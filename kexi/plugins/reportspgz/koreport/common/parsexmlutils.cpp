@@ -124,46 +124,15 @@ bool parseReportLineStyleData(const QDomElement & elemSource, ORLineStyleData & 
 
 bool parseReportRect(const QDomElement & elemSource, QRectF & rectTarget)
 {
-    if (elemSource.tagName() == "rect") {
-        QDomNode  nodeCursor = elemSource.firstChild();
-
-        while (!nodeCursor.isNull()) {
-            if (nodeCursor.isElement()) {
-                QDomElement elemThis = nodeCursor.toElement();
-                int         intTemp;
-                bool        valid;
-
-                if (elemThis.tagName() == "x") {
-                    intTemp = elemThis.text().toFloat(&valid);
-                    if (valid)
-                        rectTarget.setX(intTemp);
-                    else
-                        return FALSE;
-                } else if (elemThis.tagName() == "y") {
-                    intTemp = elemThis.text().toFloat(&valid);
-                    if (valid)
-                        rectTarget.setY(intTemp);
-                    else
-                        return FALSE;
-                } else if (elemThis.tagName() == "width") {
-                    intTemp = elemThis.text().toFloat(&valid);
-                    if (valid)
-                        rectTarget.setWidth(intTemp);
-                    else
-                        return FALSE;
-                } else if (elemThis.tagName() == "height") {
-                    intTemp = elemThis.text().toFloat(&valid);
-                    if (valid)
-                        rectTarget.setHeight(intTemp);
-                    else
-                        return FALSE;
-                }
-            }
-            nodeCursor = nodeCursor.nextSibling();
-        }
-        return TRUE;
+    if (elemSource.tagName() == "report:rect") {
+	rectTarget.setX(elemSource.attribute("report:x", "10").toFloat());
+	rectTarget.setY(elemSource.attribute("report:y", "10").toFloat());
+	rectTarget.setWidth(elemSource.attribute("report:width", "10").toFloat());
+	rectTarget.setHeight(elemSource.attribute("report:height", "10").toFloat());
+	return true;
     }
-    return FALSE;
+
+    return false;
 }
 
 bool parseReportFont(const QDomElement & elemSource, QFont & fontTarget)

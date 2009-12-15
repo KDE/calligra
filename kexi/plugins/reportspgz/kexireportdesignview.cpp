@@ -96,8 +96,8 @@ tristate KexiReportDesignView::storeData ( bool dontAsk )
 {
     Q_UNUSED(dontAsk);
     
-    QDomDocument doc ( "pgz_kexireport" );
-    QDomElement root = doc.createElement ( "report" );
+    QDomDocument doc ( "kexireport" );
+    QDomElement root = doc.createElement ( "kexireport" );
     QDomElement conndata = m_sourceSelector->connectionData();
 
     if (conndata.isNull())
@@ -148,7 +148,7 @@ tristate KexiReportDesignView::afterSwitchFrom ( Kexi::ViewMode mode )
         QDomDocument doc;
         doc.setContent ( tempData()->document );
         QDomElement root = doc.documentElement();
-        QDomElement korep = root.firstChildElement( "koreport" );
+        QDomElement korep = root.firstChildElement( "report:content" );
         QDomElement conn = root.firstChildElement( "connection" );
         if ( !korep.isNull() ) {
             m_reportDesigner = new ReportDesigner ( this, korep );

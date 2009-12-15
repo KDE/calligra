@@ -31,34 +31,23 @@ KRLabelData::KRLabelData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
+    
+    m_name->setValue(element.toElement().attribute("report:name"));
+    m_text->setValue(element.toElement().attribute("report:caption"));
+    Z = element.toElement().attribute("report:zvalue").toDouble();
+    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-alignment"));
+    m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-alignment"));
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-        if (n == "name") {
-            m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "string") {
-            m_text->setValue(node.firstChild().nodeValue());
-        } else if (n == "zvalue") {
-            Z = node.firstChild().nodeValue().toDouble();
-        } else if (n == "left") {
-            m_horizontalAlignment->setValue("Left");
-        } else if (n == "hcenter") {
-            m_horizontalAlignment->setValue("Center");
-        } else if (n == "right") {
-            m_horizontalAlignment->setValue("Right");
-        } else if (n == "top") {
-            m_verticalAlignment->setValue("Top");
-        } else if (n == "vcenter") {
-            m_verticalAlignment->setValue("Center");
-        } else if (n == "bottom") {
-            m_verticalAlignment->setValue("Bottom");
-        } else if (n == "rect") {
+
+        if (n == "report:rect") {
             QRectF r;
             parseReportRect(node.toElement(), r);
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
-        } else if (n == "textstyle") {
-
+        } else if (n == "report:text-style") {
             ORTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
                 m_backgroundColor->setValue(ts.backgroundColor);
@@ -67,7 +56,7 @@ KRLabelData::KRLabelData(QDomNode & element)
                 m_font->setValue(ts.font);
 
             }
-        } else if (n == "linestyle") {
+        } else if (n == "report:line-style") {
             ORLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
@@ -94,30 +83,30 @@ void KRLabelData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Label");
 
-    m_text = new KoProperty::Property("Caption", "Label", "Caption", "Label Caption");
+    m_text = new KoProperty::Property("caption", "Label", "Caption", "Label Caption");
     QStringList keys, strings;
 
-    keys << "Left" << "Center" << "Right";
+    keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("HAlign", keys, strings, "Left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-alignment", keys, strings, "left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();
-    keys << "Top" << "Center" << "Bottom";
+    keys << "top" << "center" << "bottom";
     strings << i18n("Top") << i18n("Center") << i18n("Bottom");
-    m_verticalAlignment = new KoProperty::Property("VAlign", keys, strings, "Center", "Vertical Alignment");
+    m_verticalAlignment = new KoProperty::Property("vertical-alignemnt", keys, strings, "center", "Vertical Alignment");
 
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", "Label Font");
 
-    m_backgroundColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
-    m_foregroundColor = new KoProperty::Property("ForegroundColor", Qt::black, "Foreground Color", "Foreground Color");
-    m_backgroundOpacity = new KoProperty::Property("Opacity", 255, "Opacity", "Opacity");
+    m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
+    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, "Foreground Color", "Foreground Color");
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 255, "Opacity", "Opacity");
     m_backgroundOpacity->setOption("max", 255);
     m_backgroundOpacity->setOption("min", 0);
 
-    m_lineWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
-    m_lineColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
-    m_lineStyle = new KoProperty::Property("LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
+    m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
+    m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
 
     m_set->addProperty(m_name);
     m_set->addProperty(m_text);
@@ -146,17 +135,17 @@ Qt::Alignment KRLabelData::textFlags() const
     Qt::Alignment align;
     QString t;
     t = m_horizontalAlignment->value().toString();
-    if (t == "Center")
+    if (t == "center")
         align = Qt::AlignHCenter;
-    else if (t == "Right")
+    else if (t == "right")
         align = Qt::AlignRight;
     else
         align = Qt::AlignLeft;
 
     t = m_verticalAlignment->value().toString();
-    if (t == "Center")
+    if (t == "center")
         align |= Qt::AlignVCenter;
-    else if (t == "Bottom")
+    else if (t == "bottom")
         align |= Qt::AlignBottom;
     else
         align |= Qt::AlignTop;

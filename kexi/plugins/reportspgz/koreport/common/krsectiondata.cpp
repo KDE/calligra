@@ -43,122 +43,51 @@ KRSectionData::KRSectionData()
 
 KRSectionData::KRSectionData(const QDomElement & elemSource)
 {
-    //TODO surely this could be wriiten in a more sane way!!!!
-    
     createProperties();
     m_name = elemSource.tagName();
     setObjectName(m_name);
 
-    if (m_name != "reportheader" && m_name != "reportfooter" &&
-            m_name != "pageheader" && m_name != "pagefooter" &&
-            m_name != "groupheader" && m_name != "groupfooter" &&
-            m_name != "detail") {
+    if (m_name != "report:section") {
         m_valid = false;
         return;
     }
-    m_height->setValue(1);
 
-    m_type = None;
-
-    if (m_name == "reportheader")
-        m_type = ReportHeader;
-
-    if (m_name == "reportfooter")
-        m_type = ReportFooter;
-
-    if (m_name == "pageheader")
-        m_type = PageHeaderAny;
-
-    if (m_name == "pagefooter")
-        m_type = PageFooterAny;
-
-    if (m_name == "groupheader")
-        m_type = GroupHeader;
-
-    if (m_name == "groupfooter")
-        m_type = GroupFooter;
-
-    if (m_name == "detail")
-        m_type = Detail;
+    m_type =sectionTypeFromString(elemSource.attribute("report:section-type"));
+    if (m_type == KRSectionData::None) {
+	m_valid = false;
+	return;
+    }
+    m_height->setValue(elemSource.attribute("report:height").toDouble());
+    m_backgroundColor->setValue(QColor(elemSource.attribute("report:background-color")));
 
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();
-        if (elemThis.tagName() == "height") {
-            bool valid;
-            qreal height = elemThis.text().toDouble(&valid);
-            if (valid)
-                m_height->setValue(height);
-        } else if (elemThis.tagName() == "bgcolor") {
-            m_backgroundColor->setValue(QColor(elemThis.text()));
-        } else if (elemThis.tagName() == "firstpage") {
-            if (m_name == "pageheader" || m_name == "pagefooter")
-                m_extra = elemThis.tagName();
 
-            if (m_name == "pageheader")
-                m_type = PageHeaderFirst;
-            if (m_name == "pagefooter")
-                m_type = PageFooterFirst;
-        } else if (elemThis.tagName() == "odd") {
-            if (m_name == "pageheader" || m_name == "pagefooter")
-                m_extra = elemThis.tagName();
-
-            if (m_name == "pageheader")
-                m_type = PageHeaderOdd;
-            if (m_name == "pagefooter")
-                m_type = PageFooterOdd;
-        } else if (elemThis.tagName() == "even") {
-            if (m_name == "pageheader" || m_name == "pagefooter")
-                m_extra = elemThis.tagName();
-
-            if (m_name == "pageheader")
-                m_type = PageHeaderEven;
-            if (m_name == "pagefooter")
-                m_type = PageFooterEven;
-        } else if (elemThis.tagName() == "lastpage") {
-            if (m_name == "pageheader" || m_name == "pagefooter")
-                m_extra = elemThis.tagName();
-
-            if (m_name == "pageheader")
-                m_type = PageHeaderLast;
-            if (m_name == "pagefooter")
-                m_type = PageFooterLast;
-        } else if (elemThis.tagName() == "label") {
+        if (elemThis.tagName() == "report:label") {
             KRLabelData * label = new KRLabelData(elemThis);
             m_objects.append(label);
-            //else
-            //  delete label;
-        } else if (elemThis.tagName() == "field") {
+        } else if (elemThis.tagName() == "report:field") {
             KRFieldData * field = new KRFieldData(elemThis);
-            //if(parseReportField(elemThis, *field) == TRUE)
-            //{
             m_objects.append(field);
-            //TODO Totals
-            //  if(field->trackTotal)
-//          sectionTarget.trackTotal.append(field->data);
-            //}
-            //else
-            //  delete field;
-        } else if (elemThis.tagName() == "text") {
+        } else if (elemThis.tagName() == "report:text") {
             KRTextData * text = new KRTextData(elemThis);
             m_objects.append(text);
-        } else if (elemThis.tagName() == "line") {
+        } else if (elemThis.tagName() == "report:line") {
             KRLineData * line = new KRLineData(elemThis);
             m_objects.append(line);
-        } else if (elemThis.tagName() == "barcode") {
+        } else if (elemThis.tagName() == "report:barcode") {
             KRBarcodeData * bc = new KRBarcodeData(elemThis);
             m_objects.append(bc);
-
-        } else if (elemThis.tagName() == "image") {
+        } else if (elemThis.tagName() == "report:image") {
             KRImageData * img = new KRImageData(elemThis);
             m_objects.append(img);
-        } else if (elemThis.tagName() == "chart") {
+        } else if (elemThis.tagName() == "report:chart") {
             KRChartData * chart = new KRChartData(elemThis);
             m_objects.append(chart);
-        } else if (elemThis.tagName() == "check") {
+        } else if (elemThis.tagName() == "report:check") {
             KRCheckData * check = new KRCheckData(elemThis);
             m_objects.append(check);
-
         } else
             kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
     }
@@ -185,8 +114,8 @@ void KRSectionData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Section");
 
-    m_height = new KoProperty::Property("Height", 1.0, "Height", "Height");
-    m_backgroundColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
+    m_height = new KoProperty::Property("height", 1.0, "Height", "Height");
+    m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
 
     m_set->addProperty(m_height);
     m_set->addProperty(m_backgroundColor);
@@ -194,5 +123,100 @@ void KRSectionData::createProperties()
 
 QString KRSectionData::name() const
 {
-    return (m_extra.isEmpty() ? m_name : m_name + "_" + m_extra);
+    return (m_name + "-" + sectionTypeString(m_type));
+}
+
+QString KRSectionData::sectionTypeString(KRSectionData::Section s)
+{
+    QString sectiontype;
+        switch (s) {
+        case KRSectionData::PageHeaderAny:
+            sectiontype = "header-page-any";
+            break;
+        case KRSectionData::PageHeaderEven:
+            sectiontype = "header-page-even";
+            break;
+        case KRSectionData::PageHeaderOdd:
+            sectiontype = "header-page-odd";
+            break;
+        case KRSectionData::PageHeaderFirst:
+            sectiontype = "header-page-first";
+            break;
+        case KRSectionData::PageHeaderLast:
+            sectiontype = "header-page-last";
+            break;
+        case KRSectionData::PageFooterAny:
+            sectiontype = "footer-page-any";
+            break;
+        case KRSectionData::PageFooterEven:
+            sectiontype = "footer-page-even";
+            break;
+        case KRSectionData::PageFooterOdd:
+            sectiontype = "footer-page-odd";
+            break;
+        case KRSectionData::PageFooterFirst:
+            sectiontype = "footer-page-first";
+            break;
+        case KRSectionData::PageFooterLast:
+            sectiontype = "footer-page-last";
+            break;
+        case KRSectionData::ReportHeader:
+            sectiontype = "header-report";
+            break;
+        case KRSectionData::ReportFooter:
+            sectiontype = "footer-report";
+            break;
+	case KRSectionData::GroupHeader:
+            sectiontype = "header-group";
+            break;
+        case KRSectionData::GroupFooter:
+            sectiontype = "footer-group";
+            break;
+        case KRSectionData::Detail:
+            sectiontype = "detail";
+            break;
+        }
+
+    return sectiontype;
+}
+
+KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
+{
+    KRSectionData::Section sec;
+    kDebug() << "Determining section type for " << s;
+    
+    if (s == "header-page-any")
+	sec = KRSectionData::PageHeaderAny;
+    else if (s == "header-page-even")
+	sec = KRSectionData::PageHeaderEven;
+    else if (s == "header-page-odd")
+	sec = KRSectionData::PageHeaderOdd;
+    else if (s == "header-page-first")
+	sec = KRSectionData::PageHeaderFirst;
+    else if (s == "header-page-last")
+	sec = KRSectionData::PageHeaderLast;
+    else if (s == "header-report")
+	sec = KRSectionData::ReportHeader;
+    else if (s == "footer-page-any")
+	sec = KRSectionData::PageFooterAny;
+    else if (s == "footer-page-even")
+	sec = KRSectionData::PageFooterEven;
+    else if (s == "footer-page-odd")
+	sec = KRSectionData::PageFooterOdd;
+    else if (s == "footer-page-first")
+	sec = KRSectionData::PageFooterFirst;
+    else if (s == "footer-page-last")
+	sec = KRSectionData::PageFooterLast;
+    else if (s == "footer-report")
+	sec = KRSectionData::ReportFooter;
+    else if (s == "header-group")
+	sec = KRSectionData::GroupHeader;
+    else if (s == "footer-group")
+	sec = KRSectionData::GroupFooter;
+    else if (s == "detail")
+	sec = KRSectionData::Detail;
+    else
+	sec = KRSectionData::None;
+    
+    return sec;  
 }

@@ -54,6 +54,8 @@ class ReportSceneView;
 class ReportWriterSectionData;
 class KexiView;
 
+const QString ns("http://kexi-project.org/report/2.0");
+
 //
 // Class ReportDesigner
 //     The ReportDesigner is the main widget for designing a report
@@ -221,6 +223,31 @@ signals:
     void propertySetChanged();
     void dirty();
 };
+
+static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
+{
+  QDomElement e = d->createElement("report:" + p->name().toLower());
+  e.appendChild(d->createTextNode(p->value().toString()));
+  return e;
+}
+
+static void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
+{
+    switch(p->value().type()) {
+	case QVariant::Int :
+	    e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
+	    break;
+	case QVariant::Double:
+	    e->setAttribute("report:" + p->name().toLower(), p->value().toDouble());
+	    break;
+	case QVariant::Bool:
+	    e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
+	    break;
+	default:
+	    e->setAttribute("report:" + p->name().toLower(), p->value().toString());
+	    break;
+    }
+}
 
 #endif
 

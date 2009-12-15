@@ -73,87 +73,35 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
 void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect)
 {
     kDebug() << "Saving Rect " << rect;
-    QDomElement element = doc.createElement("rect");
+    QDomElement element = doc.createElement("report:rect");
 
-    QDomElement x = doc.createElement("x");
-    x.appendChild(doc.createTextNode(QString::number(rect.x())));
-    element.appendChild(x);
+    element.setAttribute("report:x", QString::number(rect.x()));
+    element.setAttribute("report:y", QString::number(rect.y()));
+    element.setAttribute("report:width", QString::number(rect.width()));
+    element.setAttribute("report:height", QString::number(rect.height()));
 
-    QDomElement y = doc.createElement("y");
-    y.appendChild(doc.createTextNode(QString::number(rect.y())));
-    element.appendChild(y);
-
-    QDomElement w = doc.createElement("width");
-    w.appendChild(doc.createTextNode(QString::number(rect.width())));
-    element.appendChild(w);
-
-    QDomElement h = doc.createElement("height");
-    h.appendChild(doc.createTextNode(QString::number(rect.height())));
-    element.appendChild(h);
-
-    entity.appendChild(element);
-}
-
-void ReportEntity::buildXMLFont(QDomDocument & doc, QDomElement & entity, QFont font)
-{
-    QDomElement element = doc.createElement("font");
-    element.appendChild(doc.createTextNode(font.toString()));
-#if 0
-    QDomElement face = doc.createElement("face");
-    face.appendChild(doc.createTextNode(font.family()));
-    element.appendChild(face);
-
-    QDomElement size = doc.createElement("size");
-    size.appendChild(doc.createTextNode(QString::number(font.pointSize())));
-    element.appendChild(size);
-
-    QDomElement weight = doc.createElement("weight");
-    int w = font.weight();
-    if (w == QFont::Normal)
-        weight.appendChild(doc.createTextNode("normal"));
-    else if (w == QFont::Bold)
-        weight.appendChild(doc.createTextNode("bold"));
-    else
-        weight.appendChild(doc.createTextNode(QString::number(w)));
-    element.appendChild(weight);
-#endif
     entity.appendChild(element);
 }
 
 void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, ORTextStyleData ts)
 {
-    QDomElement element = doc.createElement("textstyle");
+    QDomElement element = doc.createElement("report:text-style");
 
-    QDomElement bgcolor = doc.createElement("bgcolor");
-    bgcolor.appendChild(doc.createTextNode(ts.backgroundColor.name()));
-    element.appendChild(bgcolor);
-
-    QDomElement fgcolor = doc.createElement("fgcolor");
-    fgcolor.appendChild(doc.createTextNode(ts.foregroundColor.name()));
-    element.appendChild(fgcolor);
-
-    QDomElement bgopacity = doc.createElement("bgopacity");
-    bgopacity.appendChild(doc.createTextNode(QString::number(ts.backgroundOpacity)));
-    element.appendChild(bgopacity);
-
-    buildXMLFont(doc, element, ts.font);
+    element.setAttribute("report:background-color", ts.backgroundColor.name());
+    element.setAttribute("report:foreground-color", ts.foregroundColor.name());
+    element.setAttribute("report:background-opacity", QString::number(ts.backgroundOpacity));
+    element.setAttribute("report:qtfont", ts.font.toString());
 
     entity.appendChild(element);
 }
 
 void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, ORLineStyleData ls)
 {
-    QDomElement element = doc.createElement("linestyle");
+    QDomElement element = doc.createElement("report:line-style");
 
-    QDomElement color = doc.createElement("color");
-    color.appendChild(doc.createTextNode(ls.lineColor.name()));
-    element.appendChild(color);
-
-    QDomElement weight = doc.createElement("weight");
-    weight.appendChild(doc.createTextNode(QString::number(ls.weight)));
-    element.appendChild(weight);
-
-    QDomElement style = doc.createElement("style");
+    element.setAttribute("report:line-color", ls.lineColor.name());
+    element.setAttribute("report:line-weight", QString::number(ls.weight));
+    
     QString l;
     switch (ls.style) {
     case Qt::NoPen:
@@ -178,8 +126,7 @@ void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, O
         l = "solid";
 
     }
-    style.appendChild(doc.createTextNode(l));
-    element.appendChild(style);
+    element.setAttribute("report:line-style", l);
 
     entity.appendChild(element);
 }

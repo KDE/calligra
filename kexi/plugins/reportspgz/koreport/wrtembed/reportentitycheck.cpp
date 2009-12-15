@@ -131,37 +131,19 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     kDebug() << endl;
 
-    QDomElement entity = doc.createElement("check");
+    QDomElement entity = doc.createElement("report:check");
 
+    //properties
+    addPropertyAsAttribute(&entity, m_name);
+    addPropertyAsAttribute(&entity, m_controlSource);
+    addPropertyAsAttribute(&entity, m_foregroundColor);
+    addPropertyAsAttribute(&entity, m_checkStyle);
+    
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
-    // name
-    QDomElement n = doc.createElement("name");
-    n.appendChild(doc.createTextNode(entityName()));
-    entity.appendChild(n);
-
-    // z
-    QDomElement z = doc.createElement("zvalue");
-    z.appendChild(doc.createTextNode(QString::number(zValue())));
-    entity.appendChild(z);
-
     //Line Style
     buildXMLLineStyle(doc, entity, lineStyle());
-
-    //Color
-    QDomElement fc = doc.createElement("fgcolor");
-    fc.appendChild(doc.createTextNode(m_foregroundColor->value().value<QColor>().name()));
-    entity.appendChild(fc);
-
-    QDomElement cs = doc.createElement("controlsource");
-    cs.appendChild(doc.createTextNode(m_controlSource->value().toString()));
-    entity.appendChild(cs);
-
-    // the check style
-    QDomElement sty = doc.createElement("checkstyle");
-    sty.appendChild(doc.createTextNode(m_checkStyle->value().toString()));
-    entity.appendChild(sty);
 
     parent.appendChild(entity);
 }

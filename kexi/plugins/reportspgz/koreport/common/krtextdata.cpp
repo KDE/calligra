@@ -103,17 +103,17 @@ Qt::Alignment KRTextData::textFlags() const
     Qt::Alignment align;
     QString t;
     t = m_horizontalAlignment->value().toString();
-    if (t == "Center")
+    if (t == "center")
         align = Qt::AlignHCenter;
-    else if (t == "Right")
+    else if (t == "right")
         align = Qt::AlignRight;
     else
         align = Qt::AlignLeft;
 
     t = m_verticalAlignment->value().toString();
-    if (t == "Center")
+    if (t == "center")
         align |= Qt::AlignVCenter;
-    else if (t == "Bottom")
+    else if (t == "bottom")
         align |= Qt::AlignBottom;
     else
         align |= Qt::AlignTop;
@@ -130,27 +130,27 @@ void KRTextData::createProperties()
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
-    m_controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
 
-    keys << "Left" << "Center" << "Right";
+    keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("HAlign", keys, strings, "Left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-alignemnt", keys, strings, "left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();
-    keys << "Top" << "Center" << "Bottom";
+    keys << "top" << "center" << "bottom";
     strings << i18n("Top") << i18n("Center") << i18n("Bottom");
-    m_verticalAlignment = new KoProperty::Property("VAlign", keys, strings, "Center", "Vertical Alignment");
+    m_verticalAlignment = new KoProperty::Property("vertical-alignment", keys, strings, "center", "Vertical Alignment");
 
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", "Field Font");
 
-    m_backgroundColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
-    m_foregroundColor = new KoProperty::Property("ForegroundColor", Qt::black, "Foreground Color", "Foreground Color");
+    m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
+    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, "Foreground Color", "Foreground Color");
 
-    m_lineWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
-    m_lineColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
-    m_lineStyle = new KoProperty::Property("LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
-    m_backgroundOpacity = new KoProperty::Property("Opacity", 255, "Opacity", "Opacity");
+    m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
+    m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
+    m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 255, "Opacity", "Opacity");
     m_backgroundOpacity->setOption("max", 255);
     m_backgroundOpacity->setOption("min", 0);
 

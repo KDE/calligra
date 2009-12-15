@@ -7,40 +7,38 @@
 
 KRCheckData::KRCheckData(QDomNode &element)
 {
-    //ctor
-        createProperties();
+    createProperties();
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
+    
+    m_name->setValue(element.toElement().attribute("report:name"));
+    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    Z = element.toElement().attribute("report:zvalue").toDouble();
+    m_foregroundColor->setValue(element.toElement().attribute("report:foreground-color"));
+    m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-        if (n == "name") {
-            m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "controlsource") {
-            m_controlSource->setValue(node.firstChild().nodeValue());
-        } else if (n == "checkstyle") {
-            m_checkStyle->setValue(node.firstChild().nodeValue());
-        } else if (n == "zvalue") {
-            Z = node.firstChild().nodeValue().toDouble();
-        } else if (n == "rect") {
+
+        if (n == "report:rect") {
             QRectF r;
             parseReportRect(node.toElement(), r);
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
-        } else if (n == "linestyle") {
+        } else if (n == "report:line-style") {
             ORLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
                 m_lineColor->setValue(ls.lineColor);
                 m_lineStyle->setValue(ls.style);
             }
-        } else if (n == "fgcolor") {
-            m_foregroundColor->setValue(QColor(node.firstChild().nodeValue()));
         } else {
-            kDebug() << "while parsing check element encountered unknown element: " << n << endl;
+            kDebug() << "while parsing check element encountered unknow element: " << n;
         }
     }
+    
 }
 
 KRCheckData::~KRCheckData()
@@ -56,16 +54,16 @@ void KRCheckData::createProperties()
 
     keys << "Cross" << "Tick" << "Dot";
     strings << i18n("Cross") << i18n("Tick") << i18n("Dot");
-    m_checkStyle = new KoProperty::Property("CheckStyle", keys, strings, "Cross", "Check Style");
+    m_checkStyle = new KoProperty::Property("check-style", keys, strings, "Cross", "Check Style");
 
-    m_controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
     m_controlSource->setOption("extraValueAllowed", "true");
 
-    m_foregroundColor = new KoProperty::Property("ForegroundColor", Qt::black, "Foreground Color", "Foreground Color");
+    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, "Foreground Color", "Foreground Color");
 
-    m_lineWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
-    m_lineColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
-    m_lineStyle = new KoProperty::Property("LineStyle", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
+    m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
+    m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
 
     m_set->addProperty(m_name);
     m_set->addProperty(m_controlSource);

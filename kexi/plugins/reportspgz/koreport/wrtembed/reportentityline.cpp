@@ -112,7 +112,7 @@ void ReportEntityLine::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("line");
+    QDomElement entity = doc.createElement("report:line");
 
     qreal sx, sy, ex, ey;
 
@@ -120,35 +120,15 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
     sy = m_start.toPoint().y();
     ex = m_end.toPoint().x();
     ey = m_end.toPoint().y();
-
-    QDomElement e;
-
-    e = doc.createElement("xstart");
-    e.appendChild(doc.createTextNode(QString::number((int) sx)));
-    entity.appendChild(e);
-
-    e = doc.createElement("ystart");
-    e.appendChild(doc.createTextNode(QString::number((int) sy)));
-    entity.appendChild(e);
-
-    e = doc.createElement("xend");
-    e.appendChild(doc.createTextNode(QString::number((int) ex)));
-    entity.appendChild(e);
-
-    e = doc.createElement("yend");
-    e.appendChild(doc.createTextNode(QString::number((int) ey)));
-    entity.appendChild(e);
-
-    // name
-    QDomElement n = doc.createElement("name");
-    n.appendChild(doc.createTextNode(entityName()));
-    entity.appendChild(n);
-
-    // z
-    QDomElement z = doc.createElement("zvalue");
-    z.appendChild(doc.createTextNode(QString::number(zValue())));
-    entity.appendChild(z);
-
+    
+    // properties
+    addPropertyAsAttribute(&entity, m_name);
+    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:xstart", QString::number(sx));
+    entity.setAttribute("report:ystart", QString::number(sy));
+    entity.setAttribute("report:xend", QString::number(ex));
+    entity.setAttribute("report:yend", QString::number(ey));
+    
     buildXMLLineStyle(doc, entity, lineStyle());
 
     parent.appendChild(entity);

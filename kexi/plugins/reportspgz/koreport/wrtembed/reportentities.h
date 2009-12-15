@@ -56,7 +56,6 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent) = 0;
 
     static void buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect);
-    static void buildXMLFont(QDomDocument & doc, QDomElement & entity, QFont font);
     static void buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, ORTextStyleData ts);
     static void buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, ORLineStyleData ls);
 

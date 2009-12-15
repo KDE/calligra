@@ -77,32 +77,26 @@ public:
         return m_valid;
     }
 
-    /**
-    set the 'extra' info for the section.  This is used
-    to uniquely identity the section, eg, odd/even footers,
-    or multiple group heads
-    */
-    void setExtra(const QString &e) {
-        m_extra = e;
-    }
-
-    QString extra() const {
-        return m_extra;
-    }
     qreal height() const {
         return m_height->value().toDouble();
     }
+    
     QList<KRObjectData*> objects() const {
         return m_objects;
-    };
+    }
+    
     QString name() const;
-    QColor bgColor() const {
+    
+    QColor backgroundColor() const {
         return m_backgroundColor->value().value<QColor>();
     }
+    
     Section type() const {
         return m_type;
     }
 
+    static KRSectionData::Section sectionTypeFromString(const QString& s);
+    static QString sectionTypeString(KRSectionData::Section s);
 protected:
     KoProperty::Set *m_set;
     KoProperty::Property *m_height;
@@ -120,7 +114,6 @@ private:
     //QList<ORDataData> trackTotal;
 
     QString m_name;
-    QString m_extra;
     Section m_type;
 
     static bool zLessThan(KRObjectData* s1, KRObjectData* s2);

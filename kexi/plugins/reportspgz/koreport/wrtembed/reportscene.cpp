@@ -71,7 +71,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
     QGraphicsScene::drawBackground(painter, clip);
     painter->setRenderHint(QPainter::Antialiasing, false);
 
-    if (m_rd->propertySet()->property("ShowGrid").value().toBool()) {
+    if (m_rd->propertySet()->property("grid-visible").value().toBool()) {
         if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
             m_unit = m_rd->pageUnit();
             if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
@@ -88,7 +88,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
             }
 
         }
-        m_minorSteps = m_rd->propertySet()->property("GridDivisions").value().toInt();
+        m_minorSteps = m_rd->propertySet()->property("grid-divisions").value().toInt();
         m_pixelIncrementX = (m_majorX / m_minorSteps);
         m_pixelIncrementY = (m_majorY / m_minorSteps);
         
@@ -149,7 +149,7 @@ void ReportScene::contextMenuEvent(QGraphicsSceneContextMenuEvent * e)
 
 QPointF ReportScene::gridPoint(const QPointF& p)
 {
-    if (!m_rd->propertySet()->property("GridSnap").value().toBool()) {
+    if (!m_rd->propertySet()->property("grid-snap").value().toBool()) {
         return p;
     }
 
@@ -172,7 +172,7 @@ QPointF ReportScene::gridPoint(const QPointF& p)
             
         }
     }
-        m_minorSteps = m_rd->propertySet()->property("GridDivisions").value().toInt();
+        m_minorSteps = m_rd->propertySet()->property("grid-divisions").value().toInt();
         m_pixelIncrementX = (m_majorX / m_minorSteps);
         m_pixelIncrementY = (m_majorY / m_minorSteps);
 

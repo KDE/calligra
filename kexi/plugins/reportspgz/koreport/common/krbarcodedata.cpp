@@ -32,53 +32,28 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
+    
+    m_name->setValue(element.toElement().attribute("report:name"));
+    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    Z = element.toElement().attribute("report:zvalue").toDouble();
+    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-alignment"));
+    m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
+    m_format->setValue(element.toElement().attribute("report:barcode-format"));
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-        if (n == "data") {
-            // see "string" just below for comments on String vs. Data
-            QDomNodeList dnl = node.childNodes();
-            for (int di = 0; di < dnl.count(); di++) {
-                node = dnl.item(di);
-                n = node.nodeName();
-                if (n == "controlsource") {
-                    m_controlSource->setValue(node.firstChild().nodeValue());
-                } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n;
-                }
-            }
-        } else if (n == "name") {
-            m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "string") {
-            // ok -- this entity wasn't really part of the initial spec for work
-            // and from what i understand the data should be puilled from the database
-            // however this string field as part of the xml def i received implies that it
-            // is static.
-        } else if (n == "zvalue") {
-            Z = node.firstChild().nodeValue().toDouble();
-        } else if (n == "format") {
-            m_format->setValue(node.firstChild().nodeValue());
-        } else if (n == "rect") {
+
+        if (n == "report:rect") {
             QRectF r;
             parseReportRect(node.toElement(), r);
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
-        } else if (n == "maxlength") {
-            // this is the maximum length of a barcode value so that we can determine reasonably
-            // what the minimum height of the barcode will be
-            int i = node.firstChild().nodeValue().toInt();
-            if (i < 1) i = 5;
-            setMaxLength(i);
-        } else if (n == "left") {
-            m_horizontalAlignment->setValue("Left");
-        } else if (n == "center") {
-            m_horizontalAlignment->setValue("Center");
-        } else if (n == "right") {
-            m_horizontalAlignment->setValue("Right");
         } else {
-            kDebug() << "while parsing barcode encountered unknow element: " << n;
+            kDebug() << "while parsing barcode element encountered unknow element: " << n;
         }
     }
+    
 }
 
 void KRBarcodeData::setMaxLength(int i)
@@ -144,19 +119,19 @@ void KRBarcodeData::createProperties()
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QString(), "Query", "Query" );
-    m_controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
 
-    keys << "Left" << "Center" << "Right";
+    keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("HAlign", keys, strings, "Left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-alignment", keys, strings, "left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();
     keys << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
     strings << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
-    m_format = new KoProperty::Property("Format", keys, strings, "3of9", "Barcode Format");
+    m_format = new KoProperty::Property("barcode-format", keys, strings, "3of9", "Barcode Format");
 
-    m_maxLength = new KoProperty::Property("Max Length", 5, "Max Length", "Maximum Barode Length");
+    m_maxLength = new KoProperty::Property("barcode-max-length", 5, "Max Length", "Maximum Barode Length");
 
     m_set->addProperty(m_name);
     m_set->addProperty(m_controlSource);
@@ -175,11 +150,11 @@ int KRBarcodeData::alignment()
 {
     QString a = m_horizontalAlignment->value().toString();
 
-    if (a == "Left")
+    if (a == "left")
         return 0;
-    else if (a == "Center")
+    else if (a == "center")
         return 1;
-    else if (a == "Right")
+    else if (a == "right")
         return 2;
     else
         return 0;

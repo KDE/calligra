@@ -460,14 +460,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
     //Create a pre-rendered section for this section and add it to the document
     OROSection *sec = new OROSection(m_document);
     sec->setHeight(sectionData.height());
-    sec->setBackgroundColor(sectionData.bgColor());
+    sec->setBackgroundColor(sectionData.backgroundColor());
     sec->setType(sectionData.type());
     m_document->addSection(sec);
 
     //Render section background
     ORORect* bg = new ORORect();
     bg->setPen(QPen(Qt::NoPen));
-    bg->setBrush(sectionData.bgColor());
+    bg->setBrush(sectionData.backgroundColor());
     qreal w = m_page->document()->pageOptions().widthPx() - m_page->document()->pageOptions().getMarginRight() - m_leftMargin;
 
     bg->setRect(QRectF(m_leftMargin, m_yOffset, w, intHeight));
@@ -1061,7 +1061,7 @@ bool ORPreRender::setDom(const QString & docReport)
         d->m_valid = false;
 
         d->m_docReport.setContent(docReport);
-        d->m_reportData = new KRReportData(d->m_docReport.documentElement().firstChildElement( "koreport" ));
+        d->m_reportData = new KRReportData(d->m_docReport.documentElement().firstChildElement( "report:content" ));
         d->m_valid = d->m_reportData->isValid();
     }
     return isValid();

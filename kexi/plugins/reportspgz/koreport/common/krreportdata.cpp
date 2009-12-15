@@ -31,162 +31,136 @@ void KRReportData::init()
     m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = NULL;
     m_reportHeader = m_reportFooter = NULL;
 }
-
 KRReportData::KRReportData()
- : m_detailSection(0)
+        : m_detailSection(0)
 {
     init();
     m_valid = true;
 }
 
 KRReportData::KRReportData(const QDomElement & elemSource)
- : m_detailSection(0)
+        : m_detailSection(0)
 {
     m_valid = false;
     init();
     bool valid; //used for local unit conversions
 
-    if (elemSource.tagName() != "koreport") {
-        kDebug() << "QDomElement passed to parseReport() was not <koreport> tag";
+    kDebug();
+    
+    if (elemSource.tagName() != "report:content") {
+        kDebug() << "QDomElement passed to parseReport() was not <report:content> tag";
         kDebug() << elemSource.text();
         return;
     }
 
     qreal d = 0.0;
 
-    QDomNodeList section = elemSource.childNodes();
-    for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
-        QDomElement elemThis = section.item(nodeCounter).toElement();
-        if (elemThis.tagName() == "title")
+    QDomNodeList sections = elemSource.childNodes();
+    for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
+        QDomElement elemThis = sections.item(nodeCounter).toElement();
+        if (elemThis.tagName() == "report:title") {
             m_title = elemThis.text();
-        else if (elemThis.tagName() == "datasource") {
-            m_query = elemThis.text();
-	    m_externalData = elemThis.attribute("external").toInt();
-	} else if (elemThis.tagName() == "script") {
+        } else if (elemThis.tagName() == "report:script") {
             m_script = elemThis.text();
-            m_interpreter = elemThis.attribute("interpreter");
-        } else if (elemThis.tagName() == "size") {
-            if (elemThis.firstChild().isText())
-                page.setPageSize(elemThis.firstChild().nodeValue());
-            else {
-                //bad code! bad code!
-                // this code doesn't check the elemts and assums they are what
-                // they should be.
-                QDomNode n1 = elemThis.firstChild();
-                QDomNode n2 = n1.nextSibling();
-                if (n1.nodeName() == "width") {
-                    page.setCustomWidth(n1.firstChild().nodeValue().toDouble() / 100.0);
-                    page.setCustomHeight(n2.firstChild().nodeValue().toDouble() / 100.0);
-                } else {
-                    page.setCustomWidth(n2.firstChild().nodeValue().toDouble() / 100.0);
-                    page.setCustomHeight(n1.firstChild().nodeValue().toDouble() / 100.0);
-                }
+            m_interpreter = elemThis.attribute("report:script-interpreter");
+        } else if (elemThis.tagName() == "report:page-style") {
+            QString pagetype = elemThis.firstChild().nodeValue();
+
+            if (pagetype == "predefined") {
+                page.setPageSize(elemThis.attribute("report:page-size", "A4"));
+            } else if (pagetype == "custom") {
+                page.setCustomWidth(elemThis.attribute("report:custom-page-width", "").toDouble());
+                page.setCustomHeight(elemThis.attribute("report:custom-page-height", "").toDouble());
                 page.setPageSize("Custom");
             }
-        } else if (elemThis.tagName() == "labeltype")
-            page.setLabelType(elemThis.firstChild().nodeValue());
-        else if (elemThis.tagName() == "portrait")
-            page.setPortrait(true);
-        else if (elemThis.tagName() == "landscape")
-            page.setPortrait(false);
-        else if (elemThis.tagName() == "topmargin") {
-            d = elemThis.text().toDouble(&valid);
-            if (!m_valid || d < 0.0) {
-                //TODO qDebug("Error converting topmargin value: %s",(const char*)elemThis.text());
-                d = 50.0;
+            else if (pagetype == "label") {
+                page.setLabelType(elemThis.firstChild().nodeValue());
             }
-            page.setMarginTop(POINT_TO_INCH(d) * KoDpi::dpiY());
-        } else if (elemThis.tagName() == "bottommargin") {
-            d = elemThis.text().toDouble(&valid);
-            if (!valid || d < 0.0) {
-                //TODO qDebug("Error converting bottommargin value: %s",(const char*)elemThis.text());
-                d = 50.0;
-            }
-            page.setMarginBottom(POINT_TO_INCH(d) * KoDpi::dpiY());
-        } else if (elemThis.tagName() == "leftmargin") {
-            d = elemThis.text().toDouble(&valid);
-            if (!valid || d < 0.0) {
-                //TODO qDebug("Error converting leftmargin value: %s",(const char*)elemThis.text());
-                d = 50.0;
-            }
-            page.setMarginLeft(POINT_TO_INCH(d) * KoDpi::dpiX());
-        } else if (elemThis.tagName() == "rightmargin") {
-            d = elemThis.text().toDouble(&valid);
-            if (!valid || d < 0.0) {
-                //TODO qDebug("Error converting rightmargin value: %s",(const char*)elemThis.text());
-                d = 50.0;
-            }
-            page.setMarginRight(POINT_TO_INCH(d) * KoDpi::dpiX());
-        } else if (elemThis.tagName() == "reportheader") {
-            KRSectionData * sd = new KRSectionData(elemThis);
-            if (sd->isValid()) {
-                m_reportHeader = sd;
-//TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
-            } else
-                delete sd;
-        } else if (elemThis.tagName() == "reportfooter") {
-            KRSectionData * sd = new KRSectionData(elemThis);
-            if (sd->isValid()) {
-                m_reportFooter = sd;
-//TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
-            } else
-                delete sd;
-        } else if (elemThis.tagName() == "pageheader") {
-            KRSectionData * sd = new KRSectionData(elemThis);
-            if (sd->isValid()) {
-                if (sd->extra() == "firstpage")
-                    m_pageHeaderFirst = sd;
-                else if (sd->extra() == "odd")
-                    m_pageHeaderOdd = sd;
-                else if (sd->extra() == "even")
-                    m_pageHeaderEven = sd;
-                else if (sd->extra() == "lastpage")
-                    m_pageHeaderLast = sd;
-                else if (sd->extra().isEmpty())
-                    m_pageHeaderAny = sd;
-                else {
-                    //TODO qDebug("don't know which page this page header is for: %s",(const char*)sd->extra);
-                    delete sd;
-                }
-//TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
-            } else
-                delete sd;
-        } else if (elemThis.tagName() == "pagefooter") {
-            KRSectionData * sd = new KRSectionData(elemThis);
-            if (sd->isValid()) {
-                if (sd->extra() == "firstpage")
-                    m_pageFooterFirst = sd;
-                else if (sd->extra() == "odd")
-                    m_pageFooterOdd = sd;
-                else if (sd->extra() == "even")
-                    m_pageFooterEven = sd;
-                else if (sd->extra() == "lastpage")
-                    m_pageFooterLast = sd;
-                else if (sd->extra().isEmpty())
-                    m_pageFooterAny = sd;
-                else {
-                    //TODO qDebug("don't know which page this page footer is for: %s",(const char*)sd->extra);
-                    delete sd;
-                }
-//TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
-            } else
-                delete sd;
-        } else if (elemThis.tagName() == "section") {
-            KRDetailSectionData * dsd = new KRDetailSectionData(elemThis);
 
-            if (dsd->isValid()) {
-                m_detailSection = dsd;
-                //reportTarget.trackTotal += dsd->trackTotal;
-            } else {
-                delete dsd;
+            page.setMarginBottom(POINT_TO_INCH(elemThis.attribute("report:margin-bottom", "28.346").toDouble()) * KoDpi::dpiY());
+            page.setMarginTop(POINT_TO_INCH(elemThis.attribute("report:margin-top", "28.346").toDouble()) * KoDpi::dpiY());
+            page.setMarginLeft(POINT_TO_INCH(elemThis.attribute("report:margin-left", "28.346").toDouble()) * KoDpi::dpiY());
+            page.setMarginRight(POINT_TO_INCH(elemThis.attribute("report:margin-right", "28.346").toDouble()) * KoDpi::dpiY());
+
+            page.setPortrait(elemThis.attribute("report:print-orientation", "portrait") == "portrait");
+
+
+        } else if (elemThis.tagName() == "report:body") {
+            QDomNodeList sectionlist = elemThis.childNodes();
+            QDomNode sec;
+	    
+            for (int s = 0; s < sectionlist.count(); ++s) {
+                sec = sectionlist.item(s);
+                if (sec.isElement()) {
+                    QString sn = sec.nodeName().toLower();
+                    kDebug() << sn;
+                    if (sn == "report:section") {
+                        KRSectionData * sd = new KRSectionData(sec.toElement());
+                        if (!sd->isValid()) {
+			    kDebug() << "Invalid section";
+                            delete sd;
+                        }
+                        else {
+			    kDebug()<< "Adding section of type " << sd->type();
+			    
+				switch (sd->type()) {
+				    case KRSectionData::PageHeaderFirst:
+					m_pageHeaderFirst = sd;
+					break;
+				    case KRSectionData::PageHeaderOdd:
+					m_pageHeaderOdd = sd;
+					break;
+				    case KRSectionData::PageHeaderEven:
+					m_pageHeaderEven = sd;
+					break;
+				    case KRSectionData::PageHeaderLast:
+					m_pageHeaderLast = sd;
+					break;
+				    case KRSectionData::PageHeaderAny:
+					m_pageHeaderAny = sd;
+					break;
+				    case KRSectionData::ReportHeader:
+					m_reportHeader = sd;
+					break;
+				    case KRSectionData::ReportFooter:
+					m_reportFooter = sd;
+					break;
+				    case KRSectionData::PageFooterFirst:
+					m_pageFooterFirst = sd;
+					break;
+				    case KRSectionData::PageFooterOdd:
+					m_pageFooterOdd = sd;
+					break;
+				    case KRSectionData::PageFooterEven:
+					m_pageFooterEven = sd;
+					break;
+				    case KRSectionData::PageFooterLast:
+					m_pageFooterLast = sd;
+					break;
+				    case KRSectionData::PageFooterAny:
+					m_pageFooterAny = sd;
+					break;
+				}
+			}
+		
+                    } else if (sn == "report:detail") {
+                        KRDetailSectionData * dsd = new KRDetailSectionData(sec.toElement());
+
+                        if (dsd->isValid()) {
+                            m_detailSection = dsd;
+                        } else {
+			    kDebug() << "Invalid detail section";
+                            delete dsd;
+                        }
+                    }
+                } else {
+                    kDebug() << "Encountered an unknown Element: "  << elemThis.tagName();
+                }
             }
         }
 
-        //else
-        //TODO qDebug("While parsing report encountered an unknown element: %s",(const char*)elemThis.tagName());
+        m_valid = true;
     }
-
-    m_valid = true;
 }
 
 

@@ -34,71 +34,58 @@ KRDetailSectionData::KRDetailSectionData()
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 {
     m_valid = false;
-    if (elemSource.tagName() != "section") {
+    kDebug() <<elemSource.tagName();
+    if (elemSource.tagName() != "report:detail") {
         return;
     }
 
     bool have_detail = false;
 
-    QDomNodeList section = elemSource.childNodes();
-    for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
-        QDomElement elemThis = section.item(nodeCounter).toElement();
-        if (elemThis.tagName() == "group") {
-            QDomNodeList nl = elemThis.childNodes();
-            QDomNode node;
-            ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
-            for (int i = 0; i < nl.count(); i++) {
-                node = nl.item(i);
-                if (node.nodeName() == "column") {
-                    dgsd->column = node.firstChild().nodeValue();
-                    if (dgsd->groupHeader) {
-                        dgsd->groupHeader->setExtra(dgsd->column);
-                    }
-                    if (dgsd->groupFooter) {
-                        dgsd->groupFooter->setExtra(dgsd->column);
-                    }
-                } else if (node.nodeName() == "pagebreak") {
-                    QDomElement elemThis = node.toElement();
-                    QString n = elemThis.attribute("when");
-                    if ("after foot" == n)
-                        dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
-                } else if (node.nodeName() == "head") {
-                    KRSectionData * sd = new KRSectionData(node.toElement());
-                    if (sd->isValid()) {
-                        dgsd->groupHeader = sd;
-                        dgsd->groupHeader->setExtra(dgsd->column);
-                        //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
-                        //for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
-                        // dgsd->_subtotCheckPoints[*it] = 0.0;
-                    } else
-                        delete sd;
-                } else if (node.nodeName() == "foot") {
-                    KRSectionData * sd = new KRSectionData(node.toElement());
-                    if (sd->isValid()) {
-                        dgsd->groupFooter = sd;
-                        dgsd->groupFooter->setExtra(dgsd->column);
-                        //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
-                        //for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
-                        // dgsd->_subtotCheckPoints[*it] = 0.0;
-                    } else
-                        delete sd;
-                }
-                //else
-                //TODO qDebug("While parsing group section encountered an unknown element: %s", node.nodeName().toLatin1());
-            }
-            m_groupList.append(dgsd);
-        } else if (elemThis.tagName() == "detail") {
+    QDomNodeList sections = elemSource.childNodes();
+    
+    for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
+        QDomElement elemThis = sections.item(nodeCounter).toElement();
+        
+	if (elemThis.tagName() == "report:group") {
+	    QDomNodeList gsections = elemSource.childNodes();
+	    ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
+	    
+	    //TODO Column and page break
+	    for (int gnodeCounter = 0; gnodeCounter < gsections.count(); gnodeCounter++) {
+		QDomElement gsec = gsections.item(gnodeCounter).toElement();
+		if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "header-group") {
+		    //Group Header
+		    KRSectionData * sd = new KRSectionData(gsec);
+		    if (sd->isValid()) {
+			dgsd->groupHeader = sd;
+		    } else {
+			delete sd;
+		    }
+		    
+		} else if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "footer-group") {
+		    //Group Footer
+		    KRSectionData * sd = new KRSectionData(gsec);
+		    if (sd->isValid()) {
+			dgsd->groupFooter = sd;
+		    } else {
+			delete sd;
+		    }
+		}
+		m_groupList.append(dgsd);
+		
+	    }
+        } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
                 m_detailSection = sd;
-                //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
                 have_detail = true;
             } else
                 delete sd;
         }
-        kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
+        else {
+	    kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
+	}
     }
-
     m_valid = true;
 }
 

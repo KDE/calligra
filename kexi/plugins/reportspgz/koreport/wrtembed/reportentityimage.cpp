@@ -100,7 +100,7 @@ void ReportEntityImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     if (isInline()) {
         //QImage t_img = _image;
         QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
-        if (mode() == "Stretch") {
+        if (mode() == "stretch") {
             t_img = t_img.scaled(rect().width(), rect().height(), Qt::KeepAspectRatio);
         }
         painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
@@ -121,36 +121,21 @@ void ReportEntityImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("image");
+    QDomElement entity = doc.createElement("report:image");
 
+    // properties
+    addPropertyAsAttribute(&entity, m_name);
+    addPropertyAsAttribute(&entity, m_resizeMode);
+    entity.setAttribute("report:zvalue", zValue());
     buildXMLRect(doc, entity, pointRect());
 
-    // name
-    QDomElement n = doc.createElement("name");
-    n.appendChild(doc.createTextNode(entityName()));
-    entity.appendChild(n);
-
-    // z
-    QDomElement z = doc.createElement("zvalue");
-    z.appendChild(doc.createTextNode(QString::number(zValue())));
-    entity.appendChild(z);
-    // mode
-    QDomElement md = doc.createElement("mode");
-    md.appendChild(doc.createTextNode(mode()));
-    entity.appendChild(md);
 
     if (isInline()) {
-        QDomElement map = doc.createElement("map");
-//        map.setAttribute("format", _format);
+        QDomElement map = doc.createElement("report:inline-image-data");
         map.appendChild(doc.createTextNode(inlineImageData()));
-        entity.appendChild(map);
+	entity.appendChild(map);
     } else {
-        // the field data
-        QDomElement data = doc.createElement("data");
-        QDomElement dcolumn = doc.createElement("controlsource");
-        dcolumn.appendChild(doc.createTextNode(column()));
-        data.appendChild(dcolumn);
-        entity.appendChild(data);
+        addPropertyAsAttribute(&entity, m_controlSource);
     }
 
     parent.appendChild(entity);

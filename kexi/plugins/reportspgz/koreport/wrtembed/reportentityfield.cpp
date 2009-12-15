@@ -126,56 +126,24 @@ void ReportEntityField::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    //kdDebug() << "ReportEntityField::buildXML()");
-    QDomElement entity = doc.createElement("field");
+    QDomElement entity = doc.createElement("report:field");
 
+    // properties
+    addPropertyAsAttribute(&entity, m_name);
+    addPropertyAsAttribute(&entity, m_controlSource);
+    addPropertyAsAttribute(&entity, m_verticalAlignment);
+    addPropertyAsAttribute(&entity, m_horizontalAlignment);
+    entity.setAttribute("report:zvalue", zValue());
+    
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
-    // name
-    QDomElement n = doc.createElement("name");
-    n.appendChild(doc.createTextNode(entityName()));
-    entity.appendChild(n);
-
-    // z
-    QDomElement z = doc.createElement("zvalue");
-    z.appendChild(doc.createTextNode(QString::number(zValue())));
-    entity.appendChild(z);
-
-    // font info
-    //buildXMLFont ( doc,entity,font() );
     //text style info
     buildXMLTextStyle(doc, entity, textStyle());
 
     //Line Style
     buildXMLLineStyle(doc, entity, lineStyle());
 
-    // text alignment
-    int align = textFlags();
-    // horizontal
-    if ((align & Qt::AlignRight) == Qt::AlignRight)
-        entity.appendChild(doc.createElement("right"));
-    else if ((align & Qt::AlignHCenter) == Qt::AlignHCenter)
-        entity.appendChild(doc.createElement("hcenter"));
-    else // Qt::AlignLeft
-        entity.appendChild(doc.createElement("left"));
-    // vertical
-    if ((align & Qt::AlignBottom) == Qt::AlignBottom)
-        entity.appendChild(doc.createElement("bottom"));
-    else if ((align & Qt::AlignVCenter) == Qt::AlignVCenter)
-        entity.appendChild(doc.createElement("vcenter"));
-    else // Qt::AlignTop
-        entity.appendChild(doc.createElement("top"));
-
-    // the field data
-    QDomElement data = doc.createElement("data");
-// QDomElement dquery = doc.createElement ( "query" );
-// dquery.appendChild ( doc.createTextNode ( query() ) );
-// data.appendChild ( dquery );
-    QDomElement dcolumn = doc.createElement("controlsource");
-    dcolumn.appendChild(doc.createTextNode(controlSource()));
-    data.appendChild(dcolumn);
-    entity.appendChild(data);
 
 #if 0
     if (m_trackTotal) {

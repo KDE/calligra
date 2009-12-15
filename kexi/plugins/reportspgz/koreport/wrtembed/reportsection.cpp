@@ -135,7 +135,7 @@ void ReportSection::setTitle(const QString & s)
 
 void ReportSection::slotResizeBarDragged(int delta)
 {
-    if (m_sceneView->designer() && m_sceneView->designer()->propertySet()->property("PageSize").value().toString() == "Labels") {
+    if (m_sceneView->designer() && m_sceneView->designer()->propertySet()->property("page-size").value().toString() == "Labels") {
         return; // we don't want to allow this on reports that are for labels
     }
 
@@ -153,20 +153,14 @@ void ReportSection::slotResizeBarDragged(int delta)
     m_reportDesigner->setModified(true);
 }
 
-void ReportSection::buildXML(QDomDocument & doc, QDomElement & section)
+void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
 {
-    int dpiY = KoDpi::dpiY();
-    qreal f = INCH_TO_POINT(m_scene->height() / dpiY);
-    //f = ( ( f - ( int ) f ) > .5 ? f : f + 1 );
-    QDomElement height = doc.createElement("height");
-    height.appendChild(doc.createTextNode(QString::number(f)));
-    section.appendChild(height);
+    qreal f = INCH_TO_POINT(m_scene->height() / KoDpi::dpiY());
 
-    QDomElement bgcolor = doc.createElement("bgcolor");
-    bgcolor.appendChild(doc.createTextNode(m_sectionData->bgColor().name()));
-    section.appendChild(bgcolor);
+    section.setAttribute("report:height", QString::number(f));
+    section.setAttribute("report:background-color",m_sectionData->backgroundColor().name());
 
-    // now get a list of all the QCanvasItems on this scene and output them.
+    // now get a list of all the QGraphicsItems on this scene and output them.
     QGraphicsItemList list = m_scene->items();
     for (QGraphicsItemList::iterator it = list.begin();
             it != list.end(); it++) {
@@ -180,41 +174,37 @@ void ReportSection::initFromXML(QDomNode & section)
     QDomNode node;
     QString n;
 
+    qreal h = section.toElement().attribute("report:height", QString::number(72)).toDouble();
+    h  = POINT_TO_INCH(h) * KoDpi::dpiY();
+    kDebug() << "Section Height: " << h;
+    m_scene->setSceneRect(0, 0, m_scene->width(), h);
+    slotResizeBarDragged(0);
+	    
+    m_sectionData->m_backgroundColor->setValue(QColor(section.toElement().attribute("report:background-color", "#ffffff")));
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-        if (n == "height") {
-            qreal h = node.firstChild().nodeValue().toDouble();
-            h  = POINT_TO_INCH(h) * KoDpi::dpiY();
-            kDebug() << "Section Height: " << h;
-            m_scene->setSceneRect(0, 0, m_scene->width(), h);
-            slotResizeBarDragged(0);
-        } else if (n == "bgcolor") {
-            m_sectionData->m_backgroundColor->setValue(QColor(node.firstChild().nodeValue()));
-        }
+ 
         //Objects
-        else if (n == "label") {
+        if (n == "report:label") {
             (new ReportEntityLabel(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "field") {
+        } else if (n == "report:field") {
             (new ReportEntityField(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "text") {
+        } else if (n == "report:text") {
             (new ReportEntityText(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "line") {
+        } else if (n == "report:line") {
             (new ReportEntityLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "barcode") {
+        } else if (n == "report:barcode") {
             (new ReportEntityBarcode(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "image") {
+        } else if (n == "report:image") {
             (new ReportEntityImage(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "chart") {
+        } else if (n == "report:chart") {
             (new ReportEntityChart(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "check") {
+        } else if (n == "report:check") {
             (new ReportEntityCheck(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "shape") {
+        } else if (n == "report:shape") {
             (new ReportEntityShape(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        } else if (n == "key" || n == "firstpage" || n == "lastpage"
-                   || n == "odd" || n == "even") {
-            // these are all handled elsewhere but we don't want to show errors
-            // because they are expected sometimes
         } else {
             kDebug() << "Encountered unknown node while parsing section: " << n;
         }
