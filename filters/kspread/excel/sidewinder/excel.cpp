@@ -1442,7 +1442,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
             // 4 bytes unused
             sizeFmla = 2 + 4 + cce;
-            startPict += sizeFmla;
+            //startPict += sizeFmla;
         }
         // skip embedInfo cause we are not a FtPictFmla
         startPict += cmFmla - sizeFmla - 0; // padding
@@ -1455,16 +1455,19 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             if(readU16(startPict) == 0x0009) {
                 const unsigned long cb = readU16(startPict + 2);
                 const unsigned long cbFmla = readU16(startPict + 4);
+                startPict += 6;
                 if(cbFmla > 0x0000) {
                     const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
                     // 4 bytes unused
 
                     // rgce                    
-                    unsigned ptg = readU8(startPict);
+                    unsigned ptg = readU8(startPict + 2);
                     ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
                     FormulaToken token(ptg);
                     token.setVersion(version());
-                    printf("%s\n",token.idAsString());
+                    printf("Picture is of type %s\n",token.idAsString());
+                    
+                    startPict += 3;
                 }
             }
             break;
