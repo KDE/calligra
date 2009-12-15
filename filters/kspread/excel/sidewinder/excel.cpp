@@ -1282,7 +1282,6 @@ void ObjRecord::dump(std::ostream& out) const
 
 void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
 {
-    printf("ObjRecord::setData ******************************************************************\n");
     if (size < 32) {
         setIsValid(false);
         return;
@@ -1325,9 +1324,11 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     const unsigned char* startPict = data + 22;
     switch (ot) {
     case Object::Group: // gmo
+        printf("ObjRecord::setData group\n");
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
+        printf("ObjRecord::setData picture\n");
         m_object = new PictureObject(id);
         //const unsigned long ft = readU16(startPict);
         //const unsigned long cb = readU16(startPict + 2);
@@ -1349,22 +1350,57 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             m_object = 0;
             return;
         }
+        const unsigned long ft2 = readU16(startPict + 6);
+        Q_ASSERT(ft2 == 0x0008);
+        const unsigned long cb2 = readU16(startPict + 8);
+        Q_ASSERT(cb2 == 0x0002);
+        const unsigned long opts2 = readU16(startPict + 10);
+        //const bool fAutoPict = opts2 & 0x01;
+        const bool fDde = opts2 & 0x02; // dynamic data exchange reference?
+        //const bool dPrintCalc = opts2 & 0x04;
+        //const bool fIcon = opts2 & 0x08;
+        const bool FCtl = opts2 & 0x10; // ActiveX control?
+        Q_ASSERT( ! (FCtl && fDde) );
+        const bool fPrstm = opts2 & 0x20; // false=embedded store or true=control stream
+        //const bool unused1 = opts2 & 0x60;
+        //const bool fCamera = opts2 & 0xC0;
+        //const bool fDefaultSize = opts2 & 0x180;
+        //const bool fAutoload = opts2 & 0x300;
+        //const bool unused2 = opts2 & 0x600;
+        //const bool unused3 = opts2 & 0xC00;
+        //const bool unused4 = opts2 & 0x1800;
+        //const bool unused5 = opts2 & 0x3000;
+        //const bool unused6 = opts2 & 0x6000;
+        //const bool unused7 = opts2 & 0xC000;
         startPict += 12;
     }
     break;
     case Object::Checkbox: // cbls
+        printf("ObjRecord::setData checkbox\n");
         startPict += 16;
         break;
     case Object::RadioButton: // cbls and rbo
+        printf("ObjRecord::setData RadioButton\n");
         startPict += 26;
         break;
     case Object::SpinControl: // sbs
+        printf("ObjRecord::setData SpinControl\n");
+        startPict += 24;
+        break;
     case Object::Scrollbar: // sbs
+        printf("ObjRecord::setData Scrollbar\n");
+        startPict += 24;
+        break;
     case Object::List: // sbs
+        printf("ObjRecord::setData List\n");
+        startPict += 24;
+        break;
     case Object::DropdownList: // sbs
+        printf("ObjRecord::setData DropdownList\n");
         startPict += 24;
         break;
     case Object::Note: { // nts
+        printf("ObjRecord::setData Note\n");
         m_object = new NoteObject(id);
         const unsigned long ft = readU16(startPict);
         const unsigned long cb = readU16(startPict + 2);
@@ -1394,7 +1430,29 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         return;
     }
 
-    // FtMacro...
+#if 0 // bah, specs say this should work but it does not.
+    {
+      // FtMacro. Specs say it's optional by not when it's used. So, we need to check it by assuming
+      // a valid FtMacro starts with 0x0004...
+      const unsigned long ft = readU16(startPict);
+      Q_ASSERT(ft == 0x0004);
+      const unsigned long cmFmla = readU16(startPict + 2);
+      startPict += 4;
+      int sizeFmla = 0;
+      if(cmFmla > 0x0000) { // ObjectParseFormula
+          const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
+          // 4byte unused
+          sizeFmla = 2 + 4 + cce;
+          startPict += sizeFmla;
+      }
+      // skip embedInfo cause we are not a FtPictFmla
+      startPict += cmFmla - sizeFmla - 0; // padding
+    }
+
+    if( ot == Object::Picture ) { // pictFmla
+      Q_ASSERT(readU16(startPict) == 0x0009);
+    }
+#endif
 }
 
 // ========== XF ==========
