@@ -203,7 +203,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
 
-    unsigned type = record->rtti();
+    const unsigned type = record->rtti();
+    
     if (type == BottomMarginRecord::id)
         handleBottomMargin(static_cast<BottomMarginRecord*>(record));
     else if (type == BoolErrRecord::id)

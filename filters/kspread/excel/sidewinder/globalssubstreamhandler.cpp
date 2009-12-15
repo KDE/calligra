@@ -461,7 +461,8 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
 
-    unsigned type = record->rtti();
+    const unsigned type = record->rtti();
+    
     if (type == BOFRecord::id)
         handleBOF(static_cast<BOFRecord*>(record));
     else if (type == BoundSheetRecord::id)

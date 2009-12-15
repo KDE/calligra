@@ -1328,7 +1328,6 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
-        printf("ObjRecord::setData picture\n");
         m_object = new PictureObject(id);
         //const unsigned long ft = readU16(startPict);
         //const unsigned long cb = readU16(startPict + 2);
@@ -1372,6 +1371,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool unused5 = opts2 & 0x3000;
         //const bool unused6 = opts2 & 0x6000;
         //const bool unused7 = opts2 & 0xC000;
+        printf("ObjRecord::setData picture fDde=%i FCtl=%i fPrstm=%i\n",fDde,FCtl,fPrstm);
         startPict += 12;
     }
     break;
@@ -1430,29 +1430,45 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         return;
     }
 
-#if 0 // bah, specs say this should work but it does not.
     {
       // FtMacro. Specs say it's optional by not when it's used. So, we need to check it by assuming
       // a valid FtMacro starts with 0x0004...
       const unsigned long ft = readU16(startPict);
-      Q_ASSERT(ft == 0x0004);
-      const unsigned long cmFmla = readU16(startPict + 2);
-      startPict += 4;
-      int sizeFmla = 0;
-      if(cmFmla > 0x0000) { // ObjectParseFormula
-          const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
-          // 4byte unused
-          sizeFmla = 2 + 4 + cce;
-          startPict += sizeFmla;
+      if(ft == 0x0004) {
+        const unsigned long cmFmla = readU16(startPict + 2);
+        startPict += 4;
+        int sizeFmla = 0;
+        if(cmFmla > 0x0000) { // ObjectParseFormula
+            const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
+            // 4 bytes unused
+            sizeFmla = 2 + 4 + cce;
+            startPict += sizeFmla;
+        }
+        // skip embedInfo cause we are not a FtPictFmla
+        startPict += cmFmla - sizeFmla - 0; // padding
       }
-      // skip embedInfo cause we are not a FtPictFmla
-      startPict += cmFmla - sizeFmla - 0; // padding
     }
 
-    if( ot == Object::Picture ) { // pictFmla
-      Q_ASSERT(readU16(startPict) == 0x0009);
+    switch(ot) {
+        case Object::Picture: // pictFmla
+            // again we need to be sure the optional pictFmla is really there.
+            if(readU16(startPict) == 0x0009) {
+                const unsigned long cb = readU16(startPict + 2);
+                const unsigned long cbFmla = readU16(startPict + 4);
+                if(cbFmla > 0x0000) {
+                    const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
+                    // 4 bytes unused
+
+                    // rgce                    
+                    const unsigned ptg = readU8(startPict);
+                    ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+                    FormulaToken token(ptg);
+                    token.setVersion(version());
+                    printf("%s\n",token.idAsString());
+                }
+            }
+            break;
     }
-#endif
 }
 
 // ========== XF ==========
@@ -2116,10 +2132,10 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         return false;
     }
 
-#ifdef SWINDER_XLS2RAW
+//#ifdef SWINDER_XLS2RAW
     std::cout << "Streams:" << std::endl;
     printEntries(storage);
-#endif
+//#endif
 
     unsigned streamVersion = Swinder::Excel97;
     POLE::Stream* stream;
@@ -2226,7 +2242,11 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                       }
                       break;
                  default:
-                     printf( "Ignoring property with unknown id %i and type %i\n", propertyId, type );
+                     if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
+                         propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */ )
+                     {
+                         printf( "Ignoring property with unknown id %i and type %i\n", propertyId, type );
+                     }
                      break;
               }
               summarystream->seek( p2 );
