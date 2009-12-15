@@ -63,6 +63,9 @@ class NoteRecord;
 class ObjRecord;
 class DefaultRowHeightRecord;
 class DefaultColWidthRecord;
+class SetupRecord;
+class HCenterRecord;
+class VCenterRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler
 {
@@ -102,6 +105,9 @@ private:
     void handleObj(ObjRecord* record);
     void handleDefaultRowHeight(DefaultRowHeightRecord* record);
     void handleDefaultColWidth(DefaultColWidthRecord* record);
+    void handleSetup(SetupRecord* record);
+    void handleHCenter(HCenterRecord *record);
+    void handleVCenter(VCenterRecord *record);
 
     UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
     UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);

@@ -262,6 +262,12 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleDefaultRowHeight(static_cast<DefaultRowHeightRecord*>(record));
     else if (type == DefaultColWidthRecord::id)
         handleDefaultColWidth(static_cast<DefaultColWidthRecord*>(record));
+    else if (type == SetupRecord::id)
+        handleSetup(static_cast<SetupRecord*>(record));
+    else if (type == HCenterRecord::id)
+        handleHCenter(static_cast<HCenterRecord*>(record));
+    else if (type == VCenterRecord::id)
+        handleVCenter(static_cast<VCenterRecord*>(record));
     else if (type == 0xA) {} //EofRecord
     else if (type == 0x200) {} //DimensionsRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
@@ -762,6 +768,21 @@ void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* rec
     d->sheet->setDefaultColWidth(record->cchdefColWidth());
 }
 
+void WorksheetSubStreamHandler::handleSetup(SetupRecord*)
+{
+    //TODO
+}
+
+void WorksheetSubStreamHandler::handleHCenter(HCenterRecord*)
+{
+    //TODO
+}
+
+void WorksheetSubStreamHandler::handleVCenter(VCenterRecord*)
+{
+    //TODO
+}
+    
 typedef std::vector<UString> UStringStack;
 
 static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString)

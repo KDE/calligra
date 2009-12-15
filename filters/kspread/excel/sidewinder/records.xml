@@ -348,7 +348,6 @@
   <field name="cchdefColWidth"   type="unsigned" size="16" />
 </record>
 
-<!-- TODO following records are missing the handle in there streams -->
 <record name="HCenter" id="0x0083">
   <field name="centered" type="bool" size="16" />
 </record>
@@ -387,6 +386,7 @@
   <field name="numCopies"               type="unsigned" size="16" />
 </record>
 
+<!-- TODO all records following are missing the handle in there streams -->
 <record name="PrintSize" id="0x0033">
   <field name="printSize" type="unsigned" size="16">
     <enum name="WorkbookDefaults"       value="0" />
