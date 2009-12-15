@@ -140,6 +140,8 @@ public:
     // only when id is Matrix (tExp)
     std::pair<unsigned, unsigned> baseFormulaRecord() const;
 
+    void operator=(const FormulaToken& token);
+    
 private:
     class Private;
     Private *d;

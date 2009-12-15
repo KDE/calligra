@@ -65,6 +65,17 @@ FormulaToken::FormulaToken(const FormulaToken& token)
         d->data[i] = token.d->data[i];
 }
 
+void FormulaToken::operator=(const FormulaToken& token)
+{
+    d = new Private;
+    d->ver = token.d->ver;
+    d->id = token.id();
+    
+    d->data.resize(token.d->data.size());
+    for (unsigned i = 0; i < d->data.size(); i++)
+        d->data[i] = token.d->data[i];
+}
+
 FormulaToken::~FormulaToken()
 {
     delete d;

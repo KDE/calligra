@@ -1432,7 +1432,8 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     {
       // FtMacro. Specs say it's optional by not when it's used. So, we need to check it by assuming
-      // a valid FtMacro starts with 0x0004...
+      // a valid FtMacro starts with 0x0004... The following code is untested. The only thing we are
+      // interested in here is seeking to the structs after this one anyway.
       const unsigned long ft = readU16(startPict);
       if(ft == 0x0004) {
         const unsigned long cmFmla = readU16(startPict + 2);
@@ -1449,29 +1450,62 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
       }
     }
 
-    switch(ot) {
-        case Object::Picture: // pictFmla
-            // again we need to be sure the optional pictFmla is really there.
-            if(readU16(startPict) == 0x0009) {
-                const unsigned long cb = readU16(startPict + 2);
-                const unsigned long cbFmla = readU16(startPict + 4);
-                startPict += 6;
-                if(cbFmla > 0x0000) {
-                    const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
-                    // 4 bytes unused
+    // pictFmla
+    if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
+        const unsigned long cb = readU16(startPict + 2);
 
-                    // rgce                    
-                    unsigned ptg = readU8(startPict + 2);
-                    ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
-                    FormulaToken token(ptg);
-                    token.setVersion(version());
-                    printf("Picture is of type %s\n",token.idAsString());
-                    
-                    startPict += 3;
-                }
+/* lots of TODO 's here... from the specs;
+
+fmla (variable): An ObjFmla that specifies the location of the data for the object associated with
+the Obj record that contains this FtPictFmla. If the pictFlags.fDde field of the Obj record that
+contains this FtPictFmla is 1, fmla MUST refer to a name which is defined in an ExternName record
+whose fOle field is 1. If the pictFlags.fCamera field of the Obj record that contains this FtPictFmla
+is 1, fmla MUST refer to a range. Otherwise, the fmla.cce field of this fmla MUST be 0x5 and the
+fmla.rgce field of this fmla MUST contain a PtgTbl followed by four bytes that are undefined and
+MUST be ignored.
+*/
+        
+        // fmla variable, an ObjFmla struct
+        FormulaToken token;
+        const unsigned long cbFmla = readU16(startPict + 4);
+        int cbFmlaSize = 6;
+        if(cbFmla > 0x0000) { // fmla variable, optional ObjectParsedFormula struct
+            const unsigned long cce = readU16(startPict + cbFmlaSize) >> 1; // 15 bits cce + 1 bit reserved
+            cbFmlaSize += 2 + 4; // 4 bytes unused
+
+            // rgce                    
+            unsigned ptg = readU8(startPict + cbFmlaSize);
+            cbFmlaSize += 1;
+            ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+            token = FormulaToken(ptg);
+            token.setVersion(version());
+            printf("Picture is of type id=%i name=%s\n",token.id(),token.idAsString());
+            if (token.size() > 0) {
+                token.setData(token.size(), startPict + cbFmlaSize);
+                cbFmlaSize += token.size();
             }
-            break;
+        }
+        
+        int embedInfoSize = 0;
+        if(token.id() == FormulaToken::Table) {
+//         const unsigned ttb = readU8(startPict + cbFmlaSize);
+//         int embedInfoSize = 0;
+//         if(ttb == 0x03) { // embedInfo variable, and optional PictFmlaEmbedInfo struct
+//             embedInfoSize += 1;
+//             const unsigned cbClass = readU8(startPict + embedInfoSize);
+//             embedInfoSize += 1;
+//             //const unsigned reserved = readU8(startPict + 2);
+//             if(cbClass > 0x0000) { // strClass specifies the class name of the embedded control
+//                 embedInfoSize += clClass;
+//             }
+//         }
+        }
+
+        //startPict += cbFmla - cbFmlaSize - embedInfoSize; // padding
+        
+        //TODO padding
     }
+    
 }
 
 // ========== XF ==========
