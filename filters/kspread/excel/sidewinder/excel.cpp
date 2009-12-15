@@ -1460,7 +1460,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                     // 4 bytes unused
 
                     // rgce                    
-                    const unsigned ptg = readU8(startPict);
+                    unsigned ptg = readU8(startPict);
                     ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
                     FormulaToken token(ptg);
                     token.setVersion(version());
