@@ -752,6 +752,19 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
     if (!record->m_object) return;
+
+    printf( "WorksheetSubStreamHandler::handleObj id=%i type=%i\n", record->m_object->id(),record->m_object->type() );
+    switch(record->m_object->type()) {
+        case Object::Picture: {
+            PictureObject *r = static_cast<PictureObject*>(record->m_object);
+            if( ! r) return;
+printf("PICTURE embeddedStorage=%s\n",r->embeddedStorage().c_str());
+        }
+        break;
+        default:
+            break;
+    }
+
     d->sharedObjects[ record->m_object->id()] = record->m_object;
 }
 

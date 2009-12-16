@@ -1458,6 +1458,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     // pictFmla
     if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
         const unsigned long cb = readU16(startPict + 2);
+        startPict += 4;
 
         /* from the specs;
 
@@ -1472,12 +1473,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
         // fmla variable, an ObjFmla struct
         FormulaToken token;
-        const unsigned long cbFmla = readU16(startPict + 4);
-        int cbFmlaSize = 6;
+        const unsigned long cbFmla = readU16(startPict);
+        int cbFmlaSize = 0;
         int embedInfoSize = 0;
         if(cbFmla > 0x0000) { // fmla variable, optional ObjectParsedFormula struct
-            const unsigned long cce = readU16(startPict + cbFmlaSize) >> 1; // 15 bits cce + 1 bit reserved
-            cbFmlaSize += 2 + 4; // 4 bytes unused
+            const unsigned long cce = readU16(startPict + cbFmlaSize + 2) >> 1; // 15 bits cce + 1 bit reserved
+            cbFmlaSize += 2 + 2 + 4; // 4 bytes unused
 
             // rgce                    
             unsigned ptg = readU8(startPict + cbFmlaSize);
@@ -1503,8 +1504,9 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                     //const unsigned reserved = readU8(startPict + cbFmlaSize + embedInfoSize + 2);
                     embedInfoSize += 3;
                     if(cbClass > 0x0000) { // strClass specifies the class name of the embedded control
-                        UString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass);
-                        embedInfoSize += cbClass;
+                        unsigned size = 0;
+                        UString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
+                        embedInfoSize += size;
                         
                         //TODO
                         printf( "!!!!!!!!!!!! ObjRecord::setData: className=%s\n", className.ascii() );
@@ -1512,8 +1514,8 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                 }
             }
         }
-        startPict += cbFmla - cbFmlaSize - embedInfoSize; // padding
-        
+        startPict += cbFmla + 2;
+
         // IPosInCtlStm variable
         if(token.id() == FormulaToken::Table) {
             const unsigned int iposInCtlStm = readU32(startPict);
@@ -1523,14 +1525,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                 static_cast<PictureObject*>(m_object)->setControlStream(iposInCtlStm, cbBufInCtlStm);
             } else { // The object‘s data MUST reside in an embedding storage.
                 std::stringstream out;
-                out << std::hex << iposInCtlStm;
-                std::string filename = "MBD" + out.str();
-                startPict += 4;
-                static_cast<PictureObject*>(m_object)->setEmbeddedStorage(filename);
+                out << std::setw(8) << std::setfill('0') << std::uppercase << std::hex << iposInCtlStm;
+                static_cast<PictureObject*>(m_object)->setEmbeddedStorage(out.str());
             }
         }
-        
-        // key variable, PictFmlaKey
+
+        // key variable, PictFmlaKey struct
         if(fCtl) {
             std::string key;
             const unsigned int cbKey = readU32(startPict);
@@ -1545,7 +1545,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             printf("ObjRecord::setData: Runtime license key is \"%s\"\n", key);
         }
     }
-    
+
     // linkFmla
     // checkBox
     // radionButton
