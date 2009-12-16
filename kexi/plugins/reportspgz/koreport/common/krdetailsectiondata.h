@@ -66,7 +66,8 @@ class ORDetailGroupSectionData
 	
 	enum PageBreak {
 	    BreakNone = 0,
-	    BreakAfterGroupFooter = 1
+	    BreakAfterGroupFooter = 1,
+	    BreakBeforeGroupHeader = 2
 	};
 	
 	//QString name;

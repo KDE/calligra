@@ -50,6 +50,17 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 	    ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
 	    
 	    //TODO Column and page break
+	    dgsd->column = elemThis.attribute("report:group-column");
+	    
+	    QString pbreak = elemThis.attribute("report:group-page-break");
+	    if (pbreak == "after-footer") {
+		dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
+	    } else if (pbreak == "before-header") {
+		dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
+	    } else {
+		dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
+	    }
+
 	    for (int gnodeCounter = 0; gnodeCounter < gsections.count(); gnodeCounter++) {
 		QDomElement gsec = gsections.item(gnodeCounter).toElement();
 		if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "header-group") {
