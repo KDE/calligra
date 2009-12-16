@@ -1309,6 +1309,7 @@ struct stackEntry {
     int row1, col1, row2, col2;
 };
 
+// evaluate the cellIndirections
 Value Formula::eval(CellIndirection cellIndirections) const
 {
     QHash<Cell, Value> values;
@@ -1502,7 +1503,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
             // greater than
-        case Opcode::Greater:
+        case Opcode::Greater: {
             val1 = stack.pop().val;
             val2 = stack.pop().val;
             if (!val1.allowComparison(val2))
@@ -1514,10 +1515,11 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             entry.reset();
             entry.val = val1;
             stack.push(entry);
-            break;
+        }
+        break;
 
-
-        case Opcode::Cell:
+        // cell in a sheet
+        case Opcode::Cell: {
             c = d->constants[index].asString();
             val1 = Value::empty();
             entry.reset();
@@ -1550,9 +1552,11 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             entry.val = val1;
             stack.push(entry);
-            break;
+        }
+        break;
 
-        case Opcode::Range:
+        // selected range in a sheet
+        case Opcode::Range: {
             c = d->constants[index].asString();
             val1 = Value::empty();
             entry.reset();
@@ -1569,8 +1573,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             entry.val = val1;
             stack.push(entry);
-            break;
+        }
+        break;
 
+        // reference
         case Opcode::Ref:
             val1 = d->constants[index];
             entry.reset();
