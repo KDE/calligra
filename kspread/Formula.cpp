@@ -1521,33 +1521,33 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             c = d->constants[index].asString();
             val1 = Value::empty();
             entry.reset();
-            if (d->sheet) {
-                const Region region(c, d->sheet->map(), d->sheet);
-                if( ! region.isValid() ) {
-                    val1 = Value::errorREF();
-                } else if ( region.isSingular()) {
-                    const QPoint position = region.firstRange().topLeft();
-                    if (cellIndirections.isEmpty())
-                        val1 = Cell(region.firstSheet(), position).value();
+
+            const Region region(c, map, d->sheet);
+            if( ! region.isValid() ) {
+                val1 = Value::errorREF();
+            } else if ( region.isSingular()) {
+                const QPoint position = region.firstRange().topLeft();
+                if (cellIndirections.isEmpty())
+                    val1 = Cell(region.firstSheet(), position).value();
+                else {
+                    Cell cell(region.firstSheet(), position);
+                    cell = cellIndirections.value(cell, cell);
+                    if (values.contains(cell))
+                        val1 = values.value(cell);
                     else {
-                        Cell cell(region.firstSheet(), position);
-                        cell = cellIndirections.value(cell, cell);
-                        if (values.contains(cell))
-                            val1 = values.value(cell);
-                        else {
-                            values[cell] = Value::errorCIRCLE();
-                            if (cell.isFormula())
-                                val1 = cell.formula().evalRecursive(cellIndirections, values);
-                            else
-                                val1 = cell.value();
-                            values[cell] = val1;
-                        }
+                        values[cell] = Value::errorCIRCLE();
+                        if (cell.isFormula())
+                            val1 = cell.formula().evalRecursive(cellIndirections, values);
+                        else
+                            val1 = cell.value();
+                        values[cell] = val1;
                     }
-                    // store the reference, so we can use it within functions
-                    entry.col1 = entry.col2 = position.x();
-                    entry.row1 = entry.row2 = position.y();
                 }
+                // store the reference, so we can use it within functions
+                entry.col1 = entry.col2 = position.x();
+                entry.row1 = entry.row2 = position.y();
             }
+
             entry.val = val1;
             stack.push(entry);
             break;
@@ -1556,17 +1556,17 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             c = d->constants[index].asString();
             val1 = Value::empty();
             entry.reset();
-            if (d->sheet) {
-                const Region region(c, d->sheet->map(), d->sheet);
-                if (region.isValid()) {
-                    val1 = region.firstSheet()->cellStorage()->valueRegion(region);
-                    // store the reference, so we can use it within functions
-                    entry.col1 = region.firstRange().left();
-                    entry.row1 = region.firstRange().top();
-                    entry.col2 = region.firstRange().right();
-                    entry.row2 = region.firstRange().bottom();
-                }
+
+            const Region region(c, map, d->sheet);
+            if (region.isValid()) {
+                val1 = region.firstSheet()->cellStorage()->valueRegion(region);
+                // store the reference, so we can use it within functions
+                entry.col1 = region.firstRange().left();
+                entry.row1 = region.firstRange().top();
+                entry.col2 = region.firstRange().right();
+                entry.row2 = region.firstRange().bottom();
             }
+
             entry.val = val1;
             stack.push(entry);
             break;
