@@ -202,6 +202,14 @@ void TestFormula::testConstant()
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
 }
 
+void TestFormula::testInvalid()
+{
+    CHECK_EVAL("a+0", Value::errorVALUE());
+    CHECK_EVAL("0-z", Value::errorVALUE());
+    CHECK_EVAL("a*b", Value::errorVALUE());
+    CHECK_EVAL("u/2", Value::errorVALUE());
+}
+
 void TestFormula::testUnary()
 {
     // unary minus
