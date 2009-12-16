@@ -389,7 +389,7 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
             if (ifmt >= 164 && ifmt <= 392) {  // custom format
                 valueFormat = d->formatsTable[ifmt];
             } else {
-                printf("Unhandled format with index %i. Using general format.\n", xf.formatIndex());
+                std::cout << "Unhandled format with index " << xf.formatIndex() << ". Using general format." << std::endl;
                 valueFormat = "General";
             }
         }
@@ -494,7 +494,7 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        printf("Unhandled global record with type %i\n", type);
+        std::cout << "Unhandled global record with type=" << type << std::endl;
     }
 }
 
@@ -504,6 +504,8 @@ void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
 
     if (record->type() == BOFRecord::Workbook) {
         d->version = record->version();
+    } else {
+        std::cout << "GlobalsSubStreamHandler::handleBOF: Unhandled type=" << record->type() << std::endl;
     }
 }
 
@@ -655,7 +657,7 @@ void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
   if (!record) return;
   
   if (record->isLocked()) {
-      printf( "Warning: The workbook is protected!\n" );
+      std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
   }
 }
 

@@ -96,14 +96,14 @@ public:
         if (hlstmfHasDisplayName) {
             length = readU32(startHyperlinkObject);
             m_displayName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-            printf("displayName=%s\n", m_displayName.ascii());
+            //printf("HLinkRecord: displayName=%s\n", m_displayName.ascii());
             startHyperlinkObject += 4 + sizeReaded;
         }
 
         if (hlstmfHasFrameName) {
             length = readU32(startHyperlinkObject);
             m_targetFrameName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-            printf("targetFrameName=%s\n", m_targetFrameName.ascii());
+            //printf("HLinkRecord: targetFrameName=%s\n", m_targetFrameName.ascii());
             startHyperlinkObject += 4 + sizeReaded;
         }
 
@@ -111,7 +111,7 @@ public:
             if (hlstmfMonikerSavedAsStr) {  // moniker
                 length = readU32(startHyperlinkObject);
                 UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-                printf("moniker=%s\n", moniker.ascii());
+                std::cout << "HLinkRecord: Unhandled moniker=" << moniker.ascii() << std::endl;
                 startHyperlinkObject += 4 + sizeReaded;
             } else { // oleMoniker
                 const unsigned long clsid = readU32(startHyperlinkObject);
@@ -120,27 +120,26 @@ public:
                 case 0x79EAC9E0: { // URLMoniker
                     length = readU32(startHyperlinkObject);
                     m_location = readTerminatedUnicodeChars(startHyperlinkObject + 4, &sizeReaded);
-                    printf("url=%s\n", m_location.ascii());
                     startHyperlinkObject += length + 4;
                 }
                 break;
                 case 0x00000303: { // FileMoniker
-                    printf("TODO: HLinkRecord FileMoniker\n");
+                    std::cout << "TODO: HLinkRecord FileMoniker" << std::endl;
                     return; // abort
                 }
                 break;
                 case 0x00000309: { // CompositeMoniker
-                    printf("TODO: HLinkRecord CompositeMoniker\n");
+                    std::cout << "TODO: HLinkRecord CompositeMoniker" << std::endl;
                     return; // abort
                 }
                 break;
                 case 0x00000305: { // AntiMoniker
-                    printf("TODO: HLinkRecord AntiMoniker\n");
+                    std::cout << "TODO: HLinkRecord AntiMoniker" << std::endl;
                     return; // abort
                 }
                 break;
                 case 0x00000304: { // ItemMoniker
-                    printf("TODO: HLinkRecord ItemMoniker\n");
+                    std::cout << "TODO: HLinkRecord ItemMoniker" << std::endl;
                     return; // abort
                 }
                 break;
@@ -151,7 +150,7 @@ public:
         if (hlstmfHasLocationStr) {
             length = readU32(startHyperlinkObject);
             m_location = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-            printf("location=%s\n", m_location.ascii());
+            std::cout << "HLinkRecord: m_displayName=" << m_displayName << " m_targetFrameName=" << m_targetFrameName << " location=" << m_location.ascii() << std::endl;
             startHyperlinkObject += 4 + sizeReaded;
         }
 
@@ -273,7 +272,7 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     else if (type == 0x200) {} //DimensionsRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        printf("Unhandled worksheet record with type %i\n", type);
+        std::cout << "Unhandled worksheet record with type=" << type << std::endl;
     }
 }
 
@@ -281,9 +280,11 @@ void WorksheetSubStreamHandler::handleBOF(BOFRecord* record)
 {
     if (!record) return;
 
-    //if (record->type() == BOFRecord::Worksheet) {
-    //    d->version = record->version();
-    //}
+    if (record->type() == BOFRecord::Worksheet) {
+        // ...
+    } else {
+        std::cout << "WorksheetSubStreamHandler::handleBOF Unhandled type=" << record->type() << std::endl;
+    }
 }
 
 void WorksheetSubStreamHandler::handleBlank(BlankRecord* record)
@@ -753,17 +754,19 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (!record) return;
     if (!record->m_object) return;
 
-    printf( "WorksheetSubStreamHandler::handleObj id=%i type=%i\n", record->m_object->id(),record->m_object->type() );
+    /*
+    std::cout << "WorksheetSubStreamHandler::handleObj id=" << record->m_object->id() << " type=" << record->m_object->type() << std::endl;
     switch(record->m_object->type()) {
         case Object::Picture: {
             PictureObject *r = static_cast<PictureObject*>(record->m_object);
             if( ! r) return;
-printf("PICTURE embeddedStorage=%s\n",r->embeddedStorage().c_str());
+            std::cout << "PICTURE embeddedStorage=" << r->embeddedStorage().c_str() << std::endl;
         }
         break;
         default:
             break;
     }
+    */
 
     d->sharedObjects[ record->m_object->id()] = record->m_object;
 }
@@ -1063,7 +1066,7 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
             } else {
               // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
               // result is an reference to cells. So, we can savly ignore that case...
-              printf( "MATRIX first=%i second=%i\n",formulaCellPos.first,formulaCellPos.second );
+              std::cout << "MATRIX first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
             }
             break;
         }
@@ -1078,7 +1081,7 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
                   stack.push_back(UString("Error"));
               }
             } else {
-              printf( "TABLE first=%i second=%i\n",formulaCellPos.first,formulaCellPos.second );
+              std::cout << "TABLE first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
             }
             break;
         }
@@ -1107,7 +1110,7 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
         case FormulaToken::AreaErr3d:
         default:
             // FIXME handle this !
-            printf("Unhandled token %s with id %i\n", token.idAsString(), token.id());
+            std::cout << "Unhandled token=" << token.idAsString() << std::endl;
             stack.push_back(UString("Unknown"));
             break;
         };
