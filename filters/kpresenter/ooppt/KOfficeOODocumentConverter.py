@@ -13,7 +13,7 @@
 
 DEFAULT_OPENOFFICE_PORT = 8100
 
-import sys, os, getopt, time, traceback, popen2, subprocess, signal
+import sys, os, getopt, time, traceback, subprocess, signal
 
 # this was needed to find uno
 sys.path.append("/usr/lib/ooo-2.0/program") 
@@ -30,7 +30,7 @@ class UnoServer:
     def __init__(self, port=DEFAULT_OPENOFFICE_PORT):
         #self.unoConfig._logger.write("Starting OpenOffice.org at %s:%s ...\n" % (self.unoConfig.host,self.unoConfig.port))
         try:
-            self.process = popen2.Popen3([ #subprocess.Popen([
+            self.process = subprocess.Popen([
                 'soffice',
                 '-nologo', #don't show startup screen.
                 '-minimized', #keep startup bitmap minimized.
