@@ -1519,11 +1519,13 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             const unsigned int iposInCtlStm = readU32(startPict);
             if(fPrstm) { // iposInCtlStm specifies the zero-based offset of this object's data within the control stream.
                 const unsigned int cbBufInCtlStm = readU32(startPict + 4);
+                startPict += 8;
                 static_cast<PictureObject*>(m_object)->setControlStream(iposInCtlStm, cbBufInCtlStm);
             } else { // The object‘s data MUST reside in an embedding storage.
                 std::stringstream out;
                 out << std::hex << iposInCtlStm;
                 std::string filename = "MBD" + out.str();
+                startPict += 4;
                 static_cast<PictureObject*>(m_object)->setEmbeddedStorage(filename);
             }
         }
@@ -1531,10 +1533,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         // key variable, PictFmlaKey
         if(fCtl) {
             std::string key;
-            const unsigned int cbKey = readU32(startPict + 4);
+            const unsigned int cbKey = readU32(startPict);
+            startPict += 4;
             for(uint i = 0; i < cbKey; ++i) {
                 if(key.size() > 0) key += ".";
-                key = readU32(startPict + 4 +  (i * 4));
+                key = readU32(startPict);
+                startPict += 4;
             }
             //fmlaLinkedCell
             //fmlaListFillRange
@@ -1542,6 +1546,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
     }
     
+    // linkFmla
+    // checkBox
+    // radionButton
+    // edit
+    // list
+    // gbo
 }
 
 // ========== XF ==========
