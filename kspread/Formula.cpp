@@ -1523,7 +1523,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             entry.reset();
             if (d->sheet) {
                 const Region region(c, d->sheet->map(), d->sheet);
-                if (region.isValid() && region.isSingular()) {
+                if( ! region.isValid() ) {
+                    val1 = Value::errorREF();
+                } else if ( region.isSingular()) {
                     const QPoint position = region.firstRange().topLeft();
                     if (cellIndirections.isEmpty())
                         val1 = Cell(region.firstSheet(), position).value();
