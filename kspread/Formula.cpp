@@ -1315,6 +1315,25 @@ Value Formula::eval(CellIndirection cellIndirections) const
     return evalRecursive(cellIndirections, values);
 }
 
+Value numericOrError(const Value &v)
+{
+    switch (v.type()) {
+        case Value::Empty:
+        case Value::Boolean:
+        case Value::Integer:
+        case Value::Float:
+        case Value::Complex:
+            return v;
+        case Value::String:
+            return v.asString().isEmpty() ? v : Value::errorVALUE();
+        case Value::Array:
+        case Value::CellRange:
+        case Value::Error:
+            break;
+    }
+    return Value::errorVALUE();
+}
+
 Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value>& values) const
 {
     QStack<stackEntry> stack;
@@ -1375,8 +1394,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             // push the result to stack
         case Opcode::Add:
             entry.reset();
-            val2 = stack.pop().val;
-            val1 = stack.pop().val;
+            val2 = numericOrError(stack.pop().val);
+            val1 = numericOrError(stack.pop().val);
             val2 = calc->add(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1384,8 +1403,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Sub:
-            val2 = stack.pop().val;
-            val1 = stack.pop().val;
+            val2 = numericOrError(stack.pop().val);
+            val1 = numericOrError(stack.pop().val);
             val2 = calc->sub(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1393,8 +1412,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Mul:
-            val2 = stack.pop().val;
-            val1 = stack.pop().val;
+            val2 = numericOrError(stack.pop().val);
+            val1 = numericOrError(stack.pop().val);
             val2 = calc->mul(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1402,8 +1421,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Div:
-            val2 = stack.pop().val;
-            val1 = stack.pop().val;
+            val2 = numericOrError(stack.pop().val);
+            val1 = numericOrError(stack.pop().val);
             val2 = calc->div(val1, val2);
             entry.reset();
             entry.val = val2;
