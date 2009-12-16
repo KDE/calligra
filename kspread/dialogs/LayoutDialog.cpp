@@ -912,21 +912,25 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     fraction->setWhatsThis(i18n("The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest closest Sixteenth fraction."));
     grid->addWidget(fraction, 6, 0);
 
-    date = new QRadioButton(i18n("Date format"), grp);
+    date = new QRadioButton(i18n("Date"), grp);
     date->setWhatsThis(i18n("To enter a date, you should enter it in one of the formats set in KControl in Regional & Accessibility ->Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get dates."));
     grid->addWidget(date, 7, 0);
 
-    time = new QRadioButton(i18n("Time format"), grp);
+    time = new QRadioButton(i18n("Time"), grp);
     time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in KControl in Regional & Accessibility ->Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in KControl. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in KControl."));
     grid->addWidget(time, 8, 0);
 
+    datetime = new QRadioButton(i18n("Date and Time"), grp);
+    datetime->setWhatsThis(i18n("This formats your cell content as date and time. To enter a date and a time, you should enter it in the Time format set in KControl in Regional & Accessibility ->Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available date format options. The default format is the system format set in KControl. When the number in the cell does not make sense as a date and time, KSpread will display 00:00 in the global format you have in KControl."));
+    grid->addWidget(datetime, 9, 0);
+
     textFormat = new QRadioButton(i18n("Text"), grp);
     textFormat->setWhatsThis(i18n("This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It also change the way the cell is justified."));
-    grid->addWidget(textFormat, 9, 0);
+    grid->addWidget(textFormat, 10, 0);
 
     customFormat = new QRadioButton(i18n("Custom"), grp);
     customFormat->setWhatsThis(i18n("The custom format does not work yet. To be enabled in the next release."));
-    grid->addWidget(customFormat, 10, 0);
+    grid->addWidget(customFormat, 11, 0);
     customFormat->setEnabled(false);
 
     QGroupBox *box2 = new QGroupBox(grp);
@@ -939,7 +943,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     exampleLabel->setWhatsThis(i18n("This will display a preview of your choice so you can know what it does before clicking the OK button to validate it."));
     grid3->addWidget(exampleLabel, 0, 1);
 
-    grid->addWidget(box2, 9, 1, 2, 1);
+    grid->addWidget(box2, 9, 1, 3, 1);
 
     customFormatEdit = new KLineEdit(grp);
     grid->addWidget(customFormatEdit, 0, 1);
@@ -1086,6 +1090,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     connect(fraction, SIGNAL(clicked()), this, SLOT(slotChangeState()));
     connect(money, SIGNAL(clicked()), this, SLOT(slotChangeState()));
     connect(date, SIGNAL(clicked()), this, SLOT(slotChangeState()));
+    connect(datetime, SIGNAL(clicked()), this, SLOT(slotChangeState()));
     connect(scientific, SIGNAL(clicked()), this, SLOT(slotChangeState()));
     connect(number, SIGNAL(clicked()), this, SLOT(slotChangeState()));
     connect(percent, SIGNAL(clicked()), this, SLOT(slotChangeState()));
@@ -1127,7 +1132,6 @@ void CellFormatPageFloat::slotChangeState()
     prefix->setEnabled(true);
     postfix->setEnabled(true);
     format->setEnabled(true);
-
     if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
             scientific->isChecked() || textFormat->isChecked())
         listFormat->setEnabled(false);
@@ -1143,6 +1147,13 @@ void CellFormatPageFloat::slotChangeState()
         postfix->setEnabled(false);
         listFormat->setEnabled(true);
         init();
+    } else if (datetime->isChecked()) {
+        format->setEnabled(false);
+        precision->setEnabled(false);
+        prefix->setEnabled(false);
+        postfix->setEnabled(false);
+        listFormat->setEnabled(true);
+        datetimeInit();
     } else if (fraction->isChecked()) {
         precision->setEnabled(false);
         listFormat->setEnabled(true);
@@ -1353,7 +1364,14 @@ void CellFormatPageFloat::init()
         listFormat->setCurrentRow(27);
     else
         listFormat->setCurrentRow(0);
+}
 
+void CellFormatPageFloat::datetimeInit()
+{
+    QStringList list;
+    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), KLocale::ShortDate);
+    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), KLocale::LongDate);
+    listFormat->addItems(list);
 }
 
 void CellFormatPageFloat::currencyChanged(const QString &)

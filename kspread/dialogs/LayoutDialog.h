@@ -232,6 +232,7 @@ public slots:
     void makeformat();
     void updateFormatType();
     void init();
+    void datetimeInit();
     void slotChangeValue(int);
     void formatChanged(int);
     void currencyChanged(const QString &);
@@ -246,6 +247,7 @@ protected:
     QRadioButton *number;
     QRadioButton *percent;
     QRadioButton *date;
+    QRadioButton *datetime;
     QRadioButton *money;
     QRadioButton *scientific;
     QRadioButton *fraction;
