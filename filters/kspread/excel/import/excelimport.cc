@@ -722,9 +722,10 @@ static bool isDateTimeFormat(const Value &value, const QString& valueFormat)
     Q_UNUSED(locale);
     vf = removeEscaped(vf);
     QRegExp ex("(m+|d+|y+)(h:m+)");
+    ex.setCaseSensitivity(Qt::CaseInsensitive);
 
-    //qDebug() << "vf regexp" << vf << ex.indexIn(vf) << value.asFloat() << (vf == "M/D/YY h:mm");
-    return (ex.indexIn(vf) > 0);
+    //qDebug() << "vf regexp" << vf << ex.indexIn(vf) << value.asFloat() << ((ex.indexIn(vf) > 0) || (vf == "M/D/YY h:mm"));
+    return ((ex.indexIn(vf) > 0) || (vf == "M/D/YY h:mm"));
 }
 
 static bool isFractionFormat(const QString& valueFormat)
