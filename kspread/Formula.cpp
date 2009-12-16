@@ -1317,7 +1317,7 @@ Value Formula::eval(CellIndirection cellIndirections) const
 
 // On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
 // non-numeric. This differs from formulas like SUM which just ignore non numeric values.
-Value numericOrError(const Value &v)
+Value numericOrError(const ValueConverter* converter, const Value &v)
 {
     switch (v.type()) {
         case Value::Empty:
@@ -1325,12 +1325,18 @@ Value numericOrError(const Value &v)
         case Value::Integer:
         case Value::Float:
         case Value::Complex:
+        case Value::Error:
             return v;
-        case Value::String:
-            return v.asString().isEmpty() ? v : Value::errorVALUE();
+        case Value::String: {
+            if( v.asString().isEmpty() )
+                return v;
+            bool ok;
+            converter->asNumeric(v, &ok);
+            if(ok)
+                return v;
+        } break;
         case Value::Array:
         case Value::CellRange:
-        case Value::Error:
             break;
     }
     return Value::errorVALUE();
@@ -1396,8 +1402,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             // push the result to stack
         case Opcode::Add:
             entry.reset();
-            val2 = numericOrError(stack.pop().val);
-            val1 = numericOrError(stack.pop().val);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
             val2 = calc->add(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1405,8 +1411,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Sub:
-            val2 = numericOrError(stack.pop().val);
-            val1 = numericOrError(stack.pop().val);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
             val2 = calc->sub(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1414,8 +1420,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Mul:
-            val2 = numericOrError(stack.pop().val);
-            val1 = numericOrError(stack.pop().val);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
             val2 = calc->mul(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1423,8 +1429,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Div:
-            val2 = numericOrError(stack.pop().val);
-            val1 = numericOrError(stack.pop().val);
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
             val2 = calc->div(val1, val2);
             entry.reset();
             entry.val = val2;
