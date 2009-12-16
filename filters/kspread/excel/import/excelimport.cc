@@ -711,6 +711,22 @@ static bool isTimeFormat(const Value &value, const QString& valueFormat)
     return (ex.indexIn(vf) >= 0) && value.asFloat() < 1.0;
 }
 
+static bool isDateTimeFormat(const Value &value, const QString& valueFormat)
+{
+    if (value.type() != Value::Float)
+        return false;
+
+    QString vf = valueFormat;
+    QString locale = extractLocale(vf);
+
+    Q_UNUSED(locale);
+    vf = removeEscaped(vf);
+    QRegExp ex("(m+|d+|y+)(h:m+)");
+
+    //qDebug() << "vf regexp" << vf << ex.indexIn(vf) << value.asFloat() << (vf == "M/D/YY h:mm");
+    return (ex.indexIn(vf) > 0);
+}
+
 static bool isFractionFormat(const QString& valueFormat)
 {
     QRegExp ex("^#[?]+/[0-9?]+$");
@@ -750,6 +766,20 @@ static QString convertTime(double serialNo, const QString& valueFormat)
     tt = tt.addMSecs(qRound((serialNo - (int)serialNo) * 86400 * 1000));
     qDebug() << tt;
     return tt.toString("'PT'hh'H'mm'M'ss'S'");
+}
+
+static QString convertDateTime(double serialNo, const QString& valueFormat)
+{
+    QString vf = valueFormat;
+    QString locale = extractLocale(vf);
+    Q_UNUSED(locale);   //TODO http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx
+    Q_UNUSED(vf);   //TODO
+
+    // reference is midnight 30 Dec 1899
+    QDateTime dt(QDate(1899, 12, 30));
+    dt = dt.addMSecs((qint64)(serialNo * 86400 * 1000)); // TODO: we probably need double precision here
+    QString res = dt.toString("yyyy-MM-ddThh:mm:ss");
+    return res;
 }
 
 static QString convertFraction(double serialNo, const QString& valueFormat)
@@ -795,6 +825,10 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
             const QString currencyValue = convertCurrency(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "currency");
             xmlWriter->addAttribute("office:value", currencyValue);
+        } else if (isDateTimeFormat(value, valueFormat)) {
+            const QString dateTimeValue = convertDateTime(value.asFloat(), valueFormat); // double?
+            xmlWriter->addAttribute("office:value-type", "date");
+            xmlWriter->addAttribute("office:date-value", dateTimeValue);
         } else if (isDateFormat(value, valueFormat)) {
             const QString dateValue = convertDate(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "date");
