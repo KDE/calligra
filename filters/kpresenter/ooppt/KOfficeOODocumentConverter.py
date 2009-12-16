@@ -39,7 +39,6 @@ class UnoServer:
                 '-headless',
                 "-accept=socket,host=localhost,port=%s;urp;" % port
             ], )
-            time.sleep(5)
         except IOError:
             traceback.print_exc()
             raise
@@ -93,9 +92,15 @@ class DocumentConverter:
     def __init__(self, port=DEFAULT_OPENOFFICE_PORT):
         localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", localContext)
-        try:
-            context = resolver.resolve("uno:socket,host=localhost,port=%s;urp;StarOffice.ComponentContext" % port)
-        except NoConnectException:
+        # try 10 seconds to connect
+        tryStartTime = time.time()
+        context = None
+        while tryStartTime + 10 > time.time() and context == None:
+            try:
+                context = resolver.resolve("uno:socket,host=localhost,port=%s;urp;StarOffice.ComponentContext" % port)
+            except NoConnectException:
+                context = None
+        if context == None:
             raise DocumentConversionException, "failed to connect to OpenOffice.org on port %s" % port
         self.desktop = context.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", context)
 
