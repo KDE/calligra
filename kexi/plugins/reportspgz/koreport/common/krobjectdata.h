@@ -117,11 +117,9 @@ protected:
 
     QString m_oldName;
     
-    bool parseReportRect(const QDomElement &, QRectF &);
-    bool parseReportFont(const QDomElement &, QFont &);
-    
-    bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
-    bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);
+    static bool parseReportRect(const QDomElement &, QRectF &); 
+    static bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
+    static bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);
     
 
 };
