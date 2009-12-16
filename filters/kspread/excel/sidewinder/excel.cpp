@@ -27,6 +27,7 @@
 #include <map>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
 
 #include <QDebug>
 #include <QDateTime>
@@ -1321,6 +1322,10 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     //const unsigned long unused9 = readU32(startFtCmo + 14);
     //const unsigned long unused10 = readU32(startFtCmo + 18);
 
+    bool fDde = false; // dynamic data exchange reference?
+    bool fCtl = false; // ActiveX control?
+    bool fPrstm = false; // false=embedded store or true=control stream
+    
     const unsigned char* startPict = data + 22;
     switch (ot) {
     case Object::Group: // gmo
@@ -1355,12 +1360,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         Q_ASSERT(cb2 == 0x0002);
         const unsigned long opts2 = readU16(startPict + 10);
         //const bool fAutoPict = opts2 & 0x01;
-        const bool fDde = opts2 & 0x02; // dynamic data exchange reference?
+        fDde = opts2 & 0x02; // dynamic data exchange reference?
         //const bool dPrintCalc = opts2 & 0x04;
         //const bool fIcon = opts2 & 0x08;
-        const bool FCtl = opts2 & 0x10; // ActiveX control?
-        Q_ASSERT( ! (FCtl && fDde) );
-        const bool fPrstm = opts2 & 0x20; // false=embedded store or true=control stream
+        fCtl = opts2 & 0x10; // ActiveX control?
+        Q_ASSERT( ! (fCtl && fDde) );
+        fPrstm = opts2 & 0x20;
         //const bool unused1 = opts2 & 0x60;
         //const bool fCamera = opts2 & 0xC0;
         //const bool fDefaultSize = opts2 & 0x180;
@@ -1371,7 +1376,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool unused5 = opts2 & 0x3000;
         //const bool unused6 = opts2 & 0x6000;
         //const bool unused7 = opts2 & 0xC000;
-        printf("ObjRecord::setData picture fDde=%i FCtl=%i fPrstm=%i\n",fDde,FCtl,fPrstm);
+        printf("ObjRecord::setData picture fDde=%i FCtl=%i fPrstm=%i\n",fDde,fCtl,fPrstm);
         startPict += 12;
     }
     break;
@@ -1508,6 +1513,33 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             }
         }
         startPict += cbFmla - cbFmlaSize - embedInfoSize; // padding
+        
+        // IPosInCtlStm variable
+        if(token.id() == FormulaToken::Table) {
+            const unsigned int iposInCtlStm = readU32(startPict);
+            if(fPrstm) { // iposInCtlStm specifies the zero-based offset of this object's data within the control stream.
+                const unsigned int cbBufInCtlStm = readU32(startPict + 4);
+                static_cast<PictureObject*>(m_object)->setControlStream(iposInCtlStm, cbBufInCtlStm);
+            } else { // The object‘s data MUST reside in an embedding storage.
+                std::stringstream out;
+                out << std::hex << iposInCtlStm;
+                std::string filename = "MBD" + out.str();
+                static_cast<PictureObject*>(m_object)->setEmbeddedStorage(filename);
+            }
+        }
+        
+        // key variable, PictFmlaKey
+        if(fCtl) {
+            std::string key;
+            const unsigned int cbKey = readU32(startPict + 4);
+            for(uint i = 0; i < cbKey; ++i) {
+                if(key.size() > 0) key += ".";
+                key = readU32(startPict + 4 +  (i * 4));
+            }
+            //fmlaLinkedCell
+            //fmlaListFillRange
+            printf("ObjRecord::setData: Runtime license key is \"%s\"\n", key);
+        }
     }
     
 }

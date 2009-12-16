@@ -82,8 +82,10 @@ private:
 class PictureObject : public Object
 {
 public:
-    PictureObject(unsigned long id) : Object(Picture, id) {}
+    PictureObject(unsigned long id) : Object(Picture, id), m_offset(0), m_size(0) {}
     virtual ~PictureObject() {}
+    
+    /// Enumeration of possible image types.
     enum Type { EnhancedMetafile, Bitmap, Unspecified };
     /// Returns the type of the image.
     Type type() const {
@@ -93,8 +95,39 @@ public:
     void setType(const Type &t) {
         m_type = t;
     }
+    
+    /// Returns the offset of the picture in the control stream.
+    uint controlStreamOffset() {
+        return m_offset;
+    }
+    /// Returns the size of the picture in the control stream.
+    uint controlStreamSize() {
+        return m_size;
+    }
+    /// Sets the offset and size of the picture in the control stream.
+    void setControlStream(uint offset, uint size) {
+        m_offset = offset;
+        m_size = size;
+    }
+    
+    /**
+     * Returns the filename of the embedded storage. This can be empty if the
+     * picture is not located in an embedded but e.g. in a control stream.
+     * If not empty then thís is usually a concatenation of "MBD" and a eight
+     * byte hexadecimal representation.
+     */
+    std::string embeddedStorage() const {
+        return m_storage;
+    }
+    /// Set the filename of the embedded storage.
+    void setEmbeddedStorage(const std::string &filename) {
+        m_storage = filename;
+    }
 private:
     Type m_type;
+    uint m_offset, m_size;
+    std::string m_storage;
+    
 };
 
 /**
