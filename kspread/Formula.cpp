@@ -1315,6 +1315,8 @@ Value Formula::eval(CellIndirection cellIndirections) const
     return evalRecursive(cellIndirections, values);
 }
 
+// On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
+// non-numeric. This differs from formulas like SUM which just ignore non numeric values.
 Value numericOrError(const Value &v)
 {
     switch (v.type()) {
