@@ -24,7 +24,6 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include "parsexmlutils.h"
 
 KRLineData::KRLineData(QDomNode & element)
 {
@@ -49,7 +48,7 @@ KRLineData::KRLineData(QDomNode & element)
         n = node.nodeName();
 	
         if (n == "report:line-style") {
-            ORLineStyleData ls;
+            KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
                 m_lineColor->setValue(ls.lineColor);
@@ -80,9 +79,9 @@ void KRLineData::createProperties()
     m_set->addProperty(m_lineStyle);
 }
 
-ORLineStyleData KRLineData::lineStyle()
+KRLineStyleData KRLineData::lineStyle()
 {
-    ORLineStyleData ls;
+    KRLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
     ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();

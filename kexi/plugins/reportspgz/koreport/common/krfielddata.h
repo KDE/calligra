@@ -23,7 +23,7 @@
 #include <QRect>
 #include <qdom.h>
 #include "krsize.h"
-#include <parsexmlutils.h>
+
 /**
  @author
 */
@@ -50,10 +50,6 @@ public:
         return m_font->value().value<QFont>();
     }
 
-    ORDataData data() {
-        return ORDataData("Data Source", m_controlSource->value().toString());
-    }
-
     void setColumn(const QString&);
     void setTrackTotal(bool);
     void setTrackTotalFormat(const QString &, bool = FALSE);
@@ -61,8 +57,8 @@ public:
 
     QString controlSource() const;
 
-    ORLineStyleData lineStyle();
-    ORTextStyleData textStyle();
+    KRLineStyleData lineStyle();
+    KRTextStyleData textStyle();
 protected:
 
     QRect m_rect;
@@ -82,14 +78,6 @@ protected:
     KoProperty::Property* m_lineWeight;
     KoProperty::Property* m_lineStyle;
 
-
-    //QFont font;
-    //int align;
-    //ORDataData data;
-    //ORTextStyleData textStyle;
-
-    //bool trackTotal;
-    //bool sub_total;
     //bool builtinFormat;
     //QString format;
 

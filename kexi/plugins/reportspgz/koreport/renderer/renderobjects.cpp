@@ -257,12 +257,12 @@ void OROTextBox::setText(const QString & s)
     m_text = s;
 }
 
-void OROTextBox::setTextStyle(const ORTextStyleData & ts)
+void OROTextBox::setTextStyle(const KRTextStyleData & ts)
 {
     m_textStyle = ts;
 }
 
-void OROTextBox::setLineStyle(const ORLineStyleData & ls)
+void OROTextBox::setLineStyle(const KRLineStyleData & ls)
 {
     m_lineStyle = ls;
 }
@@ -315,7 +315,7 @@ void OROLine::setEndPoint(const QPointF & p)
     m_endPoint = p;
 }
 
-void OROLine::setLineStyle(const ORLineStyleData& ls)
+void OROLine::setLineStyle(const KRLineStyleData& ls)
 {
     m_lineStyle = ls;
 }

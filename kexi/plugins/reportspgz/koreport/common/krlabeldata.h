@@ -20,7 +20,6 @@
 #ifndef KRLABEL_H
 #define KRLABEL_H
 #include "krobjectdata.h"
-#include "parsexmlutils.h"
 #include <QRect>
 #include <QPainter>
 #include <qdom.h>
@@ -52,8 +51,8 @@ public:
     }
     Qt::Alignment textFlags() const;
     void setText(const QString&);
-    ORTextStyleData textStyle();
-    ORLineStyleData lineStyle();
+    KRTextStyleData textStyle();
+    KRLineStyleData lineStyle();
 
 protected:
     QRectF _rect();

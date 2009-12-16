@@ -28,7 +28,7 @@ KRCheckData::KRCheckData(QDomNode &element)
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
         } else if (n == "report:line-style") {
-            ORLineStyleData ls;
+            KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
                 m_lineColor->setValue(ls.lineColor);
@@ -76,9 +76,9 @@ void KRCheckData::createProperties()
     m_set->addProperty(m_lineStyle);
 }
 
-ORLineStyleData KRCheckData::lineStyle()
+KRLineStyleData KRCheckData::lineStyle()
 {
-    ORLineStyleData ls;
+    KRLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
     ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();

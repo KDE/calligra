@@ -74,18 +74,14 @@ void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
 
     for (uint i = 0; i < (uint)groupList.count(); i++) {
         ReportSectionDetailGroup * rsdg = groupList.at(i);
-        QDomNode grp = doc.createElement("report:group");
+        QDomElement grp = doc.createElement("report:group");
 
-        QDomNode gcol = doc.createElement("report:group-column");
-        gcol.appendChild(doc.createTextNode(rsdg->column()));
-        grp.appendChild(gcol);
-
-        if (rsdg->pageBreak() != ReportSectionDetailGroup::BreakNone) {
-            QDomElement pagebreak = doc.createElement("report:pagebreak");
-            if (rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter)
-                pagebreak.setAttribute("when", "after foot");
-            grp.appendChild(pagebreak);
-        }
+	grp.setAttribute("report:group-column", rsdg->column());
+	if (rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter) {
+	    grp.setAttribute("report:group-page-break", "after-footer");
+	} else if (rsdg->pageBreak() == ReportSectionDetailGroup::BreakBeforeGroupHeader){
+	    grp.setAttribute("report:group-page-break", "before-header");
+	}
 
         //group head
         if (rsdg->groupHeaderVisible()) {

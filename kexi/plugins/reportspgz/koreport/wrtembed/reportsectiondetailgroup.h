@@ -39,7 +39,8 @@ public:
 
     enum PageBreak {
         BreakNone = 0,
-        BreakAfterGroupFooter = 1
+        BreakAfterGroupFooter = 1,
+        BreakBeforeGroupHeader = 2
     };
 
     void setColumn(const QString &);

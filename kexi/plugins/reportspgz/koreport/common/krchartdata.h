@@ -25,7 +25,6 @@
 #include <qdom.h>
 #include "krsize.h"
 #include "krpos.h"
-#include <parsexmlutils.h>
 #include <KDChartWidget>
 
 namespace KexiDB

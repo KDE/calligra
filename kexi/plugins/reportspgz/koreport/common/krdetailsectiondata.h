@@ -49,7 +49,7 @@ public:
     KRSectionData * m_detailSection;
 
     QList<ORDetailGroupSectionData*> m_groupList;
-    // QList<ORDataData> trackTotal;
+
     bool isValid() {
         return m_valid;
     }
@@ -57,6 +57,25 @@ public:
 private:
     bool m_valid;
 
+};
+
+class ORDetailGroupSectionData
+{
+    public:
+	ORDetailGroupSectionData();
+	
+	enum PageBreak {
+	    BreakNone = 0,
+	    BreakAfterGroupFooter = 1
+	};
+	
+	//QString name;
+	QString column;
+	int pagebreak;
+	
+	
+	KRSectionData *groupHeader;
+	KRSectionData *groupFooter;
 };
 
 #endif

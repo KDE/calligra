@@ -27,7 +27,6 @@
 #include <qdom.h>
 #include "krsectiondata.h"
 #include "reportpageoptions.h"
-#include "parsexmlutils.h"
 
 class KRDetailSectionData;
 
@@ -129,7 +128,6 @@ private:
     friend class ORPreRender;
     friend class KRScriptHandler;
     friend class Scripting::Report;
-//    QList<ORDataData> trackTotal;
 };
 
 #endif

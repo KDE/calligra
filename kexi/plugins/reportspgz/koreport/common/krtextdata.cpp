@@ -74,7 +74,7 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
             m_size.setPointSize(r.size());
         } else if (n == "textstyle") {
 
-            ORTextStyleData ts;
+            KRTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
                 m_backgroundColor->setValue(ts.backgroundColor);
                 m_foregroundColor->setValue(ts.foregroundColor);
@@ -82,7 +82,7 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
                 m_font->setValue(ts.font);
             }
         } else if (n == "linestyle") {
-            ORLineStyleData ls;
+            KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
                 m_lineColor->setValue(ls.lineColor);
@@ -188,9 +188,9 @@ void KRTextData::setBottomPadding(qreal bp)
     }
 }
 
-ORTextStyleData KRTextData::textStyle()
+KRTextStyleData KRTextData::textStyle()
 {
-    ORTextStyleData d;
+    KRTextStyleData d;
     d.backgroundColor = m_backgroundColor->value().value<QColor>();
     d.foregroundColor = m_foregroundColor->value().value<QColor>();
     d.font = m_font->value().value<QFont>();
@@ -198,9 +198,9 @@ ORTextStyleData KRTextData::textStyle()
     return d;
 }
 
-ORLineStyleData KRTextData::lineStyle()
+KRLineStyleData KRTextData::lineStyle()
 {
-    ORLineStyleData ls;
+    KRLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
     ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();

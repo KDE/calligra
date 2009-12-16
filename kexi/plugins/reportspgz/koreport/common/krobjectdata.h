@@ -20,6 +20,9 @@
 #ifndef KROBJECTDATA_H
 #define KROBJECTDATA_H
 #include <koproperty/Property.h>
+#include <QDomElement>
+#include <QFont>
+#include <QColor>
 #include "krpos.h"
 
 class KRLineData;
@@ -37,6 +40,27 @@ namespace KoProperty
 class Set;
 class Property;
 }
+
+class KRTextStyleData
+{
+    public:
+	QFont font;
+	Qt::Alignment alignment;
+	QColor backgroundColor;
+	QColor foregroundColor;
+	int backgroundOpacity;
+	
+};
+
+class KRLineStyleData
+{
+    public:
+	int weight;
+	QColor lineColor;
+	Qt::PenStyle style;
+};
+
+
 /**
  @author
 */
@@ -92,6 +116,13 @@ protected:
     KRPos m_pos;
 
     QString m_oldName;
+    
+    bool parseReportRect(const QDomElement &, QRectF &);
+    bool parseReportFont(const QDomElement &, QFont &);
+    
+    bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
+    bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);
+    
 
 };
 

@@ -38,6 +38,7 @@
 #include <kexidb/queryschema.h>
 
 #include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <QMotifStyle>
 #include <kdebug.h>
 
@@ -103,7 +104,7 @@ KRChartData::KRChartData(QDomNode & element)
             m_displayLegend->setValue(node.firstChild().nodeValue() == "true" ? true : false);
 
         } else if (n == "linestyle") {
-            ORLineStyleData ls;
+            KRLineStyleData ls;
 //   if (parseReportLineStyleData( node.toElement(), ls ))
 //   {
 //    _lnWeight->setValue(ls.weight);

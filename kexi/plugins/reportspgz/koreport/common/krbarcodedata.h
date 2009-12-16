@@ -25,7 +25,6 @@
 #include <qdom.h>
 #include "krpos.h"
 #include "krsize.h"
-#include <parsexmlutils.h>
 
 namespace Scripting
 {

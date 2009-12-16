@@ -102,7 +102,7 @@ void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& l
         ln->setStartPoint(s.toScene() + m_curOffset);
         ln->setEndPoint(e.toScene() + m_curOffset);
 
-        ORLineStyleData ls;
+        KRLineStyleData ls;
         ls.lineColor = QColor(lc);
         ls.weight = 1;
         if (ls.weight <= 0)
@@ -121,13 +121,13 @@ void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt
         QFont f(fnt, pt);
         QRectF r = QFontMetrics(f).boundingRect(txt);
 
-        ORTextStyleData ts;
+        KRTextStyleData ts;
         ts.font = f;
         ts.backgroundColor = QColor(bc);
         ts.foregroundColor = QColor(fc);
         ts.backgroundOpacity = o;
 
-        ORLineStyleData ls;
+        KRLineStyleData ls;
         ls.lineColor = QColor(lc);
         ls.weight = lw;
         if (lw <= 0)

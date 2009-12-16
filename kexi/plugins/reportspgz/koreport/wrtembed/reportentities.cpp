@@ -21,8 +21,6 @@
 
 #include "reportentities.h"
 
-#include <parsexmlutils.h>
-
 // qt
 #include <qpainter.h>
 #include <qstring.h>
@@ -83,7 +81,7 @@ void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF
     entity.appendChild(element);
 }
 
-void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, ORTextStyleData ts)
+void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts)
 {
     QDomElement element = doc.createElement("report:text-style");
 
@@ -95,7 +93,7 @@ void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, O
     entity.appendChild(element);
 }
 
-void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, ORLineStyleData ls)
+void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, KRLineStyleData ls)
 {
     QDomElement element = doc.createElement("report:line-style");
 

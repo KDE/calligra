@@ -20,7 +20,6 @@
 #ifndef KRSHAPEDATA_H
 #define KRSHAPEDATA_H
 #include "krobjectdata.h"
-#include "parsexmlutils.h"
 #include <QRect>
 #include <QPainter>
 #include <qdom.h>

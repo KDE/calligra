@@ -462,7 +462,7 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
                                          val[7], val[8], val[9], val[10], val[11]);
 
     QFont font("Arial", 6);
-    ORTextStyleData ts;
+    KRTextStyleData ts;
     ts.backgroundColor = Qt::white;
     ts.font = font;
     ts.foregroundColor = Qt::black;
@@ -834,7 +834,7 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     QString leftstr = QString().sprintf("%d%d%d%d%d%d",
                                         val[1], val[2], val[3], val[4], val[5], val[6]);
     QFont font("Arial", 6);
-    ORTextStyleData ts;
+    KRTextStyleData ts;
     ts.backgroundColor = Qt::white;
     ts.font = font;
     ts.foregroundColor = Qt::black;

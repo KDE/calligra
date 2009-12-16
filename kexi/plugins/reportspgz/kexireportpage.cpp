@@ -26,7 +26,6 @@
 #include <KoUnit.h>
 #include <KoGlobal.h>
 
-#include <parsexmlutils.h>
 #include <renderobjects.h>
 #include <QPainter>
 #include <krscreenrender.h>

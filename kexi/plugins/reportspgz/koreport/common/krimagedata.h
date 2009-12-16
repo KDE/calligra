@@ -31,7 +31,6 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <parsexmlutils.h>
 
 namespace Scripting
 {
@@ -61,9 +60,6 @@ public:
     QString inlineImageData();
     QString column();
 
-    ORDataData data() {
-        return ORDataData("Data Source", m_controlSource->value().toString());
-    }
 protected:
     QRect _rect();
     KRSize m_size;

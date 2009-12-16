@@ -48,7 +48,7 @@ KRLabelData::KRLabelData(QDomNode & element)
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
         } else if (n == "report:text-style") {
-            ORTextStyleData ts;
+            KRTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
                 m_backgroundColor->setValue(ts.backgroundColor);
                 m_foregroundColor->setValue(ts.foregroundColor);
@@ -57,7 +57,7 @@ KRLabelData::KRLabelData(QDomNode & element)
 
             }
         } else if (n == "report:line-style") {
-            ORLineStyleData ls;
+            KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
                 m_lineColor->setValue(ls.lineColor);
@@ -153,9 +153,9 @@ Qt::Alignment KRLabelData::textFlags() const
     return align;
 }
 
-ORTextStyleData KRLabelData::textStyle()
+KRTextStyleData KRLabelData::textStyle()
 {
-    ORTextStyleData d;
+    KRTextStyleData d;
     d.backgroundColor = m_backgroundColor->value().value<QColor>();
     d.foregroundColor = m_foregroundColor->value().value<QColor>();
     d.font = m_font->value().value<QFont>();
@@ -163,9 +163,9 @@ ORTextStyleData KRLabelData::textStyle()
     return d;
 }
 
-ORLineStyleData KRLabelData::lineStyle()
+KRLineStyleData KRLabelData::lineStyle()
 {
-    ORLineStyleData ls;
+    KRLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
     ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();

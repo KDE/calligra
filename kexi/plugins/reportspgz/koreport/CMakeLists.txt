@@ -32,7 +32,6 @@ set(koreport_LIB_SRCS
 	common/reportpageoptions.cpp
 	common/krreportdata.cpp
 	common/krdetailsectiondata.cpp
-	common/parsexmlutils.cpp
 	
 	renderer/3of9.cpp
 	renderer/code128.cpp

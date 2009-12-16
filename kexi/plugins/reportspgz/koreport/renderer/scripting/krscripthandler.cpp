@@ -24,7 +24,6 @@
 #include <kexiutils/tristate.h>
 
 #include "krscriptfunctions.h"
-#include <parsexmlutils.h>
 #include <krsectiondata.h>
 #include "krscriptsection.h"
 #include "krscriptdebug.h"

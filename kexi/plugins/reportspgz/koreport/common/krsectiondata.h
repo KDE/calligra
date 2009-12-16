@@ -111,7 +111,6 @@ private:
     void createProperties();
 
     QList<KRObjectData*> m_objects;
-    //QList<ORDataData> trackTotal;
 
     QString m_name;
     Section m_type;

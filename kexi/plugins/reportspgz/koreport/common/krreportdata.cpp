@@ -23,7 +23,6 @@
 #include <KoDpi.h>
 #include "krdetailsectiondata.h"
 #include "krobjectdata.h"
-#include "parsexmlutils.h"
 
 void KRReportData::init()
 {

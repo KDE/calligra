@@ -25,7 +25,6 @@
 #include <qdom.h>
 #include "krpos.h"
 #include "krsize.h"
-#include "parsexmlutils.h"
 
 namespace Scripting
 {
@@ -45,7 +44,7 @@ public:
     ~KRLineData() {};
     virtual int type() const;
     virtual KRLineData * toLine();
-    ORLineStyleData lineStyle();
+    KRLineStyleData lineStyle();
     unsigned int weight() const;
     void setWeight(int w);
 

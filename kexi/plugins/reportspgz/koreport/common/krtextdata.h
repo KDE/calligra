@@ -25,7 +25,7 @@
 #include <qdom.h>
 #include "krpos.h"
 #include "krsize.h"
-#include <parsexmlutils.h>
+
 namespace Scripting
 {
 class Text;
@@ -49,16 +49,13 @@ public:
     QFont font() const {
         return m_font->value().value<QFont>();
     }
-    ORDataData data() {
-        return ORDataData("Data Source"/*_query->value().toString()*/, m_controlSource->value().toString());
-    }
 
     void setBottomPadding(qreal bp);
     qreal bottomPadding() const;
 
     QString column() const;
-    ORTextStyleData textStyle();
-    ORLineStyleData lineStyle();
+    KRTextStyleData textStyle();
+    KRLineStyleData lineStyle();
 
 protected:
     QRect _rect();

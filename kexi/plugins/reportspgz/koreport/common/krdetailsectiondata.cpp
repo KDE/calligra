@@ -22,7 +22,6 @@
 
 #include "krdetailsectiondata.h"
 #include "krsectiondata.h"
-#include "parsexmlutils.h"
 #include <kdebug.h>
 
 KRDetailSectionData::KRDetailSectionData()
@@ -93,4 +92,10 @@ KRDetailSectionData::~KRDetailSectionData()
 {
 }
 
+ORDetailGroupSectionData::ORDetailGroupSectionData()
+{
+    pagebreak = BreakNone;
+    groupHeader = 0;
+    groupFooter = 0;
+}
 

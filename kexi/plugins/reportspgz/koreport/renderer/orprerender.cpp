@@ -29,7 +29,6 @@
 #include <QFontMetrics>
 #include <QPainter>
 
-#include <parsexmlutils.h>
 #include <labelsizeinfo.h>
 #include <kcodecs.h>
 #include <KoPageFormat.h>
@@ -99,9 +98,7 @@ public:
     void renderDetailSection(KRDetailSectionData &);
     qreal renderSection(const KRSectionData &);
     qreal renderSectionSize(const KRSectionData &);
-
-    qreal getNearestSubTotalCheckPoint(const ORDataData &);
-    
+ 
     ///Scripting Stuff
     KRScriptHandler *m_scriptHandler;
     void initEngine();
@@ -244,11 +241,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
             for (i = 0; i < (int) detailData.m_groupList.count(); i++) {
                 cnt++;
                 grp = detailData.m_groupList[i];
-                QMapIterator<ORDataData, qreal> it(grp->_subtotCheckPoints);
-                while (it.hasNext()) {
-                    it.next();
-                    grp->_subtotCheckPoints.insert(it.key(), 0.0);
-                }
+
                 keys.append(grp->column);
                 if (!keys[i].isEmpty())
                     keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys[i])).toString());
@@ -707,9 +700,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QString uudata;
             QByteArray imgdata;
             if (!im->isInline()) {
-//TODO                orData dataThis;
-//                populateData(im->data(), dataThis);
-//                imgdata = dataThis.getRawValue();
+//TODO load images from database
+
             } else {
                 uudata = im->inlineImageData();
                 imgdata = KCodecs::base64Decode(uudata.toLatin1());
