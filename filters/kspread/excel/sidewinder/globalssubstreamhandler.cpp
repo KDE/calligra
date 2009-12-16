@@ -573,7 +573,7 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
                     result = d->workbook->sheet(sheetRef)->name();
                 }
             } else {
-                result = UString("Unknown");
+                result = book;
             }
         }
 
