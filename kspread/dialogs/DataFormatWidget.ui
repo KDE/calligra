@@ -1,7 +1,8 @@
-<ui version="4.0" >
- <author>Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;</author>
  <comment>This file is part of the KDE project
-Copyright (C) 2006 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net>
+Copyright (C) 2006 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -18,8 +19,8 @@ License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  <class>DataFormatWidget</class>
- <widget class="QWidget" name="DataFormatWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="DataFormatWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -27,92 +28,99 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <height>433</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Format</string>
      </property>
-     <layout class="QGridLayout" >
-      <item rowspan="2" row="7" column="1" >
-       <widget class="QGroupBox" name="groupBox_3" >
-        <property name="title" >
+     <layout class="QGridLayout">
+      <item row="7" column="1" rowspan="3">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
          <string>Preview</string>
         </property>
-        <layout class="QVBoxLayout" >
+        <layout class="QVBoxLayout">
          <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string comment="KDE::DoNotExtract" >TextLabel</string>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string comment="KDE::DoNotExtract">TextLabel</string>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item rowspan="7" row="0" column="1" >
-       <widget class="QListWidget" name="listWidget" />
+      <item row="0" column="1" rowspan="7">
+       <widget class="QListWidget" name="listWidget"/>
       </item>
-      <item row="8" column="0" >
-       <widget class="QRadioButton" name="radioButton_9" >
-        <property name="text" >
+      <item row="9" column="0">
+       <widget class="QRadioButton" name="radioButton_9">
+        <property name="text">
          <string>Text</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="0" >
-       <widget class="QRadioButton" name="radioButton_8" >
-        <property name="text" >
-         <string>Time Format</string>
+      <item row="7" column="0">
+       <widget class="QRadioButton" name="radioButton_8">
+        <property name="text">
+         <string>Time</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" >
-       <widget class="QRadioButton" name="radioButton_7" >
-        <property name="text" >
-         <string>Date Format</string>
+      <item row="6" column="0">
+       <widget class="QRadioButton" name="radioButton_7">
+        <property name="text">
+         <string>Date</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
-       <widget class="QRadioButton" name="radioButton_6" >
-        <property name="text" >
+      <item row="5" column="0">
+       <widget class="QRadioButton" name="radioButton_6">
+        <property name="text">
          <string>Fraction</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
-       <widget class="QRadioButton" name="radioButton_5" >
-        <property name="text" >
+      <item row="4" column="0">
+       <widget class="QRadioButton" name="radioButton_5">
+        <property name="text">
          <string>Currency</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QRadioButton" name="radioButton_4" >
-        <property name="text" >
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="radioButton_4">
+        <property name="text">
          <string>Money</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="radioButton_3" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioButton_3">
+        <property name="text">
          <string>Percent</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioButton" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
          <string>Generic</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioButton_2" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
          <string>Number</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QRadioButton" name="radioButton_10">
+        <property name="text">
+         <string>Date and Time</string>
         </property>
        </widget>
       </item>
@@ -120,92 +128,92 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
       <string/>
      </property>
-     <layout class="QGridLayout" >
-      <item row="1" column="3" >
-       <widget class="KComboBox" name="comboBox_2" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+     <layout class="QGridLayout">
+      <item row="1" column="3">
+       <widget class="KComboBox" name="comboBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="KComboBox" name="comboBox" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+      <item row="0" column="3">
+       <widget class="KComboBox" name="comboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="label_6" >
-        <property name="text" >
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
          <string>Currency:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="label_5" >
-        <property name="text" >
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
          <string>Format:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
          <string>Postfix:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="KLineEdit" name="lineEdit_2" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+      <item row="2" column="1">
+       <widget class="KLineEdit" name="lineEdit_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KLineEdit" name="lineEdit" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+      <item row="0" column="1">
+       <widget class="KLineEdit" name="lineEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_3" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
          <string>Precision:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
          <string>Prefix:</string>
         </property>
        </widget>
@@ -215,17 +223,17 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
-  <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+ <customwidgets>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -246,7 +254,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <tabstop>lineEdit_2</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >kdialog.h</include>
+  <include location="global">kdialog.h</include>
  </includes>
  <resources/>
  <connections/>
