@@ -988,26 +988,65 @@ UString NameRecord::definedName() const
 
 void NameRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
 {
-    if (size < 14) return;
+    if (size < 14) {
+        setIsValid(false);
+        return;
+    }
 
     d->optionFlags = readU16(data);
-    unsigned len = data[3];
-
+    //const bool fHidden = d->optionFlags & 0x01;
+    //const bool fFunc = d->optionFlags & 0x02;
+    //const bool fOB = d->optionFlags & 0x04;
+    //const bool fProc = d->optionFlags & 0x08;
+    //const bool fCalcExp = d->optionFlags & 0x10;
+    const bool fBuiltin = d->optionFlags & 0x20;
+    // 6 bits fGrp
+    //const bool reserved1 = d->optionFlags & 0x1800;
+    //const bool fPublished = d->optionFlags & 0x3000;
+    //const bool fWorkbookParam = d->optionFlags & 0x6000;
+    //const bool reserved2 = d->optionFlags & 0xC000;
+    
+    const unsigned len = readU8(data + 3); // cch
+    // 2 bytes cce + 2 bytes reserved + 2 bytes itab + 4 bytes reserved = 10 bytes
     if (version() == Excel95) {
         char* buffer = new char[ len+1 ];
         memcpy(buffer, data + 14, len);
         buffer[ len ] = 0;
         d->definedName = UString(buffer);
         delete[] buffer;
-    }
+    } else  if (version() == Excel97) {
+        if( fBuiltin ) { // field is for a build-in name
+            printf( "TODO: build-in name\n" );
+            //d->definedName = ;
+        } else { // must satisfy same restrictions then name field on XLNameUnicodeString
+            const unsigned opts = readU8(data + 14);
+            const bool fHighByte = opts & 0x01;
+            Q_ASSERT((opts << 1) == 0x0);
 
-    if (version() == Excel97) {
-        UString str = UString();
-        for (unsigned k = 0; k < len; k++) {
-            unsigned uchar = readU16(data + 14 + k * 2);
-            str.append(UString(uchar));
+            // XLUnicodeStringNoCch
+            UString str = UString();                                                                                                                                              
+            if(fHighByte) {
+                for (unsigned k = 0; k < len*2; k++) {
+                    unsigned zc = readU16(data + 15 + k * 2);
+                    str.append(UString(zc));
+                }
+            } else {
+                for (unsigned k = 0; k < len; k++) {
+                    unsigned char uc = readU8(data + 15 + k) + 0x0*256;
+                    str.append(UString(uc));
+                }
+            }
+            
+            // This is rather illogical and seems there is nothing in the specs about this,
+            // but the string "_xlfn." may in front of the string we are looking for. So,
+            // remove that one and ignore whatever it means...
+            if(str.substr(0,6)=="_xlfn.")
+                str = str.substr(6);
+
+            d->definedName = str;
         }
-        d->definedName = str;
+    } else {
+        setIsValid(false);
     }
 }
 

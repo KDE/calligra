@@ -708,6 +708,16 @@ static const FunctionEntry FunctionEntries[] = {
     { "VARPA",           0 },     // 365
     { "STDEVA",          0 },     // 366
     { "VARA",            0 },     // 367
+
+    { "BAHTTEXT",        1 },     // 368
+    //TODO
+    //{ "THAIDAYOFWEEK",   1 },     // 369
+    //{ "THAIDIGIT",       1 },     // 370
+    //{ "THAIMONTHOFYEAR", 1 },     // 371
+    //{ "THAINUMSOUND",    1 },     // 372
+    //{ "THAIUMSTRING",    1 },     // 373
+    //{ "THAISTRINGLENGTH",1 },     // 374
+    //{ "ISTHAIDIGIT",     1 },     // 375
 };
 
 const char* FormulaToken::functionName() const

@@ -79,6 +79,8 @@ public:
     const std::vector<UString>& externSheets() const;
 
     UString nameFromIndex(unsigned index) const;
+    UString externNameFromIndex(unsigned index) const;
+
 private:
     void handleBOF(BOFRecord* record);
     void handleBoundSheet(BoundSheetRecord* record);

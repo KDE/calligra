@@ -46,6 +46,7 @@ public:
 
     // for NAME and EXTERNNAME
     std::vector<UString> nameTable;
+    std::vector<UString> externNameTable;
 
     // password protection flag
     // TODO: password hash for record decryption
@@ -176,6 +177,14 @@ UString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
     if (index < d->nameTable.size())
         return d->nameTable[index];
+    else
+        return UString();
+}
+
+UString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
+{
+    if (index < d->externNameTable.size())
+        return d->externNameTable[index];
     else
         return UString();
 }
@@ -462,7 +471,6 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     if (!record) return;
 
     const unsigned type = record->rtti();
-    
     if (type == BOFRecord::id)
         handleBOF(static_cast<BOFRecord*>(record));
     else if (type == BoundSheetRecord::id)
@@ -496,6 +504,7 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     else {
         std::cout << "Unhandled global record with type=" << type << std::endl;
     }
+    
 }
 
 void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
@@ -548,7 +557,7 @@ void GlobalsSubStreamHandler::handleExternName(ExternNameRecord* record)
 {
     if (!record) return;
 
-    d->nameTable.push_back(record->externName());
+    d->externNameTable.push_back(record->externName());
 }
 
 void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)

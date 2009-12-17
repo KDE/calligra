@@ -75,6 +75,7 @@ Value func_unichar(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_unicode(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_upper(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
 #ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
@@ -185,6 +186,9 @@ void TextModule::registerFunctions()
     repo->add(f);
     f = new Function("TEXT", func_text);
     f->setParamCount(1, 2);
+    repo->add(f);
+    f = new Function("BAHTTEXT", func_bahttext);
+    f->setParamCount(1);
     repo->add(f);
 }
 
@@ -732,6 +736,172 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // same as the N function
     return calc->conv()->asFloat(args[0]);
+}
+
+#define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
+#define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
+#define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
+#define UTF8_TH_3       "\340\270\252\340\270\262\340\270\241"
+#define UTF8_TH_4       "\340\270\252\340\270\265\340\271\210"
+#define UTF8_TH_5       "\340\270\253\340\271\211\340\270\262"
+#define UTF8_TH_6       "\340\270\253\340\270\201"
+#define UTF8_TH_7       "\340\271\200\340\270\210\340\271\207\340\270\224"
+#define UTF8_TH_8       "\340\271\201\340\270\233\340\270\224"
+#define UTF8_TH_9       "\340\271\200\340\270\201\340\271\211\340\270\262"
+#define UTF8_TH_10      "\340\270\252\340\270\264\340\270\232"
+#define UTF8_TH_11      "\340\271\200\340\270\255\340\271\207\340\270\224"
+#define UTF8_TH_20      "\340\270\242\340\270\265\340\271\210"
+#define UTF8_TH_1E2     "\340\270\243\340\271\211\340\270\255\340\270\242"
+#define UTF8_TH_1E3     "\340\270\236\340\270\261\340\270\231"
+#define UTF8_TH_1E4     "\340\270\253\340\270\241\340\270\267\340\271\210\340\270\231"
+#define UTF8_TH_1E5     "\340\271\201\340\270\252\340\270\231"
+#define UTF8_TH_1E6     "\340\270\245\340\271\211\340\270\262\340\270\231"
+#define UTF8_TH_DOT0    "\340\270\226\340\271\211\340\270\247\340\270\231"
+#define UTF8_TH_BAHT    "\340\270\232\340\270\262\340\270\227"
+#define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
+#define UTF8_TH_MINUS   "\340\270\245\340\270\232"
+
+inline void lclSplitBlock( double& rfInt, qint32& rnBlock, double fValue, double fSize )
+{
+    rnBlock = static_cast< qint32 >( modf( (fValue + 0.1) / fSize, &rfInt ) * fSize + 0.1 );
+}
+
+/** Appends a digit (0 to 9) to the passed string. */
+void lclAppendDigit( QString& rText, qint32 nDigit )
+{
+    switch( nDigit )
+    {
+        case 0: rText += QString::fromUtf8( UTF8_TH_0 ); break;
+        case 1: rText += QString::fromUtf8( UTF8_TH_1 ); break;
+        case 2: rText += QString::fromUtf8( UTF8_TH_2 ); break;
+        case 3: rText += QString::fromUtf8( UTF8_TH_3 ); break;
+        case 4: rText += QString::fromUtf8( UTF8_TH_4 ); break;
+        case 5: rText += QString::fromUtf8( UTF8_TH_5 ); break;
+        case 6: rText += QString::fromUtf8( UTF8_TH_6 ); break;
+        case 7: rText += QString::fromUtf8( UTF8_TH_7 ); break;
+        case 8: rText += QString::fromUtf8( UTF8_TH_8 ); break;
+        case 9: rText += QString::fromUtf8( UTF8_TH_9 ); break;
+        default: kDebug() << "lclAppendDigit - illegal digit"; break;
+    }
+}
+
+/** Appends a value raised to a power of 10: nDigit*10^nPow10.
+    @param nDigit  A digit in the range from 1 to 9.
+    @param nPow10  A value in the range from 2 to 5.
+ */
+void lclAppendPow10( QString& rText, qint32 nDigit, qint32 nPow10 )
+{
+    Q_ASSERT( (1 <= nDigit) && (nDigit <= 9) ); // illegal digit?
+    lclAppendDigit( rText, nDigit );
+    switch( nPow10 )
+    {
+        case 2: rText += QString::fromUtf8( UTF8_TH_1E2 ); break;
+        case 3: rText += QString::fromUtf8( UTF8_TH_1E3 ); break;
+        case 4: rText += QString::fromUtf8( UTF8_TH_1E4 ); break;
+        case 5: rText += QString::fromUtf8( UTF8_TH_1E5 ); break;
+        default: kDebug() << "lclAppendPow10 - illegal power"; break;
+    }
+}
+
+/** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
+void lclAppendBlock( QString& rText, qint32 nValue )
+{
+    Q_ASSERT( (1 <= nValue) && (nValue <= 999999) ); // illegal value?
+    if( nValue >= 100000 )
+    {
+        lclAppendPow10( rText, nValue / 100000, 5 );
+        nValue %= 100000;
+    }
+    if( nValue >= 10000 )
+    {
+        lclAppendPow10( rText, nValue / 10000, 4 );
+        nValue %= 10000;
+    }
+    if( nValue >= 1000 )
+    {
+        lclAppendPow10( rText, nValue / 1000, 3 );
+        nValue %= 1000;
+    }
+    if( nValue >= 100 )
+    {
+        lclAppendPow10( rText, nValue / 100, 2 );
+        nValue %= 100;
+    }
+    if( nValue > 0 )
+    {
+        qint32 nTen = nValue / 10;
+        qint32 nOne = nValue % 10;
+        if( nTen >= 1 )
+        {
+            if( nTen >= 3 )
+                lclAppendDigit( rText, nTen );
+            else if( nTen == 2 )
+                rText += QString::fromUtf8( UTF8_TH_20 );
+            rText += QString::fromUtf8( UTF8_TH_10 );
+        }
+        if( (nTen > 0) && (nOne == 1) )
+            rText += QString::fromUtf8( UTF8_TH_11 );
+        else if( nOne > 0 )
+            lclAppendDigit( rText, nOne );
+    }
+}
+
+// Function: BAHTTEXT
+Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    double value = numToDouble(calc->conv()->toFloat(args[0]));
+
+    // sign
+    bool bMinus = value < 0.0;
+    value = fabs( value );
+
+    // round to 2 digits after decimal point, value contains Satang as integer
+    value = floor( value * 100.0 + 0.5 );
+
+    // split Baht and Satang
+    double fBaht = 0.0;
+    qint32 nSatang = 0;
+    lclSplitBlock( fBaht, nSatang, value, 100.0 );
+
+    QString aText;
+
+    // generate text for Baht value
+    if( fBaht == 0.0 )
+    {
+        if( nSatang == 0 )
+            aText += QString::fromUtf8(UTF8_TH_0);
+    }
+    else while( fBaht > 0.0 )
+    {
+        QString aBlock;
+        qint32 nBlock = 0;
+        lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
+        if( nBlock > 0 )
+            lclAppendBlock( aBlock, nBlock );
+        // add leading "million", if there will come more blocks
+        if( fBaht > 0.0 )
+            aBlock = QString::fromUtf8(UTF8_TH_1E6) + aBlock;
+        aText.insert( 0, aBlock );
+    }
+    if( aText.length() > 0 )
+        aText += QString::fromUtf8(UTF8_TH_BAHT);
+
+    // generate text for Satang value
+    if( nSatang == 0 )
+    {
+        aText += QString::fromUtf8(UTF8_TH_DOT0);
+    }
+    else
+    {
+        lclAppendBlock( aText, nSatang );
+        aText += QString::fromUtf8(UTF8_TH_SATANG);
+    }
+
+    // add the minus sign
+    if( bMinus )
+        aText = QString::fromUtf8( UTF8_TH_MINUS ) + aText;
+
+    return Value(aText);
 }
 
 #include "TextModule.moc"

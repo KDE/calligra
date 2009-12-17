@@ -1059,9 +1059,12 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
             }
             break;
 
+        case FormulaToken::Name:
+            stack.push_back(d->globals->nameFromIndex(token.nameIndex()));
+            break;
+
         case FormulaToken::NameX:
-            // FIXME this handling of names is completely broken
-            stack.push_back(d->globals->nameFromIndex(token.nameIndex() - 1));
+            stack.push_back(d->globals->externNameFromIndex(token.nameIndex()));
             break;
 
         case FormulaToken::Matrix: {
@@ -1108,7 +1111,6 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
         case FormulaToken::Sheet:
         case FormulaToken::EndSheet:
         case FormulaToken::ErrorCode:
-        case FormulaToken::Name:
         case FormulaToken::MemErr:
         case FormulaToken::MemNoMem:
         case FormulaToken::MemFunc:

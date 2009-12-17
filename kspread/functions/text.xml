@@ -649,6 +649,19 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>BAHTTEXT</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Number</Comment>
+    <Type>Int</Type>
+      </Parameter>
+      <Help>
+    <Text>The BAHTTEXT() function converts a number to a text in Thai characters (baht).</Text>
+    <Syntax>BAHTTEXT(number)</Syntax>
+    <Example>BAHTTEXT(23) returns "ยี่สิบสามบาทถ้วน"</Example>
+      </Help>
+    </Function>
 
   </Group>
 
