@@ -1333,13 +1333,14 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                 value.setFormat(Value::fmt_Money);
                 setValue(value);
 
+                Currency currency;
                 if (element.hasAttributeNS(KoXmlNS::office, "currency")) {
-                    Currency currency(element.attributeNS(KoXmlNS::office, "currency", QString()));
-                    // FIXME Stefan: Only set it, if it differs from the default currency.
-                    Style style;
-                    style.setCurrency(currency);
-                    setStyle(style);
+                    currency = Currency(element.attributeNS(KoXmlNS::office, "currency", QString()));
                 }
+
+                Style style;
+                style.setCurrency(currency);
+                setStyle(style);
             }
         } else if (valuetype == "percentage") {
             bool ok = false;
