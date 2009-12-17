@@ -137,7 +137,7 @@ public:
     void setDefaultColWidth(long);
 
     double zoomLevel() const;
-    setZoomLevel(double fraction);
+    void setZoomLevel(double fraction);
     
 private:
     // no copy or assign

@@ -59,6 +59,8 @@ public:
 
     long defaultRowHeight;
     long defaultColWidth;
+    
+    double zoomLevel;
 };
 
 }
