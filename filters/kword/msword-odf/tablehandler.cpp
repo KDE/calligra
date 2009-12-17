@@ -415,7 +415,8 @@ void KWordTableHandler::tableCellEnd()
     // Text lists aren't closed explicitly so we have to close them
     // when something happens like a new paragraph or, in this case,
     // the table cell ends.
-    document()->textHandler()->closeList();
+    if (document()->textHandler()->listIsOpen())
+        document()->textHandler()->closeList();
     KoXmlWriter*  writer = currentWriter();
 
     // End table cell in content, but only if we actually opened a cell.
