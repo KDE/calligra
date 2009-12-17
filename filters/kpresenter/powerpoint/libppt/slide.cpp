@@ -39,6 +39,8 @@ public:
     double pageHeight;
 
     unsigned int slideId;
+    int flags;
+    QString styleName;
 };
 
 Slide::Slide(Presentation* pr)
@@ -49,6 +51,7 @@ Slide::Slide(Presentation* pr)
     d->pageWidth = 0.0;
     d->pageHeight = 0.0;
     d->slideId = 0;
+    d->flags = 0;
 }
 
 Slide::~Slide()
@@ -152,4 +155,24 @@ unsigned int Slide::slideId()
 void Slide::setSlideId(unsigned int id)
 {
     d->slideId = id;
+}
+
+void  Slide::setHeaderFooterFlags(int flags)
+{
+   d->flags = flags;
+}
+
+int Slide::headerFooterFlags()
+{ 
+  return  d->flags;
+}
+
+void Slide::setStyleName(const QString &name)
+{
+    d->styleName = name;
+}
+
+QString Slide::styleName() const
+{
+    return d->styleName;
 }

@@ -3625,6 +3625,7 @@ protected:
     void handleEscherChildAnchorAtom(msofbtChildAnchorAtom* r);
     void handleProgBinaryTagContainer(ProgBinaryTagContainer* r,
                                       unsigned int size);
+    void handleHeaderFooterAtom(HeadersFootersAtom* atom);
 
 
     void loadMainMasterContainer(MainMasterContainer *container);

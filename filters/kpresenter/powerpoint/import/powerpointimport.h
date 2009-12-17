@@ -47,7 +47,7 @@ private:
     void createMainStyles(KoGenStyles& styles);
     QByteArray createContent(KoGenStyles& styles);
 
-    void processSlideForBody(unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter);
+    void processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWriter);
     void processObjectForBody(Object* object, KoXmlWriter* xmlWriter);
     void processGroupObjectForBody(GroupObject* groupObject, KoXmlWriter* xmlWriter);
     void processDrawingObjectForBody(DrawObject* drawObject, KoXmlWriter* xmlWriter);
@@ -58,6 +58,21 @@ private:
     void processGroupObjectForStyle(GroupObject* groupObject, KoGenStyles &styles);
     void processDrawingObjectForStyle(DrawObject* drawObject, KoGenStyles &styles);
     void processTextObjectForStyle(TextObject* textObject, KoGenStyles &styles);
+    void processDocStyles(Slide *master,KoGenStyles &styles);
+
+    /**
+    * @brief Write Frame element (KoGenStyle& style,const char* presentation_class,
+    *  QString width, QString height, QString x, QString y) specified amount into the 
+    *  styles.xml for page-number represtation
+    * @param KoGenStyle& style To represent the style
+    * @param presentaton_class represent the class for ex: page-number etc
+    * @param width - width of the frame
+    * @param height - Height of the frame
+    * @param x - X cordinate
+    * @param y - Y cordinate
+    */
+
+    void addFrame(KoGenStyle& style,const char* presentation_class,QString width, QString height, QString x, QString y);
 
     /**
     * @brief Write itendation element (text:list and text:list-item) specified

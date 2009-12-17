@@ -192,9 +192,11 @@ addElement(KoGenStyle& style, const char* name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
 
-void
-PowerPointImport::createMainStyles(KoGenStyles& styles)
+void PowerPointImport::createMainStyles(KoGenStyles& styles)
 {
+    int x = 0;
+    int y = 0;
+    bool ok;
     Slide* master = d->presentation->masterSlide();
     QString pageWidth = QString("%1pt").arg((master) ? master->pageWidth() : 0);
     QString pageHeight = QString("%1pt").arg((master) ? master->pageHeight() : 0);
@@ -248,10 +250,60 @@ PowerPointImport::createMainStyles(KoGenStyles& styles)
     addElement(l, "text:list-level-style-bullet", lmap, ltextmap);
     styles.lookup(l, "L");
 
+
+    KoGenStyle Mpr(KoGenStyle::StylePresentationAuto,"presentation");
+    Mpr.setAutoStyleInStylesDotXml(true);
+    Mpr.addProperty("draw:stroke","none");
+    Mpr.addProperty("draw:fill","none");
+    Mpr.addProperty("draw:fill-color","#bbe0e3");
+    Mpr.addProperty("draw:textarea-horizontal-align","justify");
+    Mpr.addProperty("draw:textarea-vertical-align","top");
+    Mpr.addProperty("fo:wrap-option","wrap");
+    styles.lookup(Mpr, "Mpr");
+
     KoGenStyle s(KoGenStyle::StyleMaster);
     s.addAttribute("style:page-layout-name", styles.lookup(pl));
     s.addAttribute("draw:style-name", styles.lookup(dp));
+    if(master)
+    {
+      x = master->pageWidth()-50;
+      y = master->pageHeight()-50; 
+    }   
+    addFrame(s, "page-number", "20pt", "20pt", QString("%1pt").arg(x),  QString("%1pt").arg(y));
     styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
+    
+}
+
+void PowerPointImport::addFrame(KoGenStyle& style,const char* presentation_class ,QString width, QString height, QString x, QString y)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);
+
+    xmlWriter.startElement("draw:frame");
+    xmlWriter.addAttribute("presentation:style-name", "Mpr1");
+    xmlWriter.addAttribute("draw:layer", "layout");
+    xmlWriter.addAttribute("svg:width", width);
+    xmlWriter.addAttribute("svg:height", height);
+    xmlWriter.addAttribute("svg:x", x);
+    xmlWriter.addAttribute("svg:y", y);
+    xmlWriter.addAttribute("presentation:class", presentation_class);
+    xmlWriter.startElement("draw:text-box");
+    xmlWriter.startElement("text:p");
+    xmlWriter.addAttribute("text:style-name","P1"); 
+    xmlWriter.startElement("text:span");
+    xmlWriter.addAttribute("text:style-name","T1");
+    if(strcmp(presentation_class,"page-number") == 0){
+        xmlWriter.startElement("text:page-number");
+        xmlWriter.addTextNode("<number>");
+        xmlWriter.endElement();//text:page-number
+    }
+    xmlWriter.endElement(); // text:span
+    xmlWriter.endElement(); // text:p
+    xmlWriter.endElement(); // draw:text-box
+    xmlWriter.endElement(); // draw:frame
+    style.addChildElement("draw:frame",
+                          QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
 
 QByteArray PowerPointImport::createContent(KoGenStyles& styles)
@@ -276,21 +328,23 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->addAttribute("office:version", "1.0");
 
     // office:automatic-styles
-
+    
+    Slide *master = d->presentation->masterSlide();
+    processDocStyles(master ,styles);
+ 
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
         Slide* slide = d->presentation->slide(c);
         processSlideForStyle(c, slide, styles);
     }
     styles.saveOdfAutomaticStyles(contentWriter, false);
-
+    
     // office:body
 
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:presentation");
 
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
-        Slide* slide = d->presentation->slide(c);
-        processSlideForBody(c, slide, contentWriter);
+        processSlideForBody(c,contentWriter);
     }
 
     contentWriter->endElement();  // office:presentation
@@ -300,6 +354,21 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->endDocument();
     delete contentWriter;
     return contentData;
+}
+
+void PowerPointImport::processDocStyles(Slide *master,KoGenStyles &styles)
+{
+    
+    int  headerFooterAtomFlags = master->headerFooterFlags();
+    KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+    dp.addProperty("presentation:background-objects-visible", "true");
+    if(headerFooterAtomFlags && 0x8)
+        dp.addProperty("presentation:display-page-number", "true");
+    else
+        dp.addProperty("presentation:display-page-number", "false");
+    styles.lookup(dp, "dp");
+    master->setStyleName(styles.lookup(dp));
+
 }
 
 void PowerPointImport::processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter)
@@ -1526,20 +1595,24 @@ void PowerPointImport::processObjectForBody(Object* object, KoXmlWriter* xmlWrit
         processDrawingObjectForBody(static_cast<DrawObject*>(object), xmlWriter);
 }
 
-void PowerPointImport::processSlideForBody(unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter)
+
+
+void PowerPointImport::processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWriter)
 {
+    Slide* slide = d->presentation->slide(slideNo);
+    Slide* master = d->presentation->masterSlide();
     if (!slide || !xmlWriter) return;
 
     QString nameStr = slide->title();
     if (nameStr.isEmpty())
         nameStr = QString("page%1").arg(slideNo + 1);
 
-    QString styleNameStr = QString("dp%1").arg(slideNo + 1);
+    //QString styleNameStr = QString("dp%1").arg(slideNo + 1);
 
     xmlWriter->startElement("draw:page");
     xmlWriter->addAttribute("draw:master-page-name", "Default");
     xmlWriter->addAttribute("draw:name", nameStr);
-    xmlWriter->addAttribute("draw:style-name", styleNameStr);
+    xmlWriter->addAttribute("draw:style-name", master->styleName()); 
     xmlWriter->addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
     GroupObject* root = slide->rootObject();
@@ -1767,6 +1840,8 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         placeholderCF = masterTextCFException(textObject->type(),
                                               indentLevel);
     }
+
+
 
     KoGenStyle styleParagraph(KoGenStyle::StyleAuto, "paragraph");
     if (pf && pf->textPFException()->hasLeftMargin()) {
@@ -2253,5 +2328,4 @@ void PowerPointImport::processDrawingObjectForStyle(DrawObject* drawObject, KoGe
     }
 
     drawObject->setStyleName(styles.lookup(style));
-}
-
+}   

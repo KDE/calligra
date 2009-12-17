@@ -38,6 +38,7 @@
 
 #ifdef Q_CC_MSVC
 #define __PRETTY_FUNCTION__ __FUNCTION__
+//#define LIBPPT_DEBUG
 #endif
 
 // Use anonymous namespace to cover following functions
@@ -4594,10 +4595,11 @@ void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
         unsigned int recInstance)
 {
     unsigned int levels = readU16(data); data += 2;
-    unsigned int tempSize = size - 2;
+    int tempSize = size - 2;
     setTextType(recInstance);
 
-    for (unsigned int i = 0;i<levels && size > 0;i++) {
+    std::cout<<"**\nSize"<<tempSize;
+    for (unsigned int i = 0;i<levels && tempSize > 0;i++) {
         TextMasterStyleLevel level;
 
         //[MS-PPT].pdf states that TextMasterStyleLevel has optional level
@@ -4607,10 +4609,10 @@ void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
             level.setLevel(currentLevel);
         }
 
-
         unsigned int read = level.setData(tempSize, data);
         data += read;
         tempSize -= read;
+        std::cout<<"**\nSize"<<tempSize;
         d->levels << level;
     }
 }
@@ -8122,7 +8124,7 @@ void PPTReader::loadDocument()
             lastDocumentContainerPos = d->docStream->tell();
             lastDocumentContainerSize = size;
 #ifdef LIBPPT_DEBUG
-            std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+            std::cout  << " size is " << size << std::endl;
             std::cout << std::endl;
 #endif
         }
@@ -8188,7 +8190,9 @@ void PPTReader::loadRecord(Record* parent)
             if (type == StyleTextPropAtom::id) {
                 static_cast<StyleTextPropAtom*>(record)->setDataWithSize(size, buffer, d->lastNumChars);
             } else
+             {    
                 record->setData(size, buffer);
+             }
             handleRecord(record, type);
             if (type == TextBytesAtom::id)
                 d->lastNumChars = static_cast<TextBytesAtom*>(record)->text().length();
@@ -8224,6 +8228,8 @@ void PPTReader::handleRecord(Record* record, int type)
         handleTextPFExceptionAtom(static_cast<TextPFExceptionAtom*>(record)); break;
     case TextCFExceptionAtom::id:
         handleTextCFExceptionAtom(static_cast<TextCFExceptionAtom*>(record)); break;
+    case HeadersFootersAtom::id:
+        handleHeaderFooterAtom(static_cast<HeadersFootersAtom*>(record)); break;
 
     case msofbtSpgrAtom::id:
         handleEscherGroupAtom(static_cast<msofbtSpgrAtom*>(record)); break;
@@ -8239,10 +8245,35 @@ void PPTReader::handleRecord(Record* record, int type)
         handleEscherChildAnchorAtom(static_cast<msofbtChildAnchorAtom*>(record)); break;
     case FontEntityAtom::id:
         handleFontEntityAtom(static_cast<FontEntityAtom*>(record)); break;
-    default: break;
+    default: 
+        std::cout<<"\nDefault HandleRecord:: type"<<type;
+      break;
     }
 }
 
+void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
+{
+    if (!atom) return;
+    if (!d->presentation) return;
+    //Note:-   A - fHasDate (1 bit): A bit that specifies whether the date is displayed in the footer.
+    //         B - fHasTodayDate (1 bit): A bit that specifies whether the current datetime is used for
+    //             displaying the datetime.
+    //         C - fHasUserDate (1 bit): A bit that specifies whether the date specified in UserDateAtom
+    //             record is used for displaying the datetime.
+    //         D - fHasSlideNumber (1 bit): A bit that specifies whether the slide number is displayed in the
+    //             footer.
+    //         E - fHasHeader (1 bit): A bit that specifies whether the header text specified by HeaderAtom
+    //             record is displayed.
+    //         F - fHasFooter (1 bit): A bit that specifies whether the footer text specified by FooterAtom
+    //             record is displayed.
+    //TO DO If required formatID 
+    d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
+
+//#ifdef LIBPPT_DEBUG
+    std::cout << std::endl << "***Flags " << atom->flags();
+    std::cout << std::endl << "***FormatId " << atom->formatId();
+//#endif
+}
 void PPTReader::handleContainer(Container* container, int type, unsigned size)
 {
     if (!container || !container->isContainer()) return;
