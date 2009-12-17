@@ -813,6 +813,25 @@ static QString convertFraction(double serialNo, const QString& valueFormat)
     return QString::number(serialNo, 'g', 15);
 }
 
+QString cellFormula(Cell* cell)
+{
+    QString formula = string(cell->formula());
+    if(formula.startsWith("ROUND")) {
+        // Special case the ROUNDUP, ROUNDDOWN and ROUND function cause excel uses another
+        // logic then ODF. In Excel the second argument defines the numbers of fractional
+        // digits displayed (Num_digits) while in ODF the second argument defines
+        // the number of places to which a number is to be rounded (count).
+        // So, what we do is the same OO.org does. We prefix the formula with "of:"
+        // to indicate the changed behavior. Both, OO.org and Excel, do support
+        // that "of:" prefix.
+        formula.prepend("of:=");
+    } else {
+        // Normal formulas are only prefixed with a = sign.
+        formula.prepend("=");
+    }
+    return formula;
+}
+
 void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter)
 {
     if (!cell) return;
@@ -831,23 +850,9 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
     if (cell->rowSpan() > 1)
         xmlWriter->addAttribute("table:number-rows-spanned", cell->rowSpan());
 
-    QString formula = string(cell->formula());
-    if (!formula.isEmpty()) {
-        if(formula.startsWith("ROUNDUP(")) {
-            // Special case the ROUNDUP function cause excel uses another ROUNDUP logic
-            // then ODF. In Excel the second argument defines the numbers of fractional
-            // digits displayed (Num_digits) while in ODF the second argument defines
-            // the number of places to which a number is to be rounded (count).
-            // So, what we do is the same OO.org does. We prefix the formula with "of:"
-            // to indicate the changed behavior. Both, OO.org and Excel, do support
-            // that "of:" prefix.
-            formula.prepend("of:=");
-        } else {
-            // Normal formulas are only prefixed with a = sign.
-            formula.prepend("=");
-        }
+    const QString formula = cellFormula(cell);
+    if (!formula.isEmpty())
         xmlWriter->addAttribute("table:formula", formula);
-    }
 
     Value value = cell->value();
 
@@ -933,6 +938,27 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     QString valueFormat = string(format.valueFormat());
     if (valueFormat != QString("General")) {
         refName = processValueFormat(valueFormat);
+    } else {
+        const QString formula = cellFormula(cell);
+        if(formula.startsWith("of:=")) { // special cases
+            QRegExp roundRegExp( "^of:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+            if (roundRegExp.indexIn(formula) >= 0) {
+                bool ok = false;
+                int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
+                if(ok) {
+                    KoGenStyle style(KoGenStyle::StyleNumericNumber);
+                    QBuffer buffer;
+                    buffer.open(QIODevice::WriteOnly);
+                    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+                    xmlWriter.startElement("number:number");
+                    xmlWriter.addAttribute("number:decimal-places", decimals);
+                    xmlWriter.endElement(); // number:number
+                    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+                    style.addChildElement("number", elementContents);
+                    refName = styles->lookup(style, "N");
+                }
+            }
+        }
     }
 
     KoGenStyle style(KoGenStyle::StyleAutoTableCell, "table-cell");
