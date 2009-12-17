@@ -81,6 +81,7 @@ Sheet::Sheet(Workbook* wb)
     d->autoCalc = true;
     d->defaultRowHeight = -1;
     d->defaultColWidth = -1;
+    d->zoomLevel = 1.0; // 100%
 }
 
 Sheet::~Sheet()
@@ -329,6 +330,16 @@ long Sheet::defaultColWidth() const
 void Sheet::setDefaultColWidth(long i)
 {
     d->defaultColWidth = i;
+}
+
+double Sheet::zoomLevel() const
+{
+    return d->zoomLevel;
+}
+
+void Sheet::setZoomLevel(double fraction)
+{
+    d->zoomLevel = fraction;
 }
 
 class Column::Private

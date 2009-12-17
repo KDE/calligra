@@ -268,6 +268,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleHCenter(static_cast<HCenterRecord*>(record));
     else if (type == VCenterRecord::id)
         handleVCenter(static_cast<VCenterRecord*>(record));
+    else if (type == ZoomLevelRecord::id)
+        handleZoomLevel(static_cast<ZoomLevelRecord*>(record));
     else if (type == 0xA) {} //EofRecord
     else if (type == 0x200) {} //DimensionsRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
@@ -800,6 +802,14 @@ void WorksheetSubStreamHandler::handleVCenter(VCenterRecord*)
     //TODO
 }
     
+void WorksheetSubStreamHandler::handleZoomLevel(ZoomLevelRecord *record)
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    if (record->denominator() == 0) return;
+    d->sheet->setZoomLevel( record->numerator() / double(record->denominator()) );
+}
+
 typedef std::vector<UString> UStringStack;
 
 static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString)
