@@ -247,17 +247,6 @@ void KWordTableHandler::tableCellStart()
         //kDebug(30513) <<"rowSpan=" << rowSpan;
     }
 
-    // Put a filler in for cells that are part of a merged cell.
-    //
-    // The MSWord spec says they must be empty anyway (and we'll get a
-    // warning if not).
-    if (tc.fVertMerge && !tc.fVertRestart) {
-        writer->startElement("table:covered-table-cell");
-        m_cellOpen = true;
-
-        return;
-    }
-
     // Check how many cells that means, according to our cell edge array.
     int leftCellNumber  = m_currentTable->columnNumber(left);
     int rightCellNumber = m_currentTable->columnNumber(right);
@@ -279,6 +268,19 @@ void KWordTableHandler::tableCellStart()
 #endif
     Q_ASSERT(rightCellNumber >= leftCellNumber);   // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
+
+    // Put a filler in for cells that are part of a merged cell.
+    //
+    // The MSWord spec says they must be empty anyway (and we'll get a
+    // warning if not).
+    if (tc.fVertMerge && !tc.fVertRestart) {
+        m_cellOpen = true;
+        writer->startElement("table:covered-table-cell");
+        
+        m_colSpan = colSpan; // store colSpan so covered elements can be added on cell close
+        return;
+    }
+    // We are now sure we have a real cell (and not a covered one)
 
     QRectF cellRect(left / 20.0,  // left
                     m_currentY, // top
@@ -430,11 +432,9 @@ void KWordTableHandler::tableCellEnd()
     // If this cell covers other cells (i.e. is merged), then create
     // as many table:covered-table-cell tags as there are covered
     // columns.
-    if (m_colSpan > 1) {
-        for (int i = 1; i < m_colSpan; i++) {
-            writer->startElement("table:covered-table-cell");
-            writer->endElement();
-        }
+    for (int i = 1; i < m_colSpan; i++) {
+        writer->startElement("table:covered-table-cell");
+        writer->endElement();
     }
     m_colSpan = 1;
 }
