@@ -832,8 +832,23 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
         xmlWriter->addAttribute("table:number-rows-spanned", cell->rowSpan());
 
     QString formula = string(cell->formula());
-    if (!formula.isEmpty())
-        xmlWriter->addAttribute("table:formula", formula.prepend("="));
+    if (!formula.isEmpty()) {
+        if(formula.startsWith("ROUNDUP(")) {
+            // Special case the ROUNDUP function cause excel uses another ROUNDUP logic
+            // then ODF. In Excel the second argument defines the numbers of fractional
+            // digits displayed (Num_digits) while in ODF the second argument defines
+            // the number of places to which a number is to be rounded (count).
+            // So, what we do is the same OO.org does. We prefix the formula with of:
+            // to indicate the changed behavior. It then depends on the customer
+            // application what to do with this. Both, OO.org and Excel, do support
+            // that of: prefix
+            formula.prepend("of:=");
+        } else {
+            // Normal formulas are only prefixed with a = sign
+            formula.prepend("=");
+        }
+        xmlWriter->addAttribute("table:formula", formula);
+    }
 
     Value value = cell->value();
 
