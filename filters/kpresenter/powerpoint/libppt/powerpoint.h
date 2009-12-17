@@ -2986,6 +2986,7 @@ private:
     Private *d;
 };
 
+// this class is called OfficeArtFOPT in Microsoft documentation
 class msofbtOPTAtom : public Record
 {
 public:
@@ -2994,6 +2995,8 @@ public:
         Pib = 260,
         FillType = 384,
         FillColor = 385,
+        FillBackColor = 387,
+        FillStyleBooleanProperties = 447,
         LineColor = 448,
         LineOpacity = 449,
         LineBackColor = 450,

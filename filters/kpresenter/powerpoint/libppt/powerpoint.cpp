@@ -8852,6 +8852,12 @@ void PPTReader::handleEscherPropertiesAtom(msofbtOPTAtom* atom)
         case msofbtOPTAtom::FillColor:
             d->currentObject->setProperty("draw:fill-color", convertFromLong(pvalue));
             break;
+        case msofbtOPTAtom::FillBackColor:
+            break;
+        case msofbtOPTAtom::FillStyleBooleanProperties:
+            // 5th bit determines fFilled, if shape is filled or not
+            d->currentObject->setProperty("draw:fill", (pvalue&16)?"filled":"none");
+            break;
         case msofbtOPTAtom::LineColor:
             d->currentObject->setProperty("svg:stroke-color", convertFromLong(pvalue));
             break;
