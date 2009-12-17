@@ -845,6 +845,12 @@ void View::initView()
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(shapeSelectionChanged()));
+
+    // Update the view once our canvasController changes the document's offset.
+    QTimer *timer = new QTimer(this);
+    timer->setSingleShot(true);
+    connect(timer,SIGNAL(timeout()),this,SLOT(refreshView()));
+    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)), timer, SLOT(start()));
 }
 
 Canvas* View::canvasWidget() const
