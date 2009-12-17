@@ -601,9 +601,33 @@ QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
     return s;
 }
 
+// Another form of conditional formats are those that define a different format
+// depending on the value. In following examples the different states are
+// splittet with a ; char, the first is usually used if the value is positive,
+// the second if the value if negavtive, the third if the value is invalid and
+// the forth defines a common formatting mask.
+// _("$"* #,##0.0000_);_("$"* \(#,##0.0000\);_("$"* "-"????_);_(@_)
+// _-[$₩-412]* #,##0.0000_-;\-[$₩-412]* #,##0.0000_-;_-[$₩-412]* "-"????_-;_-@_-
+QString extractConditional(const QString &text)
+{
+    if ( text.startsWith('_') && text.length() >= 2 ) {
+        if( text[1] == '(' ) {
+            QRegExp ex("^_\\((\"\\$\".+)\\);_\\(.*\\);_\\(.*\\);_\\(.*\\)$");
+            if (ex.indexIn(text) >= 0)
+                return ex.cap(1);
+        }
+        if( text[1] == '-' ) {
+            QRegExp ex("^_\\-(\\[.*\\]).*_\\-;.*_\\-;_\\-.*_\\-;_\\-.*_\\-$");
+            if (ex.indexIn(text) >= 0)
+                return ex.cap(1);
+        }
+    }
+    return text;
+}
+
 static bool isCurrencyFormat(const QString& valueFormat)
 {
-    QString vf = removeEscaped(valueFormat);
+    QString vf = removeEscaped(extractConditional(valueFormat));
 
     // dollar is special cause it starts with a $
     QRegExp dollarRegEx("^\"\\$\"[#,]*[\\d]+(|.[0]+)$");
@@ -825,6 +849,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
         } else if (isCurrencyFormat(valueFormat)) {
             const QString currencyValue = convertCurrency(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "currency");
+            //FIXME xmlWriter->addAttribute("office:currency", "USD"); //e.g. EUR, USD,..
             xmlWriter->addAttribute("office:value", currencyValue);
         } else if (isDateTimeFormat(value, valueFormat)) {
             const QString dateTimeValue = convertDateTime(value.asFloat(), valueFormat); // double?
