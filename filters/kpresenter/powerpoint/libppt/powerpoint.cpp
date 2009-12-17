@@ -4598,7 +4598,6 @@ void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
     int tempSize = size - 2;
     setTextType(recInstance);
 
-    std::cout<<"**\nSize"<<tempSize;
     for (unsigned int i = 0;i<levels && tempSize > 0;i++) {
         TextMasterStyleLevel level;
 
@@ -4612,7 +4611,6 @@ void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
         unsigned int read = level.setData(tempSize, data);
         data += read;
         tempSize -= read;
-        std::cout<<"**\nSize"<<tempSize;
         d->levels << level;
     }
 }
@@ -8246,7 +8244,6 @@ void PPTReader::handleRecord(Record* record, int type)
     case FontEntityAtom::id:
         handleFontEntityAtom(static_cast<FontEntityAtom*>(record)); break;
     default: 
-        std::cout<<"\nDefault HandleRecord:: type"<<type;
       break;
     }
 }
@@ -8269,10 +8266,10 @@ void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
     //TO DO If required formatID 
     d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
 
-//#ifdef LIBPPT_DEBUG
+#ifdef LIBPPT_DEBUG
     std::cout << std::endl << "***Flags " << atom->flags();
     std::cout << std::endl << "***FormatId " << atom->formatId();
-//#endif
+#endif
 }
 void PPTReader::handleContainer(Container* container, int type, unsigned size)
 {
