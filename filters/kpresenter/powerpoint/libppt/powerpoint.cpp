@@ -8725,8 +8725,7 @@ void PPTReader::handleEscherClientDataAtom(msofbtClientDataAtom* atom)
 
     TextObject* textObject = 0;
     if (!d->currentObject->isText()) {
-        textObject = new TextObject();
-        textObject->convertFrom(d->currentObject);
+        textObject = new TextObject(d->currentObject);
         delete d->currentObject;
         d->currentObject = textObject;
     } else
@@ -8808,8 +8807,7 @@ void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned siz
     TextObject* textObject = 0;
 
     if (!d->currentObject->isText()) {
-        textObject = new TextObject();
-        textObject->convertFrom(d->currentObject);
+        textObject = new TextObject(d->currentObject);
         delete d->currentObject;
         d->currentObject = textObject;
     } else {
@@ -8847,13 +8845,15 @@ void PPTReader::handleEscherPropertiesAtom(msofbtOPTAtom* atom)
         case msofbtOPTAtom::Pib:
             d->currentObject->setProperty("pib", (int)pvalue);
         case msofbtOPTAtom::FillColor:
-            d->currentObject->setProperty("draw:fill-color", convertFromLong(pvalue));
+            d->currentObject->setProperty("draw:fill-color",
+                    convertFromLong(pvalue));
             break;
         case msofbtOPTAtom::FillBackColor:
             break;
         case msofbtOPTAtom::FillStyleBooleanProperties:
             // 5th bit determines fFilled, if shape is filled or not
-            d->currentObject->setProperty("draw:fill", (pvalue&16)?"filled":"none");
+            d->currentObject->setProperty("draw:fill",
+                    (pvalue&16)?"solid":"none");
             break;
         case msofbtOPTAtom::LineColor:
             d->currentObject->setProperty("svg:stroke-color", convertFromLong(pvalue));

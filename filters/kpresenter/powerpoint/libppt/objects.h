@@ -50,6 +50,7 @@ class Object
 {
 public:
     Object();
+    Object(Object* o);
     virtual ~Object();
 
     int id() const;
@@ -100,6 +101,16 @@ public:
     std::string getStrProperty(std::string name);
     Color getColorProperty(std::string name);
 
+    /**
+    * @brief Set the graphic style name
+    */
+    void setGraphicStyleName(const QString& name);
+
+    /**
+    * @brief Get the graphic style name
+    */
+    QString graphicStyleName() const;
+
 private:
     // no copy or assign
     Object(const Object&);
@@ -131,6 +142,7 @@ public:
     };
 
     TextObject();
+    TextObject(Object*);
     virtual ~TextObject();
     virtual bool isText() const {
         return true;
@@ -229,8 +241,6 @@ public:
     * @param text text to set
     */
     void setText(const QString& text);
-
-    void convertFrom(Object* object);
 private:
 
     /**

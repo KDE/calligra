@@ -196,7 +196,6 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
 {
     int x = 0;
     int y = 0;
-    bool ok;
     Slide* master = d->presentation->masterSlide();
     QString pageWidth = QString("%1pt").arg((master) ? master->pageWidth() : 0);
     QString pageHeight = QString("%1pt").arg((master) ? master->pageHeight() : 0);
@@ -381,7 +380,7 @@ void PowerPointImport::processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWr
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:ellipse");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -401,7 +400,7 @@ void PowerPointImport::processRectangle(DrawObject* drawObject, KoXmlWriter* xml
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:rect");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     if (drawObject->hasProperty("libppt:rotation")) {
@@ -434,7 +433,7 @@ void PowerPointImport::processRoundRectangle(DrawObject* drawObject, KoXmlWriter
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
 
 
     if (drawObject->hasProperty("libppt:rotation")) {
@@ -515,7 +514,7 @@ void PowerPointImport::processDiamond(DrawObject* drawObject, KoXmlWriter* xmlWr
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -554,7 +553,7 @@ void PowerPointImport::processTriangle(DrawObject* drawObject, KoXmlWriter* xmlW
 
     /* draw IsocelesTriangle or RightTriangle */
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -658,7 +657,7 @@ void PowerPointImport::processTrapezoid(DrawObject* drawObject, KoXmlWriter* xml
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -736,7 +735,7 @@ void PowerPointImport::processParallelogram(DrawObject* drawObject, KoXmlWriter*
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -849,7 +848,7 @@ void PowerPointImport::processHexagon(DrawObject* drawObject, KoXmlWriter* xmlWr
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -912,7 +911,7 @@ void PowerPointImport::processOctagon(DrawObject* drawObject, KoXmlWriter* xmlWr
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -991,7 +990,7 @@ void PowerPointImport::processArrow(DrawObject* drawObject, KoXmlWriter* xmlWrit
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1079,7 +1078,7 @@ void PowerPointImport::processLine(DrawObject* drawObject, KoXmlWriter* xmlWrite
     }
 
     xmlWriter->startElement("draw:line");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:y1", y1Str);
     xmlWriter->addAttribute("svg:y2", y2Str);
     xmlWriter->addAttribute("svg:x1", x1Str);
@@ -1099,7 +1098,7 @@ void PowerPointImport::processSmiley(DrawObject* drawObject, KoXmlWriter* xmlWri
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1163,7 +1162,7 @@ void PowerPointImport::processHeart(DrawObject* drawObject, KoXmlWriter* xmlWrit
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1202,7 +1201,7 @@ void PowerPointImport::processFreeLine(DrawObject* drawObject, KoXmlWriter* xmlW
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:path");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1230,7 +1229,7 @@ void PowerPointImport::processPictureFrame(DrawObject* drawObject, KoXmlWriter* 
     QString yStr = QString("%1mm").arg(drawObject->top());
 
     xmlWriter->startElement("draw:frame");
-    xmlWriter->addAttribute("draw:style-name", drawObject->styleName());
+    xmlWriter->addAttribute("draw:style-name", drawObject->graphicStyleName());
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1521,7 +1520,10 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
     QString yStr = QString("%1mm").arg(textObject->top());
 
     xmlWriter->startElement("draw:frame");
-    xmlWriter->addAttribute("presentation:style-name", "pr1");
+    if (!textObject->graphicStyleName().isEmpty()) {
+        xmlWriter->addAttribute("presentation:style-name",
+                textObject->graphicStyleName());
+    }
     xmlWriter->addAttribute("draw:layer", "layout");
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
@@ -2187,6 +2189,30 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
 
 }
 
+QString hexname(const Color &c)
+{
+    QColor qc(c.red, c.green, c.blue);
+    return qc.name();
+}
+
+void processGraphicStyles(KoGenStyle& style, Object* object)
+{
+    if (object->hasProperty("draw:fill")) {
+        std::string s = object->getStrProperty("draw:fill");
+        QString ss(s.c_str());
+        style.addProperty("draw:fill", ss, KoGenStyle::GraphicType);
+    }
+
+    if (object->hasProperty("draw:fill-color")) {
+        Color fillColor = object->getColorProperty("draw:fill-color");
+        style.addProperty("draw:fill-color", hexname(fillColor),
+                KoGenStyle::GraphicType);
+    } else {
+        style.addProperty("draw:fill-color", "#99ccff",
+                KoGenStyle::GraphicType);
+    }
+
+}
 
 void PowerPointImport::processTextObjectForStyle(TextObject* textObject,
         KoGenStyles &styles)
@@ -2218,6 +2244,12 @@ void PowerPointImport::processTextObjectForStyle(TextObject* textObject,
         processTextExceptionsForStyle(cf, pf, styles, textObject);
     }
 
+    // set the presentation style
+    QString styleName;
+    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "presentation");
+    processGraphicStyles(style, textObject);
+    styleName = styles.lookup(style);
+    textObject->setGraphicStyleName(styleName);
 }
 
 void PowerPointImport::processGroupObjectForStyle(GroupObject* groupObject,
@@ -2228,12 +2260,6 @@ void PowerPointImport::processGroupObjectForStyle(GroupObject* groupObject,
     for (unsigned int i = 0; i < groupObject->objectCount(); ++i) {
         processObjectForStyle(groupObject->object(i), styles);
     }
-}
-
-QString hexname(const Color &c)
-{
-    QColor qc(c.red, c.green, c.blue);
-    return qc.name();
 }
 
 void PowerPointImport::processDrawingObjectForStyle(DrawObject* drawObject, KoGenStyles &styles)
@@ -2289,18 +2315,7 @@ void PowerPointImport::processDrawingObjectForStyle(DrawObject* drawObject, KoGe
         style.addProperty("draw:marker-end-width", QString("%1cm").arg(arrowWidth), KoGenStyle::GraphicType);
     }
 
-    if (drawObject->hasProperty("draw:fill")) {
-        std::string s = drawObject->getStrProperty("draw:fill");
-        QString ss(s.c_str());
-        style.addProperty("draw:fill", ss, KoGenStyle::GraphicType);
-    }
-
-    if (drawObject->hasProperty("draw:fill-color")) {
-        Color fillColor = drawObject->getColorProperty("draw:fill-color");
-        style.addProperty("draw:fill-color", hexname(fillColor), KoGenStyle::GraphicType);
-    } else {
-        style.addProperty("draw:fill-color", "#99ccff", KoGenStyle::GraphicType);
-    }
+    processGraphicStyles(style, drawObject);
 
 #if 0
     if (drawObject->hasProperty("draw:shadow-color")) {
@@ -2327,5 +2342,5 @@ void PowerPointImport::processDrawingObjectForStyle(DrawObject* drawObject, KoGe
         style.addProperty("draw:shadow-offset-y", QString("%1cm").arg(offset), KoGenStyle::GraphicType);
     }
 
-    drawObject->setStyleName(styles.lookup(style));
+    drawObject->setGraphicStyleName(styles.lookup(style));
 }   
