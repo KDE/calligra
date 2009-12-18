@@ -67,9 +67,8 @@ public:
     QString graphicStyleName;
 };
 
-Object::Object()
+Object::Object() :d(new Private())
 {
-    d = new Private;
     d->id = -1;
     d->top = 0.0;
     d->left = 0.0;
@@ -78,9 +77,8 @@ Object::Object()
     d->background = false;
 }
 
-Object::Object(Object* o)
+Object::Object(Object* o) :d(new Private())
 {
-    d = new Private;
     d->id = o->d->id;
     d->top = o->d->top;
     d->left = o->d->left;
@@ -370,14 +368,12 @@ void TextObject::setStyleTextProperty(const StyleTextPropAtom *atom,
 }
 
 
-TextObject::TextObject(): Object()
+TextObject::TextObject(): Object(), d(new Private())
 {
-    d = new Private;
 }
 
-TextObject::TextObject(Object* o): Object(o)
+TextObject::TextObject(Object* o): Object(o), d(new Private())
 {
-    d = new Private;
     if (o->isText()) {
         TextObject* textObj = static_cast<TextObject*>(o);
         setType(textObj->type());
@@ -540,9 +536,8 @@ public:
     }
 };
 
-GroupObject::GroupObject()
+GroupObject::GroupObject() :d(new Private())
 {
-    d = new Private;
 }
 
 GroupObject::~GroupObject()
@@ -637,9 +632,8 @@ public:
     bool isHorFlip;
 };
 
-DrawObject::DrawObject()
+DrawObject::DrawObject() :d(new Private())
 {
-    d = new Private;
     d->shape = None;
 }
 
@@ -798,9 +792,8 @@ public:
     QList<TextFont> fonts;
 };
 
-TextFontCollection::TextFontCollection()
+TextFontCollection::TextFontCollection() :d(new Private())
 {
-    d = new Private;
 }
 
 TextFontCollection::~TextFontCollection()

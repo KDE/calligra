@@ -2828,9 +2828,8 @@ public:
 
 };
 
-ColorIndexStruct::ColorIndexStruct()
+ColorIndexStruct::ColorIndexStruct() :d(new Private())
 {
-    d = new Private();
 }
 
 ColorIndexStruct::ColorIndexStruct(const ColorIndexStruct &other)

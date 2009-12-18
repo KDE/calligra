@@ -117,7 +117,7 @@ private:
     Object& operator=(const Object&);
 
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 
@@ -255,7 +255,7 @@ private:
     TextObject& operator=(const TextObject&);
 
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 class GroupObject: public Object
@@ -305,7 +305,7 @@ private:
     GroupObject& operator=(const GroupObject&);
 
     class Private;
-    Private* d;
+    Private* const d;
 
 };
 
@@ -370,7 +370,7 @@ private:
     DrawObject& operator=(const DrawObject&);
 
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 /**
@@ -463,7 +463,7 @@ public:
     TextFont* getFont(unsigned int index);
 private:
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 }
