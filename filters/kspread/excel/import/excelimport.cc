@@ -608,42 +608,71 @@ QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
 // the forth defines a common formatting mask.
 // _("$"* #,##0.0000_);_("$"* \(#,##0.0000\);_("$"* "-"????_);_(@_)
 // _-[$₩-412]* #,##0.0000_-;\-[$₩-412]* #,##0.0000_-;_-[$₩-412]* "-"????_-;_-@_-
-QString extractConditional(const QString &text)
+// _ * #,##0_)[$€-1]_ ;_ * #,##0[$€-1]_ ;_ * "-"_)[$€-1]_ ;_ @_ "
+QString extractConditional(const QString &_text)
 {
-    if ( text.startsWith('_') && text.length() >= 2 ) {
-        if( text[1] == '(' ) {
-            QRegExp ex("^_\\((\"\\$\".+)\\);_\\(.*\\);_\\(.*\\);_\\(.*\\)$");
-            if (ex.indexIn(text) >= 0)
-                return ex.cap(1);
-        }
-        if( text[1] == '-' ) {
-            QRegExp ex("^_\\-(\\[.*\\]).*_\\-;.*_\\-;_\\-.*_\\-;_\\-.*_\\-$");
-            if (ex.indexIn(text) >= 0)
-                return ex.cap(1);
+    const QString text = removeEscaped(_text);
+#if 1
+    if ( text.startsWith('_') && text.length() >= 3 ) {
+        QChar end;
+        if(text[1] == '(') end = ')';
+        else if(text[1] == '_') end = '_';
+        else if(text[1] == ' ') end = ' ';
+        else kDebug() << "Probably unhandled condition=" << text[1] <<"in text=" << text;
+        if(! end.isNull()) {
+            {
+                QString regex = QString( "^_%1(.*\"\\$\".*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QRegExp ex(regex);
+                ex.setMinimal(true);
+                if (ex.indexIn(text) >= 0) return ex.cap(1);
+            }
+            {
+                QString regex = QString( "^_%1(.*\\[\\$.*\\].*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QRegExp ex(regex);
+                ex.setMinimal(true);
+                if (ex.indexIn(text) >= 0) return ex.cap(1);
+            }
         }
     }
+#else
+    if ( text.startsWith('_') ) {
+        return text.split(";").first();
+    }
+#endif
     return text;
 }
 
-static bool isCurrencyFormat(const QString& valueFormat)
+// Currency or accounting format.
+// "$"* #,##0.0000_
+// [$EUR]\ #,##0.00"
+// [$₩-412]* #,##0.0000
+// * #,##0_)[$€-1]_
+static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0, QString *formatVal = 0)
 {
-    QString vf = removeEscaped(extractConditional(valueFormat));
+    QString vf = extractConditional(valueFormat);
 
     // dollar is special cause it starts with a $
-    QRegExp dollarRegEx("^\"\\$\"[#,]*[\\d]+(|.[0]+)$");
-    if (dollarRegEx.indexIn(vf) >= 0)
+    QRegExp dollarRegEx("^\"\\$\"[*\\-\\s]*([#,]*[\\d]+(|.[#0]+)).*");
+    if (dollarRegEx.indexIn(vf) >= 0) {
+        if(currencyVal) *currencyVal = "$";
+        if(formatVal) *formatVal = dollarRegEx.cap(1);
         return true;
+    }
 
-    // everything else either has a [$ at the begin or at the end
-    QRegExp beginRegEx("^[$[\\w]+\\-[0-9\\w]+\\]");
-    if (beginRegEx.indexIn(vf) >= 0)
+    // every other currency or accounting has a [$...] identifier
+    QRegExp crRegEx("\\[\\$(.*)\\]");
+    crRegEx.setMinimal(true);
+    if (crRegEx.indexIn(vf) >= 0) {        
+        if(currencyVal) {
+            *currencyVal = crRegEx.cap(1);
+        }
+        if(formatVal) {
+            QRegExp vlRegEx("([#,]*[\\d]+(|.[#0]+))");
+            *formatVal = vlRegEx.indexIn(vf) >= 0 ? vlRegEx.cap(1) : QString();
+        }
         return true;
-
-    // we need to have such regex's cause [$ can also be a conditional formatting
-    QRegExp endRegEx("[$[\\w]+.*\\-[0-9\\w]+\\]$");
-    if (endRegEx.indexIn(vf) >= 0)
-        return true;
-
+    }
+    
     return false;
 }
 
@@ -816,20 +845,34 @@ static QString convertFraction(double serialNo, const QString& valueFormat)
 QString cellFormula(Cell* cell)
 {
     QString formula = string(cell->formula());
-    if(formula.startsWith("ROUND")) {
-        // Special case the ROUNDUP, ROUNDDOWN and ROUND function cause excel uses another
-        // logic then ODF. In Excel the second argument defines the numbers of fractional
-        // digits displayed (Num_digits) while in ODF the second argument defines
-        // the number of places to which a number is to be rounded (count).
-        // So, what we do is the same OO.org does. We prefix the formula with "of:"
-        // to indicate the changed behavior. Both, OO.org and Excel, do support
-        // that "of:" prefix.
-        formula.prepend("of:=");
-    } else {
-        // Normal formulas are only prefixed with a = sign.
-        formula.prepend("=");
+    if(!formula.isEmpty()) {
+        if(formula.startsWith("ROUND")) {
+            // Special case the ROUNDUP, ROUNDDOWN and ROUND function cause excel uses another
+            // logic then ODF. In Excel the second argument defines the numbers of fractional
+            // digits displayed (Num_digits) while in ODF the second argument defines
+            // the number of places to which a number is to be rounded (count).
+            // So, what we do is the same OO.org does. We prefix the formula with "of:"
+            // to indicate the changed behavior. Both, OO.org and Excel, do support
+            // that "of:" prefix.
+            formula.prepend("of:=");
+        } else if(!formula.isEmpty()) {
+            // Normal formulas are only prefixed with a = sign.
+            formula.prepend("=");
+        }
     }
     return formula;
+}
+
+QString currencyValue(const QString &value)
+{
+    if(value.isEmpty()) return QString();
+    if(value[0] == '$') return "USD";
+    if(value[0] == '€') return "EUR";
+    if(value[0] == '£') return "GBP";
+    if(value[0] == '¥') return "JPY";
+    QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
+    if (symbolRegEx.indexIn(value) >= 0) return symbolRegEx.cap(1);
+    return QString();
 }
 
 void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter)
@@ -865,11 +908,6 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
         if (isPercentageFormat(valueFormat)) {
             xmlWriter->addAttribute("office:value-type", "percentage");
             xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
-        } else if (isCurrencyFormat(valueFormat)) {
-            const QString currencyValue = convertCurrency(value.asFloat(), valueFormat);
-            xmlWriter->addAttribute("office:value-type", "currency");
-            //FIXME xmlWriter->addAttribute("office:currency", "USD"); //e.g. EUR, USD,..
-            xmlWriter->addAttribute("office:value", currencyValue);
         } else if (isDateTimeFormat(value, valueFormat)) {
             const QString dateTimeValue = convertDateTime(value.asFloat(), valueFormat); // double?
             xmlWriter->addAttribute("office:value-type", "date");
@@ -886,9 +924,19 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
             const QString fractionValue = convertFraction(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "float");
             xmlWriter->addAttribute("office:value", fractionValue);
-        } else { // fallback
-            xmlWriter->addAttribute("office:value-type", "float");
-            xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
+        } else {
+            QString currencyVal, formatVal;
+            if (currencyFormat(valueFormat, &currencyVal, &formatVal)) {
+                const QString v = convertCurrency(value.asFloat(), valueFormat);
+                xmlWriter->addAttribute("office:value-type", "currency");
+                const QString cv = currencyValue(currencyVal);
+                if(!cv.isEmpty())
+                    xmlWriter->addAttribute("office:currency", cv); 
+                xmlWriter->addAttribute("office:value", v);
+            } else { // fallback is the generic float format
+                xmlWriter->addAttribute("office:value-type", "float");
+                xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
+            }
         }
     } else if (value.isString()) {
         QString str = string(value.asString());
@@ -1107,6 +1155,61 @@ static void processNumberText(KoXmlWriter* xmlWriter, QString& text)
     }
 }
 
+// 2.18.52 ST_LangCode
+QString languageName(int languageCode)
+{
+    switch( languageCode ) {
+    case 0x041c: return "ALBANIAN"; break;
+    case 0x0401: return "ARABIC"; break;
+    case 0x0c09: return "AUS_ENGLISH"; break;
+    case 0x0421: return "BAHASA"; break;
+    case 0x0813: return "BELGIAN_DUTCH"; break;
+    case 0x080c: return "BELGIAN_FRENCH"; break;
+    case 0x0416: return "BRAZIL_PORT"; break;
+    case 0x0402: return "BULGARIAN"; break;
+    case 0x0c0c: return "CANADA_FRENCH"; break;
+    case 0x040a: return "CAST_SPANISH"; break;
+    case 0x0403: return "CATALAN"; break;
+    case 0x041a: return "CROATO_SERBIAN"; break;
+    case 0x0405: return "CZECH"; break;
+    case 0x0406: return "DANISH"; break;
+    case 0x0413: return "DUTCH"; break;
+    case 0x040b: return "FINNISH"; break;
+    case 0x040c: return "FRENCH"; break;
+    case 0x0407: return "GERMAN"; break;
+    case 0x0408: return "GREEK"; break;
+    case 0x040d: return "HEBREW"; break;
+    case 0x040e: return "HUNGARIAN"; break;
+    case 0x040f: return "ICELANDIC"; break;
+    case 0x0410: return "ITALIAN"; break;
+    case 0x0411: return "JAPANESE"; break;
+    case 0x0412: return "KOREAN"; break;
+    case 0x080a: return "MEXICAN_SPANISH"; break;
+    case 0x0414: return "NORWEG_BOKMAL"; break;
+    case 0x0814: return "NORWEG_NYNORSK"; break;
+    case 0x0415: return "POLISH"; break;
+    case 0x0816: return "PORTUGUESE"; break;
+    case 0x0417: return "RHAETO_ROMANIC"; break;
+    case 0x0418: return "ROMANIAN"; break;
+    case 0x0419: return "RUSSIAN"; break;
+    case 0x081a: return "SERBO_CROATIAN"; break;
+    case 0x0804: return "SIM_CHINESE"; break;
+    case 0x041b: return "SLOVAKIAN"; break;
+    case 0x041d: return "SWEDISH"; break;
+    case 0x100c: return "SWISS_FRENCH"; break;
+    case 0x0807: return "SWISS_GERMAN"; break;
+    case 0x0810: return "SWISS_ITALIAN"; break;
+    case 0x041e: return "THAI"; break;
+    case 0x0404: return "TRD_CHINESE"; break;
+    case 0x041f: return "TURKISH"; break;
+    case 0x0809: return "UK_ENGLISH"; break;
+    case 0x0420: return "URDU"; break;
+    case 0x0409: return "US_ENGLISH"; break;
+    default:     return QString(); break;
+    }
+}
+
+// 3.8.31 numFmts
 QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 {
     QRegExp numberRegEx("(0+)(\\.0+)?(E\\+0+)?");
@@ -1150,6 +1253,53 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
         QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
         style.addChildElement("number", elementContents);
         return styles->lookup(style, "N");
+    }
+
+    QString currencyVal, formatVal;
+    if (currencyFormat(valueFormat, &currencyVal, &formatVal)) {
+        KoGenStyle style(KoGenStyle::StyleNumericCurrency);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
+        if(symbolRegEx.indexIn(currencyVal) >= 0) {
+            xmlWriter.startElement("number:currency-symbol");
+
+            QString language, country;
+            QRegExp countryRegExp("^[^a-zA-Z0-9\\s]+\\-[\\s]*([0-9]+)[\\s]*$");
+            if(countryRegExp.indexIn(currencyVal) >= 0) {
+                //TODO
+                //bool ok = false;
+                //int languageCode = countryRegExp.cap(1).toInt(&ok);
+                //if(ok) language = languageName(languageCode);                    
+            } else if(currencyVal[0] == '$') {
+                language = "en";
+                country = "US";
+            } else if(currencyVal[0] == '€') {
+                // should not be possible cause there is no single "euro-land"
+            } else if(currencyVal[0] == '£') {
+                language = "en";
+                country = "GB";
+            } else if(currencyVal[0] == '¥') {
+                language = "ja";
+                country = "JP";
+            } else {
+                // nothing we can do here...
+            }
+
+            if(!language.isEmpty())
+                xmlWriter.addAttribute("number:language", language);
+            if(!country.isEmpty())
+                xmlWriter.addAttribute("number:country", country);
+            
+            xmlWriter.addTextNode(symbolRegEx.cap(1));
+            xmlWriter.endElement();
+        }
+        
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return styles->lookup(style, "N");        
     }
 
     QString vf = valueFormat;
