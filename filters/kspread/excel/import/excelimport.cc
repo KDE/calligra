@@ -1155,7 +1155,7 @@ static void processNumberText(KoXmlWriter* xmlWriter, QString& text)
     }
 }
 
-// 2.18.52 ST_LangCode
+// 2.18.52 ST_LangCode, see also http://www.w3.org/WAI/ER/IG/ert/iso639.htm
 QString languageName(int languageCode)
 {
     switch( languageCode ) {
