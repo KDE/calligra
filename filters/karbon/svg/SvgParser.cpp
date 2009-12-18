@@ -1850,7 +1850,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
             points.replace(',', ' ');
             points.remove('\r');
             points.remove('\n');
-            QStringList pointList = points.split(' ');
+            QStringList pointList = points.split(' ', QString::SkipEmptyParts);
             for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
                 QPointF point;
                 point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
