@@ -73,7 +73,6 @@ protected:
     /// Parses gradient color stops
     void parseColorStops(QGradient *, const KoXmlElement &);
     /// Parses a pattern element
-    //bool parsePattern( const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement() );
     void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
@@ -87,8 +86,6 @@ protected:
     double parseUnitXY(const QString &unit);
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
-    /// Parses a transform attribute
-    QMatrix parseTransform(const QString &transform);
     /// Parse a image
     bool parseImage(const QString &imageAttribute, QImage &image);
     /// Parses a viewbox attribute into an rectangle

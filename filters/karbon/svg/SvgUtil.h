@@ -22,6 +22,7 @@
 
 #include <QtCore/QPointF>
 #include <QtCore/QSizeF>
+#include <QtGui/QMatrix>
 
 class QString;
 class QRectF;
@@ -73,6 +74,12 @@ public:
      */
     static QSizeF userSpaceToObject(const QSizeF &size, const QRectF &objectBound);
 
+    /**
+     * Parses transform attribute value into a matrix.
+     * @param transform the transform attribute value
+     * @return the resulting transformation matrix
+     */
+    static QMatrix parseTransform(const QString &transform);
 };
 
 #endif // SVGUTIL_H

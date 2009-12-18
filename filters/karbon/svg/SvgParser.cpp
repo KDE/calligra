@@ -178,67 +178,9 @@ void SvgParser::setupTransform(const KoXmlElement &e)
     SvgGraphicsContext *gc = m_gc.top();
 
     if (e.hasAttribute("transform")) {
-        QMatrix mat = parseTransform(e.attribute("transform"));
+        QMatrix mat = SvgUtil::parseTransform(e.attribute("transform"));
         gc->matrix = mat * gc->matrix;
     }
-}
-
-QMatrix SvgParser::parseTransform(const QString &transform)
-{
-    QMatrix result;
-
-    // Split string for handling 1 transform statement at a time
-    QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.constBegin();
-    QStringList::ConstIterator end = subtransforms.constEnd();
-    for (; it != end; ++it) {
-        QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
-        if (subtransform.count() < 2)
-            continue;
-
-        subtransform[0] = subtransform[0].trimmed().toLower();
-        subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
-        QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
-
-        if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
-            subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-
-        if (subtransform[0] == "rotate") {
-            if (params.count() == 3) {
-                double x = params[1].toDouble();
-                double y = params[2].toDouble();
-
-                result.translate(x, y);
-                result.rotate(params[0].toDouble());
-                result.translate(-x, -y);
-            } else
-                result.rotate(params[0].toDouble());
-        } else if (subtransform[0] == "translate") {
-            if (params.count() == 2)
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()),
-                                 SvgUtil::fromUserSpace(params[1].toDouble()));
-            else    // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
-        } else if (subtransform[0] == "scale") {
-            if (params.count() == 2)
-                result.scale(params[0].toDouble(), params[1].toDouble());
-            else    // Spec : if only one param given, assume uniform scaling
-                result.scale(params[0].toDouble(), params[0].toDouble());
-        } else if (subtransform[0].toLower() == "skewx")
-            result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
-        else if (subtransform[0].toLower() == "skewy")
-            result.shear(0.0F, tan(params[0].toDouble() * KarbonGlobal::pi_180));
-        else if (subtransform[0] == "matrix") {
-            if (params.count() >= 6)
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(),
-                                 params[2].toDouble(), params[3].toDouble(),
-                                 SvgUtil::fromUserSpace(params[4].toDouble()),
-                                 SvgUtil::fromUserSpace(params[5].toDouble()));
-        }
-    }
-
-    return result;
 }
 
 KoShape * SvgParser::findObject(const QString &name, const QList<KoShape*> & shapes)
@@ -696,8 +638,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     // Parse the color stops. The referencing gradient does not have colorstops,
     // so use the stops from the gradient it references to (e in this case and not b)
     parseColorStops(gradhelper.gradient(), e);
-    //gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
-    gradhelper.setTransform(parseTransform(b.attribute("gradientTransform")));
+    gradhelper.setTransform(SvgUtil::parseTransform(b.attribute("gradientTransform")));
     m_gradients.insert(gradientId, gradhelper);
 
     return true;
@@ -716,7 +657,7 @@ void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
     if (e.hasAttribute("viewBox"))
         pattern.setPatternContentViewbox(parseViewBox(e.attribute("viewBox")));
     if (e.hasAttribute("patternTransform"))
-        pattern.setTransform(parseTransform(e.attribute("patternTransform")));
+        pattern.setTransform(SvgUtil::parseTransform(e.attribute("patternTransform")));
 
 
     // parse tile reference rectangle
