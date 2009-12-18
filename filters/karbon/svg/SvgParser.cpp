@@ -972,9 +972,34 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
 
 SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
 {
+    // match css style rules to element
+    QStringList cssStyles = m_cssStyles.matchStyles(e);
+
+    // collect style attribute
+    QString styleAttribute = e.attribute("style").simplified();
+    if (!styleAttribute.isEmpty())
+        cssStyles.append(styleAttribute);
+
     SvgStyles styleMap;
 
-    // first collect individual style attributes
+    // collect all css style attributes
+    foreach(const QString &style, cssStyles){
+        QStringList substyles = style.split(';', QString::SkipEmptyParts);
+        if (!substyles.count())
+            continue;
+        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+            QStringList substyle = it->split(':');
+            if (substyle.count() != 2)
+                continue;
+            QString command = substyle[0].trimmed();
+            QString params  = substyle[1].trimmed();
+            // only use style attributes
+            if (m_styleAttributes.contains(command))
+                styleMap[command] = params;
+        }
+    }
+
+    // collect individual style attributes
     foreach(const QString & command, m_styleAttributes) {
         if (e.hasAttribute(command))
             styleMap[command] = e.attribute(command);
@@ -1539,6 +1564,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 m_defs.insert(id, b);
         } else if (b.tagName() == "filter") {
             parseFilter(b);
+        } else if (b.tagName() == "style") {
+            m_cssStyles.parseStylesheet(b);
         } else if (b.tagName() == "rect" ||
                    b.tagName() == "ellipse" ||
                    b.tagName() == "circle" ||
@@ -1572,12 +1599,18 @@ void SvgParser::parseDefs(const KoXmlElement &e)
 {
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement b = n.toElement();
-        if (b.isNull()) continue;
+        if (b.isNull())
+            continue;
 
-        QString definition = b.attribute("id");
-        if (!definition.isEmpty()) {
-            if (!m_defs.contains(definition))
+        if (b.tagName() == "style") {
+            m_cssStyles.parseStylesheet(b);
+        } else if (b.tagName() == "defs") {
+            parseDefs(b);
+        } else {
+            QString definition = b.attribute("id");
+            if (!definition.isEmpty() && !m_defs.contains(definition)) {
                 m_defs.insert(definition, b);
+            }
         }
     }
 }

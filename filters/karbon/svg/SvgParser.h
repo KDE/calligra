@@ -26,6 +26,7 @@
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
 #include "svggraphiccontext.h"
+#include "SvgCssHelper.h"
 
 #include <KoXmlReader.h>
 
@@ -156,6 +157,7 @@ private:
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
     QString m_xmlBaseDir;
+    SvgCssHelper m_cssStyles;
 };
 
 #endif
