@@ -289,12 +289,12 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     readBooleanAttr(QUALIFIED_NAME(CURRENT_EL))
 
 //! converts @a string into integer @a destination; returns KoFilter::WrongFormat on failure
-#define STRING_TO_INT(string, destination) \
-    { \
+#define STRING_TO_INT(string, destination, debugElement) \
+    if (string.isEmpty()) {} else { \
         bool ok; \
         const int val = string.toInt(&ok); \
         if (!ok) { \
-            kDebug() << "STRING_TO_INT: error converting" << string << "to int"; \
+            kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute " debugElement ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val; \

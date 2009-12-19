@@ -1246,10 +1246,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
     readNext();
     if (isCharacters()) {
         if (CALLER_IS(positionH)) {
-            STRING_TO_INT(text().toString(), m_posOffsetH)
+            STRING_TO_INT(text().toString(), m_posOffsetH, "positionH/posOffset text")
             m_hasPosOffsetH = true;
         } else if (CALLER_IS(positionV)) {
-            STRING_TO_INT(text().toString(), m_posOffsetV)
+            STRING_TO_INT(text().toString(), m_posOffsetV, "positionV/posOffset text")
             m_hasPosOffsetV = true;
         }
         ELSE_WRONG_FORMAT

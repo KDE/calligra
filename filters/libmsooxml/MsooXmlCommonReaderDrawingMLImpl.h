@@ -670,10 +670,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(x)
-    STRING_TO_INT(x, m_svgX)
+    STRING_TO_INT(x, m_svgX, "off@x")
 //    m_svgX = MSOOXML::Utils::EMU_to_ODF_CM(x);
     READ_ATTR_WITHOUT_NS(y)
-    STRING_TO_INT(y, m_svgY)
+    STRING_TO_INT(y, m_svgY, "off@y")
 //    m_svgY = MSOOXML::Utils::EMU_to_ODF_CM(y);
 //    if (m_svgX.isEmpty() || m_svgY.isEmpty())
 //        return KoFilter::WrongFormat;
@@ -713,9 +713,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(cx)
-    STRING_TO_INT(cx, m_svgWidth)
+    STRING_TO_INT(cx, m_svgWidth, "ext@cx")
     READ_ATTR_WITHOUT_NS(cy)
-    STRING_TO_INT(cy, m_svgHeight)
+    STRING_TO_INT(cy, m_svgHeight, "ext@cy")
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);

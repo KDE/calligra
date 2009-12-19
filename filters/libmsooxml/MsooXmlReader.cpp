@@ -129,9 +129,11 @@ static const char* tokenName(QXmlStreamReader::TokenType t)
     return tokenNames[i];
 }
 
-bool MsooXmlReader::readBooleanAttr(const char* attrName)
+bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue)
 {
-    const QString val(attributes().value(attrName).toString());
+    const QByteArray val(attributes().value(attrName).toString().toLatin1());
+    if (val.isEmpty())
+        return defaultValue;
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 

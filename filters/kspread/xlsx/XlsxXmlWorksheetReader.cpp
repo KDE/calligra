@@ -513,24 +513,26 @@ static bool valueIsNumeric(const QString& v)
 //! @todo improve support for formulas
 
 //! @return formula with 2-dimentional range
-static QByteArray printFormula(const QByteArray& formula, const QByteArray& from, const QByteArray& to)
+static QString printFormula(const QString& formula, const QString& from, const QString& to)
 {
-    QString res;
-    return res.sprintf("=%s([.%s:.%s])", formula.constData(), from.constData(), to.constData()).toLatin1();
+    return QString("=%1([.%2:.%3])").arg(formula).arg(from).arg(to);
 }
 
-static QByteArray convertFormula(const QByteArray& formula)
+static QString convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
-        return QByteArray();
-    QRegExp re("([0-9a-zA-Z]+)\\(([0-9A-Z]+):([0-9A-Z]+)\\)"); // e.g. SUM(B2:B4)
+        return QString();
+    QRegExp re("([0-9a-zA-Z]+)\\(([A-Z]+[0-9]+):([A-Z]+[0-9]+)\\)"); // e.g. SUM(B2:B4)
     kDebug() << formula;
     if (re.exactMatch(formula)) {
         kDebug() << re.cap(1) << re.cap(2) << re.cap(3);
         return printFormula(re.cap(1).toLatin1(), re.cap(2).toLatin1(), re.cap(3).toLatin1());
     }
-    qDebug() << "Parsing of formula" << formula << "not implemented";
-    return QByteArray();
+    QString res(QLatin1String("=") + formula);
+    res.replace(QRegExp("([A-Z]+[0-9]+)"), "[.\\1]");
+    return res;
+//    qDebug() << "Parsing of formula" << formula << "not implemented";
+//    return QString();
 }
 //</SIMPLE SUPPORT FOR FORMULAS>
 
@@ -570,6 +572,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     TRY_READ_ATTR_WITHOUT_NS(s)
     TRY_READ_ATTR_WITHOUT_NS(t)
+    m_convertFormula = true; // t != QLatin1String("e");
+
     m_value.clear();
     m_formula.clear();
 
@@ -650,6 +654,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constFloat;
             valueAttr = XlsxXmlWorksheetReader::officeValue;
+        } else if (t == QLatin1String("e")) {
+            if (m_value == QLatin1String("#REF!"))
+                body->addTextSpan("#NAME?");
+            else
+                body->addTextSpan(m_value);
+//! @todo full parsing needed to retrieve the type
+            valueType = MsooXmlReader::constFloat;
+            valueAttr = XlsxXmlWorksheetReader::officeValue;
+            m_value = QLatin1String("0");
         } else {
             raiseUnexpectedAttributeValueError(t, "c@t");
             return KoFilter::WrongFormat;
@@ -677,24 +690,29 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 raiseUnexpectedAttributeValueError(s, "c@s");
                 return KoFilter::WrongFormat;
             }
-            kDebug() << "fontId:" << cellFormat->fontId;
-            const XlsxFontStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
+//            kDebug() << "fontId:" << cellFormat->fontId;
+/*            const XlsxFontStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
             if (!fontStyle) {
                 raiseUnexpectedAttributeValueError(s, "c@s");
                 return KoFilter::WrongFormat;
-            }
+            }*/
             KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
 //! @todo hardcoded master style name
             cellStyle.addAttribute("style:parent-style-name",
                                    QLatin1String("Excel_20_Built-in_20_Normal"));
 
             KoCharacterStyle cellCharacterStyle;
-            fontStyle->setupCharacterStyle(&cellCharacterStyle);
+            cellFormat->setupCharacterStyle(&cellCharacterStyle);
+kDebug() << "1";
             cellCharacterStyle.saveOdf(cellStyle);
+kDebug() << "2";
 
-            fontStyle->setupCellTextStyle(&cellStyle);
-
-            cellFormat->setupCellStyle(&cellStyle);
+//moved            fontStyle->setupCellTextStyle(&cellStyle);
+            if (!cellFormat->setupCellStyle(&cellStyle)) {
+//                raiseUnexpectedAttributeValueError(s, "c@s");
+                return KoFilter::WrongFormat;
+            }
+kDebug() << "3";
 
             const QString cellStyleName(mainStyles->lookup(cellStyle));
             body->addAttribute("table:style-name", cellStyleName);
@@ -725,7 +743,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 {
     READ_PROLOGUE
     readNext();
-    m_formula = convertFormula(text().toString().toLatin1());
+    m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
     kDebug() << m_formula;
 
     while (!atEnd()) {

@@ -70,8 +70,12 @@ protected:
     int m_currentColumn;
     //! Used in read_f() and read_v()
     QString m_value;
+
+    //! Affects read_f(), set in read_c()
+    bool m_convertFormula;
+
     //! Set in read_f() and used in read_c()
-    QByteArray m_formula;
+    QString m_formula;
 
     //! Filled by read_sheetFormatPr(), measured in pt
     QString m_defaultRowHeight;

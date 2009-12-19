@@ -29,6 +29,9 @@
 class KoCharacterStyle;
 class KoGenStyle;
 class XlsxImport;
+class XlsxStyles;
+class XlsxCellFormat;
+class XlsxXmlStylesReader;
 
 //! Single XLSX font style definition as specified in ECMA-376, 18.8.23 (Fonts), p. 1964.
 /*! @see XlsxXmlStylesReader::read_fonts() */
@@ -57,34 +60,38 @@ public:
 //! @todo bool shadow (Mac)
 //! @todo extend
 //! @todo family
-//! @todo bool outline : 1;
-//! @todo QString scheme;
+//! @todo bool outline;
 //! @todo QString scheme;
 //! @todo vertAlign
-bool bold : 1;
-bool italic : 1;
-bool strike : 1;
+    bool bold;
+    bool italic;
+    bool strike;
 
     static ST_UnderlineValue ST_UnderlineValue_fromString(const QString& s);
     void setUnderline(const QString& s);
+
+    void setSize(qreal size) {
+        m_defaultSize = false;
+        m_size = size;
+    }
+
+    qreal size() const {
+        return m_size;
+    }
+protected:
+    //! Sets up @a cellStyle to match this cell text style.
+    //! @todo implement more styling
+    void setupCellTextStyle(KoGenStyle* cellStyle) const;
 
     //! Sets up @a characterStyle to match this font style.
     //! @todo implement more formatting
     void setupCharacterStyle(KoCharacterStyle* characterStyle) const;
 
-    //! Sets up @a cellStyle to match this cell text style.
-    //! @todo implement more styling
-    void setupCellTextStyle(KoGenStyle* cellStyle) const;
-
-    void setSize(qreal size) {
-        m_defaultSize = false; m_size = size;
-    }
-    qreal size() const {
-        return m_size;
-    }
 private:
     qreal m_size;
-bool m_defaultSize : 1;
+    bool m_defaultSize;
+
+    friend class XlsxCellFormat;
 };
 
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
@@ -93,6 +100,8 @@ class XlsxCellFormat
 {
 public:
     XlsxCellFormat();
+
+    ~XlsxCellFormat();
 
     //! 18.18.40 ST_HorizontalAlignment (Horizontal Alignment Type), p. 2698
     /*! The enumeration value indicating the portion of Cell Alignment in a cell format (XF)
@@ -122,19 +131,80 @@ public:
         TopVerticalAlignment
     };
 
-    //! font id, use it in XlsXStyles::fontStyle()
-//! @todo set pointer directly here for optimization?
-    uint fontId;
+    //! Indicates whether the alignment formatting specified for this xf should be applied
+//! @todo should be saved as metadata in ODF
+    bool applyAlignment;
+    
+    //! Indicates whether the border formatting specified for this xf should be applied.
+//! @todo should be saved as metadata in ODF
+    bool applyBorder;
 
+    //! Indicates whether the fill formatting specified for this xf should be applied.
+//! @todo should be saved as metadata in ODF
+    bool applyFill;
+
+    //! Indicates whether the font formatting specified for this xf should be applied.
+//! @todo should be saved as metadata in ODF
+    bool applyFont;
+
+    //! Indicates whether the number formatting specified for this xf should be applied.
+    bool applyNumberFormat;
+
+    //! Indicates whether the protection formatting specified for this xf should be applied.
+    bool applyProtection;
+
+    //! Zero-based index of the border record used by this cell format. Can be -1.
+//! @todo set pointer directly here for optimization?
+    int borderId;
+
+    //! Zero-based index of the fill record used by this cell format. Can be -1.
+//! @todo set pointer directly here for optimization?
+    int fillId;
+
+    //! Font id used in XlsXStyles::fontStyle(). Can be -1.
+//! @todo set pointer directly here for optimization?
+    int fontId;
+
+    //! Id of the number format (numFmt) record used by this cell format. Can be -1.
+//! @todo set pointer directly here for optimization?
+    int numFmtId;
+
+    //! Indicates whether the cell rendering includes a pivot table dropdown button.
+    bool pivotButton;
+
+    //! Indicates whether the text string in a cell should be prefixed by a single quote mark
+    //! (e.g., 'text). In these cases, the quote is not stored in the Shared Strings Part.
+    bool quotePrefix;
+
+    //! For xf records contained in cellXfs this is the zero-based index of an xf record
+    //! contained in cellStyleXfs corresponding to the cell style applied to the cell.
+    //! Not present for xf records contained in cellStyleXfs. Can be -1.
+//! @todo set pointer directly here for optimization?
+    int xfId;
+
+//! @todo should be saved as metadata in ODF if applyAlignment false
     ST_HorizontalAlignment horizontalAlignment;
+//! @todo should be saved as metadata in ODF if applyAlignment false
     ST_VerticalAlignment verticalAlignment;
 
     void setHorizontalAlignment(const QString& alignment);
     void setVerticalAlignment(const QString& alignment);
 
     //! Sets up @a cellStyle to match this cell style.
-    //! @todo implement more styling
-    void setupCellStyle(KoGenStyle* cellStyle) const;
+//! @todo implement more styling
+    bool setupCellStyle(KoGenStyle* cellStyle) const;
+
+    //! Sets up @a characterStyle to match this font style.
+//! @todo implement more formatting
+    bool setupCharacterStyle(KoCharacterStyle* characterStyle) const;
+
+protected:
+    XlsxStyles *styles;
+
+    friend class XlsxStyles;
+private:
+    //! Used by setupCellStyle()
+    void setupCellStyleAlignment(KoGenStyle* cellStyle) const;
 };
 
 class XlsxStyles
@@ -142,23 +212,27 @@ class XlsxStyles
 public:
     XlsxStyles();
     ~XlsxStyles();
-    QVector<XlsxFontStyle*> fontStyles;
-    QVector<XlsxCellFormat*> cellFormats;
 
     //! @return font style for id @a id (counted from 0)
-    XlsxFontStyle* fontStyle(uint id) const {
-        if (id >= (uint)fontStyles.size())
+    XlsxFontStyle* fontStyle(int id) const {
+        if (id < 0 || id >= fontStyles.size())
             return 0;
         return fontStyles[id];
     }
 
     //! @return cell format for id @a id (counted from 0)
-    XlsxCellFormat* cellFormat(uint id) const {
-        if (id >= (uint)cellFormats.size())
+    XlsxCellFormat* cellFormat(int id) const {
+        if (id < 0 || id >= cellFormats.size())
             return 0;
         return cellFormats[id];
     }
+protected:
+    void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
+    QVector<XlsxFontStyle*> fontStyles;
+    QVector<XlsxCellFormat*> cellFormats;
+
+    friend class XlsxXmlStylesReader;
 };
 
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext

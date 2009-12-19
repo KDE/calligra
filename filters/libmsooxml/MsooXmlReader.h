@@ -96,7 +96,7 @@ protected:
     void raiseUnexpectedAttributeValueError(const QString& value, const char* attrName);
 
     //! Used by read_b(), read_i(), etc.
-    bool readBooleanAttr(const char* attrName);
+    bool readBooleanAttr(const char* attrName, bool defaultValue = false);
 
     QString m_defaultNamespace; //!< stores namespace (for optimization)
 

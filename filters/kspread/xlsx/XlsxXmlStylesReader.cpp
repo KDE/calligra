@@ -154,15 +154,42 @@ XlsxStyles::~XlsxStyles()
 {
     for (int i = 0; i < fontStyles.size(); i++)
         delete fontStyles[i];
+    for (int i = 0; i < cellFormats.size(); i++)
+        delete cellFormats[i];
+}
+
+void XlsxStyles::setCellFormat(XlsxCellFormat *format, int cellFormatIndex)
+{
+    format->styles = this;
+    delete cellFormats[cellFormatIndex];
+    cellFormats[cellFormatIndex] = format;
 }
 
 //----------------------------------------------------------
-
+//! default values based on Annex A, p. 4476
 XlsxCellFormat::XlsxCellFormat()
-        : fontId(0)
-        , horizontalAlignment(GeneralHorizontalAlignment)
-        , verticalAlignment(NoVerticalAlignment)
+ : applyAlignment(true), applyBorder(true), applyFill(true), applyFont(true),
+   applyNumberFormat(true), applyProtection(true),
+   borderId(-1), fillId(-1), fontId(-1), numFmtId(-1),
+   pivotButton(false), quotePrefix(false), xfId(-1),
+   horizontalAlignment(GeneralHorizontalAlignment),
+   verticalAlignment(NoVerticalAlignment)
 {
+}
+
+XlsxCellFormat::~XlsxCellFormat()
+{
+}
+
+bool XlsxCellFormat::setupCharacterStyle(KoCharacterStyle* characterStyle) const
+{
+    XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
+    if (!fontStyle) {
+        kDebug() << "No font with ID:" << fontId;
+        return false;
+    }
+    fontStyle->setupCharacterStyle(characterStyle);
+    return true;
 }
 
 class ST_HorizontalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::ST_HorizontalAlignment>
@@ -205,12 +232,10 @@ void XlsxCellFormat::setVerticalAlignment(const QString& alignment)
     verticalAlignment = s_ST_VerticalAlignmentValues->value(alignment);
 }
 
-// http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
-void XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
-{
 //! CASE #S1600
+void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
+{
 //! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
-    QByteArray odfHorizontalAlignment;
     bool wrapOption = false;
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
@@ -252,6 +277,23 @@ void XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
 
 //! @todo take alignment/@wrapText into account
     cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
+}
+
+// http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
+bool XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
+{
+    if (applyAlignment) {
+        setupCellStyleAlignment(cellStyle);
+    }
+    if (applyFont) {
+        XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
+        if (!fontStyle) {
+            kDebug() << "No font with ID:" << fontId;
+            return false;
+        }
+        fontStyle->setupCellTextStyle(cellStyle);
+    }
+    return true;
 }
 
 //----------------------------------------------------------
@@ -561,7 +603,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_b()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->bold = readBooleanAttr("val");
+    m_currentFontStyle->bold = readBooleanAttr("val", true);
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -588,7 +630,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_i()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->italic = readBooleanAttr("val");
+    m_currentFontStyle->italic = readBooleanAttr("val", true);
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -615,7 +657,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_strike()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->strike = readBooleanAttr("val");
+    m_currentFontStyle->strike = readBooleanAttr("val", true);
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -705,6 +747,23 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
  - [done] cellXfs (§18.8.10)
  - extLst (Future Feature Data Storage Area) §18.2.10
  - protection (Protection Properties) §18.8.33
+
+ Attributes:
+ - applyAlignment
+ - applyBorder
+ - applyFill
+ - applyFont
+ - applyNumberFormat
+ - applyProtection
+ - borderId
+ - fillId
+ - [done] fontId
+ - numFmtId
+ - pivotButton
+ - quotePrefix
+ - xfId
+
+ @todo support all attributes and elements
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 {
@@ -715,20 +774,42 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
         return KoFilter::WrongFormat;
     }
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(fontId)
-    bool ok;
-    const uint fontIdNumber = fontId.toUInt(&ok);
-    if (!ok) {
-        raiseUnexpectedAttributeValueError(fontId, "xf@fontId");
-        return KoFilter::WrongFormat;
-    }
-
-
     kDebug() << "cell format #" << m_cellFormatIndex;
     m_currentCellFormat = new XlsxCellFormat;
-    kDebug() << "- fontId:" << fontId;
-    m_currentCellFormat->fontId = fontIdNumber;
+    MSOOXML::Utils::AutoPtrSetter<XlsxCellFormat> currentCellFormatSetter(m_currentCellFormat);
+
+    // -- read attrs --
+    const QXmlStreamAttributes attrs(attributes());
+    m_currentCellFormat->applyAlignment = readBooleanAttr("applyAlignment", true);
+    m_currentCellFormat->applyBorder = readBooleanAttr("applyBorder", true);
+    m_currentCellFormat->applyFill = readBooleanAttr("applyFill", true);
+    m_currentCellFormat->applyFont = readBooleanAttr("applyFont", true);
+    m_currentCellFormat->applyNumberFormat = readBooleanAttr("applyNumberFormat", true);
+    m_currentCellFormat->applyProtection = readBooleanAttr("applyProtection", true);
+
+    TRY_READ_ATTR_WITHOUT_NS(borderId)
+    STRING_TO_INT(borderId, m_currentCellFormat->borderId, "xf@borderId")
+
+    TRY_READ_ATTR_WITHOUT_NS(fillId)
+    STRING_TO_INT(fillId, m_currentCellFormat->fillId, "xf@fillId")
+
+    TRY_READ_ATTR_WITHOUT_NS(fontId)
+/*    bool ok;
+    const int fontIdNumber = fontId.toInt(&ok);
+    if (!ok || fontIdNumber < 0) {
+        raiseUnexpectedAttributeValueError(fontId, "xf@fontId");
+        return KoFilter::WrongFormat;
+    }*/
+    STRING_TO_INT(fontId, m_currentCellFormat->fontId, "xf@fontId")
+
+    TRY_READ_ATTR_WITHOUT_NS(numFmtId)
+    STRING_TO_INT(numFmtId, m_currentCellFormat->numFmtId, "xf@numFmtId")
+
+    m_currentCellFormat->pivotButton = readBooleanAttr("pivotButton");
+    m_currentCellFormat->quotePrefix = readBooleanAttr("quotePrefix");
+
+    TRY_READ_ATTR_WITHOUT_NS(xfId)
+    STRING_TO_INT(xfId, m_currentCellFormat->xfId, "xf@xfId")
 
     while (!atEnd()) {
         readNext();
@@ -742,7 +823,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 
     READ_EPILOGUE_WITHOUT_RETURN
 
-    m_context->styles->cellFormats[m_cellFormatIndex] = m_currentCellFormat;
+    currentCellFormatSetter.release();
+    m_context->styles->setCellFormat(m_currentCellFormat, m_cellFormatIndex);
     m_currentCellFormat = 0;
     m_cellFormatIndex++;
 
