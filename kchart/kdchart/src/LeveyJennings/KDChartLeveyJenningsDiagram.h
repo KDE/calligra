@@ -40,7 +40,7 @@ namespace KDChart {
     class ThreeDLineAttributes;
 
 /**
- * @brief LeveyDiagram defines a Levey Jennings
+ * @brief LeveyDiagram defines a Levey Jennings chart.
  * 
  * It provides different subtypes which are set using \a setType.
  */
@@ -55,7 +55,7 @@ class KDCHART_EXPORT LeveyJenningsDiagram : public LineDiagram
 
 
 public:
-    LeveyJenningsDiagram( QWidget* parent = 0, LeveyJenningsCoordinatePlane* plane = 0 );
+    explicit LeveyJenningsDiagram( QWidget* parent = 0, LeveyJenningsCoordinatePlane* plane = 0 );
     virtual ~LeveyJenningsDiagram();
 
     virtual LineDiagram * clone() const;
@@ -108,6 +108,7 @@ public:
     void setModel( QAbstractItemModel* model );
 
     QPair< QDateTime, QDateTime > timeRange() const;
+    void setTimeRange( const QPair< QDateTime, QDateTime >& timeRange );
 
 protected:
     void paint( PaintContext* paintContext );

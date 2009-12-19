@@ -73,6 +73,8 @@ namespace KDChart {
         QMap< LeveyJenningsDiagram::Symbol, QString >  icons;
         QMap< LeveyJenningsDiagram::Symbol, QSvgRenderer* > iconRenderer;
 
+        QPair< QDateTime, QDateTime > timeRange;
+
         float expectedMeanValue;
         float expectedStandardDeviation;
 

@@ -1,3 +1,5 @@
+/* -*- Mode: C++ -*-
+   KDChart - a multi-platform charting engine
    */
 
 /****************************************************************************
@@ -24,9 +26,9 @@
  **********************************************************************/
 
 #include "KDChartAbstractTernaryDiagram.h"
-#include "KDChartTernaryCoordinatePlane.h"
-
 #include "KDChartAbstractTernaryDiagram_p.h"
+
+#include "KDChartTernaryCoordinatePlane.h"
 
 using namespace KDChart;
 

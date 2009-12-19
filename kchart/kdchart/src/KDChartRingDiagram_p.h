@@ -53,13 +53,22 @@ public:
     ~Private();
 
     Private( const Private& rhs ) :
-        AbstractPieDiagram::Private( rhs ),
-        relativeThickness( rhs.relativeThickness )
+        AbstractPieDiagram::Private( rhs )
         {
+            relativeThickness = rhs.relativeThickness;
+            expandWhenExploded = rhs.expandWhenExploded;
         }
 
-private:
+protected:
+    // this information needed temporarily at drawing time
+    QVector< QVector < qreal > > startAngles;
+    QVector< QVector < qreal > > angleLens;
+    QRectF position;
+    qreal size;
     bool relativeThickness;
+    bool expandWhenExploded;
+    // polygons associated to their 3d depth
+    QMap<qreal, QPolygon> polygonsToRender;
 };
 
 KDCHART_IMPL_DERIVED_DIAGRAM( RingDiagram, AbstractPieDiagram, PolarCoordinatePlane )

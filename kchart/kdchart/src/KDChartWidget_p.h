@@ -40,6 +40,8 @@
 
 #include <KDChartWidget.h>
 #include <KDChartChart.h>
+#include <KDChartCartesianCoordinatePlane.h>
+#include <KDChartPolarCoordinatePlane.h>
 
 #include <KDABLibFakes>
 
@@ -61,6 +63,8 @@ protected:
     QGridLayout layout;
     QStandardItemModel m_model;
     Chart m_chart;
+    CartesianCoordinatePlane m_cartPlane;
+    PolarCoordinatePlane m_polPlane;
 
     int usedDatasetWidth;
 };

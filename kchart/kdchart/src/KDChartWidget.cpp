@@ -30,13 +30,11 @@
 
 #include <KDChartAbstractDiagram.h>
 #include <KDChartBarDiagram.h>
-#include <KDChartCartesianCoordinatePlane.h>
 #include <KDChartChart.h>
 #include <KDChartAbstractCoordinatePlane.h>
 #include <KDChartLineDiagram.h>
 #include <KDChartPlotter.h>
 #include <KDChartPieDiagram.h>
-#include <KDChartPolarCoordinatePlane.h>
 #include <KDChartPolarDiagram.h>
 #include <KDChartRingDiagram.h>
 #include <KDChartLegend.h>
@@ -54,6 +52,8 @@ Widget::Private::Private( Widget * qq )
       layout( q ),
       m_model( q ),
       m_chart( q ),
+      m_cartPlane( &m_chart ),
+      m_polPlane( &m_chart ),
       usedDatasetWidth( 0 )
 {
     KDAB_SET_OBJECT_NAME( layout );
@@ -386,66 +386,73 @@ AbstractCoordinatePlane* Widget::coordinatePlane()
 
 static bool isCartesian( KDChart::Widget::ChartType type )
 {
-    return (type == KDChart::Widget::Bar || type == KDChart::Widget::Line);
+    return (type == KDChart::Widget::Bar) || (type == KDChart::Widget::Line);
 }
 
 static bool isPolar( KDChart::Widget::ChartType type )
 {
-    return (type == KDChart::Widget::Pie
-            || type == KDChart::Widget::Ring
-            || type == KDChart::Widget::Polar );
+    return     (type == KDChart::Widget::Pie)
+            || (type == KDChart::Widget::Ring)
+            || (type == KDChart::Widget::Polar);
 }
 
 void Widget::setType( ChartType chartType, SubType chartSubType )
 {
     AbstractDiagram* diag = 0;
-    CartesianCoordinatePlane* cartPlane = 0;
-    PolarCoordinatePlane* polPlane = 0;
+    const ChartType oldType = type();
 
-
-    if ( chartType != type() ){
-        switch ( chartType )
-        {
+    if ( chartType != oldType ){
+        if( chartType != NoType ){
+            if ( isCartesian( chartType ) && ! isCartesian( oldType ) )
+            {
+                if( coordinatePlane() == &d->m_polPlane ){
+                    d->m_chart.takeCoordinatePlane( &d->m_polPlane );
+                    d->m_chart.addCoordinatePlane(  &d->m_cartPlane );
+                }else{
+                    d->m_chart.replaceCoordinatePlane( &d->m_cartPlane );
+                }
+            }
+            else if ( isPolar( chartType ) && ! isPolar( oldType ) )
+            {
+                if( coordinatePlane() == &d->m_cartPlane ){
+                    d->m_chart.takeCoordinatePlane( &d->m_cartPlane );
+                    d->m_chart.addCoordinatePlane(  &d->m_polPlane );
+                }else{
+                    d->m_chart.replaceCoordinatePlane( &d->m_polPlane );
+                }
+            }
+        }
+        switch ( chartType ){
             case Bar:
-              diag = new BarDiagram( &d->m_chart, cartPlane );
-              break;
+                diag = new BarDiagram( &d->m_chart, &d->m_cartPlane );
+                break;
             case Line:
-                diag = new LineDiagram( &d->m_chart, cartPlane );
+                diag = new LineDiagram( &d->m_chart, &d->m_cartPlane );
                 break;
             case Plot:
-                diag = new Plotter( &d->m_chart, cartPlane );
+                diag = new Plotter( &d->m_chart, &d->m_cartPlane );
                 break;
             case Pie:
-              diag = new PieDiagram( &d->m_chart, polPlane );
-              break;
+                diag = new PieDiagram( &d->m_chart, &d->m_polPlane );
+                break;
             case Polar:
-              diag = new PolarDiagram( &d->m_chart, polPlane );
-              break;
+                diag = new PolarDiagram( &d->m_chart, &d->m_polPlane );
+                break;
             case Ring:
-              diag = new RingDiagram( &d->m_chart, polPlane );
-              break;
+                diag = new RingDiagram( &d->m_chart, &d->m_polPlane );
+                break;
             case NoType:
-              break;
+                break;
         }
-        if ( diag != NULL )
-        {
-            if ( isPolar( type() ) && isCartesian( chartType ) )
-            {
-                cartPlane = new CartesianCoordinatePlane( &d->m_chart );
-                d->m_chart.replaceCoordinatePlane( cartPlane );
-            }
-            else if ( isCartesian( type() ) && isPolar( chartType ) )
-            {
-                polPlane = new PolarCoordinatePlane( &d->m_chart );
-                d->m_chart.replaceCoordinatePlane( polPlane );
-            }
-            else if ( isCartesian( type() ) && isCartesian( chartType ) )
-            {
-                AbstractCartesianDiagram *old =
-                        qobject_cast<AbstractCartesianDiagram*>( d->m_chart.coordinatePlane()->diagram() );
-                Q_FOREACH( CartesianAxis* axis, old->axes() ) {
-                    old->takeAxis( axis );
-                    qobject_cast<AbstractCartesianDiagram*>(diag)->addAxis( axis );
+        if ( diag != NULL ){
+            if ( isCartesian( oldType ) && isCartesian( chartType ) ){
+                AbstractCartesianDiagram *oldDiag =
+                        qobject_cast<AbstractCartesianDiagram*>( coordinatePlane()->diagram() );
+                AbstractCartesianDiagram *newDiag =
+                        qobject_cast<AbstractCartesianDiagram*>( diag );
+                Q_FOREACH( CartesianAxis* axis, oldDiag->axes() ) {
+                    oldDiag->takeAxis( axis );
+                    newDiag->addAxis ( axis );
                 }
             }
             diag->setModel( &d->m_model );
@@ -456,11 +463,14 @@ void Widget::setType( ChartType chartType, SubType chartSubType )
                 l->setDiagram( diag );
             //checkDatasetWidth( d->usedDatasetWidth );
         }
+        //coordinatePlane()->setGridNeedsRecalculate();
     }
 
-    if ( chartSubType != subType() )
-        setSubType( chartSubType );
-//    coordinatePlane()->show();
+    if ( chartType != NoType ){
+        if ( chartType != oldType || chartSubType != subType() )
+            setSubType( chartSubType );
+        d->m_chart.resize( size() ); // triggering immediate update
+    }
 }
 
 void Widget::setSubType( SubType subType )
@@ -566,6 +576,7 @@ Widget::SubType Widget::subType() const
             break;
         case Plot:
             TEST_SUB_TYPE( plotterDia, Plotter::Normal,  Normal );
+            TEST_SUB_TYPE( plotterDia, Plotter::Percent, Percent );
             break;
         case Pie:
            // no impl. yet
@@ -586,7 +597,7 @@ Widget::SubType Widget::subType() const
 
 
 /**
- * Checks, whether the given width matches with the one used until now.
+ * Checks whether the given width matches with the one used until now.
  */
 bool Widget::checkDatasetWidth( int width )
 {

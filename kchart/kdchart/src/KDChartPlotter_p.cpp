@@ -25,9 +25,8 @@
  **
  **********************************************************************/
 
-#include "KDChartPlotter.h"
-
 #include "KDChartPlotter_p.h"
+#include "KDChartPlotter.h"
 
 #include "KDChartValueTrackerAttributes.h"
 
@@ -37,6 +36,15 @@ Plotter::Private::Private( const Private& rhs )
     : AbstractCartesianDiagram::Private( rhs )
 {
 }
+
+void Plotter::Private::setCompressorResolution(
+    const QSizeF& size,
+    const AbstractCoordinatePlane* plane )
+{
+    compressor.setResolution( static_cast<int>( size.width()  * plane->zoomFactorX() ),
+                              static_cast<int>( size.height() * plane->zoomFactorY() ) );
+}
+
 
 void Plotter::Private::paintPolyline(
     PaintContext* ctx,
@@ -250,8 +258,9 @@ void Plotter::PlotterType::appendDataValueTextInfoToList(
             const qreal value )
 {
     Q_UNUSED( autoPositionNegative );
-    m_private->appendDataValueTextInfoToList( diagram, list, index, points,
-                                              autoPositionPositive, autoPositionPositive, value );
+    m_private->appendDataValueTextInfoToList(
+                    diagram, list, index, 0,
+                    points, autoPositionPositive, autoPositionPositive, value );
 }
 
 void Plotter::PlotterType::paintValueTracker( PaintContext* ctx, const ValueTrackerAttributes& vt, const QPointF& at )

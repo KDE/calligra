@@ -21,6 +21,9 @@
  **
  **********************************************************************/
 
+#include "KDChartLeveyJenningsDiagram.h"
+#include "KDChartLeveyJenningsDiagram_p.h"
+
 #include <QDateTime>
 #include <QFontMetrics>
 #include <QPainter>
@@ -28,15 +31,13 @@
 #include <QVector>
 
 #include "KDChartChart.h"
-#include "KDChartLeveyJenningsDiagram.h"
 #include "KDChartTextAttributes.h"
 #include "KDChartAbstractGrid.h"
 
 #include <KDABLibFakes>
 
-#include "KDChartLeveyJenningsDiagram_p.h"
-
 using namespace KDChart;
+using namespace std;
 
 LeveyJenningsDiagram::Private::Private()
 {
@@ -73,6 +74,8 @@ void LeveyJenningsDiagram::init()
     d->icons[ FluidicsPackChanged ] = QString::fromLatin1( ":/KDAB/kdchart/LeveyJennings/karo_blue.svg" );
     d->icons[ OkDataPoint ] = QString::fromLatin1( ":/KDAB/kdchart/LeveyJennings/circle_blue.svg" );
     d->icons[ NotOkDataPoint ] = QString::fromLatin1( ":/KDAB/kdchart/LeveyJennings/circle_blue_red.svg" );
+
+    setSelectionMode( QAbstractItemView::SingleSelection );
 }
 
 LeveyJenningsDiagram::~LeveyJenningsDiagram()
@@ -327,7 +330,7 @@ void LeveyJenningsDiagram::setModel( QAbstractItemModel* model )
         disconnect( this->model(), SIGNAL( layoutChanged() ),
                                    this, SLOT( calculateMeanAndStandardDeviation() ) );
     }
-    LineDiagram::setModel( model ); 
+    LineDiagram::setModel( model );
     if( this->model() != 0 )
     {
         connect( this->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
@@ -350,7 +353,7 @@ void LeveyJenningsDiagram::setModel( QAbstractItemModel* model )
 }
 
 // TODO: This is the 'easy' solution
-// eruate, whether this is enough or we need some better one or even boost here
+// evaluate whether this is enough or we need some better one or even boost here
 void LeveyJenningsDiagram::calculateMeanAndStandardDeviation() const
 {
     QVector< double > values;
@@ -376,7 +379,7 @@ void LeveyJenningsDiagram::calculateMeanAndStandardDeviation() const
         sum += value;
         sumSquares += value * value;
     }
-    
+
     const int N = values.count();
 
     d->calculatedMeanValue = sum / N;
@@ -384,18 +387,35 @@ void LeveyJenningsDiagram::calculateMeanAndStandardDeviation() const
 }
 
 // calculates the largest QDate not greater than \a dt.
-static QDate floor( const QDateTime& dt )
+static QDate floorDay( const QDateTime& dt )
 {
     return dt.date();
 }
 
 // calculates the smallest QDate not less than \a dt.
-static QDate ceil( const QDateTime& dt )
+static QDate ceilDay( const QDateTime& dt )
 {
     QDate result = dt.date();
-    
+
     if( QDateTime( result, QTime() ) < dt )
         result = result.addDays( 1 );
+
+    return result;
+}
+
+// calculates the largest QDateTime like xx:00 not greater than \a dt.
+static QDateTime floorHour( const QDateTime& dt )
+{
+    return QDateTime( dt.date(), QTime( dt.time().hour(), 0 ) );
+}
+
+// calculates the smallest QDateTime like xx:00 not less than \a dt.
+static QDateTime ceilHour( const QDateTime& dt )
+{
+    QDateTime result( dt.date(), QTime( dt.time().hour(), 0 ) );
+
+    if( result < dt )
+        result = result.addSecs( 3600 );
 
     return result;
 }
@@ -408,7 +428,7 @@ const QPair<QPointF, QPointF> LeveyJenningsDiagram::calculateDataBoundaries() co
 
     d->setYAxisRange();
 
-    // rounded down/up to the prev/next midnight
+    // rounded down/up to the prev/next midnight (at least that's the default)
     const QPair< QDateTime, QDateTime > range = timeRange();
     const unsigned int minTime = range.first.toTime_t();
     const unsigned int maxTime = range.second.toTime_t();
@@ -427,14 +447,45 @@ const QPair<QPointF, QPointF> LeveyJenningsDiagram::calculateDataBoundaries() co
  */
 QPair< QDateTime, QDateTime > LeveyJenningsDiagram::timeRange() const
 {
+    if( d->timeRange != QPair< QDateTime, QDateTime >() )
+        return d->timeRange;
+
     const QAbstractItemModel& m = *model();
     const int rowCount = m.rowCount( rootIndex() );
 
-    // round down/up to the prev/next midnight
-    const QDate min = floor( m.data( m.index( 0, 3, rootIndex() ) ).toDateTime() );
-    const QDate max = ceil( m.data( m.index( rowCount - 1, 3, rootIndex() ) ).toDateTime() );
+    const QDateTime begin = m.data( m.index( 0, 3, rootIndex() ) ).toDateTime();
+    const QDateTime end = m.data( m.index( rowCount - 1, 3, rootIndex() ) ).toDateTime();
 
-    return QPair< QDateTime, QDateTime >( QDateTime( min ), QDateTime( max ) );
+    if( begin.secsTo( end ) > 86400 )
+    {
+        // if begin to end is more than 24h
+        // round down/up to the prev/next midnight
+        const QDate min = floorDay( begin );
+        const QDate max = ceilDay( end );
+        return QPair< QDateTime, QDateTime >( QDateTime( min ), QDateTime( max ) );
+    }
+    else if( begin.secsTo( end ) > 3600 )
+    {
+        // more than 1h: rond down up to the prex/next hour
+        // if begin to end is more than 24h
+        const QDateTime min = floorHour( begin );
+        const QDateTime max = ceilHour( end );
+        return QPair< QDateTime, QDateTime >( min, max );
+    }
+    return QPair< QDateTime, QDateTime >( begin, end );
+}
+
+/**
+ * Sets the \a timeRange visible on the x axis. Set it to QPair< QDateTime, QDateTime >()
+ * to use the default auto calculation.
+ */
+void LeveyJenningsDiagram::setTimeRange( const QPair< QDateTime, QDateTime >& timeRange )
+{
+    if( d->timeRange == timeRange )
+        return;
+
+    d->timeRange = timeRange;
+    update();
 }
 
 /**
@@ -494,68 +545,84 @@ void LeveyJenningsDiagram::paint( PaintContext* ctx )
         const QModelIndex valueIndex = m.index( row, 1, rootIndex() );
         const QModelIndex okIndex = m.index( row, 2, rootIndex() );
         const QModelIndex timeIndex = m.index( row, 3, rootIndex() );
+        const QModelIndex expectedMeanIndex = m.index( row, 4, rootIndex() );
+        const QModelIndex expectedSDIndex = m.index( row, 5, rootIndex() );
 
         painter->setPen( pen( lotIndex ) );
 
         const int lot = m.data( lotIndex ).toInt();
-        const double value = m.data( valueIndex ).toDouble();
+        double value = m.data( valueIndex ).toDouble();
         const bool ok = m.data( okIndex ).toBool();
         const QDateTime time = m.data( timeIndex ).toDateTime();
         const double xValue = ( time.toTime_t() - minTime ) / static_cast< double >( 24 * 60 * 60 );
 
-        const QPointF point = ctx->coordinatePlane()->translate( QPointF( xValue, value ) );
+        const double expectedMean = m.data( expectedMeanIndex ).toDouble();
+        const double expectedSD = m.data( expectedSDIndex ).toDouble();
+
+        QPointF point = ctx->coordinatePlane()->translate( QPointF( xValue, value ) );
 
         if( static_cast< int >( value ) == 0 )
         {
             hadMissingValue = true;
-            continue;
         }
-
-        if( prevLot == lot )
+        else
         {
-            const QPen pen = painter->pen();
-            QPen newPen = pen;
-            
-            if( hadMissingValue )
+            if( static_cast< int >( expectedMean ) != 0 && static_cast< int >( expectedSD ) != 0 )
             {
-                newPen.setDashPattern( QVector< qreal >() << 4.0 << 4.0 );
+                // this calculates the 'logical' value relative to the expected mean and SD of this point
+                value -= expectedMean;
+                value /= expectedSD;
+                value *= d->expectedStandardDeviation;
+                value += d->expectedMeanValue;
+                point = ctx->coordinatePlane()->translate( QPointF( xValue, value ) );
             }
-            
-            painter->setPen( newPen );
-            painter->drawLine( prevPoint, point );
-            painter->setPen( pen );
-            d->reverseMapper.addLine( valueIndex.row(), valueIndex.column(), prevPoint, point );
-        }
-        else if( row > 0 )
-        {
-            drawLotChangeSymbol( ctx, QPointF( xValue, value ) );
+
+            if( prevLot == lot )
+            {
+                const QPen pen = painter->pen();
+                QPen newPen = pen;
+
+                if( hadMissingValue )
+                {
+                    newPen.setDashPattern( QVector< qreal >() << 4.0 << 4.0 );
+                }
+
+                painter->setPen( newPen );
+                painter->drawLine( prevPoint, point );
+                painter->setPen( pen );
+                // d->reverseMapper.addLine( valueIndex.row(), valueIndex.column(), prevPoint, point );
+            }
+            else if( row > 0 )
+            {
+                drawLotChangeSymbol( ctx, QPointF( xValue, value ) );
+            }
+
+            if( value <= d->expectedMeanValue + 4 * d->expectedStandardDeviation &&
+                value >= d->expectedMeanValue - 4 * d->expectedStandardDeviation )
+            {
+                const QPointF location( xValue, value );
+                drawDataPointSymbol( ctx, location, ok );
+                d->reverseMapper.addCircle( valueIndex.row(),
+                                            valueIndex.column(),
+                                            ctx->coordinatePlane()->translate( location ),
+                                            iconRect().size() );
+            }
+            prevLot = lot;
+            prevPoint = point;
+            hadMissingValue = false;
         }
 
-        if( value <= d->expectedMeanValue + 4 * d->expectedStandardDeviation &&
-            value >= d->expectedMeanValue - 4 * d->expectedStandardDeviation )
-        {
-            const QPointF location( xValue, value );
-            drawDataPointSymbol( ctx, location, ok );
-            d->reverseMapper.addCircle( valueIndex.row(), 
-                                        valueIndex.column(), 
-                                        ctx->coordinatePlane()->translate( location ),
-                                        iconRect().size() );
-        }
-
-        if( selectionModel()->currentIndex() == lotIndex )
+        const QModelIndex current = selectionModel()->currentIndex();
+        if( selectionModel()->rowIntersectsSelection( lotIndex.row(), lotIndex.parent() ) || current.sibling( current.row(), 0 ) == lotIndex )
         {
             const QPen pen = ctx->painter()->pen();
             painter->setPen( d->scanLinePen );
-            painter->drawLine( ctx->coordinatePlane()->translate( QPointF( xValue, d->expectedMeanValue - 4 * 
+            painter->drawLine( ctx->coordinatePlane()->translate( QPointF( xValue, d->expectedMeanValue - 4 *
                                                                                    d->expectedStandardDeviation ) ),
-                               ctx->coordinatePlane()->translate( QPointF( xValue, d->expectedMeanValue + 4 * 
+                               ctx->coordinatePlane()->translate( QPointF( xValue, d->expectedMeanValue + 4 *
                                                                                    d->expectedStandardDeviation ) ) );
             painter->setPen( pen );
         }
-
-        prevLot = lot;
-        prevPoint = point;
-        hadMissingValue = false;
     }
 
     drawChanges( ctx );
@@ -588,12 +655,12 @@ void LeveyJenningsDiagram::drawDataPointSymbol( PaintContext* ctx, const QPointF
  */
 void LeveyJenningsDiagram::drawLotChangeSymbol( PaintContext* ctx, const QPointF& pos )
 {
-    const QPointF transPos = ctx->coordinatePlane()->translate( 
-        QPointF( pos.x(), d->lotChangedPosition & Qt::AlignTop ? d->expectedMeanValue + 
+    const QPointF transPos = ctx->coordinatePlane()->translate(
+        QPointF( pos.x(), d->lotChangedPosition & Qt::AlignTop ? d->expectedMeanValue +
                                                                  4 * d->expectedStandardDeviation
-                                                               : d->expectedMeanValue - 
+                                                               : d->expectedMeanValue -
                                                                  4 * d->expectedStandardDeviation ) );
-    
+
 
     QPainter* const painter = ctx->painter();
     const PainterSaver ps( painter );
@@ -609,10 +676,10 @@ void LeveyJenningsDiagram::drawLotChangeSymbol( PaintContext* ctx, const QPointF
  */
 void LeveyJenningsDiagram::drawSensorChangedSymbol( PaintContext* ctx, const QPointF& pos )
 {
-    const QPointF transPos = ctx->coordinatePlane()->translate( 
-        QPointF( pos.x(), d->sensorChangedPosition & Qt::AlignTop ? d->expectedMeanValue + 
+    const QPointF transPos = ctx->coordinatePlane()->translate(
+        QPointF( pos.x(), d->sensorChangedPosition & Qt::AlignTop ? d->expectedMeanValue +
                                                                     4 * d->expectedStandardDeviation
-                                                                  : d->expectedMeanValue - 
+                                                                  : d->expectedMeanValue -
                                                                     4 * d->expectedStandardDeviation ) );
 
     QPainter* const painter = ctx->painter();
@@ -629,10 +696,10 @@ void LeveyJenningsDiagram::drawSensorChangedSymbol( PaintContext* ctx, const QPo
  */
 void LeveyJenningsDiagram::drawFluidicsPackChangedSymbol( PaintContext* ctx, const QPointF& pos )
 {
-    const QPointF transPos = ctx->coordinatePlane()->translate( 
-        QPointF( pos.x(), d->fluidicsPackChangedPosition & Qt::AlignTop ? d->expectedMeanValue + 
+    const QPointF transPos = ctx->coordinatePlane()->translate(
+        QPointF( pos.x(), d->fluidicsPackChangedPosition & Qt::AlignTop ? d->expectedMeanValue +
                                                                           4 * d->expectedStandardDeviation
-                                                                        : d->expectedMeanValue - 
+                                                                        : d->expectedMeanValue -
                                                                           4 * d->expectedStandardDeviation ) );
 
     QPainter* const painter = ctx->painter();

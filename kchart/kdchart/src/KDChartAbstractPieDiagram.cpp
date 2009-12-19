@@ -21,13 +21,14 @@
  **
  **********************************************************************/
 
-#include <QMap>
-
 #include "KDChartAbstractPieDiagram.h"
 #include "KDChartAbstractPieDiagram_p.h"
+
 #include "KDChartAttributesModel.h"
 #include "KDChartPieAttributes.h"
 #include "KDChartThreeDPieAttributes.h"
+
+#include <QMap>
 
 #include <KDABLibFakes>
 
@@ -54,6 +55,28 @@ AbstractPieDiagram::~AbstractPieDiagram()
 
 void AbstractPieDiagram::init()
 {
+}
+
+
+bool AbstractPieDiagram::compare( const AbstractPieDiagram* other )const
+{
+    if( other == this ) return true;
+    if( ! other ){
+        //qDebug() << "AbstractPieDiagram::compare() cannot compare to Null pointer";
+        return false;
+    }
+    /*
+    qDebug() << "\n             AbstractPieDiagram::compare():";
+            // compare own properties
+    qDebug() <<
+            (granularity() == other->granularity()) &&
+            (startPosition() == other->startPosition());
+    */
+    return  // compare the base class
+            ( static_cast<const AbstractPolarDiagram*>(this)->compare( other ) ) &&
+            // compare own properties
+            (granularity() == other->granularity()) &&
+            (startPosition() == other->startPosition());
 }
 
 
@@ -95,6 +118,12 @@ void AbstractPieDiagram::setPieAttributes( int column, const PieAttributes & att
     d->attributesModel->setHeaderData(
         column, Qt::Vertical, qVariantFromValue( attrs ), PieAttributesRole );
     emit layoutChanged( this );
+}
+
+void AbstractPieDiagram::setPieAttributes( const QModelIndex & index, const PieAttributes & attrs )
+{
+	d->attributesModel->setData( index, qVariantFromValue( attrs), PieAttributesRole );
+	emit layoutChanged( this );
 }
 
 // Note: Our users NEED this method - even if

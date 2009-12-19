@@ -44,7 +44,7 @@ namespace KDChart {
     class AbstractDiagram;
     class PaintContext;
 
-    /** 
+    /**
      * Base class for all layout items of KD Chart
      * \internal
      */
@@ -58,7 +58,7 @@ namespace KDChart {
 
         /**
          * Default impl: just call paint.
-         * 
+         *
          * Derived classes like KDChart::AbstractArea are providing
          * additional action here.
          */
@@ -93,7 +93,7 @@ namespace KDChart {
     };
 
     /**
-     * Layout item showing a text 
+     * Layout item showing a text
      *\internal
      */
     class KDCHART_EXPORT TextLayoutItem : public AbstractLayoutItem
@@ -111,6 +111,9 @@ namespace KDChart {
 
         void setText(const QString & text);
         QString text() const;
+
+        void setTextAlignment( Qt::Alignment );
+        Qt::Alignment textAlignment() const;
 
         void setTextAttributes( const TextAttributes& a );
         TextAttributes textAttributes() const;
@@ -130,6 +133,10 @@ namespace KDChart {
         /** pure virtual in QLayoutItem */
         virtual QRect geometry() const;
 
+        virtual QSize sizeHintAndRotatedCorners(
+                    QPoint& topLeftPt, QPoint& topRightPt, QPoint& bottomRightPt, QPoint& bottomLeftPt) const;
+        virtual QSize sizeHintUnrotated() const;
+
         virtual bool intersects( const TextLayoutItem& other, const QPointF& myPos, const QPointF& otherPos ) const;
         virtual bool intersects( const TextLayoutItem& other, const QPoint& myPos, const QPoint& otherPos ) const;
 
@@ -142,16 +149,22 @@ namespace KDChart {
         QPolygon rotatedCorners() const;
         bool realFontWasRecalculated() const;
         QSize unrotatedSizeHint( QFont fnt = QFont() ) const;
-        QSize calcSizeHint( QFont fnt ) const;
+        QSize calcSizeHint( QFont fnt,
+                            QPoint& topLeftPt, QPoint& topRightPt, QPoint& bottomRightPt, QPoint& bottomLeftPt ) const;
 
         qreal fitFontSizeToGeometry() const;
 
         QRect mRect;
         QString mText;
+        Qt::Alignment mTextAlignment;
         TextAttributes mAttributes;
         const QObject* mAutoReferenceArea;
         KDChartEnums::MeasureOrientation mAutoReferenceOrientation;
         mutable QSize cachedSizeHint;
+        mutable QPoint cachedTopLeft;
+        mutable QPoint cachedTopRight;
+        mutable QPoint cachedBottomRight;
+        mutable QPoint cachedBottomLeft;
         mutable qreal cachedFontSize;
         mutable QFont cachedFont;
     };
@@ -202,7 +215,7 @@ namespace KDChart {
     };
 
     /**
-     * Layout item showing a data point marker 
+     * Layout item showing a data point marker
      * \internal
      */
     class KDCHART_EXPORT MarkerLayoutItem : public AbstractLayoutItem
@@ -274,7 +287,7 @@ namespace KDChart {
             QRect mRect;
     };
 
-    /** 
+    /**
      * Layout item showing a coloured line and a data point marker
      * \internal
      */
@@ -358,7 +371,7 @@ namespace KDChart {
             QRect mRect;
     };
 
-    /** 
+    /**
      * @brief An empty layout item
      * \internal
      *
@@ -366,7 +379,7 @@ namespace KDChart {
      * the planeLayout grid: one of its reference-layouts is a QVBoxLayout (for
      * the top, or bottom axes resp.), the other one is a QHBoxLayout (for the
      * left/right sided axes).
-     * 
+     *
      * The spacer reserves enough space so all of the AbstractAreas contained
      * in the two reference-layouts can display not only their in-bounds
      * content but also their overlapping content reaching out of their area.

@@ -21,12 +21,12 @@
  **
  **********************************************************************/
 
+#include "KDChartPolarDiagram.h"
+#include "KDChartPolarDiagram_p.h"
 
 #include <QPainter>
 #include "KDChartAttributesModel.h"
 #include "KDChartPaintContext.h"
-#include "KDChartPolarDiagram.h"
-#include "KDChartPolarDiagram_p.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartDataValueAttributes.h"
 
@@ -47,6 +47,7 @@ PolarDiagram::Private::~Private() {}
 PolarDiagram::PolarDiagram( QWidget* parent, PolarCoordinatePlane* plane ) :
     AbstractPolarDiagram( new Private( ), parent, plane )
 {
+    //init();
 }
 
 PolarDiagram::~PolarDiagram()
@@ -103,9 +104,9 @@ const QPair<QPointF, QPointF> PolarDiagram::calculateDataBoundaries () const
     double xMin = 0.0;
     double xMax = colCount;
     double yMin = 0, yMax = 0;
-    for ( int j=0; j<colCount; ++j ) {
-        for ( int i=0; i< rowCount; ++i ) {
-            double value = model()->data( model()->index( i, j, rootIndex() ) ).toDouble();
+    for ( int iCol=0; iCol<colCount; ++iCol ) {
+        for ( int iRow=0; iRow< rowCount; ++iRow ) {
+            double value = model()->data( model()->index( iRow, iCol, rootIndex() ) ).toDouble();
             yMax = qMax( yMax, value );
             yMin = qMin( yMin, value );
         }
@@ -139,52 +140,97 @@ void PolarDiagram::paintPolarMarkers( PaintContext* ctx, const QPolygonF& polygo
 
 void PolarDiagram::paint( PaintContext* ctx )
 {
+    qreal dummy1, dummy2;
+    paint( ctx, true,  dummy1, dummy2 );
+    paint( ctx, false, dummy1, dummy2 );
+}
+
+void PolarDiagram::paint( PaintContext* ctx,
+                          bool calculateListAndReturnScale,
+                          qreal& newZoomX, qreal& newZoomY )
+{
     // note: Not having any data model assigned is no bug
     //       but we can not draw a diagram then either.
     if ( !checkInvariants(true) )
         return;
-
     d->reverseMapper.clear();
 
     const int rowCount = model()->rowCount( rootIndex() );
     const int colCount = model()->columnCount( rootIndex() );
-    DataValueTextInfoList list;
 
-    for ( int j=0; j < colCount; ++j ) {
-        //TODO(khz): As of yet PolarDiagram can not show per-segment line attributes
-        //           but it draws every polyline in one go - using one color.
-        //           This needs to be enhanced to allow for cell-specific settings
-        //           in the same way as LineDiagram does it.
-        QBrush brush = qVariantValue<QBrush>( attributesModel()->headerData( j, Qt::Vertical, KDChart::DatasetBrushRole ) );
-        QPolygonF polygon;
-        QPointF point0;
-        for ( int i=0; i < rowCount; ++i ) {
-            QModelIndex index = model()->index( i, j, rootIndex() );
-            const double value = model()->data( index ).toDouble();
-            QPointF point = coordinatePlane()->translate(
-                    QPointF( value, i ) ) + ctx->rectangle().topLeft();
-            polygon.append( point );
-            //qDebug() << point;
-            d->appendDataValueTextInfoToList( this, list, index, PositionPoints( point ),
-                                              Position::Center, Position::Center,
-                                              value );
-            if( ! i )
-                point0= point;
+    int iRow, iCol;
+
+    if( calculateListAndReturnScale ){
+
+        // Check if all of the data value texts / data comments will fit
+        // into the available space:
+        d->dataValueInfoList.clear();
+        for ( iCol=0; iCol < colCount; ++iCol ) {
+            for ( iRow=0; iRow < rowCount; ++iRow ) {
+                QModelIndex index = model()->index( iRow, iCol, rootIndex() );
+                const double value = model()->data( index ).toDouble();
+                QPointF point = coordinatePlane()->translate(
+                        QPointF( value, iRow ) ) + ctx->rectangle().topLeft();
+                //qDebug() << point;
+                d->appendDataValueTextInfoToList(
+                        this, d->dataValueInfoList, index, 0,
+                        PositionPoints( point ), Position::Center, Position::Center,
+                        value );
+            }
         }
-        if( closeDatasets() && rowCount )
-            polygon.append( point0 );
+        const qreal oldZoomX = coordinatePlane()->zoomFactorX();
+        const qreal oldZoomY = coordinatePlane()->zoomFactorY();
+        newZoomX = oldZoomX;
+        newZoomY = oldZoomY;
+        if( d->dataValueInfoList.count() ){
+            QRectF txtRectF;
+            d->paintDataValueTextsAndMarkers( this, ctx, d->dataValueInfoList, true, true, &txtRectF );
+            const QRect txtRect = txtRectF.toRect();
+            const QRect curRect = coordinatePlane()->geometry();
+            const qreal gapX = qMin( txtRect.left() - curRect.left(), curRect.right()  - txtRect.right() );
+            const qreal gapY = qMin( txtRect.top()  - curRect.top(),  curRect.bottom() - txtRect.bottom() );
+            newZoomX = oldZoomX;
+            newZoomY = oldZoomY;
+            if( gapX < 0.0 )
+                newZoomX *= 1.0 + (gapX-1.0) / curRect.width();
+            if( gapY < 0.0 )
+                newZoomY *= 1.0 + (gapY-1.0) / curRect.height();
+        }
 
-        PainterSaver painterSaver( ctx->painter() );
-        ctx->painter()->setRenderHint ( QPainter::Antialiasing );
-        ctx->painter()->setBrush( brush );
-        QPen p( ctx->painter()->pen() );
-        p.setColor( brush.color() ); // FIXME use DatasetPenRole
-        p.setWidth( 2 );// FIXME properties
-        ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
-        ctx->painter()->drawPolyline( polygon );
+    }else{
+
+        for ( iCol=0; iCol < colCount; ++iCol ) {
+            //TODO(khz): As of yet PolarDiagram can not show per-segment line attributes
+            //           but it draws every polyline in one go - using one color.
+            //           This needs to be enhanced to allow for cell-specific settings
+            //           in the same way as LineDiagram does it.
+            QBrush brush = qVariantValue<QBrush>( attributesModel()->headerData( iCol, Qt::Vertical, KDChart::DatasetBrushRole ) );
+            QPolygonF polygon;
+            QPointF point0;
+            for ( iRow=0; iRow < rowCount; ++iRow ) {
+                QModelIndex index = model()->index( iRow, iCol, rootIndex() );
+                const double value = model()->data( index ).toDouble();
+                QPointF point = coordinatePlane()->translate(
+                        QPointF( value, iRow ) ) + ctx->rectangle().topLeft();
+                polygon.append( point );
+                //qDebug() << point;
+                if( ! iRow )
+                    point0= point;
+            }
+            if( closeDatasets() && rowCount )
+                polygon.append( point0 );
+
+            PainterSaver painterSaver( ctx->painter() );
+            ctx->painter()->setRenderHint ( QPainter::Antialiasing );
+            ctx->painter()->setBrush( brush );
+            QPen p( ctx->painter()->pen() );
+            p.setColor( brush.color() ); // FIXME use DatasetPenRole
+            p.setWidth( 2 );// FIXME properties
+            ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
+            ctx->painter()->drawPolyline( polygon );
+        }
+        d->paintDataValueTextsAndMarkers( this, ctx, d->dataValueInfoList, true );
     }
-
-    d->paintDataValueTextsAndMarkers( this, ctx, list, true );
 }
 
 void PolarDiagram::resize ( const QSizeF& )

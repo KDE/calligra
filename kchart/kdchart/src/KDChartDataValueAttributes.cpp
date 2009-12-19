@@ -21,10 +21,10 @@
  **
  **********************************************************************/
 
+#include "KDChartDataValueAttributes.h"
 
 #include <QVariant>
 #include <QDebug>
-#include "KDChartDataValueAttributes.h"
 #include "KDChartRelativePosition.h"
 #include "KDChartPosition.h"
 #include <KDChartTextAttributes.h>

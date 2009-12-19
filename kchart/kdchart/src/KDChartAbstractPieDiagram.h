@@ -49,6 +49,11 @@ public:
         QWidget* parent = 0, PolarCoordinatePlane* plane = 0 );
     virtual ~AbstractPieDiagram();
 
+    /**
+     * Returns true if both diagrams have the same settings.
+     */
+    bool compare( const AbstractPieDiagram* other )const;
+
     /** Set the granularity: the smaller the granularity the more your diagram
      * segments will show facettes instead of rounded segments.
      * \param value the granularity value between 0.05 (one twentieth of a degree)
@@ -66,6 +71,8 @@ public:
 
     void setPieAttributes( const PieAttributes & a );
     void setPieAttributes( int   column,
+                           const PieAttributes & a );
+    void setPieAttributes( const QModelIndex & index,
                            const PieAttributes & a );
     PieAttributes pieAttributes() const;
     PieAttributes pieAttributes( int column ) const;

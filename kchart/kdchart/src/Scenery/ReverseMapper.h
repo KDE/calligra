@@ -29,9 +29,11 @@
 #define REVERSEMAPPER_H
 
 #include <QModelIndex>
+#include <QHash>
 
 class QRectF;
 class QGraphicsScene;
+class QPolygonF;
 
 namespace KDChart {
 
@@ -58,6 +60,9 @@ namespace KDChart {
         QModelIndexList indexesAt( const QPointF& point ) const;
         QModelIndexList indexesIn( const QRect& rect ) const;
 
+        QPolygonF polygon( int row, int column ) const;
+        QRectF boundingRect( int row, int column ) const;
+
         void addItem( ChartGraphicsItem* item );
 
         // convenience methods:
@@ -69,6 +74,7 @@ namespace KDChart {
     private:
         QGraphicsScene* m_scene;
         AbstractDiagram* m_diagram;
+        QHash<QModelIndex, ChartGraphicsItem*> m_itemMap;
     };
 
 }

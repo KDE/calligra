@@ -35,6 +35,7 @@
 // We mean it.
 //
 
+#include "KDChartAbstractDiagram.h"
 #include "KDChartAbstractCoordinatePlane.h"
 #include "KDChartDataValueAttributes.h"
 #include "KDChartRelativePosition.h"
@@ -43,8 +44,10 @@
 #include "KDChartPaintContext.h"
 #include "KDChartPrintingParameters.h"
 #include "KDChartChart.h"
+#include <KDChartCartesianDiagramDataCompressor_p.h>
 #include "Scenery/ReverseMapper.h"
 
+#include <QMap>
 #include <QPoint>
 #include <QPointer>
 #include <QFont>
@@ -63,12 +66,13 @@ namespace KDChart {
     class DataValueTextInfo {
     public:
         DataValueTextInfo(){}
-        DataValueTextInfo( const QModelIndex& _index, const QPointF& _pos, const QPointF& _markerPos, double _value )
-            :index( _index ), pos( _pos ), markerPos( _markerPos ), value( _value )
+        DataValueTextInfo( const QModelIndex& _index, const DataValueAttributes& _attrs, const QPointF& _pos, const QPointF& _markerPos, double _value )
+            :index( _index), attrs( _attrs ), pos( _pos ), markerPos( _markerPos ), value( _value )
         {}
         DataValueTextInfo( const DataValueTextInfo& other )
-            :index( other.index ), pos( other.pos ), markerPos( other.markerPos ), value( other.value ) {}
+            :index( other.index ), attrs( other.attrs ), pos( other.pos ), markerPos( other.markerPos ), value( other.value ) {}
         QModelIndex index;
+        DataValueAttributes attrs;
         QPointF pos;
         QPointF markerPos;
         double value;
@@ -98,35 +102,40 @@ namespace KDChart {
             AbstractDiagram * diagram,
             DataValueTextInfoList & list,
             const QModelIndex & index,
+            const CartesianDiagramDataCompressor::CachePosition * position,
             const PositionPoints& points,
             const Position& autoPositionPositive,
             const Position& autoPositionNegative,
             const qreal value )
         {
-            const DataValueAttributes attrs( diagram->dataValueAttributes( index ) );
-            /*if( attrs.isVisible() )*/ {
-                const bool bValueIsPositive = (value >= 0.0);
-                RelativePosition relPos( attrs.position( bValueIsPositive ) );
-                relPos.setReferencePoints( points );
-                if( relPos.referencePosition().isUnknown() )
-                    relPos.setReferencePosition( bValueIsPositive ? autoPositionPositive : autoPositionNegative );
+            CartesianDiagramDataCompressor::DataValueAttributesList allAttrs( aggregatedAttrs( diagram, index, position ) );
+            QMap<QModelIndex, DataValueAttributes>::const_iterator i;
+            for (i = allAttrs.constBegin(); i != allAttrs.constEnd(); ++i){
+                if( i.value().isVisible() ){
+                    const bool bValueIsPositive = (value >= 0.0);
+                    RelativePosition relPos( i.value().position( bValueIsPositive ) );
+                    relPos.setReferencePoints( points );
+                    if( relPos.referencePosition().isUnknown() )
+                        relPos.setReferencePosition( bValueIsPositive ? autoPositionPositive : autoPositionNegative );
 
-                const QPointF referencePoint = relPos.referencePoint();
-                if( diagram->coordinatePlane()->isVisiblePoint( referencePoint ) ){
-                    const qreal fontHeight = cachedFontMetrics( attrs.textAttributes().
-                            calculatedFont( plane, KDChartEnums::MeasureOrientationMinimum ), diagram )->height();
-                    // Note: When printing data value texts the font height is used as reference size for both,
-                    //       horizontal and vertical padding, if the respective padding's Measure is using
-                    //       automatic reference area detection.
-                    QSizeF relativeMeasureSize( fontHeight, fontHeight );
-                    //qDebug()<<"fontHeight"<<fontHeight;
+                    const QPointF referencePoint = relPos.referencePoint();
+                    if( diagram->coordinatePlane()->isVisiblePoint( referencePoint ) ){
+                        const qreal fontHeight = cachedFontMetrics( i.value().textAttributes().
+                                calculatedFont( plane, KDChartEnums::MeasureOrientationMinimum ), diagram )->height();
+                        // Note: When printing data value texts the font height is used as reference size for both,
+                        //       horizontal and vertical padding, if the respective padding's Measure is using
+                        //       automatic reference area detection.
+                        QSizeF relativeMeasureSize( fontHeight, fontHeight );
+                        //qDebug()<<"fontHeight"<<fontHeight;
 
-                    // Store the anchor point, that's already shifted according to horiz./vert. padding:
-                    list.append( DataValueTextInfo(
-                                     index,
-                                     relPos.calculatedPoint( relativeMeasureSize ),
-                                     referencePoint,
-                                     value ) );
+                        // Store the anchor point, that's already shifted according to horiz./vert. padding:
+                        list.append( DataValueTextInfo(
+                                        i.key(),
+                                        i.value(),
+                                        relPos.calculatedPoint( relativeMeasureSize ),
+                                        referencePoint,
+                                        value ) );
+                    }
                 }
             }
         }
@@ -172,12 +181,16 @@ namespace KDChart {
             alreadyDrawnDataValueTexts.clear();
         }
 
-        void paintDataValueTextsAndMarkers( AbstractDiagram* diag, PaintContext* ctx,
-                                            const DataValueTextInfoList & list, bool paintMarkers )
+        void paintDataValueTextsAndMarkers( AbstractDiagram* diag,
+                                            PaintContext* ctx,
+                                            const DataValueTextInfoList & list,
+                                            bool paintMarkers,
+                                            bool justCalculateRect=false,
+                                            QRectF* cumulatedBoundingRect=0 )
         {
             const PainterSaver painterSaver( ctx->painter() );
             ctx->painter()->setClipping( false );
-            if( paintMarkers )
+            if( paintMarkers && ! justCalculateRect )
             {
                 DataValueTextInfoListIterator it( list );
                 while ( it.hasNext() ) {
@@ -197,7 +210,9 @@ namespace KDChart {
             clearListOfAlreadyDrawnDataValueTexts();
             while ( it.hasNext() ) {
                 const DataValueTextInfo& info = it.next();
-                paintDataValueText( diag, ctx->painter(), info.index, info.pos, info.value );
+                paintDataValueText( diag, ctx->painter(), info.index, info.pos, info.value,
+                                    justCalculateRect,
+                                    cumulatedBoundingRect );
 
                 const QString comment = info.index.data( KDChart::CommentRole ).toString();
                 if( comment.isEmpty() )
@@ -207,8 +222,17 @@ namespace KDChart {
                                            ctx->coordinatePlane()->parent(),
                                            KDChartEnums::MeasureOrientationMinimum,
                                            Qt::AlignHCenter|Qt::AlignVCenter );
-                item.setGeometry( QRect( info.pos.toPoint(), item.sizeHint() ) );
-                item.paint( ctx->painter() );
+                const QRect rect( info.pos.toPoint(), item.sizeHint() );
+                if( justCalculateRect &&  cumulatedBoundingRect ){
+                    (*cumulatedBoundingRect) |= rect;
+                }else{
+                    item.setGeometry( rect );
+                    item.paint( ctx->painter() );
+
+                    // Return the cumulatedBoundingRect if asked for
+                    if(cumulatedBoundingRect)
+                        (*cumulatedBoundingRect) |= rect;
+                }
             }
         }
 
@@ -217,7 +241,9 @@ namespace KDChart {
                                  QPainter* painter,
                                  const QModelIndex& index,
                                  const QPointF& pos,
-                                 double value )
+                                 double value,
+                                 bool justCalculateRect=false,
+                                 QRectF* cumulatedBoundingRect=0 )
         {
             const DataValueAttributes a( diag->dataValueAttributes( index ) );
 
@@ -243,7 +269,8 @@ namespace KDChart {
             if ( !a.suffix().isNull() )
                 roundedValue.append( a.suffix() );
 
-            paintDataValueText( diag, painter, a, pos, roundedValue, value >= 0.0 );
+            paintDataValueText( diag, painter, a, pos, roundedValue, value >= 0.0,
+                                justCalculateRect, cumulatedBoundingRect );
         }
 
 
@@ -252,7 +279,9 @@ namespace KDChart {
                                  const DataValueAttributes& attrs,
                                  const QPointF& pos,
                                  QString text,
-                                 bool valueIsPositive )
+                                 bool valueIsPositive,
+                                 bool justCalculateRect=false,
+                                 QRectF* cumulatedBoundingRect=0 )
         {
             if ( !attrs.isVisible() ) return;
 
@@ -345,8 +374,19 @@ namespace KDChart {
                             alreadyDrawnDataValueTexts << pr;
                     }
                     if( drawIt ){
-                        painter->translate( QPointF( dx, dy ) );
-                        layout->draw( painter, context );
+                        QRectF rect = layout->frameBoundingRect(doc.rootFrame());
+                        rect.moveTo(pos.x()+dx, pos.y()+dy);
+
+                        if( justCalculateRect && cumulatedBoundingRect ){
+                            (*cumulatedBoundingRect) |= rect;
+                        }else{
+                            painter->translate( QPointF( dx, dy ) );
+                            layout->draw( painter, context );
+
+                            // Return the cumulatedBoundingRect if asked for
+                            if(cumulatedBoundingRect)
+                                (*cumulatedBoundingRect) |= rect;
+                        }
                     }
                 }
 
@@ -356,6 +396,7 @@ namespace KDChart {
         virtual QModelIndex indexAt( const QPoint& point ) const
         {
             QModelIndexList l = indexesAt( point );
+            qSort( l );
             if ( !l.isEmpty() )
                 return l.first();
             else
@@ -370,6 +411,17 @@ namespace KDChart {
         QModelIndexList indexesIn( const QRect& rect ) const
         {
             return reverseMapper.indexesIn( rect );
+        }
+
+        virtual CartesianDiagramDataCompressor::DataValueAttributesList aggregatedAttrs(
+                AbstractDiagram * diagram,
+                const QModelIndex & index,
+                const CartesianDiagramDataCompressor::CachePosition * position ) const
+        {
+            Q_UNUSED( position ); // used by cartesian diagrams only
+            CartesianDiagramDataCompressor::DataValueAttributesList allAttrs;
+            allAttrs[index] = diagram->dataValueAttributes( index );
+            return allAttrs;
         }
 
     protected:

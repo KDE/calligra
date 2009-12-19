@@ -21,19 +21,19 @@
  **
  **********************************************************************/
 
-#include <QPainter>
-#include <QDebug>
-
 #include "KDChartBarDiagram.h"
 #include "KDChartBarDiagram_p.h"
+
 #include "KDChartThreeDBarAttributes.h"
 #include "KDChartPosition.h"
 #include "KDChartAttributesModel.h"
 #include "KDChartAbstractGrid.h"
 
+#include <QPainter>
+#include <QDebug>
+
 #include <KDABLibFakes>
 
-#include "KDChartBarDiagram_p.h"
 #include "KDChartNormalBarDiagram_p.h"
 #include "KDChartStackedBarDiagram_p.h"
 #include "KDChartPercentBarDiagram_p.h"
@@ -196,7 +196,7 @@ void BarDiagram::setOrientation( Qt::Orientation orientation )
              Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
          }
      }
-    
+
     // AbstractAxis settings - see AbstractDiagram and CartesianAxis
     setPercentMode( type() == BarDiagram::Percent );
     setDataBoundariesDirty();
@@ -409,17 +409,23 @@ void BarDiagram::paint( PaintContext* ctx )
 
 void BarDiagram::resize( const QSizeF& size )
 {
-    d->compressor.setResolution( static_cast< int >( size.width() ),
-                                 static_cast< int >( size.height() ) );
+    d->compressor.setResolution( static_cast< int >( size.width() * coordinatePlane()->zoomFactorX() ),
+                                 static_cast< int >( size.height() * coordinatePlane()->zoomFactorY() ) );
     setDataBoundariesDirty();
 }
 
-const int BarDiagram::numberOfAbscissaSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int BarDiagram::numberOfAbscissaSegments () const
 {
     return d->attributesModel->rowCount(attributesModelRootIndex());
 }
 
-const int BarDiagram::numberOfOrdinateSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int BarDiagram::numberOfOrdinateSegments () const
 {
     return d->attributesModel->columnCount(attributesModelRootIndex());
 }

@@ -47,11 +47,13 @@ namespace KDChart {
 
         virtual double valueTotals () const = 0;
         virtual double numberOfValuesPerDataset() const = 0;
+        virtual double numberOfDatasets() const { return 1; };
         virtual double numberOfGridRings() const = 0;
 
         const PolarCoordinatePlane * polarCoordinatePlane() const;
 
         int columnCount() const;
+        int rowCount() const;
     };
 
 }

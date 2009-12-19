@@ -23,6 +23,8 @@
 
 #include "KDChartRulerAttributes.h"
 
+#include <limits>
+
 #include <QPen>
 #include <QDebug>
 
@@ -39,12 +41,32 @@ public:
     Private();
 private:
     QPen tickMarkPen;
+    QPen majorTickMarkPen;
+    QPen minorTickMarkPen;
+    
+    bool majorTickMarkPenIsSet;
+    bool minorTickMarkPenIsSet;
+
+    bool showMajorTickMarks;
+    bool showMinorTickMarks;
+    
+    RulerAttributes::TickMarkerPensMap customTickMarkPens;
 };
 
 RulerAttributes::Private::Private()
     : tickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
+    , majorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
+    , minorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
 {
 	tickMarkPen.setCapStyle( Qt::FlatCap );
+	majorTickMarkPen.setCapStyle( Qt::FlatCap );
+	minorTickMarkPen.setCapStyle( Qt::FlatCap );
+	
+	majorTickMarkPenIsSet = false;
+	minorTickMarkPenIsSet = false;
+
+        showMajorTickMarks = true;
+        showMinorTickMarks = true;
 }
 
 
@@ -69,6 +91,71 @@ QPen RulerAttributes::tickMarkPen() const
 	return d->tickMarkPen;
 }
 
+void RulerAttributes::setMajorTickMarkPen( const QPen& pen )
+{
+	d->majorTickMarkPen = pen;
+	d->majorTickMarkPenIsSet = true;
+}
+
+bool RulerAttributes::majorTickMarkPenIsSet() const
+{
+    return d->majorTickMarkPenIsSet;
+}
+
+QPen RulerAttributes::majorTickMarkPen() const
+{
+	return d->majorTickMarkPenIsSet ? d->majorTickMarkPen : d->tickMarkPen;
+}
+
+void RulerAttributes::setMinorTickMarkPen( const QPen& pen )
+{
+	d->minorTickMarkPen = pen;
+	d->minorTickMarkPenIsSet = true;
+}
+
+bool RulerAttributes::minorTickMarkPenIsSet() const
+{
+    return d->minorTickMarkPenIsSet;
+}
+
+QPen RulerAttributes::minorTickMarkPen() const
+{
+	return d->minorTickMarkPenIsSet ? d->minorTickMarkPen : d->tickMarkPen;
+}
+
+void RulerAttributes::setTickMarkPen( qreal value, const QPen& pen )
+{
+	if ( !d->customTickMarkPens.contains( value ) )
+		d->customTickMarkPens.insert( value, pen );
+}
+
+QPen RulerAttributes::tickMarkPen( qreal value ) const
+{
+	QMapIterator<qreal, QPen> it( d->customTickMarkPens );
+	while( it.hasNext() ) {
+		it.next();
+		if ( qAbs( value - it.key() ) < std::numeric_limits< float >::epsilon() )
+			return it.value();
+	}
+	return d->tickMarkPen;
+}
+
+RulerAttributes::TickMarkerPensMap RulerAttributes::tickMarkPens() const
+{
+    return d->customTickMarkPens;
+}
+
+bool RulerAttributes::hasTickMarkPenAt( qreal value ) const
+{
+	QMapIterator<qreal, QPen> it( d->customTickMarkPens );
+	while( it.hasNext() ) {
+		it.next();
+		if ( qAbs( value - it.key() ) < std::numeric_limits< float >::epsilon() )
+			return true;
+	}
+	return false;
+}
+
 void RulerAttributes::setTickMarkColor( const QColor& color )
 {
 	d->tickMarkPen.setColor( color );
@@ -77,6 +164,26 @@ void RulerAttributes::setTickMarkColor( const QColor& color )
 QColor RulerAttributes::tickMarkColor() const
 {
 	return d->tickMarkPen.color();
+}
+
+void RulerAttributes::setShowMajorTickMarks( bool show )
+{
+    d->showMajorTickMarks = show;
+}
+
+bool RulerAttributes::showMajorTickMarks() const
+{
+    return d->showMajorTickMarks;
+}
+
+void RulerAttributes::setShowMinorTickMarks( bool show )
+{
+    d->showMinorTickMarks = show;
+}
+
+bool RulerAttributes::showMinorTickMarks() const
+{
+    return d->showMinorTickMarks;
 }
 
 RulerAttributes & RulerAttributes::operator=( const RulerAttributes& r )
@@ -97,7 +204,19 @@ RulerAttributes::~RulerAttributes()
 
 bool RulerAttributes::operator == ( const RulerAttributes& r ) const
 {
-    return  tickMarkPen() == r.tickMarkPen();
+    bool isEqual =
+        tickMarkPen()      == r.tickMarkPen() &&
+        majorTickMarkPen() == r.majorTickMarkPen() &&
+        minorTickMarkPen() == r.minorTickMarkPen();
+    if( isEqual ) {
+        QMapIterator<qreal, QPen> it( d->customTickMarkPens );
+        while( it.hasNext() ) {
+            it.next();
+            if ( it.value() != r.tickMarkPen(it.key()) )
+                return false;
+        }
+    }
+    return isEqual;
 }
 
 #if !defined( QT_NO_DEBUG_STREAM )
@@ -105,7 +224,15 @@ QDebug operator << ( QDebug dbg, const KDChart::RulerAttributes& a )
 {
     dbg << "KDChart::RulerAttributes("
             << "tickMarkPen=" << a.tickMarkPen()
-            << ")";
+            << "majorTickMarkPen=" << a.majorTickMarkPen()
+            << "minorTickMarkPen=" << a.minorTickMarkPen();
+    const RulerAttributes::TickMarkerPensMap pens( a.tickMarkPens() );
+    QMapIterator<qreal, QPen> it( pens );
+    while( it.hasNext() ) {
+        it.next();
+        dbg << "customTickMarkPen=(" << it.value() << " : " << it.key() << ")";
+    }
+    dbg << ")";
     return dbg;
 }
 #endif /* QT_NO_DEBUG_STREAM */

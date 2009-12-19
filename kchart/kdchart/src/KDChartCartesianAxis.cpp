@@ -21,6 +21,9 @@
  **
  **********************************************************************/
 
+#include "KDChartCartesianAxis.h"
+#include "KDChartCartesianAxis_p.h"
+
 #include <cmath>
 
 #include <QtDebug>
@@ -31,13 +34,12 @@
 
 #include "KDChartPaintContext.h"
 #include "KDChartChart.h"
-#include "KDChartCartesianAxis.h"
-#include "KDChartCartesianAxis_p.h"
 #include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartAbstractGrid.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartLayoutItems.h"
 #include "KDChartBarDiagram.h"
+#include "KDChartStockDiagram.h"
 #include "KDChartLineDiagram.h"
 #include "KDChartPrintingParameters.h"
 
@@ -72,6 +74,7 @@ CartesianAxis::~CartesianAxis ()
 void CartesianAxis::init ()
 {
     d->position = Bottom;
+    setCachedSizeDirty();
 }
 
 
@@ -142,7 +145,10 @@ void CartesianAxis::setPosition ( Position p )
     layoutPlanes();
 }
 
-const CartesianAxis::Position CartesianAxis::position() const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+CartesianAxis::Position CartesianAxis::position() const
 {
     return d->position;
 }
@@ -197,8 +203,10 @@ static bool referenceDiagramNeedsCenteredAbscissaTicks( const AbstractDiagram *d
     if( dia && dia->referenceDiagram() )
         dia = dia->referenceDiagram();
     if ( qobject_cast< const BarDiagram* >( dia ) )
-       return true;
-    
+    	return true;
+    if ( qobject_cast< const StockDiagram* >( dia ) )
+    	return true;
+
     const LineDiagram * lineDiagram = qobject_cast< const LineDiagram* >( dia );
     return lineDiagram && lineDiagram->centerDataPoints();
 }
@@ -244,7 +252,8 @@ void CartesianAxis::paint( QPainter* painter )
 }
 
 void CartesianAxis::Private::drawSubUnitRulers( QPainter* painter, CartesianCoordinatePlane* plane, const DataDimension& dim,
-                                                const QPointF& rulerRef, const QVector<int>& drawnTicks, const bool diagramIsVertical ) const
+                                                const QPointF& rulerRef, const QVector<int>& drawnTicks, const bool diagramIsVertical,
+						const RulerAttributes& rulerAttr ) const
 {
     const QRect geoRect( axis()->geometry() );
     int nextMayBeTick = 0;
@@ -255,61 +264,80 @@ void CartesianAxis::Private::drawSubUnitRulers( QPainter* painter, CartesianCoor
     const bool isAbscissa = axis()->isAbscissa();
     const bool isLogarithmic = (dim.calcMode == AbstractCoordinatePlane::Logarithmic );
     const int subUnitTickLength = axis()->tickLength( true );
-    
-    while ( dim.end - f > std::numeric_limits< float >::epsilon() ) {
+
+    // Use negative limit to ensure that also the last tick is painted,
+    // which is needed if major tick marks are disabled
+    while ( dim.end - f > -std::numeric_limits< float >::epsilon() ) {
+    	const qreal quotient = f / dim.stepWidth;
+    	const bool isMinorTickMark = qAbs(qRound(quotient) - quotient) > std::numeric_limits< float >::epsilon();
+    	// 'Drawn' ticks isn't quite the right naming here, it also counts major tick marks, which are not drawn.
         if( drawnTicks.count() > nextMayBeTick )
             mayBeTick = drawnTicks[ nextMayBeTick ];
-        if ( isAbscissa ) {
-            // for the x-axis
-            QPointF topPoint = diagramIsVertical ? QPointF( f, 0 ) : QPointF( 0, f );
-            QPointF bottomPoint( topPoint );
-            // we don't draw the sub ticks, if we are at the same position as a normal tick
-            topPoint = plane->translate( topPoint );
-            bottomPoint = plane->translate( bottomPoint );
-            if ( diagramIsVertical ) {
-	            topPoint.setY( rulerRef.y() + subUnitTickLength );
-	            bottomPoint.setY( rulerRef.y() );
-            } else {
-	            topPoint.setX( rulerRef.x() + subUnitTickLength );
-	            bottomPoint.setX( rulerRef.x() );
-            }
-            if( qAbs( mayBeTick - topPoint.x() ) > 1 )
-                painter->drawLine( topPoint, bottomPoint );
-            else {
-                ++nextMayBeTick;
-            }
-        } else {
-            // for the y-axis
-            QPointF leftPoint = plane->translate( diagramIsVertical ? QPointF( 0, f ) : QPointF( f, 0 ) );
-            //qDebug() << "geoRect:" << geoRect << "   geoRect.top()" << geoRect.top() << "geoRect.bottom()" << geoRect.bottom() << "  translatedValue:" << translatedValue;
-            // we don't draw the sub ticks, if we are at the same position as a normal tick
-            if( qAbs( mayBeTick - diagramIsVertical ? leftPoint.y() : leftPoint.x() ) > 1 ){
-                const qreal translatedValue = leftPoint.y();
-                bool translatedValueIsWithinBoundaries;
-                if ( diagramIsVertical ) {
-                	translatedValueIsWithinBoundaries = translatedValue > geoRect.top() && translatedValue <= geoRect.bottom();
-                } else {
-                	translatedValueIsWithinBoundaries = translatedValue > geoRect.left() && translatedValue <= geoRect.right();
+        // Paint minor tick mark only if there is no major tick mark drawn at this point
+        if ( isMinorTickMark || !rulerAttr.showMajorTickMarks() ) {
+	        if ( isAbscissa ) {
+	            // for the x-axis
+	            QPointF topPoint = diagramIsVertical ? QPointF( f, 0 ) : QPointF( 0, f );
+	            QPointF bottomPoint( topPoint );
+	            // we don't draw the sub ticks, if we are at the same position as a normal tick
+	            topPoint = plane->translate( topPoint );
+	            bottomPoint = plane->translate( bottomPoint );
+	            if ( diagramIsVertical ) {
+		            topPoint.setY( rulerRef.y() + subUnitTickLength );
+		            bottomPoint.setY( rulerRef.y() );
+	            } else {
+		            topPoint.setX( rulerRef.x() + subUnitTickLength );
+		            bottomPoint.setX( rulerRef.x() );
+	            }
+	            if( qAbs( mayBeTick - topPoint.x() ) > 1 )
+	            {
+                    if ( rulerAttr.hasTickMarkPenAt( topPoint.x() ) )
+                    	painter->setPen( rulerAttr.tickMarkPen( topPoint.x() ) );
+                    else
+                    	painter->setPen( rulerAttr.minorTickMarkPen() );
+	                painter->drawLine( topPoint, bottomPoint );
+	            }
+	            else {
+	                ++nextMayBeTick;
+	            }
+	        } else {
+	            // for the y-axis
+
+	            QPointF leftPoint = plane->translate( diagramIsVertical ? QPointF( 0, f ) : QPointF( f, 0 ) );
+	            //qDebug() << "geoRect:" << geoRect << "   geoRect.top()" << geoRect.top() << "geoRect.bottom()" << geoRect.bottom() << "  translatedValue:" << translatedValue;
+	            // we don't draw the sub ticks, if we are at the same position as a normal tick
+	            if( qAbs( mayBeTick - diagramIsVertical ? leftPoint.y() : leftPoint.x() ) > 1 ){
+	                const qreal translatedValue = leftPoint.y();
+	                bool translatedValueIsWithinBoundaries;
+	                if ( diagramIsVertical ) {
+	                	translatedValueIsWithinBoundaries = translatedValue > geoRect.top() && translatedValue <= geoRect.bottom();
+	                } else {
+	                	translatedValueIsWithinBoundaries = translatedValue > geoRect.left() && translatedValue <= geoRect.right();
+	                }
+	                if( translatedValueIsWithinBoundaries ){
+	                    QPointF rightPoint = diagramIsVertical ? QPointF( 0, f ) : QPointF( f, 0 );
+	                    rightPoint = plane->translate( rightPoint );
+	                    if ( diagramIsVertical ) {
+		                    leftPoint.setX( rulerRef.x() + subUnitTickLength );
+		                    rightPoint.setX( rulerRef.x() );
+	                    } else {
+		                    leftPoint.setY( rulerRef.y() + (position == Bottom ? subUnitTickLength : -subUnitTickLength) );
+		                    rightPoint.setY( rulerRef.y() );
+	                    }
+	                    if ( rulerAttr.hasTickMarkPenAt( f ) )
+	                    	painter->setPen( rulerAttr.tickMarkPen( f ) );
+	                    else
+	                    	painter->setPen( rulerAttr.minorTickMarkPen() );
+	                    painter->drawLine( leftPoint, rightPoint );
+	                }
+	            } else {
+	                ++nextMayBeTick;
+	            }
                 }
-                if( translatedValueIsWithinBoundaries ){
-                    QPointF rightPoint = diagramIsVertical ? QPointF( 0, f ) : QPointF( f, 0 );
-                    rightPoint = plane->translate( rightPoint );
-                    if ( diagramIsVertical ) {
-	                    leftPoint.setX( rulerRef.x() + subUnitTickLength );
-	                    rightPoint.setX( rulerRef.x() );
-                    } else {
-	                    leftPoint.setY( rulerRef.y() + (position == Bottom ? subUnitTickLength : -subUnitTickLength) );
-	                    rightPoint.setY( rulerRef.y() );
-                    }
-                    painter->drawLine( leftPoint, rightPoint );
-                }
-            } else {
-                ++nextMayBeTick;
-            }
-        }
+    	}
         if ( isLogarithmic ){
             if( logSubstep == 9 ){
-                fLogSubstep *= 10.0;
+                fLogSubstep *= ( fLogSubstep > 0.0 ) ? 10.0 : 0.1;
                 if( fLogSubstep == 0 )
                     fLogSubstep = 0.01;
                 logSubstep = 0;
@@ -403,7 +431,10 @@ void CartesianAxis::Private::drawTitleText( QPainter* painter, CartesianCoordina
 static void calculateNextLabel( qreal& labelValue, qreal step, bool isLogarithmic, qreal min )
 {
     if ( isLogarithmic ){
-        labelValue *= 10.0;
+        if( step > 0.0 )
+            labelValue *= 10.0;
+        else
+            labelValue /= 10.0;
         if( labelValue == 0.0 )
             labelValue = pow( 10.0, floor( log10( min ) ) );
     }else{
@@ -429,12 +460,15 @@ void CartesianAxis::paintCtx( PaintContext* context )
     //       but we can not draw an axis then either.
     if( ! d->diagram()->model() )
         return;
-    
-    const AbstractCartesianDiagram * dia = qobject_cast< const AbstractCartesianDiagram * >( d->diagram() );
-    if( dia && dia->referenceDiagram() )
-        dia = dia->referenceDiagram();
-	const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dia );
-	const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
+
+    // Determine the diagram that specifies the orientation of the diagram we're painting here
+    // That diagram is the reference diagram, if it exists, or otherwise the diagram itself.
+    // Note: In KDChart 2.3 or earlier, only a bar diagram can be vertical instead of horizontal.
+    const AbstractCartesianDiagram * refDiagram = qobject_cast< const AbstractCartesianDiagram * >( d->diagram() );
+    if( refDiagram && refDiagram->referenceDiagram() )
+        refDiagram = refDiagram->referenceDiagram();
+    const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( refDiagram );
+    const Qt::Orientation diagramOrientation = barDiagram ? barDiagram->orientation() : Qt::Vertical;
     const bool diagramIsVertical = diagramOrientation == Qt::Vertical;
 
     /*
@@ -462,7 +496,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
     	dimX.end = yEnd;*/
     	dimX = AbstractGrid::adjustedLowerUpperRange( dimensions.first(), true, true );
     	dimY = AbstractGrid::adjustedLowerUpperRange( dimensions.last(), true, true );
-    	
+
     	// FIXME
     	// Ugly workaround for dimensions being bound to both, the x coordinate direction and the abscissa
     	//if ( referenceDiagramIsPercentLyingBarDiagram ) {
@@ -532,8 +566,11 @@ void CartesianAxis::paintCtx( PaintContext* context )
 
     const bool useItemCountLabels = isAbscissa() && ! dimX.isCalculated;
 
-    const bool drawUnitRulers = screenRange / ( numberOfUnitRulers / dimX.stepWidth ) > MinimumPixelsBetweenRulers;
-    const bool drawSubUnitRulers =
+    // attributes used to customize ruler appearance
+    const RulerAttributes rulerAttr = rulerAttributes();
+
+    const bool drawUnitRulers = rulerAttr.showMajorTickMarks() && (screenRange / ( numberOfUnitRulers / dimX.stepWidth ) > MinimumPixelsBetweenRulers);
+    const bool drawSubUnitRulers = rulerAttr.showMinorTickMarks() &&
         (numberOfSubUnitRulers != 0.0) &&
         (screenRange / numberOfSubUnitRulers > MinimumPixelsBetweenRulers);
 
@@ -620,9 +657,6 @@ void CartesianAxis::paintCtx( PaintContext* context )
     QVector< int > drawnAbscissaTicks;
     // and that does the same for the y-ticks
     QVector< int > drawnYTicks;
-    
-    // attributes used to customize ruler appearance
-    const RulerAttributes rulerAttr = rulerAttributes();
 
     /*
      * Find out if it is a bar diagram
@@ -663,7 +697,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 QStringList configuredStepsLabels;
                 double value = dimX.start;// headerLabels.isEmpty() ? 0.0 : headerLabels.first().toDouble();
                 configuredStepsLabels << QString::number( value );
-                
+
                 for( int i = 0; i < numberOfUnitRulers; i++ )
                 {
                     //qDebug() << value;
@@ -674,7 +708,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 }
                 headerLabels = configuredStepsLabels;
             }
-    
+
             if (  centerAbscissaTicks )
                 headerLabels.append( QString::null );
         }
@@ -849,13 +883,13 @@ void CartesianAxis::paintCtx( PaintContext* context )
                             labelItem2->setText(customizedLabel(headerLabels[ iLabel+1 ]) );
                         }else{
                             //qDebug() << "i + labelDiff " << i + labelDiff;
-                            labelItem->setText( customizedLabel(headerLabelsCount > i && i >= 0 ? 
+                            labelItem->setText( customizedLabel(headerLabelsCount > i && i >= 0 ?
                                     headerLabels[static_cast<int>(i)] :
                                     QString::number( i, 'f', precision )) );
                             //           qDebug() << "1 - labelItem->text() " << labelItem->text();
                             //qDebug() << "labelDiff" << labelDiff
                             //        << "  index" << i+labelDiff << "  count" << headerLabelsCount;
-                            labelItem2->setText( customizedLabel(headerLabelsCount > i + labelDiff && i + labelDiff >= 0 ? 
+                            labelItem2->setText( customizedLabel(headerLabelsCount > i + labelDiff && i + labelDiff >= 0 ?
                                     headerLabels[static_cast<int>(i+labelDiff)] :
                                     QString::number( i + labelDiff, 'f', precision )) );
                             //qDebug() << "2 - labelItem->text() " << labelItem->text();
@@ -941,20 +975,23 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 	bIsVisibleLabel = ( translatedValue >= geoRect.left() && translatedValue <= geoRect.right() && !isLogarithmicX || i != 0.0 );
                 else
                 	bIsVisibleLabel = ( translatedValue >= geoRect.top() && translatedValue <= geoRect.bottom() && !isLogarithmicX || i != 0.0 );
-                
+
                 // fix for issue #4179:
                 bool painttick = bIsVisibleLabel && labelStep <= 0;;
                 // old code:
                 // bool painttick = true;
 
-                //Do not paint more ticks than we need
+                //Dont paint more ticks than we need
                 //when diagram type is Bar
                 if (  centerAbscissaTicks && i == maxValueX )
                     painttick = false;
 
                 if ( bIsVisibleLabel && painttick ) {
                     ptr->save();
-                    ptr->setPen( rulerAttr.tickMarkPen() );
+                    if ( rulerAttr.hasTickMarkPenAt( i ) )
+                    	ptr->setPen( rulerAttr.tickMarkPen( i ) );
+                    else
+                    	ptr->setPen( rulerAttr.majorTickMarkPen() );
                     ptr->drawLine( topPoint, bottomPoint );
                     ptr->restore();
                 }
@@ -964,7 +1001,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     if( bIsVisibleLabel ){
                         if ( isLogarithmicX )
                             labelItem->setText( customizedLabel(QString::number( i ) ) );
-                        /* We do not need that
+                        /* We don't need that
                         * it causes header labels to be skipped even if there is enough
                         * space for them to displayed.
                         * Commenting for now - I need to test more in details - Let me know if I am wrong here.
@@ -975,7 +1012,16 @@ void CartesianAxis::paintCtx( PaintContext* context )
                         }
                         */
                         else {
-                            const int idx = idxLabel + static_cast<int>(minValueX);
+                            int idx = idxLabel + static_cast<int>(minValueX);
+                            if( hardLabelsCount ){
+                                if( useShortLabels ){
+                                    if( idx >= shortLabelsList.count() )
+                                        idx = 0;
+                                }else{
+                                    if( idx >= labelsList.count() )
+                                        idx = 0;
+                                }
+                            }
                             labelItem->setText(
                                     customizedLabel(
                                           hardLabelsCount
@@ -987,29 +1033,82 @@ void CartesianAxis::paintCtx( PaintContext* context )
                         // the layout item temporarily only.
                         if( labelStep <= 0 ) {
                             const PainterSaver p( ptr );
-                            const QSize size( labelItem->sizeHint() );
-                            if ( diagramIsVertical ) {
-	                            labelItem->setGeometry(
-	                                QRect(
-	                                    QPoint(
-	                                        static_cast<int>( topPoint.x() - size.width() / 2.0 ),
-	                                        static_cast<int>( topPoint.y() +
-	                                                        ( position() == Bottom
-	                                                            ? halfFontHeight
-	                                                            : ((halfFontHeight + size.height()) * -1.0) ) ) ),
-	                                    size ) );
-                            } else {
-	                            labelItem->setGeometry(
-	                                QRect(
-	                                    QPoint(
-	                                        static_cast<int>( bottomPoint.x() +
-	                                                        ( position() == Right
-	                                                            ? halfFontWidth
-	                                                            : (-halfFontWidth - size.width()) ) ),
-
-	                	                    static_cast<int>( topPoint.y() - ( size.height() ) * 0.5 ) ),
-	                                    size ) );
+                            //const QSize size( labelItem->sizeHint() );
+                            QPoint topLeft, topRight, bottomRight, bottomLeft;
+                            const QSize size(
+                                    labelItem->sizeHintAndRotatedCorners(
+                                            topLeft, topRight, bottomRight, bottomLeft) );
+                            const QSize sizeUnrotated( labelItem->sizeHintUnrotated() );
+                            const int rotation = labelTA.rotation();
+                            const bool rotPositive = (rotation > 0 && rotation < 180);
+                            QPoint midOfSide(0,0);
+                            int dX = 0;
+                            int dY = 0;
+                            if( rotation ){
+                                if( rotPositive ){
+                                    midOfSide = (topLeft + bottomLeft)  / 2;
+                                    dX = topLeft.x() - midOfSide.x();
+                                    dY = bottomLeft.y() - midOfSide.y();
+                                }else{
+                                    midOfSide = (topRight + bottomRight) / 2;
+                                    dX = midOfSide.x() - topLeft.x();
+                                    dY = midOfSide.y() - topRight.y();
+                                }
                             }
+/*
+if( i == 2 ){
+    qDebug()<<"------"<<size<<topPoint<<topLeft<<topRight<<bottomRight<<bottomLeft<<"   m:"<<midOfSide<<" dx"<<dX<<" dy"<<dY;
+    ptr->setPen( Qt::black );
+    QRectF rect(topPoint, QSizeF(sizeUnrotated));
+    ptr->drawRect( rect );
+    ptr->drawRect( QRectF(topPoint, QSizeF(2,2)) );
+    ptr->drawRect( QRectF(topPoint+topLeft, QSizeF(2,2)) );
+    ptr->drawRect( QRectF(topPoint+bottomLeft, QSizeF(2,2)) );
+    ptr->drawRect( QRectF(topPoint+bottomRight, QSizeF(2,2)) );
+    ptr->drawRect( QRectF(topPoint+topRight, QSizeF(2,2)) );
+    ptr->drawRect( QRectF(topPoint+midOfSide, QSizeF(2,2)) );
+    ptr->setPen( Qt::green );
+    rect = QRectF(topPoint, QSizeF(size));
+    ptr->drawRect( rect );
+    ptr->drawRect( QRectF(QPointF((rect.topLeft()  + rect.bottomLeft())  / 2.0 - QPointF(2.0,2.0)), QSizeF(3.0,3.0)) );
+    //ptr->drawRect( QRectF(QPointF((rect.topRight() + rect.bottomRight()) / 2.0 - QPointF(2.0,2.0)), QSizeF(3.0,3.0)) );
+}
+*/
+                            QPoint topLeftPt;
+                            if( diagramIsVertical ){
+                                if( rotation ){
+                                    topLeftPt = QPoint(
+                                        static_cast<int>( topPoint.x() ) - dX,
+                                        static_cast<int>( topPoint.y()   - dY +
+                                                        ( position() == Bottom
+                                                            ? halfFontHeight
+                                                            : ((halfFontHeight + size.height()) * -1.0) ) ) );
+                                }else{
+                                    topLeftPt = QPoint(
+                                        static_cast<int>( topPoint.x() - size.width() / 2.0 ),
+                                        static_cast<int>( topPoint.y() +
+                                                        ( position() == Bottom
+                                                            ? halfFontHeight
+                                                            : ((halfFontHeight + size.height()) * -1.0) ) ) );
+                                }
+                            }else{
+                                if( rotation ){
+                                    topLeftPt = QPoint(
+                                        static_cast<int>( topPoint.x() ) + dX,
+                                        static_cast<int>( topPoint.y()   - dY +
+                                                        ( position() == Bottom
+                                                            ? halfFontHeight
+                                                            : ((halfFontHeight + size.height()) * -1.0) ) ) );
+                                }else{
+                                    topLeftPt = QPoint(
+                                        static_cast<int>( bottomPoint.x() +
+                                                            ( position() == Right
+                                                                ? halfFontWidth
+                                                                : (-halfFontWidth - size.width()) ) ),
+                                        static_cast<int>( topPoint.y() - ( size.height() ) * 0.5 ) );
+                                }
+                            }
+                            labelItem->setGeometry( QRect(topLeftPt, size) );
 
                             QRect labelGeo = labelItem->geometry();
                             //ptr->drawRect(labelGeo);
@@ -1019,7 +1118,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                             else if( labelGeo.left() < geoRect.right() && labelGeo.right() > geoRect.right() )
                                 ptr->setClipping( false );
 
-                           
+
                             if( !isLogarithmicX )
                                 labelStep = labelDiff - dimX.stepWidth;
 
@@ -1054,7 +1153,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 {
                     i *= 10.0;
                     if( i == 0.0 )
-                    {   
+                    {
                         const qreal j = dimensions.first().start;
                         i = j == 0.0 ? 1.0 : pow( 10.0, floor( log10( j ) ) );
                     }
@@ -1075,7 +1174,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 // our labels, to get them drawn right aligned:
                 labelValue = minValueY;
                 while ( labelValue <= maxLimit ) {
-                    const QString labelText = diagram()->unitPrefix( static_cast< int >( labelValue ), diagramOrientation, true ) + 
+                    const QString labelText = diagram()->unitPrefix( static_cast< int >( labelValue ), diagramOrientation, true ) +
                                               QString::number( labelValue ) +
                                               diagram()->unitSuffix( static_cast< int >( labelValue ), diagramOrientation, true );
                     labelItem->setText( customizedLabel( labelText ) );
@@ -1138,7 +1237,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     	QPointF annoPoint = (diagramIsVertical ? QPointF( 0.0, annotation ) : QPointF( annotation, 0.0 ));
                         QPointF leftPoint = plane->translate( annoPoint );
                         QPointF rightPoint = plane->translate( annoPoint );
-                        
+
                         if ( diagramIsVertical ) {
                         	leftPoint.setX( rulerRef.x() + tickLength() );
                         	rightPoint.setX( rulerRef.x() );
@@ -1146,7 +1245,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                         	leftPoint.setY( rulerRef.y() + ((position() == Bottom) ? tickLength() : -tickLength()) );
                         	rightPoint.setY( rulerRef.y() );
                         }
-                
+
                         const qreal translatedValue = diagramIsVertical ? rightPoint.y() : rightPoint.x();
                         const bool bIsVisibleLabel = diagramIsVertical ?
                                 ( translatedValue >= geoRect.top() && translatedValue <= geoRect.bottom() && !isLogarithmicY || labelValue != 0.0 )
@@ -1155,16 +1254,19 @@ void CartesianAxis::paintCtx( PaintContext* context )
                         if( bIsVisibleLabel )
                         {
                         	ptr->save();
-                        	ptr->setPen( rulerAttr.tickMarkPen() );
+                            if ( rulerAttr.hasTickMarkPenAt( annotation ) )
+                            	ptr->setPen( rulerAttr.tickMarkPen( annotation ) );
+                            else
+                            	ptr->setPen( rulerAttr.majorTickMarkPen() );
                             ptr->drawLine( leftPoint, rightPoint );
                             ptr->restore();
-                            
+
                             labelItem->setText( d->annotations[ annotation ] );
                             const QSize labelSize( labelItem->sizeHint() );
                             int x, y;
                             if ( diagramIsVertical ) {
-    	                        x = static_cast<int>( leftPoint.x() + met.height() * ( position() == Left ? -0.5 : 0.5) )
-    	                            - ( position() == Left ? labelSize.width() : (labelSize.width() - maxLabelsWidth) );
+                                x = static_cast<int>( leftPoint.x() + met.height() * ( position() == Left ? -0.5 : 0.5)
+                                    - ( position() == Left ? labelSize.width() : 0.0 ) );
     	                        y = static_cast<int>( leftPoint.y() - ( met.ascent() + met.descent() ) * 0.6 );
                             } else {
                             	const qreal halfFontHeight = met.height() * 0.5;
@@ -1181,8 +1283,8 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 {
                 while( labelValue <= maxLimit ) {
                     //qDebug() << "value now" << labelValue;
-                    const QString labelText = diagram()->unitPrefix( static_cast< int >( labelValue ), diagramOrientation, true ) + 
-                                              QString::number( labelValue ) + 
+                    const QString labelText = diagram()->unitPrefix( static_cast< int >( labelValue ), diagramOrientation, true ) +
+                                              QString::number( labelValue ) +
                                               diagram()->unitSuffix( static_cast< int >( labelValue ), diagramOrientation, true );
                     labelItem->setText( customizedLabel( labelText ) );
                     QPointF leftPoint = plane->translate( diagramIsVertical ? QPointF( 0, labelValue ) : QPointF( labelValue, 0 ) );
@@ -1198,17 +1300,20 @@ void CartesianAxis::paintCtx( PaintContext* context )
 
                     bool bIsVisibleLabel;
                     const qreal translatedValue = diagramIsVertical ? rightPoint.y() : rightPoint.x();
-                    if ( diagramIsVertical) 
+                    if ( diagramIsVertical)
                     	bIsVisibleLabel = ( translatedValue >= geoRect.top() && translatedValue <= geoRect.bottom() && !isLogarithmicY || labelValue != 0.0 );
                     else
                     	bIsVisibleLabel = ( translatedValue >= geoRect.left() && translatedValue <= geoRect.right() && !isLogarithmicY || labelValue != 0.0 );
 
                     if( bIsVisibleLabel ){
                     	ptr->save();
-                        ptr->setPen( rulerAttr.tickMarkPen() );
+                        if ( rulerAttr.hasTickMarkPenAt( labelValue ) )
+                        	ptr->setPen( rulerAttr.tickMarkPen( labelValue ) );
+                        else
+                        	ptr->setPen( rulerAttr.majorTickMarkPen() );
                         ptr->drawLine( leftPoint, rightPoint );
                         ptr->restore();
-                        
+
                         drawnYTicks.append( static_cast<int>( diagramIsVertical ? leftPoint.y() : leftPoint.x() ) );
                         const QSize labelSize( labelItem->sizeHint() );
 
@@ -1223,7 +1328,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
 	                        y = static_cast<int>( (position() == Bottom ? leftPoint.y() : rightPoint.y()) +
 	                                                        + ( position() == Bottom ? halfFontHeight : -(halfFontHeight + labelSize.height()) ) );
                         }
-                        
+
                         labelItem->setGeometry( QRect( QPoint( x, y ), labelSize ) );
                         const QRect labelGeo = labelItem->geometry();
                         const bool hadClipping = ptr->hasClipping();
@@ -1231,7 +1336,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                            ptr->setClipping( false );
                         else if( labelGeo.top() < geoRect.bottom() && labelGeo.bottom() > geoRect.bottom() )
                            ptr->setClipping( false );
-                            
+
                         labelItem->paint( ptr );
                         ptr->setClipping( hadClipping );
                     }
@@ -1249,10 +1354,9 @@ void CartesianAxis::paintCtx( PaintContext* context )
     // this draws the subunit rulers
     if ( drawSubUnitRulers && d->annotations.isEmpty() ) {
     	ptr->save();
-        
-    	ptr->setPen( rulerAttr.tickMarkPen() );
-        d->drawSubUnitRulers( ptr, plane, dim, rulerRef, isAbscissa() ? drawnAbscissaTicks : drawnYTicks, diagramIsVertical );
-        
+
+        d->drawSubUnitRulers( ptr, plane, dim, rulerRef, isAbscissa() ? drawnAbscissaTicks : drawnYTicks, diagramIsVertical, rulerAttr );
+
         ptr->restore();
     }
 
@@ -1316,32 +1420,44 @@ static void calculateOverlap( int i, int first, int last,
 }
 
 
+void CartesianAxis::setCachedSizeDirty() const
+{
+    d->cachedMaximumSize = QSize();
+}
+
 /* pure virtual in QLayoutItem */
 QSize CartesianAxis::maximumSize() const
 {
+    if( ! d->cachedMaximumSize.isValid() )
+        d->cachedMaximumSize = d->calculateMaximumSize();
+    return d->cachedMaximumSize;
+}
+
+QSize CartesianAxis::Private::calculateMaximumSize() const
+{
     QSize result;
-    if ( !d->diagram() )
+    if ( !diagram() )
         return result;
 
-    const AbstractCartesianDiagram * dia = qobject_cast< const AbstractCartesianDiagram * >( d->diagram() );
+    const AbstractCartesianDiagram * dia = qobject_cast< const AbstractCartesianDiagram * >( diagram() );
     if( dia && dia->referenceDiagram() )
         dia = dia->referenceDiagram();
 	const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dia );
 	const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
     const bool diagramIsVertical = diagramOrientation == Qt::Vertical;
-    
-    const TextAttributes labelTA = textAttributes();
+
+    const TextAttributes labelTA = mAxis->textAttributes();
     const bool drawLabels = labelTA.isVisible();
 
-    const TextAttributes titleTA( d->titleTextAttributesWithAdjustedRotation() );
-    const bool drawTitle = titleTA.isVisible() && ! titleText().isEmpty();
+    const TextAttributes titleTA( titleTextAttributesWithAdjustedRotation() );
+    const bool drawTitle = titleTA.isVisible() && ! axis()->titleText().isEmpty();
 
-    AbstractCoordinatePlane* plane = d->diagram()->coordinatePlane();
+    AbstractCoordinatePlane* plane = diagram()->coordinatePlane();
     //qDebug() << this<<"::maximumSize() uses plane geometry" << plane->geometry();
     QObject* refArea = plane->parent();
     TextLayoutItem labelItem( QString::null, labelTA, refArea,
                               KDChartEnums::MeasureOrientationMinimum, Qt::AlignLeft );
-    TextLayoutItem titleItem( titleText(), titleTA, refArea,
+    TextLayoutItem titleItem( axis()->titleText(), titleTA, refArea,
                               KDChartEnums::MeasureOrientationMinimum, Qt::AlignHCenter | Qt::AlignVCenter );
 
     const QFontMetrics fm( labelItem.realFont(), GlobalMeasureScaling::paintDevice() );
@@ -1356,8 +1472,8 @@ QSize CartesianAxis::maximumSize() const
         ? ( (diagramIsVertical ? titleFM.height() : titleFM.averageCharWidth()) / 3.0)
         : 0.0;
 
-    if ( isAbscissa() ) {
-        const bool centerAbscissaTicks = referenceDiagramNeedsCenteredAbscissaTicks(d->diagram());
+    if ( axis()->isAbscissa() ) {
+        const bool centerAbscissaTicks = referenceDiagramNeedsCenteredAbscissaTicks(diagram());
         int leftOverlap = 0;
         int rightOverlap = 0;
 
@@ -1365,9 +1481,9 @@ QSize CartesianAxis::maximumSize() const
         qreal h = diagramIsVertical ? 0.0 : 10.0;
         if( drawLabels ){
             // if there're no label strings, we take the biggest needed number as height
-            if( !d->annotations.isEmpty() )
+            if( !annotations.isEmpty() )
             {
-                const QStringList strings = d->annotations.values();
+                const QStringList strings = annotations.values();
                 KDAB_FOREACH( const QString& string, strings )
                 {
                     labelItem.setText( string );
@@ -1378,16 +1494,17 @@ QSize CartesianAxis::maximumSize() const
                     	w = qMax( w, static_cast< qreal >( siz.width() ) );
                 }
             }
-            else if ( !labels().isEmpty() )
+            else if ( !axis()->labels().isEmpty() )
             {
                 // find the longest label text:
                 const int first=0;
-                const int last=labels().count()-1;
-                const QStringList labelsList( labels() );
+                const int last=axis()->labels().count()-1;
+                const QStringList labelsList( axis()->labels() );
                 for ( int i = first; i <= last; ++i )
                 {
-                    labelItem.setText( customizedLabel(labelsList[ i ]) );
+                    labelItem.setText( axis()->customizedLabel(labelsList[ i ]) );
                     const QSize siz = labelItem.sizeHint();
+                    //qDebug()<<siz;
                     if ( diagramIsVertical )
                     	h = qMax( h, static_cast<qreal>(siz.height()) );
                     else
@@ -1399,35 +1516,35 @@ QSize CartesianAxis::maximumSize() const
             }
             else
             {
-                QStringList headerLabels = d->diagram()->itemRowLabels();
+                QStringList headerLabels = diagram()->itemRowLabels();
                 const int headerLabelsCount = headerLabels.count();
                 if( headerLabelsCount ){
-                    if( d->cachedHeaderLabels == headerLabels && ( diagramIsVertical ? d->cachedFontHeight == fm.height() : d->cachedFontWidth == fm.averageCharWidth() )) {
+                    if( cachedHeaderLabels == headerLabels && ( diagramIsVertical ? cachedFontHeight == fm.height() : cachedFontWidth == fm.averageCharWidth() )) {
                     	if ( diagramIsVertical )
-                    		h = d->cachedLabelHeight;
+                    		h = cachedLabelHeight;
                     	else
-                    		w = d->cachedLabelWidth;
+                    		w = cachedLabelWidth;
                     } else {
-                        d->cachedHeaderLabels = headerLabels;
+                        cachedHeaderLabels = headerLabels;
                         if ( diagramIsVertical )
-                        	d->cachedFontWidth = fm.averageCharWidth();
+                        	cachedFontWidth = fm.averageCharWidth();
                         else
-                        	d->cachedFontHeight = fm.height();
+                        	cachedFontHeight = fm.height();
                         const bool useFastCalcAlgorithm
-                            = (strcmp( metaObject()->className(), "KDChart::CartesianAxis" ) == 0);
+                            = (strcmp( axis()->metaObject()->className(), "KDChart::CartesianAxis" ) == 0);
                         const int first=0;
                         const int last=headerLabelsCount-1;
                         for ( int i = first;
                             i <= last;
                             i = (useFastCalcAlgorithm && i < last) ? last : (i+1) )
                         {
-                            labelItem.setText( customizedLabel(headerLabels[ i ]) );
+                            labelItem.setText( axis()->customizedLabel(headerLabels[ i ]) );
                             const QSize siz = labelItem.sizeHint();
                             if ( diagramIsVertical ) {
                             	h = qMax( h, static_cast<qreal>(siz.height()) );
-                                d->cachedLabelHeight = h;
+                                cachedLabelHeight = h;
                             } else {
-                                d->cachedLabelWidth = w;
+                                cachedLabelWidth = w;
                             	w = qMax( w, static_cast<qreal>(siz.width()) );
                             }
                             calculateOverlap( i, first, last, diagramIsVertical ? siz.width() : siz.height(), centerAbscissaTicks,
@@ -1436,7 +1553,7 @@ QSize CartesianAxis::maximumSize() const
                     }
                 }else{
                     labelItem.setText(
-                            customizedLabel(
+                            axis()->customizedLabel(
                                     QString::number( diagramIsVertical ? plane->gridDimensionsList().first().end
                                     								   : plane->gridDimensionsList().last().end, 'f', 0 )));
                     const QSize siz = labelItem.sizeHint();
@@ -1464,16 +1581,17 @@ QSize CartesianAxis::maximumSize() const
         }
         // space for the ticks
         if ( diagramIsVertical )
-        	h += qAbs( tickLength() ) * 3.0;
+        	h += qAbs( axis()->tickLength() ) * 3.0;
         else
-        	w += qAbs( tickLength() ) * 3.0;
+        	w += qAbs( axis()->tickLength() ) * 3.0;
         result = QSize ( static_cast<int>( w ), static_cast<int>( h ) );
 
+        //qDebug()<<"calculated size of x axis:"<<result;
 
         // If necessary adjust the widths
         // of the left (or right, resp.) side neighboring columns:
-        d->amountOfLeftOverlap = leftOverlap;
-        d->amountOfRightOverlap = rightOverlap;
+        amountOfLeftOverlap = leftOverlap;
+        amountOfRightOverlap = rightOverlap;
         /* Unused code for a push-model:
         if( leftOverlap || rightOverlap ){
             QTimer::singleShot(200, const_cast<CartesianAxis*>(this),
@@ -1489,9 +1607,9 @@ QSize CartesianAxis::maximumSize() const
         if( drawLabels ){
             // if there're no label strings, we loop through the values
             // taking the longest (not largest) number - e.g. 0.00001 is longer than 100
-            if( !d->annotations.isEmpty() )
+            if( !annotations.isEmpty() )
             {
-                const QStringList strings = d->annotations.values();
+                const QStringList strings = annotations.values();
                 KDAB_FOREACH( const QString& string, strings )
                 {
                     labelItem.setText( string );
@@ -1502,7 +1620,7 @@ QSize CartesianAxis::maximumSize() const
                     	h = qMax( h, static_cast< qreal >( siz.height() ) );
                 }
             }
-            else if( labels().isEmpty() )
+            else if( axis()->labels().isEmpty() )
             {
                 const DataDimension dimY = AbstractGrid::adjustedLowerUpperRange(
                 		diagramIsVertical ? plane->gridDimensionsList().last()
@@ -1517,7 +1635,7 @@ QSize CartesianAxis::maximumSize() const
                     const QString labelText = diagram()->unitPrefix( static_cast< int >( labelValue ), diagramOrientation, true ) +
                                             QString::number( labelValue ) +
                                             diagram()->unitSuffix( static_cast< int >( labelValue ), diagramOrientation, true );
-                    labelItem.setText( customizedLabel( labelText ) );
+                    labelItem.setText( axis()->customizedLabel( labelText ) );
 
                     const QSize siz = labelItem.sizeHint();
                     if ( diagramIsVertical )
@@ -1531,11 +1649,11 @@ QSize CartesianAxis::maximumSize() const
             }else{
                 // find the longest label text:
                 const int first=0;
-                const int last=labels().count()-1;
-                const QStringList labelsList( labels() );
+                const int last=axis()->labels().count()-1;
+                const QStringList labelsList( axis()->labels() );
                 for ( int i = first; i <= last; ++i )
                 {
-                    labelItem.setText( customizedLabel(labelsList[ i ]) );
+                    labelItem.setText( axis()->customizedLabel(labelsList[ i ]) );
                     const QSize siz = labelItem.sizeHint();
                     if ( diagramIsVertical )
                                         	w = qMax( w, (qreal)siz.width() );
@@ -1562,9 +1680,9 @@ QSize CartesianAxis::maximumSize() const
         }
         // space for the ticks
         if ( diagramIsVertical )
-        	w += qAbs( tickLength() ) * 3.0;
+        	w += qAbs( axis()->tickLength() ) * 3.0;
         else
-        	h += qAbs( tickLength() ) * 3.0;
+        	h += qAbs( axis()->tickLength() ) * 3.0;
 
         result = QSize ( static_cast<int>( w ), static_cast<int>( h ) );
         //qDebug() << "left/right axis width:" << result << "   w:" << w;
@@ -1572,8 +1690,8 @@ QSize CartesianAxis::maximumSize() const
 
         // If necessary adjust the heights
         // of the top (or bottom, resp.) side neighboring rows:
-        d->amountOfTopOverlap = topOverlap;
-        d->amountOfBottomOverlap = bottomOverlap;
+        amountOfTopOverlap = topOverlap;
+        amountOfBottomOverlap = bottomOverlap;
         /* Unused code for a push-model:
         if( topOverlap || bottomOverlap ){
             QTimer::singleShot(200, const_cast<CartesianAxis*>(this),
@@ -1601,6 +1719,7 @@ void CartesianAxis::setGeometry( const QRect& r )
 //    qDebug() << "KDChart::CartesianAxis::setGeometry(" << r << ") called"
 //             << (isAbscissa() ? "for Abscissa":"for Ordinate") << "axis";
     d->geometry = r;
+    setCachedSizeDirty();
 }
 /* pure virtual in QLayoutItem */
 QRect CartesianAxis::geometry() const

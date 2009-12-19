@@ -21,15 +21,16 @@
  **
  **********************************************************************/
 
-#include <qglobal.h>
-
 #include "KDChartAbstractGrid.h"
 #include "KDChartPaintContext.h"
+
+#include <qglobal.h>
 
 #include <KDABLibFakes>
 
 
 using namespace KDChart;
+using namespace std;
 
 
 static qreal _trunc( qreal v )

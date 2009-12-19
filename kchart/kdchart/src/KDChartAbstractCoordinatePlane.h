@@ -21,8 +21,8 @@
  **
  **********************************************************************/
 
-#ifndef KDCHARTABSTRCOORDINATEPLANE_H
-#define KDCHARTABSTRCOORDINATEPLANE_H
+#ifndef KDCHARTABSTRACTCOORDINATEPLANE_H
+#define KDCHARTABSTRACTCOORDINATEPLANE_H
 
 #include <QObject>
 #include <QList>
@@ -151,6 +151,12 @@ namespace KDChart {
          * to all coordinate transformations.
          */
         virtual double zoomFactorY() const { return 1.0; }
+
+        /**
+         * Sets both zoom factors in one go.
+         * \sa setZoomFactorX,setZoomFactorY
+         */
+        virtual void setZoomFactors( double factorX, double factorY ) { Q_UNUSED( factorX ); Q_UNUSED( factorY ); }
 
         /**
          * Sets the zoom factor in horizontal direction, that is applied
@@ -285,7 +291,11 @@ namespace KDChart {
          *
          * \note Before calling this function the point must have been translated into coordinate plane space.
          */
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
         const bool isVisiblePoint( const QPointF& point ) const;
+#else
+        bool isVisiblePoint( const QPointF& point ) const;
+#endif
 
     public Q_SLOTS:
         /**

@@ -31,6 +31,7 @@
 #include "KDChartLineDiagram_p.h"
 
 using namespace KDChart;
+using namespace std;
 
 LineDiagram::Private::Private( const Private& rhs )
     : AbstractCartesianDiagram::Private( rhs )
@@ -43,7 +44,7 @@ void LineDiagram::Private::paintPolyline(
     const QPolygonF& points ) const
 {
     ctx->painter()->setBrush( brush );
-    ctx->painter()->setPen( PrintingParameters::scalePen( 
+    ctx->painter()->setPen( PrintingParameters::scalePen(
         QPen( pen.color(),
               pen.width(),
               pen.style(),
@@ -237,13 +238,14 @@ void LineDiagram::LineDiagramType::appendDataValueTextInfoToList(
             AbstractDiagram * diagram,
             DataValueTextInfoList & list,
             const QModelIndex & index,
+            const CartesianDiagramDataCompressor::CachePosition * position,
             const PositionPoints& points,
             const Position& autoPositionPositive,
             const Position& autoPositionNegative,
             const qreal value )
 {
     Q_UNUSED( autoPositionNegative );
-    m_private->appendDataValueTextInfoToList( diagram, list, index, points,
+    m_private->appendDataValueTextInfoToList( diagram, list, index, position, points,
                                               autoPositionPositive, autoPositionPositive, value );
 }
 
@@ -313,11 +315,11 @@ double LineDiagram::LineDiagramType::interpolateMissingValue( const CartesianDia
     double leftValue = std::numeric_limits< double >::quiet_NaN();
     double rightValue = std::numeric_limits< double >::quiet_NaN();
     int missingCount = 1;
-    
+
     const int column = pos.second;
     const int row = pos.first;
     const int rowCount = compressor().modelDataRows();
-    
+
     // iterate back and forth to find valid values
     for( int r1 = row - 1; r1 > 0; --r1 )
     {

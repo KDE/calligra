@@ -64,10 +64,13 @@ public:
     const CartesianAxis* axis() const { return static_cast<CartesianAxis *>( mAxis ); }
 
     void drawSubUnitRulers( QPainter*, CartesianCoordinatePlane* plane, const DataDimension& dim,
-                            const QPointF& rulerRef, const QVector<int>& drawnTicks, const bool diagramIsVertical ) const;
+                            const QPointF& rulerRef, const QVector<int>& drawnTicks, const bool diagramIsVertical,
+                            const RulerAttributes& rulerAttr) const;
     void drawTitleText( QPainter*, CartesianCoordinatePlane* plane, const QRect& areaGeoRect ) const;
 
     const TextAttributes titleTextAttributesWithAdjustedRotation() const;
+
+    QSize calculateMaximumSize() const;
 
 private:
     QString titleText;
@@ -81,6 +84,7 @@ private:
     mutable qreal cachedLabelWidth;
     mutable int cachedFontHeight;
     mutable int cachedFontWidth;
+    mutable QSize cachedMaximumSize;
 };
 
 inline CartesianAxis::CartesianAxis( Private * p, AbstractDiagram* diagram )

@@ -59,3 +59,8 @@ int AbstractPolarDiagram::columnCount() const
 {
     return static_cast<int>( numberOfValuesPerDataset() );
 }
+
+int AbstractPolarDiagram::rowCount() const
+{
+    return static_cast<int>( numberOfDatasets() );
+}

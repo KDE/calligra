@@ -21,26 +21,30 @@
  **
  **********************************************************************/
 
+#include "KDChartPolarCoordinatePlane.h"
+#include "KDChartPolarCoordinatePlane_p.h"
+
+#include "KDChartPainterSaver_p.h"
+#include "KDChartChart.h"
+#include "KDChartPaintContext.h"
+#include "KDChartAbstractDiagram.h"
+#include "KDChartAbstractPolarDiagram.h"
+#include "KDChartPolarDiagram.h"
+
 #include <math.h>
 
 #include <QFont>
 #include <QList>
 #include <QtDebug>
 #include <QPainter>
-
-#include "KDChartChart.h"
-#include "KDChartPaintContext.h"
-#include "KDChartAbstractDiagram.h"
-#include "KDChartAbstractPolarDiagram.h"
-#include "KDChartPolarCoordinatePlane.h"
-#include "KDChartPolarCoordinatePlane_p.h"
-#include "KDChartPainterSaver_p.h"
+#include <QTimer>
 
 #include <KDABLibFakes>
 
 using namespace KDChart;
 
 #define d d_func()
+
 
 /*
 #ifndef M_PI
@@ -146,20 +150,64 @@ void PolarCoordinatePlane::paint ( QPainter* painter )
         ctx.setCoordinatePlane ( this );
         ctx.setRectangle ( geometry() /*d->contentRect*/ );
 
+        // 1. ask the diagrams if they need additional space for data labels / data comments
+        const qreal oldZoomX = zoomFactorX();
+        const qreal oldZoomY = zoomFactorY();
+        d->newZoomX = oldZoomX;
+        d->newZoomY = oldZoomY;
+        for ( int i = 0; i < diags.size(); i++ )
+        {
+            d->currentTransformation = & ( d->coordinateTransformations[i] );
+            qreal zoomX;
+            qreal zoomY;
+            PolarDiagram* polarDia = dynamic_cast<PolarDiagram*> ( diags[i] );
+            if( polarDia ){
+                polarDia->paint ( &ctx, true, zoomX, zoomY );
+                d->newZoomX = qMin(d->newZoomX, zoomX);
+                d->newZoomY = qMin(d->newZoomY, zoomY);
+            }
+        }
+        d->currentTransformation = 0;
+
+        // if re-scaling is needed start the timer and bail out
+        if( d->newZoomX != oldZoomX || d->newZoomY != oldZoomY ){
+            //qDebug()<<"new zoom:"<<d->newZoomY<<"  old zoom"<<oldZoomY;
+            QTimer::singleShot(10, this, SLOT(adjustZoomAndRepaint()));
+            return;
+        }
+
+        // 2. there was room enough for the labels, so we start drawing
+
         // paint the coordinate system rulers:
         d->currentTransformation = & ( d->coordinateTransformations.first() );
+
         d->grid->drawGrid( &ctx );
 
-        // paint the diagrams:
+        // paint the diagrams which will re-use their DataValueTextInfoList(s) filled in step 1:
         for ( int i = 0; i < diags.size(); i++ )
         {
             d->currentTransformation = & ( d->coordinateTransformations[i] );
             PainterSaver painterSaver( painter );
-            diags[i]->paint ( &ctx );
+            PolarDiagram* polarDia = dynamic_cast<PolarDiagram*> ( diags[i] );
+            if( polarDia ){
+                qreal dummy1, dummy2;
+                polarDia->paint ( &ctx, false, dummy1, dummy2 );
+            }else{
+                diags[i]->paint ( &ctx );
+            }
         }
         d->currentTransformation = 0;
     } // else: diagrams have not been set up yet
 }
+
+
+void PolarCoordinatePlane::adjustZoomAndRepaint()
+{
+    const qreal newZoom = qMin(d->newZoomX, d->newZoomY);
+    setZoomFactors(newZoom, newZoom);
+    update();
+}
+
 
 void PolarCoordinatePlane::resizeEvent ( QResizeEvent* )
 {
@@ -277,6 +325,12 @@ double PolarCoordinatePlane::zoomFactorY() const
     return d->coordinateTransformations.isEmpty()
         ? 1.0
         : d->coordinateTransformations.first().zoom.yFactor;
+}
+
+void PolarCoordinatePlane::setZoomFactors( double factorX, double factorY )
+{
+    setZoomFactorX( factorX );
+    setZoomFactorY( factorY );
 }
 
 void PolarCoordinatePlane::setZoomFactorX( double factor )

@@ -73,7 +73,7 @@ public:
    *
    * \note All of the font's attributes will be used - except of its size!
    * To specify the size please use setFontSize (or setMinimalFontSize, resp.)
-   * 
+   *
    * \param font The font to use.
    *
    * \sa setFontSize, setMinimalFontSize
@@ -116,7 +116,11 @@ public:
    * font size as it is used for rendering text, taking into account
    * any measures that were set via setFontSize and/or setMinimalFontSize.
    */
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
   const qreal calculatedFontSize(
+#else
+  qreal calculatedFontSize(
+#endif
         const QObject*                   autoReferenceArea,
         KDChartEnums::MeasureOrientation autoReferenceOrientation ) const;
 

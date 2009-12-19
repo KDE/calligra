@@ -32,6 +32,9 @@
 
 namespace KDChart {
 
+    class DataValueTextInfo;
+    typedef class QVector<DataValueTextInfo> DataValueTextInfoList;
+
 /**
   * @brief PieDiagram defines a common pie diagram
   */
@@ -51,6 +54,7 @@ protected:
     // Implement AbstractDiagram
     /** \reimpl */
     virtual void paint ( PaintContext* paintContext );
+    void paintInternal(PaintContext* paintContext, QRectF& textBoundingRect);
 
 public:
     /** \reimpl */
@@ -75,10 +79,12 @@ protected:
 private:
     QRectF piePosition( uint dataset, uint pie ) const;
     void drawOnePie( QPainter* painter,
+        DataValueTextInfoList* list,
         uint dataset, uint pie,
         qreal granularity,
         qreal threeDPieHeight );
     void drawPieSurface( QPainter* painter,
+        DataValueTextInfoList* list,
         uint dataset, uint pie,
         qreal granularity );
     void draw3DEffect( QPainter* painter,
@@ -112,4 +118,4 @@ private:
 }; // End of class KDChartPieDiagram
 
 }
-#endif // KDCHARTPIEDIAGRA_H
+#endif // KDCHARTPIEDIAGRAM_H

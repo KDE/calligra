@@ -60,19 +60,41 @@ public:
     virtual double valueTotals () const;
     /** \reimpl */
     virtual double numberOfValuesPerDataset() const;
+    virtual double numberOfDatasets() const;
     /** \reimpl */
     virtual double numberOfGridRings() const;
 
+    double valueTotals( int dataset ) const;
+
     virtual RingDiagram * clone() const;
+
+    /**
+     * Returns true if both diagrams have the same settings.
+     */
+    bool compare( const RingDiagram* other ) const;
 
     void setRelativeThickness( bool relativeThickness );
     bool relativeThickness() const;
+
+    virtual void setExpandWhenExploded( bool expand );
+    virtual bool expandWhenExploded() const;
+
 protected:
     /** \reimpl */
     virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const;
     void paintEvent( QPaintEvent* );
     void resizeEvent( QResizeEvent* );
 
+private:
+    //QRectF piePosition( uint dataset, uint pie ) const;
+    void drawOnePie( QPainter* painter,
+        uint dataset, uint pie,
+        qreal granularity );
+    void drawPieSurface( QPainter* painter,
+        uint dataset, uint pie,
+        qreal granularity );
+    QPointF pointOnCircle( const QRectF& rect, int dataset, int pie, bool outer, qreal angle, qreal totalGapFactor, qreal totalExplodeFactor );
+    //qreal radiusOf( const QRectF& rect, int dataset, int pie, bool outer );
 }; // End of class RingDiagram
 
 }

@@ -56,8 +56,13 @@ namespace KDChart {
          */
         bool compare( const AbstractCartesianDiagram* other )const;
 
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
         virtual const int numberOfAbscissaSegments () const = 0;
         virtual const int numberOfOrdinateSegments () const = 0;
+#else
+        virtual int numberOfAbscissaSegments () const = 0;
+        virtual int numberOfOrdinateSegments () const = 0;
+#endif
         /**
          * Add the axis to the diagram. The diagram takes ownership of the axis
          * and will delete it.
@@ -91,7 +96,7 @@ namespace KDChart {
         virtual void setCoordinatePlane( AbstractCoordinatePlane* plane );
 
         /**
-          * Makes this diagram use another diagram \a diagram as reference diagram with relative offset 
+          * Makes this diagram use another diagram \a diagram as reference diagram with relative offset
           * \a offset.
           * To share cartesian axes between different diagrams there might be cases when you need that.
           * Normally you don't.

@@ -21,11 +21,13 @@
  **
  **********************************************************************/
 
+#include "KDChartMeasure.h"
+
 #include <QWidget>
 
-#include "KDChartMeasure.h"
 #include <QtXml/QDomDocumentFragment>
 #include <KDChartAbstractArea.h>
+#include <KDChartCartesianCoordinatePlane.h>
 #include <KDChartTextAttributes.h>
 #include <KDChartFrameAttributes.h>
 #include <KDChartBackgroundAttributes.h>
@@ -144,26 +146,31 @@ qreal Measure::calculatedValue( const QObject* autoArea,
 const QSizeF Measure::sizeOfArea( const QObject* area ) const
 {
     QSizeF size;
-    const AbstractArea* kdcArea = dynamic_cast<const AbstractArea*>(area);
-    if( kdcArea ){
-        size = kdcArea->geometry().size();
-        //qDebug() << "Measure::sizeOfArea() found kdcArea with size" << size;
-    }else{
-        const QWidget* widget = dynamic_cast<const QWidget*>(area);
-        if( widget ){
-            /* ATTENTION: Using the layout does not work: The Legend will never get the right size then!
-            const QLayout * layout = widget->layout();
-            if( layout ){
-                size = layout->geometry().size();
-                //qDebug() << "Measure::sizeOfArea() found widget with layout size" << size;
-            }else*/
-            {
-                size = widget->geometry().size();
-                //qDebug() << "Measure::sizeOfArea() found widget with size" << size;
+    const CartesianCoordinatePlane* plane = dynamic_cast<const CartesianCoordinatePlane*>( area );
+    if ( false ) {
+        size = plane->visibleDiagramArea().size();
+    } else {
+        const AbstractArea* kdcArea = dynamic_cast<const AbstractArea*>(area);
+        if( kdcArea ){
+            size = kdcArea->geometry().size();
+            //qDebug() << "Measure::sizeOfArea() found kdcArea with size" << size;
+        }else{
+            const QWidget* widget = dynamic_cast<const QWidget*>(area);
+            if( widget ){
+                /* ATTENTION: Using the layout does not work: The Legend will never get the right size then!
+                const QLayout * layout = widget->layout();
+                if( layout ){
+                    size = layout->geometry().size();
+                    //qDebug() << "Measure::sizeOfArea() found widget with layout size" << size;
+                }else*/
+                {
+                    size = widget->geometry().size();
+                    //qDebug() << "Measure::sizeOfArea() found widget with size" << size;
+                }
+            }else if( mMode != KDChartEnums::MeasureCalculationModeAbsolute ){
+                size = QSizeF(1.0, 1.0);
+                //qDebug("Measure::sizeOfArea() got no valid area.");
             }
-        }else if( mMode != KDChartEnums::MeasureCalculationModeAbsolute ){
-            size = QSizeF(1.0, 1.0);
-            //qDebug("Measure::sizeOfArea() got no valid area.");
         }
     }
     const QPair< qreal, qreal > factors

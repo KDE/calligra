@@ -24,13 +24,14 @@
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
  **********************************************************************/
-#include <QDebug>
-#include <QPen>
-#include <QPointer>
 
 #include "KDChartAttributesModel.h"
 #include "KDChartPalette.h"
 #include "KDChartGlobal.h"
+
+#include <QDebug>
+#include <QPen>
+#include <QPointer>
 
 #include <KDChartTextAttributes>
 #include <KDChartFrameAttributes>
@@ -38,6 +39,7 @@
 #include <KDChartDataValueAttributes>
 #include <KDChartMarkerAttributes>
 #include <KDChartBarAttributes>
+#include <KDChartStockBarAttributes>
 #include <KDChartLineAttributes>
 #include <KDChartPieAttributes>
 #include <KDChartAbstractThreeDAttributes>
@@ -259,6 +261,9 @@ bool AttributesModel::compareAttributes(
             case BarAttributesRole:
                 return (qVariantValue<BarAttributes>( a ) ==
                         qVariantValue<BarAttributes>( b ));
+            case StockBarAttributesRole:
+                return (qVariantValue<StockBarAttributes>( a ) ==
+                        qVariantValue<StockBarAttributes>( b ));
             case ThreeDBarAttributesRole:
                 return (qVariantValue<ThreeDBarAttributes>( a ) ==
                         qVariantValue<ThreeDBarAttributes>( b ));
@@ -289,8 +294,11 @@ QVariant AttributesModel::headerData ( int section,
                                        Qt::Orientation orientation,
                                        int role/* = Qt::DisplayRole */ ) const
 {
-  QVariant sourceData = sourceModel()->headerData( section, orientation, role );
-  if ( sourceData.isValid() ) return sourceData;
+  if( sourceModel() ) {
+      QVariant sourceData = sourceModel()->headerData( section, orientation, role );
+      if ( sourceData.isValid() ) return sourceData;
+  }
+
   // the source model didn't have data set, let's use our stored values
   const QMap<int, QMap<int, QVariant> >& map = orientation == Qt::Horizontal ? mHorizontalHeaderDataMap : mVerticalHeaderDataMap;
   if ( map.contains( section ) ) {
@@ -420,6 +428,7 @@ bool AttributesModel::isKnownAttributesRole( int role ) const
     case LineAttributesRole:
     case ThreeDLineAttributesRole:
     case BarAttributesRole:
+    case StockBarAttributesRole:
     case ThreeDBarAttributesRole:
     case PieAttributesRole:
     case ThreeDPieAttributesRole:

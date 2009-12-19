@@ -25,14 +25,16 @@
 #include <QPainter>
 #include <QStack>
 
-#include "KDChartAttributesModel.h"
-#include "KDChartPaintContext.h"
 #include "KDChartPieDiagram.h"
 #include "KDChartPieDiagram_p.h"
+
+#include "KDChartAttributesModel.h"
+#include "KDChartPaintContext.h"
 #include "KDChartPieAttributes.h"
 #include "KDChartThreeDPieAttributes.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartDataValueAttributes.h"
+#include "KDChartNullPaintDevice.h"
 
 #include <KDABLibFakes>
 
@@ -167,13 +169,35 @@ void PieDiagram::paint( PaintContext* ctx )
 }
 */
 
+void PieDiagram::paint(PaintContext* ctx)
+{
+    // Painting is a two stage process
+    // In the first stage we figure out how much space is needed
+    // for text labels.
+    // In the second stage, we make use of that information and
+    // perform the actual painting.
+    QPainter* actualPainter = ctx->painter();
+    QRectF textBoundingRect;
 
-void PieDiagram::paint( PaintContext* ctx )
+    // Use a null paint device and perform the first painting.
+    KDChart::NullPaintDevice nullPd(ctx->rectangle().size().toSize());
+    QPainter nullPainter(&nullPd);
+    ctx->setPainter(&nullPainter);
+    paintInternal(ctx, textBoundingRect);
+
+    // Now perform the real painting
+    ctx->setPainter(actualPainter);
+    paintInternal(ctx, textBoundingRect);
+}
+
+void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
 {
     // note: Not having any data model assigned is no bug
     //       but we can not draw a diagram then either.
     if ( !checkInvariants(true) )
         return;
+
+    d->reverseMapper.clear();
 
     const PieAttributes attrs( pieAttributes() );
     const ThreeDPieAttributes threeDAttrs( threeDPieAttributes( model()->index( 0, 0, rootIndex() ) ) );
@@ -208,6 +232,35 @@ void PieDiagram::paint( PaintContext* ctx )
     }
     d->size /= ( 1.0 + 2.0 * maxExplode );
 
+    if(!textBoundingRect.isEmpty())
+    {
+        // Find out the maximum distance from every corner of the rectangle with
+        // the center.
+        double maxDistance = 0, dist = 0;
+
+        QPointF center = ctx->rectangle().center();
+
+        dist = qAbs(textBoundingRect.right() - center.x());
+        if(dist > maxDistance)
+            maxDistance = dist;
+
+        dist = qAbs(textBoundingRect.left() - center.x());
+        if(dist > maxDistance)
+            maxDistance = dist;
+
+        dist = qAbs(textBoundingRect.top() - center.y());
+        if(dist > maxDistance)
+            maxDistance = dist;
+
+        dist = qAbs(textBoundingRect.bottom() - center.y());
+        if(dist > maxDistance)
+            maxDistance = dist;
+
+        double size = d->size;
+        double diff = (2*maxDistance - d->size);
+        if(diff > 0)
+            d->size *= 1.0-(diff/size);
+    }
 
     qreal sizeFor3DEffect = 0.0;
     if ( ! threeDAttrs.isEnabled() ) {
@@ -288,7 +341,8 @@ void PieDiagram::paint( PaintContext* ctx )
     int currentRightPie = backmostpie;
 
     d->clearListOfAlreadyDrawnDataValueTexts();
-    drawOnePie( ctx->painter(), 0, backmostpie, granularity(), sizeFor3DEffect );
+
+    drawOnePie( ctx->painter(), &list, 0, backmostpie, granularity(), sizeFor3DEffect );
 
     if( backmostpie == frontmostpie )
     {
@@ -300,20 +354,20 @@ void PieDiagram::paint( PaintContext* ctx )
     while( currentLeftPie != frontmostpie )
     {
         if( currentLeftPie != backmostpie )
-            drawOnePie( ctx->painter(), 0, currentLeftPie, granularity(), sizeFor3DEffect );
+            drawOnePie( ctx->painter(), &list, 0, currentLeftPie, granularity(), sizeFor3DEffect );
         currentLeftPie = findLeftPie( currentLeftPie, colCount );
     }
     while( currentRightPie != frontmostpie )
     {
         if( currentRightPie != backmostpie )
-            drawOnePie( ctx->painter(), 0, currentRightPie, granularity(), sizeFor3DEffect );
+            drawOnePie( ctx->painter(), &list, 0, currentRightPie, granularity(), sizeFor3DEffect );
         currentRightPie = findRightPie( currentRightPie, colCount );
     }
 
     // if the backmost pie is not the frontmost pie, we draw the frontmost at last
     if( backmostpie != frontmostpie || ! threeDPieAttributes().isEnabled() )
     {
-        drawOnePie( ctx->painter(), 0, frontmostpie, granularity(), sizeFor3DEffect );
+        drawOnePie( ctx->painter(), &list, 0, frontmostpie, granularity(), sizeFor3DEffect );
     // otherwise, this gets a bit more complicated...
 /*    } else if( threeDPieAttributes().isEnabled() ) {
         //drawPieSurface( ctx->painter(), 0, frontmostpie, granularity() );
@@ -334,6 +388,8 @@ void PieDiagram::paint( PaintContext* ctx )
         drawArcEffectSegment( ctx->painter(), piePosition( 0, frontmostpie),
                 sizeFor3DEffect, startAngle, endAngle, granularity() );*/
     }
+
+    d->paintDataValueTextsAndMarkers(  this,  ctx,  list,  false, false, &textBoundingRect );
 }
 
 #if defined ( Q_WS_WIN)
@@ -359,8 +415,6 @@ QRectF PieDiagram::piePosition( uint dataset, uint pie ) const
         qreal explodeX = attrs.explodeFactor() * d->size * cosAngle;
         qreal explodeY = attrs.explodeFactor() * d->size * sinAngle;
         drawPosition.translate( explodeX, explodeY );
-    }else{
-        drawPosition = d->position;
     }
     return drawPosition;
  }
@@ -374,6 +428,7 @@ QRectF PieDiagram::piePosition( uint dataset, uint pie ) const
   \param threeDPieHeight the height of the three dimnensional effect
   */
 void PieDiagram::drawOnePie( QPainter* painter,
+        DataValueTextInfoList* list,
         uint dataset, uint pie,
         qreal granularity,
         qreal threeDPieHeight )
@@ -394,7 +449,7 @@ void PieDiagram::drawOnePie( QPainter* painter,
             threeDAttrs,
             attrs.explode() );
 
-        drawPieSurface( painter, dataset, pie, granularity );
+        drawPieSurface( painter, list, dataset, pie, granularity );
     }
 }
 
@@ -406,6 +461,7 @@ void PieDiagram::drawOnePie( QPainter* painter,
   \param pie the pie to draw
   */
 void PieDiagram::drawPieSurface( QPainter* painter,
+        DataValueTextInfoList* list,
         uint dataset, uint pie,
         qreal granularity )
 {
@@ -413,7 +469,7 @@ void PieDiagram::drawPieSurface( QPainter* painter,
     qreal angleLen = d->angleLens[ pie ];
     if ( angleLen ) {
         qreal startAngle = d->startAngles[ pie ];
-        
+
         QModelIndex index( model()->index( 0, pie, rootIndex() ) );
         const PieAttributes attrs( pieAttributes( index ) );
         const ThreeDPieAttributes threeDAttrs( threeDPieAttributes( index ) );
@@ -459,16 +515,48 @@ void PieDiagram::drawPieSurface( QPainter* painter,
             //find the value and paint it
             //fix value position
             const qreal sum = valueTotals();
+            d->reverseMapper.addPolygon( index.row(), index.column(), poly );
             painter->drawPolygon( poly );
 
-            QLineF centerLine(  drawPosition.center(),
-                            QPointF( (poly[ last - 2].x() + poly.first().x())/2,
-                                     ( poly.first().y() + poly[last-2].y() )/2 ) );
-            QPointF valuePos( ( centerLine.x1() + centerLine.x2() )/2,
-                                  ( centerLine.y1() + centerLine.y2() )/2 ) ;
+            // the new code is setting the needed position points according to the slice:
+            // all is calculated as if the slice were 'standing' on it's tip and the border
+            // were on top, so North is the middle of the curved outside line and South is the tip
+            //
+            const QPointF south = drawPosition.center();
+            const QPointF southEast = south;
+            const QPointF southWest = south;
+            const QPointF north = pointOnCircle( drawPosition, startAngle + angleLen/2.0 );
+            const QPointF northEast = pointOnCircle( drawPosition, startAngle );
+            const QPointF northWest = pointOnCircle( drawPosition, startAngle + angleLen );
+            const QPointF center    = (south + north) / 2.0;
+            const QPointF east      = (south + northEast) / 2.0;
+            const QPointF west      = (south + northWest) / 2.0;
+            PositionPoints points( center, northWest, north, northEast, east, southEast, south, southWest, west);
+            qreal topAngle = startAngle - 90;
+            if( topAngle < 0.0 )
+                topAngle += 360;
+            points.setDegrees(KDChartEnums::PositionEast,      topAngle);
+            points.setDegrees(KDChartEnums::PositionNorthEast, topAngle);
+            points.setDegrees(KDChartEnums::PositionWest,      topAngle + angleLen);
+            points.setDegrees(KDChartEnums::PositionNorthWest, topAngle + angleLen);
+            points.setDegrees(KDChartEnums::PositionCenter,    topAngle + angleLen/2.0);
+            points.setDegrees(KDChartEnums::PositionNorth,     topAngle + angleLen/2.0);
+            d->appendDataValueTextInfoToList(
+                    this, *list, index, 0,
+                    points, Position::Center, Position::Center,
+                    angleLen*sum / 360 );
 
-            paintDataValueText( painter, index, valuePos, angleLen*sum / 360  );
-
+            // The following, old code (since kdc 2.0.0) was not correct:
+            // Settings made for the position had been totally ignored,
+            // AND the center was NOT the center - except for pieces of 45 degrees size
+            //
+            // QLineF centerLine(  drawPosition.center(),
+            //                 QPointF( (poly[ last - 2].x() + poly.first().x())/2,
+            //                          ( poly.first().y() + poly[last-2].y() )/2 ) );
+            // QPointF valuePos( ( centerLine.x1() + centerLine.x2() )/2,
+            //                       ( centerLine.y1() + centerLine.y2() )/2 ) ;
+            //
+            // paintDataValueText( painter, index, valuePos, angleLen*sum / 360  );
         }
     }
 }
@@ -727,6 +815,7 @@ void PieDiagram::drawStraightEffectSegment( QPainter* painter,
     poly[1] = circlePoint;
     poly[2] = QPointF( circlePoint.x(), circlePoint.y() + threeDHeight );
     poly[3] = QPointF( center.x(), center.y() + threeDHeight );
+    // TODO: add polygon to ReverseMapper
     painter->drawPolygon( poly );
 //    if ( region )
 //        *region += QRegion( points );
@@ -772,7 +861,7 @@ void PieDiagram::drawArcEffectSegment( QPainter* painter,
     if( endA > 540 )
         drawArcEffectSegment( painter, rect, threeDHeight, 180, endA - 360, granularity );
     if( endA > 360 )
-        endA = qMin( endA, qreal(360.0) );
+        endA = qMin( endA, qreal( 360.0 ) );
 
     int numHalfPoints = static_cast<int>( trunc( ( endA - startA ) / granularity ) ) + 1;
 
@@ -804,6 +893,7 @@ void PieDiagram::drawArcEffectSegment( QPainter* painter,
         poly[ numHalfPoints * 2 - i - 1 ] = pointOnFirstArc;
     }
 
+    // TODO: Add polygon to ReverseMapper
     painter->drawPolygon( poly );
 //    if ( region )
 //        *region += QRegion( collect );

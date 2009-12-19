@@ -60,12 +60,14 @@ namespace KDChart {
 
         typedef QPair< qreal, qreal > qrealPair;
 
-        inline const qreal makeLogarithmic( qrealPair reference, qreal value ) const
+        inline qreal makeLogarithmic( qrealPair reference, qreal value ) const
         {
             qreal result = value;
 
             qreal relation;
-            if( reference.second == 1.0 )
+            if( reference.second == -1.0 )
+                relation = 1.0;
+            else if( reference.second == 1.0 )
                 relation = 1.0;
             else if( reference.second > 0.0 )
                 relation = reference.second / log10( reference.second );
@@ -83,22 +85,30 @@ namespace KDChart {
 
             if( value == 0.0 )
                 return result;
-            
-            result -= log10( reference.first ) * relation;
-            result *= ( reference.second - reference.first ) / relation / (log10(reference.second)-log10(reference.first));
-            result += reference.first;
 
+            result -= log10( qAbs( reference.first ) ) * relation;
+            result *= ( reference.second - reference.first ) / relation / (log10(qAbs(reference.second))-log10(qAbs(reference.first)));
+            result += reference.first;
+           
+            if( reference.first < 0.0 )
+            {
+                result += reference.first;
+                result -= reference.second;
+                result = reference.first - result + reference.second;
+
+            }
+           
             return result;
         }
 
-        inline const QPointF translate( const QPointF& diagramPoint ) const
+        inline QPointF translate( const QPointF& diagramPoint ) const
         {
             // ### de-inline me
             QPointF result = originTranslation;
             QPointF tempPoint = diagramPoint;
 
             const QRectF& diagRect = diagramRect;
-
+            
             if( axesCalcModeY == CartesianCoordinatePlane::Logarithmic )
             {
                 tempPoint.setY( makeLogarithmic( qrealPair( diagRect.bottom(), diagRect.y() ), tempPoint.y() ) );

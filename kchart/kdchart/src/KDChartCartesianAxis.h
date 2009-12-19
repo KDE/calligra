@@ -103,7 +103,11 @@ namespace KDChart {
         bool hasDefaultTitleTextAttributes() const;
 
         virtual void setPosition ( Position p );
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
         virtual const Position position () const;
+#else
+        virtual Position position () const;
+#endif
 
         virtual void layoutPlanes();
 
@@ -137,6 +141,10 @@ namespace KDChart {
         virtual void setGeometry( const QRect& r );
         /** pure virtual in QLayoutItem */
         virtual QRect geometry() const;
+
+    public Q_SLOTS:
+        void setCachedSizeDirty() const;
+
 
         int tickLength( bool subUnitTicks = false ) const;
     };

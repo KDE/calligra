@@ -31,6 +31,7 @@
 
 #include <KDABLibFakes>
 
+#include <limits>
 
 using namespace KDChart;
 
@@ -181,7 +182,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
             context->painter()->drawLine( topPoint, bottomPoint );
             if ( isLogarithmicX ){
                 if( logSubstep == 9 ){
-                    fLogSubstep *= 10.0;
+                    fLogSubstep *= ( fLogSubstep > 0.0 ) ? 10.0 : 0.1;
                     if( fLogSubstep == 0.0 )
                         fLogSubstep = pow( 10.0, floor( log10( dimX.start ) ) );
 
@@ -214,7 +215,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
             context->painter()->drawLine( leftPoint, rightPoint );
             if ( isLogarithmicY ){
                 if( logSubstep == 9 ){
-                    fLogSubstep *= 10.0;
+                    fLogSubstep *= ( fLogSubstep > 0.0 ) ? 10.0 : 0.1;
                     if( fLogSubstep == 0.0 )
                         fLogSubstep = pow( 10.0, floor( log10( dimY.start ) ) );
 
@@ -263,7 +264,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
                     context->painter()->setPen( PrintingParameters::scalePen( gridAttrsX.gridPen() ) );
             }
             if ( isLogarithmicX ) {
-                f *= 10.0;
+                f *= ( f > 0.0 ) ? 10.0 : 0.1;
                 if( f == 0.0 )
                     f = pow( 10.0, floor( log10( dimX.start ) ) );
             }
@@ -302,7 +303,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
                     context->painter()->setPen( PrintingParameters::scalePen( gridAttrsY.gridPen() ) );
             }
             if ( isLogarithmicY ) {
-                f *= 10.0;
+                f *= ( f > 0.0 ) ? 10.0 : 0.1;
                 if( f == 0.0 )
                     f = pow( 10.0, floor( log10( dimY.start ) ) );
             }
@@ -475,29 +476,64 @@ DataDimension CartesianGrid::calculateGridXY(
                     adjustLower, adjustUpper );
             //qDebug() << "CartesianGrid::calculateGridXY() returns linear range: min " << dim.start << " and max" << dim.end;
         }else{
+            // logarithmic calculation with negative values
+            if( dim.end <= 0 )
+            {
+                qreal min;
+                const qreal minRaw = qMin( dim.start, dim.end );
+                const int minLog = -static_cast<int>(trunc( log10( -minRaw ) ) );
+                if( minLog >= 0 )
+                    min = qMin( minRaw, -std::numeric_limits< qreal >::epsilon() );
+                else
+                    min = -fastPow10( -(minLog-1) );
+            
+                qreal max;
+                const qreal maxRaw = qMin( -std::numeric_limits< qreal >::epsilon(), qMax( dim.start, dim.end ) );
+                const int maxLog = -static_cast<int>(ceil( log10( -maxRaw ) ) );
+                if( maxLog >= 0 )
+                    max = -1;
+                else if( fastPow10( -maxLog ) < maxRaw )
+                    max = -fastPow10( -(maxLog+1) );
+                else
+                    max = -fastPow10( -maxLog );
+                if( adjustLower )
+                    dim.start = min;
+                if( adjustUpper )
+                    dim.end   = max;
+                dim.stepWidth = -pow( 10.0, ceil( log10( qAbs( max - min ) / 10.0 ) ) );
+            }
             // logarithmic calculation (ignoring all negative values)
-            qreal min;
-            const qreal minRaw = qMax( qMin( dim.start, dim.end ), qreal(0.0) );
-            const int minLog = static_cast<int>(trunc( log10( minRaw ) ) );
-            if( minLog <= 0 )
-                min = 1;
             else
-                min = fastPow10( minLog-1 );
+            {
+                qreal min;
+                const qreal minRaw = qMax( qMin( dim.start, dim.end ), qreal( 0.0 ) );
+                const int minLog = static_cast<int>(trunc( log10( minRaw ) ) );
+                if( minLog <= 0 && dim.end < 1.0 )
+                    min = qMax( minRaw, std::numeric_limits< qreal >::epsilon() );
+                else if( minLog <= 0 )
+                    min = qMax( 0.00001, dim.start );
+                else
+                    min = fastPow10( minLog-1 );
 
-            qreal max;
-            const qreal maxRaw = qMax( qMax( dim.start, dim.end ), qreal(0.0) );
-            const int maxLog = static_cast<int>(ceil( log10( maxRaw ) ) );
-            if( maxLog <= 0 )
-                max = 1;
-            else if( fastPow10( maxLog ) < maxRaw )
-                max = fastPow10( maxLog+1 );
-            else
-                max = fastPow10( maxLog );
-            if( adjustLower )
-                dim.start = min;
-            if( adjustUpper )
-                dim.end   = max;
-            dim.stepWidth = pow( 10.0, ceil( log10( qAbs( max - min ) / 10.0 ) ) );
+                // Uh oh. Logarithmic scaling doesn't work with a lower or upper
+                // bound being 0.
+                const bool zeroBound = dim.start == 0.0 || dim.end == 0.0;
+
+                qreal max;
+                const qreal maxRaw = qMax( qMax( dim.start, dim.end ), qreal( 0.0 ) );
+                const int maxLog = static_cast<int>(ceil( log10( maxRaw ) ) );
+                if( maxLog <= 0 )
+                    max = 1;
+                else if( fastPow10( maxLog ) < maxRaw )
+                    max = fastPow10( maxLog+1 );
+                else
+                    max = fastPow10( maxLog );
+                if( adjustLower || zeroBound )
+                    dim.start = min;
+                if( adjustUpper || zeroBound )
+                    dim.end   = max;
+                dim.stepWidth = pow( 10.0, ceil( log10( qAbs( max - min ) / 10.0 ) ) );
+            }
         }
     }else{
         //qDebug() << "CartesianGrid::calculateGridXY() returns stepWidth 1.0  !!";

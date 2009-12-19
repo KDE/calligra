@@ -36,6 +36,7 @@
 #include <QPointer>
 #include <QModelIndex>
 
+#include "KDChartDataValueAttributes.h"
 #include "KDChartModelDataCache_p.h"
 
 #include "kdchart_export.h"
@@ -97,7 +98,19 @@ namespace KDChart {
                 return first == rhs.first &&
                        second == rhs.second;
             }
+            bool operator<( const CachePosition& rhs ) const
+            {
+                // This function is used to topologically sort all cache positions.
+
+                // Think of them as entries in a matrix or table:
+                // An entry comes before another entry if it is either above the other
+                // entry, or in the same row and to the left of the other entry.
+                return first < rhs.first || first == rhs.first && second < rhs.second;
+            }
         };
+
+        typedef QMap<QModelIndex, DataValueAttributes > DataValueAttributesList;
+        typedef QMap<CartesianDiagramDataCompressor::CachePosition, DataValueAttributesList > DataValueAttributesCache;
 
         enum ApproximationMode {
             // do not approximate, interpolate by averaging all
@@ -121,6 +134,12 @@ namespace KDChart {
         int modelDataColumns() const;
         int modelDataRows() const;
         const DataPoint& data( const CachePosition& ) const;
+
+        QModelIndexList indexesAt( const CachePosition& position ) const;
+        DataValueAttributesList aggregatedAttrs(
+                AbstractDiagram * diagram,
+                const QModelIndex & index,
+                const CachePosition& position ) const;
 
     private Q_SLOTS:
         void slotRowsAboutToBeInserted( const QModelIndex&, int, int );
@@ -172,6 +191,7 @@ namespace KDChart {
         unsigned int m_sampleStep;
         QModelIndex m_rootIndex;
         ModelDataCache< double > m_modelCache;
+        mutable DataValueAttributesCache m_dataValueAttributesCache;
         int m_datasetDimension;
     };
 }

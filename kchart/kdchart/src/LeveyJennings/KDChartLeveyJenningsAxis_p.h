@@ -21,7 +21,7 @@
  **
  **********************************************************************/
 
-#ifndef KDCHARTLEVEYJENNINGLAXIS_P_H
+#ifndef KDCHARTLEVEYJENNINGSAXIS_P_H
 #define KDCHARTLEVEYJENNINGSAXIS_P_H
 
 //
@@ -59,6 +59,7 @@ public:
 
 private:
     LeveyJenningsGridAttributes::GridType type;
+    Qt::DateFormat format;
 };
 
 inline LeveyJenningsAxis::LeveyJenningsAxis( Private * p, AbstractDiagram* diagram )

@@ -128,6 +128,8 @@ public:
 
     GridAttributes gridAttributesCircular;
     GridAttributes gridAttributesSagittal;
+
+    qreal newZoomX, newZoomY;
 };
 
 

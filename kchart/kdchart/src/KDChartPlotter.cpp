@@ -22,12 +22,12 @@
  **********************************************************************/
 
 #include "KDChartPlotter.h"
+#include "KDChartPlotter_p.h"
 
 #include "KDChartAbstractGrid.h"
 
 #include <KDABLibFakes>
 
-#include "KDChartPlotter_p.h"
 #include "KDChartNormalPlotter_p.h"
 #include "KDChartPercentPlotter_p.h"
 
@@ -90,9 +90,9 @@ bool Plotter::compare( const Plotter* other )const
   */
 void Plotter::setType( const PlotType type )
 {
-    if( d->implementor->type() == type ) 
+    if( d->implementor->type() == type )
         return;
-    if( datasetDimension() != 2 ) 
+    if( datasetDimension() != 2 )
     {
        Q_ASSERT_X ( false, "setType()",
                     "This line chart type can only be used with two-dimensional data." );
@@ -263,7 +263,7 @@ void Plotter::setThreeDLineAttributes(
    emit propertiesChanged();
 }
 
-/** 
+/**
   * @return the global 3D line attributes
   */
 ThreeDLineAttributes Plotter::threeDLineAttributes() const
@@ -340,7 +340,7 @@ void Plotter::resizeEvent ( QResizeEvent* )
 
 const QPair< QPointF, QPointF > Plotter::calculateDataBoundaries() const
 {
-    if ( !checkInvariants( true ) ) 
+    if ( !checkInvariants( true ) )
         return QPair< QPointF, QPointF >( QPointF( 0, 0 ), QPointF( 0, 0 ) );
 
     // note: calculateDataBoundaries() is ignoring the hidden flags.
@@ -366,14 +366,18 @@ void Plotter::paint( PaintContext* ctx )
     // note: Not having any data model assigned is no bug
     //       but we can not draw a diagram then either.
     if ( !checkInvariants( true ) ) return;
+
+    AbstractCoordinatePlane* const plane = ctx->coordinatePlane();
+    if( ! plane ) return;
+    d->setCompressorResolution( size(), plane );
+
     if ( !AbstractGrid::isBoundariesValid(dataBoundaries()) ) return;
+
     const PainterSaver p( ctx->painter() );
     if( model()->rowCount( rootIndex() ) == 0 || model()->columnCount( rootIndex() ) == 0 )
         return; // nothing to paint for us
 
-    AbstractCoordinatePlane* const plane = ctx->coordinatePlane();
     ctx->setCoordinatePlane( plane->sharedAxisMasterPlane( ctx->painter() ) );
-
 
     // paint different line types Normal - Stacked - Percent - Default Normal
     d->implementor->paint( ctx );
@@ -383,17 +387,22 @@ void Plotter::paint( PaintContext* ctx )
 
 void Plotter::resize ( const QSizeF& size )
 {
-    d->compressor.setResolution( static_cast<int>( size.width() ),
-                                 static_cast<int>( size.height() ) );
+    d->setCompressorResolution( size, coordinatePlane() );
     setDataBoundariesDirty();
 }
 
-const int Plotter::numberOfAbscissaSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int Plotter::numberOfAbscissaSegments () const
 {
     return d->attributesModel->rowCount( attributesModelRootIndex() );
 }
 
-const int Plotter::numberOfOrdinateSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int Plotter::numberOfOrdinateSegments () const
 {
     return d->attributesModel->columnCount( attributesModelRootIndex() );
 }

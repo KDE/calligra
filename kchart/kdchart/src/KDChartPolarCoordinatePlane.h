@@ -68,6 +68,7 @@ namespace KDChart {
         virtual double zoomFactorX() const;
         virtual double zoomFactorY() const;
 
+        virtual void setZoomFactors( double factorX, double factorY );
         virtual void setZoomFactorX( double factor );
         virtual void setZoomFactorY( double factor );
 
@@ -153,6 +154,7 @@ namespace KDChart {
         void layoutDiagrams();
     protected Q_SLOTS:
         void slotLayoutChanged( AbstractDiagram* diagram );
+        void adjustZoomAndRepaint();
 
     private:
         void setHasOwnGridAttributes(

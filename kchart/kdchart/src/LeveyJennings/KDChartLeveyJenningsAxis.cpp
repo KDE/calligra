@@ -21,13 +21,14 @@
  **
  **********************************************************************/
 
+#include "KDChartLeveyJenningsAxis.h"
+#include "KDChartLeveyJenningsAxis_p.h"
+
 #include <QDateTime>
 #include <QPainter>
 
 #include "KDChartPaintContext.h"
 #include "KDChartChart.h"
-#include "KDChartLeveyJenningsAxis.h"
-#include "KDChartLeveyJenningsAxis_p.h"
 #include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartAbstractGrid.h"
 #include "KDChartPainterSaver_p.h"
@@ -65,6 +66,7 @@ LeveyJenningsAxis::~LeveyJenningsAxis ()
 void LeveyJenningsAxis::init ()
 {
     setType( LeveyJenningsGridAttributes::Expected );
+    setDateFormat( Qt::TextDate );
     const QStringList labels = QStringList() << tr( "-3sd" ) << tr( "-2sd" ) << tr( "mean" )
                                              << tr( "+2sd" ) << tr( "+3sd" );
 
@@ -105,6 +107,16 @@ void LeveyJenningsAxis::setType( LeveyJenningsGridAttributes::GridType type )
         setTextAttributes( ta );
     }
     d->type = type;
+}
+
+Qt::DateFormat LeveyJenningsAxis::dateFormat() const
+{
+    return d->format;
+}
+
+void LeveyJenningsAxis::setDateFormat(Qt::DateFormat format)
+{
+    d->format = format;
 }
 
 bool LeveyJenningsAxis::compare( const LeveyJenningsAxis* other )const
@@ -228,24 +240,39 @@ void LeveyJenningsAxis::paintAsAbscissa( PaintContext* context )
     painter->setClipping( false );
      
 
-    TextLayoutItem labelItem( range.first.date().toString(), 
+    TextLayoutItem labelItem( range.first.date().toString( dateFormat() ), 
                               labelTA,
                               referenceArea,
                               KDChartEnums::MeasureOrientationMinimum,
                               Qt::AlignLeft );
+    QSize origSize = labelItem.sizeHint();
+    if( range.first.secsTo( range.second ) < 86400 )
+        labelItem = TextLayoutItem( range.first.toString( dateFormat() ), 
+                                  labelTA,
+                                  referenceArea,
+                                  KDChartEnums::MeasureOrientationMinimum,
+                                  Qt::AlignLeft );
     QSize size = labelItem.sizeHint();
+
     float yPos = position() == Bottom ? geometry().bottom() - size.height() : geometry().top();
-    labelItem.setGeometry( QRectF( QPointF( geometry().left() - size.width() / 2.0, yPos ), size ).toRect() );
+    labelItem.setGeometry( QRectF( QPointF( geometry().left() - origSize.width() / 2.0, yPos ), size ).toRect() );
     labelItem.paint( painter );
 
     
-    TextLayoutItem labelItem2( range.second.date().toString(), 
+    TextLayoutItem labelItem2( range.second.date().toString( dateFormat() ), 
                               labelTA,
                               referenceArea,
                               KDChartEnums::MeasureOrientationMinimum,
                               Qt::AlignLeft );
+    origSize = labelItem2.sizeHint();
+    if( range.first.secsTo( range.second ) < 86400 )
+        labelItem2 = TextLayoutItem( range.second.toString( dateFormat() ), 
+                                     labelTA,
+                                     referenceArea,
+                                     KDChartEnums::MeasureOrientationMinimum,
+                                     Qt::AlignLeft );
     size = labelItem2.sizeHint();
     yPos = position() == Bottom ? geometry().bottom() - size.height() : geometry().top();
-    labelItem2.setGeometry( QRectF( QPointF( geometry().right() - size.width() / 2.0, yPos ), size ).toRect() );
+    labelItem2.setGeometry( QRectF( QPointF( geometry().right() - size.width() + origSize.width() / 2.0, yPos ), size ).toRect() );
     labelItem2.paint( painter );
 }

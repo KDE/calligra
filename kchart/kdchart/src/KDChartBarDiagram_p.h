@@ -34,6 +34,9 @@
 //
 // We mean it.
 //
+
+#include "KDChartBarDiagram.h"
+
 #include <QPainterPath>
 
 #include "KDChartAbstractCartesianDiagram_p.h"

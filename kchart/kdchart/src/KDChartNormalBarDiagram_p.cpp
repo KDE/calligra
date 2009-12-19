@@ -25,15 +25,17 @@
  **
  **********************************************************************/
 
+#include "KDChartNormalBarDiagram_p.h"
+
 #include <QModelIndex>
 
 #include "KDChartBarDiagram.h"
 #include "KDChartTextAttributes.h"
 #include "KDChartAttributesModel.h"
 #include "KDChartAbstractCartesianDiagram.h"
-#include "KDChartNormalBarDiagram_p.h"
 
 using namespace KDChart;
+using namespace std;
 
 NormalBarDiagram::NormalBarDiagram( BarDiagram* d )
     : BarDiagramType( d )
@@ -173,7 +175,7 @@ void NormalBarDiagram::paint(  PaintContext* ctx )
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
             const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
             const qreal value = point.value;//attributesModel()->data( sourceIndex ).toDouble();
-            if ( !ISNAN( value ) ) {
+            if ( ! point.hidden && !ISNAN( value ) ) {
                 QPointF topPoint = ctx->coordinatePlane()->translate( QPointF( point.key + 0.5, value ) );
                 QPointF bottomPoint =  ctx->coordinatePlane()->translate( QPointF( point.key, 0 ) );
                 const double barHeight = bottomPoint.y() - topPoint.y();

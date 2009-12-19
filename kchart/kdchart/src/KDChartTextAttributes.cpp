@@ -92,18 +92,23 @@ TextAttributes::~TextAttributes()
 
 bool TextAttributes::operator==( const TextAttributes& r ) const
 {
+    // the following works around a bug in gcc 4.3.2
+    // causing StyleHint to be set to Zero when copying a QFont
+    const QFont myFont( font() );
+    QFont r_font( r.font() );
+    r_font.setStyleHint( myFont.styleHint(), myFont.styleStrategy() );
     /*
-    qDebug() << "\n" << "TextAttributes::operator== :" << ( isVisible() == r.isVisible())
-            << (font() == r.font())
-            << (fontSize() == r.fontSize())
-            << (minimalFontSize() == r.minimalFontSize())
+    qDebug() << "\nTextAttributes::operator== :" << ( isVisible() == r.isVisible())
+            << " font:"<<(myFont == r_font)
+            << " fontSize:"<<(fontSize() == r.fontSize())
+            << " minimalFontSize:"<<(minimalFontSize() == r.minimalFontSize())
             << (autoRotate() == r.autoRotate())
             << (autoShrink() == r.autoShrink())
             << (rotation() == rotation())
             << (pen() == r.pen());
     */
     return ( isVisible() == r.isVisible() &&
-            font() == r.font() &&
+            myFont == r_font &&
             fontSize() == r.fontSize() &&
             minimalFontSize() == r.minimalFontSize() &&
             autoRotate() == r.autoRotate() &&
@@ -163,7 +168,10 @@ bool TextAttributes::hasAbsoluteFontSize() const
 }
 
 
-const qreal TextAttributes::calculatedFontSize(
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+qreal TextAttributes::calculatedFontSize(
         const QObject*                   autoReferenceArea,
         KDChartEnums::MeasureOrientation autoReferenceOrientation ) const
 {

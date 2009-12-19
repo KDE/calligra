@@ -25,6 +25,8 @@
  **
  **********************************************************************/
 
+#include "KDChartPercentLineDiagram_p.h"
+
 #include <QModelIndex>
 
 #include "KDChartBarDiagram.h"
@@ -32,9 +34,9 @@
 #include "KDChartTextAttributes.h"
 #include "KDChartAttributesModel.h"
 #include "KDChartAbstractCartesianDiagram.h"
-#include "KDChartPercentLineDiagram_p.h"
 
 using namespace KDChart;
+using namespace std;
 
 PercentLineDiagram::PercentLineDiagram( LineDiagram* d )
     : LineDiagramType( d )
@@ -51,7 +53,7 @@ const QPair<QPointF, QPointF> PercentLineDiagram::calculateDataBoundaries() cons
     const double xMin = 0.0;
     double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) : 0;
     if ( !diagram()->centerDataPoints() && diagram()->model() )
-       xMax -= 1;
+        xMax -= 1;
     const double yMin = 0.0;
     const double yMax = 100.0;
 
@@ -70,8 +72,8 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
 
     const int columnCount = compressor().modelDataColumns();
     const int rowCount = compressor().modelDataRows();
-   
-// FIXME integrade column index retrieval to compressor: 
+
+// FIXME integrade column index retrieval to compressor:
     int maxFound = 0;
 //    {   // find the last column number that is not hidden
 //        for( int iColumn =  datasetDimension() - 1;
@@ -108,14 +110,14 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
                 point.value = interpolateMissingValue( position );
             if ( point.value > 0 )
                 sumValues += point.value;
-            if ( col == lastVisibleColumn ) 
+            if ( col == lastVisibleColumn )
             {
                 percentSumValues << sumValues ;
                 sumValues = 0;
             }
         }
     }
-    
+
     QList<QPointF> bottomPoints;
     bool bFirstDataset = true;
 
@@ -127,7 +129,7 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
         QList<QPolygonF> areas;
         QList<QPointF> points;
 
-        for( int row = 0; row < rowCount; ++row ) 
+        for( int row = 0; row < rowCount; ++row )
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
@@ -155,7 +157,7 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
                 if ( row + 1 < rowCount ){
                     const CartesianDiagramDataCompressor::CachePosition position( row + 1, column2 );
                     CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-                
+
                     const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
                     const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
                     if( ISNAN( point.value ) && policy == LineAttributes::MissingValuesAreBridged )
@@ -222,8 +224,8 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
             if( !ISNAN( point.value ) )
             {
                 const PositionPoints pts( ptNorthWest, ptNorthEast, ptSouthEast, ptSouthWest );
-                appendDataValueTextInfoToList( diagram(), list, sourceIndex, pts,
-                                               Position::NorthWest, Position::SouthWest,
+                appendDataValueTextInfoToList( diagram(), list, sourceIndex, &position,
+                                               pts, Position::NorthWest, Position::SouthWest,
                                                point.value );
             }
         }

@@ -43,12 +43,12 @@ DatasetSelectorWidget::DatasetSelectorWidget ( QWidget* parent )
     setMinimumSize ( minimumSizeHint() );
 }
 
-void DatasetSelectorWidget::on_sbStartColumn_valueChanged ( int )
+void DatasetSelectorWidget::on_sbStartColumn_valueChanged ( const int )
 {
     calculateMapping();
 }
 
-void DatasetSelectorWidget::on_sbStartRow_valueChanged( int )
+void DatasetSelectorWidget::on_sbStartRow_valueChanged( const int )
 {
     calculateMapping();
 }

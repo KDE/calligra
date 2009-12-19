@@ -21,14 +21,14 @@
  **
  **********************************************************************/
 
+#include "KDChartAbstractCoordinatePlane.h"
+#include "KDChartAbstractCoordinatePlane_p.h"
 
 #include <QGridLayout>
 #include <QRubberBand>
 #include <QMouseEvent>
 
 #include "KDChartChart.h"
-#include "KDChartAbstractCoordinatePlane.h"
-#include "KDChartAbstractCoordinatePlane_p.h"
 #include "KDChartGridAttributes.h"
 
 #include <KDABLibFakes>
@@ -90,8 +90,11 @@ void AbstractCoordinatePlane::replaceDiagram ( AbstractDiagram* diagram, Abstrac
     if( diagram && oldDiagram_ != diagram ){
         AbstractDiagram* oldDiagram = oldDiagram_;
         if( d->diagrams.count() ){
-            if( ! oldDiagram )
+            if( ! oldDiagram ){
                 oldDiagram = d->diagrams.first();
+                if( oldDiagram == diagram )
+                    return;
+            }
             takeDiagram( oldDiagram );
         }
         delete oldDiagram;
@@ -411,7 +414,10 @@ void KDChart::AbstractCoordinatePlane::mouseMoveEvent( QMouseEvent* event )
     }
 }
 
-const bool KDChart::AbstractCoordinatePlane::isVisiblePoint( const QPointF& point ) const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+bool KDChart::AbstractCoordinatePlane::isVisiblePoint( const QPointF& point ) const
 {
     return d->isVisiblePoint( this, point );
 }

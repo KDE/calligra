@@ -31,6 +31,7 @@
 
 #include "kdchart_export.h"
 
+#ifndef KDAB_SET_OBJECT_NAME
 template <typename T>
 inline T & __kdab__dereference_for_methodcall( T & o ) {
     return o;
@@ -42,6 +43,7 @@ inline T & __kdab__dereference_for_methodcall( T * o ) {
 }
 
 #define KDAB_SET_OBJECT_NAME( x ) __kdab__dereference_for_methodcall( x ).setObjectName( QLatin1String( #x ) )
+#endif
 
 /* vc.net2002 is 1300, vc.net2003 is 1310 */
 #if defined(_MSC_VER) && _MSC_VER <= 1300
@@ -248,6 +250,7 @@ enum DisplayRoles {
   LineAttributesRole,
   ThreeDLineAttributesRole,
   BarAttributesRole,
+  StockBarAttributesRole,
   ThreeDBarAttributesRole,
   PieAttributesRole,
   ThreeDPieAttributesRole,

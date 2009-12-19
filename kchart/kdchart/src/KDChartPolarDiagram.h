@@ -95,6 +95,10 @@ public:
 
     bool showLabelsAtPosition( Position position ) const;
 
+    virtual void paint ( PaintContext* paintContext,
+                         bool calculateListAndReturnScale,
+                         qreal& newZoomX, qreal& newZoomY );
+
 protected:
     /** \reimpl */
     virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const;

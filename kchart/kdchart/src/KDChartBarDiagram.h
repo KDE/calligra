@@ -93,11 +93,19 @@ public:
     ThreeDBarAttributes threeDBarAttributes( int column ) const;
     ThreeDBarAttributes threeDBarAttributes( const QModelIndex & index ) const;
 
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
     // implement AbstractCartesianDiagram
     /** \reimpl */
     const int numberOfAbscissaSegments () const;
     /** \reimpl */
     const int numberOfOrdinateSegments () const;
+#else
+    // implement AbstractCartesianDiagram
+    /** \reimpl */
+    int numberOfAbscissaSegments () const;
+    /** \reimpl */
+    int numberOfOrdinateSegments () const;
+#endif
 
 protected:
     void paint ( PaintContext* paintContext );

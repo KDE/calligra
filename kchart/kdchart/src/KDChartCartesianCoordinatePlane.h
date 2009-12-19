@@ -69,6 +69,10 @@ namespace KDChart {
         virtual double zoomFactorY() const;
 
         /**
+         * \sa setZoomFactorX,setZoomFactorY
+         */
+        virtual void setZoomFactors( double factorX, double factorY );
+        /**
          * \sa zoomFactorX, setZoomCenter
          */
         virtual void setZoomFactorX( double factor );
@@ -87,6 +91,15 @@ namespace KDChart {
          */
         virtual void setZoomCenter( const QPointF& center );
 
+        /**
+         * Allows to specify a fixed data-space / coordinate-space relation. If set
+         * to true then fixed bar widths are used, so you see more bars as the window
+         * is made wider.
+         *
+         * This allows to completely restrict the size of bars in a graph such that,
+         * upon resizing a window, the graphs coordinate plane will grow (add more
+         * ticks to x- and y-coordinates) rather than have the image grow.
+         */
         void setFixedDataCoordinateSpaceRelation( bool fixed );
         bool hasFixedDataCoordinateSpaceRelation() const;
 
@@ -324,7 +337,11 @@ namespace KDChart {
          *
          * \sa setAutoAdjustGridToZoom
          */
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
         const bool autoAdjustGridToZoom() const;
+#else
+        bool autoAdjustGridToZoom() const;
+#endif
 
         AxesCalcMode axesCalcModeY() const;
         AxesCalcMode axesCalcModeX() const;
@@ -347,6 +364,28 @@ namespace KDChart {
          * range of the grid.
          */
         QRectF visibleDataRange() const;
+
+        /**
+         * Returns the logical area, i.e., the rectangle defined by the very top
+         * left and very bottom right coordinate.
+         */
+        QRectF logicalArea() const;
+
+        /**
+         * Returns the (physical) area occupied by the diagram. Unless zoom is applied
+         * (which is also true when a fixed data coordinate / space relation is used),
+         * \code diagramArea() == drawingArea() \endcode .
+         * \sa setFixedDataCoordinateSpaceRelation
+         * \sa drawingArea
+         */
+        QRectF diagramArea() const;
+
+        /**
+         * Returns the visible part of the diagram area, i.e.
+         * \code diagramArea().intersected( drawingArea() ) \endcode
+         * \sa diagramArea
+         */
+        QRectF visibleDiagramArea() const;
 
         /**
          * Sets whether the horizontal range should be reversed or not, i.e.

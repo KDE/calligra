@@ -35,6 +35,8 @@
 // We mean it.
 //
 
+#include "KDChartPlotter.h"
+
 #include <QPainterPath>
 
 #include "KDChartThreeDLineAttributes.h"
@@ -61,6 +63,9 @@ namespace KDChart {
         Private( const Private& rhs );
         ~Private();
 
+        void setCompressorResolution(
+            const QSizeF& size,
+            const AbstractCoordinatePlane* plane );
         void paintPolyline(
             PaintContext* ctx,
             const QBrush& brush, const QPen& pen,

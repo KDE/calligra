@@ -21,14 +21,9 @@
  **
  **********************************************************************/
 
-#include <QDebug>
-#include <QPainter>
-#include <QString>
-#include <QPainterPath>
-#include <QPen>
-#include <QVector>
-
 #include "KDChartLineDiagram.h"
+#include "KDChartLineDiagram_p.h"
+
 #include "KDChartBarDiagram.h"
 #include "KDChartPalette.h"
 #include "KDChartPosition.h"
@@ -39,10 +34,16 @@
 
 #include <KDABLibFakes>
 
-#include "KDChartLineDiagram_p.h"
 #include "KDChartNormalLineDiagram_p.h"
 #include "KDChartStackedLineDiagram_p.h"
 #include "KDChartPercentLineDiagram_p.h"
+
+#include <QDebug>
+#include <QPainter>
+#include <QString>
+#include <QPainterPath>
+#include <QPen>
+#include <QVector>
 
 using namespace KDChart;
 
@@ -101,7 +102,8 @@ bool LineDiagram::compare( const LineDiagram* other )const
     return  // compare the base class
             ( static_cast<const AbstractCartesianDiagram*>(this)->compare( other ) ) &&
             // compare own properties
-            (type() == other->type());
+            (type()             == other->type()) &&
+            (centerDataPoints() == other->centerDataPoints());
 }
 
 /**
@@ -150,12 +152,13 @@ LineDiagram::LineType LineDiagram::type() const
 
 void LineDiagram::setCenterDataPoints( bool center )
 {
-   d->centerDataPoints = center;
+	d->centerDataPoints = center;
+	emit propertiesChanged();
 }
 
 bool LineDiagram::centerDataPoints() const
 {
-   return d->centerDataPoints;
+	return d->centerDataPoints;
 }
 
 /**
@@ -169,7 +172,7 @@ void LineDiagram::setLineAttributes( const LineAttributes& la )
     emit propertiesChanged();
 }
 
-/** 
+/**
   * Sets the line attributes of data set \a column to \a la
   */
 void LineDiagram::setLineAttributes(
@@ -455,17 +458,23 @@ void LineDiagram::paint( PaintContext* ctx )
 
 void LineDiagram::resize ( const QSizeF& size )
 {
-    d->compressor.setResolution( static_cast<int>( size.width() ),
-                                 static_cast<int>( size.height() ) );
+    d->compressor.setResolution( static_cast<int>( size.width() * coordinatePlane()->zoomFactorX() ),
+                                 static_cast<int>( size.height() * coordinatePlane()->zoomFactorY() ) );
     setDataBoundariesDirty();
 }
 
-const int LineDiagram::numberOfAbscissaSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int LineDiagram::numberOfAbscissaSegments () const
 {
     return d->attributesModel->rowCount(attributesModelRootIndex());
 }
 
-const int LineDiagram::numberOfOrdinateSegments () const
+#if QT_VERSION < 0x040400 || defined(Q_COMPILER_MANGLES_RETURN_TYPE)
+const
+#endif
+int LineDiagram::numberOfOrdinateSegments () const
 {
     return d->attributesModel->columnCount(attributesModelRootIndex());
 }

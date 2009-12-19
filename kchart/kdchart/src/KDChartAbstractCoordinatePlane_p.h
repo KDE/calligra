@@ -68,7 +68,7 @@ protected:
         // can not call the base class: grid = new AbstractGrid();
     }
 
-    virtual const bool isVisiblePoint(
+    virtual bool isVisiblePoint(
         const AbstractCoordinatePlane * plane,
         const QPointF& point ) const
     {

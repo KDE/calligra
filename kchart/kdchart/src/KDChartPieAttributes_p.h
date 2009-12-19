@@ -56,6 +56,8 @@ public:
     Private();
 
     qreal explodeFactor;
+    qreal tangentialGapFactor;
+    qreal radialGapFactor;
 };
 
 }

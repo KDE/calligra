@@ -21,9 +21,10 @@
  **
  **********************************************************************/
 
-#include "KDChartChart.h"
 #include "KDChartHeaderFooter.h"
 #include "KDChartHeaderFooter_p.h"
+
+#include "KDChartChart.h"
 #include <KDChartTextAttributes.h>
 #include <QFont>
 #include <QPainter>
@@ -95,6 +96,7 @@ HeaderFooter * HeaderFooter::clone() const
     HeaderFooter* headerFooter = new HeaderFooter( new Private( *d ), 0 );
     headerFooter->setType( type() );
     headerFooter->setPosition( position() );
+    headerFooter->setText( text() );
     headerFooter->setTextAttributes( textAttributes() );
     return headerFooter;
 }

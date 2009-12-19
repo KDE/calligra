@@ -12,33 +12,28 @@ ADD_DEFINITIONS(-DKDCHART_BUILD_KDCHART_LIB)
 ########### next target ###############
 
 set(kdchart_LIB_SRCS 
-    KDChartMeasure.cpp
-    KDChartAbstractCartesianDiagram.cpp
-    KDChartAbstractCoordinatePlane.cpp
-    KDChartCartesianCoordinatePlane.cpp
-    KDChartPolarCoordinatePlane.cpp
-    KDChartChart.cpp
-    KDChartWidget.cpp
-    KDChartAbstractDiagram.cpp
-    KDChartAbstractPieDiagram.cpp
-    KDChartAbstractPolarDiagram.cpp
-    KDChartAbstractAreaBase.cpp
     KDChartAbstractArea.cpp
-    KDChartTextArea.cpp
+    KDChartAbstractAreaBase.cpp
     KDChartAbstractAreaWidget.cpp
     KDChartAbstractAxis.cpp
-    KDChartAbstractProxyModel.cpp
+    KDChartAbstractCartesianDiagram.cpp
+    KDChartAbstractCoordinatePlane.cpp
+    KDChartAbstractDiagram.cpp
     KDChartAbstractGrid.cpp
-    KDChartCartesianGrid.cpp
-    KDChartPolarGrid.cpp
+    KDChartAbstractPieDiagram.cpp
+    KDChartAbstractPolarDiagram.cpp
+    KDChartAbstractProxyModel.cpp
+    KDChartAbstractThreeDAttributes.cpp
     KDChartAttributesModel.cpp
     KDChartBackgroundAttributes.cpp
     KDChartBarAttributes.cpp
     KDChartBarDiagram.cpp
-    KDChartNormalLyingBarDiagram_p.cpp
-    KDChartStackedLyingBarDiagram_p.cpp
-    KDChartPercentPlotter_p.cpp
+    KDChartBarDiagram_p.cpp
     KDChartCartesianAxis.cpp
+    KDChartCartesianCoordinatePlane.cpp
+    KDChartCartesianDiagramDataCompressor_p.cpp
+    KDChartCartesianGrid.cpp
+    KDChartChart.cpp
     KDChartDatasetProxyModel.cpp
     KDChartDatasetSelector.cpp
     KDChartDataValueAttributes.cpp
@@ -50,48 +45,64 @@ set(kdchart_LIB_SRCS
     KDChartLegend.cpp
     KDChartLineAttributes.cpp
     KDChartLineDiagram.cpp
-    KDChartMarkerAttributes.cpp
-    KDChartPaintContext.cpp
-    KDChartPalette.cpp
-    KDChartPieDiagram.cpp
-    KDChartPolarDiagram.cpp
-    KDChartPosition.cpp
-    KDChartRelativePosition.cpp
-    KDChartRingDiagram.cpp
-    KDTextDocument.cpp
-    KDChartTextAttributes.cpp
-    KDChartPieAttributes.cpp
-    KDChartAbstractThreeDAttributes.cpp
-    KDChartThreeDBarAttributes.cpp
-    KDChartThreeDLineAttributes.cpp     
-    KDChartThreeDPieAttributes.cpp
-    KDChartSignalCompressor.cpp
-    KDChartBarDiagram_p.cpp
-    KDChartCartesianDiagramDataCompressor_p.cpp
     KDChartLineDiagram_p.cpp
+    KDChartMarkerAttributes.cpp
+    KDChartMeasure.cpp
+    KDChartModelDataCache_p.cpp
     KDChartNormalBarDiagram_p.cpp
     KDChartNormalLineDiagram_p.cpp
+    KDChartNormalLyingBarDiagram_p.cpp
     KDChartNormalPlotter_p.cpp
+    KDChartPaintContext.cpp
+    KDChartPalette.cpp
     KDChartPercentBarDiagram_p.cpp
-    KDChartPercentLyingBarDiagram_p.cpp
     KDChartPercentLineDiagram_p.cpp
+    KDChartPercentLyingBarDiagram_p.cpp
+    KDChartPercentPlotter_p.cpp
+    KDChartPieAttributes.cpp
+    KDChartPieDiagram.cpp
     KDChartPlotter.cpp
     KDChartPlotter_p.cpp
+    KDChartPolarCoordinatePlane.cpp
+    KDChartPolarDiagram.cpp
+    KDChartPolarGrid.cpp
+    KDChartPosition.cpp
+    KDChartPrintingParameters.cpp
+    KDChartRelativePosition.cpp
+    KDChartRingDiagram.cpp
+    KDChartRulerAttributes.cpp
+    KDChartSignalCompressor.cpp
     KDChartStackedBarDiagram_p.cpp
     KDChartStackedLineDiagram_p.cpp
+    KDChartStackedLyingBarDiagram_p.cpp
+    KDChartStockBarAttributes.cpp
+    KDChartStockDiagram.cpp
+    KDChartStockDiagram_p.cpp
+    KDChartTextArea.cpp
+    KDChartTextAttributes.cpp
+    KDChartThreeDBarAttributes.cpp
+    KDChartThreeDLineAttributes.cpp
+    KDChartThreeDPieAttributes.cpp
     KDChartValueTrackerAttributes.cpp
-    KDChartRulerAttributes.cpp
-    KDChartPrintingParameters.cpp
-    KDChartModelDataCache_p.cpp
-    PrerenderedElements/KDChartTextLabelCache.cpp
-    LeveyJennings/KDChartLeveyJenningsDiagram.cpp
-    LeveyJennings/KDChartLeveyJenningsDiagram_p.cpp
+    KDChartWidget.cpp
+    KDTextDocument.cpp
     LeveyJennings/KDChartLeveyJenningsAxis.cpp
     LeveyJennings/KDChartLeveyJenningsCoordinatePlane.cpp
+    LeveyJennings/KDChartLeveyJenningsDiagram.cpp
+    LeveyJennings/KDChartLeveyJenningsDiagram_p.cpp
     LeveyJennings/KDChartLeveyJenningsGrid.cpp
     LeveyJennings/KDChartLeveyJenningsGridAttributes.cpp
-    Scenery/ReverseMapper.cpp
+    PrerenderedElements/KDChartTextLabelCache.cpp
     Scenery/ChartGraphicsItem.cpp
+    Scenery/ReverseMapper.cpp
+    Ternary/KDChartAbstractTernaryDiagram.cpp
+    Ternary/KDChartTernaryAxis.cpp
+    Ternary/KDChartTernaryCoordinatePlane.cpp
+    Ternary/KDChartTernaryGrid.cpp
+    Ternary/KDChartTernaryLineDiagram.cpp
+    Ternary/KDChartTernaryPointDiagram.cpp
+    Ternary/TernaryConstants.cpp
+    Ternary/TernaryPoint.cpp
 )
 
 qt4_wrap_ui(kdchart_LIB_SRCS

@@ -49,6 +49,7 @@ Legend::Private::Private() :
     referenceArea(0),
     position( Position::East ),
     alignment( Qt::AlignCenter ),
+    textAlignment( Qt::AlignCenter ),
     relativePosition( RelativePosition() ),
     orientation( Qt::Vertical ),
     order( Qt::AscendingOrder ),
@@ -209,6 +210,7 @@ Legend* Legend::clone() const
     legend->setUseAutomaticMarkerSize( useAutomaticMarkerSize() );
     legend->setPosition( position() );
     legend->setAlignment( alignment() );
+    legend->setTextAlignment( textAlignment() );
     legend->setLegendStyle( legendStyle() );
     return legend;
 }
@@ -221,11 +223,12 @@ bool Legend::compare( const Legend* other )const
         //qDebug() << "Legend::compare() cannot compare to Null pointer";
         return false;
     }
-    /*
+
     qDebug() << ( static_cast<const AbstractAreaBase*>(this)->compare( other ) );
     qDebug() << (isVisible()              == other->isVisible());
     qDebug() << (position()               == other->position());
     qDebug() << (alignment()              == other->alignment());
+    qDebug() << (textAlignment()          == other->textAlignment());
     qDebug() << (floatingPosition()       == other->floatingPosition());
     qDebug() << (orientation()            == other->orientation());
     qDebug() << (showLines()              == other->showLines());
@@ -239,11 +242,12 @@ bool Legend::compare( const Legend* other )const
     qDebug() << (titleTextAttributes()    == other->titleTextAttributes());
     qDebug() << (spacing()                == other->spacing());
     qDebug() << (legendStyle()            == other->legendStyle());
-    */
+
     return  ( static_cast<const AbstractAreaBase*>(this)->compare( other ) ) &&
             (isVisible()              == other->isVisible()) &&
             (position()               == other->position()) &&
             (alignment()              == other->alignment())&&
+            (textAlignment()          == other->textAlignment())&&
             (floatingPosition()       == other->floatingPosition()) &&
             (orientation()            == other->orientation())&&
             (showLines()              == other->showLines())&&
@@ -451,6 +455,19 @@ void Legend::setAlignment( Qt::Alignment alignment )
 Qt::Alignment Legend::alignment() const
 {
     return d->alignment;
+}
+
+void Legend::setTextAlignment( Qt::Alignment alignment )
+{
+    if( d->textAlignment == alignment )
+        return;
+    d->textAlignment = alignment;
+    emitPositionChanged();
+}
+
+Qt::Alignment Legend::textAlignment() const
+{
+    return d->textAlignment;
 }
 
 void Legend::setFloatingPosition( const RelativePosition& relativePosition )
@@ -819,9 +836,9 @@ void Legend::buildLegend()
     d->layoutItems.clear();
 
     if( orientation() == Qt::Vertical ) {
-        d->layout->setColumnStretch( 4, 1 );
+        d->layout->setColumnStretch( 6, 1 );
     } else {
-        d->layout->setColumnStretch( 4, 0 );
+        d->layout->setColumnStretch( 6, 0 );
     }
 
     d->modelLabels.clear();
@@ -842,7 +859,8 @@ void Legend::buildLegend()
             for ( int dataset = begin; dataset != end; dataset += begin < end ? 1 : -1 )
             {
                 // only show the label if the diagrams is NOT having the dataset set to hidden
-                if( ! diagram->isHidden( dataset ) ){
+                // and the dataset is not hidden in this legend either
+                if( !diagram->isHidden( dataset ) && !datasetIsHidden( dataset ) ){
                     d->modelLabels  += diagramLabels[   dataset ];
                     d->modelBrushes += diagramBrushes[  dataset ];
                     d->modelPens    += diagramPens[     dataset ];
@@ -864,7 +882,7 @@ void Legend::buildLegend()
                 (orientation() == Qt::Vertical)
                 ? KDChartEnums::MeasureOrientationMinimum
                 : KDChartEnums::MeasureOrientationHorizontal,
-                Qt::AlignCenter );
+                d->textAlignment );
         titleItem->setParentWidget( this );
 
         d->layoutItems << titleItem;
@@ -956,12 +974,17 @@ void Legend::buildLegend()
     // for all datasets: add (line)marker items and text items to the layout
     for ( int dataset = 0; dataset < d->modelLabels.count(); ++dataset ) {
         KDChart::AbstractLayoutItem* markerLineItem = 0;
+        // It is possible to set the marker brush both through the MarkerAttributes,
+        // as well as through the dataset brush set in the diagram, whereas the
+        // MarkerAttributes are preferred.
+        const QBrush markerBrush = markerAttrs[dataset].markerColor().isValid() ?
+                                   markerAttrs[dataset].markerColor() : brush( dataset );
         switch( style ){
             case( MarkersOnly ):
                 markerLineItem = new KDChart::MarkerLayoutItem(
                         diagram(),
                         markerAttrs[dataset],
-                        brush( dataset ),
+                        markerBrush,
                         markerAttrs[dataset].pen(),
                         Qt::AlignLeft );
                 break;
@@ -979,7 +1002,7 @@ void Legend::buildLegend()
                         pen( dataset ),
                         markerOffsOnLine,
                         markerAttrs[dataset],
-                        brush( dataset ),
+                        markerBrush,
                         markerAttrs[dataset].pen(),
                         Qt::AlignCenter );
                 break;
@@ -1004,7 +1027,7 @@ void Legend::buildLegend()
             new KDChart::TextLayoutItem( text( dataset ),
                 labelAttrs,
                 referenceArea(), orient,
-                Qt::AlignLeft );
+                d->textAlignment );
         labelItem->setParentWidget( this );
 
         d->layoutItems << labelItem;
@@ -1058,3 +1081,27 @@ void Legend::buildLegend()
     qDebug() << "leaving Legend::buildLegend()";
 #endif
 }
+
+void Legend::setHiddenDatasets( const QList<uint> hiddenDatasets )
+{
+    d->hiddenDatasets = hiddenDatasets;
+}
+
+const QList<uint> Legend::hiddenDatasets() const
+{
+    return d->hiddenDatasets;
+}
+
+void Legend::setDatasetHidden( uint dataset, bool hidden )
+{
+    if( hidden && !d->hiddenDatasets.contains( dataset ) )
+        d->hiddenDatasets.append( dataset );
+    else if( !hidden && d->hiddenDatasets.contains( dataset ) )
+        d->hiddenDatasets.removeAll( dataset );
+}
+
+bool Legend::datasetIsHidden( uint dataset ) const
+{
+    return d->hiddenDatasets.contains( dataset );
+}
+

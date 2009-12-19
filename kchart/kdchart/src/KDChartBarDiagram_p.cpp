@@ -174,7 +174,8 @@ void BarDiagram::BarDiagramType::appendDataValueTextInfoToList(
             const Position& autoPositionNegative,
             const qreal value )
 {
-    m_private->appendDataValueTextInfoToList( diagram, list, index, points,
+    m_private->appendDataValueTextInfoToList( diagram, list, index, 0,
+                                              points,
                                               autoPositionPositive, autoPositionNegative, value );
 }
 
@@ -217,10 +218,14 @@ void BarDiagram::BarDiagramType::calculateValueAndGapWidths( int rowCount,int co
     double unitWidth = groupWidth / units;
     outBarWidth = unitWidth;
     outSpaceBetweenBars += unitWidth * ba.barGapFactor();
+
     // Pending Michel - minLimit: allow space between bars to be reduced until the bars are displayed next to each other.
     // is that what we want?
-    if ( outSpaceBetweenBars < 0 )
-        outSpaceBetweenBars = 0;
+    // sebsauer; in the case e.g. CartesianCoordinatePlane::setHorizontalRangeReversed(true) was
+    // used to reverse the values, we deal with negative outSpaceBetweenBars and unitWidth here
+    // and since that's correct we don't like to lose e.g. the spacing here.
+    //if ( outSpaceBetweenBars < 0 )
+    //    outSpaceBetweenBars = 0;
 
     outSpaceBetweenGroups += unitWidth * ba.groupGapFactor();
 }

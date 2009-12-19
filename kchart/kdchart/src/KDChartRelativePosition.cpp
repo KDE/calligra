@@ -154,7 +154,7 @@ qreal RelativePosition::rotation() const {
 }
 
 
-const QPointF RelativePosition::referencePoint() const
+const QPointF RelativePosition::referencePoint(qreal* polarDegrees) const
 {
     bool useRect = (d->area != 0);
     QRect rect;
@@ -172,22 +172,35 @@ const QPointF RelativePosition::referencePoint() const
         }
     }
     QPointF pt;
-    if ( useRect )
+    if ( useRect ){
         pt = PositionPoints( rect ).point( d->position );
-    else
+        if( polarDegrees )
+            *polarDegrees = 0.0;
+    }else{
         pt = d->points.point( d->position );
+        if( polarDegrees )
+            *polarDegrees = d->points.degrees( d->position.value() );
+    }
     return pt;
 }
 
 
 const QPointF RelativePosition::calculatedPoint( const QSizeF& autoSize ) const
 {
-    const QPointF pt( referencePoint() );
     const qreal dx = horizontalPadding().calculatedValue( autoSize, KDChartEnums::MeasureOrientationHorizontal );
     const qreal dy = verticalPadding()  .calculatedValue( autoSize, KDChartEnums::MeasureOrientationVertical );
-    //qDebug() << "autoSize " << autoSize << "  dx " << dx << "  dy " << dy;
-    //qDebug() << "pt.x() " << pt.x() << "  pt.y() " << pt.y();
-    return QPointF( pt.x() + dx, pt.y() + dy );
+    qreal polarDegrees;
+    QPointF pt( referencePoint( &polarDegrees ) );
+    if( polarDegrees == 0.0 ){
+        pt += QPointF(dx, dy);
+    }else{
+        const qreal rad = DEGTORAD( polarDegrees);
+        const qreal sinDeg = sin(rad);
+        const qreal cosDeg = cos(rad);
+        pt.setX( pt.x() + dx * cosDeg + dy * sinDeg );
+        pt.setY( pt.y() - dx * sinDeg + dy * cosDeg );
+    }
+    return pt;
 }
 
 

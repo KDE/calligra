@@ -35,10 +35,11 @@
 // We mean it.
 //
 
+#include "KDChartAbstractCartesianDiagram.h"
+
 #include <KDChartAbstractDiagram_p.h>
 #include <KDChartAbstractThreeDAttributes.h>
 #include <KDChartGridAttributes.h>
-#include <KDChartCartesianDiagramDataCompressor_p.h>
 
 #include <KDABLibFakes>
 
@@ -56,7 +57,7 @@ class AbstractCartesianDiagram::Private : public AbstractDiagram::Private
     friend class AbstractCartesianDiagram;
 public:
     Private();
-   ~Private();
+   virtual ~Private();
 
     Private( const Private& rhs ) :
         AbstractDiagram::Private( rhs ),
@@ -65,6 +66,19 @@ public:
         referenceDiagram( 0 )
         {
         }
+
+    /** \reimpl */
+    virtual CartesianDiagramDataCompressor::DataValueAttributesList aggregatedAttrs(
+            AbstractDiagram * diagram,
+            const QModelIndex & index,
+            const CartesianDiagramDataCompressor::CachePosition * position ) const
+    {
+        if( position )
+            return compressor.aggregatedAttrs( diagram, index, *position );
+        CartesianDiagramDataCompressor::DataValueAttributesList allAttrs;
+        allAttrs[index] = diagram->dataValueAttributes( index );
+        return allAttrs;
+    }
 
    CartesianAxisList axesList;
 

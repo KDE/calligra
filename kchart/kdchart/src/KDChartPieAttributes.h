@@ -68,6 +68,9 @@ public:
 
     /** @return the explode factor set by setExplode or by setExplodeFactor. */
     qreal explodeFactor() const;
+    
+    void setGapFactor( bool circular, qreal factor );
+    qreal gapFactor( bool circular ) const;
 
     bool operator==( const PieAttributes& ) const;
     inline bool operator!=( const PieAttributes& other ) const { return !operator==(other); }

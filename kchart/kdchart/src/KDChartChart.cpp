@@ -21,6 +21,9 @@
  **
  **********************************************************************/
 
+#include "KDChartChart.h"
+#include "KDChartChart_p.h"
+
 #include <QList>
 #include <QtDebug>
 #include <QGridLayout>
@@ -34,8 +37,6 @@
 #include <QApplication>
 #include <QEvent>
 
-#include "KDChartChart.h"
-#include "KDChartChart_p.h"
 #include "KDChartCartesianCoordinatePlane.h"
 #include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartHeaderFooter.h"
@@ -579,6 +580,7 @@ void Chart::Private::slotLayoutPlanes()
             KDAB_FOREACH( CartesianAxis* axis, diagram->axes() ) {
                 if ( axisInfos.contains( axis ) ) continue; // already laid this one out
                 Q_ASSERT ( axis );
+                axis->setCachedSizeDirty();
                 //qDebug() << "--------------- axis added to planeLayoutItems  -----------------";
                 planeLayoutItems << axis;
                 /*
@@ -943,8 +945,11 @@ void Chart::replaceCoordinatePlane( AbstractCoordinatePlane* plane,
     if( plane && oldPlane_ != plane ){
         AbstractCoordinatePlane* oldPlane = oldPlane_;
         if( d->coordinatePlanes.count() ){
-            if( ! oldPlane )
+            if( ! oldPlane ){
                 oldPlane = d->coordinatePlanes.first();
+                if( oldPlane == plane )
+                    return;
+            }
             takeCoordinatePlane( oldPlane );
         }
         delete oldPlane;
@@ -1158,8 +1163,11 @@ void Chart::replaceHeaderFooter( HeaderFooter* headerFooter,
     if( headerFooter && oldHeaderFooter_ != headerFooter ){
         HeaderFooter* oldHeaderFooter = oldHeaderFooter_;
         if( d->headerFooters.count() ){
-            if( ! oldHeaderFooter )
+            if( ! oldHeaderFooter ){
                 oldHeaderFooter =  d->headerFooters.first();
+                if( oldHeaderFooter == headerFooter )
+                    return;
+            }
             takeHeaderFooter( oldHeaderFooter );
         }
         delete oldHeaderFooter;
@@ -1248,8 +1256,11 @@ void Chart::replaceLegend( Legend* legend, Legend* oldLegend_ )
     if( legend && oldLegend_ != legend ){
         Legend* oldLegend = oldLegend_;
         if( d->legends.count() ){
-            if( ! oldLegend )
+            if( ! oldLegend ){
                 oldLegend = d->legends.first();
+                if( oldLegend == legend )
+                    return;
+            }
             takeLegend( oldLegend );
         }
         delete oldLegend;
@@ -1586,8 +1597,3 @@ bool Chart::event( QEvent* event )
         return QWidget::event( event );
     }
 }
-
-// needed for proper linkage (msvc):
-#include "KDChartChart.moc"
-#include "KDChartChart_p.moc"
-#include "KDChartEnums.moc"

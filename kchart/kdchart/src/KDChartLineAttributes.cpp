@@ -41,6 +41,7 @@ private:
     MissingValuesPolicy missingValuesPolicy;
     bool displayArea;
     uint transparency;
+    int areaBoundingDataset;
 };
 
 
@@ -48,6 +49,7 @@ LineAttributes::Private::Private()
     : missingValuesPolicy( MissingValuesAreBridged )
     , displayArea( false )
     , transparency( 255 )
+    , areaBoundingDataset( -1 )
 {
 }
 
@@ -82,7 +84,8 @@ bool LineAttributes::operator==( const LineAttributes& r ) const
     return
         missingValuesPolicy() == r.missingValuesPolicy() &&
         displayArea() == r.displayArea() &&
-        transparency() == r.transparency();
+        transparency() == r.transparency() &&
+        areaBoundingDataset() == r.areaBoundingDataset();
 }
 
 void LineAttributes::setMissingValuesPolicy( MissingValuesPolicy policy )
@@ -117,6 +120,16 @@ uint LineAttributes::transparency() const
      return d->transparency;
 }
 
+void LineAttributes::setAreaBoundingDataset( int dataset )
+{
+   d->areaBoundingDataset = dataset;
+}
+
+int LineAttributes::areaBoundingDataset() const
+{
+    return d->areaBoundingDataset;
+}
+
 #if !defined(QT_NO_DEBUG_STREAM)
 QDebug operator<<(QDebug dbg, const KDChart::LineAttributes& a)
 {
@@ -124,6 +137,7 @@ QDebug operator<<(QDebug dbg, const KDChart::LineAttributes& a)
             //     MissingValuesPolicy missingValuesPolicy;
             << "bool="<<a.displayArea()
             << "transparency="<<a.transparency()
+            << "areaBoundingDataset="<<a.areaBoundingDataset()
             << ")";
     return dbg;
 

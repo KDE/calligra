@@ -29,6 +29,9 @@
 #define KDCHARTTEXTLABELCACHE_H
 
 #include <QPixmap>
+#include <QFont>
+#include <QBrush>
+#include <QPen>
 
 #include "KDChartEnums.h"
 

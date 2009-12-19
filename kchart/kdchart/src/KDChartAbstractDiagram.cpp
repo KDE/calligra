@@ -21,6 +21,9 @@
  **
  **********************************************************************/
 
+#include "KDChartAbstractDiagram.h"
+#include "KDChartAbstractDiagram_p.h"
+
 #include <QPainter>
 #include <QDebug>
 #include <QApplication>
@@ -35,8 +38,6 @@
 #include "KDChartDataValueAttributes.h"
 #include "KDChartTextAttributes.h"
 #include "KDChartMarkerAttributes.h"
-#include "KDChartAbstractDiagram.h"
-#include "KDChartAbstractDiagram_p.h"
 #include "KDChartAbstractThreeDAttributes.h"
 #include "KDChartThreeDLineAttributes.h"
 
@@ -261,6 +262,21 @@ void AbstractDiagram::setModel( QAbstractItemModel * newModel )
         connect( model(), SIGNAL( modelReset() ), this, SLOT( setDataBoundariesDirty() ) );
         connect( model(), SIGNAL( layoutChanged() ), this, SLOT( setDataBoundariesDirty() ) );
     }
+}
+        
+void AbstractDiagram::setSelectionModel( QItemSelectionModel* newSelectionModel )
+{
+    if( selectionModel() )
+    {
+        disconnect( selectionModel(), SIGNAL( currentChanged( QModelIndex, QModelIndex ) ), this, SIGNAL( modelsChanged() ) );
+        disconnect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), this, SIGNAL( modelsChanged() ) );
+    }
+    QAbstractItemView::setSelectionModel( newSelectionModel );
+    if( selectionModel() )
+    {
+        connect( selectionModel(), SIGNAL( currentChanged( QModelIndex, QModelIndex ) ), this, SIGNAL( modelsChanged() ) );
+        connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), this, SIGNAL( modelsChanged() ) );
+    }
     emit modelsChanged();
 }
 
@@ -297,6 +313,14 @@ bool AbstractDiagram::usesExternalAttributesModel()const
 AttributesModel* AbstractDiagram::attributesModel() const
 {
     return d->attributesModel;
+}
+
+QModelIndex AbstractDiagram::conditionallyMapFromSource( const QModelIndex & index ) const
+{
+    Q_ASSERT( !index.isValid() || index.model() == attributesModel() || index.model() == attributesModel()->sourceModel() );
+    return index.model() == attributesModel()
+            ? index
+            : attributesModel()->mapFromSource( index );
 }
 
 /*! \reimpl */
@@ -351,14 +375,18 @@ void AbstractDiagram::dataChanged( const QModelIndex &topLeft,
 void AbstractDiagram::setHidden( const QModelIndex & index, bool hidden )
 {
     d->attributesModel->setData(
-        d->attributesModel->mapFromSource( index ),
+        conditionallyMapFromSource( index ),
         qVariantFromValue( hidden ),
         DataHiddenRole );
     emit dataHidden();
 }
 
-void AbstractDiagram::setHidden( int column, bool hidden )
+void AbstractDiagram::setHidden( int dataset, bool hidden )
 {
+    // To store the flag for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
     d->attributesModel->setHeaderData(
         column, Qt::Vertical,
         qVariantFromValue( hidden ),
@@ -380,8 +408,12 @@ bool AbstractDiagram::isHidden() const
         attributesModel()->modelData( DataHiddenRole ) );
 }
 
-bool AbstractDiagram::isHidden( int column ) const
+bool AbstractDiagram::isHidden( int dataset ) const
 {
+    // To store the flag for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
     const QVariant boolFlag(
             attributesModel()->headerData( column, Qt::Vertical,
                     DataHiddenRole ) );
@@ -394,7 +426,7 @@ bool AbstractDiagram::isHidden( const QModelIndex & index ) const
 {
     return qVariantValue<bool>(
         attributesModel()->data(
-            attributesModel()->mapFromSource(index),
+            conditionallyMapFromSource(index),
             DataHiddenRole ) );
 }
 
@@ -403,15 +435,19 @@ void AbstractDiagram::setDataValueAttributes( const QModelIndex & index,
                                               const DataValueAttributes & a )
 {
     d->attributesModel->setData(
-        d->attributesModel->mapFromSource( index ),
+        conditionallyMapFromSource( index ),
         qVariantFromValue( a ),
         DataValueLabelAttributesRole );
     emit propertiesChanged();
 }
 
 
-void AbstractDiagram::setDataValueAttributes( int column, const DataValueAttributes & a )
+void AbstractDiagram::setDataValueAttributes( int dataset, const DataValueAttributes & a )
 {
+    // To store the attributes for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
     d->attributesModel->setHeaderData(
         column, Qt::Vertical,
         qVariantFromValue( a ), DataValueLabelAttributesRole );
@@ -424,7 +460,7 @@ DataValueAttributes AbstractDiagram::dataValueAttributes() const
         attributesModel()->modelData( KDChart::DataValueLabelAttributesRole ) );
 }
 
-DataValueAttributes AbstractDiagram::dataValueAttributes( int column ) const
+DataValueAttributes AbstractDiagram::dataValueAttributes( int dataset ) const
 {
     /*
     The following did not work!
@@ -436,6 +472,11 @@ DataValueAttributes AbstractDiagram::dataValueAttributes( int column ) const
         attributesModel()->data( attributesModel()->mapFromSource(columnToIndex( column )),
         KDChart::DataValueLabelAttributesRole ) );
     */
+    
+    // To store the attributes for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
 
     const QVariant headerAttrs(
             attributesModel()->headerData( column, Qt::Vertical,
@@ -448,8 +489,9 @@ DataValueAttributes AbstractDiagram::dataValueAttributes( int column ) const
 DataValueAttributes AbstractDiagram::dataValueAttributes( const QModelIndex & index ) const
 {
     return qVariantValue<DataValueAttributes>(
-        attributesModel()->data( attributesModel()->mapFromSource(index),
-                                 KDChart::DataValueLabelAttributesRole ) );
+        attributesModel()->data(
+            conditionallyMapFromSource( index ),
+            KDChart::DataValueLabelAttributesRole ) );
 }
 
 void AbstractDiagram::setDataValueAttributes( const DataValueAttributes & a )
@@ -526,12 +568,11 @@ void AbstractDiagram::paintDataValueTexts( QPainter* painter )
 
 
 void AbstractDiagram::paintMarker( QPainter* painter,
+                                   const DataValueAttributes& a,
                                    const QModelIndex& index,
                                    const QPointF& pos )
 {
-    if ( !checkInvariants() ) return;
-    const DataValueAttributes a = dataValueAttributes(index);
-    if ( !a.isVisible() ) return;
+    if ( !checkInvariants() || !a.isVisible() ) return;
     const MarkerAttributes ma = a.markerAttributes();
     if ( !ma.isVisible() ) return;
 
@@ -552,6 +593,14 @@ void AbstractDiagram::paintMarker( QPainter* painter,
     // reverseMapper. This means that ^^^ this version of paintMarker
     // needs to be called to reverse-map the marker.
     d->reverseMapper.addCircle( index.row(), index.column(), pos, 2 * maSize );
+}
+
+void AbstractDiagram::paintMarker( QPainter* painter,
+                                   const QModelIndex& index,
+                                   const QPointF& pos )
+{
+    if ( !checkInvariants() ) return;
+    paintMarker( painter, dataValueAttributes( index ), index, pos );
 }
 
 void AbstractDiagram::paintMarker( QPainter* painter,
@@ -690,13 +739,8 @@ void AbstractDiagram::paintMarkers( QPainter* painter )
 
 void AbstractDiagram::setPen( const QModelIndex& index, const QPen& pen )
 {
-    if( datasetDimension() > 1 )
-    {
-        setPen( index.column(), pen );
-        return;
-    }
     attributesModel()->setData(
-        attributesModel()->mapFromSource( index ),
+        conditionallyMapFromSource( index ),
         qVariantFromValue( pen ), DatasetPenRole );
     emit propertiesChanged();
 }
@@ -708,10 +752,13 @@ void AbstractDiagram::setPen( const QPen& pen )
     emit propertiesChanged();
 }
 
-void AbstractDiagram::setPen( int column,const QPen& pen )
+void AbstractDiagram::setPen( int dataset, const QPen& pen )
 {
-    if( datasetDimension() > 1 )
-        column *= datasetDimension();
+    // To store the pen for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
+    
     attributesModel()->setHeaderData(
         column, Qt::Vertical,
         qVariantFromValue( pen ),
@@ -727,8 +774,13 @@ QPen AbstractDiagram::pen() const
 
 QPen AbstractDiagram::pen( int dataset ) const
 {
+    // To store the pen for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
+    
     const QVariant penSettings(
-            attributesModel()->headerData( dataset, Qt::Vertical,
+            attributesModel()->headerData( column, Qt::Vertical,
                     DatasetPenRole ) );
     if( penSettings.isValid() )
         return qVariantValue< QPen >( penSettings );
@@ -737,23 +789,16 @@ QPen AbstractDiagram::pen( int dataset ) const
 
 QPen AbstractDiagram::pen( const QModelIndex& index ) const
 {
-    if( datasetDimension() > 1 )
-        return pen( index.column() );
     return qVariantValue<QPen>(
         attributesModel()->data(
-            attributesModel()->mapFromSource( index ),
+            conditionallyMapFromSource( index ),
             DatasetPenRole ) );
 }
 
 void AbstractDiagram::setBrush( const QModelIndex& index, const QBrush& brush )
 {
-    if( datasetDimension() > 1 )
-    {
-        setBrush( index.column(), brush );
-        return;
-    }
     attributesModel()->setData(
-        attributesModel()->mapFromSource( index ),
+        conditionallyMapFromSource( index ),
         qVariantFromValue( brush ), DatasetBrushRole );
     emit propertiesChanged();
 }
@@ -765,10 +810,13 @@ void AbstractDiagram::setBrush( const QBrush& brush )
     emit propertiesChanged();
 }
 
-void AbstractDiagram::setBrush( int column, const QBrush& brush )
+void AbstractDiagram::setBrush( int dataset, const QBrush& brush )
 {
-    if( datasetDimension() > 1 )
-        column *= datasetDimension();
+    // To store the brush for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
+    
     attributesModel()->setHeaderData(
         column, Qt::Vertical,
         qVariantFromValue( brush ),
@@ -784,8 +832,13 @@ QBrush AbstractDiagram::brush() const
 
 QBrush AbstractDiagram::brush( int dataset ) const
 {
+    // To store the brush for a dataset, we use the first column
+    // that's associated with it. (i.e., with a dataset dimension
+    // of two, the column of the keys)
+    const int column = dataset * datasetDimension();
+    
     const QVariant brushSettings(
-            attributesModel()->headerData( dataset, Qt::Vertical,
+            attributesModel()->headerData( column, Qt::Vertical,
                     DatasetBrushRole ) );
     if( brushSettings.isValid() )
         return qVariantValue< QBrush >( brushSettings );
@@ -794,12 +847,8 @@ QBrush AbstractDiagram::brush( int dataset ) const
 
 QBrush AbstractDiagram::brush( const QModelIndex& index ) const
 {
-    if( datasetDimension() > 1 )
-        return brush( index.column() );
     return qVariantValue<QBrush>(
-        attributesModel()->data(
-            attributesModel()->mapFromSource( index ),
-            DatasetBrushRole ) );
+        attributesModel()->data( conditionallyMapFromSource( index ), DatasetBrushRole ) );
 }
 
 /**
@@ -891,9 +940,9 @@ QString AbstractDiagram::unitSuffix( Qt::Orientation orientation ) const
 }
 
 // implement QAbstractItemView:
-QRect AbstractDiagram::visualRect(const QModelIndex &) const
+QRect AbstractDiagram::visualRect( const QModelIndex &index ) const
 {
-    return QRect();
+    return d->reverseMapper.boundingRect( index.row(), index.column() ).toRect();
 }
 
 void AbstractDiagram::scrollTo(const QModelIndex &, ScrollHint )
@@ -924,9 +973,21 @@ void AbstractDiagram::setSelection(const QRect& rect , QItemSelectionModel::Sele
     selectionModel()->select( selection, command );
 }
 
-QRegion AbstractDiagram::visualRegionForSelection(const QItemSelection &) const
-{ return QRegion(); }
+QRegion AbstractDiagram::visualRegionForSelection(const QItemSelection &selection) const
+{
+    QPolygonF polygon;
+    KDAB_FOREACH( const QModelIndex& index, selection.indexes() )
+    {
+        polygon << d->reverseMapper.polygon(index.row(), index.column());
+    }
+    return polygon.isEmpty() ? QRegion() : QRegion( polygon.toPolygon() );
+}
 
+QRegion AbstractDiagram::visualRegion(const QModelIndex &index) const
+{
+    QPolygonF polygon = d->reverseMapper.polygon(index.row(), index.column());
+    return polygon.isEmpty() ? QRegion() : QRegion( polygon.toPolygon() );
+}
 
 void KDChart::AbstractDiagram::useDefaultColors( )
 {
@@ -966,7 +1027,7 @@ QStringList AbstractDiagram::datasetLabels() const
         return ret;
     
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = 0; i < columnCount / datasetDimension(); ++i )
+    for( int i = 0; i < columnCount; i += datasetDimension() )
         ret << attributesModel()->headerData( i, Qt::Horizontal, Qt::DisplayRole ).toString();
     
     return ret;
@@ -978,9 +1039,9 @@ QList<QBrush> AbstractDiagram::datasetBrushes() const
     if( model() == 0 )
         return ret;
 
-    const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = 0; i < columnCount / datasetDimension(); ++i )
-        ret << qVariantValue<QBrush>( attributesModel()->headerData( i * datasetDimension(), Qt::Vertical, DatasetBrushRole ) );
+    const int datasetCount = attributesModel()->columnCount(attributesModelRootIndex()) / datasetDimension();
+    for ( int dataset = 0; dataset < datasetCount; dataset++ )
+        ret << brush( dataset );
 
     return ret;
 }
@@ -991,9 +1052,9 @@ QList<QPen> AbstractDiagram::datasetPens() const
     if( model() == 0 )
         return ret;
     
-    const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = 0; i < columnCount / datasetDimension(); ++i )
-        ret << qVariantValue<QPen>( attributesModel()->headerData( i * datasetDimension(), Qt::Vertical, DatasetPenRole ) );
+    const int datasetCount = attributesModel()->columnCount(attributesModelRootIndex()) / datasetDimension();
+    for ( int dataset = 0; dataset < datasetCount; dataset++ )
+        ret << pen( dataset );
     
     return ret;
 }
@@ -1004,13 +1065,10 @@ QList<MarkerAttributes> AbstractDiagram::datasetMarkers() const
     if( model() == 0 )
         return ret;
     
-    const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = 0; i < columnCount / datasetDimension(); ++i )
-    {
-        const DataValueAttributes a =
-            qVariantValue<DataValueAttributes>( attributesModel()->headerData( i, Qt::Vertical, DataValueLabelAttributesRole ) );
-        ret << a.markerAttributes();
-    }
+    const int datasetCount = attributesModel()->columnCount(attributesModelRootIndex()) / datasetDimension();
+    for ( int dataset = 0; dataset < datasetCount; dataset++ )
+        ret << dataValueAttributes( dataset ).markerAttributes();
+
     return ret;
 }
 
@@ -1039,6 +1097,8 @@ void AbstractDiagram::setDatasetDimension( int dimension )
 
 void AbstractDiagram::setDatasetDimensionInternal( int dimension )
 {
+    Q_ASSERT( dimension != 0 );
+    
     if ( d->datasetDimension == dimension ) return;
     d->datasetDimension = dimension;
     setDataBoundariesDirty();

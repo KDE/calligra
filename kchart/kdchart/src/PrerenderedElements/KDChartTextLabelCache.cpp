@@ -25,6 +25,8 @@
  **
  **********************************************************************/
 
+#include "KDChartTextLabelCache.h"
+
 #include <cmath>
 
 #include <QtDebug>
@@ -32,8 +34,6 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QApplication>
-
-#include "KDChartTextLabelCache.h"
 
 #ifndef NDEBUG
 int HitCount = 0;

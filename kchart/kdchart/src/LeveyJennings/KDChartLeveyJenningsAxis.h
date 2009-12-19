@@ -69,6 +69,9 @@ namespace KDChart {
         LeveyJenningsGridAttributes::GridType type() const;
         void setType( LeveyJenningsGridAttributes::GridType type );
 
+        Qt::DateFormat dateFormat() const;
+        void setDateFormat( Qt::DateFormat format );
+
         /**
          * Returns true if both axes have the same settings.
          */

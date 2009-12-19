@@ -25,12 +25,13 @@
  **
  **********************************************************************/
 
-#include "KDChartPlotter.h"
 #include "KDChartNormalPlotter_p.h"
+#include "KDChartPlotter.h"
 
 #include <limits>
 
 using namespace KDChart;
+using namespace std;
 
 NormalPlotter::NormalPlotter( Plotter* d )
     : PlotterType( d )
@@ -99,8 +100,7 @@ void NormalPlotter::paint( PaintContext* ctx )
         return;
 
     DataValueTextInfoList textInfoList;
-    LineAttributes::MissingValuesPolicy policy; // ???
-    
+
     for( int column = 0; column < colCount; ++column )
     {
         LineAttributesInfoList lineList;
@@ -111,23 +111,32 @@ void NormalPlotter::paint( PaintContext* ctx )
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+
+            const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
+            LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
+            const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+
             if( ISNAN( point.key ) || ISNAN( point.value ) )
             {
-                previousCellPosition = CartesianDiagramDataCompressor::CachePosition();
-                continue;
+                switch( policy )
+                {
+                case LineAttributes::MissingValuesAreBridged: // we just bridge both values
+                    continue;
+                case LineAttributes::MissingValuesShownAsZero: // fall-through since that attribute makes no sense for the plotter
+                case LineAttributes::MissingValuesHideSegments: // fall-through since they're just hidden
+                default:
+                    previousCellPosition = CartesianDiagramDataCompressor::CachePosition();
+                    continue;
+                }
             }
 
-            LineAttributes laCell;
-            
-            const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
             const CartesianDiagramDataCompressor::DataPoint lastPoint = compressor().data( previousCellPosition );
             // area corners, a + b are the line ends:
             const QPointF a( plane->translate( QPointF( lastPoint.key, lastPoint.value ) ) );
             const QPointF b( plane->translate( QPointF( point.key, point.value ) ) );
             const QPointF c( plane->translate( QPointF( lastPoint.key, 0.0 ) ) );
             const QPointF d( plane->translate( QPointF( point.key, 0.0 ) ) );
-            // add the line to the list:
-            laCell = diagram()->lineAttributes( sourceIndex );
+
             // add data point labels:
             const PositionPoints pts = PositionPoints( b, a, d, c );
             // if necessary, add the area to the area list:
@@ -141,18 +150,19 @@ void NormalPlotter::paint( PaintContext* ctx )
             if ( !point.hidden /*&& !ISNAN( lastPoint.key ) && !ISNAN( lastPoint.value ) */) {
                 appendDataValueTextInfoToList( diagram(), textInfoList, sourceIndex, pts,
                                                Position::NorthWest, Position::SouthWest,
-                                               1.0 );//point.value );
+                                               point.value );
                 if( !ISNAN( lastPoint.key ) && !ISNAN( lastPoint.value ) )
                 {
                     paintAreas( ctx, attributesModel()->mapToSource( lastPoint.index ), areas, laCell.transparency() );
                     lineList.append( LineAttributesInfo( sourceIndex, a, b ) );
                 }
             }
-            
+
             // wrap it up:
             previousCellPosition = position;
             laPreviousCell = laCell;
         }
+        LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesAreBridged; //unused
         paintElements( ctx, textInfoList, lineList, policy );
     }
 }

@@ -37,6 +37,7 @@
 #include "KDChartNormalLineDiagram_p.h"
 
 using namespace KDChart;
+using namespace std;
 
 NormalLineDiagram::NormalLineDiagram( LineDiagram* d )
     : LineDiagramType( d )
@@ -55,7 +56,7 @@ const QPair< QPointF, QPointF > NormalLineDiagram::calculateDataBoundaries() con
     const double xMin = 0.0;
     double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) : 0;
     if ( !diagram()->centerDataPoints() && diagram()->model() )
-       xMax -= 1;
+        xMax -= 1;
     double yMin = std::numeric_limits< double >::quiet_NaN();
     double yMax = std::numeric_limits< double >::quiet_NaN();
 
@@ -66,7 +67,7 @@ const QPair< QPointF, QPointF > NormalLineDiagram::calculateDataBoundaries() con
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
             const double value = ISNAN( point.value ) ? 0.0 : point.value;
-            
+
             if ( ISNAN( yMin ) ) {
                     yMin = value;
                     yMax = value;
@@ -107,25 +108,36 @@ void NormalLineDiagram::paint( PaintContext* ctx )
     maxFound = columnCount;
     // ^^^ temp
 
-    LineAttributes::MissingValuesPolicy policy;
-
     for( int column = 0; column < columnCount; ++column ) {
         DataValueTextInfoList textInfoList;
         LineAttributesInfoList lineList;
         LineAttributes laPreviousCell;
         CartesianDiagramDataCompressor::DataPoint lastPoint;
+        qreal lastAreaBoundingValue;
+
+        // Get min. y value, used as lower or upper bounding for area highlighting
+        const qreal minYValue = plane->visibleDataRange().bottom();
 
         CartesianDiagramDataCompressor::CachePosition previousCellPosition;
         for ( int row = 0; row < rowCount; ++row ) {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             // get where to draw the line from:
             CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-            
+
             const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
 
             const LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
             const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
-            
+
+            // lower or upper bounding for the highlighted area
+            qreal areaBoundingValue;
+            if ( laCell.areaBoundingDataset() != -1 ) {
+                const CartesianDiagramDataCompressor::CachePosition areaBoundingCachePosition( row, laCell.areaBoundingDataset() );
+                areaBoundingValue = compressor().data( areaBoundingCachePosition ).value;
+            } else
+                // Use min. y value (i.e. zero line in most cases) if no bounding dataset is set
+                areaBoundingValue = minYValue;
+
             if( ISNAN( point.value ) )
             {
                 switch( policy )
@@ -145,12 +157,12 @@ void NormalLineDiagram::paint( PaintContext* ctx )
                     // hm....
                 }
             }
-            
+
             // area corners, a + b are the line ends:
             const QPointF a( plane->translate( QPointF( diagram()->centerDataPoints() ? lastPoint.key + 0.5 : lastPoint.key, lastPoint.value ) ) );
             const QPointF b( plane->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, point.value ) ) );
-            const QPointF c( plane->translate( QPointF( diagram()->centerDataPoints() ? lastPoint.key + 0.5 : lastPoint.key, 0.0 ) ) );
-            const QPointF d( plane->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, 0.0 ) ) );
+            const QPointF c( plane->translate( QPointF( diagram()->centerDataPoints() ? lastPoint.key + 0.5 : lastPoint.key, lastAreaBoundingValue ) ) );
+            const QPointF d( plane->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, areaBoundingValue ) ) );
             // add the line to the list:
            // add data point labels:
             const PositionPoints pts = PositionPoints( b, a, d, c );
@@ -162,20 +174,23 @@ void NormalLineDiagram::paint( PaintContext* ctx )
             // add the pieces to painting if this is not hidden:
             if ( ! point.hidden && !ISNAN( point.value ) )
             {
-                appendDataValueTextInfoToList( diagram(), textInfoList, sourceIndex, pts,
-                                               Position::NorthWest, Position::SouthWest,
+                appendDataValueTextInfoToList( diagram(), textInfoList, sourceIndex, &position,
+                                               pts, Position::NorthWest, Position::SouthWest,
                                                point.value );
                 paintAreas( ctx, attributesModel()->mapToSource( lastPoint.index ), areas, laCell.transparency() );
                 // position 0 is not really painted, since it takes two points to make a line :-)
                 if( row > 0 && !ISNAN( lastPoint.value ) )
                     lineList.append( LineAttributesInfo( sourceIndex, a, b ) );
             }
-            
+
             // wrap it up:
             previousCellPosition = position;
             laPreviousCell = laCell;
+            lastAreaBoundingValue = areaBoundingValue;
             lastPoint = point;
         }
-		paintElements( ctx, textInfoList, lineList, policy );
+
+        LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesAreBridged; //unused
+        paintElements( ctx, textInfoList, lineList, policy );
     }
 }

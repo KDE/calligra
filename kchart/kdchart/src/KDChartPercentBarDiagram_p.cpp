@@ -25,13 +25,14 @@
  **
  **********************************************************************/
 
+#include "KDChartPercentBarDiagram_p.h"
+
 #include <QModelIndex>
 
 #include "KDChartBarDiagram.h"
 #include "KDChartTextAttributes.h"
 #include "KDChartAttributesModel.h"
 #include "KDChartAbstractCartesianDiagram.h"
-#include "KDChartPercentBarDiagram_p.h"
 
 using namespace KDChart;
 
