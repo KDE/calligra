@@ -32,8 +32,8 @@
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 
-#include <pathshapes/rectangle/KoRectangleShape.h>
-#include <pathshapes/ellipse/KoEllipseShape.h>
+#include <pathshapes/rectangle/RectangleShape.h>
+#include <pathshapes/ellipse/EllipseShape.h>
 #include <pictureshape/PictureShape.h>
 #include <artistictextshape/ArtisticTextShape.h>
 #include <kdebug.h>
@@ -229,7 +229,7 @@ void WMFImportParser::drawRect(int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>(createShape(KoRectangleShapeId));
+    RectangleShape * rectangle = static_cast<RectangleShape*>(createShape(RectangleShapeId));
     if (! rectangle)
         return;
 
@@ -247,7 +247,7 @@ void WMFImportParser::drawRoundRect(int left, int top, int width, int height, in
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>(createShape(KoRectangleShapeId));
+    RectangleShape * rectangle = static_cast<RectangleShape*>(createShape(RectangleShapeId));
     if (! rectangle)
         return;
 
@@ -267,7 +267,7 @@ void WMFImportParser::drawEllipse(int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoEllipseShape *ellipse = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    EllipseShape *ellipse = static_cast<EllipseShape*>(createShape(EllipseShapeId));
     if (! ellipse)
         return;
 
@@ -289,11 +289,11 @@ void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
 
     QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * arc = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    EllipseShape * arc = static_cast<EllipseShape*>(createShape(EllipseShapeId));
     if (! arc)
         return;
 
-    arc->setType(KoEllipseShape::Arc);
+    arc->setType(EllipseShape::Arc);
     arc->setStartAngle(start);
     arc->setEndAngle(end);
     arc->setPosition(bound.topLeft());
@@ -314,11 +314,11 @@ void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
 
     QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * pie = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    EllipseShape * pie = static_cast<EllipseShape*>(createShape(EllipseShapeId));
     if (! pie)
         return;
 
-    pie->setType(KoEllipseShape::Pie);
+    pie->setType(EllipseShape::Pie);
     pie->setStartAngle(start);
     pie->setEndAngle(end);
     pie->setPosition(bound.topLeft());
@@ -339,11 +339,11 @@ void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen
 
     QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * chord = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    EllipseShape * chord = static_cast<EllipseShape*>(createShape(EllipseShapeId));
     if (! chord)
         return;
 
-    chord->setType(KoEllipseShape::Chord);
+    chord->setType(EllipseShape::Chord);
     chord->setStartAngle(start);
     chord->setEndAngle(end);
     chord->setPosition(bound.topLeft());

@@ -41,8 +41,8 @@
 #include <KoUnit.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <pathshapes/rectangle/KoRectangleShape.h>
-#include <pathshapes/ellipse/KoEllipseShape.h>
+#include <pathshapes/rectangle/RectangleShape.h>
+#include <pathshapes/ellipse/EllipseShape.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
@@ -1824,7 +1824,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
         if (! hasRx && hasRy)
             rx = ry;
 
-        KoRectangleShape * rect = static_cast<KoRectangleShape*>(createShape(KoRectangleShapeId));
+        RectangleShape * rect = static_cast<RectangleShape*>(createShape(RectangleShapeId));
         if (rect) {
             rect->setSize(QSizeF(w, h));
             rect->setPosition(QPointF(x, y));
@@ -1838,7 +1838,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
                 obj->setVisible(false);
         }
     } else if (b.tagName() == "ellipse") {
-        obj = createShape(KoEllipseShapeId);
+        obj = createShape(EllipseShapeId);
         if (obj) {
             double rx = parseUnitX(b.attribute("rx"));
             double ry = parseUnitY(b.attribute("ry"));
@@ -1850,7 +1850,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
                 obj->setVisible(false);
         }
     } else if (b.tagName() == "circle") {
-        obj = createShape(KoEllipseShapeId);
+        obj = createShape(EllipseShapeId);
         if (obj) {
             double r  = parseUnitXY(b.attribute("r"));
             double cx = b.attribute("cx").isEmpty() ? 0.0 : parseUnitX(b.attribute("cx"));

@@ -37,9 +37,9 @@
 #include <KoShapeGroup.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <KoLineBorder.h>
-#include <pathshapes/ellipse/KoEllipseShape.h>
-#include <pathshapes/rectangle/KoRectangleShape.h>
-#include <pathshapes/star/KoStarShape.h>
+#include <pathshapes/ellipse/EllipseShape.h>
+#include <pathshapes/rectangle/RectangleShape.h>
+#include <pathshapes/star/StarShape.h>
 #include <artistictextshape/ArtisticTextShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
@@ -681,7 +681,7 @@ KoShape * KarbonImport::loadPath(const KoXmlElement &element)
 
 KoShape * KarbonImport::loadEllipse(const KoXmlElement &element)
 {
-    KoEllipseShape * ellipse = new KoEllipseShape();
+    EllipseShape * ellipse = new EllipseShape();
 
     double rx = KoUnit::parseValue(element.attribute("rx"));
     double ry = KoUnit::parseValue(element.attribute("ry"));
@@ -691,11 +691,11 @@ KoShape * KarbonImport::loadEllipse(const KoXmlElement &element)
     ellipse->setEndAngle(element.attribute("end-angle").toDouble());
 
     if (element.attribute("kind") == "cut")
-        ellipse->setType(KoEllipseShape::Chord);
+        ellipse->setType(EllipseShape::Chord);
     else if (element.attribute("kind") == "section")
-        ellipse->setType(KoEllipseShape::Pie);
+        ellipse->setType(EllipseShape::Pie);
     else if (element.attribute("kind") == "arc")
-        ellipse->setType(KoEllipseShape::Arc);
+        ellipse->setType(EllipseShape::Arc);
 
     QPointF center(KoUnit::parseValue(element.attribute("cx")), KoUnit::parseValue(element.attribute("cy")));
     ellipse->setAbsolutePosition(center);
@@ -709,7 +709,7 @@ KoShape * KarbonImport::loadEllipse(const KoXmlElement &element)
 
 KoShape * KarbonImport::loadRect(const KoXmlElement &element)
 {
-    KoRectangleShape * rect = new KoRectangleShape();
+    RectangleShape * rect = new RectangleShape();
 
     double w  = KoUnit::parseValue(element.attribute("width"), 10.0);
     double h = KoUnit::parseValue(element.attribute("height"), 10.0);
@@ -993,7 +993,7 @@ KoShape * KarbonImport::loadStar(const KoXmlElement &element)
     KoPathShape * starShape = 0;
 
     if (type == star_outline || type == polygon) {
-        KoStarShape * paramStar = new KoStarShape();
+        StarShape * paramStar = new StarShape();
 
         paramStar->setCornerCount(edges);
         paramStar->setBaseRadius(innerRadius);

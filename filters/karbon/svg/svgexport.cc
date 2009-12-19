@@ -47,8 +47,8 @@
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
-#include <pathshapes/rectangle/KoRectangleShape.h>
-#include <pathshapes/ellipse/KoEllipseShape.h>
+#include <pathshapes/rectangle/RectangleShape.h>
+#include <pathshapes/ellipse/EllipseShape.h>
 #include <KoImageData.h>
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
@@ -207,10 +207,10 @@ void SvgExport::saveShape(KoShape * shape)
     if (path) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(path);
         bool isParametric = parameterShape && parameterShape->isParametricShape();
-        if (path->pathShapeId() == KoRectangleShapeId && isParametric) {
-            saveRectangle(static_cast<KoRectangleShape*>(path));
-        } else if (path->pathShapeId() == KoEllipseShapeId && isParametric) {
-            saveEllipse(static_cast<KoEllipseShape*>(path));
+        if (path->pathShapeId() == RectangleShapeId && isParametric) {
+            saveRectangle(static_cast<RectangleShape*>(path));
+        } else if (path->pathShapeId() == EllipseShapeId && isParametric) {
+            saveEllipse(static_cast<EllipseShape*>(path));
         } else {
             savePath(path);
         }
@@ -236,9 +236,9 @@ void SvgExport::savePath(KoPathShape * path)
     *m_body << " />" << endl;
 }
 
-void SvgExport::saveEllipse(KoEllipseShape * ellipse)
+void SvgExport::saveEllipse(EllipseShape * ellipse)
 {
-    if (ellipse->type() == KoEllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
+    if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
         printIndentation(m_body, m_indent);
         QSizeF size = ellipse->size();
         if (size.width() == size.height()) {
@@ -259,7 +259,7 @@ void SvgExport::saveEllipse(KoEllipseShape * ellipse)
     }
 }
 
-void SvgExport::saveRectangle(KoRectangleShape * rectangle)
+void SvgExport::saveRectangle(RectangleShape * rectangle)
 {
     printIndentation(m_body, m_indent);
     *m_body << "<rect" << getID(rectangle);
