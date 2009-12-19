@@ -84,10 +84,10 @@ public:
     static uint handleRadius() { return m_handleRadius; }
 
     /// Sets the grab sensitivity in pixel used for grabbing handles or lines
-    static void setGrabSensitivity( uint grabSensitivity ) { m_grabSensitivity = grabSensitivity; }
+    static void setGrabSensitivity(int grabSensitivity) { m_grabSensitivity = grabSensitivity; }
 
     /// Returns the actual grab sensitivity in pixel
-    static uint grabSensitivity() { return m_grabSensitivity; }
+    static int grabSensitivity() { return m_grabSensitivity; }
 
     /// returns the gradient handles bounding rect
     QRectF boundingRect( const KoViewConverter &converter ) const;
@@ -163,7 +163,7 @@ private:
     void applyChanges();
 
     static int m_handleRadius; ///< the handle radius for all gradient strategies
-    static uint m_grabSensitivity; ///< the grabbing sensitivity
+    static int m_grabSensitivity; ///< the grabbing sensitivity
     
     bool m_editing; /// the edit mode flag
     Target m_target; ///< the gradient target

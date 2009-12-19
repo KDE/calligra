@@ -35,7 +35,7 @@
 #include <math.h>
 
 int GradientStrategy::m_handleRadius = 3;
-uint GradientStrategy::m_grabSensitivity = 3;
+int GradientStrategy::m_grabSensitivity = 3;
 
 const qreal stopDistance = 15.0;
 
