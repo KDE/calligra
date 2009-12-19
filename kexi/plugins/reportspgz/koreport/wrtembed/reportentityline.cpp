@@ -65,7 +65,7 @@ ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene)
 {
     init(scene, d);
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Line"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("line"));
 }
 
 ReportEntityLine::ReportEntityLine(QDomNode & entity, ReportDesigner * d, QGraphicsScene * scene)

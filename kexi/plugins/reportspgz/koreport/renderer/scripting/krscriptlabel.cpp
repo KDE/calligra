@@ -58,16 +58,16 @@ void Label::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        m_label->m_horizontalAlignment->setValue("Left");
+        m_label->m_horizontalAlignment->setValue("left");
         break;
     case 0:
-        m_label->m_horizontalAlignment->setValue("Center");
+        m_label->m_horizontalAlignment->setValue("center");
         break;
     case 1:
-        m_label->m_horizontalAlignment->setValue("Right");
+        m_label->m_horizontalAlignment->setValue("right");
         break;
     default:
-        m_label->m_horizontalAlignment->setValue("Left");
+        m_label->m_horizontalAlignment->setValue("left");
         break;
     }
 }
@@ -89,16 +89,16 @@ void Label::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
-        m_label->m_horizontalAlignment->setValue("Top");
+        m_label->m_verticalAlignment->setValue("top");
         break;
     case 0:
-        m_label->m_horizontalAlignment->setValue("Middle");
+	m_label->m_verticalAlignment->setValue("middle");
         break;
     case 1:
-        m_label->m_horizontalAlignment->setValue("Bottom");
+	m_label->m_verticalAlignment->setValue("mottom");
         break;
     default:
-        m_label->m_horizontalAlignment->setValue("Top");
+	m_label->m_verticalAlignment->setValue("middle");
         break;
     }
 }

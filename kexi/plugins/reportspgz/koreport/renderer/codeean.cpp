@@ -466,7 +466,7 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     ts.backgroundColor = Qt::white;
     ts.font = font;
     ts.foregroundColor = Qt::black;
-    ts.backgroundOpacity = 255;
+    ts.backgroundOpacity = 100;
     ts.alignment = Qt::AlignRight | Qt::AlignTop;
 
     OROTextBox * tb = new OROTextBox();
@@ -838,7 +838,7 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     ts.backgroundColor = Qt::white;
     ts.font = font;
     ts.foregroundColor = Qt::black;
-    ts.backgroundOpacity = 255;
+    ts.backgroundOpacity = 100;
     ts.alignment = Qt::AlignRight | Qt::AlignTop;
 
     OROTextBox * tb = new OROTextBox();

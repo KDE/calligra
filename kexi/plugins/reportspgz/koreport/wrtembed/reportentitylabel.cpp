@@ -56,7 +56,7 @@ ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene)
     init(scene);
     setSceneRect(getTextRect());
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Label"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("label"));
 }
 
 ReportEntityLabel::ReportEntityLabel(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
@@ -95,10 +95,9 @@ void ReportEntityLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     QPen  p = painter->pen();
 
     painter->setFont(font());
-    //painter->setBackgroundMode ( Qt::OpaqueMode );
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha(m_backgroundOpacity->value().toInt());
+    bg.setAlpha((m_backgroundOpacity->value().toInt()/100) * 255);
 
     painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());

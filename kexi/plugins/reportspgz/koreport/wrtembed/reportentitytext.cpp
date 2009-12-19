@@ -59,7 +59,7 @@ ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene)
     init(scene);
     setSceneRect(getTextRect());
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Text"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("text"));
 }
 
 ReportEntityText::ReportEntityText(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
@@ -97,9 +97,13 @@ void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QPen  p = painter->pen();
 
     painter->setFont(font());
-    painter->setBackgroundMode(Qt::OpaqueMode);
-    painter->setBackground(m_backgroundColor->value().value<QColor>());
+    
+    QColor bg = m_backgroundColor->value().value<QColor>();
+    bg.setAlpha((m_backgroundOpacity->value().toInt()/100) * 255);
+    
+    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
+    
     painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
     painter->drawText(rect(), textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 

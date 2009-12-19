@@ -47,7 +47,7 @@ public slots:
     \param lc Line Color
     \param fc Fill Color
     \param lw Line Width
-    \param o Opacity (0=transparent, 255=opaque)
+    \param o Opacity (0=transparent, 100=opaque)
     */
     void rectangle(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
@@ -60,7 +60,7 @@ public slots:
     \param lc Line Color
     \param fc Fill Color
     \param lw Line Width
-    \param o Opacity (0=transparent, 255=opaque)
+    \param o Opacity (0=transparent, 100=opaque)
      */
     void ellipse(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
@@ -85,7 +85,7 @@ public slots:
     \param bc Background color
     \param lc Line color
     \param lw Line width
-    \param o Opacity (0=transparent, 255=opaque)
+    \param o Opacity (0=transparent, 100=opaque)
     */
     void text(qreal, qreal, const QString &, const QString &fnt = "Helvetica", int pt = 12, const QString &fc = "#000000", const QString &bc = "#ffffff", const QString &lc = "#ffffff", qreal lw = 0, int o = 0);
 private:

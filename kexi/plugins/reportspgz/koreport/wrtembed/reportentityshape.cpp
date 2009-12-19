@@ -55,7 +55,7 @@ ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene)
 {
     init(scene);
     setSceneRect(QPointF(0, 0), QSizeF(100, 100));
-    m_name->setValue(m_reportDesigner->suggestEntityName("Shape"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("shape"));
 
 }
 

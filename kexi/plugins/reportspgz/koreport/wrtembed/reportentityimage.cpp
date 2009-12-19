@@ -65,7 +65,7 @@ ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene)
     m_size.setSceneSize(QSizeF(100, 100));
     init(scene);
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Image"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
 }
 
 ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)

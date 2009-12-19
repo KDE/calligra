@@ -34,7 +34,7 @@ ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene)
     init(scene);
     setSceneRect(QPointF(0,0),QSizeF(15,15)); //default size
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Check"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("check"));
 
 }
 

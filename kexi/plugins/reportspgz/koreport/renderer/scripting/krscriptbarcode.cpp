@@ -67,16 +67,16 @@ void Barcode::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        m_barcode->m_horizontalAlignment->setValue("Left");
+        m_barcode->m_horizontalAlignment->setValue("left");
         break;
     case 0:
-        m_barcode->m_horizontalAlignment->setValue("Center");
+        m_barcode->m_horizontalAlignment->setValue("center");
         break;
     case 1:
-        m_barcode->m_horizontalAlignment->setValue("Right");
+        m_barcode->m_horizontalAlignment->setValue("right");
         break;
     default:
-        m_barcode->m_horizontalAlignment->setValue("Left");
+        m_barcode->m_horizontalAlignment->setValue("left");
         break;
     }
 }

@@ -61,9 +61,8 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             //Background
 
             QColor bg = tb->textStyle().backgroundColor;
-            bg.setAlpha(tb->textStyle().backgroundOpacity);
+            bg.setAlpha((tb->textStyle().backgroundOpacity / 100) * 255);
 
-            //_painter->setBackgroundMode(Qt::OpaqueMode);
             m_painter->setBackground(bg);
             m_painter->fillRect(rc, bg);
 

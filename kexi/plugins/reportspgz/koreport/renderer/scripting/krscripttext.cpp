@@ -62,16 +62,16 @@ void Text::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        m_text->m_horizontalAlignment->setValue("Left");
+        m_text->m_horizontalAlignment->setValue("left");
         break;
     case 0:
-        m_text->m_horizontalAlignment->setValue("Center");
+        m_text->m_horizontalAlignment->setValue("center");
         break;
     case 1:
-        m_text->m_horizontalAlignment->setValue("Right");
+        m_text->m_horizontalAlignment->setValue("right");
         break;
     default:
-        m_text->m_horizontalAlignment->setValue("Left");
+        m_text->m_horizontalAlignment->setValue("left");
         break;
     }
 }
@@ -93,16 +93,16 @@ void Text::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
-        m_text->m_horizontalAlignment->setValue("Top");
+        m_text->m_verticalAlignment->setValue("top");
         break;
     case 0:
-        m_text->m_horizontalAlignment->setValue("Middle");
+	m_text->m_verticalAlignment->setValue("middle");
         break;
     case 1:
-        m_text->m_horizontalAlignment->setValue("Bottom");
+	m_text->m_verticalAlignment->setValue("bottom");
         break;
     default:
-        m_text->m_horizontalAlignment->setValue("Top");
+	m_text->m_verticalAlignment->setValue("middle");
         break;
     }
 }

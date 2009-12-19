@@ -60,7 +60,7 @@ ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)
     m_size.setSceneSize(QSizeF(m_dpiX, m_dpiY));
     setSceneRect(m_pos.toScene(), m_size.toScene());
 
-    m_name->setValue(m_reportDesigner->suggestEntityName("Chart"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("chart"));
 }
 
 ReportEntityChart::ReportEntityChart(QDomNode & element, ReportDesigner * rd, QGraphicsScene* scene) : ReportRectEntity(rd), KRChartData(element)

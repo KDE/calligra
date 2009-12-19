@@ -97,10 +97,11 @@ void KRFieldData::createProperties()
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
     m_foregroundColor = new KoProperty::Property("foregroud-color", Qt::black, "Foreground Color", "Foreground Color");
 
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 255, "Opacity", "Opacity");
-    m_backgroundOpacity->setOption("max", 255);
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, "Opacity", "Opacity");
+    m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
-
+    m_backgroundOpacity->setOption("unit", "%");
+    
     m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
     m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
