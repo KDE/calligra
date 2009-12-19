@@ -126,7 +126,7 @@ void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
     // properties
     addPropertyAsAttribute(&entity, m_name);
     addPropertyAsAttribute(&entity, m_resizeMode);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, pointRect());
 
 

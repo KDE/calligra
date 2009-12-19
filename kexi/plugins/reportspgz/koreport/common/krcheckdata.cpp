@@ -14,7 +14,7 @@ KRCheckData::KRCheckData(QDomNode &element)
     
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
-    Z = element.toElement().attribute("report:zvalue").toDouble();
+    Z = element.toElement().attribute("report:z-index").toDouble();
     m_foregroundColor->setValue(element.toElement().attribute("fo:foreground-color"));
     m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
     

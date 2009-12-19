@@ -35,7 +35,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
     
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
-    Z = element.toElement().attribute("report:zvalue").toDouble();
+    Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
     m_format->setValue(element.toElement().attribute("report:barcode-format"));

@@ -139,7 +139,7 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     addPropertyAsAttribute(&entity, m_format);
     addPropertyAsAttribute(&entity, m_maxLength);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     
     // bounding rect
     buildXMLRect(doc, entity, pointRect());

@@ -135,7 +135,7 @@ void ReportEntityLabel::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_text);
     addPropertyAsAttribute(&entity, m_verticalAlignment);
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     
     // bounding rect
     buildXMLRect(doc, entity, pointRect());

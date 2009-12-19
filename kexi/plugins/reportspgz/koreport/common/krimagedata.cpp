@@ -37,7 +37,7 @@ KRImageData::KRImageData(QDomNode & element)
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
-    Z = element.toElement().attribute("report:zvalue").toDouble();
+    Z = element.toElement().attribute("report:z-index").toDouble();
 
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);

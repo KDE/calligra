@@ -76,7 +76,7 @@ KRChartData::KRChartData(QDomNode & element)
             }
         } else if (n == "name") {
             m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "zvalue") {
+        } else if (n == "z-index") {
             Z = node.firstChild().nodeValue().toDouble();
         } else if (n == "type") {
             m_chartType->setValue(node.firstChild().nodeValue().toInt());

@@ -133,7 +133,7 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_controlSource);
     addPropertyAsAttribute(&entity, m_verticalAlignment);
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     
     // bounding rect
     buildXMLRect(doc, entity, pointRect());

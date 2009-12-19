@@ -123,7 +123,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
     
     // properties
     addPropertyAsAttribute(&entity, m_name);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     entity.setAttribute("report:xstart", QString::number(sx));
     entity.setAttribute("report:ystart", QString::number(sy));
     entity.setAttribute("report:xend", QString::number(ex));

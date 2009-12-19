@@ -131,7 +131,7 @@ void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_verticalAlignment);
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     entity.setAttribute("report:bottom-padding", m_bottomPadding);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     
     // bounding rect
     buildXMLRect(doc, entity, pointRect());

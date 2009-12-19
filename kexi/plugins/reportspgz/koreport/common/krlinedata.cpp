@@ -34,7 +34,7 @@ KRLineData::KRLineData(QDomNode & element)
     QPointF _s, _e;
     
     m_name->setValue(element.toElement().attribute("report:name"));
-    Z = element.toElement().attribute("report:zvalue").toDouble();
+    Z = element.toElement().attribute("report:z-index").toDouble();
 
     _s.setX(element.toElement().attribute("report:xstart").toDouble());
     _s.setY(element.toElement().attribute("report:ystart").toDouble());

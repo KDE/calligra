@@ -149,7 +149,7 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_displayLegend);
     addPropertyAsAttribute(&entity, m_linkChild);
     addPropertyAsAttribute(&entity, m_linkMaster);
-    entity.setAttribute("report:zvalue", zValue());
+    entity.setAttribute("report:z-index", zValue());
     
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
