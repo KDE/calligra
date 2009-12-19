@@ -136,7 +136,7 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
     //properties
     addPropertyAsAttribute(&entity, m_name);
     addPropertyAsAttribute(&entity, m_controlSource);
-    addPropertyAsAttribute(&entity, m_foregroundColor);
+    entity.setAttribute("fo:foreground-color", m_foregroundColor->value().toString());
     addPropertyAsAttribute(&entity, m_checkStyle);
     
     // bounding rect

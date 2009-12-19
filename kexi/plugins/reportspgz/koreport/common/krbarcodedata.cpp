@@ -36,7 +36,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     Z = element.toElement().attribute("report:zvalue").toDouble();
-    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-alignment"));
+    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
     m_format->setValue(element.toElement().attribute("report:barcode-format"));
     
@@ -123,7 +123,7 @@ void KRBarcodeData::createProperties()
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("horizontal-alignment", keys, strings, "left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-align", keys, strings, "left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();

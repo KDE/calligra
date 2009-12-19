@@ -85,8 +85,8 @@ void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, K
 {
     QDomElement element = doc.createElement("report:text-style");
 
-    element.setAttribute("report:background-color", ts.backgroundColor.name());
-    element.setAttribute("report:foreground-color", ts.foregroundColor.name());
+    element.setAttribute("fo:background-color", ts.backgroundColor.name());
+    element.setAttribute("fo:foreground-color", ts.foregroundColor.name());
     element.setAttribute("report:background-opacity", QString::number(ts.backgroundOpacity));
     element.setAttribute("report:qtfont", ts.font.toString());
 

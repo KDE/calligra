@@ -309,6 +309,9 @@ QDomElement ReportDesigner::document() const
   
     QDomElement content = doc.createElement("report:content");
     content.setAttribute("xmlns:report", ns);
+    content.setAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+    content.setAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+
     doc.appendChild(content);
 
     //title

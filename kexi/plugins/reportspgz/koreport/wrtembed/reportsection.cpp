@@ -158,7 +158,7 @@ void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
     qreal f = INCH_TO_POINT(m_scene->height() / KoDpi::dpiY());
 
     section.setAttribute("report:height", QString::number(f));
-    section.setAttribute("report:background-color",m_sectionData->backgroundColor().name());
+    section.setAttribute("fo:background-color",m_sectionData->backgroundColor().name());
 
     // now get a list of all the QGraphicsItems on this scene and output them.
     QGraphicsItemList list = m_scene->items();
@@ -180,7 +180,7 @@ void ReportSection::initFromXML(QDomNode & section)
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
     slotResizeBarDragged(0);
 	    
-    m_sectionData->m_backgroundColor->setValue(QColor(section.toElement().attribute("report:background-color", "#ffffff")));
+    m_sectionData->m_backgroundColor->setValue(QColor(section.toElement().attribute("fo:background-color", "#ffffff")));
     
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);

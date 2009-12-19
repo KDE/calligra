@@ -38,8 +38,8 @@ KRFieldData::KRFieldData(QDomNode & element)
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     Z = element.toElement().attribute("report:zvalue").toDouble();
-    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-alignment"));
-    m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-alignment"));
+    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
+    m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
     
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
@@ -84,13 +84,13 @@ void KRFieldData::createProperties()
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("horizontal-alignemnt", keys, strings, "left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-align", keys, strings, "left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();
     keys << "top" << "center" << "bottom";
     strings << i18n("Top") << i18n("Center") << i18n("Bottom");
-    m_verticalAlignment = new KoProperty::Property("vertical-alignment", keys, strings, "center", "Vertical Alignment");
+    m_verticalAlignment = new KoProperty::Property("vertical-align", keys, strings, "center", "Vertical Alignment");
 
     m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", "Field Font");
 

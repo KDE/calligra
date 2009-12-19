@@ -70,8 +70,8 @@ KRCheckData * KRObjectData::toCheck()
 bool KRObjectData::parseReportTextStyleData(const QDomElement & elemSource, KRTextStyleData & ts)
 {
     if (elemSource.tagName() == "report:text-style") {
-	ts.backgroundColor = QColor(elemSource.attribute("report:background-color", "#000000"));
-	ts.foregroundColor = QColor(elemSource.attribute("report:foreground-color", "#ffffff"));
+	ts.backgroundColor = QColor(elemSource.attribute("fo:background-color", "#000000"));
+	ts.foregroundColor = QColor(elemSource.attribute("fo:foreground-color", "#ffffff"));
 	ts.backgroundOpacity = elemSource.attribute("report:background-opacity", "255").toInt();
 	ts.font.fromString(elemSource.attribute("report:qtfont"));
 	
