@@ -1000,18 +1000,6 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
         }
     }
 
-    // now parse style attribute
-    QString style = e.attribute("style").simplified();
-    QStringList substyles = style.split(';', QString::SkipEmptyParts);
-    for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-        QStringList substyle = it->split(':');
-        QString command = substyle[0].trimmed();
-        QString params  = substyle[1].trimmed();
-        // only use style attributes
-        if (m_styleAttributes.contains(command))
-            styleMap[command] = params;
-    }
-
     return styleMap;
 }
 
