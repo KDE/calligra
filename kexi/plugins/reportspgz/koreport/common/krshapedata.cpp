@@ -50,7 +50,7 @@ void KRShapeData::createProperties()
     QStringList keys;
 
     keys << KoShapeRegistry::instance()->keys();
-    m_shapeType = new KoProperty::Property("ShapeType", keys, keys, "KoStarShape", "Shape Type");
+    m_shapeType = new KoProperty::Property("ShapeType", keys, keys, "StarShape", "Shape Type");
 
     m_set->addProperty(m_name);
     m_set->addProperty(m_shapeType);
