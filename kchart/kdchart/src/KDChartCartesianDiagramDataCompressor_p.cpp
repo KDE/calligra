@@ -95,8 +95,8 @@ CartesianDiagramDataCompressor::DataValueAttributesList CartesianDiagramDataComp
         const CachePosition& position ) const
 {
     // return cached attrs, if any
-    DataValueAttributesCache::const_iterator i = m_dataValueAttributesCache.find(position);
-    if( i != m_dataValueAttributesCache.end() )
+    DataValueAttributesCache::const_iterator i = m_dataValueAttributesCache.constFind(position);
+    if( i != m_dataValueAttributesCache.constEnd() )
         return i.value();
     // retrieve attrs from all cells between the prev. cell and the current one
     CartesianDiagramDataCompressor::DataValueAttributesList allAttrs;
