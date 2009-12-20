@@ -83,7 +83,7 @@ void CharSelectDia::initDialog(const QChar &_chr, const QString &_font)
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
-    d->charSelect = new KCharSelect(page);
+    d->charSelect = new KCharSelect(page, 0);
     d->charSelect->setCurrentChar(_chr);
     d->charSelect->setCurrentFont(QFont(_font));
     connect(d->charSelect, SIGNAL(charSelected(QChar)), this, SLOT(slotDoubleClicked()));
