@@ -972,15 +972,16 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
 
 SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
 {
+    SvgStyles styleMap;
+
     // match css style rules to element
     QStringList cssStyles = m_cssStyles.matchStyles(e);
 
-    // collect style attribute
-    QString styleAttribute = e.attribute("style").simplified();
-    if (!styleAttribute.isEmpty())
-        cssStyles.append(styleAttribute);
-
-    SvgStyles styleMap;
+    // collect individual presentation style attributes which have the priority 0
+    foreach(const QString & command, m_styleAttributes) {
+        if (e.hasAttribute(command))
+            styleMap[command] = e.attribute(command);
+    }
 
     // collect all css style attributes
     foreach(const QString &style, cssStyles){
@@ -997,12 +998,6 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
             if (m_styleAttributes.contains(command))
                 styleMap[command] = params;
         }
-    }
-
-    // collect individual style attributes
-    foreach(const QString & command, m_styleAttributes) {
-        if (e.hasAttribute(command))
-            styleMap[command] = e.attribute(command);
     }
 
     // now parse style attribute

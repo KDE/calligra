@@ -34,11 +34,16 @@ public:
     /// Parses css style sheet in given xml element
     void parseStylesheet(const KoXmlElement &);
 
-    /// Matches css styles to given xml element and returns them
-    QStringList matchStyles(const KoXmlElement &) const;
+    /**
+     * Matches css styles to given xml element and returns them
+     * @param element the element to match styles for
+     * @return list of matching css styles sorted by priority
+     */
+    QStringList matchStyles(const KoXmlElement &element) const;
 
 private:
-    QMap<QString, QString> m_cssStyles;
+    class Private;
+    Private * const d;
 };
 
 #endif // SVGCSSHELPER_H
