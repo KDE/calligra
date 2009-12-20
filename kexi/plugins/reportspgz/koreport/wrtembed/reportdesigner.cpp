@@ -455,55 +455,55 @@ ReportSection * ReportDesigner::section(KRSectionData::Section s) const
         sec = m_reportFooter;
         break;
     default:
-        sec = NULL;
+        sec = 0;
     }
     return sec;
 }
 void ReportDesigner::removeSection(KRSectionData::Section s)
 {
     ReportSection* sec = section(s);
-    if (sec != NULL) {
+    if (sec) {
         delete sec;
 
         switch (s) {
         case KRSectionData::PageHeaderAny:
-            m_pageHeaderAny = NULL;
+            m_pageHeaderAny = 0;
             break;
         case KRSectionData::PageHeaderEven:
-            sec = m_pageHeaderEven = NULL;
+            sec = m_pageHeaderEven = 0;
             break;
         case KRSectionData::PageHeaderOdd:
-            m_pageHeaderOdd = NULL;
+            m_pageHeaderOdd = 0;
             break;
         case KRSectionData::PageHeaderFirst:
-            m_pageHeaderFirst = NULL;
+            m_pageHeaderFirst = 0;
             break;
         case KRSectionData::PageHeaderLast:
-            m_pageHeaderLast = NULL;
+            m_pageHeaderLast = 0;
             break;
         case KRSectionData::PageFooterAny:
-            m_pageFooterAny = NULL;
+            m_pageFooterAny = 0;
             break;
         case KRSectionData::PageFooterEven:
-            m_pageFooterEven = NULL;
+            m_pageFooterEven = 0;
             break;
         case KRSectionData::PageFooterOdd:
-            m_pageFooterOdd = NULL;
+            m_pageFooterOdd = 0;
             break;
         case KRSectionData::PageFooterFirst:
-            m_pageFooterFirst = NULL;
+            m_pageFooterFirst = 0;
             break;
         case KRSectionData::PageFooterLast:
-            m_pageFooterLast = NULL;
+            m_pageFooterLast = 0;
             break;
         case KRSectionData::ReportHeader:
-            m_reportHeader = NULL;
+            m_reportHeader = 0;
             break;
         case KRSectionData::ReportFooter:
-            m_reportFooter = NULL;
+            m_reportFooter = 0;
             break;
         default:
-            sec = NULL;
+            sec = 0;
         }
 
         setModified(true);
@@ -514,10 +514,10 @@ void ReportDesigner::removeSection(KRSectionData::Section s)
 void ReportDesigner::insertSection(KRSectionData::Section s)
 {
     ReportSection* sec = section(s);
-    if (sec == NULL) {
+    if (!sec) {
         int idx = 0;
         for (int i = 1; i <= s; ++i) {
-            if (section((KRSectionData::Section)(i)) != NULL)
+            if (section((KRSectionData::Section)i))
                 idx++;
         }
         if (s > KRSectionData::ReportHeader)
@@ -575,12 +575,12 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
             rs->setTitle(i18n("Report Footer"));
             m_reportFooter = rs;
             break;
-	//These sections cannot be inserted this way
-	case KRSectionData::None:
-	case KRSectionData::GroupHeader:
-	case KRSectionData::GroupFooter:
-	case KRSectionData::Detail:
-	    break;
+        //These sections cannot be inserted this way
+        case KRSectionData::None:
+        case KRSectionData::GroupHeader:
+        case KRSectionData::GroupFooter:
+        case KRSectionData::Detail:
+            break;
         }
 
         rs->show();
@@ -857,7 +857,7 @@ void ReportDesigner::resizeEvent(QResizeEvent * event)
 
 void ReportDesigner::setDetail(ReportSectionDetail *rsd)
 {
-    if (m_detail == NULL) {
+    if (!m_detail) {
         int idx = 0;
         if (m_pageHeaderFirst) idx++;
         if (m_pageHeaderOdd) idx++;
@@ -871,7 +871,7 @@ void ReportDesigner::setDetail(ReportSectionDetail *rsd)
 }
 void ReportDesigner::deleteDetail()
 {
-    if (m_detail != 0) {
+    if (m_detail) {
         delete m_detail;
         m_detail = 0;
     }

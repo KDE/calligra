@@ -346,6 +346,4 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
         }
         pos += w;
     }
-
-    return;
 }

@@ -187,6 +187,4 @@ void render3of9(OROPage * page, const QRectF & r, const QString & _str, int alig
         }
         pos += interchange_gap;
     }
-
-    return;
 }

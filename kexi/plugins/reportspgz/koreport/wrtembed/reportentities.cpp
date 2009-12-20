@@ -59,10 +59,10 @@ ReportEntity::ReportEntity(ReportDesigner* r)
 
 void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent)
 {
-    ReportEntity *re = NULL;
+    ReportEntity *re = 0;
     re = dynamic_cast<ReportEntity*>(item);
 
-    if (re != NULL) {
+    if (re) {
         re->buildXML(doc, parent);
     }
 

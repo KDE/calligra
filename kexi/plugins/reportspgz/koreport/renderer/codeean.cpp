@@ -285,8 +285,6 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     tb->setText(rightstr);
     tb->setFlags(Qt::AlignHCenter | Qt::AlignTop);
     page->addPrimitive(tb);
-
-    return;
 }
 
 void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int align)
@@ -497,8 +495,6 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     tb->setTextStyle(ts);
     tb->setText(chkstr);
     page->addPrimitive(tb);
-
-    return;
 }
 
 void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int align)
@@ -688,8 +684,6 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     tb->setText(rightstr);
     tb->setFlags(Qt::AlignHCenter | Qt::AlignTop);
     page->addPrimitive(tb);
-
-    return;
 }
 
 void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int align)
@@ -861,6 +855,4 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     tb->setTextStyle(ts);
     tb->setText(chkstr);
     page->addPrimitive(tb);
-
-    return;
 }

@@ -126,7 +126,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
 
 ORPreRenderPrivate::~ORPreRenderPrivate()
 {
-    if (m_reportData != 0) {
+    if (m_reportData) {
         delete m_reportData;
         m_reportData = 0;
     }
@@ -153,15 +153,15 @@ void ORPreRenderPrivate::createNewPage()
 
     m_yOffset = m_topMargin;
 
-    if (m_pageCounter == 1 && m_reportData->m_pageHeaderFirst != 0)
+    if (m_pageCounter == 1 && m_reportData->m_pageHeaderFirst)
         renderSection(* (m_reportData->m_pageHeaderFirst));
-    else if (lastPage == true && m_reportData->m_pageHeaderLast != 0)
+    else if (lastPage == true && m_reportData->m_pageHeaderLast)
         renderSection(* (m_reportData->m_pageHeaderLast));
-    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pageHeaderOdd != 0)
+    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pageHeaderOdd)
         renderSection(* (m_reportData->m_pageHeaderOdd));
-    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageHeaderAny != 0)
+    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageHeaderAny)
         renderSection(* (m_reportData->m_pageHeaderAny));
-    else if (m_reportData->m_pageHeaderAny != 0)
+    else if (m_reportData->m_pageHeaderAny)
         renderSection(* (m_reportData->m_pageHeaderAny));
 }
 
@@ -169,7 +169,7 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
 {
     qreal retval = 0.0;
 
-    if (lastPage && m_reportData->m_pageFooterLast != 0)
+    if (lastPage && m_reportData->m_pageFooterLast)
         retval = renderSectionSize(* (m_reportData->m_pageFooterLast));
     else if (m_pageCounter == 1 && m_reportData->m_pageFooterFirst)
         retval = renderSectionSize(* (m_reportData->m_pageFooterFirst));
@@ -177,7 +177,7 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
         retval = renderSectionSize(* (m_reportData->m_pageFooterOdd));
     else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageFooterEven)
         retval = renderSectionSize(* (m_reportData->m_pageFooterEven));
-    else if (m_reportData->m_pageFooterAny != 0)
+    else if (m_reportData->m_pageFooterAny)
         retval = renderSectionSize(* (m_reportData->m_pageFooterAny));
 
     kDebug() << retval;
@@ -192,7 +192,7 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
 
     kDebug() << offset;
 
-    if (lastPage && m_reportData->m_pageFooterLast != 0) {
+    if (lastPage && m_reportData->m_pageFooterLast) {
         kDebug() << "Last Footer";
         m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterLast));
         retval = renderSection(* (m_reportData->m_pageFooterLast));
@@ -208,7 +208,7 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
         kDebug() << "Even Footer";
         m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterEven));
         retval = renderSection(* (m_reportData->m_pageFooterEven));
-    } else if (m_reportData->m_pageFooterAny != 0) {
+    } else if (m_reportData->m_pageFooterAny) {
         kDebug() << "Any Footer";
         m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterAny));
         retval = renderSection(* (m_reportData->m_pageFooterAny));
@@ -221,7 +221,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 {
     kDebug();
 
-    if (detailData.m_detailSection != 0) {
+    if (detailData.m_detailSection) {
         if (m_kodata) {
 	    //TODO init the engine earlier?
             m_scriptHandler->setSource(m_kodata->source());
@@ -964,10 +964,10 @@ ORODocument* ORPreRender::generate()
         }
 
         KRDetailSectionData * detailData = d->m_reportData->m_detailSection;
-        if (detailData->m_detailSection != 0) {
+        if (detailData->m_detailSection) {
             KoReportData *mydata = d->m_kodata;
 
-            if ((mydata != 0))/* && !((query = orqThis->getQuery())->eof()))*/ {
+            if (mydata)/* && !((query = orqThis->getQuery())->eof()))*/ {
                 mydata->moveFirst();
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
@@ -993,7 +993,7 @@ ORODocument* ORPreRender::generate()
 
     } else {
 // Normal Print Run
-        if (d->m_reportData->m_reportHeader != 0) {
+        if (d->m_reportData->m_reportHeader) {
             d->renderSection(* (d->m_reportData->m_reportHeader));
         }
 
@@ -1001,7 +1001,7 @@ ORODocument* ORPreRender::generate()
             d->renderDetailSection(* (d->m_reportData->m_detailSection));
         }
 
-        if (d->m_reportData->m_reportFooter != 0) {
+        if (d->m_reportData->m_reportFooter) {
             if (d->renderSectionSize(* (d->m_reportData->m_reportFooter)) + d->finishCurPageSize(true) + d->m_bottomMargin + d->m_yOffset >= d->m_maxHeight) {
                 d->createNewPage();
             }
@@ -1037,7 +1037,7 @@ ORODocument* ORPreRender::generate()
 
 void ORPreRender::setSourceData(KoReportData *data)
 {
-    if (d != 0 && data != 0)
+    if (d && data)
     {
         d->m_kodata = data;
         d->m_conn  = static_cast<KexiDB::Connection*>(data->connection());
@@ -1047,8 +1047,8 @@ void ORPreRender::setSourceData(KoReportData *data)
 bool ORPreRender::setDom(const QString & docReport)
 {
     kDebug() << docReport;
-    if (d != 0) {
-        if (d->m_reportData != 0)
+    if (d) {
+        if (d->m_reportData)
             delete d->m_reportData;
         d->m_valid = false;
 
@@ -1061,7 +1061,7 @@ bool ORPreRender::setDom(const QString & docReport)
 
 bool ORPreRender::isValid() const
 {
-    if (d != 0 && d->m_valid)
+    if (d && d->m_valid)
         return true;
     return false;
 }

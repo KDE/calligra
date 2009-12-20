@@ -170,7 +170,7 @@ const _ext3of9map ext3of9map[] = {
     _ext3of9map('~' , "%S"),
     _ext3of9map('\177' , "%T"),   // DEL
 
-    _ext3of9map(-1 , NULL)
+    _ext3of9map(-1 , 0)
 };
 
 QString convertTo3of9(QChar c)
@@ -193,6 +193,4 @@ void renderExtended3of9(OROPage * page, const QRectF & r, const QString & str, i
     }
 
     render3of9(page, r, new_str, align);
-
-    return;
 }

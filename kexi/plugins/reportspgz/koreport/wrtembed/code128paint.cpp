@@ -302,7 +302,7 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -327,7 +327,7 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
         space = false;
         for (b = 0; b < 6; b++, space = !space) {
             w = _128codes[idx].values[b] * bar_width;
-            if (!space && pPainter != 0) {
+            if (!space && pPainter) {
                 pPainter->fillRect(pos, top, w, draw_height, pPainter->pen().color());
             }
             pos += w;
@@ -340,14 +340,13 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
     space = false;
     for (b = 0; b < 7; b++, space = !space) {
         w = STOP_CHARACTER[b] * bar_width;
-        if (!space && pPainter != 0) {
+        if (!space && pPainter) {
             pPainter->fillRect(pos, top, w, draw_height, pPainter->pen().color());
         }
         pos += w;
     }
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->restore();
     }
-    return;
 }

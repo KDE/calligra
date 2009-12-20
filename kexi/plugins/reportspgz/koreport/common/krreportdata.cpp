@@ -26,9 +26,9 @@
 
 void KRReportData::init()
 {
-    m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = NULL;
-    m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = NULL;
-    m_reportHeader = m_reportFooter = NULL;
+    m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = 0;
+    m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = 0;
+    m_reportHeader = m_reportFooter = 0;
 }
 KRReportData::KRReportData()
         : m_detailSection(0)
@@ -293,7 +293,7 @@ KRSectionData* KRReportData::section(KRSectionData::Section s) const
         sec = m_reportFooter;
         break;
     default:
-        sec = NULL;
+        sec = 0;
     }
     return sec;
 }

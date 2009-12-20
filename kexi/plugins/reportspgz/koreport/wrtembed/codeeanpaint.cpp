@@ -159,7 +159,7 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -232,7 +232,6 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
 
         pPainter->restore();
     }
-    return;
 }
 
 void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter * pPainter)
@@ -312,7 +311,7 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -389,7 +388,6 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
 
         pPainter->restore();
     }
-    return;
 }
 
 void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter * pPainter)
@@ -468,7 +466,7 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -537,7 +535,6 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
 
         pPainter->restore();
     }
-    return;
 }
 
 void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter * pPainter)
@@ -608,7 +605,7 @@ void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter *
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -666,6 +663,5 @@ void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter *
 
         pPainter->restore();
     }
-    return;
 }
 

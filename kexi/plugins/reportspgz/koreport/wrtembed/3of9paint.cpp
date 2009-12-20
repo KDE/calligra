@@ -153,7 +153,7 @@ void render3of9(const QRect & r, const QString & _str, int align, QPainter * pPa
     // ok we need to prepend and append the str with a *
     str = "*" + str + "*";
 
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -176,15 +176,14 @@ void render3of9(const QRect & r, const QString & _str, int align, QPainter * pPa
         bool space = false;
         for (int b = 0; b < 9; b++, space = !space) {
             int w = (_3of9codes[idx].values[b] == 1 ? narrow_bar * bar_width_mult : narrow_bar);
-            if (!space && pPainter != NULL) {
+            if (!space && pPainter) {
                 pPainter->fillRect(pos, top, w, draw_height, pPainter->pen().color());
             }
             pos += w;
         }
         pos += interchange_gap;
     }
-    if (pPainter != 0) {
+    if (pPainter) {
         pPainter->restore();
     }
-    return;
 }
