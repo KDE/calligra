@@ -1581,7 +1581,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             }
             //fmlaLinkedCell
             //fmlaListFillRange
-            printf("ObjRecord::setData: Runtime license key is \"%s\"\n", key);
+            printf("ObjRecord::setData: Runtime license key is \"%s\"\n", key.c_str());
         }
     }
 
@@ -2367,7 +2367,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                      if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
                          propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */ )
                      {
-                         printf( "Ignoring property with unknown id %i and type %i\n", propertyId, type );
+                         printf( "Ignoring property with unknown id %i and type %l\n", propertyId, type );
                      }
                      break;
               }
@@ -2393,7 +2393,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
       const unsigned long length = readU32( buffer );
       bytes_read = combObjStream->read( buffer, length );
       UString ansiUserType = readByteString(buffer, length);
-      printf( "length=%i ansiUserType=%s\n",length,ansiUserType.ascii() );
+      printf( "length=%l ansiUserType=%s\n",length,ansiUserType.ascii() );
       
       // AnsiClipboardFormat
       bytes_read = combObjStream->read( buffer, 4 );
