@@ -43,6 +43,9 @@
 typedef KGenericFactory<ExcelImport> ExcelImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 
+#define UNICODE_EUR 0x20AC
+#define UNICODE_GBP 0x00A3
+#define UNICODE_JPY 0x00A5
 
 // UString -> QConstString conversion. Use  to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
@@ -877,9 +880,9 @@ QString currencyValue(const QString &value)
 {
     if(value.isEmpty()) return QString();
     if(value[0] == '$') return "USD";
-    if(value[0] == '€') return "EUR";
-    if(value[0] == '£') return "GBP";
-    if(value[0] == '¥') return "JPY";
+    if(value[0] == QChar(UNICODE_EUR)) return "EUR";
+    if(value[0] == QChar(UNICODE_GBP)) return "GBP";
+    if(value[0] == QChar(UNICODE_JPY)) return "JPY";
     QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
     if (symbolRegEx.indexIn(value) >= 0) return symbolRegEx.cap(1);
     return QString();
@@ -1286,12 +1289,12 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
             } else if(currencyVal[0] == '$') {
                 language = "en";
                 country = "US";
-            } else if(currencyVal[0] == '€') {
+            } else if(currencyVal[0] == QChar(UNICODE_EUR)) {
                 // should not be possible cause there is no single "euro-land"
-            } else if(currencyVal[0] == '£') {
+            } else if(currencyVal[0] == QChar(UNICODE_GBP)) {
                 language = "en";
                 country = "GB";
-            } else if(currencyVal[0] == '¥') {
+            } else if(currencyVal[0] == QChar(UNICODE_JPY)) {
                 language = "ja";
                 country = "JP";
             } else {
