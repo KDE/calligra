@@ -2350,7 +2350,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                               bytes_read = summarystream->read( buffer, 8 );
                               if( bytes_read != 8 ) break;
                               const unsigned long dwLowDateTime = readU32( buffer );
-                              const unsigned long dwHighDateTime = readU32( buffer );
+                              const unsigned long dwHighDateTime = readU32( buffer + 4 );
                               long long int time = dwHighDateTime;
                               time <<= 32;
                               time += (unsigned long) dwLowDateTime;
