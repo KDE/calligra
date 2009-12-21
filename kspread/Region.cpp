@@ -888,6 +888,8 @@ Sheet* Region::filterSheetName(QString& sRegion)
 {
     Sheet* sheet = 0;
     int delimiterPos = sRegion.lastIndexOf('!');
+    if (delimiterPos < 0)
+        delimiterPos = sRegion.lastIndexOf('.');
     if (delimiterPos > -1) {
         const QString sheetName = sRegion.left(delimiterPos);
         sheet = d->map->findSheet(sheetName);
