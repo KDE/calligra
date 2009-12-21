@@ -1073,8 +1073,10 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         KoGenStyle currentCellStyle; // the type determined in saveOdfCellStyle
         saveOdfCellStyle(currentCellStyle, mainStyles);
         // skip 'table:style-name' attribute for the default style
-        if (!currentCellStyle.isDefaultStyle())
-            xmlwriter.addAttribute("table:style-name", mainStyles.styles().find(currentCellStyle).value());
+        if (!currentCellStyle.isDefaultStyle()) {
+            if (mainStyles.styles().contains(currentCellStyle))
+                xmlwriter.addAttribute("table:style-name", mainStyles.styles().find(currentCellStyle).value());
+        }
     }
 
     // group empty cells with the same style
@@ -1504,6 +1506,26 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     return true;
 }
 
+// Similar to KoXml::namedItemNS except that children of span tags will be evaluated too.
+KoXmlElement namedItemNSWithSpan(const KoXmlNode& node, const char* nsURI, const char* localName)
+{
+    KoXmlNode n = node.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            if (n.localName() == localName && n.namespaceURI() == nsURI) {
+                return n.toElement();
+            }
+            if (n.localName() == "span" && n.namespaceURI() == nsURI) {
+                KoXmlElement e = KoXml::namedItemNS(n, nsURI, localName); // not recursive
+                if(!e.isNull()) {
+                    return e;
+                }
+            }
+        }
+    }
+    return KoXmlElement();
+}
+
 void Cell::loadOdfCellText(const KoXmlElement& parent)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
@@ -1515,15 +1537,17 @@ void Cell::loadOdfCellText(const KoXmlElement& parent)
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
                 textParagraphElement.namespaceURI() == KoXmlNS::text) {
+
             // our text, could contain formating for value or result of formul
-            if (cellText.isEmpty())
+            if (cellText.isEmpty()) {
                 cellText = textParagraphElement.text();
-            else {
+            } else {
                 cellText += '\n' + textParagraphElement.text();
                 multipleTextParagraphsFound = true;
             }
 
-            KoXmlElement textA = KoXml::namedItemNS(textParagraphElement, KoXmlNS::text, "a");
+            // the text:a link could be located within a text:span element
+            KoXmlElement textA = namedItemNSWithSpan(textParagraphElement, KoXmlNS::text, "a");
             if (!textA.isNull()) {
                 if (textA.hasAttributeNS(KoXmlNS::xlink, "href")) {
                     QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
