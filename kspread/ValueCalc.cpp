@@ -857,10 +857,11 @@ Value ValueCalc::sin(const Value &number)
 
 Value ValueCalc::cos(const Value &number)
 {
-    Value res = Value(::cos(converter->toFloat(number)));
+    if (!number.isNumber())
+        return Value::errorVALUE();
 
-    if (number.isNumber() || number.isEmpty())
-        res.setFormat(number.format());
+    Value res = Value(::cos(converter->toFloat(number)));
+    res.setFormat(number.format());
 
     return res;
 }
@@ -887,27 +888,37 @@ Value ValueCalc::cotg(const Value &number)
 
 Value ValueCalc::asin(const Value &number)
 {
+    if (!number.isNumber())
+        return Value::errorVALUE();
+    Number n = converter->toFloat(number);
+    const double d = numToDouble(n);
+    if (d < -1.0 || d > 1.0 )
+        return Value::errorVALUE();
+
     errno = 0;
-    Value res = Value(::asin(converter->toFloat(number)));
+    Value res = Value(::asin(n));
     if (errno)
         return Value::errorVALUE();
 
-    if (number.isNumber() || number.isEmpty())
-        res.setFormat(number.format());
-
+    res.setFormat(number.format());
     return res;
 }
 
 Value ValueCalc::acos(const Value &number)
 {
+    if (!number.isNumber())
+        return Value::errorVALUE();
+    Number n = converter->toFloat(number);
+    const double d = numToDouble(n);
+    if (d < -1.0 || d > 1.0 )
+        return Value::errorVALUE();
+    
     errno = 0;
-    Value res = Value(::acos(converter->toFloat(number)));
+    Value res = Value(::acos(n));
     if (errno)
         return Value::errorVALUE();
 
-    if (number.isNumber() || number.isEmpty())
-        res.setFormat(number.format());
-
+    res.setFormat(number.format());
     return res;
 }
 

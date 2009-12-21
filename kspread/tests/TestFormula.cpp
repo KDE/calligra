@@ -204,10 +204,23 @@ void TestFormula::testConstant()
 
 void TestFormula::testInvalid()
 {
+    // Basic operations always throw errors if one of the values
+    // is invalid. This is the difference to SUM and co.
     CHECK_EVAL("a+0", Value::errorVALUE());
     CHECK_EVAL("0-z", Value::errorVALUE());
     CHECK_EVAL("a*b", Value::errorVALUE());
     CHECK_EVAL("u/2", Value::errorVALUE());
+
+    // Cosinus needs to be a numeric value
+    CHECK_EVAL("COS(raghu)", Value::errorVALUE());
+    CHECK_EVAL("COS()", Value::errorVALUE());
+    // ASinus needs to be a numeric value between >=-1.0 and <=1.0
+    CHECK_EVAL("ASIN(1.2)", Value::errorVALUE());
+    CHECK_EVAL("ASIN(-99)", Value::errorVALUE());
+    // ACosinus needs to be a numeric value between >=-1.0 and <=1.0
+    CHECK_EVAL("ACOS()", Value::errorVALUE());
+    CHECK_EVAL("ACOS(-1.1)", Value::errorVALUE());
+    CHECK_EVAL("ACOS(1.1)", Value::errorVALUE());
 }
 
 void TestFormula::testUnary()
@@ -229,10 +242,15 @@ void TestFormula::testUnary()
     CHECK_EVAL("1.1-SIN(0)", Value(1.1));
     CHECK_EVAL("1.2--SIN(0)", Value(1.2));
     CHECK_EVAL("1.3---SIN(0)", Value(1.3));
+    CHECK_EVAL("1-ASIN(1)", Value(0.57));
+    CHECK_EVAL("1+ASIN(-1.0)", Value(0.57));
+    CHECK_EVAL("1+COS(0.2)", Value(1.98));
     CHECK_EVAL("-COS(0)", Value(-1));
     CHECK_EVAL("1.1-COS(0)", Value(0.1));
     CHECK_EVAL("1.2--COS(0)", Value(2.2));
     CHECK_EVAL("1.3---COS(0)", Value(0.3));
+    CHECK_EVAL("ACOS(1.0)", Value(0));
+    CHECK_EVAL("2+ACOS(-1.0)", Value(-1.14));
 }
 
 void TestFormula::testBinary()
