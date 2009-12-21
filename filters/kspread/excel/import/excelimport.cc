@@ -854,6 +854,16 @@ QString cellFormula(Cell* cell)
             // So, what we do is the same OO.org does. We prefix the formula with "of:"
             // to indicate the changed behavior. Both, OO.org and Excel, do support
             // that "of:" prefix.
+            // 
+            // Again in other words; We need to special case that functions cause KSpread
+            // behaves here like OpenOffice.org but the behavior of OpenOffice.org ist wrong
+            // from the perspective of Excel and Excel defines the standard (that is then
+            // written down in the OpenFormula specs).
+            // OpenOffice.org as well as KSpread cannot easily change  there wrong behavior
+            // cause of backward compatibility. So, what OpenOffice.org does it to
+            // indicate that the ROUND* functions should behave like defined in the
+            // OpenFormula specs (as defined by Excel) and not like at OpenOffice.org (and
+            // KSpread) by prefixing the formula with a "of:".
             formula.prepend("of:=");
         } else if(!formula.isEmpty()) {
             // Normal formulas are only prefixed with a = sign.
