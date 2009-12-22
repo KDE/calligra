@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("flat",
-        ki18n("Flat display: don't display groups\n"
+        ki18n("Flat display: do not display groups\n"
               "(useful for testing)"));
     options.add("font-size <size>",
         ki18n("Set font size to <size> (in points)\n"
