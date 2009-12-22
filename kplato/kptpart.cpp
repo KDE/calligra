@@ -107,6 +107,7 @@ Part::~Part()
 {
     delete m_project;
     qDeleteAll( m_mergedPackages );
+    delete m_context;
 }
 
 void Part::setReadWrite( bool rw )
