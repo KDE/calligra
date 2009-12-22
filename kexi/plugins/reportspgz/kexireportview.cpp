@@ -212,7 +212,7 @@ tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);
-    
+
     return true;
 }
 
@@ -225,21 +225,21 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         delete m_preRenderer;
 
         QDomDocument doc;
-        doc.setContent ( tempData()->document );
+        doc.setContent(tempData()->document);
         QDomElement root = doc.documentElement();
-        QDomElement conn = root.firstChildElement( "connection" );
-        
+        QDomElement conn = root.firstChildElement("connection");
+
         m_preRenderer = new ORPreRender(tempData()->document);
         if (m_preRenderer->isValid()) {
             if (!conn.isNull())  {
                 m_preRenderer->setSourceData(sourceData(conn));
             }
-            m_preRenderer->setName( tempData()->name );
+            m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
 
             //Add a kexi object to provide kexidb and extra functionality
             m_kexi = new KexiScriptAdaptor();
-            m_preRenderer->registerScriptObject(m_kexi, "Kexi" );
+            m_preRenderer->registerScriptObject(m_kexi, "Kexi");
 
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
@@ -251,8 +251,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportWidget->setObjectName("KexiReportPage");
             m_scrollArea->setWidget(m_reportWidget);
 
-        }
-        else {
+        } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
 
@@ -266,14 +265,14 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
 {
     KoReportData *kodata;
     kodata = 0;
-    
-    if (e.attribute("type") == "internal" ) {
+
+    if (e.attribute("type") == "internal") {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
-    if (e.attribute("type") ==  "external" ) {
+    if (e.attribute("type") ==  "external") {
         kodata = new KexiMigrateReportData(e.attribute("source"));
     }
-    
+
     return kodata;
 }
 

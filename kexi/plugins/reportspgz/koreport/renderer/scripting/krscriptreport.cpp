@@ -107,19 +107,19 @@ QObject* Report::sectionByName(const QString &n)
 
 void Report::initialize(Kross::Object::Ptr ptr)
 {
-        m_scriptObject = ptr;
+    m_scriptObject = ptr;
 }
 
 void Report::eventOnOpen()
 {
     if (m_scriptObject)
-	m_scriptObject->callMethod("OnOpen");
+        m_scriptObject->callMethod("OnOpen");
 }
 
 void Report::eventOnComplete()
 {
     if (m_scriptObject)
-	m_scriptObject->callMethod("OnComplete");
+        m_scriptObject->callMethod("OnComplete");
 }
 
 void Report::eventOnNewPage()

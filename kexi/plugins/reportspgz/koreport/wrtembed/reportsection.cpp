@@ -53,24 +53,24 @@
 #include <kdebug.h>
 
 static const char *arrow_xpm[] = {
-/* width height num_colors chars_per_pixel */
-"    11    12       2            1",
-/* colors */
-". c None",
-"# c #555555",
-/*   data   */
-"...........",
-"...#####...",
-"...#####...",
-"...#####...",
-"...#####...",
-"...#####...",
-"###########",
-".#########.",
-"..#######.-",
-"...#####...",
-"....###....",
-".....#....."
+    /* width height num_colors chars_per_pixel */
+    "    11    12       2            1",
+    /* colors */
+    ". c None",
+    "# c #555555",
+    /*   data   */
+    "...........",
+    "...#####...",
+    "...#####...",
+    "...#####...",
+    "...#####...",
+    "...#####...",
+    "###########",
+    ".#########.",
+    "..#######.-",
+    "...#####...",
+    "....###....",
+    ".....#....."
 };
 
 //
@@ -84,7 +84,7 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
 
     m_sectionData = new KRSectionData();
     connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
     int dpiY = KoDpi::dpiY();
 
     m_reportDesigner = rptdes;
@@ -158,7 +158,7 @@ void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
     qreal f = INCH_TO_POINT(m_scene->height() / KoDpi::dpiY());
 
     section.setAttribute("report:height", QString::number(f));
-    section.setAttribute("fo:background-color",m_sectionData->backgroundColor().name());
+    section.setAttribute("fo:background-color", m_sectionData->backgroundColor().name());
 
     // now get a list of all the QGraphicsItems on this scene and output them.
     QGraphicsItemList list = m_scene->items();
@@ -179,13 +179,13 @@ void ReportSection::initFromXML(QDomNode & section)
     kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
     slotResizeBarDragged(0);
-	    
+
     m_sectionData->m_backgroundColor->setValue(QColor(section.toElement().attribute("fo:background-color", "#ffffff")));
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
- 
+
         //Objects
         if (n == "report:label") {
             (new ReportEntityLabel(node, m_sceneView->designer(), m_scene))->setVisible(true);
@@ -219,7 +219,7 @@ QSize ReportSection::sizeHint() const
 void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 {
     Q_UNUSED(set)
-    
+
     KoUnit unit = m_reportDesigner->pageUnit();
 
     //update items position with unit
@@ -250,7 +250,7 @@ void ReportSection::slotSceneClicked()
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s)
-    
+
     //Handle Background Color
     if (p.name() == "BackgroundColor") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());
@@ -298,26 +298,25 @@ void ReportSectionTitle::paintEvent(QPaintEvent * event)
 {
     QPainter painter(this);
     KColorScheme colorScheme(QPalette::Active);
-    
+
     QLinearGradient linearGrad(QPointF(0, 0), QPointF(width(), 0));
-    
+
     ReportSection* _section = dynamic_cast<ReportSection*>(parent());
 
     if (_section->m_scene == _section->m_reportDesigner->activeScene()) {
-      linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor).color());
-      linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor).color());
+        linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor).color());
+        linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor).color());
+    } else {
+        linearGrad.setColorAt(0, colorScheme.background(KColorScheme::NormalBackground).color());
+        linearGrad.setColorAt(1, colorScheme.foreground(KColorScheme::InactiveText).color());
     }
-    else {
-      linearGrad.setColorAt(0, colorScheme.background(KColorScheme::NormalBackground).color());
-      linearGrad.setColorAt(1, colorScheme.foreground(KColorScheme::InactiveText).color());
-    }
-     
+
     painter.fillRect(rect(), linearGrad);
-    
+
     painter.setPen(Qt::black);
     painter.setBackgroundMode(Qt::TransparentMode);
-    painter.drawPixmap(QPoint(25,(height() - 12) / 2), QPixmap(arrow_xpm));
-    
+    painter.drawPixmap(QPoint(25, (height() - 12) / 2), QPixmap(arrow_xpm));
+
     painter.drawText(rect().adjusted(40, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, text());
     QFrame::paintEvent(event);
 }

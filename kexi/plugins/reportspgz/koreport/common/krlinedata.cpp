@@ -32,7 +32,7 @@ KRLineData::KRLineData(QDomNode & element)
     QString n;
     QDomNode node;
     QPointF _s, _e;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
@@ -42,11 +42,11 @@ KRLineData::KRLineData(QDomNode & element)
     _e.setY(element.toElement().attribute("report:yend").toDouble());
     m_start.setPointPos(_s);
     m_end.setPointPos(_e);
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-	
+
         if (n == "report:line-style") {
             KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {

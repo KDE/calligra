@@ -33,48 +33,50 @@
  * @author Adam Pigg <adam@piggz.co.uk>
  * @version 0.1
  */
-class KexiReportPart : public KexiPart::Part {
-        Q_OBJECT
+class KexiReportPart : public KexiPart::Part
+{
+    Q_OBJECT
+public:
+    /**
+     * Default Constructor
+     */
+    KexiReportPart(QObject *parent, const QVariantList &l);
+
+    /**
+     * Default Destructor
+     */
+    virtual ~KexiReportPart();
+
+    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
+                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+    virtual KexiWindowData* createWindowData(KexiWindow* window);
+
+    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+
+    virtual void initPartActions();
+
+    class TempData : public KexiWindowData
+    {
     public:
-        /**
-         * Default Constructor
-         */
-        KexiReportPart ( QObject *parent, const QVariantList &l );
+        TempData(QObject* parent);
+        QString document;
+        QDomElement reportDefinition;
+        QDomElement connectionDefinition;
 
-        /**
-         * Default Destructor
-         */
-        virtual ~KexiReportPart();
+        /*! true, if \a document member has changed in previous view. Used on view switching.
+        Check this flag to see if we should refresh data for DataViewMode. */
+    bool reportSchemaChangedInPreviousView :
+        1;
+        QString name;
+    };
 
-        virtual KexiView* createView ( QWidget *parent, KexiWindow* win,
-                                       KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0 );
-        virtual KexiWindowData* createWindowData ( KexiWindow* window );
+private slots:
+    void slotActionTriggered();
 
-        virtual void setupCustomPropertyPanelTabs ( KTabWidget *tab );
-
-        virtual void initPartActions();
-        
-        class TempData : public KexiWindowData {
-            public:
-                TempData ( QObject* parent );
-                QString document;
-                QDomElement reportDefinition;
-                QDomElement connectionDefinition;
-
-                /*! true, if \a document member has changed in previous view. Used on view switching.
-                Check this flag to see if we should refresh data for DataViewMode. */
-            bool reportSchemaChangedInPreviousView :
-                1;
-                QString name;
-        };
-
-    private slots:
-        void slotActionTriggered();
-        
-    private:
-        QString loadReport ( const QString& );
-        class Private;
-        Private* d;
+private:
+    QString loadReport(const QString&);
+    class Private;
+    Private* d;
 };
 
 #endif // _KEXIREPORTPART_H_

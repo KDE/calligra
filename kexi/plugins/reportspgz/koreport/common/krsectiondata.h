@@ -80,17 +80,17 @@ public:
     qreal height() const {
         return m_height->value().toDouble();
     }
-    
+
     QList<KRObjectData*> objects() const {
         return m_objects;
     }
-    
+
     QString name() const;
-    
+
     QColor backgroundColor() const {
         return m_backgroundColor->value().value<QColor>();
     }
-    
+
     Section type() const {
         return m_type;
     }

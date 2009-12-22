@@ -44,7 +44,7 @@ public:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
     void triggerAction(const QString &);
-    
+
 private:
     ReportDesigner *m_reportDesigner;
     KoProperty::Set *m_propertySet;
@@ -62,7 +62,7 @@ private:
     KAction *m_itemLowerAction;
 
     KexiSourceSelector *m_sourceSelector;
-    
+
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);

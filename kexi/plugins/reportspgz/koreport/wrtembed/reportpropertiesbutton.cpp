@@ -18,22 +18,23 @@
 #include <QPainter>
 #include <KColorScheme>
 
-ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent) {
-  
+ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent)
+{
+
 }
 
 void ReportPropertiesButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
-    
+
     QPainter painter(this);
     KColorScheme colorScheme(QPalette::Active, KColorScheme::Window);
-    
-    painter.setPen(QPen(colorScheme.foreground(KColorScheme::InactiveText),2));
+
+    painter.setPen(QPen(colorScheme.foreground(KColorScheme::InactiveText), 2));
     painter.drawRect(4, 4, width() - 8, height() - 8);
-    
+
     if (checkState()) {
-      painter.fillRect(7, 7, width() - 14, height() - 14, colorScheme.foreground(KColorScheme::InactiveText));
+        painter.fillRect(7, 7, width() - 14, height() - 14, colorScheme.foreground(KColorScheme::InactiveText));
     }
 }
 

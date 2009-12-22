@@ -31,13 +31,13 @@ KRLabelData::KRLabelData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     m_text->setValue(element.toElement().attribute("report:caption"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();

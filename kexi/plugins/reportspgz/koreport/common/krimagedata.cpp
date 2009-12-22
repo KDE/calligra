@@ -33,7 +33,7 @@ KRImageData::KRImageData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
@@ -48,14 +48,14 @@ KRImageData::KRImageData(QDomNode & element)
             parseReportRect(node.toElement(), r);
             m_pos.setPointPos(r.topLeft());
             m_size.setPointSize(r.size());
-	} else if (n == "report:inline-image-data") {
-	    
-	    setInlineImageData(node.firstChild().nodeValue().toLatin1());
+        } else if (n == "report:inline-image-data") {
+
+            setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else {
             kDebug() << "while parsing image element encountered unknow element: " << n;
         }
     }
-    
+
 }
 
 bool KRImageData::isInline()
@@ -85,13 +85,13 @@ void KRImageData::setInlineImageData(QByteArray dat, const QString &fn)
         if (!pix.isNull())
             m_staticImage->setValue(pix);
         else {
-            QPixmap blank(1,1);
+            QPixmap blank(1, 1);
             blank.fill();
             m_staticImage->setValue(blank);
         }
     } else {
         const QByteArray binaryStream(KCodecs::base64Decode(dat));
-        const QPixmap pix( QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly) );
+        const QPixmap pix(QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly));
         m_staticImage->setValue(pix);
     }
 

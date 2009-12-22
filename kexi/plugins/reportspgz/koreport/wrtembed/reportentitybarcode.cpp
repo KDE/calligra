@@ -45,7 +45,7 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
         scene->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setMaxLength(5);
     ReportRectEntity::init(&m_pos, &m_size, m_set);
@@ -63,7 +63,7 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
 }
 
 ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
-	: KRBarcodeData(element), ReportRectEntity(rw)
+        : KRBarcodeData(element), ReportRectEntity(rw)
 {
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -93,7 +93,7 @@ void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsIte
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
 
@@ -140,7 +140,7 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_format);
     addPropertyAsAttribute(&entity, m_maxLength);
     entity.setAttribute("report:z-index", zValue());
-    
+
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 

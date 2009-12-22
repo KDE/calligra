@@ -43,21 +43,21 @@ class Property;
 
 class KRTextStyleData
 {
-    public:
-	QFont font;
-	Qt::Alignment alignment;
-	QColor backgroundColor;
-	QColor foregroundColor;
-	int backgroundOpacity;
-	
+public:
+    QFont font;
+    Qt::Alignment alignment;
+    QColor backgroundColor;
+    QColor foregroundColor;
+    int backgroundOpacity;
+
 };
 
 class KRLineStyleData
 {
-    public:
-	int weight;
-	QColor lineColor;
-	Qt::PenStyle style;
+public:
+    int weight;
+    QColor lineColor;
+    Qt::PenStyle style;
 };
 
 
@@ -116,11 +116,11 @@ protected:
     KRPos m_pos;
 
     QString m_oldName;
-    
-    static bool parseReportRect(const QDomElement &, QRectF &); 
+
+    static bool parseReportRect(const QDomElement &, QRectF &);
     static bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
     static bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);
-    
+
 
 };
 

@@ -61,22 +61,22 @@ private:
 
 class ORDetailGroupSectionData
 {
-    public:
-	ORDetailGroupSectionData();
-	
-	enum PageBreak {
-	    BreakNone = 0,
-	    BreakAfterGroupFooter = 1,
-	    BreakBeforeGroupHeader = 2
-	};
-	
-	//QString name;
-	QString column;
-	int pagebreak;
-	
-	
-	KRSectionData *groupHeader;
-	KRSectionData *groupFooter;
+public:
+    ORDetailGroupSectionData();
+
+    enum PageBreak {
+        BreakNone = 0,
+        BreakAfterGroupFooter = 1,
+        BreakBeforeGroupHeader = 2
+    };
+
+    //QString name;
+    QString column;
+    int pagebreak;
+
+
+    KRSectionData *groupHeader;
+    KRSectionData *groupFooter;
 };
 
 #endif

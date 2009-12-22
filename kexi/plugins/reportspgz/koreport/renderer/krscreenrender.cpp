@@ -146,7 +146,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
 
             m_painter->save();
 
-            m_painter->setBackgroundMode ( Qt::OpaqueMode );
+            m_painter->setBackgroundMode(Qt::OpaqueMode);
             m_painter->setRenderHint(QPainter::Antialiasing);
 
             m_painter->setPen(chk->foregroundColor());
@@ -157,43 +157,41 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
                 m_painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style));
             }
 
-            qreal ox = sz.width()/5;
-            qreal oy = sz.height()/5;
+            qreal ox = sz.width() / 5;
+            qreal oy = sz.height() / 5;
 
             //Checkbox Style
-            if (chk->checkType() == "Cross"){
-                m_painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+            if (chk->checkType() == "Cross") {
+                m_painter->drawRoundedRect(rc, sz.width() / 10 , sz.height() / 10);
 
                 if (chk->value()) {
                     QPen lp;
                     lp.setColor(chk->foregroundColor());
                     lp.setWidth(ox > oy ? oy : ox);
                     m_painter->setPen(lp);
-                    m_painter->drawLine(QPointF(ox,oy) + ps, QPointF(sz.width() - ox, sz.height() - oy) + ps);
+                    m_painter->drawLine(QPointF(ox, oy) + ps, QPointF(sz.width() - ox, sz.height() - oy) + ps);
                     m_painter->drawLine(QPointF(ox, sz.height() - oy) + ps, QPoint(sz.width() - ox, oy) + ps);
                 }
-            }
-            else if (chk->checkType() == "Dot"){
-            //Radio Style
+            } else if (chk->checkType() == "Dot") {
+                //Radio Style
                 m_painter->drawEllipse(rc);
 
                 if (chk->value()) {
                     QBrush lb(chk->foregroundColor());
                     m_painter->setBrush(lb);
                     m_painter->setPen(Qt::NoPen);
-                    m_painter->drawEllipse(rc.center(), sz.width()/2 - ox, sz.height()/2 - oy);
+                    m_painter->drawEllipse(rc.center(), sz.width() / 2 - ox, sz.height() / 2 - oy);
                 }
-            }
-            else {
-            //Tickbox Style
-                m_painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+            } else {
+                //Tickbox Style
+                m_painter->drawRoundedRect(rc, sz.width() / 10 , sz.height() / 10);
 
                 if (chk->value()) {
                     QPen lp;
                     lp.setColor(chk->foregroundColor());
                     lp.setWidth(ox > oy ? oy : ox);
                     m_painter->setPen(lp);
-                    m_painter->drawLine(QPointF(ox,sz.height()/2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
+                    m_painter->drawLine(QPointF(ox, sz.height() / 2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
                     m_painter->drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
                 }
             }

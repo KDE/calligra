@@ -44,7 +44,7 @@ void ReportEntityShape::init(QGraphicsScene * scene)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -84,7 +84,7 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     QList<KoShape*> shapes;
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -127,7 +127,7 @@ void ReportEntityShape::buildXML(QDomDocument & doc, QDomElement & parent)
 void ReportEntityShape::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s);
-    
+
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

@@ -22,10 +22,10 @@
 
 class ReportPropertiesButton : public QCheckBox
 {
-  public:
+public:
     ReportPropertiesButton(QWidget*);
 protected:
-    virtual void paintEvent(QPaintEvent* );
+    virtual void paintEvent(QPaintEvent*);
 };
 
 #endif // REPORTPROPERTIESBUTTON_H

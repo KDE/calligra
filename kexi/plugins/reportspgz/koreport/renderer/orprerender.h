@@ -52,12 +52,12 @@ public:
 
     void setSourceData(KoReportData*);
     void registerScriptObject(QObject*, const QString&);
-    
+
     ORODocument * generate();
 
 
 //    KexiDB::Connection* database() const;
-    
+
     /**
     @brief Set the name of the report so that it can be used internally by the script engine
     */

@@ -87,7 +87,7 @@ protected:
 
 private:
     KRSectionData *m_sectionData;
-    
+
     friend class ReportSectionTitle;
 };
 
@@ -99,7 +99,7 @@ public:
 
 signals:
     void barDragged(int delta);
-    
+
 protected:
     void mouseMoveEvent(QMouseEvent * e);
 };

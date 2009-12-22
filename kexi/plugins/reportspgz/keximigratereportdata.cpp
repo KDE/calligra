@@ -22,47 +22,50 @@
 
 //!Connect to an external data source
 //!connStr is in the form driver|connection_string|table
-KexiMigrateReportData::KexiMigrateReportData ( const QString & connStr ) {
-    QStringList extConn = connStr.split ( "|" );
+KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
+{
+    QStringList extConn = connStr.split("|");
 
-    if ( extConn.size() == 3 ) {
+    if (extConn.size() == 3) {
         KexiMigration::MigrateManager mm;
 
-        m_KexiMigrate = mm.driver ( extConn[0] );
+        m_KexiMigrate = mm.driver(extConn[0]);
         KexiDB::ConnectionData cd;
         KexiMigration::Data dat;
-        cd.setFileName ( extConn[1] );
+        cd.setFileName(extConn[1]);
         dat.source = &cd;
-        m_KexiMigrate->setData ( &dat );
+        m_KexiMigrate->setData(&dat);
         m_valid = m_KexiMigrate->connectSource();
         QStringList names;
 
-        if ( m_valid ) {
-            m_valid = m_KexiMigrate->readTableSchema ( extConn[2], m_TableSchema );
+        if (m_valid) {
+            m_valid = m_KexiMigrate->readTableSchema(extConn[2], m_TableSchema);
         }
-        if ( m_valid ) {
-            m_schema = new KexiDB::TableOrQuerySchema ( m_TableSchema );
+        if (m_valid) {
+            m_schema = new KexiDB::TableOrQuerySchema(m_TableSchema);
         }
-        m_valid = m_KexiMigrate->tableNames ( names );
-        if ( m_valid && names.contains ( extConn[2] ) ) {
-            m_valid = m_KexiMigrate->readFromTable ( extConn[2] );
+        m_valid = m_KexiMigrate->tableNames(names);
+        if (m_valid && names.contains(extConn[2])) {
+            m_valid = m_KexiMigrate->readFromTable(extConn[2]);
         }
     }
 }
 
-KexiMigrateReportData::~KexiMigrateReportData() {
+KexiMigrateReportData::~KexiMigrateReportData()
+{
     delete m_KexiMigrate;
     m_KexiMigrate = 0;
 }
 
-uint KexiMigrateReportData::fieldNumber ( const QString &fld ) {
+uint KexiMigrateReportData::fieldNumber(const QString &fld)
+{
     KexiDB::QueryColumnInfo::Vector flds;
 
     uint x = -1;
     flds = m_schema->columns();
 
-    for ( int i = 0; i < flds.size() ; ++i ) {
-        if ( fld.toLower() == flds[i]->aliasOrName().toLower() ) {
+    for (int i = 0; i < flds.size() ; ++i) {
+        if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
             x = i;
         }
     }
@@ -70,73 +73,83 @@ uint KexiMigrateReportData::fieldNumber ( const QString &fld ) {
     return x;
 }
 
-QStringList KexiMigrateReportData::fieldNames() {
+QStringList KexiMigrateReportData::fieldNames()
+{
     KexiDB::QueryColumnInfo::Vector flds;
     QStringList names;
-    
+
     flds = m_schema->columns();
-    
-    for ( int i = 0; i < flds.size() ; ++i ) {
+
+    for (int i = 0; i < flds.size() ; ++i) {
         names << flds[i]->field->name();
     }
     return names;
 }
 
-void* KexiMigrateReportData::schema() const {
+void* KexiMigrateReportData::schema() const
+{
     return m_schema;
 }
 
-QVariant KexiMigrateReportData::value ( unsigned int i ) {
-    if ( !m_valid )
+QVariant KexiMigrateReportData::value(unsigned int i)
+{
+    if (!m_valid)
         return QVariant();
 
-    return m_KexiMigrate->value ( i );
+    return m_KexiMigrate->value(i);
 
 }
 
-QVariant KexiMigrateReportData::value ( const QString &fld ) {
-    if ( !m_valid )
+QVariant KexiMigrateReportData::value(const QString &fld)
+{
+    if (!m_valid)
         return QVariant();
 
-    int i = fieldNumber ( fld );
+    int i = fieldNumber(fld);
 
-    return m_KexiMigrate->value ( i );
+    return m_KexiMigrate->value(i);
 }
 
-bool KexiMigrateReportData::moveNext() {
-    if ( !m_valid )
+bool KexiMigrateReportData::moveNext()
+{
+    if (!m_valid)
         return false;
 
-        return m_KexiMigrate->moveNext();
+    return m_KexiMigrate->moveNext();
 
 }
 
-bool KexiMigrateReportData::movePrevious() {
-    if ( !m_valid )
+bool KexiMigrateReportData::movePrevious()
+{
+    if (!m_valid)
         return false;
 
-        return m_KexiMigrate->movePrevious();
+    return m_KexiMigrate->movePrevious();
 }
 
-bool KexiMigrateReportData::moveFirst() {
-    if ( !m_valid )
+bool KexiMigrateReportData::moveFirst()
+{
+    if (!m_valid)
         return false;
 
-        return m_KexiMigrate->moveFirst();
+    return m_KexiMigrate->moveFirst();
 
 }
 
-bool KexiMigrateReportData::moveLast() {
-    if ( !m_valid )
+bool KexiMigrateReportData::moveLast()
+{
+    if (!m_valid)
         return false;
 
     return m_KexiMigrate->moveLast();
 }
 
-long KexiMigrateReportData::at() const {
-   return 0;
+long KexiMigrateReportData::at() const
+{
+    return 0;
 }
 
-long KexiMigrateReportData::recordCount() const {
+long KexiMigrateReportData::recordCount() const
+{
     return 1;
 }

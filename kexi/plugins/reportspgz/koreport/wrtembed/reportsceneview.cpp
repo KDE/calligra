@@ -31,7 +31,7 @@ ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWi
 {
     Q_UNUSED(name);
     Q_UNUSED(parent);
-    
+
     m_reportDesigner = rw;
 
     viewport()->setMouseTracking(true);

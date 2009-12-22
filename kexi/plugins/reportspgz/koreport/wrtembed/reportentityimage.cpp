@@ -50,7 +50,7 @@ void ReportEntityImage::init(QGraphicsScene * scene)
         scene->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -69,7 +69,7 @@ ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene)
 }
 
 ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
-	: KRImageData(element), ReportRectEntity(rw)
+        : KRImageData(element), ReportRectEntity(rw)
 {
     init(scene);
 }
@@ -93,7 +93,7 @@ void ReportEntityImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
 
@@ -133,7 +133,7 @@ void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
     if (isInline()) {
         QDomElement map = doc.createElement("report:inline-image-data");
         map.appendChild(doc.createTextNode(inlineImageData()));
-	entity.appendChild(map);
+        entity.appendChild(map);
     } else {
         addPropertyAsAttribute(&entity, m_controlSource);
     }
@@ -159,7 +159,7 @@ void ReportEntityImage::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
         }
     }
 
-if (m_reportDesigner) m_reportDesigner->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
 
     if (scene()) scene()->update();
 

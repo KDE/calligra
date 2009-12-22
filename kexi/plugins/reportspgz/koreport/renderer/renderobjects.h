@@ -446,51 +446,52 @@ public:
     virtual OROPrimitive* clone();
     static const int Check;
 
-    void setCheckType(const QString& t){
+    void setCheckType(const QString& t) {
         if (t == "Cross" || t == "Tick" || t == "Dot") {
             m_checkType = t;
-        }
-        else {
+        } else {
             m_checkType = "Cross";
         }
     }
 
-    QString checkType(){return m_checkType;};
+    QString checkType() {
+        return m_checkType;
+    };
 
     QSizeF size() const {
         return m_size;
     }
-    void setSize(const QSizeF &s){
+    void setSize(const QSizeF &s) {
         m_size = s;
     }
 
-    void setValue(bool v){
+    void setValue(bool v) {
         m_value = v;
     }
-    bool value(){
+    bool value() {
         return m_value;
     }
 
-    void setLineStyle(const KRLineStyleData& ls){
+    void setLineStyle(const KRLineStyleData& ls) {
         m_lineStyle = ls;
     }
 
-    KRLineStyleData lineStyle(){
+    KRLineStyleData lineStyle() {
         return m_lineStyle;
     }
-    void setForegroundColor(const QColor& fg){
+    void setForegroundColor(const QColor& fg) {
         m_fgColor = fg;
     }
-    QColor foregroundColor(){
+    QColor foregroundColor() {
         return m_fgColor;
     }
 
-    protected:
-            QSizeF m_size;
-            QString m_checkType;
-            bool m_value;
-            KRLineStyleData m_lineStyle;
-            QColor m_fgColor;
+protected:
+    QSizeF m_size;
+    QString m_checkType;
+    bool m_value;
+    KRLineStyleData m_lineStyle;
+    QColor m_fgColor;
 
 
 };

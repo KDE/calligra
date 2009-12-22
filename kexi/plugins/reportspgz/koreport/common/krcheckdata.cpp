@@ -11,13 +11,13 @@ KRCheckData::KRCheckData(QDomNode &element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_foregroundColor->setValue(element.toElement().attribute("fo:foreground-color"));
     m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -38,7 +38,7 @@ KRCheckData::KRCheckData(QDomNode &element)
             kDebug() << "while parsing check element encountered unknow element: " << n;
         }
     }
-    
+
 }
 
 KRCheckData::~KRCheckData()

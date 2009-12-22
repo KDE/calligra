@@ -59,7 +59,7 @@ public slots:
 protected:
     ReportDesigner * m_reportDesigner;
     ReportSectionDetail * m_reportSectionDetail;
-    
+
 protected slots:
     virtual void languageChange();
 

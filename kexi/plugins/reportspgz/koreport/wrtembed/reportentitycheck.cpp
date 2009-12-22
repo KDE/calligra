@@ -22,7 +22,7 @@ void ReportEntityCheck::init(QGraphicsScene * scene)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -32,7 +32,7 @@ ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene)
         : ReportRectEntity(d)
 {
     init(scene);
-    setSceneRect(QPointF(0,0),QSizeF(15,15)); //default size
+    setSceneRect(QPointF(0, 0), QSizeF(15, 15)); //default size
 
     m_name->setValue(m_reportDesigner->suggestEntityName("check"));
 
@@ -63,13 +63,13 @@ void ReportEntityCheck::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
     QBrush b = painter->brush();
 
-    painter->setBackgroundMode ( Qt::OpaqueMode );
+    painter->setBackgroundMode(Qt::OpaqueMode);
     painter->setRenderHint(QPainter::Antialiasing);
 
     painter->setPen(m_foregroundColor->value().value<QColor>());
@@ -80,38 +80,36 @@ void ReportEntityCheck::paint(QPainter* painter, const QStyleOptionGraphicsItem*
         painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
-    qreal ox = m_size.toScene().width()/5;
-    qreal oy = m_size.toScene().height()/5;
+    qreal ox = m_size.toScene().width() / 5;
+    qreal oy = m_size.toScene().height() / 5;
 
     //Checkbox Style
-    if (m_checkStyle->value().toString() == "Cross"){
-        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width()/10 , m_size.toScene().height()/10);
+    if (m_checkStyle->value().toString() == "Cross") {
+        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width() / 10 , m_size.toScene().height() / 10);
 
         QPen lp;
         lp.setColor(m_foregroundColor->value().value<QColor>());
         lp.setWidth(ox > oy ? oy : ox);
         painter->setPen(lp);
-        painter->drawLine(ox,oy, m_size.toScene().width() - ox, m_size.toScene().height() - oy);
+        painter->drawLine(ox, oy, m_size.toScene().width() - ox, m_size.toScene().height() - oy);
         painter->drawLine(ox, m_size.toScene().height() - oy, m_size.toScene().width() - ox, oy);
-    }
-    else if (m_checkStyle->value().toString() == "Dot"){
-    //Radio Style
+    } else if (m_checkStyle->value().toString() == "Dot") {
+        //Radio Style
         painter->drawEllipse(QGraphicsRectItem::rect());
 
         QBrush lb(m_foregroundColor->value().value<QColor>());
         painter->setBrush(lb);
         painter->setPen(Qt::NoPen);
-        painter->drawEllipse(rect().center(), m_size.toScene().width()/2 - ox, m_size.toScene().height()/2 - oy);
-    }
-    else {
-    //Tickbox Style
-        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width()/10 , m_size.toScene().height()/10);
+        painter->drawEllipse(rect().center(), m_size.toScene().width() / 2 - ox, m_size.toScene().height() / 2 - oy);
+    } else {
+        //Tickbox Style
+        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width() / 10 , m_size.toScene().height() / 10);
 
         QPen lp;
         lp.setColor(m_foregroundColor->value().value<QColor>());
         lp.setWidth(ox > oy ? oy : ox);
         painter->setPen(lp);
-        painter->drawLine(ox,m_size.toScene().height()/2, m_size.toScene().width() / 2, m_size.toScene().height() - oy);
+        painter->drawLine(ox, m_size.toScene().height() / 2, m_size.toScene().width() / 2, m_size.toScene().height() - oy);
         painter->drawLine(m_size.toScene().width() / 2, m_size.toScene().height() - oy, m_size.toScene().width() - ox, oy);
 
     }
@@ -138,7 +136,7 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_controlSource);
     entity.setAttribute("fo:foreground-color", m_foregroundColor->value().toString());
     addPropertyAsAttribute(&entity, m_checkStyle);
-    
+
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
@@ -151,7 +149,7 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 void ReportEntityCheck::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s)
-   
+
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

@@ -108,12 +108,12 @@ QObject* Section::objectByName(const QString& n)
 
 void Section::initialize(Kross::Object::Ptr p)
 {
-	m_scriptObject = p;
+    m_scriptObject = p;
 }
 
 void Section::eventOnRender()
 {
     if (m_scriptObject)
-	m_scriptObject->callMethod("OnRender");
+        m_scriptObject->callMethod("OnRender");
 }
 }

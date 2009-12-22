@@ -44,7 +44,7 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual ReportEntityShape* clone();
-    
+
 private:
     void init(QGraphicsScene*);
     KoShape* m_shape;

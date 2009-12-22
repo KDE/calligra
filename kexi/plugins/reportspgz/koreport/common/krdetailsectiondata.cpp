@@ -33,7 +33,7 @@ KRDetailSectionData::KRDetailSectionData()
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 {
     m_valid = false;
-    kDebug() <<elemSource.tagName();
+    kDebug() << elemSource.tagName();
     if (elemSource.tagName() != "report:detail") {
         return;
     }
@@ -41,49 +41,49 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
     bool have_detail = false;
 
     QDomNodeList sections = elemSource.childNodes();
-    
+
     for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
         QDomElement elemThis = sections.item(nodeCounter).toElement();
-        
-	if (elemThis.tagName() == "report:group") {
-	    QDomNodeList gsections = elemSource.childNodes();
-	    ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
-	    
-	    //TODO Column and page break
-	    dgsd->column = elemThis.attribute("report:group-column");
-	    
-	    QString pbreak = elemThis.attribute("report:group-page-break");
-	    if (pbreak == "after-footer") {
-		dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
-	    } else if (pbreak == "before-header") {
-		dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
-	    } else {
-		dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
-	    }
 
-	    for (int gnodeCounter = 0; gnodeCounter < gsections.count(); gnodeCounter++) {
-		QDomElement gsec = gsections.item(gnodeCounter).toElement();
-		if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "header-group") {
-		    //Group Header
-		    KRSectionData * sd = new KRSectionData(gsec);
-		    if (sd->isValid()) {
-			dgsd->groupHeader = sd;
-		    } else {
-			delete sd;
-		    }
-		    
-		} else if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "footer-group") {
-		    //Group Footer
-		    KRSectionData * sd = new KRSectionData(gsec);
-		    if (sd->isValid()) {
-			dgsd->groupFooter = sd;
-		    } else {
-			delete sd;
-		    }
-		}
-		m_groupList.append(dgsd);
-		
-	    }
+        if (elemThis.tagName() == "report:group") {
+            QDomNodeList gsections = elemSource.childNodes();
+            ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
+
+            //TODO Column and page break
+            dgsd->column = elemThis.attribute("report:group-column");
+
+            QString pbreak = elemThis.attribute("report:group-page-break");
+            if (pbreak == "after-footer") {
+                dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
+            } else if (pbreak == "before-header") {
+                dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
+            } else {
+                dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
+            }
+
+            for (int gnodeCounter = 0; gnodeCounter < gsections.count(); gnodeCounter++) {
+                QDomElement gsec = gsections.item(gnodeCounter).toElement();
+                if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "header-group") {
+                    //Group Header
+                    KRSectionData * sd = new KRSectionData(gsec);
+                    if (sd->isValid()) {
+                        dgsd->groupHeader = sd;
+                    } else {
+                        delete sd;
+                    }
+
+                } else if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "footer-group") {
+                    //Group Footer
+                    KRSectionData * sd = new KRSectionData(gsec);
+                    if (sd->isValid()) {
+                        dgsd->groupFooter = sd;
+                    } else {
+                        delete sd;
+                    }
+                }
+                m_groupList.append(dgsd);
+
+            }
         } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
@@ -91,10 +91,9 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
                 have_detail = true;
             } else
                 delete sd;
+        } else {
+            kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
         }
-        else {
-	    kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
-	}
     }
     m_valid = true;
 }

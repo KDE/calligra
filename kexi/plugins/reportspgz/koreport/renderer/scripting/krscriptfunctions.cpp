@@ -26,9 +26,8 @@ KRScriptFunctions::KRScriptFunctions(const KoReportData *kodata)
 {
     m_connection = 0;
     m_cursor = 0;
-    
-    if (kodata)
-    {
+
+    if (kodata) {
         m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
         m_cursor = kodata;
     }
@@ -106,7 +105,7 @@ QVariant KRScriptFunctions::value(const QString &field)
     }
 
     if (m_cursor->schema()) {
-        KexiDB::QueryColumnInfo::Vector flds = static_cast<KexiDB::TableOrQuerySchema*>( m_cursor->schema())->columns();
+        KexiDB::QueryColumnInfo::Vector flds = static_cast<KexiDB::TableOrQuerySchema*>(m_cursor->schema())->columns();
         for (int i = 0; i < flds.size() ; ++i) {
 
             if (flds[i]->aliasOrName().toLower() == field.toLower()) {

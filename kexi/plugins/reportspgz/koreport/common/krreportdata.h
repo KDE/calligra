@@ -46,8 +46,10 @@ public:
     KRReportData();
     ~KRReportData();
 
-    bool isValid() const { return m_valid; }
-    
+    bool isValid() const {
+        return m_valid;
+    }
+
     /**
     \return a list of all objects in the report
     */
@@ -82,18 +84,22 @@ public:
     QString interpreter() const {
         return m_interpreter;
     }
-    
+
     bool externalData() const {
-      return m_externalData;
+        return m_externalData;
     }
-    
+
     KRDetailSectionData* detail() const {
         return m_detailSection;
     }
-    
-    void setName(const QString&n){m_name = n;}
-    QString name() const {return m_name;}
-    
+
+    void setName(const QString&n) {
+        m_name = n;
+    }
+    QString name() const {
+        return m_name;
+    }
+
 protected:
     QString m_title;
     QString m_name;

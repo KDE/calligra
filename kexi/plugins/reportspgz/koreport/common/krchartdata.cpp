@@ -111,9 +111,9 @@ KRChartData::KRChartData(QDomNode & element)
 //    _lnColor->setValue(ls.lnColor);
 //    _lnStyle->setValue(ls.style);
 //   }
-        } else if (n =="linkmaster") {
+        } else if (n == "linkmaster") {
             m_linkMaster->setValue(node.firstChild().nodeValue());
-        } else if (n =="linkchild") {
+        } else if (n == "linkchild") {
             m_linkChild->setValue(node.firstChild().nodeValue());
         } else {
             kDebug() << "while parsing field element encountered unknow element: " << n;
@@ -190,8 +190,8 @@ void KRChartData::createProperties()
     m_set->addProperty(m_yTitle);
     m_set->addProperty(m_backgroundColor);
     m_set->addProperty(m_displayLegend);
-    m_set->addProperty ( m_linkMaster );
-    m_set->addProperty ( m_linkChild );
+    m_set->addProperty(m_linkMaster);
+    m_set->addProperty(m_linkChild);
 
     set3D(false);
     setAA(false);
@@ -436,7 +436,7 @@ KexiDB::Cursor *KRChartData::dataSet()
         QStringList childFields = m_linkChild->value().toString().split(",");
         QStringList masterFields = m_linkMaster->value().toString().split(",");
 
-        for(int i = 0; i < childFields.size(); ++i){
+        for (int i = 0; i < childFields.size(); ++i) {
             KexiDB::Field *f = qs->findTableField(childFields[i]);
             //Only add the condition if we found the child field, and we have data for the master field
             if (f && m_links.contains(masterFields[i])) {

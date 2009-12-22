@@ -20,8 +20,9 @@
 #include "kexidbreportdata.h"
 #include <kdebug.h>
 
-KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
-                                     KexiDB::Connection * pDb ) {
+KexiDBReportData::KexiDBReportData(const QString &qstrSQL,
+                                   KexiDB::Connection * pDb)
+{
     m_cursor = 0;
     m_connection = pDb;
     m_schema = 0;
@@ -31,17 +32,20 @@ KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
     m_valid = true;
 }
 
-KexiDBReportData::~KexiDBReportData() {
+KexiDBReportData::~KexiDBReportData()
+{
     close();
 }
 
-bool KexiDBReportData::open() {
+bool KexiDBReportData::open()
+{
     m_valid = executeInternal();
     return m_valid;
 }
 
-bool KexiDBReportData::close() {
-    if ( m_cursor ) {
+bool KexiDBReportData::close()
+{
+    if (m_cursor) {
         m_cursor->close();
         delete m_cursor;
         m_cursor = 0;
@@ -49,25 +53,26 @@ bool KexiDBReportData::close() {
     return true;
 }
 
-bool KexiDBReportData::executeInternal() {
-    if ( m_connection && m_cursor == 0 ) {
+bool KexiDBReportData::executeInternal()
+{
+    if (m_connection && m_cursor == 0) {
         //NOTE we can use the variation of executeQuery to pass in parameters
-        if ( m_qstrQuery.isEmpty() ) {
-            m_cursor = m_connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
-        } else if ( m_connection->tableSchema ( m_qstrQuery ) ) {
+        if (m_qstrQuery.isEmpty()) {
+            m_cursor = m_connection->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
+        } else if (m_connection->tableSchema(m_qstrQuery)) {
             kDebug() << m_qstrQuery <<  " is a table..";
-            m_cursor = m_connection->executeQuery ( * ( m_connection->tableSchema ( m_qstrQuery ) ), 1 );
-            m_schema = new KexiDB::TableOrQuerySchema ( m_connection->tableSchema ( m_qstrQuery ) );
-        } else if ( m_connection->querySchema ( m_qstrQuery ) ) {
+            m_cursor = m_connection->executeQuery(* (m_connection->tableSchema(m_qstrQuery)), 1);
+            m_schema = new KexiDB::TableOrQuerySchema(m_connection->tableSchema(m_qstrQuery));
+        } else if (m_connection->querySchema(m_qstrQuery)) {
             kDebug() << m_qstrQuery <<  " is a query..";
-            m_cursor = m_connection->executeQuery ( * ( m_connection->querySchema ( m_qstrQuery ) ), 1 );
+            m_cursor = m_connection->executeQuery(* (m_connection->querySchema(m_qstrQuery)), 1);
             kDebug() << "...got test result";
-            m_schema = new KexiDB::TableOrQuerySchema ( m_connection->querySchema ( m_qstrQuery ) );
+            m_schema = new KexiDB::TableOrQuerySchema(m_connection->querySchema(m_qstrQuery));
             kDebug() << "...got schema";
 
         }
 
-        if ( m_cursor ) {
+        if (m_cursor) {
             kDebug() << "Moving to first row..";
             return m_cursor->moveFirst();
         } else
@@ -76,24 +81,27 @@ bool KexiDBReportData::executeInternal() {
     return false;
 }
 
-void* KexiDBReportData::connection() const {
+void* KexiDBReportData::connection() const
+{
     return m_connection;
 }
 
-QString KexiDBReportData::source() const {
+QString KexiDBReportData::source() const
+{
     return m_qstrQuery;
 }
 
-uint KexiDBReportData::fieldNumber ( const QString &fld ) {
+uint KexiDBReportData::fieldNumber(const QString &fld)
+{
     KexiDB::QueryColumnInfo::Vector flds;
 
     uint x = -1;
-    if ( m_cursor->query() ) {
+    if (m_cursor->query()) {
         flds = m_cursor->query()->fieldsExpanded();
     }
 
-    for ( int i = 0; i < flds.size() ; ++i ) {
-        if ( fld.toLower() == flds[i]->aliasOrName().toLower() ) {
+    for (int i = 0; i < flds.size() ; ++i) {
+        if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
             x = i;
         }
     }
@@ -101,90 +109,100 @@ uint KexiDBReportData::fieldNumber ( const QString &fld ) {
     return x;
 }
 
-QStringList KexiDBReportData::fieldNames() {
+QStringList KexiDBReportData::fieldNames()
+{
     QStringList names;
     open();
-    if ( m_cursor->query() ) {
+    if (m_cursor->query()) {
         names =  m_cursor->query()->names();
     }
     close();
     return names;
 }
 
-void* KexiDBReportData::schema() const {
+void* KexiDBReportData::schema() const
+{
     return m_schema;
 }
 
-QVariant KexiDBReportData::value ( unsigned int i ) {
-    if ( !m_valid )
+QVariant KexiDBReportData::value(unsigned int i)
+{
+    if (!m_valid)
         return QVariant();
 
-    if ( m_cursor )
-        return m_cursor->value ( i );
+    if (m_cursor)
+        return m_cursor->value(i);
 
     return false;
 }
 
-QVariant KexiDBReportData::value ( const QString &fld ) {
-    if ( !m_valid )
+QVariant KexiDBReportData::value(const QString &fld)
+{
+    if (!m_valid)
         return QVariant();
 
-    int i = fieldNumber ( fld );
+    int i = fieldNumber(fld);
 
-    if ( m_cursor )
-        return m_cursor->value ( i );
+    if (m_cursor)
+        return m_cursor->value(i);
 
     return false;
 }
 
-bool KexiDBReportData::moveNext() {
-    if ( !m_valid )
+bool KexiDBReportData::moveNext()
+{
+    if (!m_valid)
         return false;
 
-    if ( m_cursor )
+    if (m_cursor)
         return m_cursor->moveNext();
 
     return false;
 }
 
-bool KexiDBReportData::movePrevious() {
-    if ( !m_valid )
+bool KexiDBReportData::movePrevious()
+{
+    if (!m_valid)
         return false;
 
-    if ( m_cursor ) return m_cursor->movePrev();
+    if (m_cursor) return m_cursor->movePrev();
 
     return false;
 }
 
-bool KexiDBReportData::moveFirst() {
-    if ( !m_valid )
+bool KexiDBReportData::moveFirst()
+{
+    if (!m_valid)
         return false;
 
-    if ( m_cursor ) return m_cursor->moveFirst();
+    if (m_cursor) return m_cursor->moveFirst();
 
     return false;
 }
 
-bool KexiDBReportData::moveLast() {
-    if ( !m_valid )
+bool KexiDBReportData::moveLast()
+{
+    if (!m_valid)
         return false;
 
-    if ( m_cursor ) return m_cursor->moveLast();
+    if (m_cursor) return m_cursor->moveLast();
 
     return false;
 }
 
-long KexiDBReportData::at() const {
-    if ( !m_valid )
+long KexiDBReportData::at() const
+{
+    if (!m_valid)
         return 0;
 
     return m_cursor->at();
 }
 
-long KexiDBReportData::recordCount() const {
-    
-    if ( m_schema && (m_schema->table() || m_schema->query()) ) {
-        return KexiDB::rowCount ( *m_schema );
+long KexiDBReportData::recordCount() const
+{
+
+    if (m_schema && (m_schema->table() || m_schema->query())) {
+        return KexiDB::rowCount(*m_schema);
     } else {
         return 1;
     }

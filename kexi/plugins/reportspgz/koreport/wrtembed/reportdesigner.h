@@ -64,14 +64,14 @@ class KOREPORT_EXPORT ReportDesigner : public QWidget
 {
     Q_OBJECT
 public:
-    
+
     ReportDesigner(QWidget *);
     ReportDesigner(QWidget *, QDomElement);
 
     ~ReportDesigner();
-    
+
     void setReportData(KoReportData* kodata);
-    
+
     ReportSection* section(KRSectionData::Section) const;
     void removeSection(KRSectionData::Section);
     void insertSection(KRSectionData::Section);
@@ -102,11 +102,11 @@ public:
     */
     QStringList fieldList() const;
 
-     /**
+    /**
     \return a list of object scripts in the database
     */
     QStringList scriptList() const;
-    
+
     /**
     \return the page width in pixels for the current paper size
     */
@@ -141,7 +141,7 @@ public:
     bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
 
     static QList<QAction*> actions();
-    
+
 public slots:
 
     void slotEditDelete();
@@ -152,7 +152,7 @@ public slots:
 
     void slotItem(KRObjectData::EntityTypes);
     void slotItem(const QString&);
-    
+
     void slotSectionEditor();
 
     void slotRaiseSelected();
@@ -185,7 +185,7 @@ private:
 
     KexiDB::Connection *m_conn;
     KoReportData *m_kordata;
-    
+
     QStringList pageFormats() const;
 
     virtual void resizeEvent(QResizeEvent * event);
@@ -226,26 +226,26 @@ signals:
 
 static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
 {
-  QDomElement e = d->createElement("report:" + p->name().toLower());
-  e.appendChild(d->createTextNode(p->value().toString()));
-  return e;
+    QDomElement e = d->createElement("report:" + p->name().toLower());
+    e.appendChild(d->createTextNode(p->value().toString()));
+    return e;
 }
 
 static void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
 {
-    switch(p->value().type()) {
-	case QVariant::Int :
-	    e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
-	    break;
-	case QVariant::Double:
-	    e->setAttribute("report:" + p->name().toLower(), p->value().toDouble());
-	    break;
-	case QVariant::Bool:
-	    e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
-	    break;
-	default:
-	    e->setAttribute("report:" + p->name().toLower(), p->value().toString());
-	    break;
+    switch (p->value().type()) {
+    case QVariant::Int :
+        e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
+        break;
+    case QVariant::Double:
+        e->setAttribute("report:" + p->name().toLower(), p->value().toDouble());
+        break;
+    case QVariant::Bool:
+        e->setAttribute("report:" + p->name().toLower(), p->value().toInt());
+        break;
+    default:
+        e->setAttribute("report:" + p->name().toLower(), p->value().toString());
+        break;
     }
 }
 

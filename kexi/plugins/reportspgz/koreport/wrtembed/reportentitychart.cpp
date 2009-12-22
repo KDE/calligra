@@ -45,7 +45,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
         scene->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
@@ -79,7 +79,7 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
@@ -89,9 +89,9 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     if (m_chartWidget) {
         m_chartWidget->setFixedSize(m_size.toScene().toSize());
-        painter->drawImage(rect().left(), rect().top(), 
-            QPixmap::grabWidget(m_chartWidget).toImage(), 
-            0, 0, rect().width(), rect().height());
+        painter->drawImage(rect().left(), rect().top(),
+                           QPixmap::grabWidget(m_chartWidget).toImage(),
+                           0, 0, rect().width(), rect().height());
     }
     bg.setAlpha(255);
 
@@ -150,7 +150,7 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_linkChild);
     addPropertyAsAttribute(&entity, m_linkMaster);
     entity.setAttribute("report:z-index", zValue());
-    
+
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
@@ -204,7 +204,7 @@ void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
 void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     QStringList ql = queryList(m_reportDesigner->theConn());
-    m_dataSource->setListData(ql,ql);
+    m_dataSource->setListData(ql, ql);
     ReportRectEntity::mousePressEvent(event);
 }
 
@@ -220,7 +220,7 @@ QStringList ReportEntityChart::queryList(KexiDB::Connection* conn)
             if (tsc)
                 qs << tsc->name();
         }
-        
+
         QList<int> qids = conn->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
@@ -229,7 +229,7 @@ QStringList ReportEntityChart::queryList(KexiDB::Connection* conn)
                 qs << qsc->name();
         }
     }
-    
+
     return qs;
 }
 

@@ -57,10 +57,10 @@ public slots:
     QObject* objectByNumber(int);
     /**Returns an object in the section, by name*/
     QObject* objectByName(const QString&);
-    
+
     void initialize(Kross::Object::Ptr);
     void eventOnRender();
-    
+
 private:
     KRSectionData *m_section;
     Kross::Object::Ptr m_scriptObject;

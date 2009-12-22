@@ -33,7 +33,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
         : QObject(parent)
 {
     Q_UNUSED(name);
-    
+
     m_pageBreak = BreakNone;
     ReportDesigner * rd = 0;
     m_reportSectionDetail = rsd;

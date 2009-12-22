@@ -43,21 +43,19 @@ ReportScene::ReportScene(qreal w, qreal h, ReportDesigner *rd)
         : QGraphicsScene(0, 0, w, h)
 {
     m_rd = rd;
-    
+
     if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
         m_unit = m_rd->pageUnit();
         if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
             m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
             m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-    }
-    else if (KoUnit::unitName(m_unit) == "pt") {
-        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
-        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
-    }
-    else {
-        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
-        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
-    }
+        } else if (KoUnit::unitName(m_unit) == "pt") {
+            m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
+            m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
+        } else {
+            m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
+            m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
+        }
     }
 }
 ReportScene::~ReportScene()
@@ -77,12 +75,10 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
             if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-            }
-            else if (KoUnit::unitName(m_unit) == "pt") {
+            } else if (KoUnit::unitName(m_unit) == "pt") {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
-            }
-            else {
+            } else {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
             }
@@ -91,30 +87,30 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         m_minorSteps = m_rd->propertySet()->property("grid-divisions").value().toInt();
         m_pixelIncrementX = (m_majorX / m_minorSteps);
         m_pixelIncrementY = (m_majorY / m_minorSteps);
-        
+
         QPen pen = painter->pen();
         painter->setPen(QColor(212, 212, 212));
 
         //kDebug() << "dpix" << KoDpi::dpiX() << "dpiy" << KoDpi::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
-        
+
         QVector<QLine> lines;
         QVector<QPoint> points;
-        
+
         if (m_pixelIncrementX > 2) { // do not bother painting points if increments are so small
             int wpoints = qRound(sceneRect().width() / m_pixelIncrementX);
             int hpoints = qRound(sceneRect().height() / m_pixelIncrementY);
             for (int i = 0; i < wpoints; ++i) {
                 for (int j = 0; j < hpoints; ++j) {
                     //if (clip.contains(i * pixel_incrementx, j * pixel_incrementy)){
-                        if (i % m_minorSteps == 0 && j % m_minorSteps == 0) {
-                            lines << QLine(QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY), QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY  + m_majorX));
-                            //painter->drawLine();
-                            lines << QLine(QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY), QPoint(i * m_pixelIncrementX + m_majorY, j * m_pixelIncrementY));
-                            //painter->drawLine();
-                        } else {
-                            points << QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY);
-                            //painter->drawPoint();
-                        }
+                    if (i % m_minorSteps == 0 && j % m_minorSteps == 0) {
+                        lines << QLine(QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY), QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY  + m_majorX));
+                        //painter->drawLine();
+                        lines << QLine(QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY), QPoint(i * m_pixelIncrementX + m_majorY, j * m_pixelIncrementY));
+                        //painter->drawLine();
+                    } else {
+                        points << QPoint(i * m_pixelIncrementX, j * m_pixelIncrementY);
+                        //painter->drawPoint();
+                    }
                     //}
                 }
             }
@@ -160,21 +156,19 @@ QPointF ReportScene::gridPoint(const QPointF& p)
             if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-            }
-            else if (KoUnit::unitName(m_unit) == "pt") {
+            } else if (KoUnit::unitName(m_unit) == "pt") {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
-            }
-            else {
+            } else {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
             }
-            
+
         }
     }
-        m_minorSteps = m_rd->propertySet()->property("grid-divisions").value().toInt();
-        m_pixelIncrementX = (m_majorX / m_minorSteps);
-        m_pixelIncrementY = (m_majorY / m_minorSteps);
+    m_minorSteps = m_rd->propertySet()->property("grid-divisions").value().toInt();
+    m_pixelIncrementX = (m_majorX / m_minorSteps);
+    m_pixelIncrementY = (m_majorY / m_minorSteps);
 
     return QPointF(qRound((p.x() / m_pixelIncrementX)) * m_pixelIncrementX, qRound((p.y() / m_pixelIncrementY)) * m_pixelIncrementY);
 }
@@ -191,7 +185,7 @@ qreal ReportScene::lowestZValue()
     qreal zz;
     z = 0;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
         zz = (*it)->zValue();
         if (zz < z) {
             z = zz;
@@ -207,7 +201,7 @@ qreal ReportScene::highestZValue()
     qreal zz;
     z = 0;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
         zz = (*it)->zValue();
         if (zz > z) {
             z = zz;
@@ -239,8 +233,8 @@ QGraphicsItemList ReportScene::itemsOrdered()
 {
     QGraphicsItemList r;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
-        for (QGraphicsItemList::iterator rit = r.begin();rit != r.end(); rit++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
+        for (QGraphicsItemList::iterator rit = r.begin(); rit != r.end(); rit++) {
 
 
         }

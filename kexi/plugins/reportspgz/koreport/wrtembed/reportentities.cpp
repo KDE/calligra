@@ -99,7 +99,7 @@ void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, K
 
     element.setAttribute("report:line-color", ls.lineColor.name());
     element.setAttribute("report:line-weight", QString::number(ls.weight));
-    
+
     QString l;
     switch (ls.style) {
     case Qt::NoPen:

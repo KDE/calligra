@@ -92,13 +92,13 @@ void Label::setVerticalAlignment(int a)
         m_label->m_verticalAlignment->setValue("top");
         break;
     case 0:
-	m_label->m_verticalAlignment->setValue("middle");
+        m_label->m_verticalAlignment->setValue("middle");
         break;
     case 1:
-	m_label->m_verticalAlignment->setValue("mottom");
+        m_label->m_verticalAlignment->setValue("mottom");
         break;
     default:
-	m_label->m_verticalAlignment->setValue("middle");
+        m_label->m_verticalAlignment->setValue("middle");
         break;
     }
 }

@@ -70,15 +70,15 @@ KRCheckData * KRObjectData::toCheck()
 bool KRObjectData::parseReportTextStyleData(const QDomElement & elemSource, KRTextStyleData & ts)
 {
     if (elemSource.tagName() == "report:text-style") {
-	ts.backgroundColor = QColor(elemSource.attribute("fo:background-color", "#ffffff"));
-	ts.foregroundColor = QColor(elemSource.attribute("fo:foreground-color", "#000000"));
-	
-	QString opacity_percent = elemSource.attribute("fo:background-opacity", "100%");
-	opacity_percent = opacity_percent.left(opacity_percent.indexOf("%"));
-	ts.backgroundOpacity = opacity_percent.toInt();
-	ts.font.fromString(elemSource.attribute("report:qtfont"));
-	
-	return TRUE;
+        ts.backgroundColor = QColor(elemSource.attribute("fo:background-color", "#ffffff"));
+        ts.foregroundColor = QColor(elemSource.attribute("fo:foreground-color", "#000000"));
+
+        QString opacity_percent = elemSource.attribute("fo:background-opacity", "100%");
+        opacity_percent = opacity_percent.left(opacity_percent.indexOf("%"));
+        ts.backgroundOpacity = opacity_percent.toInt();
+        ts.font.fromString(elemSource.attribute("report:qtfont"));
+
+        return TRUE;
     }
     return FALSE;
 }
@@ -86,39 +86,39 @@ bool KRObjectData::parseReportTextStyleData(const QDomElement & elemSource, KRTe
 bool KRObjectData::parseReportLineStyleData(const QDomElement & elemSource, KRLineStyleData & ls)
 {
     if (elemSource.tagName() == "report:line-style") {
-	ls.lineColor = QColor(elemSource.attribute("report:line-color", "#ffffff"));
-	ls.weight = elemSource.attribute("report:line-weight", "0").toInt();
-	
-	QString l = elemSource.attribute("report:line-style", "nopen");
-	if (l == "nopen") {
-	    ls.style = Qt::NoPen;
-	} else if (l == "solid") {
-	    ls.style = Qt::SolidLine;
-	} else if (l == "dash") {
-	    ls.style = Qt::DashLine;
-	} else if (l == "dot") {
-	    ls.style = Qt::DotLine;
-	} else if (l == "dashdot") {
-	    ls.style = Qt::DashDotLine;
-	} else if (l == "dashdotdot") {
-	    ls.style = Qt::DashDotDotLine;
-	}
-    return TRUE;
+        ls.lineColor = QColor(elemSource.attribute("report:line-color", "#ffffff"));
+        ls.weight = elemSource.attribute("report:line-weight", "0").toInt();
+
+        QString l = elemSource.attribute("report:line-style", "nopen");
+        if (l == "nopen") {
+            ls.style = Qt::NoPen;
+        } else if (l == "solid") {
+            ls.style = Qt::SolidLine;
+        } else if (l == "dash") {
+            ls.style = Qt::DashLine;
+        } else if (l == "dot") {
+            ls.style = Qt::DotLine;
+        } else if (l == "dashdot") {
+            ls.style = Qt::DashDotLine;
+        } else if (l == "dashdotdot") {
+            ls.style = Qt::DashDotDotLine;
+        }
+        return TRUE;
     }
-return FALSE;
+    return FALSE;
 }
 
 
 bool KRObjectData::parseReportRect(const QDomElement & elemSource, QRectF & rectTarget)
 {
     if (elemSource.tagName() == "report:rect") {
-	rectTarget.setX(elemSource.attribute("report:x", "10").toFloat());
-	rectTarget.setY(elemSource.attribute("report:y", "10").toFloat());
-	rectTarget.setWidth(elemSource.attribute("report:width", "10").toFloat());
-	rectTarget.setHeight(elemSource.attribute("report:height", "10").toFloat());
-	return true;
+        rectTarget.setX(elemSource.attribute("report:x", "10").toFloat());
+        rectTarget.setY(elemSource.attribute("report:y", "10").toFloat());
+        rectTarget.setWidth(elemSource.attribute("report:width", "10").toFloat());
+        rectTarget.setHeight(elemSource.attribute("report:height", "10").toFloat());
+        return true;
     }
-    
+
     return false;
 }
 

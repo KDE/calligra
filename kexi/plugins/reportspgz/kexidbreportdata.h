@@ -31,42 +31,43 @@
 /**
 
 */
-class KexiDBReportData : public KoReportData {
-    private:
-        QString         m_qstrQuery;
+class KexiDBReportData : public KoReportData
+{
+private:
+    QString         m_qstrQuery;
 
-        KexiDB::Cursor   *m_cursor;
+    KexiDB::Cursor   *m_cursor;
 
-        KexiDB::Connection   *m_connection;
-        KexiDB::TableOrQuerySchema *m_schema;
+    KexiDB::Connection   *m_connection;
+    KexiDB::TableOrQuerySchema *m_schema;
 
-        bool executeInternal();
+    bool executeInternal();
 
-        bool m_valid;
+    bool m_valid;
 
-    public:
-        KexiDBReportData ( const QString &, KexiDB::Connection *conn );
-        virtual ~KexiDBReportData();
+public:
+    KexiDBReportData(const QString &, KexiDB::Connection *conn);
+    virtual ~KexiDBReportData();
 
-        virtual void* connection() const;
-        virtual void* schema() const;
+    virtual void* connection() const;
+    virtual void* schema() const;
 
-        virtual QStringList fieldNames();
-        
-        virtual QString source() const;
-        virtual unsigned int fieldNumber ( const QString &field );
-        virtual QVariant value ( unsigned int );
-        virtual QVariant value ( const QString &field );
+    virtual QStringList fieldNames();
 
-        virtual bool open();
-        virtual bool close();
-        virtual bool moveNext();
-        virtual bool movePrevious();
-        virtual bool moveFirst();
-        virtual bool moveLast();
+    virtual QString source() const;
+    virtual unsigned int fieldNumber(const QString &field);
+    virtual QVariant value(unsigned int);
+    virtual QVariant value(const QString &field);
 
-        virtual long at() const;
-        virtual long recordCount() const;
+    virtual bool open();
+    virtual bool close();
+    virtual bool moveNext();
+    virtual bool movePrevious();
+    virtual bool moveFirst();
+    virtual bool moveLast();
+
+    virtual long at() const;
+    virtual long recordCount() const;
 };
 
 #endif

@@ -59,7 +59,7 @@ private:
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
     KexiScriptAdaptor *m_kexi;
-    
+
 private slots:
     void nextPage();
     void prevPage();

@@ -34,9 +34,10 @@ class KRReportData;
 class OROPage;
 class KRScriptDraw;
 
-namespace Scripting{
-    class Report;
-    class Section;
+namespace Scripting
+{
+class Report;
+class Section;
 }
 class KRScriptHandler : public QObject
 {
@@ -55,10 +56,14 @@ public slots:
     void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
     void slotEnteredGroup(const QString&, const QVariant&);
     void slotExitedGroup(const QString&, const QVariant&);
-    void setPageNumber(int p) {m_constants->setPageNumber(p);}
-    void setPageTotal(int t) {m_constants->setPageTotal(t);}
+    void setPageNumber(int p) {
+        m_constants->setPageNumber(p);
+    }
+    void setPageTotal(int t) {
+        m_constants->setPageTotal(t);
+    }
     void newPage();
-    
+
 private:
     KRScriptFunctions *m_functions;
     KRScriptConstants *m_constants;
@@ -67,17 +72,17 @@ private:
 
     Scripting::Report *m_report;
 
-    #if !KDE_IS_VERSION(4,2,88)
+#if !KDE_IS_VERSION(4,2,88)
     QString fieldFunctions();
-    #endif
-    
+#endif
+
     QString scriptCode();
-    
+
     KexiDB::Connection *m_connection;
     //const KexiDB::Cursor *m_cursor;
 
     const KoReportData *m_cursor;
-    
+
     QString m_source;
     KRReportData  *m_reportData;
 

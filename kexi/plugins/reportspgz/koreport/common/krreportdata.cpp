@@ -45,7 +45,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
     bool valid; //used for local unit conversions
 
     kDebug();
-    
+
     if (elemSource.tagName() != "report:content") {
         kDebug() << "QDomElement passed to parseReport() was not <report:content> tag";
         kDebug() << elemSource.text();
@@ -71,8 +71,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                 page.setCustomWidth(elemThis.attribute("report:custom-page-width", "").toDouble());
                 page.setCustomHeight(elemThis.attribute("report:custom-page-height", "").toDouble());
                 page.setPageSize("Custom");
-            }
-            else if (pagetype == "label") {
+            } else if (pagetype == "label") {
                 page.setLabelType(elemThis.firstChild().nodeValue());
             }
 
@@ -87,7 +86,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
         } else if (elemThis.tagName() == "report:body") {
             QDomNodeList sectionlist = elemThis.childNodes();
             QDomNode sec;
-	    
+
             for (int s = 0; s < sectionlist.count(); ++s) {
                 sec = sectionlist.item(s);
                 if (sec.isElement()) {
@@ -96,59 +95,58 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     if (sn == "report:section") {
                         KRSectionData * sd = new KRSectionData(sec.toElement());
                         if (!sd->isValid()) {
-			    kDebug() << "Invalid section";
+                            kDebug() << "Invalid section";
                             delete sd;
+                        } else {
+                            kDebug() << "Adding section of type " << sd->type();
+
+                            switch (sd->type()) {
+                            case KRSectionData::PageHeaderFirst:
+                                m_pageHeaderFirst = sd;
+                                break;
+                            case KRSectionData::PageHeaderOdd:
+                                m_pageHeaderOdd = sd;
+                                break;
+                            case KRSectionData::PageHeaderEven:
+                                m_pageHeaderEven = sd;
+                                break;
+                            case KRSectionData::PageHeaderLast:
+                                m_pageHeaderLast = sd;
+                                break;
+                            case KRSectionData::PageHeaderAny:
+                                m_pageHeaderAny = sd;
+                                break;
+                            case KRSectionData::ReportHeader:
+                                m_reportHeader = sd;
+                                break;
+                            case KRSectionData::ReportFooter:
+                                m_reportFooter = sd;
+                                break;
+                            case KRSectionData::PageFooterFirst:
+                                m_pageFooterFirst = sd;
+                                break;
+                            case KRSectionData::PageFooterOdd:
+                                m_pageFooterOdd = sd;
+                                break;
+                            case KRSectionData::PageFooterEven:
+                                m_pageFooterEven = sd;
+                                break;
+                            case KRSectionData::PageFooterLast:
+                                m_pageFooterLast = sd;
+                                break;
+                            case KRSectionData::PageFooterAny:
+                                m_pageFooterAny = sd;
+                                break;
+                            }
                         }
-                        else {
-			    kDebug()<< "Adding section of type " << sd->type();
-			    
-				switch (sd->type()) {
-				    case KRSectionData::PageHeaderFirst:
-					m_pageHeaderFirst = sd;
-					break;
-				    case KRSectionData::PageHeaderOdd:
-					m_pageHeaderOdd = sd;
-					break;
-				    case KRSectionData::PageHeaderEven:
-					m_pageHeaderEven = sd;
-					break;
-				    case KRSectionData::PageHeaderLast:
-					m_pageHeaderLast = sd;
-					break;
-				    case KRSectionData::PageHeaderAny:
-					m_pageHeaderAny = sd;
-					break;
-				    case KRSectionData::ReportHeader:
-					m_reportHeader = sd;
-					break;
-				    case KRSectionData::ReportFooter:
-					m_reportFooter = sd;
-					break;
-				    case KRSectionData::PageFooterFirst:
-					m_pageFooterFirst = sd;
-					break;
-				    case KRSectionData::PageFooterOdd:
-					m_pageFooterOdd = sd;
-					break;
-				    case KRSectionData::PageFooterEven:
-					m_pageFooterEven = sd;
-					break;
-				    case KRSectionData::PageFooterLast:
-					m_pageFooterLast = sd;
-					break;
-				    case KRSectionData::PageFooterAny:
-					m_pageFooterAny = sd;
-					break;
-				}
-			}
-		
+
                     } else if (sn == "report:detail") {
                         KRDetailSectionData * dsd = new KRDetailSectionData(sec.toElement());
 
                         if (dsd->isValid()) {
                             m_detailSection = dsd;
                         } else {
-			    kDebug() << "Invalid detail section";
+                            kDebug() << "Invalid detail section";
                             delete dsd;
                         }
                     }

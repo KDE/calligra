@@ -58,7 +58,7 @@ public:
     int indexOfSection(const QString & name) const;
     void removeSection(int idx, bool del = FALSE);
     virtual QSize sizeHint() const;
-    
+
 protected:
     QString m_query;
 

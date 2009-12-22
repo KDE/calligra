@@ -52,10 +52,10 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
         return;
     }
 
-    m_type =sectionTypeFromString(elemSource.attribute("report:section-type"));
+    m_type = sectionTypeFromString(elemSource.attribute("report:section-type"));
     if (m_type == KRSectionData::None) {
-	m_valid = false;
-	return;
+        m_valid = false;
+        return;
     }
     m_height->setValue(elemSource.attribute("report:height").toDouble());
     m_backgroundColor->setValue(QColor(elemSource.attribute("report:background-color")));
@@ -129,53 +129,53 @@ QString KRSectionData::name() const
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
     QString sectiontype;
-        switch (s) {
-        case KRSectionData::PageHeaderAny:
-            sectiontype = "header-page-any";
-            break;
-        case KRSectionData::PageHeaderEven:
-            sectiontype = "header-page-even";
-            break;
-        case KRSectionData::PageHeaderOdd:
-            sectiontype = "header-page-odd";
-            break;
-        case KRSectionData::PageHeaderFirst:
-            sectiontype = "header-page-first";
-            break;
-        case KRSectionData::PageHeaderLast:
-            sectiontype = "header-page-last";
-            break;
-        case KRSectionData::PageFooterAny:
-            sectiontype = "footer-page-any";
-            break;
-        case KRSectionData::PageFooterEven:
-            sectiontype = "footer-page-even";
-            break;
-        case KRSectionData::PageFooterOdd:
-            sectiontype = "footer-page-odd";
-            break;
-        case KRSectionData::PageFooterFirst:
-            sectiontype = "footer-page-first";
-            break;
-        case KRSectionData::PageFooterLast:
-            sectiontype = "footer-page-last";
-            break;
-        case KRSectionData::ReportHeader:
-            sectiontype = "header-report";
-            break;
-        case KRSectionData::ReportFooter:
-            sectiontype = "footer-report";
-            break;
-	case KRSectionData::GroupHeader:
-            sectiontype = "header-group";
-            break;
-        case KRSectionData::GroupFooter:
-            sectiontype = "footer-group";
-            break;
-        case KRSectionData::Detail:
-            sectiontype = "detail";
-            break;
-        }
+    switch (s) {
+    case KRSectionData::PageHeaderAny:
+        sectiontype = "header-page-any";
+        break;
+    case KRSectionData::PageHeaderEven:
+        sectiontype = "header-page-even";
+        break;
+    case KRSectionData::PageHeaderOdd:
+        sectiontype = "header-page-odd";
+        break;
+    case KRSectionData::PageHeaderFirst:
+        sectiontype = "header-page-first";
+        break;
+    case KRSectionData::PageHeaderLast:
+        sectiontype = "header-page-last";
+        break;
+    case KRSectionData::PageFooterAny:
+        sectiontype = "footer-page-any";
+        break;
+    case KRSectionData::PageFooterEven:
+        sectiontype = "footer-page-even";
+        break;
+    case KRSectionData::PageFooterOdd:
+        sectiontype = "footer-page-odd";
+        break;
+    case KRSectionData::PageFooterFirst:
+        sectiontype = "footer-page-first";
+        break;
+    case KRSectionData::PageFooterLast:
+        sectiontype = "footer-page-last";
+        break;
+    case KRSectionData::ReportHeader:
+        sectiontype = "header-report";
+        break;
+    case KRSectionData::ReportFooter:
+        sectiontype = "footer-report";
+        break;
+    case KRSectionData::GroupHeader:
+        sectiontype = "header-group";
+        break;
+    case KRSectionData::GroupFooter:
+        sectiontype = "footer-group";
+        break;
+    case KRSectionData::Detail:
+        sectiontype = "detail";
+        break;
+    }
 
     return sectiontype;
 }
@@ -184,39 +184,39 @@ KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
     KRSectionData::Section sec;
     kDebug() << "Determining section type for " << s;
-    
+
     if (s == "header-page-any")
-	sec = KRSectionData::PageHeaderAny;
+        sec = KRSectionData::PageHeaderAny;
     else if (s == "header-page-even")
-	sec = KRSectionData::PageHeaderEven;
+        sec = KRSectionData::PageHeaderEven;
     else if (s == "header-page-odd")
-	sec = KRSectionData::PageHeaderOdd;
+        sec = KRSectionData::PageHeaderOdd;
     else if (s == "header-page-first")
-	sec = KRSectionData::PageHeaderFirst;
+        sec = KRSectionData::PageHeaderFirst;
     else if (s == "header-page-last")
-	sec = KRSectionData::PageHeaderLast;
+        sec = KRSectionData::PageHeaderLast;
     else if (s == "header-report")
-	sec = KRSectionData::ReportHeader;
+        sec = KRSectionData::ReportHeader;
     else if (s == "footer-page-any")
-	sec = KRSectionData::PageFooterAny;
+        sec = KRSectionData::PageFooterAny;
     else if (s == "footer-page-even")
-	sec = KRSectionData::PageFooterEven;
+        sec = KRSectionData::PageFooterEven;
     else if (s == "footer-page-odd")
-	sec = KRSectionData::PageFooterOdd;
+        sec = KRSectionData::PageFooterOdd;
     else if (s == "footer-page-first")
-	sec = KRSectionData::PageFooterFirst;
+        sec = KRSectionData::PageFooterFirst;
     else if (s == "footer-page-last")
-	sec = KRSectionData::PageFooterLast;
+        sec = KRSectionData::PageFooterLast;
     else if (s == "footer-report")
-	sec = KRSectionData::ReportFooter;
+        sec = KRSectionData::ReportFooter;
     else if (s == "header-group")
-	sec = KRSectionData::GroupHeader;
+        sec = KRSectionData::GroupHeader;
     else if (s == "footer-group")
-	sec = KRSectionData::GroupFooter;
+        sec = KRSectionData::GroupFooter;
     else if (s == "detail")
-	sec = KRSectionData::Detail;
+        sec = KRSectionData::Detail;
     else
-	sec = KRSectionData::None;
-    
-    return sec;  
+        sec = KRSectionData::None;
+
+    return sec;
 }

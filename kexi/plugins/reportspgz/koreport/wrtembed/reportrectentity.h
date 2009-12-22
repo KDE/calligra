@@ -42,7 +42,7 @@ public:
 
     virtual ~ReportRectEntity();
     void setUnit(KoUnit u);
-    
+
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*);
     int m_dpiX;

@@ -34,31 +34,31 @@
 class KexiSourceSelector : public QWidget
 {
     Q_OBJECT
-    public:
-        KexiSourceSelector(QWidget* parent, KexiDB::Connection* conn);
-        ~KexiSourceSelector();
-        
-        KoReportData* sourceData();
-        void setConnectionData(QDomElement);
-        QDomElement connectionData();
-        
-    private:
-        KexiDB::Connection *m_conn;
-        QStringList queryList();
-        QVBoxLayout *m_layout;
-        QComboBox *m_sourceType;
-        QComboBox *m_internalSource;
-        KLineEdit *m_externalSource;
-        KPushButton *m_setData;
+public:
+    KexiSourceSelector(QWidget* parent, KexiDB::Connection* conn);
+    ~KexiSourceSelector();
 
-        KexiDBReportData *m_kexiDBData;
-        KexiMigrateReportData *m_kexiMigrateData;
+    KoReportData* sourceData();
+    void setConnectionData(QDomElement);
+    QDomElement connectionData();
 
-    private slots:
-        void setDataClicked();
-        
-    signals:
-        void setData(KoReportData*);
+private:
+    KexiDB::Connection *m_conn;
+    QStringList queryList();
+    QVBoxLayout *m_layout;
+    QComboBox *m_sourceType;
+    QComboBox *m_internalSource;
+    KLineEdit *m_externalSource;
+    KPushButton *m_setData;
+
+    KexiDBReportData *m_kexiDBData;
+    KexiMigrateReportData *m_kexiMigrateData;
+
+private slots:
+    void setDataClicked();
+
+signals:
+    void setData(KoReportData*);
 };
 
 #endif // KEXISOURCESELECTOR_H

@@ -24,12 +24,13 @@
 #include <KDebug>
 #include <QDomElement>
 
-KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *conn ) : QWidget(parent) {
+KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn) : QWidget(parent)
+{
 
     m_conn = conn;
     m_kexiDBData = 0;
     m_kexiMigrateData = 0;
-    
+
     m_layout = new QVBoxLayout(this);
     m_sourceType = new QComboBox(this);
     m_internalSource = new QComboBox(this);
@@ -37,12 +38,12 @@ KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *co
     m_setData = new KPushButton(i18n("Set Data"));
 
     connect(m_setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
-    
+
     m_sourceType->addItem(i18n("Internal"), QVariant("internal"));
     m_sourceType->addItem(i18n("External"), QVariant("external"));
 
     m_internalSource->addItems(queryList());
-    
+
     m_layout->addWidget(new QLabel("Source Type:", this));
     m_layout->addWidget(m_sourceType);
     m_layout->addSpacing(10);
@@ -57,7 +58,8 @@ KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *co
     setLayout(m_layout);
 }
 
-KexiSourceSelector::~KexiSourceSelector() {
+KexiSourceSelector::~KexiSourceSelector()
+{
 
 }
 
@@ -73,7 +75,7 @@ QStringList KexiSourceSelector::queryList()
             if (tsc)
                 qs << tsc->name();
         }
-        
+
         QList<int> qids = m_conn->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
@@ -89,17 +91,17 @@ QStringList KexiSourceSelector::queryList()
 void KexiSourceSelector::setConnectionData(QDomElement c)
 {
     m_sourceType->setEditText(c.attribute("type"));
-    
-    if (c.attribute("type") == "internal" ) {
-       m_internalSource->setCurrentIndex(m_sourceType->findText(c.attribute("source")));
+
+    if (c.attribute("type") == "internal") {
+        m_internalSource->setCurrentIndex(m_sourceType->findText(c.attribute("source")));
     }
-    
-    if (c.attribute("type") == "external" ) {
+
+    if (c.attribute("type") == "external") {
         m_externalSource->setText(c.attribute("source"));
     }
 
     emit(setData(sourceData()));
-    
+
 }
 
 QDomElement KexiSourceSelector::connectionData()
@@ -109,11 +111,10 @@ QDomElement KexiSourceSelector::connectionData()
     QDomElement conndata = d.createElement("connection");
 
     conndata.setAttribute("type", m_sourceType->itemData(m_sourceType->currentIndex()).toString());
-    
+
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
         conndata.setAttribute("source", m_internalSource->currentText());
-    }
-    else {
+    } else {
         conndata.setAttribute("source", m_externalSource->text());
     }
     return conndata;
@@ -131,11 +132,11 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiMigrateData = 0;
     }
 
-    if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal" ) {
+    if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
         m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
         return m_kexiDBData;
     }
-    if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "external" ) {
+    if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "external") {
         m_kexiMigrateData = new KexiMigrateReportData(m_externalSource->text());
         return m_kexiMigrateData;
     }
@@ -143,6 +144,7 @@ KoReportData* KexiSourceSelector::sourceData()
     return 0;
 }
 
-void KexiSourceSelector::setDataClicked() {
+void KexiSourceSelector::setDataClicked()
+{
     emit(setData(sourceData()));
 }

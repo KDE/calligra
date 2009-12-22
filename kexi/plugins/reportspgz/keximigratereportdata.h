@@ -40,24 +40,28 @@ private:
 
 public:
     KexiMigrateReportData(const QString &);
-    
+
     virtual ~KexiMigrateReportData();
 
     virtual unsigned int fieldNumber(const QString &field);
     virtual QStringList fieldNames();
-    
+
     virtual QVariant value(unsigned int);
     virtual QVariant value(const QString &field);
 
-    virtual bool open() {return true;}
-    virtual bool close() {return true;}
+    virtual bool open() {
+        return true;
+    }
+    virtual bool close() {
+        return true;
+    }
     virtual bool moveNext();
     virtual bool movePrevious();
     virtual bool moveFirst();
     virtual bool moveLast();
-    
+
     virtual long at() const;
-    
+
     virtual long recordCount() const;
 
     virtual void* schema() const;

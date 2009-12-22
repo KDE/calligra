@@ -15,19 +15,21 @@ class Check;
 
 class KRCheckData : public KRObjectData
 {
-    public:
-        KRCheckData(){createProperties();};
-        KRCheckData(QDomNode &element);
-        virtual ~KRCheckData();
-        virtual int type() const;
-        virtual KRCheckData * toCheck();
-        bool value();
-        void setValue(bool);
-        KRLineStyleData lineStyle();
+public:
+    KRCheckData() {
+        createProperties();
+    };
+    KRCheckData(QDomNode &element);
+    virtual ~KRCheckData();
+    virtual int type() const;
+    virtual KRCheckData * toCheck();
+    bool value();
+    void setValue(bool);
+    KRLineStyleData lineStyle();
 
-        QString controlSource()const;
+    QString controlSource()const;
 
-    protected:
+protected:
     QRectF _rect();
 
     KRSize m_size;

@@ -92,13 +92,13 @@ void Field::setVerticalAlignment(int a)
         m_field->m_verticalAlignment->setValue("top");
         break;
     case 0:
-	m_field->m_verticalAlignment->setValue("middle");
+        m_field->m_verticalAlignment->setValue("middle");
         break;
     case 1:
-	m_field->m_verticalAlignment->setValue("bottom");
+        m_field->m_verticalAlignment->setValue("bottom");
         break;
     default:
-	m_field->m_verticalAlignment->setValue("middle");
+        m_field->m_verticalAlignment->setValue("middle");
         break;
     }
 }

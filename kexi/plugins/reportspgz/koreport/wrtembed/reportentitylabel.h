@@ -37,11 +37,11 @@ public:
     ReportEntityLabel(ReportDesigner *, QGraphicsScene * scene);
     ReportEntityLabel(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
     virtual ~ReportEntityLabel();
-    
+
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual ReportEntityLabel* clone();
-    
+
 private:
     void init(QGraphicsScene*);
     QRectF getTextRect();

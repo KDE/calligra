@@ -43,9 +43,9 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     setPos(0, 0);
 
 #if QT_VERSION >= 0x040600
-      setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
+    setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
 #else
-      setFlags (ItemIsSelectable | ItemIsMovable);
+    setFlags(ItemIsSelectable | ItemIsMovable);
 #endif
 
     setPen(QPen(Qt::black, 5));
@@ -55,7 +55,7 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
         s->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -92,7 +92,7 @@ void ReportEntityLine::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     painter->setRenderHint(QPainter::Antialiasing, true);
     QPen p = painter->pen();
     painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
@@ -120,7 +120,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
     sy = m_start.toPoint().y();
     ex = m_end.toPoint().x();
     ey = m_end.toPoint().y();
-    
+
     // properties
     addPropertyAsAttribute(&entity, m_name);
     entity.setAttribute("report:z-index", zValue());
@@ -128,7 +128,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
     entity.setAttribute("report:ystart", QString::number(sy));
     entity.setAttribute("report:xend", QString::number(ex));
     entity.setAttribute("report:yend", QString::number(ey));
-    
+
     buildXMLLineStyle(doc, entity, lineStyle());
 
     parent.appendChild(entity);
@@ -137,7 +137,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s);
-    
+
     //TODO KoProperty does not support QPointF
     if (p.name() == "Start") {
         //setLine ( _start.toScene().x(), _start.toScene().y(), line().p1().x(), line().p1().y() );

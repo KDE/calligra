@@ -43,11 +43,11 @@ ReportRectEntity::ReportRectEntity(ReportDesigner *r)
     setAcceptsHoverEvents(true);
 
     kDebug() << QT_VERSION;
-    
+
 #if QT_VERSION >= 0x040600
-      setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
+    setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
 #else
-      setFlags (ItemIsSelectable | ItemIsMovable);
+    setFlags(ItemIsSelectable | ItemIsMovable);
 #endif
 }
 
@@ -102,7 +102,7 @@ void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
     m_reportDesigner->changeSet(m_pset);
     setSelected(true);
     scene()->update();
-    
+
     QGraphicsItem::mousePressEvent(event);
 }
 
@@ -118,7 +118,7 @@ void ReportRectEntity::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     //kDebug() << m_grabAction;
-    
+
     qreal w, h;
 
     QPointF p  = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
@@ -274,7 +274,7 @@ int ReportRectEntity::grabHandle(QPointF pos)
 
 QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-  //kDebug() << change;
+    //kDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
 

@@ -32,14 +32,14 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
     m_format->setValue(element.toElement().attribute("report:barcode-format"));
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -53,7 +53,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
             kDebug() << "while parsing barcode element encountered unknow element: " << n;
         }
     }
-    
+
 }
 
 void KRBarcodeData::setMaxLength(int i)

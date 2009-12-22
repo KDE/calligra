@@ -49,7 +49,7 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
                     kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
-	} else if (n == "name") {
+        } else if (n == "name") {
             m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();

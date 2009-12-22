@@ -54,7 +54,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     m_action = new Kross::Action(this, "ReportScript");
 
     m_action->setInterpreter(d->interpreter());
-    
+
     //Add math functions to the script
     m_functions = new KRScriptFunctions(m_cursor);
     m_action->addObject(m_functions, "field");
@@ -78,18 +78,18 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     QList<KRSectionData*> secs = m_reportData->sections();
     foreach(KRSectionData *sec, secs) {
         m_sectionMap[sec] = new Scripting::Section(sec);
-	m_sectionMap[sec]->setParent( m_report );
-	m_sectionMap[sec]->setObjectName(sec->name());
+        m_sectionMap[sec]->setParent(m_report);
+        m_sectionMap[sec]->setObjectName(sec->name());
     }
-    
+
     m_action->addObject(m_report, m_reportData->name());
     kDebug() << "Report name is" << m_reportData->name();
-    
-    #if KDE_IS_VERSION(4,2,88)
-      m_action->setCode( scriptCode().toLocal8Bit());
-    #else
-      m_action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
-    #endif
+
+#if KDE_IS_VERSION(4,2,88)
+    m_action->setCode(scriptCode().toLocal8Bit());
+#else
+    m_action->setCode(fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
+#endif
 }
 
 void KRScriptHandler::trigger()
@@ -150,13 +150,12 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
     m_draw->setOffset(off);
 
     Scripting::Section *ss = m_sectionMap[section];
-    if (ss)
-    {
-	ss->eventOnRender();
+    if (ss) {
+        ss->eventOnRender();
     }
-    
+
     return;
-    
+
     if (!m_action->hadError() && m_action->functionNames().contains(section->name() + "_onrender")) {
         QVariant result = m_action->callFunction(section->name() + "_onrender");
         displayErrors();
@@ -182,7 +181,7 @@ QString KRScriptHandler::fieldFunctions()
             }
         }
         if (o->type() == KRObjectData::EntityCheck) {
-        KRCheckData* chk = o->toCheck();
+            KRCheckData* chk = o->toCheck();
             if (chk->controlSource()[0] == '=') {
                 func = QString("function %1_onrender_(){return %2;}").arg(chk->entityName().toLower()).arg(chk->controlSource().mid(1));
 
@@ -243,9 +242,8 @@ QString KRScriptHandler::where()
 QString KRScriptHandler::scriptCode()
 {
     QString scripts;
-    
-    if (m_connection)
-    {
+
+    if (m_connection) {
         QList<int> scriptids = m_connection->objectIds(5 /*KexiPart::ScriptObjectType*/);
         QStringList scriptnames = m_connection->objectNames(5 /*KexiPart::ScriptObjectType*/);
 
@@ -253,35 +251,34 @@ QString KRScriptHandler::scriptCode()
         int i = 0;
         QString script;
 
-        foreach (id, scriptids) {
+        foreach(id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
             res = m_connection->loadDataBlock(id, script, QString());
-            if (res == true){
+            if (res == true) {
                 QDomDocument domdoc;
                 bool parsed = domdoc.setContent(script, false);
 
                 if (! parsed) {
-                kDebug() << "XML parsing error";
-                return false;
+                    kDebug() << "XML parsing error";
+                    return false;
                 }
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (scriptelem.isNull()) {
-                kDebug() << "script domelement is null";
-                return false;
+                    kDebug() << "script domelement is null";
+                    return false;
                 }
 
                 QString interpretername = scriptelem.attribute("language");
                 kDebug() << interpretername;
                 kDebug() << scriptelem.attribute("scripttype");
 
-                if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i] )) {
+                if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i])) {
                     scripts += '\n' + scriptelem.text().toUtf8();
                 }
                 ++i;
-            }
-            else{
+            } else {
                 kDebug() << "Unable to loadDataBlock";
             }
         }

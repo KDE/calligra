@@ -28,7 +28,7 @@ class KoReportData
 {
 
 public:
-    virtual ~KoReportData(){};
+    virtual ~KoReportData() {};
 
     virtual bool open() = 0;
     virtual bool close() = 0;
@@ -44,9 +44,15 @@ public:
     virtual QVariant value(const QString &field) = 0;
 
     //!Special functions only needed by kexidb driver
-    virtual void* connection() const {return 0;} //!Needs to return a KexiDB::Connection pointer
-    virtual QString source() const {return QString();}
-    virtual void* schema() const {return 0;} //!Needs to return a KexiDB::TableOrQuerySchema pointer, only needs implemented if access via scripting is desirbale
+    virtual void* connection() const {
+        return 0;
+    } //!Needs to return a KexiDB::Connection pointer
+    virtual QString source() const {
+        return QString();
+    }
+    virtual void* schema() const {
+        return 0;
+    } //!Needs to return a KexiDB::TableOrQuerySchema pointer, only needs implemented if access via scripting is desirbale
 };
 
 #endif

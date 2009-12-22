@@ -48,7 +48,7 @@ protected:
 
 private:
     void init(QGraphicsScene*);
-    
+
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 

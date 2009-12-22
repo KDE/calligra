@@ -71,12 +71,12 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 {
     Q_UNUSED(window);
     Q_UNUSED(item);
-    
+
     KexiView* view = 0;
 
     if (viewMode == Kexi::DataViewMode) {
         view = new KexiReportView(parent);
-        
+
     } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiReportDesignView(parent, d->ksrc);
         connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
@@ -88,8 +88,8 @@ void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     QList<QAction*> reportActions = ReportDesigner::actions();
-    
-    foreach( QAction* action, reportActions ) {
+
+    foreach(QAction* action, reportActions) {
         connect(action, SIGNAL(triggered()), this, SLOT(slotActionTriggered()));
         win->addToolBarAction("report", action);
     }
@@ -98,7 +98,7 @@ void KexiReportPart::initPartActions()
 QString KexiReportPart::loadReport(const QString& name)
 {
     //_internal->_reportName = pReportName;
-    
+
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection()) {
         kDebug() << "failed sanity check";
@@ -106,16 +106,16 @@ QString KexiReportPart::loadReport(const QString& name)
     }
     QString src, did;
     KexiDB::SchemaData sd;
-    
+
     if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
         kWarning() << "failed to load schema data";
         return QString();
     }
 
     kDebug() << "***Object ID:" << sd.id();
-    
+
     if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
-            return src;
+        return src;
     } else {
         kWarning() << "Unable to load document";
         return QString();
@@ -125,7 +125,7 @@ QString KexiReportPart::loadReport(const QString& name)
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
     kDebug();
-    const QString document( loadReport(window->partItem()->name()) );
+    const QString document(loadReport(window->partItem()->name()));
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
     td->document = document;
     td->name = window->partItem()->name();
@@ -141,7 +141,7 @@ KexiReportPart::TempData::TempData(QObject* parent)
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
     if (!d->ksrc)
-        d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection() );
+        d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
     tab->addTab(d->ksrc, i18n("Source"));
 }
 
@@ -150,7 +150,7 @@ void KexiReportPart::slotActionTriggered()
     QObject *theSender = sender();
     if (!theSender)
         return;
-    
+
     QString senderName = sender()->objectName();
     KexiMainWindowIface *mainwin = KexiMainWindowIface::global();
 

@@ -44,7 +44,7 @@ SectionEditor::SectionEditor(QWidget* parent, const char* name, bool modal, Qt::
 {
     Q_UNUSED(name);
     Q_UNUSED(modal);
-    
+
     setupUi(this);
 
 

@@ -44,7 +44,7 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual ReportEntityLine* clone();
-    
+
 private:
     ReportDesigner* m_rd;
     void init(QGraphicsScene*, ReportDesigner *);
@@ -57,7 +57,7 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-    
+
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };

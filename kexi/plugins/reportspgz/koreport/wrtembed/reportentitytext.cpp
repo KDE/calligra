@@ -45,7 +45,7 @@ void ReportEntityText::init(QGraphicsScene * scene)
         scene->addItem(this);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
@@ -91,19 +91,19 @@ void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget)
-    
+
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
 
     painter->setFont(font());
-    
+
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt()/100) * 255);
-    
+    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+
     painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
-    
+
     painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
     painter->drawText(rect(), textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 
@@ -136,7 +136,7 @@ void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     entity.setAttribute("report:bottom-padding", m_bottomPadding);
     entity.setAttribute("report:z-index", zValue());
-    
+
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
@@ -159,7 +159,7 @@ void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void ReportEntityText::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s);
-    
+
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

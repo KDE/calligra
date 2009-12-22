@@ -34,13 +34,13 @@ KRFieldData::KRFieldData(QDomNode & element)
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
-    
+
     m_name->setValue(element.toElement().attribute("report:name"));
     m_controlSource->setValue(element.toElement().attribute("report:control-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -101,12 +101,12 @@ void KRFieldData::createProperties()
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");
-    
+
     m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
     m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
 
-    #if 0
+#if 0
     //TODO I do not think we need these
     m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), "Track Total", "Track Total");
     m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), "Track Builtin Format", "Track Builtin Format");
@@ -176,7 +176,7 @@ void KRFieldData::setColumn(const QString& t)
     if (m_controlSource->value() != t) {
         m_controlSource->setValue(t);
     }
-    
+
     kDebug() << "Field: " << entityName() << "is" << controlSource();
 }
 

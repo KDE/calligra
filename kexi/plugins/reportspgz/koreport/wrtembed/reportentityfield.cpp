@@ -41,7 +41,7 @@ void ReportEntityField::init(QGraphicsScene * scene)
         scene->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
@@ -89,7 +89,7 @@ void ReportEntityField::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
@@ -97,7 +97,7 @@ void ReportEntityField::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setFont(font());
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt()/100) * 255);
+    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
 
     painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
@@ -133,7 +133,7 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_verticalAlignment);
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
     entity.setAttribute("report:z-index", zValue());
-    
+
     // bounding rect
     buildXMLRect(doc, entity, pointRect());
 
@@ -162,7 +162,7 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
 void ReportEntityField::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s);
-    
+
     //Handle Position
     if (p.name() == "Position") {
         //TODO _pos.setUnitRect(p.value().value<QRect>() );
