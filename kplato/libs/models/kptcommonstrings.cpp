@@ -55,8 +55,8 @@ namespace KPlato
 
     QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed without affecting the project completion time" ); }
     
-    QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fulfil a timing constraint" ); }
-    QString WhatsThis::nodeNegativeFloat() { return i18nc( "@info:whatsthis", "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfil a timing constraint." ); }
+    QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fulfill a timing constraint" ); }
+    QString WhatsThis::nodeNegativeFloat() { return i18nc( "@info:whatsthis", "Negative float is the duration by which the duration of a task or path has to be reduced in order to fulfill a timing constraint." ); }
 
     QString ToolTip::nodeFreeFloat() { return i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" ); }
     QString WhatsThis::nodeFreeFloat() { return i18nc( "@info:whatsthis", "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." ); }

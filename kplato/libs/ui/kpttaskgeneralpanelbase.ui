@@ -328,7 +328,7 @@ The estimation can be either effort based or duration based. If it is effort bas
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
+            <string>Risk controls the PERT distribution used when calculating the actual estimate for this task.</string>
            </property>
            <property name="whatsThis">
             <string>&lt;p&gt;Risk controles the PERT distribution used when calculating the actual estimate for the task.
