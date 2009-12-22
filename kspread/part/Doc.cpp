@@ -71,6 +71,7 @@
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoShapeSavingContext.h>
+#include <KoUndoStack.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -155,9 +156,9 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     // default document properties
     d->syntaxVersion = CURRENT_SYNTAX_VERSION;
 
-    // Ask every shapefactory to populate the dataCenterMap
     // Init chart shape factory with KSpread's specific configuration panels.
     QList<KoShapeConfigFactory*> panels = ChartDialog::panels(this);
+    // Ask every shapefactory to populate the dataCenterMap
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->populateDataCenterMap(d->dataCenterMap);
@@ -165,6 +166,9 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
             shapeFactory->setOptionPanels(panels);
         }
     }
+
+    // Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.                                               
+    d->dataCenterMap["UndoStack"] = undoStack();
 
     // Load the function modules.
     FunctionModuleRegistry::instance();
