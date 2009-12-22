@@ -79,14 +79,14 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     kDebug() << "Store created";
 
     if (!zip.open(QIODevice::ReadOnly)) {
-        errorMessage = i18n("Couldn't open the requested file %1", m_chain->inputFile());
+        errorMessage = i18n("Could not open the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
         return KoFilter::FileNotFound;
     }
 
     if (!zip.directory()) {
-        errorMessage = i18n("Couldn't read ZIP directory of the requested file %1", m_chain->inputFile());
+        errorMessage = i18n("Could not read ZIP directory of the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
         return KoFilter::FileNotFound;
