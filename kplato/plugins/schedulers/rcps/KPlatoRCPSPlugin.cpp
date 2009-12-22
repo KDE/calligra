@@ -30,6 +30,8 @@
 
 #include <KDebug>
 
+#include <QTimer>
+
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
@@ -42,10 +44,47 @@ KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 {
 }
 
-void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm )
+void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
-    kDebug();
-    KPlatoRCPSScheduler( project, sm );
+    qDebug()<<"KPlatoRCPSPlugin::calculate:";
+    foreach ( KPlatoRCPSScheduler *j, m_jobs ) {
+        if ( j->manager() == sm ) {
+            return;
+        }
+    }
+    sm->setScheduling( true );
+    KPlatoRCPSScheduler *job = new KPlatoRCPSScheduler( &project, sm, this );
+    project.changed( sm );
+    int result = job->kplatoToRCPS();
+    if ( result != 0 ) {
+        sm->expected()->logError( i18n( "Failed to build a valid RCPS project: %1", result, 0 ) );
+        delete job;
+        sm->setScheduling( false );
+        return;
+    }
+    m_jobs << job;
+    connect( job, SIGNAL( jobStarted( KPlatoRCPSScheduler* ) ), SLOT( slotStarted( KPlatoRCPSScheduler* ) ) );
+    connect( job, SIGNAL( jobFinished( KPlatoRCPSScheduler* ) ), SLOT( slotFinished( KPlatoRCPSScheduler* ) ) );
+    if ( nothread ) {
+        job->doRun();
+    } else {
+        job->start();
+    }
+    qDebug()<<"KPlatoRCPSPlugin::calculate: started";
 }
+
+void KPlatoRCPSPlugin::slotStarted( KPlatoRCPSScheduler *job )
+{
+    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
+}
+
+void KPlatoRCPSPlugin::slotFinished( KPlatoRCPSScheduler *job )
+{
+    qDebug()<<"KPlatoRCPSPlugin::slotFinished:";
+    //KPlatoRCPSScheduler *s = qobject_cast<KPlatoRCPSScheduler*>( job );
+    job->manager()->setScheduling( false );
+    job->deleteLater();
+}
+
 
 #include "KPlatoRCPSPlugin.moc"

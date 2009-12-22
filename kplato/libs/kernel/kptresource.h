@@ -562,6 +562,7 @@ public:
             m_resource->unregisterRequest( this );
     }
 
+    void makeAppointment( Schedule *schedule, int amount );
     void makeAppointment( Schedule *schedule );
     Task *task() const;
 

@@ -499,7 +499,12 @@ public:
 
     void initiateCalculation( MainSchedule &sch );
     void initiateCalculationLists( MainSchedule &sch );
-    
+
+    void finishCalculation( ScheduleManager &sm );
+    void adjustSummarytask();
+
+    void emitMaxProgress( int value );
+
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
@@ -512,6 +517,7 @@ signals:
     /// Use to show progress during calculation
     void sigProgress( int );
     void maxProgress( int );
+    void sigCalculationFinished( Project *project, ScheduleManager *sm );
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );
     /// This signal is emitted when the node is to be added to the project.
@@ -612,7 +618,6 @@ protected:
     DateTime calculateBackward( int use );
     DateTime scheduleForward( const DateTime &earliest, int use );
     DateTime scheduleBackward( const DateTime &latest, int use );
-    void adjustSummarytask();
     DateTime checkStartConstraints( const DateTime &dt ) const;
     DateTime checkEndConstraints( const DateTime &dt ) const;
 

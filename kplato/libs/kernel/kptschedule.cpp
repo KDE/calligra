@@ -412,6 +412,27 @@ Appointment *Schedule::findAppointment( Schedule *resource, Schedule *node, int 
     return 0;
 }
 
+DateTime Schedule::appointmentStartTime() const
+{
+    DateTime dt;
+    foreach ( const Appointment *a, m_appointments ) {
+        if ( ! dt.isValid() || dt > a->startTime() ) {
+            dt = a->startTime();
+        }
+    }
+    return dt;
+}
+DateTime Schedule::appointmentEndTime() const
+{
+    DateTime dt;
+    foreach ( const Appointment *a, m_appointments ) {
+        if ( ! dt.isValid() || dt > a->endTime() ) {
+            dt = a->endTime();
+        }
+    }
+    return dt;
+}
+
 QList<Appointment*> &Schedule::appointments( int which)
 {
     if ( which == CalculateForward ) {
@@ -1328,6 +1349,7 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_usePert( false ),
     m_recalculate( false ),
     m_schedulingDirection( false ),
+    m_scheduling( false ),
     m_expected( 0 ),
     m_optimistic( 0 ),
     m_pessimistic( 0 )
@@ -1512,6 +1534,13 @@ void ScheduleManager::setSchedulingDirection( bool on )
     m_project.changed( this );
 }
 
+void ScheduleManager::setScheduling( bool on )
+{
+    //kDebug()<<on;
+    m_scheduling = on;
+    m_project.changed( this );
+}
+
 const QList<SchedulerPlugin*> ScheduleManager::schedulerPlugins() const
 {
     return m_project.schedulerPlugins().values();
@@ -1653,6 +1682,9 @@ QStringList ScheduleManager::state() const
     QStringList lst;
     if ( isBaselined() ) {
         return lst << i18n( "Baselined" );
+    }
+    if ( m_scheduling ) {
+        return lst << i18n( "Scheduling" );
     }
     if ( m_expected == 0 && m_optimistic == 0 && m_pessimistic == 0 ) {
         return lst << i18n( "Not scheduled" );

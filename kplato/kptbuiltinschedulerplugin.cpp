@@ -36,7 +36,7 @@ BuiltinSchedulerPlugin::~BuiltinSchedulerPlugin()
 {
 }
 
-void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm )
+void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, bool )
 {
     kDebug();
     project.calculate( *sm );

@@ -482,18 +482,21 @@ public:
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration positiveFloat( long id = CURRENTSCHEDULE ) const;
+    void setPositiveFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfil a timing- or dependency constraint.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration negativeFloat( long id = CURRENTSCHEDULE ) const;
+    void setNegativeFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration freeFloat( long id = CURRENTSCHEDULE ) const;
+    void setFreeFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration from Early Start to Late Start.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
@@ -548,6 +551,29 @@ public:
     QList<Relation*> parentProxyRelations() const { return  m_parentProxyRelations; }
     QList<Relation*> childProxyRelations() const { return  m_childProxyRelations; }
 
+    /**
+     * Calculates and returns the duration of the node.
+     * Uses the correct expected-, optimistic- or pessimistic effort
+     * dependent on @p use.
+     * @param time Where to start calculation.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param backward If true, time specifies when the task should end.
+     */
+    virtual Duration duration(const DateTime &time, int use, bool backward);
+
+    /**
+     * Return the duration calculated on bases of the estimates calendar
+     */
+    Duration length(const DateTime &time, const Duration &duration, bool backward);
+    Duration length(const DateTime &time, const Duration &duration, Schedule *sch, bool backward);
+
+    /// Copy info from parent schedule
+    void copySchedule();
+    /// Copy intervals from parent schedule
+    void copyAppointments();
+    /// Copy intervals from parent schedule in the range @p start, @p end
+    void copyAppointments( const DateTime &start, const DateTime &end = DateTime() );
+
 signals:
     void workPackageToBeAdded( Node *node, int row );
     void workPackageAdded( Node *node );
@@ -555,13 +581,6 @@ signals:
     void workPackageRemoved( Node *node );
 
 protected:
-    /// Copy info from parent schedule
-    void copySchedule();
-    /// Copy intervals from parent schedule
-    void copyAppointments();
-    /// Copy intervals from parent schedule in the range @p start, @p end
-    void copyAppointments( const DateTime &start, const DateTime &end = DateTime() );
-    
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
     /// Check if this node has any dependent parent nodes
@@ -681,23 +700,9 @@ public:
 
 protected:
     /**
-     * Calculates and returns the duration of the node.
-     * Uses the correct expected-, optimistic- or pessimistic effort
-     * dependent on @p use.
-     * @param time Where to start calculation.
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @param backward If true, time specifies when the task should end.
-     */
-    virtual Duration duration(const DateTime &time, int use, bool backward);
-    /**
      * Return the duration calculated on bases of the requested resources
      */
     Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
-
-    /**
-     * Return the duration calculated on bases of the estimates calendar
-     */
-    Duration length(const DateTime &time, const Duration &duration, bool backward);
 
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);

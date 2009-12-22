@@ -201,6 +201,11 @@ public:
     void setEndTime(DateTime endTime, long id = CURRENTSCHEDULE );
     /// Return the scheduled end time
     virtual DateTime endTime( long id = CURRENTSCHEDULE ) const;
+    /// Set the scheduled duration
+    void setDuration(const Duration &duration, long id = CURRENTSCHEDULE );
+
+    DateTime appointmentStartTime( long id = CURRENTSCHEDULE) const;
+    DateTime appointmentEndTime( long id = CURRENTSCHEDULE ) const;
 
     /// Return the estimate for this node
     Estimate *estimate() const { return m_estimate; }

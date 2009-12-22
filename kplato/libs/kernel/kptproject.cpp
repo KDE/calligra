@@ -199,6 +199,7 @@ void Project::calculate( const DateTime &dt )
 
 void Project::calculate( ScheduleManager &sm )
 {
+    sm.setScheduling( true );
     m_progress = 0;
     int nodes = 0;
     foreach ( Node *n, nodeIdDict ) {
@@ -239,9 +240,11 @@ void Project::calculate( ScheduleManager &sm )
         setCurrentSchedule( sm.expected()->id() );
     }
     emit sigProgress( maxprogress );
+    emit sigCalculationFinished( this, &sm );
     emit scheduleManagerChanged( &sm );
     emit projectCalculated( &sm );
     emit changed();
+    sm.setScheduling( false );
 }
 
 void Project::calculate( Schedule *schedule )
@@ -353,10 +356,26 @@ void Project::calculate()
     }
 }
 
+void Project::finishCalculation( ScheduleManager &sm )
+{
+    MainSchedule *cs = sm.expected();
+    calcCriticalPath( false );
+    calcResourceOverbooked();
+    cs->notScheduled = false;
+    calcFreeFloat();
+    emit scheduleChanged( cs );
+    emit changed();
+}
+
 void Project::incProgress()
 {
     m_progress += 1;
     emit sigProgress( m_progress );
+}
+
+void Project::emitMaxProgress( int value )
+{
+    emit maxProgress( value );
 }
 
 bool Project::calcCriticalPath( bool fromEnd )

@@ -1,6 +1,8 @@
 
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOSTORE_INCLUDES} ${CMAKE_SOURCE_DIR}/kplato/libs/kernel ${KDE4_INCLUDES} )
 
+add_subdirectory( tests )
+
 SET ( RCPSScheduler_SRCS
     KPlatoRCPSPlugin.cpp
     KPlatoRCPSScheduler.cpp

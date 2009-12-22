@@ -24,6 +24,9 @@
 
 #include <QVariantList>
 
+class KJob;
+class KPlatoRCPSScheduler;
+
 namespace KPlato
 {
     class Project;
@@ -39,7 +42,15 @@ public:
     ~KPlatoRCPSPlugin();
 
     /// Calculate the project
-    virtual void calculate( KPlato::Project &project, KPlato::ScheduleManager *sm );
+    virtual void calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread = false );
+
+protected slots:
+    void slotStarted( KPlatoRCPSScheduler *job );
+    void slotFinished( KPlatoRCPSScheduler *job );
+
+private:
+    QList<KPlatoRCPSScheduler*> m_jobs;
 };
+
 
 #endif // KPLATORCPSPLUGIN_H

@@ -1328,6 +1328,14 @@ void ResourceRequest::makeAppointment( Schedule *ns )
     }
 }
 
+void ResourceRequest::makeAppointment( Schedule *ns, int amount )
+{
+    if ( m_resource ) {
+        setCurrentSchedulePtr( ns );
+        m_resource->makeAppointment( ns, amount, m_required );
+    }
+}
+
 long ResourceRequest::allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward )
 {
     setCurrentSchedulePtr( ns );
@@ -2072,7 +2080,9 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
-        t = backward ? availableAfter(end, ns) : availableBefore(end, ns);
+        foreach ( ResourceRequest *r, lst ) {
+            t = backward ? r->availableAfter(end, ns) : r->availableBefore(end, ns);
+        }
     }
     end = t.isValid() ? t : time;
     //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_group->name()<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort:"<<_effort.toString(Duration::Format_Day);

@@ -39,7 +39,7 @@ public:
     virtual ~SchedulerPlugin();
 
     /// Calculate the project
-    virtual void calculate( Project &project, ScheduleManager *sm ) = 0;
+    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
 
     /// Localized name
     QString name() const;

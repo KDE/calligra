@@ -187,6 +187,7 @@ protected slots:
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotCalculateSchedule( Project*, ScheduleManager* );
+    void slotCalculationFinished( Project *project, ScheduleManager *sm );
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
     void slotProgressChanged( int value );
 

@@ -478,7 +478,26 @@ DateTime Node::endTime( long id ) const
     Schedule *s = schedule( id );
     return s ? s->endTime : DateTime();
 }
-    
+
+DateTime Node::appointmentStartTime( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->appointmentStartTime() : DateTime();
+}
+DateTime Node::appointmentEndTime( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->appointmentEndTime() : DateTime();
+}
+
+void Node::setDuration(const Duration &duration, long id )
+{
+    Schedule *s = schedule( id );
+    if ( s ) {
+        s->duration = duration;
+    }
+}
+
 void Node::setEarlyStart(const DateTime &dt, long id )
 {
     Schedule *s = schedule( id );

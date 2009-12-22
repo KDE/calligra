@@ -1475,11 +1475,10 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         removeProgressBarItems();
     }
     removeStatusBarItem( m_estlabel );
-    bool conn = false;
     if ( sm == currentScheduleManager() ) {
-        conn = connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    qDebug()<<"slotCalculateSchedule:"<<sm->name()<<conn;
+    qDebug()<<"slotCalculateSchedule:"<<sm->name();
 
     m_text = new QLabel( i18n( "%1: Calculating...", sm->name() ) );
     addStatusBarItem( m_text, 0, true );
@@ -1488,19 +1487,23 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     addStatusBarItem( m_progress, 0, true );
     connect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
     connect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT( setValue( int ) ) );
+    connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
     QApplication::setOverrideCursor( Qt::WaitCursor );
     CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, *sm, i18n( "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     QApplication::restoreOverrideCursor();
     slotUpdate();
+}
+
+void View::slotCalculationFinished( Project *project, ScheduleManager *sm )
+{
     m_text->setText( i18n( "%1: Calculating done", sm->name() ) );
     disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
     disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
+    disconnect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
     m_progressBarTimer.start( 2000 );
 
-    if ( conn ) {
-        disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-    }
+    disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
 }
 
 void View::removeProgressBarItems()

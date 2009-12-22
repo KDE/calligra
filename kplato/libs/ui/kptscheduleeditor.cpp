@@ -112,7 +112,7 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
         << ScheduleModel::ScheduleDistribution
         << ScheduleModel::SchedulePlannedStart
         << ScheduleModel::SchedulePlannedFinish
-        //<< ScheduleModel::ScheduleScheduler
+        << ScheduleModel::ScheduleScheduler
         ;
 
     QList<int> lst;
@@ -208,8 +208,17 @@ void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
         actionDeleteSelection->setEnabled( false );
     } else {
         actionBaselineSchedule->setEnabled( on && sm->isScheduled() && ! m_view->project()->isBaselined() );
-        actionCalculateSchedule->setEnabled( on );
-        actionDeleteSelection->setEnabled( on );
+        actionDeleteSelection->setEnabled( on && ! sm->scheduling() );
+        bool scheduling = false;
+        if ( on && model() && project() ) {
+            foreach ( ScheduleManager *sm, project()->allScheduleManagers() ) {
+                scheduling = sm->scheduling();
+                if ( scheduling ) {
+                    break;
+                }
+            }
+        }
+        actionCalculateSchedule->setEnabled( on && ! scheduling );
     }
 }
 

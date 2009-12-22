@@ -132,6 +132,9 @@ public:
     /// Attach the appointment to appropriate list (appointment->calculationMode() specifies list)
     bool attatch( Appointment *appointment );
     
+    DateTime appointmentStartTime() const;
+    DateTime appointmentEndTime() const;
+
     virtual Appointment appointmentIntervals( int which = Scheduling ) const;
 
     virtual bool isOverbooked() const { return false; }
@@ -585,6 +588,9 @@ public:
     void setSchedulingDirection( bool on );
     bool schedulingDirection() const { return m_schedulingDirection; }
 
+    void setScheduling( bool on );
+    bool scheduling() const { return m_scheduling; }
+
     QList<MainSchedule*> schedules() const;
     int numSchedules() const;
     int indexOf( const MainSchedule *sch ) const;
@@ -624,6 +630,7 @@ protected:
     bool m_recalculate;
     DateTime m_recalculateFrom;
     bool m_schedulingDirection;
+    bool m_scheduling;
     MainSchedule *m_expected;
     MainSchedule *m_optimistic;
     MainSchedule *m_pessimistic;

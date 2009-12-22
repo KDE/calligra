@@ -38,7 +38,7 @@ public:
     virtual ~BuiltinSchedulerPlugin();
 
     /// Calculate the project
-    virtual void calculate( Project &project, ScheduleManager *sm );
+    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 };
 
 } //namespace KPlato

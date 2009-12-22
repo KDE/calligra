@@ -2121,25 +2121,30 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     return dur;
 }
 
-Duration Task::length(const DateTime &time, const Duration &duration, bool backward) {
+Duration Task::length(const DateTime &time, const Duration &duration, bool backward)
+{
+    return length( time, duration, m_currentSchedule, backward );
+}
+
+Duration Task::length(const DateTime &time, const Duration &duration, Schedule *sch, bool backward) {
     //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_name<<""<<time.toString()<<": duration:"<<duration.toString(Duration::Format_Day)<<" ("<<duration.milliseconds()<<")";
     
     Duration l;
     if ( duration == Duration::zeroDuration ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Calculate length: estimate == 0" );
+        if ( sch ) sch->logDebug( "Calculate length: estimate == 0" );
 #endif
         return l;
     }
     Calendar *cal = m_estimate->calendar();
     if ( cal == 0) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Calculate length: No calendar, return estimate " + duration.toString() );
+        if ( sch ) sch->logDebug( "Calculate length: No calendar, return estimate " + duration.toString() );
 #endif
         return duration;
     }
 #ifndef NDEBUG
-    m_currentSchedule->logDebug( "Calculate length from: " + time.toString() );
+    if ( sch ) sch->logDebug( "Calculate length from: " + time.toString() );
 #endif
     DateTime logtime = time;
     bool sts=true;
@@ -2167,7 +2172,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     }
     if ( ! match ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
+        if ( sch ) sch->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
         for (int i=0; !match && i < 24; ++i) {
@@ -2190,7 +2195,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     }
     if ( ! match ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
+        if ( sch ) sch->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
         for (int i=0; !match && i < 60; ++i) {
@@ -2213,7 +2218,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     }
     if ( ! match ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
+        if ( sch ) sch->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
         for (int i=0; !match && i < 60 && sts; ++i) {
@@ -2235,7 +2240,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     }
     if ( ! match ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " l " + l.toString() + " (" + (duration - l).toString() + ')' );
+        if ( sch ) sch->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " l " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         for (int i=0; !match && i < 1000; ++i) {
             //milliseconds
@@ -2249,7 +2254,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 match = true;
             } else {
 #ifndef NDEBUG
-                m_currentSchedule->logDebug( "Got more than asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+                if ( sch ) sch->logDebug( "Got more than asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
 #endif
                 break;
             }
@@ -2271,7 +2276,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
             }
         }
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Moved end to work: " + end.toString() + " -> " + t.toString() );
+        if ( sch ) sch->logDebug( "Moved end to work: " + end.toString() + " -> " + t.toString() );
 #endif
     }
     end = t.isValid() ? t : time;
@@ -2279,7 +2284,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     l = end>time ? end-time : time-end;
     if ( match ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Calculated length: " + time.toString() + " - " + end.toString() + " = " + l.toString() );
+        if ( sch ) sch->logDebug( "Calculated length: " + time.toString() + " - " + end.toString() + " = " + l.toString() );
 #endif
     }
     return l;
@@ -2414,16 +2419,37 @@ Duration Task::positiveFloat( long id ) const
     return s == 0 ? Duration::zeroDuration : s->positiveFloat;
 }
 
+void Task::setPositiveFloat( const Duration &fl, long id ) const
+{
+    Schedule *s = schedule( id );
+    if ( s )
+        s->positiveFloat = fl;
+}
+
 Duration Task::negativeFloat( long id ) const
 {
     Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : s->negativeFloat;
 }
 
+void Task::setNegativeFloat( const Duration &fl, long id ) const
+{
+    Schedule *s = schedule( id );
+    if ( s )
+        s->negativeFloat = fl;
+}
+
 Duration Task::freeFloat( long id ) const
 {
     Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : s->freeFloat;
+}
+
+void Task::setFreeFloat( const Duration &fl, long id ) const
+{
+    Schedule *s = schedule( id );
+    if ( s )
+        s->freeFloat = fl;
 }
 
 Duration Task::startFloat( long id ) const
@@ -2456,7 +2482,7 @@ bool Task::calcCriticalPath(bool fromEnd)
         return false;
     }
     if (fromEnd) {
-        if (isEndNode()) {
+        if (isEndNode() && startFloat() == 0 && finishFloat() == 0) {
             m_currentSchedule->inCriticalPath = true;
             //kDebug()<<m_name<<" end node";
             return true;
@@ -2472,7 +2498,7 @@ bool Task::calcCriticalPath(bool fromEnd)
             }
         }
     } else {
-        if (isStartNode()) {
+        if (isStartNode() && startFloat() == 0 && finishFloat() == 0) {
             m_currentSchedule->inCriticalPath = true;
             //kDebug()<<m_name<<" start node";
             return true;
@@ -2578,7 +2604,7 @@ uint Task::state( long id ) const
 
 void Task::addWorkPackage( WorkPackage *wp )
 {
-    qDebug()<<"addWorkPackage:"<<m_name<<wp->ownerName();
+    //qDebug()<<"addWorkPackage:"<<m_name<<wp->ownerName();
     emit workPackageToBeAdded( this, m_packageLog.count() );
     m_packageLog.append( wp );
     emit workPackageAdded( this );
@@ -2586,7 +2612,7 @@ void Task::addWorkPackage( WorkPackage *wp )
 
 void Task::removeWorkPackage( WorkPackage *wp )
 {
-    qDebug()<<"removeWorkPackage:"<<m_name<<wp->ownerName();
+    //qDebug()<<"removeWorkPackage:"<<m_name<<wp->ownerName();
     int index = m_packageLog.indexOf( wp );
     if ( index < 0 ) {
         return;
@@ -3019,7 +3045,7 @@ EffortCostMap Completion::actualEffortCost( long id ) const
         lst.append( &m );
         rate.append( r->normalRate() );
     }
-    qDebug()<<"actualEffortCost:"<<m_node->name()<<start<<end<<lst;
+    //qDebug()<<"actualEffortCost:"<<m_node->name()<<start<<end<<lst;
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
@@ -3036,7 +3062,7 @@ EffortCostMap Completion::actualEffortCost( long id ) const
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
-                qDebug()<<"actualEffortCost: added"<<m_node->name()<<d<<c.hours()<<c.cost();
+                //qDebug()<<"actualEffortCost: added"<<m_node->name()<<d<<c.hours()<<c.cost();
             }
         }
     } else if ( ! m_entries.isEmpty() ) {
@@ -3367,7 +3393,7 @@ QList<Resource*> WorkPackage::fetchResources( long id )
     //kDebug()<<m_task.name();
     QList<Resource*> lst;
     if ( id == NOTSCHEDULED ) {
-        qDebug()<<"WorkPackage::fetchResources:"<<"No schedule";
+        //qDebug()<<"WorkPackage::fetchResources:"<<"No schedule";
         if ( m_task ) lst << m_task->requestedResources();
     } else {
         if ( m_task ) lst = m_task->assignedResources( id );
@@ -3377,7 +3403,7 @@ QList<Resource*> WorkPackage::fetchResources( long id )
             }
         }
     }
-    qDebug()<<"WorkPackage::fetchResources:"<<lst;
+    //qDebug()<<"WorkPackage::fetchResources:"<<lst;
     return lst;
 }
 
@@ -3443,7 +3469,7 @@ void WorkPackageSettings::saveXML( QDomElement &element ) const
 
 bool WorkPackageSettings::loadXML( const KoXmlElement &element )
 {
-    qDebug()<<"WorkPackageSettings::loadXML:";
+    //qDebug()<<"WorkPackageSettings::loadXML:";
     usedEffort = (bool)element.attribute( "used-effort" ).toInt();
     progress = (bool)element.attribute( "progress" ).toInt();
     remainingEffort = (bool)element.attribute( "remaining-effort" ).toInt();
