@@ -32,6 +32,7 @@ private slots:
     void testSingleDay();
     void testWeekdays();
     void testCalendarWithParent();
+    void testTimezone();
 };
 
 } //namespace KPlato

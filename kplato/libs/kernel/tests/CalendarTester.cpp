@@ -120,6 +120,34 @@ void CalendarTester::testCalendarWithParent() {
     
 }
 
+void CalendarTester::testTimezone() {
+    Calendar t("Test");
+    QDate wdate(2006,1,2);
+    DateTime before = DateTime(wdate.addDays(-1), QTime());
+    DateTime after = DateTime(wdate.addDays(1), QTime());
+    QTime t1(8,0,0);
+    QTime t2(10,0,0);
+    DateTime wdt1(wdate, t1, KDateTime::Spec::UTC());
+    DateTime wdt2(wdate, t2, KDateTime::Spec::UTC());
+    int length = t1.msecsTo( t2 );
+    CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
+    day->addInterval(TimeInterval(t1, length));
+    t.addDay(day);
+    QVERIFY(t.findDay(wdate) == day);
+    
+    DateTime dt1 = DateTime( wdate, t1.addSecs( 60*60 ), KDateTime::Spec::OffsetFromUTC(3600));
+    DateTime dt2 = DateTime( wdate, t2.addSecs( 60*60 ), KDateTime::Spec::OffsetFromUTC(-3600));
+
+    qDebug()<<wdt1<<wdt2;
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(t.firstAvailableAfter(dt1,after), wdt1);
+    QCOMPARE(t.firstAvailableBefore(dt2, before), wdt2);
+    
+    Duration e(0, 2, 0);
+    QCOMPARE((t.effort(dt1, dt2)).toString(), e.toString());
+
+}
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::CalendarTester )
