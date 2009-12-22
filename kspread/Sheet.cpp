@@ -207,7 +207,7 @@ Sheet::Sheet(Map* map, const QString& sheetName)
     d->hide = false;
     d->showGrid = true;
     d->showFormula = false;
-    d->showFormulaIndicator = true;
+    d->showFormulaIndicator = false;
     d->showCommentIndicator = true;
     d->showPageBorders = false;
 
