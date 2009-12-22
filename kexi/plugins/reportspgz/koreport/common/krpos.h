@@ -40,6 +40,8 @@ public:
     void setPointPos(const QPointF&, bool = true);
     void setUnit(KoUnit);
     void setName(const QString&);
+    KoUnit unit() { return m_unit;} 
+    
     KoProperty::Property* property() {
         return m_property;
     }

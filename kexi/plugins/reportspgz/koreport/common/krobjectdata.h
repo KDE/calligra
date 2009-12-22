@@ -25,6 +25,7 @@
 #include <QColor>
 #include "krpos.h"
 
+class KRSize;
 class KRLineData;
 class KRLabelData;
 class KRFieldData;
@@ -117,7 +118,7 @@ protected:
 
     QString m_oldName;
 
-    static bool parseReportRect(const QDomElement &, QRectF &);
+    static bool parseReportRect(const QDomElement &, KRPos *pos, KRSize *siz);
     static bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);
     static bool parseReportLineStyleData(const QDomElement &, KRLineStyleData &);
 

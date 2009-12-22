@@ -58,7 +58,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
         return;
     }
     m_height->setValue(elemSource.attribute("report:height").toDouble());
-    m_backgroundColor->setValue(QColor(elemSource.attribute("report:background-color")));
+    m_backgroundColor->setValue(QColor(elemSource.attribute("fo:background-color")));
 
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {

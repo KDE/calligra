@@ -93,10 +93,7 @@ KRChartData::KRChartData(QDomNode & element)
         } else if (n == "ytitle") {
             m_yTitle->setValue(node.firstChild().nodeValue());
         } else if (n == "rect") {
-            QRectF r;
-            parseReportRect(node.toElement(), r);
-            m_pos.setPointPos(r.topLeft());
-            m_size.setPointSize(r.size());
+            parseReportRect(node.toElement(), &m_pos, &m_size);
         } else if (n == "backgroundcolor") {
             m_backgroundColor->setValue(QColor(node.firstChild().nodeValue()));
 

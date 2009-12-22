@@ -152,7 +152,7 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     entity.setAttribute("report:z-index", zValue());
 
     // bounding rect
-    buildXMLRect(doc, entity, pointRect());
+    buildXMLRect(doc, entity, &m_pos, &m_size);
 
     parent.appendChild(entity);
 }

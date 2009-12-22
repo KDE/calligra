@@ -109,7 +109,7 @@ void ReportEntityShape::buildXML(QDomDocument & doc, QDomElement & parent)
     QDomElement entity = doc.createElement("shape");
 
     // bounding rect
-    buildXMLRect(doc, entity, pointRect());
+    buildXMLRect(doc, entity, &m_pos, &m_size);
 
     // name
     QDomElement n = doc.createElement("name");

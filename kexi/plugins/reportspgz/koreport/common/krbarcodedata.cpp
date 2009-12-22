@@ -45,10 +45,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
         n = node.nodeName();
 
         if (n == "report:rect") {
-            QRectF r;
-            parseReportRect(node.toElement(), r);
-            m_pos.setPointPos(r.topLeft());
-            m_size.setPointSize(r.size());
+            parseReportRect(node.toElement(), &m_pos, &m_size);
         } else {
             kDebug() << "while parsing barcode element encountered unknow element: " << n;
         }

@@ -68,10 +68,7 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
         } else if (n == "bottom") {
             m_verticalAlignment->setValue("Bottom");
         } else if (n == "rect") {
-            QRectF r;
-            parseReportRect(node.toElement(), r);
-            m_pos.setPointPos(r.topLeft());
-            m_size.setPointSize(r.size());
+            parseReportRect(node.toElement(), &m_pos, &m_size);
         } else if (n == "textstyle") {
 
             KRTextStyleData ts;

@@ -138,7 +138,7 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
     addPropertyAsAttribute(&entity, m_checkStyle);
 
     // bounding rect
-    buildXMLRect(doc, entity, pointRect());
+    buildXMLRect(doc, entity, &m_pos, &m_size);
 
     //Line Style
     buildXMLLineStyle(doc, entity, lineStyle());

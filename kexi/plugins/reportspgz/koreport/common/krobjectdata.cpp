@@ -19,7 +19,8 @@
  */
 #include "krobjectdata.h"
 #include <kdebug.h>
-#include <QRectF>
+#include "krpos.h"
+#include "krsize.h"
 
 KRObjectData::KRObjectData()
 {
@@ -109,13 +110,31 @@ bool KRObjectData::parseReportLineStyleData(const QDomElement & elemSource, KRLi
 }
 
 
-bool KRObjectData::parseReportRect(const QDomElement & elemSource, QRectF & rectTarget)
+bool KRObjectData::parseReportRect(const QDomElement & elemSource, KRPos *pos, KRSize *siz)
 {
+    
     if (elemSource.tagName() == "report:rect") {
-        rectTarget.setX(elemSource.attribute("report:x", "10").toFloat());
-        rectTarget.setY(elemSource.attribute("report:y", "10").toFloat());
-        rectTarget.setWidth(elemSource.attribute("report:width", "10").toFloat());
-        rectTarget.setHeight(elemSource.attribute("report:height", "10").toFloat());
+        QString sUnit = elemSource.attribute("svg:x", "1cm").right(2);
+	KoUnit unit = KoUnit::unit(sUnit);
+	pos->setUnit(unit);
+	siz->setUnit(unit);
+	QPointF _pos;
+	QSizeF _siz;
+	
+	QString temp;
+	temp = elemSource.attribute("svg:x", "1cm");
+        _pos.setX(temp.left(temp.length()-2).toFloat());
+        temp = elemSource.attribute("svg:y", "1cm");
+	_pos.setY(temp.left(temp.length()-2).toFloat());
+	
+        temp = elemSource.attribute("svg:width", "1cm");
+	_siz.setWidth(temp.left(temp.length()-2).toFloat());
+        temp = elemSource.attribute("svg:height", "1cm");
+	_siz.setHeight(temp.left(temp.length()-2).toFloat());
+	
+	pos->setUnitPos(_pos);
+	siz->setUnitSize(_siz);
+	
         return true;
     }
 

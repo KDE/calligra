@@ -68,15 +68,16 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
 
 }
 
-void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect)
+void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, KRPos *pos, KRSize *siz)
 {
-    kDebug() << "Saving Rect " << rect;
     QDomElement element = doc.createElement("report:rect");
 
-    element.setAttribute("report:x", QString::number(rect.x()));
-    element.setAttribute("report:y", QString::number(rect.y()));
-    element.setAttribute("report:width", QString::number(rect.width()));
-    element.setAttribute("report:height", QString::number(rect.height()));
+    KoUnit unit = pos->unit();
+    
+    element.setAttribute("svg:x", QString::number(pos->toUnit().x()) + KoUnit::unitName(unit));
+    element.setAttribute("svg:y", QString::number(pos->toUnit().y()) + KoUnit::unitName(unit));
+    element.setAttribute("svg:width", QString::number(siz->toUnit().width()) + KoUnit::unitName(unit));
+    element.setAttribute("svg:height", QString::number(siz->toUnit().height()) + KoUnit::unitName(unit));
 
     entity.appendChild(element);
 }
