@@ -3083,6 +3083,7 @@ GeneralNodeItemModel::GeneralNodeItemModel( QObject *parent )
 
 GeneralNodeItemModel::~GeneralNodeItemModel()
 {
+    qDeleteAll( m_objects );
 }
 
 void GeneralNodeItemModel::setModus( int modus )

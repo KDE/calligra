@@ -1739,6 +1739,7 @@ void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
         }
         // remove intervals
         while ( ! lst.isEmpty() ) {
+            delete m_datamap.value( lst.first() );
             m_datamap.remove( lst.first() );
             delete lst.takeFirst();
         }
@@ -1757,6 +1758,7 @@ void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
         }
         // remove intervals
         while ( ! lst.isEmpty() ) {
+            delete m_datamap.value( lst.first() );
             m_datamap.remove( lst.first() );
             delete lst.takeFirst();
         }
