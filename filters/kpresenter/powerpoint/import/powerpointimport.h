@@ -28,6 +28,10 @@
 
 using namespace Libppt;
 
+
+
+
+
 class KoXmlWriter;
 
 class PowerPointImport : public KoFilter
@@ -35,6 +39,7 @@ class PowerPointImport : public KoFilter
     Q_OBJECT
 
 public:
+
     PowerPointImport(QObject *parent, const QStringList&);
     virtual ~PowerPointImport();
     virtual KoFilter::ConversionStatus convert(const QByteArray& from,
@@ -58,7 +63,13 @@ private:
     void processGroupObjectForStyle(GroupObject* groupObject, KoGenStyles &styles);
     void processDrawingObjectForStyle(DrawObject* drawObject, KoGenStyles &styles);
     void processTextObjectForStyle(TextObject* textObject, KoGenStyles &styles);
-    void processDocStyles(Slide *master,KoGenStyles &styles);
+
+    /**
+    * @brief Write styles (KoGenStyle& style) meant for the whole presentation 
+    * @param KoGenStyle& style To represent the style
+    * @param Slide master - master slide
+    */
+    void processDocStyles(Slide *master, KoGenStyles &styles);
 
     /**
     * @brief Write Frame element (KoGenStyle& style,const char* presentation_class,
@@ -70,9 +81,12 @@ private:
     * @param height - Height of the frame
     * @param x - X cordinate
     * @param y - Y cordinate
+    * @param pStyle - paragraph style
+    * @param tStyle - text style
     */
-
-    void addFrame(KoGenStyle& style,const char* presentation_class,QString width, QString height, QString x, QString y);
+    void addFrame(KoGenStyle& style,const char* presentationName, 
+                  QString width, QString height, QString x, QString y,
+                  QString pStyle, QString tStyle);
 
     /**
     * @brief Write itendation element (text:list and text:list-item) specified
@@ -191,7 +205,7 @@ private:
     * @return value converted to centimeters
     */
     QString paraSpacingToCm(int value) const;
-
+    
     /**
     * @brief Convert TextAlignmentEnum value to a string from ODF specification
     * An enumeration that specifies paragraph alignments.
@@ -241,6 +255,7 @@ private:
     * @return QColor value
     */
     QColor colorIndexStructToQColor(const ColorIndexStruct &color);
+
 
     void processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter);
     void processRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter);

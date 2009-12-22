@@ -52,6 +52,13 @@ public:
     int headerFooterFlags();
     void setStyleName(const QString &name);
     QString styleName() const;
+    void setDateTimeFormatId(int formatId);
+    int dateTimeFormatId();
+    //Notes
+    void  setNotesHeaderFooterFlags(int notesFlags);
+    int   notesHeaderFooterFlags();
+    void  setNotesDateTimeFormatId(int formatId);
+    int   notesDateTimeFormatId();
 private:
     // no copy or assign
     Slide(const Slide&);

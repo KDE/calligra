@@ -36,6 +36,7 @@
 #include <KoXmlNS.h>
 
 #include "libppt.h"
+#include "datetimeformat.h"
 #include <iostream>
 #include <math.h>
 #include "pictures.h"
@@ -64,6 +65,7 @@ public:
     QList<QString> pictureNames;
 
     Presentation *presentation;
+    DateTimeFormat *dateTime;
 };
 
 
@@ -197,6 +199,7 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
     int x = 0;
     int y = 0;
     Slide* master = d->presentation->masterSlide();
+
     QString pageWidth = QString("%1pt").arg((master) ? master->pageWidth() : 0);
     QString pageHeight = QString("%1pt").arg((master) ? master->pageHeight() : 0);
 
@@ -249,6 +252,18 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
     addElement(l, "text:list-level-style-bullet", lmap, ltextmap);
     styles.lookup(l, "L");
 
+    //Creating dateTime class object
+    d->dateTime = new DateTimeFormat(master);
+    d->dateTime->addDateTimeAutoStyles(styles);
+    
+    KoGenStyle text(KoGenStyle::StyleTextAuto,"text");
+    text.setAutoStyleInStylesDotXml(true);
+    text.addProperty("fo:font-size","12pt");
+    text.addProperty("fo:language","en");
+    text.addProperty("fo:country","US");
+    text.addProperty("style:font-size-asian","12pt");
+    text.addProperty("style:font-size-complex","12pt");
+
 
     KoGenStyle Mpr(KoGenStyle::StylePresentationAuto,"presentation");
     Mpr.setAutoStyleInStylesDotXml(true);
@@ -268,14 +283,29 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
       x = master->pageWidth()-50;
       y = master->pageHeight()-50; 
     }   
-    addFrame(s, "page-number", "20pt", "20pt", QString("%1pt").arg(x),  QString("%1pt").arg(y));
+
+    addFrame(s, "page-number", "20pt", "20pt", 
+             QString("%1pt").arg(x), QString("%1pt").arg(y),
+             styles.lookup(p), styles.lookup(text));
+    addFrame(s, "date-time", "200pt", "20pt", "20pt",
+             QString("%1pt").arg(y),styles.lookup(p), styles.lookup(text));
     styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
+
+    //Deleting Datetime. 
+    delete d->dateTime;
+    d->dateTime = NULL;
     
 }
 
-void PowerPointImport::addFrame(KoGenStyle& style,const char* presentation_class ,QString width, QString height, QString x, QString y)
+void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass, 
+                                QString width, QString height,
+                                QString x, QString y, QString pStyle, QString tStyle)
 {
     QBuffer buffer;
+    Slide *master = d->presentation->masterSlide();
+    int  headerFooterAtomFlags = master->headerFooterFlags();
+    //QString datetime;
+
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
@@ -286,18 +316,29 @@ void PowerPointImport::addFrame(KoGenStyle& style,const char* presentation_class
     xmlWriter.addAttribute("svg:height", height);
     xmlWriter.addAttribute("svg:x", x);
     xmlWriter.addAttribute("svg:y", y);
-    xmlWriter.addAttribute("presentation:class", presentation_class);
+    xmlWriter.addAttribute("presentation:class", presentationClass);
     xmlWriter.startElement("draw:text-box");
     xmlWriter.startElement("text:p");
-    xmlWriter.addAttribute("text:style-name","P1"); 
-    xmlWriter.startElement("text:span");
-    xmlWriter.addAttribute("text:style-name","T1");
-    if(strcmp(presentation_class,"page-number") == 0){
+    xmlWriter.addAttribute("text:style-name",pStyle);  
+
+    if (strcmp(presentationClass,"page-number") == 0) {
+        xmlWriter.startElement("text:span");
+        xmlWriter.addAttribute("text:style-name", tStyle); 
         xmlWriter.startElement("text:page-number");
         xmlWriter.addTextNode("<number>");
         xmlWriter.endElement();//text:page-number
+        xmlWriter.endElement(); // text:span
     }
-    xmlWriter.endElement(); // text:span
+    if (strcmp(presentationClass,"date-time") == 0) {
+        //Same DateTime object so no need to pass style name for date time  
+        if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
+           d->dateTime->addMasterDateTimeSection(xmlWriter,tStyle);
+        }
+        else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
+           //Future FixedDate format
+        }
+     }
+
     xmlWriter.endElement(); // text:p
     xmlWriter.endElement(); // draw:text-box
     xmlWriter.endElement(); // draw:frame
@@ -342,6 +383,22 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:presentation");
 
+    int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
+    if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
+         contentWriter->startElement("presentation:date-time-decl");
+         contentWriter->addAttribute("presentation:name", "dtd1");
+         contentWriter->addAttribute("presentation:source", "current-date");
+         //contentWriter->addAttribute("style:data-style-name", "Dt1"); 
+         contentWriter->endElement();  // presentation:date-time-decl
+    }
+    else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
+         contentWriter->startElement("presentation:date-time-decl");
+         contentWriter->addAttribute("presentation:name", "dtd1");
+         contentWriter->addAttribute("presentation:source", "fixed");
+         //Future - Add Fixed date data here
+         contentWriter->endElement();  //presentation:date-time-decl 
+    }
+
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
         processSlideForBody(c,contentWriter);
     }
@@ -361,13 +418,18 @@ void PowerPointImport::processDocStyles(Slide *master,KoGenStyles &styles)
     int  headerFooterAtomFlags = master->headerFooterFlags();
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.addProperty("presentation:background-objects-visible", "true");
-    if(headerFooterAtomFlags && 0x8)
+    if (headerFooterAtomFlags && DateTimeFormat::fHasSlideNumber)
         dp.addProperty("presentation:display-page-number", "true");
     else
         dp.addProperty("presentation:display-page-number", "false");
+
+    if (headerFooterAtomFlags && DateTimeFormat::fHasDate)    
+        dp.addProperty("presentation:display-date-time" ,"true");
+    else
+        dp.addProperty("presentation:display-date-time" ,"false");
+ 
     styles.lookup(dp, "dp");
     master->setStyleName(styles.lookup(dp));
-
 }
 
 void PowerPointImport::processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter)
@@ -1616,6 +1678,10 @@ void PowerPointImport::processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWri
     xmlWriter->addAttribute("draw:name", nameStr);
     xmlWriter->addAttribute("draw:style-name", master->styleName()); 
     xmlWriter->addAttribute("presentation:presentation-page-layout-name", "AL1T0");
+    int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
+    if(headerFooterAtomFlags && DateTimeFormat::fHasTodayDate){
+        xmlWriter->addAttribute("presentation:use-date-time-name","dtd1"); 
+    }
 
     GroupObject* root = slide->rootObject();
     if (root)
@@ -1637,7 +1703,7 @@ void PowerPointImport::processSlideForStyle(unsigned , Slide* slide, KoGenStyles
         for (unsigned int i = 0; i < root->objectCount(); i++) {
             Object* object = root->object(i);
             if (object)
-                processObjectForStyle(object, styles);
+                processObjectForStyle(object, styles); 
         }
 }
 

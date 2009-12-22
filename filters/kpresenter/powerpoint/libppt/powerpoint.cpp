@@ -36,10 +36,10 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QTextCodec>
 
-#ifdef Q_CC_MSVC
+//#ifdef Q_CC_MSVC
 #define __PRETTY_FUNCTION__ __FUNCTION__
-//#define LIBPPT_DEBUG
-#endif
+#define LIBPPT_DEBUG
+//#endif
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -164,6 +164,9 @@ Record::~Record()
 Record* Record::create(unsigned type)
 {
     Record* record = 0;
+#ifdef LIBPPT_DEBUG
+    std::cout<<"\nRecord Create type:"<<type;
+#endif
 
     if (type == BookmarkCollectionContainer::id)
         record = new BookmarkCollectionContainer();
@@ -441,10 +444,10 @@ Record* Record::create(unsigned type)
         record = new msofbtOleObjectAtom() ;
 
     else if (type == msofbtDeletedPsplAtom::id)
-        record = new msofbtDeletedPsplAtom() ;
+        record = new msofbtDeletedPsplAtom() ; 
 
     else if (type == msofbtConnectorRuleAtom::id)
-        record = new msofbtConnectorRuleAtom() ;
+        record = new msofbtConnectorRuleAtom(); 
 
     else if (type == msofbtAlignRuleAtom::id)
         record = new msofbtAlignRuleAtom() ;
@@ -1996,11 +1999,12 @@ void HeadersFootersAtom::setData(unsigned , const unsigned char* data)
 {
     setFormatId(readS16(data + 0));
     setFlags(readU16(data + 2));
+    //dump(std::cout);
 }
 
 void HeadersFootersAtom::dump(std::ostream& out) const
 {
-    out << "HeadersFootersAtom" << std::endl;
+    out << "\nHeadersFootersAtom" << std::endl;
     out << "formatId " << formatId() << std::endl;
     out << "flags " << flags() << std::endl;
 }
@@ -4608,7 +4612,9 @@ void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
         }
 
         unsigned int read = level.setData(tempSize, data);
+        
         data += read;
+        
         tempSize -= read;
         d->levels << level;
     }
@@ -7925,6 +7931,11 @@ int PPTReader::fastForwardRecords(unsigned int wantedType, unsigned int max)
 
 void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
 {
+#ifdef  LIBPPT_DEBUG
+    //std::cout << std::endl;
+    //std::cout << "Loading MainMasterContainer" << std::endl;
+    //std::cout << "================================================" << std::endl;
+#endif
     if (container == 0) return;
 
     //skip over slideAtom (32 bytes)
@@ -8247,8 +8258,13 @@ void PPTReader::handleRecord(Record* record, int type)
     }
 }
 
+// Function used in case of SlideHeadersFootersContainer & NotesHeadersFootersContainer.
+// These container have same Id so need to differentiate on basis of Instance::id.
+//
 void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
 {
+    int flags = 0;
+
     if (!atom) return;
     if (!d->presentation) return;
     //Note:-   A - fHasDate (1 bit): A bit that specifies whether the date is displayed in the footer.
@@ -8263,13 +8279,32 @@ void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
     //         F - fHasFooter (1 bit): A bit that specifies whether the footer text specified by FooterAtom
     //             record is displayed.
     //TO DO If required formatID 
-    d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
+
+    const Record *parentRecord = atom->parent(); 
+    int instance = parentRecord->instance();
+    
+    if (instance == 0x4F) {
+        std::cout<<"\n****NotesInstance:"<<instance;
+        d->presentation->masterSlide()->setNotesHeaderFooterFlags(atom->flags());
+        d->presentation->masterSlide()->setNotesDateTimeFormatId(atom->formatId());
+    }
+    else {
+        std::cout<<"\n****Instance:"<<instance;
+        d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
+        d->presentation->masterSlide()->setDateTimeFormatId(atom->formatId());
+        flags = atom->flags();
+        //Fixed Data- user date format
+        if (flags & 0x04){ 
+            //future -Fixed Date
+        }
+    }
 
 #ifdef LIBPPT_DEBUG
     std::cout << std::endl << "***Flags " << atom->flags();
     std::cout << std::endl << "***FormatId " << atom->formatId();
 #endif
 }
+
 void PPTReader::handleContainer(Container* container, int type, unsigned size)
 {
     if (!container || !container->isContainer()) return;
@@ -8664,6 +8699,7 @@ void PPTReader::handleEscherSpAtom(msofbtSpAtom* atom)
     if (!d->currentSlide) return;
     if (!d->currentGroup) return;
 
+
     DrawObject* drawObject = new DrawObject;
 
     drawObject->setBackground(atom->isBackground());
@@ -8729,7 +8765,8 @@ void PPTReader::handleEscherClientDataAtom(msofbtClientDataAtom* atom)
         d->currentObject = textObject;
     } else
         textObject = static_cast<TextObject*>(d->currentObject);
-
+    
+ 
     switch (atom->placeholderId()) {
     case msofbtClientDataAtom::MasterTitle:
     case msofbtClientDataAtom::Title:
@@ -8744,7 +8781,6 @@ void PPTReader::handleEscherClientDataAtom(msofbtClientDataAtom* atom)
     case msofbtClientDataAtom::MasterCenteredTitle:
     case msofbtClientDataAtom::CenteredTitle:
         textObject->setType(TextObject::CenterTitle); break;
-
     default:
         textObject->setType(TextObject::Other); break;
         break;
@@ -8814,6 +8850,8 @@ void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned siz
     }
 
     textObject->setType(TextObject::Other);
+    
+
     unsigned long nextpos = d->docStream->tell() + size - 6;
     while (d->docStream->tell() < nextpos)
         loadRecord(container);

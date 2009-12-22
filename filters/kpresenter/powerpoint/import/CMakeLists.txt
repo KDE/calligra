@@ -1,4 +1,4 @@
-set(powerpointimport_PART_SRCS powerpointimport.cc pictures.cc ${libppt_SRCS} )
+set(powerpointimport_PART_SRCS powerpointimport.cc datetimeformat.cc pictures.cc ${libppt_SRCS} )
 
 kde4_add_plugin(powerpointimport WITH_PREFIX ${powerpointimport_PART_SRCS})
 
