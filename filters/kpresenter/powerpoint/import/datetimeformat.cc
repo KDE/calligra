@@ -37,7 +37,7 @@ DateTimeFormat::DateTimeFormat(Slide *master)
 {
     formatId = master->dateTimeFormatId();
 //#ifdef LIBDATE_DEBUG
-    std::cout<<"\nDateTimeConstructor formatId :"<<formatId ;  
+    std::cout<<"\nDateTimeConstructor formatId :"<<formatId ;
 //#endif
 }
 
@@ -62,7 +62,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
         xmlWriter.addTextNode(",");
         xmlWriter.endElement(); //number:text
     }
-    
+
     xmlWriter.startElement("number:day");
     xmlWriter.endElement(); // number:day
     xmlWriter.startElement("number:text");
@@ -71,7 +71,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
     xmlWriter.startElement("number:month");
     if (longmonth == true) {
-        xmlWriter.addAttribute("number:style","long"); 
+        xmlWriter.addAttribute("number:style","long");
         if (textualmonth == true)
            xmlWriter.addAttribute("number:textual","true");
     }
@@ -79,9 +79,9 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(seperator);
     xmlWriter.endElement(); //number:text
-   
+
     xmlWriter.startElement("number:year");
-    if (longyear == true) { 
+    if (longyear == true) {
         xmlWriter.addAttribute("number-style","long");
     }
     xmlWriter.endElement(); // number:year
@@ -94,7 +94,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
     styles.lookup(dt, "DT");
     setDateStyleName(styles.lookup(dt));
- 
+
 }
 
 
@@ -114,7 +114,7 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format,bool seco
     xmlWriter.startElement("number:text");
     xmlWriter.addTextNode(seperator);
     xmlWriter.endElement(); //number:text
-    
+
     xmlWriter.startElement("number:minutes");
     xmlWriter.endElement(); // number:minutes
 
@@ -125,7 +125,7 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format,bool seco
        xmlWriter.startElement("number:second"); //TBD in spec
        xmlWriter.endElement();  //number:second
     }
-    
+
     if (hr12Format) {
         xmlWriter.startElement("number:am-pm");
         xmlWriter.endElement(); // number:am-pm
@@ -135,7 +135,7 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format,bool seco
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
     styles.lookup(tm, "TM");
     setTimeStyleName(styles.lookup(tm));
- 
+
 }
 
 
@@ -148,15 +148,15 @@ void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles)
         case ShortDate:
              break;
         case LongDate:
-             addDateStyle(styles, true, true, true, true,"."); 
+             addDateStyle(styles, true, true, true, true,".");
          break;
-        case LongDateWithoutWeekday:   
-           addDateStyle(styles, false, true, false, true,".");       
+        case LongDateWithoutWeekday:
+           addDateStyle(styles, false, true, false, true,".");
          break;
         case ShortDateWithAbbrMonth:
            addDateStyle(styles, false, false, false, true);
          break;
-        case ShortDateWithSlashes: 
+        case ShortDateWithSlashes:
            addDateStyle(styles, false, false, false, false);
          break;
         case DateAnd12HrTime:
@@ -169,13 +169,13 @@ void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles)
         case Hr24TimeWithSec:
            addTimeStyle(styles, false, true);
          break;
-        case Hr12Time: 
+        case Hr12Time:
            addTimeStyle(styles, true, false);
          break;
         case Hr12TimeWithSec:
            addTimeStyle(styles, true, true);
          break;
-        default: 
+        default:
          break;
         } //switch
     }//if
@@ -198,13 +198,13 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
     case LongDate:
            format = "dddd dd MMMM yyyy";
          break;
-    case LongDateWithoutWeekday:           
+    case LongDateWithoutWeekday:
            format = "dd MMMM yyyy";
          break;
     case ShortDateWithAbbrMonth:
            format = "dd MMM yyyy";
          break;
-    case ShortDateWithSlashes: 
+    case ShortDateWithSlashes:
            format = "dd/MM/yy";
          break;
     case DateAnd12HrTime:
@@ -221,7 +221,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
            hasDate = false;
            format = "hh:mm:ss";
          break;
-    case Hr12Time: 
+    case Hr12Time:
            hasTime = true;
            hasDate = false;
            format = "hh:mm ap";
@@ -233,15 +233,15 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
          break;
     case FixedUserDateFormat:
            //Future - Fixed Date
-    default: 
+    default:
            format = "dd-MM-yy hh:mm ap";
          break;
-    } 
+    }
 
     result = dt.toString(format);
     if ( hasDate == true ) {
         xmlWriter.startElement("text:span");
-        xmlWriter.addAttribute("text:style-name", tStyle); 
+        xmlWriter.addAttribute("text:style-name", tStyle);
         xmlWriter.startElement("text:date");
         xmlWriter.addAttribute("style:data-style-name", getDateStyleName());
         xmlWriter.addAttribute("text:date-value", result);
@@ -251,7 +251,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
     }
     if ( hasTime == true ) {
         xmlWriter.startElement("text:span");
-        xmlWriter.addAttribute("text:style-name", tStyle); 
+        xmlWriter.addAttribute("text:style-name", tStyle);
         xmlWriter.startElement("text:time");
         xmlWriter.addAttribute("style:data-style-name", getTimeStyleName());
         xmlWriter.addAttribute("text:time-value", result);
@@ -259,8 +259,8 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
         xmlWriter.endElement();//text:time
         xmlWriter.endElement(); // text:span
     }
-  
-#ifdef LIBDATE_DEBUG     
+
+#ifdef LIBDATE_DEBUG
     std::cout<<"****Date formatted here: "<<result.toLatin1().data();
 #endif
 

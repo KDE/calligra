@@ -1,4 +1,4 @@
- /*
+/*
 * This file is part of the KDE project
 *
 * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
@@ -42,7 +42,6 @@ public:
 
      /**
      * @brief Destructor
-     * @param 
      */
     ~DateTimeFormat();
 
@@ -60,7 +59,6 @@ public:
 
      /**
      * @brief eHeaderFooterAtom - HeaderFooter enum as per spec of formatId
-     * @param 
      */
      enum{
         fHasDate = 0x01,       //(1 bit): A bit that specifies whether the date is displayed in the footer.
@@ -70,7 +68,7 @@ public:
         fHasHeader = 0x10,      //(1 bit): A bit that specifies whether the header text specified by HeaderAtom record is displayed.
         fHasFooter = 0x20,    //(1 bit): A bit that specifies whether the footer text specified by FooterAtom
     }eHeaderFooterAtom;
-     
+
 private:
 
     /**
@@ -81,8 +79,8 @@ private:
      * @param bool textualmonth - Month in textual format also.
      * @param bool longyear  - Long year format
      * @param QString seperator="/" - Seperator b/w date.
-     */ 
-    void addDateStyle(KoGenStyles& styles, 
+     */
+    void addDateStyle(KoGenStyles& styles,
                       bool dayofweek, bool longMonth, bool textualmonth, bool longyear,
                       QString seperator="/");
 
@@ -92,36 +90,35 @@ private:
      * @param bool hr12Format - Time in 12 hr format.
      * @param bool second - Second is required in time or not.
      * @param QString seperator=":" - Seperator b/w time.
-     */ 
+     */
     void addTimeStyle(KoGenStyles& styles, bool hr12Format,bool second,QString seperator=":");
 
     /**
      * @brief setDateStyleName - set the date style name for further usage.
-     * @param QString name - name of the style
-     */ 
+     * @param name  name of the style
+     */
     void setDateStyleName(const QString &name);
 
     /**
      * @brief dateStyleName - Retrun the date style name .
-     * @parma QString name - name of the style
-     */ 
+     * @param name  name of the style
+     */
     QString getDateStyleName() const;
 
     /**
      * @brief setTimeStyleName - set the time style name for further usage.
-     * @parma QString name - name of the style
-     */ 
+     * @param name  name of the style
+     */
     void setTimeStyleName(const QString &name);
 
     /**
      * @brief timeStyleName - Return the time style name.
-     * @parma QString name - name of the style
-     */ 
+     * @param name  name of the style
+     */
     QString getTimeStyleName() const;
 
     /**
      * @brief eDateTimeFormat - DateTime different format enum
-     * @param 
      */
     enum{
        ShortDate,                         //0
@@ -137,16 +134,14 @@ private:
        Hr12TimeWithSec,                    //10
        FixedUserDateFormat,                //11
     }eDateTimeFormat;
-       
+
     Slide *master;
     /**
      * @brief formatId - Date represtation format
-     * @param 
      */
     int formatId;
     QString dateStyleName;
     QString timeStyleName;
-   
 };
 
 #endif //datetimeformat.h
