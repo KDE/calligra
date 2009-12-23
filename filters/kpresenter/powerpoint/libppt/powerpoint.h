@@ -117,7 +117,7 @@ private:
     Record& operator=(const Record&);
 };
 
-// Container is a special record, it is for holding another records
+// Container is a special record, it is for holding other records
 class Container: public Record
 {
 public:
