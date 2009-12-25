@@ -85,10 +85,10 @@ public:
 // QMap<QString, QVariant> *valueList;
     QString icon;
 
-    bool changed : 1;
-    bool storable : 1;
-    bool readOnly : 1;
-    bool visible : 1;
+    bool changed;
+    bool storable;
+    bool readOnly;
+    bool visible;
     int autosync;
     QMap<QByteArray, QVariant> options;
 

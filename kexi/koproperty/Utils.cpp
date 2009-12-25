@@ -154,8 +154,8 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
     protected:
         QString m_titleStr;
         QPixmap m_miniicon;
-    bool m_isOpen : 1;
-    bool m_mouseDown : 1;
+        bool m_isOpen;
+        bool m_mouseDown;
     };
 
 /*    class GroupWidget : public GroupWidgetBase

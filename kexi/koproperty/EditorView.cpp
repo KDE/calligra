@@ -277,7 +277,7 @@ public:
     EditorDataModel *model;
     ItemDelegate *itemDelegate;
     QColor gridLineColor;
-    bool autoSync : 1;
+    bool autoSync;
 };
 
 EditorView::EditorView(QWidget* parent)

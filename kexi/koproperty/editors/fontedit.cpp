@@ -100,7 +100,7 @@ protected:
 
     KPushButton *m_button;
     QFont m_font;
-    bool m_paletteChangedEnabled : 1;
+    bool m_paletteChangedEnabled;
 };
 
 // -----------
