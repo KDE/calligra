@@ -25,7 +25,7 @@
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
 #include "SvgFilterHelper.h"
-#include "svggraphiccontext.h"
+#include "SvgGraphicContext.h"
 #include "SvgCssHelper.h"
 
 #include <KoXmlReader.h>
