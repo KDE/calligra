@@ -330,12 +330,12 @@ bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
         return rootItem->setData(section, value);*/
 }
 
-/*QModelIndex EditorDataModel::buddy( const QModelIndex & idx ) const
+QModelIndex EditorDataModel::buddy(const QModelIndex & idx) const
 {
     if (idx.column() == 0)
         return index( idx.row(), 1, parent(idx));
     return idx;
-}*/
+}
 
 /*
 void EditorDataModel::setupModelData(const QStringList &lines, Property *parent)

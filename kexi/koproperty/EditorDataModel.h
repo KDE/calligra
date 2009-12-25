@@ -72,7 +72,7 @@ public:
       bool removeRows(int position, int rows,
                       const QModelIndex &parent = QModelIndex());*/
 
-//    QModelIndex buddy( const QModelIndex & index ) const;
+    QModelIndex buddy(const QModelIndex & index) const;
 
     //! @return property set object for this model.
     Set& propertySet() const;
