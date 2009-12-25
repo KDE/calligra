@@ -3,6 +3,8 @@
 # See koffice/kexi/CMakeLists.txt for example.
 # TODO remove when we move to independent place
 
+add_subdirectory( test )
+
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
 if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
