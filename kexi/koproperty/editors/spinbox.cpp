@@ -252,7 +252,6 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         : KDoubleNumInput(parent)
 {
-    m_property = prop;
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     QLineEdit* le = 0;
     if (sb) {
@@ -294,7 +293,8 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
-    }
+    m_unit = prop->option("unit").toString();
+}
 
 DoubleSpinBox::~DoubleSpinBox()
 {
@@ -310,8 +310,8 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
 void DoubleSpinBox::setValue(double v)
 {
 #ifdef KOPROPERTY_USE_KOLIBS
-    if (!m_property->option("unit").toString().isEmpty()) {
-        KDoubleNumInput::setValue(KoUnit::unit(m_property->option("unit").toString()).toUserValue(v));
+    if (!m_unit.isEmpty()) {
+        KDoubleNumInput::setValue(KoUnit::unit(m_unit).toUserValue(v));
         return;
     }
 #endif
@@ -321,8 +321,8 @@ void DoubleSpinBox::setValue(double v)
 double DoubleSpinBox::value() const
 {
 #ifdef KOPROPERTY_USE_KOLIBS
-    if (!m_property->option("unit").toString().isEmpty()) {
-        return KoUnit::unit(m_property->option("unit").toString()).fromUserValue(KDoubleNumInput::value());
+    if (!m_unit.isEmpty()) {
+        return KoUnit::unit(m_unit).fromUserValue(KDoubleNumInput::value());
     }
 #endif
     return KDoubleNumInput::value();
@@ -511,6 +511,7 @@ DoubleSpinBoxDelegate::DoubleSpinBoxDelegate()
 QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
 {
     QString valueText;
+    const QString unit(prop->option("unit").toString());
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
         QVariant minValue(prop->option("min"));
@@ -518,15 +519,18 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
         if (!minValue.isNull() && !minValueText.isEmpty()
             && minValue.toDouble() == prop->value().toDouble())
         {
-            return minValueText + " " + prop->option("unit").toString();
+            if (unit.isEmpty())
+                return minValueText;
+            else
+                return minValueText + " " + unit;
         }
     }
 //! @todo precision? 
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
     QString display;
 #ifdef KOPROPERTY_USE_KOLIBS
-    if (!prop->option("unit").toString().isEmpty()) {
-        return KGlobal::locale()->formatNumber(KoUnit::unit(prop->option("unit").toString()).toUserValue(prop->value().toDouble())) + " " + prop->option("unit").toString();
+    if (!unit.isEmpty()) {
+        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + " " + unit;
     }
 #endif
     return KGlobal::locale()->formatNumber(prop->value().toDouble());

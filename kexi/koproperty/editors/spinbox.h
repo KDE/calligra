@@ -112,8 +112,8 @@ public slots:
 protected:
     //! Used to fix height of the internal spin box
     virtual void resizeEvent( QResizeEvent * event );
-private:
-        const Property *m_property;
+
+    QString m_unit;
 };
 
 /*
