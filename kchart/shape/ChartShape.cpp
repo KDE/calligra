@@ -157,17 +157,10 @@ bool isCartesian( ChartType type )
     return !isPolar( type );
 }
 
-// FIXME: Rename Title to TitleLabelType and so on
-enum OdfLabelType {
-    Title,
-    SubTitle,
-    Footer
-};
-
 
 QString saveOdfFont( KoGenStyles& mainStyles,
-                                 const QFont& font,
-                                 const QColor& color )
+                     const QFont& font,
+                     const QColor& color )
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     KoGenStyle autoStyle( KoGenStyle::StyleAuto, "chart", 0 );
@@ -202,7 +195,7 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
 }
 
 void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
-                   KoGenStyles &mainStyles, OdfLabelType odfLabelType )
+                   KoGenStyles &mainStyles, LabelType labelType )
 {
     // Don't save hidden labels, as that's the way of removing them
     // from a chart.
@@ -213,11 +206,11 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
     if ( !labelData )
         return;
 
-    if ( odfLabelType == Footer )
+    if ( labelType == FooterLabelType )
         bodyWriter.startElement( "chart:footer" );
-    else if ( odfLabelType == SubTitle )
+    else if ( labelType == SubTitleLabelType )
         bodyWriter.startElement( "chart:subtitle" );
-    else // if ( odfLabelType == Title )
+    else // if ( labelType == TitleLabelType )
         bodyWriter.startElement( "chart:title" );
 
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
@@ -1185,13 +1178,13 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     bodyWriter.addAttribute( "chart:class", ODF_CHARTTYPES[ d->plotArea->chartType() ] );
 
     // 2. Write the title.
-    saveOdfLabel( d->title, bodyWriter, mainStyles, Title );
+    saveOdfLabel( d->title, bodyWriter, mainStyles, TitleLabelType );
 
     // 3. Write the subtitle.
-    saveOdfLabel( d->subTitle, bodyWriter, mainStyles, SubTitle );
+    saveOdfLabel( d->subTitle, bodyWriter, mainStyles, SubTitleLabelType );
 
     // 4. Write the footer.
-    saveOdfLabel( d->footer, bodyWriter, mainStyles, Footer );
+    saveOdfLabel( d->footer, bodyWriter, mainStyles, FooterLabelType );
 
     // 5. Write the legend.
     d->legend->saveOdf( context );

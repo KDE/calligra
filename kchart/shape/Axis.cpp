@@ -935,7 +935,7 @@ void Axis::setPosition( AxisPosition position )
 {
     d->position = position;
     
-    // FIXME: In KChart 2.1, we will have vertical bar diagrams.
+    // FIXME: In KChart 2.1, we will have horizontal bar diagrams.
     // That means that e.g. LeftAxisPosition != YAxisDimension!
     if ( position == LeftAxisPosition || position == RightAxisPosition )
         setDimension( YAxisDimension );
