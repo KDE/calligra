@@ -86,7 +86,7 @@ public:
     QVBoxLayout           *leftLayout;
     QVBoxLayout           *rightLayout;
     Ui::ChartConfigWidget  ui;
-    bool                   sourceIsSpreadSheet; // FIXME: Rename to isExternalDataSource?
+    bool                   isExternalDataSource;
     
     // Menus
     QMenu *dataSetBarChartMenu;
@@ -181,7 +181,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     shape = 0;
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
-    sourceIsSpreadSheet = false;
+    isExternalDataSource = false;
     cellRegionStringValidator = 0;
     
     dataSetBarChartMenu = 0;
@@ -419,7 +419,7 @@ void ChartConfigWidget::open( KoShape* shape )
 
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
     ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
-    d->sourceIsSpreadSheet = ( spreadSheetModel != 0 && tableModel == 0 );
+    d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -429,7 +429,7 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
     
     // Fill the data table
-    if ( d->sourceIsSpreadSheet ) {
+    if ( d->isExternalDataSource ) {
     	d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
     	d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
     	d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
