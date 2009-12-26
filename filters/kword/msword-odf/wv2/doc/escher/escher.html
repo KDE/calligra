@@ -1,0 +1,1838 @@
+<HEAD>
+<TITLE>Microsoft Office 97 Drawing File Format</TITLE>
+ <link rel="stylesheet" href="/layout.css" type="text/css">
+
+</HEAD>
+
+<body>
+<H1>Microsoft Office 97 Drawing File Format</H1></P>
+
+
+
+<H2>Introduction</H2>
+<p>
+This document describes the file format of the Office Drawing Layer (Escher). With this document and knowledge of the host application's file
+format, the reader should be able to construct and interpret an Escher file stream. 
+</P>
+
+
+<H2>Object Container Hierarchy</H2>
+Escher has an object containership hierarchy similar to other drawing programs. At the root of the hierarchy is a drawing group object. There
+is one drawing group per client document. Drawing groups contain drawings. Drawings in turn contain shapes that are the objects that actually
+mark a page. Next to the drawings in a drawing group is a collection that contains the images and pictures used by the drawings. Escher keeps
+pictures in a separate collection to be able to incrementally load and save them.
+</P>
+
+<p>
+<img src="121819.gif"></P>
+</P>
+
+<P>Figure 1 -- Containership Hierarchy </P>
+A few other points are worth noting</P>
+<UL>
+<li>Associated with each shape is a piece of client data that keeps the shape's anchor, text and OLE data, as well as host specific 
+properties. The format of this structure is host-defined.
+</LI>
+
+<LI>Shapes store their properties in a separate structure called a property table. The property table is basically a sorted list of property
+id-value pairs.
+</LI>
+
+<LI>Each drawing group has a shape property table that stores the defaults for new shapes. </LI>
+
+<LI>Each drawing has a collection of rules that govern the shapes in the drawing.</LI>
+
+<LI>This object hierarchy does <B>not</B> exactly correspond to the record hierarchy in the file format.  In the file format, drawings are
+not saved inside drawing groups, but in separate top-level containers.  In this scheme, hosts can save drawing group information with
+per-document information, and save drawing information with per-sheet, per-slide, or per-page information.</LI>
+</UL>
+
+
+
+
+
+<H3>Use by the Host Application</H3>
+Escher is part of the Office 97 DLL. It replaces the existing drawing layers of PowerPoint, Word, and Excel.  Clients access the Escher 
+services through custom APIs and COM interfaces defined in msodr.h. </P>
+When serializing Escher data into a file, the client application provides an OLE IStream interface to Escher. This document describes the
+records Escher writes to this interface. However, it doesn't describe how the actual bytes are saved to disk. The client controls this
+format, since Escher writes to a client provided interface. Excel, for example, places the bytes of the Escher stream into BIFF records.
+</P>
+
+
+
+
+<H3>Credits</H3>
+Tagged chunks of data are a common file-format element. Escher's particular record structure follows the record structure used in PowerPoint
+97, designed by Tony Lin. Parts of this document were copied from the PowerPoint file format SDK. Matthew Morgan did most of the work on the
+Escher file format. Rick Hawes did the shape work. John Bowler did the blip work.
+</P>
+
+
+
+<H2>Records</H2>
+The Escher file stream is a series of records that share a common header structure. Records can be categorized in to two groups.</P>
+<table border = "1">
+<tr><td>Atoms</td><td> Records that contain information about an Escher object and are kept inside containers.</td></tr>
+<tr><td>Containers</td><td>Records that keep atoms and other containers in a logical and organized way.</td></tr>
+</table>
+
+Each record, whether it's an atom or a container, has a common header. Container records are just the common header, while the atom records
+are the common header followed by some record specific data. Escher uses the structure of container records containing atom records and other
+container records throughout its stream. 
+
+
+
+
+<H3>Common Header</H3>
+<p>The common record header is an 8-byte structure defined in msodr.h as follows:</P>
+
+<pre>
+	typedef struct MSOFBH
+   {
+   struct
+       {
+       ULONG ver : 4;
+       ULONG inst: 12;
+       ULONG fbt : 16;
+       };
+   ULONG 
+   cbLength;
+   } MSOFBH;
+</pre>   
+
+The fields are:
+<table border = "1">
+<tr><td>Record Type</td><td>Indicates the signature or type of the record. Each record has a symbolic and a numberic signature in msodr.h.
+							Escher uses values from 0xF000 to 0xFFFF. Clients may define their own records in other ranges. A description
+							of each of the different types can be found in the following sections.</td></tr>
+<tr><td>Record Instance</td><td>(inst) Differentiates atoms. Depending on the instance a record's contents it can have different meanings. For
+example a list container can store a list of slides or a list of fonts, and its instance would vary accordingly. The instance of a record is
+useful for differentiating atoms when there is more than one atom of the same type in a particular container</td></tr>
+<tr><td>Record Version</td>
+<td>(ver) Indicates the version if the record is an atom.  If the record is a container, this field has a value of 0xFFFF.</td></tr>
+<tr><td>Record Length</td><td>(cbLength) Stores the length of the record in bytes. If the record is an atom, it refers to the length of
+the atom excluding the header. If the record is a container, it refers to the sum of the length of the atoms inside it, plus the length
+of the record headers.</td></tr>
+</table>
+
+
+
+
+<H3>Notes for Implementers</H3>
+<p>
+The common header specifies the length of each record. Consequently, it is possible to parse the Escher record stream without knowledge of
+the actual contents of each record. The Escher team intends to take advantage of this fact in future versions. As new features are added,
+Escher will define new record types.  Readers of the Escher file format should skip over record types unknown to the reader.
+In addition, readers should not expect a record to come in a certain order in a container. They can, however, expect that the containership
+hierarchy will not change. For example, readers do not need to handle the case of a shape record containing a drawing record.
+</P>
+<p>
+When Escher writes to a client file, it stores client-specific records in it stream to preserve the client features and behaviors.
+On the other hand, when Escher writes to a clipboard stream, it uses a client-independent form of the file format to allow interchange
+between applications.
+</P>
+<p>
+Escher saves records in Intel byte-order even on the Macintosh. The Macintosh version of Escher byte-swaps the records as they are loaded
+and as they are saved. Records are tightly packed, without alignment.  The LONG type is 32 bits in length.
+</P>
+
+
+
+
+
+<H2>Pointers</H2>
+<p>
+The general problem of saving pointers to objects in the file format is solved in ordinary fashion by giving objects unique identifiers,
+which are saved in the file format in place of the pointer values.  At load time, these IDs are converted back into pointers.
+</P>
+<p>
+The most common instances of this are pointers to shapes, which are saved as shape IDs, or SPIDs.  SPIDs are unique per drawing group,
+and are parceled out by the drawing group to individual drawings in blocks of 1024.  The drawing group keeps a table recording which drawing
+owns which block of SPIDs, so that, given a SPID, it is easy to determine which drawing the shape is in.  That table makes up the bulk of the
+<B>msofbtDgg</B> record, and is the only place where pointers to drawings are saved (as DGIDs).
+</P>
+
+<TABLE BORDER="1" CELLPADDING="7">
+<COLGROUP><COL WIDTH="31pt" VALIGN="TOP"><COL WIDTH="31pt" VALIGN="TOP"><COL WIDTH="109pt" VALIGN="TOP"><COL WIDTH="16pt" VALIGN="TOP"><COL WIDTH="16pt" VALIGN="TOP"><COL WIDTH="16pt" VALIGN="TOP"><COL WIDTH="33pt" VALIGN="TOP"><COL WIDTH="15pt" VALIGN="TOP"><COL WIDTH="133pt" VALIGN="TOP"><COL WIDTH="302pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,  ,  " SIZE="2">Record Name</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">Word</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">Excel</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">PowerPoint</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">FBT value</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">Version</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">Instance</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">Contents</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtDggContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F000</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">per-document data</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtDgg</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F006</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FDGG and several FIDCLs</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtCLSID</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F016</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the CLSID of the application that put the data on the clipboard</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtOPT</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00B</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">3</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of properties</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the document-wide default shape properties</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtColorMRU</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F11A</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of colors</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the colors in the MRU swatch</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSplitMenuColors</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F11E</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of colors</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the colors in the top-level split menus</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtBstoreContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F001</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of BLIPs</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">all images in the document (JPEGs, metafiles, etc.)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtBSE</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F007</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">2</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">BLIP type</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FBSE (one per BLIP)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtBlip***</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F018 - F117</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">range of fbts reserved for various kinds of BLIPs</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtDgContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F002</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">per-sheet/page/slide data</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtDg</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F008</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">drawing ID</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FDG</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtRegroupItems</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F118</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of regroup entries</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">several FRITs</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtColorScheme</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F120</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of colors</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the colors of the source host's color scheme</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSpgrContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F003</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">several SpContainers, the first of which is the group shape itself</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSpContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F004</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">a shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSpgr</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F009</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">1</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FSPGR; only present if the shape is a group shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSp</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00A</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">2</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>shape type</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FSP</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtOPT</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00B</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">3</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of properties</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">a shape property table</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtTextbox</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">RTF text</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">msofbtClientTextbox</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00D</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-defined</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the text in the textbox, in a host-defined format</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtAnchor</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00E</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">a RECT, in 100000ths of an inch</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtChildAnchor</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F00F</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">a RECT, in units relative to the parent group</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">msofbtClientAnchor</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F010</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-defined</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the location of the shape, in a host-defined format</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">msofbtClientData</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F011</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-defined</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-specific data</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtOleObject</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">C</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F11F</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">a serialized IStorage for an OLE object </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtDeletedPspl</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F11D</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FPSPL; only present in top-level deleted shapes</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSolverContainer</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F005</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">count of rules</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">the rules governing shapes</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtConnectorRule</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F012</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">1</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FConnectorRule</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtAlignRule</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F013</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FAlignRule</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtArcRule</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F014</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FARCRU</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtClientRule</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F015</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-defined</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">host-defined</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtCalloutRule</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F017</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FCORU</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B>msofbtSelection</B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"><B></B></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">X</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">F119</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=  SIZE="2">an FDGSL followed by the SPIDs of the shapes in the selection</P></TD></TR></T ></TABLE>
+<BR></P></FONT></ >
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Drawing Group Container    msofbtDggContainer</H2></FONT></ >
+
+
+
+
+
+<H3>Drawing Group Record  msofbtDgg</H3>
+<p>
+The drawing group record is a variable length record consisting of a fixed part followed by an array.
+The fixed part is defined as follows.
+</P>
+
+<p>
+<pre>
+// FDGG - File DGG
+typedef struct _FDGG
+   {
+   MSOSPID spidMax; // The current maximum shape ID
+   ULONG cidcl;     // The number of ID clusters (FIDCLs) 
+   ULONG cspSaved;  // The total number of shapes saved
+                    // (including deleted shapes, if undo
+                    // information was saved)
+   ULONG cdgSaved;  // The total number of drawings saved
+   } FDGG;
+</pre>
+The fixed part is followed by an array of ID clusters. The ID clusters are used internally for the translation of shape ids (SPIDs) to shape
+handles (MSOHSPs).
+</P>
+
+<pre>
+// File ID Cluster - used to save IDCLs
+typedef struct _FIDCL
+   {
+   MSODGID dgid;    // DG owning the SPIDs in this cluster
+   ULONG cspidCur;  // number of SPIDs used so far
+   } FIDCL;
+</pre>
+
+<H3>Class ID Record    msofbtCLSID</H3>
+The class ID record is only present in the clipboard format.  It just contains an OLE CLSID record from the source application, and is used
+by the destination application to check where the clipboard data originated.</P>
+
+
+<H3>Default Property Table Record    msofbtOPT</H3>
+This describes the default properties of newly created shapes.  Only the properties that differ from the per-property defaults are saved. 
+The format of the record is the same as that of the property table in a shape; a discussion of that format is in the Shape Properties section
+
+
+
+
+<H3>Color MRU Record     msofbtColorMRU</H3>The Color MRU record contains the colors in the most-recently-used-colors swatch that appears at the bottom of color dropdowns.  The instance field contains the number of colors; the data of the record contains the colors in order from left to right.</P></FONT></ >
+</ >
+< >
+< >
+
+
+
+
+<H3>Split Menu Colors Record    msofbtSplitMenuColors</H3>The single MRU colors of the top-level Fill Color, Line Color, Shadow Color, and 3D Color split menus are saved to a SplitMenuColors record in that order, with the number of colors (currently always four) in the instance field.</P></FONT></ >
+
+
+
+<H3>BStore Container    msofbtBstoreContainer</H3>The images and pictures in a drawing can be dominate the size of a drawing. Consequently, Escher handles these objects in a special way. As an abstraction, Escher names these objects BLIPs for Big Large Image or Picture. Currently, there are five types of blips supported in Escher: Windows Metafiles, Enhanced Metafiles, JPEG Interchange Format, Portable Network Graphics (PNG) and Macintosh PICT. Other types may be defined in future versions. </P>
+Escher stores all the BLIPs in a document in a separate container called the BStore. It reference counts the BLIPs, so that if a picture is inserted multiple times in a document it is only stored once in the BStore but is multiply referenced by different shapes. </P>
+The host may choose to store the blip data in a separate delay stream. If a delay stream is used, Escher can incrementally load the blips as they are displayed, not when the document is loaded.  (As of Office 97, Word and PowerPoint use a delay stream, and Excel does not.)</P>
+The BStore container is just an array of Blip Store Entry (BSE) records. Each shape stores indices into the array for the BLIPs they use. BLIPs are used not only for inserted pictures, but also for the textured and pictures fills of the shape. </P>
+<H4 CLASS="h3"><A NAME="sec0"></A>BLIP Store Entry Record    msofbtBSE</H4>Each BLIP in the BStore is serialized to a File BLIP Store Entry (FBSE) record. The instance field encodes the type of the blip. A fixed size header contains the rest of the common information about the BLIP.  If the cbName field in the FBSE is nonzero, a null-terminated Unicode string is written immediately after the FBSE in the file.</P>
+
+<pre><code>// FBSE - File Blip Store Entry
+typedef struct _FBSE
+   {
+   BYTE      btWin32;    // Required type on Win32
+   BYTE      btMacOS;    // Required type on Mac
+   BYTE      rgbUid[16]; // Identifier of blip
+   WORD      tag;        // currently unused
+   ULONG     size;       // Blip size in stream
+   ULONG     cRef;       // Reference count on the blip
+   MSOFO     foDelay;    // File offset in the delay stream
+   BYTE      usage;      // How this blip is used (MSOBLIPUSAGE)
+   BYTE      cbName;     // length of the blip name
+   BYTE      unused2;    // for the future
+   BYTE      unused3;    // for the future
+   } FBSE;
+
+typedef enum
+   {
+   msoblipUsageDefault,  // All non-texture fill blips get this.
+   msoblipUsageTexture,
+   msoblipUsageMax = 255 // Since this is stored in a byte
+   } MSOBLIPUSAGE;
+
+typedef enum
+   {                          // GEL provided types...
+   msoblipERROR = 0,          // An error occured during loading
+   msoblipUNKNOWN,            // An unknown blip type
+   msoblipEMF,                // Windows Enhanced Metafile
+   msoblipWMF,                // Windows Metafile
+   msoblipPICT,               // Macintosh PICT
+   msoblipJPEG,               // JFIF
+   msoblipPNG,                // PNG
+   msoblipDIB,                // Windows DIB
+   msoblipFirstClient = 32,   // First client defined blip type
+   msoblipLastClient  = 255   // Last client defined blip type
+   } MSOBLIPTYPE;
+
+typedef enum
+   {
+   msobiUNKNOWN = 0,
+   msobiWMF  = 0x216,      // Metafile header then compressed WMF
+   msobiEMF  = 0x3D4,      // Metafile header then compressed EMF
+   msobiPICT = 0x542,      // Metafile header then compressed PICT
+   msobiPNG  = 0x6E0,      // One byte tag then PNG data
+   msobiJFIF = 0x46A,      // One byte tag then JFIF data
+   msobiJPEG = msobiJFIF,
+   msobiDIB  = 0x7A8,      // One byte tag then DIB data
+   msobiClient=0x800,      // Clients should set this bit
+   }
+MSOBI;                     // Blip signature as encoded in the MSOFBH.inst
+</code></pre>
+The btWin32 and btMacOS fields store the MSOBLIPTYPE for the respective operating systems. When the OS blip type doesn't match the blip type of stored, Escher will attempt to convert the blip. For example, a PICT will be stored as a msoblipPICT with a btWin32 field of msoblipWMF and a btMacOS field of msoblipPICT. When the PICT blip is loaded on Windows, the stored field will not match the OS field, so PICTtoWMF filter will be called to create a msoblipWMF BLIP. </P>
+A few additional facts are worth noting. Clients can define their own BLIP types. When loading client defined blip types Escher calls the clients to load the blips. Each BSE contains a 16-byte checksum that is used to quickly compare a BLIP with other BLIPs in the store. Any algorithm could be used for this checksum. Escher uses the <I>RSA Data Security, Inc. MD4 Message-Digest Algorithm </I>for<I> </I>the checksums of its BLIP types. Finally, the cRef field can be 0, indicating an empty slot in the BStore. </P>
+If a delay stream is not used, then the BLIP data follows the BSE header in a separate record.  The FBT of the BLIP record is the MSOBLIPTYPE plus msofbtBlipFirst (0xF018).  (If a delay stream <I>is</I> being used, the BLIP's record header and data are both written there instead.)</P>
+<H5 CLASS="h4"><A NAME="sec1"></A>Metafile/PICT Blips</H5>Those blips have one of the following signatures: msobiEMF, msobiWMF, or msobiPICT. They are normally stored in a compressed format using the LZ compression algorithm in the format used by GNU Zip deflate/inflate with a 32k window. The format is zlib format . The only metafile compression version number currently defined identifies this format and is analogous to the PNG compression type value in the PNG file format.  The filter values (MSOBLIPFILTER) define pre-filtering of metafile data to give better compression.  Currently no pre-filtering is done (it is likely that filtering on a per-record basis will give substantially better compression in the future).</P>
+However, if there is an exception due to out-of-memory or out-of-disk space when saving those blips, the compression operation is skipped and the blips are then saved in a non-compressed format- in this case the compressed bits are simply the original metafile data.. When the blips are loaded back in memory, a check is performed based on a "compression status" flag (MSOBLIPCOMPRESSION) that follows the blip header encoded as follows:</P>
+
+<pre><code>typedef enum
+   {
+   msocompressionDeflate = 0,
+   msocompressionNone = 254,    // Used only if compression fails
+   msocompressionTest = 255,    // For testing only
+   }
+MSOBLIPCOMPRESSION;
+
+typedef enum
+   {
+   msofilterAdaptive = 0,       // PNG type - not used/supported for metafile
+   msofilterNone = 254,
+   msofilterTest = 255,         // For testing only
+   }
+MSOBLIPFILTER;
+
+/* The secondary, or data, UID - should always be set. */
+BYTE  m_rgbUid[16];
+/* The primary UID - this defaults to 0, in which case the primary ID is
+   that of the internal data. <B>NOTE!: </B>The primary UID is only saved to disk
+   if (blip_instance ^ blip_signature == 1). Blip_instance is MSOFBH.inst and 
+   blip_signature is one of the values defined in MSOBI */
+BYTE  m_rgbUidPrimary[16]; /   / optional based on the above check
+
+/* Metafile Blip overhead = 34 bytes. m_cb gives the number of
+   bytes required to store an uncompressed version of the file, m_cbSave
+   is the compressed size.  m_mfBounds gives the boundary of all the
+   drawing calls within the metafile (this may just be the bounding box
+   or it may allow some whitespace, for a WMF this comes from the
+   SetWindowOrg and SetWindowExt records of the metafile). */
+int           m_cb;           // Cache of the metafile size
+RECT          m_rcBounds;     // Boundary of metafile drawing commands
+POINT         m_ptSize;       // Size of metafile in EMUs
+int           m_cbSave;       // Cache of saved size (size of m_pvBits)
+<B>BYTE          m_fCompression; // MSOBLIPCOMPRESSION</B>
+BYTE          m_fFilter;      // always msofilterNone
+void         *m_pvBits;       // Compressed bits of metafile.
+</code></pre>
+<H5 CLASS="h4"><A NAME="sec2"></A>Bitmap Blips</H5>Those blips have one of the following signatures: msobiJPEG, msobiPNG, or msobiDIB. They have the same UID header as described in the Metafile Blip case. The data after the header is just a single BYTE "tag" value and is followed by the compressed data of the bitmap in the relevant format (JFIF or PNG, bytes as would be stored in a file). For the msobiDIB format,  the data is in the standard DIB format  as a BITMAPINFO ER, BITMAPCORE ER or BITMAPV4 ER followed by the color map (DIB_RGB_COLORS) and the bits.  This data is not compressed (the format is used for very small DIB bitmaps only).</P>
+To determine where the bits are located, refer to the following header:</P>
+
+<pre><code>/* The secondary, or data, UID - should always be set. */
+BYTE  m_rgbUid[16];
+/* The primary UID - this defaults to 0, in which case the primary ID is
+   that of the internal data. <B>NOTE!: </B>The primary UID is only saved to disk
+   if (blip_instance ^ blip_signature == 1). Blip_instance is MSOFBH.finst and 
+   blip_signature is one of the values defined in MSOBI*/
+BYTE  m_rgbUidPrimary[16];    // optional based on the above check
+BYTE  m_bTag;            
+void  *m_pvBits;              // raster bits of the blip.
+</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Drawing Container     msofbtDgContainer</H2>The drawing container contains all per-slide/sheet types of information, including the shapes themselves.  With a few exceptions, shapes are stored hierarchically according to how they've been grouped (through use of the Draw/Group command).  For normal shapes, there is a special parent group shape called the patriarch that contains all of the top-level shapes (which in turn may contain other shapes).  The patriarch is always the first msofbtSpgrContainer in the drawing container.</P>
+A few kinds of shapes are stored separately from the patriarch.  The background shape, if there is one, is saved in its own msofbtSpContainer after the patriarch and its children.  Additionally, if undo information is being saved and there are deleted shapes that could be brought back via Undo, the deleted shapes are saved.  Note that there is no patriarch for the deleted shapes, so the top-level deleted shapes are saved separately into the drawing container.  (Deleted groups still contain their children, though.)</P>
+
+<TABLE COLS="3" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="109pt" VALIGN="TOP"><COL WIDTH="111pt" VALIGN="TOP"><COL WIDTH="178pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Record Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Condition</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comments</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtDg</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Basic drawing information.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtRegroupItems</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shapes have been ungrouped.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Mappings to reconstitute groups.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtSpgrContainer</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Patriarch shape, with all non-background non-deleted shapes inside it.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtSpContainer with fBackground bit set in the FSP (see below).</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Application uses a background shape (currently Word and PowerPoint only).</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Special shape used as background of the document, e.g. the background texture of a Web page.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Other msofbtSpContainers and msofbtSpgrContainers</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Undo is being saved, and there are deleted shapes in the drawing.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shapes that have been deleted but that could be brought back via Undo.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtSolverContainer</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">There are rules in the drawing.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Rules governing shapes in the drawing.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtColorScheme</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The application uses a color scheme.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Only present in the clipboard format.</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Drawing Record    msofbtDg</H3>The drawing record is very simple, with just a count and MSOSPID seed. The attentive reader may expect to find the size of the drawing recorded here, but that information is stored elsewhere by the host application. </P>
+
+<pre><code>// FDG - File DG
+typedef struct _FDG
+   {
+   ULONG     csp;          // The number of shapes in this drawing
+   MSOSPID   spidCur;      // The last MSOSPID given to an SP in this DG
+   } FDG;
+</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Regroup     msofbtRegroupItems</H3>Each shape in a drawing has a regroup ID (separate from the shape ID), so that the regroup command can find shapes that were once grouped.  In order to handle nested cases (e.g. ungroup, ungroup, ungroup, regroup, regroup, regroup), there is a table logging changes to regroup IDs.  Each entry has an old ID and a new ID and records the change of all instances of the old ID to the new ID.</P>
+The instance of an msofbtRegroupItems record contains the number of entries, and the record itself is just that many FRITs (File Regroup Items).</P>
+<P>typedef struct _FRIT // File Regroup item</P>
+
+<pre><code>   {
+   FRID fridNew;
+   FRID fridOld;
+   } FRIT;</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Group Container    msofbtSpgrContainer</H3>A group is a collection of other shapes. The contained shapes are placed in the coordinate system of the group.  The group container contains a variable number of shapes (msofbtSpContainer) and other groups (msofbtSpgrContainer, for nested groups).  The group itself is a shape, and always appears as the first msofbtSpContainer in the group container.</P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Shape Container    msofbtSpContainer</H3>A shape is the elemental object that composes a drawing. All graphical figures on a drawing are shapes. Each shape has a list of properties, which is stored in an array. A shape container contains the following records:</P>
+
+<TABLE COLS="3" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="109pt" VALIGN="TOP"><COL WIDTH="111pt" VALIGN="TOP"><COL WIDTH="178pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Record Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Condition</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comments</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtSpgr</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape is a group shape.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Group-shape-specific information.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtSp</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">A shape atom record. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtOPT</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The properties of a shape. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtAnchor or msofbtChildAnchor or msofbtClientAnchor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always, except for the background shape.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The anchor or location of the shape. If the shape is saved to a clipboard, a msofbtAnchor record is used. If the shape is a child of a group shape, a msofbtChildAnchor is used. Otherwise, for top-level shapes, a host anchor record is present. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtClientData</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Always.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">A client data record, the content of which is up to the host.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtClientTextbox or msofbtTextbox</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape has attached text.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">If the shape has text, a text record is written. For clipboard streams, a msofbtTextbox record is used. Otherwise, a msofbtClientTextbox record is used, the content of which is up to the host.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtOleObject</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape is an OLE object.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Used only in the clipboard format.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msofbtDeletedPspl</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape is deleted.</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Link to previous spot of object.</P></TD></TR></T ></TABLE>
+<BR></P><P></P>
+<H4 CLASS="h3"><A NAME="sec0"></A>Group Shape Record    msofbtSpgr</H4>This record is present only in group shapes (not shapes <I>in</I> groups, shapes that <I>are </I>groups). The group shape record defines the coordinate system of the shape, which the anchors of the child shape are expressed in. All other information is stored in the shape records that follow. </P>
+
+<pre><code>typedef struct _FSPGR
+   {
+   RECT   rcgBounds;
+   } FSPGR;</code></pre>
+<H4 CLASS="h3"><A NAME="sec1"></A>Shape Record    msofbtSp</H4>The instance field of the record header contains the shape type; the record itself contains the shape ID and a group of persistent flags:</P>
+
+<pre><code>typedef struct _FSP
+   {
+   MSOSPID  spid;           // The shape id 
+   ULONG    grfPersistent;
+   } FSP;
+</code></pre>
+The flags for the shape are:</P>
+
+<pre><code>typedef struct 
+{
+   ULONG fGroup : 1;        // This shape is a group shape
+   ULONG fChild : 1;        // Not a top-level shape
+   ULONG fPatriarch : 1;    // This is the topmost group shape.
+                            // Exactly one of these per drawing. 
+   ULONG fDeleted : 1;      // The shape has been deleted
+   ULONG fOleShape : 1;     // The shape is an OLE object
+   ULONG fHaveMaster : 1;   // Shape has a hspMaster property
+   ULONG fFlipH : 1;        // Shape is flipped horizontally
+   ULONG fFlipV : 1;        // Shape is flipped vertically
+   ULONG fConnector : 1;    // Connector type of shape
+   ULONG fHaveAnchor : 1;   // Shape has an anchor of some kind
+   ULONG fBackground : 1;   // Background shape
+   ULONG fHaveSpt : 1;      // Shape has a shape type property
+   ULONG reserved : 20;     // Not yet used
+}
+</code></pre>
+<H4 CLASS="h3"><A NAME="sec2"></A>Property Table Record    msofbtOPT</H4>A shape's properties are stored in a sorted array of property id-value pairs.  Only the properties that differ from the per-shape-type defaults or the per-property defaults are saved.  (Note that the per-property defaults are unrelated to the default property table stored in the drawing group container).</P>
+<P>The format of a property table record is in another section of this document. </P>
+<H4 CLASS="h3"><A NAME="sec3"></A>Anchor Record    msofbtAnchor</H4>An anchor record is used for top-level shapes when the shape streamed to the clipboard. The content of the record is simply a RECT with a coordinate system of 100,000 units per inch and origin in the top-left of the drawing.</P>
+<H4 CLASS="h3"><A NAME="sec4"></A>Child Anchor Record    msofbtChildAnchor</H4>A child anchor record is used for all shapes that belong to a group. The content of the record is simply a RECT in the coordinate system of the parent group shape. </P>
+<H4 CLASS="h3"><A NAME="sec5"></A>Textbox Record    msofbtTextbox</H4>A textbox record is used when a shape with attached text is written to a clipboard stream. It just contains an RTF string.</P>
+<H4 CLASS="h3"><A NAME="sec6"></A>OLE Object Record    msofbtOleObject</H4>An OLE object record is present when a shape that is an OLE object is saved to the clipboard.  It contains the OLE object's storage, serialized using OleConvertIStorageToOLESTREAM. </P>
+<H4 CLASS="h3"><A NAME="sec7"></A>Deleted PSPL Record    msofbtDeletedPspl</H4>Top-level deleted shapes save a pointer back into their former position in the shape tree, so that if they are undeleted via undo they can be easily put back into the main shape tree.</P>
+The record consists of a single FPSPL:</P>
+
+<pre><code>// FPSPL - File PSPL
+typedef struct _FPSPL 
+   {
+   union
+      {
+      ULONG lAll;
+      struct
+         {
+         ULONG spid : 30;   // The SPID of the shape PSPL points at.
+         ULONG fFirst : 1;  // Is this a pointer to the m_splFirst?
+         ULONG fLast  : 1;  // Is this a pointer to the m_splLast?
+         };
+      };
+   } FPSPL;</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Solver Container    msofbtSolverContainer</H3>Rules give special behaviors to shapes. Rules can govern a single shape, like in the case of a callout shape, or multiple shapes, as in the case of connectors. Each drawing can have a list of rules associated with it.</P>
+<H4 CLASS="h3"><A NAME="sec0"></A>Connector Rule Record    msofbtConnectorRule</H4>Governs a connector shape.</P>
+
+<pre><code>typedef struct _FConnectorRule
+   {
+   ULONG ruid;       // rule ID
+   MSOSPID spidA;    // SPID of shape A
+   MSOSPID spidB;    // SPID of shape B
+   MSOSPID spidC;    // SPID of connector shape
+   ULONG cptiA;      // Connection site Index of shape A
+   ULONG cptiB;      // Connection site Index of shape B
+   } FConnectorRule;</code></pre>
+<H4 CLASS="h3"><A NAME="sec1"></A>Align Rule Record    msofbtAlignRule</H4>Aligns shapes.  The FAlignRule record is followed by the SPIDs of the proxy shapes.</P>
+
+<pre><code>// FAlignRule 
+typedef struct _FAlignRule
+   {
+   ULONG ruid;       // rule ID
+   ULONG align;      // alignment – see below
+   ULONG cProxies;   // number of shapes governed by rule
+   } FAlignRule;
+
+// ALIGN == Shape alignment (Horz and vert can be or'ed together)
+#define alignHorz      0x000F   // mask for horizontal component
+#define alignLeft      0x0001   // left edges
+#define alignCenter    0x0002   // horizontal center
+#define alignRight     0x0003   // right edges
+#define alignVert      0x00F0   // mask for vertical component
+#define alignTop       0x0010   // top edges
+#define alignMiddle    0x0020   // vertical center
+#define alignBottom    0x0030   // bottom edges
+#define alignRelative  0x0100   // Relative to the page
+</code></pre>
+<H4 CLASS="h3"><A NAME="sec2"></A>Arc Rule Record    msofbtArcRule</H4>One Arc rule per elliptical arc shape.</P>
+
+<pre><code>// FARCRU -- Arc Rule
+typedef struct _FARCRU
+   {
+   ULONG      ruid; // rule ID
+   MSOSPID    spid; // spid of arc shape
+   } FARCRU;</code></pre>
+<H4 CLASS="h3"><A NAME="sec3"></A>Callout Rule Record    msofbtCalloutRule</H4>One callout rule per callout shape.</P>
+
+<pre><code>// FCORU   -- Callout Rule
+typedef struct _FCORU
+   {
+   ULONG      ruid; // rule ID
+   MSOSPID    spid; // spid of callout shape
+   } FCORU;</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Color Scheme     msofbtColorScheme</H3>Hosts may define their own color scheme and store colors in shape properties that are an index to that scheme plus an indicating flag (see Appendix B).  Since hosts' color schemes are independent of each other, the color scheme is saved when rendering to the clipboard.  If the clipboard data is pasted back into the same application, the color scheme block is ignored; otherwise, it is used to translate scheme colors in properties into RGB values.</P>
+The data in the block is an array of RGB values, saved as LONGs in order of color scheme index.</P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Selections    msofbtSelection</H2>Selections of shapes are saved as top-level file blocks; they are never placed in a container.  (Note: As of Office 97, only Excel saves shape selections; Word and PowerPoint do not.)  The selection record consists of an FDGSL followed by the SPIDs of the shapes in the selection.</P>
+
+<pre><code>// FDGSL - File Drawing Selection
+typedef struct _FDGSL
+   {
+   ULONG         cpsp;       // number of shapes in the selection
+   ULONG         dgslk;      // kind of selection (an MSODGSLK)
+   MSOSPID       spidFocus;  // SPID of the focus shape
+   } FDGSL;
+
+// DGSLK = DrawinG SeLection Kind.
+typedef enum
+   {
+   msodgslkNormal,          // Normal Selection Mode.
+   msodgslkRotate,          // Rotate selection mode
+   msodgslkReshape,         // Reshape Selection Mode.
+   msodgslkUnused,
+   msodgslkWrapPolygon,     // Display and edit of wrap polygons.
+   msodgslkTextEdit         // Text Edit Mode.
+   } MSODGSLK;</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Shape Properties    msofbtOPT</H2>The first part of an OPT record is an array of FOPTEs, consisting of ID-value pairs tightly packed:</P>
+
+<pre><code>typedef struct _FOPTE
+   {
+   struct
+      {
+      USHORT pid : 14;     // Property ID
+      USHORT fBid : 1;     // value is a blip ID – only valid if fComplex is FALSE
+      USHORT fComplex : 1; // complex property, value is length
+      };
+   ULONG   op;  // Value
+   } FOPTE;
+</code></pre>
+The FOPTE array is sorted by property ID.</P>
+Some property values, such as Unicode strings, don't fit in 32 bits.  For these properties, the fComplex bit is set in the FOPTE, and the length of the data is saved in the value slot.  The data of the complex properties follows the FOPTE array in the file record (sorted by property ID).</P>
+BLIPs are usually saved in the BLIP Store, so, in most cases, BLIP properties just store a BLIP ID (basically an index into an array in the BLIP Store).  This is signaled by the fBid flag; note however that this flag is only valid if fComplex is FALSE.</P>
+Boolean properties are grouped in bitfields by property set; note that the Boolean properties in each property set below are contiguous.  They are saved under the property ID of the <I>last</I> Boolean property in the set, and are placed in the value field in reverse order starting with the last property in the low bit.</P>
+Notes on types and units:</P>
+<SPAN CLASS="list"><UL><LI CLASS="ULI1">MSOHSP properties are basically just pointers to shapes, and they are therefore saved as SPIDs.</LI><LI CLASS="ULI1">WCHAR* properties are Unicode strings; char* properties are ASCII strings.</LI><LI CLASS="ULI1">IMsoArray properties are arrays.  They are always complex when non-NULL.  The complex-data part is saved as three shorts (16 bits each) followed by the array data.  The first short is the number of elements in the array; the second short is the number of elements allocated for the array in memory (always greater than or equal to the first short); and the third short is the size of each array element.</LI><LI CLASS="ULI1">Absolute distances are specified in English Metric Units (EMUs), occasionally referred to as A units; there are 360000 EMUs per centimeter, 914400 EMUs per inch, 12700 EMUs per point.</LI><LI CLASS="ULI1">A coordinate space relative to the size of the shape is specified with the geoLeft, geoTop, geoRight, and geoBottom properties; coordinates in this space are said to be in G units.</LI><LI CLASS="ULI1">Many quantities are specified as fixed-point 16.16 numbers; that is, the quantity fits in a LONG, where the high word specifies the integer part and the low word specifies the fractional part.  In this system, 1&lt;&lt;16 signifies 1, 1&lt;&lt;17 signifies 2, and 1&lt;&lt;15 signifies ½.</LI></UL></SPAN>The property listings below contain only those properties which are saved in OPT records in the file.  Properties which are never saved, or which appear elsewhere in the file format, have been omitted.</P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Transform</H3>
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">rotation</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">4</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fixed point: 16.16 degrees</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Protection</H3>Changes the behavior of a shape by restricting direct manipulation. </P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockRotation</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">119</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">No rotation</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockAspectRatio</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">120</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Don't allow changes in aspect ratio</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockPosition</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">121</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Don't allow the shape to be moved</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockAgainstSelect</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">122</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape may not be selected</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockCropping</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">123</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">No cropping this shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockVertices</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">124</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Edit Points not allowed</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">125</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not edit text</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockAdjustHandles</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">126</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not adjust</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockAgainstGrouping</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">127</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not group this shape</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Text</H3>How text fits in a shape.  Text is host-dependent, so some hosts may ignore some of these properties.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lTxid</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">128</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">id for the text, value determined by the host</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxTextLeft</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">129</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/10 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">margins relative to shape's inscribed text rectangle (in EMUs)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dyTextTop</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">130</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/20 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxTextRight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">131</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/10 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dyTextBottom</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">132</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/20 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WrapText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">133</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOWRAPMODE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Wrap text at shape margins</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">scaleText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">134</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Text zoom/scale (used if fFitTextToShape)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">anchorText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">135</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOANCHOR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Top</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How to anchor the text</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">txflTextFlow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">136</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOTXFL</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">HorzN</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Text flow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cdirFont</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">137</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCDIR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">msocdir0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Font rotation</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">hspNext</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">138</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOHSP</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">ID of the next shape (used by Word for linked textboxes)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">txdir</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">139</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOTXDIR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LTR</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Bi-Di Text direction</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fSelectText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">187</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE if single click selects text, FALSE if two clicks</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fAutoTextMargin</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">188</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">use host's margin calculations</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fRotateText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">189</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Rotate text with shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fFitShapeToText</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">190</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Size shape to fit text size</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fFitTextToShape</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">191</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Size text to fit shape size</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>GeoText</H3>Effect text of the shape - this is what the WordArt tools use, and is separate from the attached text present in ordinary textboxes.  Theoretically, a shape could have both (a WordArt with attached text), but this is not currently allowed by the UI.  Note that font information is provided here.  The default text size is in points, the text effect geometry interfaces require the device size of a point to interpret this.  The default point size is a 16.16 fixed-point number.  A text effect is present if the fGText boolean is set and either the gtextUNICODE (UNICODE) or gtextRTF (RTF) is present, the UNICODE string takes precedence, however it cannot include any additional font information (unlike the RTF).</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextUNICODE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">192</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">UNICODE text string</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextRTF</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">193</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">char*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">RTF text string</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextAlign</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">194</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOGEOTEXTALIGN</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Center</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">alignment on curve</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextSize</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">195</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">36&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">default point size</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextSpacing</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">196</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fixed point 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFont</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">197</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">font family name</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFReverseRows</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">240</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Reverse row order</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fGtext</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">241</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Has text effect</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFVertical</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">242</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Rotate characters</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFKern</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">243</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Kern characters</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFTight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">244</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Tightening or tracking</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFStretch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">245</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Stretch to fit shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFShrinkFit</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">246</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Char bounding box</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFBestFit</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">247</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Scale text-on-path</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFNormalize</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">248</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Stretch char height</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFDxMeasure</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">249</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not measure along path</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFBold</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">250</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Bold font</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFItalic</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">251</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Italic font</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFUnderline</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">252</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Underline font</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFShadow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">253</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shadow font</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFSmallcaps</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">254</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Small caps font</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">gtextFStrikethrough</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">255</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Strike through font</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Blip</H3>How a BLIP fits into a shape.  This includes cropping information as well as picture display modifications such as brightness and contrast.</P>
+
+<TABLE COLS="7" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="96pt" VALIGN="TOP"><COL WIDTH="45pt" VALIGN="TOP"><COL WIDTH="49pt" VALIGN="TOP"><COL WIDTH="49pt" VALIGN="TOP"><COL WIDTH="0pt" VALIGN="TOP"><COL WIDTH="192pt" VALIGN="TOP"><COL WIDTH="1pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cropFromTop</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">256</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16 fraction times total image width or height, as appropriate.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cropFromBottom</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">257</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cropFromLeft</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">258</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cropFromRight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">259</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pib</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">260</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">IMsoBlip*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip to display</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pibName</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">261</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip file name</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pibFlags</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">262</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBLIPFLAGS</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comment</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip flags</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureTransparent</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">263</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">~0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">transparent color (none if ~0UL) </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureContrast</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">264</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">contrast setting</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureBrightness</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">265</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">brightness setting</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureGamma</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">266</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16 gamma</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureId</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">267</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Host-defined ID for OLE objects (usually a pointer)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureDblCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">268</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">This</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Modification used if shape has double shadow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureFillCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">269</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureLineCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">270</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD COLSPAN="3" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pibPrint</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">271</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">IMsoBlip*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip to display when printing</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pibPrintName</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">272</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip file name</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pibPrintFlags</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">273</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBLIPFLAGS</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comment</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip flags</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fNoHitTestPicture</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">316</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not hit test the picture</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureGray</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">317</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">grayscale display</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureBiLevel</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">318</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">bi-level display</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pictureActive</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">319</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Server is active (OLE objects only)</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+<!DOCTYPE   PUBLIC "-//IETF//DTD  //EN">
+< >< >
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+
+<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
+<title>Geometry</title>
+
+<  bgcolor="#FFFFFF">
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+
+<H3>Geometry</h3>
+
+The geometry of the shape. Typically, these
+properties reside in a shape type definition, and so are not
+written to the file. However, freeform shapes drawing using the
+polygon tools set the pVertices and pSegmentInfo properties to
+define their geometries.</p>
+
+<table border="1" cellpadding="1" cols="5">
+    <tr><b>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Property</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">PID</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Type</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Default</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Description</td>
+    </b></tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">geoLeft</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">320</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Defines the G (geometry) coordinate
+        space.</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">geoTop</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">321</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">geoRight</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">322</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">21600</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">geoBottom</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">323</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">21600</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">shapePath</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">324</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2"><b>MSOSHAPEPATH</b></td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">msoshapeLinesClosed</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">pVertices</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">325</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2"><b>IMsoArray</b></td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">NULL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">An array of points, in G units.</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">pSegmentInfo</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">326</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2"><b>IMsoArray</b></td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">NULL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjustValue</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">327</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Adjustment values corresponding to the
+        positions of the adjust handles of the shape. The number
+        of values used and their allowable ranges vary from shape
+        type to shape type.</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust2Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">328</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust3Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">329</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust4Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">330</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust5Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">331</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust6Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">332</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust7Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">333</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust8Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">334</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust9Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">335</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">adjust10Value</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">336</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">LONG</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">0</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">fShadowOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">378</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">TRUE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Shadow may be set</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">f3DOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">379</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">TRUE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">3D may be set</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">fLineOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">380</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">TRUE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Line style may be set</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">fGtextOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">381</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">FALSE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">Text effect (WordArt) supported</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">fFillShadeShapeOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">382</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">FALSE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">fFillOK</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">383</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">BOOL</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">TRUE</td>
+        <TD valign="top"><FONT FACE=" ,    " SIZE="2">OK to fill the shape through the UI or
+        VBA?</td>
+    </tr>
+</T ></table>
+
+<br>
+</p>
+</FONT></ >
+
+</html>
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Fill Style</H3>Two main colors are defined - a foreground color and a background color.  Different fillTypes use these values differently. In addition to the foreground and background any number of shade colors can be defined.  Each shade color is associated with a "position" which says how far into the shade the color appears – colors must be given in position order.</P>
+For a solid fill the foreground color is used and the background (and everything else except transparency) is ignored. For pattern and texture fills the fillBlip identifies a BLIP, which will be used for the fill.</P>
+fillWidth and fillHeight define the desired pattern/texture size in EMUs.  The pattern/tile will be expanded to this size.  If the pattern is a bitmap the actual size will be rounded to a close integer multiple of the original (pixel) size of the bitmap.  If the size is 0 then the pattern/tile will not be expanded or contracted at all in pixel terms, so the fill will be device dependent - this may result in non-proportional scaling between devices (on devices with non-square pixels).</P>
+For a pattern the foreground and background colors define the colors to use when filling with a pattern, for a texture the colors are in the bitmap (this is the only difference).</P>
+For both pattern and texture fills the fill is registered with (0,0) on the view in which the effect appears unless fillShape is set to TRUE, in which case the pattern/texture is registered relative to the shape (so it moves with the shape).</P>
+For a picture fill the fillBlip is centered in the shape - not tiled.</P>
+For a shaded fill the colors define shade bands to use across the shade, shading between each pair of colors.  The positions are the positions of the shade at which the given color appears - the shade ends with the first index that is &gt;= 1 (in 16.16 notation), the indices must be in ascending order or the result is undefined.  The interpretation of the shade start and shade end points varies according to the exact shade type.</P>
+The fillBackground fill indicates a fill inherited from a background object.</P>
+
+<TABLE COLS="6" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="0pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">384</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOFILLTYPE</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Solid</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type of fill</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">385</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">white</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Foreground color</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillOpacity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">386</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillBackColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">387</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">white</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Background color</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillBackOpacity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">388</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shades only</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">389</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Modification for BW views</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillBlip</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">390</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">IMsoBlip*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Pattern/texture</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillBlipName</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">391</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip file name</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillBlipFlags</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">392</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBLIPFLAGS</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comment</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip flags</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillWidth</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">393</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How big (A units) to make a metafile texture.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillHeight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">394</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillAngle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">395</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fade angle - degrees in 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillFocus</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">396</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Linear shaded fill focus percent</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillToLeft</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">397</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fraction 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillToTop</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">398</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fraction 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillToRight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">399</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fraction 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillToBottom</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">400</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fraction 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillRectLeft</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">401</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">For shaded fills, use the specified rectangle instead of the shape's bounding rect to define how large the fade is going to be.</P>
+</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillRectTop</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">402</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillRectRight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">403</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillRectBottom</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">404</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillDztype</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">405</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSODZTYPE</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShadePreset</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">406</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Special shades</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShadeColors</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">407</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>IMsoArray</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">a preset array of colors</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillOriginX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">408</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillOriginY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">409</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShapeOriginX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">410</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShapeOriginY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">411</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShadeType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">412</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOSHADETYPE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type of shading, if a shaded (gradient) fill.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fFilled</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">443</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Is shape filled?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fHitTestFill</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">444</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Should we hit test fill? </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillShape</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">445</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Register pattern on shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fillUseRect</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">446</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Use the large rect?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fNoFillHitTest</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">447</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Hit test a shape as though filled</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Line Style</H3>Lines are centered about the infinitely thin proto-line along which they are drawn.  Complex dash effects are supported only for simple lines (e.g. changing the end cap) - defaults should be used for other line styles.  The line width is in EMUs; a line width of zero should not be used - there is no logical interpretation on a high-resolution printer.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">448</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">black</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Color of line</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineOpacity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">449</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Not implemented</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineBackColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">450</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">white</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Background color</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">451</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Modification for BW views</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">452</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINETYPE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Solid</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type of line</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillBlip</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">453</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">IMsoBlip*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Pattern/texture</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillBlipName</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">454</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip file name</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillBlipFlags</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">455</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBLIPFLAGS</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Comment</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Blip flags</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillWidth</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">456</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How big (A units) to make a metafile texture.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillHeight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">457</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillDztype</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">458</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSODZTYPE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How to interpret fillWidth/Height numbers.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineWidth</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">459</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">9525</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">A units; 1pt == 12700 EMUs</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineMiterLimit</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">460</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">8&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">ratio (16.16) of width</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineStyle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">461</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINESTYLE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Simple</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Draw parallel lines?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineDashing</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">462</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEDASHING</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Solid</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Can be overridden by:</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineDashStyle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">463</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>IMsoArray</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">As Win32 ExtCreatePen</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineStartArrowhead</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">464</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEEND</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NoEnd</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at start</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineEndArrowhead</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">465</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEEND</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NoEnd</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at end</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineStartArrowWidth</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">466</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEENDWIDTH</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">MediumWidthArrow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at start</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineStartArrowLength</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">467</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEENDLENGTH</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">MediumLenArrow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at end</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineEndArrowWidth</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">468</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEENDWIDTH</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">MediumWidthArrow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at start</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineEndArrowLength</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">469</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEENDLENGTH</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">MediumLenArrow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Arrow at end</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineJoinStyle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">470</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINEJOIN</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">JoinRound</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How to join lines</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineEndCapStyle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">471</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOLINECAP</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">EndCapFlat</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">How to end lines</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fArrowheadsOK</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">507</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Allow arrowheads if prop. is set</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLine</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">508</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Any line?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fHitTestLine</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">509</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Should we hit test lines? </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lineFillShape</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">510</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Register pattern on shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fNoLineDrawDash</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">511</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Draw a dashed line if no line</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Shadow Style</H3>The interpretation of the transform properties depends on the type of shadow:</P>
+<B>msoshadowOffset, msoshadowDouble:</B></P>
+Only the offset is used.  It is interpreted as an absolute offset expressed in EMUs.  The default corresponds to 1/36" in both X and Y (2 or 3 pixels on screen depending on monitor resolution).  The offset is relative to the drawing axes (as msoshadowDrawing below, not msoshadowRich) so a shadow offset to the bottom right of the drawing is still offset (by the same amount) to the bottom right if the shape is rotated.  The "double" case causes two shadows to be drawn, the first (lower) at the second offset and in the shadowHighlightColor.  If the second offset is 0,0 it defaults to being the inverse of the first.</P>
+<B>msoshadowRich:</B></P>
+The offsets and transformation properties are in absolute units measured relative to the shape on the drawing - the shadow moves with the shape, but anisotropic scaling of the shape changes the proportions of the shadow, not its angles.  Compare with the following where such scaling scales the shadow in proportion too, thus changes the angle between (e.g.) a vertical line in the shape and it's shadow.</P>
+<B>msoshadowShape:</B></P>
+The offsets and transformation properties are relative to the shape; 1.0 corresponds to the shape width/height as appropriate.  The shadow is cast relative to the shape then scaled with the shape, so it moves with the shape.  The units are simple numbers (ratios of the G unit space effectively).  This transformation type is unnatural in real world terms, but behaves nicely in geometric terms.  The offset elements of the property set are treated as fixed-point 16.16 values.</P>
+<B>msoshadowDrawing:</B></P>
+A rich shadow cast onto a plane in drawing space.  The transform is applied to the drawing coordinates of the shape and is thus expressed in EMUs.  This shadow type enables creation of shadows from multiple objects, however the shadows may overlap higher (different) objects if the shadow plane and shape drawing planes overlap on the screen.</P>
+The shadowWeight parameter is used as in the perspective property set to apply addiitonal scaling to the perspective parameters - these are divided by the weight.</P>
+Shadow transformations are independent of the perspective transformation applied to a shape - either hte perspective transformation or the shadow transformation is used as appropriate.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">512</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOSHADOWTYPE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Offset</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type of effect</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">513</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0x808080</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Foreground color</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowHighlight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">514</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0xCBCBCB</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Embossed color</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">515</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Modification for BW views</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowOpacity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">516</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowOffsetX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">517</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">25400</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Offset shadow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowOffsetY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">518</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">25400</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Offset shadow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowSecondOffsetX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">519</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Double offset shadow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowSecondOffsetY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">520</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Double offset shadow</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowScaleXToX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">521</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowScaleYToX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">522</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowScaleXToY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">523</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowScaleYToY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">524</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowPerspectiveX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">525</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16 / weight</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowPerspectiveY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">526</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">16.16 / weight</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowWeight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">527</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;8</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">scaling factor</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowOriginX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">528</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">shadowOriginY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">529</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fShadow</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">574</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Any shadow?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fshadowObscured</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">575</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Excel5-style shadow</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Perspective Style</H3>This is just a 2D transformation matrix (3x3).  Specifying peculiar values will cause the shape to render completely outside its geometry - normally clients will constrain the values to get reasonable results.  The transformation may be applied at various times as the geometry is processed, this affects the behavior of the perspective which results in the same way as the corresponding shadow perspective types.</P>
+
+<TABLE COLS="2" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="125pt" VALIGN="TOP"><COL WIDTH="310pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>   msoxformAbsolute</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Equivalent to msoshadowRich</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>   msoxformShape</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Equivalent to msoshadowShape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>   msoxformDrawing</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Equivalent to msoshadowDrawing</P></TD></TR></T ></TABLE>
+<BR></P>In the case of perspective the msoxformShape form is the default - the perspective will then scale proportionally with the overall shape scaling.</P>
+All parameters except the weight and offset elements are 16.16 fixed-point numbers.  The offset is interpreted according to the perspective type, if the type is msoxformShape then the offset is assumed to be a 16.16 fixed point value, otherwise it is assumed to be an integral value (effectively a number of EMUs).  The weight acts as an additional divisor for the perspectivePerspectiveX/Y elements - the values in the transformation matrix are obtained by dividing the property values by the weight, the default value of 256 gives a useful range of values for the msoxformShape case, for the other cases the weight should normally be around 1 to 256 times the size of the shape in the coordinate space.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">576</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOXFORMTYPE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Where transform applies</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveOffsetX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">577</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The LONG values define a transformation matrix, effectively, each value is scaled by the perspectiveWeight parameter.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveOffsetY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">578</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveScaleXToX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">579</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveScaleYToX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">580</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveScaleXToY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">581</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveScaleYToY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">582</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;16</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectivePerspectiveX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">583</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectivePerspectiveY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">584</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveWeight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">585</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;8</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Scaling factor</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveOriginX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">586</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;15</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">perspectiveOriginY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">587</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1&lt;&lt;15</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fPerspective</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">639</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">On/off</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>3D Object</H3>Material properties of a 3D object.  A 3D effect overrides the fill and line effects and corresponding colors.  Extrusion depths are always specified in absolute units.</P>
+
+<TABLE COLS="6" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="0pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DSpecularAmt</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">640</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed-point 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DDiffuseAmt</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">641</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">65536</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed-point 16.16</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DShininess</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">642</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">5</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default gives OK results</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DEdgeThickness</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">643</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">12700</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Specular edge thickness</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DExtrudeForward</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">644</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Distance of extrusion in EMUs</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DExtrudeBackward</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">645</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">457200</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DExtrudePlane</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">646</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Extrusion direction</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DExtrusionColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">647</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FillThenLine</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DCrMod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">648</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCLR</B></P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">undefined</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Modification for BW views</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">f3D</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">700</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Does this shape have a 3D effect?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DMetallic</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">701</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Use metallic specularity?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DUseExtrusionColor</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">702</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DLightFace</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">703</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>3D Style</H3>Properties of a 3D view; note that distances are in drawing units.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DYRotationAngle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">704</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">degrees (16.16) about y axis</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DXRotationAngle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">705</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">degrees (16.16) about x axis</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationAxisX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">706</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">100</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">These specify the rotation axis; only their relative magnitudes matter.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationAxisY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">707</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationAxisZ</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">708</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationAngle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">709</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">degrees (16.16) about axis</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationCenterX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">710</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">rotation center x (16.16 or g-units)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationCenterY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">711</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">rotation center y (16.16 or g-units)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRotationCenterZ</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">712</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">rotation center z (absolute (emus))</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DRenderMode</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">713</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSO3DRENDERMODE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FullRender</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Full,wireframe, or bcube</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DTolerance</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">714</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">30000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pixels (16.16)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DXViewpoint</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">715</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1250000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">X view point (emus)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DYViewpoint</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">716</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">-1250000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Y view point (emus)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DZViewpoint</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">717</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">9000000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Z view distance (emus)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DOriginX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">718</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">32768</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DOriginY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">719</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">-32768</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DSkewAngle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">720</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">-8847360</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">degree (16.16) skew angle</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DSkewAmount</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">721</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">50</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Percentage skew amount</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DAmbientIntensity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">722</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">20000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed point intensity</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DKeyX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">723</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">50000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Key light source direc-</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DKeyY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">724</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">tion; only their relative</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DKeyZ</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">725</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">10000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">magnitudes matter</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DKeyIntensity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">726</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">38000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed point intensity</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DFillX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">727</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">-50000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fill light source direc-</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DFillY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">728</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">tion; only their relative</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DFillZ</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">729</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">10000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">magnitudes matter</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">c3DFillIntensity</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">730</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">38000</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Fixed point intensity</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DConstrainRotation</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">763</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DRotationCenterAuto</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">764</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DParallel</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">765</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Parallel projection?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DKeyHarsh</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">766</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Is key lighting harsh?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fc3DFillHarsh</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">767</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Is fill lighting harsh?</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Shape</H3>Miscellaneous properties of a single shape which do not apply to group shapes.</P>
+
+<TABLE COLS="6" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="0pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">hspMaster</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">769</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">MSOHSP</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">master shape</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">cxstyle</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">771</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOCXSTYLE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">None</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type of connector</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">bWMode</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">772</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBWMODE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Automatic</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Settings for modifications to be made when in different forms of black-and-white mode.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">bWModePureBW</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">773</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBWMODE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Automatic</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">bWModeBW</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">774</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOBWMODE</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Automatic</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fOleIcon</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">826</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">For OLE objects, whether the object is in icon form</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fPreferRelativeResize</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">827</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">For UI only. Prefer relative resizing. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fLockShapeType</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">828</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Lock the shape type (don't allow Change Shape)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fDeleteAttachedObject</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">830</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fBackground</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">831</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD COLSPAN="2" VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">If TRUE, this is the background shape.</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Callout</H3>Properties of a callout shape.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">spcot</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">832</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOSPCOT</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TwoSegment</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Callout type</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxyCalloutGap</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">833</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/12 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Distance from box to first point.(EMUs)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">spcoa</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">834</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOSPCOA</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Any</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Callout angle</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">spcod</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">835</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>MSOSPCOD</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Specified</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Callout drop type</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxyCalloutDropSpecified</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">836</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">9 points</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">if msospcodSpecified, the actual drop distance</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxyCalloutLengthSpecified</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">837</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">if fCalloutLengthSpecified, the actual distance</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCallout</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">889</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Is the shape a callout?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutAccentBar</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">890</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">does callout have accent bar</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutTextBorder</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">891</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">does callout have a text border</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutMinusX</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">892</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutMinusY</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">893</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutDropAuto</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">894</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">If true, then we occasionally invert the drop distance</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fCalloutLengthSpecified</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">895</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">if true, we look at dxyCalloutLengthSpecified</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H3>Group Shape</H3>Miscellaneous shape properties that <I>can</I> apply to group shapes.</P>
+
+<TABLE COLS="5" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="115pt" VALIGN="TOP"><COL WIDTH="21pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="50pt" VALIGN="TOP"><COL WIDTH="195pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Property</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">PID</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Type</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Default</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Description</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">wzName</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">896</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Shape Name (present only if explicitly set)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">wzDescription</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">897</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">WCHAR*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">alternate text</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pihlShape</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">898</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">IHlink*</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The hyperlink in the shape.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">pWrapPolygonVertices</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">899</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"><B>IMsoArray</B></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">NULL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">The polygon that text will be wrapped around (Word)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxWrapDistLeft</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">900</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/8 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Left wrapping distance from text (Word)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dyWrapDistTop</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">901</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Top wrapping distance from text (Word)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dxWrapDistRight</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">902</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/8 inch</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Right wrapping distance from text (Word)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">dyWrapDistBottom</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">903</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Bottom wrapping distance from text (Word)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">lidRegroup</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">904</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">LONG</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">0</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Regroup ID </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fEditedWrap</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">953</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Has the wrap polygon been edited?</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fBehindDocument</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">954</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Word-only (shape is behind text)</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fOnDblClickNotify</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">955</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Notify client on a double click</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fIsButton</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">956</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">A button shape (i.e., clicking performs an action).  Set for shapes with attached hyperlinks or macros.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fOneD</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">957</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1D adjustment</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fHidden</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">958</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">FALSE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Do not display</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">fPrint</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">959</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">BOOL</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">TRUE</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Print this shape</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Appendix A: Change History</H2>
+<TABLE COLS="3" BORDER="0" CELLPADDING="7"><COLGROUP><COL WIDTH="51pt" VALIGN="TOP"><COL WIDTH="55pt" VALIGN="TOP"><COL WIDTH="267pt" VALIGN="TOP"></COLGROUP><T ><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Date</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Change</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/11/96</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Created the document. Left work to be done in the BStore and Complex shape properties. </P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">1/23/97</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Extensively updated and reorganized document.  Added overview and shape hierarchy information.  Added more complete shape property information.</P></TD></TR><TR><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">4/15/97</P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2"></P></TD><TD VALIGN="TOP"><FONT FACE=" ,    " SIZE="2">Add details on compression of Metafile Blips. See section "Metafile/PICT Blips"</P></TD></TR></T ></TABLE>
+<BR></P><P></P></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Appendix B: Colors</H2>Colors are always saved as four-byte LONG values.  If the high byte is zero, then the low three bytes contain a normal RGB COLORREF.  Otherwise, the value of the high byte is used as a bitfield of flags (notice that the values below are the <I>indices</I> of the bits that are set).</P>
+
+<pre><code>typedef enum
+   {
+   msocolorFlagPaletteIndex,  // PALETTEINDEX macro
+   msocolorFlagPaletteRGB,    // PALETTERGB macro
+   msocolorFlagSystemRGB,     // MSOSYSTEMRGB
+   msocolorFlagSchemeIndex,   // MSOSCHEMECOLOR
+   msocolorFlagSysIndex,      // MSOSYSCOLOR
+   } MSOCOLORINDEX;
+</code></pre>
+Windows defines the first two.  The third (SystemRGB) is a flag that it set on an otherwise normal RGB value to indicate to the rendering engine to bypass its normal halftone dithering process and just render the color directly using Windows.</P>
+The presence of either of the last two flags indicates that the low three bytes are an index into a predefined array of colors.  For SchemeIndex colors, the host application provides the translation to RGB colors when necessary (PowerPoint and Excel both use this).  SysIndex colors are indices into colors tracked by Escher itself:</P>
+
+<pre><code>typedef enum
+   {
+   msosyscolorButtonFace,          // COLOR_BTNFACE
+   msosyscolorWindowText,          // COLOR_WINDOWTEXT
+   msosyscolorMenu,                // COLOR_MENU
+   msosyscolorHighlight,           // COLOR_HIGHLIGHT
+   msosyscolorHighlightText,       // COLOR_HIGHLIGHTTEXT
+   msosyscolorCaptionText,         // COLOR_CAPTIONTEXT
+   msosyscolorActiveCaption,       // COLOR_ACTIVECAPTION
+   msosyscolorButtonHighlight,     // COLOR_BTNHIGHLIGHT
+   msosyscolorButtonShadow,        // COLOR_BTNSHADOW
+   msosyscolorButtonText,          // COLOR_BTNTEXT
+   msosyscolorGrayText,            // COLOR_GRAYTEXT
+   msosyscolorInactiveCaption,     // COLOR_INACTIVECAPTION
+   msosyscolorInactiveCaptionText, // COLOR_INACTIVECAPTIONTEXT
+   msosyscolorInfoBackground,      // COLOR_INFOBK
+   msosyscolorInfoText,            // COLOR_INFOTEXT
+   msosyscolorMenuText,            // COLOR_MENUTEXT
+   msosyscolorScrollbar,           // COLOR_SCROLLBAR
+   msosyscolorWindow,              // COLOR_WINDOW
+   msosyscolorWindowFrame,         // COLOR_WINDOWFRAME
+   msosyscolor3DLight,             // COLOR_3DLIGHT
+   msosyscolorMax,                 // Count of system colors
+
+   msocolorFillColor =0xF0,  // Use the fillColor property
+   msocolorLineOrFillColor,  // Use the line color only if there is a line
+   msocolorLineColor,        // Use the lineColor property
+   msocolorShadowColor,      // Use the shadow color
+   msocolorThis,             // Use this color (only valid as described below)
+   msocolorFillBackColor,    // Use the fillBackColor property
+   msocolorLineBackColor,    // Use the lineBackColor property
+   msocolorFillThenLine,     // Use the fillColor unless no fill and line
+   msocolorIndexMask =0xFF,  // Extract the color index
+
+   msocolorProcessMask      =0xFFFF00, // All the processing bits
+   msocolorModificationMask =0x0F00,   // Just the function
+   msocolorModFlagMask      =0xF000,   // Just the additional flags
+   msocolorDarken           =0x0100,   // Darken color by parameter/255
+   msocolorLighten          =0x0200,   // Lighten color by parameter/255
+   msocolorAdd              =0x0300,   // Add grey level RGB(param,param,param)
+   msocolorSubtract         =0x0400,   // Subtract grey level RGB(p,p,p)
+   msocolorReverseSubtract  =0x0500,   // Subtract from grey level RGB(p,p,p)
+   /* In the following "black" means maximum component value, white minimum.
+      The operation is per component, to guarantee white combine with
+   msocolorGray */
+   msocolorBlackWhite       =0x0600,   // Black if &lt; uParam, else white (&gt;=)
+   msocolorInvert           =0x2000,   // Invert color (at the *end*)
+   msocolorInvert128        =0x4000,   // Invert by toggling the top bit
+   msocolorGray             =0x8000,   // Make the color gray (before the above!)
+   msocolorBParamMask       =0xFF0000, // Parameter used as above
+   msocolorBParamShift =16,            // To extract the parameter value
+   }
+MSOSYSCOLORINDEX;
+</code></pre></FONT></ >
+</ >
+< >
+< >
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Appendix C: Shape Types</H2>Internally, a shape type is defined as a fixed set of property values, the most important being the geometry of the shape (the pVertices property, etc.).  Each shape stores in itself only those properties that differ from its shape type.  When a shape is asked for a property that isn't in its local table, it looks in the shape type's table.   If the shape type doesn't define a value for the property, then the property's default value is used.</P>
+In the file format, shapes store their shape types in the instance field of the msofbtSp record.</P>
+
+<pre><code>typedef enum
+   {
+   msosptMin = 0,
+   msosptNotPrimitive = msosptMin,
+   msosptRectangle = 1,
+   msosptRoundRectangle = 2,
+   msosptEllipse = 3,
+   msosptDiamond = 4,
+   msosptIsocelesTriangle = 5,
+   msosptRightTriangle = 6,
+   msosptParallelogram = 7,
+   msosptTrapezoid = 8,
+   msosptHexagon = 9,
+   msosptOctagon = 10,
+   msosptPlus = 11,
+   msosptStar = 12,
+   msosptArrow = 13,
+   msosptThickArrow = 14,
+   msosptHomePlate = 15,
+   msosptCube = 16,
+   msosptBalloon = 17,
+   msosptSeal = 18,
+   msosptArc = 19,
+   msosptLine = 20,
+   msosptPlaque = 21,
+   msosptCan = 22,
+   msosptDonut = 23,
+   msosptTextSimple = 24,
+   msosptTextOctagon = 25,
+   msosptTextHexagon = 26,
+   msosptTextCurve = 27,
+   msosptTextWave = 28,
+   msosptTextRing = 29,
+   msosptTextOnCurve = 30,
+   msosptTextOnRing = 31,
+   msosptStraightConnector1 = 32,
+   msosptBentConnector2 = 33,
+   msosptBentConnector3 = 34,
+   msosptBentConnector4 = 35,
+   msosptBentConnector5 = 36,
+   msosptCurvedConnector2 = 37,
+   msosptCurvedConnector3 = 38,
+   msosptCurvedConnector4 = 39,
+   msosptCurvedConnector5 = 40,
+   msosptCallout1 = 41,
+   msosptCallout2 = 42,
+   msosptCallout3 = 43,
+   msosptAccentCallout1 = 44,
+   msosptAccentCallout2 = 45,
+   msosptAccentCallout3 = 46,
+   msosptBorderCallout1 = 47,
+   msosptBorderCallout2 = 48,
+   msosptBorderCallout3 = 49,
+   msosptAccentBorderCallout1 = 50,
+   msosptAccentBorderCallout2 = 51,
+   msosptAccentBorderCallout3 = 52,
+   msosptRibbon = 53,
+   msosptRibbon2 = 54,
+   msosptChevron = 55,
+   msosptPentagon = 56,
+   msosptNoSmoking = 57,
+   msosptSeal8 = 58,
+   msosptSeal16 = 59,
+   msosptSeal32 = 60,
+   msosptWedgeRectCallout = 61,
+   msosptWedgeRRectCallout = 62,
+   msosptWedgeEllipseCallout = 63,
+   msosptWave = 64,
+   msosptFoldedCorner = 65,
+   msosptLeftArrow = 66,
+   msosptDownArrow = 67,
+   msosptUpArrow = 68,
+   msosptLeftRightArrow = 69,
+   msosptUpDownArrow = 70,
+   msosptIrregularSeal1 = 71,
+   msosptIrregularSeal2 = 72,
+   msosptLightningBolt = 73,
+   msosptHeart = 74,
+   msosptPictureFrame = 75,
+   msosptQuadArrow = 76,
+   msosptLeftArrowCallout = 77,
+   msosptRightArrowCallout = 78,
+   msosptUpArrowCallout = 79,
+   msosptDownArrowCallout = 80,
+   msosptLeftRightArrowCallout = 81,
+   msosptUpDownArrowCallout = 82,
+   msosptQuadArrowCallout = 83,
+   msosptBevel = 84,
+   msosptLeftBracket = 85,
+   msosptRightBracket = 86,
+   msosptLeftBrace = 87,
+   msosptRightBrace = 88,
+   msosptLeftUpArrow = 89,
+   msosptBentUpArrow = 90,
+   msosptBentArrow = 91,
+   msosptSeal24 = 92,
+   msosptStripedRightArrow = 93,
+   msosptNotchedRightArrow = 94,
+   msosptBlockArc = 95,
+   msosptSmileyFace = 96,
+   msosptVerticalScroll = 97,
+   msosptHorizontalScroll = 98,
+   msosptCircularArrow = 99,
+   msosptNotchedCircularArrow = 100,
+   msosptUturnArrow = 101,
+   msosptCurvedRightArrow = 102,
+   msosptCurvedLeftArrow = 103,
+   msosptCurvedUpArrow = 104,
+   msosptCurvedDownArrow = 105,
+   msosptCloudCallout = 106,
+   msosptEllipseRibbon = 107,
+   msosptEllipseRibbon2 = 108,
+   msosptFlowChartProcess = 109,
+   msosptFlowChartDecision = 110,
+   msosptFlowChartInputOutput = 111,
+   msosptFlowChartPredefinedProcess = 112,
+   msosptFlowChartInternalStorage = 113,
+   msosptFlowChartDocument = 114,
+   msosptFlowChartMultidocument = 115,
+   msosptFlowChartTerminator = 116,
+   msosptFlowChartPreparation = 117,
+   msosptFlowChartManualInput = 118,
+   msosptFlowChartManualOperation = 119,
+   msosptFlowChartConnector = 120,
+   msosptFlowChartPunchedCard = 121,
+   msosptFlowChartPunchedTape = 122,
+   msosptFlowChartSummingJunction = 123,
+   msosptFlowChartOr = 124,
+   msosptFlowChartCollate = 125,
+   msosptFlowChartSort = 126,
+   msosptFlowChartExtract = 127,
+   msosptFlowChartMerge = 128,
+   msosptFlowChartOfflineStorage = 129,
+   msosptFlowChartOnlineStorage = 130,
+   msosptFlowChartMagneticTape = 131,
+   msosptFlowChartMagneticDisk = 132,
+   msosptFlowChartMagneticDrum = 133,
+   msosptFlowChartDisplay = 134,
+   msosptFlowChartDelay = 135,
+   msosptTextPlainText = 136,
+   msosptTextStop = 137,
+   msosptTextTriangle = 138,
+   msosptTextTriangleInverted = 139,
+   msosptTextChevron = 140,
+   msosptTextChevronInverted = 141,
+   msosptTextRingInside = 142,
+   msosptTextRingOutside = 143,
+   msosptTextArchUpCurve = 144,
+   msosptTextArchDownCurve = 145,
+   msosptTextCircleCurve = 146,
+   msosptTextButtonCurve = 147,
+   msosptTextArchUpPour = 148,
+   msosptTextArchDownPour = 149,
+   msosptTextCirclePour = 150,
+   msosptTextButtonPour = 151,
+   msosptTextCurveUp = 152,
+   msosptTextCurveDown = 153,
+   msosptTextCascadeUp = 154,
+   msosptTextCascadeDown = 155,
+   msosptTextWave1 = 156,
+   msosptTextWave2 = 157,
+   msosptTextWave3 = 158,
+   msosptTextWave4 = 159,
+   msosptTextInflate = 160,
+   msosptTextDeflate = 161,
+   msosptTextInflateBottom = 162,
+   msosptTextDeflateBottom = 163,
+   msosptTextInflateTop = 164,
+   msosptTextDeflateTop = 165,
+   msosptTextDeflateInflate = 166,
+   msosptTextDeflateInflateDeflate = 167,
+   msosptTextFadeRight = 168,
+   msosptTextFadeLeft = 169,
+   msosptTextFadeUp = 170,
+   msosptTextFadeDown = 171,
+   msosptTextSlantUp = 172,
+   msosptTextSlantDown = 173,
+   msosptTextCanUp = 174,
+   msosptTextCanDown = 175,
+   msosptFlowChartAlternateProcess = 176,
+   msosptFlowChartOffpageConnector = 177,
+   msosptCallout90 = 178,
+   msosptAccentCallout90 = 179,
+   msosptBorderCallout90 = 180,
+   msosptAccentBorderCallout90 = 181,
+   msosptLeftRightUpArrow = 182,
+   msosptSun = 183,
+   msosptMoon = 184,
+   msosptBracketPair = 185,
+   msosptBracePair = 186,
+   msosptSeal4 = 187,
+   msosptDoubleWave = 188,
+   msosptActionButtonBlank = 189,
+   msosptActionButtonHome = 190,
+   msosptActionButtonHelp = 191,
+   msosptActionButtonInformation = 192,
+   msosptActionButtonForwardNext = 193,
+   msosptActionButtonBackPrevious = 194,
+   msosptActionButtonEnd = 195,
+   msosptActionButtonBeginning = 196,
+   msosptActionButtonReturn = 197,
+   msosptActionButtonDocument = 198,
+   msosptActionButtonSound = 199,
+   msosptActionButtonMovie = 200,
+   msosptHostControl = 201,
+   msosptTextBox = 202,
+   msosptMax,
+   msosptNil = 0x0FFF,
+ } MSOSPT;
+</code></pre></FONT></ >
+</ >
+< >
+< >
+
+
+
+<FONT FACE=" ,    " SIZE="2">
+
+<FONT FACE="VERDANA,ARIAL,HELVETICA" SIZE=2>
+	<!--TOOLBAR_START-->
+	<!--TOOLBAR_EXEMPT-->
+	<!--TOOLBAR_END-->
+
+
+
+<H2>Appendix D: Miscellaneous Enumerated Types</H2>
+<pre><code>// MSOSHAPEPATH
+typedef enum
+   {
+   msoshapeLines,        // A line of straight segments
+   msoshapeLinesClosed,  // A closed polygonal object
+   msoshapeCurves,       // A line of Bezier curve segments
+   msoshapeCurvesClosed, // A closed shape with curved edges
+   msoshapeComplex,      // pSegmentInfo must be non-empty
+   } MSOSHAPEPATH;
+
+// MSOWRAPMODE
+typedef enum
+   {
+   msowrapSquare,
+   msowrapByPoints,
+   msowrapNone,
+   msowrapTopBottom,
+   msowrapThrough,
+   } MSOWRAPMODE;
+
+// MSOBWMODE
+typedef enum
+   {
+   msobwColor,          // only used for predefined shades
+   msobwAutomatic,      // depends on object type
+   msobwGrayScale,      // shades of gray only
+   msobwLightGrayScale, // shades of light gray only
+   msobwInverseGray,    // dark gray mapped to light gray, etc.
+   msobwGrayOutline,    // pure gray and white
+   msobwBlackTextLine,  // black text and lines, all else grayscale
+   msobwHighContrast,   // pure black and white mode (no grays)
+   msobwBlack,          // solid black
+   msobwWhite,          // solid white
+   msobwDontShow,       // object not drawn
+   msobwNumModes        // number of Black and white modes
+   } MSOBWMODE;
+
+// MSOANCHOR
+typedef enum
+   {
+   msoanchorTop, 
+   msoanchorMiddle, 
+   msoanchorBottom, 
+   msoanchorTopCentered, 
+   msoanchorMiddleCentered, 
+   msoanchorBottomCentered,
+   msoanchorTopBaseline,
+   msoanchorBottomBaseline,
+   msoanchorTopCenteredBaseline,
+   msoanchorBottomCenteredBaseline
+   } MSOANCHOR;
+
+// MSOCDIR
+typedef enum
+   {
+   msocdir0,       // Right
+   msocdir90,      // Down
+   msocdir180,     // Left
+   msocdir270      // Up
+   } MSOCDIR;
+
+// MSOCXSTYLE – connector style
+typedef enum
+   {
+   msocxstyleStraight = 0,
+   msocxstyleBent,
+   msocxstyleCurved,
+   msocxstyleNone
+   } MSOCXSTYLE;
+
+// MSOTXFL -- text flow
+typedef enum 
+   {
+   msotxflHorzN,           // Horizontal non-@
+   msotxflTtoBA,           // Top to Bottom @-font
+   msotxflBtoT,            // Bottom to Top non-@
+   msotxflTtoBN,           // Top to Bottom non-@
+   msotxflHorzA,           // Horizontal @-font
+   msotxflVertN,           // Vertical, non-@
+   } MSOTXFL;
+
+// MSOTXDIR - text direction (needed for Bi-Di support)
+typedef enum
+   {
+   msotxdirLTR,           // left-to-right text direction
+   msotxdirRTL,           // right-to-left text direction
+    msotxdirContext,      // context text direction
+    } MSOTXDIR;
+
+// MSOSPCOT -- Callout Type 
+typedef enum
+   {
+   msospcotRightAngle = 1,
+   msospcotOneSegment = 2,
+   msospcotTwoSegment = 3,
+   msospcotThreeSegment = 4,
+   } MSOSPCOT;
+
+// MSOSPCOA -- Callout Angle
+typedef enum
+   {
+   msospcoaAny,
+   msospcoa30,
+   msospcoa45,
+   msospcoa60,
+   msospcoa90,
+   msospcoa0,
+   } MSOSPCOA;
+
+// MSOSPCOD -- Callout Drop
+typedef enum
+   {
+   msospcodTop,
+   msospcodCenter,
+   msospcodBottom,
+   msospcodSpecified,
+   } MSOSPCOD;
+
+// MSOGEOTEXTALIGN – WordArt alignment
+typedef enum
+   {
+   msoalignTextStretch,      /* Stretch each line of text to fit width. */
+   msoalignTextCenter,       /* Center text on width. */
+   msoalignTextLeft,         /* Left justify. */
+   msoalignTextRight,        /* Right justify. */
+   msoalignTextLetterJust,   /* Spread letters out to fit width. */
+   msoalignTextWordJust,     /* Spread words out to fit width. */
+   msoalignTextInvalid       /* Invalid */
+   } MSOGEOTEXTALIGN;
+
+// MSOBLIPFLAGS – flags for pictures
+typedef enum
+   {
+   msoblipflagDefault = 0,
+   msoblipflagComment = 0,   // Blip name is a comment
+   msoblipflagFile,          // Blip name is a file name
+   msoblipflagURL,           // Blip name is a full URL
+   msoblipflagType = 3,      // Mask to extract type
+   /* Or the following flags with any of the above. */
+   msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
+                             // body work of an automobile caused when a
+                             // cyclist violently thrusts his or her nose
+                             // at it, thus a DontSave is another name for
+                             // a cycle lane.
+   msoblipflagDoNotSave = 4, // For those who prefer English
+   msoblipflagLinkToFile = 8,
+   } MSOBLIPFLAGS;
+
+// MSO3DRENDERMODE
+typedef enum
+   {
+   msoFullRender,      // Generate a full rendering
+   msoWireframe,       // Generate a wireframe
+   msoBoundingCube,    // Generate a bounding cube
+   } MSO3DRENDERMODE;
+
+// MSOXFORMTYPE
+typedef enum
+   {
+   msoxformAbsolute,   // Apply transform in absolute space centered on shape
+   msoxformShape,      // Apply transform to shape geometry
+   msoxformDrawing     // Apply transform in drawing space
+   } MSOXFORMTYPE;
+
+// MSOSHADOWTYPE
+typedef enum
+   {
+   msoshadowOffset,    // N pixel offset shadow
+   msoshadowDouble,    // Use second offset too
+   msoshadowRich,      // Rich perspective shadow (cast relative to shape)
+   msoshadowShape,     // Rich perspective shadow (cast in shape space)
+   msoshadowDrawing,   // Perspective shadow cast in drawing space
+   msoshadowEmbossOrEngrave,
+   } MSOSHADOWTYPE;
+
+// MSODZTYPE - the type of a (length) measurement
+typedef enum
+   {
+   msodztypeMin          = 0,
+   msodztypeDefault      = 0,  // Default size, ignore the values
+   msodztypeA            = 1,  // Values are in EMUs
+   msodztypeV            = 2,  // Values are in pixels
+   msodztypeShape        = 3,  // Values are 16.16 fractions of shape size
+   msodztypeFixedAspect  = 4,  // Aspect ratio is fixed
+   msodztypeAFixed       = 5,  // EMUs, fixed aspect ratio
+   msodztypeVFixed       = 6,  // Pixels, fixed aspect ratio
+   msodztypeShapeFixed   = 7,  // Proportion of shape, fixed aspect ratio
+   msodztypeFixedAspectEnlarge
+                         = 8,  // Aspect ratio is fixed, favor larger size
+   msodztypeAFixedBig    = 9,  // EMUs, fixed aspect ratio
+   msodztypeVFixedBig    = 10, // Pixels, fixed aspect ratio
+   msodztypeShapeFixedBig= 11, // Proportion of shape, fixed aspect ratio
+   msodztypeMax         = 11
+   } MSODZTYPE;
+
+// MSOFILLTYPE
+typedef enum
+   {
+   msofillSolid,             // Fill with a solid color
+   msofillPattern,           // Fill with a pattern (bitmap)
+   msofillTexture,           // A texture (pattern with its own color map)
+   msofillPicture,           // Center a picture in the shape
+   msofillShade,             // Shade from start to end points
+   msofillShadeCenter,       // Shade from bounding rectangle to end point
+   msofillShadeShape,        // Shade from shape outline to end point
+   msofillShadeScale,        // Similar to msofillShade, but the fillAngle
+                             // is additionally scaled by the aspect ratio of
+                             // the shape. If shape is square, it is the
+                             // same as msofillShade.
+   msofillShadeTitle,        // special type - shade to title ---  for PP 
+   msofillBackground         // Use the background fill color/pattern
+   } MSOFILLTYPE;
+
+// MSOSHADETYPE – how to interpret the colors in a shaded fill.
+typedef enum
+   {
+   msoshadeNone  = 0,        // Interpolate without correction between RGBs
+   msoshadeGamma = 1,        // Apply gamma correction to colors
+   msoshadeSigma = 2,        // Apply a sigma transfer function to position
+   msoshadeBand  = 4,        // Add a flat band at the start of the shade
+   msoshadeOneColor = 8,     // This is a one color shade
+
+   /* A parameter for the band or sigma function can be stored in the top
+      16 bits of the value - this is a proportion of *each* band of the
+      shade to make flat (or the approximate equal value for a sigma
+      function).  NOTE: the parameter is not used for the sigma function,
+      instead a built in value is used.  This value should not be changed
+      from the default! */
+   msoshadeParameterShift = 16,
+   msoshadeParameterMask  = 0xffff0000,
+
+   msoshadeDefault = (msoshadeGamma|msoshadeSigma|
+                     (16384&lt;&lt;msoshadeParameterShift))
+   } MSOSHADETYPE;
+
+//   MSOLINESTYLE - compound line style
+typedef enum
+   {
+   msolineSimple,            // Single line (of width lineWidth)
+   msolineDouble,            // Double lines of equal width
+   msolineThickThin,         // Double lines, one thick, one thin
+   msolineThinThick,         // Double lines, reverse order
+   msolineTriple             // Three lines, thin, thick, thin
+   } MSOLINESTYLE;
+
+// MSOLINETYPE - how to "fill" the line contour
+typedef enum
+   {
+   msolineSolidType,         // Fill with a solid color
+   msolinePattern,           // Fill with a pattern (bitmap)
+   msolineTexture,           // A texture (pattern with its own color map)
+   msolinePicture            // Center a picture in the shape
+   } MSOLINETYPE;
+
+// MSOLINEDASHING - dashed line style
+typedef enum
+   {
+   msolineSolid,              // Solid (continuous) pen
+   msolineDashSys,            // PS_DASH system   dash style
+   msolineDotSys,             // PS_DOT system   dash style
+   msolineDashDotSys,         // PS_DASHDOT system dash style
+   msolineDashDotDotSys,      // PS_DASHDOTDOT system dash style
+   msolineDotGEL,             // square dot style
+   msolineDashGEL,            // dash style
+   msolineLongDashGEL,        // long dash style
+   msolineDashDotGEL,         // dash short dash
+   msolineLongDashDotGEL,     // long dash short dash
+   msolineLongDashDotDotGEL   // long dash short dash short dash
+   } MSOLINEDASHING;
+
+// MSOLINEEND - line end effect
+typedef enum
+   {
+   msolineNoEnd,
+   msolineArrowEnd,
+   msolineArrowStealthEnd,
+   msolineArrowDiamondEnd,
+   msolineArrowOvalEnd,
+   msolineArrowOpenEnd,
+   } MSOLINEEND;
+
+// MSOLINEENDWIDTH - size of arrowhead
+typedef enum
+   {
+   msolineNarrowArrow,
+   msolineMediumWidthArrow,
+   msolineWideArrow
+   } MSOLINEENDWIDTH;
+
+//   MSOLINEENDLENGTH - size of arrowhead
+typedef enum
+   {
+   msolineShortArrow,
+   msolineMediumLenArrow,
+   msolineLongArrow
+   } MSOLINEENDLENGTH;
+
+//   MSOLINEJOIN - line join style.
+typedef enum
+   {
+   msolineJoinBevel,     // Join edges by a straight line
+   msolineJoinMiter,     // Extend edges until they join
+   msolineJoinRound      // Draw an arc between the two edges
+   } MSOLINEJOIN;
+
+//   MSOLINECAP - line cap style (applies to ends of dash segments too).
+typedef enum
+   {
+   msolineEndCapRound,   // Rounded ends - the default
+   msolineEndCapSquare,  // Square protrudes by half line width
+   msolineEndCapFlat     // Line ends at end point
+   } MSOLINECAP;
+</code></pre></FONT></ >
+
+</body>
+</html>

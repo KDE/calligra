@@ -1,0 +1,14 @@
+These are a few guidelines for people planning to contribute to the library.
+It's not meant as a "don't do that or your code won't go in" document, but more
+as a good hint what we're aiming at.
+
+The most important issue is that we want to make the filter as portable as
+possible. This means that you shouldn't e.g. use gcc specific extensions.
+Another important issue is that we don't want to rely on "packed" for our
+basic structures. Therefore you never know about the layout in memory and you
+also shouldn't use sizeof() on that generated structures. Another consequence
+of this is that you shouldn't cast a plain memory area to such a generated
+structure, but rather use the Foo(const U8 *ptr) constructur of it.
+
+For more information about the structures and how to enable certain features
+please check the script's documentation (src/generator/generate.pl)

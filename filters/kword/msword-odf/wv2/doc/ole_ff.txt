@@ -1,0 +1,1379 @@
+
+Appendices
+DIG2000 file format proposal
+October 30, 1998
+
+
+
+
+
+
+A: Structured 
+     Storage
+
+     Intellectual property note: The Structured Storage binary format is the property of 
+     Microsoft. The DIG believes that there are not licensing or royalty barriers to third par-
+     ties creating independent implementations of a Structured Storage reader and writer. 
+     However, the formal documentation of the IP status of the standard is not yet in 
+     place. The DIG is working diligently to get this issue resolved.
+
+     Note: This document is meant to accompany the Microsoft OLE Structured Storage Ref-
+     erence Implementation, hereafter referred to as the `Software.' If this document and 
+     functionality of the Software conflict, the actual functionality of the Software repre-
+     sents the correct functionality. Microsoft assumes no responsibility for any damages 
+     that might occur either directly or indirectly from these discrepancies or inaccuracies. 
+     Microsoft may have trademarks, copyrights, patents or pending patent applications, 
+     or other intellectual property rights covering subject matter in this document and in 
+     the Software. The furnishing of this document does not give you a license to these 
+     trademarks, copyrights, patents, or other intellectual property rights and any license 
+     rights granted are limited to those set forth in the End User License Agreement accom-
+     panying this document.
+
+
+ A.1 Compound file binary format
+
+A.1.1 Overview
+     A Compound File is made up of a number of virtual streams. These are collec-
+     tions of data that behave as a linear stream, although their on-disk format may be 
+     fragmented. Virtual streams can be user data, or they can be control structures 
+     used to maintain the file. Note that the file itself can also be considered a virtual 
+     stream.
+
+     All allocations of space within a Compound File are done in units called sectors. 
+     The size of a sector is definable at creation time of a Compound File, but for the 
+     purposes of this document will be 512 bytes. A virtual stream is made up of a 
+     sequence of sectors.
+
+     The Compound File uses several different types of sector: Fat, Directory, Minifat, 
+     DIF, and Storage. A separate type of `sector' is a Header, the primary difference 
+     being that a Header is always 512 bytes long (regardless of the sector size of the 
+     rest of the file) and is always located at offset zero (0). With the exception of the 
+     header, sectors of any type can be placed anywhere within the file. The function of 
+     the various sector types is discussed below.
+
+
+
+
+
+             In the discussion below, the term SECT is used to describe the location of a sector 
+             within a virtual stream (in most cases this virtual stream is the file itself). Inter-
+             nally, a SECT is represented as a ULONG.
+
+      A.1.2 Sector types
+             typedef unsigned long ULONG;                     // 4 bytes
+             typedef unsigned short USHORT;                   // 2 bytes
+             typedef short OFFSET;                            // 2 bytes
+             typedef ULONG SECT;                              // 4 bytes
+             typedef ULONG FSINDEX;                           // 4 bytes
+             typedef USHORT FSOFFSET;                         // 2 bytes
+             typedef ULONG DFSIGNATURE;                       // 4 bytes
+             typedef unsigned char BYTE;                      // 1 byte
+             typedef unsigned short WORD;                     // 2 bytes
+             typedef unsigned long DWORD;                     // 4 bytes
+             typedef WORD DFPROPTYPE;                         // 2 bytes
+             typedef ULONG SID;                               // 4 bytes
+             typedef CLSID GUID;                              // 16 bytes
+
+             typedef struct tagFILETIME {                     // 8 bytes
+                    DWORD         dwLowDateTime;
+                    DWORD         dwHighDateTime;
+             } FILETIME, TIME_T;
+
+             const SECT DIFSECT          = 0xFFFFFFFC;        // 4 bytes
+             const SECT FATSECT          = 0xFFFFFFFD;        // 4 bytes
+             const SECT ENDOFCHAIN = 0xFFFFFFFE;              // 4 bytes
+             const SECT FREESECT         = 0xFFFFFFFF;        // 4 bytes
+
+      A.1.2.1 Header
+             struct StructuredStorageHeader{           // [offset from start in bytes, length
+                                                       // in bytes]
+
+                    BYTE          _abSig[8];           // [000H,08] {0xd0, 0xcf, 0x11, 0xe0,
+                                                       // 0xa1, 0xb1, 0x1a, 0xe1} for current
+                                                       // version, was {0x0e, 0x11, 0xfc, 
+                                                       // 0x0d, 0xd0, 0xcf, 0x11, 0xe0} on
+                                                       // old, beta 2 files (late '92) which
+                                                       // are also supported by the reference
+                                                       // implementation
+
+                    CLSID         _clid;               // [008H,16] class id (set with
+                                                       // WriteClassStg, retrieved with
+                                                       // GetClassFile/ReadClassStg)
+
+                    USHORT        _uMinorVersion; // [018H,02] minor version of the
+                                                       // format: 33 is written by reference
+                                                       // implementation
+
+                    USHORT        _uDllVersion;        // [01AH,02] major version of the dll/
+                                                       // format: 3 is written by reference
+                                                       // implementation
+
+                    USHORT        _uByteOrder;         // [01CH,02] 0xFFFE: indicates Intel
+                                                       // byte-ordering
+
+
+
+
+66                                                                                       October 30, 1998
+
+
+
+        DIG2000 file format proposal
+
+
+
+
+
+               USHORT          _uSectorShift;    // [01EH,02] size of sectors in power-
+                                                 // of-two (typically 9, indicating 512-
+                                                 // byte sectors)
+
+               USHORT          _uMiniSectorShift;
+                                                 // [020H,02] size of mini-sectors 
+                                                 // in power-of-two (typically 6, 
+                                                 // indicating 64-byte mini-sectors)
+
+               USHORT          _usReserved;      // [022H,02] reserved, must be zero
+
+               ULONG           _ulReserved1;     // [024H,04] reserved, must be zero
+
+               ULONG           _ulReserved2;     // [028H,04] reserved, must be zero
+
+               FSINDEX         _csectFat;        // [02CH,04] number of SECTs in the FAT
+                                                 // chain
+
+               SECT            _sectDirStart;    // [030H,04] first SECT in the FAT 
+                                                 // Directory chain
+
+               DFSIGNATURE_signature;            // [034H,04] signature used for
+                                                 // transactioning must be zero. The
+                                                 // reference implementation does not
+                                                 // support transactioning
+
+               ULONG           _ulMiniSectorCutoff;
+                                                 // [038H,04] maximum size for
+                                                 // mini-streams: typically 4096 bytes
+
+               SECT            _sectMiniFatStart;
+                                                 // [03CH,04] first SECT in the 
+                                                 // mini-FAT chain
+
+               FSINDEX         _csectMiniFat;    // [040H,04] number of SECTs in the 
+                                                 // mini-FAT chain
+
+               SECT            _sectDifStart;    // [044H,04] first SECT in the DIF
+                                                 // chain
+
+               FSINDEX         _csectDif;        // [048H,04] number of SECTs in the DIF
+                                                 // chain
+
+               SECT            _sectFat[109];    // [04CH,436] the SECTs of the first 
+                                                 // 109 FAT sectors
+        };
+
+        The Header contains vital information for the instantiation of a Compound File. Its 
+        total length is 512 bytes. There is exactly one Header in any Compound File, and it 
+        is always located beginning at offset zero in the file.
+
+A.1.2.2 Fat sectors
+        The Fat is the main allocator for space within a Compound File. Every sector in the 
+        file is represented within the Fat in some fashion, including those sectors that are 
+        unallocated (free). The Fat is a virtual stream made up of one or more Fat Sectors.
+
+        Fat sectors are arrays of SECT's that represent the allocation of space within the 
+        file. Each stream is represented in the Fat by a chain, in much the same fashion as 
+
+
+
+
+
+                 a DOS file allocation table (FAT). To elaborate, the set of Fat Sectors can be consid-
+                 ered together to be a single array-each cell in that array contains the SECT of the 
+                 next sector in the chain, and this SECT can be used as an index into the Fat array 
+                 to continue along the chain. Special values are reserved for chain terminators 
+                 (ENDOFCHAIN = 0xFFFFFFFE), free sectors (FREETEXT = 0xFFFFFFFF), and 
+                 sectors that contain storage for Fat Sectors (FATSECT = 0xFFFFFFFD) or DIF Sec-
+                 tors (DIFSECT = 0xFFFFFFFC), which are not chained in the same way as the 
+                 others.
+
+
+      FIGURE A.1 Example of chained sectors
+
+                                                                           Pointer in from
+                                                                           directory
+
+                            3         5        E           1
+
+
+                 The locations of Fat Sectors are read from the DIF (Double indirect Fat), which is 
+                 described below. The Fat is represented in itself, but not by a chain-a special 
+                 reserved SECT value (FATSECT = 0xFFFFFFFD) is used to mark sectors allo-
+                 cated to the Fat.
+
+                 A SECT can be converted into a byte offset into the file by using the following for-
+                 mula: SECT << ssheader._uSectorShift + sizeof(ssheader). This 
+                 implies that sector 0 of the file begins at byte offset 512, not at 0.
+
+        A.1.2.3 MiniFat sectors
+                 Since space for streams is always allocated in sector sized blocks, there can be con-
+                 siderable waste when storing objects much smaller than sectors (typically 512 
+                 bytes). As a solution to this problem, we introduced the concept of the MiniFat. 
+                 The MiniFat is structurally equivalent to the Fat, but is used in a different way. The 
+                 virtual sector size for objects represented in the Minifat is 
+                 1 << ssheader._uMiniSectorShift (typically 64 bytes) instead of 
+                 1 << ssheader._uSectorShift (typically 512 bytes). The storage for these 
+                 objects comes from a virtual stream within the Multistream (called the 
+                 Ministream).
+
+                 The locations for MiniFat sectors are stored in a standard chain in the Fat, with the 
+                 beginning of the chain stored in the header.
+
+                 A Minifat sector number can be converted into a byte offset into the ministream by 
+                 using the following formula: SECT << ssheader._uMiniSectorShift. (This 
+                 formula is different from the formula used to convert a SECT into a byte offset in 
+                 the file, since no header is stored in the Ministream)
+
+                 The Ministream is chained within the Fat in exactly the same fashion as any nor-
+                 mal stream. It is referenced by the first Directory Entry (SID 0).
+
+
+
+
+68                                                                                            October 30, 1998
+
+
+
+           DIG2000 file format proposal
+
+
+
+
+
+  A.1.2.4 DIF sectors
+
+FIGURE A.2 DIF sector
+            Pointers to FAT sectors
+
+
+
+
+
+                                                Pointer to next DIF sector
+
+
+
+           The Double Indirect Fat is used to represent storage of the Fat. The DIF is also rep-
+           resented by an array of SECT's, and is chained by the terminating cell in each 
+           sector array (see the diagram above). As an optimization, the first 109 Fat Sectors 
+           are represented within the header itself, so no DIF sectors will be found in a small 
+           (< 7 MB) Compound File.
+
+           The DIF represents the Fat in a different manner than the Fat represents a chain. A 
+           given index into the DIF will contain the SECT of the Fat Sector found at that off-
+           set in the Fat virtual stream. For instance, index 3 in the DIF would contain the 
+           SECT for Sector #3 of the Fat.
+
+           The storage for DIF Sectors is reserved in the Fat, but is not chained there (space for 
+           it is reserved by a special SECT value, DIFSECT=0xFFFFFFFC). The location of 
+           the first DIF sector is stored in the header.
+
+           A value of ENDOFCHAIN=0xFFFFFFFE is stored in the pointer to the next DIF sec-
+           tor of the last DIF sector.
+
+  A.1.2.5 Directory sectors
+           typedef enum tagSTGTY {
+                  STGTY_INVALID= 0,
+                  STGTY_STORAGE= 1,
+                  STGTY_STREAM= 2,
+                  STGTY_LOCKBYTES= 3,
+                  STGTY_PROPERTY= 4,
+                  STGTY_ROOT= 5,
+           } STGTY;
+
+           typedef enum tagDECOLOR {
+                  DE_RED= 0,
+                  DE_BLACK= 1,
+           } DECOLOR;
+
+
+
+
+
+
+
+
+      struct StructuredStorageDirectoryEntry {// [offset from start in bytes,
+                                                   // length in bytes]
+
+            BYTE _ab[32*sizeof(WCHAR)];            // [000H,64] 64 bytes. The 
+                                                   // Element name in Unicode,
+                                                   // padded with zeros to fill
+                                                   // this byte array
+
+            WORD _cb;                              // [040H,02] Length of the
+                                                   // Element name in bytes,
+                                                   // including two bytes for the
+                                                   // terminating NULL
+
+            BYTE _mse;                             // [042H,01] Type of object:
+                                                   // value taken from the STGTY
+                                                   // enumeration
+
+            BYTE _bflags;                          // [043H,01] Value taken from
+                                                   // DECOLOR enumeration.
+
+            SID    _sidLeftSib;                    // [044H,04] SID of the left 
+                                                   // sibling of this entry in the
+                                                   // directory tree
+
+            SID    _sidRightSib;                   // [048H,04] SID of the right 
+                                                   // sibling of this entry in the
+                                                   // directory tree
+
+            SID    _sidChild;                      // [04CH,04] SID of the first
+                                                   // child acting as the root of
+                                                   // all the children of this
+                                                   // element(if_mse=STGTY_STORAGE)
+
+            GUID _clsId;                           // [050H,16]CLSID of this storage
+                                                   // (if_mse=STGTY_STORAGE)
+
+            DWORD _dwUserFlags;                    // [060H,04] User flags of this
+                                                   // storage (if_mse=STGTY_STORAGE)
+
+            TIME _T_time[2];                       // [064H,16] Create/Modify
+                                                   // timestamps 
+                                                   // (if_mse=STGTY_STORAGE)
+
+            SECT _sectStart;                       // [074H,04] starting SECT of
+                                                   // the stream
+                                                   // (if_mse=STGTY_STREAM)
+
+            ULONG _ulSize;                         // [078H,04] size of stream in 
+                                                   // bytes (if_mse=STGTY_STREAM)
+
+            DFPROPTYPE _dptPropType;               // [07CH,02] Reserved for future
+                                                   // use. Must be zero.
+      };
+
+      The Directory is a structure used to contain per stream information about the 
+      streams in a Compound File, as well as to maintain a tree styled containment struc-
+      ture. It is a virtual stream made up of one or more Directory Sectors. The Directory 
+
+
+
+70                                                                           October 30, 1998
+
+
+
+          DIG2000 file format proposal
+
+
+
+
+
+          is represented as a standard chain of sectors within the Fat. The first sector of the 
+          Directory chain (the Root Directory Entry) 
+
+          Each level of the containment hierarchy (i.e. each set of siblings) is represented as a 
+          red/black tree. The parent of this set of siblings will have a pointer to the top of this 
+          tree. This red/black tree must maintain the following conditions in order for it to be 
+          valid:
+          1. The root node must always be black. Since the root directory (see below) does 
+               not have siblings, it's color is irrelevant and may therefore be either red or 
+               black.
+          2. No two consecutive nodes may both be red.
+          3. The left child must always be less than the right child. This relationship is 
+               defined as:
+               x A node with a shorter name is less than a node with a longer name (i.e. 
+                    compare the length of the name)
+               x For nodes with the same length names, compare the two names.
+
+          The simplest implementation of the above invariants would be to mark every node 
+          as black, in which case the tree is simply a binary tree.
+
+          A Directory Sector is an array of Directory Entries, a structure represented in the 
+          diagram below. Each user stream within a Compound File is represented by a sin-
+          gle Directory Entry. The Directory is considered as a large array of Directory Entries. 
+          It is useful to note that the Directory Entry for a stream remains at the same index 
+          in the Directory array for the life of the stream-thus, this index (called an SID) can 
+          be used to readily identify a given stream.
+
+          The directory entry is then padded out with zeros to make a total size of 128 bytes.
+
+          Directory entries are grouped into blocks of four to form Directory Sectors.
+
+A.1.2.5.1 Root Directory Entry
+          The first sector of the Directory chain (also referred to as the first element of the 
+          Directory array, or SID 0) is known as the Root Directory Entry and is reserved for 
+          two purposes: First, it provides a root parent for all objects stationed at the root of 
+          the multistream. Second, its function is overloaded to store the size and starting 
+          sector for the Ministream.
+
+          The Root Directory Entry behaves as both a stream and a storage. All of the fields in 
+          the Directory Entry are valid for the root. The Root Directory Entry's Name field typ-
+          ically contains the string "RootEntry" in Unicode, although some versions of 
+          structured storage (particularly the preliminary reference implementation and the 
+          Macintosh version) store only the first letter of this string, "R" in the name. This 
+          string is always ignored, since the Root Directory Entry is known by its position at 
+          SID 0 rather than by its name, and its name is not otherwise used. New imple-
+          mentations should write "RootEntry" properly in the Root Directory Entry for 
+          consistency and support manipulating files created with only the "R" name.
+
+
+
+
+
+
+
+      A.1.2.5.2 Other Directory Entries
+                Non-root directory entries are marked as either stream (STGTY_STREAM) or stor-
+                age (STGTY_STORAGE) elements. Storage elements have a _clsid, _time[], 
+                and _sidChild values; stream elements may not. Stream elements have valid 
+                _sectStart and _ulSize members, whereas these fields are set to zero for 
+                storage elements (except as noted above for the Root Directory Entry).
+
+                To determine the physical file location of actual stream data from a stream direc-
+                tory entry, it is necessary to determine which Fat (normal or mini) the stream exists 
+                within. Streams whose _ulSize member is less than the 
+                _ulMiniSectorCutoff value for the file exist in the ministream, and so the 
+                _startSect is used as an index into the MiniFat (which starts at 
+                _sectMiniFatStart) to track the chain of minisectors through the ministream 
+                (which is, as noted earlier, the standard (non-mini) stream referred to by the Root 
+                Directory Entry's _sectStart value). Streams whose _ulSize member is 
+                greater than the _ulMiniSectorCutoff value for the file exist as standard 
+                streams-their _sectStart value is used as an index into the standard Fat which 
+                describes the chain of full sectors containing their data).
+
+       A.1.2.6 Storage sectors
+                Storage sectors are simply collections of arbitrary bytes. They are the building 
+                blocks of user streams, and no restrictions are imposed on their contents. Storage 
+                sectors are represented as chains in the Fat, and each storage chain (stream) will 
+                have a single Directory Entry associated with it.
+
+       A.1.3 Examples
+                This section contains a hexadecimal dump of an example structured storage file to 
+                clarify the binary file format.
+
+       A.1.3.1 Sector 0: Header
+                _abSig                     = DOCF 11E0 A1B1 1AE1
+                _clid                      = 0000 0000 0000 0000 0000 0000 0000 0000
+                _uMinorVersion             = 003B
+                _uDllVersion               = 3
+                _uByteOrder                = FFFE (Intel byte order)
+                _uSectorShift              = 9 (512 bytes)
+                _uMiniSectorShift          = 6 (64 bytes)
+                _usReserved                = 0000
+                _ulReserved1               = 00000000
+                _ulReserved2               = 00000000
+                _csectFat                  = 00000001
+                _sectDirStart              = 00000001
+                _signature                 = 00000000
+                _ulMiniSectorCutoff        = 00001000 (4096 bytes)
+                _sectMiniFatStart          = 00000002
+                _csectMiniFat              = 00000001
+                _sectDifStart              = FFFFFFFE (no DIF, file is < 7Mb)
+                _csectDIF                  = 00000000
+                _sectFat[]                 = 00000000 FFFFFFFF... (continues with FFFFFFFF)
+
+
+
+
+
+72                                                                                        October 30, 1998
+
+
+
+          DIG2000 file format proposal
+
+
+
+
+
+          000000:  D0CF 11E0 A1B1 1AE1  0000 0000 0000 0000   ................
+          000010:  0000 0000 0000 0000  3B00 0300 FEFF 0900   ................
+          000020:  0600 0000 0000 0000  0000 0000 0100 0000   ................
+          000030:  0100 0000 0000 0000  0010 0000 0200 0000   ................
+          000040:  0100 0000 FEFF FFFF  0000 0000 0000 0000   ................
+          000050:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+          ...
+          0001F0:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+
+ A.1.3.2 SECT 0: First (only) FAT sector 
+          SECT 0:        FFFFFFFD = FATSECT: marks this sector as a FAT sector.
+                         Referred to in header by _sectFat[0]
+          SECT 1:        FFFFFFFE = ENDOFCHAIN: marks the end of the directory chain,
+                         referred to in header by _sectDirStart
+          SECT 2:        FFFFFFFE = ENDOFCHAIN: marks the end of the mini-fat,
+                         referred to in header by _sectMiniFatStart
+          SECT 3:        00000004 = pointer to the next sector in the "Stream 1" data. 
+                         This sector is the first sector of "Stream 1", it is referred
+                         to by the Directory Entry 
+          SECT 4:        ENDOFCHAIN (0xFFFFFFFE): marks the end of the "Stream 1" 
+                         stream data. Further Entries are empty (FREESECT =0xFFFFFFFF)
+
+          000200:  FDFF FFFF FEFF FFFF  FEFF FFFF 0400 0000   ................
+          000210:  FEFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+          ...
+          0003F0:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+
+ A.1.3.3 SECT 1: First (only) Directory sector
+          SID 0: Root SID: Root Name = "R"
+          SID 1: Element 1 SID: Name = "Storage 1"
+          SID 2: Element 2 SID: Name = "Stream 1"
+          SID 3: Unused
+
+A.1.3.3.1 SID 0: Root Directory Entry
+          _ab                    = "R" (this should be "Root Entry")
+          _cb                    = 0004 (4 bytes, does not include double-null
+                                   terminator)
+          _mse                   = 05 (STGTY_ROOT)
+          _bflags                = 00 (DE_RED)
+          _sidLeftSib            = FFFFFFFF (none)
+          _sidRightSib           = FFFFFFFF (none)
+          _sidChild              = 00000001 (SID 1: "Storage 1")
+          _clsid                 = 0067 6156 54C1 CE11 8553 00AA 00A1 F95B
+          _dwUserFlags           = 00000000 (n/a for STGTY_ROOT)
+          _time[0]               = CreateTime = 0000 0000 0000 0000 (none set)
+          _time[1]               = ModifyTime = 801E 9213 4BB4 BA01 (?)
+          _sectStart             = 00000003 (starting sector of MiniStream)
+          _ulSize                = 00000240 (length of MiniStream in bytes)
+          _dptPropTyp e          = 0000 (n/a)
+
+          000400:  0052 0000 0000 0000  0000 0000 0000 0000   .R..............
+          000410:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+          000420:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+          000430:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+          000440:  0400 0500 FFFF FFFF  FFFF FFFF 0100 0000   ................
+          000450:  0067 6156 54C1 CE11  8553 00AA 00A1 F95B   .gaVT....S.....[
+          000460:  0000 0000 0000 0000  0000 0000 801E 9213   ................
+          000470:  4BB4 BA01 0300 0000  4002 0000 0000 0000   K.......@.......
+
+
+
+
+
+      A.1.3.3.2 SID 1: "Storage 1"
+                _ab              = ("Storage 1")
+                _cb              = 0014 (20 bytes, including double-null terminator)
+                _mse             = 01 (STGTY_STORAGE)
+                _bflags          = 01 (DE_BLACK)
+                _sidLeftSib      = FFFFFFFF (none)
+                _sidRightSib     = FFFFFFFF (none)
+                _sidChild        = 00000002 (SID 2: "Stream 1")
+                _clsid           = 0000 0000 0000 0000 0000 0000 0000 0000 (none set)
+                _dwUserFlags     = 00000000 (none set)
+                _time[0]         = CreateTime = 00000000 00000000 (none set)
+                _time[1]         = ModifyTime = 00000000 00000000 (none set)
+                _sectStart       = 00000000 (n/a)
+                _ulSize          = 00000000 (n/a)
+                _dptPropType     = 0000 (n/a)
+
+                000480:  5300 7400 6F00 7200  6100 6700 6500 2000   S.t.o.r.a.g.e. .
+                000490:  3100 0000 0000 0000  0000 0000 0000 0000   1...............
+                0004A0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                0004B0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                0004C0:  1400 0101 FFFF FFFF  FFFF FFFF 0200 0000   ................
+                0004D0:  0061 6156 54C1 CE11  8553 00AA 00A1 F95B   .aaVT....S.....[
+                0004E0:  0000 0000 0088 F912  4BB4 BA01 801E 9213   ........K.......
+                0004F0:  4BB4 BA01 0000 0000  0000 0000 0000 0000   K...............
+
+      A.1.3.3.3 SID 2: "Stream 1"
+                _ab              = ("Stream 1")
+                _cb              = 0012 (18 bytes, including double-null terminator)
+                _mse             = 02 (STGTY_STREAM)
+                _bflags          = 01 (DE_BLACK)
+                _sidLeftSib      = FFFFFFFF (none)
+                _sidRightSib     = FFFFFFFF (none)
+                _sidChild        = FFFFFFFF (n/a for STGTY_STREAM)
+                _clsid           = 0000 0000 0000 0000 0000 0000 0000 0000 (n/a)
+                _dwUserFlags     = 00000000 (n/a)
+                _time[0]         = CreateTime = 00000000 00000000 (n/a)
+                _time[1]         = ModifyTime = 00000000 00000000 (n/a)
+                _startSect       = 00000000 (SECT in mini-fat, since _ulSize is smaller
+                                   than _ulMiniSectorCutoff)
+                _ulSize          = 00000220 (< ssheader._ulMiniSectorCutoff, so
+                                   _sectStart is in Mini)
+                _dptPropType     = 0000 (n/a)
+
+                000500:  5300 7400 7200 6500  6100 6D00 2000 3100   S.t.r.e.a.m. .1.
+                000510:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                000520:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                000530:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                000540:  1200 0201 FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+                000550:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                000560:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+                000570:  0000 0000 0000 0000  2002 0000 0000 0000   ........ .......
+                000580:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+
+
+
+
+
+74                                                                              October 30, 1998
+
+
+
+         DIG2000 file format proposal
+
+
+
+
+
+A.1.3.3.4 SID 3: Unused
+         000590:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+         0005A0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+         0005B0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+         0005C0:  0000 0000 FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+         0005D0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+         0005E0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+         0005F0:  0000 0000 0000 0000  0000 0000 0000 0000   ................
+
+ A.1.3.4 SECT 3: MiniFat sector
+         SECT 0:        00000001: pointer to the second sector in the "Stream 1"
+                        data. This sector is the first sector of "Stream 1", it is
+                        referred to by _sectStart of SID 2
+         SECT 1:        00000002: pointer to the third sector in the "Stream 1" data.
+                        This sector is the second sector of "Stream 1", it is
+                        referred to in MiniFat SECT 0, above.
+         ...
+         SECT 8:        FFFFFFFE = ENDOFCHAIN: marks the end of the "Stream 1" data.
+
+         Further Entries are empty (FREESECT = 0xFFFFFFFF)
+
+         000600:  0100 0000 0200 0000  0300 0000 0400 0000   ................
+         000610:  0500 0000 0600 0000  0700 0000 0800 0000   ................
+         000620:  FEFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+         ...
+         0007F0:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+
+ A.1.3.5 SECT 4: MiniStream (data of "Stream 1")
+         // referred to by SECTs in MiniFat of SECT 3, above
+
+         000800:  4461 7461 2066 6F72  2073 7472 6561 6D20   Data for stream 
+         000810:  3144 6174 6120 666F  7220 7374 7265 616D   1Data for stream
+         000820:  2031 4461 7461 2066  6F72 2073 7472 6561    1Data for strea
+         ...
+         000A00:  7461 2066 6F72 2073  7472 6561 6D20 3144   ta for stream 1D
+         000A10:  6174 6120 666F 7220  7374 7265 616D 2031   ata for stream 1
+
+         // data ends at 000A1F, MiniSector is filled to the end with known data 
+         // (a copy of the header or FFFFFFF to prevent random disk or memory 
+         // contents from contaminating the file on-disk.
+
+         000A20:  0000 0000 0000 0000  3B00 03FF FE00 0900   ........;.......
+         000A30:  0600 0000 0000 0000  0000 0000 0000 0100   ................
+         000A40:  D0CF 11E0 A1B1 1AE1  0000 0000 0000 0000   ................
+         000A50:  0000 0000 0000 0000  003B 0003 FFFE 0009   .........;......
+         000A60:  0006 0000 0000 0000  0000 0000 0000 0001   ................
+         000A70:  0000 0001 0000 0000  0000 1000 0000 0002   ................
+         000A80:  0000 0001 FFFF FFFE  0000 0000 0000 0000   ................
+         000A90:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+         ...
+         000BF0:  FFFF FFFF FFFF FFFF  FFFF FFFF FFFF FFFF   ................
+
+
+
+
+
+
+
+
+       A.2 OLE Property Set binary format
+
+      A.2.1 Document properties in storage
+            In an IStorage, a serialized property set is stored in either a single stream or in a 
+            nested IStorage instance. In the latter case, the contained stream named "Con-
+            tents" is the primary stream containing property values. The format of the primary 
+            stream, the same in either case, is described in the next section below. None of the 
+            property types VT_STREAM, VT_STORAGE, VT_STREAMED_OBJECT, or 
+            VT_STORED_OBJECT may be used in a stream based property set; these types 
+            may only be used in storage based sets. It is the person who invents/defines a new 
+            property set who gets to choose whether the set is always stream based, is always 
+            storage based, or at times can be either.
+
+            Names in an IStorage that begin with the value `\0x05' are reserved exclu-
+            sively for the storage of property sets. Streams or storages that begin with `\0x05' 
+            must therefore be in the format described below; storages so named must contain 
+                                                          1
+            a "Contents" stream in the format.  One of the things that a person who invents 
+            a new standard property set does is specify the standard string name under which 
+            instances of that type are stored. For example, the summary information property 
+            set defined by OLE2 is always found under the name 
+            "\005SummaryInformation". OLE2 provided no conventions for choosing this 
+            name; however, a convention for choosing such names is now strongly recom-
+            mended below.
+
+
+
+
+
+            1. Properties may of course be stored in streams or storages that do not begin with `\0x05,' but 
+              such properties are completely private to the application manipulating the storage; there is little 
+              reason to do this.
+
+
+76                                                                                                   October 30, 1998
+
+
+
+            DIG2000 file format proposal
+
+
+
+
+
+FIGURE A.3 Steam containing a serialized property set
+             Primary stream of a serialized property set
+                Property Set Header
+                Byte Order Indicator     Format Version       Originating OS Version Class Identifier Reserved
+                (WORD)                   (WORD)               (DWORD)                     (CLSID)          (DWORD)
+
+                FMTID/Offset pair
+                FMTID (16 bytes)                                           Offset* (DWORD)
+
+                Section
+                   Section Header
+                   Size of section (DWORD)                                 Count of properties, m (DWORD)
+
+                   Property ID/Offset pairs
+                   Property ID for property 1 (DWORD)                      Offset** (DWORD)
+                   Property ID for property 2 (DWORD)                      Offset** (DWORD)
+                                                              m entries
+                   Property ID for property m (DWORD)                      Offset** (DWORD)
+
+                   Properties (Type/Value pairs)
+                   Type indicator 1 (DWORD)                                Property value 1 (variable length)
+                   Type indicator 2 (DWORD)                                Property value 2 (variable length)
+                                                              m entries
+                   Type indicator m (DWORD)                                Property value m (variable length)
+
+
+            *Offset in bytes from the start of the stream to the start of the section
+            **Offset in bytes from the start of the section to the start of the type/value pair
+
+
+   A.2.2 Format of the primary property set stream
+            The overall structure of a stream containing a serialized property set is as illus-
+            trated in Figure A.3. The format consists of a property set header, a sequence of size 
+            exactly one of format ID/offset pair, and a corresponding sequence of sections con-
+                                                         1
+            taining the actual property values.
+
+            Absolutely all the fields of a serialized property set specified here are always stored 
+                                                                    2
+            in storage in little endian (Intel) byte order.
+
+            The overall length of this property set stream is limited to 256k bytes.
+
+
+
+
+
+            1. The original OLE2 format allowed for more than one section, but use of that functionality is dis-
+              couraged and no longer supported.
+            2. Notwithstanding the fact that there is a byte-order tag of 0xFFFE at the start of the format. 
+              This tag was intended to allow for future extensibility that has been subsequently determined to 
+              be very unlikely to be done.
+
+
+
+
+
+      A.2.2.1 Property Set header
+              At the beginning of the property set stream is a header. The following structure 
+              illustrates the header:
+              typedef struct PROPERTYSETHEADER {
+                    WORD          wByteOrder;          // Always 0xFFFE
+                    WORD          wFormat;             // Should be 0
+                    DWORD         dwOSVer;             // System version
+                    CLSID         clsid;               // Application CLSID
+                    DWORD         reserved;            // Should be 1
+              } PROPERTYSETHEADER;
+
+              The definition of the members of this structure as follows:
+
+              wByteOrder. The byte-order indicator is a WORD and should always hold the 
+              value 0xFFFE. This is the same as the Unicode© byte-order indicator. When writ-
+              ten in little endian (Intel) byte order, as is always done, this appears in the stream 
+              as 0xFE, 0xFF.
+
+              wFormat. The format version is a WORD and indicates the format version of this 
+              stream. Property set writers should write zero for this value. Property set readers 
+              should check this value; if it is non-zero, then they should refuse to read the set, for 
+              it is in a format that they don't in fact understand.
+
+              dwOSVer. The OS version number is encoded as OS kind in the high order word (0 
+              for Windows on OS, 1 for Macintosh, 2 for Windows 32-bit, 3 for UNIX) and the OS 
+              supplied version number in the low order word. For Windows on DOS and Windows 
+              32-bit, the latter is the low order word of the result of GetVersion().
+
+              clsid. The class identifier is the CLSID of a class that can display and/or provide 
+              programmatic access to the property values. If there is no such class, it is recom-
+              mended that the format ID be used (see below), though a value of all zeros is also 
+              acceptable; the former simply allows for greater future extensibility.
+
+              reserved. Reserved for future use. A writer of a property set should write the 
+              value one here; a reader of a property set should only however check that the 
+              value is at least one.
+
+
+      A.2.2.2 Format ID/Offset pairs
+              This part of the serialized property set indicates two things: the FMTID that scopes 
+              the property values contained in the set, and the location within the stream at 
+              which those values are stored.
+              typedef struct FORMATIDOFFSET {
+                    FMTID         fmtid;         // semantic name of a section
+                    DWORD         dwOffset;      // offset from start of whole property set
+                                                 // stream to the section
+              } FORMATIDOFFSET;
+
+
+
+
+
+78                                                                                      October 30, 1998
+
+
+
+        DIG2000 file format proposal
+
+
+
+
+
+        The offset is the distance of bytes from the start of the whole stream to where the 
+        section begins. The format ID (FMTID) is the semantic name of its corresponding 
+        section, telling how to interpret the property values therein.
+
+A.2.2.3 Sections
+        Each section is made of up a property section header followed by an array that 
+        locates each property value within the section. It is specifically not the case that the 
+        properties in this array are sorted in any particular order Offsets within this array 
+        are the distance from the start of the section to the start of the property (type, 
+        value) pair. This allows entire sections to be copied as an array of bytes without any 
+        translation of internal structure.
+        typedef struct PROPERTYSECTIONHEADER {
+                   DWORD                cbSection;      // size of section in bytes,
+                                                        // which is inclusive of the byte
+                                                        // count itself
+                   DWORD                cProperties;    // count of properties in section
+                   PROPERTYIDOFFSET rgprop[];           // array of property locations
+        } PROPERTYSECTIONHEADER;
+
+        typedef struct PROPERTYIDOFFSET {
+                   DWORD                propid;         // name of a property
+                   DWORD                dwOffset;       // offset from the start of the
+                                                        // section to that property
+        } PROPERTYIDOFFSET;
+
+        Each property value contains a type tag followed by the bytes of the actual prop-
+        erty value (at last!). All type/value pairs begin on a 32-bit boundary. Thus values 
+        may be followed with null bytes to align the subsequent pair on a 32-bit boundary 
+        (note though that there is no guarantee that property values are in fact as tightly 
+        packed in a section as this restriction permits; that is, there may be additional gra-
+        tuitous padding).
+        typedef struct SERIALIZEDPROPERTYVALUE {
+                   DWORD       dwType;                  // type tag
+                   BYTE        rgb[];                   // the actual property value
+        } SERIALIZEDPROPERTYVALUE;
+
+        A consequence of these rules is that the smallest legal section, one containing zero 
+        properties, contains the following eight bytes: 08 00 00 00  00 00 00 00.
+
+A.2.3 Special property ids
+        A couple of property ID's have special significance in all property sets.
+
+A.2.3.1 Property ID zero: Dictionary of property names
+        To enable users of property sets to attach meaning to properties beyond those pro-
+        vided by the type indicator, property ID zero (0) is reserved in all property sets for 
+        an optional dictionary giving human readable names for the properties in the set 
+        and for the property set itself. The value will be an array of (property ID, string) 
+        pairs. 
+
+        The value of property ID zero is an array of property ID/string pairs. Entries in the 
+        array are the ID's and corresponding names of the properties; these are not in any 
+
+
+
+
+
+              particular order with respect to their property ID's. Not all of the names of the 
+              properties in the set need appear in the dictionary: the dictionary may omit entries 
+              for properties that are assumed to be universally known by clients that manipulate 
+              the property set. Typically names for the base property sets for widely accepted 
+              standards will be omitted.
+
+              Property names that begin with the binary Unicode characters 0x0001 through 
+              0x001F are reserved for future use.
+
+              The name indicated as corresponding to property ID zero is to be interpreted as the 
+              human readable name of the property set itself; like all property names, this may 
+              or may not be present.
+
+              The dictionary is stored as a list of property ID/string pairs; the code page for the 
+              strings involved is as indicated in property ID one. This can be illustrated using the 
+              following pseudo-structure definition for a dictionary entry (it's a pseudo-structure 
+              because the sz[] member is variable size).
+              typedef struct tagENTRY {
+                    DWORD            propid;      // Property ID
+                    DWORD            cb;          // Count of bytes in the string, including
+                                                  // the null at the end
+                    tchar            tsz[cb];     // Zero-terminated string. Code page as
+                                                  // indicated by property ID one.
+              } ENTRY;
+
+              typedef struct tagDICTIONARY {
+                    DWORD            cEntries;    // Count of entries in the list
+                    ENTRY            rgEntry[cEntries]; 
+              } DICTIONARY;
+
+              Note the following:
+
+              x Property ID zero does not have a type indicator. The DWORD that indicates the 
+                  count of entries sits in the usual type indicator position.
+
+              x The count of bytes in the string (cb) includes the zero character that 
+                  terminates the string.
+
+              x If the code page indicator is not 1200 (Unicode), there is no padding between 
+                  entries to achieve reasonable alignment (sigh). However, if the code page 
+                  indicator is Unicode, then each entry should be aligned on a DWORD boundary.
+
+              x If the code page indicator is not 1200 (Unicode), property names are stored 
+                  DBCS strings. If the code page indicator does indicate Unicode, property name 
+                  strings are stored as Unicode.
+
+              x Property name strings are restricted in length to 128 characters including the 
+                  NULL terminating character.
+
+      A.2.3.2 Property ID one: Code Page Indicator
+              Property ID one (1) is reserved as an indicator of which code page or script any not-
+              always-Unicode strings in the property set originated from (code pages are used in 
+              Windows and scripts are from the Macintosh world). All such string values in the 
+              entire property set, such as VT_LPSTR's, VT_BSTR's, and the names in the prop-
+
+
+80                                                                                      October 30, 1998
+
+
+
+        DIG2000 file format proposal
+
+
+
+
+
+        erty name dictionary found in code page zero use characters from this one code 
+        page. If the code page indicator is not present, the prevailing code page on the 
+        reader's machine must be assumed. If an application cannot understand the indi-
+        cated code page, it should not try to modify strings stored in the property set.
+
+        When an application that is not the author of a property set changes a property of 
+        type string in the set, it should examine the code page indicator and take one of 
+        the following courses of action:
+        1. Write the new value using the code page found in the code page indicator.
+        2. Rewrite all string values in the property set using the new code page (including 
+             the new value), and modify the code page indicator to reflect the new code 
+             page.
+
+        Possible values for the code page indicator are given in the Win32 API reference (see 
+        the NLSAPI functions, and specifically the GetACP function) and Inside Macintosh 
+        Volume VI, §14­111. For example, the code page US ANSI is represented by 0x04e4 
+        (or 1252 in decimal); the code page for Unicode is 1200. Whether a Windows code 
+        page or a Macintosh script is found in property ID one is determined by the "origi-
+        nating OS version" (PROPERTYSETHEADER::dwOSVer) of the property set as a 
+        whole. Note that there exist Windows code page equivalents for the Macintosh 
+        scripts numbers (Windows code page 10000, for example, is the Macintosh Roman 
+        script).
+
+        By far, if it is at all possible, it is recommended that the Unicode code page (1200) 
+        be used. This is the only practical way to in fact achieve worldwide interoperable 
+        property sets. In code page 1200, note especially that the count at the start of a 
+        VT_LPSTR or VT_BSTR is to be interpreted as a byte count, not a character count. 
+        The byte count includes the two zero bytes at the end of the string.
+
+        Property ID one is of type VT_I2, and therefore consists of a DWORD containing 
+        VT_I2 followed by a USHORT indicating the code page. For example, the 
+        type/value pair for property ID one representing the US ANSI code page is the follow-
+        ing six bytes: 02 00 00 00 e4 04, plus any necessary padding.
+
+A.2.3.3 Property ID 0x80000000: Locale Indicator
+        Property ID 0x80000000 (PID_LOCALE) is reserved as an indication of which 
+        locale the property set was written in. The default locale for a property set, in the 
+        event that PID_LOCALE does not exist in the property set will be the system's 
+        default locale (LOCALE_SYSTEM_DEFAULT).
+
+        Applications can choose to support locale or just get the default behavior. Applica-
+        tions that allow users to specify a working locale should write that locale identifier 
+        to this property. Applications that use the user's default locale 
+        (LOCALE_USER_DEFAULT) should write the user's default locale identifier.
+
+        Applications should be concerned with the possibility of getting information from a 
+        property set which is of a different locale than the application's locale or the user's 
+        or the system's (i.e. a foreign object).
+
+        There is no provision in the OLE Property Set interfaces defined above to specifi-
+        cally read and write PID_LOCALE; in other words this property can be treated just 
+
+
+
+
+
+                like any property. Likewise the system will not attempt to automatically add or 
+                modify this property.
+
+                Property ID PID_LOCALE is of type VT_U4, and therefore consists of a DWORD con-
+                taining VT_U4 followed by a DWORD containing the Locale Identifier (LCID) as 
+                defined by Appendix C of the Win32 SDK.
+
+       A.2.3.4 Reserved property ID's
+                Property ID's with the high bit set (that is, which are negative) are reserved for 
+                future definition by Microsoft.
+
+        A.2.4 Property type representations
+                A property (type, value) pair is a DWORD type indicator, followed by a value whose 
+                representation depends on the type. The serialized representations of each of the 
+                different types of values are as follows:
+
+
+      TABLE 6.4 Common property types
+
+                Type indicator              Value representation
+                VT_EMPTY                    no bytes
+                VT_NULL                     no bytes
+                VT_I2                       2 byte signed integer
+                VT_I4                       4 byte signed integer
+                VT_R4                       32bit IEEE floating point value
+                VT_R8                       64bit IEEE floating point value
+                VT_CY                       8 byte two's complement integer (scaled by 10,000)
+                VT_DATE                     A 64bit floating point number representing the num-
+                                            ber of days (not seconds) since December 31, 1899 
+                                            (thus, January 1, 1900 is 2.0, January 2, 1900 is 3.0, and 
+                                            so on). This is stored in the same representation as 
+                                            VT_R8.
+                VT_BSTR                     Counted, null terminated binary string; represented as 
+                                            a DWORD byte count of the number of bytes in the 
+                                            string (including the terminating null) followed by the 
+                                            bytes of the string. Character set is as indicated by the 
+                                            code page indicator.
+                VT_ERROR                    A DWORD containing a status code.
+                VT_BOOL                     Boolean value, a WORD containing 0 (false) or ­1 (true).
+                VT_VARIANT                  A type indicator (a DWORD) followed by the correspond-
+                                            ing value. VT_VARIANT is only used in conjunction 
+                                            with VT_VECTOR: see below.
+                VT_UI1                      1 byte unsigned integer
+                VT_UI2                      2 byte unsigned integer
+
+
+82                                                                                        October 30, 1998
+
+
+
+          DIG2000 file format proposal
+
+
+
+
+
+TABLE 6.4 Common property types
+
+          Type indicator                  Value representation
+          VT_UI4                          4 byte unsigned integer
+          VT_I8                           8 byte signed integer
+          VT_UI8                          8 byte unsigned integer
+          VT_LPSTR                        This is the representation of many strings. Stored in the 
+                                          same representation as VT_BSTR. Note therefore that 
+                                          the serialized representation of VT_LPSTR in fact has 
+                                          a preceding byte count, whereas the in-memory repre-
+                                          sentation does not. Character set is as indicated by the 
+                                          code page indicator.
+          VT_LPWSTR                       A counted and null terminated Unicode string; a 
+                                          DWORD character count (where the count includes the 
+                                          terminating null) followed by that many Unicode (16 
+                                          bit) characters. Note that the count is a character 
+                                          count, not a byte count.
+          VT_FILETIME                     64bit FILETIME structure as defined by Win32
+          VT_BLOB                         A DWORD count of bytes, followed by that many bytes 
+                                          of data; the byte count does not include the four bytes 
+                                          for the length of the count itself: an empty blob would 
+                                          have a count of zero, followed by zero bytes. Thus, the 
+                                          serialized representation of a VT_BLOB is similar to 
+                                          that of a VT_BSTR but does not guarantee a null byte 
+                                          at the end of the data.
+          VT_STREAM                       Indicates the value is stored in a stream which is sibling 
+                                          to the "Contents" stream. Following this type indicator 
+                                          is data in the format of a serialized VT_LPSTR which 
+                                          names the stream containing the data.
+          VT_STORAGE                      Indicates the value is stored in an IStorage which is sib-
+                                          ling to the "Contents" stream. Following this type indi-
+                                          cator is data in the format of a serialized VT_LPSTR 
+                                          which names the IStorage containing the data.
+          VT_STREAMED_OBJE                As in VT_STREAM but indicates that the stream con-
+          CT                              tains a serialized object, which is a class ID followed by 
+                                          initialization data for the class.
+          VT_STORED_OBJECT                As in VT_STORAGE but indicates that the designated 
+                                          IStorage contains a loadable object.
+
+
+
+
+
+
+
+
+      TABLE 6.4 Common property types
+
+                Type indicator             Value representation
+                VT_BLOB_OBJECT             A BLOB containing a serialized object in the same rep-
+                                           resentation as would appear in a 
+                                           VT_STREAMED_OBJECT. That is, following the 
+                                           VT_BLOB_OBJECT tag is a DWORD byte count of the 
+                                           remaining data (where the byte count does not include 
+                                           the size of itself) which is in the format of a class id fol-
+                                           lowed by initialization data for that class.
+                                           The only significant difference between 
+                                           VT_BLOB_OBJECT and VT_STREAMED_OBJECT is 
+                                           that the former does not have the system-level storage 
+                                           overhead that the latter would have, and is therefore 
+                                           more suitable for scenarios involving numbers of small 
+                                           objects.
+                VT_CF                      A BLOB containing a clipboard format identifier fol-
+                                           lowed by the data in that format. That is, following the 
+                                           VT_CF tag is data in the format of a VT_BLOB: a 
+                                           DWORD count of bytes, followed by that many bytes of 
+                                           data in the format of a packed VTCFREP described 
+                                           just below, followed immediately by an array of bytes 
+                                           as appropriate for data in the clipboard format format 
+                                           (text, metafile, or whatever).
+                VT_CLSID                   A class ID (or other GUID).
+                VT_VECTOR                  If the type indicator is one of the above values with this 
+                                           bit on in addition, then the value is a DWORD count of 
+                                           elements, followed by that many repetitions of the 
+                                           value.
+                                           As an example, a type indicator of 
+                                           VT_LPSTR | VT_VECTOR has a DWORD element 
+                                           count, a DWORD byte count, the first string data, a 
+                                           DWORD byte count, the second string data, and so on.
+
+                Clipboard format identifiers, stored with the tag VT_CF, use one of five different 
+                representations:
+                typedef struct VTCFREP {
+                      LONG lTag;
+                      BYTE rgb[];
+                } VTCFREP;
+
+
+
+
+
+84                                                                                         October 30, 1998
+
+
+
+          DIG2000 file format proposal
+
+
+
+
+
+          The values for rgb are determined by the different values for lTag:
+
+
+TABLE 6.5 Relationship between lTag and rgb
+
+          lTag Value         rgb value
+          -1L                a DWORD containing a built-in Windows clipboard format value.
+          -2L                a DWORD containing a Macintosh clipboard format value.
+          -3L                a GUID containing a format identifier (this is in little usage).
+          any positive       a null-terminated string containing a Windows clipboard format 
+          value              name, one suitable for passing to RegisterClipboardFor-
+                             mat. The code page used for characters in the string is per the 
+                             code page indicator. The "positive value" here is the length of the 
+                             string, including the null byte at the end.
+          0L                 no data (very rare usage)
+
+          As was mentioned above, all type/value pairs begin on a 32-bit boundary. It fol-
+          lows that in turn, the type indicators and values of a type value pair are so aligned. 
+          This means that values may be necessarily followed by null bytes to align a subse-
+          quent type/value pair.
+
+          However, within a vector of values, each repetition of a value is to be aligned with 
+          its natural alignment rather than with 32-bit alignment. In practice, this is only sig-
+          nificant for types VT_I2 and VT_BOOL (which have 2-byte natural alignment); all 
+          other types have 4-byte natural alignment. Therefore, a value with type tag 
+          VT_I2 | VT_VECTOR would be:
+          x a DWORD element count, followed by
+          x an sequence of packed 2-byte integers with no padding between them, 
+                whereas a value of with type tag VT_LPSTR | VT_VECTOR would be a 
+                DWORD element count, followed by
+          x a sequence of (DWORD cch, char rgch[]) strings, each of which may be 
+                followed by null padding to round to a 32-bit boundary.
+
+
+   A.3 CompObj stream binary format
+
+  A.3.1 Overview
+          The `CompObj' stream in a storage object provides generic information regarding 
+          the native data contained in this storage object. This generic information is manip-
+          ulated through the OLE API functions WriteFmtUserTypeStg and 
+          ReadFmtUserTypeStg and includes:
+
+          x User Type: a user readable string that indicates the type of the object.
+
+          x Clipboard Format: implies the names and structure of streams and sub-
+                storages.
+
+
+
+
+
+
+               This document exposes the binary format of the data written by WriteFmtUser-
+               TypeStg and interpreted by ReadFmtUserTypeStg.
+
+       A.3.2 Format
+               The format consists of three basic parts, that represent versions of the stream writ-
+               ten by different versions of the OLE2 libraries:
+
+               x Header, User Type (ANSI), Clipboard format (ANSI)
+
+               x ProgID (ANSI): optional. If not present, no Unicode information may follow
+
+               x Unicode versions of User Type, Clipboard format and ProgID: optional. If any 
+                     Unicode information is present all three items have to be valid. Presence of the 
+                     Unicode information is indicated by a "magic DWORD" value following the ANSI 
+                     ProgID.
+
+               The following is a detailed description of the format using a pseudo C++ syntax 
+               where applicable.
+
+       A.3.2.1 Mandatory part
+
+      A.3.2.1.1 Stream name
+                // Stream name: L"\1CompObj"
+
+      A.3.2.1.2 Header
+               struct CompObjHdr {                      // The leading data in the
+                                                        // CompObj stream
+                       DWORD        dwVersionAndByteOrder;
+                                                        // First DWORD: LOWORD Version=0x0001,
+                                                        // HIWORD=FFFE (ignored by reader!)
+                       DWORD        dwFormat = 0x00000a03;
+                                                        // OS Version: always Win 3.1
+                       DWORD        unused = -1L;       // Always a -1L in the stream
+
+               CLSID clsidClass;                        // Class ID of this object, identical
+                                                        // to the CLSID in the parent storage
+                                                        // of the stream
+               };
+
+      A.3.2.1.3 User Type
+               struct ANSIUserType {
+                       DWORD        dwLenBytes;         // length of User Type string in bytes
+                                                        // including terminating 0
+                       char         szUserType[dwLenBytes];
+                                                        // User Type string (ANSI) terminated
+                                                        // with '\0'
+               }
+
+
+
+
+
+86                                                                                     October 30, 1998
+
+
+
+          DIG2000 file format proposal
+
+
+
+
+
+A.3.2.1.4 Clipboard Format (ANSI)
+          LONG dwCFLen;                           // Length of clipboard format name
+                                                  // special values:
+                                                  // 0  no clipboard format
+                                                  // -1 DWORD with standard Windows CF
+                                                  // follows: DWORD cfStdWin;
+                                                  // -2 DWORD with standard Apple
+                                                  //    Macintosh CF follows:
+                                                  //    DWORD cfStdMac;
+                                                  // >0 Length in bytes of clipboard
+                                                  // format name including terminating 0
+
+          char szCFName[dwCFLen];                 // Clipboard Format Name (ANSI)
+                                                  // terminated with '\0'
+
+ A.3.2.2 Optional: ProgID (ANSI)
+          The stream may end at this point. Versions of OLE before 2.01 provided only the 
+          data described in section 2.1.
+
+          If more data follows it is to be interpreted as follows:
+          struct ANSIProgID {
+                 DWORD           dwLenBytes;      // length of ProgID stream in bytes.
+                                                  // dwLenBytes   40
+          char szProgID[dwLenBytes];              // ProgID string (ANSI) terminated
+                                                  // with '\0'
+          }
+
+ A.3.2.3 Optional: Unicode versions
+          Only if a ANSI ProgID was provided (possibly with ANSIProgID::dwLen-
+          Bytes=0), the following data may follow:
+
+A.3.2.3.1 Magic Number
+          DWORD dwMagicNumber =0x71B239F4; // indicates Unicode UserType, CF
+                                                  // and ProgID follow (all three!)
+
+A.3.2.3.2 User Type (Unicode)
+          struct UNICODEUserType {
+                 DWORD           dwLenBytes;      // Size of Unicode User Type in bytes
+                                                  // (not characters!) including
+                                                  // terminating 0
+                 WCHAR           wszUserType[dwLenBytes/sizeof(WCHAR)];
+                                                  // Unicode User Type string, terminated
+                                                  // with '\0'
+          };
+
+
+
+
+
+
+
+
+      A.3.2.3.3 Clipboard Format (Unicode)
+               LONG              dwUnicodeCFLen;       // Length of Unicode clipboard format
+                                                       // name in bytes
+                                                       // Special values:
+                                                       // 0 no clipboard format
+                                                       // -1 DWORD with standard Windows CF
+                                                       //    follows: DWORD cfStdWin;
+                                                       // -2 DWORD with standard Apple
+                                                       //    Macintosh CF follows:
+                                                       //    DWORD cfStdMac;
+                                                       // >0 Length in bytes of clipboard
+                                                       //    format name including
+                                                       //    terminating 0
+
+               WCHAR             szCFName[dwUnicodeCFLen/sizeof(WCHAR)];
+                                                       // Clipboard Format Name (Unicode)
+                                                       // terminated with '\0'
+
+      A.3.2.3.4 ProgID (Unicode)
+               struct UNICODEProgID {
+                        DWORD         dwLenBytes;      // Size of Unicode ProgID in bytes
+                                                       // (not characters!) including
+                                                       // terminating '\0'
+                        WCHAR         wszProgID[dwLenBytes/sizeof(WCHAR)];
+                                                       // Unicode ProgID string, terminated
+                                                       // with '\0'
+               };
+
+
+
+
+
+88                                                                                    October 30, 1998
+

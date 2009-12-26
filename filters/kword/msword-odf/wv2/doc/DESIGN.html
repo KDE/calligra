@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>wvWare 2 Design Document</title>
+    <link rel="stylesheet" href="Steely" type="text/css" />
+  </head>
+<body>
+  <h1>wvWare 2 Design Document</h1>
+
+  <h2>Design Goals</h2>
+    <ul>
+      <li>The filter should depend on as few libraries as possible. Right now it depends
+          on <b>libgsf-1</b>, which in turn depends on <b>glib-2</b> and <b>libxml2</b>.
+          Additionally wv2 needs a working <b>iconv</b> installation (which is present on
+          almost all systems).<br/>
+          Apart from that we need a working C++ compiler (e.g. gcc-2.95.2 or newer; egcs-2.91.66
+          seems to compile it, too. I didn't test whether it actually works, though).
+          Developers might also need Perl 5 or newer (to regenerate the code),
+          reasonably new versions of automake, autoconf, and libtool. If you have some
+          Doxygen version you can generate the API documentation yourself, using the
+          doxyfile in wv2/doc.<br/>
+          To use the regression test script you need a working Python installation.
+       </li>
+       <li>We try to get the filter as portable as possible (without major pain).
+           It has been tested on various architectures like x86, PPC, Alpha, and Sparc
+           and on several operating systems. The library compiles without any problems
+           with recent gcc versions, with Intel's C++ compiler, and MS Visual C++ 7.
+           Unfortunately I wasn't able to test it with other compilers, but any modern
+           compiler with a working STL should do.
+       </li>
+       <li>To allow different use cases (like importing a file to some word processor
+           or just outputting a bit of plain text for a preview) we try to provide a
+           layered API (low level/high complexity vs. high level). Right now we concentrate
+           on the low level API, later on we'll add the high level interfaces.
+       </li>
+       <li>Albeit the Word file format is crazy and broken we still aim to have
+           readable and sane code. The API should be easy to use and well documented (using
+           Doxygen tags). We also fix the buggy SPEC whenever we detect bugs or ambiguities.
+           If we are not sure about our changes and fixes of the SPEC we don't change the
+           HTML file, but add an entry to src/generator/spec_defects.
+       </li>
+       <li>The "old" WinWord filter of KOffice reads the information "just in time"
+           which makes the code a bit crowded and hard to follow. wv2 reads the important
+           information like stylesheets, list information,... <i>before</i> we start to process
+           the main document body. This way the code should get a bit simpler (but we'll
+           use a bit more memory while parsing the document).
+       </li>
+       <li>We assume the filter is used as in-process component and the API is designed
+           for this purpose. In order to make it possible to dlopen/dlclose the filter
+           we try not to use lots of static objects (as there are problems with destructing
+           them on unloading). Please inform us if you experience problems in that area,
+           it's very likely that we can fix them.
+        </li>
+        <li>For all important components of this library self-checking unit and function tests
+            are recommended. It's also recommended to check the code using Julian Seward's tool
+            <a href="http://developer.kde.org/~sewardj/">valgrind</a>. Additionally the library
+            comes with an automatic regression test utility in the <code>tests</code> directory.
+        </li>
+        <li>We aim to reuse code and share the parser/utility code between parsers for different
+            Word versions. This goal mainly is a design task and requires a lot of knowledge
+            about the formats.
+        </li>
+        <li>The library is <b>not</b> designed to work in a multi-threaded environment. If you
+            need non-blocking filtering you will have to use a separate process (note that
+            I'm no threading expert, but I definitely know that a thread safe library doesn't just
+            &quot;happen&quot;).
+        </li>
+    </ul>
+
+  <h2>Directory Structure</h2>
+    <p>Not a huge package, but in case you get lost:</p>
+    <table>
+      <tr>
+        <td><b>Path</b></td>
+        <td><b>Contents</b></td>
+      </tr>
+      <tr>
+        <td>wv2</td>
+        <td>Holds some build system stuff and general build information.</td>
+      </tr>
+      <tr>
+        <td>wv2/doc</td>
+        <td>Here we keep some information for developers and a Doxygen file to generate
+            the API documentation.
+        </td>
+      </tr>
+      <tr>
+        <td>wv2/src</td>
+        <td>Contains 99% of the sources. As we don't want to have a build-time
+            dependency on Perl we also added the generated Code to the CVS tree.
+        </td>
+      </tr>
+      <tr>
+        <td>wv2/src/generator</td>
+        <td>Two Perl scripts, some template files, and the available file format specification
+            for Word 8 and Word 6. This stuff generates the scanner code. If you finished reading
+            this document you might want to check out the file format spec in this directory.
+        </td>
+      </tr>
+      <tr>
+        <td>wv2/tests</td>
+        <td>Mainly self checking unit tests and function tests for the library. Use "make check" to build them.
+        </td>
+      </tr>
+    </table>
+
+  <h2>Design Overview</h2>
+    <p>Viewed from far, far away the filter structure somehow looks like that:</p>
+    <p style="text-align:center"><img src="arch.png" alt="Architecture" width="884" height="390" /></p>
+    <p>A Word document consists of a number of streams, embedded in one file. This file-system-in-a-file
+       is called OLE structured storage. We're using libgsf to get hold of the real data. The filter
+       itself consists of some central &quot;intelligence&quot; to perform the needed steps to parse the document
+       and some utility classes to support that task. During the parsing process we send the gathered information
+       to the consumer, the program loading the Word file (on the right). This program has to process the
+       delivered information and either assemble a native file or stream the contents directly to the application.
+    </p>
+
+    <h4>OLE Code</h4>
+      <p>The interface to the documents is a C++ wrapper around the libgsf library. libgsf allows --
+         among many other things -- to read and write OLE streams from and to the document file.
+         It would be rather inconvenient to use it directly, so we created a class representing the
+         whole document (<code>OLEStorage</code>), and two classes for reading and writing a single
+         stream (<code>OLEStreamReader</code> and <code>OLEStreamWriter</code>).
+      </p>
+      <p><code>OLEStorage</code> holds the state of the document and allows to travel through the
+         &quot;directories.&quot; It also provides methods to create <code>OLEStreamReader</code> and
+         <code>OLEStreamWriter</code> objects on the document.
+      </p>
+      <p><code>OLEStream</code> is the base class for <code>OLEStreamReader</code> and
+         <code>OLEStreamWriter</code>, providing the common functionality, like seeking in the stream
+         and pushing and popping the current cursor position.<br/>
+         The <code>OLEStreamReader/Writer</code> classes provide a stream-based API, although we don't
+         use the stream operators (operator&lt;&lt; and operator&gt;&gt;). Using the stream operators
+         would be very inconvenient, as we often would have to specify the exact type we want to read
+         or write to/from a variable of a different type.
+      </p>
+      <p>This part of the code contained in the ole* files is generally straightforward, but as libgsf is a lot
+         stricter than libole2 some of the functionality is gone (e.g. you can't browse the contents of a
+         directory in a file you write out, you can't open an OLE storage for reading and writing,...).
+      </p>
+
+    <h4>API</h4>
+      <p>The external API for the users of the library should consist of at least two, but maybe more,
+         layers. Ranging from a low level and fine grained API where lots of work is needed on the
+         consumer side (with the benefit of high flexibility and enormous amounts of information) to a
+         very high level API, basically returning enriched text, at the cost of flexibility.
+      </p>
+      <p>Another main task of that API is to hide differences between Word versions if that's feasible.
+         In any case even the low level layer of the API shouldn't expose too much of the ugliness of
+         Word documents. For the time being we chose to make every document look like it's a Word 8
+         (aka Word 97) one to the consumer. For Word 6 or newer this seems to work, and I think it's
+         possible to do the same for older Word versions. In the unlikely case that Microsoft releases
+         a more recent file format specification (e.g. the specification for Word 2002) we should
+         think about "updating" the API, to provide as much information as possible to the consumer.
+      </p>
+      <p>Technically the API is a mixture of a good old &quot;Hollywood Principle&quot; API
+         (<a href="http://www.research.ibm.com/designpatterns/pubs/ph-feb96.txt">Don't call us; we'll call you</a>)
+         and a fancy <a href="http://www.gotw.ca/gotw/083.htm">functor-based approach</a>. The Hollywood part of the
+         API can be found in the handler.h file, it's split across several smaller interfaces. We are incrementally
+         adding/moving/removing functionality there, so please don't expect that API to be stable, yet.
+      </p>
+      <p>The main reason to choose this approach is that the very common callbacks like <code>TextHandler::runOfText</code>
+         are as lightweight as possible. More complex callbacks like <code>TextHandler::headersFound</code> allow a good
+         deal of flexibility in parsing, as the consumer decides <i>when</i> to parse e.g. the header (also known as stored
+         command). This helps to avoid nasty hacks if the concepts of the destination file format differ from the
+         MS Word ones. The consumer just stores the functor objects and executes them whenever it feels like. For
+         an example please refer to the KOffice MS Word filter in <code>koffice/filters/kword/msword</code>.
+      </p>
+
+    <h4>Parser</h4>
+      <p>The core part of the whole filter. This part of the code ensures that the utility classes are
+         used in the correct order and manages the communication between various parts of the library.
+         It's also quite challenging to design this part of the code. Various versions contain similar
+         or even identical chunks, but other parts differ a lot. The aim is to find a design which allows
+         to reuse much of the parser code for several versions.
+      </p>
+      <p>Right now it seems that we found a nice mixture of plain interfaces with virtual methods and
+         fancy functor-like objects for more complex structures like footnote information. The advantage
+         of this mixture is, that common operations are reasonably fast (just a virtual method call) and
+         yet we provide enough flexibility for the consumer to trigger the parsing of the more complex
+         structures itself. This means that you can easily cope with different concepts in the file formats
+         by delaying the parsing of, say, headers and footers till after you read all the main body text.
+      </p>
+      <p>This flexibility of course isn't free of costs, but the functor concept is pretty lightweight,
+         totally typesafe, and it allows to hide parts of the parser API. I'd like to hear your opinions
+         on that topic.
+      </p>
+      <p>The main task in the parser section is to find a design which allows to share the common code between different
+         file format versions. Another important task is to keep the coupling of the code reasonably low. I see a lot
+         of places in the specification where information from various blocks of our design is needed, and I really hate
+         code where every object holds 5 pointers to other objects just because it needs to query some information from
+         every of these objects once in its lifetime. Code like that is a pain to maintain.
+      </p>
+      <p>For the code sharing topic the current solution is a small hierarchy of <code>Parser*</code> classes like
+         this one:
+      </p>
+      <p style="text-align:center"><img src="parsers.png" alt="Hierarchy" width="276" height="262" /></p>
+      <p><code>Parser</code> is an abstract base class providing a few methods to start the parsing and so on. This
+         is the interface the outside world sees and uses. <code>Parser9x</code> derives from that base class and
+         implements the common parsing code for Word 6, Word 7, and Word 8. Whenever these versions need a different
+         handling there are two possibilities: smaller differences are solved via a conditional expression or a
+         if-else construct, bigger differences are solved by an abstract virtual method in <code>Parser9x</code> and
+         the appropriate implementation in <code>Parser97</code> and <code>Parser95.</code><br/>
+         Therefore <code>Parser9x</code> does the main work. It's hard to argue that this is a normal Is-A inheritance,
+         but with a little bit of phantasy it's pretty close.
+      </p>
+      <p>The whole parsing process is divided into different stages and all this code is chopped into nice little pieces
+         and put into various helper/template methods. We take care to separate methods in a way that as many of them as 
+         possible can be &quot;bubbled up&quot; the inheritance hierarchy right to <code>Parser9x</code> or even
+         <code>Parser</code>.
+      </p>
+      <p>To keep the coupling between the blocks of the design low the parser has to implement the Mediator pattern
+         or something similar. It is the only block in our design containing &quot;intelligence&quot; in the sense
+         that it's the only block knowing about the sequence of parsing and the interaction of the encapsulated
+         components like the OLE subsystem and the stylesheet-handling utility classes.
+      </p>
+
+    <h4>String Classes</h4>
+      <p>We agreed to use Harri Porten's <code>UString</code> class from kjs, a clean implementation of
+         an implicitly shared UCS-2 string class (host order Unicode values). In the same file (ustring.h)
+         there's also a <code>CString</code> class, but we'll use <code>std::string</code> for ASCII strings.
+      </p>
+      <p>The iconv library is used to convert text stored as CP 1252 or similar to UCS-2. This is done by
+         the <code>Textconverter</code> class, which wraps libiconv. Some systems ship a broken/incomplete
+         version of libiconv (e.g. Darwin, older Solaris versions,...), so we have a configure option
+         <code>--with-iconv-dir</code> to specify the path of alternative iconv installations.
+      </p>
+      <p>The main classes <code>UString</code> and <code>std::string</code> are well tested and known to work well.
+         Take a lot of care when using <code>UString::ascii</code>, though. The buffer for the ASCII
+         string is shared among all instances of <code>UString</code> (static buffer)! As we need that method for
+         debugging only this is no problem. <code>UString</code> is implicitly shared, so copying strings is rather
+         cheap as long as you don't modify them (copy on write semantics).
+      </p>
+      <p>Older Word versions don't store the text as Unicode strings but encoded using some codepage like CP 1252.
+         libiconv helps us to convert all these encodings to UCS-2 (sloppy: 16bit Unicode). We don't use libiconv
+         directly from within the library, but we use a small wrapper class (<code>Textconverter</code>) for convenience.
+      </p>
+
+    <h4>Utility Classes</h4>
+      <p>To reduce the complexity of the code we try to write small entities designed to do one specific,
+         encapsulated task (e.g. all the code in styles.cpp is used to read the stylesheet information contained in
+         every Word file, lists.cpp cares about -- surprise -- lists,...). These classes are, IMHO, the key to
+         clean code. Classes for the programming infrastructure like the <code>SharedPtr</code> class also belong
+         to this category.<br/>
+         We use a certain naming scheme to distinguish code which works for all versions (at least
+         Word 6 and newer) or just for one specific category. All the *97.(cpp|h) files are designed
+         to work with Word 8 or newer, files without such a number should work with all versions (note
+         that there are some exceptions to that rule, e.g. <code>Properties97</code> as I was too lazy
+         to mess around with the files in CVS, losing the history).
+      </p>
+      <p>This part of the code also consists of a number of templates to handle the different ways
+         arrays and more complex structures are stored in a Word file (e.g. the meta structures PLF, PLCF,
+         and FKP). If that sounds like Greek to you it's probably a good idea to read the Definitions
+         section at the top of the file format specification in wv2/src/generator.
+      </p>
+
+    <h4>Generated Scanner Code</h4>
+      <p>It's a tedious job to implement the most basic part of the filter -- reading and writing the
+         structures in Word documents. It is boring, repetitious, error prone, so we decided to <i>generate</i>
+         this ultra-low level code. We're using two Perl scripts and the available HTML specification
+         for Word 8 and Word 6. One script called <code>generate.pl</code> is used to scan the HTML file
+         and output the reading/writing code and some test files. The other script, <code>convert.pl</code>
+         generates code to convert Word 6 to Word 8 structures. We need to do this, because we want to
+         present the files as Word 8 files to the outside world. The idea behind that is to hide all the
+         subtle differences between the formats from the user of this library. For Word 6 this seems to
+         be possible, no idea if that will work out for older formats.
+      </p>
+      <p>The generated code mentioned above consists of several thousand lines of code. The design of this
+         code is non-existent, it's just a number of structures supporting reading, writing, copying, assignment,
+         and so on. Some of the structures are partly generated only (like the <code>apply()</code> method of the main
+         property structures like <code>PAP</code>, <code>CHP</code>, <code>SEP</code>, and others). Some structures are
+         commented out, as it would be too hard to generate them. These few structures have to be written manually if
+         they are needed.
+      </p>
+      <p>Generally we just parse the specification to get the information out, but sometimes we need a few hints from the
+         programmer to know what to do. These hints are mostly given by adding special comments to the HTML specification.
+         For further information on these hints, and on the available tricks, please have a look at the top of the Perl
+         scripts. The comments are quite detailed and it should be easy to figure out what I intend to do with the hints.
+      </p>
+      <p>Another way to influence the generated code is to manipulate certain parts of the script itself. You need to do
+         that to change the order of the structures in the file, disable a structure completely and so on. You can also
+         select structures to derive from the <code>Shared</code> class to be able to use the structure with the
+         <code>SharedPtr</code> class.
+      </p>
+      <p>The whole file might need some minor tweaking, a license, <code>#includes</code>, and maybe even some declarations
+         or code. This is what the template files in wv2/src/generator are for -- the code gets copied verbatim into
+         the generated file. Never manipulate a generated file, all your changes will be lost when the code is regenerated!
+      </p>
+      <p>If you think you found a bug in the specification you can try to correct the HTML file and regenerate the scanner
+         code using the command <code>make generated</code>. In case you aren't satisfied with the resulting C++ code, or
+         if you found a bug in the scripts please contact me. If you aren't scared by a bit of Perl code feel free to fix
+         or extend the code yourself.
+      </p>
+      <p>Please note that using the C++ <code>sizeof()</code> operator on these structures is dangerous. You should never
+         rely on their memory layout. The reason for that is that the structures in the Word file are
+         &quot;packed&quot;, this means there are no padding and alignment bytes between variables. In our generated code
+         we can't achieve that in a portable manner, so we decided not to use it at all. Due to that reading the whole
+         structure in at once doesn't even work on little endian platforms, let alone big endian machines. The solution are
+         the generated <code>read()</code> methods. In case you need to know the in-file size of a Word structure, you can
+         add a <code>sizeOf</code> variable in the HTML spec (please check the code generation script for more information).
+         It should be obvious that casting memory chunks from a Word file to structures or casting among different structures
+         is also a bad idea. If you really want to create a certain structure from some memory block, please add a
+         <code>readPtr</code> special-comment in the HTML spec.
+      </p>
+
+    <h4>Unit Tests</h4>
+      <p>A vital part of the whole library are self-checking unit and function tests, to avoid introducing
+         hard to find bugs while implementing new features. The goal is to test the major components, but
+         it's close to impossible to test everything. Please run the unit tests before you commit bigger
+         changes to see if something breaks. If you find out that some test is broken on your platform
+         please send me the whole output, some platform information, and the document you used for testing.
+      </p>
+      <p>It's a bit hard to test the proper parsing of a file, the best thing I came up with is a kind of
+         record and playback approach. The Python script <code>regression</code> can be used to compare the
+         filter output with some previously recorded output. This tool should be run with the <code>-r</code>
+         option before you do any major changes. The created files are quite a detailed recording of the parsing
+         process. After the changes are implemented you re-run the script without the <code>-r</code> option.
+         If the result differs you might want to check, whether the difference is intended.
+      </p>
+      <p>Code-wise there's not much to say about the unit tests. If you add new code please also add a test for it,
+         or at least tell me to do so. The header test.h contains a trivial test method and a method to convert
+         integers to strings (as <code>std::string</code> doesn't have such functionality).
+      </p>
+      <p>If you decide to create a unit test please ensure that it's self checking. That means if it runs till the end
+         everything is alright. If it stops somewhere in between something unexpected happened. Oh, and let me repeat
+         the warning that <code>UString::ascii()</code> might produce unexpected results due to the static buffer.
+      </p>
+
+  <h2>Pending Design Issues</h2>
+    <p>Currently the filter is in a pretty usable state, it is able to read the text including properties and styles,
+       it handles fonts, lists, headers/footers, footnotes and endnotes, sections, fields (to some extent, it's close
+       to impossible to do anything useful without knowing the target application), and tables.
+       This functionality is tested for Word 97, but I'm lacking test documents for Word 6 and Word 95. In theory most
+       of the mentioned features should work there too, but I doubt that lists work without any problems.
+    </p>
+    <p>This section of the design document lists my plans for features I'd like to implement next and some ideas about
+       their design.
+    </p>
+
+  <h4>Images and Graphic Objects</h4>
+    <p>Embedded images and graphic objects are a hard topic. According to Shaheed there are approximately 9 different
+       ways to have images embedded in a Word file, and the documentation is very brief. In newer Office versions
+       (anything from Office 97 on) Microsoft decided to share the graphics embedding code among Word, Excel, and
+       Powerpoint. This project is called <i>Escher</i> and some documentation can be found
+       <a href="./escher/escher.html">here</a>. Older Office versions are known to embed bitmaps directly in the
+       files, e.g. stored as .dib or .tiff image, or as .wmf drawing.
+    </p>
+    <p>Apart from raster images it's also possible to embed drawing objects (lines, rectangles,...) in a Word file.
+       These can be stored in an Escher container, or directly in the Word file (in older files). Due to OLE it's
+       also possible to embed e.g. AutoCAD drawings in a word file, but I didn't check how that's done yet. For
+       Far East versions of Word it seems to be possible to have a drawing grid for far east characters, but I
+       have no idea how that works as I have never seen a FE Word nor speak any far east language.
+    </p>
+    <p>One thing that seems to be common among all the embedded images and drawing objects (regardless of the Word
+       version) is that they are anchored using a special character (<code>SPEC_PICTURE = 1</code>) and of course
+       the <code>fSpec</code> flag is set. For this character it should be possible to find and construct the PICF.
+    </p>
+    <p>For Word 8 the important structures seem to be PICF and METAFILEPICT, the rest should be embedded in
+       Escher containers. For Word 6 we have the PICF, METAFILEPICT, DO and DP* (for the drawing primitives).
+    </p>
+
+  <h2>Questions</h2>
+    <p>Finally some questions that still make my head ache, from a design point of view:
+    </p>
+    <ul>
+      <li>What to do with embedded documents (like Excel documents)?</li>
+      <li>How to handle embedded image/clipart/wmf/... files?</li>
+      <li>How can we handle bugs in the SPEC as effective as possible? It shouldn't be necessary that
+          two programmers lose their hair on the same bug...
+      </li>
+    </ul>
+
+<p>Please send comments, corrections, condolences, patches, and suggestions to
+<a href="mailto:trobin@kde.org">Werner Trobin</a>. Thanks in advance. If you really read that
+document till here I owe you a beverage of your choice next time we meet :-)</p>
+
+</body>
+</html>

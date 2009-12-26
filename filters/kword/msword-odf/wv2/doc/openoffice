@@ -1,0 +1,20 @@
+This file holds a few hints about the OpenOffice (OOo) WinWord 8 filter, in
+case you want to understand the Word file format and the HTML specification
+is just too confusing.
+
+First of all the most important part: The OOo filter is dual licensed, and
+one of those licenses is the LGPL, so it's legal to look at their code (at
+least for my understanding of the LGPL, please correct me if I'm wrong.)
+
+You can find the OOo WinWord filter in: openofficedir/sw/source/filter/ww8
+
+Now some hints where to find certain code inside the OOo filter:
+
+1) The sprm handling code is spread across several files; it provides some more
+   information than the SPEC, as the OOo crew reverse engineered some of the
+   sprms:
+     ww8par6.cxx, around line 4890 contains an array called aSprmReadTab, which
+       relates the sprm codes to a function processing those sprms.
+     ww8scan.cxx, around line 5650 contains an array called aWwSprmTab, which
+       holds the sizes of the sprms. There's also some other sprm information
+       in that file.
