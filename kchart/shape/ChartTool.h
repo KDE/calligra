@@ -100,8 +100,8 @@ private slots:
     void setAxisTitle( Axis *axis, const QString& title );
     void setAxisShowGridLines( Axis *axis, bool b = true );
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true );
-    void setAxisStepWidth( Axis *axis, double width );
-    void setAxisSubStepWidth( Axis *axis, double width );
+    void setAxisStepWidth( Axis *axis, qreal width );
+    void setAxisSubStepWidth( Axis *axis, qreal width );
     void setAxisUseAutomaticStepWidth( Axis *axis, bool automatic);
     void setAxisUseAutomaticSubStepWidth( Axis *axis, bool automatic );
 

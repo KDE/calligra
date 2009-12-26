@@ -44,9 +44,9 @@ public:
     QBrush backgroundBrush() const;
     QColor backgroundColor() const;
     QFont font() const;
-    double fontSize() const;
+    qreal fontSize() const;
     QFont titleFont() const;
-    double titleFontSize() const;
+    qreal titleFontSize() const;
     LegendExpansion expansion() const;
     Qt::Alignment alignment() const;
     LegendPosition legendPosition() const;
@@ -58,9 +58,9 @@ public:
     void setBackgroundBrush( const QBrush &brush );
     void setBackgroundColor( const QColor &color );
     void setFont( const QFont &font );
-    void setFontSize( double size );
+    void setFontSize( qreal size );
     void setTitleFont( const QFont &font );
-    void setTitleFontSize( double size );
+    void setTitleFontSize( qreal size );
     void setExpansion( LegendExpansion expansion );
     void setAlignment( Qt::Alignment alignment );
     void setLegendPosition( LegendPosition position );

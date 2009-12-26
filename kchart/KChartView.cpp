@@ -151,8 +151,8 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
 
     addStatusBarItem( zoomAction->createWidget( ( QWidget* )statusBar() ), 0 );
-    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
-             this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+             this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     // initialize the configuration
@@ -376,9 +376,9 @@ void KChartView::importData()
 	for (uint col = 0; col < cols; col++) {
 	    bool     ok;
 	    QString  tmp;
-	    double   val;
+	    qreal   val;
 
-	    // Get the text and convert to double unless in the headers.
+	    // Get the text and convert to qreal unless in the headers.
 	    tmp = dialog->text( row, col );
 	    if ( ( row == 0 && hasRowHeaders )
 		 || ( col == 0 && hasColHeaders ) ) {
@@ -444,7 +444,7 @@ void KChartView::documentViewRectChanged( const QRectF &viewRect )
     m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
 }
 
-void KChartView::zoomChanged( KoZoomMode::Mode mode, double zoom )
+void KChartView::zoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);

@@ -60,8 +60,8 @@ public:
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
-    double majorInterval() const;
-    double minorInterval() const;
+    qreal majorInterval() const;
+    qreal minorInterval() const;
     int minorIntervalDivisor() const;
     bool useAutomaticMajorInterval() const;
     bool useAutomaticMinorInterval() const;
@@ -82,8 +82,8 @@ public:
     void setDimension( AxisDimension dimension );
     bool attachDataSet( DataSet *dataSet, bool silent = false );
     bool detachDataSet( DataSet *dataSet, bool silent = false );
-    void setMajorInterval( double interval );
-    void setMinorInterval( double interval );
+    void setMajorInterval( qreal interval );
+    void setMinorInterval( qreal interval );
     void setMinorIntervalDivisor( int divisor );
     void setUseAutomaticMajorInterval( bool automatic );
     void setUseAutomaticMinorInterval( bool automatic );

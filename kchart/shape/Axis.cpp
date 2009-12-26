@@ -110,7 +110,7 @@ public:
 
     QString id;
     QList<DataSet*> dataSets;
-    double majorInterval;
+    qreal majorInterval;
     int minorIntervalDivisor;
     bool showInnerMinorTicks;
     bool showOuterMinorTicks;
@@ -1074,12 +1074,12 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     return true; 
 }
 
-double Axis::majorInterval() const
+qreal Axis::majorInterval() const
 {
     return d->majorInterval;
 }
 
-void Axis::setMajorInterval( double interval )
+void Axis::setMajorInterval( qreal interval )
 {
     // Don't overwrite if automatic interval is being requested ( for
     // interval = 0 )
@@ -1100,12 +1100,12 @@ void Axis::setMajorInterval( double interval )
     requestRepaint();
 }
 
-double Axis::minorInterval() const
+qreal Axis::minorInterval() const
 {
-    return ( d->majorInterval / (double)d->minorIntervalDivisor ); 
+    return ( d->majorInterval / (qreal)d->minorIntervalDivisor ); 
 }
 
-void Axis::setMinorInterval( double interval )
+void Axis::setMinorInterval( qreal interval )
 {
     if ( interval == 0.0 )
         setMinorIntervalDivisor( 0 );

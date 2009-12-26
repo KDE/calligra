@@ -1143,12 +1143,12 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT( ui_axisScalingButtonClicked() ) );
     connect( d->axisScalingDialog.logarithmicScaling, SIGNAL( toggled( bool ) ),
              this, SLOT( ui_axisUseLogarithmicScalingChanged( bool ) ) );
-    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( double ) ),
-             this, SLOT( ui_axisStepWidthChanged( double ) ) );
+    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( qreal ) ),
+             this, SLOT( ui_axisStepWidthChanged( qreal ) ) );
     connect ( d->axisScalingDialog.automaticStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticStepWidthChanged( bool ) ) );
-    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double ) ),
-             this, SLOT( ui_axisSubStepWidthChanged( double ) ) );
+    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( qreal ) ),
+             this, SLOT( ui_axisSubStepWidthChanged( qreal ) ) );
     connect ( d->axisScalingDialog.automaticSubStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticSubStepWidthChanged( bool ) ) );
 }
@@ -1545,7 +1545,7 @@ void ChartConfigWidget::ui_axisUseLogarithmicScalingChanged( bool b )
     emit axisUseLogarithmicScalingChanged( d->axes[ index ], b );
 }
 
-void ChartConfigWidget::ui_axisStepWidthChanged( double width )
+void ChartConfigWidget::ui_axisStepWidthChanged( qreal width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
@@ -1556,7 +1556,7 @@ void ChartConfigWidget::ui_axisStepWidthChanged( double width )
     emit axisStepWidthChanged( d->axes[ index ], width );
 }
 
-void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
+void ChartConfigWidget::ui_axisSubStepWidthChanged( qreal width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index

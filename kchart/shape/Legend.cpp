@@ -250,12 +250,12 @@ void Legend::setFont( const QFont &font )
     d->pixmapRepaintRequested = true;
 }
 
-double Legend::fontSize() const
+qreal Legend::fontSize() const
 {
     return d->font.pointSizeF();
 }
 
-void Legend::setFontSize( double size )
+void Legend::setFontSize( qreal size )
 {
     d->font.setPointSizeF( size );
 
@@ -286,12 +286,12 @@ void Legend::setTitleFont( const QFont &font )
     d->pixmapRepaintRequested = true;
 }
 
-double Legend::titleFontSize() const
+qreal Legend::titleFontSize() const
 {
     return d->titleFont.pointSizeF();
 }
 
-void Legend::setTitleFontSize( double size )
+void Legend::setTitleFontSize( qreal size )
 {
     d->titleFont.setPointSizeF( size );
 

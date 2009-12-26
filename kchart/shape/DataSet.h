@@ -78,10 +78,10 @@ public:
     bool showUpperErrorIndicator() const;
     QPen errorIndicatorPen() const;
     ErrorCategory errorCategory() const;
-    double errorPercentage() const;
-    double errorMargin() const;
-    double lowerErrorLimit() const;
-    double upperErrorLimit() const;
+    qreal errorPercentage() const;
+    qreal errorMargin() const;
+    qreal lowerErrorLimit() const;
+    qreal upperErrorLimit() const;
 
     // Setter methods
     void setChartType( ChartType type );
@@ -106,10 +106,10 @@ public:
     void setShowErrorIndicators( bool lower, bool upper );
     void setErrorIndicatorPen( const QPen &pen );
     void setErrorCategory( ErrorCategory category );
-    void setErrorPercentage( double percentage );
-    void setErrorMargin( double margin );
-    void setLowerErrorLimit( double limit );
-    void setUpperErrorLimit( double limit );
+    void setErrorPercentage( qreal percentage );
+    void setErrorMargin( qreal margin );
+    void setLowerErrorLimit( qreal limit );
+    void setUpperErrorLimit( qreal limit );
 
     QVariant xData( int index ) const;
     QVariant yData( int index ) const;

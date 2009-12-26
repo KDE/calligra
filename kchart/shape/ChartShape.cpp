@@ -319,8 +319,8 @@ void ChartShape::Private::showLabel( KoShape *label )
     if ( label->position().y() + label->size().height() / 2.0
          < shape->size().height() / 2.0 )
     {
-        const double verticalSpaceRemaining = plotArea->position().y();
-        const double spaceToExpand          = ( label->position().y() + label->size().height() ) - verticalSpaceRemaining;
+        const qreal verticalSpaceRemaining = plotArea->position().y();
+        const qreal spaceToExpand          = ( label->position().y() + label->size().height() ) - verticalSpaceRemaining;
 
         if ( spaceToExpand > 0.0 ) {
             plotArea->setSize( QSizeF( plotAreaSize.width(),
@@ -330,8 +330,8 @@ void ChartShape::Private::showLabel( KoShape *label )
         }
     }
     else {
-        const double verticalSpaceRemaining = label->position().y() - plotArea->position().y() - plotArea->size().height();
-        double spaceToExpand = ( shape->size().height() - label->position().y() - label->size().height() ) - verticalSpaceRemaining;
+        const qreal verticalSpaceRemaining = label->position().y() - plotArea->position().y() - plotArea->size().height();
+        qreal spaceToExpand = ( shape->size().height() - label->position().y() - label->size().height() ) - verticalSpaceRemaining;
 
         if ( spaceToExpand < 0.0 )
             spaceToExpand = 0.0;
@@ -340,7 +340,7 @@ void ChartShape::Private::showLabel( KoShape *label )
             if ( axis->position() != BottomAxisPosition )
                 continue;
 
-            double _spaceToExpand = ( label->size().height()
+            qreal _spaceToExpand = ( label->size().height()
                                       - ( shape->size().height()
                                           - axis->title()->position().y()
                                           - axis->title()->size().height() ) );
@@ -629,7 +629,7 @@ void ChartShape::setPosition( const QPointF &pos )
     KoShape::setPosition( pos );
 }
 
-static QPointF scalePointCenterLeft( QPointF center, double factorX, double factorY, const QSizeF &size )
+static QPointF scalePointCenterLeft( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
 {
     center.rx() -= size.width() / 2.0;
     center.rx() *= factorX;
@@ -639,7 +639,7 @@ static QPointF scalePointCenterLeft( QPointF center, double factorX, double fact
     return center;
 }
 
-static QPointF scalePointCenterRight( QPointF center, double factorX, double factorY, const QSizeF &size )
+static QPointF scalePointCenterRight( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
 {
     center.rx() += size.width() / 2.0;
     center.rx() *= factorX;
@@ -649,7 +649,7 @@ static QPointF scalePointCenterRight( QPointF center, double factorX, double fac
     return center;
 }
 
-static QPointF scalePointCenterTop( QPointF center, double factorX, double factorY, const QSizeF &size )
+static QPointF scalePointCenterTop( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
 {
     center.ry() -= size.height() / 2.0;
     center.rx() *= factorX;
@@ -659,7 +659,7 @@ static QPointF scalePointCenterTop( QPointF center, double factorX, double facto
     return center;
 }
 
-static QPointF scalePointCenterBottom( QPointF center, double factorX, double factorY, const QSizeF &size )
+static QPointF scalePointCenterBottom( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
 {
     center.ry() += size.height() / 2.0;
     center.rx() *= factorX;
@@ -673,8 +673,8 @@ void ChartShape::setSize( const QSizeF &newSize )
 {
     Q_ASSERT( d->plotArea );
 
-    const double factorX = newSize.width() / size().width();
-    const double factorY = newSize.height() / size().height();
+    const qreal factorX = newSize.width() / size().width();
+    const qreal factorY = newSize.height() / size().height();
 
     // Reposition the Axes within the shape.
     foreach( Axis *axis, d->plotArea->axes() ) {
@@ -743,7 +743,7 @@ void ChartShape::updateChildrenPositions()
         title->setPosition( titlePosition );
     }
 
-    const double legendXOffset = 10.0;
+    const qreal legendXOffset = 10.0;
     d->legend->setPosition( QPointF( size().width() + legendXOffset,
                                      size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }

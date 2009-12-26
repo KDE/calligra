@@ -845,7 +845,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
                             kWarning(35001) << "Don't know how to handle value-type " << valueType;
                         else {
                             QString  value = cellElem.attributeNS( KoXmlNS::office, "value", QString() );
-                            double   val = value.toDouble();
+                            qreal    val = value.toDouble();
 
                             m_currentData.setCell( row, col, val );
                         }
@@ -1303,7 +1303,7 @@ bool KChartPart::loadData( const KoXmlDocument& doc )
                     }
                     else if ( "double" == valueType ) {
                         bool bOk;
-                        double val = e.attribute("value").toDouble(&bOk);
+                        qreal val = e.attribute("value").toDouble(&bOk);
                         if ( !bOk )
                             val = 0.0;
                         t = val;

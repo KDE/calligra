@@ -18,8 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "TestProxyModel.h"
+
+// Qt
+#include <QRect>
+#include <QPoint>
+#include <QSize>
+#include <QDebug>
 
 // KChart
 #include "ChartProxyModel.h"
@@ -27,11 +33,6 @@
 #include "ChartTableModel.h"
 #include "CellRegion.h"
 
-// Qt
-#include <QRect>
-#include <QPoint>
-#include <QSize>
-#include <QDebug>
 
 namespace QTest {
     template<>

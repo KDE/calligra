@@ -75,10 +75,10 @@ public:
     bool showUpperErrorIndicator;
     QPen errorIndicatorPen;
     ErrorCategory errorCategory;
-    double errorPercentage;
-    double errorMargin;
-    double lowerErrorLimit;
-    double upperErrorLimit;
+    qreal errorPercentage;
+    qreal errorMargin;
+    qreal lowerErrorLimit;
+    qreal upperErrorLimit;
     QPen pen;
     QBrush brush;
     int num;
@@ -310,22 +310,22 @@ ErrorCategory DataSet::errorCategory() const
     return d->errorCategory;
 }
 
-double DataSet::errorPercentage() const
+qreal DataSet::errorPercentage() const
 {
     return d->errorPercentage;
 }
 
-double DataSet::errorMargin() const
+qreal DataSet::errorMargin() const
 {
     return d->errorMargin;   
 }
 
-double DataSet::lowerErrorLimit() const
+qreal DataSet::lowerErrorLimit() const
 {
     return d->lowerErrorLimit;
 }
 
-double DataSet::upperErrorLimit() const
+qreal DataSet::upperErrorLimit() const
 {
     return d->upperErrorLimit;
 }
@@ -499,22 +499,22 @@ void DataSet::setErrorCategory( ErrorCategory category )
     d->errorCategory = category;
 }
 
-void DataSet::setErrorPercentage( double percentage )
+void DataSet::setErrorPercentage( qreal percentage )
 {
     d->errorPercentage = percentage;
 }
 
-void DataSet::setErrorMargin( double margin )
+void DataSet::setErrorMargin( qreal margin )
 {
     d->errorMargin = margin;
 }
 
-void DataSet::setLowerErrorLimit( double limit )
+void DataSet::setLowerErrorLimit( qreal limit )
 {
     d->lowerErrorLimit = limit;
 }
 
-void DataSet::setUpperErrorLimit( double limit )
+void DataSet::setUpperErrorLimit( qreal limit )
 {
     d->upperErrorLimit = limit;
 }

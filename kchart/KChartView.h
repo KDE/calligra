@@ -77,7 +77,7 @@ public slots:
 
     void selectionChanged();
     void documentViewRectChanged( const QRectF &viewRect );
-    void zoomChanged( KoZoomMode::Mode mode, double zoom );
+    void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
 signals:
     void selectionChange();
