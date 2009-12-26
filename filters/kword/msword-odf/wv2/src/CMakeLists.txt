@@ -1,9 +1,6 @@
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR/filters/kword/msword-odf/wv2} )
 
-# I'd say the 'if' is unneeded because we always CONFIGURE_FILE
-IF( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/../config.h )
-    ADD_DEFINITIONS( -DHAVE_CONFIG_H )
-ENDIF( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/../config.h )
+ADD_DEFINITIONS( -DHAVE_CONFIG_H )
 
 SET( wv2_SOURCES 
 	olestorage.cpp 
