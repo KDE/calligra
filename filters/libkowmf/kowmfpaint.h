@@ -57,6 +57,7 @@ public:
      *   relative coord. use the existing world transfomation Matrix
      */
     bool play(QPaintDevice& target, bool relativeCoord = false);
+    bool play(QPainter &painter, bool relativeCoord = false);
 
 
 private:
@@ -121,7 +122,8 @@ private:
     void  setMatrix(const QMatrix &, bool combine = false);
 
 private:
-    QPainter mPainter;
+    bool  mInternalPainter;      // True if the painter wasn't externally provided.
+    QPainter *mPainter;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
     // memorisation of WMF matrix transformation (in relative coordinate)
