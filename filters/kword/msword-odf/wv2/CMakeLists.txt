@@ -123,8 +123,8 @@ FOREACH( _inc ${_WV2_CFLAGS} )
 ENDFOREACH( _inc )
 
 # Generate configuration files
-CONFIGURE_FILE( config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
-CONFIGURE_FILE( wv2-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/wv2-config @ONLY )
+CONFIGURE_FILE( config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/config.h )
+CONFIGURE_FILE( wv2-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/wv2-config @ONLY )
 
 # Source directories
 ADD_SUBDIRECTORY( src )
