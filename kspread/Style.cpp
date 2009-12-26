@@ -523,7 +523,7 @@ Format::Type Style::dateType(const QString &_format)
         return Format::Date5;
     else if (_format == "dd/MM/yyyy")
         return Format::Date6;
-    else if (_format == "MMM-yy")
+    else if (_format == "MM-yy" || _format == "MM/yy" || _format == "MMM-yy" || _format == "MMM/yy")
         return Format::Date7;
     else if (_format == "MMMM-yyyy")
         return Format::Date9;
@@ -539,10 +539,8 @@ Format::Type Style::dateType(const QString &_format)
         return Format::Date14;
     else if (_format == "yyyy-MMM-dd")
         return Format::Date15;
-    else if (_format == "yyyy/MM/dd")
+    else if (_format == "yyyy-MM-dd")
         return Format::Date16;
-    else if (_format == "d MMMM yyyy")
-        return Format::Date17;
     else if (_format == "MM/dd/yyyy")
         return Format::Date18;
     else if (_format == "MM/dd/yy")
@@ -565,6 +563,8 @@ Format::Type Style::dateType(const QString &_format)
         return Format::ShortDate;
     else if (_format == dateFormat)
         return Format::TextDate;
+    else if (_format.contains("d MM yy") || _format.contains("d MMM yy") || _format.contains("d MMMM yy"))
+        return Format::Date17;
     else
         return Format::ShortDate;
 }
