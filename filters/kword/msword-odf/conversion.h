@@ -24,7 +24,7 @@
 #ifndef CONVERSION_H
 #define CONVERSION_H
 
-#include <wv2/ustring.h>
+#include <wv2/src/ustring.h>
 #include <QString>
 #include <QColor>
 

@@ -32,13 +32,13 @@
 #include <KoPageLayout.h>
 #include <kdebug.h>
 
-#include <wv2/styles.h>
-#include <wv2/ustring.h>
-#include <wv2/word97_generated.h>
-#include <wv2/parser.h>
-#include <wv2/parserfactory.h>
-#include <wv2/paragraphproperties.h>
-#include <wv2/associatedstrings.h>
+#include <wv2/src/styles.h>
+#include <wv2/src/ustring.h>
+#include <wv2/src/word97_generated.h>
+#include <wv2/src/parser.h>
+#include <wv2/src/parserfactory.h>
+#include <wv2/src/paragraphproperties.h>
+#include <wv2/src/associatedstrings.h>
 #include <klocale.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>

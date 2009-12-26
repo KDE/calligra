@@ -1,0 +1,112 @@
+Basic installation instructions
+===============================
+
+These are instructions to build wv2 with the CMake build system on any 
+platform, including cross-compilation. If you are intested in building 
+wv2 with autotools, please read INSTALL instead.
+
+
+Configuring and building
+========================
+
+1. Download CMake from http://www.cmake.org or install it by other means (apt, 
+   yum, zypper, the KDE on Windows installer, etc)
+
+2. The following third party dependencies must be available:
+
+   * GNOME Structured File Library
+     http://ftp.gnome.org/pub/gnome/sources/libgsf/
+
+   * glib 2.0
+     http://www.gtk.org
+
+   * iconv
+     http://www.gnu.org/software/libiconv/
+
+   * zlib
+     http://www.zlib.net/
+    
+   By default, Zlib is also required, although it is possible to build wv2 
+   without zlib by using setting the WITHOUT_ZLIB CMake option to ON.
+
+3. Open the CMake GUI and select the source directory (where the CMakeLists.txt
+   file is) and the build directory (where you want to build wv2). 
+
+   Building in the source directory (i.e. build directory = source directory ) 
+   is possible but ill-advised.
+
+   If you want to build without zlib, change the value of WITHOUT_ZLIB to ON.
+
+4. Click the 'Configure' button.
+
+   If the build directory does not exist, CMake will ask for your permission to 
+   create it.
+
+5. CMake will also ask you what build system you want to build with, i. e. Unix 
+   makefiles, Visual Studio solutions, Eclipse project, Borland makefiles, etc. 
+   Depending on what platform you are, you will be offered different build 
+   systems (known as "generators" in CMake slang).
+
+6. CMake will now look for the third party dependencies. 
+
+   On Linux/Unix (including Mac), if third party libraries were installed in 
+   the default locations they will be found automatically. 
+
+   On Windows, if you are cross-compiling or if third party libraries are 
+   installed to non-default locations, you will need to browse for the 
+   libraries (on windows, the .lib files) and include directories. Make 
+   sure CMake GUI is in the "Advanced view" mode or you may not see all 
+   missing dependencies.
+
+7. Once you are done with dependencies, click the 'Generate' button
+
+8. An appropriate build system will be available in your build directory. 
+   Use it with your toolchain, i.e.
+    - Go to the build directory and invoke "make" or "nmake", if using makefiles
+    - Open the Visual Studio solution, if using Visual C++
+    - Open the Eclipse project if using Eclipse
+    etc
+
+Alternatively to steps 3-7, you may invoke CMake from the command line:
+     $ cmake /path/to/wv2/sources
+ or, to build without zlib:
+     $ cmake -DWITHOUT_ZLIB=ON
+
+
+Building the tests
+==================
+
+By default, only the wv2 library will be built. If you want to compile the tests, 
+build the "test" target ("make test").
+
+
+Installing
+==========
+
+Build the "install" target ("make install").
+
+On Linux/Unix, the default installation prefix is /usr/local. On Windows, the 
+default installation prefix is C:\Program Files. To change this, modify the  
+value of the CMAKE_INSTALL_PREFIX variable in the CMake GUI.
+
+You can also install to a different location by using the DESTDIR environment 
+variable ("make install DESTDIR=/opt/mine/wv2") but then wv2-config will 
+report wrong paths.
+
+
+Regenerating the scanner and converter code
+===========================================
+
+Build the 'scanner' and 'converter' targets. The 'generated' target is provided 
+as a convenience and will build both 'scanner' and 'converter'.
+
+Please note the generated sources are currently generated in the SOURCE 
+directory, not in the build directory.
+
+
+Generating a distributable source package
+=========================================
+
+Use "make dist" to create a tarball from a Subversion working tree. In the future, 
+other options (NSIS installer for Windows, .dmg for Mac, Debian and RPM packages 
+for Linux, etc) may be available.

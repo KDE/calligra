@@ -22,8 +22,8 @@
 #ifndef GRAPHICSHANDLER_H
 #define GRAPHICSHANDLER_H
 
-#include <wv2/functor.h>
-#include <wv2/handlers.h>
+#include <wv2/src/functor.h>
+#include <wv2/src/handlers.h>
 
 #include <QObject>
 #include "document.h"

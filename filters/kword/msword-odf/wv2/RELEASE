@@ -1,0 +1,18 @@
+A small listing for me as I keep forgetting important steps like tagging...
+
+- Bump the version numbers in:
+    * CMakeLists.txt: WV_MAJOR/MINOR/MICRO_VERSION and LT_CURRENT/REVISION/AGE
+    * wv2version.h: WV2_VERSION_MAJOR/MINOR/RELEASE, WV2_VERSION_STRING
+- Add a ChangeLog entry for the release
+- branch svn if needed
+- copy branch out to wv2-x.y.z & remove .svn directories
+- tar -jcvf wv2-x.y.z.tar.bz2 wv2-x.y.z/
+- use that tarball, install it, and run tests with that version of library
+- svn copy https://wvware.svn.sourceforge.net/svnroot/wvware/branches/wv2-0.x https://wvware.s
+vn.sourceforge.net/svnroot/wvware/tags/wv2-0.x.y -m "tag wv2-0.x.y"
+- gpg --detach-sign --armor -u "user" wv2-0.x.y.tar.bz2
+- gpg --verify wv2-x.y.z.tar.bz2.asc
+- upload files to sourceforge
+- download & gpg verify again
+- announce on koffice-devel
+

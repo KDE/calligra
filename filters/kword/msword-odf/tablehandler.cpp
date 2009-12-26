@@ -24,7 +24,7 @@
 #include "tablehandler.h"
 #include "conversion.h"
 
-#include <wv2/word97_generated.h>
+#include <wv2/src/word97_generated.h>
 
 #include <kdebug.h>
 #include <QList>

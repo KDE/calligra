@@ -1,7 +1,58 @@
+# check whether we can compile wv2
 
+macro_optional_find_package(GObject)
+macro_log_feature(GOBJECT_FOUND "GObject" "GObject" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
 
- macro_optional_find_package(WV2)
-macro_log_feature(WV2_FOUND "wvWare" "Microsoft Word .doc Library" "http://sourceforge.net/projects/wvware" FALSE "" "Required by the KWord .doc filter")
+macro_optional_find_package(GLIB2)
+macro_log_feature(GLIB2_FOUND "Glib2" "Glib2" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
+
+macro_optional_find_package(LIBGSF)
+macro_log_feature(GLIB2_FOUND "libgsf" "LibGSF" "ftp://ftp.gnome.org/pub/GNOME/sources/libgsf" FALSE "" "Required by the msword .doc filter")
+
+macro_optional_find_package(Iconv)
+macro_log_feature(ICONV_FOUND "Iconv" "Iconv" "http://www.gnu.org/software/libiconv/" FALSE "" "Required by the msword .doc filter")
+IF( ICONV_FOUND )
+    SET( HAVE_ICONV_H 1 )
+    SET( ICONV_REQUIRES_CONST ${ICONV_SECOND_ARGUMENT_IS_CONST} )
+ENDIF( ICONV_FOUND )
+
+#
+# Iconv checks for wv2
+# 
+
+INCLUDE( CheckIncludeFile )
+
+CHECK_INCLUDE_FILE( sys/iconv.h HAVE_SYS_ICONV_H )
+
+# Add "COMPILE_DEFINITIONS definitions" to TRY_RUN only if we have compile definitions
+
+# Make sure ICONV_COMPILE_DEFINITIONS will never be empty (in case we define neither HAVE_ICONV_H nor HAVE_SYS_ICONV_H),
+# otherwise TRY_RUN will fail due to COMPILE_DEFINITIONS being followed by nothing
+
+SET( ICONV_COMPILE_DEFINITIONS "-DBLAH" )
+
+IF( HAVE_ICONV_H )
+  SET( ICONV_COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} "-DHAVE_ICONV_H" )
+ENDIF( HAVE_ICONV_H )
+
+IF( HAVE_SYS_ICONV_H )
+  SET( ICONV_COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} "-DHAVE_SYS_ICONV_H" )
+ENDIF( HAVE_SYS_ICONV_H )
+
+TRY_RUN( MODERN_ICONV_RUN MODERN_ICONV_COMPILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp ${CMAKE_SOURCE_DIR}/cmake/TestModernIconv.c COMPILE_DEFINITIONS ${ICONV_COMPILE_DEFINITIONS} )
+
+IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
+  MESSAGE( STATUS "wv2 depends on a modern iconv installation, supporting UNICODELITTLE and" )
+  MESSAGE( STATUS "UNICODEBIG. The detected iconv version doesn't support these conversions." )
+  MESSAGE( STATUS "" )
+  MESSAGE( STATUS "Please get a new libiconv from http://www.gnu.org/software/libiconv/" )
+  MESSAGE( STATUS "You might want to install the library to some alternative directory, in" )
+  MESSAGE( STATUS "order not to overwrite your current installation. Please use the options" )
+  MESSAGE( STATUS "-DICONV_INCLUDE_DIR=DIR and -DICONV_LIBRARIES=DIR to specify the location." )
+  MESSAGE( STATUS "" )
+  set(ICONV_FOUND FALSE)
+ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
+
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOMAIN_INCLUDES} )
 
@@ -41,8 +92,9 @@ endif (NOT TINY)
 
 add_subdirectory( ascii )
 add_subdirectory( rtf )
-if(WV2_FOUND)
+
+if(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
 	add_subdirectory(msword-odf)
-endif(WV2_FOUND)
+endif(GLIB2_FOUND AND GOBJECT_FOUND AND ICONV_FOUND AND LIBGSF_FOUND)
 
 add_subdirectory( docx )

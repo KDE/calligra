@@ -22,7 +22,7 @@
 #include "graphicshandler.h"
 #include "document.h"
 
-#include <wv2/olestream.h>
+#include <wv2/src/olestream.h>
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -137,7 +137,7 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
     picName->append(QString::number(m_pictureCount));
     m_pictureCount++;
     //the type coming in corresponds to MSOBLIPTYPE
-    //  see wv2/graphics.h
+    //  see wv2/src/graphics.h
     if (type == 5)
         picName->append(".jpg");
     else if (type == 6)

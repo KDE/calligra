@@ -1,0 +1,171 @@
+#! /usr/bin/env python
+##############################################################################
+# This file is part of the wvWare 2 project
+# Copyright (C) 2003 Werner Trobin <trobin@kde.org>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License version 2 as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General Public License
+# along with this library; see the file COPYING.LIB.  If not, write to
+# the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+##############################################################################
+
+# An automatic regression test script, based on a record/replay approach.
+# It runs .doc files through wv2, using a verbose "consumer", printing tons
+# of information about the .doc file. This information is compared to a
+# previously recorded and verified template.
+
+import getopt, sys, os, filecmp
+from stat import *
+
+
+# Prints usage information to stdout
+def usage():
+    print "Regression test for the wv2 library..."
+    print "Usage: regression [OPTION]... [FILE]...\n"
+    print "Examples:"
+    print "  regression --record <document.doc>     # Record a template of the given .doc"
+    print "  regression <file/directory>            # Verify the given file/directory\n"
+    print "Options:"
+    print "  -d, --diff            In case the regression test fails, output the diff"
+    print "  -h, --help            Output this information"
+    print "  -l, --local           Don't recurse to subdirectories"
+    print "  -m, --missing-only    Record only missing template files (implies -r)"
+    print "  -p, --pedantic        Abort on any .doc error"
+    print "  -r, --record          Record a template file"
+    print "  -x, --extension=EXT   Use EXT as extension for the template files (default=reg)"
+
+
+# Processes all remaining command line arguments after getopt removed
+# all the options.
+def process(args):
+    for a in args:
+        try:
+            mode = os.stat(a)[ST_MODE]
+            if S_ISDIR(mode):
+                processDirectory(a)
+            elif S_ISREG(mode):
+                processDocument(a)
+            else:
+                print "Skipping %s: This isn't a file or directory" % (a)
+        except OSError, e:
+            print "Skipping %s: %s (%d)" % (a, e.strerror, e.errno)
+
+
+# Recursively processes all (.doc) files of a directory
+def processDirectory(directory):
+    for f in os.listdir(directory):
+        pathname = '%s/%s' % (directory, f)
+        mode = os.stat(pathname)[ST_MODE]
+        if S_ISDIR(mode) and local == 0:
+            processDirectory(pathname)
+        elif S_ISREG(mode):
+            processDocument(pathname)
+        else:
+            # Unknown file type, print a message
+            print "Skipping", pathname
+
+
+# Process a single (.doc) file. Starts wv2 on it and compares (or generates)
+# the template file
+def processDocument(document):
+    root, ext = os.path.splitext(document)
+    if ext != ".doc" and ext != ".DOC":
+        return
+
+    print "Processing:", document
+    status = 0
+    result = 0
+    templateFile = root + '.' + extension
+
+    if record == 1:
+        if missing == 0 or not os.path.exists(templateFile):
+            status = os.system("./handlertest \"%s\" &> \"%s\"" % (document, templateFile))
+            if status != 0:
+                os.unlink(templateFile)
+    else:
+        # Does the template file exist at all?
+        try:
+            mode = os.stat(templateFile)[ST_MODE]
+            if not S_ISREG(mode):
+                status = -42
+        except OSError:
+            status = -42
+
+        if status == -42:
+            print "Error: There's no template file for '%s'" % (document)
+            result = 1 # We don't want to exit even with --pedantic
+        else:          # Okay, it makes sense to start the comparison
+            tmpFile = os.tempnam()
+            status = os.system("./handlertest \"%s\" &> \"%s\"" % (document, tmpFile))
+            # If the status is okay we compare the files
+            if status == 0:
+                result = filecmp.cmp(tmpFile, templateFile)
+                if result == 0 and diff == 1:
+                    os.system("diff -ua \"%s\" \"%s\"" % (templateFile, tmpFile))
+            print "%s: %d (status = %d)" % (document, result, status)
+            os.unlink(tmpFile)
+
+    if result != 1 and pedantic == 1:
+        print "Error: Aborting the test run (--pedantic), status", status, "result", result
+        sys.exit(status)
+
+
+# Interpret the options and kick off the testing process.
+# Sets the global variables "record", "extension", and "pedantic"
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "dhrx:plm", ["diff", "help", "record", "extension=", "pedantic", "local", "missing-only"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        usage()
+        sys.exit(2)
+
+    global diff, record, extension, pedantic, local, missing
+    # Does the user want to see the diff on failure?
+    diff = 0
+    # Are we in record or in verify mode?
+    record = 0
+    # What extension do we use?
+    extension = "reg"
+    # Pedantic mode?
+    pedantic = 0
+    # Recurse?
+    local = 0
+    # Missing only?
+    missing = 0
+
+    for o, a in opts:
+        if o in ("-d", "--diff"):
+            diff = 1
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-r", "--record"):
+            record = 1
+        if o in ("-x", "--extension"):
+            extension = a
+        if o in ("-p", "--pedantic"):
+            pedantic = 1
+        if o in ("-l", "--local"):
+            local = 1
+        if o in ("-m", "--missing-only"):
+            missing = 1
+            record = 1
+
+    if len(args) == 0:
+        usage()
+        sys.exit(2)
+
+    process(args)
+
+if __name__ == "__main__":
+    main()

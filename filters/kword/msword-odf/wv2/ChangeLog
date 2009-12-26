@@ -1,0 +1,202 @@
+2009-10-30  Benjamin Cail <cricketc@gmail.com>
+
+	* Release wv2-0.4.2 with a couple updates.
+
+2009-10-08  Benjamin Cail <cricketc@gmail.com>
+
+	* Release wv2-0.4.1 with a few updates.
+
+2009-08-26  Benjamin Cail <cricketc@gmail.com>
+
+	* Release wv2-0.4.0 with cmake build system from Pau Garcia i 
+	Quiles and some table border/shading improvements from 
+	boemann.
+
+2009-03-05  Benjamin Cail <cricketc@gmail.com>
+
+	* Released wv2-0.3.1 with a few bugfixes for image handling.
+
+2009-02-16  Benjamin Cail <cricketc@gmail.com>
+
+	* Released wv2-0.3.0 with basic for images, both metafile and
+	  bitmap.
+
+2006-06-12  Werner Trobin  <trobin@kde.org>
+
+	* Applied security fix to HEAD
+
+2004-09-14  Werner Trobin  <trobin@kde.org>
+
+	* Applied a patch by Friedemann Kleint (Fa. metis) <kleint@bifab-l.de>
+	  with fixes for Solaris / Sun C++ 5.5 Patch 113817-02 2003/08/29.
+	  Additionally fixes some tab-related bugs (unique and erase stuff)
+
+2004-05-10  Werner Trobin  <trobin@kde.org>
+
+	* Ported the gcc 3.4 fixes to HEAD
+
+2004-05-09  Werner Trobin  <trobin@kde.org>
+
+	* Released wv2-0.2.2 (WV2_0_2_1_BRANCH)
+
+	* Fixed compilation with gcc 3.4
+
+2003-11-08  Werner Trobin  <trobin@kde.org>
+
+	* Cleaned up the configure.in script and the Makefiles a bit.
+	  Let's hope this still works everywhere and doesn't barf on the
+	  iconv test on Cygwin...
+
+2003-11-06  Werner Trobin  <trobin@kde.org>
+
+	* Safer version of the wvlog.h fix. Backported to the branch.
+
+	* Added a version header surprisingly similar to kdeversion.h to
+	  make it easier for the KOffice part of the filter.
+
+2003-11-05  Werner Trobin  <trobin@kde.org>
+
+	* Released wv2-0.2.1
+
+	* Fixed a very stupid bug: it didn't compile on gcc 2.95.x ... doh!
+
+	* Bumped the CVS version 0.2.5 and the library version to 2.0.0.
+	  The goal is to have at least basic image support for the 0.3
+	  release. Depending on the quality of the 0.2 release there might
+	  be one or more bugfix releases (0.2.1, 0.2.2,...).
+
+	* Released wv2-0.2
+
+	* Merged some fixes from HEAD to the WV2_0_1_9_BRANCH
+
+2003-10-23  Werner Trobin  <trobin@kde.org>
+
+	* Fixed a tricky list bug. When a compat list was converted to Word 8
+	  format it worked for the first time. From the second time on the
+	  index into the pllfo was off-by-one. This triggered a crash in case
+	  the first list in the pllfo was a compat one (i.e. there are *just*
+	  compat lists in a document).
+
+2003-09-11  Werner Trobin  <trobin@kde.org>
+
+	* More image stuff. I had to split some interfaces, let's see if it's
+	  cleaner that way.
+
+2003-09-08  Werner Trobin  <trobin@kde.org>
+
+	* Started to implement image support for Word 6 style inline images.
+
+2003-09-01  Werner Trobin  <trobin@kde.org>
+
+	* Released wv2-0.1.9
+
+2003-08-30  Werner Trobin  <trobin@kde.org>
+
+	* Implemented a different logging mechanism to support a really
+	  quiet wv2 for users. :-)
+	  Packagers will have to use --disable-debug
+
+2003-08-29  Werner Trobin  <trobin@kde.org>
+
+	* Okay, as it turned out there was still a problem with lists and
+	  restarting counters yesterday. Now all my test documents work
+	  as expected, though.
+
+2003-08-28  Werner Trobin  <trobin@kde.org>
+
+	* Fixed the handling of startAt in list level overrides and
+	  some related list bugs. Looks pretty okay now...
+
+2003-08-26  Werner Trobin  <trobin@kde.org>
+
+	* Fixed list handling for Word 6 files.
+
+2003-08-25  Werner Trobin  <trobin@kde.org>
+
+	* Added a public domain implementation of CRC32 written by
+	  Ross Williams. We need that to calculate unique list ids.
+
+2003-08-23  Werner Trobin  <trobin@kde.org>
+
+	* Added some ideas about image handling in wv2 to the design document.
+	  Moved some variables in Parser9x to the private section.
+
+2003-08-13  Werner Trobin  <trobin@kde.org>
+
+	* Fixed the problem of lost text in some Word 95 documents.
+	  Unfortunately MS uses CP1252 characters marked as UNDEFINED
+	  in the specification. iconv doesn't really like that.
+	  The filter now tries to recover as much text as possible.
+
+2003-08-09  Werner Trobin  <trobin@kde.org>
+
+	* Rewrote parts of the design document to reflect the recent changes.
+
+2003-08-07  Werner Trobin  <trobin@kde.org>
+
+	* Removed the "any later version" clause from the license headers.
+
+	* Released wv2-0.1.8
+
+	* Fixed a bug in the lid handling
+
+2003-08-01  Werner Trobin  <trobin@kde.org>
+
+	* Fixed some SPRMs (Word 6 vs. Word 8)
+
+2003-07-31  Werner Trobin  <trobin@kde.org>
+
+	* Released wv2-0.1.7
+
+	* Word 6/7 support should work now. Well, at least none of the test
+	  documents crashes and headers/footers also seem to work. Now I'd
+	  need some more test documents (including screenshots).
+
+2003-07-23  Werner Trobin  <trobin@kde.org>
+
+	* Started to implement Word 6/7 support by moving code around. This
+	  stuff is quite tricky. Basically I'm trying to unify the code and
+	  move it to the common base class Parser9x, which Parser95 and
+	  Parser97 inherit.
+
+2003-06-08  Werner Trobin  <trobin@kde.org>
+
+	* Applied a patch from Ben Burton <bab@debian.org> to make wv2 work
+	  with libgsf-1.8.x and libgsf-1.7.2.
+
+	* Released wv2-0.1
+
+2003-04-26  Werner Trobin  <trobin@kde.org>
+
+	* Got rid of the acconfig.h file, as autoconf 2.57 issued warnings.
+
+2003-04-08  Werner Trobin  <trobin@kde.org>
+
+	* Applied a patch from Adrian Schroeter <adrian@suse.de>, fixing the
+	  build system. (e.g. CFLAGS -> AM_CFLAGS,...)
+
+	* Fixed the libtool versioning
+
+	* Released wv2-0.0.9
+
+2003-03-21  Werner Trobin  <trobin@kde.org>
+
+	* Worked around another bug in list handling (05_...). Unfortunately
+	  I have no idea how to fix that "the right way" as some information
+	  is just missing and I see no way to recover it (having only one
+	  test document with that oddity). Maybe I can recognize a pattern
+	  when I get some more flaky list documents.
+
+	* Fixed a bug in list handling, avoids crashes on flaky documents.
+
+2003-03-16  Werner Trobin  <trobin@kde.org>
+
+	* Removed the "/wv2" after the include path, to avoid header
+	  clashes when #including e.g. parser.h (libxml2 also has a
+	  header named parser.h)
+
+2003-03-09  Werner Trobin  <trobin@kde.org>
+
+	* Released wv2-0.0.8 (and decided to start writing a ChangeLog :-)
+
+	* Registered the project at freshmeat.net

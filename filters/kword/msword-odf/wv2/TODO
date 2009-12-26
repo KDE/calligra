@@ -1,0 +1,31 @@
+This file contains the next few features I'd like to implement (in no
+particular order):
+
+* SPRM related:
+  - Try to implement some more of the known SPRMs and merge the information
+    about the non-documented sprms from OOo
+  - Try to find out what the sprms 0xD632 and 0xD634 mean and how to interpret
+    them (OOo). Some spacing related thing. Check all other sprms found in
+    C.U.5.doc. It seems that some previously undocumented sprms like 0xD620
+    are known in OOo now.
+
+* Image reading:
+  - Try to write some image reading code, OOo has some nice comments in the
+    ww8graf* files.
+  - Find out how drawings are anchored, tell David
+  - Try to import textboxes / header-textboxes. Note: Internally they are
+    represented like drawings
+
+* Performance:
+  - Run cachegrind on the parsertest and check for bottlenecks
+
+* Bugs:
+  - The parser has problems with Informatikmanagement.doc (header)
+  - The generated testcases have alignment problems on Solaris
+  - The helpertest fails on Solaris with some backtrace ending in UString. Weird
+  - Fields don't really work in the KOffice part of the filter... (e.g. page
+    numbers in the footer)
+
+* Build system:
+  - Fix the iconv test (cygwin link line problem)
+  - Make sure to create some test system with gcc 2.95.x...

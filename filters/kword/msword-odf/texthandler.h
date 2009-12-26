@@ -28,8 +28,8 @@
 #include "versionmagic.h"
 #include "paragraph.h"
 
-#include <wv2/handlers.h>
-#include <wv2/lists.h>
+#include <wv2/src/handlers.h>
+#include <wv2/src/lists.h>
 #include <QString>
 #include <QObject>
 #include <qdom.h>

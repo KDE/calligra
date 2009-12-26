@@ -24,9 +24,9 @@
 
 #include "conversion.h"
 
-#include <wv2/word97_generated.h>
-#include <wv2/functordata.h>
-#include <wv2/fields.h>
+#include <wv2/src/word97_generated.h>
+#include <wv2/src/functordata.h>
+#include <wv2/src/fields.h>
 
 #include <kdebug.h>
 #include <QRegExp>

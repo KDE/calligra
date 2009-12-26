@@ -39,9 +39,9 @@
 //#include <KoXmlWriter.h>
 
 #include <document.h>
-#include <wv2/word95_generated.h>
-#include <wv2/olestorage.h>
-#include <wv2/olestream.h>
+#include <wv2/src/word95_generated.h>
+#include <wv2/src/olestorage.h>
+#include <wv2/src/olestream.h>
 
 typedef KGenericFactory<MSWordOdfImport> MSWordOdfImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libmswordodf_import, MSWordOdfImportFactory("kofficefilters"))

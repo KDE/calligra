@@ -1,0 +1,14 @@
+We would like to thank the following people for their help:
+
+Harri Porten <harri@kde.org> - for the UString class
+Karl-Heinz Zimmer <khz@kde.org> - for hints about bits and pieces of the Word
+                                  oddities
+F J Franklin <F.J.Franklin@sheffield.ac.uk> - for the build system, all the
+                                              libtool/autofoo magic
+Jeremy White, CEO of CodeWeavers, Inc. - for donating a CrossOver Office
+                                         license
+Stephan Kulow <coolo@kde.org> - for all the code we stole^H^H^Hborrowed from
+                                the KDE build system
+Duncan Wilcox <duncan@focuseek.com> - for porting wv2 to Visual C++,
+                                      for adding "OLE from memory" support,
+                                      and for sending good bug reports
