@@ -34,10 +34,6 @@ public:
     KWPrintingDialog(KWView *view);
     ~KWPrintingDialog();
 
-    void setClipToPage(bool on) {
-        m_clipToPage = on;
-    }
-
     virtual QList<QWidget*> createOptionWidgets() const;
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
@@ -51,7 +47,6 @@ protected:
 
 private:
     KWDocument *m_document;
-    bool m_clipToPage;
 };
 
 #endif

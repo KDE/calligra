@@ -37,8 +37,7 @@
 
 KWPrintingDialog::KWPrintingDialog(KWView *view)
         : KoPrintingDialog(view),
-        m_document(view->kwdocument()),
-        m_clipToPage(false)
+        m_document(view->kwdocument())
 {
     setShapeManager(view->kwcanvas()->shapeManager());
 
@@ -72,37 +71,34 @@ KWPrintingDialog::~KWPrintingDialog()
 QRectF KWPrintingDialog::preparePage(int pageNumber)
 {
     const int resolution = printer().resolution();
-    KoInsets bleed = m_document->pageManager()->padding();
-    const int bleedOffset = (int)(m_clipToPage ? 0 : POINT_TO_INCH(-bleed.left * resolution));
-    const int bleedWidth = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.left + bleed.right) * resolution));
-    const int bleedHeigt = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
-
     KWPage page = m_document->pageManager()->page(pageNumber);
     if (! page.isValid())
         return QRectF();
-    QRectF pageRect = page.rect(pageNumber);
-    pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
+    printer().setPaperSize(page.rect(pageNumber).size(), QPrinter::Point);
 
-    printer().setPaperSize(pageRect.size(), QPrinter::Point);
-    const qreal offsetInDocument = page.offsetInDocument();
+    KoInsets bleed = m_document->pageManager()->padding();
+    const int bleedOffsetX = qRound(POINT_TO_INCH(bleed.left * resolution));
+    const int bleedOffsetY = qRound(POINT_TO_INCH(bleed.top * resolution));
+    const int bleedWidth = qRound(POINT_TO_INCH((bleed.left + bleed.right) * resolution));
+    const int bleedHeight = qRound(POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
 
-    const int pageOffset = qRound(POINT_TO_INCH(resolution * offsetInDocument));
-
+    const int pageOffset = qRound(POINT_TO_INCH(resolution * page.offsetInDocument()));
     painter().translate(0, -pageOffset);
+
     qreal width = page.width();
-    int clipHeight = (int) POINT_TO_INCH(resolution * page.height());
+    const int clipHeight = (int) POINT_TO_INCH(resolution * page.height());
     int clipWidth = (int) POINT_TO_INCH(resolution * page.width());
-    int offset = bleedOffset;
+    int offsetX = -bleedOffsetX;
     if (page.pageSide() == KWPage::PageSpread) {
         width /= 2;
         clipWidth /= 2;
         if (pageNumber != page.pageNumber()) { // right side
-            offset += clipWidth;
+            offsetX += clipWidth;
             painter().translate(-clipWidth, 0);
         }
     }
 
-    return QRectF(offset, pageOffset, clipWidth + bleedWidth, clipHeight + bleedHeigt);
+    return QRectF(offsetX, pageOffset - bleedOffsetY, clipWidth + bleedWidth, clipHeight + bleedHeight);
 }
 
 QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
