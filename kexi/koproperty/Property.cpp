@@ -356,28 +356,33 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
                  || (t == QVariant::String && newt == QVariant::ByteArray)
                  || (t == QVariant::ULongLong && newt == QVariant::LongLong)
                  || (t == QVariant::LongLong && newt == QVariant::ULongLong)
-                )) {
+                ))
+    {
         kWarning() << "INCOMPATIBLE TYPES! old=" << currentValue
-        << " new=" << value;
+            << " new=" << value;
     }
 
     //1. Check if the value should be changed
     bool ch;
-    if (t == QVariant::DateTime
-            || t == QVariant::Time) {
+    if (   t == QVariant::DateTime
+        || t == QVariant::Time)
+    {
         //for date and datetime types: compare with strings, because there
         //can be miliseconds difference
         ch = (currentValue.toString() != value.toString());
-    } else if (t == QVariant::String || t == QVariant::ByteArray) {
+    }
+    else if (t == QVariant::String || t == QVariant::ByteArray) {
         //property is changed for string type,
         //if one of value is empty and other isn't..
         ch = ((currentValue.toString().isEmpty() != value.toString().isEmpty())
               //..or both are not empty and values differ
               || (!currentValue.toString().isEmpty() && !value.toString().isEmpty() && currentValue != value));
-    } else if (t == QVariant::Invalid && newt == QVariant::Invalid)
+    } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
-    else
+    }
+    else {
         ch = (currentValue != value);
+    }
 
     if (!ch)
         return;
@@ -387,27 +392,29 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
         if (!d->changed)
             d->oldValue = currentValue;
         d->changed = true;
-    } else {
+    }
+    else {
         d->oldValue = QVariant(); // clear old value
         d->changed = false;
     }
-    QVariant prevValue;
     if (d->parent) {
         d->parent->childValueChanged(this, value, rememberOldValue);
     }
 
+    QVariant prevValue;
     if (d->composed && useComposedProperty) {
         prevValue = currentValue; //???
         d->composed->setChildValueChangedEnabled(false);
         d->composed->setValue(this, value, rememberOldValue);
         d->composed->setChildValueChangedEnabled(true);
 //        prevValue = d->composed->value();
-    } else {
+    }
+    else {
         prevValue = currentValue;
     }
 
 //    if (!d->composed || !useComposedProperty)// || !composed->handleValue())
-        d->value = value;
+    d->value = value;
 
     if (!d->parent) { // emit only if parent has not done it
         emitPropertyChanged(); // called as last step in this method!
