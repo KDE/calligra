@@ -86,6 +86,12 @@ protected:
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context = 0);
 
+    //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
+    //! but return KoFilter::OK if the document for the content type is not found.
+    KoFilter::ConversionStatus loadAndParseDocumentIfExists(
+        const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+        QString& errorMessage, MsooXmlReaderContext* context = 0);
+
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.
@@ -93,6 +99,10 @@ private:
 
     KoFilter::ConversionStatus loadAndParse(const QString& filename,
                                             KoXmlDocument& doc, QString& errorMessage);
+
+    KoFilter::ConversionStatus loadAndParseDocumentInternal(
+        const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+        QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound);
 
     KZip* m_zip; //!< Input zip file
 

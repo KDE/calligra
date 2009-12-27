@@ -462,9 +462,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     }
     if ((m_currentRow + 1) < rNumber) {
         body->startElement("table:table-row");
-        const KoFilter::ConversionStatus saveRowStyleStatus = saveRowStyle(QString());
-        if (saveRowStyleStatus != KoFilter::OK)
-            return saveRowStyleStatus;
+        RETURN_IF_ERROR( saveRowStyle(QString()) )
 
         const uint skipRows = rNumber - (m_currentRow + 1);
         if (skipRows > 1) {
@@ -475,9 +473,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     }
 
     body->startElement("table:table-row");
-    const KoFilter::ConversionStatus saveRowStyleStatus = saveRowStyle(ht);
-    if (saveRowStyleStatus != KoFilter::OK)
-        return saveRowStyleStatus;
+    RETURN_IF_ERROR( saveRowStyle(ht) )
 
     m_currentColumn = -1;
     while (!atEnd()) {
@@ -702,13 +698,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                                    QLatin1String("Excel_20_Built-in_20_Normal"));
 
             KoCharacterStyle cellCharacterStyle;
-            cellFormat->setupCharacterStyle(&cellCharacterStyle);
+            cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
 kDebug() << "1";
             cellCharacterStyle.saveOdf(cellStyle);
 kDebug() << "2";
 
 //moved            fontStyle->setupCellTextStyle(&cellStyle);
-            if (!cellFormat->setupCellStyle(&cellStyle)) {
+            if (!cellFormat->setupCellStyle(m_context->styles, &cellStyle)) {
 //                raiseUnexpectedAttributeValueError(s, "c@s");
                 return KoFilter::WrongFormat;
             }

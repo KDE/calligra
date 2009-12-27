@@ -30,9 +30,7 @@
 
 #define TRY_READ_WITH_ARGS_INTERNAL(name, args) \
     args \
-    const KoFilter::ConversionStatus result = read_ ## name (); \
-    if (result != KoFilter::OK) \
-        return result;
+    RETURN_IF_ERROR( read_ ## name () )
 
 #define TRY_READ_WITH_ARGS(name, args) \
     TRY_READ_WITH_ARGS_INTERNAL(name, m_read_ ## name ## _args = args)
@@ -142,6 +140,10 @@
 
 #define ERROR_NO_ELEMENT(el) \
     raiseError(i18n("Element \"%1\" not found", QString(el))); \
+    return KoFilter::WrongFormat;
+
+#define ERROR_UNEXPECTED_SECOND_OCCURENCE(el) \
+    raiseError(i18n("Unexpected second occurence of \"%1\" element", QLatin1String(STRINGIFY(el)))); \
     return KoFilter::WrongFormat;
 
 #define ERROR_NO_ATTRIBUTE(attr) \
@@ -294,7 +296,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         bool ok; \
         const int val = string.toInt(&ok); \
         if (!ok) { \
-            kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute " debugElement ")"; \
+            kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val; \

@@ -32,6 +32,8 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
 
+#include <memory>
+
 #include <QColor>
 #include <QFile>
 #include <QFont>
@@ -497,50 +499,41 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     // 1. parse themes
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
-
     {
-        MSOOXML::DrawingMLTheme *theme = new MSOOXML::DrawingMLTheme;
+        std::auto_ptr<MSOOXML::DrawingMLTheme> theme( new MSOOXML::DrawingMLTheme );
         MSOOXML::MsooXmlThemesReader themesReader(writers);
-        MSOOXML::MsooXmlThemesReaderContext context(*theme);
+        MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
         //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context) )
+        if (!theme.get()->name.isEmpty()) {
+            // theme loaded
+            themes.insert(theme.get()->name, theme.get());
+            theme.release();
         }
-        themes.insert(theme->name, theme);
     }
     // 2. parse shared strings
     QVector<QString> sharedStrings;
     {
         XlsxXmlSharedStringsReader sharedStringsReader(writers);
         XlsxXmlSharedStringsReaderContext context(sharedStrings);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context) )
     }
     // 3. parse styles
     XlsxStyles styles;
     {
         XlsxXmlStylesReader stylesReader(writers);
         XlsxXmlStylesReaderContext context(styles);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context) )
     }
     // 4. parse document
     {
         XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::spreadsheetDocument, &documentReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocument(
+            MSOOXML::ContentTypes::spreadsheetDocument, &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;

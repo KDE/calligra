@@ -49,7 +49,7 @@ private:
 };
 
 XlsxXmlSharedStringsReader::XlsxXmlSharedStringsReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
+        : XlsxXmlCommonReader(writers)
         , m_context(0)
         , d(new Private)
 {
@@ -152,7 +152,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
 #undef CURRENT_EL
 #define CURRENT_EL si
 //! si handler (String Item)
-/*! ECMA-376, 18.2.20, p. 1740.
+/*! ECMA-376, 18.2.20, p. 1911.
  This element is the representation of an individual string in the Shared String table.
 
  Child elements:
@@ -169,53 +169,31 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 {
     READ_PROLOGUE
 
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        if (isStartElement()) {
-            TRY_READ_IF(t)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL t
-//! t handler (Text)
-/*! ECMA-376, 18.4.12, p. 1914.
- This element represents the text content shown as part of a string.
-
- No child elements.
- Parent elements:
- - is (§18.3.1.53)
- - r (§18.4.4)
- - rPh (§18.4.6)
- - [done] si (§18.4.8)
- - text (§18.7.7)
-
- @todo support all child elements
-*/
-KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_t()
-{
-    READ_PROLOGUE
-    readNext();
-
     kDebug() << "#" << m_index << text().toString();
     if (m_index >= (uint)m_context->strings->size()) {
         raiseError(i18n("Declared number of shared strings too small (%1)", m_context->strings->size()));
         return KoFilter::WrongFormat;
     }
 
-    (*m_context->strings)[m_index] = text().toString();
-    m_index++;
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(t)) {
+                TRY_READ(t)
+                (*m_context->strings)[m_index] = m_text;
+            }
+            else if (QUALIFIED_NAME_IS(r)) {
+                TRY_READ(r)
+                (*m_context->strings)[m_index] = m_text;
+            }
+//! @todo support phoneticPr
+//! @todo support rPh
+            ELSE_WRONG_FORMAT
+        }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    m_index++;
     READ_EPILOGUE
 }

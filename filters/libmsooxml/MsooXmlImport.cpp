@@ -147,18 +147,44 @@ static bool checkParsedXML(const char *xmlName, KoFilter::ConversionStatus statu
     return true;
 }
 
-// protected
-KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
+// private
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
     const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
-    QString& errorMessage, MsooXmlReaderContext* context)
+    QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound)
 {
+    *pathFound = false;
     if (!m_zip) {
         return KoFilter::UsageError;
     }
     const QString path = m_contentTypes.value(contentType);
     kDebug() << contentType << ":" << path;
+    if (path.isEmpty())
+        return KoFilter::FileNotFound;
+
+    *pathFound = true;
     return Utils::loadAndParseDocument(
                reader, m_zip, writers, errorMessage, path, context);
+}
+
+// protected
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
+    const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+    QString& errorMessage, MsooXmlReaderContext* context)
+{
+    bool pathFound;
+    return loadAndParseDocumentInternal( contentType, reader, writers, errorMessage, context, &pathFound);
+}
+
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentIfExists(
+    const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+    QString& errorMessage, MsooXmlReaderContext* context)
+{
+    bool pathFound;
+    const KoFilter::ConversionStatus status( loadAndParseDocumentInternal(
+        contentType, reader, writers, errorMessage, context, &pathFound) );
+    if (!pathFound)
+        return KoFilter::OK;
+    return status;
 }
 
 KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
@@ -196,17 +222,9 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
         return status;
     }
 
-    status = Utils::loadContentTypes(m_contentTypesXML, m_contentTypes);
-    if (status != KoFilter::OK) {
-        return status;
-    }
-
+    RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )
     MsooXmlRelationships relationships(*this, writers, errorMessage);
-
-    status = parseParts(writers, &relationships, errorMessage);
-    if (status != KoFilter::OK) {
-        return status;
-    }
+    RETURN_IF_ERROR( parseParts(writers, &relationships, errorMessage) )
 //! @todo sigProgress()
     emit sigProgress(10);
 

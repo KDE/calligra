@@ -87,6 +87,14 @@ inline QString EMU_TO_INCH_STRING(int emu)
 #define PT_TO_PX(pt) ((pt)*1.33597222222)
 #define PX_TO_CM(px) ((px)*0.0264)
 
+//! Returns from the current block if the result of @a call is not equal to KoFilter::OK
+#define RETURN_IF_ERROR( call ) \
+    { \
+        const KoFilter::ConversionStatus result = call; \
+        if (result != KoFilter::OK) \
+            return result; \
+    }
+
 //! Common utilities for handling MSOOXML formats
 namespace MSOOXML
 {
@@ -215,13 +223,13 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip*
 
 // -- conversions ---
 
-//! Handles ST_Lang value @a value (Language Reference) (22.9.2.6)
+//! Handles ST_Lang value @a value (Language Reference) (SharedML, 22.9.2.6)
 /*! The value specifies that its contents contains a language identifier as defined by RFC 4646/BCP 47.
     Sets up @a language and @a country based on @a value that is of format {langugage}-{country}
     @return true on success. */
 MSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
 
-//! @return QColor value for ST_HexColorRGB (Hexadecimal Color Value) (22.9.2.5)
+//! @return QColor value for ST_HexColorRGB (Hexadecimal Color Value) (SharedML, 22.9.2.5)
 //! @par val color value in RRGGBB hexadecimal format
 inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 {

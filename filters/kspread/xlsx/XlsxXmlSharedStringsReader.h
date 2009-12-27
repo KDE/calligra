@@ -24,7 +24,7 @@
 #ifndef XLSXXMLSHAREDSTRINGSREADER_H
 #define XLSXXMLSHAREDSTRINGSREADER_H
 
-#include <MsooXmlReader.h>
+#include "XlsxXmlCommonReader.h"
 
 class XlsxImport;
 
@@ -37,7 +37,7 @@ public:
 
 //! A class reading MSOOXML XLSX markup - sharedStrings.xml part.
 //! See ECMA-376, 12.3.15: Shared String Table Part
-class XlsxXmlSharedStringsReader : public MSOOXML::MsooXmlReader
+class XlsxXmlSharedStringsReader : public XlsxXmlCommonReader
 {
 public:
     explicit XlsxXmlSharedStringsReader(KoOdfWriters *writers);
@@ -52,7 +52,6 @@ protected:
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_sst();
     KoFilter::ConversionStatus read_si();
-    KoFilter::ConversionStatus read_t();
 
     uint m_index;
 

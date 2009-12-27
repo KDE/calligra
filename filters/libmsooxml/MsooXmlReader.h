@@ -109,6 +109,7 @@ protected:
     static const char* constOff;
     static const char* constTrue;
     static const char* constFalse;
+    static const char* constNone;
     static const char* const1;
     static const char* const0;
     static const char* constAuto;

@@ -25,6 +25,7 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlReader.h>
+#include <QColor>
 
 class KoCharacterStyle;
 class KoGenStyle;
@@ -32,6 +33,18 @@ class XlsxImport;
 class XlsxStyles;
 class XlsxCellFormat;
 class XlsxXmlStylesReader;
+
+//! Color information. Used by background and foregound color for XlsxFillStyle, by color of XlsxFontStyle
+struct XlsxColorStyle
+{
+    XlsxColorStyle();
+
+    bool automatic; //!< default: false
+    int indexed; //!< default: -1
+    QColor rgb;
+//! @todo theme;
+//! @todo tint
+};
 
 //! Single XLSX font style definition as specified in ECMA-376, 18.8.23 (Fonts), p. 1964.
 /*! @see XlsxXmlStylesReader::read_fonts() */
@@ -45,7 +58,7 @@ public:
     //! Used by u@val (§18.4.13) - SpreadsheetML
     //! CASE #S1730
     enum ST_UnderlineValue {
-        NoUnderline = 0,
+        NoUnderline,
         SingleUnderline, //!< The default
         DoubleUnderline,
         SingleAccountingUnderline,
@@ -55,7 +68,7 @@ public:
     QString name;
     ST_UnderlineValue underline;
 //! @todo charset
-//! @todo color
+    XlsxColorStyle color;
 //! @todo bool condense (Mac)
 //! @todo bool shadow (Mac)
 //! @todo extend
@@ -78,7 +91,7 @@ public:
     qreal size() const {
         return m_size;
     }
-protected:
+
     //! Sets up @a cellStyle to match this cell text style.
     //! @todo implement more styling
     void setupCellTextStyle(KoGenStyle* cellStyle) const;
@@ -90,8 +103,59 @@ protected:
 private:
     qreal m_size;
     bool m_defaultSize;
+};
 
-    friend class XlsxCellFormat;
+//! @return QColor value for  ST_UnsignedIntHex (ARGB) e.g. for 18.8.19 fgColor (Foreground Color) - SpreadsheetML only
+//! @par val color value in AARRGGBB hexadecimal format
+inline QColor ST_UnsignedIntHex_to_QColor(const QString& color)
+{
+    return QColor(QRgb(color.toInt(0, 16)));
+}
+
+//! Single XLSX fill style definition as specified in ECMA-376, ECMA-376, 18.8.21, p. 1963.
+/*! @see XlsxXmlStylesReader::read_fills() */
+class XlsxFillStyle
+{
+public:
+    XlsxFillStyle();
+
+    //! 18.18.55 ST_PatternType (Pattern Type), p. 2713
+    /*! Indicates the style of fill pattern being used for a cell format.
+        Compare to MSOOXML::DrawingMLPatternFillStyle which is different pattern type. */
+    enum ST_PatternType {
+        NonePatternType,
+        SolidPatternType,
+        DarkDownPatternType,
+        DarkGrayPatternType,
+        DarkGridPatternType,
+        DarkHorizontalPatternType,
+        DarkTrellisPatternType,
+        DarkUpPatternType,
+        DarkVerticalPatternType,
+        LightPatternType,
+        LightDownPatternType,
+        LightGrayPatternType,
+        LightGridPatternType,
+        LightHorizontalPatternType,
+        LightTrellisPatternType,
+        LightUpPatternType,
+        LightVerticalPatternType,
+        MediumGrayPatternType,
+        Gray0625PatternType,
+        Gray125PatternType
+    };
+
+    ST_PatternType patternType;
+    XlsxColorStyle bgColor;
+    XlsxColorStyle fgColor;
+
+    //! Sets up @a cellStyle to match this style.
+    //! @todo implement more styling
+    void setupCellStyle(KoGenStyle* cellStyle) const;
+
+    //! @return color style (bgColor or fgColor) depending on the pattern
+    //! Can return 0 if no fill should be painted.
+    const XlsxColorStyle* realBackgroundColor() const;
 };
 
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
@@ -109,7 +173,7 @@ public:
         horizontally centered, filled (replicated), justified, centered across multiple cells,
         or distributed. */
     enum ST_HorizontalAlignment {
-        GeneralHorizontalAlignment = 0,
+        GeneralHorizontalAlignment,
         CenterHorizontalAlignment,
         CenterContinuousHorizontalAlignment,
         DistributedHorizontalAlignment,
@@ -123,7 +187,7 @@ public:
     /*! This enumeration value indicates the type of vertical alignment for a cell,
         i.e., whether it is aligned top, bottom, vertically centered, justified or distributed. */
     enum ST_VerticalAlignment {
-        NoVerticalAlignment = 0,
+        NoVerticalAlignment,
         BottomVerticalAlignment,
         CenterVerticalAlignment,
         DistributedVerticalAlignment,
@@ -134,7 +198,7 @@ public:
     //! Indicates whether the alignment formatting specified for this xf should be applied
 //! @todo should be saved as metadata in ODF
     bool applyAlignment;
-    
+
     //! Indicates whether the border formatting specified for this xf should be applied.
 //! @todo should be saved as metadata in ODF
     bool applyBorder;
@@ -192,16 +256,12 @@ public:
 
     //! Sets up @a cellStyle to match this cell style.
 //! @todo implement more styling
-    bool setupCellStyle(KoGenStyle* cellStyle) const;
+    bool setupCellStyle(const XlsxStyles *styles, KoGenStyle* cellStyle) const;
 
     //! Sets up @a characterStyle to match this font style.
 //! @todo implement more formatting
-    bool setupCharacterStyle(KoCharacterStyle* characterStyle) const;
+    bool setupCharacterStyle(const XlsxStyles *styles, KoCharacterStyle* characterStyle) const;
 
-protected:
-    XlsxStyles *styles;
-
-    friend class XlsxStyles;
 private:
     //! Used by setupCellStyle()
     void setupCellStyleAlignment(KoGenStyle* cellStyle) const;
@@ -220,6 +280,13 @@ public:
         return fontStyles[id];
     }
 
+    //! @return fill style for id @a id (counted from 0)
+    XlsxFillStyle* fillStyle(int id) const {
+        if (id < 0 || id >= fillStyles.size())
+            return 0;
+        return fillStyles[id];
+    }
+
     //! @return cell format for id @a id (counted from 0)
     XlsxCellFormat* cellFormat(int id) const {
         if (id < 0 || id >= cellFormats.size())
@@ -230,6 +297,7 @@ protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
     QVector<XlsxFontStyle*> fontStyles;
+    QVector<XlsxFillStyle*> fillStyles;
     QVector<XlsxCellFormat*> cellFormats;
 
     friend class XlsxXmlStylesReader;
@@ -266,11 +334,23 @@ protected:
     KoFilter::ConversionStatus read_i();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_u();
+    KoFilter::ConversionStatus read_color();
     KoFilter::ConversionStatus read_cellXfs();
     KoFilter::ConversionStatus read_xf();
     KoFilter::ConversionStatus read_alignment();
+    KoFilter::ConversionStatus read_fills();
+    KoFilter::ConversionStatus read_fill();
+//! @todo implement read_patternFill
+    KoFilter::ConversionStatus read_patternFill();
+    KoFilter::ConversionStatus read_bgColor();
+    KoFilter::ConversionStatus read_fgColor();
+//! @todo implement read_gradientFill
+    KoFilter::ConversionStatus read_gradientFill();
+//! @todo implement read_stop()
+//! @todo implement read_color()
 
     uint m_fontStyleIndex;
+    uint m_fillStyleIndex;
     uint m_cellFormatIndex;
 
     typedef KoFilter::ConversionStatus(XlsxXmlStylesReader::*ReadMethod)();
@@ -279,10 +359,24 @@ protected:
     XlsxXmlStylesReaderContext* m_context;
 
     XlsxFontStyle *m_currentFontStyle;
+    XlsxFillStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
 
 private:
     void init();
+
+    void handlePatternType(const QString& patternType); //!< used by read_patternFill()
+
+    /*! @return color decoded from a rgb attribute of the current element or empty QColor when reading was not possible
+    Used by:
+    - color@rgb (§18.3.1.15)
+    - bgColor@rgb (§18.8.20) */
+    QColor readRgbAttribute(const QXmlStreamAttributes& attrs) const;
+
+    /*! Reads attributes into @a colorStyle structure. */
+    KoFilter::ConversionStatus readColorStyle(XlsxColorStyle* colorStyle, const char* debugElement = 0);
+
+//! @todo readTintAttribute(const QXmlStreamAttributes& attrs) const;
 
     class Private;
     Private* const d;

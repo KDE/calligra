@@ -209,11 +209,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
 {
     READ_PROLOGUE
-
-    KoFilter::ConversionStatus result = read_sldInternal();
-    if (result != KoFilter::OK)
-        return result;
-
+    RETURN_IF_ERROR( read_sldInternal() )
     READ_EPILOGUE
 }
 
@@ -237,11 +233,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster()
 {
     READ_PROLOGUE
-
-    KoFilter::ConversionStatus result = read_sldInternal();
-    if (result != KoFilter::OK)
-        return result;
-
+    RETURN_IF_ERROR( read_sldInternal() )
     READ_EPILOGUE
 }
 

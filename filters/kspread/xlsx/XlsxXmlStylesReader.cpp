@@ -39,6 +39,11 @@
 
 #include <QMap>
 
+XlsxColorStyle::XlsxColorStyle()
+        : automatic(false), indexed(-1)
+{
+}
+
 XlsxFontStyle::XlsxFontStyle()
         : underline(NoUnderline),
         bold(false),
@@ -47,6 +52,37 @@ XlsxFontStyle::XlsxFontStyle()
         m_size(12.0),
         m_defaultSize(true)
 {
+}
+
+XlsxFillStyle::XlsxFillStyle()
+        : patternType(NonePatternType)
+{
+}
+
+const XlsxColorStyle* XlsxFillStyle::realBackgroundColor() const
+{
+    switch (patternType) {
+    case NonePatternType:
+        return 0;
+    case SolidPatternType:
+        return &fgColor;
+    default:;
+//! @todo support other patterns
+    }
+    return &bgColor;
+}
+
+void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle) const
+{
+//! @todo implement more styling;
+//!       use XlsxColorStyle::automatic, XlsxColorStyle::indexed, XlsxColorStyle::theme, XlsxColorStyle::tint...
+    const XlsxColorStyle* realBackgroundColor = this->realBackgroundColor();
+    if (realBackgroundColor) {
+kDebug() << patternType << realBackgroundColor->rgb;
+        if (realBackgroundColor->rgb.isValid()) {
+            cellStyle->addProperty("fo:background-color", realBackgroundColor->rgb.name());
+        }
+    }
 }
 
 class ST_UnderlineValue_fromStringMap : public QMap<QString, XlsxFontStyle::ST_UnderlineValue>
@@ -144,6 +180,10 @@ void XlsxFontStyle::setupCellTextStyle(KoGenStyle* cellStyle) const
     if (!name.isEmpty()) {
         cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
     }
+    if (color.rgb.isValid()) {
+        cellStyle->addProperty("fo:color", color.rgb.name(), KoGenStyle::TextType);
+    }
+    //! @todo implement more styling
 }
 
 XlsxStyles::XlsxStyles()
@@ -154,13 +194,15 @@ XlsxStyles::~XlsxStyles()
 {
     for (int i = 0; i < fontStyles.size(); i++)
         delete fontStyles[i];
+    for (int i = 0; i < fillStyles.size(); i++)
+        delete fillStyles[i];
     for (int i = 0; i < cellFormats.size(); i++)
         delete cellFormats[i];
 }
 
 void XlsxStyles::setCellFormat(XlsxCellFormat *format, int cellFormatIndex)
 {
-    format->styles = this;
+//    format->styles = this;
     delete cellFormats[cellFormatIndex];
     cellFormats[cellFormatIndex] = format;
 }
@@ -181,7 +223,7 @@ XlsxCellFormat::~XlsxCellFormat()
 {
 }
 
-bool XlsxCellFormat::setupCharacterStyle(KoCharacterStyle* characterStyle) const
+bool XlsxCellFormat::setupCharacterStyle(const XlsxStyles *styles, KoCharacterStyle* characterStyle) const
 {
     XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
     if (!fontStyle) {
@@ -279,19 +321,28 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
 }
 
-// http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
-bool XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
+//! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
+bool XlsxCellFormat::setupCellStyle(const XlsxStyles *styles, KoGenStyle* cellStyle) const
 {
     if (applyAlignment) {
         setupCellStyleAlignment(cellStyle);
     }
-    if (applyFont) {
+    if (applyFont && fontId >= 0) {
         XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
         if (!fontStyle) {
-            kDebug() << "No font with ID:" << fontId;
+            kWarning() << "No font with ID:" << fontId;
             return false;
         }
         fontStyle->setupCellTextStyle(cellStyle);
+    }
+    if (applyFill && fillId >= 0) {
+kDebug() << "fillId:" << fillId;
+        XlsxFillStyle *fillStyle = styles->fillStyle(fillId);
+        if (!fillStyle) {
+            kWarning() << "No fill with ID:" << fillId;
+            return false;
+        }
+        fillStyle->setupCellStyle(cellStyle);
     }
     return true;
 }
@@ -325,6 +376,7 @@ XlsxXmlStylesReader::~XlsxXmlStylesReader()
 {
     delete d;
     delete m_currentFontStyle;
+    delete m_currentFillStyle;
     delete m_currentCellFormat;
 }
 
@@ -332,8 +384,10 @@ void XlsxXmlStylesReader::init()
 {
     m_defaultNamespace = "";
     m_fontStyleIndex = 0;
+    m_fillStyleIndex = 0;
     m_cellFormatIndex = 0;
     m_currentFontStyle = 0;
+    m_currentFillStyle = 0;
     m_currentCellFormat = 0;
 }
 
@@ -391,14 +445,14 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
  This is the root element of the Styles part.
 
  Child elements:
- - borders (Borders) §18.8.5
+ - [done] borders (Borders) §18.8.5
  - cellStyles (Cell Styles) §18.8.8
  - cellStyleXfs (Formatting Records) §18.8.9
  - [done] cellXfs (Cell Formats) §18.8.10
  - colors (Colors) §18.8.11
  - dxfs (Formats) §18.8.15
  - extLst (Future Feature Data Storage Area) §18.2.10
- - fills (Fills) §18.8.21
+ - [done] fills (Fills) §18.8.21
  - [done] fonts (Fonts) §18.8.23
  - numFmts (Number Formats) §18.8.31
  - tableStyles (Table Styles) §18.8.42
@@ -412,6 +466,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(fonts)
+            TRY_READ_IF(fills)
             TRY_READ_IF(cellXfs)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -434,15 +489,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 {
     READ_PROLOGUE
+    if (!m_context->styles->fontStyles.isEmpty()) {
+        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+    }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-
-    bool ok;
-    const uint countNumber = count.toUInt(&ok);
-    if (!ok) {
-        raiseUnexpectedAttributeValueError(count, "styleSheet@fonts");
-        return KoFilter::WrongFormat;
-    }
+    uint countNumber;
+    STRING_TO_INT(count, countNumber, "styleSheet/fonts@count")
     m_context->styles->fontStyles.resize(countNumber);
     m_fontStyleIndex = 0;
 
@@ -455,7 +508,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
     READ_EPILOGUE
 }
 
@@ -500,6 +552,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     kDebug() << "font #" << m_fontStyleIndex;
     m_currentFontStyle = new XlsxFontStyle;
+    MSOOXML::Utils::AutoPtrSetter<XlsxFontStyle> currentFontStyleSetter(m_currentFontStyle);
 
     while (!atEnd()) {
         readNext();
@@ -511,6 +564,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(i)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
+            ELSE_TRY_READ_IF(color)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -518,6 +572,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     READ_EPILOGUE_WITHOUT_RETURN
 
+    currentFontStyleSetter.release();
     m_context->styles->fontStyles[m_fontStyleIndex] = m_currentFontStyle;
     m_currentFontStyle = 0;
     m_fontStyleIndex++;
@@ -695,6 +750,46 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL color
+//! color handler (Data Bar Color)
+/*! ECMA-376, 18.3.1.15, p. 1780.
+ One of the colors associated with the data bar or color scale.
+ The auto attribute shall not be used in the context of data bars.
+
+ Child elements:
+ - stop (Gradient Stop) §18.8.38
+ Parent elements:
+ - bottom (§18.8.6)
+ - colorScale (§18.3.1.16)
+ - dataBar (§18.3.1.28)
+ - diagonal (§18.8.13)
+ - end (§18.8.16)
+ - [done] font (§18.8.22)
+ - horizontal (§18.8.25)
+ - mruColors (§18.8.28)
+ - rPr (§18.4.7)
+ - start (§18.8.37)
+ - stop (§18.8.38)
+ - top (§18.8.43)
+ - vertical (§18.8.44)
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
+{
+    Q_ASSERT(m_currentFontStyle);
+
+    READ_PROLOGUE
+    RETURN_IF_ERROR( readColorStyle(&m_currentFontStyle->color, "color") )
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        break;
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL cellXfs
 //! cellXfs handler (Cell Formats)
 /*! ECMA-376, 18.8.10, p. 1956.
@@ -709,15 +804,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 {
     READ_PROLOGUE
+    if (!m_context->styles->cellFormats.isEmpty()) {
+        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+    }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-
-    bool ok;
-    const uint countNumber = count.toUInt(&ok);
-    if (!ok) {
-        raiseUnexpectedAttributeValueError(count, "styleSheet@cellXfs");
-        return KoFilter::WrongFormat;
-    }
+    uint countNumber;
+    STRING_TO_INT(count, countNumber, "styleSheet/cellXfs@count")
     m_context->styles->cellFormats.resize(countNumber);
     m_cellFormatIndex = 0;
 
@@ -730,7 +823,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
     READ_EPILOGUE
 }
 
@@ -791,15 +883,10 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
     STRING_TO_INT(borderId, m_currentCellFormat->borderId, "xf@borderId")
 
     TRY_READ_ATTR_WITHOUT_NS(fillId)
+kDebug() << "fillId:" << fillId;
     STRING_TO_INT(fillId, m_currentCellFormat->fillId, "xf@fillId")
 
     TRY_READ_ATTR_WITHOUT_NS(fontId)
-/*    bool ok;
-    const int fontIdNumber = fontId.toInt(&ok);
-    if (!ok || fontIdNumber < 0) {
-        raiseUnexpectedAttributeValueError(fontId, "xf@fontId");
-        return KoFilter::WrongFormat;
-    }*/
     STRING_TO_INT(fontId, m_currentCellFormat->fontId, "xf@fontId")
 
     TRY_READ_ATTR_WITHOUT_NS(numFmtId)
@@ -860,6 +947,288 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         break;
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fills
+//! fills handler (Fills)
+/*! ECMA-376, 18.8.21, p. 1963.
+ This element defines the cell fills portion of the Styles part, consisting of a sequence of fill records.
+ A cell fill consists of a background color, foreground color, and pattern to be applied across the cell.
+
+ Child elements:
+ - [done] fill (Fill) §18.8.20
+ Parent elements:
+ - [done] styleSheet (§18.8.39)
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
+{
+    READ_PROLOGUE
+    if (!m_context->styles->fillStyles.isEmpty()) {
+        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+    }
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(count)
+    uint countNumber;
+    STRING_TO_INT(count, countNumber, "styleSheet/fills@count")
+    m_context->styles->fillStyles.resize(countNumber);
+    m_fillStyleIndex = 0;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(fill)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fill
+//! fill handler (Fill)
+/*! ECMA-376, 18.8.20, p. 1962.
+ This element specifies fill formatting.
+
+ Child elements:
+ - gradientFill (Gradient) §18.8.24
+ - [done] patternFill (Pattern) §18.8.32
+ Parent elements:
+ - dxf (§18.8.14)
+ - [done] fills (§18.8.21)
+ - ndxf (§18.11.1.4)
+ - odxf (§18.11.1.6)
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_fill()
+{
+    READ_PROLOGUE
+
+    if (m_fillStyleIndex >= (uint)m_context->styles->fillStyles.size()) {
+        raiseError(i18n("Declared number of fill styles too small (%1)", m_context->styles->fillStyles.size()));
+        return KoFilter::WrongFormat;
+    }
+
+    kDebug() << "fill #" << m_fillStyleIndex;
+    m_currentFillStyle = new XlsxFillStyle;
+    MSOOXML::Utils::AutoPtrSetter<XlsxFillStyle> currentFillStyleSetter(m_currentFillStyle);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(gradientFill)
+            ELSE_TRY_READ_IF(patternFill)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE_WITHOUT_RETURN
+
+    currentFillStyleSetter.release();
+    m_context->styles->fillStyles[m_fillStyleIndex] = m_currentFillStyle;
+    m_currentFillStyle = 0;
+    m_fillStyleIndex++;
+
+    return KoFilter::OK;
+}
+
+//! Handles patternType
+void XlsxXmlStylesReader::handlePatternType(const QString& patternType)
+{
+    const QByteArray p(patternType.toLatin1());
+kDebug() << p;
+    if (p.isEmpty() || p == MsooXmlReader::constNone) {
+        // 100% background
+        m_currentFillStyle->patternType = XlsxFillStyle::NonePatternType;
+    }
+    else if (p == "solid") {
+        // 100% foreground
+        m_currentFillStyle->patternType = XlsxFillStyle::SolidPatternType;
+    }
+    else if (p.startsWith("dark")) {
+        if (p == "darkDown") {
+        }
+        else if (p == "darkGray") {
+        }
+        else if (p == "darkGrid") {
+        }
+        else if (p == "darkHorizontal") {
+        }
+        else if (p == "darkTrellis") {
+        }
+        else if (p == "darkUp") {
+        }
+        else if (p == "darkVertical") {
+        }
+    }
+    else if (p.startsWith("light")) {
+        if (p == "lightDown") {
+        }
+        else if (p == "lightGray") {
+        }
+        else if (p == "lightGrid") {
+        }
+        else if (p == "lightHorizontal") {
+        }
+        else if (p == "lightTrellis") {
+        }
+        else if (p == "lightUp") {
+        }
+        else if (p == "lightVertical") {
+        }
+    }
+    else if (p == "mediumGray") {
+    }
+    else if (p == "gray0625") {
+    }
+    else if (p == "gray125") {
+    }
+    else {
+        kWarning() << "unknown value" << p
+            << "of patterFill@patternType; defaulting to \"none\"";
+        m_currentFillStyle->patternType = XlsxFillStyle::NonePatternType;
+    }
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL patternFill
+//! patternFill handler (Pattern)
+/*! ECMA-376, 18.8.22, p. 1990.
+ This element is used to specify cell fill information for pattern and solid color cell fills.
+
+ Child elements:
+ - [done] bgColor (Background Color) §18.8.3
+ - [done] fgColor (Foreground Color) §18.8.19
+ Parent elements:
+ - [done] fill (§18.8.20)
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_patternFill()
+{
+    Q_ASSERT(m_currentFillStyle);
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(patternType)
+    handlePatternType(patternType);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(bgColor)
+            ELSE_TRY_READ_IF(fgColor)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+// private
+QColor XlsxXmlStylesReader::readRgbAttribute(const QXmlStreamAttributes& attrs) const
+{
+    TRY_READ_ATTR_WITHOUT_NS(rgb)
+    if (rgb.isEmpty())
+        return QColor();
+    return ST_UnsignedIntHex_to_QColor(rgb);
+}
+
+KoFilter::ConversionStatus XlsxXmlStylesReader::readColorStyle(
+    XlsxColorStyle* colorStyle, const char* debugElement)
+{
+    const QXmlStreamAttributes attrs(attributes());
+    colorStyle->automatic = readBooleanAttr("auto", false);
+    TRY_READ_ATTR_WITHOUT_NS(indexed)
+    STRING_TO_INT(indexed, colorStyle->indexed, QLatin1String(debugElement) + "@indexed")
+    colorStyle->rgb = readRgbAttribute(attrs);
+ //! @todo theme
+ //! @todo tint
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bgColor
+//! bgColor handler (Background Color)
+/*! ECMA-376, 18.8.3, p. 1948.
+ Background color of the cell fill pattern. Cell fill patterns operate with two colors:
+ a background color and a foreground color. These combine together to make a patterned cell fill.
+
+ No child elements.
+ Parent elements:
+ - [done] patternFill (§18.8.20)
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
+{
+    Q_ASSERT(m_currentFillStyle);
+    READ_PROLOGUE
+    RETURN_IF_ERROR( readColorStyle(&m_currentFillStyle->bgColor, "bgColor") )
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        break;
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fgColor
+//! fgColor handler (Foreground  Color)
+/*! ECMA-376, 18.8.19, p. 1961.
+ Foreground color of the cell fill pattern. Cell fill patterns operate with two colors:
+ a background color and a foreground color. These combine together to make a patterned cell fill.
+
+ No child elements.
+ Parent elements:
+ - [done] patternFill (§18.8.20)
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
+{
+    READ_PROLOGUE
+    RETURN_IF_ERROR( readColorStyle(&m_currentFillStyle->fgColor, "fgColor") )
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        break;
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL gradientFill
+//! gradientFill handler (Pattern)
+/*! ECMA-376, 18.8.24, p. 1965.
+ This element defines a gradient-style cell fill.
+ Gradient cell fills can use one or two colors as the end points of color interpolation.
+
+ Child elements:
+ - stop (Gradient Stop) §18.8.38
+ Parent elements:
+ - [done] fill (§18.8.20)
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
+{
+    Q_ASSERT(m_currentFillStyle);
+    READ_PROLOGUE
+
+//! @todo read attributes for gradientFill
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//! @todo            TRY_READ_IF(stop)
+//todo            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }

@@ -381,9 +381,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
                 Q_ASSERT(!m_currentColor);
-                const KoFilter::ConversionStatus result = (this->*readMethod)();
-                if (result != KoFilter::OK)
-                    return result;
+                RETURN_IF_ERROR( (this->*readMethod)() )
                 Q_ASSERT(m_currentColor);
                 if (!m_currentColor) {
                     return KoFilter::InternalError;
@@ -438,9 +436,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
-                const KoFilter::ConversionStatus result = (this->*readMethod)();
-                if (result != KoFilter::OK)
-                    return result;
+                RETURN_IF_ERROR( (this->*readMethod)() )
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
         }

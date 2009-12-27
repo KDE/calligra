@@ -1598,10 +1598,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             kDebug() << sourceName << "already copied - skipping";
         } else {
 //! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-            const KoFilter::ConversionStatus status = m_context->import->copyFile(sourceName, destinationName);
-            if (status != KoFilter::OK) {
-                return status;
-            }
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
             m_copiedFiles.insert(sourceName);
         }
         m_xlinkHref = destinationName;

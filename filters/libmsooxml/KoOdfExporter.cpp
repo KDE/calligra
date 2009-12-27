@@ -19,6 +19,7 @@
 */
 
 #include "KoOdfExporter.h"
+#include "MsooXmlUtils.h"
 
 #include <QBuffer>
 #include <QByteArray>
@@ -117,10 +118,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(d->bodyContentElement.constData());
 
-    const KoFilter::ConversionStatus result
-    = createDocument(outputStore.get(), &writers);
-    if (result != KoFilter::OK)
-        return result;
+    RETURN_IF_ERROR( createDocument(outputStore.get(), &writers) )
 
     //save the office:automatic-styles & and fonts in content.xml
     mainStyles.saveOdfFontFaceDecls(&contentWriter);

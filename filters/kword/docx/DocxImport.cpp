@@ -210,20 +210,14 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     {
         DocxXmlFontTableReaderContext context(*writers->mainStyles);
         DocxXmlFontTableReader fontTableReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context) )
     }
     // 2. parse styles
     {
         DocxXmlStylesReader stylesReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::wordStyles, &stylesReader, writers, errorMessage);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::wordStyles, &stylesReader, writers, errorMessage) )
     }
     // 3. parse document
     {
@@ -232,11 +226,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             *this, QLatin1String("word"), QLatin1String("document.xml"),
             *relationships);
         DocxXmlDocumentReader documentReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::wordDocument, &documentReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocument(
+            MSOOXML::ContentTypes::wordDocument, &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;

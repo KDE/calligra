@@ -54,6 +54,8 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
+#include <memory>
+
 typedef KGenericFactory<PptxImport> PptxImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libpptximport, PptxImportFactory("kofficefilters"))
 
@@ -1039,16 +1041,17 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
 
     {
-        MSOOXML::DrawingMLTheme *theme = new MSOOXML::DrawingMLTheme;
+        std::auto_ptr<MSOOXML::DrawingMLTheme> theme( new MSOOXML::DrawingMLTheme );
         MSOOXML::MsooXmlThemesReader themesReader(writers);
-        MSOOXML::MsooXmlThemesReaderContext context(*theme);
+        MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
         //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context) )
+        if (!theme.get()->name.isEmpty()) {
+            // theme loaded
+            themes.insert(theme.get()->name, theme.get());
+            theme.release();
         }
-        themes.insert(theme->name, theme);
     }
     // 2. parse master slides
 #ifdef __GNUC__
@@ -1092,11 +1095,8 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
             masterSlideProperties,
             *relationships);
         PptxXmlDocumentReader documentReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                MSOOXML::ContentTypes::presentationDocument, &documentReader, writers, errorMessage, &context);
-        if (status != KoFilter::OK) {
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocument(
+            MSOOXML::ContentTypes::presentationDocument, &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;

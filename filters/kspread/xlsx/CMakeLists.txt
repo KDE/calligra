@@ -6,6 +6,7 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
 
 set(xlsximport_PART_SRCS
     XlsxImport.cpp
+    XlsxXmlCommonReader.cpp
     XlsxXmlDocumentReader.cpp
     XlsxXmlWorksheetReader.cpp
     XlsxXmlSharedStringsReader.cpp
