@@ -136,7 +136,7 @@ void ChartTool::shapeSelectionChanged()
                 Legend *legend = dynamic_cast<Legend*>( shape );
                 if ( legend ) {
                     selectedShape = legend;
-                    d->shape = dynamic_cast<ChartShape*>( legend->parent() );
+                    d->shape = dynamic_cast<ChartShape*>( shape->parent() );
                 }
             }
         // The selected shape is the chart

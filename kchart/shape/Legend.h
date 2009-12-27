@@ -21,6 +21,8 @@
 #ifndef KCHART_LEGEND_H
 #define KCHART_LEGEND_H
 
+// Qt
+#include <QObject>
 
 // KOffice
 #include <KoShape.h>
@@ -31,8 +33,10 @@
 
 namespace KChart {
 
-class CHARTSHAPELIB_EXPORT Legend : public KoShape
+class CHARTSHAPELIB_EXPORT Legend : public QObject, public KoShape
 {
+    Q_OBJECT
+
 public:
     Legend( ChartShape *parent );
     ~Legend();
@@ -74,7 +78,10 @@ public:
     
     KDChart::Legend *kdLegend() const;
     
-    void legendUpdate();
+    void update() const;
+
+private slots:
+    void slotKdLegendChanged();
 
 private:
     class Private;
