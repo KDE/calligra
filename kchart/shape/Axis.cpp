@@ -858,10 +858,7 @@ Axis::Axis( PlotArea *parent )
     setShowMajorGrid( false );
     setShowMinorGrid( false );
     
-    // FIXME: Check if it is ok to pass an empty map. The text shape
-    //        might not work correctly
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( parent->parent()->dataCenterMap() );
     if ( d->title ) {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );
         if ( d->titleData == 0 ) {
