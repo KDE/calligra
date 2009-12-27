@@ -75,7 +75,16 @@ enum Type {
     Date24 = 223,       ///< e.g. 99
     Date25 = 224,       ///< e.g. 2000/02/18
     Date26 = 225,       ///< e.g. 2000/Feb/18
-    DatesEnd = 225,     ///< \internal
+    Date27 = 226,       ///< e.g. Feb/99, complements Date7
+    Date28 = 227,       ///< e.g. Feb/1999, complements Date22
+    Date29 = 228,       ///< e.g. February/99, complements Date8
+    Date30 = 229,       ///< e.g. February/1999, complements Date9
+    Date31 = 230,       ///< e.g. 18-02, complements Date12
+    Date32 = 231,       ///< e.g. 02/99
+    Date33 = 232,       ///< e.g. 02-99, complements Date32
+    Date34 = 233,       ///< e.g. Mon, 2 Feb 99
+    Date35 = 234,       ///< e.g. Mon, 2 February 1999
+    DatesEnd = 234,     ///< \internal
 
     DateTime = 40,      ///< e.g. 08-04-2007 11:02 (locale specific)
 

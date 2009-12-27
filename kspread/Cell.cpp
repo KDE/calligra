@@ -1388,15 +1388,14 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             if (ok) {
                 setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
-//Sebsauer: Its not handled by Value::Format. Fix and remove!
-//#if 0
+//Sebsauer: Fixed now. Value::Format handles it correct.
+#if 0
                 Style s;
                 s.setFormatType(Format::ShortDate);
                 setStyle(s);
-//#endif
+#endif
                 kDebug(36003) << "Set QDate:" << year << " -" << month << " -" << day;
             }
-
         } else if (valuetype == "time") {
             QString value = element.attributeNS(KoXmlNS::office, "time-value", QString());
             kDebug(36003) << "Type: time:" << value;

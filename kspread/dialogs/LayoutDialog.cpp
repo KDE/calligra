@@ -1304,6 +1304,15 @@ void CellFormatPageFloat::init()
     list += fmt->dateFormat(tmpDate, Format::Date24);
     list += fmt->dateFormat(tmpDate, Format::Date25);
     list += fmt->dateFormat(tmpDate, Format::Date26);
+    list += fmt->dateFormat(tmpDate, Format::Date27);
+    list += fmt->dateFormat(tmpDate, Format::Date28);
+    list += fmt->dateFormat(tmpDate, Format::Date29);
+    list += fmt->dateFormat(tmpDate, Format::Date30);
+    list += fmt->dateFormat(tmpDate, Format::Date31);
+    list += fmt->dateFormat(tmpDate, Format::Date32);
+    list += fmt->dateFormat(tmpDate, Format::Date33);
+    list += fmt->dateFormat(tmpDate, Format::Date34);
+    list += fmt->dateFormat(tmpDate, Format::Date35);
 
     listFormat->addItems(list);
     if (cellFormatType == Format::ShortDate)
@@ -1362,6 +1371,24 @@ void CellFormatPageFloat::init()
         listFormat->setCurrentRow(26);
     else if (cellFormatType == Format::Date26)
         listFormat->setCurrentRow(27);
+    else if (cellFormatType == Format::Date27)
+        listFormat->setCurrentRow(28);
+    else if (cellFormatType == Format::Date28)
+        listFormat->setCurrentRow(29);
+    else if (cellFormatType == Format::Date29)
+        listFormat->setCurrentRow(30);
+    else if (cellFormatType == Format::Date30)
+        listFormat->setCurrentRow(31);
+    else if (cellFormatType == Format::Date31)
+        listFormat->setCurrentRow(32);
+    else if (cellFormatType == Format::Date32)
+        listFormat->setCurrentRow(33);
+    else if (cellFormatType == Format::Date33)
+        listFormat->setCurrentRow(34);
+    else if (cellFormatType == Format::Date34)
+        listFormat->setCurrentRow(35);
+    else if (cellFormatType == Format::Date35)
+        listFormat->setCurrentRow(36);
     else
         listFormat->setCurrentRow(0);
 }
@@ -1423,6 +1450,15 @@ void CellFormatPageFloat::updateFormatType()
         case 25: newFormatType = Format::Date24; break;
         case 26: newFormatType = Format::Date25; break;
         case 27: newFormatType = Format::Date26; break;
+        case 28: newFormatType = Format::Date27; break;
+        case 29: newFormatType = Format::Date28; break;
+        case 30: newFormatType = Format::Date29; break;
+        case 31: newFormatType = Format::Date30; break;
+        case 32: newFormatType = Format::Date31; break;
+        case 33: newFormatType = Format::Date32; break;
+        case 34: newFormatType = Format::Date33; break;
+        case 35: newFormatType = Format::Date34; break;
+        case 36: newFormatType = Format::Date35; break;
         }
     } else if (money->isChecked())
         newFormatType = Format::Money;

@@ -506,12 +506,14 @@ static QString convertDateFormat(const QString& date)
     return result;
 }
 
-Format::Type Style::dateType(const QString &_format)
+Format::Type Style::dateType(const QString &_f)
 {
     const QString dateFormatShort = convertDateFormat(KGlobal::locale()->dateFormatShort());
     const QString dateFormat = convertDateFormat(KGlobal::locale()->dateFormat());
+    QString _format = _f;
+    _format.replace(' ','-');
 
-    if (_format == "dd-MMM-yy")
+    if (_format == "d-MMM-yy" || _format == "dd-MMM-yy")
         return Format::Date1;
     else if (_format == "dd-MMM-yyyy")
         return Format::Date2;
@@ -523,8 +525,10 @@ Format::Type Style::dateType(const QString &_format)
         return Format::Date5;
     else if (_format == "dd/MM/yyyy")
         return Format::Date6;
-    else if (_format == "MM-yy" || _format == "MM/yy" || _format == "MMM-yy" || _format == "MMM/yy")
+    else if (_format == "MMM-yy")
         return Format::Date7;
+    else if (_format == "MMMM-yy")
+        return Format::Date8;
     else if (_format == "MMMM-yyyy")
         return Format::Date9;
     else if (_format == "MMMMM-yy")
@@ -541,6 +545,8 @@ Format::Type Style::dateType(const QString &_format)
         return Format::Date15;
     else if (_format == "yyyy-MM-dd")
         return Format::Date16;
+    else if (_format == "d MMMM yyyy")
+        return Format::Date17;
     else if (_format == "MM/dd/yyyy")
         return Format::Date18;
     else if (_format == "MM/dd/yy")
@@ -559,14 +565,32 @@ Format::Type Style::dateType(const QString &_format)
         return Format::Date25;
     else if (_format == "yyyy/MMM/dd")
         return Format::Date26;
+    else if (_format == "MMM/yy")
+        return Format::Date27;
+    else if (_format == "MMM/yyyy")
+        return Format::Date28;
+    else if (_format == "MMMM/yy")
+        return Format::Date29;
+    else if (_format == "MMMM/yyyy")
+        return Format::Date30;
+    else if (_format == "dd-MM")
+        return Format::Date31;
+    else if (_format == "MM/yy")
+        return Format::Date32;
+    else if (_format == "MM-yy")
+        return Format::Date33;
+    else if (QRegExp("^[d]+[\\s]*[d]{1,2}[\\s]+[M]{1,4}[\\s]+[y]{2,2}$").indexIn(_f) >= 0)
+        return Format::Date34;
+    else if (QRegExp("^[d]+[\\s]*[d]{1,2}[\\s]+[M]{1,}[\\s]+[y]{2,4}$").indexIn(_f) >= 0)
+        return Format::Date35;
     else if (_format == dateFormatShort)
         return Format::ShortDate;
     else if (_format == dateFormat)
         return Format::TextDate;
-    else if (_format.contains("d MM yy") || _format.contains("d MMM yy") || _format.contains("d MMMM yy"))
-        return Format::Date17;
-    else
+    else {
+        kDebug() << "Unhandled date format="<<_format;
         return Format::ShortDate;
+    }
 }
 
 Format::Type Style::timeType(const QString &_format)
@@ -700,6 +724,15 @@ QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::Date24:
     case Format::Date25:
     case Format::Date26:
+    case Format::Date27:
+    case Format::Date28:
+    case Format::Date29:
+    case Format::Date30:
+    case Format::Date31:
+    case Format::Date32:
+    case Format::Date33:
+    case Format::Date34:
+    case Format::Date35:
         styleName = saveOdfStyleNumericDate(mainStyles, _style, _prefix, _postfix);
         valueType = "date";
         break;
@@ -895,6 +928,33 @@ QString Style::saveOdfStyleNumericDate(KoGenStyles&mainStyles, Format::Type _sty
         break;
     case Format::Date26:
         format = "yyyy/MMM/dd";
+        break;
+    case Format::Date27:
+        format = "MMM/yy";
+        break;
+    case Format::Date28:
+        format = "MMM/yyyy";
+        break;
+    case Format::Date29:
+        format = "MMMM/yy";
+        break;
+    case Format::Date30:
+        format = "MMMM/yyyy";
+        break;
+    case Format::Date31:
+        format = "dd-MM";
+        break;
+    case Format::Date32:
+        format = "MM/yy";
+        break;
+    case Format::Date33:
+        format = "MM-yy";
+        break;
+    case Format::Date34:
+        format = "ddd d MMM yyyy";
+        break;
+    case Format::Date35:
+        format = "dddd d MMM yyyy";
         break;
     default:
         kDebug(36003) << "this date format is not defined ! :" << _style;

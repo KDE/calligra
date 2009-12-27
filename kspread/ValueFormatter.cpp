@@ -619,8 +619,33 @@ QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType)
         tmp = QString::number(date.year());
         tmp += '/' + m_converter->settings()->locale()->calendar()->monthString(date, KCalendarSystem::ShortFormat);
         tmp += '/' + QString().sprintf("%02d", date.day());
-    } else
+    } else if (fmtType == Format::Date27) { /*Feb/99 */
+        tmp = m_converter->settings()->locale()->calendar()->monthString(date, KCalendarSystem::ShortFormat) + '/';
+        tmp += QString::number(date.year()).right(2);
+    } else if (fmtType == Format::Date28) { /*Feb/1999 */
+        tmp = m_converter->settings()->locale()->calendar()->monthString(date, KCalendarSystem::ShortFormat) + '/';
+        tmp += QString::number(date.year());
+    } else if (fmtType == Format::Date29) { /*February/99 */
+        tmp = m_converter->settings()->locale()->calendar()->monthString(date, KCalendarSystem::LongFormat) + '/';
+        tmp += QString::number(date.year()).right(2);
+    } else if (fmtType == Format::Date30) { /*February/1999 */
+        tmp = m_converter->settings()->locale()->calendar()->monthString(date, KCalendarSystem::LongFormat) + '/';
+        tmp += QString::number(date.year());
+    } else if (fmtType == Format::Date31) { /*18-02 */
+        tmp = QString().sprintf("%02d", date.day()) + '-';
+        tmp += QString().sprintf("%02d", date.month());
+    } else if (fmtType == Format::Date32) { /*02/99 */
+        tmp = QString().sprintf("%02d", date.month()) + '/';
+        tmp += QString::number(date.year()).right(2);
+    } else if (fmtType == Format::Date33) { /*02-99 */
+        tmp = QString().sprintf("%02d", date.month()) + '-';
+        tmp += QString::number(date.year()).right(2);
+    } else if (fmtType == Format::Date34 || fmtType == Format::Date35) { /*Mon, 2 Feb 2000 and Mon, 2 February 2000 */
+        QLocale l(QLocale::English);
+        tmp = l.toString(date, fmtType == Format::Date34 ? "ddd d MMM yy" : "dddd d MMM yyyy");
+    } else { /*fallback... */
         tmp = m_converter->settings()->locale()->formatDate(date, KLocale::ShortDate);
+    }
 
     // Missing compared with gnumeric:
     //  "m/d/yy h:mm",    /* 20 */
