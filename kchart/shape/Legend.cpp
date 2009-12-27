@@ -130,6 +130,7 @@ Legend::Legend( ChartShape *parent )
 
 Legend::~Legend()
 {
+    delete d->kdLegend;
     delete d;
 }
 
