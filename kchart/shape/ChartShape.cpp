@@ -276,6 +276,8 @@ public:
     ChartDocument *document;
 
     ChartShape *shape;		// The chart that owns this ChartShape::Private
+
+    QMap<QString, KoDataCenter*> dataCenterMap;
 };
 
 
@@ -1297,6 +1299,7 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 
 void ChartShape::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
 {
+    d->dataCenterMap = dataCenterMap;
     d->title->init( dataCenterMap );
     d->subTitle->init( dataCenterMap );
     d->footer->init( dataCenterMap );
@@ -1318,6 +1321,11 @@ void ChartShape::requestRepaint() const
 {
     Q_ASSERT( d->plotArea );
     d->plotArea->requestRepaint();
+}
+
+QMap<QString, KoDataCenter*> ChartShape::dataCenterMap() const
+{
+    return d->dataCenterMap;
 }
 
 } // Namespace KChart

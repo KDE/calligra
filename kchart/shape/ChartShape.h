@@ -172,6 +172,8 @@ public:
     
     void requestRepaint() const;
     
+    QMap<QString, KoDataCenter*> dataCenterMap() const;
+
 private:
     class Private;
     Private *const d;
