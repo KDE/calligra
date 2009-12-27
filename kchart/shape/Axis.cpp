@@ -877,7 +877,7 @@ Axis::Axis( PlotArea *parent )
     }
     d->title->setSize( QSizeF( CM_TO_POINT( 3 ), CM_TO_POINT( 0.75 ) ) );
     
-    d->plotArea->parent()->addChild( d->title );
+    d->plotArea->parent()->setClipping( d->title, true );
     
     connect( d->plotArea, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,        SLOT( setGapBetweenBars( int ) ) );
