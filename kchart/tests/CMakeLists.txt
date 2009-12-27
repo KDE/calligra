@@ -9,6 +9,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
 
 ########### next target ###############
 set( TestProxyModel_test_SRCS TestProxyModel.cpp )
+set( TestKDChartModel_test_SRCS TestKDChartModel.cpp ModelObserver.cpp )
 kde4_add_unit_test( TestProxyModel TESTNAME kchart-TestProxyModel ${TestProxyModel_test_SRCS} )
+kde4_add_unit_test( TestKDChartModel TESTNAME kchart-TestKDChartModel ${TestKDChartModel_test_SRCS} )
 target_link_libraries( TestProxyModel ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY} chartshapelib )
-
+target_link_libraries( TestKDChartModel ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY} chartshapelib )
