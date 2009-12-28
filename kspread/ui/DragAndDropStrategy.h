@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    DragAndDropStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+    DragAndDropStrategy(KoTool* parent, Selection* selection,
                         const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**

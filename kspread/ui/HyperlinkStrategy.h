@@ -23,6 +23,7 @@
 #include "AbstractSelectionStrategy.h"
 
 #include <Qt>
+#include <QRectF>
 
 namespace KSpread
 {
@@ -41,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    HyperlinkStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+    HyperlinkStrategy(KoTool* parent, Selection* selection,
                       const QPointF position, Qt::KeyboardModifiers modifiers,
                       const QString& url, const QRectF& textRect);
 

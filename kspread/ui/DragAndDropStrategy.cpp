@@ -24,6 +24,9 @@
 #include "Sheet.h"
 
 #include <KoCanvasBase.h>
+#include <KoTool.h>
+#include <KoShape.h>
+#include <KoSelection.h>
 #include <KoShapeManager.h>
 
 #include <QBuffer>
@@ -41,13 +44,13 @@ public:
     QPointF lastPoint;
 };
 
-DragAndDropStrategy::DragAndDropStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+DragAndDropStrategy::DragAndDropStrategy(KoTool *parent, Selection *selection,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)
 {
     d->lastPoint = documentPos;
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?
@@ -78,7 +81,7 @@ bool DragAndDropStrategy::startDrag(const QPointF& documentPos, Qt::KeyboardModi
 {
     Q_UNUSED(modifiers);
     d->lastPoint = documentPos;
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?
@@ -105,7 +108,7 @@ bool DragAndDropStrategy::startDrag(const QPointF& documentPos, Qt::KeyboardModi
         mimeData->setText(selection()->activeSheet()->copyAsText(selection()));
         mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
-        QDrag *drag = new QDrag(m_canvas->canvasWidget());
+        QDrag *drag = new QDrag(tool()->canvas()->canvasWidget());
         drag->setMimeData(mimeData);
         drag->exec();
         return true;
@@ -115,7 +118,7 @@ bool DragAndDropStrategy::startDrag(const QPointF& documentPos, Qt::KeyboardModi
 
 QUndoCommand* DragAndDropStrategy::createCommand()
 {
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = d->lastPoint - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // In which cell did the user click?

@@ -45,10 +45,10 @@ public:
     QString url;
 };
 
-HyperlinkStrategy::HyperlinkStrategy(KoTool* parent, KoCanvasBase* m_canvas, Selection* selection,
+HyperlinkStrategy::HyperlinkStrategy(KoTool* parent, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
-        : AbstractSelectionStrategy(parent, m_canvas, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)
 {
     d->lastPoint = documentPos;
@@ -106,16 +106,16 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                                               "Are you sure that you want to run this program?", d->url);
                 // this will also start local programs, so adding a "don't warn again"
                 // checkbox will probably be too dangerous
-                const int answer = KMessageBox::warningYesNo(m_canvas->canvasWidget(), question,
+                const int answer = KMessageBox::warningYesNo(tool()->canvas()->canvasWidget(), question,
                                    i18n("Open Link?"));
                 if (answer != KMessageBox::Yes) {
                     return;
                 }
             }
-            new KRun(url, m_canvas->canvasWidget(), 0, url.isLocalFile());
+            new KRun(url, tool()->canvas()->canvasWidget(), 0, url.isLocalFile());
         }
     }
 
     QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    m_parent->repaintDecorations();
+    tool()->repaintDecorations();
 }

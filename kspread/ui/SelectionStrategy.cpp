@@ -34,12 +34,12 @@ class SelectionStrategy::Private
 public:
 };
 
-SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+SelectionStrategy::SelectionStrategy(KoTool *parent, Selection *selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)
 {
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // Extend selection, if control modifier is pressed.
@@ -63,7 +63,7 @@ SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selec
             this->selection()->initialize(QPoint(col, row), this->selection()->activeSheet());
         }
     }
-    m_parent->repaintDecorations();
+    tool()->repaintDecorations();
 }
 
 SelectionStrategy::~SelectionStrategy()

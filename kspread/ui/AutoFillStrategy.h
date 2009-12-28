@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    AutoFillStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+    AutoFillStrategy(KoTool *parent, Selection *selection,
                      const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
