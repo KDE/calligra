@@ -32,8 +32,8 @@
 
 
 DateTimeFormat::DateTimeFormat(Slide *master)
-               :master(master)
-               ,formatId(0)
+        : master(master)
+        , formatId(0)
 {
     formatId = master->dateTimeFormatId();
 //#ifdef LIBDATE_DEBUG
@@ -45,7 +45,7 @@ DateTimeFormat::~DateTimeFormat()
 {
 }
 
-void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, QString seperator)
+void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, QString separator)
 {
     QBuffer buffer;
 
@@ -66,7 +66,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     xmlWriter.startElement("number:day");
     xmlWriter.endElement(); // number:day
     xmlWriter.startElement("number:text");
-    xmlWriter.addTextNode(seperator);
+    xmlWriter.addTextNode(separator);
     xmlWriter.endElement(); //number:text
 
     xmlWriter.startElement("number:month");
@@ -77,7 +77,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     }
     xmlWriter.endElement();  //number:month
     xmlWriter.startElement("number:text");
-    xmlWriter.addTextNode(seperator);
+    xmlWriter.addTextNode(separator);
     xmlWriter.endElement(); //number:text
 
     xmlWriter.startElement("number:year");
@@ -98,7 +98,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 }
 
 
-void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format,bool second,QString seperator)
+void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator)
 {
     QBuffer buffer;
 
@@ -112,26 +112,27 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format,bool seco
     xmlWriter.endElement();  //number:hours
 
     xmlWriter.startElement("number:text");
-    xmlWriter.addTextNode(seperator);
+    xmlWriter.addTextNode(separator);
     xmlWriter.endElement(); //number:text
 
     xmlWriter.startElement("number:minutes");
     xmlWriter.endElement(); // number:minutes
 
     if (second) {
-       xmlWriter.startElement("number:text");
-       xmlWriter.addTextNode(seperator);
-       xmlWriter.endElement(); //number:text
-       xmlWriter.startElement("number:second"); //TBD in spec
-       xmlWriter.endElement();  //number:second
+        xmlWriter.startElement("number:text");
+        xmlWriter.addTextNode(separator);
+        xmlWriter.endElement(); //number:text
+        xmlWriter.startElement("number:second"); //TBD in spec
+        xmlWriter.endElement();  //number:second
     }
 
     if (hr12Format) {
         xmlWriter.startElement("number:am-pm");
         xmlWriter.endElement(); // number:am-pm
-     }
+    }
 
     tm.addChildElement("number:date-style",
+
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
     styles.lookup(tm, "TM");
     setTimeStyleName(styles.lookup(tm));

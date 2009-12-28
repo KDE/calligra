@@ -255,49 +255,50 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
     //Creating dateTime class object
     d->dateTime = new DateTimeFormat(master);
     d->dateTime->addDateTimeAutoStyles(styles);
-    
-    KoGenStyle text(KoGenStyle::StyleTextAuto,"text");
+
+    KoGenStyle text(KoGenStyle::StyleTextAuto, "text");
     text.setAutoStyleInStylesDotXml(true);
-    text.addProperty("fo:font-size","12pt");
-    text.addProperty("fo:language","en");
-    text.addProperty("fo:country","US");
-    text.addProperty("style:font-size-asian","12pt");
-    text.addProperty("style:font-size-complex","12pt");
+    text.addProperty("fo:font-size", "12pt");
+    text.addProperty("fo:language", "en");
+    text.addProperty("fo:country", "US");
+    text.addProperty("style:font-size-asian", "12pt");
+    text.addProperty("style:font-size-complex", "12pt");
 
 
-    KoGenStyle Mpr(KoGenStyle::StylePresentationAuto,"presentation");
+    KoGenStyle Mpr(KoGenStyle::StylePresentationAuto, "presentation");
     Mpr.setAutoStyleInStylesDotXml(true);
-    Mpr.addProperty("draw:stroke","none");
-    Mpr.addProperty("draw:fill","none");
-    Mpr.addProperty("draw:fill-color","#bbe0e3");
-    Mpr.addProperty("draw:textarea-horizontal-align","justify");
-    Mpr.addProperty("draw:textarea-vertical-align","top");
-    Mpr.addProperty("fo:wrap-option","wrap");
+    Mpr.addProperty("draw:stroke", "none");
+    Mpr.addProperty("draw:fill", "none");
+    Mpr.addProperty("draw:fill-color", "#bbe0e3");
+    Mpr.addProperty("draw:textarea-horizontal-align", "justify");
+    Mpr.addProperty("draw:textarea-vertical-align", "top");
+    Mpr.addProperty("fo:wrap-option", "wrap");
     styles.lookup(Mpr, "Mpr");
 
     KoGenStyle s(KoGenStyle::StyleMaster);
     s.addAttribute("style:page-layout-name", styles.lookup(pl));
     s.addAttribute("draw:style-name", styles.lookup(dp));
-    if(master)
-    {
-      x = master->pageWidth()-50;
-      y = master->pageHeight()-50; 
-    }   
 
-    addFrame(s, "page-number", "20pt", "20pt", 
+    if (master) {
+        x = master->pageWidth() - 50;
+        y = master->pageHeight() - 50;
+    }
+
+    addFrame(s, "page-number", "20pt", "20pt",
+
              QString("%1pt").arg(x), QString("%1pt").arg(y),
              styles.lookup(p), styles.lookup(text));
     addFrame(s, "date-time", "200pt", "20pt", "20pt",
-             QString("%1pt").arg(y),styles.lookup(p), styles.lookup(text));
+             QString("%1pt").arg(y), styles.lookup(p), styles.lookup(text));
     styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
 
-    //Deleting Datetime. 
+    //Deleting Datetime.
     delete d->dateTime;
     d->dateTime = NULL;
-    
+
 }
 
-void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass, 
+void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass,
                                 QString width, QString height,
                                 QString x, QString y, QString pStyle, QString tStyle)
 {
@@ -319,27 +320,28 @@ void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass
     xmlWriter.addAttribute("presentation:class", presentationClass);
     xmlWriter.startElement("draw:text-box");
     xmlWriter.startElement("text:p");
-    xmlWriter.addAttribute("text:style-name",pStyle);  
+    xmlWriter.addAttribute("text:style-name", pStyle);
 
-    if (strcmp(presentationClass,"page-number") == 0) {
+    if (strcmp(presentationClass, "page-number") == 0) {
         xmlWriter.startElement("text:span");
-        xmlWriter.addAttribute("text:style-name", tStyle); 
+        xmlWriter.addAttribute("text:style-name", tStyle);
         xmlWriter.startElement("text:page-number");
         xmlWriter.addTextNode("<number>");
         xmlWriter.endElement();//text:page-number
         xmlWriter.endElement(); // text:span
     }
-    if (strcmp(presentationClass,"date-time") == 0) {
-        //Same DateTime object so no need to pass style name for date time  
+
+    if (strcmp(presentationClass, "date-time") == 0) {
+        //Same DateTime object so no need to pass style name for date time
         if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
-           d->dateTime->addMasterDateTimeSection(xmlWriter,tStyle);
+            d->dateTime->addMasterDateTimeSection(xmlWriter, tStyle);
+        } else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
+            //Future FixedDate format
         }
-        else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
-           //Future FixedDate format
-        }
-     }
+    }
 
     xmlWriter.endElement(); // text:p
+
     xmlWriter.endElement(); // draw:text-box
     xmlWriter.endElement(); // draw:frame
     style.addChildElement("draw:frame",
@@ -368,42 +370,44 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->addAttribute("office:version", "1.0");
 
     // office:automatic-styles
-    
+
     Slide *master = d->presentation->masterSlide();
-    processDocStyles(master ,styles);
- 
+    processDocStyles(master , styles);
+
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
         Slide* slide = d->presentation->slide(c);
         processSlideForStyle(c, slide, styles);
     }
+
     styles.saveOdfAutomaticStyles(contentWriter, false);
-    
+
     // office:body
 
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:presentation");
 
     int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
+
     if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
-         contentWriter->startElement("presentation:date-time-decl");
-         contentWriter->addAttribute("presentation:name", "dtd1");
-         contentWriter->addAttribute("presentation:source", "current-date");
-         //contentWriter->addAttribute("style:data-style-name", "Dt1"); 
-         contentWriter->endElement();  // presentation:date-time-decl
-    }
-    else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
-         contentWriter->startElement("presentation:date-time-decl");
-         contentWriter->addAttribute("presentation:name", "dtd1");
-         contentWriter->addAttribute("presentation:source", "fixed");
-         //Future - Add Fixed date data here
-         contentWriter->endElement();  //presentation:date-time-decl 
+        contentWriter->startElement("presentation:date-time-decl");
+        contentWriter->addAttribute("presentation:name", "dtd1");
+        contentWriter->addAttribute("presentation:source", "current-date");
+        //contentWriter->addAttribute("style:data-style-name", "Dt1");
+        contentWriter->endElement();  // presentation:date-time-decl
+    } else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
+        contentWriter->startElement("presentation:date-time-decl");
+        contentWriter->addAttribute("presentation:name", "dtd1");
+        contentWriter->addAttribute("presentation:source", "fixed");
+        //Future - Add Fixed date data here
+        contentWriter->endElement();  //presentation:date-time-decl
     }
 
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
-        processSlideForBody(c,contentWriter);
+        processSlideForBody(c, contentWriter);
     }
 
     contentWriter->endElement();  // office:presentation
+
     contentWriter->endElement();  // office:body
 
     contentWriter->endElement();  // office:document-content
@@ -412,23 +416,25 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     return contentData;
 }
 
-void PowerPointImport::processDocStyles(Slide *master,KoGenStyles &styles)
+void PowerPointImport::processDocStyles(Slide *master, KoGenStyles &styles)
 {
-    
+
     int  headerFooterAtomFlags = master->headerFooterFlags();
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.addProperty("presentation:background-objects-visible", "true");
+
     if (headerFooterAtomFlags && DateTimeFormat::fHasSlideNumber)
         dp.addProperty("presentation:display-page-number", "true");
     else
         dp.addProperty("presentation:display-page-number", "false");
 
-    if (headerFooterAtomFlags && DateTimeFormat::fHasDate)    
-        dp.addProperty("presentation:display-date-time" ,"true");
+    if (headerFooterAtomFlags && DateTimeFormat::fHasDate)
+        dp.addProperty("presentation:display-date-time" , "true");
     else
-        dp.addProperty("presentation:display-date-time" ,"false");
- 
+        dp.addProperty("presentation:display-date-time" , "false");
+
     styles.lookup(dp, "dp");
+
     master->setStyleName(styles.lookup(dp));
 }
 
@@ -1573,20 +1579,30 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
     if (!textObject || !xmlWriter) return;
 
     QString classStr = "subtitle";
+
     if (textObject->type() == TextObject::Title)
         classStr = "title";
 
+    if (textObject->type() == TextObject::Body)
+        classStr = "outline";
+
     QString widthStr = QString("%1mm").arg(textObject->width());
+
     QString heightStr = QString("%1mm").arg(textObject->height());
+
     QString xStr = QString("%1mm").arg(textObject->left());
+
     QString yStr = QString("%1mm").arg(textObject->top());
 
     xmlWriter->startElement("draw:frame");
+
     if (!textObject->graphicStyleName().isEmpty()) {
         xmlWriter->addAttribute("presentation:style-name",
                 textObject->graphicStyleName());
     }
+
     xmlWriter->addAttribute("draw:layer", "layout");
+
     xmlWriter->addAttribute("svg:width", widthStr);
     xmlWriter->addAttribute("svg:height", heightStr);
     xmlWriter->addAttribute("svg:x", xStr);
@@ -1665,28 +1681,38 @@ void PowerPointImport::processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWri
 {
     Slide* slide = d->presentation->slide(slideNo);
     Slide* master = d->presentation->masterSlide();
+
     if (!slide || !xmlWriter) return;
 
     QString nameStr = slide->title();
+
     if (nameStr.isEmpty())
         nameStr = QString("page%1").arg(slideNo + 1);
 
     //QString styleNameStr = QString("dp%1").arg(slideNo + 1);
 
     xmlWriter->startElement("draw:page");
+
     xmlWriter->addAttribute("draw:master-page-name", "Default");
+
     xmlWriter->addAttribute("draw:name", nameStr);
-    xmlWriter->addAttribute("draw:style-name", master->styleName()); 
+
+    xmlWriter->addAttribute("draw:style-name", master->styleName());
+
     xmlWriter->addAttribute("presentation:presentation-page-layout-name", "AL1T0");
+
     int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
-    if(headerFooterAtomFlags && DateTimeFormat::fHasTodayDate){
-        xmlWriter->addAttribute("presentation:use-date-time-name","dtd1"); 
+
+    if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
+        xmlWriter->addAttribute("presentation:use-date-time-name", "dtd1");
     }
 
     GroupObject* root = slide->rootObject();
+
     if (root)
         for (unsigned i = 0; i < root->objectCount(); i++) {
             Object* object = root->object(i);
+
             if (object)
                 processObjectForBody(object, xmlWriter);
         }
@@ -2129,51 +2155,62 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     }
 
     KoGenStyle styleList(KoGenStyle::StyleListAuto, 0);
+
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
 
 
     TextPFException9 *pf9 = 0;
+    StyleTextProp9 *prop9 = 0;
+
     if (cf) {
-        StyleTextProp9 *prop9 = textObject->findStyleTextProp9(cf->textCFException());
-        if (prop9) {
-            pf9 = prop9->pf9();
-        }
+        prop9 = textObject->findStyleTextProp9(cf->textCFException());
     }
 
     for (int i = 0;i < indent + 1;i++) {
-        TextCFException *levelCF = masterTextCFException(type,
-                                   i);
+        TextCFException *levelCF = masterTextCFException(type, i);
+        TextPFException *levelPF = masterTextPFException(type, i);
 
-        TextPFException *levelPF = masterTextPFException(type,
-                                   i);
-
-        if (!levelCF || !levelPF) {
-            //Some text's might not have master style but they have
-            //a specific style (StyleTextPropAtom) instead.
-            continue;
+        if (prop9) {
+            pf9 = prop9->pf9();
+            std::cout << "\npf9 :" << pf9;
         }
 
         if (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme()) {
             elementWriter.startElement("text:list-level-style-number");
         } else {
-            elementWriter.startElement("text:list-level-style-bullet");
+            if (levelPF && (levelPF->hasBulletFont() || levelPF->bulletFont())) {
+                elementWriter.startElement("text:list-level-style-number");
+            } else {
+                elementWriter.startElement("text:list-level-style-bullet");
+            }
         }
 
         elementWriter.addAttribute("text:level", i + 1);
 
         if (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme()) {
-            elementWriter.addAttribute("style:num-suffix", ".");
-            elementWriter.addAttribute("style:num-format", 1);
+            QString numFormat = 0;
+            QString numSuffix = 0;
+            QString numPrefix = 0;
+            processTextAutoNumberScheme(pf9->scheme(), numFormat, numSuffix, numPrefix);
+
+            if (numPrefix != 0) {
+                elementWriter.addAttribute("style:num-prefix", numPrefix);
+            }
+
+            if (numSuffix != 0) {
+                elementWriter.addAttribute("style:num-suffix", numSuffix);
+            }
+
+            elementWriter.addAttribute("style:num-format", numFormat);
+
         } else {
             if (pf && i == pf->textPFException()->indent() &&
                     pf->textPFException()->hasBulletChar()) {
                 elementWriter.addAttribute("text:bullet-char", pf->textPFException()->bulletChar());
-            } else {
-                if (levelPF->hasBulletChar()) {
-                    elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
-                }
+            } else if (levelPF && levelPF->hasBulletChar()) {
+                elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
             }
         }
 
@@ -2185,7 +2222,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             elementWriter.addAttribute("text:space-before",
                                        paraSpacingToCm(pf->textPFException()->spaceBefore()));
         } else {
-            if (levelPF->hasSpaceBefore()) {
+            if (levelPF && levelPF->hasSpaceBefore()) {
                 elementWriter.addAttribute("text:space-before",
                                            paraSpacingToCm(levelPF->spaceBefore()));
             }
@@ -2194,10 +2231,11 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         elementWriter.endElement(); // style:list-level-properties
 
         elementWriter.startElement("style:text-properties");
+
         if (pf && i == pf->textPFException()->indent() &&
                 pf->textPFException()->hasBulletFont()) {
             font = d->presentation->getFont(pf->textPFException()->bulletFontRef());
-        } else if (levelPF->hasBulletFont()) {
+        } else if (levelPF && levelPF->hasBulletFont()) {
             font = d->presentation->getFont(levelPF->bulletFontRef());
         }
 
@@ -2210,7 +2248,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             elementWriter.addAttribute("fo:color",
                                        colorIndexStructToQColor(pf->textPFException()->bulletColor()).name());
         } else {
-            if (levelPF->hasBulletColor()) {
+            if (levelPF && levelPF->hasBulletColor()) {
                 elementWriter.addAttribute("fo:color",
                                            colorIndexStructToQColor(levelPF->bulletColor()).name());
             }
@@ -2222,7 +2260,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
                                        QString("%1%").arg(pf->textPFException()->bulletSize()));
 
         } else {
-            if (levelPF->hasBulletSize()) {
+            if (levelPF && levelPF->hasBulletSize()) {
                 elementWriter.addAttribute("fo:font-size",
                                            QString("%1%").arg(levelPF->bulletSize()));
             } else {
@@ -2231,6 +2269,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         }
 
         elementWriter.endElement(); // style:text-properties
+
         elementWriter.endElement();  // text:list-level-style-bullet
 
 
@@ -2253,6 +2292,101 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
                                   styles.lookup(styleList));
     }
 
+}
+
+void PowerPointImport::processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix)
+{
+    switch (val) {
+
+    case ANM_AlphaLcPeriod:         //Example: a., b., c., ...Lowercase Latin character followed by a period.
+        numFormat = "a";
+        numSuffix = ".";
+        break;
+
+    case ANM_AlphaUcPeriod:        //Example: A., B., C., ...Uppercase Latin character followed by a period.
+        numFormat = "A";
+        numSuffix = ".";
+        break;
+
+    case ANM_ArabicParenRight:     //Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+        numFormat = "1";
+        numSuffix = ")";
+        break;
+
+    case ANM_ArabicPeriod :        //Example: 1., 2., 3., ...Arabic numeral followed by a period.
+        numFormat = "1";
+        numSuffix = ".";
+        break;
+
+    case ANM_RomanLcParenBoth:     //Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
+        numPrefix = "(";
+        numFormat = "i";
+        numSuffix = ")";
+        break;
+
+    case ANM_RomanLcParenRight:    //Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
+        numFormat = "i";
+        numSuffix = ")";
+        break;
+
+    case ANM_RomanLcPeriod :        //Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+        numFormat = "i";
+        numSuffix = ".";
+        break;
+
+    case ANM_RomanUcPeriod:         //Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+        numFormat = "I";
+        numSuffix = ".";
+        break;
+
+    case ANM_AlphaLcParenBoth:      //Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
+        numPrefix = "(";
+        numFormat = "a";
+        numSuffix = ")";
+        break;
+
+    case ANM_AlphaLcParenRight:     //Example: a), b), c), ...Lowercase alphabetic character followed by a closing
+        numFormat = "a";
+        numSuffix = ")";
+        break;
+
+    case ANM_AlphaUcParenBoth:      //Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
+        numPrefix = "(";
+        numFormat = "A";
+        numSuffix = ")";
+        break;
+
+    case ANM_AlphaUcParenRight:     //Example: A), B), C), ...Uppercase alphabetic character followed by a closing
+        numFormat = "A";
+        numSuffix = ")";
+        break;
+
+    case ANM_ArabicParenBoth:       //Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+        numPrefix = "(";
+        numFormat = "1";
+        numSuffix = ")";
+        break;
+
+    case ANM_ArabicPlain:           //Example: 1, 2, 3, ...Arabic numeral.
+        numFormat = "1";
+        break;
+
+    case ANM_RomanUcParenBoth:      //Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
+        numPrefix = "(";
+        numFormat = "I";
+        numSuffix = ")";
+        break;
+
+    case ANM_RomanUcParenRight:     //Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
+        numFormat = "I";
+        numSuffix = ")";
+        break;
+
+    default:
+        numFormat = "i";
+        numSuffix = ".";
+        break;
+    }
 }
 
 QString hexname(const Color &c)

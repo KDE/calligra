@@ -3477,6 +3477,11 @@ bool TextPFException::bullet()
     return d->bulletFlags.fHasBullet;
 }
 
+bool TextPFException::bulletFont()
+{
+    return d->bulletFlags.fBulletHasFont;
+}
+
 
 unsigned int TextPFException::bulletFontRef()
 {
@@ -5597,14 +5602,22 @@ unsigned int OutlineTextPropsHeaderExAtom::setData(unsigned int size,
     * follow the corresponding slide persist. It MUST be less than or equal to
     * 0x005.
     */
-    if (rh.recInstance > 5) {
+#ifdef LIBPPT_DEBUG
+    std::cout << "\nRecInstance " << rh.recInstance;
+
+#endif
+
+    if (rh.recInstance > 0x5) {
         kWarning() << __PRETTY_FUNCTION__ << "Invalid record header instance for OutlineTextPropsHeaderExAtom:" << rh.recInstance;
         return 0;
     }
 
     d->instance = rh.recInstance;
-    d->slideIdRef = readU32(data); data += 4;
-    d->txType = readU32(data); data += 4;
+
+    d->slideIdRef = readU32(data);
+    data += 4;
+    d->txType = readU32(data);
+    data += 4;
 
     return 16;
 }
@@ -7573,7 +7586,7 @@ public:
     * @brief Container for extra style info for texts
     *
     */
-    OutlineTextProps9Container container;
+    OutlineTextProps9Container outlineContainer;
 };
 
 
@@ -8278,54 +8291,81 @@ void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
     //             record is displayed.
     //         F - fHasFooter (1 bit): A bit that specifies whether the footer text specified by FooterAtom
     //             record is displayed.
-    //TO DO If required formatID 
+    //TO DO If required formatID
 
-    const Record *parentRecord = atom->parent(); 
+    const Record *parentRecord = atom->parent();
+
     int instance = parentRecord->instance();
-    
-    if (instance == 0x4F) {
-        std::cout<<"\n****NotesInstance:"<<instance;
+
+#ifdef LIBPPT_DEBUG
+    std::cout << "\n****HeaderFooter Instance:" << instance;
+
+#endif
+    //Note:- 0x04 Instance of NotesHeaderFooter and 0x03 for headerfooter for master
+    if (instance == 0x04) {
         d->presentation->masterSlide()->setNotesHeaderFooterFlags(atom->flags());
         d->presentation->masterSlide()->setNotesDateTimeFormatId(atom->formatId());
-    }
-    else {
-        std::cout<<"\n****Instance:"<<instance;
+    } else {
         d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
         d->presentation->masterSlide()->setDateTimeFormatId(atom->formatId());
         flags = atom->flags();
         //Fixed Data- user date format
-        if (flags & 0x04){ 
+
+        if (flags & 0x04) {
             //future -Fixed Date
         }
     }
 
 #ifdef LIBPPT_DEBUG
     std::cout << std::endl << "***Flags " << atom->flags();
+
     std::cout << std::endl << "***FormatId " << atom->formatId();
+
 #endif
 }
 
 void PPTReader::handleContainer(Container* container, int type, unsigned size)
 {
+#ifdef LIBPPT_DEBUG
+    std::cout << std::endl << "\n***HandleContainer START type:" << type;
+#endif
+
     if (!container || !container->isContainer()) return;
 
     unsigned long nextpos = d->docStream->tell() + size - 6;
 
     switch (type) {
+
     case msofbtDgContainer::id:
-        handleDrawingContainer(static_cast<msofbtDgContainer*>(container), size); break;
+        handleDrawingContainer(static_cast<msofbtDgContainer*>(container), size);
+        break;
+
     case msofbtSpgrContainer::id:
-        handleEscherGroupContainer(static_cast<msofbtSpgrContainer*>(container), size); break;
+        handleEscherGroupContainer(static_cast<msofbtSpgrContainer*>(container), size);
+        break;
+
     case msofbtSpContainer::id:
-        handleSPContainer(static_cast<msofbtSpContainer*>(container), size); break;
+        handleSPContainer(static_cast<msofbtSpContainer*>(container), size);
+        break;
+
     case msofbtClientTextBox::id:
-        handleEscherTextBox(static_cast<msofbtClientTextBox*>(container), size); break;
+        handleEscherTextBox(static_cast<msofbtClientTextBox*>(container), size);
+        break;
+
     case ProgBinaryTagContainer::id:
-        handleProgBinaryTagContainer(static_cast<ProgBinaryTagContainer*>(container), size); break;
+        handleProgBinaryTagContainer(static_cast<ProgBinaryTagContainer*>(container), size);
+        break;
+
     default:
+
         while (d->docStream->tell() < nextpos)
             loadRecord(container);
     }
+
+#ifdef LIBPPT_DEBUG
+    std::cout << std::endl << "\n***HandleContainer END type:" << type;
+
+#endif
 }
 
 void PPTReader::handleProgBinaryTagContainer(ProgBinaryTagContainer* /*r*/,
@@ -8375,69 +8415,89 @@ void PPTReader::handleProgBinaryTagContainer(ProgBinaryTagContainer* /*r*/,
     rhData.setData(buffer);
 
     //Next we want a BinaryTagDataBlob
-    if (rhData.recType != 5003) {
+
+    if (rhData.recType != BinaryTagExtension::id) {
         return;
     }
 
 
     RecordHeader atomRH;
+
     while (d->docStream->tell() < end) {
         bytes_read = d->docStream->read(buffer, 8);
+
         if (bytes_read != 8) {
+            std::cout << "\n**Wrong bytes read> ";
             return;
         }
 
+
         atomRH.setData(buffer);
 
+        std::cout << "\n**Type: " << atomRH.recType << " atomRH.recLen:" << atomRH.recLen;
+
         //OutlineTextProps9Container
+
         if (atomRH.recType != 4014) {
+            std::cout << "\n**!=4014 type:" << atomRH.recType;
+            d->docStream->seek(d->docStream->tell() + atomRH.recLen);
             continue;
         }
+
         bytes_read = d->docStream->read(buffer, atomRH.recLen);
+
         if (bytes_read != atomRH.recLen) {
             return;
         }
 
-        if (d->container.setData(atomRH.recLen, buffer) != 0) {
+        if (d->outlineContainer.setData(atomRH.recLen, buffer) != 0) {
             return;
-        } else {
-            continue;
         }
 
         d->docStream->seek(d->docStream->tell() + atomRH.recLen);
     }
 }
 
+
 void PPTReader::handleDocumentAtom(DocumentAtom* atom)
 {
     if (!atom) return;
+
     if (!d->presentation) return;
 
     double pageWidth = atom->slideWidth() * 0.125; // pt, in cm  * 0.0440972
+
     double pageHeight = atom->slideHeight() * 0.125; // pt
 
     d->presentation->masterSlide()->setPageWidth(pageWidth);
+
     d->presentation->masterSlide()->setPageHeight(pageHeight);
 
 #ifdef LIBPPT_DEBUG
     std::cout << std::endl << "page width = " << pageWidth << std::endl;
+
     std::cout << std::endl << "page height = " << pageHeight << std::endl;
+
 #endif
 }
 
 void PPTReader::handleSlidePersistAtom(SlidePersistAtom* atom)
 {
     if (!atom) return;
+
     if (!d->presentation) return;
 
     //int id = atom->slideId();
     unsigned ref = atom->psrReference();
 
     d->currentSlide = d->slideMap[ ref ];
+
     if (d->currentSlide) {
         d->currentSlide->setSlideId(atom->slideId());
     }
+
     d->currentTextId = 0;
+
     d->currentTextType = TextObject::Body;
 
 #ifdef LIBPPT_DEBUG
@@ -8542,23 +8602,33 @@ void PPTReader::handleTextCFExceptionAtom(TextCFExceptionAtom* atom)
 void PPTReader::handleStyleTextPropAtom(StyleTextPropAtom* atom)
 {
     if (!atom) return;
+
     if (!d->presentation) return;
+
     if (!d->currentSlide) return;
+
     if (!d->currentTextId) return;
 
     int placeId = d->currentTextId - 1;
+
     TextObject* text = d->currentSlide->textObject(placeId);
+
     if (text == 0 && d->currentObject && d->currentObject->isText()) {
         text = static_cast<TextObject*>(d->currentObject);
     }
+
     if (text == 0) return;
-    StyleTextProp9Atom *atom9 = d->container.styleTextProp9Atom(d->currentSlide->slideId(), placeId);
+
+    StyleTextProp9Atom *atom9 = d->outlineContainer.styleTextProp9Atom(d->currentSlide->slideId(), placeId);
+
+
     text->setStyleTextProperty(atom, atom9);
 }
 
 void PPTReader::handleColorSchemeAtom(ColorSchemeAtom* atom)
 {
     if (!atom) return;
+
     if (!d->presentation) return;
 
 }

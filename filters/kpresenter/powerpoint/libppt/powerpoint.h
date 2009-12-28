@@ -702,6 +702,15 @@ public:
     bool bullet();
 
     /**
+    * A bit that specifies whether the bulletFlags field of the TextPFException
+    * structure that contains this PFMasks exists and whether
+    * bulletFlags.fBulletHasFont is valid.
+    *
+    */
+    bool bulletFont();
+
+
+    /**
     * An optional BulletSize that specifies the size of the bullet. It MUST exist
     * if and only if masks.bulletSize is TRUE. This field is valid if and only if
     * bulletFlags.fBulletHasSize is TRUE.

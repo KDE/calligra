@@ -78,20 +78,20 @@ private:
      * @param bool longMonth - Long Month as per the formatId spec.
      * @param bool textualmonth - Month in textual format also.
      * @param bool longyear  - Long year format
-     * @param QString seperator="/" - Seperator b/w date.
+     * @param QString separator="/" - Separator b/w date.
      */
     void addDateStyle(KoGenStyles& styles,
                       bool dayofweek, bool longMonth, bool textualmonth, bool longyear,
-                      QString seperator="/");
+                      QString separator="/");
 
     /**
      * @brief addTimeStyle - Add Time styles in as per the formatId in styles.xml.
      * @param KoGenStyles - Styles generator handle.
      * @param bool hr12Format - Time in 12 hr format.
      * @param bool second - Second is required in time or not.
-     * @param QString seperator=":" - Seperator b/w time.
+     * @param QString separator=":" - Separator b/w time.
      */
-    void addTimeStyle(KoGenStyles& styles, bool hr12Format,bool second,QString seperator=":");
+    void addTimeStyle(KoGenStyles& styles, bool hr12Format,bool second,QString separator=":");
 
     /**
      * @brief setDateStyleName - set the date style name for further usage.
