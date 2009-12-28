@@ -681,8 +681,10 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
     if ( fib.lcbSttbListNames != 0 ) {
         // Get rid of leading garbage. Take care, though, as the STTBF most likely starts
         // with 0xffff (extended character STTBF)
-        while ( static_cast<U32>( tableStream->tell() ) < fib.fcSttbListNames &&
-                tableStream->readU8() == 0xff ); // the ; is intended!
+        while (    static_cast<U32>( tableStream->tell() ) < fib.fcSttbListNames
+                && tableStream->readU8() == 0xff )
+        {
+        }
 
         // Check the position and warn about corrupt files
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbListNames ) {
@@ -815,7 +817,8 @@ void ListInfoProvider::readListNames( OLEStreamReader* tableStream )
 
 void ListInfoProvider::eatLeading0xff( OLEStreamReader* tableStream )
 {
-    while ( tableStream->readU8() == 0xff ); // semicolon intended ;)
+    while ( tableStream->readU8() == 0xff ) {
+    }
     tableStream->seek( -1, G_SEEK_CUR ); // rewind the stream
 }
 
