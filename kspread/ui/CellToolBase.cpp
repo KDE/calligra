@@ -1080,7 +1080,7 @@ void CellToolBase::activate(bool temporary)
         d->initialized = true;
     }
 
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
 
     // paint the selection rectangle
     selection()->update();

@@ -242,8 +242,8 @@ void KarbonPatternTool::activate( bool temporary )
 
     KarbonPatternEditStrategyBase::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     KarbonPatternEditStrategyBase::setGrabSensitivity( m_canvas->resourceProvider()->grabSensitivity() );
-    
-    useCursor(Qt::ArrowCursor, true);
+
+    useCursor(Qt::ArrowCursor);
 
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }

@@ -180,7 +180,7 @@ void KarbonPencilTool::activate( bool )
 {
     m_points.clear();
     m_close = false;
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
 }
 
 void KarbonPencilTool::deactivate()

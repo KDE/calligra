@@ -352,7 +352,7 @@ qreal KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
 
 void KarbonCalligraphyTool::activate( bool )
 {
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
     m_lastShape = 0;
 }
 

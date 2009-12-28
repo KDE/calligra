@@ -352,7 +352,7 @@ void KarbonGradientTool::activate( bool temporary )
     initialize();
     repaintDecorations();
 
-    useCursor( KarbonCursor::needleArrow(), true);
+    useCursor(KarbonCursor::needleArrow());
 
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = m_canvas->snapGuide()->enabledSnapStrategies();

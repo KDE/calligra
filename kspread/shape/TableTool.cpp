@@ -151,7 +151,7 @@ void TableTool::activate(bool temporary)
     }
     d->selection->setActiveSheet(d->tableShape->sheet());
     d->selection->setOriginSheet(d->tableShape->sheet());
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
     d->tableShape->update();
 
     CellToolBase::activate(temporary);

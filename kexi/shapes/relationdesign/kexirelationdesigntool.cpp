@@ -67,7 +67,7 @@ void KexiRelationDesignTool::activate ( bool temporary ) {
         emit done();
         return;
     }
-    useCursor( Qt::ArrowCursor, true );
+    useCursor(Qt::ArrowCursor);
 }
 
 void KexiRelationDesignTool::deactivate ( ) {

@@ -51,7 +51,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KPrAnimationTool::activate(bool temporary)
 {
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
     repaintDecorations();
     Q_UNUSED(temporary);
 }
