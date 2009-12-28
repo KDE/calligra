@@ -1002,7 +1002,9 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
-    loadOdfAttributes( element, context, OdfTransformation | OdfGeometry );
+    // Load common attributes of (frame) shapes.  If you change here,
+    // don't forget to also change in saveOdf().
+    loadOdfAttributes( element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );
     return loadOdfFrame( element, context );
 }
 
@@ -1163,7 +1165,8 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
          || QString( tagHierarchy.last() ) != "office:chart" )
     {
         bodyWriter.startElement( "draw:frame" );
-        saveOdfAttributes( context, OdfTransformation | OdfSize );
+        // See also loadOdf() in loadOdfAttributes.
+        saveOdfAttributes( context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );
 
         bodyWriter.startElement( "draw:object" );
         context.embeddedSaver().embedDocument( bodyWriter, d->document );
