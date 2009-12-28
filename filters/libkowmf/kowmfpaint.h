@@ -121,7 +121,7 @@ private:
     // matrix transformation : only used in some bitmap manipulation
     void  setMatrix(const QMatrix &, bool combine = false);
 
-private:
+protected:
     bool  mInternalPainter;      // True if the painter wasn't externally provided.
     QPainter *mPainter;
     QPaintDevice *mTarget;
