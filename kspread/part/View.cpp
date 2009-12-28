@@ -675,7 +675,7 @@ View::~View()
     qDeleteAll( d->sheetViews );
 
     d->selection->emitCloseEditor(false);
-    d->selection->endReferenceSelection();
+    d->selection->endReferenceSelection(false);
     d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
     // performed. The repains can happen if you delete an embedded document,

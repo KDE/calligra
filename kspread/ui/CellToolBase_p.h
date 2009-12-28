@@ -36,6 +36,7 @@
 
 // dialogs
 #include "dialogs/FindDialog.h"
+#include "dialogs/FormulaDialog.h"
 
 // KDE
 
@@ -65,6 +66,7 @@ public:
     // Option widget elements
     QGridLayout *widgetLayout;
     ExternalEditor *userInput;
+    QPointer<FormulaDialog> formulaDialog;
     QToolButton *formulaButton, *applyButton, *cancelButton;
     LocationComboBox* locationComboBox;
     bool hasWideLayout;

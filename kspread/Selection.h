@@ -271,7 +271,7 @@ public:
     /** Start using a reference selection instead of normal one. */
     void startReferenceSelection(const Region& region = Region());
     /** End using reference selection. */
-    void endReferenceSelection();
+    void endReferenceSelection(bool saveChanges = true);
     /** Enable/disable reference choosing mode. */
     void setReferenceSelectionMode(bool enable);
     /** Are we in reference choosing mode ? */
