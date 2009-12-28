@@ -144,6 +144,9 @@ protected:
     /// Applies the current filter to the object
     void applyFilter(KoShape * shape);
 
+    /// Returns inherited attribute value for specified element
+    QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
+
 private:
     QSizeF m_documentSize;
     QStack<SvgGraphicsContext*>    m_gc;

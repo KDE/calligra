@@ -481,6 +481,7 @@ void SvgParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
 {
     QGradientStops stops;
     QColor c;
+
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement stop = n.toElement();
         if (stop.tagName() == "stop") {
@@ -492,8 +493,13 @@ void SvgParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
             } else
                 offset = temp.toFloat();
 
-            if (!stop.attribute("stop-color").isEmpty())
-                parseColor(c, stop.attribute("stop-color"));
+            QString stopColorStr = stop.attribute("stop-color");
+            if (!stopColorStr.isEmpty()) {
+                if (stopColorStr == "inherit") {
+                    stopColorStr = inheritedAttribute("stop-color", stop);
+                }
+                parseColor(c, stopColorStr);
+            }
             else {
                 // try style attr
                 QString style = stop.attribute("style").simplified();
@@ -509,8 +515,13 @@ void SvgParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
                 }
 
             }
-            if (!stop.attribute("stop-opacity").isEmpty())
-                c.setAlphaF(stop.attribute("stop-opacity").toDouble());
+            QString opacityStr = stop.attribute("stop-opacity");
+            if (!opacityStr.isEmpty()) {
+                if (opacityStr == "inherit") {
+                    opacityStr = inheritedAttribute("stop-opacity", stop);
+                }
+                c.setAlphaF(opacityStr.toDouble());
+            }
             stops.append(QPair<qreal, QColor>(offset, c));
         }
     }
@@ -997,6 +1008,15 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
             // only use style attributes
             if (m_styleAttributes.contains(command))
                 styleMap[command] = params;
+        }
+    }
+
+    // replace keyword "inherit" for style values
+    QMutableMapIterator<QString, QString> it(styleMap);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value() == "inherit") {
+            it.setValue(inheritedAttribute(it.key(), e));
         }
     }
 
@@ -2013,4 +2033,17 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     delete oldFill;
 
     return shape;
+}
+
+QString SvgParser::inheritedAttribute(const QString &attributeName, const KoXmlElement &e)
+{
+    KoXmlNode parent = e.parentNode();
+    while(!parent.isNull()) {
+        KoXmlElement currentElement = parent.toElement();
+        if (currentElement.hasAttribute(attributeName)) {
+            return currentElement.attribute(attributeName);
+        }
+        parent = currentElement.parentNode();
+    }
+    return QString();
 }
