@@ -985,14 +985,18 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
 {
     SvgStyles styleMap;
 
-    // match css style rules to element
-    QStringList cssStyles = m_cssStyles.matchStyles(e);
-
     // collect individual presentation style attributes which have the priority 0
     foreach(const QString & command, m_styleAttributes) {
         if (e.hasAttribute(command))
             styleMap[command] = e.attribute(command);
     }
+    foreach(const QString & command, m_fontAttributes) {
+        if (e.hasAttribute(command))
+            styleMap[command] = e.attribute(command);
+    }
+
+    // match css style rules to element
+    QStringList cssStyles = m_cssStyles.matchStyles(e);
 
     // collect all css style attributes
     foreach(const QString &style, cssStyles){
@@ -1005,8 +1009,8 @@ SvgParser::SvgStyles SvgParser::collectStyles(const KoXmlElement &e)
                 continue;
             QString command = substyle[0].trimmed();
             QString params  = substyle[1].trimmed();
-            // only use style attributes
-            if (m_styleAttributes.contains(command))
+            // only use style and font attributes
+            if (m_styleAttributes.contains(command) || m_fontAttributes.contains(command))
                 styleMap[command] = params;
         }
     }
@@ -1340,26 +1344,18 @@ void SvgParser::applyFilter(KoShape * shape)
     }
 }
 
-void SvgParser::parseFont(const KoXmlElement &e)
+void SvgParser::parseFont(const SvgStyles &styles)
 {
     SvgGraphicsContext * gc = m_gc.top();
-    if (!gc) return;
+    if (!gc)
+        return;
 
-    foreach(const QString &attributeName, m_fontAttributes) {
-        if (! e.attribute(attributeName).isEmpty())
-            parsePA(gc, attributeName, e.attribute(attributeName));
-    }
-
-    // now parse the style attribute for font specific parameters
-    QString style = e.attribute("style").simplified();
-    QStringList substyles = style.split(';', QString::SkipEmptyParts);
-    for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
-        QStringList substyle = it->split(':');
-        QString command = substyle[0].trimmed();
-        QString params  = substyle[1].trimmed();
-        // only parse font related parameters here
-        if (m_fontAttributes.contains(command))
-            parsePA(gc, command, params);
+    // make sure to only parse font attributes here
+    foreach(const QString & command, m_fontAttributes) {
+        const QString &params = styles.value(command);
+        if (params.isEmpty())
+            continue;
+        parsePA(gc, command, params);
     }
 }
 
@@ -1395,7 +1391,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
                 group->setZIndex(nextZIndex());
 
                 parseStyle(0, styles);
-                parseFont(a);
+                parseFont(styles);
 
                 QList<KoShape*> childShapes = parseContainer(a);
 
@@ -1535,8 +1531,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex(nextZIndex());
 
-            parseStyle(0, b);   // parse style for inheritance
-            parseFont(b);
+            SvgStyles styles = collectStyles(b);
+            parseStyle(0, styles);   // parse style for inheritance
+            parseFont(styles);
 
             QList<KoShape*> childShapes = parseContainer(b);
 
@@ -1545,7 +1542,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 group->setName(b.attribute("id"));
 
             addToGroup(childShapes, group);
-            parseStyle(group, b);   // apply style to this group after size is set
+            parseStyle(group, styles);   // apply style to this group after size is set
 
             shapes.append(group);
 
@@ -1652,7 +1649,8 @@ KoShape * SvgParser::createText(const KoXmlElement &b, const QList<KoShape*> & s
     if (! b.attribute("text-anchor").isEmpty())
         anchor = b.attribute("text-anchor");
 
-    parseFont(b);
+    SvgStyles elementStyles = collectStyles(b);
+    parseFont(elementStyles);
     KoXmlElement styleElement = b;
 
     if (b.hasChildNodes()) {
@@ -1725,7 +1723,7 @@ KoShape * SvgParser::createText(const KoXmlElement &b, const QList<KoShape*> & s
                 styleElement = e;
                 // this overrides the font of the text element or of previous tspan elements
                 // TODO we probably have to create separate shapes per tspan element later
-                parseFont(e);
+                parseFont(collectStyles(e));
             } else if (e.tagName() == "tref") {
                 if (e.attribute("xlink:href").isEmpty())
                     continue;
@@ -1798,7 +1796,7 @@ KoShape * SvgParser::createText(const KoXmlElement &b, const QList<KoShape*> & s
     text->setZIndex(nextZIndex());
 
     // apply the style merged from the text element and the last tspan element
-    parseStyle(text, mergeStyles(collectStyles(styleElement), collectStyles(b)));
+    parseStyle(text, mergeStyles(collectStyles(styleElement), elementStyles));
 
     removeGraphicContext();
 

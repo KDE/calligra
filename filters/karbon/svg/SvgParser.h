@@ -101,7 +101,8 @@ protected:
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create text object from the given xml element
     KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
-    void parseFont(const KoXmlElement &);
+    /// Parses font attributes
+    void parseFont(const SvgStyles &styles);
     /// find object with given id in document
     KoShape * findObject(const QString &name);
     /// find object with given id in given group
