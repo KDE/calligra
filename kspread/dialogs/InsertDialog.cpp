@@ -54,6 +54,8 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
   setModal( true );
 
   m_selection = selection;
+  rect = m_selection->firstRange();
+  Q_ASSERT( ! rect.isNull());
   insRem=_mode;
 
   QWidget *page = new QWidget();
