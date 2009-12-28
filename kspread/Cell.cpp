@@ -1129,7 +1129,8 @@ bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         saveOdfCellStyle( currentCellStyle, mainStyles );
         // skip 'table:style-name' attribute for the default style
         if ( !currentCellStyle.isDefaultStyle() )
-            xmlwriter.addAttribute( "table:style-name", mainStyles.styles().find(currentCellStyle).value() );
+            if ( mainStyles.styles().contains(currentCellStyle) )
+                xmlwriter.addAttribute( "table:style-name", mainStyles.styles().find(currentCellStyle).value() );
     }
 
     // group empty cells with the same style
