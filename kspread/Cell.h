@@ -585,7 +585,7 @@ private:
     /**
      * \ingroup NativeFormat
      */
-    bool loadCellData(const KoXmlElement &text, Paste::Operation op);
+    bool loadCellData(const KoXmlElement &text, Paste::Operation op, const QString &dataType = QString());
 
     /**
      * \ingroup NativeFormat

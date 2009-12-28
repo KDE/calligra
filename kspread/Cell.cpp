@@ -1760,18 +1760,12 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
 
     if (!text.isNull() &&
             (mode == Paste::Normal || mode == Paste::Text || mode == Paste::NoBorder || mode == Paste::Result)) {
-        /* older versions mistakenly put the datatype attribute on the cell
-           instead of the text.  Just move it over in case we're parsing
-           an old document */
-#ifdef KOXML_USE_QDOM
+
+        /* older versions mistakenly put the datatype attribute on the cell instead
+           of the text. Just move it over in case we're parsing an old document */
+        QString dataType;
         if (cell.hasAttribute("dataType"))     // new docs
-            text.setAttribute("dataType", cell.attribute("dataType"));
-#else
-#ifdef __GNUC__
-#warning Problem with KoXmlReader conversion!
-#endif
-        kWarning() << "Problem with KoXmlReader conversion!";
-#endif
+            dataType = cell.attribute("dataType");
 
         KoXmlElement result = cell.namedItem("result").toElement();
         QString txt = text.text();
@@ -1781,7 +1775,7 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
             setUserInput(result.text());
         else
             //otherwise copy everything
-            loadCellData(text, op);
+            loadCellData(text, op, dataType);
 
         if (!result.isNull()) {
             QString dataType;
@@ -1857,7 +1851,7 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
     return true;
 }
 
-bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op)
+bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QString &_dataType)
 {
     //TODO: use converter()->asString() to generate userInput()
 
@@ -1910,19 +1904,21 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op)
         setValue(Value(qml_text));
     } else {
         bool newStyleLoading = true;
-        QString dataType;
+        QString dataType = _dataType;
 
-        if (text.hasAttribute("dataType")) {   // new docs
-            dataType = text.attribute("dataType");
-        } else { // old docs: do the ugly solution of parsing the text
-            // ...except for date/time
-            if (isDate() && (t.count('/') == 2))
-                dataType = "Date";
-            else if (isTime() && (t.count(':') == 2))
-                dataType = "Time";
-            else {
-                parseUserInput(pasteOperation(t, userInput(), op));
-                newStyleLoading = false;
+        if (dataType.isNull()) {
+            if (text.hasAttribute("dataType")) {   // new docs
+                dataType = text.attribute("dataType");
+            } else { // old docs: do the ugly solution of parsing the text
+                // ...except for date/time
+                if (isDate() && (t.count('/') == 2))
+                    dataType = "Date";
+                else if (isTime() && (t.count(':') == 2))
+                    dataType = "Time";
+                else {
+                    parseUserInput(pasteOperation(t, userInput(), op));
+                    newStyleLoading = false;
+                }
             }
         }
 
