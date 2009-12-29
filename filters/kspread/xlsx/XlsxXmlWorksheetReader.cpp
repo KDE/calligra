@@ -643,7 +643,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         } else if (t == QLatin1String("n") || t.isEmpty() /* already checked if numeric */) {
             if (!t.isEmpty()) { // sanity check
                 if (!valueIsNumeric(m_value)) {
-                    raiseError(i18n("Expected integer of floating point number"));
+                    raiseError(i18n("Expected integer or floating point number"));
                     return KoFilter::WrongFormat;
                 }
             }
