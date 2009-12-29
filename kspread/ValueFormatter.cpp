@@ -399,45 +399,42 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
     /* handle Format::fraction_one_digit, Format::fraction_two_digit
       * and Format::fraction_three_digit style */
 
-    double precision, denominator, numerator;
+    double target = numToDouble(result);
 
-    do {
-        double val1 = numToDouble(result);
-        double val2 = rint(numToDouble(result));
-        double inter2 = 1;
-        double inter4, p,  q;
-        inter4 = p = q = 0;
+    double numerator = 1;
+    double denominator = 1;
 
-        precision = ::pow(10.0, -index);
-        numerator = val2;
-        denominator = 1;
+    double bestNumerator = 0;
+    double bestDenominator = 1;
+    double bestDist = target;
 
-        while (fabs(numerator / denominator - result) > precision) {
-            val1 = (1 / (val1 - val2));
-            val2 = rint(val1);
-            p = val2 * numerator + inter2;
-            q = val2 * denominator + inter4;
-            inter2 = numerator;
-            inter4 = denominator;
-            numerator = p;
-            denominator = q;
+    // as soon as either numerator or denominator gets above the limit, we're done
+    while (numerator <= limit && denominator <= limit) {
+        double dist = abs((numerator / denominator) - target);
+        if (dist < bestDist) {
+            bestDist = dist;
+            bestNumerator = numerator;
+            bestDenominator = denominator;
         }
-        index--;
-    } while (::fabs(denominator) > limit);
+        if (numerator / denominator > target) {
+            denominator++;
+        } else {
+            numerator++;
+        }
+    }
 
-    denominator = ::fabs(denominator);
-    numerator = ::fabs(numerator);
-
-    if (denominator == numerator)
+    if (bestNumerator == 0)
+        return prefix + QString().setNum((double) floor(numToDouble(value)));
+    else if (bestDenominator == bestNumerator)
         return prefix + QString().setNum((double) floor(numToDouble(value + 1)));
     else {
         if (floor(numToDouble(value)) == 0)
-            return prefix + QString("%1/%2").arg(numerator).arg(denominator);
+            return prefix + QString("%1/%2").arg(bestNumerator).arg(bestDenominator);
         else
             return prefix + QString("%1 %2/%3")
                    .arg((double)floor(numToDouble(value)))
-                   .arg(numerator)
-                   .arg(denominator);
+                   .arg(bestNumerator)
+                   .arg(bestDenominator);
     }
 }
 

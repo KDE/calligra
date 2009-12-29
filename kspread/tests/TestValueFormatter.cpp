@@ -150,7 +150,7 @@ void TestValueFormatter::testFractionFormat_data()
     QTest::newRow("one_digit 1.1") << 1.1 << Format::fraction_one_digit << "1 1/9";
     QTest::newRow("one_digit 1.2") << 1.2 << Format::fraction_one_digit << "1 1/5";
     QTest::newRow("one_digit 1.3") << 1.3 << Format::fraction_one_digit << "1 2/7";
-    QTest::newRow("one_digit -0.05") << -0.05 << Format::fraction_one_digit << "0";
+    QTest::newRow("one_digit -0.05") << -0.05 << Format::fraction_one_digit << "-0";
     QTest::newRow("one_digit -0.1") << -0.1 << Format::fraction_one_digit << "-1/9";
     QTest::newRow("one_digit -0.2") << -0.2 << Format::fraction_one_digit << "-1/5";
     QTest::newRow("one_digit -0.3") << -0.3 << Format::fraction_one_digit << "-2/7";
