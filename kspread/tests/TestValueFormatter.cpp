@@ -69,7 +69,7 @@ void TestValueFormatter::testFractionFormat_data()
     QTest::newRow("half 1.6") << 1.6 << Format::fraction_half << "1 1/2";
     QTest::newRow("half 0.9") << 0.9 << Format::fraction_half << "1";
     QTest::newRow("half 1.1") << 1.1 << Format::fraction_half << "1";
-    QTest::newRow("half -0.2") << -0.4 << Format::fraction_half << "-0";
+    QTest::newRow("half -0.2") << -0.2 << Format::fraction_half << "-0";
     QTest::newRow("half -0.4") << -0.4 << Format::fraction_half << "-1/2";
     QTest::newRow("half -0.6") << -0.6 << Format::fraction_half << "-1/2";
     QTest::newRow("half -0.9") << -0.9 << Format::fraction_half << "-1";
