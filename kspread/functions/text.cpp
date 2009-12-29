@@ -202,9 +202,8 @@ void TextModule::removeFunctions()
 // Function: ASC
 Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Q_UNUSED(args);
-    Q_UNUSED(calc);
-    return Value(QString("FIXME ASC()"));
+    QString s = calc->conv()->asString(args[0]).asString();
+    return Value(QString(s));
 }
 
 // Function: CHAR
