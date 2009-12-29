@@ -161,6 +161,8 @@
   <field name="condensed"   type="bool"     size="1" />
   <field name="extended"    type="bool"     size="1" />
 
+  <field name="reserved2"                   size="8" />
+
   <field name="colorIndex"  type="unsigned" size="16" />
   <field name="fontWeight"  type="unsigned" size="16" />
   <field name="escapement"  type="unsigned" size="16">
@@ -184,7 +186,7 @@
     <enum name="Decorative"  value="5" />
   </field>
   <field name="characterSet" type="unsigned" size="8" />
-  <field name="reserved2"                    size="8" />
+  <field name="reserved3"                    size="8" />
   <field name="fontNameLength" type="unsigned" size="8" />
   <if predicate="version() &lt; Excel97">
     <field name="fontName"     type="bytestring" length="fontNameLength" />
