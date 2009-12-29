@@ -572,7 +572,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("clearConditional", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(clearConditionalStyles()));
 
-    action = new KAction(KIcon("insertHyperlink"), i18n("&Link..."), this);
+    action = new KAction(KIcon("insert-link"), i18n("&Link..."), this);
     addAction("insertHyperlink", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertHyperlink()));
     action->setToolTip(i18n("Insert an Internet hyperlink"));
