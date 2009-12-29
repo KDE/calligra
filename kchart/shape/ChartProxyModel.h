@@ -96,21 +96,15 @@ public slots:
 
     QList<DataSet*> dataSets() const;
 
+    void invalidateDataSets();
     void rebuildDataMap();
 
 signals:
     void dataChanged();
 
-    // Emitted after modelReset(), to signalize that all the internal
-    // data has been updated properly, and that we can now do a repaint.
-    void modelResetComplete();
-
 private:
     class Private;
     Private *const d;
-    
-    // overwrites QAbstractItemModel::reset()
-    void reset();
 };
 
 } // namespace KChart

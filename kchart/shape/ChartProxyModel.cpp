@@ -102,6 +102,8 @@ ChartProxyModel::~ChartProxyModel()
 
 void ChartProxyModel::rebuildDataMap()
 {
+    invalidateDataSets();
+
     QVector<QRect> dataRegions;
 
     if ( d->selection.isEmpty() ) {
@@ -308,6 +310,8 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     if ( this->sourceModel() == sourceModel )
         return;
 
+    beginResetModel();
+
     if ( this->sourceModel() ) {
         disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
                     this,                SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
@@ -337,28 +341,29 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     QAbstractProxyModel::setSourceModel( sourceModel );
     
     rebuildDataMap();
-
-    // Update the entire data set
-    reset();
+    endResetModel();
 }
 
-void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel, 
+void ChartProxyModel::setSourceModel( QAbstractItemModel *model,
                                       const QVector<QRect> &selection )
 {
-    // FIXME: What if we already have a source model?  Don't we have
-    //        to disconnect that one before connecting the new one?
+    // FIXME: Why are we not using ChartProxyModel::setSourceModel() here to connect all signals
+    // after setting d->selection ?
+    beginResetModel();
 
-    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    if ( sourceModel() )
+        disconnect( sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+                    this,          SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+
+    connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+             this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
 
-    QAbstractProxyModel::setSourceModel( sourceModel );
-    
-    rebuildDataMap();
+    QAbstractProxyModel::setSourceModel( model );
 
-    // Update the entire data set
-    reset();
+    rebuildDataMap();
+    endResetModel();
 }
 
 void ChartProxyModel::setSelection( const QVector<QRect> &selection )
@@ -402,6 +407,7 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
+    beginResetModel();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
@@ -476,7 +482,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     }
 
     rebuildDataMap();
-    reset();
+    endResetModel();
 
     styleStack.restore();
     return true;
@@ -771,6 +777,7 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
+    beginResetModel();
     if ( b == d->firstRowIsLabel )
         return;
     
@@ -780,7 +787,7 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
         return;
     
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
  
 
@@ -788,14 +795,15 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
     if ( b == d->firstColumnIsLabel )
         return;
-    
+
+    beginResetModel();
     d->firstColumnIsLabel = b;
 
     if ( !sourceModel() )
         return;
     
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 Qt::Orientation ChartProxyModel::dataDirection()
@@ -803,18 +811,33 @@ Qt::Orientation ChartProxyModel::dataDirection()
     return d->dataDirection;
 }
 
+void ChartProxyModel::invalidateDataSets()
+{
+    foreach ( DataSet *dataSet, d->dataSets )
+    {
+        if ( dataSet->attachedAxis() ) {
+            // Remove data sets 'silently'. Once the last data set
+            // has been detached from an axis, the axis will delete
+            // all models and diagrams associated with it, thus we
+            // do not need to propagate these events to any models.
+            dataSet->attachedAxis()->detachDataSet( dataSet, true );
+        }
+    }
+}
+
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     if ( d->dataDirection == orientation )
         return;
 
+    beginResetModel();
     d->dataDirection = orientation;
 
     if ( !sourceModel() )
         return;
-    
+
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 void ChartProxyModel::setDataDimensions( int dimensions )
@@ -822,10 +845,11 @@ void ChartProxyModel::setDataDimensions( int dimensions )
     if ( d->dataDimensions == dimensions )
         return;
 
+    beginResetModel();
     d->dataDimensions = dimensions;
 
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 bool ChartProxyModel::firstRowIsLabel() const
@@ -850,8 +874,9 @@ void ChartProxyModel::slotRowsInserted( const QModelIndex &parent,
     Q_UNUSED( start );
     Q_UNUSED( end );
 
+    beginResetModel();
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent,
@@ -861,8 +886,9 @@ void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent,
     Q_UNUSED( start );
     Q_UNUSED( end );
 
+    beginResetModel();
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent,
@@ -872,8 +898,9 @@ void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent,
     Q_UNUSED( start );
     Q_UNUSED( end );
 
+    beginResetModel();
     rebuildDataMap();
-    reset();
+    endResetModel();
 }
 
 void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
@@ -883,14 +910,9 @@ void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
     Q_UNUSED( start );
     Q_UNUSED( end );
 
+    beginResetModel();
     rebuildDataMap();
-    reset();
-}
-
-void ChartProxyModel::reset()
-{
-    QAbstractProxyModel::reset();
-    emit modelResetComplete();
+    endResetModel();
 }
 
 

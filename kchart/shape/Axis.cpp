@@ -81,8 +81,8 @@ public:
 
     void adjustAllDiagrams();
     
-    void registerKDChartModel( KDChartModel *model );
-    void deregisterKDChartModel( KDChartModel *model );
+    void registerDiagram( KDChart::AbstractDiagram *model );
+    void deregisterDiagram( KDChart::AbstractDiagram *model );
     
     KDChart::AbstractDiagram *createDiagramIfNeeded( ChartType chartType );
     KDChart::AbstractDiagram *getDiagram( ChartType chartType );
@@ -287,47 +287,40 @@ Axis::Private::~Private()
     }
 }
 
-void Axis::Private::registerKDChartModel( KDChartModel *model )
+void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
 {
-    // Uncommented because this causes a crash! The plot area is
-    // updated before KDChart is notified about the new model, which
-    // ends up in wrong assumptions about the model's size, etc.
+    KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
+    Q_ASSERT( model );
 
-    //QObject::connect( model, SIGNAL( modelReset() ), plotArea, SLOT( plotAreaUpdate() ) );
-
-    QObject::connect( model,    SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::connect( model,    SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::connect( model,    SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::connect( model,    SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( plotAreaUpdate() ) );
-    
-    QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                      model,                  SLOT( emitReset() ) );
     QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
                       model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+
+    QObject::connect( diagram, SIGNAL( propertiesChanged() ),
+                      plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::connect( diagram, SIGNAL( layoutChanged( AbstractDiagram* ) ),
+                      plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::connect( diagram, SIGNAL( modelsChanged() ),
+                      plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::connect( diagram, SIGNAL( dataHidden() ),
+                      plotArea, SLOT( plotAreaUpdate() ) );
 }
 
-void Axis::Private::deregisterKDChartModel( KDChartModel *model )
+void Axis::Private::deregisterDiagram( KDChart::AbstractDiagram *diagram )
 {
-    // See comment above about the uncommenting.
-    //QObject::disconnect( model, SIGNAL( modelReset() ), plotArea, SLOT( plotAreaUpdate() ) );
+    KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
+    Q_ASSERT( model );
 
-    QObject::disconnect( model,    SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                         plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::disconnect( model,    SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                         plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::disconnect( model,    SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), 
-                         plotArea, SLOT( plotAreaUpdate() ) );
-    QObject::disconnect( model,    SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), 
-                         plotArea, SLOT( plotAreaUpdate() ) );
-    
-    QObject::disconnect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                         model,                  SLOT( emitReset() ) );
     QObject::disconnect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
                          model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+
+    QObject::disconnect( diagram, SIGNAL( propertiesChanged() ),
+                         plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::disconnect( diagram, SIGNAL( layoutChanged( AbstractDiagram* ) ),
+                         plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::disconnect( diagram, SIGNAL( modelsChanged() ),
+                         plotArea, SLOT( plotAreaUpdate() ) );
+    QObject::disconnect( diagram, SIGNAL( dataHidden() ),
+                         plotArea, SLOT( plotAreaUpdate() ) );
 }
 
 
@@ -514,11 +507,14 @@ void Axis::Private::deleteDiagram( ChartType chartType )
         // FIXME: Error handling?
     }
 
-    // Also delete the model, as we don't need it anymore
-    if ( model && *model )
-        delete *model;
-    if ( diagram && *diagram )
-        delete *diagram;
+    Q_ASSERT( model );
+    Q_ASSERT( *model );
+    Q_ASSERT( diagram );
+    Q_ASSERT( *diagram );
+
+    deregisterDiagram( *diagram );
+    delete *diagram;
+    delete *model;
 
     *model = 0;
     *diagram = 0;
@@ -529,198 +525,191 @@ void Axis::Private::deleteDiagram( ChartType chartType )
 
 void Axis::Private::createBarDiagram()
 {
-    if ( kdBarDiagramModel == 0 ) {
-        kdBarDiagramModel = new KDChartModel;
-        registerKDChartModel( kdBarDiagramModel );
+    Q_ASSERT( kdBarDiagramModel == 0 );
+    Q_ASSERT( kdBarDiagram == 0 );
+
+    kdBarDiagramModel = new KDChartModel;
+
+    kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
+    kdBarDiagram->setModel( kdBarDiagramModel );
+    registerDiagram( kdBarDiagram );
+    kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
+
+    if ( plotAreaChartSubType == StackedChartSubtype )
+        kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
+    else if ( plotAreaChartSubType == PercentChartSubtype )
+        kdBarDiagram->setType( KDChart::BarDiagram::Percent );
+
+    kdBarDiagram->addAxis( kdAxis );
+    kdPlane->addDiagram( kdBarDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() )
+    {
+        if ( axis->dimension() == XAxisDimension )
+            kdBarDiagram->addAxis( axis->kdAxis() );
     }
 
-    if ( kdBarDiagram == 0 ) {
-        kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
-        kdBarDiagram->setModel( kdBarDiagramModel );
-        kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
-
-        if ( plotAreaChartSubType == StackedChartSubtype )
-            kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
-        else if ( plotAreaChartSubType == PercentChartSubtype )
-            kdBarDiagram->setType( KDChart::BarDiagram::Percent );
-        
-        kdBarDiagram->addAxis( kdAxis );
-        kdPlane->addDiagram( kdBarDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
-        Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() )
-        {
-            if ( axis->dimension() == XAxisDimension )
-                kdBarDiagram->addAxis( axis->kdAxis() );
-        }
-        
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
-    }
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
 }
 
 void Axis::Private::createLineDiagram()
 {
-    if ( kdLineDiagramModel == 0 ) {
-        kdLineDiagramModel = new KDChartModel;
-        registerKDChartModel( kdLineDiagramModel );
+    Q_ASSERT( kdLineDiagramModel );
+    Q_ASSERT( kdLineDiagram );
+
+    kdLineDiagramModel = new KDChartModel;
+
+    kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+    kdLineDiagram->setModel( kdLineDiagramModel );
+    registerDiagram( kdLineDiagram );
+
+    if ( plotAreaChartSubType == StackedChartSubtype )
+        kdLineDiagram->setType( KDChart::LineDiagram::Stacked );
+    else if ( plotAreaChartSubType == PercentChartSubtype )
+        kdLineDiagram->setType( KDChart::LineDiagram::Percent );
+
+    kdLineDiagram->addAxis( kdAxis );
+    kdPlane->addDiagram( kdLineDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() ) {
+        if ( axis->dimension() == XAxisDimension )
+            kdLineDiagram->addAxis( axis->kdAxis() );
     }
 
-    if ( kdLineDiagram == 0 ) {
-        kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
-        kdLineDiagram->setModel( kdLineDiagramModel );
-
-        if ( plotAreaChartSubType == StackedChartSubtype )
-            kdLineDiagram->setType( KDChart::LineDiagram::Stacked );
-        else if ( plotAreaChartSubType == PercentChartSubtype )
-            kdLineDiagram->setType( KDChart::LineDiagram::Percent );
-        
-        kdLineDiagram->addAxis( kdAxis );
-        kdPlane->addDiagram( kdLineDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
-        Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() ) {
-            if ( axis->dimension() == XAxisDimension )
-                kdLineDiagram->addAxis( axis->kdAxis() );
-        }
-
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
-    }
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
 }
 
 void Axis::Private::createAreaDiagram()
 {
-    if ( kdAreaDiagramModel == 0 ) {
-        kdAreaDiagramModel = new KDChartModel;
-        registerKDChartModel( kdAreaDiagramModel );
+    Q_ASSERT( kdAreaDiagramModel );
+    Q_ASSERT( kdAreaDiagram );
+
+    kdAreaDiagramModel = new KDChartModel;
+
+    kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+    KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
+    // Draw the area under the lines. This makes this diagram an area chart.
+    attr.setDisplayArea( true );
+    kdAreaDiagram->setLineAttributes( attr );
+    kdAreaDiagram->setModel( kdAreaDiagramModel );
+    registerDiagram( kdAreaDiagram );
+    kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
+
+    if ( plotAreaChartSubType == StackedChartSubtype )
+        kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );
+    else if ( plotAreaChartSubType == PercentChartSubtype )
+        kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
+
+    kdAreaDiagram->addAxis( kdAxis );
+    kdPlane->addDiagram( kdAreaDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() ) {
+        if ( axis->dimension() == XAxisDimension )
+            kdAreaDiagram->addAxis( axis->kdAxis() );
     }
 
-    if ( kdAreaDiagram == 0 ) {
-        kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
-        KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
-        // Draw the area under the lines. This makes this diagram an area chart.
-        attr.setDisplayArea( true );
-        kdAreaDiagram->setLineAttributes( attr );
-        kdAreaDiagram->setModel( kdAreaDiagramModel );
-        kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
-
-        if ( plotAreaChartSubType == StackedChartSubtype )
-            kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );
-        else if ( plotAreaChartSubType == PercentChartSubtype )
-            kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
-        
-        kdAreaDiagram->addAxis( kdAxis );
-        kdPlane->addDiagram( kdAreaDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
-        Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() ) {
-            if ( axis->dimension() == XAxisDimension )
-                kdAreaDiagram->addAxis( axis->kdAxis() );
-        }
-
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
-    }
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
 }
 
 void Axis::Private::createCircleDiagram()
 {
-    if ( kdCircleDiagramModel == 0 ) {
-        kdCircleDiagramModel = new KDChartModel;
-        kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
-        registerKDChartModel( kdCircleDiagramModel );
-    }
+    Q_ASSERT( kdCircleDiagramModel );
+    Q_ASSERT( kdCircleDiagram );
 
-    if ( kdCircleDiagram == 0 ) {
-        kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
-        kdCircleDiagram->setModel( kdCircleDiagramModel );
+    kdCircleDiagramModel = new KDChartModel;
+    kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
 
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
-        kdPolarPlane->addDiagram( kdCircleDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
-    }
+    kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
+    kdCircleDiagram->setModel( kdCircleDiagramModel );
+    registerDiagram( kdCircleDiagram );
+
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
+    kdPolarPlane->addDiagram( kdCircleDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
 }
 
 void Axis::Private::createRingDiagram()
 {
-    if ( kdRingDiagramModel == 0 ) {
-        kdRingDiagramModel = new KDChartModel;
-        kdRingDiagramModel->setDataDirection( Qt::Horizontal );
-        registerKDChartModel( kdRingDiagramModel );
-    }
+    Q_ASSERT( kdRingDiagramModel );
+    Q_ASSERT( kdRingDiagram );
 
-    if ( kdRingDiagram == 0 ) {
-        kdRingDiagram = new KDChart::RingDiagram( plotArea->kdChart(), kdPolarPlane );
-        kdRingDiagram->setModel( kdRingDiagramModel );
+    kdRingDiagramModel = new KDChartModel;
+    kdRingDiagramModel->setDataDirection( Qt::Horizontal );
 
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
-        kdPolarPlane->addDiagram( kdRingDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
-    }
+    kdRingDiagram = new KDChart::RingDiagram( plotArea->kdChart(), kdPolarPlane );
+    kdRingDiagram->setModel( kdRingDiagramModel );
+    registerDiagram( kdRingDiagram );
+
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
+    kdPolarPlane->addDiagram( kdRingDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
 }
 
 void Axis::Private::createRadarDiagram()
 {
-    if ( kdRadarDiagramModel == 0 ) {
-        kdRadarDiagramModel = new KDChartModel;
-        registerKDChartModel( kdRadarDiagramModel );
-    }
+    Q_ASSERT( kdRadarDiagramModel );
+    Q_ASSERT( kdRadarDiagram );
 
-    if ( kdRadarDiagram == 0 ) {
-        kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
-        kdRadarDiagram->setModel( kdRadarDiagramModel );
+    kdRadarDiagramModel = new KDChartModel;
+
+    kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
+    kdRadarDiagram->setModel( kdRadarDiagramModel );
+    registerDiagram( kdRadarDiagram );
 
 #if 0  // Stacked and Percent not supported by KDChart.
-        if ( plotAreaChartSubType == StackedChartSubtype )
-            kdBarDiagram->setType( KDChart::PolarDiagram::Stacked );
-        else if ( plotAreaChartSubType == PercentChartSubtype )
-            kdBarDiagram->setType( KDChart::PolarDiagram::Percent );
+    if ( plotAreaChartSubType == StackedChartSubtype )
+        kdBarDiagram->setType( KDChart::PolarDiagram::Stacked );
+    else if ( plotAreaChartSubType == PercentChartSubtype )
+        kdBarDiagram->setType( KDChart::PolarDiagram::Percent );
 #endif        
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
-        kdPolarPlane->addDiagram( kdRadarDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
-    }
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
+    kdPolarPlane->addDiagram( kdRadarDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
 }
 
 void Axis::Private::createScatterDiagram()
 {
-    if ( kdScatterDiagramModel == 0 ) {
-        kdScatterDiagramModel = new KDChartModel;
-        registerKDChartModel( kdScatterDiagramModel );
-        kdScatterDiagramModel->setDataDimensions( 2 );
+    Q_ASSERT( kdScatterDiagramModel );
+    Q_ASSERT( kdScatterDiagram );
+
+    kdScatterDiagramModel = new KDChartModel;
+    kdScatterDiagramModel->setDataDimensions( 2 );
+
+    kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
+    kdScatterDiagram->setModel( kdScatterDiagramModel );
+    registerDiagram( kdScatterDiagram );
+
+    kdScatterDiagram->addAxis( kdAxis );
+    kdPlane->addDiagram( kdScatterDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() ) {
+        if ( axis->dimension() == XAxisDimension )
+            kdScatterDiagram->addAxis( axis->kdAxis() );
     }
 
-    if ( kdScatterDiagram == 0 ) {
-        kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
-        kdScatterDiagram->setModel( kdScatterDiagramModel );
-        
-        kdScatterDiagram->addAxis( kdAxis );
-        kdPlane->addDiagram( kdScatterDiagram );
-        
-        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-            plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
-        Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() ) {
-            if ( axis->dimension() == XAxisDimension )
-                kdScatterDiagram->addAxis( axis->kdAxis() );
-        }
-
-        plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
-    }
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
 }
 
 void Axis::Private::createStockDiagram()
@@ -732,7 +721,6 @@ void Axis::Private::createStockDiagram()
     // The model.
     if ( kdStockDiagramModel == 0 ) {
         kdStockDiagramModel = new KDChartModel;
-        registerKDChartModel( kdStockDiagramModel );
         kdStockDiagramModel->setDataDimensions( 2 );
     }
 
@@ -753,7 +741,6 @@ void Axis::Private::createBubbleDiagram()
     // The model.
     if ( kdBubbleDiagramModel == 0 ) {
         kdBubbleDiagramModel = new KDChartModel;
-        registerKDChartModel( kdBubbleDiagramModel );
         //kdBubbleDiagramModel->setDataDimensions( 2 );
     }
 
@@ -774,7 +761,6 @@ void Axis::Private::createSurfaceDiagram()
     // The model.
     if ( kdSurfaceDiagramModel == 0 ) {
         kdSurfaceDiagramModel = new KDChartModel;
-        registerKDChartModel( kdSurfaceDiagramModel );
         //kdSurfaceDiagramModel->setDataDimensions( 2 );
     }
 
@@ -795,7 +781,6 @@ void Axis::Private::createGanttDiagram()
     // The model.
     if ( kdGanttDiagramModel == 0 ) {
         kdGanttDiagramModel = new KDChartModel;
-        registerKDChartModel( kdGanttDiagramModel );
         //kdGanttDiagramModel->setDataDimensions( 2 );
     }
 

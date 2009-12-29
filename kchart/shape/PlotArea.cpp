@@ -177,12 +177,9 @@ PlotArea::PlotArea( ChartShape *parent )
     
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->proxyModel() );
-    
+
     connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
              this,                   SLOT( dataSetCountChanged() ) );
-    connect( d->shape->proxyModel(), SIGNAL( modelResetComplete() ),
-             this,                   SLOT( plotAreaUpdate() ) );
-    // FIXME: The following signatures don't match.  Bug?
     connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
              this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
