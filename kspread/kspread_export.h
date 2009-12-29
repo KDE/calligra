@@ -40,4 +40,19 @@
 #  define KSPREAD_EXPORT_DEPRECATED KDE_DEPRECATED KSPREAD_EXPORT
 # endif
 
+// now for tests
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KSPREADCOMMON_LIB)
+#       define KSPREAD_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KSPREAD_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KSPREAD_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KSPREAD_TEST_EXPORT
+#endif
+
 #endif

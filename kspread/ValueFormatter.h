@@ -36,7 +36,7 @@ class ValueConverter;
 /**
  * Generates a textual representation of a Value with a given formatting.
  */
-class ValueFormatter
+class KSPREAD_TEST_EXPORT ValueFormatter
 {
 public:
     /**
