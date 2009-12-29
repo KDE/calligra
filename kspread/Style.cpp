@@ -628,26 +628,26 @@ Format::Type Style::timeType(const QString &_format)
 
 Format::Type Style::fractionType(const QString &_format)
 {
-    if (_format == "# ?/2")
+    if (_format.endsWith("/2"))
         return Format::fraction_half;
-    else if (_format == "# ?/4")
+    else if (_format.endsWith("/4"))
         return Format::fraction_quarter;
-    else if (_format == "# ?/8")
+    else if (_format.endsWith("/8"))
         return Format::fraction_eighth;
-    else if (_format == "# ?/16")
+    else if (_format.endsWith("/16"))
         return Format::fraction_sixteenth;
-    else if (_format == "# ?/10")
+    else if (_format.endsWith("/10"))
         return Format::fraction_tenth;
-    else if (_format == "# ?/100")
+    else if (_format.endsWith("/100"))
         return Format::fraction_hundredth;
-    else if (_format == "# ?/?")
+    else if (_format.endsWith("/?"))
         return Format::fraction_one_digit;
-    else if (_format == "# \?\?/\?\?")
+    else if (_format.endsWith("/??"))
         return Format::fraction_two_digits;
-    else if (_format == "# \?\?\?/\?\?\?")
+    else if (_format.endsWith("/???"))
         return Format::fraction_three_digits;
     else
-        return Format::fraction_half;
+        return Format::fraction_three_digits;
 }
 
 QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
