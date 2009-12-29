@@ -488,6 +488,17 @@ void Style::loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyle
             kDebug(36003) << "\t\t text-line-through-style:" << "solid (actually: !none)";
         }
     }
+    if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
+        QString fontName = styleStack.property(KoXmlNS::style, "font-name");
+        kDebug(36003) << "\t\t style:font-name:" << fontName;
+        const KoXmlElement * style = stylesReader.findStyle(fontName);
+        // TODO: sanity check that it is a font-face style?
+        kDebug(36003) << "\t\t\t style:" <<  style;
+        if (style) {
+            setFontFamily(style->attributeNS(KoXmlNS::svg, "font-family"));
+            kDebug(36003) << "\t\t\t svg:font-family:" << fontFamily();
+        }
+    }
 }
 
 static QString convertDateFormat(const QString& date)
