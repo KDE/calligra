@@ -1323,7 +1323,8 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             const Value value(element.attributeNS(KoXmlNS::office, "value", QString()).toDouble(&ok));
             if (ok)
                 setValue(value);
-            if (!isFormula && userInput().isEmpty())
+            // always set the userInput to the actual value read from the cell, and not whatever happens to be set as text, as the textual representation of a value may be less accurate than the value itself
+            if (!isFormula)
                 setUserInput(sheet()->map()->converter()->asString(value).asString());
         }
 
