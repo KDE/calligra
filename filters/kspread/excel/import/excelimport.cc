@@ -665,7 +665,7 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
     // every other currency or accounting has a [$...] identifier
     QRegExp crRegEx("\\[\\$(.*)\\]");
     crRegEx.setMinimal(true);
-    if (crRegEx.indexIn(vf) >= 0) {        
+    if (crRegEx.indexIn(vf) >= 0) {
         if(currencyVal) {
             *currencyVal = crRegEx.cap(1);
         }
@@ -675,7 +675,7 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
         }
         return true;
     }
-    
+
     return false;
 }
 
@@ -857,7 +857,7 @@ QString cellFormula(Cell* cell)
             // So, what we do is the same OO.org does. We prefix the formula with "of:"
             // to indicate the changed behavior. Both, OO.org and Excel, do support
             // that "of:" prefix.
-            // 
+            //
             // Again in other words; We need to special case that functions cause KSpread
             // behaves here like OpenOffice.org but the behavior of OpenOffice.org ist wrong
             // from the perspective of Excel and Excel defines the standard (that is then
@@ -944,7 +944,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
                 xmlWriter->addAttribute("office:value-type", "currency");
                 const QString cv = currencyValue(currencyVal);
                 if(!cv.isEmpty())
-                    xmlWriter->addAttribute("office:currency", cv); 
+                    xmlWriter->addAttribute("office:currency", cv);
                 xmlWriter->addAttribute("office:value", v);
             } else { // fallback is the generic float format
                 xmlWriter->addAttribute("office:value-type", "float");
@@ -1089,7 +1089,7 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
             style.addProperty("style:text-position", "super", KoGenStyle::TextType);
 
         if (!font.fontFamily().isEmpty())
-            style.addProperty("style:font-name", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
+            style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
 
         style.addPropertyPt("fo:font-size", font.fontSize(), KoGenStyle::TextType);
 
@@ -1285,7 +1285,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
                 //TODO
                 //bool ok = false;
                 //int languageCode = countryRegExp.cap(1).toInt(&ok);
-                //if(ok) language = languageName(languageCode);                    
+                //if(ok) language = languageName(languageCode);
             } else if(currencyVal[0] == '$') {
                 language = "en";
                 country = "US";
@@ -1305,14 +1305,14 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
                 xmlWriter.addAttribute("number:language", language);
             if(!country.isEmpty())
                 xmlWriter.addAttribute("number:country", country);
-            
+
             xmlWriter.addTextNode(symbolRegEx.cap(1));
             xmlWriter.endElement();
         }
-        
+
         QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
         style.addChildElement("number", elementContents);
-        return styles->lookup(style, "N");        
+        return styles->lookup(style, "N");
     }
 
     QString vf = valueFormat;
