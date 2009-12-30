@@ -20,19 +20,34 @@
 #ifndef KPREVENTACTIONDATA_H
 #define KPREVENTACTIONDATA_H
 
-#include <KoEventActionData.h>
-
 #include "kpresenter_export.h"
 
 class KPrSoundCollection;
+class KoShape;
+class KoEventAction;
+class KPrSoundCollection;
 
-class KPRESENTER_EXPORT KPrEventActionData : public KoEventActionData
+class KPRESENTER_EXPORT KPrEventActionData
 {
 public:
     KPrEventActionData( KoShape * shape, KoEventAction * eventAction , KPrSoundCollection * soundCollection );
-    virtual ~KPrEventActionData();
+    ~KPrEventActionData();
 
     KPrSoundCollection * soundCollection() const;
+
+    /**
+     * Get the shape
+     *
+     * @return the shape or 0 if there is none.
+     */
+    KoShape *shape() const;
+
+    /**
+     * Get the event action
+     *
+     * @return the event action or 0 if there is none
+     */
+    KoEventAction *eventAction() const;
 
 private:
     class Private;

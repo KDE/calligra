@@ -36,7 +36,7 @@ KoEventAction * KPrSoundEventActionFactory::createEventAction()
     return new KPrSoundEventAction();
 }
 
-KoEventActionWidget * KPrSoundEventActionFactory::createOptionWidget()
+QWidget *KPrSoundEventActionFactory::createOptionWidget()
 {
     return new KPrSoundEventActionWidget();
 }

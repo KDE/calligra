@@ -17,15 +17,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoEventActionWidget.h"
+#ifndef KOEVENTACTIONWIDGET_H
+#define KOEVENTACTIONWIDGET_H
 
-KoEventActionWidget::KoEventActionWidget(QWidget * parent)
-        : QWidget(parent)
+#include <QWidget>
+
+#include "kpresenter_export.h"
+
+class KPrEventActionData;
+class QUndoCommand;
+
+/**
+ * Widget used for configuring an event action
+ *
+ * Each event action needs to implement this widget to make it configurable
+ */
+class KPRESENTER_EXPORT KPrEventActionWidget : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit KPrEventActionWidget(QWidget *parent = 0);
+    virtual ~KPrEventActionWidget();
 
-KoEventActionWidget::~KoEventActionWidget()
-{
-}
+    /**
+     * Set the data for the widget
+     */
+    virtual void setData(KPrEventActionData *eventActionData) = 0;
 
-#include <KoEventActionWidget.moc>
+signals:
+    /**
+     * Send signal to add the created command to the command history
+     */
+    void addCommand(QUndoCommand *command);
+};
+
+#endif /* KOEVENTACTIONWIDGET_H */

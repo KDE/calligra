@@ -29,7 +29,7 @@ public:
     virtual ~KPrSoundEventActionFactory();
 
     virtual KoEventAction * createEventAction();
-    virtual KoEventActionWidget * createOptionWidget();
+    virtual QWidget *createOptionWidget();
 };
 
 #endif /* KPRSOUNDEVENTACTIONFACTORY_H */

@@ -20,7 +20,7 @@
 #ifndef KPRSOUNDEVENTACTIONWIDGET_H
 #define KPRSOUNDEVENTACTIONWIDGET_H
 
-#include <KoEventActionWidget.h>
+#include <KPrEventActionWidget.h>
 
 class QComboBox;
 class QString;
@@ -30,7 +30,7 @@ class KoEventActionData;
 class KPrEventActionData;
 class KPrSoundCollection;
 
-class KPrSoundEventActionWidget : public KoEventActionWidget
+class KPrSoundEventActionWidget : public KPrEventActionWidget
 {
     Q_OBJECT
 public:
@@ -38,7 +38,7 @@ public:
     virtual ~KPrSoundEventActionWidget();
 
 public slots:
-    void setData( KoEventActionData *eventActionData );
+    void setData( KPrEventActionData *eventActionData );
 
 private slots:
     void soundComboChanged();

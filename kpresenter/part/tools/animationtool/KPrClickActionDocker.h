@@ -60,7 +60,7 @@ private:
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
     QComboBox *m_cbPlaySound; // TODO remove when the embedded widgets are ok
-    QMap<QString, KoEventActionWidget *> m_eventActionWidgets;
+    QMap<QString, QWidget *> m_eventActionWidgets;
 };
 
 #endif // KPRCLICKACTIONDOCKER_H

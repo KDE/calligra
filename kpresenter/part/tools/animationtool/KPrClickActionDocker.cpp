@@ -38,7 +38,7 @@
 #include <KoEventAction.h>
 #include <KoEventActionFactory.h>
 #include <KoEventActionRegistry.h>
-#include <KoEventActionWidget.h>
+#include <KPrEventActionWidget.h>
 #include "KPrSoundData.h"
 #include "KPrSoundCollection.h"
 #include "KPrView.h"
@@ -60,7 +60,7 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
 
     QList<KoEventActionFactory *> factories = KoEventActionRegistry::instance()->presentationEventActions();
     foreach ( KoEventActionFactory * factory, factories ) {
-        KoEventActionWidget * optionWidget = factory->createOptionWidget();
+        QWidget * optionWidget = factory->createOptionWidget();
         layout->addWidget( optionWidget );
         m_eventActionWidgets.insert( factory->id(), optionWidget );
         connect( optionWidget, SIGNAL( addCommand( QUndoCommand * ) ),
@@ -84,18 +84,24 @@ void KPrClickActionDocker::selectionChanged()
             eventActionMap.insert( eventAction->id(), eventAction );
         }
 
-        QMap<QString, KoEventActionWidget *>::const_iterator it( m_eventActionWidgets.constBegin() );
+        QMap<QString, QWidget *>::const_iterator it(m_eventActionWidgets.constBegin());
 
-        for ( ; it != m_eventActionWidgets.constEnd(); ++it )  {
-            // if it is not in the map a default value 0 pointer will be returned
-            KPrEventActionData data( shape, eventActionMap.value( it.key() ), m_soundCollection );
-            it.value()->setData( &data );
+        for (; it != m_eventActionWidgets.constEnd(); ++it)  {
+            KPrEventActionWidget *actionWidget = dynamic_cast<KPrEventActionWidget*>(it.value());
+            if (actionWidget) {
+                // if it is not in the map a default value 0 pointer will be returned
+                KPrEventActionData data(shape, eventActionMap.value(it.key()), m_soundCollection);
+                actionWidget->setData(&data);
+            }
         }
     }
     else {
-        foreach ( KoEventActionWidget * widget, m_eventActionWidgets ) {
-            KPrEventActionData data( 0, 0, m_soundCollection );
-            widget->setData( &data );
+        foreach (QWidget *widget, m_eventActionWidgets) {
+            KPrEventActionWidget *actionWidget = dynamic_cast<KPrEventActionWidget*>(widget);
+            if (actionWidget) {
+                KPrEventActionData data(0, 0, m_soundCollection);
+                actionWidget->setData( &data );
+            }
         }
     }
 }

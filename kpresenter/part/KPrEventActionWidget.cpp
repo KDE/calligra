@@ -17,42 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOEVENTACTIONDATA_H
-#define KOEVENTACTIONDATA_H
+#include "KPrEventActionWidget.h"
 
-#include "flake_export.h"
-
-class KoShape;
-class KoEventAction;
-
-/**
- * Data passed to an event action in setData.
- *
- * Applications can extend that to pass additional data to the event action.
- */
-class FLAKE_EXPORT KoEventActionData
+KPrEventActionWidget::KPrEventActionWidget(QWidget * parent)
+        : QWidget(parent)
 {
-public:
-    KoEventActionData(KoShape *shape, KoEventAction *eventAction);
-    virtual ~KoEventActionData();
+}
 
-    /**
-     * Get the shape
-     *
-     * @return the shape or 0 if there is none.
-     */
-    KoShape *shape();
+KPrEventActionWidget::~KPrEventActionWidget()
+{
+}
 
-    /**
-     * Get the event action
-     *
-     * @return the event action or 0 if there is none
-     */
-    KoEventAction *eventAction();
-
-private:
-    class Private;
-    Private * const d;
-};
-
-#endif /* KOEVENTACTIONDATA_H */
+#include <KPrEventActionWidget.moc>

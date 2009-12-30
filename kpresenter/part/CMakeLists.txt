@@ -32,6 +32,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrSoundData.cpp
      KPrSoundCollection.cpp
      KPrEventActionData.cpp
+     KPrEventActionWidget.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      KPrCustomSlideShows.cpp

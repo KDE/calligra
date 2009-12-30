@@ -33,7 +33,7 @@
 #include "KPrSoundEventAction.h"
 
 KPrSoundEventActionWidget::KPrSoundEventActionWidget( QWidget * parent )
-: KoEventActionWidget( parent )
+: KPrEventActionWidget( parent )
 , m_shape( 0 )
 , m_eventAction( 0 )
 , m_soundCollection( 0 )
@@ -52,25 +52,17 @@ KPrSoundEventActionWidget::~KPrSoundEventActionWidget()
 {
 }
 
-void KPrSoundEventActionWidget::setData( KoEventActionData * eventActionData )
+void KPrSoundEventActionWidget::setData( KPrEventActionData * eventActionData )
 {
-    QString title( "" );
-    KPrEventActionData * data = dynamic_cast<KPrEventActionData *>( eventActionData );
-    if ( data ) {
-        m_shape = data->shape();
-        m_eventAction = data->eventAction();
-        // TODO get the sound out ot the action
-        KPrSoundEventAction * eventAction = dynamic_cast<KPrSoundEventAction *>( m_eventAction );
-        if ( eventAction ) {
-            title = eventAction->soundData()->title();
-        }
-        m_soundCollection = data->soundCollection();
+    m_shape = eventActionData->shape();
+    m_eventAction = eventActionData->eventAction();
+    // TODO get the sound out ot the action
+    QString title;
+    KPrSoundEventAction * eventAction = dynamic_cast<KPrSoundEventAction *>( m_eventAction );
+    if (eventAction) {
+        title = eventAction->soundData()->title();
     }
-    else {
-        m_shape = 0;
-        m_eventAction = 0;
-        m_soundCollection = 0;
-    }
+    m_soundCollection = eventActionData->soundCollection();
     setEnabled( m_shape && m_soundCollection );
     updateCombo( title );
 }
