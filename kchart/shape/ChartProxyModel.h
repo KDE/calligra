@@ -102,6 +102,12 @@ public slots:
 signals:
     void dataChanged();
 
+protected:
+    // TODO: Remove once we depend on Qt 4.6
+    // For compatability with Qt < 4.6
+    void beginResetModel();
+    void endResetModel();
+
 private:
     class Private;
     Private *const d;

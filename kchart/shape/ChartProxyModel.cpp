@@ -100,6 +100,22 @@ ChartProxyModel::~ChartProxyModel()
 }
 
 
+void ChartProxyModel::beginResetModel()
+{
+#if QT_VERSION  >= 0x040600
+    QAbstractItemModel::beginResetModel();
+#endif
+}
+
+void ChartProxyModel::endResetModel()
+{
+#if QT_VERSION  >= 0x040600
+    QAbstractItemModel::endResetModel();
+#else
+    reset();
+#endif
+}
+
 void ChartProxyModel::rebuildDataMap()
 {
     invalidateDataSets();
