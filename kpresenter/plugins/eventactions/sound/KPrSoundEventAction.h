@@ -42,8 +42,8 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    virtual void execute( KoTool * tool );
-    virtual void finish( KoTool * tool );
+    virtual void start();
+    virtual void finish();
 
     void setSoundData( KPrSoundData * soundData );
     KPrSoundData * soundData() const;

@@ -95,7 +95,7 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
             m_eventActions = shapeClicked->eventActions();
             if ( m_eventActions.size() ) {
                 foreach ( KoEventAction * eventAction, m_eventActions ) {
-                    eventAction->execute( this );
+                    eventAction->start();
                 }
                 // don't do next step if a action was executed
                 return;
@@ -202,7 +202,7 @@ void KPrPresentationTool::deactivate()
 void KPrPresentationTool::finishEventActions()
 {
     foreach ( KoEventAction * eventAction, m_eventActions ) {
-        eventAction->finish( this );
+        eventAction->finish();
     }
 }
 

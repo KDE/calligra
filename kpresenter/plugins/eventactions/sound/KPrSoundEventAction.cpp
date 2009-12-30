@@ -32,10 +32,11 @@
 
 KPrSoundEventAction::KPrSoundEventAction()
 : QObject()
-, KoEventAction( KPrSoundEventActionId )
+, KoEventAction()
 , m_media( 0 )
 , m_soundData( 0 )
 {
+    setId(KPrSoundEventActionId);
 }
 
 KPrSoundEventAction::~KPrSoundEventAction()
@@ -86,10 +87,10 @@ void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
     context.addDataCenter( m_soundData->soundCollection() );
 }
 
-void KPrSoundEventAction::execute( KoTool * tool )
+void KPrSoundEventAction::start()
 {
     if ( m_soundData ) {
-        finish( tool );
+        finish();
         m_media = Phonon::createPlayer( Phonon::MusicCategory,
                                         Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
         connect( m_media, SIGNAL( finished() ), this, SLOT( finished() ) );
@@ -97,9 +98,8 @@ void KPrSoundEventAction::execute( KoTool * tool )
     }
 }
 
-void KPrSoundEventAction::finish( KoTool * tool )
+void KPrSoundEventAction::finish()
 {
-    Q_UNUSED( tool );
     if ( m_media ) {
         m_media->stop();
         finished();
