@@ -78,7 +78,7 @@ void KPrClickActionDocker::selectionChanged()
     KoShape *shape = selection->firstSelectedShape();
 
     if ( shape ) {
-        QList<KoEventAction *> eventActions = shape->eventActions();
+        QSet<KoEventAction *> eventActions = shape->eventActions();
         QMap<QString, KoEventAction*> eventActionMap;
         foreach ( KoEventAction * eventAction, eventActions ) {
             eventActionMap.insert( eventAction->id(), eventAction );

@@ -26,7 +26,7 @@
 
 #include <KoTool.h>
 
-#include <QList>
+#include <QSet>
 
 class QFrame;
 class KoEventAction;
@@ -67,7 +67,7 @@ private:
     bool eventFilter( QObject * obj, QEvent * event );
 
     KPrViewModePresentation & m_viewMode;
-    QList<KoEventAction *> m_eventActions;
+    QSet<KoEventAction *> m_eventActions;
 
     KPrPresentationToolWidget * m_presentationToolWidget;
     QFrame * m_frame;

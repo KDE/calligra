@@ -93,7 +93,7 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
         KoShape * shapeClicked = m_canvas->shapeManager()->shapeAt( event->point );
         if (shapeClicked) {
             m_eventActions = shapeClicked->eventActions();
-            if ( m_eventActions.size() ) {
+            if (!m_eventActions.isEmpty()) {
                 foreach ( KoEventAction * eventAction, m_eventActions ) {
                     eventAction->start();
                 }
