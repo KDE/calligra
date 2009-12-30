@@ -25,6 +25,9 @@
 // Qt
 #include <QDebug>
 
+// KDE
+#include <kdebug.h>
+
 // KChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
@@ -47,37 +50,6 @@ TableEditorDialog::~TableEditorDialog()
     delete m_tableView;
 }
 
-void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
-{
-    if ( m_proxyModel == proxyModel )
-        return;
-
-    // Disconnect the old proxy model.
-    if ( m_proxyModel ) {
-        disconnect( m_proxyModel,    SIGNAL( modelReset() ),
-                    this,            SLOT( update() ) );
-        disconnect( firstRowIsLabel, SIGNAL( clicked( bool ) ),
-                    m_proxyModel,    SLOT( setFirstRowIsLabel( bool ) ) );
-        disconnect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                    m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
-    }
-
-    m_proxyModel = proxyModel;
-
-    // Connect the new proxy model.
-    if ( m_proxyModel ) {
-        m_tableView->setModel( m_proxyModel->sourceModel() );
-
-        connect( m_proxyModel,       SIGNAL( modelReset() ), 
-                 this,               SLOT( update() ) );
-        connect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
-                 m_proxyModel,       SLOT( setFirstRowIsLabel( bool ) ) );
-        connect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                 m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
-    }
-
-    update();
-}
 
 void TableEditorDialog::init()
 {
@@ -136,7 +108,67 @@ void TableEditorDialog::init()
     m_tableView->addAction( m_insertColumnsAction );
 
     m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
+
+    // Initialize the contents of the controls
+    updateDialog();
 }
+
+void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
+{
+    if ( m_proxyModel == proxyModel )
+        return;
+
+    // Disconnect the old proxy model.
+    if ( m_proxyModel ) {
+        disconnect( m_proxyModel,    SIGNAL( modelReset() ),
+                    this,            SLOT( updateDialog() ) );
+        disconnect( firstRowIsLabel, SIGNAL( clicked( bool ) ),
+                    m_proxyModel,    SLOT( setFirstRowIsLabel( bool ) ) );
+        disconnect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
+                    m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
+    }
+
+    m_proxyModel = proxyModel;
+
+    // Connect the new proxy model.
+    if ( m_proxyModel ) {
+        m_tableView->setModel( m_proxyModel->sourceModel() );
+
+        connect( m_proxyModel,       SIGNAL( modelReset() ), 
+                 this,               SLOT( updateDialog() ) );
+        connect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
+                 m_proxyModel,       SLOT( setFirstRowIsLabel( bool ) ) );
+        connect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
+                 m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
+    }
+
+    updateDialog();
+}
+
+void TableEditorDialog::updateDialog()
+{
+    if ( !m_proxyModel )
+        return;
+
+    firstRowIsLabel->setChecked( m_proxyModel->firstRowIsLabel() );
+    firstColumnIsLabel->setChecked( m_proxyModel->firstColumnIsLabel() );
+
+    switch ( m_proxyModel->dataDirection() ) {
+    case Qt::Horizontal:
+        dataSetsInRows->setChecked( true );
+        break;
+    case Qt::Vertical:
+        dataSetsInColumns->setChecked( true );
+        break;
+    default:
+        kWarning(35001) << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
+    }
+}
+
+
+// ----------------------------------------------------------------
+//                             slots
+
 
 void TableEditorDialog::slotInsertRowPressed()
 {
@@ -237,14 +269,4 @@ void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
 {
     Q_ASSERT( m_proxyModel );
     m_proxyModel->setDataDirection( enabled ? Qt::Horizontal : Qt::Vertical );
-}
-
-void TableEditorDialog::update()
-{
-    if ( !m_proxyModel )
-        return;
-
-    firstRowIsLabel->setChecked( m_proxyModel->firstRowIsLabel() );
-    firstColumnIsLabel->setChecked( m_proxyModel->firstColumnIsLabel() );
-    dataSetsInRows->setChecked( m_proxyModel->dataDirection() == Qt::Horizontal );
 }

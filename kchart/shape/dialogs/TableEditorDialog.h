@@ -45,7 +45,7 @@ public:
 
     void init();
     void setProxyModel( ChartProxyModel *proxyModel );
-    void update();
+    void updateDialog();
 
 protected slots:
     void slotInsertRowPressed();
