@@ -1039,22 +1039,38 @@ QString convertColor(const Color& color)
     return QString(buf);
 }
 
-QString convertBorder(const Pen& pen)
+void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
 {
-    if (pen.style == Pen::NoLine || pen.width == 0) return "none";
+    QString result;
+    if (pen.style == Pen::NoLine || pen.width == 0) {
+        result = "none";
+        style.addProperty("fo:border-" + which, result);
+    } else {
+        if (pen.style == Pen::DoubleLine) {
+            result += QString::number(pen.width * 3);
+        } else {
+            result = QString::number(pen.width);
+        }
+        result += "pt ";
 
-    QString result = QString::number(pen.width);
-    result += "pt ";
+        switch (pen.style) {
+        case Pen::SolidLine: result += "solid "; break;
+        case Pen::DashLine: result += "dashed "; break;
+        case Pen::DotLine: result += "dotted "; break;
+        case Pen::DashDotLine: result += "dot-dash "; break;
+        case Pen::DashDotDotLine: result += "dot-dot-dash "; break;
+        case Pen::DoubleLine: result += "double "; break;
+        }
 
-    switch (pen.style) {
-    case Pen::SolidLine: result += "solid "; break;
-    case Pen::DashLine: result += "dashed "; break;
-    case Pen::DotLine: result += "dotted "; break;
-    case Pen::DashDotLine: result += "dot-dash "; break;
-    case Pen::DashDotDotLine: result += "dot-dot-dash "; break;
+        result += convertColor(pen.color);
+
+        style.addProperty("fo:border-" + which, result);
+        if (pen.style == Pen::DoubleLine) {
+            result = QString::number(pen.width);
+            result = result + "pt " + result + "pt " + result + "pt";
+            style.addProperty("fo:border-line-width-" + which, result);
+        }
     }
-
-    return result + convertColor(pen.color);
 }
 
 void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
@@ -1109,10 +1125,10 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     }
 
     if (!borders.isNull()) {
-        style.addProperty("fo:border-left", convertBorder(borders.leftBorder()));
-        style.addProperty("fo:border-right", convertBorder(borders.rightBorder()));
-        style.addProperty("fo:border-top", convertBorder(borders.topBorder()));
-        style.addProperty("fo:border-bottom", convertBorder(borders.bottomBorder()));
+        convertBorder("left", borders.leftBorder(), style);
+        convertBorder("right", borders.rightBorder(), style);
+        convertBorder("top", borders.topBorder(), style);
+        convertBorder("bottom", borders.bottomBorder(), style);
         //TODO diagonal 'borders'
     }
 

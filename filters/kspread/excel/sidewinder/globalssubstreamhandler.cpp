@@ -275,9 +275,8 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::SolidLine;
         break;
     case XFRecord::Double:
-        // FIXME no equivalent ?
-        pen.width = 2;
-        pen.style = Pen::SolidLine;
+        pen.width = 0.5;
+        pen.style = Pen::DoubleLine;
         break;
     case XFRecord::Hair:
         // FIXME no equivalent ?
@@ -504,7 +503,7 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     else {
         std::cout << "Unhandled global record with type=" << type << std::endl;
     }
-    
+
 }
 
 void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
@@ -664,7 +663,7 @@ void GlobalsSubStreamHandler::handleXF(XFRecord* record)
 void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
 {
   if (!record) return;
-  
+
   if (record->isLocked()) {
       std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
   }
