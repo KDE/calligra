@@ -303,7 +303,7 @@ void FormatAlignment::setAlignY(unsigned ya)
 
 bool FormatAlignment::wrap() const
 {
-    return d->wrap;
+    return d->wrap || d->alignY == Format::VJustify || d->alignY == Format::VDistributed;
 }
 
 void FormatAlignment::setWrap(bool w)

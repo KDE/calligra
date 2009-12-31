@@ -428,6 +428,10 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
         alignment.setAlignY(Format::Middle); break;
     case XFRecord::Bottom:
         alignment.setAlignY(Format::Bottom); break;
+    case XFRecord::VJustified:
+        alignment.setAlignY(Format::VJustify); break;
+    case XFRecord::VDistributed:
+        alignment.setAlignY(Format::VDistributed); break;
     default: break;
         // FIXME still unsupported: Justified, Distributed
     }

@@ -1114,9 +1114,23 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
 
     if (!align.isNull()) {
         switch (align.alignY()) {
-        case Format::Top: style.addProperty("style:vertical-align", "top"); break;
-        case Format::Middle: style.addProperty("style:vertical-align", "middle"); break;
-        case Format::Bottom: style.addProperty("style:vertical-align", "bottom"); break;
+        case Format::Top:
+            style.addProperty("style:vertical-align", "top");
+            break;
+        case Format::Middle:
+            style.addProperty("style:vertical-align", "middle");
+            break;
+        case Format::Bottom:
+            style.addProperty("style:vertical-align", "bottom");
+            break;
+        case Format::VJustify:
+            style.addProperty("style:vertical-align", "top");
+            //TODO: add property for distributing lines...
+            break;
+        case Format::VDistributed:
+            style.addProperty("style:vertical-align", "middle");
+            //TODO: add property for distributing lines...
+            break;
         }
 
         style.addProperty("fo:wrap-option", align.wrap() ? "wrap" : "no-wrap");

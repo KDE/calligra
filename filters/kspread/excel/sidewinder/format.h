@@ -337,7 +337,7 @@ public:
     void setAlignX(unsigned xa);
 
     /**
-     * Returns horizontal alignment. Possible values are
+     * Returns vertical alignment. Possible values are
      * Format::Top, Format::Middle and Format::Bottom.
      *
      * \sa setAlignY
@@ -345,7 +345,7 @@ public:
     unsigned alignY() const;
 
     /**
-     * Sets the horizontal alignment.
+     * Sets the vertical alignment.
      *
      * \sa alignY
      */
@@ -738,7 +738,7 @@ public:
 
     enum { Left, Center, Right };
 
-    enum { Top, Middle, Bottom };
+    enum { Top, Middle, Bottom, VJustify, VDistributed };
 
     /**
      * Applies another format to this format. Basically this will merge
