@@ -1134,7 +1134,11 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
         }
 
         style.addProperty("fo:wrap-option", align.wrap() ? "wrap" : "no-wrap");
-        //TODO rotation
+
+        if (align.rotationAngle()) {
+            style.addProperty("style:rotation-angle", QString::number(align.rotationAngle()));
+        }
+
         //TODO stacked letters
     }
 

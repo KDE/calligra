@@ -692,7 +692,7 @@ bool FormulaRecord::isShared() const
 {
     return d->shared;
 }
-    
+
 void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
 {
     if (size < 20) return;
@@ -725,7 +725,7 @@ void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsi
             break;
         };
     }
-    
+
     unsigned opts = readU16(data + 14);
     //const bool fAlwaysCalc = opts & 0x01;
     //const bool reserved1 = opts & 0x02;
@@ -1005,7 +1005,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     //const bool fPublished = d->optionFlags & 0x3000;
     //const bool fWorkbookParam = d->optionFlags & 0x6000;
     //const bool reserved2 = d->optionFlags & 0xC000;
-    
+
     const unsigned len = readU8(data + 3); // cch
     // 2 bytes cce + 2 bytes reserved + 2 bytes itab + 4 bytes reserved = 10 bytes
     if (version() == Excel95) {
@@ -1024,7 +1024,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             Q_ASSERT((opts << 1) == 0x0);
 
             // XLUnicodeStringNoCch
-            UString str = UString();                                                                                                                                              
+            UString str = UString();
             if(fHighByte) {
                 for (unsigned k = 0; k < len*2; k++) {
                     unsigned zc = readU16(data + 15 + k * 2);
@@ -1036,7 +1036,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
                     str.append(UString(uc));
                 }
             }
-            
+
             // This is rather illogical and seems there is nothing in the specs about this,
             // but the string "_xlfn." may in front of the string we are looking for. So,
             // remove that one and ignore whatever it means...
@@ -1364,7 +1364,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     bool fDde = false; // dynamic data exchange reference?
     bool fCtl = false; // ActiveX control?
     bool fPrstm = false; // false=embedded store or true=control stream
-    
+
     const unsigned char* startPict = data + 22;
     switch (ot) {
     case Object::Group: // gmo
@@ -1519,7 +1519,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             const unsigned long cce = readU16(startPict + cbFmlaSize + 2) >> 1; // 15 bits cce + 1 bit reserved
             cbFmlaSize += 2 + 2 + 4; // 4 bytes unused
 
-            // rgce                    
+            // rgce
             unsigned ptg = readU8(startPict + cbFmlaSize);
             cbFmlaSize += 1;
             ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
@@ -1546,7 +1546,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                         unsigned size = 0;
                         UString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
                         embedInfoSize += size;
-                        
+
                         //TODO
                         printf( "!!!!!!!!!!!! ObjRecord::setData: className=%s\n", className.ascii() );
                     }
@@ -2023,7 +2023,7 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
     setTextWrap(align & 0x08);
 
     unsigned angle = data[7];
-    setRotationAngle((angle != 255) ? (angle & 0x7f) : 0);
+    setRotationAngle((angle != 255) ? angle : 0);
     setStackedLetters(angle == 255);
 
     if (version() == Excel97) {
@@ -2384,7 +2384,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
       // header
       unsigned bytes_read = combObjStream->read( buffer, 28 );
       //const unsigned long version = readU32( buffer + 5 );
-      
+
       //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
       //printEntries(storage,"CompObj");
 
@@ -2394,7 +2394,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
       bytes_read = combObjStream->read( buffer, length );
       UString ansiUserType = readByteString(buffer, length);
       printf( "length=%lu ansiUserType=%s\n",length,ansiUserType.ascii() );
-      
+
       // AnsiClipboardFormat
       bytes_read = combObjStream->read( buffer, 4 );
       const unsigned long markerOrLength = readU32( buffer );

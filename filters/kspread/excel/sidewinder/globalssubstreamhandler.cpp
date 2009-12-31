@@ -437,6 +437,11 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     }
 
     alignment.setWrap(xf.textWrap());
+
+    unsigned angle = xf.rotationAngle();
+    if (angle > 90) angle = 360-(angle-90);
+    alignment.setRotationAngle(angle);
+
     format.setAlignment(alignment);
 
     FormatBorders borders;
