@@ -1132,7 +1132,9 @@ void CellView::paintText(QPainter& painter,
     } else if (tmpAngle != 0) {
         // Case 2: an angle.
 
-        const int angle = tmpAngle;
+        int angle = ((tmpAngle % 360) + 360) % 360;
+        // now angle is between 0 and 359, but 181-359 should be -179 - -1
+        if (angle > 180) angle = angle - 360;
 
         painter.rotate(angle);
         qreal x;
