@@ -2120,9 +2120,10 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
                                         - 0.5 * d->style.leftBorderPen().width()
                                         - 0.5 * d->style.rightBorderPen().width()));
             height += leading;
-            line.setPosition(QPoint(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().width()),
-                                    qRound(scaleX * height)));
-            height += line.height();
+            line.setPosition(QPointF(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
+                                    scaleY * height));
+
+            height += line.height() / scaleY;
         }
         textLayout.endLayout();
 
