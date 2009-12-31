@@ -256,7 +256,7 @@ CustomStyle * StyleManager::style(QString const & name) const
     // on OpenDocument loading
 //     if ( !m_oasisStyles.isEmpty() )
     {
-        if (m_oasisStyles.contains(name))
+        if (m_oasisStyles.contains(name) && m_styles.contains(m_oasisStyles[name]))
             return m_styles.value(m_oasisStyles[name]);
 //         return 0;
     }
