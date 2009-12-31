@@ -28,7 +28,8 @@ KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory( QObject *parent 
 {
     setToolTip( i18n( "Calligraphic Shape" ) );
     setIcon("calligraphy");
-    setLoadingPriority( 1 ); // TODO: to what should this be set??
+    setLoadingPriority( 1 );
+    setHidden(true);
 }
 
 KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()
@@ -63,9 +64,3 @@ QList<KoShapeConfigWidgetBase*> KarbonCalligraphicShapeFactory::createShapeOptio
     panels.append( new CalligraphicShapeConfigWidget() );
     return panels;
 }*/
-
-bool KarbonCalligraphicShapeFactory::hidden() const
-{
-    return true;
-}
-

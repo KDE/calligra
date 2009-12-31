@@ -33,7 +33,6 @@ public:
     KoShape * createDefaultShape() const;
     KoShape * createShape( const KoProperties * params ) const;
     virtual bool supports( const KoXmlElement & e ) const;
-    virtual bool hidden() const;
 };
 
 #endif /* KPRPLACEHOLDERSHAPEFACTORY_H */

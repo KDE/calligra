@@ -35,7 +35,6 @@ public:
     KoShape * createShape( const KoProperties * params ) const;
     //virtual bool supports(const KoXmlElement & e) const;
     //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-    bool hidden() const;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPEFACTORY_H

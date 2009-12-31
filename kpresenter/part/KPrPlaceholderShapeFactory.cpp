@@ -34,6 +34,7 @@ KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory( QObject *parent )
     setOdfElementNames( KoXmlNS::draw, elementNames );
     // use a really high number as we want to be used before the normal shapes try to load it
     setLoadingPriority( 1000 );
+    setHidden(true);
 }
 
 KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory()
@@ -63,9 +64,4 @@ bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e) const
         }
     }
     return false;
-}
-
-bool KPrPlaceholderShapeFactory::hidden() const
-{
-    return true;
 }
