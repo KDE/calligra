@@ -1160,10 +1160,26 @@ void CellView::paintText(QPainter& painter,
         // Case 4: Vertical text.
         QStringList textLines = d->displayText.split('\n');
         qreal dx = 0.0;
+
+        qreal space = d->width - d->textWidth;
+        if (space > 0) {
+            switch (hAlign) {
+                case Style::Center:
+                case Style::HAlignUndefined:
+                    dx += space/2;
+                    break;
+                case Style::Right:
+                    dx += space;
+                    break;
+                default:
+                    break;
+            }
+        }
         for (int i = 0; i < textLines.count(); ++i) {
             QStringList textColumn;
             for (int j = 0; j < textLines[i].count(); ++j)
                 textColumn << QString(textLines[i][j]);
+
             const QPointF position(indent + coordinate.x() + dx, coordinate.y() + d->textY);
             drawText(painter, position, textColumn, cell);
             dx += fontMetrics.maxWidth();
@@ -2105,6 +2121,12 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
 
     const QTextOption options = d->textOptions();
 
+    const bool tmpVerticalText = d->style.verticalText();
+    const qreal lineWidth = tmpVerticalText ? fontMetrics.maxWidth() :
+                                    scaleX * (d->width - 2 * s_borderSpace
+                                        - 0.5 * d->style.leftBorderPen().width()
+                                        - 0.5 * d->style.rightBorderPen().width());
+
     qreal offset = 1.0 - fontMetrics.ascent() / scaleY;
     for (int i = 0; i < textLines.count(); ++i) {
         QTextLayout textLayout(textLines[i], d->style.font());
@@ -2118,9 +2140,7 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
             QTextLine line = textLayout.createLine();
             if (!line.isValid())
                 break;
-            line.setLineWidth(scaleX * (d->width - 2 * s_borderSpace
-                                        - 0.5 * d->style.leftBorderPen().width()
-                                        - 0.5 * d->style.rightBorderPen().width()));
+            line.setLineWidth(lineWidth);
             height += leading;
             line.setPosition(QPointF(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
                                     scaleY * height));
