@@ -1027,7 +1027,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
         styleStack.setTypeProperties( "graphic" );
     }
     loadOdfAttributes( chartElement, context,
-                       OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements );
+                       OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements | OdfStyle );
+    if ( !background() ) {
+        KoColorBackground *bg = new KoColorBackground( Qt::white );
+        setBackground( bg );
+    }
 
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
