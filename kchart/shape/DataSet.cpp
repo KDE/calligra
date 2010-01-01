@@ -226,7 +226,8 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
         data = model->headerData( col, Qt::Horizontal );
     else {
         const QModelIndex &index = model->index( row, col );
-        Q_ASSERT( index.isValid() );
+        // FIXME: This causes a crash in KSpread when a document is loaded.
+        //Q_ASSERT( index.isValid() );
         if ( index.isValid() )
             data = model->data( index );
     }
