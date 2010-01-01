@@ -333,7 +333,7 @@ private:
     void obscure(int col, int row);
 
     void drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
-                  const Cell& cell) const;
+                  const Cell& cell, qreal lineSpacing = 0) const;
 
     /**
      * Default CellView used by SheetView.

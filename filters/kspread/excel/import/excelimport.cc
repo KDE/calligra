@@ -1125,11 +1125,11 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
             break;
         case Format::VJustify:
             style.addProperty("style:vertical-align", "top");
-            //TODO: add property for distributing lines...
+            style.addProperty("koffice:vertical-distributed", "distributed");
             break;
         case Format::VDistributed:
             style.addProperty("style:vertical-align", "middle");
-            //TODO: add property for distributing lines...
+            style.addProperty("koffice:vertical-distributed", "distributed");
             break;
         }
 

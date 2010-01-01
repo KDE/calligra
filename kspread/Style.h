@@ -68,6 +68,8 @@ public:
         Top = 1,
         Middle = 2,
         Bottom = 3,
+        VDistributed = 4,
+        VJustified = 5,
         VAlignUndefined = 0
     };
 

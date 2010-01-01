@@ -83,6 +83,7 @@ public:
             , textY(0.0)
             , textWidth(0.0)
             , textHeight(0.0)
+            , textLinesCount(0)
             , hidden(false)
             , merged(false)
             , obscured(false)
@@ -104,6 +105,8 @@ public:
     qreal  textY;
     qreal  textWidth;
     qreal  textHeight;
+
+    int    textLinesCount;
 
 bool hidden         : 1;
 bool merged         : 1;
@@ -1095,6 +1098,7 @@ void CellView::paintText(QPainter& painter,
     qreal indent = 0.0;
     qreal offsetCellTooShort = 0.0;
     const Style::HAlign hAlign = d->style.halign();
+    const Style::VAlign vAlign = d->style.valign();
 
     // Apply indent if text is align to left not when text is at right or middle.
     if (hAlign == Style::Left && !cell.isEmpty()) {
@@ -1116,6 +1120,7 @@ void CellView::paintText(QPainter& painter,
     const bool tmpVerticalText = d->style.verticalText();
     // force multiple rows on explicitly set line breaks
     const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains('\n');
+    const bool tmpVDistributed = vAlign == Style::VJustified || vAlign == Style::VDistributed;
 
     // Actually paint the text.
     //    There are 4 possible cases:
@@ -1155,7 +1160,9 @@ void CellView::paintText(QPainter& painter,
     } else if (tmpMultiRow && !tmpVerticalText) {
         // Case 3: Multiple rows, but horizontal.
         const QPointF position(indent + coordinate.x(), coordinate.y() + d->textY);
-        drawText(painter, position, d->displayText.split('\n'), cell);
+        const qreal space = d->height - d->textHeight;
+        const qreal lineSpacing = tmpVDistributed && space > 0 ? space / (d->textLinesCount - 1) : 0;
+        drawText(painter, position, d->displayText.split('\n'), cell, lineSpacing);
     } else if (tmpVerticalText && !d->displayText.isEmpty()) {
         // Case 4: Vertical text.
         QStringList textLines = d->displayText.split('\n');
@@ -1874,6 +1881,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     // Calculate d->textY based on the vertical alignment and a few
     // other inputs.
     switch (vAlign) {
+    case Style::VJustified:
     case Style::Top: {
         if (tmpAngle == 0) {
             d->textY = effTop + ascent;
@@ -1919,6 +1927,12 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
         }
         break;
     }
+    case Style::VDistributed:
+        if (!tmpVerticalText && !tmpAngle && d->textLinesCount > 1) {
+            d->textY = effTop + ascent;
+            break;
+        }
+        // fall through
     case Style::Middle:
     case Style::VAlignUndefined: {
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle) {
@@ -2105,7 +2119,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
 }
 
 void CellView::drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
-                        const Cell& cell) const
+                        const Cell& cell, qreal lineSpacing) const
 {
     Q_UNUSED(cell)
 
@@ -2145,7 +2159,7 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
             line.setPosition(QPointF(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
                                     scaleY * height));
 
-            height += line.height() / scaleY;
+            height += line.height() / scaleY + lineSpacing;
         }
         textLayout.endLayout();
 
@@ -2236,6 +2250,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
 
     textHeight = 0.0;
     textWidth = 0.0;
+    textLinesCount = 0;
     fittingHeight = true;
     fittingWidth = true;
     for (int i = 0; i < textLines.count(); ++i) {
@@ -2256,6 +2271,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
                 break; // forever
             }
         }
+        textLinesCount += textLayout.lineCount();
         textLayout.endLayout();
     }
     // The width fits, if the text fits wrapped or all lines are smaller than the cell width.

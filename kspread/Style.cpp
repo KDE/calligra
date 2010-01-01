@@ -330,6 +330,12 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         else
             setVAlign(Style::VAlignUndefined);
     }
+    if (styleStack.property(KoXmlNS::koffice, "vertical-distributed") == "distributed") {
+        if (valign() == Style::Top)
+            setVAlign(Style::VJustified);
+        else
+            setVAlign(Style::VDistributed);
+    }
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         QColor color(styleStack.property(KoXmlNS::fo, "background-color"));
         if (styleStack.property(KoXmlNS::fo, "background-color") == "transparent")
@@ -1173,9 +1179,11 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         QString value;
         switch (valign()) {
         case Top:
+        case VJustified:
             value = "top";
             break;
         case Middle:
+        case VDistributed:
             value = "middle";
             break;
         case Bottom:
@@ -1187,6 +1195,9 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         }
         if (!value.isEmpty()) // sanity
             style.addProperty("style:vertical-align", value);
+
+        if (valign() == VJustified || valign() == VDistributed)
+            style.addProperty("koffice:vertical-distributed", "distributed");
     }
 
     if (keysToStore.contains(BackgroundColor) && backgroundColor().isValid())
