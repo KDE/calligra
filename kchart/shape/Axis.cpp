@@ -558,8 +558,8 @@ void Axis::Private::createBarDiagram()
 
 void Axis::Private::createLineDiagram()
 {
-    Q_ASSERT( kdLineDiagramModel );
-    Q_ASSERT( kdLineDiagram );
+    Q_ASSERT( kdLineDiagramModel == 0 );
+    Q_ASSERT( kdLineDiagram == 0 );
 
     kdLineDiagramModel = new KDChartModel;
 
@@ -589,8 +589,8 @@ void Axis::Private::createLineDiagram()
 
 void Axis::Private::createAreaDiagram()
 {
-    Q_ASSERT( kdAreaDiagramModel );
-    Q_ASSERT( kdAreaDiagram );
+    Q_ASSERT( kdAreaDiagramModel == 0 );
+    Q_ASSERT( kdAreaDiagram == 0 );
 
     kdAreaDiagramModel = new KDChartModel;
 
@@ -625,8 +625,8 @@ void Axis::Private::createAreaDiagram()
 
 void Axis::Private::createCircleDiagram()
 {
-    Q_ASSERT( kdCircleDiagramModel );
-    Q_ASSERT( kdCircleDiagram );
+    Q_ASSERT( kdCircleDiagramModel == 0);
+    Q_ASSERT( kdCircleDiagram == 0 );
 
     kdCircleDiagramModel = new KDChartModel;
     kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
@@ -644,8 +644,8 @@ void Axis::Private::createCircleDiagram()
 
 void Axis::Private::createRingDiagram()
 {
-    Q_ASSERT( kdRingDiagramModel );
-    Q_ASSERT( kdRingDiagram );
+    Q_ASSERT( kdRingDiagramModel == 0 );
+    Q_ASSERT( kdRingDiagram == 0 );
 
     kdRingDiagramModel = new KDChartModel;
     kdRingDiagramModel->setDataDirection( Qt::Horizontal );
@@ -663,8 +663,8 @@ void Axis::Private::createRingDiagram()
 
 void Axis::Private::createRadarDiagram()
 {
-    Q_ASSERT( kdRadarDiagramModel );
-    Q_ASSERT( kdRadarDiagram );
+    Q_ASSERT( kdRadarDiagramModel == 0 );
+    Q_ASSERT( kdRadarDiagram == 0 );
 
     kdRadarDiagramModel = new KDChartModel;
 
@@ -687,8 +687,8 @@ void Axis::Private::createRadarDiagram()
 
 void Axis::Private::createScatterDiagram()
 {
-    Q_ASSERT( kdScatterDiagramModel );
-    Q_ASSERT( kdScatterDiagram );
+    Q_ASSERT( kdScatterDiagramModel == 0 );
+    Q_ASSERT( kdScatterDiagram == 0 );
 
     kdScatterDiagramModel = new KDChartModel;
     kdScatterDiagramModel->setDataDimensions( 2 );
