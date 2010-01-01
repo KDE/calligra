@@ -1139,7 +1139,9 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
             style.addProperty("style:rotation-angle", QString::number(align.rotationAngle()));
         }
 
-        //TODO stacked letters
+        if (align.stackedLetters()) {
+            style.addProperty("style:direction", "ttb");
+        }
     }
 
     if (!borders.isNull()) {

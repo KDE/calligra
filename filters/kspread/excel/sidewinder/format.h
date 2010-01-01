@@ -394,6 +394,20 @@ public:
     void setRotationAngle(unsigned r);
 
     /**
+     * Returns true if the text should be shown in stacked letters.
+     *
+     * \sa setStackedLetters
+     */
+    bool stackedLetters() const;
+
+    /**
+     * Sets whether the text should be shown in stacked letters.
+     *
+     * \sa stackedLetters
+     */
+    void setStackedLetters(bool b);
+
+    /**
      * Returns true if this alignment is equal to f; otherwise returns false.
      */
     bool operator==(const FormatAlignment& f) const;

@@ -442,6 +442,8 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     if (angle > 90) angle = 360-(angle-90);
     alignment.setRotationAngle(angle);
 
+    alignment.setStackedLetters(xf.stackedLetters());
+
     format.setAlignment(alignment);
 
     FormatBorders borders;
