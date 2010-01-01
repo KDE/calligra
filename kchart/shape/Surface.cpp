@@ -88,6 +88,9 @@ Surface::Surface( PlotArea *parent )
     // FIXME: init in private's constructor
     d->plotArea = parent;
 
+    // FIXME: Make this class capable of storing floor-specific
+    // attributes as well. Right now, it's really only used
+    // and designed to load and save the chart's wall.
     d->kdPlane = d->plotArea->kdPlane();
     Q_ASSERT( d->kdPlane );
 }

@@ -588,9 +588,11 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
         else if ( n.localName() == "floor" ) {
             // The floor is not always present, so allocate it if needed.
-            if ( !d->floor )
-                d->floor = new Surface( this );
-            d->floor->loadOdf( n, context );
+            // FIXME: Load floor, even if we don't really support it yet
+            // and save it back to ODF.
+            //if ( !d->floor )
+            //    d->floor = new Surface( this );
+            //d->floor->loadOdf( n, context );
         }
         else if ( n.localName() != "axis" && n.localName() != "series" ) {
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
@@ -661,8 +663,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 
     // Save the floor and wall of the plotarea.
     d->wall->saveOdf( context, "chart:wall" );
-    if ( d->floor )
-        d->floor->saveOdf( context, "chart:floor" );
+    //if ( d->floor )
+    //    d->floor->saveOdf( context, "chart:floor" );
 
     // TODO chart:series
     // TODO chart:grid
