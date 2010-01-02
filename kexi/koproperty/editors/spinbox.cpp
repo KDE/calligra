@@ -21,6 +21,7 @@
 
 #include "spinbox.h"
 #include "koproperty/Property.h"
+#include "koproperty/Property_p.h"
 #include "koproperty/EditorDataModel.h"
 #include "koproperty/EditorView.h"
 
@@ -276,7 +277,7 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
-    QVariant step(prop->option("step", 0.01));
+    QVariant step(prop->option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP));
     bool slider(prop->option("slider", false).toBool());
     if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
         setRange(minVal.toDouble(), maxVal.toDouble(), step.toDouble(), slider);
