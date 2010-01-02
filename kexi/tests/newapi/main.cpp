@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/indexschema.h>
 #include <kexidb/parser/parser.h>
+#include <core/kexiproject.h>
 
 #include <iostream>
 
@@ -48,7 +49,8 @@ QString test_name;
 int cursor_options = 0;
 bool db_name_required = true;
 
-KexiDB::ConnectionData conn_data;
+//KexiProjectData project_data;
+QPointer<KexiProject> project;
 QPointer<KexiDB::Connection> conn;
 QPointer<KexiDB::Driver> driver;
 KApplication *app = 0;
@@ -64,7 +66,15 @@ KComponentData *instance = 0;
 #include "parser_test.h"
 #include "dr_prop_test.h"
 
+void exitRoutine()
+{
+    if (project)
+        project->closeConnection();
+    delete project;
+}
+
 #define RETURN(code) \
+    exitRoutine(); \
     kDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
     return code
 
@@ -81,9 +91,9 @@ int main(int argc, char** argv)
 
     KCmdLineArgs::init(argc, argv,
                        new KAboutData(prgname, 0, ki18n("KexiDBTest"),
-                                      "0.1.2", KLocalizedString(), KAboutData::License_GPL,
-                                      ki18n("(c) 2003-2006, Kexi Team\n"
-                                            "(c) 2003-2006, OpenOffice Polska Ltd.\n"),
+                                      KEXI_VERSION_STRING, KLocalizedString(), KAboutData::License_GPL,
+                                      ki18n("(c) 2003-2010, Kexi Team\n"
+                                            "(c) 2003-2006, OpenOffice Software.\n"),
                                       KLocalizedString(),
                                       "http://www.koffice.org/kexi",
                                       "submit@bugs.kde.org"
@@ -173,12 +183,13 @@ int main(int argc, char** argv)
     }
 
     //get driver
+    const KexiDB::Driver::Info drv_info = manager.driverInfo(drv_name);
     driver = manager.driver(drv_name);
-    if (!driver || manager.error()) {
+    if (drv_info.name.isEmpty() || manager.error()) {
         manager.debugError();
         RETURN(1);
     }
-    kDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMimeType();
+    kDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
 
     //open connection
     if (args->count() >= 2)
@@ -193,9 +204,27 @@ int main(int argc, char** argv)
         if (args->isSet("buffered-cursors")) {
             cursor_options |= KexiDB::Cursor::Buffered;
         }
-        conn_data.setFileName(db_name);
-        conn = driver->createConnection(conn_data);
-
+        KexiProjectData *project_data = new KexiProjectData;
+        project_data->setDatabaseName(db_name);
+        if (drv_info.fileBased) {
+            project_data->connectionData()->setFileName(db_name);
+        }
+        project_data->connectionData()->driverName = drv_name;
+        project = new KexiProject(project_data);
+        bool incompatibleWithKexi = false;
+        tristate res;
+        if (test_name == "dbcreation" || test_name == "tables")
+            res = project->create(true /*force overwrite*/);
+        else
+            res = project->open(incompatibleWithKexi);
+        if (res != true) {
+            if (incompatibleWithKexi)
+                kDebug() << "incompatibleWithKexi";
+            project->debugError();
+            RETURN(1);
+        }
+        conn = project->dbConnection();
+/*        conn = driver->createConnection(conn_data);
         if (!conn || driver->error()) {
             driver->debugError();
             RETURN(1);
@@ -203,7 +232,7 @@ int main(int argc, char** argv)
         if (!conn->connect()) {
             conn->debugError();
             RETURN(1);
-        }
+        }*/
     }
 
     //start test:
@@ -239,8 +268,13 @@ int main(int argc, char** argv)
     if (r)
         kDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
 
-    if (conn && !conn->disconnect())
-        r = 1;
+    if (project) {
+        if (!project->closeConnection())
+            r = 1;
+        delete project;
+    }
+//    if (conn && !conn->disconnect())
+//        r = 1;
 
 // kDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount();
 // kDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount();

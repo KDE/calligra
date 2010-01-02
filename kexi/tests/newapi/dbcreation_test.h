@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 
 int dbCreationTest()
 {
-    if (conn->databaseExists(db_name)) {
+/*    if (conn->databaseExists(db_name)) {
         if (!conn->dropDatabase(db_name)) {
             conn->debugError();
             return 1;
@@ -37,7 +37,8 @@ int dbCreationTest()
     if (!conn->useDatabase(db_name)) {
         conn->debugError();
         return 1;
-    }
+    }*/
+
     /* KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
       kDebug()<<"executeQuery() = "<<!!cursor;
       if (cursor) {

@@ -25,10 +25,10 @@ int tablesTest()
     if (dbCreationTest() != 0)
         return 1;
 
-    if (!conn->useDatabase(db_name)) {
+/*    if (!conn->useDatabase(db_name)) {
         conn->debugError();
         return 1;
-    }
+    }*/
 
     conn->setAutoCommit(false);
     KexiDB::Transaction t = conn->beginTransaction();
