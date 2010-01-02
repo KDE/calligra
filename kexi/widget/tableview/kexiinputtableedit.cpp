@@ -48,7 +48,7 @@ public:
     MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
 protected:
     virtual void drawFrame(QPainter * p) {
-        p->setPen(palette().text());
+        p->setPen(QPen(palette().text(), 1.0));
         QRect r = rect();
         p->drawLine(r.topLeft(), r.topRight());
         p->drawLine(r.topRight(), r.bottomRight());
@@ -93,8 +93,6 @@ void KexiInputTableEdit::init()
         //create layer for internal editor
         lyr = new QHBoxLayout(this);
         lyr->setContentsMargins(0, 0, 0, 0);
-        lyr->addSpacing(4);
-//2.0        lyr->setAutoAdd(true);
     }
 
     //create internal editor
@@ -105,16 +103,18 @@ void KexiInputTableEdit::init()
     m_lineedit->setStyleSheet(QString("QLineEdit { \
       border: 1px solid %1; \
       border-radius: 0px; \
-      padding: 0 0px; }").arg(focus.name()));
+      padding: 0px %2px 0px %3px; }")
+      .arg(focus.name())
+      .arg(align_right ? 1 : 0) // right
+      .arg(align_right ? 0 : 1) // left
+    );
     if (lyr)
         lyr->addWidget(m_lineedit);
+    if (align_right) {
+        m_lineedit->setAlignment(Qt::AlignRight);
+    }
 
     setViewWidget(m_lineedit);
-    if (align_right)
-        m_lineedit->setAlignment(Qt::AlignRight);
-// m_cview->setFrame(false);
-// m_cview->setFrameStyle( QFrame::Plain | QFrame::Box );
-// m_cview->setLineWidth( 1 );
     m_calculatedCell = false;
 
 #if 0 //js TODO
@@ -157,7 +157,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
 {
     QPainter p(this);
-    p.setPen(palette().text());
+    p.setPen(QPen(palette().text(), 1.0));
     p.drawRect(rect());
 }
 
