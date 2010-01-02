@@ -669,6 +669,8 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 #ifdef KEXI_NO_UNFINISHED
              && property != "paper"
 #endif
+             && property != "textInteractionFlags"
+//! @todo support textInteractionFlags property of QLabel and QTextEdit
              ;
     else if (classname == "KexiDBSubForm")
         ok = property != "dragAutoScroll"
@@ -678,7 +680,9 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         ok = property != "iconText"
              && property != "geometry" /*nonsense for toplevel widget; for size, "size" property is used*/;
     else if (classname == "KexiDBLabel")
-        ok = property != "focusPolicy";
+        ok = property != "focusPolicy"
+             && property != "textInteractionFlags";
+//! @todo support textInteractionFlags property of QLabel
     else if (classname == "KexiDBAutoField") {
         if (!isTopLevel && property == "caption")
             return true; //force
