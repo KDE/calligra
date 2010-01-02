@@ -58,6 +58,20 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2010-01-02
+Tests
+*make kexidbtest create kexi-compliant databases (i.e. using KexiProject class)
+KexiDB
+Core
+*simplify assignment operators
+
+2009-12-25..29
+KoProperty
+*use buddy so clicking on item names show and activate the editor
+  (why does it work ok now? it was disabled in r944261)
+*double spin box: do not keep Property context, instead read unit in advance
+*use the "step" property option when comparing values of double type
+
 2009-12-05
 Reports
 *Qt-ify: remove get prefix form some accessort
