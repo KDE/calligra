@@ -21,7 +21,7 @@
 #ifndef _KEXITABLEEDIT_H_
 #define _KEXITABLEEDIT_H_
 
-#include <kexidataiteminterface.h>
+#include <core/kexidataiteminterface.h>
 
 #include <qvariant.h>
 #include <q3scrollview.h>

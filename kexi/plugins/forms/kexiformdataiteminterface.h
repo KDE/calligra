@@ -21,7 +21,7 @@
 #define KEXIFORMDATAITEMINTERFACE_H
 
 #include <widget/utils/kexidisplayutils.h>
-#include <kexidataiteminterface.h>
+#include <core/kexidataiteminterface.h>
 #include <qwidget.h>
 
 namespace KexiDB

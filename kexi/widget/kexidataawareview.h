@@ -22,7 +22,7 @@
 
 #include <kexi_export.h>
 #include <KexiView.h>
-#include <kexisearchandreplaceiface.h>
+#include <core/kexisearchandreplaceiface.h>
 
 class KexiDataAwareObjectInterface;
 class KexiSharedActionClient;

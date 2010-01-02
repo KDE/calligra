@@ -21,7 +21,7 @@
 #define KDBWIDGETS_UTILS_H
 
 #include <QMenu>
-#include <kexidataiteminterface.h>
+#include <core/kexidataiteminterface.h>
 
 //! Form-related utilities
 class KexiFormUtils

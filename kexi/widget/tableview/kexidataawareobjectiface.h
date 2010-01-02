@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 #include <widget/utils/kexiarrowtip.h>
-#include <kexisearchandreplaceiface.h>
+#include <core/kexisearchandreplaceiface.h>
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -43,7 +43,7 @@ class KexiTableViewData;
 class KexiRecordMarker;
 class KexiTableViewHeader;
 class KexiRecordNavigator;
-#include <kexidataiteminterface.h>
+#include <core/kexidataiteminterface.h>
 
 namespace KexiDB
 {
