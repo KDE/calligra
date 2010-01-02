@@ -37,6 +37,8 @@ class KexiProjectDataPrivate;
  - database name
  - connection data
  - date and time of last opening
+
+ @todo make it value-based class
 */
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
@@ -116,11 +118,11 @@ public:
      Format version used when saving the data to a shortcut file.
      This is set to 0 by default what means KexiDBShortcutFile_version should be used on saving.
      If KexiDBShortcutFile was used to create this KexiProjectData object,
-     the version information is be retrieved from the file. */
+     the version information is retrieved from the file. */
     uint formatVersion;
 
 private:
-    KexiProjectDataPrivate *d;
+    KexiProjectDataPrivate * const d;
 };
 
 #endif

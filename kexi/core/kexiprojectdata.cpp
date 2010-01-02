@@ -106,7 +106,7 @@ KexiProjectData::KexiProjectData(
 KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
         : QObject(0)
         , KexiDB::SchemaData()
-        , d(0)
+        , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
     *this = pdata;
@@ -124,10 +124,11 @@ KexiProjectData::~KexiProjectData()
 
 KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
 {
-    delete d; //this is old
+//    delete d; //this is old
     static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
     //deep copy
-    d = new KexiProjectDataPrivate();
+    autoopenObjects = pdata.autoopenObjects;
+    formatVersion = pdata.formatVersion;
     *d = *pdata.d;
 // d->connData = *pdata.constConnectionData();
 // setDatabaseName(pdata.databaseName());
