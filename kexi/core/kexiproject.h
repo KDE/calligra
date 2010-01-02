@@ -294,13 +294,14 @@ public:
      To generate this ID, just app-wide internal counter is used. */
     virtual int generatePrivateID();
 
+    //! Closes connection. @return true on success.
+    bool closeConnection();
+
 protected:
     /*! Creates connection using project data.
      The connection will be readonly if data()->isReadOnly().
      \return true on success, otherwise false and appropriate error is set. */
     bool createConnection();
-
-    bool closeConnection();
 
     bool initProject();
 
