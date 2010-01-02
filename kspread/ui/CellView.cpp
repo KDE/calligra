@@ -1042,6 +1042,10 @@ void CellView::paintText(QPainter& painter,
     Q_UNUSED(paintDevice);
     QColor textColorPrint = d->style.fontColor();
 
+    // set a clipping region
+    painter.save();
+    painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
+
     // Resolve the text color if invalid (=default).
     if (!textColorPrint.isValid()) {
         if (dynamic_cast<QPrinter*>(painter.device()))
@@ -1192,6 +1196,8 @@ void CellView::paintText(QPainter& painter,
             dx += fontMetrics.maxWidth();
         }
     }
+
+    painter.restore();
 }
 
 
@@ -1655,7 +1661,10 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
 
     const bool isNumeric = cell.value().isNumber();
 
-    if (!style().verticalText()) {
+    if (style().wrapText()) {
+        // For wrapping text always draw all text
+        return d->displayText;
+    } else if (!style().verticalText()) {
         // Non-vertical text: the ordinary case.
 
         // Not enough space but align to left
@@ -2149,8 +2158,8 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
         textLayout.beginLayout();
         qreal height = 0.0;
         forever {
-            if (offset + height + leading + fontMetrics.height() / scaleY > d->height)
-                break;
+            // we don't need to break if the text no longer fits in the cell;
+            // a clipping region is set on the painter to make sure we won't draw outside the cell
             QTextLine line = textLayout.createLine();
             if (!line.isValid())
                 break;
@@ -2274,8 +2283,8 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
         textLinesCount += textLayout.lineCount();
         textLayout.endLayout();
     }
-    // The width fits, if the text fits wrapped or all lines are smaller than the cell width.
-    fittingWidth = (style.wrapText() && fittingHeight) ||
+    // The width fits, if the text is wrapped or all lines are smaller than the cell width.
+    fittingWidth = (style.wrapText()/* && fittingHeight*/) ||
                    textWidth <= (width - 2 * s_borderSpace
                                  - 0.5 * style.leftBorderPen().width()
                                  - 0.5 * style.rightBorderPen().width());
@@ -2366,6 +2375,6 @@ QTextOption CellView::Private::textOptions() const
     // The text consists of a single character, if it's vertical. Always center it.
     if (style.verticalText())
         options.setAlignment(Qt::AlignHCenter);
-    options.setWrapMode(style.wrapText() ? QTextOption::WordWrap : QTextOption::NoWrap);
+    options.setWrapMode(style.wrapText() ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
     return options;
 }
