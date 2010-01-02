@@ -50,7 +50,6 @@
 #include <QTextLayout>
 
 // KOffice
-#include <KoDpi.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 
@@ -2132,27 +2131,23 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
 {
     Q_UNUSED(cell)
 
-    const qreal scaleX = POINT_TO_INCH(qreal(KoDpi::dpiX()));
-    const qreal scaleY = POINT_TO_INCH(qreal(KoDpi::dpiY()));
+    KoPostscriptPaintDevice device;
+    const QFont font(d->style.font(), &device);
+    const QFontMetricsF fontMetrics(font, &device);
 
-    // Qt scales the font already with the logical resolution. Do not do it twice!
-    painter.save();
-    painter.scale(1.0 / scaleX, 1.0 / scaleY);
-
-    const QFontMetricsF fontMetrics(d->style.font());
-    const qreal leading = fontMetrics.leading() / scaleY;
+    const qreal leading = fontMetrics.leading();
 
     const QTextOption options = d->textOptions();
 
     const bool tmpVerticalText = d->style.verticalText();
     const qreal lineWidth = tmpVerticalText ? fontMetrics.maxWidth() :
-                                    scaleX * (d->width - 2 * s_borderSpace
+                                        (d->width - 2 * s_borderSpace
                                         - 0.5 * d->style.leftBorderPen().width()
                                         - 0.5 * d->style.rightBorderPen().width());
 
-    qreal offset = 1.0 - fontMetrics.ascent() / scaleY;
+    qreal offset = 1.0 - fontMetrics.ascent();
     for (int i = 0; i < textLines.count(); ++i) {
-        QTextLayout textLayout(textLines[i], d->style.font());
+        QTextLayout textLayout(textLines[i], font);
         textLayout.setCacheEnabled(true);
         textLayout.setTextOption(options);
         textLayout.beginLayout();
@@ -2165,18 +2160,16 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
                 break;
             line.setLineWidth(lineWidth);
             height += leading;
-            line.setPosition(QPointF(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
-                                    scaleY * height));
+            line.setPosition(QPointF((s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
+                                    height));
 
-            height += line.height() / scaleY + lineSpacing;
+            height += line.height() + lineSpacing;
         }
         textLayout.endLayout();
 
-        textLayout.draw(&painter, QPointF(scaleX * location.x(), scaleY * (location.y() + offset)));
+        textLayout.draw(&painter, QPointF(location.x(), (location.y() + offset)));
         offset += height;
     }
-
-    painter.restore();
 }
 
 void CellView::obscure(int col, int row)
@@ -2272,6 +2265,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
             if (!line.isValid())
                 break; // forever
             line.setLineWidth(width);
+            kDebug() << textLines[i].mid(line.textStart(), line.textLength()) << line.naturalTextWidth();
             textHeight += leading + line.height();
             if ((textHeight - fontMetrics.descent()) > (height - 2 * s_borderSpace
                     - 0.5 * style.topBorderPen().width()
@@ -2284,7 +2278,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
         textLayout.endLayout();
     }
     // The width fits, if the text is wrapped or all lines are smaller than the cell width.
-    fittingWidth = (style.wrapText()/* && fittingHeight*/) ||
+    fittingWidth = style.wrapText() ||
                    textWidth <= (width - 2 * s_borderSpace
                                  - 0.5 * style.leftBorderPen().width()
                                  - 0.5 * style.rightBorderPen().width());
