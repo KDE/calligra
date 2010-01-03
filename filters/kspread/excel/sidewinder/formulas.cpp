@@ -715,9 +715,14 @@ static const FunctionEntry FunctionEntries[] = {
     { "THAIDIGIT",       1 },     // 370
     { "THAIMONTHOFYEAR", 1 },     // 371
     { "THAINUMSOUND",    1 },     // 372
-    { "THAIUMSTRING",    1 },     // 373
+    { "THAINUMSTRING",   1 },     // 373
     { "THAISTRINGLENGTH",1 },     // 374
     { "ISTHAIDIGIT",     1 },     // 375
+    { "ROUNDBAHTDOWN",   1 },     // 376
+    { "ROUNDBAHTUP",     1 },     // 377
+    { "THAIYEAR",        1 },     // 378
+    { "RTD",             1 },     // 379
+    { "ISHYPERLINK",     1 }      // 380
 };
 
 const char* FormulaToken::functionName() const
