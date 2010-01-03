@@ -145,7 +145,7 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, qreal fl
 {
     // save original point data
     uint subpathCount = d->path->subpathCount();
-    // iterate over all the subpathes
+    // iterate over all the subpaths
     for( uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
     {
         QList<PointData> subpathData;
@@ -180,7 +180,7 @@ void KarbonPathFlattenCommand::redo()
     if( ! d->flattened )
     {
         uint subpathCount = d->oldPointData.count();
-        // iterate over all the subpathes
+        // iterate over all the subpaths
         for( uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
         {
             uint pointCount = d->oldPointData[subpathIndex].count();
