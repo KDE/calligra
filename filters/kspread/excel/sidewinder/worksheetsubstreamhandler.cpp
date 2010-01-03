@@ -203,7 +203,7 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     if (!record) return;
 
     const unsigned type = record->rtti();
-    
+
     if (type == BottomMarginRecord::id)
         handleBottomMargin(static_cast<BottomMarginRecord*>(record));
     else if (type == BoolErrRecord::id)
@@ -271,7 +271,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     else if (type == ZoomLevelRecord::id)
         handleZoomLevel(static_cast<ZoomLevelRecord*>(record));
     else if (type == 0xA) {} //EofRecord
-    else if (type == 0x200) {} //DimensionsRecord
+    else if (type == DimensionRecord::id)
+        handleDimension(static_cast<DimensionRecord*>(record));
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
         std::cout << "Unhandled worksheet record with type=" << type << std::endl;
@@ -378,9 +379,12 @@ void WorksheetSubStreamHandler::handleDataTable(DataTableRecord* record)
 void WorksheetSubStreamHandler::handleDimension(DimensionRecord* record)
 {
     if (!record) return;
+    if (!d->sheet) return;
 
     // in the mean time we don't need to handle this because we don't care
     // about the used range of the sheet
+    d->sheet->setMaxRow(record->lastRow());
+    d->sheet->setMaxColumn(record->lastColumn());
 }
 
 void WorksheetSubStreamHandler::handleFormula(FormulaRecord* record)
@@ -801,7 +805,7 @@ void WorksheetSubStreamHandler::handleVCenter(VCenterRecord*)
 {
     //TODO
 }
-    
+
 void WorksheetSubStreamHandler::handleZoomLevel(ZoomLevelRecord *record)
 {
     if (!record) return;

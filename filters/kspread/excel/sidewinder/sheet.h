@@ -131,6 +131,10 @@ public:
     unsigned maxRow() const;
     unsigned maxColumn() const;
 
+    // explicitly set the maxRow/maxColumn values to at least a specific value
+    void setMaxRow(unsigned row);
+    void setMaxColumn(unsigned column);
+
     long defaultRowHeight() const;
     void setDefaultRowHeight(long);
     long defaultColWidth() const;
@@ -138,7 +142,7 @@ public:
 
     double zoomLevel() const;
     void setZoomLevel(double fraction);
-    
+
 private:
     // no copy or assign
     Sheet(const Sheet&);

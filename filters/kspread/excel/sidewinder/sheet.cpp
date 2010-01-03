@@ -59,7 +59,7 @@ public:
 
     long defaultRowHeight;
     long defaultColWidth;
-    
+
     double zoomLevel;
 };
 
@@ -192,6 +192,18 @@ unsigned Sheet::maxRow() const
 unsigned Sheet::maxColumn() const
 {
     return d->maxColumn;
+}
+
+void Sheet::setMaxRow(unsigned row)
+{
+    if (row > d->maxRow)
+        d->maxRow = row;
+}
+
+void Sheet::setMaxColumn(unsigned column)
+{
+    if (column > d->maxColumn)
+        d->maxColumn = column;
 }
 
 bool Sheet::visible() const

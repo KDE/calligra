@@ -130,7 +130,8 @@
   <field name="lastColumnPlus1"   type="unsigned" size="16" />
   <field name="reserved"                          size="16" />
 
-  <!-- TODO: accessors for lastRow() lastColumn() -->
+  <computedField name="lastRow" ctype="unsigned" value="lastRowPlus1() == 0 ? 0 : lastRowPlus1() - 1" />
+  <computedField name="lastColumn" ctype="unsigned" value="lastColumnPlus1() == 0 ? 0 : lastColumnPlus1() - 1" /> -->
 </record>
 
 <!-- TODO: ExternBook -->
