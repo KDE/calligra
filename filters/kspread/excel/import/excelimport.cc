@@ -443,6 +443,14 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
         }
     }
 
+    // in odf default-cell-style's only apply to cells (or at least columns) that are present in the file in xls though
+    // row styles should apply to all cells in that row, so make sure to always write out 256 columns
+    if (sheet->maxColumn() < 255) {
+        xmlWriter->startElement("table:table-column");
+        xmlWriter->addAttribute("table:number-columns-repeated", 255 - sheet->maxColumn());
+        xmlWriter->endElement();
+    }
+
     for (unsigned i = 0; i <= sheet->maxRow(); i++) {
         // FIXME optimized this when operator== in Swinder::Format is implemented
         processRowForBody(sheet->row(i, false), 1, xmlWriter);
