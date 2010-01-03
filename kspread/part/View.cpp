@@ -1147,6 +1147,11 @@ void View::initialPosition()
 
     d->canvas->setFocus();
 
+    QTimer::singleShot(50, this, SLOT(finishLoading()));
+}
+
+void View::finishLoading()
+{
     // finish the "View Loading" process
     d->loading = false;
     doc()->map()->deleteLoadingInfo();
@@ -1420,7 +1425,6 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->selection->setActiveSheet(d->activeSheet);
     d->selection->setOriginSheet(d->activeSheet);
     d->selection->initialize(QRect(newMarker, newAnchor));
-
     d->canvas->scrollToCell(newMarker);
     if (it3 != d->savedOffsets.end()) {
         const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();

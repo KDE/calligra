@@ -200,6 +200,7 @@ public Q_SLOTS:
     void refreshSelection(const Region& region);
     void aboutToModify(const Region& region);
     void initialPosition();
+    void finishLoading();
     /**
      * Actions
      */
