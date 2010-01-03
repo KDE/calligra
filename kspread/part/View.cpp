@@ -1429,6 +1429,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
         d->vertScrollBar->setValue(offset.y());
     }
 
+    d->canvas->update();
+
     d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
     d->actions->protectSheet->setChecked(d->activeSheet->isProtected());
     d->actions->protectDoc->setChecked(doc()->map()->isProtected());
