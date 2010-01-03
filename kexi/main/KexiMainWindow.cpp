@@ -2018,13 +2018,11 @@ void KexiMainWindow::setupProjectNavigator()
         d->navDockWidget->setWindowTitle(d->nav->windowTitle());
         d->navDockWidget->setWidget(navDockableWidget);
 
-    const bool showProjectNavigator = mainWindowGroup.readEntry("ShowProjectNavigator", true);
-    if (d->nav) {
+//        const bool showProjectNavigator = mainWindowGroup.readEntry("ShowProjectNavigator", true);
         const QSize projectNavigatorSize = mainWindowGroup.readEntry<QSize>("ProjectNavigatorSize", QSize());
         if (!projectNavigatorSize.isNull()) {
             navDockableWidget->setSizeHint(projectNavigatorSize);
         }
-    }
 
 #ifdef __GNUC__
 #warning TODO d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
