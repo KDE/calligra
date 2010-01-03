@@ -507,6 +507,7 @@ protected slots:
     virtual void addNewRecordRequested() {
         KexiDataAwareObjectInterface::addNewRecordRequested();
     }
+    void slotContentsMoving(int x, int y);
 protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).

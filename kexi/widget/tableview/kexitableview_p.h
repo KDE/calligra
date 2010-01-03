@@ -117,6 +117,8 @@ public:
 
     bool firstTimeEnsureCellVisible;
 
+    bool insideResizeEvent;
+
     KexiTableView::Appearance appearance;
 
     //! brushes, fonts
