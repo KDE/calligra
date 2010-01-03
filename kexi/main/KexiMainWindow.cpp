@@ -1828,7 +1828,7 @@ tristate KexiMainWindow::closeProject()
     }
 #endif
 
-    //only save nav. visibility setting is project is opened
+    //only save nav. visibility setting if there is project opened
     d->saveSettingsForShowProjectNavigator = d->prj && d->isProjectNavigatorVisible;
 
     if (!d->prj)
@@ -1997,7 +1997,10 @@ void KexiMainWindow::setupProjectNavigator()
     if (!d->isProjectNavigatorVisible)
         return;
 
-    if (!d->nav) {
+    if (d->nav) {
+         d->navDockWidget->show();
+    }
+    else {
         d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
         d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
 //        d->navDockWidget->setMinimumWidth(300);
