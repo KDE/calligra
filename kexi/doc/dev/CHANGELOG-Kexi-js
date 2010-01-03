@@ -58,12 +58,20 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
-2010-01-02
+2010-01-02..03
 Tests
 *make kexidbtest create kexi-compliant databases (i.e. using KexiProject class)
 KexiDB
 Core
 *simplify assignment operators
+Table View
+*improve left/right margins of text editor
+*fix disappearing bottom border of the grid when scrollbars re-appearing
+*fix repainting on scrolling horizontally to the right
+*fix: small geometries contents were moved 1/2 of row height up
+Main Window
+*re-display project navigator pane after reopening project
+BUG:220686
 
 2009-12-25..29
 KoProperty
