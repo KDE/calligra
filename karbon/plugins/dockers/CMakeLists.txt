@@ -9,7 +9,7 @@ project(karbondockersplugin)
 #
 #kde4_add_plugin(karbondockersplugin ${karbondockers_SRCS})
 #
-#target_link_libraries(karbondockersplugin karboncommon kocolorwidgets karbonui )
+#target_link_libraries(karbondockersplugin karboncommon kowidgets karbonui )
 #
 #install(TARGETS karbondockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 #

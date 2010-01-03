@@ -46,7 +46,7 @@ kde4_add_ui_files(karbon_tools_PART_SRCS
 
 kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
 
-target_link_libraries(karbontools karboncommon karbonui kocolorwidgets)
+target_link_libraries(karbontools karboncommon karbonui kowidgets)
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
