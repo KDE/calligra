@@ -68,7 +68,9 @@ public:
     KoGenStyles *styles;
     QList<QString> cellStyles;
     QList<QString> rowStyles;
+    QList<QString> rowCellStyles;
     QList<QString> colStyles;
+    QList<QString> colCellStyles;
     QList<QString> sheetStyles;
 
     bool createStyles(KoOdfWriteStore* store);
@@ -91,6 +93,7 @@ public:
     void processRowForStyle(Row* row, int repeat, KoXmlWriter* xmlWriter);
     void processCellForBody(Cell* cell, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
+    QString processCellFormat(Format* format, const QString& formula = QString());
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
 };
@@ -191,7 +194,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->styles = 0;
     d->cellStyles.clear();
     d->rowStyles.clear();
+    d->rowCellStyles.clear();
     d->colStyles.clear();
+    d->colCellStyles.clear();
     d->sheetStyles.clear();
 
     return KoFilter::OK;
@@ -495,7 +500,7 @@ void ExcelImport::Private::processColumnForBody(Column* column, int repeat, KoXm
     if (!xmlWriter) return;
 
     xmlWriter->startElement("table:table-column");
-    xmlWriter->addAttribute("table:default-style-name", "Default");
+    xmlWriter->addAttribute("table:default-cell-style-name", colCellStyles[columnFormatIndex]);
     xmlWriter->addAttribute("table:visibility", column->visible() ? "visible" : "collapse");
     if (repeat > 1) xmlWriter->addAttribute("table:number-columns-repeated", repeat);
     xmlWriter->addAttribute("table:style-name", colStyles[columnFormatIndex]);
@@ -515,6 +520,10 @@ void ExcelImport::Private::processColumnForStyle(Column* column, int /*repeat*/,
 
     QString styleName = styles->lookup(style, "co");
     colStyles.append(styleName);
+
+    Format format = column->format();
+    QString cellStyleName = processCellFormat(&format);
+    colCellStyles.append(cellStyleName);
 }
 
 void ExcelImport::Private::processRowForBody(Row* row, int /*repeat*/, KoXmlWriter* xmlWriter)
@@ -535,6 +544,7 @@ void ExcelImport::Private::processRowForBody(Row* row, int /*repeat*/, KoXmlWrit
     xmlWriter->startElement("table:table-row");
     xmlWriter->addAttribute("table:visibility", row->visible() ? "visible" : "collapse");
     xmlWriter->addAttribute("table:style-name", rowStyles[rowFormatIndex]);
+    xmlWriter->addAttribute("table:default-cell-style-name", rowCellStyles[rowFormatIndex]);
     rowFormatIndex++;
 
     for (int i = 0; i <= lastCol; i++) {
@@ -570,6 +580,10 @@ void ExcelImport::Private::processRowForStyle(Row* row, int repeat, KoXmlWriter*
 
     QString styleName = styles->lookup(style, "ro");
     rowStyles.append(styleName);
+
+    Format format = row->format();
+    QString cellStyleName = processCellFormat(&format);
+    rowCellStyles.append(cellStyleName);
 
     for (int i = 0; i <= lastCol; i++) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
@@ -993,14 +1007,18 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
 
     // TODO optimize with hash table
     Format format = cell->format();
+    QString styleName = processCellFormat(&format, cellFormula(cell));
+    cellStyles.append(styleName);
+}
 
+QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
+{
     // handle data format, e.g. number style
     QString refName;
-    QString valueFormat = string(format.valueFormat());
+    QString valueFormat = string(format->valueFormat());
     if (valueFormat != QString("General")) {
         refName = processValueFormat(valueFormat);
     } else {
-        const QString formula = cellFormula(cell);
         if(formula.startsWith("of:=")) { // special cases
             QRegExp roundRegExp( "^of:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
             if (roundRegExp.indexIn(formula) >= 0) {
@@ -1027,9 +1045,9 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     if (!refName.isEmpty())
         style.addAttribute("style:data-style-name", refName);
 
-    processFormat(&format, style);
+    processFormat(format, style);
     QString styleName = styles->lookup(style, "ce");
-    cellStyles.append(styleName);
+    return styleName;
 }
 
 QString convertColor(const Color& color)
