@@ -3140,7 +3140,8 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         const ColumnFormat* column = columnFormat(i);
 //         kDebug(36003) << "Sheet::saveOdfColRowCell: first col loop:"
 //                       << "i:" << i
-//                       << "column:" << (column ? column->column() : 0);
+//                       << "column:" << (column ? column->column() : 0)
+//                       << "default:" << (column ? column->isDefault() : false);
 
         //style default layout for column
         const Style style = tableContext.columnDefaultStyles.value(i);
@@ -3171,9 +3172,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                     if (!nextColumn && !nextStyleColumnIndex)
                         count = maxCols - i + 1;
                     else if (nextColumn && (!nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex))
-                        count = nextColumn->column() - i + 1;
+                        count = nextColumn->column() - i;
                     else
-                        count = nextStyleColumnIndex - i + 1;
+                        count = nextStyleColumnIndex - i;
                 }
                 // otherwise we just stop here to process the adjacent
                 // column in the next iteration of the outer loop
