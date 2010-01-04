@@ -2070,7 +2070,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
             //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
         }
     }
-    if (!match) {
+    if (!match && ns) {
         ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
         foreach (ResourceRequest *r, lst) {
             Resource *res = r->resource();
