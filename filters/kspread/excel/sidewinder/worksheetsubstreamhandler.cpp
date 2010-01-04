@@ -1112,21 +1112,24 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
         case FormulaToken::RefErr:
         case FormulaToken::AreaErr:
         case FormulaToken::MemErr:
+        case FormulaToken::RefErr3d:
+        case FormulaToken::AreaErr3d:
             stack.push_back(UString("#REF!"));
             break;
 
+        case FormulaToken::ErrorCode:
+            stack.push_back(token.value().asString());
+            break;
+            
         case 0: break; // NOPE
 
         case FormulaToken::NatFormula:
         case FormulaToken::Sheet:
         case FormulaToken::EndSheet:
-        case FormulaToken::ErrorCode:
         case FormulaToken::MemNoMem:
         case FormulaToken::MemFunc:
         case FormulaToken::MemAreaN:
         case FormulaToken::MemNoMemN:
-        case FormulaToken::RefErr3d:
-        case FormulaToken::AreaErr3d:
         default:
             // FIXME handle this !
             std::cout << "Unhandled token=" << token.idAsString() << std::endl;
