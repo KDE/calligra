@@ -282,7 +282,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_verticalHeader->setCurrentRow(-1);
     connect(m_verticalHeader, SIGNAL(rowPressed(uint)), this, SLOT(moveToRecordRequested(uint)));
     connect(m_verticalHeader, SIGNAL(rowHighlighted(int)), this, SLOT(setHighlightedRow(int)));
-    connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotContentsMoving(int,int)));
+/* not needed after #2010-01-05 fix    connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotContentsMoving(int,int)));*/
 
     setMargins(
         qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
@@ -621,7 +621,9 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
         if (colp == -1)
             continue; //invisible column?
         int colw = columnWidth(c);
-        int translx = colp - cx + contentsX();
+//        kDebug() << "c:" << c << "colp:" << colp << "cx:" << cx << "contentsX():" << contentsX() << "colw:" << colw;
+//(js #2010-01-05) breaks rendering:       int translx = colp - cx + contentsX();
+        int translx = colp;
 
         // Translate painter and draw the cell
         const QTransform oldTr( pb->worldTransform() );
@@ -781,7 +783,7 @@ bool KexiTableView::isDefaultValueDisplayed(KexiDB::RecordData *record, int col,
 
 void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print)
 {
-//kDebug() << "col/row:" << col << row << "rect:" << cr;
+kDebug() << "col/row:" << col << row << "rect:" << cr << p->worldMatrix();
     p->save();
     Q_UNUSED(print);
     int w = cr.width();
@@ -821,7 +823,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
     QString txt; //text to draw
 
     if (record == m_insertItem) {
-        kDebug() << "we're at INSERT row...";
+        //kDebug() << "we're at INSERT row...";
     }
 
     KexiTableViewColumn *tvcol = m_data->column(col);
@@ -2636,11 +2638,12 @@ int KexiTableView::lastVisibleRow() const
     return rowAt(contentsY());
 }
 
+/* not needed after #2010-01-05 fix
 void KexiTableView::slotContentsMoving(int x, int y)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
     updateContents(); // (js) needed in Qt 4, no idea why, this fix consumed me hours
-}
+}*/
 
 #include "kexitableview.moc"

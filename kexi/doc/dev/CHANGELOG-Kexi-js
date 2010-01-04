@@ -58,6 +58,10 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2010-01-04
+Table View
+*fix coordinate for painting, this also makes more elegant fix compared to the yesterdays patch
+
 2010-01-02..03
 Tests
 *make kexidbtest create kexi-compliant databases (i.e. using KexiProject class)
