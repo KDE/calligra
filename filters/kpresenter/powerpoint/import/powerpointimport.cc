@@ -2184,6 +2184,19 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             elementWriter.startElement("text:list-level-style-number");
         } else {
             elementWriter.startElement("text:list-level-style-bullet");
+            // every text:list-level-style-bullet must have a text:bullet-char
+            const char bullet[4] = {0xe2, 0x97, 0x8f, 0};
+            QString bulletChar(QString::fromUtf8(bullet)); //  "●";
+            if (pf && i == pf->textPFException()->indent() &&
+                    pf->textPFException()->hasBulletChar()) {
+                bulletChar = pf->textPFException()->bulletChar();
+            } else if (!isListLevelStyleNumber
+                    && levelPF && levelPF->hasBulletChar()) {
+                bulletChar = levelPF->bulletChar();
+            } else {
+                QString::fromUtf8(bullet);//  "●";
+            }
+            elementWriter.addAttribute("text:bullet-char", bulletChar);
         }
 
         elementWriter.addAttribute("text:level", i + 1);
@@ -2204,33 +2217,18 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             }
 
             elementWriter.addAttribute("style:num-format", numFormat);
-
-        } else {
-            if (pf && i == pf->textPFException()->indent() &&
-                    pf->textPFException()->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char",
-                        pf->textPFException()->bulletChar());
-            } else if (!isListLevelStyleNumber
-                    && levelPF && levelPF->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char",
-                        levelPF->bulletChar());
-            }
         }
-
 
         elementWriter.startElement("style:list-level-properties");
 
         if (pf && i == pf->textPFException()->indent() &&
                 pf->textPFException()->hasSpaceBefore()) {
             elementWriter.addAttribute("text:space-before",
-                                       paraSpacingToCm(pf->textPFException()->spaceBefore()));
-        } else {
-            if (levelPF && levelPF->hasSpaceBefore()) {
-                elementWriter.addAttribute("text:space-before",
-                                           paraSpacingToCm(levelPF->spaceBefore()));
-            }
+                    paraSpacingToCm(pf->textPFException()->spaceBefore()));
+        } else if (levelPF && levelPF->hasSpaceBefore()) {
+            elementWriter.addAttribute("text:space-before",
+                    paraSpacingToCm(levelPF->spaceBefore()));
         }
-
         elementWriter.endElement(); // style:list-level-properties
 
         elementWriter.startElement("style:text-properties");
