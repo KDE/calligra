@@ -48,6 +48,7 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 #define UNICODE_EUR 0x20AC
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
+static const int minimumColumnCount = 256;
 
 // UString -> QConstString conversion. Use  to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
@@ -503,9 +504,9 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
 
     // in odf default-cell-style's only apply to cells (or at least columns) that are present in the file in xls though
     // row styles should apply to all cells in that row, so make sure to always write out 256 columns
-    if (sheet->maxColumn() < 255) {
+    if (sheet->maxColumn() < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
-        xmlWriter->addAttribute("table:number-columns-repeated", 255 - sheet->maxColumn());
+        xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - sheet->maxColumn());
         xmlWriter->endElement();
     }
 
