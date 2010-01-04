@@ -380,6 +380,18 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_model( new DateTableDataModel( this ) )
 {
+    setWhatsThis( i18nc( "@info:whatsthis", 
+        "<title>Work & Vacation Editor</title>"
+        "<para>"
+        "A calendar defines availablility for resources or tasks of type <emphasis>Duration</emphasis>. "
+        "A calendar can be specific to a resource or task, or shared by multiple resources or tasks. "
+        "A day can be of type <emphasis>Undefined</emphasis>, <emphasis>Non-working day</emphasis> or <emphasis>Working day</emphasis>. "
+        "A working day has one or more work intervals defined. "
+        "A calendar can have sub calendars. If a day is undefined in a calendar, the parent calendar is checked. "
+        "An <emphasis>Undefined</emphasis> day defaults to <emphasis>Non-working</emphasis> if used by a resource, or <emphasis>available all day</emphasis> if used by a task. "
+        "</para>"
+        ) );
+
     setupGui();
     
     QVBoxLayout *l = new QVBoxLayout( this );

@@ -121,6 +121,16 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
+    setWhatsThis( i18nc( "@info:whatsthis", 
+        "<title>Resource Editor</title>"
+        "<para>"
+        "Resources are origanized in a Resource Breakdown Structure. "
+        "Resources can be of type <emphasis>Work</emphasis> or <emphasis>Material</emphasis>."
+        "When assigned to a task, a resource of type <emphasis>Work</emphasis> can affect the duration of the task, while a resource of type <emphasis>Material</emphasis> does not. "
+        "A resource must refer to a <emphasis>Calendar</emphasis> that defines the working hours."
+        "</para>"
+        ) );
+
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new ResourceTreeView( this );
