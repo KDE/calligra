@@ -2169,7 +2169,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     }
 
     for (int i = 0;i < indent + 1;i++) {
-        TextCFException *levelCF = masterTextCFException(type, i);
+        //TextCFException *levelCF = masterTextCFException(type, i);
         TextPFException *levelPF = masterTextPFException(type, i);
 
         if (prop9) {
@@ -2177,14 +2177,13 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             std::cout << "\npf9 :" << pf9;
         }
 
-        if (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme()) {
+        bool isListLevelStyleNumber =
+                (levelPF && (levelPF->hasBulletFont() || levelPF->bulletFont()))
+                || (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme());
+        if (isListLevelStyleNumber) {
             elementWriter.startElement("text:list-level-style-number");
         } else {
-            if (levelPF && (levelPF->hasBulletFont() || levelPF->bulletFont())) {
-                elementWriter.startElement("text:list-level-style-number");
-            } else {
-                elementWriter.startElement("text:list-level-style-bullet");
-            }
+            elementWriter.startElement("text:list-level-style-bullet");
         }
 
         elementWriter.addAttribute("text:level", i + 1);
@@ -2193,7 +2192,8 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             QString numFormat = 0;
             QString numSuffix = 0;
             QString numPrefix = 0;
-            processTextAutoNumberScheme(pf9->scheme(), numFormat, numSuffix, numPrefix);
+            processTextAutoNumberScheme(pf9->scheme(), numFormat, numSuffix,
+                numPrefix);
 
             if (numPrefix != 0) {
                 elementWriter.addAttribute("style:num-prefix", numPrefix);
@@ -2208,9 +2208,12 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         } else {
             if (pf && i == pf->textPFException()->indent() &&
                     pf->textPFException()->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char", pf->textPFException()->bulletChar());
-            } else if (levelPF && levelPF->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
+                elementWriter.addAttribute("text:bullet-char",
+                        pf->textPFException()->bulletChar());
+            } else if (!isListLevelStyleNumber
+                    && levelPF && levelPF->hasBulletChar()) {
+                elementWriter.addAttribute("text:bullet-char",
+                        levelPF->bulletChar());
             }
         }
 
