@@ -772,6 +772,11 @@ Sheet* Map::sheet(int index) const
     return d->lstSheets.value(index);
 }
 
+int Map::indexOf(Sheet* sheet) const
+{
+    return d->lstSheets.indexOf(sheet);
+}
+
 QList<Sheet*>& Map::sheetList() const
 {
     return d->lstSheets;

@@ -181,6 +181,7 @@ SET (kspreadcommon_LIB_SRCS
 	GenValidationStyle.cpp
 	Localization.cpp
 	Map.cpp
+    SheetAccessModel.cpp
 	NamedAreaManager.cpp
 	Number.cpp
 	PageManager.cpp

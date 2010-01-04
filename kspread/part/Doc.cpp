@@ -93,6 +93,7 @@
 #include "StyleManager.h"
 #include "Util.h"
 #include "View.h"
+#include "SheetAccessModel.h"
 
 // chart shape
 #include "kchart/shape/ChartShape.h"
@@ -155,6 +156,8 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
     // default document properties
     d->syntaxVersion = CURRENT_SYNTAX_VERSION;
+
+    d->dataCenterMap["SheetAccessModel"] = new SheetAccessModel( d->map );
 
     // Init chart shape factory with KSpread's specific configuration panels.
     QList<KoShapeConfigFactory*> panels = ChartDialog::panels(this);
