@@ -382,55 +382,34 @@ static QString rangeIntToString( int i )
 // static
 QVector<QRect> CellRegion::stringToRegion( const QString &string )
 {
-    if ( string.isEmpty() )
-        return QVector<QRect>();
-    
     const bool isPoint = !string.contains( ':' );
-    //kDebug(350001) << "CellRegion::stringToRegion():" << string;
-    QString s = string;
-    QStringList regionStrings = isPoint ? s.split( '.' ) : s.remove( ':' ).split( '.' );
-    QPoint topLeftPoint;
-    QPoint bottomRightPoint;
 
-    if ( ( isPoint && regionStrings.size() < 2 )
-         || ( !isPoint && regionStrings.size() < 3 ) )
-    {
-        qWarning() << "1) CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
+    // A dollar sign before a part of the address means that this part
+    // is absolute. This is irrelevant for us, however, thus we can remove
+    // all occurences of '$', and handle relative and absolute addresses in
+    // the same way.
+    // See ODF specs $8.3.1 "Referencing Table Cells"
+    QString searchStr = QString( string ).remove( "$" );
+    QString pointRegEx = "(.*)\\.([A-Z]+)([0-9]+)";
+    QRegExp regEx;
+    if ( isPoint )
+        regEx = QRegExp( pointRegEx );
+    else
+        regEx = QRegExp ( pointRegEx + ":" + pointRegEx );
+
+    // The region string is invalid (e.g. empty)
+    if ( regEx.indexIn( searchStr ) < 0 )
         return QVector<QRect>();
-    }
 
-    const QString tableName = regionStrings[0];
+    // FIXME: How should we handle table names? Is it possible for an address
+    // to contain two points that reference different tables?
 
-    const QString topLeft = regionStrings[1];
-    QStringList l = topLeft.split( '$' );
-    if ( l.size() < 3 ) {
-        //kDebug(350001) << topLeft;
-        qWarning() << "2) CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
-        return QVector<QRect>();
-    }
+    QPoint topLeft( rangeStringToInt( regEx.cap( 2 ) ), regEx.cap(3).toInt() );
+    QPoint bottomRight( rangeStringToInt( regEx.cap( 5 ) ), regEx.cap(6).toInt() );
 
-    int column = rangeStringToInt( l[1] );
-    int row = l[2].toInt() - 1;
-    topLeftPoint = QPoint( column, row );
-
-    if ( isPoint ) {
-        //kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
-        return QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
-    }
-
-    const QString bottomRight = regionStrings[2];
-    l = bottomRight.split( '$' );
-    if ( l.size() < 3 ) {
-        qWarning() << "CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
-        return QVector<QRect>();
-    }
-    column = rangeStringToInt( l[1] );
-    row = l[2].toInt() - 1;
-    bottomRightPoint = QPoint( column, row );
-
-    //kDebug(350001) << "///" << QRect( topLeftPoint, bottomRightPoint );
-
-    return QVector<QRect>( 1, QRect( topLeftPoint, bottomRightPoint ) );
+    if ( isPoint )
+        return QVector<QRect>( 1, QRect( topLeft, QSize( 1, 1 ) ) );
+    return QVector<QRect>( 1, QRect( topLeft, bottomRight ) );
 }
 
 int CellRegion::rangeCharToInt( char c )     
