@@ -2115,6 +2115,8 @@ bool Sheet::loadSheetStyleFormat(KoXmlElement *style)
             hright = getPart(part);
             kDebug(36003) << "Header right:" << hright;
         }
+        //If Header doesn't have region tag add it to Left
+        hleft.append(getPart(header));
     }
     //TODO implement it under kspread
     KoXmlNode headerleft = KoXml::namedItemNS(*style, KoXmlNS::style, "header-left");
@@ -2153,6 +2155,8 @@ bool Sheet::loadSheetStyleFormat(KoXmlElement *style)
             fright = getPart(part);
             kDebug(36003) << "Footer right:" << fright;
         }
+        //If Footer doesn't have region tag add it to Left
+        fleft.append(getPart(footer));
     }
 
     print()->setHeadFootLine(hleft, hmiddle, hright,

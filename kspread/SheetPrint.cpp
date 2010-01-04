@@ -433,16 +433,18 @@ void SheetPrint::printRect(QPainter& painter, const QPointF& topLeft,
 void SheetPrint::printHeaderFooter(QPainter &painter, int pageNo)
 {
     double w;
-    double headFootDistance = MM_TO_POINT(10.0 /*mm*/);
+    double headFootDistance = MM_TO_POINT(5.0 /*mm*/);
+    double leftMarginDistance = MM_TO_POINT(5.0 /*mm*/);
     QFont font("Times");
     font.setPointSizeF(/* Font size of 10 */ 10.0);
     painter.setFont(font);
     QFontMetrics fm = painter.fontMetrics();
+    const double scale = POINT_TO_INCH(painter.device()->logicalDpiY());
 
     // print head line left
     w = fm.width(headLeft(pageNo, m_pSheet->sheetName()));
     if (w > 0)
-        painter.drawText((int)paperLayout().leftMargin, (int)headFootDistance,
+        painter.drawText((int)leftMarginDistance, (int)headFootDistance,
                          headLeft(pageNo, m_pSheet->sheetName()));
     // print head line middle
     w = fm.width(headMid(pageNo, m_pSheet->sheetName()));
@@ -454,26 +456,26 @@ void SheetPrint::printHeaderFooter(QPainter &painter, int pageNo)
     w = fm.width(headRight(pageNo, m_pSheet->sheetName()));
     if (w > 0)
         painter.drawText((int)(paperLayout().leftMargin + m_settings->printWidth() - w),
-                         (int)headFootDistance,
+                         (int)headFootDistance ,
                          headRight(pageNo, m_pSheet->sheetName()));
 
     // print foot line left
     w = fm.width(footLeft(pageNo, m_pSheet->sheetName()));
     if (w > 0)
-        painter.drawText((int)paperLayout().leftMargin,
-                         (int)(paperLayout().height - headFootDistance),
+        painter.drawText((int)leftMarginDistance,
+                         (int)(m_settings->printHeight() * scale  + headFootDistance),
                          footLeft(pageNo, m_pSheet->sheetName()));
     // print foot line middle
     w = fm.width(footMid(pageNo, m_pSheet->sheetName()));
     if (w > 0)
-        painter.drawText((int)(paperLayout().leftMargin + (m_settings->printWidth() - w) / 2.0),
-                         (int)(paperLayout().height - headFootDistance),
+        painter.drawText((int)(leftMarginDistance + (paperLayout().width - w) / 2.0),
+                         (int)(m_settings->printHeight() * scale  + headFootDistance),
                          footMid(pageNo, m_pSheet->sheetName()));
     // print foot line right
     w = fm.width(footRight(pageNo, m_pSheet->sheetName()));
     if (w > 0)
-        painter.drawText((int)(paperLayout().leftMargin + m_settings->printWidth() - w),
-                         (int)(paperLayout().height - headFootDistance),
+        painter.drawText((int)(leftMarginDistance + paperLayout().width - w),
+                         (int)(m_settings->printHeight() * scale  + headFootDistance),
                          footRight(pageNo, m_pSheet->sheetName()));
 }
 

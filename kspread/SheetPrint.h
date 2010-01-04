@@ -330,6 +330,11 @@ public:
     */
     bool pageNeedsPrinting(QRect& page_range);
 
+    /**
+     * Prints the header and footer on a page
+     */
+    void printHeaderFooter(QPainter &painter, int pageNo);
+
 signals:
     void sig_updateView(Sheet *_sheet);
 
@@ -363,11 +368,6 @@ private:
     void printRect(QPainter &painter, const QPointF& topLeft,
                    const QRect& printRect, const QRectF& view,
                    QRegion &clipRegion);
-
-    /**
-     * Prints the header and footer on a page
-     */
-    void printHeaderFooter(QPainter &painter, int pageNo);
 
     /**
      * Returns the iterator for the column in the newPage list for columns

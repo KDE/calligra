@@ -28,6 +28,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
+#include "SheetPrint.h"
 
 #include "part/dialogs/SheetSelectPage.h"
 
@@ -224,6 +225,7 @@ QRectF PrintJob::preparePage(int pageNumber)
         painter().translate(0.0, offset * scale);
         pageRect.moveTop(offset); // scale will be applied below
     }
+    sheet->print()->printHeaderFooter(painter(), sheetPageNumber);
     return QRectF(pageRect.left() * scale, pageRect.top() * scale,
                   pageRect.width() * scale, pageRect.height() * scale);
 }
