@@ -63,6 +63,7 @@ public:
 
     // shared-string table
     std::vector<UString> stringTable;
+    std::vector<std::map<unsigned, FormatFont> > formatRunsTable;
 
     // color table (from Palette record)
     std::vector<Color> colorTable;
@@ -124,6 +125,14 @@ UString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
         return d->stringTable[index];
     else
         return UString();
+}
+
+std::map<unsigned, FormatFont> GlobalsSubStreamHandler::formatRunsFromSST(unsigned index) const
+{
+    if (index < d->formatRunsTable.size())
+        return d->formatRunsTable[index];
+    else
+        return std::map<unsigned, FormatFont>();
 }
 
 unsigned GlobalsSubStreamHandler::fontCount() const
@@ -658,9 +667,16 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
     if (!record) return;
 
     d->stringTable.clear();
+    d->formatRunsTable.clear();
     for (unsigned i = 0; i < record->count();i++) {
         UString str = record->stringAt(i);
         d->stringTable.push_back(str);
+        std::map<unsigned, unsigned> formatRunsRaw = record->formatRunsAt(i);
+        std::map<unsigned, FormatFont> formatRuns;
+        for (std::map<unsigned, unsigned>::iterator it = formatRunsRaw.begin(); it != formatRunsRaw.end(); ++it) {
+            formatRuns[it->first] = convertedFont(it->second);
+        }
+        d->formatRunsTable.push_back(formatRuns);
     }
 }
 

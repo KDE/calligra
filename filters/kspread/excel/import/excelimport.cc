@@ -58,6 +58,14 @@ inline QString string(const Swinder::UString& str)
     return QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
 }
 
+namespace Swinder {
+static inline uint qHash(const Swinder::FormatFont& font)
+{
+    // TODO: make this a better hash
+    return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
+}
+}
+
 using namespace Swinder;
 
 class ExcelImport::Private
@@ -76,6 +84,7 @@ public:
     QList<QString> colStyles;
     QList<QString> colCellStyles;
     QList<QString> sheetStyles;
+    QHash<FormatFont, QString> fontStyles;
 
     bool createStyles(KoOdfWriteStore* store);
     bool createContent(KoOdfWriteStore* store);
@@ -102,6 +111,7 @@ public:
     QString processCellFormat(Format* format, const QString& formula = QString());
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
+    void processFontFormat(const FormatFont& font, KoGenStyle& style);
 };
 
 
@@ -1147,12 +1157,45 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
                 xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
             }
         }
-    } else if (value.isString()) {
+    } else if (value.isText()) {
         QString str = string(value.asString());
         xmlWriter->addAttribute("office:value-type", "string");
-        xmlWriter->addAttribute("office:string-value", str);
-        xmlWriter->startElement("text:p");
-        xmlWriter->addTextNode(str);
+        if (value.isString())
+            xmlWriter->addAttribute("office:string-value", str);
+
+        xmlWriter->startElement("text:p", false);
+
+        if (value.isString())
+            xmlWriter->addTextNode(str);
+        else {
+            // rich text
+            std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
+
+            // add sentinel to list of format runs
+            formatRuns[str.length()] = cell->format().font();
+
+            unsigned index = 0;
+            QString style;
+            for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
+                if (!style.isEmpty() && it->first > index) {
+                    xmlWriter->startElement("text:span");
+                    xmlWriter->addAttribute("text:style-name", style);
+                }
+                if (it->first > index)
+                    xmlWriter->addTextNode(str.mid(index, it->first - index));
+                if (!style.isEmpty() && it->first > index) {
+                    xmlWriter->endElement(); // text:span
+                }
+
+                index = it->first;
+
+                if (it->second == cell->format().font())
+                    style = "";
+                else {
+                    style = fontStyles.value(it->second);
+                }
+            }
+        }
 
         if (cell->hasHyperlink()) {
             QString displayName = string(cell->hyperlinkDisplayName());
@@ -1191,6 +1234,17 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     Format format = cell->format();
     QString styleName = processCellFormat(&format, cellFormula(cell));
     cellStyles.append(styleName);
+
+    if (cell->value().isRichText()) {
+        std::map<unsigned, FormatFont> formatRuns = cell->value().formatRuns();
+        for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
+            if (fontStyles.contains(it->second)) continue;
+            KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
+            processFontFormat(it->second, style);
+            QString styleName = styles->lookup(style, "T");
+            fontStyles[it->second] = styleName;
+        }
+    }
 }
 
 QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
@@ -1273,6 +1327,39 @@ void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
     }
 }
 
+void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle& style)
+{
+    if (font.isNull()) return;
+
+    if (font.bold())
+        style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
+
+    if (font.italic())
+        style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
+
+    if (font.underline()) {
+        style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
+        style.addProperty("style:text-underline-width", "auto", KoGenStyle::TextType);
+        style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
+    }
+
+    if (font.strikeout())
+        style.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
+
+    if (font.subscript())
+        style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
+
+    if (font.superscript())
+        style.addProperty("style:text-position", "super", KoGenStyle::TextType);
+
+    if (!font.fontFamily().isEmpty())
+        style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
+
+    style.addPropertyPt("fo:font-size", font.fontSize(), KoGenStyle::TextType);
+
+    style.addProperty("fo:color", convertColor(font.color()), KoGenStyle::TextType);
+}
+
 void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
 {
     if (!format) return;
@@ -1282,35 +1369,7 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     FormatBackground back = format->background();
     FormatBorders borders = format->borders();
 
-    if (!font.isNull()) {
-        if (font.bold())
-            style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
-
-        if (font.italic())
-            style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
-
-        if (font.underline()) {
-            style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
-            style.addProperty("style:text-underline-width", "auto", KoGenStyle::TextType);
-            style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
-        }
-
-        if (font.strikeout())
-            style.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
-
-        if (font.subscript())
-            style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
-
-        if (font.superscript())
-            style.addProperty("style:text-position", "super", KoGenStyle::TextType);
-
-        if (!font.fontFamily().isEmpty())
-            style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
-
-        style.addPropertyPt("fo:font-size", font.fontSize(), KoGenStyle::TextType);
-
-        style.addProperty("fo:color", convertColor(font.color()), KoGenStyle::TextType);
-    }
+    processFontFormat(font, style);
 
     if (!align.isNull()) {
         switch (align.alignY()) {

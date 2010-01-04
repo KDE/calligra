@@ -97,6 +97,7 @@ public:
     bool richText;
     UString str;
     unsigned size;
+    std::map<unsigned, unsigned> formatRuns;
 };
 
 EString::EString()
@@ -156,6 +157,16 @@ UString EString::str() const
 void EString::setStr(const UString& str)
 {
     d->str = str;
+}
+
+std::map<unsigned, unsigned> EString::formatRuns() const
+{
+    return d->formatRuns;
+}
+
+void EString::setFormatRuns(const std::map<unsigned, unsigned>& formatRuns)
+{
+    d->formatRuns = formatRuns;
 }
 
 unsigned EString::size() const
@@ -219,11 +230,22 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
         }
     }
 
+    // read format runs
+    std::map<unsigned, unsigned> formatRunsMap;
+    for (unsigned k = 0; k < formatRuns; k++) {
+        unsigned index = readU16(data + offset);
+        unsigned font = readU16(data + offset + 2);
+        if (index < len)
+            formatRunsMap[index] = font;
+        offset += 4;
+    }
+
     EString result;
     result.setUnicode(unicode);
     result.setRichText(richText);
     result.setSize(size);
     result.setStr(str);
+    result.setFormatRuns(formatRunsMap);
 
     return result;
 }
@@ -1222,6 +1244,7 @@ public:
     unsigned total;
     unsigned count;
     std::vector<UString> strings;
+    std::vector<std::map<unsigned, unsigned> > formatRuns;
 };
 
 SSTRecord::SSTRecord():
@@ -1268,6 +1291,7 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
         EString es = EString::fromUnicodeString(data + offset, true, size - offset, nextContinuePos - offset);
         d->strings.push_back(es.str());
+        d->formatRuns.push_back(es.formatRuns());
         offset += es.size();
         while (nextContinuePos < offset) nextContinuePos = continuePositions[++nextContinuePosIdx];
     }
@@ -1290,6 +1314,12 @@ UString SSTRecord::stringAt(unsigned index) const
 {
     if (index >= count()) return UString::null;
     return d->strings[ index ];
+}
+
+std::map<unsigned, unsigned> SSTRecord::formatRunsAt(unsigned index) const
+{
+    if (index >= count()) return std::map<unsigned, unsigned>();
+    return d->formatRuns[ index ];
 }
 
 void SSTRecord::dump(std::ostream& out) const

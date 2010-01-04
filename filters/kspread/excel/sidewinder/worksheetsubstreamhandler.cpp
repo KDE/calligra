@@ -526,10 +526,14 @@ void WorksheetSubStreamHandler::handleLabelSST(LabelSSTRecord* record)
     unsigned xfIndex = record->xfIndex();
 
     UString str = d->globals->stringFromSST(index);
+    std::map<unsigned, FormatFont> formatRuns = d->globals->formatRunsFromSST(index);
 
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
-        cell->setValue(Value(str));
+        if (formatRuns.size())
+            cell->setValue(Value(str, formatRuns));
+        else
+            cell->setValue(Value(str));
         cell->setFormat(d->globals->convertedFormat(xfIndex));
     }
 }

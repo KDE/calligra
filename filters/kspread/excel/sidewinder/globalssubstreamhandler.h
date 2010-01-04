@@ -21,6 +21,7 @@
 #define SWINDER_GLOBALSSUBSTREAMHANDLER_H
 
 #include <vector>
+#include <map>
 
 #include "substreamhandler.h"
 #include "ustring.h"
@@ -60,6 +61,7 @@ public:
     unsigned version() const;
     Sheet* sheetFromPosition(unsigned position) const;
     UString stringFromSST(unsigned index) const;
+    std::map<unsigned, FormatFont> formatRunsFromSST(unsigned index) const;
 
     unsigned fontCount() const;//
     FontRecord fontRecord(unsigned index) const;  //

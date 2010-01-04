@@ -278,7 +278,6 @@ private:
     Private *d;
 };
 
-
 /**
  * Defines alignment information for cell format.
  *

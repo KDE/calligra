@@ -57,6 +57,10 @@ public:
 
     void setStr(const UString& str);
 
+    std::map<unsigned, unsigned> formatRuns() const;
+
+    void setFormatRuns(const std::map<unsigned, unsigned>& formatRuns);
+
     // space allocate for the string, not length (use string.length() for that)
     unsigned size() const;
     void setSize(unsigned size);   // HACKS
@@ -450,7 +454,7 @@ public:
      * Returns true if this formula is a share formula.
      */
     bool isShared() const;
-    
+
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
     virtual const char* name() const {
@@ -821,6 +825,12 @@ public:
       If index is not valid, this will return UString::null.
      */
     UString stringAt(unsigned index) const;
+
+    /**
+      Returnsformat runs for the string at specified index.
+      Format runs are a mapping from character-index -> font index.
+     */
+    std::map<unsigned,unsigned> formatRunsAt(unsigned index) const;
 
     virtual const char* name() const {
         return "SST";

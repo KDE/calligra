@@ -21,7 +21,9 @@
 #define SWINDER_VALUE_H
 
 #include <iostream>
+#include <map>
 #include "ustring.h"
+#include "format.h"
 
 namespace Swinder
 {
@@ -50,6 +52,7 @@ public:
         Integer,
         Float,
         String,
+        RichText,
         CellRange, // not used yet
         Array,     // not used yet
         Error
@@ -109,6 +112,11 @@ public:
     explicit Value(const UString& s);
 
     /**
+     * Create a richtext value
+     */
+    Value(const UString& s, const std::map<unsigned, FormatFont>& formatRuns);
+
+    /**
      * Returns the type of the value.
      */
     Type type() const;
@@ -157,6 +165,20 @@ public:
     }
 
     /**
+     * Returns true if the type of this value is richtext.
+     */
+    bool isRichText() const {
+        return type() == RichText;
+    }
+
+    /**
+     * Returns true if the type of this value is string or richtext.
+     */
+    bool isText() const {
+        return type() == String || type() == RichText;
+    }
+
+    /**
      * Returns true if this value holds error information.
      */
     bool isError() const {
@@ -184,6 +206,11 @@ public:
      * Sets this value to string value.
      */
     void setValue(const UString& s);
+
+    /**
+     * Sets this value to richtext value.
+     */
+    void setValue(const UString& s, const std::map<unsigned, FormatFont>& formatRuns);
 
     /**
      * Sets this value to hold error message.
@@ -214,9 +241,16 @@ public:
     /**
      * Returns the string value of this value.
      *
-     * Call this function only if isString() returns true.
+     * Call this function only if isText() returns true.
      */
     UString asString() const;
+
+    /**
+     * Returns the format runs of this value.
+     *
+     * Call this function only if isRichText() returns true.
+     */
+    std::map<unsigned, FormatFont> formatRuns() const;
 
     /**
      * Returns error message associated with this value.

@@ -37,6 +37,7 @@ public:
     int i;
     double f;
     UString s;
+    std::map<unsigned, FormatFont> formatRuns;
 
     // create empty data
     ValueData() {
@@ -158,6 +159,13 @@ Value::Value(const UString& s)
     setValue(s);
 }
 
+// create a richtext value
+Value::Value(const UString& s, const std::map<unsigned, FormatFont>& formatRuns)
+{
+    d = ValueData::null();
+    setValue(s, formatRuns);
+}
+
 // assign value from other
 // shallow copy: only copy the data pointer
 Value& Value::assign(const Value& _value)
@@ -255,8 +263,28 @@ UString Value::asString() const
 {
     UString result;
 
-    if (type() == Value::String)
+    if (type() == Value::String || type() == Value::RichText)
         result = d->s;
+
+    return result;
+}
+
+// set the value as rich text
+void Value::setValue(const UString& s, const std::map<unsigned, FormatFont>& formatRuns)
+{
+    detach();
+    d->type = RichText;
+    d->s = s;
+    d->formatRuns = formatRuns;
+}
+
+// get the format runs
+std::map<unsigned, FormatFont> Value::formatRuns() const
+{
+    std::map<unsigned, FormatFont> result;
+
+    if (type() == Value::RichText)
+        result = d->formatRuns;
 
     return result;
 }
@@ -382,6 +410,9 @@ std::ostream& Swinder::operator<<(std::ostream& s, Swinder::Value value)
         break;
     case Value::String:
         s << "String: " << value.asString().ascii();
+        break;
+    case Value::RichText:
+        s << "RichText: " << value.asString().ascii();
         break;
     case Value::Error:
         s << "Error: " << value.errorMessage().ascii();
