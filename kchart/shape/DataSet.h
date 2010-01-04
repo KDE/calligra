@@ -30,6 +30,7 @@
 #include "ChartShape.h"
 #include "CellRegion.h"
 
+class KoOdfLoadingContext;
 
 namespace KChart {
 
@@ -168,6 +169,9 @@ public:
     KDChartModel *kdChartModel() const;
     
     void blockSignals( bool block );
+
+    bool loadOdf( const KoXmlElement &n,
+                  KoOdfLoadingContext &context );
 
 private:
     class Private;

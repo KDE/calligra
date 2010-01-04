@@ -67,14 +67,16 @@ public:
     QList<DataSet*>  removedDataSets;
     
     QVector<QRect>   selection;
-};
 
+    bool automaticDataSetCreation;
+};
 
 ChartProxyModel::Private::Private()
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
     dataDimensions     = 1;
+    automaticDataSetCreation = true;
 
     dataDirection      = Qt::Vertical; // Apparently the default is columns.
 }
@@ -100,6 +102,16 @@ ChartProxyModel::~ChartProxyModel()
 }
 
 
+void ChartProxyModel::setAutomaticDataSetCreation( bool enable )
+{
+    d->automaticDataSetCreation = enable;
+}
+
+bool ChartProxyModel::automaticDataSetCreation() const
+{
+    return d->automaticDataSetCreation;
+}
+
 void ChartProxyModel::beginResetModel()
 {
 #if QT_VERSION  >= 0x040600
@@ -118,6 +130,9 @@ void ChartProxyModel::endResetModel()
 
 void ChartProxyModel::rebuildDataMap()
 {
+    if ( !d->automaticDataSetCreation )
+        return;
+
     invalidateDataSets();
 
     QVector<QRect> dataRegions;
@@ -363,23 +378,8 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 void ChartProxyModel::setSourceModel( QAbstractItemModel *model,
                                       const QVector<QRect> &selection )
 {
-    // FIXME: Why are we not using ChartProxyModel::setSourceModel() here to connect all signals
-    // after setting d->selection ?
-    beginResetModel();
-
-    if ( sourceModel() )
-        disconnect( sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                    this,          SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-
-    connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-    
     d->selection = selection;
-
-    QAbstractProxyModel::setSourceModel( model );
-
-    rebuildDataMap();
-    endResetModel();
+    setSourceModel( model );
 }
 
 void ChartProxyModel::setSelection( const QVector<QRect> &selection )
@@ -424,6 +424,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
     beginResetModel();
+    invalidateDataSets();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
@@ -438,66 +439,13 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             DataSet *dataSet = new DataSet( this );
             dataSet->setNumber( d->dataSets.size() );
             d->dataSets.append( dataSet );
-
-            if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-                //qDebug() << "HAS style-name:" << n.attributeNS( KoXmlNS::chart, "style-name" );
-                styleStack.clear();
-                context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
-
-                //styleStack.setTypeProperties( "chart" );
-
-                // FIXME: Load Pie explode factors
-                //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
-                //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-
-                styleStack.setTypeProperties( "graphic" );
-
-                if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
-                    qDebug() << "HAS stroke";
-                    QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-                    if( stroke == "solid" || stroke == "dash" ) {
-                        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
-                        dataSet->setPen( pen );
-                    }
-                }
-
-                if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-                    //qDebug() << "HAS fill";
-                    QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-                    QBrush brush;
-                    if ( fill == "solid" || fill == "hatch" ) {
-                        brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
-                    } else if ( fill == "gradient" ) {
-                        brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
-                    } else if ( fill == "bitmap" )
-                        brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
-                    dataSet->setBrush( brush );
-                } else {
-                    dataSet->setColor( defaultDataSetColor( dataSet->number() ) );
-                }
-            }
-
-            if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
-                const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
-                dataSet->setYDataRegionString( region );
-            }
-            if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
-                const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
-                dataSet->setLabelDataRegionString( region );
-            }
-
-            KoXmlElement m;
-            forEachElement ( m, n ) {
-                if ( m.namespaceURI() != KoXmlNS::chart )
-                    continue;
-                // FIXME: Load data points
-            }
+            dataSet->loadOdf( n, context.odfLoadingContext() );
         } else {
             qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }
     }
 
-    rebuildDataMap();
+    //rebuildDataMap();
     endResetModel();
 
     styleStack.restore();
@@ -838,6 +786,8 @@ void ChartProxyModel::invalidateDataSets()
             // do not need to propagate these events to any models.
             dataSet->attachedAxis()->detachDataSet( dataSet, true );
         }
+        d->dataSets.removeAll( dataSet );
+        d->removedDataSets.append( dataSet );
     }
 }
 

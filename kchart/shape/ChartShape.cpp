@@ -995,6 +995,13 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
+    // Invalidate all data sets before we new load data sets from ODF
+    // and *before* we delete existing axes.
+    proxyModel()->invalidateDataSets();
+
+    // When loading from ODF, all data sets are added explicitly.
+    proxyModel()->setAutomaticDataSetCreation( false );
+
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );

@@ -53,6 +53,9 @@ public slots:
                                  const QVector<QRect> &selection );
 
     void setSelection( const QVector<QRect> &selection );
+    
+    void setAutomaticDataSetCreation( bool enable );
+    bool automaticDataSetCreation() const;
 
     /**
     * Load series from ODF
@@ -97,6 +100,10 @@ public slots:
     QList<DataSet*> dataSets() const;
 
     void invalidateDataSets();
+    /**
+     * Discards old and creates new data sets from the current region selection
+     * if and only if automaticDataSetCreation() returns true.
+     */
     void rebuildDataMap();
 
 signals:

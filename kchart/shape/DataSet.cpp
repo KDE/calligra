@@ -44,6 +44,12 @@
 #include "Axis.h"
 #include "PlotArea.h"
 
+// KOffice
+#include <KoXmlNS.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoXmlReader.h>
+#include <KoOdfLoadingContext.h>
+
 
 using namespace KChart;
 
@@ -824,4 +830,62 @@ KDChartModel *DataSet::kdChartModel() const
 void DataSet::blockSignals( bool block )
 {
     d->blockSignals = block;
+}
+
+bool DataSet::loadOdf( const KoXmlElement &n,
+                       KoOdfLoadingContext &context )
+{
+
+    KoStyleStack &styleStack = context.styleStack();
+
+    if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        styleStack.clear();
+        context.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+        //styleStack.setTypeProperties( "chart" );
+
+        // FIXME: Load Pie explode factors
+        //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
+        //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
+
+        styleStack.setTypeProperties( "graphic" );
+
+        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
+            QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+            if( stroke == "solid" || stroke == "dash" ) {
+                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.stylesReader() );
+                setPen( pen );
+            }
+        }
+
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+            QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+            QBrush brush;
+            if ( fill == "solid" || fill == "hatch" ) {
+                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, context.stylesReader() );
+            } else if ( fill == "gradient" ) {
+                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.stylesReader(), QSizeF( 5.0, 60.0 ) );
+            } else if ( fill == "bitmap" )
+                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context, QSizeF( 5.0, 60.0 ) );
+            setBrush( brush );
+        } else {
+            setColor( defaultDataSetColor( number() ) );
+        }
+    }
+
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
+        const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        setYDataRegionString( region );
+    }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
+        const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
+        setLabelDataRegionString( region );
+    }
+
+    KoXmlElement m;
+    forEachElement ( m, n ) {
+        if ( m.namespaceURI() != KoXmlNS::chart )
+            continue;
+        // FIXME: Load data points
+    }
 }
