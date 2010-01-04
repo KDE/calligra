@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Manikandaprasad Chandrasekar <manikandaprasad.chandrasekar@nokia.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,6 +68,7 @@ public:
     Workbook *workbook;
 
     KoGenStyles *styles;
+    KoGenStyles *mainStyles;
     QList<QString> cellStyles;
     QList<QString> rowStyles;
     QList<QString> rowCellStyles;
@@ -87,6 +90,8 @@ public:
     void processWorkbookForStyle(Workbook* workbook, KoXmlWriter* xmlWriter);
     void processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter);
+    void processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* writer);
+    void processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter);
     void processColumnForBody(Column* column, int repeat, KoXmlWriter* xmlWriter);
     void processColumnForStyle(Column* column, int repeat, KoXmlWriter* xmlWriter);
     void processRowForBody(Row* row, int repeat, KoXmlWriter* xmlWriter);
@@ -136,6 +141,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     d->styles = new KoGenStyles();
+    d->mainStyles = new KoGenStyles();
 
     // create output store
     KoStore* storeout;
@@ -152,17 +158,21 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     storeout->disallowNameExpansion();
     KoOdfWriteStore oasisStore(storeout);
 
-    // store document styles
-    if (!d->createStyles(&oasisStore)) {
-        kWarning() << "Couldn't open the file 'styles.xml'.";
+    // header and footer are read from each sheet and saved in styles
+    // So creating content before styles
+    // store document content
+    if ( !d->createContent( &oasisStore ) )
+    {
+        kWarning() << "Couldn't open the file 'content.xml'.";
         delete d->workbook;
         delete storeout;
         return KoFilter::CreationError;
     }
 
-    // store document content
-    if (!d->createContent(&oasisStore)) {
-        kWarning() << "Couldn't open the file 'content.xml'.";
+    // store document styles
+    if ( !d->createStyles( &oasisStore ) )
+    {
+        kWarning() << "Couldn't open the file 'styles.xml'.";
         delete d->workbook;
         delete storeout;
         return KoFilter::CreationError;
@@ -284,8 +294,8 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store)
     stylesWriter->endElement(); // office:styles
 
     // office:automatic-styles
-    stylesWriter->startElement("office:automatic-styles");
-    stylesWriter->endElement(); // office:automatic-styles
+    mainStyles->saveOdfAutomaticStyles(stylesWriter, false);
+    mainStyles->saveOdfMasterStyles(stylesWriter);
 
     stylesWriter->endElement();  // office:document-styles
     stylesWriter->endDocument();
@@ -399,9 +409,57 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     if (!workbook) return;
     if (!xmlWriter) return;
 
-    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+    QString contentElement;
+    QString masterStyleName("Default");
+    QString pageLayoutStyleName ("Mpm");
+
+    KoGenStyle *pageLayoutStyle = new KoGenStyle(KoGenStyle::StylePageLayout);
+    pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
+
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buf);
+
+    //Hardcoded page-layout
+    writer.startElement("style:header-style");
+    writer.startElement("style:header-footer-properties");
+    writer.addAttribute("fo:min-height", "20pt");
+    writer.addAttribute("fo:margin-left", "0pt");
+    writer.addAttribute("fo:margin-right", "0pt");
+    writer.addAttribute("fo:margin-bottom", "10pt");
+    writer.endElement();
+    writer.endElement();
+
+    writer.startElement("style:footer-style");
+    writer.startElement("style:header-footer-properties");
+    writer.addAttribute("fo:min-height", "20pt");
+    writer.addAttribute("fo:margin-left", "0pt");
+    writer.addAttribute("fo:margin-right", "0pt");
+    writer.addAttribute("fo:margin-top", "10pt");
+    writer.endElement();
+    writer.endElement();
+    QString pageLyt = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    buf.close();
+
+    pageLayoutStyle->addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
+    pageLayoutStyleName = mainStyles->lookup(*pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
+
+    for(unsigned i = 0; i < workbook->sheetCount(); i++)
+    {
         Sheet* sheet = workbook->sheet(i);
         processSheetForStyle(sheet, xmlWriter);
+
+        buf.open(QIODevice::WriteOnly);
+        processSheetForHeaderFooter (workbook->sheet(0), &writer);
+        contentElement = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        buf.close();
+        QString childElementName = QString::number(i).append("master-style");
+        KoGenStyle masterStyle(KoGenStyle::StyleMaster);;
+        masterStyle.addChildElement(childElementName, contentElement);
+        masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
+
+        masterStyleName = mainStyles->lookup(masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
+        masterStyle.addAttribute( "style:name", masterStyleName);
     }
 }
 
@@ -500,6 +558,121 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
         // FIXME optimized this when operator== in Swinder::Format is implemented
         processRowForStyle(row, 1, xmlWriter);
     }
+}
+
+void ExcelImport::Private::processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* xmlWriter )
+{
+    if ( !sheet ) return;
+    if ( !xmlWriter ) return;
+
+    xmlWriter->startElement( "style:header" );
+    if ( !sheet->leftHeader().isEmpty() ) {
+        xmlWriter->startElement( "style:region-left" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->leftHeader(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    if ( !sheet->centerHeader().isEmpty() ) {
+        xmlWriter->startElement( "style:region-center" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->centerHeader(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    if ( !sheet->rightHeader().isEmpty() ) {
+        xmlWriter->startElement( "style:region-right" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->rightHeader(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    xmlWriter->endElement();
+
+    xmlWriter->startElement( "style:footer" );
+    if ( !sheet->leftFooter().isEmpty() ) {
+        xmlWriter->startElement( "style:region-left" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->leftFooter(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    if ( !sheet->centerFooter().isEmpty() ) {
+        xmlWriter->startElement( "style:region-center" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->centerFooter(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    if ( !sheet->rightFooter().isEmpty() ) {
+        xmlWriter->startElement( "style:region-right" );
+        xmlWriter->startElement( "text:p" );
+        processHeaderFooterStyle (sheet->rightFooter(), xmlWriter);
+        xmlWriter->endElement();
+        xmlWriter->endElement();
+    }
+    xmlWriter->endElement();
+}
+
+void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter)
+{
+    QString content;
+    bool skipUnsupported = false;
+    int lastPos;
+    int pos = text.find(UString('&'));
+    int len = text.length();
+    if ( (pos < 0) && (text.length() > 0) ) // If ther is no &
+        xmlWriter->addTextNode(text.cstring().c_str());
+    else if (pos > 0) // Some text and '&'
+        xmlWriter->addTextNode( text.substr( 0,  pos-1 ).cstring().c_str() );
+
+    while (pos >= 0) {
+        switch (text[pos + 1].unicode() ) {
+            case 'D':
+                xmlWriter->startElement( "text:date");
+                xmlWriter->addTextNode( QDate::currentDate().toString("DD/MM/YYYY"));
+                xmlWriter->endElement();
+                break;
+            case 'T':
+                xmlWriter->startElement( "text:time");
+                xmlWriter->addTextNode( QTime::currentTime().toString("HH:MM:SS"));
+                xmlWriter->endElement();
+                break;
+            case 'P':
+                xmlWriter->startElement( "text:page-number");
+                xmlWriter->addTextNode( "1" );
+                xmlWriter->endElement();
+                break;
+            case 'N':
+                xmlWriter->startElement( "text:page-count");
+                xmlWriter->addTextNode( "999" );
+                xmlWriter->endElement();
+                break;
+            case 'F':
+                xmlWriter->startElement( "text:title");
+                xmlWriter->addTextNode( "???" );
+                xmlWriter->endElement();
+                break;
+            case 'A':
+                xmlWriter->startElement( "text:sheet-name");
+                xmlWriter->addTextNode( "???" );
+                xmlWriter->endElement();
+                break;
+            case '\"':
+            default:
+                skipUnsupported = true;
+                break;
+        }
+        lastPos = pos;
+        pos = text.find(UString('&'), lastPos + 1);
+        if ( !skipUnsupported && (pos > (lastPos + 1)) )
+            xmlWriter->addTextNode( text.substr( lastPos+2, (pos - lastPos - 2) ).cstring().c_str() );
+        else if ( !skipUnsupported && (pos < 0) )//Remaining text
+            xmlWriter->addTextNode( text.substr( lastPos+2, len - (lastPos + 2)).cstring().c_str() );
+        else
+            skipUnsupported = false;
+    }
+
 }
 
 void ExcelImport::Private::processColumnForBody(Column* column, int repeat, KoXmlWriter* xmlWriter)
