@@ -16,7 +16,7 @@
        <config:config-item config:name="ShowZeroValues" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
        <config:config-item config:name="FirstLetterUpper" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowCommentIndicator" config:type="boolean">true</config:config-item>
        <config:config-item config:name="ShowPageBorders" config:type="boolean">false</config:config-item>
        <config:config-item config:name="lcmode" config:type="boolean">false</config:config-item>
@@ -31,7 +31,7 @@
        <config:config-item config:name="ShowZeroValues" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
        <config:config-item config:name="FirstLetterUpper" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowCommentIndicator" config:type="boolean">true</config:config-item>
        <config:config-item config:name="ShowPageBorders" config:type="boolean">false</config:config-item>
        <config:config-item config:name="lcmode" config:type="boolean">false</config:config-item>
@@ -46,7 +46,7 @@
        <config:config-item config:name="ShowZeroValues" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
        <config:config-item config:name="FirstLetterUpper" config:type="boolean">false</config:config-item>
-       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="ShowFormulaIndicator" config:type="boolean">false</config:config-item>
        <config:config-item config:name="ShowCommentIndicator" config:type="boolean">true</config:config-item>
        <config:config-item config:name="ShowPageBorders" config:type="boolean">false</config:config-item>
        <config:config-item config:name="lcmode" config:type="boolean">false</config:config-item>

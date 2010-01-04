@@ -40,16 +40,16 @@ class PrintSettings::Private
 {
 public:
     KoPageLayout pageLayout;
-bool printGrid              : 1;
-bool printCharts            : 1;
-bool printObjects           : 1;
-bool printGraphics          : 1;
-bool printCommentIndicator  : 1;
-bool printFormulaIndicator  : 1;
-bool printHeaders           : 1;
-bool printZeroValues        : 1;
-bool centerHorizontally     : 1;
-bool centerVertically       : 1;
+    bool printGrid              : 1;
+    bool printCharts            : 1;
+    bool printObjects           : 1;
+    bool printGraphics          : 1;
+    bool printCommentIndicator  : 1;
+    bool printFormulaIndicator  : 1;
+    bool printHeaders           : 1;
+    bool printZeroValues        : 1;
+    bool centerHorizontally     : 1;
+    bool centerVertically       : 1;
     PageOrder pageOrder;
     Region printRegion;
     double zoom;

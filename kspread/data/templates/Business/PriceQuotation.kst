@@ -28,7 +28,7 @@
   </style>
  </styles>
  <map markerColumn="1" activeTable="Price Quotation" markerRow="1" >
-  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="PriceQuotation" borders1.2="1" printCommentIndicator="0" >
+  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="0" showFormula="0" lcmode="0" name="PriceQuotation" borders1.2="1" printCommentIndicator="0" >
    <paper format="A4" orientation="Portrait" >
     <borders right="20" left="20" bottom="20" top="20" />
     <head/>
