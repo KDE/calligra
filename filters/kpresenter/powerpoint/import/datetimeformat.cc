@@ -232,10 +232,20 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
            hasDate = false;
            format = "hh:mm:ss ap";
          break;
+    case XMLSchemaDate:
+           // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#date
+           format = "yyyy-MM-dd";
+         break;
+    case XMLSchemaDateTime:
+           // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dateTime
+           hasTime = true;
+           format = "yyyy-MM-ddTHH:mm:ss.z";
+         break;
     case FixedUserDateFormat:
            //Future - Fixed Date
     default:
-           format = "dd-MM-yy hh:mm ap";
+           // XML Schema time format
+           format = "yyyy-MM-ddTHH:mm:ss.z";
          break;
     }
 

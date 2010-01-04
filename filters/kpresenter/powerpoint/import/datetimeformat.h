@@ -132,7 +132,9 @@ private:
        Hr24TimeWithSec,                    //8
        Hr12Time,                           //9
        Hr12TimeWithSec,                    //10
-       FixedUserDateFormat,                //11
+       XMLSchemaDate,                      //11
+       XMLSchemaDateTime,                  //12
+       FixedUserDateFormat,                //13
     }eDateTimeFormat;
 
     Slide *master;
