@@ -336,7 +336,7 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
     if (start_num > (int)within_text.length()) return Value::errorVALUE();
 
     int pos = within_text.indexOf(find_text, start_num - 1);
-    if (pos < 0) return Value::errorNA();
+    if (pos < 0) return Value::errorVALUE();
 
     return Value(pos + 1);
 }
