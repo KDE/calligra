@@ -1460,6 +1460,7 @@ QString languageName(int languageCode)
 // 3.8.31 numFmts
 QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 {
+    // number
     QRegExp numberRegEx("(0+)(\\.0+)?(E\\+0+)?");
     if (numberRegEx.exactMatch(valueFormat)) {
         if (numberRegEx.cap(3).length())
@@ -1468,11 +1469,28 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
             return KoOdfNumberStyles::saveOdfNumberStyle(*styles, valueFormat, "", "");
     }
 
+    // percent
     QRegExp percentageRegEx("(0+)(\\.0+)?%");
     if (percentageRegEx.exactMatch(valueFormat)) {
         return KoOdfNumberStyles::saveOdfPercentageStyle(*styles, valueFormat, "", "");
     }
 
+    // text
+    if (valueFormat.startsWith("@")) {
+        KoGenStyle style(KoGenStyle::StyleNumericText);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        xmlWriter.startElement("number:text-content");
+        xmlWriter.endElement(); // text-content
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return styles->lookup(style, "N");
+    }
+    
+    // fraction
     const QString escapedValueFormat = removeEscaped(valueFormat);
     QRegExp fractionRegEx("^#([?]+)/([0-9?]+)$");
     if (fractionRegEx.indexIn(escapedValueFormat) >= 0) {
@@ -1503,6 +1521,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
         return styles->lookup(style, "N");
     }
 
+    // currency
     QString currencyVal, formatVal;
     if (currencyFormat(valueFormat, &currencyVal, &formatVal)) {
         KoGenStyle style(KoGenStyle::StyleNumericCurrency);
@@ -1555,6 +1574,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     Q_UNUSED(locale);
     const QString _vf = removeEscaped(vf);
 
+    // dates
     QRegExp dateRegEx("(d|M|y)");   // we don't check for 'm' cause this can be 'month' or 'minute' and if nothing else is defined we assume 'minute'...
     if (dateRegEx.indexIn(_vf) >= 0) {
         KoGenStyle style(KoGenStyle::StyleNumericDate);
@@ -1635,6 +1655,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     }
     */
 
+    // times
     QRegExp timeRegEx("(h|hh|H|HH|m|s)");
     if (timeRegEx.indexIn(_vf) >= 0) {
         KoGenStyle style(KoGenStyle::StyleNumericTime);
@@ -2041,5 +2062,5 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     }
     */
 
-    return "";
+    return ""; // generic
 }
