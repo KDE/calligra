@@ -1109,17 +1109,20 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, boo
             break;
         }
 
+        case FormulaToken::RefErr:
+        case FormulaToken::AreaErr:
+        case FormulaToken::MemErr:
+            stack.push_back(UString("#REF!"));
+            break;
+
         case 0: break; // NOPE
 
         case FormulaToken::NatFormula:
         case FormulaToken::Sheet:
         case FormulaToken::EndSheet:
         case FormulaToken::ErrorCode:
-        case FormulaToken::MemErr:
         case FormulaToken::MemNoMem:
         case FormulaToken::MemFunc:
-        case FormulaToken::RefErr:
-        case FormulaToken::AreaErr:
         case FormulaToken::MemAreaN:
         case FormulaToken::MemNoMemN:
         case FormulaToken::RefErr3d:
