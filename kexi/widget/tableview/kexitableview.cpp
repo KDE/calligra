@@ -783,7 +783,7 @@ bool KexiTableView::isDefaultValueDisplayed(KexiDB::RecordData *record, int col,
 
 void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print)
 {
-kDebug() << "col/row:" << col << row << "rect:" << cr << p->worldMatrix();
+//kDebug() << "col/row:" << col << row << "rect:" << cr << p->worldMatrix();
     p->save();
     Q_UNUSED(print);
     int w = cr.width();
