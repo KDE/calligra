@@ -23,8 +23,6 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <q3cstring.h>
-
 class ExcelImport : public KoFilter
 {
 
