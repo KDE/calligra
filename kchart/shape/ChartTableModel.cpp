@@ -163,9 +163,6 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     else // if ( valueType == "string" )
                         value = valueString;
 
-                    // FIXME: Check how to handle this.
-                    if ( isHeader )
-                        setHeaderData( column, Qt::Horizontal, value );
                     setData( index( row, column ), value );
 
                     column++;
