@@ -48,7 +48,7 @@ ToolRegistry::ToolRegistry()
         : d(new Private)
 {
     // Add the built-in cell tool.
-    KoToolRegistry::instance()->add(new CellToolFactory(this, "KSpreadCellToolId", i18n("Cell Tool")));
+    KoToolRegistry::instance()->add(new CellToolFactory(this, "KSpreadCellToolId"));
     // Load the tool plugins.
     loadTools();
 }

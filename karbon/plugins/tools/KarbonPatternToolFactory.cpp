@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 KarbonPatternToolFactory::KarbonPatternToolFactory(QObject *parent)
-: KoToolFactory(parent, "KarbonPatternTool", i18n("Pattern tool") )
+    : KoToolFactory(parent, "KarbonPatternTool")
 {
     setToolTip( i18n("Pattern Editing Tool") );
     setToolType( mainToolType() );

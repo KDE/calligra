@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory(QObject *parent)
-: KoToolFactory(parent, "KarbonGradientTool", i18n("Gradient tool") )
+    : KoToolFactory(parent, "KarbonGradientTool")
 {
     setToolTip( i18n("Gradient Editing Tool") );
     setToolType( mainToolType() );

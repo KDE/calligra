@@ -26,8 +26,8 @@
 
 using namespace KSpread;
 
-CellToolFactory::CellToolFactory(QObject* parent, const QString& id, const QString& name)
-        : KoToolFactory(parent, id, name)
+CellToolFactory::CellToolFactory(QObject* parent, const QString& id)
+        : KoToolFactory(parent, id)
 {
     setToolTip(i18n("Cell Tool"));
     setIcon("kspread");

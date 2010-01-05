@@ -23,7 +23,7 @@
 #include "KPrPlaceholderShape.h"
 
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory(QObject *parent)
-: KoToolFactory(parent, "Layout Tool", i18n("Layout Tool"))
+    : KoToolFactory(parent, "Layout Tool")
 {
     setToolTip( i18n( "Layout Tool" ) );
     setToolType(dynamicToolType());
