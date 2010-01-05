@@ -57,6 +57,8 @@ public slots:
     void setAutomaticDataSetCreation( bool enable );
     bool automaticDataSetCreation() const;
 
+    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
+
     /**
     * Load series from ODF
     */

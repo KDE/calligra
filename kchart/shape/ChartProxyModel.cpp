@@ -61,6 +61,8 @@ public:
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
+
+    QVector< CellRegion > dataSetRegions;
     
     QList<DataSet*>  dataSets;
     QList<DataSet*>  removedDataSets;
@@ -133,7 +135,12 @@ void ChartProxyModel::rebuildDataMap()
         return;
 
     invalidateDataSets();
+    d->dataSets = createDataSetsFromRegion( d->removedDataSets );
+}
 
+QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
+{
+    QList<DataSet*> createdDataSets;
     QVector<QRect> dataRegions;
 
     if ( d->selection.isEmpty() ) {
@@ -200,16 +207,12 @@ void ChartProxyModel::rebuildDataMap()
             j.next();
             
             DataSet *dataSet;
-            if ( createdDataSetCount >= d->dataSets.size() ) {
-                if ( !d->removedDataSets.isEmpty() )
-                    dataSet = d->removedDataSets.takeLast();
-                else
-                    dataSet = new DataSet( this );
-
-                d->dataSets.append( dataSet );
-            }
+            if ( !dataSetsToRecycle.isEmpty() )
+                dataSet = dataSetsToRecycle.takeLast();
             else
-                dataSet = d->dataSets[createdDataSetCount];
+                dataSet = new DataSet( this );
+            createdDataSets.append( dataSet );
+
             dataSet->blockSignals( true );
             
             dataSet->setNumber( createdDataSetCount );
@@ -288,17 +291,14 @@ void ChartProxyModel::rebuildDataMap()
         
         while ( j.hasNext() ) {
             j.next();
-            
+
             DataSet *dataSet;
-            if ( createdDataSetCount >= d->dataSets.size() ) {
-                if ( !d->removedDataSets.isEmpty() )
-                    dataSet = d->removedDataSets.takeLast();
-                else
-                    dataSet = new DataSet( this );
-                d->dataSets.append( dataSet );
-            }
+            if ( !dataSetsToRecycle.isEmpty() )
+                dataSet = dataSetsToRecycle.takeLast();
             else
-                dataSet = d->dataSets[createdDataSetCount];
+                dataSet = new DataSet( this );
+            createdDataSets.append( dataSet );
+
             dataSet->blockSignals( true );
             
             dataSet->setNumber( createdDataSetCount );
@@ -322,16 +322,8 @@ void ChartProxyModel::rebuildDataMap()
             dataSet->blockSignals( false );
         }
     }
-    
-    while ( d->dataSets.size() > createdDataSetCount ) {
-    	DataSet *dataSet = d->dataSets.takeLast();
 
-    	// TODO: Restore attached axis when dataset is re-inserted?
-    	if ( dataSet->attachedAxis() )
-    	    dataSet->attachedAxis()->detachDataSet( dataSet, true );
-
-        d->removedDataSets.append( dataSet );
-    }
+    return createdDataSets;
 }
 
 
@@ -423,11 +415,26 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                                KoShapeLoadingContext &context )
 {
     beginResetModel();
-    invalidateDataSets();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
-    d->dataSets.clear();
+    invalidateDataSets();
+
+    QList<DataSet*> createdDataSets;
+    int loadedDataSetCount = 0;
+
+    // A cell range for all data is optional.
+    // If it is specified, use createDataSetsFromRegion() to automatically
+    // turn this data region into consecutive data series.
+    // If cell ranges are in addition specified for one or more of these
+    // data series, they'll be overwritten by these values.
+    if ( element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+    {
+        QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
+        qDebug() << "table:cell-range-address: " << cellRangeAddress;
+        setSelection( CellRegion::stringToRegion( cellRangeAddress ) );
+        createdDataSets = createDataSetsFromRegion( d->removedDataSets );
+    }
 
     KoXmlElement n;
     forEachElement ( n, element ) {
@@ -435,10 +442,17 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             continue;
 
         if ( n.localName() == "series" ) {
-            DataSet *dataSet = new DataSet( this );
-            dataSet->setNumber( d->dataSets.size() );
+            DataSet *dataSet;
+            if ( loadedDataSetCount < createdDataSets.size() ) {
+                dataSet = createdDataSets[loadedDataSetCount];
+            } else {
+                dataSet = new DataSet( this );
+                dataSet->setNumber( d->dataSets.size() );
+            }
             d->dataSets.append( dataSet );
             dataSet->loadOdf( n, context.odfLoadingContext() );
+
+            loadedDataSetCount++;
         } else {
             qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }
@@ -728,9 +742,10 @@ void ChartProxyModel::invalidateDataSets()
             // do not need to propagate these events to any models.
             dataSet->attachedAxis()->detachDataSet( dataSet, true );
         }
-        d->dataSets.removeAll( dataSet );
-        d->removedDataSets.append( dataSet );
     }
+
+    d->removedDataSets = d->dataSets;
+    d->dataSets.clear();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
