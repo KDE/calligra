@@ -1277,9 +1277,6 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     d->total = readU32(data);
     d->count = readU32(data + 4);
-    FILE* f = fopen("/tmp/sst.dump", "w");
-    fwrite(data, size, 1, f);
-    fclose(f);
 
     unsigned offset = 8;
     unsigned int nextContinuePosIdx = 0;
