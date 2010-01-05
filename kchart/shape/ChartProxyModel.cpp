@@ -217,18 +217,32 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             
             dataSet->setNumber( createdDataSetCount );
             dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
-            
-            CellRegion yDataRegion( j.value() );
+
             CellRegion labelDataRegion;
-    
+
+            CellRegion xDataRegion;
+            // In case of 2 data dimensions, x data appears before y data
+            if ( d->dataDimensions == 2 )
+                xDataRegion = CellRegion( j.value() );
+
             //qDebug() << "Creating data set with region" << j.value();
             if ( d->firstColumnIsLabel ) {
-                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+                CellRegion tmpRegion = CellRegion( j.value() );
+                QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
                 labelDataRegion = CellRegion( labelDataPoint );
-                
-                yDataRegion.subtract( labelDataPoint );
             }
+
+            if ( d->dataDimensions == 2 )
+                j.next();
             
+            CellRegion yDataRegion( j.value() );
+
+            if ( d->firstColumnIsLabel ) {
+                xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
+                yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
+            }
+
+            dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
             dataSet->setCategoryDataRegion( categoryDataRegion );
             dataSet->setLabelDataRegion( labelDataRegion );
@@ -303,18 +317,32 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             
             dataSet->setNumber( createdDataSetCount );
             dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+
+            CellRegion labelDataRegion;
+            
+            CellRegion xDataRegion;
+            // In case of 2 data dimensions, x data appears before y data
+            if ( d->dataDimensions == 2 )
+                xDataRegion = CellRegion( j.value() );
+
+            //qDebug() << "Creating data set with region" << j.value();
+            if ( d->firstRowIsLabel ) {
+                CellRegion tmpRegion = CellRegion( j.value() );
+                QPoint labelDataPoint = tmpRegion.pointAtIndex( 0 );
+                labelDataRegion = CellRegion( labelDataPoint );
+            }
+
+            if ( d->dataDimensions == 2 )
+                j.next();
             
             CellRegion yDataRegion( j.value() );
-            CellRegion labelDataRegion;
-    
-            //qDebug() << "Creating data set with region " << j.value();
+
             if ( d->firstRowIsLabel ) {
-                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-                labelDataRegion = CellRegion( labelDataPoint );
-                
-                yDataRegion.subtract( labelDataPoint );
+                xDataRegion.subtract( xDataRegion.pointAtIndex( 0 ) );
+                yDataRegion.subtract( yDataRegion.pointAtIndex( 0 ) );
             }
-            
+
+            dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
             dataSet->setLabelDataRegion( labelDataRegion );
             dataSet->setCategoryDataRegion( categoryDataRegion );
@@ -431,7 +459,6 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     if ( element.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
-        qDebug() << "table:cell-range-address: " << cellRangeAddress;
         setSelection( CellRegion::stringToRegion( cellRangeAddress ) );
         createdDataSets = createDataSetsFromRegion( d->removedDataSets );
     }
