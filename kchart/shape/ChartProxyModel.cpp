@@ -628,11 +628,13 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
 QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 {
     Q_UNUSED( sourceIndex );
+    return QModelIndex();
 }
 
 QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
     Q_UNUSED( proxyIndex );
+    return QModelIndex();
 }
 
 
