@@ -242,8 +242,8 @@ FormatAlignment::FormatAlignment()
 {
     d = new FormatAlignment::Private;
     d->null          = true;
-    d->alignX        = Format::Left;
-    d->alignY        = Format::Middle;
+    d->alignX        = Format::Standard;
+    d->alignY        = Format::Standard;
     d->wrap          = false;
     d->indentLevel   = 0;
     d->rotationAngle = 0;

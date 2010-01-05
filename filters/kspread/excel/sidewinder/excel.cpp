@@ -1668,8 +1668,8 @@ XFRecord::XFRecord():  Record()
     d->locked              = false;
     d->formulaHidden       = false;
     d->parentStyle         = 0;
-    d->horizontalAlignment = Left;
-    d->verticalAlignment   = VCentered;
+    d->horizontalAlignment = General;
+    d->verticalAlignment   = General;
     d->textWrap            = false;
     d->rotationAngle       = 0;
     d->stackedLetters      = 0;
@@ -1824,6 +1824,7 @@ const char* XFRecord::verticalAlignmentAsString() const
 {
     const char *result = "Unknown";
     switch (verticalAlignment()) {
+    case General:      result = "General"; break;
     case Top:          result = "Top"; break;
     case VCentered:    result = "Centered"; break;
     case Bottom:       result = "Bottom"; break;

@@ -1011,11 +1011,11 @@ public:
     const char* horizontalAlignmentAsString() const;
 
     enum {
-        Top = 0,
-        VCentered = 1,
-        Bottom = 2,
-        VJustified = 3,
-        VDistributed = 4
+        Top = 1,
+        VCentered = 2,
+        Bottom = 3,
+        VJustified = 4,
+        VDistributed = 5
     };
 
     /**

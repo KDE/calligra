@@ -749,7 +749,7 @@ public:
      */
     void setValueFormat(const UString& valueFormat);
 
-    enum { Left, Center, Right };
+    enum { Standard = -1, Left, Center, Right };
 
     enum { Top, Middle, Bottom, VJustify, VDistributed };
 
