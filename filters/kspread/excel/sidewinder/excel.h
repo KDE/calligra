@@ -66,7 +66,7 @@ public:
     void setSize(unsigned size);   // HACKS
 
 
-    static EString fromUnicodeString(const void* p, bool longString, unsigned maxsize = 0, unsigned continuePosition = 0xFFFFFFFF);
+    static EString fromUnicodeString(const void* p, bool longString, unsigned maxsize = 0, const unsigned *continuePositions = 0, unsigned continuePositionsOffset = 0);
 
     static EString fromSheetName(const void* p, unsigned maxsize = 0);
 

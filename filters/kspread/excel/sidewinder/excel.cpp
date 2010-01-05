@@ -180,7 +180,7 @@ void EString::setSize(unsigned s)
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* maxsize */, unsigned continuePosition)
+EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* maxsize */, const unsigned* continuePositions, unsigned continuePositionsOffset)
 {
     const unsigned char* data = (const unsigned char*) p;
     UString str = UString::null;
@@ -223,10 +223,11 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
             size++;
         }
         str.append(UString(UChar(uchar)));
-        if (offset == continuePosition && k < len - 1) {
+        if (continuePositions && offset == *continuePositions-continuePositionsOffset && k < len - 1) {
             unicode = data[offset] & 1;
             size++;
             offset++;
+            continuePositions++;
         }
     }
 
@@ -1276,6 +1277,9 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     d->total = readU32(data);
     d->count = readU32(data + 4);
+    FILE* f = fopen("/tmp/sst.dump", "w");
+    fwrite(data, size, 1, f);
+    fclose(f);
 
     unsigned offset = 8;
     unsigned int nextContinuePosIdx = 0;
@@ -1289,7 +1293,7 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
             break;
         }
 
-        EString es = EString::fromUnicodeString(data + offset, true, size - offset, nextContinuePos - offset);
+        EString es = EString::fromUnicodeString(data + offset, true, size - offset, continuePositions + nextContinuePosIdx, offset);
         d->strings.push_back(es.str());
         d->formatRuns.push_back(es.formatRuns());
         offset += es.size();
