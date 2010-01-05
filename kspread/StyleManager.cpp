@@ -390,6 +390,8 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader, QHash<QS
 
             if (element->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
                 const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
+                if (parentOdfName == "Default")
+                    continue;
                 const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
                 if (!parentStyle) {
                     kWarning(36003) << parentOdfName << " not found.";
