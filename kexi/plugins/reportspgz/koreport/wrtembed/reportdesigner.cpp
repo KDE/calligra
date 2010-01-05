@@ -259,10 +259,10 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
                     //TODO
                 }
 
-                m_rightMargin->setValue(it.toElement().attribute("report:margin-right", "28.346").toDouble());
-                m_leftMargin->setValue(it.toElement().attribute("report:margin-left", "28.346").toDouble());
-                m_topMargin->setValue(it.toElement().attribute("report:margin-top", "28.346").toDouble());
-                m_bottomMargin->setValue(it.toElement().attribute("report:margin-bottom", "28.346").toDouble());
+		m_rightMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-right", "1.0cm")));
+                m_leftMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-left", "1.0cm")));
+                m_topMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-top", "1.0cm")));
+                m_bottomMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-bottom", "1.0cm")));
 
                 m_orientation->setValue(it.toElement().attribute("report:print-orientation", "portrait"));
 
@@ -340,17 +340,18 @@ QDomElement ReportDesigner::document() const
         pagestyle.setAttribute("report:page-label-type", m_labelType->value().toString());
     } else {
         pagestyle.appendChild(doc.createTextNode("predefined"));
-        pagestyle.setAttribute("report:page-size", m_pageSize->value().toString());
+	addPropertyAsAttribute(&pagestyle, m_pageSize);
+        //pagestyle.setAttribute("report:page-size", m_pageSize->value().toString());
     }
 
     // -- orientation
     addPropertyAsAttribute(&pagestyle, m_orientation);
 
     // -- margins
-    addPropertyAsAttribute(&pagestyle, m_topMargin);
-    addPropertyAsAttribute(&pagestyle, m_bottomMargin);
-    addPropertyAsAttribute(&pagestyle, m_rightMargin);
-    addPropertyAsAttribute(&pagestyle, m_rightMargin);
+    pagestyle.setAttribute("fo:margin-top", KoUnit::unit(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-bottom", KoUnit::unit(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-right", KoUnit::unit(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-left", KoUnit::unit(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
 
     content.appendChild(pagestyle);
 
