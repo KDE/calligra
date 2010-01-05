@@ -39,7 +39,8 @@ KAboutData * newAboutData()
                                             ki18n("(c) 1998-2008, The KSpread Team"), KLocalizedString(),
                                             "http://www.koffice.org/kspread/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
-    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Maintainer"), "montel@kde.org");
+    aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "m.kruisselbrink@student.tue.nl");
+    aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
     aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");
     aboutData->addAuthor(ki18n("Philipp Müller"), KLocalizedString(), "philipp.mueller@gmx.de");
     aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
