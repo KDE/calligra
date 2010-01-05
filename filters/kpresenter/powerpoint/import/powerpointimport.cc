@@ -2482,6 +2482,10 @@ void PowerPointImport::processDrawingObjectForStyle(DrawObject* drawObject, KoGe
         } else if (drawObject->getStrProperty("draw:stroke") == "solid") {
             style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
         }
+    } else {
+        // default style is a solid line, this must be set explicitly as long
+        // as kpresenter takes draw:stroke="none" as default
+        style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
     }
 
     if (drawObject->hasProperty("svg:stroke-width")) {
