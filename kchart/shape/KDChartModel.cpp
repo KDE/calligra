@@ -246,12 +246,10 @@ QVariant KDChartModel::headerData( int section,
     }
     
     if ( orientation != d->dataDirection ) {
-        Q_ASSERT( section < d->dataSets.count() );
+        int dataSetNumber = section / d->dataDimensions;
+        Q_ASSERT( dataSetNumber < d->dataSets.count() );
 
-        // KDChart has only one header cell per data point, no matter
-        // how many dimensions are. That is, section does not need to
-        // be divided by d->dataDimensions.
-        DataSet *dataSet = d->dataSets[ section ];
+        DataSet *dataSet  = d->dataSets[ dataSetNumber ];
         return dataSet->labelData();
     }
     
