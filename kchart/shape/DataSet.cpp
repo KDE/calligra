@@ -890,4 +890,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             continue;
         // FIXME: Load data points
     }
+
+    return true;
 }
