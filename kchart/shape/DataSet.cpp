@@ -111,6 +111,8 @@ DataSet::Private::Private( DataSet *parent )
 {
     this->parent = parent;
     num = -1;
+    globalChartType = LastChartType;
+    globalChartSubType = NoChartSubtype;
     chartType = LastChartType;
     chartSubType = NoChartSubtype;
     kdChartModel = 0;

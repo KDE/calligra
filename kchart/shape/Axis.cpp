@@ -985,6 +985,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         Q_ASSERT( model );
     
         dataSet->setKdDiagram( diagram );
+        dataSet->setGlobalChartType( chartType );
         if ( model )
             model->addDataSet( dataSet, silent );
         
