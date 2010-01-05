@@ -383,7 +383,7 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     setWhatsThis( i18nc( "@info:whatsthis", 
         "<title>Work & Vacation Editor</title>"
         "<para>"
-        "A calendar defines availablility for resources or tasks of type <emphasis>Duration</emphasis>. "
+        "A calendar defines availability for resources or tasks of type <emphasis>Duration</emphasis>. "
         "A calendar can be specific to a resource or task, or shared by multiple resources or tasks. "
         "A day can be of type <emphasis>Undefined</emphasis>, <emphasis>Non-working day</emphasis> or <emphasis>Working day</emphasis>. "
         "A working day has one or more work intervals defined. "
