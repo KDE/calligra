@@ -1353,7 +1353,7 @@ void ObjRecord::dump(std::ostream& out) const
 
 void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
 {
-    if (size < 32) {
+    if (size < 4) {
         setIsValid(false);
         return;
     }
@@ -1497,6 +1497,8 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     }
     break;
+    case Object::Chart:
+        break;
     default:
         std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
         setIsValid(false);
