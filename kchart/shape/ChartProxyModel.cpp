@@ -61,7 +61,6 @@ public:
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
-    QMap<int, int>   dataMap;
     
     QList<DataSet*>  dataSets;
     QList<DataSet*>  removedDataSets;
@@ -587,69 +586,12 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
 
 QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 {
-    int  row;
-    int  column;
-
-    if ( d->dataDirection == Qt::Horizontal ) {
-        row    = sourceIndex.row();
-        column = sourceIndex.column();
-
-        if ( d->firstRowIsLabel )
-            row--;
-        if ( d->firstColumnIsLabel )
-            column--;
-        
-        // Find the first occurrence of row in the map
-        for ( int i = 0; i < d->dataMap.size(); i++ ) {
-            if ( d->dataMap[i] == row ) {
-                row = i;
-                break;
-            }
-        }
-    }
-    else {
-        // d->dataDirection == Qt::Vertical here
-
-        row    = sourceIndex.column();
-        column = sourceIndex.row();
-
-        if ( d->firstRowIsLabel )
-            row--;
-        if ( d->firstColumnIsLabel )
-            column--;
-        
-        // Find the first occurrence of column in the map
-        for ( int i = 0; i < d->dataMap.size(); i++ ) {
-            if ( d->dataMap[i] == column ) {
-                column = i;
-                break;
-            }
-        }
-    }
-    
-    return sourceModel()->index( row, column );
+    Q_UNUSED( sourceIndex );
 }
 
 QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
-    int  row;
-    int  column;
-
-    if ( d->dataDirection == Qt::Horizontal ) {
-        row    = d->dataMap[ proxyIndex.row() ];
-        column = proxyIndex.column();
-    }
-    else {
-        row    = proxyIndex.column();
-        column = d->dataMap[ proxyIndex.row() ];
-    }
-
-    if ( d->firstRowIsLabel )
-        row++;
-    if ( d->firstColumnIsLabel )
-        column++;
-
-    return sourceModel()->index( row, column );
+    Q_UNUSED( proxyIndex );
 }
 
 
