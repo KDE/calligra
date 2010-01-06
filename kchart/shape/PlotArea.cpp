@@ -357,7 +357,8 @@ bool PlotArea::addAxis( Axis *axis )
     
     if ( axis->dimension() == XAxisDimension ) {
         foreach ( Axis *_axis, d->axes )
-            _axis->registerKdXAxis( axis->kdAxis() );
+            if ( _axis->isVisible() )
+                _axis->registerKdAxis( axis->kdAxis() );
     }
     
     requestRepaint();
@@ -380,7 +381,7 @@ bool PlotArea::removeAxis( Axis *axis )
     
     if ( axis->dimension() == XAxisDimension ) {
         foreach ( Axis *_axis, d->axes )
-            _axis->deregisterKdXAxis( axis->kdAxis() );
+            _axis->deregisterKdAxis( axis->kdAxis() );
     }
     
     // This also removes the axis' title, which is a shape as well
