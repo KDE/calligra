@@ -48,7 +48,9 @@
 #include <KoXmlNS.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
 
 
 using namespace KChart;
@@ -69,6 +71,8 @@ public:
     
     ChartType     chartType;
     ChartSubtype  chartSubType;
+
+    // FIXME: Retrieve these two from the plot area
     ChartType     globalChartType;
     ChartSubtype  globalChartSubType;
 
@@ -835,14 +839,16 @@ void DataSet::blockSignals( bool block )
 }
 
 bool DataSet::loadOdf( const KoXmlElement &n,
-                       KoOdfLoadingContext &context )
+                       KoShapeLoadingContext &context )
 {
+    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack &styleStack = odfLoadingContext.styleStack();
 
-    KoStyleStack &styleStack = context.styleStack();
+    bool brushLoaded = false;
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
-        context.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+        odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
         //styleStack.setTypeProperties( "chart" );
 
@@ -855,7 +861,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
             QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
             if( stroke == "solid" || stroke == "dash" ) {
-                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.stylesReader() );
+                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
                 setPen( pen );
             }
         }
@@ -864,16 +870,25 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             QString fill = styleStack.property( KoXmlNS::draw, "fill" );
             QBrush brush;
             if ( fill == "solid" || fill == "hatch" ) {
-                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, context.stylesReader() );
+                brushLoaded = true;
+                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
             } else if ( fill == "gradient" ) {
-                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.stylesReader(), QSizeF( 5.0, 60.0 ) );
-            } else if ( fill == "bitmap" )
-                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context, QSizeF( 5.0, 60.0 ) );
+                brushLoaded = true;
+                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
+            } else if ( fill == "bitmap" ) {
+                brushLoaded = true;
+                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
+            }
             setBrush( brush );
         } else {
             setColor( defaultDataSetColor( number() ) );
         }
     }
+
+#ifndef NWORKAROUND_ODF_BUGS
+    if ( !brushLoaded )
+        setBrush( KoOdfWorkaround::fixMissingFillColor( n, context ) );
+#endif
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );

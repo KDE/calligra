@@ -39,6 +39,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoGenStyles.h>
+#include <KoOdfWorkaround.h>
 
 // KDChart
 #include <KDChartAbstractCoordinatePlane>
@@ -147,6 +148,8 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
     // Get the current style stack and save it's state.
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
+
+    bool brushLoaded = false;
     
     if ( surfaceElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
@@ -179,14 +182,19 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
 
             QBrush   brush;
             QString  fill = styleStack.property( KoXmlNS::draw, "fill" );
-            if ( fill == "solid" || fill == "hatch" )
+            if ( fill == "solid" || fill == "hatch" ) {
+                brushLoaded = true;
                 brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill,
                                                               context.odfLoadingContext().stylesReader() );
+            }
             else if ( fill == "gradient" ) {
+                brushLoaded = true;
                 brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
             }
-            else if ( fill == "bitmap" )
+            else if ( fill == "bitmap" ) {
+                brushLoaded = true;
                 brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+            }
 
             backgroundAttributes.setBrush( brush );
         }
@@ -195,6 +203,18 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         d->kdPlane->setBackgroundAttributes( backgroundAttributes );
         d->kdPlane->setFrameAttributes( frameAttributes );
     }
+
+#ifndef NWORKAROUND_ODF_BUGS
+    if ( !brushLoaded ) {
+        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        QColor fillColor = KoOdfWorkaround::fixMissingFillColor( surfaceElement, context );
+        if ( fillColor.isValid() ) {
+            backgroundAttributes.setVisible( true );
+            backgroundAttributes.setBrush( fillColor );
+            d->kdPlane->setBackgroundAttributes( backgroundAttributes );
+        }
+    }
+#endif
 
     // Restore the style stack to what it was before entering this
     // function.

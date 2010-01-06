@@ -89,6 +89,7 @@
 #include <KoShapeBorderModel.h>
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
+#include <KoOdfWorkaround.h>
 
 // KChart
 #include "Axis.h"
@@ -1035,6 +1036,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     }
     loadOdfAttributes( chartElement, context,
                        OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements | OdfStyle );
+
+#ifndef NWORKAROUND_ODF_BUGS
+    if ( !background() )
+        setBackground( new KoColorBackground( KoOdfWorkaround::fixMissingFillColor( chartElement, context ) ) );
+#endif
 
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
