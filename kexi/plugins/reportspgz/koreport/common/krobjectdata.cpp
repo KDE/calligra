@@ -121,19 +121,13 @@ bool KRObjectData::parseReportRect(const QDomElement & elemSource, KRPos *pos, K
 	QPointF _pos;
 	QSizeF _siz;
 	
-	QString temp;
-	temp = elemSource.attribute("svg:x", "1cm");
-        _pos.setX(temp.left(temp.length()-2).toFloat());
-        temp = elemSource.attribute("svg:y", "1cm");
-	_pos.setY(temp.left(temp.length()-2).toFloat());
+	_pos.setX(KoUnit::parseValue(elemSource.attribute("svg:x", "1cm")));
+	_pos.setY(KoUnit::parseValue(elemSource.attribute("svg:y", "1cm")));
+	_siz.setWidth(KoUnit::parseValue(elemSource.attribute("svg:width", "1cm")));
+	_siz.setHeight(KoUnit::parseValue(elemSource.attribute("svg:height", "1cm")));
 	
-        temp = elemSource.attribute("svg:width", "1cm");
-	_siz.setWidth(temp.left(temp.length()-2).toFloat());
-        temp = elemSource.attribute("svg:height", "1cm");
-	_siz.setHeight(temp.left(temp.length()-2).toFloat());
-	
-	pos->setUnitPos(_pos);
-	siz->setUnitSize(_siz);
+	pos->setPointPos(_pos);
+	siz->setPointSize(_siz);
 	
         return true;
     }
