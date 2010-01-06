@@ -181,6 +181,8 @@ public:
     int gapBetweenBars;
     // TODO: Save to ODF
     int gapBetweenSets;
+
+    bool isVisible;
 };
 
 
@@ -189,6 +191,11 @@ Axis::Private::Private( Axis *axis )
 {
     position = LeftAxisPosition;
     centerDataPoints = false;
+
+    gapBetweenBars = 0;
+    gapBetweenSets = 100;
+
+    isVisible = true;
 
     useAutomaticMajorInterval = true;
     useAutomaticMinorInterval = true;
@@ -549,7 +556,8 @@ void Axis::Private::createBarDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
         kdBarDiagram->setType( KDChart::BarDiagram::Percent );
 
-    kdBarDiagram->addAxis( kdAxis );
+    if ( isVisible )
+        kdBarDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdBarDiagram );
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
@@ -558,11 +566,11 @@ void Axis::Private::createBarDiagram()
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() )
     {
-        if ( axis->dimension() == XAxisDimension )
+        if ( axis->isVisible() && axis->dimension() == XAxisDimension )
             kdBarDiagram->addAxis( axis->kdAxis() );
     }
 
-    // Set default values
+    // Set default bar diagram attributes
     q->setGapBetweenBars( 0 );
     q->setGapBetweenSets( 100 );
 
@@ -585,7 +593,8 @@ void Axis::Private::createLineDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
         kdLineDiagram->setType( KDChart::LineDiagram::Percent );
 
-    kdLineDiagram->addAxis( kdAxis );
+    if ( isVisible )
+        kdLineDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdLineDiagram );
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
@@ -621,7 +630,8 @@ void Axis::Private::createAreaDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
 
-    kdAreaDiagram->addAxis( kdAxis );
+    if ( isVisible )
+        kdAreaDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdAreaDiagram );
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
@@ -710,7 +720,8 @@ void Axis::Private::createScatterDiagram()
     kdScatterDiagram->setModel( kdScatterDiagramModel );
     registerDiagram( kdScatterDiagram );
 
-    kdScatterDiagram->addAxis( kdAxis );
+    if ( isVisible )
+        kdScatterDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdScatterDiagram );
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
@@ -1374,7 +1385,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 setDimension( ZAxisDimension );
         }
     }
-    
+
+    bool isVisible = false;
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "text" );
@@ -1395,16 +1407,13 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
             setMinorIntervalDivisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
-        if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) ) {
+        if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
             d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
-        }
-        if ( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) ) {
-            setGapBetweenSets( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "gap-width" ) ) );
-        }
-        if ( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) ) {
-            setGapBetweenBars( -KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "overlap" ) ) );
-        }
+
+        if ( styleStack.hasProperty( KoXmlNS::chart, "visible" ) )
+            isVisible = styleStack.property( KoXmlNS::chart, "visible" )  == "true";
     }
+    setVisible( isVisible );
     
     d->kdPlane->setGridAttributes( orientation(), gridAttr );
 
@@ -1834,7 +1843,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         dataSet->setGlobalChartSubType( subType );
 }
 
-void Axis::registerKdXAxis( KDChart::CartesianAxis *axis )
+void Axis::registerKdAxis( KDChart::CartesianAxis *axis )
 {
     if ( d->kdBarDiagram )
         d->kdBarDiagram->addAxis( axis );
@@ -1844,9 +1853,10 @@ void Axis::registerKdXAxis( KDChart::CartesianAxis *axis )
         d->kdAreaDiagram->addAxis( axis );
     if ( d->kdScatterDiagram )
         d->kdScatterDiagram->addAxis( axis );
+    // FIXME: Add all diagrams here
 }
 
-void Axis::deregisterKdXAxis( KDChart::CartesianAxis *axis )
+void Axis::deregisterKdAxis( KDChart::CartesianAxis *axis )
 {
     if ( d->kdBarDiagram )
         d->kdBarDiagram->takeAxis( axis );
@@ -1856,6 +1866,7 @@ void Axis::deregisterKdXAxis( KDChart::CartesianAxis *axis )
         d->kdAreaDiagram->takeAxis( axis );
     if ( d->kdScatterDiagram )
         d->kdScatterDiagram->takeAxis( axis );
+    // FIXME: Add all diagrams here
 }
 
 void Axis::setThreeD( bool threeD )
@@ -1971,6 +1982,21 @@ void Axis::setFont( const QFont &font )
     KDChart::TextAttributes attr = d->kdAxis->textAttributes();
     attr.setFont( font );
     d->kdAxis->setTextAttributes( attr );
+}
+
+bool Axis::isVisible() const
+{
+    return d->isVisible;
+}
+
+void Axis::setVisible( bool visible )
+{
+    d->isVisible = visible;
+
+    if ( visible )
+        registerKdAxis( d->kdAxis );
+    else
+        deregisterKdAxis( d->kdAxis );
 }
 
 #include "Axis.moc"

@@ -74,6 +74,7 @@ public:
     bool showMinorGrid() const;
     Qt::Orientation orientation();
     QFont font() const;
+    bool isVisible() const;
     
     void setCategoryDataRegionString( const QString &region );
 	
@@ -96,6 +97,7 @@ public:
     void setShowMinorGrid( bool showGrid );
     void setThreeD( bool threeD );
     void setFont( const QFont &font );
+    void setVisible( bool visible );
     
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     bool loadOdfChartSubtypeProperties( const KoXmlElement &axisElement,
@@ -110,8 +112,8 @@ public:
     void plotAreaChartTypeChanged( ChartType chartType );
     void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
     
-    void registerKdXAxis( KDChart::CartesianAxis *axis );
-    void deregisterKdXAxis( KDChart::CartesianAxis *axis );
+    void registerKdAxis( KDChart::CartesianAxis *axis );
+    void deregisterKdAxis( KDChart::CartesianAxis *axis );
     
     void update() const;
     void requestRepaint() const;
