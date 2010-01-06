@@ -553,6 +553,8 @@ void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
         // update bof position map
         unsigned bofPos = record->bofPosition();
         d->bofMap[ bofPos ] = sheet;
+    } else {
+        std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
     }
 }
 

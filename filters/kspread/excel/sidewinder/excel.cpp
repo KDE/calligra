@@ -36,6 +36,7 @@
 #include "swinder.h"
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
+#include "chartsubstreamhandler.h"
 #include "utils.h"
 
 //#define SWINDER_XLS2RAW
@@ -459,10 +460,10 @@ void BOFRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     d->version  = readU16(data);
     d->type     = readU16(data + 2);
-    if (size > 6) {
+    if (size >= 8) {
         d->build    = readU16(data + 4);
         d->year     = readU16(data + 6);
-        if (size > 12) {
+        if (size >= 16) {
             d->history  = readU32(data + 8);
             d->rversion = readU32(data + 12);
         }
@@ -566,9 +567,9 @@ void ExternBookRecord::setData(unsigned size, const unsigned char* data, const u
     if (size < 4) return;
 
     d->sheetCount = readU16(data);
-    if (data[2] == 0x01 && data[3] == 0x04) {
+    if (data[2] == 0x01 && data[3] == 0x04) { // self-referencing supporting link
         d->name = UString("\004");
-    } else if (data[2] == 0x01 && data[3] == ':') {
+    } else if (data[2] == 0x01 && data[3] == ':') { // add-in referencing type of supporting link
         d->name = UString(":");
     } else {
         d->name = EString::fromUnicodeString(data + 2, true, size - 2).str();
@@ -1526,7 +1527,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += cmFmla - sizeFmla - 0; // padding
       }
     }
-
+    
     // pictFmla
     if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
         const unsigned long cb = readU16(startPict + 2);
@@ -2574,7 +2575,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
 #ifdef SWINDER_XLS2RAW
         if (!record) {
-            std::cout << "Record 0x";
+            std::cout << "Unhandled Record";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
             std::cout << std::dec;
             std::cout << " (" << type << ")";
@@ -2617,8 +2618,10 @@ void ExcelReader::handleBOF(BOFRecord* record)
         Sheet* sheet = d->globals->sheetFromPosition(record->position());
         if (sheet) d->activeSheet = sheet;
         d->handlerStack.push_back(new WorksheetSubStreamHandler(sheet, d->globals));
+    } else if (record->type() == BOFRecord::Chart) {
+        d->handlerStack.push_back(new ChartSubStreamHandler(d->globals));
     } else {
-        d->handlerStack.push_back(0);
+        std::cout << "ExcelReader::handleBOF Unhandled type=" << record->type() << std::endl;
     }
 }
 

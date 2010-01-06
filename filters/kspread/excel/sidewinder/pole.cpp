@@ -681,13 +681,15 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         e.next = readU32(buffer + 0x48 + p);
         e.child = readU32(buffer + 0x4C + p);
         e.dir = (type != 2);
-
+        
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
+        if (name_len < 1) e.valid = false;
 
-        // the spec do not deny items with an empty name even if it makes not
-        // really sense cause the item cannot access then by name.
-        //if (name_len < 1) e.valid = false;
+        // CLSID, contains a object class GUI if this entry is a storage or root
+        // storage or all zero if not.
+        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
+               name.c_str(),type,e.prev,e.next,e.child,e.start,e.size,readU32(buffer+0x50+p),readU32(buffer+0x54+p),readU32(buffer+0x58+p),readU32(buffer+0x5C+p));
 
         entries.push_back(e);
     }
@@ -1220,13 +1222,14 @@ std::list<std::string> Storage::entries(const std::string& path)
     std::list<std::string> result;
     DirTree* dt = io->dirtree;
     DirEntry* e = dt->entry(path, false);
-    if (e  && e->dir) {
-        unsigned parent = dt->indexOf(e);
-        std::vector<unsigned> children = dt->children(parent);
-        for (unsigned i = 0; i < children.size(); i++)
-            result.push_back(dt->entry(children[i])->name);
+    if (e) {
+        if (e->dir) {
+            unsigned parent = dt->indexOf(e);
+            std::vector<unsigned> children = dt->children(parent);
+            for (unsigned i = 0; i < children.size(); i++)
+                result.push_back(dt->entry(children[i])->name);
+        }
     }
-
     return result;
 }
 

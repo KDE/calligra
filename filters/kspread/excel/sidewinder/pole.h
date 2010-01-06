@@ -94,7 +94,7 @@ public:
      * You do not need to delete the created stream, it will be handled
      * automatically.
      **/
-    Stream* stream(const std::string& name, bool reuse = true);
+    //Stream* stream(const std::string& name, bool reuse = true);
     //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
 
 private:
