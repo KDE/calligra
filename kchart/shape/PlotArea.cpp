@@ -113,6 +113,9 @@ public:
     // Data specific to each types
 
     // 1. Bar charts
+    // FIXME: OpenOffice stores these attributes in the axes' elements.
+    // The specs don't say anything at all about what elements can have
+    // these style attributes.
     bool  vertical;
     int   gapBetweenBars;
     int   gapBetweenSets;
