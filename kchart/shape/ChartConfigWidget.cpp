@@ -214,6 +214,8 @@ ChartConfigWidget::Private::~Private()
 // ================================================================
 //                     class ChartConfigWidget
 
+// TODO:
+// 1) Allow user to change axis' "visible" property
 
 ChartConfigWidget::ChartConfigWidget()
     : d( new Private( this ) )
