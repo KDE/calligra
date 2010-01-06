@@ -76,7 +76,7 @@ using namespace KChart;
 class Axis::Private
 {
 public:
-    Private();
+    Private( Axis *axis );
     ~Private();
 
     void adjustAllDiagrams();
@@ -99,6 +99,9 @@ public:
     void createBubbleDiagram();
     void createSurfaceDiagram();
     void createGanttDiagram();
+
+    // Pointer to Axis that owns this Private instance
+    Axis * const q;
 
     PlotArea *plotArea;
     
@@ -172,11 +175,17 @@ public:
     // an offset of 0.5, that is, in the middle of a column in the diagram.
     // Set flag to true if at least one dataset is attached to this axis
     // that belongs to a horizontal bar chart
-    bool centerDataPoints; 
+    bool centerDataPoints;
+
+    // TODO: Save to ODF
+    int gapBetweenBars;
+    // TODO: Save to ODF
+    int gapBetweenSets;
 };
 
 
-Axis::Private::Private()
+Axis::Private::Private( Axis *axis )
+    : q( axis )
 {
     position = LeftAxisPosition;
     centerDataPoints = false;
@@ -553,6 +562,10 @@ void Axis::Private::createBarDiagram()
             kdBarDiagram->addAxis( axis->kdAxis() );
     }
 
+    // Set default values
+    q->setGapBetweenBars( 0 );
+    q->setGapBetweenSets( 100 );
+
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
 }
 
@@ -814,7 +827,7 @@ void Axis::Private::adjustAllDiagrams()
 
 
 Axis::Axis( PlotArea *parent )
-    : d( new Private )
+    : d( new Private( this ) )
 {
     Q_ASSERT( parent );
     
@@ -1394,11 +1407,32 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     }
     
     d->kdPlane->setGridAttributes( orientation(), gridAttr );
+
+    if ( !loadOdfChartSubtypeProperties( axisElement, context ) )
+        return false;
     
     requestRepaint();
 
     styleStack.restore();
     
+    return true;
+}
+
+bool Axis::loadOdfChartSubtypeProperties( const KoXmlElement &axisElement,
+                                          KoShapeLoadingContext &context )
+{
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.setTypeProperties( "chart" );
+
+    // Load these attributes regardless of the actual chart type. They'll have
+    // no effect if their respective chart type is not in use.
+    // However, they'll be saved back to ODF that way.
+    if ( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) )
+        setGapBetweenSets( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "gap-width" ) ) );
+    if ( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) )
+        // The minus is intended!
+        setGapBetweenBars( -KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "overlap" ) ) );
+
     return true;
 }
 
@@ -1883,6 +1917,10 @@ void Axis::layoutPlanes()
 
 void Axis::setGapBetweenBars( int percent )
 {
+    // This method is also used to override KDChart's default attributes.
+    // Do not just return and do nothing if value doesn't differ from stored one.
+    d->gapBetweenBars = percent;
+
     if ( d->kdBarDiagram ) {
         KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setBarGapFactor( (float)percent / 100.0 );
@@ -1894,6 +1932,10 @@ void Axis::setGapBetweenBars( int percent )
 
 void Axis::setGapBetweenSets( int percent )
 {
+    // This method is also used to override KDChart's default attributes.
+    // Do not just return and do nothing if value doesn't differ from stored one.
+    d->gapBetweenSets = percent;
+
     if ( d->kdBarDiagram ) {
         KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setGroupGapFactor( (float)percent / 100.0 );
