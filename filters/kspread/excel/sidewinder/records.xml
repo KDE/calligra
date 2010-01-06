@@ -410,8 +410,201 @@
   <field name="height" type="fixed" size="32" />
 </record>
 
+<record name="SheetExt" id="0x0862">
+   <field name="cb"        type="unsigned"   size="32" />
+   <field name="icvPlain"  type="unsigned"   size="7" />
+   <field name="reserved" size="25" />
+</record>
+
 <record name="Begin" id="0x1033" />
 <record name="End" id="0x1034" />
+
+<record name="DataFormat" id="0x1006">
+</record>
+
+<record name="LineFormat" id="0x1007">
+</record>
+
+<record name="MarkerFormat" id="0x1009">
+</record>
+
+<record name="AreaFormat" id="0x100a">
+</record>
+
+<record name="PieFormat" id="0x100b">
+</record>
+
+<record name="AttachedLabel" id="0x100c">
+</record>
+
+<record name="ChartFormat" id="0x1014">
+</record>
+
+<record name="Legend" id="0x1015">
+</record>
+
+<record name="SeriesList" id="0x1016">
+</record>
+
+<record name="Bar" id="0x1017">
+</record>
+
+<record name="Line" id="0x1018">
+</record>
+
+<record name="Pie" id="0x1019">
+</record>
+
+<record name="Area" id="0x101a">
+</record>
+
+<record name="Scatter" id="0x101b">
+</record>
+
+<record name="CrtLine" id="0x101c">
+</record>
+
+<record name="Axis" id="0x101d">
+</record>
+
+<record name="Tick" id="0x101e">
+</record>
+
+<record name="ValueRange" id="0x101f">
+</record>
+
+<record name="CatSerRange" id="0x1020">
+</record>
+
+<record name="AxisLine" id="0x1021">
+</record>
+
+<record name="CrtLink" id="0x1022">
+</record>
+
+
+<record name="DefaultText" id="0x1024">
+</record>
+
+<record name="Text" id="0x1025">
+</record>
+
+<record name="FontX" id="0x1026">
+</record>
+
+<record name="ObjectLink" id="0x1027">
+</record>
+
+<record name="PlotArea" id="0x1035">
+</record>
+
+
+<record name="Chart3d" id="0x103a">
+  <field name="anRot"         type="signed"   size="16" />
+  <field name="anElev"        type="signed"   size="16" />
+  <field name="pcDist"        type="signed"   size="16" />
+  <field name="pcHeight"      type="unsigned" size="16" />
+  <field name="pcDepth"       type="signed"   size="16" />
+  <field name="pcGap"         type="unsigned" size="16" />
+  <field name="fPerspective"  type="bool"     size="1" />
+  <field name="fCluster"      type="bool"     size="1" />
+  <field name="f3DScaling"    type="bool"     size="1" />
+  <field name="reserved1"                     size="1" />
+  <field name="fNotPieChart"  type="bool"     size="1" />
+  <field name="fWalls2D"      type="bool"     size="1" />
+  <field name="reserved2"                     size="10" />
+</record>
+
+<record name="PicF" id="0x103c">
+</record>
+
+<record name="DropBar" id="0x103d">
+</record>
+
+<record name="Radar" id="0x103e">
+</record>
+
+<record name="Surf" id="0x103f">
+</record>
+
+<record name="RadarArea" id="0x1040">
+</record>
+
+<record name="AxisParent" id="0x1041">
+</record>
+
+<record name="LegendException" id="0x1043">
+</record>
+
+<record name="ShtProps" id="0x1044">
+</record>
+
+<record name="SerToCrt" id="0x1045">
+</record>
+
+<record name="AxesUsed" id="0x1046">
+</record>
+
+
+<record name="SBaseRef" id="0x1048">
+</record>
+
+<record name="SerParent" id="0x104a">
+</record>
+
+
+<record name="SerAuxTrend" id="0x104b">
+</record>
+
+<record name="IFmtRecord" id="0x104e">
+</record>
+
+<record name="Pos" id="0x104f">
+</record>
+
+<record name="AIRuns" id="0x1050">
+</record>
+
+
+<record name="SerAuxErrBar" id="0x105b">
+</record>
+
+<record name="ClrtClient" id="0x105c">
+</record>
+
+<record name="SerFmt" id="0x105d">
+</record>
+
+<record name="Chart3DBarShape" id="0x105f">
+</record>
+
+<record name="Fbi" id="0x1060">
+</record>
+
+<record name="BopPop" id="0x1061">
+</record>
+
+<record name="AxcExt" id="0x1062">
+</record>
+
+<record name="Dat" id="0x1063">
+</record>
+
+<record name="PlotGrowth" id="0x1064">
+</record>
+
+<record name="SIIndex" id="0x1065">
+</record>
+
+<record name="GelFrame" id="0x1066">
+</record>
+
+<record name="BobPopCustom" id="0x1067">
+</record>
+
+<record name="Fbi2" id="0x1068">
+</record>
+
 
 <record name="ZoomLevel" id="0x00a0">
   <field name="numerator"   type="signed" size="16" />
