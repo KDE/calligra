@@ -221,8 +221,8 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             CellRegion labelDataRegion;
 
             CellRegion xDataRegion;
-            // In case of 2 data dimensions, x data appears before y data
-            if ( d->dataDimensions == 2 )
+            // In case of > 1 data dimensions, x data appears before y data
+            if ( d->dataDimensions > 1 )
                 xDataRegion = CellRegion( j.value() );
 
             //qDebug() << "Creating data set with region" << j.value();
@@ -232,7 +232,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions == 2 )
+            if ( d->dataDimensions > 1 )
                 j.next();
             
             CellRegion yDataRegion( j.value() );
@@ -321,8 +321,8 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             CellRegion labelDataRegion;
             
             CellRegion xDataRegion;
-            // In case of 2 data dimensions, x data appears before y data
-            if ( d->dataDimensions == 2 )
+            // In case of > 1 data dimensions, x data appears before y data
+            if ( d->dataDimensions > 1 )
                 xDataRegion = CellRegion( j.value() );
 
             //qDebug() << "Creating data set with region" << j.value();
@@ -332,7 +332,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions == 2 )
+            if ( d->dataDimensions > 1 )
                 j.next();
             
             CellRegion yDataRegion( j.value() );
