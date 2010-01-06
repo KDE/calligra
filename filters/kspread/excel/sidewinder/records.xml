@@ -420,6 +420,9 @@
 <record name="End" id="0x1034" />
 
 <record name="DataFormat" id="0x1006">
+  <field name="xi"     type="unsigned" size="16" />
+  <field name="yi"     type="unsigned" size="16" />
+  <field name="iss"    type="unsigned" size="16" />
 </record>
 
 <record name="LineFormat" id="0x1007">
@@ -453,6 +456,11 @@
 </record>
 
 <record name="Pie" id="0x1019">
+  <field name="anStart" type="unsigned" size="16" />
+  <field name="pcDonut" type="unsigned" size="16" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="fShowLdrLines" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="14" />
 </record>
 
 <record name="Area" id="0x101a">
@@ -482,11 +490,40 @@
 <record name="CrtLink" id="0x1022">
 </record>
 
-
 <record name="DefaultText" id="0x1024">
+  <field name="identifier" type="unsigned" size="16" />
 </record>
 
 <record name="Text" id="0x1025">
+  <field name="at" type="unsigned" size="8" />
+  <field name="vat" type="unsigned" size="8" />
+  <field name="wBkgMode" type="unsigned" size="16" />
+  <field name="rgbText" type="unsigned" size="32" />
+  <field name="x" type="unsigned" size="32" />
+  <field name="y" type="unsigned" size="32" />
+  <field name="dx" type="unsigned" size="32" />
+  <field name="dy" type="unsigned" size="32" />
+  <field name="fAutoColor" type="bool" size="1" />
+  <field name="fShowKey" type="bool" size="1" />
+  <field name="fShowValue" type="bool" size="1" />
+  <field name="unused1" type="unsigned" size="1" />
+  <field name="fAutoText" type="bool" size="1" />
+  <field name="fGenerated" type="bool" size="1" />
+  <field name="fDeleted" type="bool" size="1" />
+  <field name="fAutoMode" type="bool" size="1" />
+  <field name="unused2" type="unsigned" size="3" />
+  <field name="fShowLabelAndPerc" type="bool" size="1" />
+  <field name="fShowPercent" type="bool" size="1" />
+  <field name="fShowBubbleSizes" type="bool" size="1" />
+  <field name="fShowLabel" type="bool" size="1" />
+  <field name="reserved" type="bool" size="1" />
+  <field name="icvText" type="unsigned" size="16" />
+  <!--
+  <field name="dlp" type="unsigned" size="4" />
+  <field name="unused3" type="unsigned" size="10" />
+  <field name="iReadingOrder" type="unsigned" size="2" />
+  <field name="trot" type="unsigned" size="16" />
+  -->
 </record>
 
 <record name="FontX" id="0x1026">
@@ -537,9 +574,18 @@
 </record>
 
 <record name="ShtProps" id="0x1044">
+  <field name="fManSerAlloc" type="bool"        size="1" />
+  <field name="fPlotVisOnly" type="bool"        size="1" />
+  <field name="fNotSizeWIth" type="bool"        size="1" />
+  <field name="fManPlotArea" type="bool"        size="1" />
+  <field name="fAlwaysAutoPlotArea" type="bool" size="1" />
+  <field name="reserved1" type="unsigned"       size="11" />
+  <field name="mdBlank" type="unsigned"         size="8" />
+  <field name="reserved2" type="unsigned"       size="8" />
 </record>
 
 <record name="SerToCrt" id="0x1045">
+  <field name="identifier" type="unsigned"   size="16" />
 </record>
 
 <record name="AxesUsed" id="0x1046">
@@ -560,6 +606,16 @@
 </record>
 
 <record name="Pos" id="0x104f">
+  <field name="mdTopLt" type="unsigned" size="16" />
+  <field name="mdBotRt" type="unsigned" size="16" />
+  <field name="x1" type="unsigned" size="16" />
+  <field name="unused1" type="unsigned" size="16" />
+  <field name="y1" type="unsigned" size="16" />
+  <field name="unused2" type="unsigned" size="16" />
+  <field name="x2" type="unsigned" size="16" />
+  <field name="unused3" type="unsigned" size="16" />
+  <field name="y2" type="unsigned" size="16" />
+  <field name="unused4" type="unsigned" size="16" />
 </record>
 
 <record name="AIRuns" id="0x1050">
@@ -576,6 +632,8 @@
 </record>
 
 <record name="Chart3DBarShape" id="0x105f">
+  <field name="riser"         type="unsigned"   size="8" />
+  <field name="taper"         type="unsigned"   size="8" />
 </record>
 
 <record name="Fbi" id="0x1060">
@@ -591,9 +649,14 @@
 </record>
 
 <record name="PlotGrowth" id="0x1064">
+  <!--
+  <field name="dxPlotGrow"   type="fixedfloat" size="32" />
+  <field name="dyPlotGrow"   type="fixedfloat" size="32" />
+  -->
 </record>
 
 <record name="SIIndex" id="0x1065">
+  <field name="numIndex" type="unsigned" size="16" />
 </record>
 
 <record name="GelFrame" id="0x1066">

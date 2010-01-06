@@ -72,6 +72,8 @@ public:
             handleVCenter(static_cast<VCenterRecord*>(record));
         else if (type == ZoomLevelRecord::id)
             handleZoomLevel(static_cast<ZoomLevelRecord*>(record));
+        else if (type == DimensionRecord::id)
+            handleDimension(static_cast<DimensionRecord*>(record));
         else if (type == ChartRecord::id)
             handleChart(static_cast<ChartRecord*>(record));
         else if (type == BeginRecord::id)
@@ -82,8 +84,52 @@ public:
             handleFrame(static_cast<FrameRecord*>(record));
         else if (type == SeriesRecord::id)
             handleSeries(static_cast<SeriesRecord*>(record));
+        else if (type == DataFormatRecord::id)
+            handleDataFormat(static_cast<DataFormatRecord*>(record));
+        else if (type == Chart3DBarShapeRecord::id)
+            handleChart3DBarShape(static_cast<Chart3DBarShapeRecord*>(record));
+        else if (type == Chart3dRecord::id)
+            handleChart3d(static_cast<Chart3dRecord*>(record));
+        else if (type == LineFormatRecord::id)
+            handleLineFormat(static_cast<LineFormatRecord*>(record));
+        else if (type == AreaFormatRecord::id)
+            handleAreaFormat(static_cast<AreaFormatRecord*>(record));
+        else if (type == PieFormatRecord::id)
+            handlePieFormat(static_cast<PieFormatRecord*>(record));
+        else if (type == MarkerFormatRecord::id)
+            handleMarkerFormat(static_cast<MarkerFormatRecord*>(record));
+        else if (type == ChartFormatRecord::id)
+            handleChartFormat(static_cast<ChartFormatRecord*>(record));
+        else if (type == GelFrameRecord::id)
+            handleGelFrame(static_cast<GelFrameRecord*>(record));
+        else if (type == SerToCrtRecord::id)
+            handleSerToCrt(static_cast<SerToCrtRecord*>(record));
+        else if (type == ShtPropsRecord::id)
+            handleShtProps(static_cast<ShtPropsRecord*>(record));
+        else if (type == DefaultTextRecord::id)
+            handleDefaultText(static_cast<DefaultTextRecord*>(record));
+        else if (type == TextRecord::id)
+            handleText(static_cast<TextRecord*>(record));
+        else if (type == PosRecord::id)
+            handlePos(static_cast<PosRecord*>(record));
+        else if (type == FontXRecord::id)
+            handleFontX(static_cast<FontXRecord*>(record));
+        else if (type == PlotGrowthRecord::id)
+            handlePlotGrowth(static_cast<PlotGrowthRecord*>(record));
+        else if (type == LegendRecord::id)
+            handleLegend(static_cast<LegendRecord*>(record));
+        else if (type == AxesUsedRecord::id)
+            handleAxesUsed(static_cast<AxesUsedRecord*>(record));
+        else if (type == AxisParentRecord::id)
+            handleAxisParent(static_cast<AxisParentRecord*>(record));
         else if (type == BRAIRecord::id)
             handleBRAI(static_cast<BRAIRecord*>(record));
+        else if (type == PieRecord::id)
+            handlePie(static_cast<PieRecord*>(record));
+        else if (type == SIIndexRecord::id)
+            handleSIIndex(static_cast<SIIndexRecord*>(record));
+        else if (type == CrtLinkRecord::id)
+            {} // written but unused record
         else {
             std::cout << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
         }
@@ -109,10 +155,11 @@ private:
     }
     void handleZoomLevel(ZoomLevelRecord *) {
     }
+    void handleDimension(DimensionRecord *) {
+    }
     void handleChart(ChartRecord *record) {
         if(!record) return;
         std::cout << "ChartSubStreamHandler ChartRecord" << std::endl;
-
         m_chart->x = record->x();
         m_chart->y = record->y();
         m_chart->width = record->width();
@@ -149,6 +196,85 @@ private:
         std::cout << "ChartSubStreamHandler::handleBRAI dataId=" << record->dataId() << " type=" << record->type() << " isUnlinkedNumberFormat=" << record->isUnlinkedNumberFormat() << " numberFormat=" << record->numberFormat() << std::endl;
         //TODO
     }
+    void handleDataFormat(DataFormatRecord *record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleDataFormat xi=" << record->xi() << " yi=" << record->yi() << " iss=" << record->iss() << std::endl;
+        //TODO
+    }
+    void handleChart3DBarShape(Chart3DBarShapeRecord * record) {
+        //TODO
+    }
+    void handleChart3d(Chart3dRecord *record) { // specifies that chart is rendered in 3d scene
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleChart3d" << std::endl;
+        //TODO
+    }
+    void handleLineFormat(LineFormatRecord *) {
+        //TODO
+    }
+    void handleAreaFormat(AreaFormatRecord *) {
+        //TODO
+    }
+    void handlePieFormat(PieFormatRecord *) {
+        //TODO
+    }
+    void handleMarkerFormat(MarkerFormatRecord *) {
+        //TODO
+    }
+    void handleChartFormat(ChartFormatRecord *) {
+        //TODO
+    }
+    void handleGelFrame(GelFrameRecord *) {
+        //TODO
+    }
+    void handleSerToCrt(SerToCrtRecord *record) { // specifies the chartgroup for the current series
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleSerToCrt id=" << record->identifier() << std::endl;
+    }
+    void handleShtProps(ShtPropsRecord *) { // properties
+        //TODO
+    }
+    void handleDefaultText(DefaultTextRecord *record) { // text
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleDefaultText id=" << record->identifier() << std::endl;
+        //TODO
+    }
+    void handleText(TextRecord *record) { // text formatting
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleText" << std::endl;
+        //TODO
+    }
+    void handlePos(PosRecord *record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handlePos mdTopLt=" << record->mdTopLt() << " mdBotRt=" << record->mdBotRt() << " x1=" << record->x1() << " y1=" << record->y1() << " x2=" << record->x2() << " y2=" << record->y2() << std::endl;
+        //TODO
+    }
+    void handleFontX(FontXRecord *) {
+        //TODO
+    }
+    void handlePlotGrowth(PlotGrowthRecord *) {
+        //TODO
+    }
+    void handleLegend(LegendRecord *) {
+        //TODO
+    }
+    void handleAxesUsed(AxesUsedRecord *) {
+        //TODO
+    }
+    void handleAxisParent(AxisParentRecord *) {
+        //TODO
+    }
+    void handlePie(PieRecord *record) { // specifies that the chartgroup is a pie chart
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handlePie anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
+        //TODO
+    }
+    void handleSIIndex(SIIndexRecord *record) { // type of data contained in the Number records following
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleSIIndex numIndex=" << record->numIndex() << std::endl;
+        //TODO
+    }
+
 };
 
 } // namespace Swinder
