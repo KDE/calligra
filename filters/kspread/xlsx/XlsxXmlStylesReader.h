@@ -293,12 +293,20 @@ public:
             return 0;
         return cellFormats[id];
     }
+
+    //! @return number format string for id @a (counted from 0)
+    QString numberFormatString( int id ) const 
+    {
+        return numberFormatStrings[ id ];
+    }
+
 protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
     QVector<XlsxFontStyle*> fontStyles;
     QVector<XlsxFillStyle*> fillStyles;
     QVector<XlsxCellFormat*> cellFormats;
+    QMap< int, QString > numberFormatStrings;
 
     friend class XlsxXmlStylesReader;
 };
@@ -326,6 +334,8 @@ public:
 protected:
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_styleSheet();
+    KoFilter::ConversionStatus read_numFmts();
+    KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_fonts();
     KoFilter::ConversionStatus read_font();
     KoFilter::ConversionStatus read_sz();

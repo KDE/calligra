@@ -188,6 +188,35 @@ void XlsxFontStyle::setupCellTextStyle(KoGenStyle* cellStyle) const
 
 XlsxStyles::XlsxStyles()
 {
+    // fill the default number formats
+    // from Office Open XML Part 4 - Markup Language Reference, p. 2128
+    numberFormatStrings[ 1 ] = QLatin1String( "0" );
+    numberFormatStrings[ 2 ] = QLatin1String( "0.00" );
+    numberFormatStrings[ 3 ] = QLatin1String( "#,##0" );
+    numberFormatStrings[ 4 ] = QLatin1String( "#,##0.00" );
+    numberFormatStrings[ 9 ] = QLatin1String( "0%" );
+    numberFormatStrings[ 10 ] = QLatin1String( "0.00%" );
+    numberFormatStrings[ 11 ] = QLatin1String( "0.00E+00" );
+    numberFormatStrings[ 12 ] = QLatin1String( "# ?/?" );
+    numberFormatStrings[ 13 ] = QLatin1String( "# ??/??" );
+    numberFormatStrings[ 14 ] = QLatin1String( "mm-dd-yy" );
+    numberFormatStrings[ 15 ] = QLatin1String( "d-mmm-yy" );
+    numberFormatStrings[ 16 ] = QLatin1String( "d-mmm" );
+    numberFormatStrings[ 17 ] = QLatin1String( "mmm-yy" );
+    numberFormatStrings[ 18 ] = QLatin1String( "h:mm AM/PM" );
+    numberFormatStrings[ 19 ] = QLatin1String( "h:mm:ss AM/PM" );
+    numberFormatStrings[ 20 ] = QLatin1String( "h:mm" );
+    numberFormatStrings[ 21 ] = QLatin1String( "h:mm:ss" );
+    numberFormatStrings[ 22 ] = QLatin1String( "m/d/yy h:mm" );
+    numberFormatStrings[ 37 ] = QLatin1String( "#,##0 ;(#,##0)" );
+    numberFormatStrings[ 38 ] = QLatin1String( "#,##0 ;[Red](#,##0)" );
+    numberFormatStrings[ 39 ] = QLatin1String( "#,##0.00;(#,##0.00)" );
+    numberFormatStrings[ 40 ] = QLatin1String( "#,##0.00;[Red](#,##0.00)" );
+    numberFormatStrings[ 45 ] = QLatin1String( "mm:ss" );
+    numberFormatStrings[ 46 ] = QLatin1String( "[h]:mm:ss" );
+    numberFormatStrings[ 47 ] = QLatin1String( "mmss.0" );
+    numberFormatStrings[ 48 ] = QLatin1String( "##0.0E+0" );
+    numberFormatStrings[ 49 ] = QLatin1String( "@" );
 }
 
 XlsxStyles::~XlsxStyles()
@@ -467,6 +496,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
         if (isStartElement()) {
             TRY_READ_IF(fonts)
             TRY_READ_IF(fills)
+            TRY_READ_IF(numFmts)
             TRY_READ_IF(cellXfs)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -508,6 +538,63 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numFmts
+//! numFmts handler (Number formats)
+/*! ECMA-??? ???
+ This element contains all number format definitions for this workbook.
+ Child elements:
+ - [done] numFmt (Format Definition) §???
+ Parent elements:
+ - [done] styleSheet (§18.8.39)
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs = attributes();
+    TRY_READ_ATTR_WITHOUT_NS( count )
+    uint countNumber;
+    STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
+    
+    while( !atEnd() )
+    {
+        readNext();
+        if( isStartElement() )
+        {
+            TRY_READ_IF( numFmt )
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF( CURRENT_EL )
+    }
+    
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numFmt
+
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs = attributes();
+    TRY_READ_ATTR_WITHOUT_NS( numFmtId )
+    const uint id = numFmtId.toInt();
+    QString formatCode;
+    TRY_READ_ATTR_WITHOUT_NS_INTO( formatCode, formatCode );
+
+    m_context->styles->numberFormatStrings[ id ] = formatCode;
+
+    while( true )
+    {
+        BREAK_IF_END_OF( CURRENT_EL );
+        readNext();
+        break;
+    }
+
     READ_EPILOGUE
 }
 
