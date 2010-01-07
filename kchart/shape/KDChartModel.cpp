@@ -334,7 +334,7 @@ QVariant KDChartModel::headerData( int section,
         case Qt::DisplayRole:
             return dataSet->labelData();
         case KDChart::DatasetBrushRole:
-            return dataSet->color();
+            return dataSet->brush();
         }
     }
     /* else if ( orientation == d->dataDirection ) { */
