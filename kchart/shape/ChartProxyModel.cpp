@@ -523,22 +523,22 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
     QRect dataChangedRect = QRect( topLeftPoint,
                                    QSize( bottomRightPoint.x() - topLeftPoint.x() + 1,
                                           bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
-    
+
     foreach ( DataSet *dataSet, d->dataSets ) {
-        bool intersects = false;
-        QRect changedRect;
-        foreach ( const QRect &rect, dataSet->yDataRegion().rects() ) {
-            if ( rect.intersects( dataChangedRect ) ) {
-                changedRect |= rect.intersected( dataChangedRect );
-                intersects = true;
+        if ( dataSet->xDataRegion().intersects( dataChangedRect ) )
+            dataSet->xDataChanged( dataSet->xDataRegion().intersected( dataChangedRect ).boundingRect() );
 
-                break;
-            }
-        }
+        if ( dataSet->yDataRegion().intersects( dataChangedRect ) )
+            dataSet->yDataChanged( dataSet->yDataRegion().intersected( dataChangedRect ).boundingRect() );
 
-        if ( intersects ) {
-            dataSet->yDataChanged( changedRect );
-        }
+        if ( dataSet->categoryDataRegion().intersects( dataChangedRect ) )
+            dataSet->categoryDataChanged( dataSet->categoryDataRegion().intersected( dataChangedRect ).boundingRect() );
+
+        if ( dataSet->labelDataRegion().intersects( dataChangedRect ) )
+            dataSet->labelDataChanged( dataSet->labelDataRegion().intersected( dataChangedRect ).boundingRect() );
+
+        if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
+            dataSet->customDataChanged( dataSet->customDataRegion().intersected( dataChangedRect ).boundingRect() );
     }
 	
     emit dataChanged();
