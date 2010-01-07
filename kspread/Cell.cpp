@@ -586,7 +586,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
 
 QString Cell::decodeFormula(const QString &_text) const
 {
-    QString erg = "";
+    QString erg;
     unsigned int pos = 0;
     const unsigned int length = _text.length();
 
@@ -1420,7 +1420,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
 
                 kDebug(36003) << "Num:" << num;
 
-                num = "";
+                num.clear();
                 if (!ok)
                     break;
             }
