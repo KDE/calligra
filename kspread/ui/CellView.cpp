@@ -1900,6 +1900,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
         }
         break;
     }
+    case Style::VAlignUndefined: // fall through
     case Style::Bottom: {
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle) {
             d->textY = effBottom;
@@ -1941,8 +1942,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
             break;
         }
         // fall through
-    case Style::Middle:
-    case Style::VAlignUndefined: {
+    case Style::Middle: {
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle) {
             d->textY = (h - d->textHeight) / 2 + ascent;
         } else if (tmpAngle != 0) {
