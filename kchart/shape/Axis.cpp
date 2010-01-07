@@ -652,7 +652,6 @@ void Axis::Private::createCircleDiagram()
     Q_ASSERT( kdCircleDiagram == 0 );
 
     kdCircleDiagramModel = new KDChartModel;
-    kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
 
     kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
     kdCircleDiagram->setModel( kdCircleDiagramModel );
@@ -671,7 +670,6 @@ void Axis::Private::createRingDiagram()
     Q_ASSERT( kdRingDiagram == 0 );
 
     kdRingDiagramModel = new KDChartModel;
-    kdRingDiagramModel->setDataDirection( Qt::Horizontal );
 
     kdRingDiagram = new KDChart::RingDiagram( plotArea->kdChart(), kdPolarPlane );
     kdRingDiagram->setModel( kdRingDiagramModel );
