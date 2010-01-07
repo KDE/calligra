@@ -66,6 +66,9 @@ public:
     bool       isValidDataPoint( const QPoint &point ) const;
     QVariant   data( const CellRegion &region, int index ) const;
 
+    QBrush defaultBrush() const;
+    QBrush defaultBrush( int section ) const;
+
     // Determines what sections of a cell region lie in rect
     void sectionsInRect( const CellRegion &region, const QRect &rect,
                          int &start, int &end ) const;
@@ -93,10 +96,15 @@ public:
     qreal errorMargin;
     qreal lowerErrorLimit;
     qreal upperErrorLimit;
+    // Determines whether pen has been set
+    bool penIsSet;
+    // Determines whether brush has been set
+    bool brushIsSet;
     QPen pen;
     QBrush brush;
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
+
     int num;
 
     // The different CellRegions for a dataset
@@ -144,6 +152,8 @@ DataSet::Private::Private( DataSet *parent )
     attachedAxis = 0;
     size = 0;
     blockSignals = false;
+    penIsSet = false;
+    brushIsSet = false;
 }
 
 DataSet::Private::~Private()
@@ -294,6 +304,29 @@ void DataSet::Private::sectionsInRect( const CellRegion &region, const QRect &re
             totalHeight += dataRegions[i].height();
         }
     }
+}
+
+QBrush DataSet::Private::defaultBrush() const
+{
+    Q_ASSERT( kdDiagram );
+    Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
+    if ( modelDataDirection == Qt::Vertical )
+        return defaultDataSetColor( kdDataSetNumber );
+    // FIXME: What to return in the other case?
+    return QBrush();
+}
+
+QBrush DataSet::Private::defaultBrush( int section ) const
+{
+    Q_ASSERT( kdDiagram );
+    Qt::Orientation modelDataDirection = kdChartModel->dataDirection();
+    // Horizontally aligned diagrams have a specific color per category
+    // See for example pie or ring charts. A pie chart contains a single
+    // data set, but the slices default to different brushes.
+    if ( modelDataDirection == Qt::Horizontal )
+        return defaultDataSetColor( section );
+    // Vertically aligned diagrams default to one brush per data set
+    return defaultBrush();
 }
 
 
@@ -479,7 +512,7 @@ QPen DataSet::pen() const
 
 QBrush DataSet::brush() const
 {
-    return d->brush;
+    return d->brushIsSet ? d->brush : d->defaultBrush();
 }
 
 QPen DataSet::pen( int section ) const
@@ -493,7 +526,9 @@ QBrush DataSet::brush( int section ) const
 {
     if ( d->brushes.contains( section ) )
         return d->brushes[ section ];
-    return brush();
+    if ( d->brushIsSet )
+        return brush();
+    return d->defaultBrush( section );
 }
 
 void DataSet::setPen( const QPen &pen )
@@ -505,9 +540,11 @@ void DataSet::setPen( const QPen &pen )
 
 void DataSet::setBrush( const QBrush &brush )
 {
+    Q_ASSERT( false );
     d->brush = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
+    d->brushIsSet = true;
 }
 
 void DataSet::setPen( int section, const QPen &pen )
@@ -515,6 +552,7 @@ void DataSet::setPen( int section, const QPen &pen )
     d->pens[ section ] = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
+    d->penIsSet = true;
 }
 
 void DataSet::setBrush( int section, const QBrush &brush )

@@ -216,7 +216,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             dataSet->blockSignals( true );
             
             dataSet->setNumber( createdDataSetCount );
-            dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+            //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
 
             CellRegion labelDataRegion;
 
@@ -316,7 +316,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             dataSet->blockSignals( true );
             
             dataSet->setNumber( createdDataSetCount );
-            dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+            //dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
 
             CellRegion labelDataRegion;
             
