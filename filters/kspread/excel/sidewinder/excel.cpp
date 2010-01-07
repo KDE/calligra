@@ -2575,7 +2575,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
 #ifdef SWINDER_XLS2RAW
         if (!record) {
-            std::cout << "Unhandled Record";
+            std::cout << "Unhandled Record 0x";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
             std::cout << std::dec;
             std::cout << " (" << type << ")";

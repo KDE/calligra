@@ -160,6 +160,87 @@ public:
 
 const unsigned HLinkRecord::id = 0x01B8;
 
+class MsoDrawingRecord : public Record
+{
+public:
+    static const unsigned id;
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "MsoDrawing";
+    }
+    virtual void dump(std::ostream&) const {}
+    static Record *createRecord() {
+        return new MsoDrawingRecord;
+    }
+    MsoDrawingRecord() : Record() {}
+    virtual ~MsoDrawingRecord() {}
+
+    // read a OfficeArtRecordHeader struct
+    void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0, unsigned *recType = 0, unsigned long *recLen = 0) {
+        const unsigned recVerAndInstance = readU16(data); //4 bits version and 12 bits number of differentiate atoms in this record
+        if(recVer) {
+            unsigned rv = recVerAndInstance;
+            rv = (rv >> 12);
+            *recVer = rv;
+        }
+        if(recInstance) {
+            unsigned ri = recVerAndInstance;
+            ri = (ri << 4);
+            ri = (ri >> 4);
+            *recInstance = ri;
+        }
+        if(recType) {
+            *recType = readU16(data + 2);
+        }
+        if(recLen) {
+            *recLen = readU32(data + 4);
+        }
+    }
+        
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */) {
+        if(size < 24) {
+            setIsValid(false);
+            Q_ASSERT(false);
+            return;
+        }
+        
+        // rh
+        unsigned recVer = 0;
+        unsigned recInstance = 0;
+        unsigned recType = 0;
+        unsigned long recLen = 0;
+        readHeader(data, 0, 0, &recType, &recLen);
+        if(recType < 0xF000 || recType > 0xFFFF) {
+            std::cerr << "Invalid MsoDrawing record" << std::endl;
+            setIsValid(false);
+            Q_ASSERT(false);
+            return;
+        }
+        
+        // drawingData
+        readHeader(data + 8, &recVer, &recInstance, &recType, &recLen);
+        if(recVer != 0x0 || recInstance > 0xFFE || recType != 0xF008 || recLen != 0x00000008) {
+            std::cerr << "Invalid MsoDrawing record" << std::endl;
+            setIsValid(false);
+            Q_ASSERT(false);
+            return;
+        }
+        unsigned long csp = readU32(data + 16);
+        printf("Number of shapes=%i\n",csp);
+        unsigned long spidCur = readU32(data + 20); // MSOSPID, shape-identifier of the last shape in the drawing
+
+        // regroupItems
+        // groupShape
+        // shape
+        // deletedShapes
+        // solvers
+    }
+};
+
+const unsigned MsoDrawingRecord::id = 0xEC;
+
 class WorksheetSubStreamHandler::Private
 {
 public:
@@ -191,6 +272,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->formulaStringCell = 0;
 
     RecordRegistry::registerRecordClass(HLinkRecord::id, HLinkRecord::createRecord);
+    RecordRegistry::registerRecordClass(MsoDrawingRecord::id, MsoDrawingRecord::createRecord);
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
