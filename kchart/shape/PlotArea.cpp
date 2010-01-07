@@ -122,6 +122,8 @@ public:
     
     // 2. Pie charts
     int   pieExplodeFactor;     // in percents
+    // TODO: Load+Save
+    qreal pieAngleOffset;       // in degrees
 
     // ----------------------------------------------------------------
     // The embedded KD Chart
@@ -157,6 +159,10 @@ PlotArea::Private::Private( ChartShape *parent )
     vertical       = false;
     gapBetweenBars = 0;
     gapBetweenSets = 100;
+
+    // OpenOffice.org's default. It means the first pie slice starts at the
+    // very top (and then going counter-clockwise).
+    pieAngleOffset = 90.0;
 
     // KD Chart stuff
     kdChart = new KDChart::Chart();
@@ -340,6 +346,11 @@ int PlotArea::gapBetweenBars() const
 int PlotArea::gapBetweenSets() const
 {
     return d->gapBetweenSets;
+}
+
+qreal PlotArea::pieAngleOffset() const
+{
+    return d->pieAngleOffset;
 }
 
 bool PlotArea::addAxis( Axis *axis )
@@ -819,6 +830,13 @@ void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
     d->pieExplodeFactor = percent;
 
     emit pieExplodeFactorChanged( dataSet, percent );
+}
+
+void PlotArea::setPieAngleOffset( qreal angle )
+{
+    d->pieAngleOffset = angle;
+
+    emit pieAngleOffsetChanged( angle );
 }
 
 ChartShape *PlotArea::parent() const

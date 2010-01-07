@@ -663,6 +663,10 @@ void Axis::Private::createCircleDiagram()
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+
+    // Initialize with default values that are specified in PlotArea
+    // Note: KDChart takes an int here, though ODF defines the offset to be a double.
+    kdPolarPlane->setStartPosition( (int)plotArea->pieAngleOffset() );
 }
 
 void Axis::Private::createRingDiagram()
@@ -682,6 +686,10 @@ void Axis::Private::createRingDiagram()
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+
+    // Initialize with default values that are specified in PlotArea
+    // Note: KDChart takes an int here, though ODF defines the offset to be a double.
+    kdPolarPlane->setStartPosition( (int)plotArea->pieAngleOffset() );
 }
 
 void Axis::Private::createRadarDiagram()
@@ -895,6 +903,8 @@ Axis::Axis( PlotArea *parent )
              this,        SLOT( setGapBetweenSets( int ) ) );
     connect( d->plotArea, SIGNAL( pieExplodeFactorChanged( DataSet*, int ) ),
              this,        SLOT( setPieExplodeFactor( DataSet*, int ) ) );
+    connect( d->plotArea, SIGNAL( pieAngleOffsetChanged( qreal ) ),
+             this,        SLOT( setPieAngleOffset( qreal ) ) );
 }
 
 Axis::~Axis()
@@ -1965,6 +1975,14 @@ void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
 					      attributes );
     }
     
+    requestRepaint();
+}
+
+void Axis::setPieAngleOffset( qreal angle )
+{
+    // KDChart takes an int here, though ODF defines it to be a double.
+    d->kdPolarPlane->setStartPosition( (int)angle );
+
     requestRepaint();
 }
 

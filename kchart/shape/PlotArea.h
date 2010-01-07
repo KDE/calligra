@@ -78,10 +78,12 @@ public:
     bool isThreeD() const;
     int gapBetweenBars() const;
     int gapBetweenSets() const;
+    qreal pieAngleOffset() const;
 
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     void setPieExplodeFactor( DataSet *dataSet, int percent );
+    void setPieAngleOffset( qreal angle );
 
     bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
     bool loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingContext &context );
@@ -114,6 +116,7 @@ signals:
     void gapBetweenBarsChanged( int );
     void gapBetweenSetsChanged( int );
     void pieExplodeFactorChanged( DataSet*, int );
+    void pieAngleOffsetChanged( qreal );
 
 private:
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
