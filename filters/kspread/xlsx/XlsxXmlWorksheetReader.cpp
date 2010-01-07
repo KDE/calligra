@@ -31,6 +31,7 @@
 #include <KoUnit.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoOdfNumberStyles.h>
 #include <KoOdfGraphicStyles.h>
 #include <styles/KoCharacterStyle.h>
 
@@ -39,6 +40,10 @@
 #include <QBrush>
 #include <QRegExp>
 
+#define UNICODE_EUR 0x20AC
+#define UNICODE_GBP 0x00A3
+#define UNICODE_JPY 0x00A5
+
 #undef  MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlWorksheetReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
@@ -46,23 +51,6 @@
 #include <MsooXmlReader_p.h>
 
 #include <math.h>
-
-QString extractLocale(QString &time)
-{
-    QString locale;
-    if (time.startsWith("[$-")) {
-        int pos = time.indexOf(']');
-        if (pos > 3) {
-            locale = time.mid(3, pos - 3);
-            time = time.mid(pos + 1);
-            pos = time.lastIndexOf(';');
-            if (pos >= 0) {
-                time = time.left(pos);
-            }
-        }
-    }
-    return locale;
-}
 
 // Remove via the "\" char escaped characters from the string.
 QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
@@ -81,6 +69,110 @@ QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
         }
     }
     return s;
+}
+
+
+static void processNumberText(KoXmlWriter* xmlWriter, QString& text)
+{
+    if (! text.isEmpty()) {
+        xmlWriter->startElement("number:text");
+        xmlWriter->addTextNode(removeEscaped(text, true));
+        xmlWriter->endElement();  // number:text
+        text.clear();
+    }
+}
+
+// Another form of conditional formats are those that define a different format
+// depending on the value. In following examples the different states are
+// splittet with a ; char, the first is usually used if the value is positive,
+// the second if the value if negavtive, the third if the value is invalid and
+// the forth defines a common formatting mask.
+// _("$"* #,##0.0000_);_("$"* \(#,##0.0000\);_("$"* "-"????_);_(@_)
+// _-[$₩-412]* #,##0.0000_-;\-[$₩-412]* #,##0.0000_-;_-[$₩-412]* "-"????_-;_-@_-
+// _ * #,##0_)[$€-1]_ ;_ * #,##0[$€-1]_ ;_ * "-"_)[$€-1]_ ;_ @_ "
+QString extractConditional(const QString &_text)
+{
+    const QString text = removeEscaped(_text);
+#if 1
+    if ( text.startsWith('_') && text.length() >= 3 ) {
+        QChar end;
+        if(text[1] == '(') end = ')';
+        else if(text[1] == '_') end = '_';
+        else if(text[1] == ' ') end = ' ';
+        else kDebug() << "Probably unhandled condition=" << text[1] <<"in text=" << text;
+        if(! end.isNull()) {
+            {
+                QString regex = QString( "^_%1(.*\"\\$\".*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QRegExp ex(regex);
+                ex.setMinimal(true);
+                if (ex.indexIn(text) >= 0) return ex.cap(1);
+            }
+            {
+                QString regex = QString( "^_%1(.*\\[\\$.*\\].*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QRegExp ex(regex);
+                ex.setMinimal(true);
+                if (ex.indexIn(text) >= 0) return ex.cap(1);
+            }
+        }
+    }
+#else
+    if ( text.startsWith('_') ) {
+        return text.split(";").first();
+    }
+#endif
+    return text;
+}
+
+// Currency or accounting format.
+// "$"* #,##0.0000_
+// [$EUR]\ #,##0.00"
+// [$₩-412]* #,##0.0000
+// * #,##0_)[$€-1]_
+static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0, QString *formatVal = 0)
+{
+    QString vf = extractConditional(valueFormat);
+
+    // dollar is special cause it starts with a $
+    QRegExp dollarRegEx("^\"\\$\"[*\\-\\s]*([#,]*[\\d]+(|.[#0]+)).*");
+    if (dollarRegEx.indexIn(vf) >= 0) {
+        if(currencyVal) *currencyVal = "$";
+        if(formatVal) *formatVal = dollarRegEx.cap(1);
+        return true;
+    }
+
+    // every other currency or accounting has a [$...] identifier
+    QRegExp crRegEx("\\[\\$(.*)\\]");
+    crRegEx.setMinimal(true);
+    if (crRegEx.indexIn(vf) >= 0) {
+        if(currencyVal) {
+            *currencyVal = crRegEx.cap(1);
+        }
+        if(formatVal) {
+            QRegExp vlRegEx("([#,]*[\\d]+(|.[#0]+))");
+            *formatVal = vlRegEx.indexIn(vf) >= 0 ? vlRegEx.cap(1) : QString();
+        }
+        return true;
+    }
+
+    return false;
+}
+
+
+QString extractLocale(QString &time)
+{
+    QString locale;
+    if (time.startsWith("[$-")) {
+        int pos = time.indexOf(']');
+        if (pos > 3) {
+            locale = time.mid(3, pos - 3);
+            time = time.mid(pos + 1);
+            pos = time.lastIndexOf(';');
+            if (pos >= 0) {
+                time = time.left(pos);
+            }
+        }
+    }
+    return locale;
 }
 
 static bool isTimeFormat( const QString& value, const QString& valueFormat)
@@ -138,19 +230,22 @@ const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 class XlsxXmlWorksheetReader::Private
 {
 public:
-    Private()
-     : warningAboutWorksheetSizeDisplayed(false)
+    Private( XlsxXmlWorksheetReader* qq )
+     : q( qq ),
+       warningAboutWorksheetSizeDisplayed(false)
     {
     }
     ~Private() {
     }
+    XlsxXmlWorksheetReader* const q;
+    QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
         : MSOOXML::MsooXmlCommonReader(writers)
         , m_context(0)
-        , d(new Private)
+        , d(new Private( this ) )
 {
     init();
 }
@@ -738,7 +833,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         */
         if( isTimeFormat( m_value, numberFormat ) )
         {
-            const QTime time = QTime( 0, 0 ).addMSecs( m_value.toDouble() * 24 * 60 * 60 * 1000 );
+            const QTime time = QTime( 0, 0 ).addMSecs( qRound( m_value.toDouble() * 24 * 60 * 60 * 1000 ) );
             body->addTextSpan( time.toString() );
             m_value = time.toString( QLatin1String( "'PT'HH'H'mm'M'ss'S'" ) );
             valueType = MsooXmlReader::constTime;
@@ -834,6 +929,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             }
             QString cellStyleName(mainStyles->lookup(cellStyle));
 
+/*
             if( !numberFormat.isEmpty() )
             {
                 if( valueType == "time" )
@@ -843,9 +939,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                     timeStyle.addChildElement( "number", "<number:hours/>" );
                     cellStyleName = mainStyles->lookup( timeStyle, "N" );
                 }
-            }
+            }*/
 
-            body->addAttribute("table:style-name", cellStyleName);
+            const QString formattedStyle = d->processValueFormat( numberFormat );
+
+            body->addAttribute("table:style-name", formattedStyle.isEmpty() ? cellStyleName : formattedStyle );
         }
 
         if (m_value.isEmpty()) {
@@ -918,4 +1016,612 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
+}
+
+// 3.8.31 numFmts
+QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& valueFormat)
+{
+    // number
+    QRegExp numberRegEx("(0+)(\\.0+)?(E\\+0+)?");
+    if (numberRegEx.exactMatch(valueFormat)) {
+        if (numberRegEx.cap(3).length())
+            return KoOdfNumberStyles::saveOdfScientificStyle(*q->mainStyles, valueFormat, "", "");
+        else
+            return KoOdfNumberStyles::saveOdfNumberStyle(*q->mainStyles, valueFormat, "", "");
+    }
+
+    // percent
+    QRegExp percentageRegEx("(0+)(\\.0+)?%");
+    if (percentageRegEx.exactMatch(valueFormat)) {
+        return KoOdfNumberStyles::saveOdfPercentageStyle(*q->mainStyles, valueFormat, "", "");
+    }
+
+    // text
+    if (valueFormat.startsWith("@")) {
+        KoGenStyle style(KoGenStyle::StyleNumericText);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        xmlWriter.startElement("number:text-content");
+        xmlWriter.endElement(); // text-content
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return q->mainStyles->lookup(style, "N");
+    }
+    
+    // fraction
+    const QString escapedValueFormat = removeEscaped(valueFormat);
+    QRegExp fractionRegEx("^#([?]+)/([0-9?]+)$");
+    if (fractionRegEx.indexIn(escapedValueFormat) >= 0) {
+        const int minlength = fractionRegEx.cap(1).length(); // numerator
+        const QString denominator = fractionRegEx.cap(2); // denominator
+        bool hasDenominatorValue = false;
+        const int denominatorValue = denominator.toInt(&hasDenominatorValue);
+
+        KoGenStyle style(KoGenStyle::StyleNumericFraction);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        xmlWriter.startElement("number:fraction");
+        xmlWriter.addAttribute("number:min-numerator-digits", minlength);
+        if (hasDenominatorValue) {
+            QRegExp rx("/[?]*([0-9]*)[?]*$");
+            if (rx.indexIn(escapedValueFormat) >= 0)
+                xmlWriter.addAttribute("number:min-integer-digits", rx.cap(1).length());
+            xmlWriter.addAttribute("number:number:denominator-value", denominatorValue);
+        } else {
+            xmlWriter.addAttribute("number:min-denominator-digits", denominator.length());
+        }
+        xmlWriter.endElement(); // number:fraction
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return q->mainStyles->lookup(style, "N");
+    }
+
+    // currency
+    QString currencyVal, formatVal;
+    if (currencyFormat(valueFormat, &currencyVal, &formatVal)) {
+        KoGenStyle style(KoGenStyle::StyleNumericCurrency);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
+        if(symbolRegEx.indexIn(currencyVal) >= 0) {
+            xmlWriter.startElement("number:currency-symbol");
+
+            QString language, country;
+            QRegExp countryRegExp("^[^a-zA-Z0-9\\s]+\\-[\\s]*([0-9]+)[\\s]*$");
+            if(countryRegExp.indexIn(currencyVal) >= 0) {
+                //TODO
+                //bool ok = false;
+                //int languageCode = countryRegExp.cap(1).toInt(&ok);
+                //if(ok) language = languageName(languageCode);
+            } else if(currencyVal[0] == '$') {
+                language = "en";
+                country = "US";
+            } else if(currencyVal[0] == QChar(UNICODE_EUR)) {
+                // should not be possible cause there is no single "euro-land"
+            } else if(currencyVal[0] == QChar(UNICODE_GBP)) {
+                language = "en";
+                country = "GB";
+            } else if(currencyVal[0] == QChar(UNICODE_JPY)) {
+                language = "ja";
+                country = "JP";
+            } else {
+                // nothing we can do here...
+            }
+
+            if(!language.isEmpty())
+                xmlWriter.addAttribute("number:language", language);
+            if(!country.isEmpty())
+                xmlWriter.addAttribute("number:country", country);
+
+            xmlWriter.addTextNode(symbolRegEx.cap(1));
+            xmlWriter.endElement();
+        }
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return q->mainStyles->lookup(style, "N");
+    }
+
+    QString vf = valueFormat;
+    QString locale = extractLocale(vf);
+    Q_UNUSED(locale);
+    const QString _vf = removeEscaped(vf);
+
+    // dates
+    QRegExp dateRegEx("(d|M|y)");   // we don't check for 'm' cause this can be 'month' or 'minute' and if nothing else is defined we assume 'minute'...
+    if (dateRegEx.indexIn(_vf) >= 0) {
+        KoGenStyle style(KoGenStyle::StyleNumericDate);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        QString numberText;
+        int lastPos = -1;
+        while (++lastPos < vf.count()) {
+            if (vf[lastPos] == 'd' || vf[lastPos] == 'm' || vf[lastPos] == 'M' || vf[lastPos] == 'y') break;
+            numberText += vf[lastPos];
+        }
+        processNumberText(&xmlWriter, numberText);
+
+        while (++lastPos < vf.count()) {
+            if (vf[lastPos] == 'd') { // day
+                processNumberText(&xmlWriter, numberText);
+                const bool isLong = lastPos + 1 < vf.count() && vf[lastPos + 1] == 'd';
+                if (isLong) ++lastPos;
+                xmlWriter.startElement("number:day");
+                xmlWriter.addAttribute("number:style", isLong ? "long" : "short");
+                xmlWriter.endElement();  // number:day
+            } else if (vf[lastPos] == 'm' || vf[lastPos] == 'M') { // month
+                processNumberText(&xmlWriter, numberText);
+                const int length = (lastPos + 2 < vf.count() && (vf[lastPos + 2] == 'm' || vf[lastPos + 2] == 'M')) ? 2
+                                   : (lastPos + 1 < vf.count() && (vf[lastPos + 1] == 'm' || vf[lastPos + 1] == 'M')) ? 1
+                                   : 0;
+                xmlWriter.startElement("number:month");
+                xmlWriter.addAttribute("number:textual", length == 2 ? "true" : "false");
+                xmlWriter.addAttribute("number:style", length == 1 ? "long" : "short");
+                xmlWriter.endElement();  // number:month
+                lastPos += length;
+            } else if (vf[lastPos] == 'y') { // year
+                processNumberText(&xmlWriter, numberText);
+                const int length = (lastPos + 3 < vf.count() && vf[lastPos + 3] == 'y') ? 3
+                                   : (lastPos + 2 < vf.count() && vf[lastPos + 2] == 'y') ? 2
+                                   : (lastPos + 1 < vf.count() && vf[lastPos + 1] == 'y') ? 1 : 0;
+                xmlWriter.startElement("number:year");
+                xmlWriter.addAttribute("number:style", length >= 3 ? "long" : "short");
+                xmlWriter.endElement();  // number:year
+                lastPos += length;
+            } else {
+                numberText += vf[lastPos];
+            }
+        }
+        processNumberText(&xmlWriter, numberText);
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+
+        qDebug() << elementContents;
+        return q->mainStyles->lookup(style, "N");
+    }
+
+    /*
+    QRegExp dateRegEx("(m{1,3}|d{1,2}|yy|yyyy)(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy)(?:(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy))?");
+    if( dateRegEx.exactMatch(valueFormat) )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericDate);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
+
+      processDateFormatComponent( &elementWriter, dateRegEx.cap(1) );
+      processDateFormatSeparator( &elementWriter, dateRegEx.cap(2) );
+      processDateFormatComponent( &elementWriter, dateRegEx.cap(3) );
+      if( dateRegEx.cap(4).length() )
+      {
+        processDateFormatSeparator( &elementWriter, dateRegEx.cap(4) );
+        processDateFormatComponent( &elementWriter, dateRegEx.cap(5) );
+      }
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    */
+
+    // times
+    QRegExp timeRegEx("(h|hh|H|HH|m|s)");
+    if (timeRegEx.indexIn(_vf) >= 0) {
+        KoGenStyle style(KoGenStyle::StyleNumericTime);
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+        // look for hours, minutes or seconds. Not for AM/PM cause we need at least one value before.
+        QString numberText;
+        int lastPos = -1;
+        while (++lastPos < vf.count()) {
+            if (vf[lastPos] == 'h' || vf[lastPos] == 'H' || vf[lastPos] == 'm' || vf[lastPos] == 's') break;
+            numberText += vf[lastPos];
+        }
+        if (! numberText.isEmpty()) {
+            xmlWriter.startElement("number:text");
+            xmlWriter.addTextNode(numberText);
+            xmlWriter.endElement();  // number:text
+            numberText.clear();
+        }
+        if (lastPos < vf.count()) {
+            // take over hours if defined
+            if (vf[lastPos] == 'h' || vf[lastPos] == 'H') {
+                const bool isLong = ++lastPos < vf.count() && (vf[lastPos] == 'h' || vf[lastPos] == 'H');
+                if (! isLong) --lastPos;
+                xmlWriter.startElement("number:hours");
+                xmlWriter.addAttribute("number:style", isLong ? "long" : "short");
+                xmlWriter.endElement();  // number:hours
+
+                // look for minutes, seconds or AM/PM definition
+                while (++lastPos < vf.count()) {
+                    if (vf[lastPos] == 'm' || vf[lastPos] == 's') break;
+                    const QString s = vf.mid(lastPos);
+                    if (s.startsWith("AM/PM") || s.startsWith("am/pm")) break;
+                    numberText += vf[lastPos];
+                }
+                if (! numberText.isEmpty()) {
+                    xmlWriter.startElement("number:text");
+                    xmlWriter.addTextNode(numberText);
+                    xmlWriter.endElement();  // number:text
+
+                    numberText.clear();
+                }
+            }
+        }
+
+        if (lastPos < vf.count()) {
+
+            // taker over minutes if defined
+            if (vf[lastPos] == 'm') {
+                const bool isLong = ++lastPos < vf.count() && vf[lastPos] == 'm';
+                if (! isLong) --lastPos;
+                xmlWriter.startElement("number:minutes");
+                xmlWriter.addAttribute("number:style", isLong ? "long" : "short");
+                xmlWriter.endElement();  // number:hours
+
+                // look for seconds or AM/PM definition
+                while (++lastPos < vf.count()) {
+                    if (vf[lastPos] == 's') break;
+                    const QString s = vf.mid(lastPos);
+                    if (s.startsWith("AM/PM") || s.startsWith("am/pm")) break;
+                    numberText += vf[lastPos];
+                }
+                if (! numberText.isEmpty()) {
+                    xmlWriter.startElement("number:text");
+                    xmlWriter.addTextNode(numberText);
+                    xmlWriter.endElement();  // number:text
+                    numberText.clear();
+                }
+            }
+        }
+
+        if (lastPos < vf.count()) {
+            // taker over seconds if defined
+            if (vf[lastPos] == 's') {
+                const bool isLong = ++lastPos < vf.count() && vf[lastPos] == 's';
+                if (! isLong) --lastPos;
+                xmlWriter.startElement("number:seconds");
+                xmlWriter.addAttribute("number:style", isLong ? "long" : "short");
+                xmlWriter.endElement();  // number:hours
+
+                // look for AM/PM definition
+                while (++lastPos < vf.count()) {
+                    const QString s = vf.mid(lastPos);
+                    if (s.startsWith("AM/PM") || s.startsWith("am/pm")) break;
+                    numberText += vf[lastPos];
+                }
+                if (! numberText.isEmpty()) {
+                    xmlWriter.startElement("number:text");
+                    xmlWriter.addTextNode(numberText);
+                    xmlWriter.endElement();  // number:text
+                    numberText.clear();
+                }
+            }
+
+            // take over AM/PM definition if defined
+            const QString s = vf.mid(lastPos);
+            if (s.startsWith("AM/PM") || s.startsWith("am/pm")) {
+                xmlWriter.startElement("number:am-pm");
+                xmlWriter.endElement();  // number:am-pm
+                lastPos += 4;
+            }
+        }
+
+        // and take over remaining text
+        if (++lastPos < vf.count()) {
+            xmlWriter.startElement("number:text");
+            xmlWriter.addTextNode(vf.mid(lastPos));
+            xmlWriter.endElement();  // number:text
+        }
+
+        QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("number", elementContents);
+        return q->mainStyles->lookup(style, "N");
+    }
+
+
+    /*
+    else if( valueFormat == "h:mm AM/PM" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( " " );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:am-pm" );
+      xmlWriter.endElement();  // number:am-pm
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "h:mm:ss AM/PM" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( " " );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:am-pm" );
+      xmlWriter.endElement();  // number:am-pm
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "h:mm" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "h:mm:ss" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "[h]:mm" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      style.addAttribute( "number:truncate-on-overflow", "false" );
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "[h]:mm:ss" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      style.addAttribute( "number:truncate-on-overflow", "false" );
+
+      xmlWriter.startElement( "number:hours" );
+      xmlWriter.addAttribute( "number:style", "short" );
+      xmlWriter.endElement();  // number:hour
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "mm:ss" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "mm:ss.0" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:text
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+
+      xmlWriter.endElement();  // number:minutes
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ".0" );
+      xmlWriter.endElement();  // number:text
+
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "[mm]:ss" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      style.addAttribute( "number:truncate-on-overflow", "false" );
+
+      xmlWriter.startElement( "number:minutes" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( ":" );
+      xmlWriter.endElement();  // number:textexactMatch
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else if( valueFormat == "[ss]" )
+    {
+      KoGenStyle style(KoGenStyle::StyleNumericTime);
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+      style.addAttribute( "number:truncate-on-overflow", "false" );
+
+      xmlWriter.startElement( "number:seconds" );
+      xmlWriter.addAttribute( "number:style", "long" );
+      xmlWriter.endElement();  // number:minutes
+
+      QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+      style.addChildElement("number", elementContents);
+
+      return q->mainStyles->lookup(style, "N");
+    }
+    else
+    {
+    }
+    */
+
+    return ""; // generic
 }
