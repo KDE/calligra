@@ -227,12 +227,28 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
         if (stylesReader.dataFormats().contains(styleName)) {
-            const KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
+            KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
             QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
             if(styleMaps.count() > 0) {
-                const KoOdfNumberStyles::NumericStyleFormat ds = dataStyle;
-                foreach(StringPair p, styleMaps)
-                    conditions.loadOdfConditions(styleManager, p.first, p.second);
+                //TODO KSpread does not support conditional formatting yet. So, what we do is to
+                // just take the first style and apply that one in the hope it does match best.
+                const QString stylename = styleMaps.first().second;
+                if(stylesReader.dataFormats().contains(stylename))
+                    dataStyle = stylesReader.dataFormats()[stylename];
+
+                /*
+                // to just turn a conditional formatting into a conditional style (what is supported
+                // by kspread), something like the following can be used;
+                foreach(StringPair p, styleMaps) {
+                    Conditional c = conditions.loadOdfCondition(styleManager, p.first, p.second);
+                    if(c.styleName && !styleManager->style(*c.styleName)) {
+                        CustomStyle *s = new CustomStyle(*c.styleName);
+                        KoOdfNumberStyles::NumericStyleFormat ds = stylesReader.dataFormats()[*c.styleName];
+                        s->setCustomFormat(ds.formatStr);
+                        const_cast<StyleManager*>(styleManager)->insertStyle(s);
+                    }
+                }
+                */
             }
 
             QString tmp = dataStyle.prefix;

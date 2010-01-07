@@ -131,10 +131,15 @@ public:
 
     /**
      * \ingroup OpenDocument
+     * Loads the condtional formatting.
+     */
+    Conditional loadOdfCondition(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName);
+
+    /**
+     * \ingroup OpenDocument
      * Loads the condtional formattings.
      */
     void loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element);
-    void loadOdfConditions(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName);
 
     /**
      * \ingroup OpenDocument

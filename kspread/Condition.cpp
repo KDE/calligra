@@ -415,7 +415,7 @@ QDomElement Conditions::saveConditions(QDomDocument & doc) const
     }
 }
 
-void Conditions::loadOdfConditions(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName)
+Conditional Conditions::loadOdfCondition(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName)
 {
     kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
@@ -425,6 +425,7 @@ void Conditions::loadOdfConditions(const StyleManager* styleManager, const QStri
         newCondition.styleName = new QString(applyStyleName);
     }
     d->conditionList.append(newCondition);
+    return newCondition;
 }
 
 void Conditions::loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element)
@@ -438,7 +439,7 @@ void Conditions::loadOdfConditions(const StyleManager* styleManager, const KoXml
             QString applyStyleName;
             if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
                 applyStyleName = elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
-            loadOdfConditions(styleManager, conditionValue, applyStyleName);
+            loadOdfCondition(styleManager, conditionValue, applyStyleName);
         }
         node = node.nextSibling();
     }
