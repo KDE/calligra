@@ -84,6 +84,7 @@ protected:
     // for optimization
     static const char* officeValue;
     static const char* officeDateValue;
+    static const char* officeTimeValue;
     static const char* officeBooleanValue;
 
 private:

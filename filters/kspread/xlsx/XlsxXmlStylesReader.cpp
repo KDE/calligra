@@ -372,7 +372,7 @@ XlsxStyles::XlsxStyles()
     numberFormatStrings[ 10 ] = QLatin1String( "0.00%" );
     numberFormatStrings[ 11 ] = QLatin1String( "0.00E+00" );
     numberFormatStrings[ 12 ] = QLatin1String( "# ?/?" );
-    numberFormatStrings[ 13 ] = QLatin1String( "# ??/??" );
+    numberFormatStrings[ 13 ] = QLatin1String( "# \?\?/\?\?" );
     numberFormatStrings[ 14 ] = QLatin1String( "mm-dd-yy" );
     numberFormatStrings[ 15 ] = QLatin1String( "d-mmm-yy" );
     numberFormatStrings[ 16 ] = QLatin1String( "d-mmm" );

@@ -47,6 +47,77 @@
 
 #include <math.h>
 
+QString extractLocale(QString &time)
+{
+    QString locale;
+    if (time.startsWith("[$-")) {
+        int pos = time.indexOf(']');
+        if (pos > 3) {
+            locale = time.mid(3, pos - 3);
+            time = time.mid(pos + 1);
+            pos = time.lastIndexOf(';');
+            if (pos >= 0) {
+                time = time.left(pos);
+            }
+        }
+    }
+    return locale;
+}
+
+// Remove via the "\" char escaped characters from the string.
+QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
+{
+    QString s(text);
+    int pos = 0;
+    while (true) {
+        pos = s.indexOf('\\', pos);
+        if (pos < 0)
+            break;
+        if (removeOnlyEscapeChar) {
+            s = s.left(pos) + s.mid(pos + 1);
+            pos++;
+        } else {
+            s = s.left(pos) + s.mid(pos + 2);
+        }
+    }
+    return s;
+}
+
+static bool isTimeFormat( const QString& value, const QString& valueFormat)
+{
+    bool ok = false;
+    const double v = value.toDouble( &ok );
+    if( !ok )    
+        return false;
+
+    QString vf = valueFormat;
+    QString locale = extractLocale(vf);
+    Q_UNUSED(locale);
+    vf = removeEscaped(vf);
+
+    // if( vf == "h:mm AM/PM" ) return true;
+    // if( vf == "h:mm:ss AM/PM" ) return true;
+    // if( vf == "h:mm" ) return true;
+    // if( vf == "h:mm:ss" ) return true;
+    // if( vf == "[h]:mm:ss" ) return true;
+    // if( vf == "[h]:mm" ) return true;
+    // if( vf == "[mm]:ss" ) return true;
+    // if( vf == "M/D/YY h:mm" ) return true;
+    // if( vf == "[ss]" ) return true;
+    // if( vf == "mm:ss" ) return true;
+    // if( vf == "mm:ss.0" ) return true;
+    // if( vf == "[mm]:ss" ) return true;
+    // if( vf == "[ss]" ) return true;
+
+    // if there is still a time formatting picture item that was not escaped
+    // and therefore removed above, then we have a time format here.
+    QRegExp ex("(h|H|m|s)");
+    return (ex.indexIn(vf) >= 0) && v < 1.0;
+}
+
+
+
+
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
     const QString& _worksheetName,
@@ -61,6 +132,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
 
 const char* XlsxXmlWorksheetReader::officeValue = "office:value";
 const char* XlsxXmlWorksheetReader::officeDateValue = "office:date-value";
+const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
 class XlsxXmlWorksheetReader::Private
@@ -636,6 +708,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    bool ok = false;
+    uint styleId = s.toUInt(&ok);
+    kDebug() << "styleId:" << styleId;
+    const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
+    const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
+
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
     QByteArray valueType;
@@ -658,7 +736,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
             Converting into values described in ODF1.1: "6.7.1. Variable Value Types and Values".
         */
-        if (t == QLatin1String("s")) {
+        if( isTimeFormat( m_value, numberFormat ) )
+        {
+            const QTime time = QTime( 0, 0 ).addMSecs( m_value.toDouble() * 24 * 60 * 60 * 1000 );
+            body->addTextSpan( time.toString() );
+            m_value = time.toString( QLatin1String( "'PT'HH'H'mm'M'ss'S'" ) );
+            valueType = MsooXmlReader::constTime;
+            valueAttr = XlsxXmlWorksheetReader::officeTimeValue;
+        }
+        else if (t == QLatin1String("s")) {
             bool ok;
             const uint stringIndex = m_value.toUInt(&ok);
             if (!ok || (int)stringIndex >= m_context->sharedStrings->size()) {
@@ -746,7 +832,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
                 return KoFilter::WrongFormat;
             }
-            const QString cellStyleName(mainStyles->lookup(cellStyle));
+            QString cellStyleName(mainStyles->lookup(cellStyle));
+
+            if( !numberFormat.isEmpty() )
+            {
+                if( valueType == "time" )
+                {
+                    KoGenStyle timeStyle( KoGenStyle::StyleNumericTime );
+                    timeStyle.addAttribute("style:parent-style-name", cellStyleName );
+                    timeStyle.addChildElement( "number", "<number:hours/>" );
+                    cellStyleName = mainStyles->lookup( timeStyle, "N" );
+                }
+            }
+
             body->addAttribute("table:style-name", cellStyleName);
         }
 
