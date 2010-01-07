@@ -109,4 +109,4 @@ Comment[zh_CN]=新建 KPresenter 演示文档：
 Comment[zh_TW]=新建 KPresenter 簡報文件:
 Type=Link
 URL=.source/Presentation.kpt
-Icon=kpresenter_kpr
+Icon=application-vnd.oasis.opendocument.presentation.png
