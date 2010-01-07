@@ -362,20 +362,26 @@ int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) co
 {
     Q_UNUSED( parent );
 
+    int rows;
     if ( d->dataDirection == Qt::Vertical )
-        return d->maxDataSetSize();
+        rows = d->maxDataSetSize();
+    else
+        rows = d->dataSets.size() * d->dataDimensions;
 
-    return d->dataSets.size() * d->dataDimensions;
+    return rows;
 }
 
 int KDChartModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     Q_UNUSED( parent );
 
+    int columns;
     if ( d->dataDirection == Qt::Vertical )
-        return d->dataSets.size() * d->dataDimensions;
+        columns = d->dataSets.size() * d->dataDimensions;
+    else
+        columns = d->maxDataSetSize();
 
-    return d->maxDataSetSize();    
+    return columns;
 }
 
 void KDChartModel::setDataDimensions( int dataDimensions )
