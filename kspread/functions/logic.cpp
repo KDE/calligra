@@ -185,7 +185,7 @@ Value func_false(valVector, ValueCalc *, FuncExtra *)
 Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if ((!args[0].isBoolean()) && (!args[0].isInteger()))
-        return Value::errorNA();
+        return Value::errorVALUE();
 
     if (asBool(args[0], calc)) {
         return args[1];
