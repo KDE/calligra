@@ -410,7 +410,6 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
     else if ( !d->dataSets.isEmpty() ) {
         const int columnAboutToBeInserted = dataSetIndex * d->dataDimensions;
         if ( d->dataDirection == Qt::Vertical ) {
-            qDebug() << "Emitting beginInsertColumns(" << columnAboutToBeInserted << columnAboutToBeInserted + d->dataDimensions - 1 << ")";
             beginInsertColumns( QModelIndex(), columnAboutToBeInserted,
                                 columnAboutToBeInserted + d->dataDimensions - 1 );
         }
