@@ -326,9 +326,9 @@ void RingDiagram::drawPieSurface( QPainter* painter,
 
         QRectF drawPosition = d->position;//piePosition( dataset, pie );
 
-        QPen pen = this->pen( index );
         painter->setRenderHint ( QPainter::Antialiasing );
         painter->setBrush( brush( index ) );
+        painter->setPen( pen( index ) );
 //        painter->setPen( pen );
         //painter->setPen( Qt::red );
         if ( angleLen == 360 ) {

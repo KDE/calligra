@@ -476,9 +476,9 @@ void PieDiagram::drawPieSurface( QPainter* painter,
 
         QRectF drawPosition = piePosition( dataset, pie );
 
-        QPen pen = this->pen( index );
         painter->setRenderHint ( QPainter::Antialiasing );
         painter->setBrush( brush( index ) );
+        painter->setPen( pen( index ) );
 //        if ( threeDAttrs.isEnabled() )
 //            pen.setColor( QColor( 0, 0, 0 ) );
 //        painter->setPen( pen );
