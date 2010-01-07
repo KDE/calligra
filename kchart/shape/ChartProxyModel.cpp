@@ -477,7 +477,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 dataSet->setNumber( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
-            dataSet->loadOdf( n, context.odfLoadingContext() );
+            dataSet->loadOdf( n, context );
 
             loadedDataSetCount++;
         } else {
