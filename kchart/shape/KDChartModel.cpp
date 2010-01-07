@@ -340,10 +340,17 @@ QVariant KDChartModel::headerData( int section,
         }
     }
     /* else if ( orientation == d->dataDirection ) { */
+    // FIXME: Find a way to *not* use the first data set, but some method
+    // to set category data (including category pen and brush) properly
+    // (Setter methods in this class?)
+    DataSet *dataSet = d->dataSets[ 0 ];
     switch ( role ) {
     case Qt::DisplayRole:
-        DataSet *dataSet = d->dataSets[ 0 ];
         return dataSet->categoryData( section );
+    case KDChart::DatasetBrushRole:
+        return dataSet->brush( section );
+    case KDChart::DatasetPenRole:
+        return dataSet->pen( section );
     }
     /* } */
 
