@@ -540,7 +540,6 @@ void DataSet::setPen( const QPen &pen )
 
 void DataSet::setBrush( const QBrush &brush )
 {
-    Q_ASSERT( false );
     d->brush = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
