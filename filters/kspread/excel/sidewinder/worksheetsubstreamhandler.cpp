@@ -202,7 +202,6 @@ public:
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */) {
         if(size < 24) {
             setIsValid(false);
-            Q_ASSERT(false);
             return;
         }
         
@@ -215,7 +214,6 @@ public:
         if(recType < 0xF000 || recType > 0xFFFF) {
             std::cerr << "Invalid MsoDrawing record" << std::endl;
             setIsValid(false);
-            Q_ASSERT(false);
             return;
         }
         
@@ -224,7 +222,6 @@ public:
         if(recVer != 0x0 || recInstance > 0xFFE || recType != 0xF008 || recLen != 0x00000008) {
             std::cerr << "Invalid MsoDrawing record" << std::endl;
             setIsValid(false);
-            Q_ASSERT(false);
             return;
         }
         unsigned long csp = readU32(data + 16);
