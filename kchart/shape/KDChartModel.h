@@ -59,16 +59,37 @@ class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
 public:
     KDChartModel( QObject *parent = 0 );
     ~KDChartModel();
+
+    enum DataRole {
+        XDataRole,
+        YDataRole,
+        ZDataRole,
+        LabelDataRole,
+        CategoryDataRole,
+        CustomDataRole,
+        BrushDataRole,
+        PenDataRole
+    };
     
+    /**
+     * Specifies in what direction a data set 'points'. More specifically,
+     * if the data direction is Qt::Vertical, a data set occupies one
+     * column (in case only one data dimension is being used).
+     */
     void setDataDirection( Qt::Orientation direction );
+    /**
+     * See \a setDataDirection
+     */
     Qt::Orientation dataDirection() const;
+    /**
+     * Returns the opposite of dataDirection().
+     */
+    Qt::Orientation categoryDirection() const;
 
 public slots:
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
-    void dataSetSizeChanged( DataSet *dataSet, int newSize );
     void slotColumnsInserted( const QModelIndex& parent, int start, int end );
     
     QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
@@ -83,6 +104,10 @@ public slots:
     void addDataSet( DataSet *dataSet, bool silent = false );
     void removeDataSet( DataSet *dataSet, bool silent = false );
     QList<DataSet*> dataSets() const;
+
+    void dataSetChanged( DataSet *dataSet );
+    void dataSetChanged( DataSet *dataSet, DataRole role, int first, int last = -1 );
+    void dataSetSizeChanged( DataSet *dataSet, int newSize );
     
     void emitReset();
 
