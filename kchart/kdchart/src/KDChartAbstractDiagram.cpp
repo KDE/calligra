@@ -253,7 +253,6 @@ void AbstractDiagram::setModel( QAbstractItemModel * newModel )
     d->setAttributesModel(amodel);
     scheduleDelayedItemsLayout();
     setDataBoundariesDirty();
-    emit modelsChanged();
     if( model() )
     {
         connect( model(), SIGNAL( rowsInserted( QModelIndex, int, int ) ), this, SLOT( setDataBoundariesDirty() ) );
@@ -263,6 +262,7 @@ void AbstractDiagram::setModel( QAbstractItemModel * newModel )
         connect( model(), SIGNAL( modelReset() ), this, SLOT( setDataBoundariesDirty() ) );
         connect( model(), SIGNAL( layoutChanged() ), this, SLOT( setDataBoundariesDirty() ) );
     }
+    emit modelsChanged();
 }
         
 void AbstractDiagram::setSelectionModel( QItemSelectionModel* newSelectionModel )
