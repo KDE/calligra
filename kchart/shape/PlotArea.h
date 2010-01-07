@@ -78,11 +78,22 @@ public:
     bool isThreeD() const;
     int gapBetweenBars() const;
     int gapBetweenSets() const;
+
+    /**
+     * chart:angle-offset property, as defined in ODF v1.2.
+     * Defines at what angle, relative to the right-most point
+     * of a pie or ring chart, the first slice is going to be drawn,
+     * going counter-clockwise.
+     */
     qreal pieAngleOffset() const;
 
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     void setPieExplodeFactor( DataSet *dataSet, int percent );
+
+    /**
+     * See \a pieAngleOffset
+     */
     void setPieAngleOffset( qreal angle );
 
     bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
