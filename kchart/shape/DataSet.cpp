@@ -959,6 +959,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
 
     bool brushLoaded = false;
+    bool penLoaded = false;
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
@@ -976,6 +977,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
             if( stroke == "solid" || stroke == "dash" ) {
                 QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
+                penLoaded = true;
                 setPen( pen );
             }
         }
@@ -1002,6 +1004,11 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
         if ( fixedColor.isValid() )
             setBrush( fixedColor );
+    }
+    if ( !penLoaded ) {
+        QColor fixedColor = KoOdfWorkaround::fixMissingStrokeColor( n, context );
+        if ( fixedColor.isValid() )
+            setPen( fixedColor );
     }
 #endif
 
