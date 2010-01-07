@@ -91,7 +91,7 @@ private:
     bool checkInputData();
     bool getCondition(Conditional & newCondition, const KComboBox * cb,
                       const KLineEdit * edit1, const KLineEdit * edit2,
-                      const KComboBox * sb, Style * style);
+                      const KComboBox * sb);
 
 };
 

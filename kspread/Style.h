@@ -233,7 +233,7 @@ protected:
     void saveOdfStyle(const QSet<Key>& subStyles, KoGenStyle &style,
                       KoGenStyles &mainStyles, const StyleManager* manager) const;
 
-    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element);
+    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element, Conditions& conditions, const StyleManager* styleManager);
     void loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
     void loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
     void loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);

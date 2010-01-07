@@ -216,16 +216,24 @@ void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& el
             conditions.loadOdfConditions(styleManager, e);
     }
 
-    loadOdfDataStyle(stylesReader, element);
+    loadOdfDataStyle(stylesReader, element, conditions, styleManager);
 }
 
-void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element)
+typedef QPair<QString,QString> StringPair;
+
+void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element, Conditions& conditions, const StyleManager* styleManager)
 {
     QString str;
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
         if (stylesReader.dataFormats().contains(styleName)) {
             const KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
+            QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
+            if(styleMaps.count() > 0) {
+                const KoOdfNumberStyles::NumericStyleFormat ds = dataStyle;
+                foreach(StringPair p, styleMaps)
+                    conditions.loadOdfConditions(styleManager, p.first, p.second);
+            }
 
             QString tmp = dataStyle.prefix;
             if (!tmp.isEmpty()) {

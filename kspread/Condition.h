@@ -60,7 +60,6 @@ public:
     QColor  *      colorcond;
     QFont   *      fontcond;
     QString *      styleName;
-    Style *        style;
     Type           cond;
 
     Conditional();
@@ -104,7 +103,7 @@ public:
     /**
      * \return the style that matches first (or 0 if no condition matches)
      */
-    Style* testConditions(const Cell& cell) const;
+    Style* testConditions(const Cell& cell, const StyleManager* styleManager) const;
 
     /**
      * Retrieve the current list of conditions we're checking
@@ -135,6 +134,7 @@ public:
      * Loads the condtional formattings.
      */
     void loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element);
+    void loadOdfConditions(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName);
 
     /**
      * \ingroup OpenDocument

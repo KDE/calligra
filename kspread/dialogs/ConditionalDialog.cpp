@@ -552,7 +552,7 @@ bool ConditionalDialog::checkInputData()
 
 bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox * cb,
                                      const KLineEdit * edit1, const KLineEdit * edit2,
-                                     const KComboBox * sb, Style * style)
+                                     const KComboBox * sb)
 {
     if (!cb->isEnabled())
         return false;
@@ -588,7 +588,6 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
     newCondition.fontcond  = 0;
     newCondition.colorcond = 0;
     newCondition.styleName = sn;
-    newCondition.style     = style;
 
     return true;
 }
@@ -609,15 +608,15 @@ void ConditionalDialog::slotOk()
     Conditional newCondition;
 
     if (getCondition(newCondition, m_dlg->m_condition_1, m_dlg->m_firstValue_1,
-                     m_dlg->m_secondValue_1, m_dlg->m_style_1, manager->style(m_dlg->m_style_1->currentText())))
+                     m_dlg->m_secondValue_1, m_dlg->m_style_1))
         newList.append(newCondition);
 
     if (getCondition(newCondition, m_dlg->m_condition_2, m_dlg->m_firstValue_2,
-                     m_dlg->m_secondValue_2, m_dlg->m_style_2, manager->style(m_dlg->m_style_2->currentText())))
+                     m_dlg->m_secondValue_2, m_dlg->m_style_2))
         newList.append(newCondition);
 
     if (getCondition(newCondition, m_dlg->m_condition_3, m_dlg->m_firstValue_3,
-                     m_dlg->m_secondValue_3, m_dlg->m_style_3, manager->style(m_dlg->m_style_3->currentText())))
+                     m_dlg->m_secondValue_3, m_dlg->m_style_3))
         newList.append(newCondition);
 
     kDebug() << "Setting conditional list";

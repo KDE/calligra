@@ -171,7 +171,7 @@ CellView::CellView(SheetView* sheetView, int col, int row)
 
         // use conditional formatting attributes
         Conditions conditions = cell.conditions();
-        if (Style* style = conditions.testConditions(cell))
+        if (Style* style = conditions.testConditions(cell, sheetView->sheet()->map()->styleManager()))
             d->style.merge(*style);
     }
 

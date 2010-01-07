@@ -52,7 +52,6 @@ Conditional::Conditional()
         , colorcond(0)
         , fontcond(0)
         , styleName(0)
-        , style(0)
         , cond(None)
 {
 }
@@ -75,7 +74,6 @@ Conditional::Conditional(const Conditional& o)
     colorcond = o.colorcond ? new QColor(*o.colorcond) : 0;
     val1  = o.val1;
     val2  = o.val2;
-    style = o.style;
     cond  = o.cond;
 }
 
@@ -93,7 +91,6 @@ Conditional& Conditional::operator=(const Conditional & o)
     colorcond = o.colorcond ? new QColor(*o.colorcond) : 0;
     val1  = o.val1;
     val2  = o.val2;
-    style = o.style;
     cond  = o.cond;
 
     return *this;
@@ -101,18 +98,14 @@ Conditional& Conditional::operator=(const Conditional & o)
 
 bool Conditional::operator==(const Conditional& other) const
 {
-    if (cond == other.cond &&
+    return (cond == other.cond &&
             val1 == other.val1 &&
             val2 == other.val2 &&
             (strVal1 && other.strVal1) ? (*strVal1 == *other.strVal1) : (strVal1 == other.strVal1) &&
             (strVal2 && other.strVal2) ? (*strVal2 == *other.strVal2) : (strVal2 == other.strVal2) &&
             (colorcond && other.strVal2) ? (*colorcond == *other.colorcond) : (colorcond == other.colorcond) &&
             (fontcond && other.fontcond) ? (*fontcond == *other.fontcond) : (fontcond == other.fontcond) &&
-            (styleName && other.styleName) ? (*styleName == *other.styleName) : (styleName == other.styleName) &&
-            (style && other.style) ? (*style == *other.style) : (style == other.style)) {
-        return true;
-    }
-    return false;
+            (styleName && other.styleName) ? (*styleName == *other.styleName) : (styleName == other.styleName) );
 }
 
 
@@ -147,11 +140,11 @@ bool Conditions::isEmpty() const
     return d->conditionList.isEmpty();
 }
 
-Style* Conditions::testConditions(const Cell& cell) const
+Style* Conditions::testConditions(const Cell& cell, const StyleManager* styleManager) const
 {
     Conditional condition;
-    if (currentCondition(cell, condition))
-        return condition.style;
+    if (currentCondition(cell, condition) && condition.styleName)
+        return styleManager->style(*condition.styleName);
     else
         return 0;
 }
@@ -167,12 +160,6 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
 
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it) {
         condition = *it;
-
-//     if ( (*it).styleName )
-//         kDebug()<<"*it :"<<  *( ( *it ).styleName );
-        //
-//     kDebug()<<"*it style :"<<(  *it ).style;
-
 
         if (condition.strVal1 && cell.value().isNumber())
             continue;
@@ -428,32 +415,30 @@ QDomElement Conditions::saveConditions(QDomDocument & doc) const
     }
 }
 
+void Conditions::loadOdfConditions(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName)
+{
+    kDebug(36003) << "\tcondition:" << conditionValue;
+    Conditional newCondition;
+    loadOdfConditionValue(conditionValue, newCondition);
+    if (!applyStyleName.isNull()) {
+        kDebug(36003) << "\tstyle:" << applyStyleName;
+        newCondition.styleName = new QString(applyStyleName);
+    }
+    d->conditionList.append(newCondition);
+}
+
 void Conditions::loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element)
 {
     kDebug(36003) << "Loading conditional styles";
     KoXmlNode node(element);
-
     while (!node.isNull()) {
         KoXmlElement elementItem = node.toElement();
         if (elementItem.tagName() == "map" && elementItem.namespaceURI() == KoXmlNS::style) {
-            bool ok = true;
-            kDebug(36003) << "\tcondition:" << elementItem.attributeNS(KoXmlNS::style, "condition", QString());
-            Conditional newCondition;
-            loadOdfConditionValue(elementItem.attributeNS(KoXmlNS::style, "condition", QString()), newCondition);
-            if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name")) {
-                kDebug(36003) << "\tstyle:" << elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
-                newCondition.styleName = new QString(elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString()));
-                newCondition.style = styleManager->style(*newCondition.styleName);
-                if (!newCondition.style)
-                    ok = false;
-                else
-                    ok = true;
-            }
-
-            if (ok)
-                d->conditionList.append(newCondition);
-            else
-                kDebug(36003) << "Error loading condition" << elementItem.nodeName();
+            QString conditionValue = elementItem.attributeNS(KoXmlNS::style, "condition", QString());
+            QString applyStyleName;
+            if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
+                applyStyleName = elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
+            loadOdfConditions(styleManager, conditionValue, applyStyleName);
         }
         node = node.nextSibling();
     }
@@ -466,6 +451,11 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         val = val.remove("cell-content()");
         loadOdfCondition(val, newCondition);
     }
+    else if (val.contains("value()")) {
+        val = val.remove("value()");
+        loadOdfCondition(val, newCondition);
+    }
+
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
     //for the moment we support just int/double value, not text/date/time :(
     if (val.contains("cell-content-is-between(")) {
@@ -475,14 +465,13 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         loadOdfValidationValue(listVal, newCondition);
         newCondition.cond = Conditional::Between;
     }
-    if (val.contains("cell-content-is-not-between(")) {
+    else if (val.contains("cell-content-is-not-between(")) {
         val = val.remove("cell-content-is-not-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadOdfValidationValue(listVal, newCondition);
         newCondition.cond = Conditional::Different;
     }
-
 }
 
 void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondition)
@@ -548,7 +537,6 @@ void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional 
 void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlElement & element)
 {
     Conditional newCondition;
-    bool ok;
 
     KoXmlElement conditionElement;
     forEachElement(conditionElement, element) {
@@ -558,11 +546,13 @@ void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlEle
         newCondition.fontcond  = 0;
         newCondition.colorcond = 0;
 
-        ok = conditionElement.hasAttribute("cond");
-
-        if (ok)
-            newCondition.cond = (Conditional::Type) conditionElement.attribute("cond").toInt(&ok);
-        else continue;
+        if (!conditionElement.hasAttribute("cond"))
+            continue;
+        
+        bool ok = true;
+        newCondition.cond = (Conditional::Type) conditionElement.attribute("cond").toInt(&ok);
+        if(!ok)
+            continue;
 
         if (conditionElement.hasAttribute("val1")) {
             newCondition.val1 = conditionElement.attribute("val1").toDouble(&ok);
@@ -590,16 +580,9 @@ void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlEle
 
         if (conditionElement.hasAttribute("style")) {
             newCondition.styleName = new QString(conditionElement.attribute("style"));
-            newCondition.style = styleManager->style(*newCondition.styleName);
-            if (!newCondition.style)
-                ok = false;
         }
 
-        if (ok) {
-            d->conditionList.append(newCondition);
-        } else {
-            kDebug(36001) << "Error loading condition" << conditionElement.nodeName();
-        }
+        d->conditionList.append(newCondition);
     }
 }
 

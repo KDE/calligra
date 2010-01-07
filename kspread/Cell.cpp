@@ -321,7 +321,7 @@ Style Cell::effectiveStyle() const
 {
     Style style = sheet()->cellStorage()->style(d->column, d->row);
     // use conditional formatting attributes
-    if (Style* conditialStyle = conditions().testConditions(*this))
+    if (Style* conditialStyle = conditions().testConditions(*this, sheet()->map()->styleManager()))
         style.merge(*conditialStyle);
     return style;
 }
