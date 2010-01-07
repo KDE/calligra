@@ -673,11 +673,7 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
             if (elementItem.hasAttributeNS(ooNS::style, "apply-style-name")) {
                 kDebug(30518) << "elementItem.attribute( style:apply-style-name ) :" << elementItem.attributeNS(ooNS::style, "apply-style-name", QString());
                 newCondition.styleName = new QString(elementItem.attributeNS(ooNS::style, "apply-style-name", QString()));
-                newCondition.style = manager->style(*newCondition.styleName);
-                if (!newCondition.style)
-                    ok = false;
-                else
-                    ok = true;
+                ok = true;
             }
 
             if (ok)
