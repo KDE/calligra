@@ -69,6 +69,8 @@ public:
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
 
+    QPen defaultPen() const;
+
     // Determines what sections of a cell region lie in rect
     void sectionsInRect( const CellRegion &region, const QRect &rect,
                          int &start, int &end ) const;
@@ -329,6 +331,17 @@ QBrush DataSet::Private::defaultBrush( int section ) const
     return defaultBrush();
 }
 
+QPen DataSet::Private::defaultPen() const
+{
+    QPen pen( Qt::black );
+    ChartType chartType = effectiveChartType();
+    if ( chartType == LineChartType ||
+         chartType == ScatterChartType )
+        pen = QPen( Qt::NoPen );
+
+    return pen;
+}
+
 
 DataSet::DataSet( ChartProxyModel *proxyModel )
     : d( new Private( this ) )
@@ -507,7 +520,7 @@ void DataSet::setShowLabels( bool showLabels )
 
 QPen DataSet::pen() const
 {
-    return d->pen;
+    return d->penIsSet ? d->pen : d->defaultPen();
 }
 
 QBrush DataSet::brush() const
@@ -536,6 +549,7 @@ void DataSet::setPen( const QPen &pen )
     d->pen = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
+    d->penIsSet = true;
 }
 
 void DataSet::setBrush( const QBrush &brush )
@@ -551,7 +565,6 @@ void DataSet::setPen( int section, const QPen &pen )
     d->pens[ section ] = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
-    d->penIsSet = true;
 }
 
 void DataSet::setBrush( int section, const QBrush &brush )

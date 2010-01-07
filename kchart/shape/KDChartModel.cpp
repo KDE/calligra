@@ -335,12 +335,20 @@ QVariant KDChartModel::headerData( int section,
             return dataSet->labelData();
         case KDChart::DatasetBrushRole:
             return dataSet->brush();
+        case KDChart::DatasetPenRole:
+            return dataSet->pen();
         }
     }
     /* else if ( orientation == d->dataDirection ) { */
-    DataSet *dataSet = d->dataSets[ 0 ];
-    return dataSet->categoryData( section );
+    switch ( role ) {
+    case Qt::DisplayRole:
+        DataSet *dataSet = d->dataSets[ 0 ];
+        return dataSet->categoryData( section );
+    }
     /* } */
+
+    // Do return something even though we should never get to this point.
+    return QVariant();
 }
 
 QModelIndex KDChartModel::index( int row, int column,
