@@ -31,6 +31,27 @@
 
 namespace KChart {
 
+/**
+ * Takes a list of DataSet's and compiles them into a
+ * QAbstractItemModel for use with KDChart.
+ *
+ * Data sets in this model are aligned column-wise. Each column
+ * occupies dimension() columns. For example, for an X/Y chart,
+ * the data of this model would be structured as follows:
+ *
+ *             Brush 0       Brush 1
+ *             Pen 0         Pen 1
+ *             Label 0       Label 1
+ * -----------|------|------|------|------|
+ * Category 1 | x0,0 | y0,0 | x1,0 | x1,0 |
+ * -----------|------|------|------|------|
+ * Category 2 | x0,1 | y0,1 | x1,1 | x1,1 |
+ * -----------|------|------|------|------|
+ * Category 3 | x0,2 | y0,2 | x1,2 | x1,2 |
+ * -----------|------|------|------|------|
+ *
+ */
+
 class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
 {
     Q_OBJECT
