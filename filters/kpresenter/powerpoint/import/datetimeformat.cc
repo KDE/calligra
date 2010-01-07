@@ -35,7 +35,8 @@ DateTimeFormat::DateTimeFormat(Slide *master)
         : master(master)
         , formatId(0)
 {
-    formatId = master->dateTimeFormatId();
+    if(master)
+        formatId = master->dateTimeFormatId();
 //#ifdef LIBDATE_DEBUG
     std::cout<<"\nDateTimeConstructor formatId :"<<formatId ;
 //#endif

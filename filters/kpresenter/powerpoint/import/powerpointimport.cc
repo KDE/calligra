@@ -199,9 +199,11 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
     int x = 0;
     int y = 0;
     Slide* master = d->presentation->masterSlide();
-
+    if(!master)
+        return;
     QString pageWidth = QString("%1pt").arg((master) ? master->pageWidth() : 0);
     QString pageHeight = QString("%1pt").arg((master) ? master->pageHeight() : 0);
+    
 
     KoGenStyle marker(KoGenStyle::StyleMarker);
     marker.addAttribute("draw:display-name", "msArrowEnd 5");
@@ -254,7 +256,8 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
 
     //Creating dateTime class object
     d->dateTime = new DateTimeFormat(master);
-    d->dateTime->addDateTimeAutoStyles(styles);
+    if(d->dateTime)
+        d->dateTime->addDateTimeAutoStyles(styles);
 
     KoGenStyle text(KoGenStyle::StyleTextAuto, "text");
     text.setAutoStyleInStylesDotXml(true);
@@ -303,8 +306,10 @@ void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass
                                 QString x, QString y, QString pStyle, QString tStyle)
 {
     QBuffer buffer;
+    int  headerFooterAtomFlags = 0;
     Slide *master = d->presentation->masterSlide();
-    int  headerFooterAtomFlags = master->headerFooterFlags();
+    if(master)
+        headerFooterAtomFlags = master->headerFooterFlags();
     //QString datetime;
 
     buffer.open(QIODevice::WriteOnly);
@@ -352,6 +357,7 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
 {
     KoXmlWriter* contentWriter;
     QByteArray contentData;
+    int  headerFooterAtomFlags = 0;
     QBuffer contentBuffer(&contentData);
 
     contentBuffer.open(QIODevice::WriteOnly);
@@ -386,7 +392,8 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:presentation");
 
-    int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
+    if(master)
+        headerFooterAtomFlags = master->headerFooterFlags();
 
     if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
         contentWriter->startElement("presentation:date-time-decl");
@@ -418,8 +425,10 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
 
 void PowerPointImport::processDocStyles(Slide *master, KoGenStyles &styles)
 {
+    int  headerFooterAtomFlags = 0;
+    if(master)
+        headerFooterAtomFlags = master->headerFooterFlags();
 
-    int  headerFooterAtomFlags = master->headerFooterFlags();
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.addProperty("presentation:background-objects-visible", "true");
 
@@ -435,7 +444,8 @@ void PowerPointImport::processDocStyles(Slide *master, KoGenStyles &styles)
 
     styles.lookup(dp, "dp");
 
-    master->setStyleName(styles.lookup(dp));
+    if(master)
+        master->setStyleName(styles.lookup(dp));
 }
 
 void PowerPointImport::processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter)
@@ -1682,7 +1692,7 @@ void PowerPointImport::processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWri
     Slide* slide = d->presentation->slide(slideNo);
     Slide* master = d->presentation->masterSlide();
 
-    if (!slide || !xmlWriter) return;
+    if (!slide || !xmlWriter || !master) return;
 
     QString nameStr = slide->title();
 
