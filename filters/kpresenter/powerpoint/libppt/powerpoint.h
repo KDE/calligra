@@ -3196,6 +3196,7 @@ public:
     msofbtClientDataAtom();
     ~msofbtClientDataAtom();
 
+    unsigned dataType() const; // the recType of the contained data
     unsigned placementId() const;
     void setPlacementId(unsigned id);
     unsigned placeholderId() const;

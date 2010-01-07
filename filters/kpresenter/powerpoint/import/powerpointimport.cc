@@ -1326,7 +1326,6 @@ void PowerPointImport::processDrawingObjectForBody(DrawObject* drawObject, KoXml
 {
 
     if (!drawObject || !xmlWriter) return;
-
     if (drawObject->shape() == DrawObject::Ellipse) {
         processEllipse(drawObject, xmlWriter);
     } else if (drawObject->shape() == DrawObject::Rectangle) {
@@ -1676,7 +1675,6 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
 void PowerPointImport::processObjectForBody(Object* object, KoXmlWriter* xmlWriter)
 {
     if (!object ||  !xmlWriter) return;
-
     if (object->isText())
         processTextObjectForBody(static_cast<TextObject*>(object), xmlWriter);
     else if (object->isGroup())

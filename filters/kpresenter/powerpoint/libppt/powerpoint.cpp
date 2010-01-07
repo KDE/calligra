@@ -38,7 +38,7 @@
 
 //#ifdef Q_CC_MSVC
 #define __PRETTY_FUNCTION__ __FUNCTION__
-#define LIBPPT_DEBUG
+//#define LIBPPT_DEBUG
 //#endif
 
 // Use anonymous namespace to cover following functions
@@ -7055,6 +7055,7 @@ const unsigned int msofbtClientDataAtom::id = 61457; /* F011 */
 class msofbtClientDataAtom::Private
 {
 public:
+    RecordHeader header;
     unsigned placementId;
     unsigned placeholderId;
 };
@@ -7126,20 +7127,23 @@ const char* msofbtClientDataAtom::placeholderIdAsString() const
     return "Unknown";
 }
 
-
-//  00 00 c3 0b ===>   OEPlaceholderAtom
-//  08 00 00 00
-//  00 00 00 00 ===> Placement ID
-//  0f          ====> Placeholder ID
-//  00         =====> Size of placeholder
-//  9e 00
-
 void msofbtClientDataAtom::setData(unsigned size, const unsigned char* data)
 {
-    // TODO: this is largely unimplemented
-    if (size < 16) return;
-    setPlacementId(readU16(data + 8));
-    setPlaceholderId(data[12] - 1);
+    // client data starts with a header
+    if (size < 12) return;
+    d->header.setData(data);
+    if (size == 16 && d->header.recType == 0xBC3) { // PlaceholderAtom
+        setPlacementId(readU32(data + 8));
+        setPlaceholderId(data[12] - 1);
+    } else if (size == 12 && d->header.recType == 0xBC1){//ExternalObjectRefAtom
+        // currently we do not use the ole id
+        // setExObjIdRef(readU32(data + 8));
+    }
+}
+
+unsigned msofbtClientDataAtom::dataType() const // the recType of the contained data
+{
+    return d->header.recType;
 }
 
 void msofbtClientDataAtom ::dump(std::ostream& out) const
@@ -8769,7 +8773,6 @@ void PPTReader::handleEscherSpAtom(msofbtSpAtom* atom)
     if (!d->currentSlide) return;
     if (!d->currentGroup) return;
 
-
     DrawObject* drawObject = new DrawObject;
 
     drawObject->setBackground(atom->isBackground());
@@ -8827,6 +8830,11 @@ void PPTReader::handleEscherClientDataAtom(msofbtClientDataAtom* atom)
     if (!d->currentSlide) return;
     if (!d->currentGroup) return;
     if (!d->currentObject) return;
+
+    // only convert to a text object if the client data is a placeholderitem
+    if (atom->dataType() != 0xBC3) { // PlaceholderAtom
+        return;
+    }
 
     TextObject* textObject = 0;
     if (!d->currentObject->isText()) {
