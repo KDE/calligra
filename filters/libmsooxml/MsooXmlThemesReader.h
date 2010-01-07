@@ -45,12 +45,14 @@ public:
     virtual ~DrawingMLColorSchemeItemBase();
     DrawingMLColorSchemeItem* toColorItem();
     DrawingMLColorSchemeSystemItem* toSystemItem();
+    virtual QColor value() const = 0;
 };
 
 class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItem();
+    virtual QColor value() const { return color; }
     QColor color;
 };
 
@@ -58,18 +60,30 @@ class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchem
 {
 public:
     DrawingMLColorSchemeSystemItem();
+    virtual QColor value() const {
+//! @todo use systemColor too...
+        return lastColor;
+    }
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).
 };
 
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
 
-//! Impelemnts color scheme, based on hash. All items are owned by this object.
+//! Implements color scheme, based on hash. All items are owned by this object.
 class MSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
 {
 public:
     DrawingMLColorScheme();
     ~DrawingMLColorScheme();
+
+    DrawingMLColorSchemeItemBase* value(const QString& name) const { return DrawingMLColorSchemeItemHash::value(name); }
+
+    /*! @return color value for index. Needed because while PPTX uses lookup by name: value(QString&),
+                XLSX uses lookup by index. When index is invalid, 0 is returned. */
+    DrawingMLColorSchemeItemBase* value(int index) const;
+
+    //! Name of the color scheme
     QString name;
 };
 
@@ -226,8 +240,9 @@ private:
 
     typedef KoFilter::ConversionStatus(MsooXmlThemesReader::*ReadMethod)();
     QHash<QString, ReadMethod> m_readMethods;
-bool m_clrScheme_initialized : 1;
-bool m_color_initialized : 1;
+    QHash<QString, QString> m_colorSchemeIndices;
+    bool m_clrScheme_initialized;
+    bool m_color_initialized;
 
     QStack<ReadMethod> m_calls;
 };

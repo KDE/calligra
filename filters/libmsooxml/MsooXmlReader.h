@@ -85,25 +85,6 @@ public:
     //! Undoes recent readNext(); only one recent readNext() can be undoed
     void undoReadNext();
 
-protected:
-    // -- general
-    bool expectElName(const char* qualifiedElementName);
-    bool expectElNameEnd(const char* elementName);
-    bool expectEl(const char* elementName);
-    bool expectElEnd(const QString& qualifiedElementName);
-    bool expectElEnd(const char* qualifiedElementName);
-    bool expectNS(const char* nsName);
-    void raiseUnexpectedAttributeValueError(const QString& value, const char* attrName);
-
-    //! Used by read_b(), read_i(), etc.
-    bool readBooleanAttr(const char* attrName, bool defaultValue = false);
-
-    QString m_defaultNamespace; //!< stores namespace (for optimization)
-
-#ifndef NDEBUG
-    QStack<QByteArray> m_callsNames;
-#endif
-
     // const strings (for optimization)
     static const char* constOn;
     static const char* constOff;
@@ -120,6 +101,25 @@ protected:
     static const char* constTime;
     static const char* constBoolean;
     static const char* constString;
+
+protected:
+    // -- general
+    bool expectElName(const char* qualifiedElementName);
+    bool expectElNameEnd(const char* elementName);
+    bool expectEl(const char* elementName);
+    bool expectElEnd(const QString& qualifiedElementName);
+    bool expectElEnd(const char* qualifiedElementName);
+    bool expectNS(const char* nsName);
+    void raiseUnexpectedAttributeValueError(const QString& value, const char* attrName);
+
+    //! Decodes boolean attribute. Used by read_b(), read_i(), etc.
+    bool readBooleanAttr(const char* attrName, bool defaultValue = false) const;
+
+    QString m_defaultNamespace; //!< stores namespace (for optimization)
+
+#ifndef NDEBUG
+    QStack<QByteArray> m_callsNames;
+#endif
 
 private:
     QString m_fileName;

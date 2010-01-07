@@ -26,6 +26,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlSharedStringsReader
@@ -33,7 +34,24 @@
 
 #include <MsooXmlReader_p.h>
 
-XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings)
+XlsxSharedString::XlsxSharedString()
+    : m_isPlainText(true)
+{
+}
+
+void XlsxSharedString::saveXml(KoXmlWriter *writer) const
+{
+    if (m_isPlainText) {
+        writer->addTextSpan(m_data);
+    }
+    else {
+        writer->addCompleteElement(m_data.toLatin1());
+    }
+}
+
+// -------------------------------------------------------------
+
+XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings)
         : strings(&_strings)
 {
 }
@@ -175,23 +193,50 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
         return KoFilter::WrongFormat;
     }
 
+    QByteArray siData;
+    QBuffer siBuffer(&siData);
+    siBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter siWriter(&siBuffer, 0/*indentation*/);
+    MSOOXML::Utils::XmlWriteBuffer buf;
+    KoXmlWriter *origWriter = body;
+    body = buf.setWriter(&siWriter);
+
+    m_currentTextStyle = KoGenStyle();
+    bool plainTextSet = false;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(t)) {
                 TRY_READ(t)
-                (*m_context->strings)[m_index] = m_text;
+                (*m_context->strings)[m_index].setPlainText(m_text);
+                plainTextSet = true;
             }
             else if (QUALIFIED_NAME_IS(r)) {
                 TRY_READ(r)
-                (*m_context->strings)[m_index] = m_text;
+                if (m_currentTextStyle.isEmpty()) {
+                    body->addTextSpan(m_text);
+                }
+                else {
+                    const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
+                    body->startElement("text:span", false);
+                    body->addAttribute("text:style-name", currentTextStyleName);
+                    body->addTextSpan(m_text);
+                    body->endElement(); //text:span
+                }
             }
 //! @todo support phoneticPr
 //! @todo support rPh
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    (void)buf.releaseWriter();
+    body = origWriter;
+    siBuffer.close();
+    if (!plainTextSet) {
+        (*m_context->strings)[m_index].setXml(siData);
     }
 
     m_index++;

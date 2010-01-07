@@ -302,6 +302,17 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         destination = val; \
     }
 
+#define STRING_TO_QREAL(string, destination, debugElement) \
+    if (string.isEmpty()) {} else { \
+        bool ok; \
+        const qreal val = string.toDouble(&ok); \
+        if (!ok) { \
+            kDebug() << "STRING_TO_DOUBLE: error converting" << string << "to qreal (attribute" << debugElement << ")"; \
+            return KoFilter::WrongFormat; \
+        } \
+        destination = val; \
+    }
+
 #define CALLER_IS(name) \
     (caller == PASTE(&MSOOXML_CURRENT_CLASS::read_, name))
 

@@ -37,7 +37,7 @@
 
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-    const QVector<QString>& _sharedStrings, const XlsxStyles& _styles,
+    const XlsxSharedStringVector& _sharedStrings, const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), themes(&_themes), sharedStrings(&_sharedStrings),
@@ -142,6 +142,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
 //! workbook handler (Workbook)
 /*! ECMA-376, 18.2.27, p. 1746.
  Root element.
+
  Child elements:
  - bookViews (Workbook Views) §18.2.1
  - calcPr (Calculation Properties) §18.2.2
@@ -193,10 +194,11 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
 /*! ECMA-376, 18.2.20, p. 1740.
  This element represents the collection of sheets in the workbook.
 
- Child elements:
- - [done] sheet (Sheet Information) §18.2.19
  Parent elements:
  - [done] workbook (§18.2.27)
+
+ Child elements:
+ - [done] sheet (Sheet Information) §18.2.19
 */
 KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 {
@@ -221,9 +223,10 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 /*! ECMA-376, 18.2.19, p. 1740.
  This element defines a sheet in this workbook. Sheet data is stored in a separate part.
 
- No child elements.
  Parent elements:
  - [done] sheets (§18.2.20)
+
+ No child elements.
 */
 KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 {

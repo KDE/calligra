@@ -42,51 +42,6 @@ class KoCharacterStyle;
 class KoStyleStack;
 class KoXmlWriter;
 
-// conversion from twips (http://en.wikipedia.org/wiki/Twip)
-#define TWIP_TO_DM(tw) ((tw)*0.000176389)
-#define TWIP_TO_CM(tw) ((tw)*0.001763889)
-#define TWIP_TO_MM(tw) ((tw)*0.017638889)
-#define TWIP_TO_POINT(tw) ((tw)*0.05)
-#define TWIP_TO_INCH(tw) ((tw)*0.000694444)
-#define TWIP_TO_PI(tw) ((tw)*0.004166667)
-#define TWIP_TO_CC(tw) ((tw)*0.00389404975957)
-#define TWIP_TO_PX(tw) ((tw)*0.066798611)
-
-// conversion to twips
-#define DM_TO_TWIP(dm) ((dm)*5669.28776738)
-#define CM_TO_TWIP(cm) ((cm)*566.929098146)
-#define MM_TO_TWIP(mm) ((mm)*56.6929130287)
-#define POINT_TO_TWIP(pt) ((pt)*20.0)
-#define INCH_TO_TWIP(in) ((in)*1440.0)
-#define PI_TO_TWIP(pi) ((pi)*240.0)
-#define CC_TO_TWIP(cc) ((cc)*256.80206)
-#define PX_TO_TWIP(px) ((px)*14.970371)
-
-// EMU conversion (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
-//! Converts emu value (integer or double) to cm
-#define EMU_TO_CM(emu) ((emu)/360000.0)
-
-//! Performs EMU conversion and returns string.
-inline QString EMU_TO_CM_STRING(int emu)
-{
-    QString res;
-    return res.sprintf("%3.3fcm", EMU_TO_CM(double(emu)));
-}
-
-//! Converts emu value (integer or double) to inches
-#define EMU_TO_INCH(emu) ((emu)/914400.0)
-
-//! Performs EMU conversion and returns string.
-inline QString EMU_TO_INCH_STRING(int emu)
-{
-    QString res;
-    return res.sprintf("%3.3fin", EMU_TO_INCH(double(emu)));
-}
-
-// px conversion
-#define PT_TO_PX(pt) ((pt)*1.33597222222)
-#define PX_TO_CM(px) ((px)*0.0264)
-
 //! Returns from the current block if the result of @a call is not equal to KoFilter::OK
 #define RETURN_IF_ERROR( call ) \
     { \
@@ -157,8 +112,8 @@ public:
     }
     ~AutoPtrSetter() {
         if (m_pptr && *m_pptr) {
-            *m_pptr = 0;
             delete *m_pptr;
+            *m_pptr = 0;
         }
     }
     //! Bypasses the smart pointer, and returns it, so on destruction
@@ -173,6 +128,10 @@ public:
 private:
     T** m_pptr;
 };
+
+//! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
+//! @return true unless @a value is equal to "false", "off" or "0".
+MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
 
 //! Loads content types from "[Content_Types].xml"
 /*! Based on information from ECMA-376, Part 1: "11.2 Package Structure".
@@ -230,10 +189,16 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip*
 MSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
 
 //! @return QColor value for ST_HexColorRGB (Hexadecimal Color Value) (SharedML, 22.9.2.5)
+//!         or invalid QColor if @a color is not in the expected format.
 //! @par val color value in RRGGBB hexadecimal format
 inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 {
-    return QColor(QRgb(0xff000000 | color.toInt(0, 16)));
+    if (color.length() != 6)
+        return QColor();
+    bool ok;
+    const uint rgb = color.toUInt(&ok, 16);
+    return ok ? QColor(QRgb(rgb)) : QColor(); // alpha ignored
+//    return QColor(QRgb(0xff000000 | color.toInt(0, 16)));
 }
 
 //! @return QBrush value for ST_HighlightColor
@@ -255,7 +220,7 @@ struct MSOOXML_EXPORT DoubleModifier {
     DoubleModifier(double v) : value(v), valid(true) {}
     DoubleModifier() : value(0.0), valid(false) {}
     double value;
-bool valid : 1;
+    bool valid;
 };
 
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color, const DoubleModifier& modulation, const DoubleModifier& offset);
@@ -329,6 +294,9 @@ public:
     KoXmlWriter* originalWriter() const {
         return m_origWriter;
     }
+
+    //! Clears this buffer without performing any output to the writer.
+    void clear();
 private:
     //! Internal, used in releaseWriter() and the destructor; Does not assert when there's nothing to release.
     KoXmlWriter* releaseWriterInternal();

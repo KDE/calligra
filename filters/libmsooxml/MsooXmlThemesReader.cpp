@@ -67,8 +67,13 @@ DrawingMLColorScheme::DrawingMLColorScheme()
 
 DrawingMLColorScheme::~DrawingMLColorScheme()
 {
-    QList<DrawingMLColorSchemeItemBase*> list(values());
-    qDeleteAll(list);
+    QSet<DrawingMLColorSchemeItemBase*> set(values().toSet()); // use set because values can be duplicated
+    qDeleteAll(set);
+}
+
+DrawingMLColorSchemeItemBase* DrawingMLColorScheme::value(int index) const
+{
+    return DrawingMLColorSchemeItemHash::value( QString::number(index) );
 }
 
 DrawingMLFontScheme::DrawingMLFontScheme()
@@ -327,6 +332,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrSchemeLst()
     SKIP_EVERYTHING_AND_RETURN
 }
 
+#define INIT_COLOR_ITEM(name, index) \
+    BIND_READ_METHOD(name, color) \
+    m_colorSchemeIndices.insert(name, QLatin1String(STRINGIFY(index)));
+
 //! @todo !!!!!!!!!!!!!MERGE with Document Reader!!!!!!!!!!!!!
 #undef CURRENT_EL
 #define CURRENT_EL clrScheme
@@ -357,18 +366,18 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
 
     if (!m_clrScheme_initialized) {
         m_clrScheme_initialized = true;
-        BIND_READ_METHOD("accent1", color)
-        BIND_READ_METHOD("accent2", color)
-        BIND_READ_METHOD("accent3", color)
-        BIND_READ_METHOD("accent4", color)
-        BIND_READ_METHOD("accent5", color)
-        BIND_READ_METHOD("accent6", color)
-        BIND_READ_METHOD("dk1", color)
-        BIND_READ_METHOD("dk2", color)
-        BIND_READ_METHOD("lt1", color)
-        BIND_READ_METHOD("lt2", color)
-        BIND_READ_METHOD("hlink", color)
-        BIND_READ_METHOD("folHlink", color)
+        INIT_COLOR_ITEM("dk1", 0)
+        INIT_COLOR_ITEM("lt1", 1)
+        INIT_COLOR_ITEM("dk2", 2)
+        INIT_COLOR_ITEM("lt2", 3)
+        INIT_COLOR_ITEM("accent1", 4)
+        INIT_COLOR_ITEM("accent2", 5)
+        INIT_COLOR_ITEM("accent3", 6)
+        INIT_COLOR_ITEM("accent4", 7)
+        INIT_COLOR_ITEM("accent5", 8)
+        INIT_COLOR_ITEM("accent6", 9)
+        INIT_COLOR_ITEM("hlink", 10)
+        INIT_COLOR_ITEM("folHlink", 11)
     }
 
     const QXmlStreamAttributes attrs(attributes());
@@ -386,8 +395,13 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
                 if (!m_currentColor) {
                     return KoFilter::InternalError;
                 }
-                kDebug() << "inserting color for" << this->name();
-                m_context->theme->colorScheme.insert(this->name().toString(), m_currentColor);
+                const QString colorName( this->name().toString() );
+                kDebug() << "inserting color for" << colorName;
+                m_context->theme->colorScheme.insert(colorName, m_currentColor);
+                const QString colorIndex(m_colorSchemeIndices.value(colorName));
+                if (!colorIndex.isEmpty()) {
+                    m_context->theme->colorScheme.insert(colorIndex, m_currentColor);
+                }
                 m_currentColor = 0;
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
@@ -396,6 +410,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
     }
     READ_EPILOGUE
 }
+#undef INIT_COLOR_ITEM
 
 //! @todo !!!!!!!!!!!!!MERGE with Document Reader!!!!!!!!!!!!!
 #undef CURRENT_EL

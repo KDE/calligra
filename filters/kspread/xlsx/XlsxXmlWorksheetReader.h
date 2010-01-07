@@ -26,6 +26,7 @@
 
 #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
+#include "XlsxSharedString.h"
 
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -88,9 +89,11 @@ protected:
 private:
     void init();
 
+    void showWarningAboutWorksheetSize();
     void saveColumnStyle(const QString& widthString);
     KoFilter::ConversionStatus saveRowStyle(const QString& heightString);
-    void appendTableCells(uint cells);
+    void appendTableColumns(int columns, const QString& width = QString());
+    void appendTableCells(int cells);
 
 #include <MsooXmlCommonReaderMethods.h>
 
@@ -106,11 +109,11 @@ public:
         uint _worksheetNumber,
         const QString& _worksheetName,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        const QVector<QString>& _sharedStrings, const XlsxStyles& _styles);
+        const XlsxSharedStringVector& _sharedStrings, const XlsxStyles& _styles);
     const uint worksheetNumber;
     QString worksheetName;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
-    const QVector<QString> *sharedStrings;
+    const XlsxSharedStringVector *sharedStrings;
     const XlsxStyles* styles;
 };
 

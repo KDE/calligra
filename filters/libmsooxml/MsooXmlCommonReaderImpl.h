@@ -362,7 +362,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_b()
 {
     READ_PROLOGUE
     m_currentTextStyleProperties->setFontWeight(READ_BOOLEAN_ATTR ? QFont::Bold : QFont::Normal);
-//kDebug() << JOIN(MSOOXML_CURRENT_NS ":", CURRENT_EL) << m_currentTextStyleProperties->fontWeight();
     readNext();
     READ_EPILOGUE
 }
@@ -375,7 +374,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_i()
 {
     READ_PROLOGUE
     m_currentTextStyleProperties->setFontItalic(READ_BOOLEAN_ATTR);
-//kDebug() << JOIN(MSOOXML_CURRENT_NS ":", CURRENT_EL) << m_currentTextStyleProperties->fontItalic();
     readNext();
     READ_EPILOGUE
 }

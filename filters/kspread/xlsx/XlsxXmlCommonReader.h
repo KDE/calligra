@@ -25,10 +25,13 @@
 #define XLSXXMLCOMMONREADER_H
 
 #include <MsooXmlReader.h>
+#include <KoGenStyle.h>
+
+class KoCharacterStyle;
 
 //! A class reading MSOOXML XLSX markup
 //! This is a base class implementing reading elements common to some XLSX content types.
-//! Currently this class is used by XlsxXmlSharedStringsReader and XlsxXmlDocumentReader.
+//! Currently this class is used by XlsxXmlSharedStringsReader (and shall be by XlsxXmlDocumentReader).
 class XlsxXmlCommonReader : public MSOOXML::MsooXmlReader
 {
 public:
@@ -39,11 +42,18 @@ public:
 protected:
     KoFilter::ConversionStatus read_t();
     KoFilter::ConversionStatus read_r();
+    KoFilter::ConversionStatus read_rPr();
+    KoFilter::ConversionStatus read_vertAlign();
 
     typedef KoFilter::ConversionStatus(XlsxXmlCommonReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     QString m_text; //!< result of read_t() and read_r()
+
+    KoCharacterStyle *m_currentTextStyleProperties;
+
+    //! Used for creating style in w:pPr (style:style/@style:name attr)
+    KoGenStyle m_currentTextStyle;
 private:
     void init();
 

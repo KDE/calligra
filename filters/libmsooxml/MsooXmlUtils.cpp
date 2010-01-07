@@ -24,6 +24,7 @@
  */
 
 #include "MsooXmlUtils.h"
+#include "MsooXmlUnits.h"
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlSchemas.h"
 #include "MsooXmlReader.h"
@@ -280,6 +281,14 @@ static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
         return false;
     }
     return true;
+}
+
+bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
+{
+    const QByteArray val(value.toLatin1());
+    if (val.isEmpty())
+        return defaultValue;
+    return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 
 KoFilter::ConversionStatus Utils::loadContentTypes(
@@ -568,4 +577,11 @@ KoXmlWriter* Utils::XmlWriteBuffer::releaseWriterInternal()
     KoXmlWriter* tmp = m_origWriter;
     m_origWriter = 0;
     return tmp;
+}
+
+void Utils::XmlWriteBuffer::clear()
+{
+    delete m_newWriter;
+    m_newWriter = 0;
+    m_origWriter = 0;
 }

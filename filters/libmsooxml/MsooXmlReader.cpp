@@ -23,6 +23,7 @@
 
 #include "MsooXmlReader.h"
 #include "MsooXmlSchemas.h"
+#include "MsooXmlUtils.h"
 
 #include <KoXmlWriter.h>
 
@@ -130,12 +131,9 @@ static const char* tokenName(QXmlStreamReader::TokenType t)
     return tokenNames[i];
 }
 
-bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue)
+bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue) const
 {
-    const QByteArray val(attributes().value(attrName).toString().toLatin1());
-    if (val.isEmpty())
-        return defaultValue;
-    return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
+    return MSOOXML::Utils::convertBooleanAttr(attributes().value(attrName).toString(), defaultValue);
 }
 
 void MsooXmlReader::raiseError(const QString & message)

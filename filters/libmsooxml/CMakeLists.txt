@@ -5,6 +5,7 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIRECTORY})
 ########### next target ###############
 
 set(msooxml_LIB_SRCS
+    MsooXmlGlobal.cpp
     MsooXmlUtils.cpp
     MsooXmlReader.cpp
     MsooXmlCommonReader.cpp
