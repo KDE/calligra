@@ -149,12 +149,11 @@ void DataSet::Private::updateSize()
     newSize = qMax( newSize, yDataRegion.cellCount() );
     newSize = qMax( newSize, customDataRegion.cellCount() );
     newSize = qMax( newSize, categoryDataRegion.cellCount() );
-    
-    size = newSize;
-    // FIXME: The first test below can *never* fail because of the
-    //        assignment just above. (iw)
-    if ( newSize != size && !blockSignals && kdChartModel ) {
-        kdChartModel->dataSetSizeChanged( parent, size );
+
+    if ( size != newSize ) {
+        size = newSize;
+        if ( !blockSignals && kdChartModel )
+            kdChartModel->dataSetSizeChanged( parent, size );
     }
 }
 
