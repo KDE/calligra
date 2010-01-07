@@ -76,6 +76,14 @@ void DiagramObserver::init()
     if( m_diagram->model() ){
         connect( m_diagram->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                  SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+        connect( m_diagram->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+                 SLOT(slotDataChanged()));
+        connect( m_diagram->model(), SIGNAL(columnsInserted(QModelIndex,int,int)),
+                 SLOT(slotDataChanged()));
+        connect( m_diagram->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                 SLOT(slotDataChanged()));
+        connect( m_diagram->model(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
+                 SLOT(slotDataChanged()));
         connect( m_diagram->model(), SIGNAL(modelReset()),
                  SLOT(slotDataChanged()));
         connect( m_diagram->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
