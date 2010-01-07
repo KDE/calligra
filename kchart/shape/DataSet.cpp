@@ -981,14 +981,15 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                 brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
             }
             setBrush( brush );
-        } else {
-            setColor( defaultDataSetColor( number() ) );
         }
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
-    if ( !brushLoaded )
-        setBrush( KoOdfWorkaround::fixMissingFillColor( n, context ) );
+    if ( !brushLoaded ) {
+        QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
+        if ( fixedColor.isValid() )
+            setBrush( fixedColor );
+    }
 #endif
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
