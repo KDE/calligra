@@ -400,6 +400,8 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
         qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
     }
+
+    dataSet->setKdChartModel( this );
     
     int dataSetIndex = d->dataSetIndex( dataSet );
     
@@ -462,8 +464,6 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
 		
         reset();
     }
-    
-    dataSet->setKdChartModel( this );
 }
 
 void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
