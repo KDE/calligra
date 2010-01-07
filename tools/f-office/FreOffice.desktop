@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Office Viewer
+Exec=/usr/bin/FreOffice
+Icon=freoffice
+X-Window-Icon=freoffice
+X-Window-Icon-Dimmed=freoffice
+X-Osso-Service=com.nokia.FreOffice
+X-Osso-Type=application/x-executable
+MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;

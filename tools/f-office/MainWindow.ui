@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>801</width>
+    <height>445</height>
+   </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Office Viewer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QToolBar" name="viewToolBar">
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>BottomToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSearch"/>
+   <addaction name="separator"/>
+   <addaction name="actionPrevPage"/>
+   <addaction name="actionPageNumber"/>
+   <addaction name="actionNextPage"/>
+   <addaction name="separator"/>
+   <addaction name="actionZoomOut"/>
+   <addaction name="actionZoomLevel"/>
+   <addaction name="actionZoomIn"/>
+   <addaction name="separator"/>
+   <addaction name="actionPanningOn"/>
+   <addaction name="actionCopy"/>
+   <addaction name="separator"/>
+   <addaction name="actionFullScreen"/>
+  </widget>
+  <widget class="QToolBar" name="SearchToolBar">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>48</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>BottomToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionSearch"/>
+   <addaction name="actionSearchOption"/>
+   <addaction name="actionPrevWord"/>
+   <addaction name="actionSearchResult"/>
+   <addaction name="actionNextWord"/>
+   <addaction name="actionFullScreen"/>
+  </widget>
+  <action name="actionSearch">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_search.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_search.png</iconset>
+   </property>
+  </action>
+  <action name="actionPanningOn">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</iconset>
+   </property>
+  </action>
+  <action name="actionPrevPage">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_back.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_back.png</iconset>
+   </property>
+  </action>
+  <action name="actionNextPage">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_forward.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_forward.png</iconset>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/pdf_zoomin.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/pdf_zoomin.png</iconset>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/pdf_zoomout.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/pdf_zoomout.png</iconset>
+   </property>
+  </action>
+  <action name="actionFullScreen">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_fullsize.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_fullsize.png</iconset>
+   </property>
+  </action>
+  <action name="actionPageNumber">
+   <property name="text">
+    <string>0 / 0</string>
+   </property>
+   <property name="font">
+    <font/>
+   </property>
+  </action>
+  <action name="actionZoomLevel">
+   <property name="text">
+    <string>0 %</string>
+   </property>
+   <property name="font">
+    <font/>
+   </property>
+  </action>
+  <action name="actionSearchResult">
+   <property name="text">
+    <string>0 of 0</string>
+   </property>
+   <property name="font">
+    <font/>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/26x26/hildon/general_copy.png</normaloff>/usr/share/icons/hicolor/26x26/hildon/general_copy.png</iconset>
+   </property>
+  </action>
+  <action name="actionZoom">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/26x26/hildon/qgn_toolb_gene_zoomin.png</normaloff>/usr/share/icons/hicolor/26x26/hildon/qgn_toolb_gene_zoomin.png</iconset>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionPrevWord">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_back.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_back.png</iconset>
+   </property>
+   <property name="text">
+    <string>PrevWord</string>
+   </property>
+   <property name="iconText">
+    <string>PrevWord</string>
+   </property>
+  </action>
+  <action name="actionNextWord">
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_forward.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_forward.png</iconset>
+   </property>
+   <property name="text">
+    <string>NextWord</string>
+   </property>
+  </action>
+  <action name="actionEnter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>/usr/share/icons/hicolor/48x48/hildon/office_whole_words.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/office_whole_words.png</iconset>
+   </property>
+   <property name="text">
+    <string>Enter</string>
+   </property>
+  </action>
+  <action name="actionSearchOption">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>searchOption</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
