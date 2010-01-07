@@ -50,8 +50,8 @@ int tableViewTest()
 
     KexiDataTableView *tv = new KexiDataTableView(0, cursor);
 
-    app->setMainWidget(tv);
     tv->move((qApp->desktop()->width() - tv->width()) / 2, (qApp->desktop()->height() - tv->height()) / 2);
+    tv->setWindowTitle(QString("%1: %2").arg(KGlobal::mainComponent().aboutData()->programName()).arg(tv->windowTitle()));
     tv->show();
     tv->setFocus();
 
