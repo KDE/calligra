@@ -124,7 +124,7 @@ Qt::Orientation KDChartModel::dataDirection() const
 
 Qt::Orientation KDChartModel::categoryDirection() const
 {
-    return d->dataDirection = Qt::Horizontal ? Qt::Vertical : Qt::Horizontal;
+    return d->dataDirection == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal;
 }
 
 QVariant KDChartModel::data( const QModelIndex &index,
