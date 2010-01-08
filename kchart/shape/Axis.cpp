@@ -603,7 +603,8 @@ void Axis::Private::createLineDiagram()
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
-            kdLineDiagram->addAxis( axis->kdAxis() );
+            if ( axis->isVisible() )
+                kdLineDiagram->addAxis( axis->kdAxis() );
     }
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
@@ -640,7 +641,8 @@ void Axis::Private::createAreaDiagram()
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
-            kdAreaDiagram->addAxis( axis->kdAxis() );
+            if ( axis->isVisible() )
+                kdAreaDiagram->addAxis( axis->kdAxis() );
     }
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
@@ -738,7 +740,8 @@ void Axis::Private::createScatterDiagram()
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
-            kdScatterDiagram->addAxis( axis->kdAxis() );
+            if ( axis->isVisible() )
+                kdScatterDiagram->addAxis( axis->kdAxis() );
     }
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
