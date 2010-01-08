@@ -18,6 +18,7 @@
 */
 #include "pictures.h"
 #include <stdio.h>
+#include <zlib.h>
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -36,7 +37,64 @@ static inline quint32 readU32(const void* p)
 }
 
 }
+void
+saveStream(POLE::Stream& stream, quint32 size, KoStore* out) {
+    const quint16 bufferSize = 1024;
+    unsigned char buffer[bufferSize];
+    unsigned long nread = stream.read(buffer,
+                                      (bufferSize < size) ? bufferSize : size);
+    while (nread > 0) {
+        out->write((char*)buffer, nread);
+        size -= nread;
+        nread = stream.read(buffer, (bufferSize < size) ? bufferSize : size);
+    }
+}
+bool
+saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
+    const quint16 bufferSize = 1024;
+    unsigned char bufin[bufferSize];
+    unsigned char bufout[bufferSize];
 
+    // initialize for decompressing ZLIB format
+    z_stream_s zstream;
+    zstream.zalloc = Z_NULL;
+    zstream.zfree = Z_NULL;
+    zstream.opaque = Z_NULL;
+    zstream.avail_in = 0;
+    zstream.next_in = Z_NULL;
+    int r = inflateInit(&zstream);
+    if (r != Z_OK) {
+        inflateEnd(&zstream);
+        return false;
+    }
+
+    unsigned long nread = stream.read(bufin,
+            (bufferSize < size) ? bufferSize : size);
+    while (nread > 0) { // loop over the available data
+        size -= nread;
+        zstream.next_in = (Bytef*)bufin;
+        zstream.avail_in = nread;
+        do { // loop until the data in bufin has all been decompressed
+            zstream.next_out = (Bytef*)bufout;
+            zstream.avail_out = bufferSize;
+            int r = inflate(&zstream, Z_SYNC_FLUSH);
+            int32_t nwritten = bufferSize - zstream.avail_out;
+            if (r != Z_STREAM_END && r != Z_OK) {
+                inflateEnd(&zstream);
+                return false;
+            }
+            out->write((char*)bufout, nwritten);
+            if (r == Z_STREAM_END) {
+                inflateEnd(&zstream);
+                return true; // successfully reached the end
+            }
+        } while (zstream.avail_in > 0);
+        nread = stream.read(bufin, (bufferSize < size) ? bufferSize : size);
+    }
+
+    inflateEnd(&zstream);
+    return false; // the stream was incomplete
+}
 std::string
 savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
 {
@@ -117,18 +175,22 @@ savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
     if (offset != 0 && stream.read(buffer, offset) != offset) return "";
     size -= offset;
 
+    bool compressed = false;
+    if (type == 0xF01A || type == 0xF01B || type == 0xF01C) {
+        // read the compressed field from the OfficeArtMetafileHeader
+        compressed = buffer[offset-2] == 0;
+    }
+
     int n = sprintf((char*)buffer, nametemplate, position);
     std::string filename((char*)buffer, n);
 
     if (!out->open(filename.c_str())) {
         return ""; // empty name reports an error
     }
-    unsigned long nread = stream.read(buffer,
-                                      (bufferSize < size) ? bufferSize : size);
-    while (nread > 0) {
-        out->write((char*)buffer, nread);
-        size -= nread;
-        nread = stream.read(buffer, (bufferSize < size) ? bufferSize : size);
+    if (compressed) {
+        saveDecompressedStream(stream, size, out);
+    } else {
+        saveStream(stream, size, out);
     }
     out->close();
 
