@@ -58,6 +58,7 @@ else                                                                            
 #define FINISH_PLAIN_TEXT_PART {             \
 if( !plainText.isEmpty() )                   \
 {                                            \
+    hadPlainText = true;                     \
     xmlWriter.startElement( "number:text" ); \
     xmlWriter.addTextNode( plainText );      \
     xmlWriter.endElement();                  \
@@ -90,6 +91,8 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     // this is for the month vs. minutes-context
     bool justHadHours = false;
     int justHadMMM = 0; // contains the number of 'm's in case
+
+    bool hadPlainText = false;
 
     for( int i = 0; i < numberFormat.length(); ++i )
     {
@@ -128,8 +131,13 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             case 'd':
             case 'Y':
             case 'y':
+            case '.':
+            case ',':
+            case '#':
+            case '0':
             case ';':
             case '@':
+            case '"':
             case '\\':
                 SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericTime )
                 FINISH_PLAIN_TEXT_PART;
@@ -153,7 +161,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         // condition or color or locale...
         case '[':
             // ignore for now
-            while( numberFormat[ i ] != QLatin1Char( ']' ) )
+            while( i < numberFormat.length() && numberFormat[ i ] != QLatin1Char( ']' ) )
                 ++i;
             break;
 
@@ -164,6 +172,47 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             xmlWriter.startElement( "number:text" );
             xmlWriter.addTextNode( "%" );
             xmlWriter.endElement();
+            break;
+
+        // a number
+        case '.':
+        case ',':
+        case '#':
+        case '0':
+            SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericNumber )
+            FINISH_PLAIN_TEXT_PART
+            {
+                bool grouping = false;
+                bool gotDot = false;
+                int decimalPlaces = 0;
+                int integerDigits = 0;
+                
+                char ch = numberFormat[ i ].toLatin1();
+                do
+                {
+                    if( ch == '.' )
+                        gotDot = true;
+                    else if( ch == ',' )
+                        grouping = true;
+                    else if( ch == '0' && !gotDot )
+                        ++integerDigits;
+                    else if( ch == '0' && gotDot )
+                        ++decimalPlaces;
+
+                    ch = numberFormat[ ++i ].toLatin1();
+                }
+                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' ) );
+               
+                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' ) )
+                    --i;
+
+                xmlWriter.startElement( "number:nmber" );
+                if( gotDot )
+                    xmlWriter.addAttribute( "number:decimal-places", decimalPlaces );
+                xmlWriter.addAttribute( "number:min-integer-digits", integerDigits );
+                xmlWriter.addAttribute( "number:grouping", grouping ? "true" : "false" );
+                xmlWriter.endElement();
+            }
             break;
 
 
@@ -305,6 +354,12 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             xmlWriter.endElement();
             break;
 
+        // quote - plain text block
+        case '"':
+            while( i < numberFormat.length() - 1 && numberFormat[ ++i ] != QLatin1Char( '"' ) )
+                plainText += numberFormat[ i ];
+            break; 
+
         // backslash escapes the next char
         case '\\':
             if( i < numberFormat.length() - 1 )
@@ -325,6 +380,9 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     }
             
     FINISH_PLAIN_TEXT_PART;
+
+    if( type == KoGenStyle::StyleAuto && hadPlainText )
+        SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericText )
 
     // add conditional styles:
     for( QMap< QString, QString >::const_iterator it = conditions.begin(); it != conditions.end(); ++it )
