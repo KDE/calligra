@@ -663,9 +663,9 @@ void Axis::Private::createAreaDiagram()
     }
 
     // Propagate existing settings
-    KDChart::ThreeDLineAttributes attributes( kdLineDiagram->threeDLineAttributes() );
+    KDChart::ThreeDLineAttributes attributes( kdAreaDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
-    kdLineDiagram->setThreeDLineAttributes( attributes );
+    kdAreaDiagram->setThreeDLineAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
 }
