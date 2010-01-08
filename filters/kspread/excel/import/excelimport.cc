@@ -451,6 +451,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     writer.endElement();
     QString pageLyt = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     buf.close();
+    buf.setData("", 0);
 
     pageLayoutStyle->addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
     pageLayoutStyleName = mainStyles->lookup(*pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
