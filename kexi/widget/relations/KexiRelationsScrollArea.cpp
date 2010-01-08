@@ -494,6 +494,7 @@ KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
 
 void KexiRelationsScrollArea::handlePaintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
 //Qt 4 QRect clipping(cx, cy, cw, ch);
     QPainter p(d->areaWidget);
     p.setWindow(
@@ -531,6 +532,7 @@ void KexiRelationsScrollArea::clearSelection()
 void
 KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent* event)
 {
+    Q_UNUSED(event);
     if (d->selectedConnection) {
         emit connectionContextMenuRequest(
             mapToGlobal(d->selectedConnection->connectionRect().center()));

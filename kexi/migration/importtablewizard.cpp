@@ -247,6 +247,7 @@ void ImportTableWizard::setupFinishPage()
 
 void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWidgetItem* prevPage)
 {
+    Q_UNUSED(prevPage);
     if (curPage == m_introPageItem) {
     }
     else if (curPage == m_srcConnPageItem) {

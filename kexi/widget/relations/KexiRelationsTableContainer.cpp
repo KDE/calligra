@@ -197,6 +197,7 @@ void KexiRelationsTableContainer::unsetFocus()
 
 void KexiRelationsTableContainer::slotFieldsDoubleClicked(Q3ListViewItem *i, const QPoint&, int)
 {
+    Q_UNUSED(i);
     if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
         return;
     const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());

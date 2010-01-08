@@ -66,6 +66,7 @@ Command::Command(const QString &text, Command *parent)
         : QUndoCommand(parent)
         , m_blockRedoOnce(false)
 {
+    Q_UNUSED(text);
 }
 
 Command::~Command()

@@ -44,6 +44,7 @@
 
 int main(int argc, char** argv)
 {
+    Q_UNUSED(argv);
     // first the formalities
     KComponentData *instance = 0;
     QByteArray prgname;
