@@ -489,6 +489,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
 
+        if ( styleStack.hasProperty( KoXmlNS::chart, "three-dimensional" ) )
+            setThreeD( styleStack.property( KoXmlNS::chart, "three-dimensional" ) == "true" );
+
         // Set subtypes stacked or percent.
         // These are valid for Bar, Line, Area and Radar types.
         if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" )
