@@ -764,13 +764,24 @@ void ChartShape::setLegendSize( const QSizeF &size )
     QSizeF oldSize = d->legend->size();
     switch ( d->legend->legendPosition() ) {
     case TopLegendPosition:
+        // Move it to the left as much as the width changed
+        newPos.rx() -= (size.width() - oldSize.width()) / 2.0;
+        // No adjustment of y position needed
         break;
     case BottomLegendPosition:
+        // Move it up as much as the height changed
+        newPos.ry() -= (size.height() - oldSize.height());
+        // Move it to the left as much as the width changed
+        newPos.rx() -= (size.width() - oldSize.width()) / 2.0;
         break;
     case StartLegendPosition:
+        // No adjustment of x position needed
+        newPos.ry() -= (size.height() - oldSize.height()) / 2.0;
         break;
     case EndLegendPosition:
         newPos.ry() -= (size.height() - oldSize.height()) / 2.0;
+        // Move it to the left as much as the width changed
+        newPos.rx() -= (size.width() - oldSize.width());
         break;
     // FIXME: The following positions are not handled
     // The new position is simply set as is
@@ -785,6 +796,8 @@ void ChartShape::setLegendSize( const QSizeF &size )
     case FloatingLegendPosition:
         break;
     }
+
+    // TODO: Adjust plot area's size and position if necessary
 
     d->legend->setPosition( newPos );
     d->legend->setSize( size );
