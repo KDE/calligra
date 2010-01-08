@@ -57,7 +57,8 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
         m_valid = false;
         return;
     }
-    m_height->setValue(elemSource.attribute("report:height").toDouble());
+    m_height->setValue(KoUnit::parseValue(elemSource.attribute("svg:height", "2.0cm")));
+    
     m_backgroundColor->setValue(QColor(elemSource.attribute("fo:background-color")));
 
     QDomNodeList section = elemSource.childNodes();
@@ -114,9 +115,10 @@ void KRSectionData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Section");
 
-    m_height = new KoProperty::Property("height", 1.0, "Height", "Height");
+    m_height = new KoProperty::Property("height", KoUnit::unit("cm").fromUserValue(2.0), "Height", "Height");
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
-
+    m_height->setOption("unit", "cm");
+    
     m_set->addProperty(m_height);
     m_set->addProperty(m_backgroundColor);
 }

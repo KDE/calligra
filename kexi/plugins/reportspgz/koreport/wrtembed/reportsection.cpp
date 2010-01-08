@@ -144,7 +144,7 @@ void ReportSection::slotResizeBarDragged(int delta)
     if (h < 1) h = 1;
 
     h = m_scene->gridPoint(QPointF(0, h)).y();
-
+    m_sectionData->m_height->setValue(INCH_TO_POINT(h/KoDpi::dpiY()));
     m_sectionRuler->setRulerLength(h);
 
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
@@ -156,8 +156,9 @@ void ReportSection::slotResizeBarDragged(int delta)
 void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
 {
     qreal f = INCH_TO_POINT(m_scene->height() / KoDpi::dpiY());
+    QString un = m_sectionData->m_height->option("unit", "cm").toString();
 
-    section.setAttribute("report:height", QString::number(f));
+    section.setAttribute("svg:height", KoUnit::unit(un).toUserStringValue(m_sectionData->m_height->value().toDouble()) + un);
     section.setAttribute("fo:background-color", m_sectionData->backgroundColor().name());
 
     // now get a list of all the QGraphicsItems on this scene and output them.
@@ -174,7 +175,9 @@ void ReportSection::initFromXML(QDomNode & section)
     QDomNode node;
     QString n;
 
-    qreal h = section.toElement().attribute("report:height", QString::number(72)).toDouble();
+    qreal h = KoUnit::parseValue(section.toElement().attribute("svg:height", "2.0cm"));
+    m_sectionData->m_height->setValue(h);
+    
     h  = POINT_TO_INCH(h) * KoDpi::dpiY();
     kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
@@ -221,6 +224,8 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
     Q_UNUSED(set)
 
     KoUnit unit = m_reportDesigner->pageUnit();
+    
+    m_sectionData->m_height->setOption("unit", KoUnit::unitName(unit));
 
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
@@ -239,6 +244,8 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
     m_reportDesigner->adjustSize();
     m_reportDesigner->repaint();
+    
+    slotResizeBarDragged(0);
 }
 
 void ReportSection::slotSceneClicked()
@@ -252,13 +259,19 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
     Q_UNUSED(s)
 
     //Handle Background Color
-    if (p.name() == "BackgroundColor") {
+    if (p.name() == "background-color") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());
+    }
+    
+    if (p.name() == "height") {
+	m_scene->setSceneRect(0, 0, m_scene->width(), POINT_TO_INCH(p.value().toDouble()) * KoDpi::dpiY());
+	slotResizeBarDragged(0);
     }
 
     if (m_reportDesigner)
         m_reportDesigner->setModified(true);
 
+    m_sceneView->resetCachedContent();
     m_scene->update();
 }
 
