@@ -82,8 +82,8 @@ public:
 
     void adjustAllDiagrams();
     
-    void registerDiagram( KDChart::AbstractDiagram *model );
-    void deregisterDiagram( KDChart::AbstractDiagram *model );
+    void registerDiagram( KDChart::AbstractDiagram *diagram );
+    void deregisterDiagram( KDChart::AbstractDiagram *diagram );
     
     KDChart::AbstractDiagram *createDiagramIfNeeded( ChartType chartType );
     KDChart::AbstractDiagram *getDiagram( ChartType chartType );
@@ -344,7 +344,6 @@ void Axis::Private::deregisterDiagram( KDChart::AbstractDiagram *diagram )
                          plotArea, SLOT( plotAreaUpdate() ) );
 }
 
-
 KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartType )
 {
     KDChart::AbstractDiagram *diagram = 0;
@@ -579,6 +578,11 @@ void Axis::Private::createBarDiagram()
     q->setGapBetweenBars( 0 );
     q->setGapBetweenSets( 100 );
 
+    // Propagate existing settings
+    KDChart::ThreeDBarAttributes attributes( kdBarDiagram->threeDBarAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdBarDiagram->setThreeDBarAttributes( attributes );
+
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
 }
 
@@ -611,6 +615,11 @@ void Axis::Private::createLineDiagram()
             if ( axis->isVisible() )
                 kdLineDiagram->addAxis( axis->kdAxis() );
     }
+
+    // Propagate existing settings
+    KDChart::ThreeDLineAttributes attributes( kdLineDiagram->threeDLineAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdLineDiagram->setThreeDLineAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
 }
@@ -650,6 +659,11 @@ void Axis::Private::createAreaDiagram()
                 kdAreaDiagram->addAxis( axis->kdAxis() );
     }
 
+    // Propagate existing settings
+    KDChart::ThreeDLineAttributes attributes( kdLineDiagram->threeDLineAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdLineDiagram->setThreeDLineAttributes( attributes );
+
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
 }
 
@@ -670,6 +684,11 @@ void Axis::Private::createCircleDiagram()
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+
+    // Propagate existing settings
+    KDChart::ThreeDPieAttributes attributes( kdCircleDiagram->threeDPieAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdCircleDiagram->setThreeDPieAttributes( attributes );
 
     // Initialize with default values that are specified in PlotArea
     // Note: KDChart takes an int here, though ODF defines the offset to be a double.
@@ -693,6 +712,11 @@ void Axis::Private::createRingDiagram()
 
     if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
         plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+
+    // Propagate existing settings
+    KDChart::ThreeDPieAttributes attributes( kdRingDiagram->threeDPieAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdRingDiagram->setThreeDPieAttributes( attributes );
 
     // Initialize with default values that are specified in PlotArea
     // Note: KDChart takes an int here, though ODF defines the offset to be a double.
@@ -748,6 +772,11 @@ void Axis::Private::createScatterDiagram()
             if ( axis->isVisible() )
                 kdScatterDiagram->addAxis( axis->kdAxis() );
     }
+
+    // Propagate existing settings
+    KDChart::ThreeDLineAttributes attributes( kdScatterDiagram->threeDLineAttributes() );
+    attributes.setEnabled( plotArea->isThreeD() );
+    kdScatterDiagram->setThreeDLineAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
 }
