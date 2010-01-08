@@ -545,8 +545,13 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     }
 
     KoXmlNode sheetNode = KoXml::namedItemNS(body, KoXmlNS::table, "table");
-    // sanity check
-    if (sheetNode.isNull()) return false;
+
+    if (sheetNode.isNull()) {
+        // We need at least one sheet !
+        doc()->setErrorMessage(i18n("This document has no sheets (tables)."));
+        d->isLoading = false;
+        return false;
+    }
 
     d->overallRowCount = 0;
     while (!sheetNode.isNull()) {
