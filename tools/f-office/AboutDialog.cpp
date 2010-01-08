@@ -38,11 +38,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
     </style></head><body style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:400; \
     font-style:normal;\">\n <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; \
     margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + \
-    i18n("KOffice Office Viewer - Alpha Release for Maemo 5 is based on KOffice Open Source Project. <br> \
+    i18n("KOffice Office Viewer - Alpha Release for Maemo 5 is based on the KOffice Open Source Project. <br> \
     The application currently supports ODF (ODT & ODP) and Microsoft formats (Word and <br> \
     Powerpoint). The support for Microsoft formats is not complete and is still missing many<br> \
-    features. Software is packaged by Maemo in collaboration with few KOffice community <br> \
-    members. The software source code is available from Maemo Extras under GPL license.") + \
+    features. The software is packaged by Maemo, in collaboration with members of the KOffice <br> \
+    community. The software source code is available from Maemo Extras under GPL license.") + \
     "</p></body></html>";
 
     m_ui->setupUi(this);
