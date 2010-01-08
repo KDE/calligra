@@ -338,7 +338,7 @@ public:
     //! @return number format string for id @a (counted from 0)
     QString numberFormatString( int id ) const 
     {
-        return numberFormatStrings[ id ];
+        return numberFormatStrings.at(id);
     }
 
 protected:
@@ -347,7 +347,7 @@ protected:
     QVector<XlsxFontStyle*> fontStyles;
     QVector<XlsxFillStyle*> fillStyles;
     QVector<XlsxCellFormat*> cellFormats;
-    QMap< int, QString > numberFormatStrings;
+    QVector< QString > numberFormatStrings;
 
     friend class XlsxXmlStylesReader;
 };

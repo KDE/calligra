@@ -1,0 +1,12 @@
+MS OOXML filters helper library for KOffice.
+Contains common code for XLSX, DOCX, PPTX filters for MS Office 2007.
+
+References to the ECMA-376 specification in the source code are made
+by page number or chapter number. Page numbers are the physical PDF
+document's page numbers as displayed by the viewer.
+
+The proper version of the specification document is "ECMA-376 2nd edition
+Part 1" (December 2008) [1]. It may not reflect the behaviour of MS Office
+2007 but is of slightly higher quality than the 1st edition.
+
+[1] http://www.ecma-international.org/publications/standards/Ecma-376.htm

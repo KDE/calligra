@@ -343,7 +343,11 @@ void XlsxFontStyle::setupCellTextStyle(
     KoGenStyle* cellStyle) const
 {
     if (!name.isEmpty()) {
-        cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
+#ifdef __GNUC__
+#warning TODO: we are saving with fo:font-family now because style:font-name is not properly supported by kotext; fix void KoCharacterStyle::loadOdf(KoOdfLoadingContext &context)...
+#endif
+//!@ todo reenable this        cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
+        cellStyle->addProperty("fo:font-family", name, KoGenStyle::TextType);
     }
     if (color.isValid(themes)) {
 //<workaround>
@@ -360,10 +364,14 @@ else {
     //! @todo implement more styling
 }
 
+#define NUMBERFORMATSTRINGS_CAPACITY 512
+
 XlsxStyles::XlsxStyles()
 {
     // fill the default number formats
-    // from Office Open XML Part 4 - Markup Language Reference, p. 2128
+    // from Office Open XML Part 4 - Markup Language Reference, p. 1974
+    numberFormatStrings.reserve(NUMBERFORMATSTRINGS_CAPACITY);
+    numberFormatStrings.resize(49 + 1);
     numberFormatStrings[ 1 ] = QLatin1String( "0" );
     numberFormatStrings[ 2 ] = QLatin1String( "0.00" );
     numberFormatStrings[ 3 ] = QLatin1String( "#,##0" );
@@ -441,6 +449,7 @@ class ST_HorizontalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat
 {
 public:
     ST_HorizontalAlignment_fromStringMap() {
+        insert(QString(), XlsxCellFormat::GeneralHorizontalAlignment);
         insert(QLatin1String("general"), XlsxCellFormat::GeneralHorizontalAlignment);
         insert(QLatin1String("center"), XlsxCellFormat::CenterHorizontalAlignment);
         insert(QLatin1String("centerContinuous"), XlsxCellFormat::CenterContinuousHorizontalAlignment);
@@ -462,7 +471,7 @@ class ST_VerticalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::
 {
 public:
     ST_VerticalAlignment_fromStringMap() {
-        insert(QLatin1String(""), XlsxCellFormat::NoVerticalAlignment);
+        insert(QString(), XlsxCellFormat::NoVerticalAlignment);
         insert(QLatin1String("bottom"), XlsxCellFormat::BottomVerticalAlignment);
         insert(QLatin1String("center"), XlsxCellFormat::CenterVerticalAlignment);
         insert(QLatin1String("distributed"), XlsxCellFormat::DistributedVerticalAlignment);
@@ -481,16 +490,17 @@ void XlsxCellFormat::setVerticalAlignment(const QString& alignment)
 void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 {
 //! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
-    bool wrapOption = false;
+    int wrapOption = -1; // "don't know"
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
     case CenterContinuousHorizontalAlignment:
     case DistributedHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "center", KoGenStyle::ParagraphType);
         if (horizontalAlignment == DistributedHorizontalAlignment)
-            wrapOption = true;
+            wrapOption = 1;
         break;
     case GeneralHorizontalAlignment: // ok?
+        break;
     case LeftHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "start", KoGenStyle::ParagraphType);
         break;
@@ -516,12 +526,13 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case DistributedVerticalAlignment:
     case BottomVerticalAlignment:
         if (verticalAlignment == DistributedVerticalAlignment)
-            wrapOption = true;
+            wrapOption = 1;
     default:;
     }
 
 //! @todo take alignment/@wrapText into account
-    cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
+    if (wrapOption == 0 || wrapOption == 1)
+        cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
 }
 
 //! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
@@ -660,7 +671,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
  - extLst (Future Feature Data Storage Area) §18.2.10
  - [done] fills (Fills) §18.8.21
  - [done] fonts (Fonts) §18.8.23
- - numFmts (Number Formats) §18.8.31
+ - [done] numFmts (Number Formats) §18.8.31
  - tableStyles (Table Styles) §18.8.42
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
@@ -721,21 +732,29 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 #undef CURRENT_EL
 #define CURRENT_EL numFmts
 //! numFmts handler (Number formats)
-/*! ECMA-??? ???
- This element contains all number format definitions for this workbook.
+/*! ECMA-376, 18.8.31, p. 1981.
+ This element defines the number formats in this workbook, consisting of a sequence of numFmt records,
+ where each numFmt record defines a particular number format, indicating how to format and render
+ the numeric value of a cell.
+
  Child elements:
- - [done] numFmt (Format Definition) §???
+ - [done] numFmt (Format Definition) §18.8.30
  Parent elements:
  - [done] styleSheet (§18.8.39)
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs = attributes();
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS( count )
-    uint countNumber;
+    int countNumber;
     STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
-    
+    if (countNumber < 0 || countNumber >= NUMBERFORMATSTRINGS_CAPACITY) {
+        raiseError(i18n("Declared number of formats too small (%1)", NUMBERFORMATSTRINGS_CAPACITY));
+        return KoFilter::WrongFormat;
+    }
+    m_context->styles->numberFormatStrings.resize(countNumber+1);
+
     while( !atEnd() )
     {
         readNext();
@@ -746,22 +765,39 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
         }
         BREAK_IF_END_OF( CURRENT_EL )
     }
-    
+
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL numFmt
+//! numFmt handler (Number format)
+/*! ECMA-376, 18.8.30, p. 1973.
+ This element specifies number format properties which indicate how to format and render
+ the numeric value of a cell.
 
+ No child elements.
+ 
+ Parent elements:
+ - dxf (§18.8.14)
+ - ndxf (§18.11.1.4)
+ - [done] numFmts (§18.8.31)
+ - odxf (§18.11.1.6)
+*/
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs = attributes();
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS( numFmtId )
-    const uint id = numFmtId.toInt();
-    QString formatCode;
-    TRY_READ_ATTR_WITHOUT_NS_INTO( formatCode, formatCode );
+    int id;
+    STRING_TO_INT(numFmtId, id, "numFmt@numFmtId")
+    if (id < 0 || id >= NUMBERFORMATSTRINGS_CAPACITY) {
+        raiseError(i18n("Declared number of formats too small (%1)", NUMBERFORMATSTRINGS_CAPACITY));
+        return KoFilter::WrongFormat;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS( formatCode );
 
     m_context->styles->numberFormatStrings[ id ] = formatCode;
 
