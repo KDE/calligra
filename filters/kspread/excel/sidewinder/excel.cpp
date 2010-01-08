@@ -2415,46 +2415,52 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
     { // read CompObj stream
       POLE::Stream *combObjStream = new POLE::Stream( &storage, "/CompObj" );
-      //const unsigned long streamStartPosition = combObjStream->tell();
+      
       // header
       unsigned bytes_read = combObjStream->read( buffer, 28 );
-      //const unsigned long version = readU32( buffer + 5 );
+      unsigned long length = 0;
+      bool hasCombObjStream = bytes_read == 28;
+      if(hasCombObjStream) {
+          //const unsigned long version = readU32( buffer + 5 );
+          //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
+          //printEntries(storage,"CompObj");
 
-      //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
-      //printEntries(storage,"CompObj");
-
-      // AnsiUserType
-      bytes_read = combObjStream->read( buffer, 4 );
-      const unsigned long length = readU32( buffer );
-      bytes_read = combObjStream->read( buffer, length );
-      UString ansiUserType = readByteString(buffer, length);
-      printf( "length=%lu ansiUserType=%s\n",length,ansiUserType.ascii() );
-
-      // AnsiClipboardFormat
-      bytes_read = combObjStream->read( buffer, 4 );
-      const unsigned long markerOrLength = readU32( buffer );
-      switch (markerOrLength) {
-        case 0x00000000: break; // Must not be present, do nothing...
-        case 0xFFFFFFFF: // fall through
-        case 0xFFFFFFFE: { // must be 4 bytes and contains a clipboard identifier
+          // AnsiUserType
           bytes_read = combObjStream->read( buffer, 4 );
-          //const unsigned long standardFormat = readU32( buffer );
-          // switch(standardFormat) {
-          //   case 0x00000002: standardFormat=CF_BITMAP;
-          //   case 0x00000003: standardFormat=CF_METAFILEPICT
-          //   case 0x00000008: standardFormat=CF_DIB
-          //   case 0x0000000E: standardFormat=CF_ENHMETAFILE
-          // }
-          //TODO...
-        }
-        break;
-        default:
-          bytes_read = combObjStream->read( buffer, markerOrLength );
-          UString ansiString = readByteString(buffer, markerOrLength);
-          //TODO...
-          //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+          length = readU32( buffer );
+          bytes_read = combObjStream->read( buffer, length );
+          if(bytes_read != length) hasCombObjStream = false;
       }
-      //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
+      if(hasCombObjStream) {
+          UString ansiUserType = readByteString(buffer, length);
+          printf( "length=%lu ansiUserType=%s\n",length,ansiUserType.ascii() );
+
+          // AnsiClipboardFormat
+          bytes_read = combObjStream->read( buffer, 4 );
+          const unsigned long markerOrLength = readU32( buffer );
+          switch (markerOrLength) {
+            case 0x00000000: break; // Must not be present, do nothing...
+            case 0xFFFFFFFF: // fall through
+            case 0xFFFFFFFE: { // must be 4 bytes and contains a clipboard identifier
+              bytes_read = combObjStream->read( buffer, 4 );
+              //const unsigned long standardFormat = readU32( buffer );
+              // switch(standardFormat) {
+              //   case 0x00000002: standardFormat=CF_BITMAP;
+              //   case 0x00000003: standardFormat=CF_METAFILEPICT
+              //   case 0x00000008: standardFormat=CF_DIB
+              //   case 0x0000000E: standardFormat=CF_ENHMETAFILE
+              // }
+              //TODO...
+            }
+            break;
+            default:
+              bytes_read = combObjStream->read( buffer, markerOrLength );
+              UString ansiString = readByteString(buffer, markerOrLength);
+              //TODO...
+              //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+          }
+          //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
+      }
       delete combObjStream;
     }
 
