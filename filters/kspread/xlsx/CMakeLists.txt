@@ -12,6 +12,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlWorksheetReader.cpp
     XlsxXmlSharedStringsReader.cpp
     XlsxXmlStylesReader.cpp
+    NumberFormatParser.cpp
 )
 
 kde4_add_plugin(xlsximport WITH_PREFIX ${xlsximport_PART_SRCS})
