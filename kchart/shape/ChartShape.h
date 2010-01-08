@@ -174,6 +174,9 @@ public:
     
     QMap<QString, KoDataCenter*> dataCenterMap() const;
 
+signals:
+    void chartTypeChanged( ChartType );
+
 private:
     class Private;
     Private *const d;

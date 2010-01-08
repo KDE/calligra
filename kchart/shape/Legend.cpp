@@ -130,6 +130,8 @@ Legend::Legend( ChartShape *parent )
 
     connect ( d->kdLegend, SIGNAL( propertiesChanged() ),
               this,        SLOT( slotKdLegendChanged() ) );
+    connect ( parent, SIGNAL( chartTypeChanged( ChartType ) ),
+              this,   SLOT( slotChartTypeChanged( ChartType ) ) );
 }
 
 Legend::~Legend()
@@ -590,4 +592,19 @@ void Legend::slotKdLegendChanged()
     // FIXME: Scale size from px to pt?
     setSize( QSizeF( size ) );
     update();
+}
+
+void Legend::slotChartTypeChanged( ChartType chartType )
+{
+    // TODO: Once we support markers, this switch will have to be
+    // more clever.
+    switch ( chartType ) {
+    case LineChartType:
+    case ScatterChartType:
+        d->kdLegend->setLegendStyle( KDChart::Legend::LinesOnly );
+        break;
+    default:
+        d->kdLegend->setLegendStyle( KDChart::Legend::MarkersOnly );
+        break;
+    }
 }

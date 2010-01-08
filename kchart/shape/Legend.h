@@ -81,6 +81,7 @@ public:
     void update() const;
 
 private slots:
+    void slotChartTypeChanged( ChartType chartType );
     void slotKdLegendChanged();
 
 private:

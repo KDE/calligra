@@ -822,6 +822,7 @@ void ChartShape::setChartType( ChartType type )
 {
     Q_ASSERT( d->plotArea );
     d->plotArea->setChartType( type );
+    emit chartTypeChanged( type );
 }
 
 void ChartShape::setChartSubType( ChartSubtype subType )
@@ -1084,7 +1085,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
         if ( chartClass == ODF_CHARTTYPES[ (ChartType)type ] ) {
             //kDebug(35001) <<"found chart of type" << chartClass;
 
-            d->plotArea->setChartType( (ChartType)type );
+            setChartType( (ChartType)type );
             knownType = true;
             break;
         }
