@@ -290,7 +290,7 @@ static Pen convertBorderStyle(unsigned style)
     case XFRecord::Hair:
         // FIXME no equivalent ?
         pen.width = 0.1;
-        pen.style = Pen::SolidLine;
+        pen.style = Pen::DotLine;
         break;
     case XFRecord::MediumDashed:
         pen.width = 1;
