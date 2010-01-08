@@ -42,6 +42,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoCharacterStyle.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoOdfWorkaround.h>
 
 // KDChart
 #include <KDChartChart>
@@ -181,6 +182,10 @@ public:
     int gapBetweenBars;
     // TODO: Save to ODF
     int gapBetweenSets;
+
+    // TODO: Save
+    // See ODF v1.2 $19.12 (chart:display-label)
+    bool showLabels;
 
     bool isVisible;
 };
@@ -983,6 +988,11 @@ QString Axis::titleText() const
     return d->titleData->document()->toPlainText();
 }
 
+bool Axis::showLabels() const
+{
+    return d->showLabels;
+}
+
 QString Axis::id() const
 {
     return d->id;
@@ -1264,6 +1274,15 @@ void Axis::setTitleText( const QString &text )
     d->titleData->document()->setPlainText( text );
 }
 
+void Axis::setShowLabels( bool show )
+{
+    d->showLabels = show;
+
+    KDChart::TextAttributes textAttr = d->kdAxis->textAttributes();
+    textAttr.setVisible( show );
+    d->kdAxis->setTextAttributes( textAttr );
+}
+
 Qt::Orientation Axis::orientation()
 {
     if ( d->position == BottomAxisPosition || d->position == TopAxisPosition )
@@ -1399,7 +1418,6 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         }
     }
 
-    bool isVisible = false;
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "text" );
@@ -1421,12 +1439,12 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
             setMinorIntervalDivisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
-            d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
-
+            setShowLabels( styleStack.property( KoXmlNS::chart, "display-label" ) != "false" );
         if ( styleStack.hasProperty( KoXmlNS::chart, "visible" ) )
-            isVisible = styleStack.property( KoXmlNS::chart, "visible" )  == "true";
+            setVisible( styleStack.property( KoXmlNS::chart, "visible" )  != "false" );
+    } else {
+        setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }
-    setVisible( isVisible );
     
     d->kdPlane->setGridAttributes( orientation(), gridAttr );
 

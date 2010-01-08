@@ -57,6 +57,7 @@ public:
     AxisPosition position() const;
     KoShape *title() const;
     QString titleText() const;
+    bool showLabels() const;
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
@@ -80,6 +81,7 @@ public:
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
+    void setShowLabels( bool show );
     void setDimension( AxisDimension dimension );
     bool attachDataSet( DataSet *dataSet, bool silent = false );
     bool detachDataSet( DataSet *dataSet, bool silent = false );
