@@ -453,14 +453,14 @@ void QWinMetaFile::setWindowExt(long, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::lineTo(long, short* parm)
 {
-    mLastPos = QPoint(parm[ 1 ], parm[ 0 ]);
+    mPainter.drawLine(mLastPos, QPoint(parm[1], parm[0]));
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::moveTo(long, short* parm)
 {
-    mPainter.drawLine(mLastPos, QPoint(parm[1], parm[0]));
+    mLastPos = QPoint(parm[ 1 ], parm[ 0 ]);
 }
 
 
