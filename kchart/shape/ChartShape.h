@@ -130,6 +130,8 @@ public:
     
     void setPosition( const QPointF &size );
     void setSize( const QSizeF &size );
+
+    void setLegendSize( const QSizeF &size );
     
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;

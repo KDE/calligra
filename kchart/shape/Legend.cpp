@@ -594,7 +594,7 @@ void Legend::slotKdLegendChanged()
     //d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
     // FIXME: Scale size from px to pt?
-    setSize( QSizeF( size ) );
+    d->shape->setLegendSize( size );
     update();
 }
 

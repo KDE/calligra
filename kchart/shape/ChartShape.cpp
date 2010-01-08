@@ -398,8 +398,8 @@ ChartShape::ChartShape()
     setClipping( d->legend, true );
 
     // A few simple defaults (chart type and subtype in this case)
-    d->plotArea->setChartType( BarChartType );
-    d->plotArea->setChartSubType( NormalChartSubtype );
+    setChartType( BarChartType );
+    setChartSubType( NormalChartSubtype );
 
     // Create the Title, which is a standard TextShape.
     // We use a empty dataCenterMap here for the creation and then in
@@ -758,6 +758,38 @@ void ChartShape::setSize( const QSizeF &newSize )
     KoShape::setSize( newSize );
 }
 
+void ChartShape::setLegendSize( const QSizeF &size )
+{
+    QPointF newPos = d->legend->position();
+    QSizeF oldSize = d->legend->size();
+    switch ( d->legend->legendPosition() ) {
+    case TopLegendPosition:
+        break;
+    case BottomLegendPosition:
+        break;
+    case StartLegendPosition:
+        break;
+    case EndLegendPosition:
+        newPos.ry() -= (size.height() - oldSize.height()) / 2.0;
+        break;
+    // FIXME: The following positions are not handled
+    // The new position is simply set as is
+    case TopStartLegendPosition:
+    case BottomStartLegendPosition:
+    case TopEndLegendPosition:
+    case BottomEndLegendPosition:
+
+    // If the legend is floating, the user has changed the position manually.
+    // There's no way to determine where the user wants it to be after a resize.
+    // (more to the left? more to the right?)
+    case FloatingLegendPosition:
+        break;
+    }
+
+    d->legend->setPosition( newPos );
+    d->legend->setSize( size );
+}
+
 void ChartShape::updateChildrenPositions()
 {
     Q_ASSERT( d->plotArea );
@@ -770,8 +802,7 @@ void ChartShape::updateChildrenPositions()
         title->setPosition( titlePosition );
     }
 
-    const qreal legendXOffset = 10.0;
-    d->legend->setPosition( QPointF( size().width() + legendXOffset,
+    d->legend->setPosition( QPointF( size().width() - d->legend->size().width(),
                                      size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }
 
