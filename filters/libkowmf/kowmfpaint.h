@@ -122,7 +122,7 @@ private:
     void  setMatrix(const QMatrix &, bool combine = false);
 
 protected:
-    bool  mInternalPainter;      // True if the painter wasn't externally provided.
+    bool  mIsInternalPainter;      // True if the painter wasn't externally provided.
     QPainter *mPainter;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;

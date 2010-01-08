@@ -20,22 +20,28 @@
 
 #include <QPolygon>
 #include <QPrinter>
+#include <QFontMetrics>
 
 #include <kdebug.h>
 
-KoWmfPaint::KoWmfPaint() : KoWmfRead()
+
+#define DEBUG_WMFPAINT 1
+
+
+KoWmfPaint::KoWmfPaint()
+    : KoWmfRead()
 {
     mTarget = 0;
-    mInternalPainter = true;
+    mIsInternalPainter = true;
     mPainter = 0;
 }
 
 
 bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
 {
-    if (!mPainter || !mInternalPainter)
-        mPainter = new QPainter;
-    mInternalPainter = true;
+    if (!mPainter)
+        mPainter = new QPainter(&target);
+    mIsInternalPainter = true;
 
     if (mPainter->isActive()) return false;
     mTarget = &target;
@@ -47,10 +53,12 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
 
 bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 {
-    if (mInternalPainter && mPainter)
+    // If there is already a painter and it's owned by us, then delete i
+    if (mPainter && mIsInternalPainter)
         delete mPainter;
 
-    mInternalPainter = false;
+    // Set the new painter
+    mIsInternalPainter = false;
     mPainter = &painter;
 
     mTarget = mPainter->device();
@@ -67,7 +75,10 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 bool KoWmfPaint::begin()
 {
     bool ret = true;
-    if (mInternalPainter)
+
+    // If the painter is our own, we have to call begin() on it.
+    // If it's external, we suppose that it's already done for us.
+    if (mIsInternalPainter)
         ret = mPainter->begin(mTarget);
 
     if (ret) {
@@ -82,7 +93,13 @@ bool KoWmfPaint::begin()
             mPainter->setWindow(rec.left(), rec.top(), rec.width(), rec.height());
         }
     }
+
+#if DEBUG_WMFPAINT
+    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
+                  << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
     kDebug(31000) << "KoWmfPaint::begin returns " << ret;
+#endif
+
     return ret;
 }
 
@@ -101,8 +118,7 @@ bool KoWmfPaint::end()
     }
 
     bool ret = true;
-
-    if (mInternalPainter)
+    if (mIsInternalPainter)
         ret = mPainter->end();
 
     return ret;
@@ -123,12 +139,19 @@ void KoWmfPaint::restore()
 
 void KoWmfPaint::setFont(const QFont &font)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << font;
+#endif
     mPainter->setFont(font);
 }
 
 
 void KoWmfPaint::setPen(const QPen &pen)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << pen;
+#endif
+
     QPen p = pen;
     int width = pen.width();
 
@@ -161,24 +184,36 @@ const QPen &KoWmfPaint::pen() const
 
 void KoWmfPaint::setBrush(const QBrush &brush)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << brush;
+#endif
     mPainter->setBrush(brush);
 }
 
 
 void KoWmfPaint::setBackgroundColor(const QColor &c)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << c;
+#endif
     mPainter->setBackground(QBrush(c));
 }
 
 
 void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << mode;
+#endif
     mPainter->setBackgroundMode(mode);
 }
 
 
 void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << mode;
+#endif
     mPainter->setCompositionMode(mode);
 }
 
@@ -192,6 +227,10 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 // and relative/absolute coordinate
 void KoWmfPaint::setWindowOrg(int left, int top)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << left << " " << top;
+#endif
+    //return;
     if (mRelativeCoord) {
         double dx = mInternalWorldMatrix.dx();
         double dy = mInternalWorldMatrix.dy();
@@ -210,6 +249,10 @@ void KoWmfPaint::setWindowOrg(int left, int top)
 
 void KoWmfPaint::setWindowExt(int w, int h)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << w << " " << h;
+#endif
+    //return;
     if (mRelativeCoord) {
         QRect r = mPainter->window();
         double dx = mInternalWorldMatrix.dx();
@@ -239,6 +282,9 @@ void KoWmfPaint::setWindowExt(int w, int h)
 
 void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << wm << " " << combine;
+#endif
     mPainter->setMatrix(wm, combine);
 }
 
@@ -257,60 +303,92 @@ QRegion KoWmfPaint::clipRegion()
 
 void KoWmfPaint::moveTo(int x, int y)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000)<< x << ", " << y;
+#endif
     mLastPos = QPoint(x, y);
 }
 
 
 void KoWmfPaint::lineTo(int x, int y)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << " using " << mPainter->pen();
+#endif
     mPainter->drawLine(mLastPos, QPoint(x, y));
 }
 
 
 void KoWmfPaint::drawRect(int x, int y, int w, int h)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h << " using " << mPainter->pen();
+#endif
     mPainter->drawRect(x, y, w, h);
 }
 
 
 void KoWmfPaint::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+#endif
     mPainter->drawRoundRect(x, y, w, h, roudw, roudh);
 }
 
 
 void KoWmfPaint::drawEllipse(int x, int y, int w, int h)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+#endif
     mPainter->drawEllipse(x, y, w, h);
 }
 
 
 void KoWmfPaint::drawArc(int x, int y, int w, int h, int a, int alen)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+#endif
     mPainter->drawArc(x, y, w, h, a, alen);
 }
 
 
 void KoWmfPaint::drawPie(int x, int y, int w, int h, int a, int alen)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+#endif
     mPainter->drawPie(x, y, w, h, a, alen);
 }
 
 
 void KoWmfPaint::drawChord(int x, int y, int w, int h, int a, int alen)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h
+                  << ", " << a << ", " << alen;
+#endif
     mPainter->drawChord(x, y, w, h, a, alen);
 }
 
 
 void KoWmfPaint::drawPolyline(const QPolygon &pa)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << pa;
+#endif
     mPainter->drawPolyline(pa);
 }
 
 
 void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << pa;
+    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
+#endif
     if (winding)
         mPainter->drawPolygon(pa, Qt::WindingFill);
     else
@@ -320,6 +398,10 @@ void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
 
 void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000);
+#endif
+
     mPainter->save();
     QBrush brush = mPainter->brush();
 
@@ -332,6 +414,7 @@ void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 
     // fill polygons
     if (brush != Qt::NoBrush) {
+        kDebug(31000) << "Filling polygon with " << brush;
         mPainter->fillRect(region.boundingRect(), brush);
     }
 
@@ -340,6 +423,9 @@ void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
     if (mPainter->pen().style() != Qt::NoPen) {
         mPainter->setBrush(Qt::NoBrush);
         foreach(const QPolygon & pa, listPa) {
+#if DEBUG_WMFPAINT
+            kDebug(31000) << pa;
+#endif
             if (winding)
                 mPainter->drawPolygon(pa, Qt::WindingFill);
             else
@@ -354,13 +440,29 @@ void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 
 void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
+#endif
     mPainter->drawImage(x, y, img, sx, sy, sw, sh);
 }
 
 
 void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& s, double)
 {
-    mPainter->drawText(x, y, w, h, flags, s);
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << " " << y << " " << w << " " << w << " " << h << " " << s;
+#endif
+    // Sometimes it happens that w and/or h == -1, and then the
+    // bounding box isn't valid any more.  In that case, no text at
+    // all is shown.
+    if (w == -1 || h == -1) {
+        // We want the text to appear with x,y in the upper left corner
+        // so we have to add the ascent of the font to the y value.
+        QFontMetrics  fontMetrics(mPainter->font());
+        y += fontMetrics.ascent();
+
+        mPainter->drawText(x, y, s);
+    }
+    else
+        mPainter->drawText(x, y, w, h, flags, s);
 }
-
-
