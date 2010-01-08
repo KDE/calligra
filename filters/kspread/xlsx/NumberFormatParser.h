@@ -25,11 +25,16 @@
 
 class QString;
 class KoGenStyle;
+class KoGenStyles;
 
 class NumberFormatParser
 {
 public:
+    static void setStyles( KoGenStyles* styles );
     static KoGenStyle parse( const QString& numberFormat );
+
+private:
+    static KoGenStyles* styles;
 };
 
 #endif

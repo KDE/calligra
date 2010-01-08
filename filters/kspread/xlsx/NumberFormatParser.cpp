@@ -23,10 +23,18 @@
 #include "NumberFormatParser.h"
 
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
 #include <QString>
+
+KoGenStyles* NumberFormatParser::styles = 0;
+    
+void NumberFormatParser::setStyles( KoGenStyles* styles )
+{
+    NumberFormatParser::styles = styles;
+}
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \
 \
@@ -57,6 +65,16 @@ if( !plainText.isEmpty() )                   \
 }                                            \
 }
 
+static KoGenStyle styleFromTypeAndBuffer( KoGenStyle::Type type, const QBuffer& buffer )
+{
+    KoGenStyle result( type );
+    
+    const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    result.addChildElement( "number", elementContents );
+
+    return result;
+}
+
 KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 {
     QBuffer buffer;
@@ -66,6 +84,8 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     KoGenStyle::Type type = KoGenStyle::StyleAuto;
 
     QString plainText;
+
+    QMap< QString, QString > conditions;
 
     // this is for the month vs. minutes-context
     bool justHadHours = false;
@@ -130,6 +150,13 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
         switch( c )
         {
+        // condition or color or locale...
+        case '[':
+            // ignore for now
+            while( numberFormat[ i ] != QLatin1Char( ']' ) )
+                ++i;
+            break;
+
         // percentage
         case '%':
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericPercentage );
@@ -258,6 +285,17 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
         // now it's getting really scarry: semi-colon:
         case ';':
+            {
+                buffer.close();
+                // conditional style with the current format
+                const KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
+                const QString styleName = NumberFormatParser::styles->lookup( result, "N" );
+                const QString condition = QLatin1String( "value()>=0" );
+                // start a new style
+                buffer.setData( QByteArray() );
+                buffer.open( QIODevice::WriteOnly );
+                conditions[ condition ] = styleName;
+            }
             break;
 
         // text-content
@@ -288,12 +326,16 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             
     FINISH_PLAIN_TEXT_PART;
 
+    // add conditional styles:
+    for( QMap< QString, QString >::const_iterator it = conditions.begin(); it != conditions.end(); ++it )
+    {
+        xmlWriter.startElement( "style:map" );
+        xmlWriter.addAttribute( "style:condition", it.key() );
+        xmlWriter.addAttribute( "style:apply-style-name", it.value() );
+        xmlWriter.endElement();
+    }
+
     buffer.close();
 
-    KoGenStyle result( type );
-    
-    const QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    result.addChildElement( "number", elementContents );
-
-    return result;
+    return styleFromTypeAndBuffer( type, buffer );
 }
