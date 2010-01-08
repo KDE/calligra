@@ -428,7 +428,6 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
         context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
-    loadOdfAttributes( legendElement, context, OdfAllAttributes );
 
     // TODO: Read optional attributes
     // 1. Legend expansion
@@ -438,9 +437,14 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
 
     if ( !legendElement.isNull() ) {
         QString lp;
+        int attributesToLoad = OdfAllAttributes;
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) ) {
+            attributesToLoad ^= OdfPosition;
             lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
+
+        loadOdfAttributes( legendElement, context, attributesToLoad );
+
         QString lalign;
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) ) {
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
