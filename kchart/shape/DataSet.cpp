@@ -547,17 +547,17 @@ QBrush DataSet::brush( int section ) const
 void DataSet::setPen( const QPen &pen )
 {
     d->pen = pen;
+    d->penIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
-    d->penIsSet = true;
 }
 
 void DataSet::setBrush( const QBrush &brush )
 {
     d->brush = brush;
+    d->brushIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
-    d->brushIsSet = true;
 }
 
 void DataSet::setPen( int section, const QPen &pen )
