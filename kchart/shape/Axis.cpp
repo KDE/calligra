@@ -552,6 +552,9 @@ void Axis::Private::createBarDiagram()
 
     kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
     kdBarDiagram->setModel( kdBarDiagramModel );
+    // By 'vertical', KDChart means the orientation of a chart's bars,
+    // not the orientation of the x axis.
+    kdBarDiagram->setOrientation( plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical );
     registerDiagram( kdBarDiagram );
     kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
 

@@ -76,6 +76,12 @@ public:
     Axis *secondaryXAxis() const;
     Axis *secondaryYAxis() const;
     bool isThreeD() const;
+
+    /**
+     * Determines whether x and y axis are swapped. Default is 'false'.
+     * See chart:vertical attribute in ODF v1.2, $19.63
+     */
+    bool isVertical() const;
     int gapBetweenBars() const;
     int gapBetweenSets() const;
 
@@ -104,6 +110,7 @@ public:
     
     
     void setThreeD( bool threeD );
+    void setVertical( bool vertical );
     
     ChartShape *parent() const;
 

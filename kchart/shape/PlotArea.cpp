@@ -116,6 +116,7 @@ public:
     // FIXME: OpenOffice stores these attributes in the axes' elements.
     // The specs don't say anything at all about what elements can have
     // these style attributes.
+    // chart:vertical attribute: see ODF v1.2, $19.63
     bool  vertical;
     int   gapBetweenBars;
     int   gapBetweenSets;
@@ -151,6 +152,9 @@ PlotArea::Private::Private( ChartShape *parent )
 
     wall  = 0;
     floor = 0;
+
+    // By default, x and y axes are not swapped.
+    vertical = false;
 
     threeD      = false;
     threeDScene = 0;
@@ -333,6 +337,11 @@ bool PlotArea::isThreeD() const
     return d->threeD;
 }
 
+bool PlotArea::isVertical() const
+{
+    return d->vertical;
+}
+
 ThreeDScene *PlotArea::threeDScene() const
 {
     return d->threeDScene;
@@ -466,6 +475,11 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
+void PlotArea::setVertical( bool vertical )
+{
+    d->vertical = vertical;
+    // TODO: Propagate
+}
 
 // ----------------------------------------------------------------
 //                         loading and saving
@@ -506,11 +520,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
 
         // Data specific to bar charts
-        if ( styleStack.hasProperty( KoXmlNS::chart, "vertical" )
-             && styleStack.property( KoXmlNS::chart, "vertical" ) == "true" )
-        {
-            d->vertical = true;
-        }
+        if ( styleStack.hasProperty( KoXmlNS::chart, "vertical" ) )
+            setVertical( styleStack.property( KoXmlNS::chart, "vertical" ) == "true" );
 
         // Data direction: It's in the plotarea style.
         if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
