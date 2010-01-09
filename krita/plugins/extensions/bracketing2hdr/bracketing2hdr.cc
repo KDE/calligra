@@ -348,6 +348,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
 }
 void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
 {
+    if(frames.size() < 1) return;
 //     return;
     // Normalize the intensity responses
     normalize(m_intensityR);
