@@ -337,7 +337,7 @@ QPen DataSet::Private::defaultPen() const
     ChartType chartType = effectiveChartType();
     if ( chartType == LineChartType ||
          chartType == ScatterChartType )
-        pen = QPen( Qt::NoPen );
+        pen = QPen( defaultDataSetColor( kdDataSetNumber ) );
 
     return pen;
 }
