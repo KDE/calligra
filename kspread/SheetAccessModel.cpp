@@ -21,6 +21,7 @@
 #include "SheetAccessModel.h"
 #include "Map.h"
 #include "Binding.h"
+#include "BindingManager.h"
 #include "Region.h"
 
 // Qt
@@ -84,9 +85,9 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
 
     // This region contains the entire sheet
     const Region region( 1, 1, KS_colMax, KS_rowMax, sheet );
-    Binding* binding = new Binding( region );
+    const QPointer<QAbstractItemModel> model = const_cast<QAbstractItemModel*>( d->map->bindingManager()->createModel( region.name() ) );
 
-    item->setData( qVariantFromValue( QPointer<QAbstractItemModel>( binding->model() ) ), Qt::DisplayRole );
+    item->setData( qVariantFromValue( model ), Qt::DisplayRole );
 
     const int sheetIndex = d->map->indexOf( sheet );
 
