@@ -523,14 +523,14 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     		
             if ( maxSize < dataSetSize ) {
                 if ( d->dataDirection == Qt::Horizontal )
-                    beginRemoveRows( QModelIndex(), maxSize, dataSetSize - 1 );
-                else
                     beginRemoveColumns( QModelIndex(), maxSize, dataSetSize - 1 );
+                else
+                    beginRemoveRows( QModelIndex(), maxSize, dataSetSize - 1 );
                 d->biggestDataSetIndex = biggestDataSetIndex;
                 if ( d->dataDirection == Qt::Horizontal )
-                    endRemoveRows();
-                else
                     endRemoveColumns();
+                else
+                    endRemoveRows();
             }
             else {
                 d->biggestDataSetIndex = biggestDataSetIndex;
@@ -543,10 +543,10 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     	int columnAboutToBeRemoved = dataSetIndex * d->dataDimensions;
         if ( d->dataDirection == Qt::Horizontal )
             beginRemoveRows( QModelIndex(), columnAboutToBeRemoved,
-                                columnAboutToBeRemoved + d->dataDimensions - 1 );
+                             columnAboutToBeRemoved + d->dataDimensions - 1 );
     	else
             beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved,
-                             columnAboutToBeRemoved + d->dataDimensions - 1 );
+                                columnAboutToBeRemoved + d->dataDimensions - 1 );
     	d->dataSets.removeAt( dataSetIndex );
         if ( d->dataDirection == Qt::Horizontal )
             endRemoveRows();
