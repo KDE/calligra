@@ -88,12 +88,25 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
 
     item->setData( qVariantFromValue( QPointer<QAbstractItemModel>( binding->model() ) ), Qt::DisplayRole );
 
-    insertColumn( d->map->indexOf( sheet ), col );
+    const int sheetIndex = d->map->indexOf( sheet );
+
+    insertColumn( sheetIndex, col );
+    setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
 }
 
 void SheetAccessModel::slotSheetRemoved( Sheet *sheet )
 {
     removeColumn( d->map->indexOf( sheet ), QModelIndex() );
+}
+
+void SheetAccessModel::slotSheetNameChanged( Sheet *sheet, const QString &oldName )
+{
+    Q_UNUSED( oldName );
+
+    const int sheetIndex = d->map->indexOf( sheet );
+    // We should never receive signals from sheets that are not in our model
+    Q_ASSERT( sheetIndex >= 0 );
+    setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
 }
 
 } // namespace KSpread

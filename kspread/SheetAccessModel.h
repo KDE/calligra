@@ -58,6 +58,7 @@ namespace KSpread {
     public Q_SLOTS:
         void slotSheetAdded( Sheet *sheet );
         void slotSheetRemoved( Sheet *sheet );
+        void slotSheetNameChanged( Sheet *sheet, const QString &oldName );
 
     private:
         class Private;
