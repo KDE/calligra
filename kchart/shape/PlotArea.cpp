@@ -112,6 +112,9 @@ public:
     // ----------------------------------------------------------------
     // Data specific to each types
 
+    // table:cell-range-address, ODF v1.2, $18.595
+    CellRegion cellRangeAddress;
+
     // 1. Bar charts
     // FIXME: OpenOffice stores these attributes in the axes' elements.
     // The specs don't say anything at all about what elements can have
@@ -337,6 +340,11 @@ bool PlotArea::isThreeD() const
     return d->threeD;
 }
 
+CellRegion PlotArea::cellRangeAddress() const
+{
+    return d->cellRangeAddress;
+}
+
 bool PlotArea::isVertical() const
 {
     return d->vertical;
@@ -475,6 +483,11 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
+void PlotArea::setCellRangeAddress( const CellRegion &region )
+{
+    d->cellRangeAddress = region;
+}
+
 void PlotArea::setVertical( bool vertical )
 {
     d->vertical = vertical;
@@ -584,12 +597,29 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     QAbstractItemModel *sheetAccessModel = dynamic_cast<QAbstractItemModel*>( d->shape->dataCenterMap()["SheetAccessModel"] );
 
+    QString sheetName;
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+    {
+        CellRegion cellRangeAddress( plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+        setCellRangeAddress( cellRangeAddress );
+        sheetName = cellRangeAddress.sheetName();
+    }
+
     if ( sheetAccessModel )
     {
-        // FIXME: Use the access model's header data to determine what sheet to use
-        QPointer<QAbstractItemModel> firstSheet = sheetAccessModel->data( sheetAccessModel->index( 0, 0 ) ).value< QPointer<QAbstractItemModel> >();
-        Q_ASSERT( firstSheet );
-        d->shape->setModel( firstSheet.data() );
+        int sheetIndex = 0;
+        // Find sheet that this cell range address is associated with
+        if ( !sheetName.isEmpty() ) {
+            while ( sheetIndex + 1 < sheetAccessModel->columnCount() &&
+                    sheetAccessModel->headerData( sheetIndex, Qt::Horizontal ) != sheetName )
+                sheetIndex++;
+        }
+        QPointer<QAbstractItemModel> sheet = sheetAccessModel->data( sheetAccessModel->index( 0, sheetIndex ) ).value< QPointer<QAbstractItemModel> >();
+
+        // If sheet can't be found, we'll stay with the back-up model loaded from the
+        // chart document.
+        if ( sheet )
+            d->shape->setModel( sheet.data() );
     }
 
     // Remove all axes before loading new ones
@@ -675,6 +705,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     bodyWriter.addAttributePt( "svg:height", s.height() );
     bodyWriter.addAttributePt( "svg:x", p.x() );
     bodyWriter.addAttributePt( "svg:y", p.y() );
+
+    bodyWriter.addAttribute( "table:cell-range-address", d->cellRangeAddress.toString() );
 
     // About the data:
     //   Save if the first row / column contain headers.

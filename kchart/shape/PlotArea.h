@@ -78,6 +78,13 @@ public:
     bool isThreeD() const;
 
     /**
+     * Determines from what range of cells the data in this chart
+     * comes from. This region also contains the name of the sheet.
+     * See table:cell-range-address, ODF v1.2, $18.595
+     */
+    CellRegion cellRangeAddress() const;
+
+    /**
      * Determines whether x and y axis are swapped. Default is 'false'.
      * See chart:vertical attribute in ODF v1.2, $19.63
      */
@@ -86,10 +93,10 @@ public:
     int gapBetweenSets() const;
 
     /**
-     * chart:angle-offset property, as defined in ODF v1.2.
      * Defines at what angle, relative to the right-most point
      * of a pie or ring chart, the first slice is going to be drawn,
      * going counter-clockwise.
+     * See chart:angle-offset property, as defined in ODF v1.2.
      */
     qreal pieAngleOffset() const;
 
@@ -98,7 +105,7 @@ public:
     void setPieExplodeFactor( DataSet *dataSet, int percent );
 
     /**
-     * See \a pieAngleOffset
+     * @see pieAngleOffset
      */
     void setPieAngleOffset( qreal angle );
 
@@ -110,6 +117,15 @@ public:
     
     
     void setThreeD( bool threeD );
+
+    /**
+     * @see cellRangeAddress
+     */
+    void setCellRangeAddress( const CellRegion &region );
+
+    /**
+     * @see isVertical
+     */
     void setVertical( bool vertical );
     
     ChartShape *parent() const;
