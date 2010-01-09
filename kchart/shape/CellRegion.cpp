@@ -40,12 +40,16 @@
 using std::pow;
 using namespace KChart;
 
+static QString columnName( uint column );
+static int rangeCharToInt( char c );
 
 class CellRegion::Private
 {
 public:
     Private();
     ~Private();
+
+    QString pointToString( const QPoint &point ) const;
     
     // These are actually one-dimensional, but can have different
     // orientations (hor / vert).
@@ -53,11 +57,23 @@ public:
 
     QRect          boundingRect;
     // NOTE: Don't forget to extend operator=() if you add new members
+
+    // Determines, if not empty, what string this cell region was created from.
+    QString origString;
+    // ODF's definition of table:cell-range-address is much more comprehensive
+    // than what we currently support. Use the original string this cell region
+    // was initialized with (if string constructor used) as fall-back if no
+    // changes were made to this region.
+    bool origStringValid;
+
+    // Name of the sheet this region lies in
+    QString sheetName;
 };
 
 
 CellRegion::Private::Private()
 {
+    origStringValid = false;
 }
 
 CellRegion::Private::~Private()
@@ -79,6 +95,44 @@ CellRegion::CellRegion( const CellRegion &region )
 {
     // Use operator=(); 
     *this = region;
+}
+
+CellRegion::CellRegion( const QString& region )
+    : d( new Private() )
+{
+    // A dollar sign before a part of the address means that this part
+    // is absolute. This is irrelevant for us, however, thus we can remove
+    // all occurences of '$', and handle relative and absolute addresses in
+    // the same way.
+    // See ODF specs $8.3.1 "Referencing Table Cells"
+    QString searchStr = QString( region ).remove( "$" );
+    QString pointRegEx = "(.*)\\.([A-Z]+)([0-9]+)";
+    QRegExp regEx;
+
+    const bool isPoint = !region.contains( ':' );
+    if ( isPoint )
+        regEx = QRegExp( pointRegEx );
+    else
+        regEx = QRegExp ( pointRegEx + ":" + pointRegEx );
+
+    // Check if region string is valid (e.g. not empty)
+    if ( regEx.indexIn( searchStr ) >= 0 ) {
+        // It is possible for a cell-range-address as defined in ODF to contain
+        // refernces to cells of more than one sheet. This, however, we ignore
+        // here. We do not support more than one table in a cell region.
+        d->sheetName = regEx.cap( 1 );
+
+        QPoint topLeft( rangeStringToInt( regEx.cap( 2 ) ), regEx.cap(3).toInt() );
+        QPoint bottomRight( rangeStringToInt( regEx.cap( 5 ) ), regEx.cap(6).toInt() );
+
+        if ( isPoint )
+            d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
+        else
+            d->rects.append( QRect( topLeft, bottomRight ) );
+    }
+
+    d->origString = region;
+    d->origStringValid = true;
 }
 
 CellRegion::CellRegion( const QPoint &point )
@@ -136,9 +190,52 @@ int CellRegion::rectCount() const
     return d->rects.size();
 }
 
+QString CellRegion::sheetName() const
+{
+    return d->sheetName;
+}
+
 bool CellRegion::isValid() const
 {
     return d->rects.size() > 0;
+}
+
+QString CellRegion::Private::pointToString( const QPoint &point ) const
+{
+    QString result;
+
+    result.append( '$' + sheetName + '.' );
+    result.append( '$' + columnName( point.x() ) );
+    result.append( '$' + QString::number( point.y() ) );
+
+    return result;
+}
+
+QString CellRegion::toString() const
+{
+    if ( d->origStringValid )
+        return d->origString;
+
+    if ( !isValid() )
+        return QString();
+
+    QString result;
+    for ( int i = 0; i < d->rects.count(); ++i ) {
+        const QRect range = d->rects[i];
+        // Top-left corner
+        result.append( d->pointToString( range.topLeft() ) );
+
+        // If it is not a point, append rect's bottom-right corner
+        if ( range.topLeft() != range.bottomRight() ) {
+            result.append( ':' );
+            result.append( d->pointToString( range.bottomRight() ) );
+        }
+
+        // Separate ranges by a comma, except for the last one
+        if ( i < d->rects.count() - 1 )
+            result.append( ';' );
+    }
+    return result;
 }
 
 
@@ -224,6 +321,8 @@ void CellRegion::add( const QPoint &point )
 
 void CellRegion::add( const QRect &rect )
 {
+    d->origStringValid = false;
+
     if ( !rect.isValid() ) {
         qWarning() << "CellRegion::add() Attempt to add invalid rectangle";
         qWarning() << "CellRegion::add():" << rect;
@@ -382,34 +481,7 @@ static QString rangeIntToString( int i )
 // static
 QVector<QRect> CellRegion::stringToRegion( const QString &string )
 {
-    const bool isPoint = !string.contains( ':' );
-
-    // A dollar sign before a part of the address means that this part
-    // is absolute. This is irrelevant for us, however, thus we can remove
-    // all occurences of '$', and handle relative and absolute addresses in
-    // the same way.
-    // See ODF specs $8.3.1 "Referencing Table Cells"
-    QString searchStr = QString( string ).remove( "$" );
-    QString pointRegEx = "(.*)\\.([A-Z]+)([0-9]+)";
-    QRegExp regEx;
-    if ( isPoint )
-        regEx = QRegExp( pointRegEx );
-    else
-        regEx = QRegExp ( pointRegEx + ":" + pointRegEx );
-
-    // The region string is invalid (e.g. empty)
-    if ( regEx.indexIn( searchStr ) < 0 )
-        return QVector<QRect>();
-
-    // FIXME: How should we handle table names? Is it possible for an address
-    // to contain two points that reference different tables?
-
-    QPoint topLeft( rangeStringToInt( regEx.cap( 2 ) ), regEx.cap(3).toInt() );
-    QPoint bottomRight( rangeStringToInt( regEx.cap( 5 ) ), regEx.cap(6).toInt() );
-
-    if ( isPoint )
-        return QVector<QRect>( 1, QRect( topLeft, QSize( 1, 1 ) ) );
-    return QVector<QRect>( 1, QRect( topLeft, bottomRight ) );
+    return CellRegion( string ).rects();
 }
 
 int CellRegion::rangeCharToInt( char c )     
@@ -462,26 +534,5 @@ static QString columnName( uint column )
 // static
 QString CellRegion::regionToString( const QVector<QRect> &region )
 {
-    if ( region.isEmpty() )
-        return QString();
-    
-    QString result;
-    for ( int i = 0; i < region.count(); ++i ) {
-        const QRect range = region[i];
-        result.append( '$' );
-        result.append( columnName( range.left() ) );
-            result.append( '$' );
-        result.append( QString::number( range.top() ) );
-        if ( range.topLeft() != range.bottomRight() ) {
-            result.append( ':' );
-            result.append( '$' );
-            result.append( columnName(range.right() ) );
-            result.append( '$' );
-            result.append( QString::number( range.bottom() ) );
-        }
-        if ( i < region.count() - 1 ) {
-            result.append( ';' );
-        }
-    }
-    return result;
+    return CellRegion( region ).toString();
 }

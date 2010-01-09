@@ -73,6 +73,7 @@ class CHARTSHAPELIB_EXPORT CellRegion
 public:
     CellRegion();
     CellRegion( const CellRegion& region );
+    CellRegion( const QString& region );
     CellRegion( const QPoint &point );
     CellRegion( const QRect &rect );
     CellRegion( const QPoint &point, const QSize &size );
@@ -84,7 +85,11 @@ public:
     
     QVector<QRect> rects() const;
     
+    QString sheetName() const;
+
     bool isValid() const;
+
+    QString toString() const;
     
     bool contains( const QPoint &point, bool proper = false ) const;
     bool contains( const QRect &rect, bool proper = false ) const;
