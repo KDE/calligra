@@ -120,7 +120,7 @@ void ChartTool::shapeSelectionChanged()
     
     // Get the chart shape that the tool is working on. 
     // Let d->shape point to it.
-    KoSelection  *selection = m_canvas->shapeManager()->selection();
+    KoSelection  *selection = canvas()->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
         // Find out which type of shape that the user clicked on.
         // We support several here, since the chart shape is comprised

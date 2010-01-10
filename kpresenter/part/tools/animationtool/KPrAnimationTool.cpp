@@ -75,10 +75,10 @@ void KPrAnimationTool::mouseReleaseEvent( KoPointerEvent *event )
 QMap<QString, QWidget *> KPrAnimationTool::createOptionWidgets()
 {
     KPrPageEffectDocker *effectWidget = new KPrPageEffectDocker( );
-    effectWidget->setView((dynamic_cast<KoPACanvas *>(m_canvas))->koPAView());
+    effectWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
     KPrClickActionDocker *clickActionWidget = new KPrClickActionDocker();
-    clickActionWidget->setView((dynamic_cast<KoPACanvas *>(m_canvas))->koPAView());
+    clickActionWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
     QMap<QString, QWidget *> widgets;
     widgets.insert(i18n("Transitions"), effectWidget);

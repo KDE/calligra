@@ -90,7 +90,7 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
     if ( event->button() & Qt::LeftButton ) {
         event->accept();
         finishEventActions();
-        KoShape * shapeClicked = m_canvas->shapeManager()->shapeAt( event->point );
+        KoShape * shapeClicked = canvas()->shapeManager()->shapeAt( event->point );
         if (shapeClicked) {
             m_eventActions = shapeClicked->eventActions();
             if (!m_eventActions.isEmpty()) {
@@ -186,7 +186,7 @@ void KPrPresentationTool::wheelEvent( KoPointerEvent * event )
 void KPrPresentationTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
-    m_frame->setGeometry( m_canvas->canvasWidget()->geometry() );
+    m_frame->setGeometry( canvas()->canvasWidget()->geometry() );
     m_presentationToolWidget->setVisible( false );
     // redirect event to tool widget
     m_frame->installEventFilter( this );

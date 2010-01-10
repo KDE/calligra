@@ -74,7 +74,7 @@ TableTool::TableTool(KoCanvasBase* canvas)
 {
     setObjectName("TableTool");
 
-    d->selection = new Selection(m_canvas);
+    d->selection = new Selection(canvas);
     d->tableShape = 0;
 
     KAction* importAction = new KAction(KIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
@@ -128,7 +128,7 @@ void TableTool::repaintDecorations()
 {
     if (!d->tableShape) return;
     // TODO Stefan: restrict to the changed area
-    m_canvas->updateCanvas(d->tableShape->boundingRect());
+    canvas()->updateCanvas(d->tableShape->boundingRect());
 }
 
 Selection* TableTool::selection()
@@ -138,7 +138,7 @@ Selection* TableTool::selection()
 
 void TableTool::activate(bool temporary)
 {
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach(KoShape* shape, selection->selectedShapes()) {
         d->tableShape = dynamic_cast<TableShape*>(shape);
         if (d->tableShape)

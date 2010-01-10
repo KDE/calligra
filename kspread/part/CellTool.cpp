@@ -149,8 +149,8 @@ CellTool::~CellTool()
 void CellTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
 {
     KoShape::applyConversion(painter, viewConverter);
-    const double xOffset = viewConverter.viewToDocumentX(m_canvas->canvasController()->canvasOffsetX());
-    const double yOffset = viewConverter.viewToDocumentY(m_canvas->canvasController()->canvasOffsetY());
+    const double xOffset = viewConverter.viewToDocumentX(canvas()->canvasController()->canvasOffsetX());
+    const double yOffset = viewConverter.viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
     const QRectF paintRect = QRectF(QPointF(-xOffset, -yOffset), size());
 
     /* paint the selection */
@@ -512,7 +512,7 @@ KoInteractionStrategy* CellTool::createStrategy(KoPointerEvent* event)
 
 void CellTool::activate(bool temporary)
 {
-    m_canvas->shapeManager()->selection()->deselectAll();
+    canvas()->shapeManager()->selection()->deselectAll();
     CellToolBase::activate(temporary);
 }
 
@@ -528,7 +528,7 @@ QPointF CellTool::offset() const
 
 QSizeF CellTool::size() const
 {
-    return m_canvas->viewConverter()->viewToDocument(d->canvas->size());
+    return canvas()->viewConverter()->viewToDocument(d->canvas->size());
 }
 
 int CellTool::maxCol() const

@@ -74,7 +74,7 @@ KoFormulaTool::~KoFormulaTool()
 void KoFormulaTool::activate( bool temporary )
 {
     Q_UNUSED(temporary);
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach( KoShape* shape, selection->selectedShapes() )
     {
         m_formulaShape = dynamic_cast<KoFormulaShape*>( shape );
@@ -120,7 +120,7 @@ void KoFormulaTool::deactivate()
 {
     disconnect(m_formulaShape->formulaData(),0,this,0);
     disconnect(m_signalMapper,0,this,0);
-    if (m_canvas) {
+    if (canvas()) {
         m_cursorList.append(m_formulaEditor);
         kDebug()<<"Appending cursor";
     }
@@ -280,7 +280,7 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
             }
     }
     if (command!=0) {
-        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
+        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
     }
     repaintCursor();
     event->accept();
@@ -305,7 +305,7 @@ void KoFormulaTool::insert( const QString& action )
     m_formulaShape->update();
     command=m_formulaEditor->insertMathML( action );
     if (command!=0) {
-        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
 
@@ -317,7 +317,7 @@ void KoFormulaTool::changeTable ( QAction* action )
     bool insert=action->data().toList()[1].toBool();
     command=m_formulaEditor->changeTable(insert,row);
     if (command!=0) {
-        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
 
@@ -327,7 +327,7 @@ void KoFormulaTool::insertSymbol ( const QString& symbol )
     m_formulaShape->update();
     command=m_formulaEditor->insertText( symbol );
     if (command!=0) {
-        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
 }
 
@@ -385,7 +385,7 @@ void KoFormulaTool::loadFormula()
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     formulaElement->readMathML( tmpDocument.documentElement() );     // and load the new formula
     FormulaCommand* command=new FormulaCommandLoad(m_formulaShape->formulaData(),formulaElement);
-    m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
 }
 
 void KoFormulaTool::saveFormula()
@@ -501,7 +501,7 @@ bool KoFormulaTool::paste()
         kDebug()<< data->text();
         FormulaCommand* command=m_formulaEditor->insertText(data->text());
         if (command!=0) {
-            m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
+            canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
         }
         repaintCursor();
         return true;

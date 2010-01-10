@@ -66,7 +66,7 @@ void KPrPlaceholderTool::activate( bool temporary )
     Q_UNUSED(temporary);
     QList<KPrPlaceholderShape *> selectedShapes;
 
-    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() ) {
+    foreach( KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes() ) {
         if ( KPrPlaceholderShape * ps = dynamic_cast<KPrPlaceholderShape*>( shape ) ) {
             selectedShapes.append( ps );
         }
@@ -79,7 +79,7 @@ void KPrPlaceholderTool::activate( bool temporary )
 
     KPrPlaceholderShape * shape = selectedShapes.at( 0 );
 
-    KoShape * newShape = shape->createShape( m_canvas->shapeController()->dataCenterMap() );
+    KoShape * newShape = shape->createShape( canvas()->shapeController()->dataCenterMap() );
     // only do anything when we got a shape back
     if ( newShape ) {
         // copy settings from placeholder shape
@@ -92,14 +92,14 @@ void KPrPlaceholderTool::activate( bool temporary )
         QUndoCommand *cmd = new QUndoCommand( i18n( "Edit Shape" ) );
 
         // replace placeholder by shape
-        m_canvas->shapeController()->removeShape( shape, cmd );
-        m_canvas->shapeController()->addShapeDirect( newShape, cmd );
-        m_canvas->addCommand( cmd );
+        canvas()->shapeController()->removeShape( shape, cmd );
+        canvas()->shapeController()->addShapeDirect( newShape, cmd );
+        canvas()->addCommand( cmd );
 
         // activate the correct tool for the shape
         QList<KoShape *> shapes;
         shapes.append( newShape );
-        m_canvas->shapeManager()->selection()->select( newShape );
+        canvas()->shapeManager()->selection()->select( newShape );
         activateTool( KoToolManager::instance()->preferredToolForSelection( shapes ) );
     }
     else {

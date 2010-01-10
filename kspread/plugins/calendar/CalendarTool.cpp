@@ -190,7 +190,7 @@ QWidget* CalendarTool::createOptionWidget()
     // of it, and it refuses to work correctly if it does not exist
     CellTool::createOptionWidget();
 
-    CalendarToolWidget* widget =  new CalendarToolWidget(m_canvas->canvasWidget());
+    CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
             this, SLOT(insertCalendar(const QDate&, const QDate&)));
     return widget;

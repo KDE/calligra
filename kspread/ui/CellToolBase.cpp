@@ -1109,7 +1109,7 @@ void CellToolBase::init()
 
 QWidget* CellToolBase::createOptionWidget()
 {
-    QWidget* widget = new QWidget(m_canvas->canvasWidget());
+    QWidget* widget = new QWidget(canvas()->canvasWidget());
     d->widgetLayout = new QGridLayout(widget);
 
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
@@ -1217,15 +1217,15 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             SheetView* const sheetView = this->sheetView(selection()->activeSheet());
 
             // Filter button hit.
-            const double offsetX = m_canvas->canvasController()->canvasOffsetX();
-            const double offsetY = m_canvas->canvasController()->canvasOffsetY();
+            const double offsetX = canvas()->canvasController()->canvasOffsetX();
+            const double offsetY = canvas()->canvasController()->canvasOffsetY();
             const QPointF p1 = QPointF(xpos, ypos) - offset(); // the shape offset, not the scrolling one.
             const QSizeF s1(cell.width(), cell.height());
-            const QRectF cellRect = m_canvas->viewConverter()->documentToView(QRectF(p1, s1));
+            const QRectF cellRect = canvas()->viewConverter()->documentToView(QRectF(p1, s1));
             const QRect cellViewRect = cellRect.translated(offsetX, offsetY).toRect();
             if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->pos())) {
                 Database database = cell.database();
-                database.showPopup(m_canvas->canvasWidget(), cell, cellViewRect);
+                database.showPopup(canvas()->canvasWidget(), cell, cellViewRect);
                 return 0; // Act directly; no further strategy needed.
             }
 
@@ -1305,9 +1305,9 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         return false;
 
     if (!editor()) {
-        d->cellEditor = new CellEditor(m_canvas->canvasWidget(), selection(),
+        d->cellEditor = new CellEditor(canvas()->canvasWidget(), selection(),
                                        selection()->activeSheet()->map()->settings()->captureAllArrowKeys());
-        d->cellEditor->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->userInput, SLOT(setText(const QString &)));
         connect(d->userInput, SIGNAL(textChanged(const QString &)),
@@ -1321,7 +1321,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         double min_h = cell.height();
 
         double xpos = selection()->activeSheet()->columnPosition(selection()->marker().x());
-        xpos += m_canvas->viewConverter()->viewToDocumentX(m_canvas->canvasController()->canvasOffsetX());
+        xpos += canvas()->viewConverter()->viewToDocumentX(canvas()->canvasController()->canvasOffsetX());
 
         Qt::LayoutDirection sheetDir = selection()->activeSheet()->layoutDirection();
         bool rtlText = cell.displayText().isRightToLeft();
@@ -1334,20 +1334,20 @@ bool CellToolBase::createEditor(bool clear, bool focus)
 
         // paint editor above correct cell if sheet direction is RTL
         if (sheetDir == Qt::RightToLeft) {
-            double dwidth = m_canvas->viewConverter()->viewToDocumentX(m_canvas->canvasWidget()->width());
+            double dwidth = canvas()->viewConverter()->viewToDocumentX(canvas()->canvasWidget()->width());
             double w2 = qMax(w, min_w);
             xpos = dwidth - w2 - xpos;
         }
 
         double ypos = selection()->activeSheet()->rowPosition(selection()->marker().y());
-        ypos += m_canvas->viewConverter()->viewToDocumentY(m_canvas->canvasController()->canvasOffsetY());
+        ypos += canvas()->viewConverter()->viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
 
         // Setup the editor's palette.
         const Style style = cell.effectiveStyle();
         QPalette editorPalette(editor()->palette());
         QColor color = style.fontColor();
         if (!color.isValid())
-            color = m_canvas->canvasWidget()->palette().text().color();
+            color = canvas()->canvasWidget()->palette().text().color();
         editorPalette.setColor(QPalette::Text, color);
         color = style.backgroundColor();
         if (!color.isValid())
@@ -1360,10 +1360,10 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         ypos += offset().y();
 
         const QRectF rect(xpos + 0.5, ypos + 0.5, w - 0.5, h - 0.5); //needed to circumvent rounding issue with height/width
-        const QRectF zoomedRect = m_canvas->viewConverter()->documentToView(rect);
+        const QRectF zoomedRect = canvas()->viewConverter()->documentToView(rect);
         editor()->setGeometry(zoomedRect.toRect().adjusted(1, 1, -1, -1));
-        editor()->setMinimumSize(QSize((int)m_canvas->viewConverter()->documentToViewX(min_w) - 1,
-                                       (int)m_canvas->viewConverter()->documentToViewY(min_h) - 1));
+        editor()->setMinimumSize(QSize((int)canvas()->viewConverter()->documentToViewX(min_w) - 1,
+                                       (int)canvas()->viewConverter()->documentToViewY(min_h) - 1));
         editor()->show();
 
         // Laurent 2001-12-05
@@ -1404,7 +1404,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     }
     d->applyButton->setEnabled(false);
     d->cancelButton->setEnabled(false);
-    m_canvas->canvasWidget()->setFocus();
+    canvas()->canvasWidget()->setFocus();
 }
 
 bool CellToolBase::eventFilter(QObject *obj, QEvent *event)
@@ -1486,7 +1486,7 @@ void CellToolBase::applyUserInput(bool expandMatrix)
     command->setParsing(true);
     command->setExpandMatrix(expandMatrix);
     command->add(expandMatrix ? *selection() : Region(selection()->cursor(), selection()->activeSheet()));
-    command->execute(m_canvas);
+    command->execute(canvas());
 
     if (expandMatrix && selection()->isSingular())
         selection()->initialize(*command);
@@ -1517,7 +1517,7 @@ void CellToolBase::sheetProtectionToggled(bool protect)
 
 void CellToolBase::cellStyle()
 {
-    CellFormatDialog dialog(m_canvas->canvasWidget(), selection());
+    CellFormatDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -1527,20 +1527,20 @@ void CellToolBase::setDefaultStyle()
     command->setSheet(selection()->activeSheet());
     command->setDefault();
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::styleDialog()
 {
     Map* const map = selection()->activeSheet()->map();
     StyleManager* const styleManager = map->styleManager();
-    StyleManagerDialog dialog(m_canvas->canvasWidget(), selection(), styleManager);
+    StyleManagerDialog dialog(canvas()->canvasWidget(), selection(), styleManager);
     dialog.exec();
 
     static_cast<KSelectAction*>(action("setStyle"))->setItems(styleManager->styleNames());
     if (selection()->activeSheet())
         map->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
-    m_canvas->canvasWidget()->update();
+    canvas()->canvasWidget()->update();
 }
 
 void CellToolBase::setStyle(const QString& stylename)
@@ -1551,7 +1551,7 @@ void CellToolBase::setStyle(const QString& stylename)
         command->setSheet(selection()->activeSheet());
         command->setParentName(stylename);
         command->add(*selection());
-        command->execute(m_canvas);
+        command->execute(canvas());
     }
 }
 
@@ -1565,7 +1565,7 @@ void CellToolBase::createStyleFromCell()
 
     while (true) {
         styleName = KInputDialog::getText(i18n("Create Style From Cell"),
-                                          i18n("Enter name:"), styleName, &ok, m_canvas->canvasWidget());
+                                          i18n("Enter name:"), styleName, &ok, canvas()->canvasWidget());
 
         if (!ok) // User pushed an OK button.
             return;
@@ -1573,12 +1573,12 @@ void CellToolBase::createStyleFromCell()
         styleName = styleName.trimmed();
 
         if (styleName.length() < 1) {
-            KMessageBox::sorry(m_canvas->canvasWidget(), i18n("The style name cannot be empty."));
+            KMessageBox::sorry(canvas()->canvasWidget(), i18n("The style name cannot be empty."));
             continue;
         }
 
         if (selection()->activeSheet()->map()->styleManager()->style(styleName) != 0) {
-            KMessageBox::sorry(m_canvas->canvasWidget(), i18n("A style with this name already exists."));
+            KMessageBox::sorry(canvas()->canvasWidget(), i18n("A style with this name already exists."));
             continue;
         }
         break;
@@ -1602,10 +1602,10 @@ void CellToolBase::bold(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontBold(enable);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
     }
 }
 
@@ -1616,10 +1616,10 @@ void CellToolBase::underline(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontUnderline(enable);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
     }
 }
 
@@ -1630,10 +1630,10 @@ void CellToolBase::strikeOut(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontStrike(enable);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
     }
 }
 
@@ -1645,10 +1645,10 @@ void CellToolBase::italic(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontItalic(enable);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
     }
 }
 
@@ -1659,14 +1659,14 @@ void CellToolBase::font(const QString& font)
     command->setText(i18n("Change Font"));
     command->setFontFamily(font.toLatin1());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     // Don't leave the focus in the toolbars combo box ...
     if (editor()) {
         const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
-        editor()->setEditorFont(style.font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(style.font(), true, canvas()->viewConverter());
         editor()->setFocus();
     } else {
-        m_canvas->canvasWidget()->setFocus();
+        canvas()->canvasWidget()->setFocus();
     }
 }
 
@@ -1677,14 +1677,14 @@ void CellToolBase::fontSize(int size)
     command->setText(i18n("Change Font"));
     command->setFontSize(size);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
     // Don't leave the focus in the toolbars combo box ...
     if (editor()) {
         const Cell cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
+        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         editor()->setFocus();
     } else {
-        m_canvas->canvasWidget()->setFocus();
+        canvas()->canvasWidget()->setFocus();
     }
 }
 
@@ -1698,7 +1698,7 @@ void CellToolBase::increaseFontSize()
     command->setText(i18n("Change Font"));
     command->setFontSize(size + 1);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::decreaseFontSize()
@@ -1711,7 +1711,7 @@ void CellToolBase::decreaseFontSize()
     command->setText(i18n("Change Font"));
     command->setFontSize(size - 1);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::changeTextColor()
@@ -1719,9 +1719,9 @@ void CellToolBase::changeTextColor()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Text Color"));
-    command->setFontColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+    command->setFontColor(canvas()->resourceProvider()->foregroundColor().toQColor());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignLeft(bool enable)
@@ -1731,7 +1731,7 @@ void CellToolBase::alignLeft(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Left : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignRight(bool enable)
@@ -1741,7 +1741,7 @@ void CellToolBase::alignRight(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Right : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignCenter(bool enable)
@@ -1751,7 +1751,7 @@ void CellToolBase::alignCenter(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Center : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignTop(bool enable)
@@ -1761,7 +1761,7 @@ void CellToolBase::alignTop(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Top : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignBottom(bool enable)
@@ -1771,7 +1771,7 @@ void CellToolBase::alignBottom(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Bottom : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::alignMiddle(bool enable)
@@ -1781,7 +1781,7 @@ void CellToolBase::alignMiddle(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Middle : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderLeft()
@@ -1790,11 +1790,11 @@ void CellToolBase::borderLeft()
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     else
-        command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderRight()
@@ -1803,11 +1803,11 @@ void CellToolBase::borderRight()
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     else
-        command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderTop()
@@ -1815,9 +1815,9 @@ void CellToolBase::borderTop()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderBottom()
@@ -1825,9 +1825,9 @@ void CellToolBase::borderBottom()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setBottomBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderAll()
@@ -1835,14 +1835,14 @@ void CellToolBase::borderAll()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setHorizontalPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setVerticalPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setHorizontalPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setVerticalPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderRemove()
@@ -1857,7 +1857,7 @@ void CellToolBase::borderRemove()
     command->setHorizontalPen(QPen(Qt::NoPen));
     command->setVerticalPen(QPen(Qt::NoPen));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderOutline()
@@ -1865,21 +1865,21 @@ void CellToolBase::borderOutline()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::borderColor()
 {
     BorderColorCommand* command = new BorderColorCommand();
     command->setSheet(selection()->activeSheet());
-    command->setColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+    command->setColor(canvas()->resourceProvider()->foregroundColor().toQColor());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::wrapText(bool enable)
@@ -1891,7 +1891,7 @@ void CellToolBase::wrapText(bool enable)
     command->setVerticalText(false);
     command->setAngle(0);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::verticalText(bool enable)
@@ -1903,7 +1903,7 @@ void CellToolBase::verticalText(bool enable)
     command->setMultiRow(false);
     command->setAngle(0);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::increaseIndentation()
@@ -1927,7 +1927,7 @@ void CellToolBase::decreaseIndentation()
 
 void CellToolBase::changeAngle()
 {
-    AngleDialog dialog(m_canvas->canvasWidget(), selection());
+    AngleDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -1938,7 +1938,7 @@ void CellToolBase::percent(bool enable)
     command->setText(i18n("Format Percent"));
     command->setFormatType(enable ? Format::Percentage : Format::Generic);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::currency(bool enable)
@@ -1949,7 +1949,7 @@ void CellToolBase::currency(bool enable)
     command->setFormatType(enable ? Format::Money : Format::Generic);
     command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::increasePrecision()
@@ -1978,7 +1978,7 @@ void CellToolBase::toUpperCase()
     command->setText(i18n("Switch to uppercase"));
     command->changeMode(CaseManipulator::Upper);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::toLowerCase()
@@ -1988,7 +1988,7 @@ void CellToolBase::toLowerCase()
     command->setText(i18n("Switch to lowercase"));
     command->changeMode(CaseManipulator::Lower);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::firstLetterToUpperCase()
@@ -1998,7 +1998,7 @@ void CellToolBase::firstLetterToUpperCase()
     command->setText(i18n("First letter uppercase"));
     command->changeMode(CaseManipulator::FirstUpper);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::changeBackgroundColor()
@@ -2006,9 +2006,9 @@ void CellToolBase::changeBackgroundColor()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Background Color"));
-    command->setBackgroundColor(m_canvas->resourceProvider()->backgroundColor().toQColor());
+    command->setBackgroundColor(canvas()->resourceProvider()->backgroundColor().toQColor());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::mergeCells()
@@ -2026,7 +2026,7 @@ void CellToolBase::mergeCells()
     command->setHorizontalMerge(false);
     command->setVerticalMerge(false);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::mergeCellsHorizontal()
@@ -2044,7 +2044,7 @@ void CellToolBase::mergeCellsHorizontal()
     command->setVerticalMerge(false);
     command->setSelection(selection());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::mergeCellsVertical()
@@ -2062,7 +2062,7 @@ void CellToolBase::mergeCellsVertical()
     command->setVerticalMerge(true);
     command->setSelection(selection());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::dissociateCells()
@@ -2079,15 +2079,15 @@ void CellToolBase::dissociateCells()
     command->setReverse(true);
     command->setSelection(selection());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::resizeColumn()
 {
     if (selection()->isRowSelected())
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
-        ResizeColumn dialog(m_canvas->canvasWidget(), selection());
+        ResizeColumn dialog(canvas()->canvasWidget(), selection());
         dialog.exec();
     }
 }
@@ -2097,7 +2097,7 @@ void CellToolBase::insertColumn()
     InsertDeleteColumnManipulator* command = new InsertDeleteColumnManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::deleteColumn()
@@ -2106,13 +2106,13 @@ void CellToolBase::deleteColumn()
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::hideColumn()
 {
     if (selection()->isRowSelected()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
         return;
     }
 
@@ -2120,13 +2120,13 @@ void CellToolBase::hideColumn()
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::showColumn()
 {
     if (selection()->isRowSelected()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
         return;
     }
 
@@ -2135,19 +2135,19 @@ void CellToolBase::showColumn()
     command->setManipulateColumns(true);
     command->setReverse(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::slotShowColumnDialog()
 {
-    ShowColRow dialog(m_canvas->canvasWidget(), selection(), ShowColRow::Column);
+    ShowColRow dialog(canvas()->canvasWidget(), selection(), ShowColRow::Column);
     dialog.exec();
 }
 
 void CellToolBase::equalizeColumn()
 {
     if (selection()->isRowSelected())
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
         const QRect range = selection()->lastRange();
         const ColumnFormat* columnFormat = selection()->activeSheet()->columnFormat(range.left());
@@ -2181,15 +2181,15 @@ void CellToolBase::adjustColumn()
     command->setSheet(selection()->activeSheet());
     command->setAdjustColumn(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::resizeRow()
 {
     if (selection()->isColumnSelected())
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
-        ResizeRow dialog(m_canvas->canvasWidget(), selection());
+        ResizeRow dialog(canvas()->canvasWidget(), selection());
         dialog.exec();
     }
 }
@@ -2199,7 +2199,7 @@ void CellToolBase::insertRow()
     InsertDeleteRowManipulator* command = new InsertDeleteRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::deleteRow()
@@ -2208,13 +2208,13 @@ void CellToolBase::deleteRow()
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::hideRow()
 {
     if (selection()->isColumnSelected()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
         return;
     }
 
@@ -2222,13 +2222,13 @@ void CellToolBase::hideRow()
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::showRow()
 {
     if (selection()->isColumnSelected()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
         return;
     }
 
@@ -2237,19 +2237,19 @@ void CellToolBase::showRow()
     command->setManipulateRows(true);
     command->setReverse(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::slotShowRowDialog()
 {
-    ShowColRow dialog(m_canvas->canvasWidget(), selection(), ShowColRow::Row);
+    ShowColRow dialog(canvas()->canvasWidget(), selection(), ShowColRow::Row);
     dialog.exec();
 }
 
 void CellToolBase::equalizeRow()
 {
     if (selection()->isColumnSelected())
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("Area is too large."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
         const QRect range = selection()->lastRange();
         const RowFormat* rowFormat = selection()->activeSheet()->rowFormat(range.top());
@@ -2283,7 +2283,7 @@ void CellToolBase::adjustRow()
     command->setSheet(selection()->activeSheet());
     command->setAdjustRow(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::adjust()
@@ -2293,18 +2293,18 @@ void CellToolBase::adjust()
     command->setAdjustColumn(true);
     command->setAdjustRow(true);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::insertCells()
 {
-    InsertDialog dialog(m_canvas->canvasWidget(), selection(), InsertDialog::Insert);
+    InsertDialog dialog(canvas()->canvasWidget(), selection(), InsertDialog::Insert);
     dialog.exec();
 }
 
 void CellToolBase::deleteCells()
 {
-    InsertDialog dialog(m_canvas->canvasWidget(), selection(), InsertDialog::Remove);
+    InsertDialog dialog(canvas()->canvasWidget(), selection(), InsertDialog::Remove);
     dialog.exec();
 }
 
@@ -2313,7 +2313,7 @@ void CellToolBase::clearAll()
     DeleteCommand* command = new DeleteCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::clearContents()
@@ -2330,12 +2330,12 @@ void CellToolBase::clearContents()
     command->setParsing(true);
     command->setValue(Value(""));
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::comment()
 {
-    CommentDialog dialog(m_canvas->canvasWidget(), selection());
+    CommentDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -2350,12 +2350,12 @@ void CellToolBase::clearComment()
     command->setText(i18n("Remove Comment"));
     command->setComment(QString());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::conditional()
 {
-    ConditionalDialog dialog(m_canvas->canvasWidget(), selection());
+    ConditionalDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -2369,7 +2369,7 @@ void CellToolBase::clearConditionalStyles()
     command->setSheet(selection()->activeSheet());
     command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::insertHyperlink()
@@ -2379,7 +2379,7 @@ void CellToolBase::insertHyperlink()
     QPoint marker(selection()->marker());
     Cell cell(selection()->activeSheet(), marker);
 
-    LinkDialog* dialog = new LinkDialog(m_canvas->canvasWidget(), selection());
+    LinkDialog* dialog = new LinkDialog(canvas()->canvasWidget(), selection());
     dialog->setWindowTitle(i18n("Insert Link"));
     if (!cell.isNull()) {
         dialog->setText(cell.userInput());
@@ -2393,7 +2393,7 @@ void CellToolBase::insertHyperlink()
         cell = Cell(selection()->activeSheet(), marker);
 
         LinkCommand* command = new LinkCommand(cell, dialog->text(), dialog->link());
-        m_canvas->addCommand(command);
+        canvas()->addCommand(command);
 
         //refresh editWidget
         selection()->emitModified();
@@ -2411,14 +2411,14 @@ void CellToolBase::clearHyperlink()
         return;
 
     LinkCommand* command = new LinkCommand(cell, QString(), QString());
-    m_canvas->addCommand(command);
+    canvas()->addCommand(command);
 
     selection()->emitModified();
 }
 
 void CellToolBase::validity()
 {
-    ValidityDialog dialog(m_canvas->canvasWidget(), selection());
+    ValidityDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -2432,24 +2432,24 @@ void CellToolBase::clearValidity()
     command->setSheet(selection()->activeSheet());
     command->setValidity(Validity()); // empty object removes validity
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::sort()
 {
     if (selection()->isSingular()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("You must select multiple cells."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
     }
 
-    SortDialog dialog(m_canvas->canvasWidget(), selection());
+    SortDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
 void CellToolBase::sortInc()
 {
     if (selection()->isSingular()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("You must select multiple cells."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
     }
 
@@ -2463,7 +2463,7 @@ void CellToolBase::sortInc()
     command->setSortRows(!sortCols);
     command->addSortBy(0, true);  // by first one, ascending order
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 
     selection()->emitModified();
 }
@@ -2471,7 +2471,7 @@ void CellToolBase::sortInc()
 void CellToolBase::sortDec()
 {
     if (selection()->isSingular()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("You must select multiple cells."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
     }
 
@@ -2485,7 +2485,7 @@ void CellToolBase::sortDec()
     command->setSortRows(!sortCols);
     command->addSortBy(0, false);  // by first one, descending order
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 
     selection()->emitModified();
 }
@@ -2495,7 +2495,7 @@ void CellToolBase::autoFilter()
     AutoFilterCommand* command = new AutoFilterCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::fillLeft()
@@ -2504,7 +2504,7 @@ void CellToolBase::fillLeft()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Left);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::fillRight()
@@ -2513,7 +2513,7 @@ void CellToolBase::fillRight()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Right);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::fillUp()
@@ -2522,7 +2522,7 @@ void CellToolBase::fillUp()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Up);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::fillDown()
@@ -2531,7 +2531,7 @@ void CellToolBase::fillDown()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Down);
     command->add(*selection());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::autoSum()
@@ -2612,7 +2612,7 @@ void CellToolBase::autoSum()
 void CellToolBase::insertSeries()
 {
     selection()->emitAboutToModify();
-    SeriesDialog dialog(m_canvas->canvasWidget(), selection());
+    SeriesDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -2622,7 +2622,7 @@ void CellToolBase::insertSpecialChar()
     QChar c = ' ';
 
     if (d->specialCharDialog == 0) {
-        d->specialCharDialog = new CharSelectDia(m_canvas->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
+        d->specialCharDialog = new CharSelectDia(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
         connect(d->specialCharDialog, SIGNAL(insertChar(QChar, const QString&)),
                 this, SLOT(specialChar(QChar, const QString&)));
         connect(d->specialCharDialog, SIGNAL(finished()),
@@ -2663,7 +2663,7 @@ void CellToolBase::insertFormula()
     if (! d->formulaDialog) {
         if (! createEditor())
             return;
-        d->formulaDialog = new FormulaDialog(m_canvas->canvasWidget(), selection(), editor());
+        d->formulaDialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor());
     }
     d->formulaDialog->show(); // dialog deletes itself later
 }
@@ -2675,12 +2675,12 @@ void CellToolBase::insertFromDatabase()
 
     QStringList str = QSqlDatabase::drivers();
     if (str.isEmpty()) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("No database drivers available.  To use this feature you need "
+        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available.  To use this feature you need "
                            "to install the necessary Qt 3 database drivers."));
         return;
     }
 
-    DatabaseDialog dialog(m_canvas->canvasWidget(), selection());
+    DatabaseDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 #endif
 }
@@ -2689,7 +2689,7 @@ void CellToolBase::insertFromTextfile()
 {
     selection()->emitAboutToModify();
 
-    CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::File);
+    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
     dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
@@ -2700,7 +2700,7 @@ void CellToolBase::insertFromClipboard()
 {
     selection()->emitAboutToModify();
 
-    CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::Clipboard);
+    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
     dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
@@ -2716,7 +2716,7 @@ void CellToolBase::textToColumns()
     Region oldSelection = *selection(); // store
     selection()->initialize(area);
 
-    CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::Column);
+    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::Column);
     dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
@@ -2727,14 +2727,14 @@ void CellToolBase::textToColumns()
 
 void CellToolBase::sortList()
 {
-    ListDialog dialog(m_canvas->canvasWidget());
+    ListDialog dialog(canvas()->canvasWidget());
     dialog.exec();
 }
 
 void CellToolBase::consolidate()
 {
     selection()->emitAboutToModify();
-    ConsolidateDialog * dialog = new ConsolidateDialog(m_canvas->canvasWidget(), selection());
+    ConsolidateDialog * dialog = new ConsolidateDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
 }
 
@@ -2742,18 +2742,18 @@ void CellToolBase::goalSeek()
 {
     selection()->emitAboutToModify();
 
-    GoalSeekDialog* dialog = new GoalSeekDialog(m_canvas->canvasWidget(), selection());
+    GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::subtotals()
 {
     if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
-        KMessageBox::error(m_canvas->canvasWidget(), i18n("You must select multiple cells."));
+        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
     }
 
-    SubtotalDialog dialog(m_canvas->canvasWidget(), selection());
+    SubtotalDialog dialog(canvas()->canvasWidget(), selection());
     if (dialog.exec()) {
         selection()->initialize(QRect(dialog.selection().topLeft(), dialog.selection().bottomRight()));
         selection()->emitModified();
@@ -2762,13 +2762,13 @@ void CellToolBase::subtotals()
 
 void CellToolBase::setAreaName()
 {
-    AddNamedAreaDialog dialog(m_canvas->canvasWidget(), selection());
+    AddNamedAreaDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
 void CellToolBase::namedAreaDialog()
 {
-    NamedAreaDialog dialog(m_canvas->canvasWidget(), selection());
+    NamedAreaDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -2780,7 +2780,7 @@ void CellToolBase::formulaSelection(const QString& expression)
     }
 
     createEditor();
-    FormulaDialog* dialog = new FormulaDialog(m_canvas->canvasWidget(), selection(), editor(), expression);
+    FormulaDialog* dialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor(), expression);
     dialog->show(); // dialog deletes itself later
 }
 
@@ -2893,7 +2893,7 @@ bool CellToolBase::paste()
 
 void CellToolBase::specialPaste()
 {
-    SpecialPasteDialog dialog(m_canvas->canvasWidget(), selection());
+    SpecialPasteDialog dialog(canvas()->canvasWidget(), selection());
     if (dialog.exec()) {
         selection()->emitModified();
     }
@@ -2905,7 +2905,7 @@ void CellToolBase::pasteWithInsertion()
         selection()->activeSheet()->paste(selection()->lastRange(), true,
                                           Paste::Normal, Paste::OverWrite, true);
     } else {
-        PasteInsertDialog dialog(m_canvas->canvasWidget(), selection());
+        PasteInsertDialog dialog(canvas()->canvasWidget(), selection());
         dialog.exec();
     }
     d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
@@ -2918,7 +2918,7 @@ void CellToolBase::selectAll()
 
 void CellToolBase::find()
 {
-    FindDlg dialog(m_canvas->canvasWidget(), "Find", d->findOptions, d->findStrings);
+    FindDlg dialog(canvas()->canvasWidget(), "Find", d->findOptions, d->findStrings);
     dialog.setHasSelection(!selection()->isSingular());
     dialog.setHasCursor(true);
     if (KFindDialog::Accepted != dialog.exec())
@@ -2933,7 +2933,7 @@ void CellToolBase::find()
     // Create the KFind object
     delete d->find;
     delete d->replace;
-    d->find = new KFind(dialog.pattern(), dialog.options(), m_canvas->canvasWidget());
+    d->find = new KFind(dialog.pattern(), dialog.options(), canvas()->canvasWidget());
     d->replace = 0;
     d->replaceCommand = 0;
 
@@ -3034,7 +3034,7 @@ void CellToolBase::findNext()
             if (d->find)
                 d->find->closeFindNextDialog();
             else {
-                m_canvas->addCommand(d->replaceCommand);
+                canvas()->addCommand(d->replaceCommand);
                 d->replaceCommand = 0;
                 d->replace->closeReplaceNextDialog();
             }
@@ -3133,7 +3133,7 @@ void CellToolBase::findPrevious()
 
 void CellToolBase::replace()
 {
-    SearchDlg dialog(m_canvas->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
+    SearchDlg dialog(canvas()->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
     dialog.setHasSelection(!selection()->isSingular());
     dialog.setHasCursor(true);
     if (KReplaceDialog::Accepted != dialog.exec())
@@ -3186,7 +3186,7 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
         dialog = d->replace->replaceNextDialog();
     kDebug() << " baseDialog :" << dialog;
     QRect globalRect(d->findPos, d->findEnd);
-    globalRect.moveTopLeft(m_canvas->canvasWidget()->mapToGlobal(globalRect.topLeft()));
+    globalRect.moveTopLeft(canvas()->canvasWidget()->mapToGlobal(globalRect.topLeft()));
     KDialog::avoidArea(dialog, QRect(d->findPos, d->findEnd));
 }
 
@@ -3208,13 +3208,13 @@ void CellToolBase::slotReplace(const QString &newText, int, int, int)
 
 void CellToolBase::gotoCell()
 {
-    GotoDialog dialog(m_canvas->canvasWidget(), selection());
+    GotoDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
 void CellToolBase::spellCheck()
 {
-    SpellCheckCommand* command = new SpellCheckCommand(selection(), m_canvas);
+    SpellCheckCommand* command = new SpellCheckCommand(selection(), canvas());
     command->start();
 }
 
@@ -3230,7 +3230,7 @@ void CellToolBase::inspector()
 void CellToolBase::qTableView()
 {
 #ifndef NDEBUG
-    KDialog* const dialog = new KDialog(m_canvas->canvasWidget());
+    KDialog* const dialog = new KDialog(canvas()->canvasWidget());
     QTableView* const view = new QTableView(dialog);
 //     ReadOnlyTableModel* const model = new ReadOnlyTableModel(selection()->activeSheet());
     ReadWriteTableModel* const model = new ReadWriteTableModel(selection()->activeSheet());
@@ -3245,7 +3245,7 @@ void CellToolBase::qTableView()
 
 void CellToolBase::sheetFormat()
 {
-    AutoFormatDialog dialog(m_canvas->canvasWidget(), selection());
+    AutoFormatDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
 }
 
@@ -3308,11 +3308,11 @@ void CellToolBase::listChoosePopupMenu()
     ty += h;
 
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        tx = m_canvas->canvasWidget()->width() - tx;
+        tx = canvas()->canvasWidget()->width() - tx;
     }
 
     QPoint p((int)tx, (int)ty);
-    QPoint p2 = m_canvas->canvasWidget()->mapToGlobal(p);
+    QPoint p2 = canvas()->canvasWidget()->mapToGlobal(p);
 
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
         p2.setX(p2.x() - d->popupListChoose->sizeHint().width() + 1);
@@ -3335,11 +3335,11 @@ void CellToolBase::listChooseItemSelected(QAction* action)
     command->setValue(Value(action->text()));
     command->setParsing(true);
     command->add(selection()->marker());
-    command->execute(m_canvas);
+    command->execute(canvas());
 }
 
 void CellToolBase::documentSettingsDialog()
 {
-    DocumentSettingsDialog dialog(selection(), m_canvas->canvasWidget());
+    DocumentSettingsDialog dialog(selection(), canvas()->canvasWidget());
     dialog.exec();
 }
