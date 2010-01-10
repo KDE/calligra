@@ -1208,9 +1208,10 @@ void CellView::paintText(QPainter& painter,
         QSharedPointer<QTextDocument> doc = d->richText;
         doc->setDefaultTextOption(d->textOptions());
         const QPointF position(coordinate.x() + indent,
-                               coordinate.y() + d->textY - fontMetrics.ascent());
+                               coordinate.y() + d->textY);
         painter.translate(position);
         doc->drawContents(&painter);
+//        painter.drawRect(QRectF(QPointF(0, 0), QSizeF(d->textWidth, d->textHeight)));
     }
 
     painter.restore();
@@ -1895,6 +1896,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
     const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains('\n');
+    const bool tmpRichText = !d->richText.isNull();
 
     qreal  w = d->width;
     qreal  h = d->height;
@@ -1908,7 +1910,9 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     switch (vAlign) {
     case Style::VJustified:
     case Style::Top: {
-        if (tmpAngle == 0) {
+        if (tmpAngle == 0 && tmpRichText) {
+            d->textY = effTop;
+        } else if (tmpAngle == 0) {
             d->textY = effTop + ascent;
         } else if (tmpAngle < 0) {
             d->textY = effTop;
@@ -1919,7 +1923,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     }
     case Style::VAlignUndefined: // fall through
     case Style::Bottom: {
-        if (!tmpVerticalText && !tmpMultiRow && !tmpAngle) {
+        if (!tmpVerticalText && !tmpMultiRow && !tmpAngle && !tmpRichText) {
             d->textY = effBottom;
         } else if (tmpAngle != 0) {
             // Is enough place available?
@@ -1936,6 +1940,8 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                     d->textY = effTop + ascent * ::cos(tmpAngle * M_PI / 180);
                 }
             }
+        } else if (tmpRichText) {
+            d->textY = effBottom - d->textHeight;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
@@ -1960,7 +1966,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
         }
         // fall through
     case Style::Middle: {
-        if (!tmpVerticalText && !tmpMultiRow && !tmpAngle) {
+        if (!tmpVerticalText && !tmpMultiRow && !tmpAngle && !tmpRichText) {
             d->textY = (h - d->textHeight) / 2 + ascent;
         } else if (tmpAngle != 0) {
             // Is enough place available?
@@ -1977,6 +1983,8 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                     d->textY = effTop + ascent * ::cos(tmpAngle * M_PI / 180);
                 }
             }
+        } else if (tmpRichText && !tmpVerticalText) {
+            d->textY = (h - d->textHeight) / 2;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
