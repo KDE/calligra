@@ -40,8 +40,11 @@ using namespace KSpread;
 class DragAndDropStrategy::Private
 {
 public:
+    Private() : started(false) { }
+
     Cell cell;
     QPointF lastPoint;
+    bool started;
 };
 
 DragAndDropStrategy::DragAndDropStrategy(KoTool *parent, Selection *selection,
@@ -73,13 +76,9 @@ DragAndDropStrategy::~DragAndDropStrategy()
 
 void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
 {
-    Q_UNUSED(documentPos);
     Q_UNUSED(modifiers);
-}
-
-bool DragAndDropStrategy::startDrag(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
-{
-    Q_UNUSED(modifiers);
+    if (d->started)
+        return;
     d->lastPoint = documentPos;
     const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
@@ -111,9 +110,8 @@ bool DragAndDropStrategy::startDrag(const QPointF& documentPos, Qt::KeyboardModi
         QDrag *drag = new QDrag(tool()->canvas()->canvasWidget());
         drag->setMimeData(mimeData);
         drag->exec();
-        return true;
+        d->started = true;
     }
-    return false;
 }
 
 QUndoCommand* DragAndDropStrategy::createCommand()

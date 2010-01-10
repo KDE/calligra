@@ -872,20 +872,12 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
 void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 {
     // Special handling for drag'n'drop.
-    if (dynamic_cast<DragAndDropStrategy*>(m_currentStrategy)) {
-        DragAndDropStrategy* dragAndDropStrategy = dynamic_cast<DragAndDropStrategy*>(m_currentStrategy);
-        m_currentStrategy = 0;
-        KoInteractionTool::mouseMoveEvent(event); // for last point
-        if (dragAndDropStrategy->startDrag(event->point, event->modifiers())) {
-            // drag was started
-            delete dragAndDropStrategy;
-        } else {
-            m_currentStrategy = dragAndDropStrategy;
-        }
+    if (dynamic_cast<DragAndDropStrategy*>(currentStrategy())) {
+        KoInteractionTool::mouseMoveEvent(event);
         return;
     }
     // Indicators are not necessary for protected sheets or if there's a strategy.
-    if (selection()->activeSheet()->isProtected() || m_currentStrategy) {
+    if (selection()->activeSheet()->isProtected() || currentStrategy()) {
         return KoInteractionTool::mouseMoveEvent(event);
     }
 
@@ -953,11 +945,7 @@ void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
 void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
 {
     Q_UNUSED(event);
-    if (m_currentStrategy) {
-        m_currentStrategy->cancelInteraction();
-        delete m_currentStrategy;
-        m_currentStrategy = 0;
-    }
+    cancelCurrentStrategy();
     createEditor(false /* keep content */);
 }
 
