@@ -271,6 +271,7 @@ public:
      , model(0)
      , gridLineColor( EditorView::defaultGridLineColor() )
      , autoSync(true)
+     , slotPropertyChangedEnabled(true)
     {
     }
     Set *set;
@@ -278,6 +279,7 @@ public:
     ItemDelegate *itemDelegate;
     QColor gridLineColor;
     bool autoSync;
+    bool slotPropertyChangedEnabled;
 };
 
 EditorView::EditorView(QWidget* parent)
@@ -534,7 +536,9 @@ void EditorView::acceptInput()
 
 void EditorView::commitData( QWidget * editor )
 {
+    d->slotPropertyChangedEnabled = false;
     QAbstractItemView::commitData( editor );
+    d->slotPropertyChangedEnabled = true;
 }
 
 bool EditorView::viewportEvent( QEvent * event )
@@ -588,6 +592,9 @@ static QModelIndex findChildItem(const Property& property, const QModelIndex &pa
 void EditorView::slotPropertyChanged(Set& set, Property& property)
 {
     Q_UNUSED(set);
+    if (!d->slotPropertyChangedEnabled)
+        return;
+    d->slotPropertyChangedEnabled = false;
     Property *realProperty = &property;
     while (realProperty->parent()) { // find top-level property
         realProperty = realProperty->parent();
@@ -603,6 +610,7 @@ void EditorView::slotPropertyChanged(Set& set, Property& property)
             update(index);
         }
     }
+    d->slotPropertyChangedEnabled = true;
 }
 
 void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)

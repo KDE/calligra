@@ -51,7 +51,8 @@ public:
     static void draw(QPainter *p, const QRect &r, const QVariant &value,
                      const QString& text, bool threeState);
 signals:
-    void commitData( QWidget * editor );
+    void commitData(QWidget* editor);
+
 public slots:
     virtual void setValue(bool value);
 

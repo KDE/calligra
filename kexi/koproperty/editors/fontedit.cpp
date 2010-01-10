@@ -89,6 +89,7 @@ protected slots:
         KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
         if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
             setValue(m_font);
+            emit commitData(this);
         }
     }
 

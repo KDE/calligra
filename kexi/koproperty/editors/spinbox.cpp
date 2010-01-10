@@ -91,6 +91,7 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
+    connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged(int)));
 }
 
 IntSpinBox::~IntSpinBox()
@@ -112,6 +113,12 @@ void IntSpinBox::setValue(const QVariant& value)
         v = 0;
     }
     KIntNumInput::setValue(v);
+}
+
+void IntSpinBox::slotValueChanged(int value)
+{
+    Q_UNUSED(value);
+    emit commitData(this);
 }
 
 /*void IntSpinBox::setValue(const QVariant &value)
@@ -295,6 +302,7 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
     m_unit = prop->option("unit").toString();
+    connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
 }
 
 DoubleSpinBox::~DoubleSpinBox()
@@ -327,6 +335,12 @@ double DoubleSpinBox::value() const
     }
 #endif
     return KDoubleNumInput::value();
+}
+
+void DoubleSpinBox::slotValueChanged(double value)
+{
+    Q_UNUSED(value);
+    emit commitData(this);
 }
 
 /*
