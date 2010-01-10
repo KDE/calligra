@@ -73,10 +73,12 @@ void KexiFrame::dropEvent(QDropEvent *e)
 void KexiFrame::paintEvent(QPaintEvent *pe)
 {
     QFrame::paintEvent(pe);
-    const bool hasFrame = !designMode() && frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
-    if (!hasFrame) {
-        QPainter p(this);
-        KFormDesigner::paintWidgetFrame(p, rect());
+    if (designMode()) {
+        const bool hasFrame = frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
+        if (!hasFrame) {
+            QPainter p(this);
+            KFormDesigner::paintWidgetFrame(p, rect());
+        }
     }
 }
 
