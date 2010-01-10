@@ -39,6 +39,8 @@ TODO Form editor:
  - port KFDPixmapEdit, PropertyFactory
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
+ - clicking too many time on undo CRASHES
+ - fix syncing form geometry with properties in the propeditor
 TODO: setting "enabled" property to false does not work
 TODO: inserting tab widget does not work
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
@@ -57,10 +59,21 @@ TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
 TODO: text editor: autofill disabled because this makes the widget disappear entirely; now fix the background color because it is getting transparent on mouse out in design mode
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-01-10
+Forms
+*Only add dashed frames for widgets with no frames
+TODO: compress actions for QUndo
+TODO: renaming widgets using name property do not work
+TODO: port KexiCustomPropertyFactory
+      - image box widget and name property needs it; see wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
+KoProperty
+*Do not repaint item when value was changed by inline editor in the same item
+*boolean, int-spin-box, double-spin-box, font editors commit value changes directly now (no need to move to another item)
+TODO: add commitData(this) to more editors...
 
 2010-01-04
 Table View
-*fix coordinate for painting, this also makes more elegant fix compared to the yesterdays patch
+*fix coordinate for painting focus frame, this also makes more elegant fix compared to the yesterdays patch
 
 2010-01-02..03
 Tests
