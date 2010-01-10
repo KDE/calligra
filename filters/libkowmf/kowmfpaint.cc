@@ -196,7 +196,11 @@ void KoWmfPaint::setBackgroundColor(const QColor &c)
 #if DEBUG_WMFPAINT
     kDebug(31000) << c;
 #endif
-    mPainter->setBackground(QBrush(c));
+    // FIXME: This needs more investigation, but it seems that the
+    //        concept of "background" in WMF is the same as the
+    //        "brush" in QPainter.
+    mPainter->setBrush(QBrush(c));
+    //mPainter->setBackground(QBrush(c));
 }
 
 
@@ -205,6 +209,7 @@ void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
 #if DEBUG_WMFPAINT
     kDebug(31000) << mode;
 #endif
+
     mPainter->setBackgroundMode(mode);
 }
 
@@ -212,9 +217,12 @@ void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
 void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << mode;
+    kDebug(31000) << mode << "(ignored)";
 #endif
-    mPainter->setCompositionMode(mode);
+
+    // FIXME: This doesn't work.  I don't understand why, but when I
+    //        enable this all backgrounds become black.
+    //mPainter->setCompositionMode(mode);
 }
 
 
@@ -314,7 +322,9 @@ void KoWmfPaint::lineTo(int x, int y)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << " using " << mPainter->pen();
+    kDebug(31000) << "linewidth: " << mPainter->pen().width();
 #endif
+
     mPainter->drawLine(mLastPos, QPoint(x, y));
 }
 
@@ -322,8 +332,10 @@ void KoWmfPaint::lineTo(int x, int y)
 void KoWmfPaint::drawRect(int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h << " using " << mPainter->pen();
+    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
+
     mPainter->drawRect(x, y, w, h);
 }
 
@@ -389,6 +401,7 @@ void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
     kDebug(31000) << pa;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
+
     if (winding)
         mPainter->drawPolygon(pa, Qt::WindingFill);
     else
