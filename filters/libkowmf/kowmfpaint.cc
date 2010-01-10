@@ -155,10 +155,18 @@ void KoWmfPaint::setPen(const QPen &pen)
     QPen p = pen;
     int width = pen.width();
 
+    // FIXME: For some reason, this seems to be necessary.  There are
+    //        some calls to setPen() that contains the wrong color,
+    //        but with width == 0.  If these are ignored, the image
+    //        looks much more correct.  It should be investigated why
+    //        this is so.
+    if (width == 0)
+        return;
+
     if (dynamic_cast<QPrinter *>(mTarget)) {
         width = 0;
     } else {
-        // WMF spec : width of pen in logical coordinate
+        // WMF spec: width of pen in logical coordinate
         // => width of pen proportional with device context width
         QRect rec = mPainter->window();
         // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
@@ -321,8 +329,8 @@ void KoWmfPaint::moveTo(int x, int y)
 void KoWmfPaint::lineTo(int x, int y)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << " using " << mPainter->pen();
-    kDebug(31000) << "linewidth: " << mPainter->pen().width();
+    kDebug(31000) << x << ", " << y << " using " << mPainter->pen()
+                  << "linewidth: " << mPainter->pen().width();
 #endif
 
     QPoint newPoint(x, y);
