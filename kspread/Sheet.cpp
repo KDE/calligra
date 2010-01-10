@@ -3843,8 +3843,11 @@ bool Sheet::setSheetName(const QString& name, bool init)
     QString old_name = d->name;
     d->name = name;
 
-    if (init)
-        return true;
+    // FIXME: Why is the change of a sheet's name not supposed to be propagated here?
+    // If it is not, we have to manually do so in the loading process, e.g. for the
+    // SheetAccessModel in the document's data center map.
+    //if (init)
+    //    return true;
 
     foreach(Sheet* sheet, map()->sheetList()) {
         sheet->changeCellTabName(old_name, name);
