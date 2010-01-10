@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KPlato WorkPackage Handler
 Name[ca]=Manegador WorkPackage del KPlato
+Name[ca@valencia]=Manegador WorkPackage del KPlato
 Name[da]=Håndtering af KPlato WorkPackage
 Name[de]=KPlato-Arbeitspaketverwaltung
 Name[el]=Χειριστής πακέτου εργασίας KPlato
@@ -32,6 +33,7 @@ GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
 GenericName[ca]=Gestió de projectes
+GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů
 GenericName[cy]=Rheoli Cywaith
 GenericName[da]=Projektstyring

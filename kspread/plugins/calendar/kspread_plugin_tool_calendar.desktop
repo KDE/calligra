@@ -2,6 +2,7 @@
 Name=Calendar Tool
 Name[bg]=Инструмент календар
 Name[ca]=Eina de calendari
+Name[ca@valencia]=Eina de calendari
 Name[da]=Kalenderværktøj
 Name[de]=Kalender-Werkzeug
 Name[el]=Εργαλείο ημερολογίου
@@ -32,6 +33,7 @@ Name[zh_TW]=行事曆工具
 Comment=Inserts a calendar into a cell range.
 Comment[bg]=Вмъкване на календар в набор от клетки
 Comment[ca]=Insereix un calendari a un interval de cel·la.
+Comment[ca@valencia]=Insereix un calendari a un interval de cel·la.
 Comment[da]=Indsætter en kalender i et celleområde.
 Comment[de]=Fügt einen Kalender in einen Zellbereich ein.
 Comment[el]=Εισαγωγή ενός ημερολογίου σε ένα εύρος κελιών.

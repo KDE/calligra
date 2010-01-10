@@ -3,6 +3,7 @@ Type=Service
 Name=KPresenter Old File Format Filter
 Name[bg]=Филтър за стария файлов формат на KPresenter
 Name[ca]=Filtre de format de fitxer antic del KPresenter
+Name[ca@valencia]=Filtre de format de fitxer antic del KPresenter
 Name[cs]=Filtr starého formátu pro KPresenter
 Name[da]=Filter til KPresenters gamle filformat
 Name[de]=KPresenter Filter für altes Dateiformat

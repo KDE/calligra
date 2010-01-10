@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
 Name[ca]=Estris contenidors
+Name[ca@valencia]=Estris contenidors
 Name[cy]=Celfigion Cynhwysydd
 Name[da]=Container-kontroller
 Name[de]=Container-Elemente

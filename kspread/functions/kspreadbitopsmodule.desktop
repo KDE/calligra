@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Bit Operation Functions
 Name[ca]=Funcions d'operació de bit
+Name[ca@valencia]=Funcions d'operació de bit
 Name[da]=Funktioner til bitoperationer
 Name[de]=Bit-Operation-Funktionen
 Name[el]=Συναρτήσεις δυαδικών τελεστών
@@ -26,6 +27,7 @@ Name[zh_CN]=位操作函数
 Name[zh_TW]=位元操作函數
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[ca]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[ca@valencia]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[cs]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[da]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[de]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT

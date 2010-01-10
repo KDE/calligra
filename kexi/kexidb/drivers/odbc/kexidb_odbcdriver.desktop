@@ -2,6 +2,7 @@
 Name=ODBC
 Name[br]=ODBC
 Name[ca]=ODBC
+Name[ca@valencia]=ODBC
 Name[cs]=ODBC
 Name[cy]=ODBC
 Name[da]=ODBC
@@ -58,6 +59,7 @@ Name[zh_CN]=ODBC
 Name[zh_TW]=ODBC
 Comment=Kexi Open Database Connectivity Driver
 Comment[ca]=Controlador ODBC per al Kexi
+Comment[ca@valencia]=Controlador ODBC per al Kexi
 Comment[cy]=Gyrrydd Cysylltedd Cronfa Ddata Agored Kexi
 Comment[da]=Kexi-driver for åben databaseforbindelse
 Comment[de]=Kexi-ODBC-Treiber

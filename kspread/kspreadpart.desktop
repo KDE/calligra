@@ -2,6 +2,7 @@
 Name=KOffice Spreadsheet Component
 Name[bg]=Компонент за електронна таблица за KOffice
 Name[ca]=Component de full de càlcul del KOffice
+Name[ca@valencia]=Component de full de càlcul del KOffice
 Name[cy]=Cydran Taenlen KOffice 
 Name[da]=KOffice regnearkkomponent
 Name[de]=KOffice-Komponente für Tabellenkalkulation
@@ -58,6 +59,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-templa
 GenericName=Spreadsheet
 GenericName[bg]=Таблици
 GenericName[ca]=Full de càlcul
+GenericName[ca@valencia]=Full de càlcul
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation
 GenericName[el]=Λογιστικό φύλλο

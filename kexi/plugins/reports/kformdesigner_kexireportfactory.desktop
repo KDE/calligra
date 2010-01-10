@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi Report Widgets
 Name[ca]=Estris d'informe del Kexi
+Name[ca@valencia]=Estris d'informe del Kexi
 Name[cy]=Celfigion Adroddiad i Kexi
 Name[da]=Kexi Rapportkontroller
 Name[de]=Kexi-Berichtelemente

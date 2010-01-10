@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Database Component
 Name[ca]=Component de bases de dades del KOffice
+Name[ca@valencia]=Component de bases de dades del KOffice
 Name[da]=Databasemodul til KOffice
 Name[de]=KOffice-Komponente für Datenbanken
 Name[el]=Συστατικό βάσης δεδομένων του KOffice
@@ -41,6 +42,7 @@ X-KDE-NOTKoDocumentEmbeddable=true
 GenericName=Database Creator
 GenericName[br]=Aozer ar stlennvon
 GenericName[ca]=Creador de bases de dades
+GenericName[ca@valencia]=Creador de bases de dades
 GenericName[cs]=Tvůrce databází
 GenericName[cy]=Creuydd Cronfa Ddata
 GenericName[da]=Opretter af databaser

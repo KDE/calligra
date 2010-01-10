@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Flowchart & Diagram Editing Component
 Name[ca]=Component editor de diagrames de fluxos i diagrames del KOffice
+Name[ca@valencia]=Component editor de diagrames de fluxos i diagrames del KOffice
 Name[cy]=Cydran Golygu Siartiau Llif & Diagram KOffice
 Name[da]=Koffice flydediagrammer & diagramredigeringskomponent
 Name[de]=KOffice-Komponente für Flussdiagramme & Diagrammbearbeitung
@@ -57,6 +58,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,applicati
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
 GenericName[ca]=Editor de diagrames de fluxos i diagrames
+GenericName[ca@valencia]=Editor de diagrames de fluxos i diagrames
 GenericName[cy]=Siart Llif & Diagram
 GenericName[da]=Flydediagrammer & diagrammer
 GenericName[de]=Flussdiagramm

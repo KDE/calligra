@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text
 Name[ca]=Text
+Name[ca@valencia]=Text
 Name[cs]=Text
 Name[da]=Tekst
 Name[de]=Text
@@ -21,6 +22,7 @@ Name[x-test]=xxTextxx
 Name[zh_TW]=文字
 Comment=Text Migration Driver for Kexi
 Comment[ca]=Controlador de migració de text per al Kexi
+Comment[ca@valencia]=Controlador de migració de text per al Kexi
 Comment[da]=Migrationsdriver til tekst til Kexi
 Comment[de]=Text-Migrationstreiber für Kexi
 Comment[en_GB]=Text Migration Driver for Kexi

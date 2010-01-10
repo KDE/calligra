@@ -3,6 +3,7 @@ Type=Service
 Name=Karbon WPG Import Filter
 Name[bg]=Филтър за импортиране от WPG в Karbon
 Name[ca]=Filtre d'importació WPG per al Karbon
+Name[ca@valencia]=Filtre d'importació WPG per al Karbon
 Name[cs]=Importní filtr formátu WPG pro Karbon
 Name[da]=WPG-importfilter til Karbon
 Name[de]=Karbon WPG-Importfilter

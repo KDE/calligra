@@ -2,6 +2,7 @@
 Name=Logic Functions
 Name[bg]=Логически функции
 Name[ca]=Funcions lògiques
+Name[ca@valencia]=Funcions lògiques
 Name[cs]=Logické funkce
 Name[da]=Logiske funktioner
 Name[de]=Logikfunktionen
@@ -31,6 +32,7 @@ Name[zh_CN]=逻辑函数
 Name[zh_TW]=邏輯函數
 Comment=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[ca]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[ca@valencia]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[cs]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[da]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[de]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR

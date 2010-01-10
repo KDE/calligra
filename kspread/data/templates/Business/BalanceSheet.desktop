@@ -4,6 +4,7 @@ URL=.source/BalanceSheet.kst
 Name=Balance Sheet
 Name[bg]=Баланс
 Name[ca]=Full de balanç
+Name[ca@valencia]=Full de balanç
 Name[cs]=Rozvaha
 Name[cy]=Mantolen
 Name[da]=Balanceringsark

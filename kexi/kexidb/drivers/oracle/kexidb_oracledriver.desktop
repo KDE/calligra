@@ -2,6 +2,7 @@
 Type=Service
 Name=Oracle
 Name[ca]=Oracle
+Name[ca@valencia]=Oracle
 Name[cs]=Oracle
 Name[da]=Oracle
 Name[de]=Oracle
@@ -34,6 +35,7 @@ Name[zh_CN]=Oracle
 Name[zh_TW]=Oracle
 Comment=Kexi database driver for accessing Oracle servers
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors Oracle
+Comment[ca@valencia]=Controlador de bases de dades Kexi per a accedir a servidors Oracle
 Comment[da]=Databasedriver til at tilgå Oracle-servere til Kexi
 Comment[de]=Kexi-Datenbanktreiber für Zugriff auf Oracle-Server
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές Oracle

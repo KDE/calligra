@@ -2,6 +2,7 @@
 Name=Trigonometry Functions
 Name[bg]=Тригонометрични функции
 Name[ca]=Funcions trigonomètriques
+Name[ca@valencia]=Funcions trigonomètriques
 Name[cs]=Trigonometrické funkce
 Name[da]=Trigonometrifunktioner
 Name[de]=Trigonometrie-Funktionen
@@ -29,6 +30,7 @@ Name[zh_CN]=三角函数
 Name[zh_TW]=三角函數
 Comment=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Comment[ca]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[ca@valencia]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Comment[cs]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Comment[da]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Comment[de]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH

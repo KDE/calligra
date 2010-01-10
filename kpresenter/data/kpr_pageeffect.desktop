@@ -4,6 +4,7 @@ X-KDE-ServiceType=KPresenter/PageEffect
 Comment=Page effect plugin for KPresenter
 Comment[bg]=Приставка за ефекти в страниците на KPresenter
 Comment[ca]=Connector d'efectes de pàgina per al KPresenter
+Comment[ca@valencia]=Connector d'efectes de pàgina per al KPresenter
 Comment[da]=Sideeffekt-plugin til KPresenter
 Comment[de]=Seiteneffektmodul für KPresenter
 Comment[el]=Πρόσθετο εφέ σελίδας για το KPresenter

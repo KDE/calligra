@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Slide Wipe
 Name[ca]=Esborrat de diapositiva
+Name[ca@valencia]=Esborrat de diapositiva
 Name[da]=Diasvisker
 Name[de]=Wischblende (Gleiten)
 Name[el]=Σβήσιμο κύλιση
@@ -26,6 +27,7 @@ Name[x-test]=xxSlide Wipexx
 Name[zh_TW]=滑動掃描
 Comment=Slide Wipe Page Effect
 Comment[ca]=Efectes d'esborrat de diapositiva de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat de diapositiva de la pàgina
 Comment[da]=Diasvisker-sideeffekt
 Comment[de]=Wischblenden-Seiteneffekt (Gleiten)
 Comment[el]=Εφέ σελίδας σβήσιμο κύλιση

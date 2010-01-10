@@ -2,6 +2,7 @@
 Name=PostgreSQL
 Name[br]=PostgreSQL
 Name[ca]=PostgreSQL
+Name[ca@valencia]=PostgreSQL
 Name[cs]=PostgreSQL
 Name[cy]=PostgreSQL
 Name[da]=PostgreSQL
@@ -55,6 +56,7 @@ Name[zh_CN]=PostgreSQL
 Name[zh_TW]=PostgreSQL
 Comment=PostgreSQL Migration Driver for Kexi
 Comment[ca]=Controlador de migració de PostgreSQL per al Kexi
+Comment[ca@valencia]=Controlador de migració de PostgreSQL per al Kexi
 Comment[cy]=Gyrrydd Mudo PostgreSQL ar gyfer Kexi
 Comment[da]=PostgreSQL Migrationsdriver for Kexi
 Comment[de]=PostgreSQL-Migrationstreiber für Kexi

@@ -3,6 +3,7 @@ Type=Service
 Name=Kivio Image Export Filter
 Name[br]=Sil ezporzh skeudenn evit Kivio
 Name[ca]=Filtre d'exportació d'imatges per al Kivio
+Name[ca@valencia]=Filtre d'exportació d'imatges per al Kivio
 Name[da]=Kivio billedeksportfilter
 Name[de]=Kivio Bild-Exportfilter
 Name[el]=Φίλτρο εξαγωγής εικόνας του Kivio

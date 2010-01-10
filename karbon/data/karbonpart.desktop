@@ -2,6 +2,7 @@
 Name=KOffice Scalable Graphics Component
 Name[bg]=Компонент за векторна графика в KOffice
 Name[ca]=Component de gràfics escalables del KOffice
+Name[ca@valencia]=Component de gràfics escalables del KOffice
 Name[cs]=SVG komponenta pro KOffice
 Name[cy]=Cydran Graffeg Graddadwy KOffice
 Name[da]=Koffice skalérbar grafikkomponent
@@ -63,6 +64,7 @@ GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
 GenericName[bg]=Векторна графика
 GenericName[ca]=Gràfics escalables
+GenericName[ca@valencia]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika
 GenericName[cy]=Graffeg Graddadwy
 GenericName[da]=Skalérbar grafik
