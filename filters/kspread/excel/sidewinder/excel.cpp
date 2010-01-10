@@ -1527,7 +1527,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += cmFmla - sizeFmla - 0; // padding
       }
     }
-    
+
     // pictFmla
     if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
         const unsigned long cb = readU16(startPict + 2);
@@ -2070,7 +2070,7 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
 
         unsigned linestyle = readU16(data + 10);
         unsigned color1 = readU16(data + 12);
-        // unsigned color2 = readU16( data + 14 );
+        unsigned color2 = readU16(data + 14);
         unsigned flag = readU16(data + 16);
         unsigned fill = readU16(data + 18);
 
@@ -2081,13 +2081,13 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
 
         setLeftBorderColor(color1 & 0x7f);
         setRightBorderColor((color1 >> 7) & 0x7f);
-        setTopBorderColor(color1 & 0x7f);
-        setBottomBorderColor((color1 >> 7) & 0x7f);
+        setTopBorderColor(color2 & 0x7f);
+        setBottomBorderColor((color2 >> 7) & 0x7f);
 
         setDiagonalTopLeft(color1 & 0x40);
-        setDiagonalBottomLeft(color1 & 0x40);
+        setDiagonalBottomLeft(color1 & 0x80);
         setDiagonalStyle((flag >> 4) & 0x1e);
-        setDiagonalColor(((flag & 0x1f) << 2) + ((color1 >> 14) & 3));
+        setDiagonalColor(((flag & 0x1f) << 2) + ((color2 >> 14) & 3));
 
         setFillPattern((flag >> 10) & 0x3f);
         setPatternForeColor(fill & 0x7f);
@@ -2415,7 +2415,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
     { // read CompObj stream
       POLE::Stream *combObjStream = new POLE::Stream( &storage, "/CompObj" );
-      
+
       // header
       unsigned bytes_read = combObjStream->read( buffer, 28 );
       unsigned long length = 0;
