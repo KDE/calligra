@@ -57,24 +57,24 @@ public:
         setCursor( Qt::PointingHandCursor );
         setToolTip( i18n("Press to apply fill to selection" ) );
     }
-    
+
     virtual ~KarbonFillStyleWidget()
     {
-        if( m_fill && ! m_fill->removeUser() )
+        if (m_fill && !m_fill->deref())
             delete m_fill;
     }
-    
+
     void setFill( KoShapeBackground * fill )
     {
         if( fill != m_fill )
         {
-            if( m_fill && ! m_fill->removeUser() )
+            if (m_fill && !m_fill->deref())
                 delete m_fill;
             m_fill = fill;
-            if( m_fill )
-                m_fill->addUser();
+            if (m_fill)
+                m_fill->ref();
         }
-        
+
         update();
     }
 protected:
@@ -134,22 +134,22 @@ public:
         setCursor( Qt::PointingHandCursor );
         setToolTip( i18n("Press to apply stroke to selection" ) );
     }
-    
+
     virtual ~KarbonStrokeStyleWidget()
     {
-        if( m_stroke && ! m_stroke->removeUser() )
+        if (m_stroke && !m_stroke->deref())
             delete m_stroke;
     }
-    
+
     void setStroke( KoShapeBorderModel * stroke )
     {
         if( stroke != m_stroke )
         {
-            if( m_stroke && ! m_stroke->removeUser() )
+            if (m_stroke && !m_stroke->deref())
                 delete m_stroke;
             m_stroke = stroke;
-            if( m_stroke )
-                m_stroke->addUser();
+            if (m_stroke)
+                m_stroke->ref();
         }
         update();
     }

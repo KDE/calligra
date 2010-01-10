@@ -29,18 +29,18 @@ FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoSh
     Q_ASSERT(m_shape);
     m_oldFilterStack = m_shape->filterEffectStack();
     if (m_newFilterStack)
-        m_newFilterStack->addUser();
+        m_newFilterStack->ref();
     if (m_oldFilterStack)
-        m_oldFilterStack->addUser();
-    
+        m_oldFilterStack->ref();
+
     setText(i18n("Set filter stack"));
 }
 
 FilterStackSetCommand::~FilterStackSetCommand()
 {
-    if (m_newFilterStack && ! m_newFilterStack->removeUser())
+    if (m_newFilterStack && !m_newFilterStack->deref())
         delete m_newFilterStack;
-    if (m_oldFilterStack && ! m_oldFilterStack->removeUser())
+    if (m_oldFilterStack && !m_oldFilterStack->deref())
         delete m_oldFilterStack;
 }
 
