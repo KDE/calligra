@@ -2721,11 +2721,13 @@ bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
 
         if (cell.isFormula() || !cell.userInput().isEmpty() || !cell.value().isEmpty()) {
             // Row-wise filling of PointStorages is faster than column-wise filling.
+            QSharedPointer<QTextDocument> richText = cell.richText();
             for (int r = rowIndex; r <= endRow; ++r) {
                 for (int c = 0; c < numberColumns; ++c) {
                     Cell target(this, columnIndex + c, r);
                     target.setFormula(cell.formula());
                     target.setUserInput(cell.userInput());
+                    target.setRichText(richText);
                     target.setValue(cell.value());
                 }
             }

@@ -36,6 +36,10 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoStyleManager.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoParagraphStyle.h>
 
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
@@ -102,6 +106,7 @@ public:
     NamedAreaManager* namedAreaManager;
     RecalcManager* recalcManager;
     StyleManager* styleManager;
+    KoStyleManager* textStyleManager;
 
     ApplicationSettings* applicationSettings;
     CalculationSettings* calculationSettings;
@@ -137,6 +142,7 @@ Map::Map(Doc* doc, const char* name)
     d->namedAreaManager = new NamedAreaManager(this);
     d->recalcManager = new RecalcManager(this);
     d->styleManager = new StyleManager();
+    d->textStyleManager = new KoStyleManager(this);
 
     d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
@@ -249,6 +255,11 @@ RecalcManager* Map::recalcManager() const
 StyleManager* Map::styleManager() const
 {
     return d->styleManager;
+}
+
+KoStyleManager* Map::textStyleManager() const
+{
+    return d->textStyleManager;
 }
 
 ValueParser* Map::parser() const
@@ -500,6 +511,14 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 
     OdfLoadingContext tableContext(odfContext);
     tableContext.validities = Validity::preloadValidities(body); // table:content-validations
+
+    // load text styles for rich-text content
+    KoShapeLoadingContext shapeContext(odfContext, doc()->dataCenterMap());
+    tableContext.shapeContext = &shapeContext;
+    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    sharedData->loadOdfStyles(odfContext, textStyleManager());
+    textStyleManager()->defaultParagraphStyle()->characterStyle()->removeHardCodedDefaults();
+    shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
     // load default column style
     const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");

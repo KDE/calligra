@@ -36,6 +36,8 @@
 
 #include <QDate>
 #include <QSharedDataPointer>
+#include <QSharedPointer>
+#include <QTextDocument>
 
 #include "Condition.h"
 #include "Global.h"
@@ -265,6 +267,19 @@ public:
      * \see setUserInput, parseUserInput
      */
     void setValue(const Value& value);
+
+    /**
+     * Returns the richtext that this cell holds.
+     */
+    QSharedPointer<QTextDocument> richText() const;
+
+    /**
+     * Sets the richtext for this cell.
+     * If \p text is empty, richtext is removed.
+     *
+     * \param text the new richtext
+     */
+    void setRichText(QSharedPointer<QTextDocument> text);
 
     /**
      * Return the text the user entered. This could be a value (e.g. "14.03")
@@ -566,7 +581,7 @@ protected:
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
-    void loadOdfCellText(const KoXmlElement& parent);
+    void loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext);
 
     /**
      * \ingroup OpenDocument

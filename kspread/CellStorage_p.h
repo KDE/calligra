@@ -59,6 +59,8 @@ public:
             return false;
         if (!values.isEmpty())
             return false;
+        if (!richTexts.isEmpty())
+            return false;
         return true;
     }
 
@@ -75,6 +77,7 @@ public:
     QVector< QPair<QPoint, QString> >        userInputs;
     QList< QPair<QRectF, Validity> >         validities;
     QVector< QPair<QPoint, Value> >          values;
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts;
 };
 
 } // namespace KSpread

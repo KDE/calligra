@@ -67,6 +67,7 @@ public:
             , userInputStorage(new UserInputStorage())
             , validityStorage(new ValidityStorage(sheet->map()))
             , valueStorage(new ValueStorage())
+            , richTextStorage(new RichTextStorage())
             , undoData(0) {}
 
     Private(const Private& other, Sheet* sheet)
@@ -84,6 +85,7 @@ public:
             , userInputStorage(new UserInputStorage(*other.userInputStorage))
             , validityStorage(new ValidityStorage(*other.validityStorage))
             , valueStorage(new ValueStorage(*other.valueStorage))
+            , richTextStorage(new RichTextStorage(*other.richTextStorage))
             , undoData(0) {}
 
     ~Private() {
@@ -100,6 +102,7 @@ public:
         delete userInputStorage;
         delete validityStorage;
         delete valueStorage;
+        delete richTextStorage;
     }
 
     Sheet*                  sheet;
@@ -116,6 +119,7 @@ public:
     UserInputStorage*       userInputStorage;
     ValidityStorage*        validityStorage;
     ValueStorage*           valueStorage;
+    RichTextStorage*        richTextStorage;
     CellStorageUndoData*    undoData;
 };
 
@@ -148,11 +152,13 @@ void CellStorage::take(int col, int row)
     QString oldLink;
     QString oldUserInput;
     Value oldValue;
+    QSharedPointer<QTextDocument> oldRichText;
 
     oldFormula = d->formulaStorage->take(col, row);
     oldLink = d->linkStorage->take(col, row);
     oldUserInput = d->userInputStorage->take(col, row);
     oldValue = d->valueStorage->take(col, row);
+    oldRichText = d->richTextStorage->take(col, row);
 
     if (!d->sheet->map()->isLoading()) {
         // Trigger a recalculation of the consuming cells.
@@ -166,6 +172,7 @@ void CellStorage::take(int col, int row)
         d->undoData->links      << qMakePair(QPoint(col, row), oldLink);
         d->undoData->userInputs << qMakePair(QPoint(col, row), oldUserInput);
         d->undoData->values     << qMakePair(QPoint(col, row), oldValue);
+        d->undoData->richTexts  << qMakePair(QPoint(col, row), oldRichText);
     }
 }
 
@@ -355,6 +362,24 @@ void CellStorage::setUserInput(int column, int row, const QString& userInput)
     // recording undo?
     if (d->undoData && userInput != old)
         d->undoData->userInputs << qMakePair(QPoint(column, row), old);
+}
+
+QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
+{
+    return d->richTextStorage->lookup(column, row);
+}
+
+void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument> text)
+{
+    QSharedPointer<QTextDocument> old;
+    if (text.isNull())
+        old = d->richTextStorage->take(column, row);
+    else
+        old = d->richTextStorage->insert(column, row, text);
+
+    // recording undo?
+    if (d->undoData && text != old)
+        d->undoData->richTexts << qMakePair(QPoint(column, row), old);
 }
 
 Validity CellStorage::validity(int column, int row) const
@@ -599,6 +624,7 @@ void CellStorage::insertColumns(int position, int number)
     QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->insertColumns(position, number);
     QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->insertColumns(position, number);
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertColumns(position, number);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertColumns(position, number);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertColumns(position, number);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->insertColumns(position, number);
     // recording undo?
@@ -616,6 +642,7 @@ void CellStorage::insertColumns(int position, int number)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -656,6 +683,7 @@ void CellStorage::removeColumns(int position, int number)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeColumns(position, number);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeColumns(position, number);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->removeColumns(position, number);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeColumns(position, number);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -671,6 +699,7 @@ void CellStorage::removeColumns(int position, int number)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -710,6 +739,7 @@ void CellStorage::insertRows(int position, int number)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertRows(position, number);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertRows(position, number);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->insertRows(position, number);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertRows(position, number);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -725,6 +755,7 @@ void CellStorage::insertRows(int position, int number)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -765,6 +796,7 @@ void CellStorage::removeRows(int position, int number)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeRows(position, number);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeRows(position, number);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->removeRows(position, number);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeRows(position, number);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -780,6 +812,7 @@ void CellStorage::removeRows(int position, int number)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -820,6 +853,7 @@ void CellStorage::removeShiftLeft(const QRect& rect)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeShiftLeft(rect);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeShiftLeft(rect);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->removeShiftLeft(rect);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeShiftLeft(rect);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -835,6 +869,7 @@ void CellStorage::removeShiftLeft(const QRect& rect)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -874,6 +909,7 @@ void CellStorage::insertShiftRight(const QRect& rect)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertShiftRight(rect);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertShiftRight(rect);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->insertShiftRight(rect);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertShiftRight(rect);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -889,6 +925,7 @@ void CellStorage::insertShiftRight(const QRect& rect)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -929,6 +966,7 @@ void CellStorage::removeShiftUp(const QRect& rect)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeShiftUp(rect);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeShiftUp(rect);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->removeShiftUp(rect);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeShiftUp(rect);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -944,6 +982,7 @@ void CellStorage::removeShiftUp(const QRect& rect)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -983,6 +1022,7 @@ void CellStorage::insertShiftDown(const QRect& rect)
     QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertShiftDown(rect);
     QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertShiftDown(rect);
     QVector< QPair<QPoint, Value> > values = d->valueStorage->insertShiftDown(rect);
+    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertShiftDown(rect);
     // recording undo?
     if (d->undoData) {
         d->undoData->bindings   << bindings;
@@ -998,6 +1038,7 @@ void CellStorage::insertShiftDown(const QRect& rect)
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
         d->undoData->values     << values;
+        d->undoData->richTexts  << richTexts;
     }
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -1255,6 +1296,8 @@ void CellStorage::undo(CellStorageUndoData* data)
         setValue(data->values[i].first.x(), data->values[i].first.y(), data->values[i].second);
     for (int i = 0; i < data->userInputs.count(); ++i)
         setUserInput(data->userInputs[i].first.x(), data->userInputs[i].first.y(), data->userInputs[i].second);
+    for (int i = 0; i < data->richTexts.count(); ++i)
+        setRichText(data->richTexts[i].first.x(), data->richTexts[i].first.y(), data->richTexts[i].second);
     for (int i = 0; i < data->links.count(); ++i)
         setLink(data->links[i].first.x(), data->links[i].first.y(), data->links[i].second);
     for (int i = 0; i < data->fusions.count(); ++i)

@@ -33,6 +33,7 @@
 class KoStore;
 class KoOdfLoadingContext;
 class KoEmbeddedDocumentSaver;
+class KoStyleManager;
 
 class QDomElement;
 class QDomDocument;
@@ -128,6 +129,11 @@ public:
      * @return the StyleManager of this Document
      */
     StyleManager* styleManager() const;
+
+    /**
+     * @return the KoStyleManager of this Document
+     */
+    KoStyleManager* textStyleManager() const;
 
     /**
      * @return the value parser of this Document

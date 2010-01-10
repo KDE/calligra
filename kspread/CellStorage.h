@@ -22,6 +22,7 @@
 
 #include <QPair>
 #include <QRect>
+#include <QTextDocument>
 
 #include "Cell.h"
 #include "Global.h"
@@ -45,6 +46,7 @@ class FormulaStorage;
 class FusionStorage;
 class LinkStorage;
 class Region;
+class RichTextStorage;
 class Sheet;
 class StyleStorage;
 class Validity;
@@ -185,6 +187,9 @@ public:
      */
     Value valueRegion(const Region& region) const;
     void setValue(int column, int row, const Value& value);
+
+    QSharedPointer<QTextDocument> richText(int column, int row) const;
+    void setRichText(int column, int row, QSharedPointer<QTextDocument> text);
 
     /**
      */
@@ -399,6 +404,15 @@ class LinkStorage : public PointStorage<QString>
 public:
     LinkStorage& operator=(const PointStorage<QString>& o) {
         PointStorage<QString>::operator=(o);
+        return *this;
+    }
+};
+
+class RichTextStorage : public PointStorage<QSharedPointer<QTextDocument> >
+{
+public:
+    RichTextStorage& operator=(const PointStorage<QSharedPointer<QTextDocument> >& o) {
+        PointStorage<QSharedPointer<QTextDocument> >::operator=(o);
         return *this;
     }
 };

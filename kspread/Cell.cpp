@@ -81,10 +81,20 @@
 #include <KoOdfStylesReader.h>
 #include <KoXmlWriter.h>
 
+#include <KoTextLoader.h>
+#include <KoStyleManager.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoTextDocument.h>
+#include <KoTextWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoParagraphStyle.h>
+
 #include <kdebug.h>
 #include <KNotification>
 
 #include <QTimer>
+#include <QTextDocument>
+#include <QTextCursor>
 
 using namespace KSpread;
 
@@ -372,6 +382,9 @@ void Cell::setUserInput(const QString& string)
         // set the value
         sheet()->cellStorage()->setUserInput(d->column, d->row, string);
     }
+
+    // remove any existing richtext
+    setRichText(QSharedPointer<QTextDocument>());
 }
 
 
@@ -412,6 +425,17 @@ const Value Cell::value() const
 void Cell::setValue(const Value& value)
 {
     sheet()->cellStorage()->setValue(d->column, d->row, value);
+}
+
+
+QSharedPointer<QTextDocument> Cell::richText() const
+{
+    return sheet()->cellStorage()->richText(d->column, d->row);
+}
+
+void Cell::setRichText(QSharedPointer<QTextDocument> text)
+{
+    sheet()->cellStorage()->setRichText(d->column, d->row, text);
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -1155,9 +1179,18 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
 
     if (!isEmpty() && link().isEmpty()) {
-        xmlwriter.startElement("text:p");
-        xmlwriter.addTextNode(displayText().toUtf8());
-        xmlwriter.endElement();
+        QSharedPointer<QTextDocument> doc = richText();
+        if (doc) {
+            KoEmbeddedDocumentSaver saver;
+            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, saver);
+            KoTextWriter writer(shapeContext);
+
+            writer.write(doc.data(), 0);
+        } else {
+            xmlwriter.startElement("text:p");
+            xmlwriter.addTextNode(displayText().toUtf8());
+            xmlwriter.endElement();
+        }
     }
 
     // flake
@@ -1267,7 +1300,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     kDebug(36003) << "*** Loading cell properties ***** at" << name();
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
-    loadOdfCellText(element);
+    loadOdfCellText(element, tableContext);
 
     //
     // formula
@@ -1526,13 +1559,28 @@ KoXmlElement namedItemNSWithSpan(const KoXmlNode& node, const char* nsURI, const
     return KoXmlElement();
 }
 
-void Cell::loadOdfCellText(const KoXmlElement& parent)
+// recursively goes through all children of parent and returns true if there is any element
+// in the draw: namespace in this subtree
+static bool findDrawElements(const KoXmlElement& parent)
+{
+    KoXmlElement element;
+    forEachElement(element , parent) {
+        if (element.namespaceURI() == KoXmlNS::draw)
+            return true;
+        if (findDrawElements(element))
+            return true;
+    }
+    return false;
+}
+
+void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
     QString cellText;
 
     bool multipleTextParagraphsFound = false;
+    bool hasRichText = false;
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
@@ -1545,6 +1593,14 @@ void Cell::loadOdfCellText(const KoXmlElement& parent)
                 cellText += '\n' + textParagraphElement.text();
                 multipleTextParagraphsFound = true;
             }
+
+            // if any of this nodes children are elements, we're dealing with richtext
+            if (!hasRichText)
+                for (KoXmlNode n = textParagraphElement.firstChild(); !n.isNull(); n = n.nextSibling())
+                    if (n.isElement()) {
+                        hasRichText = true;
+                        break;
+                    }
 
             // the text:a link could be located within a text:span element
             KoXmlElement textA = namedItemNSWithSpan(textParagraphElement, KoXmlNS::text, "a");
@@ -1559,12 +1615,28 @@ void Cell::loadOdfCellText(const KoXmlElement& parent)
                     setLink(link);
                 }
             }
-        }
+        } else
+            hasRichText = true;
     }
 
     if (!cellText.isNull()) {
         setUserInput(cellText);
         // The value will be set later in loadOdf().
+
+        if (hasRichText && !findDrawElements(parent)) {
+            // for now we don't support richtext and embedded shapes in the same cell;
+            // this is because they would currently be loaded twice, once by the KoTextLoader
+            // and later properly by the cell itself
+            KoTextLoader loader(*tableContext.shapeContext);
+            QSharedPointer<QTextDocument> doc(new QTextDocument);
+            KoTextDocument(doc.data()).setStyleManager(sheet()->map()->textStyleManager());
+
+            QTextCursor cursor(doc.data());
+            loader.loadBody(parent, cursor);
+
+            setUserInput(doc->toPlainText());
+            setRichText(doc);
+        }
     }
 
     //Enable word wrapping if multiple lines of text have been found.

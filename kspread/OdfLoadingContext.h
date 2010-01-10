@@ -24,6 +24,8 @@
 
 #include <QHash>
 
+class KoShapeLoadingContext;
+
 namespace KSpread
 {
 
@@ -35,10 +37,11 @@ class OdfLoadingContext
 {
 public:
     OdfLoadingContext(KoOdfLoadingContext& odfContext)
-            : odfContext(odfContext) {}
+            : odfContext(odfContext), shapeContext(0) {}
 
 public:
     KoOdfLoadingContext& odfContext;
+    KoShapeLoadingContext* shapeContext;
     QHash<QString, KoXmlElement> validities;
 };
 
