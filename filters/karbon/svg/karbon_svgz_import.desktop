@@ -3,6 +3,7 @@ Type=Service
 Name=Karbon SVGZ Import Filter
 Name[bg]=Филтър за импортиране от SVGZ в Karbon
 Name[ca]=Filtre d'importació SVGZ per al Karbon
+Name[ca@valencia]=Filtre d'importació SVGZ per al Karbon
 Name[cs]=Importní filtr formátu SVGZ pro Karbon
 Name[da]=SVGZ-importfilter til Karbon
 Name[de]=Karbon SVGZ-Importfilter

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Formula Component
 Name[ca]=Component de fórmules del KOffice
+Name[ca@valencia]=Component de fórmules del KOffice
 Name[cy]=Cydran Fformiwla KOffice 
 Name[da]=KOffice formelkomponent
 Name[de]=KOffice-Komponente für Formeln
@@ -60,6 +61,7 @@ GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
+GenericName[ca@valencia]=Editor de fórmules
 GenericName[cs]=Editor vzorců
 GenericName[cy]=Golygydd Fformiwla
 GenericName[da]=Formeleditor

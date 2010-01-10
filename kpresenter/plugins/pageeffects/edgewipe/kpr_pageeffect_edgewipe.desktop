@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Edge wipe
 Name[ca]=Esborrat de vora
+Name[ca@valencia]=Esborrat de vora
 Name[da]=Kantvisker
 Name[de]=Wischblende (Rand)
 Name[el]=Σβήσιμο άκρων
@@ -26,6 +27,7 @@ Name[x-test]=xxEdge wipexx
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat de vora de la pàgina
 Comment[da]=Kantvisker-sideeffekter
 Comment[de]=Wischblenden-Seiteneffekte
 Comment[el]=Εφέ σελίδας σβήσιμο άκρων

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Iris Wipe
 Name[ca]=Esborrat d'iris
+Name[ca@valencia]=Esborrat d'iris
 Name[da]=Irisvisker
 Name[de]=Wischblende (Iris)
 Name[el]=Σβήσιμο ίριδας
@@ -25,6 +26,7 @@ Name[x-test]=xxIris Wipexx
 Name[zh_TW]=彩虹掃描
 Comment=Iris Wipe Page Effects
 Comment[ca]=Efectes d'esborrat d'iris de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat d'iris de la pàgina
 Comment[da]=Irisvisker-sideeffekter
 Comment[de]=Wischblenden-Seiteneffekte (Iris)
 Comment[el]=Εφέ σελίδας σβήσιμο ίριδας

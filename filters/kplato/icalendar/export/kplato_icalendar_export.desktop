@@ -7,6 +7,7 @@ X-KDE-Weight=1
 ImportDescription=KPlato
 Name=KPlato iCalendar Export Filter
 Name[ca]=Filtre d'exportació iCalendar del KPlato
+Name[ca@valencia]=Filtre d'exportació iCalendar del KPlato
 Name[da]=KPlato iCalendar-eksportfilter
 Name[de]=Kivio iCalendar-Exportfilter
 Name[en_GB]=KPlato iCalendar Export Filter

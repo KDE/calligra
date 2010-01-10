@@ -2,6 +2,7 @@
 Name=KOffice Project Management Component
 Name[bg]=Компонент за управление на проекти в KOffice
 Name[ca]=Component de gestió de projectes del KOffice
+Name[ca@valencia]=Component de gestió de projectes del KOffice
 Name[cy]=Cydran Rheoli Cywaith KOffice 
 Name[da]=KOffice projektstyringskomponent
 Name[de]=KOffice-Komponente für Projektmanagement
@@ -57,6 +58,7 @@ GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
 GenericName[ca]=Gestió de projectes
+GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů
 GenericName[cy]=Rheoli Cywaith
 GenericName[da]=Projektstyring
