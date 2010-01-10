@@ -939,8 +939,8 @@ void KoWmfReadPrivate::createPenIndirect(quint32, QDataStream& stream)
         handle->pen.setJoinStyle(Qt::RoundJoin);
 
         const int PenStyleMask = 0x0000000F;
-        const int PenCapMask = 0x00000F00;
-        const int PenJoinMask = 0x0000F000;
+        const int PenCapMask   = 0x00000F00;
+        const int PenJoinMask  = 0x0000F000;
 
         quint16 penStyle = style & PenStyleMask;
         if (penStyle < 7)

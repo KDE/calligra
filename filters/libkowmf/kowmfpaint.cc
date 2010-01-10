@@ -325,7 +325,9 @@ void KoWmfPaint::lineTo(int x, int y)
     kDebug(31000) << "linewidth: " << mPainter->pen().width();
 #endif
 
-    mPainter->drawLine(mLastPos, QPoint(x, y));
+    QPoint newPoint(x, y);
+    mPainter->drawLine(mLastPos, newPoint);
+    mLastPos = newPoint;
 }
 
 
