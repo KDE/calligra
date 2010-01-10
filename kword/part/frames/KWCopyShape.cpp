@@ -59,7 +59,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     m_original->paint(painter, converter);
     painter.restore();
     if (m_original->border())
-        m_original->border()->paintBorder(m_original, painter, converter);
+        m_original->border()->paint(m_original, painter, converter);
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)

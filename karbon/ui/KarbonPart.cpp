@@ -367,7 +367,7 @@ void KarbonPart::paintContent( QPainter &painter, const QRect& rect)
 {
     KoShapePainter shapePainter;
     shapePainter.setShapes( d->document.shapes() );
-    shapePainter.paintShapes( painter, rect, QRectF(QPointF(), d->document.pageSize()) );
+    shapePainter.paint( painter, rect, QRectF(QPointF(), d->document.pageSize()) );
 }
 
 KarbonDocument& KarbonPart::document()

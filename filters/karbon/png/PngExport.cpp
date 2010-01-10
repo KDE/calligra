@@ -100,7 +100,7 @@ PngExport::convert(const QByteArray& from, const QByteArray& to)
     image.fill(backgroundColor.rgba());
 
     // paint the shapes
-    painter.paintShapes(image);
+    painter.paint(image);
     image.save(m_chain->outputFile(), "PNG");
 
     return KoFilter::OK;

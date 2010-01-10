@@ -316,7 +316,7 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
     imageRect.adjust( 2, 2, -2, -2 );
 
     QPainter p( &thumb );
-    painter.paintShapes( p, imageRect, painter.contentRect() );
+    painter.paint(p, imageRect, painter.contentRect());
 
     return thumb;
 }

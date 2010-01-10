@@ -30,9 +30,9 @@ public:
     {
     }
 
-    using KoLineBorder::paintBorder;
+    using KoLineBorder::paint;
 
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
     {
         KoShape::applyConversion(painter, converter);
         painter.strokePath(shape->outline(), m_pen);
@@ -58,7 +58,7 @@ void KarbonOutlinePaintingStrategy::paint( KoShape * shape, QPainter &painter, c
     painter.save();
     painter.setMatrix( shape->absoluteTransformation(&converter) * painter.matrix() );
 
-    m_border->paintBorder( shape, painter, converter );
+    m_border->paint( shape, painter, converter );
 
     painter.restore();
 }

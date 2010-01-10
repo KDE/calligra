@@ -96,7 +96,7 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     m_shapePainter.setShapes(shapes);
 
-    m_shapePainter.paintShapes(*painter, m_zoomHandle);
+    m_shapePainter.paint(*painter, m_zoomHandle);
     //mShape->paint(*painter, z);
 
     drawHandles(painter);
