@@ -89,9 +89,10 @@ void BindingManager::regionChanged(const Region& region)
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
-        bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(Region((*it)->rect(), sheet));
+        const Region changedRegion((*it)->rect(), sheet);
+        bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(changedRegion);
         for (int j = 0; j < bindings.count(); ++j)
-            bindings[j].second.update(region);
+            bindings[j].second.update(changedRegion);
     }
 }
 
