@@ -52,7 +52,7 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool(canvas), m_shape(0), m_angle(0),
       m_selectedPath(0), m_isDrawing(false), m_speed(0, 0), m_lastShape(0)
 {
-    connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
+    connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
              SLOT(updateSelectedPath()) );
 
     updateSelectedPath();
@@ -101,7 +101,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape( m_caps );
-    m_shape->setBackground( new KoColorBackground( m_canvas->resourceProvider()->backgroundColor().toQColor() ) );
+    m_shape->setBackground( new KoColorBackground( canvas()->resourceProvider()->backgroundColor().toQColor() ) );
     //addPoint( event );
 }
 
@@ -123,7 +123,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
         // handle click: select shape (if any)
         if ( event->point == m_lastPoint )
         {
-            KoShapeManager *shapeManager = m_canvas->shapeManager();
+            KoShapeManager *shapeManager = canvas()->shapeManager();
             KoShape *selectedShape = shapeManager->shapeAt( event->point );
             if ( selectedShape != 0 )
             {
@@ -146,12 +146,12 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 
     m_shape->simplifyGuidePath();
 
-    QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_shape );
+    QUndoCommand * cmd = canvas()->shapeController()->addShape( m_shape );
     if( cmd )
     {
         m_lastShape = m_shape;
-        m_canvas->addCommand( cmd );
-        m_canvas->updateCanvas( m_shape->boundingRect() );
+        canvas()->addCommand( cmd );
+        canvas()->updateCanvas( m_shape->boundingRect() );
     }
     else
     {
@@ -194,7 +194,7 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 
     m_speed = newSpeed;
     m_lastPoint = newPoint;
-    m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
+    canvas()->updateCanvas( m_shape->lastPieceBoundingRect() );
 
     if ( m_usePath && m_selectedPath )
         m_speed = QPointF(0, 0); // following path
@@ -358,9 +358,9 @@ void KarbonCalligraphyTool::activate( bool )
 
 void KarbonCalligraphyTool::deactivate()
 {
-    if ( m_lastShape && m_canvas->shapeManager()->shapes().contains(m_lastShape))
+    if ( m_lastShape && canvas()->shapeManager()->shapes().contains(m_lastShape))
     {
-        KoSelection *selection = m_canvas->shapeManager()->selection();
+        KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();
         selection->select( m_lastShape );
     }
@@ -464,7 +464,7 @@ void KarbonCalligraphyTool::setUsePath( bool usePath )
 {
     m_usePath = usePath;
     //if ( m_selectedPath )
-    //    m_canvas->updateCanvas( m_selectedPath->boundingRect() );
+    //    canvas()->updateCanvas( m_selectedPath->boundingRect() );
 }
 
 void KarbonCalligraphyTool::setUsePressure( bool usePressure )
@@ -486,7 +486,7 @@ void KarbonCalligraphyTool::updateSelectedPath()
 {
     KoPathShape *oldSelectedPath = m_selectedPath; // save old value
 
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
 
     // null pointer if it the selection isn't a KoPathShape
     // or if the selection is empty

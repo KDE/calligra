@@ -92,7 +92,7 @@ void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.setMatrix(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
 
-        int handleRadius = m_canvas->resourceProvider()->handleRadius();
+        int handleRadius = canvas()->resourceProvider()->handleRadius();
         painter.setPen(Qt::blue);      //TODO make configurable
         painter.setBrush(Qt::white);   //TODO make configurable
         m_hoveredPoint->paint(painter, handleRadius, KoPathPoint::Node);
@@ -132,12 +132,12 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
     if (m_hoveredPoint != endPoint) {
         if (m_hoveredPoint) {
             QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
-            m_canvas->updateCanvas(handlePaintRect(nodePos));
+            canvas()->updateCanvas(handlePaintRect(nodePos));
         }
         m_hoveredPoint = endPoint;
         if (m_hoveredPoint) {
             QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
-            m_canvas->updateCanvas(handlePaintRect(nodePos));
+            canvas()->updateCanvas(handlePaintRect(nodePos));
         }
     }
 }
@@ -160,7 +160,7 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
     m_hoveredPoint = 0;
     
     // the original path may be different from the one added
-    m_canvas->updateCanvas( m_shape->boundingRect() );
+    canvas()->updateCanvas( m_shape->boundingRect() );
     delete m_shape;
     m_shape = 0;
     m_points.clear();
@@ -208,7 +208,7 @@ void KarbonPencilTool::addPoint( const QPointF & point )
         return;
 
     m_points.append( point );
-    m_canvas->updateCanvas( m_shape->boundingRect() );
+    canvas()->updateCanvas( m_shape->boundingRect() );
 }
 
 qreal KarbonPencilTool::lineAngle( const QPointF &p1, const QPointF &p2 )
@@ -302,23 +302,23 @@ void KarbonPencilTool::finish( bool closePath )
     path->setShapeId( KoPathShapeId );
     path->setBorder( currentBorder() );
     
-    QUndoCommand * cmd = m_canvas->shapeController()->addShape( path );
+    QUndoCommand * cmd = canvas()->shapeController()->addShape( path );
     if( cmd )
     {
-        KoSelection *selection = m_canvas->shapeManager()->selection();
+        KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();
         selection->select( path );
         
         if (startShape)
-            m_canvas->shapeController()->removeShape(startShape, cmd);
+            canvas()->shapeController()->removeShape(startShape, cmd);
         if (endShape && startShape != endShape)
-            m_canvas->shapeController()->removeShape(endShape, cmd);
+            canvas()->shapeController()->removeShape(endShape, cmd);
         
-        m_canvas->addCommand( cmd );
+        canvas()->addCommand( cmd );
     }
     else
     {
-        m_canvas->updateCanvas( path->boundingRect() );
+        canvas()->updateCanvas( path->boundingRect() );
         delete path;
     }
 }
@@ -406,20 +406,20 @@ void KarbonPencilTool::setDelta( double delta )
 
 KoLineBorder * KarbonPencilTool::currentBorder()
 {
-    KoLineBorder * border = new KoLineBorder( m_canvas->resourceProvider()->activeBorder() );
-    border->setColor( m_canvas->resourceProvider()->foregroundColor().toQColor() ); 
+    KoLineBorder * border = new KoLineBorder( canvas()->resourceProvider()->activeBorder() );
+    border->setColor( canvas()->resourceProvider()->foregroundColor().toQColor() ); 
     return border;
 }
 
 KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
 {
     QRectF roi = handleGrabRect(position);
-    QList<KoShape *> shapes = m_canvas->shapeManager()->shapesAt(roi);
+    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
     
     KoPathPoint * nearestPoint = 0;
     qreal minDistance = HUGE_VAL;
-    uint grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
-    qreal maxDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
+    uint grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
+    qreal maxDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
     
     foreach(KoShape *shape, shapes) {
         KoPathShape * path = dynamic_cast<KoPathShape*>(shape);

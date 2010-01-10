@@ -165,21 +165,21 @@ void KarbonFilterEffectsTool::repaintDecorations()
 {
     if (d->currentShape && d->currentShape->filterEffectStack()) {
         QRectF bb = d->currentShape->boundingRect();
-        int radius = m_canvas->resourceProvider()->handleRadius();
-        m_canvas->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
+        int radius = canvas()->resourceProvider()->handleRadius();
+        canvas()->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
     }
 }
 
 void KarbonFilterEffectsTool::activate( bool temporary )
 {
     Q_UNUSED(temporary);
-    if( ! m_canvas->shapeManager()->selection()->count() )
+    if( ! canvas()->shapeManager()->selection()->count() )
     {
         emit done();
         return;
     }
     
-    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
+    d->currentShape = canvas()->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
     d->fillConfigSelector(d->currentShape);
 }
 
@@ -211,7 +211,7 @@ void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
     if (!filterStack)
         return;
     
-    m_canvas->addCommand(new FilterStackSetCommand(filterStack, d->currentShape));
+    canvas()->addCommand(new FilterStackSetCommand(filterStack, d->currentShape));
     d->fillConfigSelector(d->currentShape);
 }
 
@@ -222,7 +222,7 @@ void KarbonFilterEffectsTool::editFilter()
     dlg->setButtons(KDialog::Close);
 
     FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
-    editor->editShape(d->currentShape, m_canvas);
+    editor->editShape(d->currentShape, canvas());
     
     dlg->setMainWidget(editor);
     dlg->exec();
@@ -256,7 +256,7 @@ void KarbonFilterEffectsTool::filterSelected(int index)
 
 void KarbonFilterEffectsTool::selectionChanged()
 {
-    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
+    d->currentShape = canvas()->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
     d->fillConfigSelector(d->currentShape);
 }
 
