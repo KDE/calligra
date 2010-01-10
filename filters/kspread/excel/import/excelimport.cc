@@ -85,6 +85,7 @@ public:
     QList<QString> colCellStyles;
     QList<QString> sheetStyles;
     QHash<FormatFont, QString> fontStyles;
+    QString subScriptStyle, superScriptStyle;
 
     bool createStyles(KoOdfWriteStore* store);
     bool createContent(KoOdfWriteStore* store);
@@ -1166,6 +1167,14 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
 
         xmlWriter->startElement("text:p", false);
 
+        if (cell->format().font().subscript() || cell->format().font().superscript()) {
+            xmlWriter->startElement("text:span");
+            if (cell->format().font().subscript())
+                xmlWriter->addAttribute("text:style-name", subScriptStyle);
+            else
+                xmlWriter->addAttribute("text:style-name", superScriptStyle);
+        }
+
         if (value.isString())
             xmlWriter->addTextNode(str);
         else {
@@ -1211,6 +1220,9 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
             xmlWriter->endElement(); // text:a
         }
 
+        if (cell->format().font().subscript() || cell->format().font().superscript())
+            xmlWriter->endElement(); // text:span
+
         xmlWriter->endElement(); //  text:p
     }
 
@@ -1245,6 +1257,17 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
             QString styleName = styles->lookup(style, "T");
             fontStyles[it->second] = styleName;
         }
+    }
+
+    if (format.font().superscript() && superScriptStyle.isEmpty()) {
+        KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
+        style.addProperty("style:text-position", "super", KoGenStyle::TextType);
+        superScriptStyle = styles->lookup(style, "T");
+    }
+    if (format.font().subscript() && subScriptStyle.isEmpty()) {
+        KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
+        style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
+        subScriptStyle = styles->lookup(style, "T");
     }
 }
 
@@ -1346,12 +1369,6 @@ void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle&
 
     if (font.strikeout())
         style.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
-
-    if (font.subscript())
-        style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
-
-    if (font.superscript())
-        style.addProperty("style:text-position", "super", KoGenStyle::TextType);
 
     if (!font.fontFamily().isEmpty())
         style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
@@ -1550,7 +1567,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
         style.addChildElement("number", elementContents);
         return styles->lookup(style, "N");
     }
-    
+
     // fraction
     const QString escapedValueFormat = removeEscaped(valueFormat);
     QRegExp fractionRegEx("^#([?]+)/([0-9?]+)$");
