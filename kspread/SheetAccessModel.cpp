@@ -83,6 +83,9 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
     QList<QStandardItem*> col;
     col.append( item );
 
+    connect( sheet, SIGNAL( sig_nameChanged( Sheet*, QString ) ),
+             this,  SLOT( slotSheetNameChanged( Sheet*, QString ) ) );
+
     // This region contains the entire sheet
     const Region region( 1, 1, KS_colMax, KS_rowMax, sheet );
     const QPointer<QAbstractItemModel> model = const_cast<QAbstractItemModel*>( d->map->bindingManager()->createModel( region.name() ) );
@@ -97,6 +100,9 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
 
 void SheetAccessModel::slotSheetRemoved( Sheet *sheet )
 {
+    disconnect( sheet, SIGNAL( sig_nameChanged( Sheet*, QString ) ),
+                this,  SLOT( slotSheetNameChanged( Sheet*, QString ) ) );
+
     removeColumn( d->map->indexOf( sheet ), QModelIndex() );
 }
 
