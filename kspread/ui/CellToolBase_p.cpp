@@ -130,18 +130,7 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     ACTION_EXEC("underline", setChecked(style.underline()));
     ACTION_EXEC("strikeOut", setChecked(style.strikeOut()));
 
-    // workaround for bug #59291 (crash upon starting from template)
-    // certain Qt and Fontconfig combination fail miserably if can not
-    // find the font name (e.g. not installed in the system)
-    QStringList fontList;
-    KFontChooser::getFontList(fontList, 0);
-    QString fontFamily = style.fontFamily();
-    for (QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it) {
-        if ((*it).toLower() == fontFamily.toLower()) {
-            static_cast<KFontAction*>(q->action("font"))->setFont(fontFamily);
-            break;
-        }
-    }
+    static_cast<KFontAction*>(q->action("font"))->setFont(style.fontFamily());
     static_cast<KFontSizeAction*>(q->action("fontSize"))->setFontSize(style.fontSize());
     // -- horizontal alignment actions --
     ACTION_EXEC("alignLeft", setChecked(style.halign() == Style::Left));
