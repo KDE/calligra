@@ -6,10 +6,7 @@ find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 INCLUDE(${QT_USE_FILE})
 
-find_package(KDE4 4.1.0 REQUIRED)
-find_package(KOfficeLibs REQUIRED)
-
-include_directories(${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_PREFIX}/include ${KDE4_INCLUDES})
+include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES})
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
@@ -19,7 +16,7 @@ QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplic
 
 add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp DBusAdaptor.cpp AboutDialog.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
-target_link_libraries(FreOffice ${QT_LIBRARIES} ${KOFFICECORE_LIBRARIES})
+target_link_libraries(FreOffice ${QT_LIBRARIES} komain kopageapp)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
 install(FILES FreOffice.desktop DESTINATION share/applications/hildon)
