@@ -308,7 +308,7 @@ sub createConf() {
     #print FILE "INPUT_FILTER=\n";
     #print FILE "FILTER_PATTERNS=\n";
     #print FILE "FILTER_SOURCE_FILES=NO\n";
-    #print FILE "SOURCE_BROWSER=NO\n";
+    print FILE "SOURCE_BROWSER=YES\n";
     #print FILE "INLINE_SOURCES=NO\n";
     #print FILE "STRIP_CODE_COMMENTS=YES\n";
     #print FILE "REFERENCED_BY_RELATION=YES\n";
