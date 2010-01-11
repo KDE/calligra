@@ -104,7 +104,6 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
     // this is for the month vs. minutes-context
     bool justHadHours = false;
-    int justHadMMM = 0; // contains the number of 'm's in case
 
     bool hadPlainText = false;
 
@@ -116,59 +115,6 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         const bool isLonger = isLong && numberFormat[ i + 2 ] == c             && i < numberFormat.length() - 2;
         const bool isLongest = isLonger && numberFormat[ i + 3 ] == c          && i < numberFormat.length() - 3;
         const bool isWayTooLong = isWayTooLong && numberFormat[ i + 4 ] == c   && i < numberFormat.length() - 4;
-
-
-        if( justHadMMM > 0 )
-        {
-            switch( c )
-            {
-            // m, followed by seconds: must be minutes, then
-            case 'S':
-            case 's':
-                SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericTime )
-                FINISH_PLAIN_TEXT_PART;
-                xmlWriter.startElement( "number:minutes" );
-                if( justHadMMM > 1 )
-                    xmlWriter.addAttribute( "number:style", "long" );
-                xmlWriter.endElement();
-                justHadMMM = 0;
-                break;
-
-            // any other, must be the month, then
-            case 'A':
-            case 'a':
-            case 'H':
-            case 'h':
-            case 'M': // shouldn't happen, though
-            case 'm': // ...
-            case 'D':
-            case 'd':
-            case 'Y':
-            case 'y':
-            case '.':
-            case ',':
-            case '#':
-            case '/':
-            case '0':
-            case ';':
-            case '@':
-            case '"':
-            case '\\':
-                SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericTime )
-                FINISH_PLAIN_TEXT_PART;
-                xmlWriter.startElement( "number:month" );
-                if( justHadMMM > 1 )
-                    xmlWriter.addAttribute( "number:style", "long" );
-                xmlWriter.endElement();
-                justHadMMM = 0;
-                break;
-
-            // default is plain text and is getting ignored here
-            default:
-                break;
-            }
-        }
-
 
 
         switch( c )
@@ -333,7 +279,30 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 else
                 {
                     // on the next iteration, we might see wheter there're seconds or something else
-                    justHadMMM = isLong ? 2 : 1;
+                    bool minutes = true; // let's just default to minutes, if there's nothing more...
+                    // so let's look ahead:
+                    for( int j = i + 1; j < numberFormat.length(); ++j )
+                    {
+                        const char ch = numberFormat[ i ].toLatin1();
+                        if( ch == 's' || ch == 'S' )  // minutes
+                            break;
+                        if( !(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' ) ) // months
+                            continue;
+                        minutes = false;
+                        break;
+                    }
+                    if( minutes )
+                        SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericTime )
+                    else
+                        SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericDate )
+                    FINISH_PLAIN_TEXT_PART;
+                    if( minutes )
+                        xmlWriter.startElement( "number:minutes" );
+                    else
+                        xmlWriter.startElement( "number:month" );
+                    if( isLong )
+                        xmlWriter.addAttribute( "number:style", "long" );
+                    xmlWriter.endElement();
                 }
                 if( isLong )
                     ++i;
@@ -377,9 +346,13 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericDate )
             FINISH_PLAIN_TEXT_PART;
             xmlWriter.startElement( "number:year" );
-            if( isLonger )
+            if( isLongest )
             {
                 xmlWriter.addAttribute( "number:style", "long" );
+                i += 2;
+            }
+            else if( isLong )
+            {
                 ++i;
             }
             xmlWriter.endElement();
