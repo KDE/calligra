@@ -520,6 +520,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_highlight()
     readNext();
     READ_EPILOGUE
 }
+#undef CURRENT_EL
+#define CURRENT_EL jc
+//! Paragraph Alignment
+/*! ECMA-376, 17.3.1.13, p.239
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_jc()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(val)
+    // Does ODF support high/low/medium kashida ?
+    val = val.toLower();
+    if ((val == "both") || (val == "distribute"))
+        m_currentParagraphStyle.addProperty("fo:text-align", "justify");
+    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center"))
+        m_currentParagraphStyle.addProperty("fo:text-align", val);
+    readNext();
+    READ_EPILOGUE
+}
 
 //! CASE #410
 void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttributes& attrs)
@@ -604,6 +623,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(jc)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
