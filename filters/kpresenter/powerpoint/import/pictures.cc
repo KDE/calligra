@@ -17,8 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 #include "pictures.h"
-#include <stdio.h>
 #include <zlib.h>
+#include <cstdio>
+#include <iostream>
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -95,25 +96,28 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
     inflateEnd(&zstream);
     return false; // the stream was incomplete
 }
-std::string
-savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
+PictureReference
+savePicture(POLE::Stream& stream, KoStore* out)
 {
+    PictureReference ref;
     const quint16 bufferSize = 1024;
     unsigned char buffer[bufferSize];
-    if (stream.read(buffer, 8) != 8) return "";
+    if (stream.read(buffer, 8) != 8) return ref;
+
 
     quint16 instance = readU16(buffer) >> 4;
     quint16 type = readU16(buffer + 2);
     quint32 size = readU32(buffer + 4);
 
     if (type == 0xF007) { // OfficeArtFBSE
-        if (stream.read(buffer, 36) != 36) return "";
+        if (stream.read(buffer, 36) != 36) return ref;
         quint16 cbName = *(buffer + 33);
-        if (cbName > bufferSize || stream.read(buffer, cbName) != cbName)
-            return "";
+        if (cbName > bufferSize || stream.read(buffer, cbName) != cbName) {
+            return ref;
+        }
         size = size - 36 - cbName;
         // read embedded BLIP
-        if (stream.read(buffer, 8) != 8) return "";
+        if (stream.read(buffer, 8) != 8) return ref;
         instance = readU16(buffer) >> 4;
         type = readU16(buffer + 2);
         size = readU32(buffer + 4);
@@ -122,57 +126,57 @@ savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
     // Image data is stored raw in the Pictures stream
     // The offset to the data differs per image type.
     quint16 offset;
-    const char* nametemplate;
+    const char* namesuffix;
     switch (type) {
     case 0xF01A:
         offset = (instance == 0x3D4) ? 50 : 66;
-        nametemplate = "%06i.emf";
-        mimetype = "application/octet-stream";
+        namesuffix = ".emf";
+        ref.mimetype = "application/octet-stream";
         break;
     case 0xF01B:
         offset = (instance == 0x216) ? 50 : 66;
-        nametemplate = "%06i.wmf";
-        mimetype = "application/octet-stream";
+        namesuffix = ".wmf";
+        ref.mimetype = "application/octet-stream";
         break;
     case 0xF01C:
         offset = (instance == 0x542) ? 50 : 66;
-        nametemplate = "%06i.pict";
-        mimetype = "image/pict";
+        namesuffix = ".pict";
+        ref.mimetype = "image/pict";
         break;
     case 0xF01D:
         offset = (instance == 0x46A) ? 17 : 33;
-        nametemplate = "%06i.jpg";
-        mimetype = "image/jpeg";
+        namesuffix = ".jpg";
+        ref.mimetype = "image/jpeg";
         break;
     case 0xF01E:
         offset = (instance == 0x6E0) ? 17 : 33;
-        nametemplate = "%06i.png";
-        mimetype = "image/png";
+        namesuffix = ".png";
+        ref.mimetype = "image/png";
         break;
     case 0xF01F:
         offset = (instance == 0x7A8) ? 17 : 33;
-        nametemplate = "%06i.dib";
-        mimetype = "application/octet-stream";
+        namesuffix = ".dib";
+        ref.mimetype = "application/octet-stream";
         break;
     case 0xF029:
         offset = (instance == 0x6E4) ? 17 : 33;
-        nametemplate = "%06i.tiff";
-        mimetype = "image/tiff";
+        namesuffix = ".tiff";
+        ref.mimetype = "image/tiff";
         break;
     case 0xF02A:
         offset = (instance == 0x46A) ? 17 : 33;
-        nametemplate = "%06i.jpg";
-        mimetype = "image/jpeg";
+        namesuffix = ".jpg";
+        ref.mimetype = "image/jpeg";
         break;
     default:
         offset = 0;
-        nametemplate = "%06i";
-        mimetype = "application/octet-stream";
+        namesuffix = "";
+        ref.mimetype = "application/octet-stream";
         break;
     }
 
     // skip offset
-    if (offset != 0 && stream.read(buffer, offset) != offset) return "";
+    if (offset != 0 && stream.read(buffer, offset) != offset) return ref;
     size -= offset;
 
     bool compressed = false;
@@ -181,18 +185,21 @@ savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
         compressed = buffer[offset-2] == 0;
     }
 
-    int n = sprintf((char*)buffer, nametemplate, position);
-    std::string filename((char*)buffer, n);
-
-    if (!out->open(filename.c_str())) {
-        return ""; // empty name reports an error
+    ref.uid = QByteArray((const char*)buffer, 16);
+    ref.name = ref.uid.toHex() + namesuffix;
+    if (!out->open(ref.name.toLocal8Bit())) {
+        ref.name.clear();
+        ref.uid.clear();
+        return ref; // empty name reports an error
     }
+    unsigned long next = stream.tell() + size;
     if (compressed) {
         saveDecompressedStream(stream, size, out);
     } else {
         saveStream(stream, size, out);
     }
+    stream.seek(next);
     out->close();
 
-    return filename;
+    return ref;
 }

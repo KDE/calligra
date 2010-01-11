@@ -20,6 +20,8 @@
 #ifndef LIBPPT_PRESENTATION
 #define LIBPPT_PRESENTATION
 
+#include <vector>
+#include <string>
 
 namespace Libppt
 {
@@ -127,6 +129,19 @@ public:
     * @return default character exception
     */
     TextCFException *defaultTextCFException();
+
+    /**
+     * @brief Set the list of image RgbUids
+     **/
+    void setBStore(const std::vector<std::string>& rgbuid);
+
+    /**
+     * @brief return the 16 byte RgbUid that corresponds to pib number in a
+     * presentation.
+     * The RgbUid corresponds to the RgbUid stored with the image in the
+     * Pictures stream.
+     **/
+    const char* getRgbUid(unsigned int bip) const;
 
 private:
     // no copy or assign

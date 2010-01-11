@@ -45,6 +45,12 @@
 namespace
 {
 
+// TODO: get proper definitions for uint16_t, uint32_t etc
+typedef int int16_t;
+typedef unsigned int uint16_t;
+typedef long int32_t;
+typedef unsigned long uint32_t;
+
 static inline unsigned long readU16(const void* p)
 {
     const unsigned char* ptr = (const unsigned char*) p;
@@ -535,8 +541,43 @@ msofbtDggContainer::msofbtDggContainer()
 
 const unsigned int msofbtBstoreContainer::id = 61441; /* F001 */
 
-msofbtBstoreContainer::msofbtBstoreContainer()
+class msofbtBstoreContainer::Private {
+public:
+    std::vector<std::string> rgbUids;
+    unsigned int pos;
+
+    Private() :pos(0) {}
+};
+
+msofbtBstoreContainer::msofbtBstoreContainer() :d(new Private())
 {
+}
+
+msofbtBstoreContainer::~msofbtBstoreContainer()
+{
+    delete d;
+}
+
+void
+msofbtBstoreContainer::addRgbUid(const char rgbUid[16])
+{
+    if (d->rgbUids.size() != instance()) {
+        d->rgbUids.resize(instance());
+    }
+    if (d->pos < d->rgbUids.size()) {
+        d->rgbUids[d->pos++].assign(rgbUid, 16);
+    }
+}
+
+std::vector<std::string>
+msofbtBstoreContainer::bstore() const
+{
+    if (d->pos == d->rgbUids.size()) {
+        return d->rgbUids;
+    }
+    std::vector<std::string> subset = d->rgbUids;
+    subset.resize(d->pos);
+    return subset;
 }
 
 // ========== msofbtDgContainer ==========
@@ -7344,12 +7385,36 @@ void msofbtSplitMenuColorsAtom ::dump(std::ostream& out) const
 
 const unsigned int msofbtBSEAtom::id = 61447; /* F007 */
 
-msofbtBSEAtom ::msofbtBSEAtom()
+class msofbtBSEAtom::Private {
+public:
+    char rgbUid[16];
+
+    Private() {
+        memset(rgbUid, 0, 16);
+    }
+};
+
+msofbtBSEAtom ::msofbtBSEAtom() :d(new Private())
 {
 }
 
 msofbtBSEAtom ::~msofbtBSEAtom()
 {
+    delete d;
+}
+
+void
+msofbtBSEAtom::setData(unsigned size, const unsigned char* data)
+{
+    if (size > 26) {
+        bcopy(data+2, d->rgbUid, 16);
+    }
+}
+
+const char*
+msofbtBSEAtom::rgbUid() const
+{
+    return d->rgbUid;
 }
 
 void msofbtBSEAtom ::dump(std::ostream& out) const
@@ -8214,10 +8279,9 @@ void PPTReader::loadRecord(Record* parent)
             // special treatment for StyleTextPropAtom
             if (type == StyleTextPropAtom::id) {
                 static_cast<StyleTextPropAtom*>(record)->setDataWithSize(size, buffer, d->lastNumChars);
-            } else
-             {    
+            } else {
                 record->setData(size, buffer);
-             }
+            }
             handleRecord(record, type);
             if (type == TextBytesAtom::id)
                 d->lastNumChars = static_cast<TextBytesAtom*>(record)->text().length();
@@ -8270,6 +8334,8 @@ void PPTReader::handleRecord(Record* record, int type)
         handleEscherChildAnchorAtom(static_cast<msofbtChildAnchorAtom*>(record)); break;
     case FontEntityAtom::id:
         handleFontEntityAtom(static_cast<FontEntityAtom*>(record)); break;
+    case msofbtBSEAtom::id:
+        handleBSEAtom(static_cast<msofbtBSEAtom*>(record)); break;
     default: 
       break;
     }
@@ -8358,6 +8424,10 @@ void PPTReader::handleContainer(Container* container, int type, unsigned size)
 
     case ProgBinaryTagContainer::id:
         handleProgBinaryTagContainer(static_cast<ProgBinaryTagContainer*>(container), size);
+        break;
+
+    case msofbtBstoreContainer::id:
+        handleBstoreContainer(static_cast<msofbtBstoreContainer*>(container), size);
         break;
 
     default:
@@ -8462,6 +8532,14 @@ void PPTReader::handleProgBinaryTagContainer(ProgBinaryTagContainer* /*r*/,
     }
 }
 
+void PPTReader::handleBstoreContainer(msofbtBstoreContainer* container,
+        unsigned int size)
+{
+    unsigned long nextpos = d->docStream->tell() + size - 6;
+    while (d->docStream->tell() < nextpos)
+        loadRecord(container);
+    d->presentation->setBStore(container->bstore());
+}
 
 void PPTReader::handleDocumentAtom(DocumentAtom* atom)
 {
@@ -9193,4 +9271,15 @@ void PPTReader::handleFontEntityAtom(FontEntityAtom* r)
 
     TextFont font(r->typeface(), r->charset(), r->clipPrecision(), r->quality(), r->pitchAndFamily());
     d->presentation->addTextFont(font);
+}
+
+void PPTReader::handleBSEAtom(msofbtBSEAtom* record)
+{
+    const msofbtBstoreContainer* const_bstore
+        = dynamic_cast<const msofbtBstoreContainer*>(record->parent());
+    msofbtBstoreContainer* bstore = const_cast<msofbtBstoreContainer*>(const_bstore);
+    if (bstore) {
+        bstore->addRgbUid(record->rgbUid());
+    }
+
 }

@@ -53,6 +53,12 @@ public:
     * settings for paragraph-level style and formatting.
     */
     TextPFException *textPFDefaultsAtom;
+
+    /**
+     * @brief list of rgbuid for the images in this presentation
+     * This data is obtained from the blipStore
+     **/
+    std::vector<std::string> bstore;
 };
 
 Presentation::Presentation()
@@ -85,6 +91,7 @@ void Presentation::clear()
     d->textCFDefaultsAtom = 0;
     d->textPFDefaultsAtom = 0;
     d->masterSlide = 0;
+    d->bstore.resize(0);
 }
 
 bool Presentation::load(const char* filename)
@@ -179,3 +186,12 @@ TextCFException *Presentation::defaultTextCFException()
     return d->textCFDefaultsAtom;
 }
 
+void Presentation::setBStore(const std::vector<std::string>& store)
+{
+    d->bstore = store;
+}
+
+const char* Presentation::getRgbUid(unsigned int bip) const
+{
+    return (d->bstore.size() > bip) ?d->bstore[bip].c_str() :0;
+}

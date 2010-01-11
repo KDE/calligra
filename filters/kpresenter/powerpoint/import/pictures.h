@@ -22,6 +22,12 @@
 #include <pole.h>
 #include <KoStore.h>
 
+struct PictureReference {
+    QString name;
+    QString mimetype;
+    QByteArray uid;
+};
+
 /**
  * Save the next picture record in the 'Pictures' stream into the ODF store.
  * The parameter @position is used to give the picture a unique name.
@@ -31,6 +37,6 @@
  * @return The name under which the image is saved or an empty string when
  *         an error occurred.
  **/
-std::string savePicture(POLE::Stream& stream, int position, KoStore* store, QString& mimetype);
+PictureReference savePicture(POLE::Stream& stream, KoStore* store);
 
 #endif

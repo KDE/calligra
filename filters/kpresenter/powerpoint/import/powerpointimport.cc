@@ -62,7 +62,7 @@ class PowerPointImport::Private
 public:
     QString inputFile;
     QString outputFile;
-    QList<QString> pictureNames;
+    QMap<QByteArray, QString> pictureNames;
 
     Presentation *presentation;
     DateTimeFormat *dateTime;
@@ -80,21 +80,20 @@ PowerPointImport::~PowerPointImport()
     delete d;
 }
 
-QStringList
+QMap<QByteArray, QString>
 createPictures(const char* filename, KoStore* store, KoXmlWriter* manifest)
 {
     POLE::Storage storage(filename);
-    QStringList fileNames;
+    QMap<QByteArray, QString> fileNames;
     if (!storage.open()) return fileNames;
     POLE::Stream* stream = new POLE::Stream(&storage, "/Pictures");
     while (!stream->eof() && !stream->fail()
             && stream->tell() < stream->size()) {
-        QString mimetype;
-        std::string name = savePicture(*stream, fileNames.size(), store,
-                                       mimetype);
-        manifest->addManifestEntry(name.c_str(), mimetype);
-        if (name.length() == 0) break;
-        fileNames.append(name.c_str());
+
+        PictureReference ref = savePicture(*stream, store);
+        if (ref.name.length() == 0) break;
+        manifest->addManifestEntry(ref.name, ref.mimetype);
+        fileNames[ref.uid] = ref.name;
     }
     storage.close();
     delete stream;
@@ -1293,14 +1292,12 @@ void PowerPointImport::processPictureFrame(DrawObject* drawObject, KoXmlWriter* 
     if (!drawObject || !xmlWriter) return;
 
     int picturePosition = drawObject->getIntProperty("pib") - 1;
-    QString url;
-    if (picturePosition >= 0 && picturePosition < d->pictureNames.size()) {
-        url = "Pictures/" + d->pictureNames[picturePosition];
-    } else {
-        url = "Error:" + QString::number(d->pictureNames.size())
-              + " != " + QString::number(picturePosition);
-        kWarning() << "Picture index is out of range.";
+    QString pictureName;
+    const char* rgbUid = d->presentation->getRgbUid(picturePosition);
+    if (rgbUid) {
+        pictureName = d->pictureNames[QByteArray(rgbUid, 16)];
     }
+    QString url = "Pictures/" + pictureName;
     QString widthStr = QString("%1mm").arg(drawObject->width());
     QString heightStr = QString("%1mm").arg(drawObject->height());
     QString xStr = QString("%1mm").arg(drawObject->left());
