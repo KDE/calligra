@@ -516,6 +516,8 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
         handleXF(static_cast<XFRecord*>(record));
     else if (type == ProtectRecord::id)
         handleProtect(static_cast<ProtectRecord*>(record));
+    else if (type == MsoDrawingGroupRecord::id)
+        handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord*>(record));
     else if (type == 0x40) {} //BackupRecord
     else if (type == 0x22) {} //Date1904Record
     else if (type == 0xA) {} //EofRecord
@@ -696,6 +698,12 @@ void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
   if (record->isLocked()) {
       std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
   }
+}
+
+void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* record)
+{
+    //TODO
+    printf("TODO GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
 }
 
 } // namespace Swinder

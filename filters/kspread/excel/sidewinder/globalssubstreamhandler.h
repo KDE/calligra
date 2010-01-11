@@ -47,6 +47,7 @@ class PaletteRecord;
 class SSTRecord;
 class XFRecord;
 class ProtectRecord;
+class MsoDrawingGroupRecord;
 
 class GlobalsSubStreamHandler : public SubStreamHandler
 {
@@ -98,6 +99,7 @@ private:
     void handleSST(SSTRecord* record);
     void handleXF(XFRecord* record);
     void handleProtect(ProtectRecord* record);
+    void handleMsoDrawingGroup(MsoDrawingGroupRecord* record);
 
     class Private;
     Private * const d;
