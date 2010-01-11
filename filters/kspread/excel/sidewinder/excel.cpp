@@ -1627,6 +1627,280 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     // gbo
 }
 
+// ========== DrawingObject ==========
+
+// read a OfficeArtRecordHeader struct.
+void DrawingObject::readHeader(const unsigned char* data, unsigned *recVer, unsigned *recInstance, unsigned *recType, unsigned long *recLen)
+{
+    const unsigned recVerAndInstance = readU16(data); // 4 bits version and 12 bits number of differentiate atoms in this record
+    if(recVer) {
+        const unsigned rv = recVerAndInstance;
+        *recVer = rv >> 12;
+    }
+    if(recInstance) {
+        const unsigned ri = recVerAndInstance;
+        *recInstance = ri >> 4;
+    }
+    if(recType) {
+        *recType = readU16(data + 2);
+    }
+    if(recLen) {
+        *recLen = readU32(data + 4);
+    }
+}
+
+// read a drawing object (container or atom) and handle/dispatch according to the recType.
+unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* data)
+{
+    unsigned recVer = 0;
+    unsigned recInstance = 0;
+    unsigned recType = 0;
+    unsigned long recLen = 0;
+    readHeader(data, &recVer, &recInstance, &recType, &recLen);
+    switch(recType) {
+        case 0xF003: // OfficeArtSpgrContainer
+        case 0xF004: { // OfficeArtSpContainer
+            unsigned long offset = 8;
+            while(offset <= recLen) {
+                offset += handleObject(size, data + offset);
+            }
+        } break;
+        case 0xF008: { // OfficeArtFDG
+            unsigned long csp = readU32(data + 8);
+            unsigned long spid = readU32(data + 12); // MSOSPID, shape-identifier of the last shape in the drawing
+            printf("OfficeArtFDG, number of shapes=%i, shapeId of last shape=%i\n", csp, spid);
+        } break;
+        case 0xF009: { // OfficeArtFSPGR
+            printf("OfficeArtFSPGR %i\n",recLen);
+            //xLeft = readU32(data + 8);
+            //yTop = readU32(data + 12);
+            //xRight = readU32(data + 16);
+            //yBottom = readU32(data + 20);
+        } break;
+        case 0xF00A: { // OfficeArtFSP
+            unsigned long spid = readU32(data + 8); // MSOSPID, shape-identifier of the last shape in the drawing
+            printf("OfficeArtFSP, shapeId of current shape=%i\n", spid);
+        } break;
+        case 0xF11D: // OfficeArtFPSPL
+            printf("OfficeArtFPSPL %i\n",recLen);
+            break;
+        case 0xF00B: { // OfficeArtFOPT
+            printf("OfficeArtFPSPL %i\n",recLen);
+            for(int i = 0; i < recInstance; ++i) {
+                const unsigned long opidOpts = readU16(data + 8 + i * 6);
+                const unsigned long opid = opidOpts >> 2;
+                const bool fBid = opidOpts & 0x04000; // BLIP identifier?
+                const bool fComplex = opidOpts & 0x08000; // Complex property?
+                const unsigned long op = readS32(data + 10 + i * 6);
+                if(fComplex) { // op specifies the size of the property in the ComplexData
+                    // ...
+                } else {
+                    if(fBid) { // of specifies the BLIP identifier
+                        // ...
+                    } else { // the property value itself
+                        // ...
+                    }
+                }
+                printf("MsoDrawingRecord: opid=%x fBid=%i fComplex=%i op=%i\n",opid,fBid,fComplex,op);
+            }
+            const unsigned char* startComplexData = data + 8 + recInstance * 6;
+            printf("MsoDrawingRecord: complexDataLength=%i\n",recLen-(recInstance * 6));
+            //TODO
+        } break;
+        case 0xF121: // OfficeArtSecondaryFOPT
+            printf("OfficeArtSecondaryFOPT %i\n",recLen);
+            break;
+        case 0xF122: // OfficeArtTertiaryFOPT
+            printf("OfficeArtTertiaryFOPT %i\n",recLen);
+            break;
+        case 0xF00F: // OfficeArtChildAnchor
+            printf("OfficeArtChildAnchor %i\n",recLen);
+            break;
+        case 0xF010: // OfficeArtChildAnchorHF, OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart
+            switch(recLen) {
+                case 8: printf("OfficeArtChildAnchorHF %i\n",recLen); break;
+                case 18: printf("OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart %i\n",recLen); break;
+                default: printf("Unhandled OfficeArtChildAnchor type=%i\n",recLen);
+            }
+            break;
+        case 0xF011: // OfficeArtClientData
+            printf("OfficeArtClientData %i\n",recLen);
+            break;
+                    
+        default:
+            printf("Unhandled record type=%i size=%i\n",recType,recLen);
+    }
+    return 8 + recLen;
+}
+
+// ========== MsoDrawing ==========
+
+const unsigned MsoDrawingRecord::id = 0xEC;
+
+void MsoDrawingRecord::dump(std::ostream& out) const
+{
+    out << "MsoDrawingRecord" << std::endl;
+}
+
+void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+{
+    if(size < 24) {
+        setIsValid(false);
+        return;
+    }
+
+    //printf("MsoDrawingRecord: START_POS %i\n",data+0);
+    
+    // rh
+    unsigned recType = 0;
+    unsigned long recLen = 0;
+    readHeader(data, 0, 0, &recType, &recLen);
+    if(recType < 0xF000 || recType > 0xFFFF) {
+        std::cerr << "Invalid MsoDrawing record" << std::endl;
+        setIsValid(false);
+        return;
+    }
+    
+    unsigned long offset = 8;
+    while(offset + 8 <= size) {
+        offset += handleObject(size, data + offset);
+    }
+
+    //printf("MsoDrawingRecord: END_POS %i, recLen=%i\n",data+offset,recLen);
+}
+
+// ========== MsoDrawingGroup ==========
+
+const unsigned MsoDrawingGroupRecord::id = 0xEB;
+
+MsoDrawingGroupRecord::MsoDrawingGroupRecord() : Record() {}
+MsoDrawingGroupRecord::~MsoDrawingGroupRecord() {}
+
+void MsoDrawingGroupRecord::dump(std::ostream& out) const
+{
+    out << "MsoDrawingGroupRecord" << std::endl;
+}
+
+void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+{
+    if(size < 8) {
+        setIsValid(false);
+        return;
+    }
+
+    unsigned recVer = 0;
+    unsigned recInstance = 0;
+    unsigned recType = 0;
+    unsigned long recLen = 0;
+    readHeader(data, &recVer, &recInstance, &recType, &recLen);
+    if(recType != 0xF000) {
+        std::cerr << "Invalid MsoDrawingGroup record" << std::endl;
+        setIsValid(false);
+        return;
+    }
+    
+    // drawingGroup
+    readHeader(data + 8, &recVer, &recInstance, &recType, &recLen);
+    Q_ASSERT(recType == 0xF006);
+    unsigned long spidMax = readU32(data + 16);
+    unsigned long cidcl = readU32(data + 20);
+    unsigned long cspSaved = readU32(data + 24);
+    unsigned long cdgSaved = readU32(data + 28);
+    std::cout << "MsoDrawingGroupRecord: spidMax=" << spidMax << " cidcl=" << cidcl << " cspSaved=" << cspSaved << " cdgSaved=" << cdgSaved << std::endl;
+    for(int i = 0; i < cidcl; ++i) {
+        unsigned long dgid = readU32(data + 32 + (i * 8));
+        unsigned long cspidCur = readU32(data + 36 + (i * 8));
+        std::cout << "dgid=" << dgid << " cspidCur=" << cspidCur << std::endl;
+    }
+    
+    // blipStore
+    //const unsigned char* blipStoreOffset = data + 32 + (cidcl * 8);
+    const unsigned char* blipStoreOffset = data + 16 + recLen;
+    readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &recLen);
+    Q_ASSERT(recType == 0xF001);
+    blipStoreOffset += 8;
+    for(int i = 0; i < recInstance; ++i) {
+        unsigned long blibRecLen = 0;
+        readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
+        if(recType == 0xF007) { // OfficeArtFBSE
+            std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
+            unsigned btWin32 = readU8(blipStoreOffset + 8);
+            unsigned btMacOS = readU8(blipStoreOffset + 9);
+            switch(btWin32) {
+                case 0x00: printf("MsoDrawingGroupRecord: There was an error reading the file.\n"); break;
+                case 0x01: printf("MsoDrawingGroupRecord: Unknown BLIP type.\n"); break;
+                case 0x02: printf("MsoDrawingGroupRecord: EMF format.\n"); break;
+                case 0x03: printf("MsoDrawingGroupRecord: WMF format.\n"); break;
+                case 0x04: printf("MsoDrawingGroupRecord: Macintosh PICT format.\n"); break;
+                case 0x05: printf("MsoDrawingGroupRecord: JPEG format.\n"); break;
+                case 0x06: printf("MsoDrawingGroupRecord: PNG format.\n"); break;
+                case 0x07: printf("MsoDrawingGroupRecord: DIB format.\n"); break;
+                case 0x11: printf("MsoDrawingGroupRecord: TIFF format.\n"); break;
+                case 0x12: printf("MsoDrawingGroupRecord: JPEG format in YCCK or CMYK color space.\n"); break;
+            }
+            char rgbUid[16];
+            for(int i = 0; i < 16; ++i)
+                rgbUid[i] = readU8(blipStoreOffset + 10 + i);
+            unsigned tag = readU16(blipStoreOffset + 26);
+            unsigned long size = readU32(blipStoreOffset + 28);
+            unsigned long cRef = readU32(blipStoreOffset + 32);
+            unsigned long foDelay = readU32(blipStoreOffset + 36);
+            // 1 unused byte
+            unsigned long cbName = readU8(blipStoreOffset + 41);
+            // 2 unused bytes
+            UString nameData;
+            const unsigned char* embeddedBlipOffset = data + 44;
+            if(cbName > 0x00) {
+                nameData = readByteString(embeddedBlipOffset, size);
+                embeddedBlipOffset += size;
+            }
+            // OfficeArtBlip
+            readHeader(embeddedBlipOffset, &recVer, &recInstance, &recType, &recLen);
+            switch(recType) {
+                case 0xF01A:
+                    printf("OfficeArtBlipEMF\n");
+                    break;
+                case 0xF01B:
+                    printf("OfficeArtBlipWMF\n");
+                    break;
+                case 0xF01C:
+                    printf("OfficeArtBlipPICT\n");
+                    break;
+                case 0xF01D:
+                case 0xF02A:
+                    printf("OfficeArtBlipJPEG\n");
+                    break;
+                case 0xF01E:
+                    printf("OfficeArtBlipPNG\n");
+                    break;
+                case 0xF01F:
+                    printf("OfficeArtBlipDIB\n");
+                    break;
+                case 0xF029:
+                    printf("OfficeArtBlipTIFF\n");
+                    break;
+                default:
+                    printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
+                    break;
+            }
+
+            std::cout << "nameData=" << nameData.ascii() << " rgbUid" << rgbUid << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
+        } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
+            std::cout << "TODO: MsoDrawingGroupRecord: OfficeArtBlip" << std::endl;
+            //TODO
+        } else {
+            std::cerr << "MsoDrawingGroupRecord: Unknown OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
+        }
+        blipStoreOffset += 8 + blibRecLen;
+    }
+    
+    Q_ASSERT(false);
+    // draingPrimaryOptions
+    // draingTertiaryOptions
+    // colorMRU
+    // splitColors
+}
+
 // ========== XF ==========
 
 const unsigned int XFRecord::id = 0x00e0;
@@ -2248,6 +2522,16 @@ static Record* createObjRecord()
     return new ObjRecord();
 }
 
+static Record* createRecordMsoDrawingRecord()
+{
+    return new MsoDrawingRecord();
+}
+
+static Record* createMsoDrawingGroupRecord()
+{
+    return new MsoDrawingGroupRecord();
+}
+
 static void registerAllRecordClasses()
 {
     registerRecordClasses();
@@ -2264,6 +2548,8 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(SSTRecord::id, createSSTRecord);
     RecordRegistry::registerRecordClass(XFRecord::id, createXFRecord);
     RecordRegistry::registerRecordClass(ObjRecord::id, createObjRecord);
+    RecordRegistry::registerRecordClass(MsoDrawingRecord::id, createRecordMsoDrawingRecord);
+    RecordRegistry::registerRecordClass(MsoDrawingGroupRecord::id, createMsoDrawingGroupRecord);
 }
 
 void printEntries(POLE::Storage &storage, const std::string path = "/", int level = 0)
@@ -2515,29 +2801,37 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
 
-            if (next_type == 0x3C) {
-                // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
-                continuePositions[continuePositionsCount++] = size;
-                if (continuePositionsCount >= continuePositionsSize) {
-                    continuePositionsSize *= 2;
-                    continuePositions = (unsigned int *) realloc(continuePositions, continuePositionsSize * sizeof(int));
-                }
+            switch(next_type) {
+                case 0x3C: {
+                    // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
+                    continuePositions[continuePositionsCount++] = size;
+                    if (continuePositionsCount >= continuePositionsSize) {
+                        continuePositionsSize *= 2;
+                        continuePositions = (unsigned int *) realloc(continuePositions, continuePositionsSize * sizeof(int));
+                    }
 
-                // first verify the buffer is large enough to hold all the data
-                if ((size + next_size) > buffer_size) {
-                    buffer = (unsigned char *) realloc(buffer, size + next_size);
-                    buffer_size = size + next_size;
-                }
+                    // first verify the buffer is large enough to hold all the data
+                    if ((size + next_size) > buffer_size) {
+                        buffer = (unsigned char *) realloc(buffer, size + next_size);
+                        buffer_size = size + next_size;
+                    }
 
-                // next read the data of the record
-                bytes_read = stream->read(buffer + size, next_size);
-                if (bytes_read != next_size) {
-                    std::cout << "ERROR!" << std::endl;
-                    break;
-                }
+                    // next read the data of the record
+                    bytes_read = stream->read(buffer + size, next_size);
+                    if (bytes_read != next_size) {
+                        std::cout << "ERROR!" << std::endl;
+                        break;
+                    }
 
-                // and finally update size
-                size += next_size;
+                    // and finally update size
+                    size += next_size;
+                    //printf("CONTINUES RECORD, type=%i fromPos=%i size=%i\n",type,buffer+size,next_size);
+                } break;
+                case 0x5D: { // ObjRecord
+                    
+
+                    
+                } break;
             }
         } while (next_type == 0x3C);
 

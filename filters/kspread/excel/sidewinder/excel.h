@@ -867,6 +867,48 @@ public:
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 };
 
+class DrawingObject
+{
+public:
+    DrawingObject() {}
+    ~DrawingObject() {}
+protected:
+    void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0, unsigned *recType = 0, unsigned long *recLen = 0);
+    unsigned long handleObject(unsigned size, const unsigned char* data);
+};
+
+class MsoDrawingRecord : public Record, private DrawingObject
+{
+public:
+    static const unsigned id;
+    MsoDrawingRecord() : Record() {}
+    virtual ~MsoDrawingRecord() {}
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "MsoDrawing";
+    }
+    virtual void dump(std::ostream&) const;
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+};
+
+class MsoDrawingGroupRecord : public Record, private DrawingObject
+{
+public:
+    static const unsigned id;
+    MsoDrawingGroupRecord();
+    virtual ~MsoDrawingGroupRecord();
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "MsoDrawingGroup";
+    }
+    virtual void dump(std::ostream&) const;
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+};
+
 /**
   Class XFRecord holds information of XF (eXtended Format) which specifies
   many kind of properties of a specific cell. It will be referred

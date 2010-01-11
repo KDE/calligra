@@ -67,6 +67,7 @@ class SetupRecord;
 class HCenterRecord;
 class VCenterRecord;
 class ZoomLevelRecord;
+class MsoDrawingRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler
 {
@@ -110,6 +111,7 @@ private:
     void handleHCenter(HCenterRecord *record);
     void handleVCenter(VCenterRecord *record);
     void handleZoomLevel(ZoomLevelRecord *record);
+    void handleMsoDrawing(MsoDrawingRecord* record);
 
     UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
     UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
