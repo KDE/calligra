@@ -51,14 +51,14 @@ else if( type == KoGenStyle::StyleNumericPercentage && TYPE == KoGenStyle::Style
 else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericPercentage )  \
 {                                                                                                \
     type = TYPE;                                                                                 \
-}                                                                                                \             
+}                                                                                                \
 else if( type == KoGenStyle::StyleNumericFraction && TYPE == KoGenStyle::StyleNumericNumber )    \
 {                                                                                                \
 }                                                                                                \
 else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericFraction )    \
 {                                                                                                \
     type = TYPE;                                                                                 \
-}                                                                                                \             
+}                                                                                                \
 else if( type != KoGenStyle::StyleAuto && type != TYPE )                                         \
 {                                                                                                \
     return KoGenStyle( KoGenStyle::StyleAuto );                                                  \
@@ -122,7 +122,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         // condition or color or locale...
         case '[':
             {
-                const char ch = numberFormat[ ++i ].toLatin1();
+                const char ch = i < numberFormat.length() - 1 ? numberFormat[ ++i ].toLatin1() : ']';
                 if( ( ch >= 'a' && ch <= 'z' ) || ( ch >= 'A' && ch <= 'Z' ) )
                 {
                     // color code
@@ -320,9 +320,20 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 xmlWriter.startElement( "number:day" );
                 if( isLong )
                     xmlWriter.addAttribute( "number:style", "long" );
+                xmlWriter.endElement();
             }
-            xmlWriter.endElement();
+            else
+            {
+                xmlWriter.startElement( "number:day-of-week" );
+                if( isLongest )
+                    xmlWriter.addAttribute( "number:style", "long" );
+                xmlWriter.endElement();
+            }
             if( isLong )
+                ++i;
+            if( isLonger )
+                ++i;
+            if( isLongest )
                 ++i;
             break;
 
