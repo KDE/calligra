@@ -37,22 +37,35 @@ void NumberFormatParser::setStyles( KoGenStyles* styles )
 }
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \
-\
-if( type == KoGenStyle::StyleNumericDate && TYPE == KoGenStyle::StyleNumericTime )          \
-{                                                                                           \
-}                                                                                           \
-else if( type == KoGenStyle::StyleNumericTime && TYPE == KoGenStyle::StyleNumericDate )     \
-{                                                                                           \
-    type = TYPE;                                                                            \
-}                                                                                           \
-else if( type != KoGenStyle::StyleAuto && type != TYPE )                                    \
-{                                                                                           \
-    return KoGenStyle( KoGenStyle::StyleAuto );                                             \
-}                                                                                           \
-else                                                                                        \
-{                                                                                           \
-    type = TYPE;                                                                            \
-}                                                                                           \
+if( type == KoGenStyle::StyleNumericDate && TYPE == KoGenStyle::StyleNumericTime )               \
+{                                                                                                \
+}                                                                                                \
+else if( type == KoGenStyle::StyleNumericTime && TYPE == KoGenStyle::StyleNumericDate )          \
+{                                                                                                \
+    type = TYPE;                                                                                 \
+}                                                                                                \
+else if( type == KoGenStyle::StyleNumericPercentage && TYPE == KoGenStyle::StyleNumericNumber )  \
+{                                                                                                \
+}                                                                                                \
+else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericPercentage )  \
+{                                                                                                \
+    type = TYPE;                                                                                 \
+}                                                                                                \             
+else if( type == KoGenStyle::StyleNumericFraction && TYPE == KoGenStyle::StyleNumericNumber )    \
+{                                                                                                \
+}                                                                                                \
+else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericFraction )    \
+{                                                                                                \
+    type = TYPE;                                                                                 \
+}                                                                                                \             
+else if( type != KoGenStyle::StyleAuto && type != TYPE )                                         \
+{                                                                                                \
+    return KoGenStyle( KoGenStyle::StyleAuto );                                                  \
+}                                                                                                \
+else                                                                                             \
+{                                                                                                \
+    type = TYPE;                                                                                 \
+}                                                                                                \
 }
 
 #define FINISH_PLAIN_TEXT_PART {             \
@@ -134,6 +147,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             case '.':
             case ',':
             case '#':
+            case '/':
             case '0':
             case ';':
             case '@':
@@ -160,10 +174,30 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         {
         // condition or color or locale...
         case '[':
-            // ignore for now
-            while( i < numberFormat.length() && numberFormat[ i ] != QLatin1Char( ']' ) )
-                ++i;
+            {
+                const char ch = numberFormat[ ++i ].toLatin1();
+                if( ( ch >= 'a' && ch <= 'z' ) || ( ch >= 'A' && ch <= 'Z' ) )
+                {
+                    // color code
+                    QString colorName;
+                    while( i < numberFormat.length() && numberFormat[ i ] != QLatin1Char( ']' ) )
+                        colorName += numberFormat[ i++ ];
+                    
+                }
+                else
+                {
+                    // unknown - no idea, skip
+                    while( i < numberFormat.length() && numberFormat[ i ] != QLatin1Char( ']' ) )
+                        ++i;
+                }
+            }
             break;
+
+        // fraction
+        case '/':
+            FINISH_PLAIN_TEXT_PART
+            xmlWriter.startElement( "number:text" );
+            xmlWriter.endElement;
 
         // percentage
         case '%':
@@ -179,6 +213,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         case ',':
         case '#':
         case '0':
+        case '/':
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericNumber )
             FINISH_PLAIN_TEXT_PART
             {
@@ -198,12 +233,20 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                         ++integerDigits;
                     else if( ch == '0' && gotDot )
                         ++decimalPlaces;
+                    else if( ch == '?' )
+                    { // no idea how to handle... }
+                    else if( ch == '/' )
+                    {
+                        SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericFraction );
+                        if( gotDot || grouping )
+                            return KoGenStyle();
+                    }
 
                     ch = numberFormat[ ++i ].toLatin1();
                 }
-                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' ) );
+                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == '/' || ch == '?' ) );
                
-                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' ) )
+                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == '/' || ch == '?' ) )
                     --i;
 
                 xmlWriter.startElement( "number:nmber" );
