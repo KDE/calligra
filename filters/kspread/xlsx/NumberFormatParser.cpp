@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
+#include <QDebug>
 #include <QString>
 
 KoGenStyles* NumberFormatParser::styles = 0;
@@ -192,12 +193,6 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 }
             }
             break;
-
-        // fraction
-        case '/':
-            FINISH_PLAIN_TEXT_PART
-            xmlWriter.startElement( "number:text" );
-            xmlWriter.endElement;
 
         // percentage
         case '%':
@@ -437,6 +432,8 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     }
 
     buffer.close();
+    
+    qDebug() << buffer.data();
 
     return styleFromTypeAndBuffer( type, buffer );
 }
