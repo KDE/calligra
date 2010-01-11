@@ -31,6 +31,8 @@
 
 #include "MsooXmlReader_p.h"
 
+#include <QPalette>
+
 #include <memory>
 
 using namespace MSOOXML;
@@ -41,6 +43,48 @@ DrawingMLColorSchemeItem::DrawingMLColorSchemeItem()
 
 DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 {
+}
+
+QColor DrawingMLColorSchemeSystemItem::value() const
+{
+kDebug() << systemColor;
+    //! 20.1.10.58 ST_SystemColorVal (System Color Value)
+    if (   systemColor == QLatin1String("windowText")
+        || systemColor == QLatin1String("menuText"))
+    {
+//        return QPalette().color(QPalette::Active, QPalette::WindowText);
+        return QPalette().color(QPalette::Active, QPalette::Window);
+    }
+    else if (    systemColor == QLatin1String("window")
+              || systemColor == QLatin1String("menu")
+              || systemColor == QLatin1String("menuBar"))
+    {
+//        return QPalette().color(QPalette::Active, QPalette::Window);
+        return QPalette().color(QPalette::Active, QPalette::WindowText);
+    }
+    else if (systemColor == QLatin1String("highlightText")) {
+        return QPalette().color(QPalette::Active, QPalette::HighlightedText);
+    }
+    else if (systemColor == QLatin1String("highlight")) {
+        return QPalette().color(QPalette::Active, QPalette::Highlight);
+    }
+    else if (systemColor == QLatin1String("grayText")) {
+        return QPalette().color(QPalette::Disabled, QPalette::WindowText);
+    }
+    else if (systemColor == QLatin1String("btnText")) {
+        return QPalette().color(QPalette::Active, QPalette::ButtonText);
+    }
+    else if (systemColor == QLatin1String("btnFace")) {
+        return QPalette().color(QPalette::Active, QPalette::Button);
+    }
+    else if (systemColor == QLatin1String("btnHighlight")) {
+        return QPalette().color(QPalette::Active, QPalette::Light);
+    }
+    else if (systemColor == QLatin1String("btnShadow")) {
+        return QPalette().color(QPalette::Active, QPalette::Dark);
+    }
+//! @todo Use more of systemColor
+    return lastColor;
 }
 
 DrawingMLColorSchemeItemBase::DrawingMLColorSchemeItemBase()
@@ -421,7 +465,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - prstClr (Preset Color) §20.1.2.3.22
- - schemeClr (Scheme Color) §20.1.2.3.29
+ - [unsupported by MSO] schemeClr (Scheme Color) §20.1.2.3.29
  - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
  - sysClr (System Color) §20.1.2.3.33

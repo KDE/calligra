@@ -313,6 +313,19 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         destination = val; \
     }
 
+//! Creates condition that checks what's the calling method (what means parent element)
+//! Example use:
+/*! @code
+    ... read_foo()
+    {
+      ReadMethod caller = m_calls.top(); // <-- needed
+      ...
+      if (CALLER_IS(r)) {
+        ...
+      }
+    }
+    @endcode
+*/
 #define CALLER_IS(name) \
     (caller == PASTE(&MSOOXML_CURRENT_CLASS::read_, name))
 

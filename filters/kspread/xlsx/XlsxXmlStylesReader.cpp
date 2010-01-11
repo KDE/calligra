@@ -56,13 +56,13 @@ const int HLSMAX = 255; //!< Used for computing tint
 */
 static QColor tintedColor(const QColor& color, qreal tint)
 {
-kDebug() << "rgb:" << color.name() << "tint:" << tint;
+//kDebug() << "rgb:" << color.name() << "tint:" << tint;
     if (tint == 0.0 || !color.isValid()) {
         return color;
     }
     int h, l, s;
     rgb_to_hls(color.red(), color.green(), color.blue(), &h, &l, &s);
-//    rgb_to_hls(0xc6, 0xd9, 0xf1, &h, &l, &s);
+//    rgb_to_hls(0xec, 0xec, 0xec, &h, &l, &s);
 //kDebug() << "hls before:" << h << l << s;
     if (tint < 0.0) {
         l = floor( l * (1.0 + tint) );
@@ -70,10 +70,10 @@ kDebug() << "rgb:" << color.name() << "tint:" << tint;
     else {
         l = floor( l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)) );
     }
-kDebug() << "hls after:" << h << l << s;
+//kDebug() << "hls after:" << h << l << s;
     quint8 r, g, b;
     hls_to_rgb(h, l, s, &r, &g, &b);
-kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
+//kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
     return QColor(r, g, b, color.alpha());
 }
 
@@ -350,16 +350,8 @@ void XlsxFontStyle::setupCellTextStyle(
         cellStyle->addProperty("fo:font-family", name, KoGenStyle::TextType);
     }
     if (color.isValid(themes)) {
-//<workaround>
-//! @todo remove this ugly fix when we find a better way to work with themes
-        QColor c(color.value(themes));
-if (c.name() == "#ffffff") {
-        cellStyle->addProperty("fo:color", "#000000", KoGenStyle::TextType);
-}
-else {
+        const QColor c(color.value(themes));
         cellStyle->addProperty("fo:color", c.name(), KoGenStyle::TextType);
-}
-//<workaround>
     }
     //! @todo implement more styling
 }
@@ -1101,6 +1093,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
  - [done] xf (Format) §18.8.45
  Parent elements:
  - [done] styleSheet (§18.8.39)
+
+ @note cellStyleXfs: the standard states that both the cell style xf records and cell xf records
+       must be read to understand the full set of formatting applied to a cell.
+       In MSO, only the cell xf record defines the formatting applied to a cell.
+       See <a href="http://www.documentinteropinitiative.org/implnotes/implementationnotelist.aspx?id=dd2615fe-aa8d-4a06-a415-13389919cf36&specname=ecma-376">here</a>.
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 {

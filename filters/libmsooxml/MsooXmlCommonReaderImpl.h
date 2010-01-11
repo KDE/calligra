@@ -289,6 +289,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
             ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(highlight)
             ELSE_TRY_READ_IF(lang)
+            ELSE_TRY_READ_IF(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -623,6 +624,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(shd)
             ELSE_TRY_READ_IF(jc)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -634,6 +636,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
         setupParagraphStyle();
     #endif
     */
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL shd
+//! Shading handler (object's shading attributes)
+/*! ECMA-376, 17.3.5, p.399
+ Parent Elements:
+ - [done] pPr (Paragraph Properties) §17.3.1.26
+ Attributes:
+ - color (Shading Pattern Color)
+ - fill (Shading Background Color)
+ - themeColor (Shading Pattern Theme Color)
+ - themeFill (Shading Background Theme Color)
+ - themeFillShade (Shading Background Theme Color Shade)
+ - themeFillTint (Shading Background Theme Color Tint)
+ - themeShade (Shading Pattern Theme Color Shade)
+ - themeTint (Shading Pattern Theme Color Tint)
+ - [done] val (Shading Pattern)
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shd()
+{
+    ReadMethod caller = m_calls.top();
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(val)
+    TRY_READ_ATTR(color)
+kDebug() << m_callsNames;
+    if (!color.isEmpty() && color != MsooXmlReader::constAuto) {
+        QColor clr(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
+        if (CALLER_IS(rPr) && clr.isValid() && (val.compare("solid", Qt::CaseInsensitive) == 0)) {
+            m_currentTextStyleProperties->setBackground(clr);
+        }
+    }
+
+    TRY_READ_ATTR(fill)
+    QString fillColor = fill.toLower();
+    if (!fillColor.isEmpty() && fillColor != MsooXmlReader::constAuto) {
+        fillColor.prepend("#");
+        if (CALLER_IS(pPr)) {
+            m_currentParagraphStyle.addProperty("fo:background-color", fillColor);
+        }
+    }
+    readNext();
     READ_EPILOGUE
 }
 

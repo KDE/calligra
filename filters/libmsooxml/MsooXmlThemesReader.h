@@ -60,10 +60,8 @@ class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchem
 {
 public:
     DrawingMLColorSchemeSystemItem();
-    virtual QColor value() const {
-//! @todo use systemColor too...
-        return lastColor;
-    }
+    virtual QColor value() const;
+
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).
 };
