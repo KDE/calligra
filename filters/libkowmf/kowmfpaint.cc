@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 
-#define DEBUG_WMFPAINT 1
+#define DEBUG_WMFPAINT 0
 
 
 KoWmfPaint::KoWmfPaint()
@@ -473,19 +473,39 @@ void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int 
 void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& s, double)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << " " << y << " " << w << " " << w << " " << h << " " << s;
+    kDebug(31000) << x << " " << y << " " << w << " " << h << " " << flags << " " << s;
 #endif
+
+    // This enum is taken from the karbon WMF import filter.
+    // FIXME: This is just a small subset of the align flags that WMF defines.  
+    //        They should all be handled.
+    enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
+
+    if (flags & CurrentPosition) {
+        // (left, top) position = current logical position
+        x = mLastPos.x();
+        y = mLastPos.y();
+    }
+
+    // If this flag is set, the point to draw the text is the
+    // baseline, otherwise it should be the upper left corner.
+    if (!(flags & AlignBottom)) {
+        QFontMetrics  fontMetrics(mPainter->font(), mTarget);
+        y += fontMetrics.ascent();
+
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
+                      << "ascent = " << fontMetrics.ascent() << " height = " << fontMetrics.height()
+                      << "leading = " << fontMetrics.leading();
+#endif
+    }
+
     // Sometimes it happens that w and/or h == -1, and then the
     // bounding box isn't valid any more.  In that case, no text at
     // all is shown.
-    if (w == -1 || h == -1) {
-        // We want the text to appear with x,y in the upper left corner
-        // so we have to add the ascent of the font to the y value.
-        QFontMetrics  fontMetrics(mPainter->font());
-        y += fontMetrics.ascent();
-
+    if (w == -1 || h == -1)
         mPainter->drawText(x, y, s);
-    }
     else
-        mPainter->drawText(x, y, w, h, flags, s);
+        // FIXME: Find out which Qt flags should be there instead of the 0.
+        mPainter->drawText(x, y, w, h, 0, s);
 }
