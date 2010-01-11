@@ -6,7 +6,7 @@ find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 INCLUDE(${QT_USE_FILE})
 
-include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES})
+include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
