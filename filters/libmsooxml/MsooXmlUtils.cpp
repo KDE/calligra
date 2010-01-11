@@ -357,6 +357,7 @@ public:
         INSERT_HC("lightGray", 0xc0c0c0);
         INSERT_HC("magenta", 0xff00ff);
         INSERT_HC("red", 0xff0000);
+        INSERT_HC("yellow", 0xffff00);
         INSERT_HC("white", 0xffffff);
 #undef INSERT_HC
     }
@@ -496,6 +497,34 @@ public:
         insert("single",
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight)
+              );
+        insert("words",
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight, KoCharacterStyle::SkipWhiteSpaceLineMode)
+              );
+        insert("thick",
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::BoldLineWeight)
+              );
+        insert("dash",
+               new UnderlineStyle(KoCharacterStyle::DashLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("dotDash",
+               new UnderlineStyle(KoCharacterStyle::DotDashLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("dotDotDash",
+               new UnderlineStyle(KoCharacterStyle::DotDotDashLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("wave",
+               new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("wavyHeavy",
+               new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::BoldLineWeight)
               );
 //! @todo more styles
 
