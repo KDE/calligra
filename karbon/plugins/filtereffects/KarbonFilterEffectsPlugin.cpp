@@ -29,13 +29,13 @@
 
 #include "KoFilterEffectRegistry.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 
-K_EXPORT_COMPONENT_FACTORY(
-    karbonfiltereffects,
-    KGenericFactory<KarbonFilterEffectsPlugin>( "FilterEffects" ) )
 
-KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QStringList& )
+K_PLUGIN_FACTORY(KarbonFilterEffectsPluginFacory, registerPlugin<KarbonFilterEffectsPlugin>();)
+K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
+
+KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QList<QVariant>& )
     : QObject(parent)
 {
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory(parent));

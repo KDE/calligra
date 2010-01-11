@@ -26,7 +26,7 @@ class KarbonFilterEffectsPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KarbonFilterEffectsPlugin(QObject * parent,  const QStringList & );
+    KarbonFilterEffectsPlugin(QObject * parent, const QList<QVariant>& );
     ~KarbonFilterEffectsPlugin() {}
 };
 
