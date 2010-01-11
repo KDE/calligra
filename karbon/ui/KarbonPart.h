@@ -118,9 +118,6 @@ protected slots:
     /// reimplemented from KoDocument
     virtual void openTemplate(const KUrl& url);
 
-    /// change the unit
-    void updateUnit( const KoUnit &unit );
-
 private:
     class Private;
     Private * const d;

@@ -61,7 +61,6 @@ class KarbonDocument::Private
 public:
     Private()
     : pageSize(0.0, 0.0)
-    , unit( KoUnit::Millimeter )
     , hasExternalDataCenterMap(false)
     {
         // Ask every shapefactory to populate the dataCenterMap
@@ -87,7 +86,6 @@ public:
     QList<KoShape*> objects;     ///< The list of all object of the document.
     QList<KoShapeLayer*> layers; ///< The layers in this document.
 
-    KoUnit unit; ///< The unit.
     QMap<QString, KoDataCenter*> dataCenterMap;
     bool hasExternalDataCenterMap;
 };
@@ -284,16 +282,6 @@ void KarbonDocument::setPageSize( QSizeF pageSize )
 const QList<KoShape*> KarbonDocument::shapes() const
 {
     return d->objects;
-}
-
-KoUnit KarbonDocument::unit() const
-{
-    return d->unit;
-}
-
-void KarbonDocument::setUnit( KoUnit unit )
-{
-    d->unit = unit;
 }
 
 const QList<KoShapeLayer*> KarbonDocument::layers() const

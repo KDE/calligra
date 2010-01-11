@@ -366,7 +366,7 @@ QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
 }
 
 KoUnit KarbonCanvas::unit() const {
-    return d->document->unit();
+    return d->part->unit();
 }
 
 QPoint KarbonCanvas::documentOrigin() const

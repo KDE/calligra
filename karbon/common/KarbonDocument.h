@@ -35,7 +35,6 @@
 #include <QRectF>
 
 #include <karboncommon_export.h>
-#include <KoUnit.h>
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoXmlReader.h>
@@ -74,20 +73,6 @@ public:
      * Destroys the document and all of the layers.
      */
     virtual ~KarbonDocument();
-
-    /**
-     * Returns document unit.
-     *
-     * @return the document's unit
-     */
-    KoUnit unit() const;
-
-    /**
-     * Sets document unit.
-     *
-     * @param unit the new document unit
-     */
-    void setUnit( KoUnit unit );
 
     /**
      * Checks if specified layer can be raised. 
@@ -173,7 +158,7 @@ public:
     bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
     void loadOdfStyles( KoShapeLoadingContext & context );
     void saveOdfStyles( KoShapeSavingContext & context );
-    
+
     /**
     * Adds an object to the document.
     *
@@ -210,6 +195,7 @@ public:
     void useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters );
 
     void addToDataCenterMap(const QString &key, KoDataCenter* dataCenter);
+
 private:
 
     class Private;

@@ -140,8 +140,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 {
     Q_UNUSED(widgetName);
 
-    connect( this, SIGNAL( unitChanged( const KoUnit& ) ), this, SLOT( updateUnit( const KoUnit& ) ) );
-
     setObjectName(name);
     setComponentData( KarbonFactory::componentData(), false );
     setTemplateType( "karbon_template" );
@@ -417,17 +415,19 @@ void KarbonPart::initConfig()
         setBackupFile( interfaceGroup.readEntry( "BackupFile", true ) );
     }
     int undos = 30;
+    QString defaultUnit = "cm";
+    if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
+        defaultUnit = "in";
+
     if( config->hasGroup( "Misc" ) )
     {
         KConfigGroup miscGroup = config->group( "Misc" );
         undos = miscGroup.readEntry( "UndoRedo", -1 );
-        QString defaultUnit = "cm";
-
-        if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
-            defaultUnit = "in";
-
-        setUnit(KoUnit::unit( miscGroup.readEntry( "Units", defaultUnit ) ) );
+        defaultUnit = miscGroup.readEntry( "Units", defaultUnit );
     }
+    undoStack()->setUndoLimit(undos);
+    setUnit(KoUnit::unit(defaultUnit));
+
     if( config->hasGroup( "Grid" ) )
     {
         KoGridData defGrid;
@@ -435,9 +435,6 @@ void KarbonPart::initConfig()
         qreal spacingX = gridGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );
         qreal spacingY = gridGroup.readEntry<qreal>( "SpacingY", defGrid.gridY() );
         gridData().setGrid( spacingX, spacingY );
-        //qreal snapX = gridGroup.readEntry<qreal>( "SnapX", defGrid.snapX() );
-        //qreal snapY = gridGroup.readEntry<qreal>( "SnapY", defGrid.snapY() );
-        //d->document.grid().setSnap( snapX, snapY );
         QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );
     }
@@ -525,11 +522,6 @@ void KarbonPart::setPageSize( const QSizeF &pageSize )
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
         canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
     }
-}
-
-void KarbonPart::updateUnit( const KoUnit &unit )
-{
-    d->document.setUnit(unit);
 }
 
 #include "KarbonPart.moc"

@@ -78,6 +78,7 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
 }
 
