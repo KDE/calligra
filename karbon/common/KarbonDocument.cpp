@@ -200,7 +200,7 @@ bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingConte
 {
     // load text styles used by text shapes
     loadOdfStyles( context );
-    
+
     qDeleteAll( d->layers );
     d->layers.clear();
     qDeleteAll( d->objects );
@@ -324,7 +324,7 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
 
     // save text styles
     saveOdfStyles( shapeContext );
-    
+
     // save page
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
@@ -365,11 +365,11 @@ void KarbonDocument::loadOdfStyles( KoShapeLoadingContext & context )
     KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
     if( ! styleManager )
         return;
-    
+
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     if( ! sharedData )
         return;
-    
+
     sharedData->loadOdfStyles( context.odfLoadingContext(), styleManager );
     context.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 }
@@ -379,7 +379,7 @@ void KarbonDocument::saveOdfStyles( KoShapeSavingContext & context )
     KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
     if( ! styleManager )
         return;
-    
+
     styleManager->saveOdf( context.mainStyles() );
 }
 

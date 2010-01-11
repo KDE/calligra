@@ -156,13 +156,13 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
     m_dockerFontSize->setValue( m_oldDockerFontSize );
     m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
     grpLayout->addWidget( m_dockerFontSize );
-    
+
     QLabel* canvasColorLbl = new QLabel( i18n( "Canvas color:" ), tmpQGroupBox);
     m_canvasColor = new KColorButton( m_oldCanvasColor, tmpQGroupBox);
     canvasColorLbl->setBuddy( m_canvasColor );
     grpLayout->addWidget( canvasColorLbl );
     grpLayout->addWidget( m_canvasColor );
-    
+
     grpLayout->addStretch();
 }
 
@@ -215,7 +215,7 @@ void ConfigInterfacePage::apply()
         interfaceGroup.writeEntry( "CanvasColor", canvasColor );
         refreshGUI = true;
     }
-    
+
     if( refreshGUI )
         part->reorganizeGUI();
 }

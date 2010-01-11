@@ -104,11 +104,11 @@ public:
         else
             return defaultValue;
     }
-    
+
     void applyCanvasConfiguration( KarbonCanvas * canvas, KarbonPart * part )
     {
         KSharedConfigPtr config = part->componentData().config();
-        
+
         uint grabSensitivity = 3;
         uint handleRadius = 3;
         if( config->hasGroup( "Misc" ) ) {
@@ -118,7 +118,7 @@ public:
         }
         canvas->resourceProvider()->setHandleRadius( handleRadius );
         canvas->resourceProvider()->setGrabSensitivity( grabSensitivity );
-        
+
         QColor color( Qt::white );
         if( config->hasGroup( "Interface" ) )
         {
@@ -126,7 +126,6 @@ public:
         }
         canvas->setBackgroundColor( color );
     }
-
 
     KarbonDocument document;  ///< store non-visual doc info
     bool showStatusBar;       ///< enable/disable status bar in attached view(s)
@@ -170,12 +169,12 @@ void KarbonPart::setPageLayout( const KoPageLayout& layout )
 KoView* KarbonPart::createViewInstance( QWidget* parent )
 {
     KarbonView *result = new KarbonView( this, parent );
-    
+
     KoCanvasResourceProvider * provider = result->canvasWidget()->resourceProvider();
     provider->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
-    
+
     d->applyCanvasConfiguration( result->canvasWidget(), this );
-    
+
     return result;
 }
 

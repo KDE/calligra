@@ -425,14 +425,14 @@ void KarbonView::fileImportGraphic()
 
     QByteArray nativeMimeType = part()->nativeFormatMimeType();
     QStringList filter = KoFilterManager::mimeFilter( nativeMimeType, KoFilterManager::Import);
-    
+
     QStringList imageFilter;
     // add filters for all formats supported by QImage
     foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilter << "image/" + format;
     }
     filter.append(imageFilter);
-    
+
     QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
     dialog->setCaption(i18n("Choose Graphic to Add"));
     dialog->setModal(true);
@@ -444,9 +444,9 @@ void KarbonView::fileImportGraphic()
     QString fname = dialog ? dialog->selectedFile() : QString();
     QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
     delete dialog;
-    
+
     QMap<QString,KoDataCenter*> dataCenters = part()->document().dataCenterMap();
-    
+
     KarbonPart importPart;
     // use data centers of this document for importing
     importPart.document().useExternalDataCenterMap(dataCenters);
@@ -471,7 +471,7 @@ void KarbonView::fileImportGraphic()
             }
         }
     }
-    
+
     // check if we are loading an image format
     if (imageFilter.contains(currentMimeFilter)) {
         QImage image;
@@ -484,33 +484,33 @@ void KarbonView::fileImportGraphic()
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
             return;
         }
-        
+
         KoShape * picture = factory->createDefaultShapeAndInit(dataCenters);
         KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenters["ImageCollection"] );
         if (!picture || !imageCollection) {
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
             return;
         }
-        
+
         // calculate shape size in point from image resolution
         qreal pxWidth = static_cast<qreal>(image.width());
         qreal pxHeight = static_cast<qreal>(image.height());
         qreal width = DM_TO_POINT(pxWidth / static_cast<qreal>(image.dotsPerMeterX()) * 10.0);
         qreal height = DM_TO_POINT(pxHeight / static_cast<qreal>(image.dotsPerMeterY()) * 10.0);
-        
+
         // set shape data
         picture->setUserData(imageCollection->createImageData(image));
         picture->setSize(QSizeF(width,height));
         picture->setPosition(QPointF());
         picture->setKeepAspectRatio(true);
-        
+
         QUndoCommand * cmd = d->canvas->shapeController()->addShapeDirect(picture);
         cmd->setText(i18n("Insert graphics"));
         d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->selection()->select(picture);
         return;
     }
-    
+
     // check if we are loading our native format
     if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
@@ -536,10 +536,10 @@ void KarbonView::fileImportGraphic()
             unlink( QFile::encodeName( importedFile ) );
         }
     }
-        
+
     if (success) {
         QList<KoShape*> importedShapes = importPart.document().shapes();
-            
+
         KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importPart);
         d->canvas->addCommand( cmd );
 
@@ -793,26 +793,26 @@ void KarbonView::pathSnapToGrid()
     KoSelection* selection = d->canvas->shapeManager()->selection();
     if( ! selection )
         return;
-    
+
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     QList<KoPathPointData> points;
     QList<QPointF> offsets;
-    
+
     // store current grid snap state
     bool oldSnapToGrid = part()->gridData().snapToGrid();
     // enable grid snapping
     part()->gridData().setSnapToGrid(true);
-    
+
     KoSnapGuide snapGuide(d->canvas);
     snapGuide.enableSnapStrategies(KoSnapGuide::GridSnapping);
     snapGuide.setSnapDistance(INT_MAX);
-    
+
     foreach( KoShape* shape, selectedShapes )
     {
         KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(shape);
         if( paramShape && paramShape->isParametricShape() )
             continue;
-        
+
         KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
         if( ! path )
             continue;
@@ -827,7 +827,7 @@ void KarbonView::pathSnapToGrid()
                 KoPathPoint * p = path->pointByIndex(index);
                 if( !p )
                     continue;
-                
+
                 QPointF docPoint = path->shapeToDocument(p->point());
                 QPointF offset = snapGuide.snap(docPoint, 0) - docPoint;
                 points.append( KoPathPointData(path,index) );
@@ -835,10 +835,10 @@ void KarbonView::pathSnapToGrid()
             }
         }
     }
-    
+
     // reset grid snapping state to old value
     part()->gridData().setSnapToGrid(oldSnapToGrid);
-    
+
     d->canvas->addCommand( new KoPathPointMoveCommand( points, offsets ) );
 }
 
@@ -1042,12 +1042,12 @@ void KarbonView::initActions()
     //d->excludePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->excludePath->setEnabled( false );
     connect(d->excludePath, SIGNAL(triggered()), this, SLOT(excludePaths()));
-    
+
     d->pathSnapToGrid = new KAction(i18n("Snap Path to Grid"), this);
     actionCollection()->addAction("path_snap_to_grid", d->pathSnapToGrid );
     d->pathSnapToGrid->setEnabled( false );
     connect(d->pathSnapToGrid, SIGNAL(triggered()), this, SLOT(pathSnapToGrid()));
-    
+
     // path <-----
 
     d->configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);

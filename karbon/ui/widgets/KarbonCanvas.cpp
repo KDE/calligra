@@ -221,11 +221,13 @@ void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
     d->toolProxy->mouseReleaseEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
-void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
+void KarbonCanvas::keyReleaseEvent (QKeyEvent *e)
+{
     d->toolProxy->keyReleaseEvent(e);
 }
 
-void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
+void KarbonCanvas::keyPressEvent (QKeyEvent *e)
+{
     d->toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
         if (e->key() == Qt::Key_Backtab
@@ -261,7 +263,8 @@ void KarbonCanvas::resizeEvent( QResizeEvent * )
     updateSizeAndOffset();
 }
 
-void KarbonCanvas::gridSize(qreal *horizontal, qreal *vertical) const {
+void KarbonCanvas::gridSize(qreal *horizontal, qreal *vertical) const
+{
     if( horizontal )
         *horizontal = d->part->gridData().gridX();
     if( vertical )
@@ -272,13 +275,14 @@ bool KarbonCanvas::snapToGrid() const {
     return d->part->gridData().snapToGrid();
 }
 
-void KarbonCanvas::addCommand(QUndoCommand *command) {
-
+void KarbonCanvas::addCommand(QUndoCommand *command)
+{
     d->part->addCommand(command);
     updateSizeAndOffset();
 }
 
-void KarbonCanvas::updateCanvas(const QRectF& rc) {
+void KarbonCanvas::updateCanvas(const QRectF& rc)
+{
     QRect clipRect( viewToWidget( d->zoomHandler.documentToView(rc).toRect() ) );
     clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
     clipRect.moveTopLeft( clipRect.topLeft() - d->documentOffset);
@@ -335,7 +339,8 @@ void KarbonCanvas::adjustOrigin()
         emit documentOriginChanged( d->origin );
 }
 
-void KarbonCanvas::setDocumentOffset(const QPoint &offset) {
+void KarbonCanvas::setDocumentOffset(const QPoint &offset)
+{
     d->documentOffset = offset;
 }
 
@@ -349,23 +354,28 @@ void KarbonCanvas::enableOutlineMode( bool on )
     }
 }
 
-QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {
+QPoint KarbonCanvas::widgetToView( const QPoint& p ) const
+{
     return p - d->origin;
 }
 
-QRect KarbonCanvas::widgetToView( const QRect& r ) const {
+QRect KarbonCanvas::widgetToView( const QRect& r ) const
+{
     return r.translated( - d->origin );
 }
 
-QPoint KarbonCanvas::viewToWidget( const QPoint& p ) const {
+QPoint KarbonCanvas::viewToWidget( const QPoint& p ) const
+{
     return p + d->origin;
 }
 
-QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
+QRect KarbonCanvas::viewToWidget( const QRect& r ) const
+{
     return r.translated( d->origin );
 }
 
-KoUnit KarbonCanvas::unit() const {
+KoUnit KarbonCanvas::unit() const
+{
     return d->part->unit();
 }
 
@@ -396,7 +406,8 @@ QRectF KarbonCanvas::documentViewRect()
     return d->documentViewRect;
 }
 
-void KarbonCanvas::updateInputMethodInfo() {
+void KarbonCanvas::updateInputMethodInfo()
+{
     updateMicroFocus();
 }
 
