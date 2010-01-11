@@ -356,14 +356,10 @@ void XlsxFontStyle::setupCellTextStyle(
     //! @todo implement more styling
 }
 
-#define NUMBERFORMATSTRINGS_CAPACITY 512
-
 XlsxStyles::XlsxStyles()
 {
     // fill the default number formats
     // from Office Open XML Part 4 - Markup Language Reference, p. 1974
-    numberFormatStrings.reserve(NUMBERFORMATSTRINGS_CAPACITY);
-    numberFormatStrings.resize(49 + 1);
     numberFormatStrings[ 1 ] = QLatin1String( "0" );
     numberFormatStrings[ 2 ] = QLatin1String( "0.00" );
     numberFormatStrings[ 3 ] = QLatin1String( "#,##0" );
@@ -741,11 +737,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
     TRY_READ_ATTR_WITHOUT_NS( count )
     int countNumber;
     STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
-    if (countNumber < 0 || countNumber >= NUMBERFORMATSTRINGS_CAPACITY) {
-        raiseError(i18n("Declared number of formats too small (%1)", NUMBERFORMATSTRINGS_CAPACITY));
-        return KoFilter::WrongFormat;
-    }
-    m_context->styles->numberFormatStrings.resize(countNumber+1);
 
     while( !atEnd() )
     {
@@ -784,10 +775,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
     TRY_READ_ATTR_WITHOUT_NS( numFmtId )
     int id;
     STRING_TO_INT(numFmtId, id, "numFmt@numFmtId")
-    if (id < 0 || id >= NUMBERFORMATSTRINGS_CAPACITY) {
-        raiseError(i18n("Declared number of formats too small (%1)", NUMBERFORMATSTRINGS_CAPACITY));
-        return KoFilter::WrongFormat;
-    }
 
     TRY_READ_ATTR_WITHOUT_NS( formatCode );
 
