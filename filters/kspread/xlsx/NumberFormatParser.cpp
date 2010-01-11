@@ -208,15 +208,16 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         case ',':
         case '#':
         case '0':
-        case '/':
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericNumber )
             FINISH_PLAIN_TEXT_PART
             {
                 bool grouping = false;
                 bool gotDot = false;
+                bool gotE = false;
                 int decimalPlaces = 0;
                 int integerDigits = 0;
-                
+                int exponentDigits = 0;
+
                 char ch = numberFormat[ i ].toLatin1();
                 do
                 {
@@ -224,12 +225,23 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                         gotDot = true;
                     else if( ch == ',' )
                         grouping = true;
+                    else if( ch == 'E' || ch == 'e' )
+                    {
+                        const char chN = numberFormat[ i + 1 ].toLatin1();
+                        if( chN == '-' || chN == '+' )
+                        {
+                            gotE = true;
+                            ++i;
+                        }
+                    }
+                    else if( ch == '0' && gotE )
+                        ++exponentDigits;
                     else if( ch == '0' && !gotDot )
                         ++integerDigits;
                     else if( ch == '0' && gotDot )
                         ++decimalPlaces;
                     else if( ch == '?' )
-                    { // no idea how to handle... }
+                    { /* no idea how to handle... */ }
                     else if( ch == '/' )
                     {
                         SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericFraction );
@@ -239,16 +251,19 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
                     ch = numberFormat[ ++i ].toLatin1();
                 }
-                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == '/' || ch == '?' ) );
+                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' ) );
                
-                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == '/' || ch == '?' ) )
+                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' ) )
                     --i;
 
                 xmlWriter.startElement( "number:nmber" );
                 if( gotDot )
                     xmlWriter.addAttribute( "number:decimal-places", decimalPlaces );
                 xmlWriter.addAttribute( "number:min-integer-digits", integerDigits );
-                xmlWriter.addAttribute( "number:grouping", grouping ? "true" : "false" );
+                if( exponentDigits > 0 )
+                    xmlWriter.addAttribute( "number:min-exponent-digits", exponentDigits );
+                if( grouping )
+                    xmlWriter.addAttribute( "number:grouping", grouping ? "true" : "false" );
                 xmlWriter.endElement();
             }
             break;
