@@ -31,6 +31,7 @@
 
 #include <QDebug>
 #include <QDateTime>
+#include <QFile>
 
 #include "pole.h"
 #include "swinder.h"
@@ -1773,7 +1774,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
 
 const unsigned MsoDrawingGroupRecord::id = 0xEB;
 
-MsoDrawingGroupRecord::MsoDrawingGroupRecord() : Record() {}
+MsoDrawingGroupRecord::MsoDrawingGroupRecord() : Record(), m_blipData(0), m_blibSize(0) {}
 MsoDrawingGroupRecord::~MsoDrawingGroupRecord() {}
 
 void MsoDrawingGroupRecord::dump(std::ostream& out) const
@@ -1781,8 +1782,9 @@ void MsoDrawingGroupRecord::dump(std::ostream& out) const
     out << "MsoDrawingGroupRecord" << std::endl;
 }
 
-void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
+    //printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data, *continuePositions);
     if(size < 8) {
         setIsValid(false);
         return;
@@ -1819,7 +1821,6 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     Q_ASSERT(recType == 0xF001);
     blipStoreOffset += 8;
     for(int i = 0; i < recInstance; ++i) {
-printf(">>>>>>>> %i\n",i);
         unsigned long blibRecLen = 0;
         readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
         const unsigned char* blipItemOffset = blipStoreOffset + 8;
@@ -1867,29 +1868,53 @@ printf(">>>>>>>> %i\n",i);
         }
         
         // OfficeArtBlip
-        //TODO
         switch(recType) {
             case 0xF01A:
-                printf("OfficeArtBlipEMF\n");
+                printf("TODO: OfficeArtBlipEMF\n");
+                //TODO
                 break;
             case 0xF01B:
-                printf("OfficeArtBlipWMF\n");
+                printf("TODO: OfficeArtBlipWMF\n");
+                //TODO
                 break;
             case 0xF01C:
-                printf("OfficeArtBlipPICT\n");
+                printf("TODO: OfficeArtBlipPICT\n");
+                //TODO
                 break;
             case 0xF01D:
-            case 0xF02A:
+            case 0xF02A: {
                 printf("OfficeArtBlipJPEG\n");
-                break;
+                char rgbUid[16];
+                for(int i = 0; i < 16; ++i)
+                    rgbUid[i] = readU8(blipItemOffset + i);
+                unsigned tag = readU8(blipItemOffset + 16);
+                Q_ASSERT(tag == 0xFF);
+                
+                m_blipData = blipItemOffset + 17;
+                m_blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
+                Q_ASSERT(m_blibSize <= size);
+                
+#if 0
+QFile f("/home/q45/Gaga.jpg");
+Q_ASSERT(f.open(QIODevice::WriteOnly));
+//const int maxxxSize = recLen+((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
+const int maxSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
+printf(">>>>>> %i %i\n",maxSize,size);
+Q_ASSERT(maxSize <= size);
+f.write( (const char*)(blipItemOffset + 17), maxSize);
+f.close();
+//Q_ASSERT(false);
+#endif
+
+            } break;
             case 0xF01E:
-                printf("OfficeArtBlipPNG\n");
+                printf("TODO: OfficeArtBlipPNG\n");
                 break;
             case 0xF01F:
-                printf("OfficeArtBlipDIB\n");
+                printf("TODO: OfficeArtBlipDIB\n");
                 break;
             case 0xF029:
-                printf("OfficeArtBlipTIFF\n");
+                printf("TODO: OfficeArtBlipTIFF\n");
                 break;
             default:
                 printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
@@ -2805,39 +2830,36 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
 
-            switch(next_type) {
-                case 0x3C: {
-                    // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
-                    continuePositions[continuePositionsCount++] = size;
-                    if (continuePositionsCount >= continuePositionsSize) {
-                        continuePositionsSize *= 2;
-                        continuePositions = (unsigned int *) realloc(continuePositions, continuePositionsSize * sizeof(int));
-                    }
-
-                    // first verify the buffer is large enough to hold all the data
-                    if ((size + next_size) > buffer_size) {
-                        buffer = (unsigned char *) realloc(buffer, size + next_size);
-                        buffer_size = size + next_size;
-                    }
-
-                    // next read the data of the record
-                    bytes_read = stream->read(buffer + size, next_size);
-                    if (bytes_read != next_size) {
-                        std::cout << "ERROR!" << std::endl;
-                        break;
-                    }
-
-                    // and finally update size
-                    size += next_size;
-                    //printf("CONTINUES RECORD, type=%i fromPos=%i size=%i\n",type,buffer+size,next_size);
-                } break;
-                case 0x5D: { // ObjRecord
-                    
-
-                    
-                } break;
+            if(next_type == MsoDrawingGroupRecord::id) {
+                if(type != MsoDrawingGroupRecord::id)
+                    break;
+            } else if(next_type != 0x3C) {
+                break;
             }
-        } while (next_type == 0x3C);
+
+            // compress multiple MsoDrawingGroup records or continues records (0x3C) into one.
+            continuePositions[continuePositionsCount++] = size;
+            if (continuePositionsCount >= continuePositionsSize) {
+                continuePositionsSize *= 2;
+                continuePositions = (unsigned int *) realloc(continuePositions, continuePositionsSize * sizeof(int));
+            }
+
+            // first verify the buffer is large enough to hold all the data
+            if ((size + next_size) > buffer_size) {
+                buffer = (unsigned char *) realloc(buffer, size + next_size);
+                buffer_size = size + next_size;
+            }
+
+            // next read the data of the record
+            bytes_read = stream->read(buffer + size, next_size);
+            if (bytes_read != next_size) {
+                std::cout << "ERROR!" << std::endl;
+                break;
+            }
+
+            // and finally update size
+            size += next_size;
+        } while (true);
 
         // append total size as last continue position
         continuePositions[continuePositionsCount] = size;

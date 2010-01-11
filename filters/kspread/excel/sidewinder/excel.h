@@ -896,6 +896,9 @@ public:
 class MsoDrawingGroupRecord : public Record, private DrawingObject
 {
 public:
+    const unsigned char *m_blipData;
+    unsigned long m_blibSize;
+
     static const unsigned id;
     MsoDrawingGroupRecord();
     virtual ~MsoDrawingGroupRecord();
