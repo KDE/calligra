@@ -27,18 +27,18 @@
 
 #include <math.h>
 
-RoundCornersCommand::RoundCornersCommand( KoPathShape * path, qreal radius, QUndoCommand * parent )
-    : QUndoCommand( parent ), m_path( path ), m_copy(0)
+RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, QUndoCommand * parent)
+        : QUndoCommand(parent), m_path(path), m_copy(0)
 {
-    Q_ASSERT( path );
+    Q_ASSERT(path);
 
     // Set members.
     m_radius = radius > 0.0 ? radius : 1.0;
     // copy original path data
     m_copy = new KoPathShape();
-    copyPath( m_copy, m_path );
+    copyPath(m_copy, m_path);
     m_copy->normalize();
-    setText( i18n( "Round Corners" ) );
+    setText(i18n("Round Corners"));
 }
 
 RoundCornersCommand::~RoundCornersCommand()
@@ -61,7 +61,7 @@ void RoundCornersCommand::undo()
     QUndoCommand::undo();
 
     m_path->update();
-    copyPath( m_path, m_copy );
+    copyPath(m_path, m_copy);
     m_path->update();
 }
 
@@ -185,25 +185,23 @@ void RoundCornersCommand::roundPath()
     m_path->clear();
 
     int subpathCount = m_copy->subpathCount();
-    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
-    {
-        int pointCount = m_copy->subpathPointCount( subpathIndex );
-        if( ! pointCount )
+    for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
+        int pointCount = m_copy->subpathPointCount(subpathIndex);
+        if (! pointCount)
             continue;
 
         // check if we have sufficient number of points
-        if( pointCount < 3 )
-        {
+        if (pointCount < 3) {
             // copy the only segment
-            KoPathSegment s = m_copy->segmentByIndex( KoPathPointIndex( subpathIndex, 0 ) );
-            m_path->moveTo( m_copy->pointByIndex( KoPathPointIndex( subpathIndex, 0 ) )->point() );
-            addSegment( m_path, s );
+            KoPathSegment s = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, 0));
+            m_path->moveTo(m_copy->pointByIndex(KoPathPointIndex(subpathIndex, 0))->point());
+            addSegment(m_path, s);
 
             continue;
         }
 
-        KoPathSegment prevSeg = m_copy->segmentByIndex( KoPathPointIndex( subpathIndex, pointCount-1 ) );
-        KoPathSegment nextSeg = m_copy->segmentByIndex( KoPathPointIndex( subpathIndex, 0 ) );
+        KoPathSegment prevSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, pointCount - 1));
+        KoPathSegment nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, 0));
         KoPathSegment lastSeg;
 
         KoPathPoint * currPoint = nextSeg.first();
@@ -211,89 +209,82 @@ void RoundCornersCommand::roundPath()
         KoPathPoint * lastPoint = 0;
 
         // check if first path point is a smooth join with the closing segment
-        bool firstPointIsCorner = m_copy->isClosedSubpath( subpathIndex ) 
-                && ! currPoint->isSmooth( prevSeg.first(), nextSeg.second() );
+        bool firstPointIsCorner = m_copy->isClosedSubpath(subpathIndex)
+                                  && ! currPoint->isSmooth(prevSeg.first(), nextSeg.second());
 
         // Begin: take care of the first path point
-        if( firstPointIsCorner )
-        {
+        if (firstPointIsCorner) {
             // split the previous segment at length - radius
             qreal prevLength = prevSeg.length();
-            qreal prevSplit = prevLength > m_radius ? prevSeg.paramAtLength( prevLength-m_radius ) : 0.5;
-            QPair<KoPathSegment,KoPathSegment> prevParts = prevSeg.splitAt( prevSplit );
+            qreal prevSplit = prevLength > m_radius ? prevSeg.paramAtLength(prevLength - m_radius) : 0.5;
+            QPair<KoPathSegment, KoPathSegment> prevParts = prevSeg.splitAt(prevSplit);
 
             // split the next segment at radius
             qreal nextLength = nextSeg.length();
-            qreal nextSplit = nextLength > m_radius ? nextSeg.paramAtLength( m_radius ) : 0.5;
-            QPair<KoPathSegment,KoPathSegment> nextParts = nextSeg.splitAt( nextSplit );
+            qreal nextSplit = nextLength > m_radius ? nextSeg.paramAtLength(m_radius) : 0.5;
+            QPair<KoPathSegment, KoPathSegment> nextParts = nextSeg.splitAt(nextSplit);
 
             // calculate smooth tangents
             QPointF P0 = prevParts.first.second()->point();
             QPointF P3 = nextParts.first.second()->point();
-            qreal tangentLength1 = 0.5 * QLineF( P0, currPoint->point() ).length();
-            qreal tangentLength2 = 0.5 * QLineF( P3, currPoint->point() ).length();
-            QPointF P1 = P0 - tangentLength1 * tangentAtEnd( prevParts.first );
-            QPointF P2 = P3 - tangentLength2 * tangentAtStart( nextParts.second );
+            qreal tangentLength1 = 0.5 * QLineF(P0, currPoint->point()).length();
+            qreal tangentLength2 = 0.5 * QLineF(P3, currPoint->point()).length();
+            QPointF P1 = P0 - tangentLength1 * tangentAtEnd(prevParts.first);
+            QPointF P2 = P3 - tangentLength2 * tangentAtStart(nextParts.second);
 
             // start the subpath
-            firstPoint = m_path->moveTo( prevParts.second.first()->point() );
+            firstPoint = m_path->moveTo(prevParts.second.first()->point());
             // connect the split points with curve
             // TODO: shall we create a correct arc?
-            m_path->curveTo( P1, P2, P3 );
+            m_path->curveTo(P1, P2, P3);
 
             prevSeg = nextParts.second;
             lastSeg = prevParts.first;
-        }
-        else
-        {
-            firstPoint = m_path->moveTo( currPoint->point() );
+        } else {
+            firstPoint = m_path->moveTo(currPoint->point());
             prevSeg = nextSeg;
         }
 
         // Loop:
-        for( int pointIndex = 1; pointIndex < pointCount; ++pointIndex )
-        {
-            nextSeg = m_copy->segmentByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
-            if( ! nextSeg.isValid() )
+        for (int pointIndex = 1; pointIndex < pointCount; ++pointIndex) {
+            nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            if (! nextSeg.isValid())
                 break;
 
             currPoint = nextSeg.first();
-            if( ! currPoint )
+            if (! currPoint)
                 continue;
 
-            if( currPoint->isSmooth( prevSeg.first(), nextSeg.second() ) )
-            {
+            if (currPoint->isSmooth(prevSeg.first(), nextSeg.second())) {
                 // the current point has a smooth join, so we can add the previous segment
                 // to our new path
-                addSegment( m_path, prevSeg );
+                addSegment(m_path, prevSeg);
                 prevSeg = nextSeg;
-            }
-            else
-            {
+            } else {
                 // split the previous segment at length - radius
                 qreal prevLength = prevSeg.length();
-                qreal prevSplit = prevLength > m_radius ? prevSeg.paramAtLength( prevLength-m_radius ) : 0.5;
-                QPair<KoPathSegment,KoPathSegment> prevParts = prevSeg.splitAt( prevSplit );
+                qreal prevSplit = prevLength > m_radius ? prevSeg.paramAtLength(prevLength - m_radius) : 0.5;
+                QPair<KoPathSegment, KoPathSegment> prevParts = prevSeg.splitAt(prevSplit);
 
                 // add the remaining part up to the split point of the pervious segment
-                lastPoint = addSegment( m_path, prevParts.first );
+                lastPoint = addSegment(m_path, prevParts.first);
 
                 // split the next segment at radius
                 qreal nextLength = nextSeg.length();
-                qreal nextSplit = nextLength > m_radius ? nextSeg.paramAtLength( m_radius ) : 0.5;
-                QPair<KoPathSegment,KoPathSegment> nextParts = nextSeg.splitAt( nextSplit );
+                qreal nextSplit = nextLength > m_radius ? nextSeg.paramAtLength(m_radius) : 0.5;
+                QPair<KoPathSegment, KoPathSegment> nextParts = nextSeg.splitAt(nextSplit);
 
                 // calculate smooth tangents
                 QPointF P0 = prevParts.first.second()->point();
                 QPointF P3 = nextParts.first.second()->point();
-                qreal tangentLength1 = 0.5 * QLineF( P0, currPoint->point() ).length();
-                qreal tangentLength2 = 0.5 * QLineF( P3, currPoint->point() ).length();
-                QPointF P1 = P0 - tangentLength1 * tangentAtEnd( prevParts.first );
-                QPointF P2 = P3 - tangentLength2 * tangentAtStart( nextParts.second );
+                qreal tangentLength1 = 0.5 * QLineF(P0, currPoint->point()).length();
+                qreal tangentLength2 = 0.5 * QLineF(P3, currPoint->point()).length();
+                QPointF P1 = P0 - tangentLength1 * tangentAtEnd(prevParts.first);
+                QPointF P2 = P3 - tangentLength2 * tangentAtStart(nextParts.second);
 
                 // connect the split points with curve
                 // TODO: shall we create a correct arc?
-                lastPoint = m_path->curveTo( P1, P2, P3 );
+                lastPoint = m_path->curveTo(P1, P2, P3);
 
                 prevSeg = nextParts.second;
             }
@@ -301,101 +292,91 @@ void RoundCornersCommand::roundPath()
         }
 
         // End: take care of the last path point
-        if( firstPointIsCorner )
-        {
+        if (firstPointIsCorner) {
             // construct the closing segment
-            lastPoint->setProperty( KoPathPoint::CloseSubpath );
-            firstPoint->setProperty( KoPathPoint::CloseSubpath );
-            switch( lastSeg.degree() )
-            {
-                case 1:
-                    lastPoint->removeControlPoint2();
+            lastPoint->setProperty(KoPathPoint::CloseSubpath);
+            firstPoint->setProperty(KoPathPoint::CloseSubpath);
+            switch (lastSeg.degree()) {
+            case 1:
+                lastPoint->removeControlPoint2();
+                firstPoint->removeControlPoint1();
+                break;
+            case 2:
+                if (lastSeg.first()->activeControlPoint2()) {
+                    lastPoint->setControlPoint2(lastSeg.first()->controlPoint2());
                     firstPoint->removeControlPoint1();
-                    break;
-                case 2:
-                    if( lastSeg.first()->activeControlPoint2() )
-                    {
-                        lastPoint->setControlPoint2( lastSeg.first()->controlPoint2() );
-                        firstPoint->removeControlPoint1();
-                    }
-                    else
-                    {
-                        lastPoint->removeControlPoint2();
-                        firstPoint->setControlPoint1( lastSeg.second()->controlPoint1() );
-                    }
-                    break;
-                case 3:
-                    lastPoint->setControlPoint2( lastSeg.first()->controlPoint2() );
-                    firstPoint->setControlPoint1( lastSeg.second()->controlPoint1() );
-                    break;
+                } else {
+                    lastPoint->removeControlPoint2();
+                    firstPoint->setControlPoint1(lastSeg.second()->controlPoint1());
+                }
+                break;
+            case 3:
+                lastPoint->setControlPoint2(lastSeg.first()->controlPoint2());
+                firstPoint->setControlPoint1(lastSeg.second()->controlPoint1());
+                break;
             }
-        }
-        else
-        {
+        } else {
             // add the last remaining segment
-            addSegment( m_path, prevSeg );
+            addSegment(m_path, prevSeg);
         }
     }
 }
 
-KoPathPoint * RoundCornersCommand::addSegment( KoPathShape * p, KoPathSegment & s )
+KoPathPoint * RoundCornersCommand::addSegment(KoPathShape * p, KoPathSegment & s)
 {
-    switch( s.degree() )
-    {
-        case 1:
-            return p->lineTo( s.second()->point() );
-            break;
-        case 2:
-            if( s.first()->activeControlPoint2() )
-                return p->curveTo( s.first()->controlPoint2(), s.second()->point() );
-            else
-                return p->curveTo( s.second()->controlPoint1(), s.second()->point() );
-            break;
-            case 3:
-                return p->curveTo( s.first()->controlPoint2(), 
-                                   s.second()->controlPoint1(), 
-                                   s.second()->point() );
-            break;
+    switch (s.degree()) {
+    case 1:
+        return p->lineTo(s.second()->point());
+        break;
+    case 2:
+        if (s.first()->activeControlPoint2())
+            return p->curveTo(s.first()->controlPoint2(), s.second()->point());
+        else
+            return p->curveTo(s.second()->controlPoint1(), s.second()->point());
+        break;
+    case 3:
+        return p->curveTo(s.first()->controlPoint2(),
+                          s.second()->controlPoint1(),
+                          s.second()->point());
+        break;
     }
     return 0;
 }
 
-void RoundCornersCommand::copyPath( KoPathShape * dst, KoPathShape * src )
+void RoundCornersCommand::copyPath(KoPathShape * dst, KoPathShape * src)
 {
     dst->clear();
 
     int subpathCount = src->subpathCount();
-    for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
-    {
-        int pointCount = src->subpathPointCount( subpathIndex );
-        if( ! pointCount )
+    for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
+        int pointCount = src->subpathPointCount(subpathIndex);
+        if (! pointCount)
             continue;
 
         KoSubpath * subpath = new KoSubpath;
-        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
-        {
-            KoPathPoint * p = src->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
-            KoPathPoint * c = new KoPathPoint( *p );
-            c->setParent( dst );
-            subpath->append( c );
+        for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
+            KoPathPoint * p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            KoPathPoint * c = new KoPathPoint(*p);
+            c->setParent(dst);
+            subpath->append(c);
         }
-        dst->addSubpath( subpath, subpathIndex );
+        dst->addSubpath(subpath, subpathIndex);
     }
-    dst->setTransformation( src->transformation() );
+    dst->setTransformation(src->transformation());
 }
 
-QPointF RoundCornersCommand::tangentAtStart( const KoPathSegment &s )
+QPointF RoundCornersCommand::tangentAtStart(const KoPathSegment &s)
 {
     QList<QPointF> cp = s.controlPoints();
     QPointF tn = cp[1] - cp.first();
-    qreal length = sqrt( tn.x()*tn.x() + tn.y()*tn.y() );
+    qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;
 }
 
-QPointF RoundCornersCommand::tangentAtEnd( const KoPathSegment &s )
+QPointF RoundCornersCommand::tangentAtEnd(const KoPathSegment &s)
 {
     QList<QPointF> cp = s.controlPoints();
     QPointF tn = cp[cp.count()-2] - cp.last();
-    qreal length = sqrt( tn.x()*tn.x() + tn.y()*tn.y() );
+    qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;
 }

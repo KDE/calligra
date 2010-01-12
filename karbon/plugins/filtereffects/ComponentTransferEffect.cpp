@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -26,7 +26,7 @@
 #include <math.h>
 
 ComponentTransferEffect::ComponentTransferEffect()
-: KoFilterEffect(ComponentTransferEffectId, i18n( "Component transfer" ))
+        : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))
 {
 }
 
@@ -103,25 +103,25 @@ qreal ComponentTransferEffect::offset(Channel channel) const
 QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
     QImage result = image;
-    
+
     QRgb *src = (QRgb*)image.bits();
     QRgb *dst = (QRgb*)result.bits();
     int w = result.width();
-    
+
     qreal sa, sr, sg, sb;
     qreal da, dr, dg, db;
     int pixel;
-    
+
     QRect roi = context.filterRegion().toRect();
-    for( int row = roi.top(); row < roi.bottom(); ++row) {
-        for(int col = roi.left(); col < roi.right(); ++col) {
-            pixel = row*w+col;
+    for (int row = roi.top(); row < roi.bottom(); ++row) {
+        for (int col = roi.left(); col < roi.right(); ++col) {
+            pixel = row * w + col;
             const QRgb &s = src[pixel];
 
-            sa = qAlpha(s)/255.0;
-            sr = qRed(s)/255.0;
-            sb = qBlue(s)/255.0;
-            sg = qGreen(s)/255.0;
+            sa = qAlpha(s) / 255.0;
+            sr = qRed(s) / 255.0;
+            sb = qBlue(s) / 255.0;
+            sg = qGreen(s) / 255.0;
             // the matrix is applied to non-premultiplied color values
             // so we have to convert colors by dividing by alpha value
             if (sa > 0.0 && sa < 1.0) {
@@ -129,60 +129,57 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
                 sb /= sa;
                 sg /= sa;
             }
-            
+
             dr = transferChannel(ChannelR, sr);
             dg = transferChannel(ChannelG, sg);
             db = transferChannel(ChannelB, sb);
             da = transferChannel(ChannelA, sa);
-            
+
             da *= 255.0;
-            
+
             // set pre-multiplied color values on destination image
-            dst[pixel] = qRgba(static_cast<quint8>(qBound(0.0, dr*da, 255.0)),
-                               static_cast<quint8>(qBound(0.0, dg*da, 255.0)),
-                               static_cast<quint8>(qBound(0.0, db*da, 255.0)),
+            dst[pixel] = qRgba(static_cast<quint8>(qBound(0.0, dr * da, 255.0)),
+                               static_cast<quint8>(qBound(0.0, dg * da, 255.0)),
+                               static_cast<quint8>(qBound(0.0, db * da, 255.0)),
                                static_cast<quint8>(qBound(0.0, da, 255.0)));
         }
     }
-    
+
     return result;
 }
 
 qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) const
 {
     const Data &d = m_data[channel];
-    
-    switch(d.function)
-    {
-        case Identity:
-            return value;
-        case Table:
-        {
-            qreal valueCount = d.tableValues.count()-1;
-            qreal k1 = static_cast<int>(value*valueCount);
-            qreal k2 = qMin(k1+1,valueCount);  
-            qreal vk1 = d.tableValues[k1];
-            qreal vk2 = d.tableValues[k2];
-            return vk1 + (value-static_cast<qreal>(k1)/valueCount)*valueCount * (vk2-vk1);
-        }
-        case Discrete:
-        {
-            qreal valueCount = d.tableValues.count()-1;
-            return d.tableValues[static_cast<int>(value*valueCount)];
-        }
-        case Linear:
-            return d.slope * value + d.intercept;
-        case Gamma:
-            return d.amplitude * pow(value, d.exponent) + d.offset;
+
+    switch (d.function) {
+    case Identity:
+        return value;
+    case Table: {
+        qreal valueCount = d.tableValues.count() - 1;
+        qreal k1 = static_cast<int>(value * valueCount);
+        qreal k2 = qMin(k1 + 1, valueCount);
+        qreal vk1 = d.tableValues[k1];
+        qreal vk2 = d.tableValues[k2];
+        return vk1 + (value - static_cast<qreal>(k1) / valueCount)*valueCount *(vk2 - vk1);
     }
-    
+    case Discrete: {
+        qreal valueCount = d.tableValues.count() - 1;
+        return d.tableValues[static_cast<int>(value*valueCount)];
+    }
+    case Linear:
+        return d.slope * value + d.intercept;
+    case Gamma:
+        return d.amplitude * pow(value, d.exponent) + d.offset;
+    }
+
     return value;
 }
 
 bool ComponentTransferEffect::load(const KoXmlElement &element, const QMatrix &matrix)
 {
     Q_UNUSED(matrix);
-    
+
     if (element.tagName() != id())
         return false;
 
@@ -191,20 +188,20 @@ bool ComponentTransferEffect::load(const KoXmlElement &element, const QMatrix &m
     m_data[ChannelG] = Data();
     m_data[ChannelB] = Data();
     m_data[ChannelA] = Data();
-    
+
     for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement node = n.toElement();
         if (node.tagName() == "feFuncR") {
             loadChannel(ChannelR, node);
-        } else if(node.tagName() == "feFuncG") {
+        } else if (node.tagName() == "feFuncG") {
             loadChannel(ChannelG, node);
-        } else if(node.tagName() == "feFuncB") {
+        } else if (node.tagName() == "feFuncB") {
             loadChannel(ChannelB, node);
-        } else if(node.tagName() == "feFuncA") {
+        } else if (node.tagName() == "feFuncA") {
             loadChannel(ChannelA, node);
         }
     }
-    
+
     return true;
 }
 
@@ -213,17 +210,17 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
     QString typeStr = element.attribute("type");
     if (typeStr.isEmpty())
         return;
-    
+
     Data &d = m_data[channel];
-    
-    if (typeStr == "table"|| typeStr == "discrete") {
+
+    if (typeStr == "table" || typeStr == "discrete") {
         d.function = typeStr == "table" ? Table : Discrete;
         QString valueStr = element.attribute("tableValues");
         QStringList values = valueStr.split(QRegExp("(\\s+|,)"), QString::SkipEmptyParts);
         foreach(const QString &v, values) {
             d.tableValues.append(v.toDouble());
         }
-    } else if( typeStr == "linear") {
+    } else if (typeStr == "linear") {
         d.function = Linear;
         if (element.hasAttribute("slope")) {
             d.slope = element.attribute("slope").toDouble();
@@ -231,7 +228,7 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
         if (element.hasAttribute("intercept")) {
             d.intercept = element.attribute("intercept").toDouble();
         }
-    } else if( typeStr == "gamma") {
+    } else if (typeStr == "gamma") {
         d.function = Gamma;
         if (element.hasAttribute("amplitude")) {
             d.amplitude = element.attribute("amplitude").toDouble();
@@ -248,43 +245,42 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
 void ComponentTransferEffect::save(KoXmlWriter &writer)
 {
     writer.startElement(ComponentTransferEffectId);
-    
+
     saveCommonAttributes(writer);
-    
+
     saveChannel(ChannelR, writer);
     saveChannel(ChannelG, writer);
     saveChannel(ChannelB, writer);
     saveChannel(ChannelA, writer);
-    
+
     writer.endElement();
 }
 
 void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
 {
     Function function = m_data[channel].function;
-    // we can omit writing the transfer function when 
+    // we can omit writing the transfer function when
     if (function == Identity)
         return;
-    
-    switch(channel) 
-    {
-        case ChannelR:
-            writer.startElement("feFuncR");
-            break;
-        case ChannelG:
-            writer.startElement("feFuncG");
-            break;
-        case ChannelB:
-            writer.startElement("feFuncB");
-            break;
-        case ChannelA:
-            writer.startElement("feFuncA");
-            break;
+
+    switch (channel) {
+    case ChannelR:
+        writer.startElement("feFuncR");
+        break;
+    case ChannelG:
+        writer.startElement("feFuncG");
+        break;
+    case ChannelB:
+        writer.startElement("feFuncB");
+        break;
+    case ChannelA:
+        writer.startElement("feFuncA");
+        break;
     }
-    
+
     Data defaultData;
     const Data &currentData = m_data[channel];
-    
+
     if (function == Linear) {
         writer.addAttribute("type", "linear");
         // only write non default data
@@ -311,6 +307,6 @@ void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
             writer.addAttribute("tableValues", tableStr.trimmed());
         }
     }
-    
+
     writer.endElement();
 }

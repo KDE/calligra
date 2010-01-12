@@ -38,7 +38,7 @@ class RoundCornersPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RoundCornersPlugin( QWidget * parent, const QStringList & );
+    RoundCornersPlugin(QWidget * parent, const QStringList &);
     virtual ~RoundCornersPlugin();
 
 private slots:
@@ -56,11 +56,11 @@ class RoundCornersDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit RoundCornersDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit RoundCornersDlg(QWidget* parent = 0L, const char* name = 0L);
 
     qreal radius() const;
-    void setRadius( qreal value );
-    void setUnit( const KoUnit &unit );
+    void setRadius(qreal value);
+    void setUnit(const KoUnit &unit);
 
 private:
     KoUnitDoubleSpinBox * m_radius;

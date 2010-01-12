@@ -36,7 +36,7 @@ class WhirlPinchPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    WhirlPinchPlugin( QWidget *parent, const QStringList & );
+    WhirlPinchPlugin(QWidget *parent, const QStringList &);
     virtual ~WhirlPinchPlugin() {}
 
 private slots:
@@ -55,15 +55,15 @@ class WhirlPinchDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit WhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit WhirlPinchDlg(QWidget* parent = 0L, const char* name = 0L);
 
     qreal angle() const;
     qreal pinch() const;
     qreal radius() const;
-    void setAngle( qreal value );
-    void setPinch( qreal value );
-    void setRadius( qreal value );
-    void setUnit( const KoUnit &unit );
+    void setAngle(qreal value);
+    void setPinch(qreal value);
+    void setRadius(qreal value);
+    void setUnit(const KoUnit &unit);
 
 private:
     KDoubleNumInput* m_angle;

@@ -38,7 +38,7 @@ public:
     * @param flatness the desired flatness
     * @param parent the parent command used for macro commands
      */
-    KarbonPathFlattenCommand( KoPathShape * path, qreal flatness, QUndoCommand *parent = 0 );
+    KarbonPathFlattenCommand(KoPathShape * path, qreal flatness, QUndoCommand *parent = 0);
     virtual ~KarbonPathFlattenCommand();
 
     /// redo the command

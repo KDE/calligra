@@ -24,11 +24,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-class KarbonPathRefineCommand::Private
-{
+class KarbonPathRefineCommand::Private {
 public:
-    Private( KoPathShape * p, uint insertPointsCount ) 
-    : path( p ), insertCount( insertPointsCount ), initialized(false) {}
+    Private(KoPathShape * p, uint insertPointsCount)
+            : path(p), insertCount(insertPointsCount), initialized(false) {}
     ~Private() {}
 
     KoPathShape * path; ///< the path to refine
@@ -36,10 +35,10 @@ public:
     bool initialized;   ///< tells whether the subcommands are already created
 };
 
-KarbonPathRefineCommand::KarbonPathRefineCommand( KoPathShape * path, uint insertPointsCount, QUndoCommand *parent )
-    : QUndoCommand( parent ), d( new Private( path, insertPointsCount ) )
+KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, QUndoCommand *parent)
+        : QUndoCommand(parent), d(new Private(path, insertPointsCount))
 {
-    setText( i18n( "Refine path" ) );
+    setText(i18n("Refine path"));
 }
 
 KarbonPathRefineCommand::~KarbonPathRefineCommand()
@@ -50,39 +49,33 @@ KarbonPathRefineCommand::~KarbonPathRefineCommand()
 void KarbonPathRefineCommand::redo()
 {
     // check if we have to create the insert points commands
-    if( ! d->initialized )
-    {
+    if (! d->initialized) {
         // create insert point commands, one for each point to insert
         // into each segment
-        for( uint iteration = 0; iteration < d->insertCount; ++iteration )
-        {
+        for (uint iteration = 0; iteration < d->insertCount; ++iteration) {
             // in each iteration collect the (iteration+1)th point which starts a segments
             // into which we insert the point of this iteration
             QList<KoPathPointData> pointData;
             // calculate the segment position where to insert the point
-            qreal insertPosition = 1.0 / (d->insertCount+1-iteration);
+            qreal insertPosition = 1.0 / (d->insertCount + 1 - iteration);
             int subpathCount = d->path->subpathCount();
             // iterate over the paths subpaths
-            for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
-            {
-                int pointCount = d->path->subpathPointCount( subpathIndex );
+            for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
+                int pointCount = d->path->subpathPointCount(subpathIndex);
                 // iterate over the subpaths points
-                for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
-                {
+                for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
                     // we only collect the (iteration+1)th point
-                    if( (pointIndex+1) % (iteration+1) != 0 )
+                    if ((pointIndex + 1) % (iteration + 1) != 0)
                         continue;
-                    pointData.append( KoPathPointData( d->path, KoPathPointIndex( subpathIndex, pointIndex ) ) );
+                    pointData.append(KoPathPointData(d->path, KoPathPointIndex(subpathIndex, pointIndex)));
                 }
             }
             // create the command and execute it
-            QUndoCommand * cmd = new KoPathPointInsertCommand( pointData, insertPosition, this );
+            QUndoCommand * cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
             cmd->redo();
         }
         d->initialized = true;
-    }
-    else
-    {
+    } else {
         QUndoCommand::redo();
     }
     d->path->update();

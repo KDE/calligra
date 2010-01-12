@@ -32,7 +32,7 @@ class RefinePathPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RefinePathPlugin( QWidget *parent, const QStringList & );
+    RefinePathPlugin(QWidget *parent, const QStringList &);
     virtual ~RefinePathPlugin() {}
 
 private slots:
@@ -49,10 +49,10 @@ class RefinePathDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit RefinePathDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit RefinePathDlg(QWidget* parent = 0L, const char* name = 0L);
 
     uint knots() const;
-    void setKnots( uint value );
+    void setKnots(uint value);
 
 private:
     KIntSpinBox * m_knots;

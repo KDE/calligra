@@ -53,19 +53,19 @@
 
 
 typedef KGenericFactory<WhirlPinchPlugin, QWidget> WhirlPinchPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) )
+K_EXPORT_COMPONENT_FACTORY(karbon_whirlpinchplugin, WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 
-WhirlPinchPlugin::WhirlPinchPlugin( QWidget *parent, const QStringList & ) 
-    : Plugin( parent )
+WhirlPinchPlugin::WhirlPinchPlugin(QWidget *parent, const QStringList &)
+        : Plugin(parent)
 {
-    QAction *a = new KAction(KIcon( "14_whirl" ), i18n("&Whirl/Pinch..."), this );
+    QAction *a = new KAction(KIcon("14_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
-    connect( a, SIGNAL( triggered() ), this, SLOT( slotWhirlPinch() ) );
+    connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
 
     m_whirlPinchDlg = new WhirlPinchDlg(parent);
-    m_whirlPinchDlg->setAngle( 180.0 );
-    m_whirlPinchDlg->setPinch( 0.0 );
-    m_whirlPinchDlg->setRadius( 100.0 );
+    m_whirlPinchDlg->setAngle(180.0);
+    m_whirlPinchDlg->setPinch(0.0);
+    m_whirlPinchDlg->setRadius(100.0);
 }
 
 void WhirlPinchPlugin::slotWhirlPinch()
@@ -73,76 +73,76 @@ void WhirlPinchPlugin::slotWhirlPinch()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
-    if( ! shape )
+    if (! shape)
         return;
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-    if( ! path )
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (! path)
         return;
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>( shape );
-    if( ps && ps->isParametricShape() )
+    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
+    if (ps && ps->isParametricShape())
         return;
 
-    m_whirlPinchDlg->setUnit( canvasController->canvas()->unit() );
+    m_whirlPinchDlg->setUnit(canvasController->canvas()->unit());
 
-    if( QDialog::Rejected == m_whirlPinchDlg->exec() )
+    if (QDialog::Rejected == m_whirlPinchDlg->exec())
         return;
 
-    canvasController->canvas()->addCommand( 
-        new KarbonWhirlPinchCommand( path, m_whirlPinchDlg->angle(), m_whirlPinchDlg->pinch(), m_whirlPinchDlg->radius() ) );
+    canvasController->canvas()->addCommand(
+        new KarbonWhirlPinchCommand(path, m_whirlPinchDlg->angle(), m_whirlPinchDlg->pinch(), m_whirlPinchDlg->radius()));
 }
 
-WhirlPinchDlg::WhirlPinchDlg( QWidget* parent, const char* name )
-    : KDialog( parent )
+WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
+        : KDialog(parent)
 {
-    setObjectName( name );
-    setModal( true );
-    setCaption( i18n( "Whirl Pinch" ) );
-    setButtons( Ok | Cancel );
+    setObjectName(name);
+    setModal(true);
+    setCaption(i18n("Whirl Pinch"));
+    setButtons(Ok | Cancel);
 
     QWidget * mainWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout( mainWidget );
-    mainLayout->setContentsMargins(0,0,0,0);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    QGroupBox* info = new QGroupBox( i18n( "Info" ), mainWidget );
-    QVBoxLayout * infoLayout = new QVBoxLayout( info );
+    QGroupBox* info = new QGroupBox(i18n("Info"), mainWidget);
+    QVBoxLayout * infoLayout = new QVBoxLayout(info);
     QString infoText = i18n("The result of the Whirlpinch effect can be improved by refining the path shape beforehand.");
-    QLabel * infoLabel = new QLabel( infoText, info );
-    infoLabel->setWordWrap( true );
-    infoLayout->addWidget( infoLabel );
+    QLabel * infoLabel = new QLabel(infoText, info);
+    infoLabel->setWordWrap(true);
+    infoLayout->addWidget(infoLabel);
 
     // add input fields:
-    QGroupBox* group = new QGroupBox( i18n( "Properties" ), mainWidget );
+    QGroupBox* group = new QGroupBox(i18n("Properties"), mainWidget);
 
     QGridLayout* layout = new QGridLayout(group);
 
-    layout->addWidget(new QLabel( i18n( "Angle:" )), 0, 0);
-    m_angle = new KDoubleNumInput( group );
+    layout->addWidget(new QLabel(i18n("Angle:")), 0, 0);
+    m_angle = new KDoubleNumInput(group);
     layout->addWidget(m_angle, 0, 1);
 
-    layout->addWidget(new QLabel( i18n( "Pinch:" )), 1, 0);
-    m_pinch = new KDoubleNumInput( group );
-    m_pinch->setRange( -1, 1, 0.01, true );
+    layout->addWidget(new QLabel(i18n("Pinch:")), 1, 0);
+    m_pinch = new KDoubleNumInput(group);
+    m_pinch->setRange(-1, 1, 0.01, true);
     layout->addWidget(m_pinch, 1, 1);
 
 
-    layout->addWidget(new QLabel( i18n( "Radius:" )), 2, 0);
-    m_radius = new KoUnitDoubleSpinBox( group );
-    m_radius->setMinimum( 0.0 );
-    m_radius->setLineStepPt( 0.1 );
+    layout->addWidget(new QLabel(i18n("Radius:")), 2, 0);
+    m_radius = new KoUnitDoubleSpinBox(group);
+    m_radius->setMinimum(0.0);
+    m_radius->setLineStepPt(0.1);
     layout->addWidget(m_radius, 2, 1);
 
     // signals and slots:
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
-    connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
 
-    mainLayout->addWidget( info );
-    mainLayout->addWidget( group );
+    mainLayout->addWidget(info);
+    mainLayout->addWidget(group);
 
-    setMainWidget( mainWidget );
+    setMainWidget(mainWidget);
 }
 
 qreal WhirlPinchDlg::angle() const
@@ -160,24 +160,24 @@ qreal WhirlPinchDlg::radius() const
     return m_radius->value();
 }
 
-void WhirlPinchDlg::setAngle( qreal value )
+void WhirlPinchDlg::setAngle(qreal value)
 {
-    m_angle->setValue( value);
+    m_angle->setValue(value);
 }
 
-void WhirlPinchDlg::setPinch( qreal value )
+void WhirlPinchDlg::setPinch(qreal value)
 {
     m_pinch->setValue(value);
 }
 
-void WhirlPinchDlg::setRadius( qreal value )
+void WhirlPinchDlg::setRadius(qreal value)
 {
-    m_radius->setValue( value);
+    m_radius->setValue(value);
 }
 
-void WhirlPinchDlg::setUnit( const KoUnit &unit )
+void WhirlPinchDlg::setUnit(const KoUnit &unit)
 {
-    m_radius->setUnit( unit );
+    m_radius->setUnit(unit);
 }
 
 #include "WhirlPinchPlugin.moc"

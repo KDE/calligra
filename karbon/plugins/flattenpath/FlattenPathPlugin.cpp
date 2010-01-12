@@ -48,18 +48,18 @@
 #include <QtGui/QHBoxLayout>
 
 
-typedef KGenericFactory<FlattenPathPlugin,QWidget> FlattenPathPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( "karbonflattenpathplugin" ) )
+typedef KGenericFactory<FlattenPathPlugin, QWidget> FlattenPathPluginFactory;
+K_EXPORT_COMPONENT_FACTORY(karbon_flattenpathplugin, FlattenPathPluginFactory("karbonflattenpathplugin"))
 
-FlattenPathPlugin::FlattenPathPlugin( QWidget *parent, const QStringList & )
-: Plugin( parent/*, name*/ )
+FlattenPathPlugin::FlattenPathPlugin(QWidget *parent, const QStringList &)
+        : Plugin(parent/*, name*/)
 {
     KAction *actionFlattenPath  = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), this);
-    actionCollection()->addAction("path_flatten", actionFlattenPath );
+    actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
-    m_flattenPathDlg = new FlattenDlg( parent );
-    m_flattenPathDlg->setFlatness( 10.0 );
+    m_flattenPathDlg = new FlattenDlg(parent);
+    m_flattenPathDlg->setFlatness(10.0);
 }
 
 void FlattenPathPlugin::slotFlattenPath()
@@ -67,51 +67,51 @@ void FlattenPathPlugin::slotFlattenPath()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
-    if( ! shape )
+    if (! shape)
         return;
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-    if( ! path )
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (! path)
         return;
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>( shape );
-    if( ps && ps->isParametricShape() )
+    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
+    if (ps && ps->isParametricShape())
         return;
 
-    if( QDialog::Rejected == m_flattenPathDlg->exec() )
+    if (QDialog::Rejected == m_flattenPathDlg->exec())
         return;
 
-    canvasController->canvas()->addCommand( 
-        new KarbonPathFlattenCommand( path, m_flattenPathDlg->flatness() ) );
+    canvasController->canvas()->addCommand(
+        new KarbonPathFlattenCommand(path, m_flattenPathDlg->flatness()));
 }
 
-FlattenDlg::FlattenDlg( QWidget* parent, const char* name )
-    : KDialog( parent )
+FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
+        : KDialog(parent)
 {
     setObjectName(name);
     setModal(true);
-    setCaption( i18n( "Flatten Path" ) );
-    setButtons( Ok | Cancel );
+    setCaption(i18n("Flatten Path"));
+    setButtons(Ok | Cancel);
 
     // add input fields on the left:
-    QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
+    QGroupBox* group = new QGroupBox(i18n("Properties"), this);
 
     QHBoxLayout* layout = new QHBoxLayout;
 
-    layout->addWidget(new QLabel( i18n( "Flatness:" )));
+    layout->addWidget(new QLabel(i18n("Flatness:")));
     m_flatness = new KDoubleNumInput(group);
     layout->addWidget(m_flatness);
 
     group->setLayout(layout);
-    group->setMinimumWidth( 300 );
+    group->setMinimumWidth(300);
 
     // signals and slots:
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
-    connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
 
-    setMainWidget( group );
+    setMainWidget(group);
 }
 
 qreal FlattenDlg::flatness() const
@@ -119,9 +119,9 @@ qreal FlattenDlg::flatness() const
     return m_flatness->value();
 }
 
-void FlattenDlg::setFlatness( qreal value )
+void FlattenDlg::setFlatness(qreal value)
 {
-    m_flatness->setValue( value);
+    m_flatness->setValue(value);
 }
 
 #include "FlattenPathPlugin.moc"
