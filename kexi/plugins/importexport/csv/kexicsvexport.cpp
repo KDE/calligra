@@ -114,7 +114,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         uint bufSize = qMin(uint(rowCount < 0 ? 10 : rowCount) * fields.count() * 20, (uint)128000);
         buffer.reserve(bufSize);
         if ((uint)buffer.capacity() < bufSize) {
-            kWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize
+            kWarning() << "Cannot allocate memory for " << bufSize
             << " characters";
             return false;
         }
@@ -123,16 +123,20 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
             stream = predefinedTextStream;
         } else {
             if (options.fileName.isEmpty()) {//sanity
-                kWarning() << "KexiCSVExportWizard::exportData(): fname is empty";
+                kWarning() << "Fname is empty";
                 return false;
             }
             kSaveFile = new KSaveFile(options.fileName);
-            if (QFile::NoError == kSaveFile->error()) {
+	    
+	    kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
+	    
+            if (kSaveFile->open()) {
                 kSaveFileTextStream = new QTextStream(kSaveFile);
                 stream = kSaveFileTextStream;
+		kDebug() << "have a stream";
             }
             if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
-                kWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0";
+                kWarning() << "Status != 0 or stream == 0";
 //! @todo show error
                 delete kSaveFileTextStream;
                 delete kSaveFile;
@@ -154,6 +158,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 // line endings should be as in RFC 4180
 #define CSV_EOLN "\r\n"
 
+    kDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
     const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
     const QByteArray delimiter(options.delimiter.left(1).toLatin1());
@@ -188,9 +193,11 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
     }
 
+kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
+	    kDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -211,6 +218,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         _ERR;
     }
     for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
+	kDebug() << "Adding records";
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
@@ -262,8 +270,13 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     delete [] isBLOB;
     delete [] visibleFieldIndex;
 
+    kDebug() << "Done";
+    
     if (kSaveFile) {
-        kSaveFile->close();
+	stream->flush();
+        if (!kSaveFile->finalize()) {
+		kDebug() << "Error finalizing stream!";
+	}
         delete kSaveFileTextStream;
         delete kSaveFile;
     }
