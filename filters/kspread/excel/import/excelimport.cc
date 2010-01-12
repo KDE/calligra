@@ -65,12 +65,15 @@ static inline uint qHash(const Swinder::FormatFont& font)
     // TODO: make this a better hash
     return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
 }
+
 // calculates the column width in pixels
 int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx) {
     QFont font("Arial",10);
     QFontMetricsF fm(font);
-    const int characterWidth = fm.width("h");
-    const long defColWidth = sheet->defaultColWidth() * characterWidth;
+    const qreal characterWidth = fm.width("h");
+    long defColWidth = sheet->defaultColWidth();
+    if(defColWidth <= 0) defColWidth = 8;
+    defColWidth *= characterWidth;
     return (defColWidth * col) + (dx / 1024.0 * defColWidth);
 }
 
@@ -79,8 +82,10 @@ int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy)
 {
     QFont font("Arial",10);
     QFontMetricsF fm(font);
-    const int characterHeight = fm.xHeight();
-    const long defRowHeight = sheet->defaultRowHeight() * characterHeight;
+    const qreal characterHeight = fm.height();
+    long defRowHeight = sheet->defaultRowHeight();
+    if(defRowHeight <= 0) defRowHeight = 1;
+    defRowHeight *= characterHeight;
     return (defRowHeight * row) + (dy / 1024.0 * defRowHeight);
 }
 }
@@ -1281,23 +1286,18 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
     
     foreach(Picture *picture, cell->pictures()) {
         xmlWriter->startElement("draw:frame");
+        //xmlWriter->addAttribute("draw:name", "Graphics 1");
         xmlWriter->addAttribute("table:end-cell", columnName(picture->m_colR) + QString::number(picture->m_rwB));
         xmlWriter->addAttribute("table:table:end-x", QString::number(picture->m_dxR));
         xmlWriter->addAttribute("table:table:end-y", QString::number(picture->m_dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
-        //xmlWriter->addAttribute("draw:name", "Graphics 1");
-//FIXME
-#if 0
-xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),picture->m_colL,picture->m_dxL)));
-xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),picture->m_rwT,picture->m_dyT)));
-#else
-xmlWriter->addAttribute("svg:x", QString::number(picture->m_colL*8 /*+picture->m_dxL*/)+"mm");
-xmlWriter->addAttribute("svg:y", QString::number(picture->m_rwT*8 /*+picture->m_dyT*/)+"mm");
-xmlWriter->addAttribute("svg:width", QString::number(picture->m_colR*8)+"mm");
-xmlWriter->addAttribute("svg:height", QString::number(picture->m_rwB*8)+"mm");
-#endif
-        //xmlWriter->addAttribute("svg:width", QString::number(picture->m_dxR));
-        //xmlWriter->addAttribute("svg:height", QString::number(picture->m_dyB));
+
+        //FIXME
+        xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),picture->m_colL,picture->m_dxL))+"pt");
+        xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),picture->m_rwT,picture->m_dyT))+"pt");
+        xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),picture->m_colR,picture->m_dxR))+"pt");
+        xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),picture->m_rwB,picture->m_dyB))+"pt");
+
         xmlWriter->startElement("draw:image");
         xmlWriter->addAttribute("xlink:href", picture->m_filename.c_str());
         xmlWriter->addAttribute("xlink:type", "simple");
