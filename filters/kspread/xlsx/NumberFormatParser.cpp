@@ -29,6 +29,7 @@
 #include <QBuffer>
 #include <QDebug>
 #include <QString>
+#include <QStringList>
 
 KoGenStyles* NumberFormatParser::styles = 0;
     
@@ -147,6 +148,19 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             }
             break;
 
+
+        // underscore: ignore the next char
+        case '_':
+            plainText += QLatin1Char( ' ' );
+            ++i;
+            break;
+
+
+        // asterisk: ignore
+        case '*':
+            ++i;
+            break;
+
         // percentage
         case '%':
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericPercentage );
@@ -161,6 +175,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         case ',':
         case '#':
         case '0':
+        case '?':
             SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericNumber )
             FINISH_PLAIN_TEXT_PART
             {
@@ -195,7 +210,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     else if( ch == '0' && gotDot )
                         ++decimalPlaces;
                     else if( ch == '?' )
-                    { /* no idea how to handle... */ }
+                    { /* ignore */ }
                     else if( ch == '/' )
                     {
                         SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericFraction );
@@ -205,9 +220,9 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
                     ch = numberFormat[ ++i ].toLatin1();
                 }
-                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' ) );
+                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' ) );
                
-                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' ) )
+                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' ) )
                     --i;
 
                 if( exponentDigits > 0 )
@@ -383,18 +398,20 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         // now it's getting really scarry: semi-colon:
         case ';':
             {
+                FINISH_PLAIN_TEXT_PART;
                 buffer.close();
 
                 // conditional style with the current format
-                const KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
+                KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
+                result.addAttribute( "style:volatile", "true" );
                 const QString styleName = NumberFormatParser::styles->lookup( result, "N" );
-                const QString condition = QLatin1String( "value()>=0" );
+                const QString condition = QString();
                 qDebug() << condition;
                 qDebug() << buffer.data();
                 // start a new style
                 buffer.setData( QByteArray() );
                 buffer.open( QIODevice::WriteOnly );
-                conditions[ condition ] = styleName;
+                conditions.insertMulti( condition, styleName );
             }
             break;
 
@@ -435,11 +452,24 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     if( type == KoGenStyle::StyleAuto && hadPlainText )
         SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericText )
 
+    // if conditions w/o explicit expressions where added, we create the expressions
+    QStringList autoConditions;
+    if( conditions.count( QString() ) == 1 )
+    {
+        autoConditions.push_back( QLatin1String( "value()>=0" ) );
+    }
+    else
+    {
+        autoConditions.push_back( QLatin1String( "value()>0" ) );
+        autoConditions.push_back( QLatin1String( "value()<0" ) );
+        autoConditions.push_back( QLatin1String( "value()=0" ) );
+    }
+
     // add conditional styles:
     for( QMap< QString, QString >::const_iterator it = conditions.begin(); it != conditions.end(); ++it )
     {
         xmlWriter.startElement( "style:map" );
-        xmlWriter.addAttribute( "style:condition", it.key() );
+        xmlWriter.addAttribute( "style:condition", it.key().isEmpty() ? autoConditions.takeLast() : it.key() );
         xmlWriter.addAttribute( "style:apply-style-name", it.value() );
         xmlWriter.endElement();
     }
