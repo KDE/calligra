@@ -59,6 +59,13 @@ else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNume
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
+else if( type == KoGenStyle::StyleNumericScientific && TYPE == KoGenStyle::StyleNumericNumber )  \
+{                                                                                                \
+}                                                                                                \
+else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericScientific )  \
+{                                                                                                \
+    type = TYPE;                                                                                 \
+}                                                                                                \
 else if( type != KoGenStyle::StyleAuto && type != TYPE )                                         \
 {                                                                                                \
     return KoGenStyle( KoGenStyle::StyleAuto );                                                  \
@@ -173,6 +180,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                         grouping = true;
                     else if( ch == 'E' || ch == 'e' )
                     {
+                        SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericScientific );
                         const char chN = numberFormat[ i + 1 ].toLatin1();
                         if( chN == '-' || chN == '+' )
                         {
@@ -202,7 +210,10 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' ) )
                     --i;
 
-                xmlWriter.startElement( "number:nmber" );
+                if( exponentDigits > 0 )
+                    xmlWriter.startElement( "number:scientific-number" );
+                else
+                    xmlWriter.startElement( "number:number" );
                 if( gotDot )
                     xmlWriter.addAttribute( "number:decimal-places", decimalPlaces );
                 xmlWriter.addAttribute( "number:min-integer-digits", integerDigits );
@@ -373,10 +384,13 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         case ';':
             {
                 buffer.close();
+
                 // conditional style with the current format
                 const KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
                 const QString styleName = NumberFormatParser::styles->lookup( result, "N" );
                 const QString condition = QLatin1String( "value()>=0" );
+                qDebug() << condition;
+                qDebug() << buffer.data();
                 // start a new style
                 buffer.setData( QByteArray() );
                 buffer.open( QIODevice::WriteOnly );
@@ -432,6 +446,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
     buffer.close();
     
+    // conditional style with the current format
     qDebug() << buffer.data();
 
     return styleFromTypeAndBuffer( type, buffer );
