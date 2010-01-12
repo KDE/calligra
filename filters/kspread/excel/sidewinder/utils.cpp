@@ -181,8 +181,9 @@ Value errorAsValue(int errorCode)
 
 const unsigned int Record::id = 0; // invalid of-course
 
-Record::Record(Workbook*)
+Record::Record(Workbook *book)
 {
+    m_workbook = book;
     stream_position = 0;
     ver = Excel97;
     valid = true;

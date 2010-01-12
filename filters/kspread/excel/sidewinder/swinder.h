@@ -26,5 +26,6 @@
 #include "cell.h"
 #include "sheet.h"
 #include "workbook.h"
+#include "excel.h"
 
 #endif // SWINDER_H

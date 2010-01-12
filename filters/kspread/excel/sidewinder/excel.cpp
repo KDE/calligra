@@ -1818,7 +1818,7 @@ void MsoDrawingGroupRecord::dump(std::ostream& out) const
 void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     //printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data, *continuePositions);
-    if(size < 8) {
+    if(size < 8 || !m_workbook->store()) {
         setIsValid(false);
         return;
     }
@@ -1906,7 +1906,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             rgbUid[i] = readU8(blipItemOffset + i);
         printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><< rgbUid=%s\n",QByteArray(rgbUid,16).toHex().data());
         
-        MsoDrawingBlibItem *item = new MsoDrawingBlibItem(rgbUid);
+        MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
         m_items.push_back(item);
         
         switch(recType) {
@@ -1928,22 +1928,17 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 unsigned tag = readU8(blipItemOffset + 16);
                 Q_ASSERT(tag == 0xFF);
                 
-                item->m_blipData = blipItemOffset + 17;
-                item->m_blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
-                Q_ASSERT(item->m_blibSize <= size);
-                
-#if 0
-QFile f("/home/q45/Gaga.jpg");
-Q_ASSERT(f.open(QIODevice::WriteOnly));
-//const int maxxxSize = recLen+((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
-const int maxSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
-printf(">>>>>> %i %i\n",maxSize,size);
-Q_ASSERT(maxSize <= size);
-f.write( (const char*)(blipItemOffset + 17), maxSize);
-f.close();
-//Q_ASSERT(false);
-#endif
+                const unsigned char *blipData = blipItemOffset + 17;
+                unsigned long blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
+                Q_ASSERT(blibSize <= size);
 
+                Store *store = m_workbook->store();
+                item->id = QByteArray(rgbUid,16).toHex().constData();
+                item->filename = "Pictures/" + item->id + ".jpg";
+                if(store->open(item->filename)) {
+                    store->write((const char*)blipData, blibSize);
+                    store->close();
+                }
             } break;
             case 0xF01E:
                 printf("TODO: OfficeArtBlipPNG\n");

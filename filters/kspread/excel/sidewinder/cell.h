@@ -24,11 +24,14 @@
 #include "format.h"
 #include "value.h"
 
+#include <vector>
+
 namespace Swinder
 {
 
 class Workbook;
 class Sheet;
+class Picture;
 
 class Cell
 {
@@ -75,6 +78,10 @@ public:
 
     UString note() const;
     void setNote(const UString &n);
+    
+    std::vector<Picture*> pictures() const;
+    void setPictures(std::vector<Picture*>);
+    void addPicture(Picture*);
 
 private:
     // no copy or assign

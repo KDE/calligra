@@ -45,6 +45,7 @@ public:
     UString hyperlinkLocation;
     UString hyperlinkTargetFrameName;
     UString note;
+    std::vector<Picture*> pictures;
 };
 
 }
@@ -221,4 +222,19 @@ UString Cell::note() const
 void Cell::setNote(const UString &n)
 {
     d->note = n;
+}
+
+std::vector<Picture*> Cell::pictures() const
+{
+    return d->pictures;
+}
+
+void Cell::setPictures(std::vector<Picture*> pics)
+{
+    d->pictures = pics;
+}
+
+void Cell::addPicture(Picture* picture)
+{
+    d->pictures.push_back(picture);
 }

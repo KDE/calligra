@@ -900,10 +900,9 @@ protected:
 class MsoDrawingBlibItem
 {
 public:
-    const char *rgbUid; // 16 bytes
-    const unsigned char *m_blipData;
-    unsigned long m_blibSize;
-    explicit MsoDrawingBlibItem(const char rgbUid[16]) : rgbUid(rgbUid), m_blipData(0), m_blibSize(0) {}
+    std::string id;
+    std::string filename;
+    explicit MsoDrawingBlibItem() {}
 };
 
 class MsoDrawingGroupRecord : public Record, private DrawingObject
@@ -1424,6 +1423,25 @@ private:
     Private* d;
 };
 
+class Picture
+{
+public:
+    std::string m_id;
+    std::string m_filename;
+    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
+    Picture(MsoDrawingRecord *record, MsoDrawingBlibItem *item) {
+        m_id = item->id;
+        m_filename = item->filename;
+        m_colL = record->m_colL;
+        m_dxL = record->m_dxL;
+        m_rwT = record->m_rwT;
+        m_dyT = record->m_dyT;
+        m_colR = record->m_colR;
+        m_dxR = record->m_dxR;
+        m_rwB = record->m_rwB;
+        m_dyB = record->m_dyB;
+    }
+};
 
 class ExcelReader
 {

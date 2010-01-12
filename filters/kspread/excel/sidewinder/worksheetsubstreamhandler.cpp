@@ -831,13 +831,10 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     const unsigned long pid = record->m_properties[0x0104];
     MsoDrawingBlibItem *drawing = d->globals->drawing(pid);
     if(!drawing) return;
+    std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
     Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
     Q_ASSERT(cell);
-    std::cout << "################################ TODO: WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
-    
-    //cell->
-
-    //TODO
+    cell->addPicture(new Picture(record,drawing));
 }
 
 typedef std::vector<UString> UStringStack;
