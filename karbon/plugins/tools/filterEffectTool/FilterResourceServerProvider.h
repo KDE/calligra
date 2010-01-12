@@ -27,7 +27,7 @@
 
 class FilterEffectResource;
 
- /// Provides resource server for filter effect resources
+/// Provides resource server for filter effect resources
 class FilterResourceServerProvider : public QObject
 {
     Q_OBJECT
@@ -40,7 +40,7 @@ public:
     KoResourceServer<FilterEffectResource>* filterEffectServer();
 
 private slots:
-        
+
     void filterEffectThreadDone();
 
 private:

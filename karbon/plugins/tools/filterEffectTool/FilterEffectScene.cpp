@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -33,12 +33,12 @@ const qreal ItemSpacing = 10.0;
 const qreal ConnectionDistance = 10.0;
 
 ConnectionSource::ConnectionSource()
-: m_type(Effect), m_effect(0)
+        : m_type(Effect), m_effect(0)
 {
 }
 
 ConnectionSource::ConnectionSource(KoFilterEffect *effect, SourceType type)
-: m_type(type), m_effect(effect)
+        : m_type(type), m_effect(effect)
 {
 }
 
@@ -89,12 +89,12 @@ QString ConnectionSource::typeToString(SourceType type)
 }
 
 ConnectionTarget::ConnectionTarget()
-: m_inputIndex(0), m_effect(0)
+        : m_inputIndex(0), m_effect(0)
 {
 }
 
 ConnectionTarget::ConnectionTarget(KoFilterEffect *effect, int inputIndex)
-: m_inputIndex(inputIndex), m_effect(effect)
+        : m_inputIndex(inputIndex), m_effect(effect)
 {
 }
 
@@ -110,12 +110,12 @@ KoFilterEffect * ConnectionTarget::effect() const
 
 
 FilterEffectScene::FilterEffectScene(QObject *parent)
-: QGraphicsScene(parent), m_effectStack(0)
+        : QGraphicsScene(parent), m_effectStack(0)
 {
     m_defaultInputs << "SourceGraphic" << "SourceAlpha";
     m_defaultInputs << "FillPaint" << "StrokePaint";
     m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
-    
+
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
@@ -129,7 +129,7 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
     m_connectionItems.clear();
     m_outputs.clear();
     clear();
-    
+
     m_effectStack = effectStack;
 
     if (!m_effectStack)
@@ -138,11 +138,11 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
     QList<KoFilterEffect*> filterEffects = m_effectStack->filterEffects();
     if (! filterEffects.count())
         return;
-    
+
     foreach(KoFilterEffect *effect, filterEffects) {
         createEffectItems(effect);
     }
-    
+
     layoutEffects();
     layoutConnections();
 }
@@ -151,12 +151,12 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
 {
     const bool isFirstItem = m_items.count() == 0;
     const QString defaultInput = isFirstItem ? "SourceGraphic" : m_items.last()->outputName();
-    
+
     QList<QString> inputs = effect->inputs();
     for (int i = inputs.count(); i < effect->requiredInputCount(); ++i) {
         inputs.append(defaultInput);
     }
-    
+
     QSet<QString> defaultItems;
     foreach(const QString &currentInput, inputs) {
         const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
@@ -167,9 +167,9 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
             defaultItems.insert(input);
         }
     }
-    
+
     EffectItem * effectItem = new EffectItem(effect);
-    
+
     // create connections
     int index = 0;
     foreach(const QString &currentInput, inputs) {
@@ -181,14 +181,14 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
         }
         index++;
     }
-    
+
     addSceneItem(effectItem);
-    
+
     m_outputs.insert(effectItem->outputName(), effectItem);
 }
 
-void FilterEffectScene::addSceneItem(QGraphicsItem *item)                                 
-{                                                                                         
+void FilterEffectScene::addSceneItem(QGraphicsItem *item)
+{
     addItem(item);
     EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
     if (effectItem) {
@@ -199,10 +199,10 @@ void FilterEffectScene::addSceneItem(QGraphicsItem *item)
             m_connectionItems.append(connectionItem);
     }
 }
-        
+
 void FilterEffectScene::layoutEffects()
 {
-    QPointF position(25,25);
+    QPointF position(25, 25);
     foreach(EffectItemBase * item, m_items) {
         item->setPos(position);
         position.ry() += item->rect().height() + ItemSpacing;
@@ -211,30 +211,30 @@ void FilterEffectScene::layoutEffects()
 
 void FilterEffectScene::layoutConnections()
 {
-    QList<QPair<int,int> > sortedConnections;
-    
+    QList<QPair<int, int> > sortedConnections;
+
     // calculate connection sizes from item distances
     int connectionIndex = 0;
     foreach(ConnectionItem *item, m_connectionItems) {
         int sourceIndex = m_items.indexOf(item->sourceItem());
         int targetIndex = m_items.indexOf(item->targetItem());
-        sortedConnections.append(QPair<int,int>(targetIndex-sourceIndex, connectionIndex));
+        sortedConnections.append(QPair<int, int>(targetIndex - sourceIndex, connectionIndex));
         connectionIndex++;
     }
-    
+
     qSort(sortedConnections);
     qreal distance = ConnectionDistance;
     int lastSize = -1;
     int connectionCount = sortedConnections.count();
     for (int i = 0; i < connectionCount; ++i) {
         const QPair<int, int> &connection = sortedConnections[i];
-        
+
         int size = connection.first;
         if (size > lastSize) {
             lastSize = size;
             distance += ConnectionDistance;
         }
-        
+
         ConnectionItem * connectionItem = m_connectionItems[connection.second];
         if (!connectionItem)
             continue;
@@ -242,22 +242,22 @@ void FilterEffectScene::layoutConnections()
         EffectItemBase * targetItem = connectionItem->targetItem();
         if (!sourceItem || ! targetItem)
             continue;
-        
+
         int targetInput = connectionItem->targetInput();
         QPointF sourcePos = sourceItem->mapToScene(sourceItem->outputPosition());
         QPointF targetPos = targetItem->mapToScene(targetItem->inputPosition(targetInput));
         QPainterPath path;
-        path.moveTo(sourcePos+QPointF(0.5*sourceItem->connectorSize().width(),0));
-        path.lineTo(sourcePos+QPointF(distance,0));
-        path.lineTo(targetPos+QPointF(distance,0));
-        path.lineTo(targetPos+QPointF(0.5*targetItem->connectorSize().width(),0));
+        path.moveTo(sourcePos + QPointF(0.5*sourceItem->connectorSize().width(), 0));
+        path.lineTo(sourcePos + QPointF(distance, 0));
+        path.lineTo(targetPos + QPointF(distance, 0));
+        path.lineTo(targetPos + QPointF(0.5*targetItem->connectorSize().width(), 0));
         connectionItem->setPath(path);
     }
 }
 
 void FilterEffectScene::selectionChanged()
 {
-    if(selectedItems().count()) {
+    if (selectedItems().count()) {
         foreach(EffectItemBase* item, m_items) {
             if (item->isSelected()) {
                 item->setOpacity(1.0);
@@ -275,28 +275,28 @@ void FilterEffectScene::selectionChanged()
 QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
 {
     QList<ConnectionSource> effectItems;
-    
+
     QList<QGraphicsItem*> selectedGraphicsItems = selectedItems();
     if (!selectedGraphicsItems.count())
         return effectItems;
     if (!m_items.count())
         return effectItems;
-    
+
     foreach(QGraphicsItem * item, selectedGraphicsItems) {
         EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
         if (!item)
             continue;
 
         ConnectionSource::SourceType type = ConnectionSource::Effect;
-        
+
         KoFilterEffect * effect = effectItem->effect();
         if (dynamic_cast<DefaultInputItem*>(item)) {
             type = ConnectionSource::typeFromString(effectItem->outputName());
         }
-        
+
         effectItems.append(ConnectionSource(effect, type));
     }
-    
+
     return effectItems;
 }
 
@@ -311,11 +311,11 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent * event)
     }
     if (!dropTargetItem)
         return;
-    
+
     const ConnectorMimeData * data = dynamic_cast<const ConnectorMimeData*>(event->mimeData());
     if (!data)
         return;
-    
+
     ConnectorItem * dropSourceItem = data->connector();
     if (!dropSourceItem)
         return;
@@ -324,7 +324,7 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent * event)
     KoFilterEffect * inputEffect = 0;
     KoFilterEffect * outputEffect = 0;
     int inputIndex = 0;
-    
+
     if (dropTargetItem->connectorType() == ConnectorItem::Input) {
         // dropped output onto an input
         outputParentItem = dynamic_cast<EffectItemBase*>(dropSourceItem->parentItem());

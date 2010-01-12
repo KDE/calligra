@@ -38,11 +38,11 @@ FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 FilterResourceServerProvider::FilterResourceServerProvider()
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_effects", "data", "karbon/effects/");
-    
+
     m_filterEffectServer = new KoResourceServer<FilterEffectResource>("ko_effects", "*.svg");
     m_filterEffectThread = new KoResourceLoaderThread(m_filterEffectServer);
-    connect(m_filterEffectThread, SIGNAL(finished()), 
-             this, SLOT(filterEffectThreadDone()));
+    connect(m_filterEffectThread, SIGNAL(finished()),
+            this, SLOT(filterEffectThreadDone()));
     m_filterEffectThread->start();
 }
 

@@ -41,7 +41,7 @@ class KoPathShape;
  * @return a path shape representing the fitted curve
  */
 
-KoPathShape * bezierFit( const QList<QPointF> &points, float error );
+KoPathShape * bezierFit(const QList<QPointF> &points, float error);
 
 #endif
 

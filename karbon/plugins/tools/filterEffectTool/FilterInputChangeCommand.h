@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -25,18 +25,15 @@
 class KoShape;
 class KoFilterEffect;
 
-struct InputChangeData 
-{
+struct InputChangeData {
     InputChangeData()
-        : filterEffect(0), inputIndex(-1)
-    {
+            : filterEffect(0), inputIndex(-1) {
     }
-    
+
     InputChangeData(KoFilterEffect *effect, int index, const QString &oldIn, const QString &newIn)
-        : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn)
-    {
+            : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn) {
     }
-    
+
     KoFilterEffect * filterEffect;
     int inputIndex;
     QString oldInput;
@@ -47,10 +44,10 @@ struct InputChangeData
 class FilterInputChangeCommand : public QUndoCommand
 {
 public:
-    explicit FilterInputChangeCommand( const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
-    
-    explicit FilterInputChangeCommand( const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
-    
+    explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
+
+    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
+
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

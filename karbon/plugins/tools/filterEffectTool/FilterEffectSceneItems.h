@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -58,31 +58,31 @@ class EffectItemBase : public QGraphicsRectItem
 {
 public:
     EffectItemBase(KoFilterEffect *effect);
-    
+
     /// Returns the position of the output connector
     QPointF outputPosition() const;
-    
+
     /// Returns the position of the specified input connector
     QPointF inputPosition(int index) const;
-    
+
     /// Returns the name of the output
     QString outputName() const;
-    
+
     /// Returns the size of the connectors
     QSizeF connectorSize() const;
-    
+
     /// Returns the corresponding filter effect
     KoFilterEffect * effect() const;
-    
+
 protected:
     void createText(const QString &text);
     void createOutput(const QPointF &position, const QString &name);
     void createInput(const QPointF &position);
-    
+
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
     virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
-    
+
     ConnectorItem * connectorAtPosition(const QPointF &scenePosition);
 
 private:
@@ -106,7 +106,7 @@ class EffectItem : public EffectItemBase
 {
 public:
     EffectItem(KoFilterEffect *effect);
-    
+
 private:
     KoFilterEffect * m_effect;
 };
@@ -116,19 +116,19 @@ class ConnectionItem : public QGraphicsPathItem
 {
 public:
     ConnectionItem(EffectItemBase *source, EffectItemBase * target, int targetInput);
-    
+
     /// Returns the source item of the connection
     EffectItemBase * sourceItem() const;
     /// Returns the target item of the connection
     EffectItemBase * targetItem() const;
     /// Returns the input index of the target item
     int targetInput() const;
-    
+
     /// Sets the source item
     void setSourceItem(EffectItemBase * source);
-    /// Set the target item and the corresponding input index 
+    /// Set the target item and the corresponding input index
     void setTargetItem(EffectItemBase * target, int targetInput);
-    
+
 private:
     EffectItemBase * m_source;
     EffectItemBase * m_target;
