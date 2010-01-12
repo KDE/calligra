@@ -31,19 +31,19 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 
-K_PLUGIN_FACTORY( KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>(); )
-K_EXPORT_PLUGIN( KarbonToolsPluginFactory("KarbonTools") )
+K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
+K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
 
-KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QVariantList& )
-    : QObject(parent)
+KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
+        : QObject(parent)
 {
-    KoToolRegistry::instance()->add( new KarbonPencilToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonCalligraphyToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonGradientToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonPatternToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonFilterEffectsToolFactory( parent ) );
-    
-    KoShapeRegistry::instance()->add( new KarbonCalligraphicShapeFactory( parent ) );
+    KoToolRegistry::instance()->add(new KarbonPencilToolFactory(parent));
+    KoToolRegistry::instance()->add(new KarbonCalligraphyToolFactory(parent));
+    KoToolRegistry::instance()->add(new KarbonGradientToolFactory(parent));
+    KoToolRegistry::instance()->add(new KarbonPatternToolFactory(parent));
+    KoToolRegistry::instance()->add(new KarbonFilterEffectsToolFactory(parent));
+
+    KoShapeRegistry::instance()->add(new KarbonCalligraphicShapeFactory(parent));
 }
 
 #include "KarbonToolsPlugin.moc"

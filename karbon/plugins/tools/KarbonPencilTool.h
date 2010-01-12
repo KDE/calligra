@@ -34,37 +34,37 @@ public:
     explicit KarbonPencilTool(KoCanvasBase *canvas);
     ~KarbonPencilTool();
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void repaintDecorations();
 
-    void mousePressEvent( KoPointerEvent *event ) ;
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
+    void mousePressEvent(KoPointerEvent *event) ;
+    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-    void activate (bool temporary=false);
+    void activate(bool temporary = false);
     void deactivate();
 
 protected:
     virtual QWidget * createOptionWidget();
 
 private slots:
-    void selectMode( int mode );
-    void setOptimize( int state );
-    void setDelta( double delta );
+    void selectMode(int mode);
+    void setOptimize(int state);
+    void setDelta(double delta);
 private:
 
-    qreal lineAngle( const QPointF &p1, const QPointF &p2 );
-    void addPoint( const QPointF & point );
-    void finish( bool closePath );
+    qreal lineAngle(const QPointF &p1, const QPointF &p2);
+    void addPoint(const QPointF & point);
+    void finish(bool closePath);
     KoLineBorder * currentBorder();
-    
-    /// returns the nearest existing path point 
-    KoPathPoint* endPointAtPosition( const QPointF &position );
-    
+
+    /// returns the nearest existing path point
+    KoPathPoint* endPointAtPosition(const QPointF &position);
+
     /// Connects given path with the ones we hit when starting/finishing
-    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
-    
+    bool connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd);
+
     enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
 
     PencilMode m_mode;

@@ -35,25 +35,27 @@ class KarbonPatternEditStrategyBase
 {
 public:
     /// constructs an edit strategy working on the given shape
-    explicit KarbonPatternEditStrategyBase( KoShape * shape, KoImageCollection * imageCollection );
+    explicit KarbonPatternEditStrategyBase(KoShape * shape, KoImageCollection * imageCollection);
 
     /// destroy the edit strategy
     virtual ~KarbonPatternEditStrategyBase();
 
     /// painting of the pattern editing handles
-    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) const = 0;
 
     /// selects handle at the given position
-    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter ) = 0;
+    virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter) = 0;
 
     /// mouse position handling for moving handles
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) = 0;
 
     /// sets the strategy into editing mode
-    void setEditing( bool on );
+    void setEditing(bool on);
 
     /// checks if strategy is in editing mode
-    bool isEditing() const { return m_editing; }
+    bool isEditing() const {
+        return m_editing;
+    }
 
     /// create the command for changing the shapes background
     QUndoCommand * createCommand();
@@ -71,19 +73,27 @@ public:
     KoShape * shape() const;
 
     /// sets the handle radius in pixel used for painting the handles
-    static void setHandleRadius( uint radius ) { m_handleRadius = radius; }
+    static void setHandleRadius(uint radius) {
+        m_handleRadius = radius;
+    }
 
     /// returns the actual handle radius in pixel
-    static uint handleRadius() { return m_handleRadius; }
+    static uint handleRadius() {
+        return m_handleRadius;
+    }
 
     /// sets the grab sensitivity in pixel used for grabbing the handles
-    static void setGrabSensitivity( uint grabSensitivity ) { m_grabSensitivity = grabSensitivity; }
+    static void setGrabSensitivity(uint grabSensitivity) {
+        m_grabSensitivity = grabSensitivity;
+    }
 
     /// returns the actual grab sensitivity in pixel
-    static uint grabSensitivity() { return m_grabSensitivity; }
+    static uint grabSensitivity() {
+        return m_grabSensitivity;
+    }
 
     virtual void updateHandles() {}
-    
+
 protected:
     /// Returns the image collectio used to create new pattern background
     KoImageCollection * imageCollection();
@@ -95,10 +105,10 @@ protected:
     bool isModified() const;
 
     /// paints a single handle
-    void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const;
+    void paintHandle(QPainter &painter, const KoViewConverter &converter, const QPointF &position) const;
 
     /// checks if mouse position is inside handle rect
-    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos, const KoViewConverter &converter ) const;
+    bool mouseInsideHandle(const QPointF &mousePos, const QPointF &handlePos, const KoViewConverter &converter) const;
 
 
     QList<QPointF> m_handles;  ///< the list of handles
@@ -121,10 +131,10 @@ private:
 class KarbonPatternEditStrategy : public KarbonPatternEditStrategyBase
 {
 public:
-    explicit KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
+    explicit KarbonPatternEditStrategy(KoShape * shape, KoImageCollection * imageCollection);
     virtual ~KarbonPatternEditStrategy();
-    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
-    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) const;
+    virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
     virtual KoPatternBackground updatedBackground();
@@ -141,10 +151,10 @@ private:
 class KarbonOdfPatternEditStrategy : public KarbonPatternEditStrategyBase
 {
 public:
-    explicit KarbonOdfPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
+    explicit KarbonOdfPatternEditStrategy(KoShape * shape, KoImageCollection * imageCollection);
     virtual ~KarbonOdfPatternEditStrategy();
-    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
-    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) const;
+    virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
     virtual KoPatternBackground updatedBackground();
@@ -153,7 +163,7 @@ private:
 
     enum Handles { origin, size };
 
-    void updateHandles( KoPatternBackground * fill );
+    void updateHandles(KoPatternBackground * fill);
 };
 
 #endif // _KARBONPATTERNEDITSTRATEGY_H_

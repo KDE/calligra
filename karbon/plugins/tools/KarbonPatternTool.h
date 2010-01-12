@@ -37,23 +37,23 @@ public:
     explicit KarbonPatternTool(KoCanvasBase *canvas);
     ~KarbonPatternTool();
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void repaintDecorations();
 
-    void mousePressEvent( KoPointerEvent *event ) ;
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
+    void mousePressEvent(KoPointerEvent *event) ;
+    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-    void activate (bool temporary=false);
+    void activate(bool temporary = false);
     void deactivate();
 
 protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private slots:
-    virtual void resourceChanged( int key, const QVariant & res );
-    void patternSelected( KoResource * resource );
+    virtual void resourceChanged(int key, const QVariant & res);
+    void patternSelected(KoResource * resource);
     void initialize();
     /// updates options widget from selected pattern
     void updateOptionsWidget();

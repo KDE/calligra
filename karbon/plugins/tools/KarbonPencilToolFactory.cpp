@@ -26,19 +26,21 @@
 #include <kdebug.h>
 
 KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
-    : KoToolFactory(parent, "KarbonPencilTool")
+        : KoToolFactory(parent, "KarbonPencilTool")
 {
-    setToolTip( i18n("Freehand Path Drawing Tool") );
-    setToolType( mainToolType() );
-    setIcon( "draw-freehand" );
-    setPriority( 3 );
+    setToolTip(i18n("Freehand Path Drawing Tool"));
+    setToolType(mainToolType());
+    setIcon("draw-freehand");
+    setPriority(3);
     setActivationShapeId("flake/edit");
 }
 
-KarbonPencilToolFactory::~KarbonPencilToolFactory() {
+KarbonPencilToolFactory::~KarbonPencilToolFactory()
+{
 }
 
-KoTool * KarbonPencilToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * KarbonPencilToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KarbonPencilTool(canvas);
 }
 

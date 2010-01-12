@@ -63,19 +63,18 @@ public slots:
     void decreaseAngle();
 
 private slots:
-    void loadProfile( const QString &name );
-    void toggleUseAngle( bool checked );
+    void loadProfile(const QString &name);
+    void toggleUseAngle(bool checked);
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
 
-    void setUsePathEnabled( bool enabled );
+    void setUsePathEnabled(bool enabled);
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
     //       is it needed al all??
-    struct Profile
-    {
+    struct Profile {
         QString name;
         int index; // index in the config file
         bool usePath;
@@ -107,7 +106,7 @@ private:
 
     // save a new profile using the values of the input boxes
     // if a profile with the same name already exists it will be overwritten
-    void saveProfile( const QString &name );
+    void saveProfile(const QString &name);
 
     // removes the profile from the configuration file, from profiles
     // and from the combobox.
@@ -116,7 +115,7 @@ private:
 
     // returns the position inside profiles of a certain profile
     // returns -1 if the profile is not found
-    int profilePosition( const QString &profileName );
+    int profilePosition(const QString &profileName);
 
 private:
     typedef QMap<QString, Profile *> ProfileMap;

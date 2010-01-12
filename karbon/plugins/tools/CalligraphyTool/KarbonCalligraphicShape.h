@@ -28,14 +28,24 @@ class KarbonCalligraphicPoint
 {
 public:
     KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
-        : m_point(point), m_angle(angle), m_width(width) {}
+            : m_point(point), m_angle(angle), m_width(width) {}
 
-    QPointF point() const {return m_point;}
-    qreal angle() const {return m_angle;}
-    qreal width() const {return m_width;}
+    QPointF point() const {
+        return m_point;
+    }
+    qreal angle() const {
+        return m_angle;
+    }
+    qreal width() const {
+        return m_width;
+    }
 
-    void setPoint(const QPointF &point) {m_point = point;}
-    void setAngle(qreal angle) {m_angle = angle;}
+    void setPoint(const QPointF &point) {
+        m_point = point;
+    }
+    void setAngle(qreal angle) {
+        m_angle = angle;
+    }
 
 private:
     QPointF m_point; // in shape coordinates
@@ -71,17 +81,17 @@ private:
 class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
-    KarbonCalligraphicShape( qreal caps=0.0 );
+    KarbonCalligraphicShape(qreal caps = 0.0);
     ~KarbonCalligraphicShape();
 
-    void appendPoint( const QPointF &p1, qreal angle, qreal width );
+    void appendPoint(const QPointF &p1, qreal angle, qreal width);
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
     // returns the bounding rect of whan needs to be repainted
     // after new points are added
     const QRectF lastPieceBoundingRect();
 
-    void setSize( const QSizeF &newSize );
+    void setSize(const QSizeF &newSize);
     //virtual QPointF normalize();
 
     QPointF normalize();
@@ -92,35 +102,35 @@ public:
 
     // reimplemented
     virtual QString pathShapeId() const;
-    
+
 protected:
     // reimplemented
-    void moveHandleAction( int handleId,
-                           const QPointF & point,
-                           Qt::KeyboardModifiers modifiers = Qt::NoModifier );
+    void moveHandleAction(int handleId,
+                          const QPointF & point,
+                          Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     // reimplemented
-    void updatePath( const QSizeF &size );
+    void updatePath(const QSizeF &size);
 
 private:
     // auxiliary function that actually insererts the points
     // without doing any additional checks
     // the points should be given in canvas coordinates
-    void appendPointsToPathAux( const QPointF &p1, const QPointF &p2 );
-   
+    void appendPointsToPathAux(const QPointF &p1, const QPointF &p2);
+
     // function to detect a flip, given the points being inserted
-    bool flipDetected( const QPointF &p1, const QPointF &p2 );
+    bool flipDetected(const QPointF &p1, const QPointF &p2);
 
     void smoothLastPoints();
-    void smoothPoint( const int index );
+    void smoothPoint(const int index);
 
     // determine whether the points given are in counterclockwise order or not
     // returns +1 if they are, -1 if they are given in clockwise order
     // and 0 if they form a degenerate triangle
-    static int ccw( const QPointF &p1, const QPointF &p2, const QPointF &p3 );
+    static int ccw(const QPointF &p1, const QPointF &p2, const QPointF &p3);
 
-    // 
-    void addCap( int index1, int index2, int pointIndex, bool inverted=false );
+    //
+    void addCap(int index1, int index2, int pointIndex, bool inverted = false);
 
     // the actual data then determines it's shape (guide path + data for points)
     QList<KarbonCalligraphicPoint *> m_points;

@@ -47,18 +47,18 @@
 
 #include <math.h>
 
-qreal squareDistance( const QPointF &p1, const QPointF &p2)
+qreal squareDistance(const QPointF &p1, const QPointF &p2)
 {
-    qreal dx = p1.x()-p2.x();
-    qreal dy = p1.y()-p2.y();
+    qreal dx = p1.x() - p2.x();
+    qreal dy = p1.y() - p2.y();
     return dx*dx + dy*dy;
 }
 
 KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
-    : KoTool( canvas ),  m_mode( ModeCurve ), m_optimizeRaw( false )
-    , m_optimizeCurve( false ), m_combineAngle( 15.0 ), m_fittingError( 5.0 )
-    , m_close( false ), m_shape( 0 )
-    , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)
+        : KoTool(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
+        , m_optimizeCurve(false), m_combineAngle(15.0), m_fittingError(5.0)
+        , m_close(false), m_shape(0)
+        , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)
 {
 }
 
@@ -66,27 +66,26 @@ KarbonPencilTool::~KarbonPencilTool()
 {
 }
 
-void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converter )
+void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_shape) {
         painter.save();
 
-        painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
+        painter.setMatrix(m_shape->absoluteTransformation(&converter) * painter.matrix());
 
         painter.save();
-        m_shape->paint( painter, converter );
+        m_shape->paint(painter, converter);
         painter.restore();
 
-        if( m_shape->border() )
-        {
+        if (m_shape->border()) {
             painter.save();
-            m_shape->border()->paint( m_shape, painter, converter );
+            m_shape->border()->paint(m_shape, painter, converter);
             painter.restore();
         }
 
         painter.restore();
     }
-    
+
     if (m_hoveredPoint) {
         painter.save();
         painter.setMatrix(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
@@ -96,7 +95,7 @@ void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.setPen(Qt::blue);      //TODO make configurable
         painter.setBrush(Qt::white);   //TODO make configurable
         m_hoveredPoint->paint(painter, handleRadius, KoPathPoint::Node);
-        
+
         painter.restore();
     }
 }
@@ -105,29 +104,28 @@ void KarbonPencilTool::repaintDecorations()
 {
 }
 
-void KarbonPencilTool::mousePressEvent( KoPointerEvent *event )
+void KarbonPencilTool::mousePressEvent(KoPointerEvent *event)
 {
-    if( ! m_shape )
-    {
+    if (! m_shape) {
         m_shape = new KoPathShape();
-        m_shape->setShapeId( KoPathShapeId );
-        m_shape->setBorder( currentBorder() );
+        m_shape->setShapeId(KoPathShapeId);
+        m_shape->setBorder(currentBorder());
         m_points.clear();
-        
+
         QPointF point = event->point;
         m_existingStartPoint = endPointAtPosition(point);
         if (m_existingStartPoint)
             point = m_existingStartPoint->parent()->shapeToDocument(m_existingStartPoint->point());
-        
-        addPoint( point );
+
+        addPoint(point);
     }
 }
 
-void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
+void KarbonPencilTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if( event->buttons() & Qt::LeftButton )
-        addPoint( event->point );
-    
+    if (event->buttons() & Qt::LeftButton)
+        addPoint(event->point);
+
     KoPathPoint * endPoint = endPointAtPosition(event->point);
     if (m_hoveredPoint != endPoint) {
         if (m_hoveredPoint) {
@@ -142,25 +140,25 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
     }
 }
 
-void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
+void KarbonPencilTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if( ! m_shape )
+    if (! m_shape)
         return;
-    
+
     QPointF point = event->point;
     m_existingEndPoint = endPointAtPosition(point);
     if (m_existingEndPoint)
         point = m_existingEndPoint->parent()->shapeToDocument(m_existingEndPoint->point());
-    
-    addPoint( point );
-    finish( event->modifiers() & Qt::ShiftModifier );
+
+    addPoint(point);
+    finish(event->modifiers() & Qt::ShiftModifier);
 
     m_existingStartPoint = 0;
     m_existingEndPoint = 0;
     m_hoveredPoint = 0;
-    
+
     // the original path may be different from the one added
-    canvas()->updateCanvas( m_shape->boundingRect() );
+    canvas()->updateCanvas(m_shape->boundingRect());
     delete m_shape;
     m_shape = 0;
     m_points.clear();
@@ -168,15 +166,14 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
 {
-    if ( m_shape ) {
+    if (m_shape) {
         event->accept();
-    }
-    else {
+    } else {
         event->ignore();
     }
 }
 
-void KarbonPencilTool::activate( bool )
+void KarbonPencilTool::activate(bool)
 {
     m_points.clear();
     m_close = false;
@@ -193,65 +190,63 @@ void KarbonPencilTool::deactivate()
     m_hoveredPoint = 0;
 }
 
-void KarbonPencilTool::addPoint( const QPointF & point )
+void KarbonPencilTool::addPoint(const QPointF & point)
 {
-    if( ! m_shape )
+    if (! m_shape)
         return;
 
     // do a moveTo for the first point added
-    if( m_points.empty() )
-        m_shape->moveTo( point );
+    if (m_points.empty())
+        m_shape->moveTo(point);
     // do not allow coincident points
-    else if( point != m_points.last() )
-        m_shape->lineTo( point );
+    else if (point != m_points.last())
+        m_shape->lineTo(point);
     else
         return;
 
-    m_points.append( point );
-    canvas()->updateCanvas( m_shape->boundingRect() );
+    m_points.append(point);
+    canvas()->updateCanvas(m_shape->boundingRect());
 }
 
-qreal KarbonPencilTool::lineAngle( const QPointF &p1, const QPointF &p2 )
+qreal KarbonPencilTool::lineAngle(const QPointF &p1, const QPointF &p2)
 {
-    qreal angle = atan2( p2.y() - p1.y(), p2.x() - p1.x() );
-    if( angle < 0.0 )
-        angle += 2*M_PI;
+    qreal angle = atan2(p2.y() - p1.y(), p2.x() - p1.x());
+    if (angle < 0.0)
+        angle += 2 * M_PI;
 
     return angle * 180.0 / M_PI;
 }
 
-void KarbonPencilTool::finish( bool closePath )
+void KarbonPencilTool::finish(bool closePath)
 {
-    if( m_points.count() < 2 )
+    if (m_points.count() < 2)
         return;
 
     KoPathShape * path = 0;
     QList<QPointF> complete;
     QList<QPointF> *points = &m_points;
 
-    if( m_mode == ModeStraight || m_optimizeRaw || m_optimizeCurve )
-    {
+    if (m_mode == ModeStraight || m_optimizeRaw || m_optimizeCurve) {
         float combineAngle;
 
-        if( m_mode == ModeStraight )
+        if (m_mode == ModeStraight)
             combineAngle = m_combineAngle;
         else
             combineAngle = 0.50f;
 
         //Add the first two points
-        complete.append( m_points[0] );
-        complete.append( m_points[1] );
+        complete.append(m_points[0]);
+        complete.append(m_points[1]);
 
         //Now we need to get the angle of the first line
-        float lastAngle = lineAngle( complete[0], complete[1] );
+        float lastAngle = lineAngle(complete[0], complete[1]);
 
         uint pointCount = m_points.count();
-        for( uint i = 2; i < pointCount; ++i )
-        {
-            float angle = lineAngle( complete.last(), m_points[i] );
-            if( qAbs( angle - lastAngle ) < combineAngle )
+        for (uint i = 2; i < pointCount; ++i) {
+            float angle = lineAngle(complete.last(), m_points[i]);
+            if (qAbs(angle - lastAngle) < combineAngle)
                 complete.removeLast();
-            complete.append( m_points[i] );
+            complete.append(m_points[i]);
             lastAngle = angle;
         }
 
@@ -259,36 +254,32 @@ void KarbonPencilTool::finish( bool closePath )
         points = &complete;
     }
 
-    switch( m_mode )
-    {
-        case ModeCurve:
-        {
-            path = bezierFit( *points, m_fittingError );
-        }
-        break;
-        case ModeStraight:
-        case ModeRaw:
-        {
-            path = new KoPathShape();
-            uint pointCount = points->count();
-            path->moveTo( points->at( 0 ) );
-            for( uint i = 1; i < pointCount; ++i )
-                path->lineTo( points->at(i) );
-        }
-        break;
+    switch (m_mode) {
+    case ModeCurve: {
+        path = bezierFit(*points, m_fittingError);
+    }
+    break;
+    case ModeStraight:
+    case ModeRaw: {
+        path = new KoPathShape();
+        uint pointCount = points->count();
+        path->moveTo(points->at(0));
+        for (uint i = 1; i < pointCount; ++i)
+            path->lineTo(points->at(i));
+    }
+    break;
     }
 
-    if( ! path )
+    if (! path)
         return;
 
     KoShape * startShape = 0;
     KoShape * endShape = 0;
-    
-    if( closePath ) {
+
+    if (closePath) {
         path->close();
         path->normalize();
-    }
-    else {
+    } else {
         path->normalize();
         if (connectPaths(path, m_existingStartPoint, m_existingEndPoint)) {
             if (m_existingStartPoint)
@@ -299,26 +290,23 @@ void KarbonPencilTool::finish( bool closePath )
     }
 
     // set the proper shape id
-    path->setShapeId( KoPathShapeId );
-    path->setBorder( currentBorder() );
-    
-    QUndoCommand * cmd = canvas()->shapeController()->addShape( path );
-    if( cmd )
-    {
+    path->setShapeId(KoPathShapeId);
+    path->setBorder(currentBorder());
+
+    QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+    if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();
-        selection->select( path );
-        
+        selection->select(path);
+
         if (startShape)
             canvas()->shapeController()->removeShape(startShape, cmd);
         if (endShape && startShape != endShape)
             canvas()->shapeController()->removeShape(endShape, cmd);
-        
-        canvas()->addCommand( cmd );
-    }
-    else
-    {
-        canvas()->updateCanvas( path->boundingRect() );
+
+        canvas()->addCommand(cmd);
+    } else {
+        canvas()->updateCanvas(path->boundingRect());
         delete path;
     }
 }
@@ -326,101 +314,101 @@ void KarbonPencilTool::finish( bool closePath )
 QWidget * KarbonPencilTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
-    QVBoxLayout * layout = new QVBoxLayout( optionWidget );
+    QVBoxLayout * layout = new QVBoxLayout(optionWidget);
 
-    QHBoxLayout *modeLayout = new QHBoxLayout( optionWidget );
-    modeLayout->setSpacing( 3 );
-    QLabel *modeLabel = new QLabel( i18n( "Precision:" ), optionWidget );
-    KComboBox * modeBox = new KComboBox( optionWidget );
-    modeBox->addItem( i18nc( "The raw line data", "Raw" ) );
-    modeBox->addItem( i18n( "Curve" ) );
-    modeBox->addItem( i18n( "Straight" ) );
-    modeLayout->addWidget( modeLabel );
-    modeLayout->addWidget( modeBox, 1 );
-    layout->addLayout( modeLayout );
+    QHBoxLayout *modeLayout = new QHBoxLayout(optionWidget);
+    modeLayout->setSpacing(3);
+    QLabel *modeLabel = new QLabel(i18n("Precision:"), optionWidget);
+    KComboBox * modeBox = new KComboBox(optionWidget);
+    modeBox->addItem(i18nc("The raw line data", "Raw"));
+    modeBox->addItem(i18n("Curve"));
+    modeBox->addItem(i18n("Straight"));
+    modeLayout->addWidget(modeLabel);
+    modeLayout->addWidget(modeBox, 1);
+    layout->addLayout(modeLayout);
 
-    QStackedWidget * stackedWidget = new QStackedWidget( optionWidget );
+    QStackedWidget * stackedWidget = new QStackedWidget(optionWidget);
 
-    QWidget * rawBox = new QWidget( stackedWidget );
-    QVBoxLayout * rawLayout = new QVBoxLayout( rawBox );
-    QCheckBox * optimizeRaw = new QCheckBox( i18n( "Optimize" ), rawBox );
-    rawLayout->addWidget( optimizeRaw );
-    rawLayout->setContentsMargins( 0, 0, 0, 0 );
-    
-    QWidget * curveBox = new QWidget( stackedWidget );
-    QHBoxLayout * curveLayout = new QHBoxLayout( curveBox );
-    QCheckBox * optimizeCurve = new QCheckBox( i18n( "Optimize" ), curveBox );
-    KDoubleNumInput * fittingError = new KDoubleNumInput( 0.0, 400.0, m_fittingError, curveBox, 0.50, 3 );
-    fittingError->setToolTip( i18n( "Exactness:" ) );
-    curveLayout->addWidget( optimizeCurve );
-    curveLayout->addWidget( fittingError );
-    curveLayout->setContentsMargins( 0, 0, 0, 0 );
-    
-    QWidget * straightBox = new QWidget( stackedWidget );
-    QVBoxLayout * straightLayout = new QVBoxLayout( straightBox );
-    KDoubleNumInput * combineAngle = new KDoubleNumInput( 0.0, 360.0, m_combineAngle, straightBox, 0.50, 3 );
-    combineAngle->setSuffix( " deg" );
-    combineAngle->setLabel( i18n( "Combine angle:" ), Qt::AlignLeft|Qt::AlignVCenter );
-    straightLayout->addWidget( combineAngle );
-    straightLayout->setContentsMargins( 0, 0, 0, 0 );
-    
-    stackedWidget->addWidget( rawBox );
-    stackedWidget->addWidget( curveBox );
-    stackedWidget->addWidget( straightBox );
-    layout->addWidget( stackedWidget, 1 );
-    layout->addStretch( 1 );
+    QWidget * rawBox = new QWidget(stackedWidget);
+    QVBoxLayout * rawLayout = new QVBoxLayout(rawBox);
+    QCheckBox * optimizeRaw = new QCheckBox(i18n("Optimize"), rawBox);
+    rawLayout->addWidget(optimizeRaw);
+    rawLayout->setContentsMargins(0, 0, 0, 0);
 
-    connect( modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-    connect( modeBox, SIGNAL(activated(int)), this, SLOT(selectMode(int)));
-    connect( optimizeRaw, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
-    connect( optimizeCurve, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
-    connect( fittingError, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
-    connect( combineAngle, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
+    QWidget * curveBox = new QWidget(stackedWidget);
+    QHBoxLayout * curveLayout = new QHBoxLayout(curveBox);
+    QCheckBox * optimizeCurve = new QCheckBox(i18n("Optimize"), curveBox);
+    KDoubleNumInput * fittingError = new KDoubleNumInput(0.0, 400.0, m_fittingError, curveBox, 0.50, 3);
+    fittingError->setToolTip(i18n("Exactness:"));
+    curveLayout->addWidget(optimizeCurve);
+    curveLayout->addWidget(fittingError);
+    curveLayout->setContentsMargins(0, 0, 0, 0);
 
-    modeBox->setCurrentIndex( m_mode );
-    stackedWidget->setCurrentIndex( m_mode );
+    QWidget * straightBox = new QWidget(stackedWidget);
+    QVBoxLayout * straightLayout = new QVBoxLayout(straightBox);
+    KDoubleNumInput * combineAngle = new KDoubleNumInput(0.0, 360.0, m_combineAngle, straightBox, 0.50, 3);
+    combineAngle->setSuffix(" deg");
+    combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
+    straightLayout->addWidget(combineAngle);
+    straightLayout->setContentsMargins(0, 0, 0, 0);
+
+    stackedWidget->addWidget(rawBox);
+    stackedWidget->addWidget(curveBox);
+    stackedWidget->addWidget(straightBox);
+    layout->addWidget(stackedWidget, 1);
+    layout->addStretch(1);
+
+    connect(modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+    connect(modeBox, SIGNAL(activated(int)), this, SLOT(selectMode(int)));
+    connect(optimizeRaw, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
+    connect(optimizeCurve, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
+    connect(fittingError, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
+    connect(combineAngle, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
+
+    modeBox->setCurrentIndex(m_mode);
+    stackedWidget->setCurrentIndex(m_mode);
 
     return optionWidget;
 }
 
-void KarbonPencilTool::selectMode( int mode )
+void KarbonPencilTool::selectMode(int mode)
 {
-    m_mode = static_cast<PencilMode>( mode );
+    m_mode = static_cast<PencilMode>(mode);
 }
 
-void KarbonPencilTool::setOptimize( int state )
+void KarbonPencilTool::setOptimize(int state)
 {
-    if( m_mode == ModeRaw )
+    if (m_mode == ModeRaw)
         m_optimizeRaw = state == Qt::Checked ? true : false;
     else
         m_optimizeCurve = state == Qt::Checked ? true : false;
 }
 
-void KarbonPencilTool::setDelta( double delta )
+void KarbonPencilTool::setDelta(double delta)
 {
-    if( m_mode == ModeCurve )
+    if (m_mode == ModeCurve)
         m_fittingError = delta;
-    else if( m_mode == ModeStraight )
+    else if (m_mode == ModeStraight)
         m_combineAngle = delta;
 }
 
 KoLineBorder * KarbonPencilTool::currentBorder()
 {
-    KoLineBorder * border = new KoLineBorder( canvas()->resourceProvider()->activeBorder() );
-    border->setColor( canvas()->resourceProvider()->foregroundColor().toQColor() ); 
+    KoLineBorder * border = new KoLineBorder(canvas()->resourceProvider()->activeBorder());
+    border->setColor(canvas()->resourceProvider()->foregroundColor().toQColor());
     return border;
 }
 
-KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
+KoPathPoint* KarbonPencilTool::endPointAtPosition(const QPointF &position)
 {
     QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
-    
+
     KoPathPoint * nearestPoint = 0;
     qreal minDistance = HUGE_VAL;
     uint grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
     qreal maxDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
-    
+
     foreach(KoShape *shape, shapes) {
         KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
         if (!path)
@@ -428,7 +416,7 @@ KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
         KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
         if (paramShape && paramShape->isParametricShape())
             continue;
-        
+
         KoPathPoint * p = 0;
         uint subpathCount = path->subpathCount();
         for (uint i = 0; i < subpathCount; ++i) {
@@ -442,7 +430,7 @@ KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
                 minDistance = d;
             }
             // check end of subpath
-            p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i)-1));
+            p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i) - 1));
             d = squareDistance(position, path->shapeToDocument(p->point()));
             if (d < minDistance && d < maxDistance) {
                 nearestPoint = p;
@@ -450,11 +438,11 @@ KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
             }
         }
     }
-    
+
     return nearestPoint;
 }
 
-bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd )
+bool KarbonPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd)
 {
     // at least one point must be valid
     if (!pointAtStart && !pointAtEnd)
@@ -462,30 +450,30 @@ bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     // do not allow connecting to the same point twice
     if (pointAtStart == pointAtEnd)
         pointAtEnd = 0;
-    
+
     // we have hit an existing path point on start/finish
     // what we now do is:
     // 1. combine the new created path with the ones we hit on start/finish
     // 2. merge the endpoints of the corresponding subpaths
-    
+
     uint newPointCount = pathShape->subpathPointCount(0);
     KoPathPointIndex newStartPointIndex(0, 0);
-    KoPathPointIndex newEndPointIndex(0, newPointCount-1);
+    KoPathPointIndex newEndPointIndex(0, newPointCount - 1);
     KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
     KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
-    
+
     KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
     KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
-    
+
     // combine with the path we hit on start
-    KoPathPointIndex startIndex(-1,-1);
+    KoPathPointIndex startIndex(-1, -1);
     if (pointAtStart) {
         startIndex = startShape->pathPointIndex(pointAtStart);
         pathShape->combine(startShape);
-        pathShape->moveSubpath(0, pathShape->subpathCount()-1);
+        pathShape->moveSubpath(0, pathShape->subpathCount() - 1);
     }
     // combine with the path we hit on finish
-    KoPathPointIndex endIndex(-1,-1);
+    KoPathPointIndex endIndex(-1, -1);
     if (pointAtEnd) {
         endIndex = endShape->pathPointIndex(pointAtEnd);
         if (endShape != startShape) {
@@ -495,27 +483,27 @@ bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     }
     // do we connect twice to a single subpath ?
     bool connectToSingleSubpath = (startShape == endShape && startIndex.first == endIndex.first);
-    
+
     if (startIndex.second == 0 && !connectToSingleSubpath) {
         pathShape->reverseSubpath(startIndex.first);
-        startIndex.second = pathShape->subpathPointCount(startIndex.first)-1;
+        startIndex.second = pathShape->subpathPointCount(startIndex.first) - 1;
     }
     if (endIndex.second > 0 && !connectToSingleSubpath) {
         pathShape->reverseSubpath(endIndex.first);
         endIndex.second = 0;
     }
-    
+
     // after combining we have a path where with the subpaths in the following
     // order:
     // 1. the subpaths of the pathshape we started the new path at
     // 2. the subpath we just created
     // 3. the subpaths of the pathshape we finished the new path at
-    
+
     // get the path points we want to merge, as these are not going to
     // change while merging
     KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
     KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
-    
+
     // merge first two points
     if (existingStartPoint) {
         KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
@@ -530,7 +518,7 @@ bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
         KoPathPointMergeCommand cmd2(pd3, pd4);
         cmd2.redo();
     }
-    
+
     return true;
 }
 

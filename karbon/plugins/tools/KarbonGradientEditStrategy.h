@@ -43,54 +43,64 @@ public:
     enum SelectionType { None, Handle, Line, Stop };
 
     /// constructs new strategy on the specified shape and target
-    explicit GradientStrategy( KoShape *shape, const QGradient * gradient, Target target );
+    explicit GradientStrategy(KoShape *shape, const QGradient * gradient, Target target);
 
     virtual ~GradientStrategy() {}
 
     /// painting of the gradient editing handles
-    void paint( QPainter &painter, const KoViewConverter &converter, bool selected );
+    void paint(QPainter &painter, const KoViewConverter &converter, bool selected);
 
     /// selects handle at the given position
-    bool hitHandle( const QPointF &mousePos, const KoViewConverter &converter, bool select );
+    bool hitHandle(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
     /// selects the the gradient line at the given position
-    bool hitLine( const QPointF &mousePos, const KoViewConverter &converter, bool select );
+    bool hitLine(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
     /// selects the gradient stop at the given position
-    bool hitStop( const QPointF &mousePos, const KoViewConverter &converter, bool select );
+    bool hitStop(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
     /// mouse position handling for moving handles
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
     /// mouse double click handling
-    bool handleDoubleClick( const QPointF &mouseLocation );
+    bool handleDoubleClick(const QPointF &mouseLocation);
 
     /// sets the strategy into editing mode
-    void setEditing( bool on );
+    void setEditing(bool on);
 
     /// checks if strategy is in editing mode
-    bool isEditing() { return m_editing; }
+    bool isEditing() {
+        return m_editing;
+    }
 
     /// create the command for changing the shapes background
-    QUndoCommand * createCommand( QUndoCommand * parent );
+    QUndoCommand * createCommand(QUndoCommand * parent);
 
     /// schedules a repaint of the shape and gradient handles
-    void repaint( const KoViewConverter &converter ) const;
+    void repaint(const KoViewConverter &converter) const;
 
     /// sets the handle radius in pixel used for painting the handles
-    static void setHandleRadius( uint radius ) { m_handleRadius = radius; }
+    static void setHandleRadius(uint radius) {
+        m_handleRadius = radius;
+    }
 
     /// returns the actual handle radius in pixel
-    static uint handleRadius() { return m_handleRadius; }
+    static uint handleRadius() {
+        return m_handleRadius;
+    }
 
     /// Sets the grab sensitivity in pixel used for grabbing handles or lines
-    static void setGrabSensitivity(int grabSensitivity) { m_grabSensitivity = grabSensitivity; }
+    static void setGrabSensitivity(int grabSensitivity) {
+        m_grabSensitivity = grabSensitivity;
+    }
 
     /// Returns the actual grab sensitivity in pixel
-    static int grabSensitivity() { return m_grabSensitivity; }
+    static int grabSensitivity() {
+        return m_grabSensitivity;
+    }
 
     /// returns the gradient handles bounding rect
-    QRectF boundingRect( const KoViewConverter &converter ) const;
+    QRectF boundingRect(const KoViewConverter &converter) const;
 
     /// returns the actual gradient
     const QGradient * gradient();
@@ -99,7 +109,7 @@ public:
     Target target() const;
 
     /// Starts drawing the gradient at the given mouse position
-    void startDrawing( const QPointF &mousePos );
+    void startDrawing(const QPointF &mousePos);
 
     /// Returns if strategy has a selection
     bool hasSelection() const;
@@ -121,26 +131,26 @@ public:
 
 protected:
     /// Sets the actual selection
-    void setSelection( SelectionType selection, int index = 0 );
+    void setSelection(SelectionType selection, int index = 0);
 
     /// paints a handle at the given position
-    void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position );
+    void paintHandle(QPainter &painter, const KoViewConverter &converter, const QPointF &position);
 
-    /// paints the 
-    void paintStops( QPainter &painter, const KoViewConverter &converter );
+    /// paints the
+    void paintStops(QPainter &painter, const KoViewConverter &converter);
 
     /// checks if given mouse position is on specified line segment
-    bool mouseAtLineSegment( const QPointF &mousePos, qreal maxDistance );
+    bool mouseAtLineSegment(const QPointF &mousePos, qreal maxDistance);
 
     /// Sets the handle indices defining the gradient line
-    void setGradientLine( int start, int stop );
+    void setGradientLine(int start, int stop);
 
     /// Returns the handle rect
-    QRectF handleRect( const KoViewConverter &converter ) const;
+    QRectF handleRect(const KoViewConverter &converter) const;
 
     /// Returns the grab rect
-    QRectF grabRect( const KoViewConverter &converter ) const;
-    
+    QRectF grabRect(const KoViewConverter &converter) const;
+
     /// creates an updated brush from the actual data
     virtual QBrush brush() = 0;
 
@@ -153,21 +163,21 @@ protected:
     KoLineBorder m_oldStroke;  ///< the old stroke
     KoGradientBackground m_oldFill;
 private:
-    typedef QPair<QPointF,QPointF> StopHandle;
-    QColor invertedColor( const QColor &color );
-    QList<StopHandle> stopHandles( const KoViewConverter &converter ) const;
+    typedef QPair<QPointF, QPointF> StopHandle;
+    QColor invertedColor(const QColor &color);
+    QList<StopHandle> stopHandles(const KoViewConverter &converter) const;
 
     /// Projects point onto gradient line returning the position on the line
-    qreal projectToGradientLine( const QPointF &point );
+    qreal projectToGradientLine(const QPointF &point);
 
     void applyChanges();
 
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     static int m_grabSensitivity; ///< the grabbing sensitivity
-    
+
     bool m_editing; /// the edit mode flag
     Target m_target; ///< the gradient target
-    QPair<int,int> m_gradientLine; ///< the handle indices defining the gradient line
+    QPair<int, int> m_gradientLine; ///< the handle indices defining the gradient line
     QPointF m_lastMousePos;    ///< last mouse position
     SelectionType m_selection; ///< the actual selection type
     int m_selectionIndex;      ///< the actual selection index
@@ -178,7 +188,7 @@ private:
 class LinearGradientStrategy : public GradientStrategy
 {
 public:
-    LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient, Target target );
+    LinearGradientStrategy(KoShape *shape, const QLinearGradient *gradient, Target target);
 private:
     virtual QBrush brush();
     enum Handles { start, stop };
@@ -188,7 +198,7 @@ private:
 class RadialGradientStrategy : public GradientStrategy
 {
 public:
-    RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient, Target target );
+    RadialGradientStrategy(KoShape *shape, const QRadialGradient *gradient, Target target);
 private:
     virtual QBrush brush();
     enum Handles { center, focal, radius };
@@ -198,7 +208,7 @@ private:
 class ConicalGradientStrategy : public GradientStrategy
 {
 public:
-    ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient, Target target );
+    ConicalGradientStrategy(KoShape *shape, const QConicalGradient *gradient, Target target);
 private:
     virtual QBrush brush();
     enum Handles { center, direction };

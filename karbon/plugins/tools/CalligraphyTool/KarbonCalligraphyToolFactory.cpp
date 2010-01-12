@@ -26,20 +26,20 @@
 #include <kdebug.h>
 
 KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory(QObject *parent)
-    : KoToolFactory(parent, "KarbonCalligraphyTool")
+        : KoToolFactory(parent, "KarbonCalligraphyTool")
 {
-    setToolTip( i18n("Calligraphy Tool") );
-    setToolType( mainToolType() );
-    setIcon( "calligraphy" );
-    setPriority( 3 );
+    setToolTip(i18n("Calligraphy Tool"));
+    setToolType(mainToolType());
+    setIcon("calligraphy");
+    setPriority(3);
     setActivationShapeId("flake/edit");
 }
 
-KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory() 
+KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory()
 {
 }
 
-KoTool * KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas) 
+KoTool * KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonCalligraphyTool(canvas);
 }

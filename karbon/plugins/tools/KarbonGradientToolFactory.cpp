@@ -26,19 +26,21 @@
 #include <kdebug.h>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory(QObject *parent)
-    : KoToolFactory(parent, "KarbonGradientTool")
+        : KoToolFactory(parent, "KarbonGradientTool")
 {
-    setToolTip( i18n("Gradient Editing Tool") );
-    setToolType( mainToolType() );
-    setIcon( "format-fill-color" );
+    setToolTip(i18n("Gradient Editing Tool"));
+    setToolType(mainToolType());
+    setIcon("format-fill-color");
     // or probably rather "fill-gradient", please request that icon on TechBase
-    setPriority( 3 );
+    setPriority(3);
 }
 
-KarbonGradientToolFactory::~KarbonGradientToolFactory() {
+KarbonGradientToolFactory::~KarbonGradientToolFactory()
+{
 }
 
-KoTool * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KarbonGradientTool(canvas);
 }
 

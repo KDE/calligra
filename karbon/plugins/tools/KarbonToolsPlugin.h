@@ -23,11 +23,12 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
-class KarbonToolsPlugin : public QObject {
+class KarbonToolsPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    KarbonToolsPlugin(QObject * parent,  const QVariantList & );
+    KarbonToolsPlugin(QObject * parent,  const QVariantList &);
     ~KarbonToolsPlugin() {}
 
 };
