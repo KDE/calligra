@@ -76,6 +76,7 @@ KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum,
 
 KWPageInsertCommand::~KWPageInsertCommand()
 {
+    delete d;
 }
 
 void KWPageInsertCommand::redo()
