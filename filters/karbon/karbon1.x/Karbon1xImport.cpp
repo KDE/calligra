@@ -242,7 +242,7 @@ bool KarbonImport::loadXML(const KoXmlElement& doc)
     double height = doc.attribute("height", "550.0").toDouble();
 
     m_document.setPageSize(QSizeF(width, height));
-    m_document.setUnit(KoUnit::unit(doc.attribute("unit", KoUnit::unitName(m_document.unit()))));
+    //m_document.setUnit(KoUnit::unit(doc.attribute("unit", KoUnit::unitName(m_document.unit()))));
 
     m_mirrorMatrix.scale(1.0, -1.0);
     m_mirrorMatrix.translate(0, -m_document.pageSize().height());
