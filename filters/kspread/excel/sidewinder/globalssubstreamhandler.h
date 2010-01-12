@@ -22,8 +22,8 @@
 
 #include <vector>
 #include <map>
-#include <KoStore.h>
 
+#include "workbook.h"
 #include "substreamhandler.h"
 #include "ustring.h"
 #include "format.h"
@@ -87,7 +87,7 @@ public:
     
     MsoDrawingBlibItem* drawing(unsigned long pid) const;
 
-    KoStore* store() const;
+    Store* store() const;
 
 private:
     void handleBOF(BOFRecord* record);

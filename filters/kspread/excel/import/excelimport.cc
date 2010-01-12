@@ -127,6 +127,17 @@ ExcelImport::~ExcelImport()
     delete d;
 }
 
+class StoreImpl : public Store {
+public:
+    StoreImpl(KoStore* store) : Store(), m_store(store) {}
+    virtual ~StoreImpl() {}
+    virtual bool open(const std::string& filename) { return m_store->open(filename.c_str()); }
+    virtual bool write(const char *data, int size) { return m_store->write(data, size); }
+    virtual bool close() { return m_store->close(); }
+private:
+    KoStore* m_store;
+};
+
 KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (from != "application/vnd.ms-excel")
@@ -152,7 +163,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     storeout->disallowNameExpansion();
 
     // open inputFile
-    d->workbook = new Swinder::Workbook(storeout);
+    StoreImpl *storeimpl = new StoreImpl(storeout);
+    d->workbook = new Swinder::Workbook(storeimpl);
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
         d->workbook = 0;

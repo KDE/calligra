@@ -721,7 +721,7 @@ MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
     return d->drawingTable.at(index);
 }
 
-KoStore* GlobalsSubStreamHandler::store() const
+Store* GlobalsSubStreamHandler::store() const
 {
     return d->workbook->store();
 }
