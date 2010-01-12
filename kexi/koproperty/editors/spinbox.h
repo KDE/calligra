@@ -41,7 +41,7 @@ public:
     IntSpinBox(const Property* prop, QWidget *parent, int itemHeight);
     virtual ~IntSpinBox();
 
-    virtual QVariant value() const;
+    QVariant value() const;
 
 //    virtual void setProperty(const Property *prop);
     
@@ -51,7 +51,7 @@ signals:
     void commitData(QWidget* editor);
 
 public slots:
-    virtual void setValue(const QVariant& value);
+    void setValue(const QVariant& value);
 
 //todo?    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
@@ -61,7 +61,7 @@ protected slots:
     void slotValueChanged(int value);
 
 private:
-    bool m_unsigned : 1;
+    bool m_unsigned;
 };
 
 /*class KOPROPERTY_EXPORT IntEdit : public Widget
@@ -104,13 +104,13 @@ public:
         return QDoubleSpinBox::lineEdit();
     }*/
 
-    virtual double value() const;
+    double value() const;
 
 signals:
     void commitData(QWidget* editor);
 
 public slots:
-    virtual void setValue(double value);
+    void setValue(double value);
 
 protected slots:
     void slotValueChanged(double value);
@@ -148,7 +148,7 @@ private:
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
 class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface, 
-                           public ValueDisplayInterface
+                                             public ValueDisplayInterface
 {
 public:
     IntSpinBoxDelegate();

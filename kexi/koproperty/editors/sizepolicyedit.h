@@ -42,6 +42,7 @@ class KOPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator,
 {
 public:
     SizePolicyDelegate() {}
+
     virtual QString displayText( const QVariant& value ) const;
 
     static const Property::ListData& listData();

@@ -23,8 +23,7 @@
 #include "customproperty.h"*/
 #include "editors/booledit.h"
 #include "editors/combobox.h"
-/*
-#include "editors/coloredit.h"*/
+#include "editors/coloredit.h"
 #include "editors/cursoredit.h"
 /*#include "editors/dateedit.h"
 #include "editors/datetimeedit.h"
@@ -53,15 +52,16 @@ DefaultFactory::DefaultFactory()
 {
     addEditor( KoProperty::Bool, new BoolDelegate );
     addEditor( KoProperty::Cursor, new CursorDelegate );
+    addEditor( KoProperty::Color, new ColorComboDelegate );
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
+    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
-    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
     addEditor( KoProperty::String, new StringDelegate );
     addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
 //! @todo addEditor( KoProperty::ULongLong, new LongLongSpinBoxDelegate );

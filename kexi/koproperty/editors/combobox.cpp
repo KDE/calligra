@@ -22,16 +22,10 @@
 #include "combobox.h"
 #include "koproperty/EditorDataModel.h"
 #include "koproperty/EditorView.h"
+#include "koproperty/Property.h"
 
-#include <QLayout>
-#include <QMap>
-#include <QVariant>
-#include <QPainter>
-#include <QHBoxLayout>
-#include <kcolorscheme.h>
+#include <KColorScheme>
 #include <KDebug>
-
-#include "Property.h"
 
 using namespace KoProperty;
 
@@ -109,12 +103,20 @@ ComboBox::~ComboBox()
 {
 }
 
-QVariant ComboBox::value() const
+bool ComboBox::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        kWarning() << "propery listData not available!";
-        return QVariant();
+        kWarning() << "property listData not available!";
+        return false;
     }
+    return true;
+}
+
+QVariant ComboBox::value() const
+{
+    if (!listDataKeysAvailable())
+        return QVariant();
+
     const int idx = currentIndex();
     if (idx < 0 || idx >= (int)m_listData.keys.count() || m_listData.names[idx] != currentText().trimmed()) {
         if (!m_options.extraValueAllowed || currentText().isEmpty())
@@ -126,32 +128,32 @@ QVariant ComboBox::value() const
 
 void ComboBox::setValue(const QVariant &value)
 {
-    if (m_listData.keys.isEmpty()) {
-        kWarning() << "propery listData not available!";
+    if (!listDataKeysAvailable())
         return;
-    }
+
     if (!m_setValueEnabled)
         return;
     int idx = m_listData.keys.indexOf(value.toString());
 //    kDebug(30007) << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
-    } else {
+    }
+    else {
         if (idx < 0) {
             if (m_options.extraValueAllowed) {
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kWarning() << "NO SUCH KEY '" << value.toString()
-            << "' (property '" << objectName() << "')";
+            kWarning() << "NO SUCH KEY:" << value.toString()
+                << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX: " << idx
-            << " count=" << count() << " value='" << value.toString()
-            << "' (property '" << objectName() << "')\nActual combobox contents: "
-            << list;
+            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+                << "count=" << count() << "value=" << value.toString()
+                << "property=" << objectName() << "\nActual combobox contents"
+                << list;
         }
         setItemText(currentIndex(), QString());
     }
@@ -189,10 +191,9 @@ void ComboBox::fillValues()
 
 //    if (!m_property)
 //        return;
-    if (m_listData.keys.isEmpty()) {
-        kWarning() << "property listData not available!";
+    if (!listDataKeysAvailable())
         return;
-    }
+
 //    m_keys = m_property->listData()->keys;
     int index = 0;
     foreach( const QString& itemName, m_listData.names ) {
@@ -288,7 +289,7 @@ QString ComboBoxDelegate::displayTextForProperty( const Property* property ) con
       if (!property->option("extraValueAllowed").toBool())
         return QString();
       else
-	return property->value().toString();
+        return property->value().toString();
     }
     return property->listData()->names[ idx ];
 }

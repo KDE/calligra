@@ -44,9 +44,9 @@ class KOPROPERTY_EXPORT BoolEdit : public QToolButton
 public:
     explicit BoolEdit(const Property *prop, QWidget *parent = 0);
 
-    virtual ~BoolEdit();
+    ~BoolEdit();
 
-    virtual bool value() const;
+    bool value() const;
 
     static void draw(QPainter *p, const QRect &r, const QVariant &value,
                      const QString& text, bool threeState);
@@ -54,7 +54,7 @@ signals:
     void commitData(QWidget* editor);
 
 public slots:
-    virtual void setValue(bool value);
+    void setValue(bool value);
 
 protected slots:
     void  slotValueChanged(bool state);
@@ -81,10 +81,10 @@ class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 
 public:
     ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
-    virtual ~ThreeStateBoolEdit();
+    ~ThreeStateBoolEdit();
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value);
+    QVariant value() const;
+    void setValue(const QVariant &value);
 
 //    virtual void setProperty(Property *property);
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
@@ -94,7 +94,7 @@ signals:
 };
 
 class KOPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface, 
-                     public ValuePainterInterface
+                                       public ValuePainterInterface
 {
 public:
     BoolDelegate();

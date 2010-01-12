@@ -38,7 +38,7 @@ public:
 };
 
 class KOPROPERTY_EXPORT RectDelegate : public LabelCreator,
-                     public ComposedPropertyCreator<RectComposedProperty>
+                                       public ComposedPropertyCreator<RectComposedProperty>
 {
 public:
     RectDelegate() {}

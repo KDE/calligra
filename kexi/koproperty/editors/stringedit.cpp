@@ -59,65 +59,13 @@ void StringEdit::slotTextChanged( const QString & text )
     emit commitData(this);
 }
 
-#if 0
-
-#include <QLayout>
-#include <QLineEdit>
-#include <QVariant>
-#include <QHBoxLayout>
-
-using namespace KoProperty;
-
-StringEdit::StringEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+QWidget* StringDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-
-    m_edit = new QLineEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-// m_edit->setMargin(1);
-    m_edit->setMinimumHeight(5);
-    setPlainWidgetStyle(m_edit);
-
-    l->addWidget(m_edit);
-    setFocusWidget(m_edit);
-
-    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return new StringEdit(parent);
 }
-
-StringEdit::~StringEdit()
-{}
-
-QVariant
-StringEdit::value() const
-{
-    return m_edit->text();
-}
-
-void
-StringEdit::setValue(const QVariant &value, bool emitChange)
-{
-    m_edit->blockSignals(true);
-    m_edit->setText(value.toString());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
-}
-
-void
-StringEdit::slotValueChanged(const QString &)
-{
-    emit valueChanged(this);
-}
-
-void
-StringEdit::setReadOnlyInternal(bool readOnly)
-{
-    m_edit->setReadOnly(readOnly);
-}
-
-#endif
 
 #include "stringedit.moc"

@@ -36,60 +36,32 @@ class KOPROPERTY_EXPORT StringEdit : public KLineEdit
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
     StringEdit(QWidget *parent = 0);
+
     ~StringEdit();
-    virtual QString value() const;
-    virtual void setValue(const QString& value);
+
+    QString value() const;
+
 signals:
     void commitData( QWidget * editor );
+
+public slots:
+    void setValue(const QString& value);
+
 private slots:
     void slotTextChanged( const QString & text );
+
 private:
-    bool m_slotTextChangedEnabled : 1;
+    bool m_slotTextChangedEnabled;
 };
 
 class KOPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
 {
 public:
     StringDelegate() {}
+
     virtual QWidget * createEditor( int type, QWidget *parent, 
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-        Q_UNUSED(type);
-        Q_UNUSED(option);
-        Q_UNUSED(index);
-        return new StringEdit(parent);
-    }
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
-
-#if 0
-class QLineEdit;
-
-namespace KoProperty
-{
-
-class KOPROPERTY_EXPORT StringEdit : public Widget
-{
-    Q_OBJECT
-
-public:
-    explicit StringEdit(Property *property, QWidget *parent = 0);
-    virtual ~StringEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-protected slots:
-    void slotValueChanged(const QString&);
-
-protected:
-    QLineEdit *m_edit;
-};
-
-}
-#endif
 
 }
 

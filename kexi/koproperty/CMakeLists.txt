@@ -23,7 +23,7 @@ include_directories(
 set(libkopropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
-#  editors/coloredit.cpp
+  editors/coloredit.cpp
   editors/combobox.cpp
   editors/cursoredit.cpp
 #  editors/dateedit.cpp

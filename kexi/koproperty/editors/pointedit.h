@@ -40,7 +40,7 @@ public:
 };
 
 class KOPROPERTY_EXPORT PointDelegate : public LabelCreator,
-                     public ComposedPropertyCreator<PointComposedProperty>
+                                        public ComposedPropertyCreator<PointComposedProperty>
 {
 public:
     PointDelegate() {}
