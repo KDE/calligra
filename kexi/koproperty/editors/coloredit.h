@@ -28,7 +28,8 @@ namespace KoProperty
 
 //! Color combo box
 //! @todo enable transparency selection
-//! @todo enable transparency as option
+//! @todo add transparency option
+//! @todo reimplement view using KColorCells
 class KOPROPERTY_EXPORT ColorCombo : public KColorCombo
 {
     Q_OBJECT

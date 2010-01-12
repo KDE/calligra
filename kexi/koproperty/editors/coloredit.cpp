@@ -25,15 +25,25 @@
 #include <QColor>
 #include <QPainter>
 
-#include <kcolorcombo.h>
-#include <kcolorscheme.h>
+#include <KGlobal>
+#include <KColorCombo>
+#include <KColorCollection>
 
 using namespace KoProperty;
+
+K_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
 
 ColorCombo::ColorCombo(QWidget *parent)
         : KColorCombo(parent)
 {
     connect(this, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
+
+    QList< QColor > colors;
+    const int oxygenColorsCount = g_oxygenColors->count();
+    for (int i = 0; i < oxygenColorsCount; i++) {
+        colors += g_oxygenColors->color(i);
+    }
+    setColors(colors);
 }
 
 ColorCombo::~ColorCombo()
@@ -64,11 +74,10 @@ QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent,
 void ColorComboDelegate::paint( QPainter * painter, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-//    painter->eraseRect(option.rect);
     painter->save();
     const QBrush b(index.data(Qt::EditRole).value<QColor>());
     painter->setBrush(b);
-    painter->setPen(QPen());
+    painter->setPen(QPen(Qt::NoPen));
     painter->drawRect(option.rect);
     painter->setBrush(KoProperty::contrastColor(b.color()));
     painter->setPen(KoProperty::contrastColor(b.color()));
