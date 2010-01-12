@@ -26,15 +26,14 @@
 
 #include <QtGui/QWidget>
 
-class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget
-{
+class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget {
     Q_OBJECT
 public:
-    KarbonPatternOptionsWidget( QWidget * parent = 0 );
+    KarbonPatternOptionsWidget(QWidget * parent = 0);
     virtual ~KarbonPatternOptionsWidget();
 
     /// Sets the pattern repeat
-    void setRepeat( KoPatternBackground::PatternRepeat repeat );
+    void setRepeat(KoPatternBackground::PatternRepeat repeat);
 
     /// Return the pattern repeat
     KoPatternBackground::PatternRepeat repeat() const;
@@ -43,25 +42,25 @@ public:
     KoPatternBackground::ReferencePoint referencePoint() const;
 
     /// Sets the pattern reference point
-    void setReferencePoint( KoPatternBackground::ReferencePoint referencePoint );
+    void setReferencePoint(KoPatternBackground::ReferencePoint referencePoint);
 
     /// Returns reference point offset in percent of the size to fill
     QPointF referencePointOffset() const;
 
     /// Sets the reference point offset in percent of the size to fill
-    void setReferencePointOffset( const QPointF &offset );
+    void setReferencePointOffset(const QPointF &offset);
 
     /// Returns tile repeat offset in percent of the size to fill
     QPointF tileRepeatOffset() const;
 
     /// Sets the tile repeat offset in percent of the size to fill
-    void setTileRepeatOffset( const QPointF &offset );
+    void setTileRepeatOffset(const QPointF &offset);
 
     /// Returns the pattern size
     QSize patternSize() const;
 
     /// Sets the pattern size
-    void setPatternSize( const QSize &size );
+    void setPatternSize(const QSize &size);
 
 signals:
     /// is emitted whenever an option has changed

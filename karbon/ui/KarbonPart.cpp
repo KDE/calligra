@@ -84,13 +84,12 @@ class KarbonPart::Private
 {
 public:
     Private()
-    : showStatusBar(true), merge(false), maxRecentFiles(10)
-    {}
+            : showStatusBar(true), merge(false), maxRecentFiles(10) {}
 
     qreal getAttribute(KoXmlElement &element, const char *attributeName, qreal defaultValue)
     {
-        QString value = element.attribute( attributeName );
-        if( ! value.isEmpty() )
+        QString value = element.attribute(attributeName);
+        if (! value.isEmpty())
             return value.toDouble();
         else
             return defaultValue;
@@ -98,33 +97,32 @@ public:
 
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
     {
-        QString value = element.attribute( attributeName );
-        if( ! value.isEmpty() )
+        QString value = element.attribute(attributeName);
+        if (! value.isEmpty())
             return value.toInt();
         else
             return defaultValue;
     }
 
-    void applyCanvasConfiguration( KarbonCanvas * canvas, KarbonPart * part )
+    void applyCanvasConfiguration(KarbonCanvas * canvas, KarbonPart * part)
     {
         KSharedConfigPtr config = part->componentData().config();
 
         uint grabSensitivity = 3;
         uint handleRadius = 3;
-        if( config->hasGroup( "Misc" ) ) {
-            KConfigGroup miscGroup = config->group( "Misc" );
-            grabSensitivity = miscGroup.readEntry( "GrabSensitivity", grabSensitivity );
-            handleRadius = miscGroup.readEntry( "HandleRadius", handleRadius );
+        if (config->hasGroup("Misc")) {
+            KConfigGroup miscGroup = config->group("Misc");
+            grabSensitivity = miscGroup.readEntry("GrabSensitivity", grabSensitivity);
+            handleRadius = miscGroup.readEntry("HandleRadius", handleRadius);
         }
-        canvas->resourceProvider()->setHandleRadius( handleRadius );
-        canvas->resourceProvider()->setGrabSensitivity( grabSensitivity );
+        canvas->resourceProvider()->setHandleRadius(handleRadius);
+        canvas->resourceProvider()->setGrabSensitivity(grabSensitivity);
 
-        QColor color( Qt::white );
-        if( config->hasGroup( "Interface" ) )
-        {
-            color = config->group( "Interface" ).readEntry("CanvasColor", color);
+        QColor color(Qt::white);
+        if (config->hasGroup("Interface")) {
+            color = config->group("Interface").readEntry("CanvasColor", color);
         }
-        canvas->setBackgroundColor( color );
+        canvas->setBackgroundColor(color);
     }
 
     KarbonDocument document;  ///< store non-visual doc info
@@ -134,14 +132,14 @@ public:
 };
 
 
-KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode ), d( new Private() )
+KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode)
+        : KoDocument(parentWidget, parent, singleViewMode), d(new Private())
 {
     Q_UNUSED(widgetName);
 
     setObjectName(name);
-    setComponentData( KarbonFactory::componentData(), false );
-    setTemplateType( "karbon_template" );
+    setComponentData(KarbonFactory::componentData(), false);
+    setTemplateType("karbon_template");
     d->document.addToDataCenterMap("UndoStack", undoStack());
 
     initConfig();
@@ -150,8 +148,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
     KoPageLayout pl = pageLayout();
     pl.format = KoPageFormat::defaultFormat();
     pl.orientation = KoPageFormat::Portrait;
-    pl.width = MM_TO_POINT( KoPageFormat::width( pl.format, pl.orientation ) );
-    pl.height = MM_TO_POINT( KoPageFormat::height( pl.format, pl.orientation ) );
+    pl.width = MM_TO_POINT(KoPageFormat::width(pl.format, pl.orientation));
+    pl.height = MM_TO_POINT(KoPageFormat::height(pl.format, pl.orientation));
     setPageLayout(pl);
 }
 
@@ -160,150 +158,140 @@ KarbonPart::~KarbonPart()
     delete d;
 }
 
-void KarbonPart::setPageLayout( const KoPageLayout& layout )
+void KarbonPart::setPageLayout(const KoPageLayout& layout)
 {
     KoDocument::setPageLayout(layout);
-    setPageSize( QSizeF( layout.width, layout.height ) );
+    setPageSize(QSizeF(layout.width, layout.height));
 }
 
-KoView* KarbonPart::createViewInstance( QWidget* parent )
+KoView* KarbonPart::createViewInstance(QWidget* parent)
 {
-    KarbonView *result = new KarbonView( this, parent );
+    KarbonView *result = new KarbonView(this, parent);
 
     KoCanvasResourceProvider * provider = result->canvasWidget()->resourceProvider();
-    provider->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
+    provider->setResource(KoCanvasResource::PageSize, d->document.pageSize());
 
-    d->applyCanvasConfiguration( result->canvasWidget(), this );
+    d->applyCanvasConfiguration(result->canvasWidget(), this);
 
     return result;
 }
 
-void KarbonPart::removeView( KoView *view )
+void KarbonPart::removeView(KoView *view)
 {
-    kDebug(38000) <<"KarbonPart::removeView";
-    KoDocument::removeView( view );
+    kDebug(38000) << "KarbonPart::removeView";
+    KoDocument::removeView(view);
 }
 
 void KarbonPart::openTemplate(const KUrl& url)
 {
-    KoDocument::openTemplate( url );
+    KoDocument::openTemplate(url);
 
     // explicitly set the output mimetype to our native mimetype
     // so that autosaving works for not yet saved templates as well
-    if( outputMimeType().isEmpty() )
-        setOutputMimeType( "application/vnd.oasis.opendocument.graphics" );
+    if (outputMimeType().isEmpty())
+        setOutputMimeType("application/vnd.oasis.opendocument.graphics");
 }
 
-bool KarbonPart::loadXML( const KoXmlDocument&, KoStore* )
+bool KarbonPart::loadXML(const KoXmlDocument&, KoStore*)
 {
     return false;
 }
 
-bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
+bool KarbonPart::loadOdf(KoOdfReadStore & odfStore)
 {
-    kDebug(38000) <<"Start loading OASIS document..." /*<< doc.toString()*/;
+    kDebug(38000) << "Start loading OASIS document..." /*<< doc.toString()*/;
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
-    kDebug(38000) <<"Start loading OASIS document..." << contents.text();
-    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().isElement();
-    KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
-    if( body.isNull() )
-    {
-        kDebug(38000) <<"No office:body found!";
-        setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+    kDebug(38000) << "Start loading OASIS document..." << contents.text();
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName();
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement();
+    KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
+    if (body.isNull()) {
+        kDebug(38000) << "No office:body found!";
+        setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
         return false;
     }
 
-    body = KoXml::namedItemNS( body, KoXmlNS::office, "drawing");
-    if(body.isNull())
-    {
-        kDebug(38000) <<"No office:drawing found!";
-        setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+    body = KoXml::namedItemNS(body, KoXmlNS::office, "drawing");
+    if (body.isNull()) {
+        kDebug(38000) << "No office:drawing found!";
+        setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
         return false;
     }
 
-    KoXmlElement page( KoXml::namedItemNS( body, KoXmlNS::draw, "page" ) );
-    if(page.isNull())
-    {
-        kDebug(38000) <<"No office:drawing found!";
-        setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+    KoXmlElement page(KoXml::namedItemNS(body, KoXmlNS::draw, "page"));
+    if (page.isNull()) {
+        kDebug(38000) << "No office:drawing found!";
+        setErrorMessage(i18n("Invalid OASIS document. No draw:page tag found."));
         return false;
     }
 
     KoXmlElement * master = 0;
-    if( odfStore.styles().masterPages().contains( "Standard" ) )
-        master = odfStore.styles().masterPages().value( "Standard" );
-    else if( odfStore.styles().masterPages().contains( "Default" ) )
-        master = odfStore.styles().masterPages().value( "Default" );
-    else if( ! odfStore.styles().masterPages().empty() )
+    if (odfStore.styles().masterPages().contains("Standard"))
+        master = odfStore.styles().masterPages().value("Standard");
+    else if (odfStore.styles().masterPages().contains("Default"))
+        master = odfStore.styles().masterPages().value("Default");
+    else if (! odfStore.styles().masterPages().empty())
         master = odfStore.styles().masterPages().begin().value();
 
-    if( master )
-    {
+    if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
-            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
-        if( style )
-        {
-            pageLayout().loadOdf( *style );
-            setPageSize( QSizeF( pageLayout().width, pageLayout().height ) );
+                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
+        if (style) {
+            pageLayout().loadOdf(*style);
+            setPageSize(QSizeF(pageLayout().width, pageLayout().height));
         }
-    }
-    else
-    {
+    } else {
         kWarning() << "No master page found!";
         return false;
     }
 
-    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext shapeContext( context, dataCenterMap() );
+    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
+    KoShapeLoadingContext shapeContext(context, dataCenterMap());
 
-    d->document.loadOasis( page, shapeContext );
+    d->document.loadOasis(page, shapeContext);
 
-    if( d->document.pageSize().isEmpty() )
-    {
-        QSizeF pageSize = d->document.contentRect().united( QRectF(0,0,1,1) ).size();
-        setPageSize( pageSize );
+    if (d->document.pageSize().isEmpty()) {
+        QSizeF pageSize = d->document.contentRect().united(QRectF(0, 0, 1, 1)).size();
+        setPageSize(pageSize);
     }
 
-    loadOasisSettings( odfStore.settingsDoc() );
+    loadOasisSettings(odfStore.settingsDoc());
 
     return true;
 }
 
-bool KarbonPart::completeLoading( KoStore* store )
+bool KarbonPart::completeLoading(KoStore* store)
 {
     bool ok = true;
-    foreach(KoDataCenter *dataCenter, dataCenterMap() )
-    {
+    foreach(KoDataCenter *dataCenter, dataCenterMap()) {
         ok = ok && dataCenter->completeLoading(store);
     }
     return ok;
 }
 
-void KarbonPart::loadOasisSettings( const KoXmlDocument & settingsDoc )
+void KarbonPart::loadOasisSettings(const KoXmlDocument & settingsDoc)
 {
-    if ( settingsDoc.isNull() )
+    if (settingsDoc.isNull())
         return ; // not an error if some file doesn't have settings.xml
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    if ( !viewSettings.isNull() )
-    {
+    KoOasisSettings settings(settingsDoc);
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    if (!viewSettings.isNull()) {
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
-    guidesData().loadOdfSettings( settingsDoc );
-    gridData().loadOdfSettings( settingsDoc );
+    guidesData().loadOdfSettings(settingsDoc);
+    gridData().loadOdfSettings(settingsDoc);
 }
 
-void KarbonPart::saveOasisSettings( KoStore * store )
+void KarbonPart::saveOasisSettings(KoStore * store)
 {
-    KoStoreDevice settingsDev( store );
-    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings");
+    KoStoreDevice settingsDev(store);
+    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
 
     // add this so that OOo reads guides lines and grid data from ooo:view-settings
-    settingsWriter->addAttribute( "xmlns:ooo", "http://openoffice.org/2004/office" );
+    settingsWriter->addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
 
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
@@ -315,12 +303,12 @@ void KarbonPart::saveOasisSettings( KoStore * store )
 
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:view-settings");
-    settingsWriter->startElement("config:config-item-map-indexed" );
-    settingsWriter->addAttribute("config:name", "Views" );
-    settingsWriter->startElement("config:config-item-map-entry" );
+    settingsWriter->startElement("config:config-item-map-indexed");
+    settingsWriter->addAttribute("config:name", "Views");
+    settingsWriter->startElement("config:config-item-map-entry");
 
-    guidesData().saveOdfSettings( *settingsWriter );
-    gridData().saveOdfSettings( *settingsWriter );
+    guidesData().saveOdfSettings(*settingsWriter);
+    gridData().saveOdfSettings(*settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
@@ -334,37 +322,37 @@ void KarbonPart::saveOasisSettings( KoStore * store )
     delete settingsWriter;
 }
 
-bool KarbonPart::saveOdf( SavingContext &documentContext )
+bool KarbonPart::saveOdf(SavingContext &documentContext)
 {
-    if( ! d->document.saveOdf( documentContext ) )
+    if (! d->document.saveOdf(documentContext))
         return false;
 
     KoStore * store = documentContext.odfStore.store();
-    if( ! store->open("settings.xml"))
+    if (! store->open("settings.xml"))
         return false;
 
-    saveOasisSettings( store );
+    saveOasisSettings(store);
 
-    if( ! store->close() )
+    if (! store->close())
         return false;
 
     documentContext.odfStore.manifestWriter()->addManifestEntry("settings.xml", "text/xml");
 
-    setModified( false );
+    setModified(false);
 
     return true;
 }
 
 void KarbonPart::slotDocumentRestored()
 {
-    setModified( false );
+    setModified(false);
 }
 
-void KarbonPart::paintContent( QPainter &painter, const QRect& rect)
+void KarbonPart::paintContent(QPainter &painter, const QRect& rect)
 {
     KoShapePainter shapePainter;
-    shapePainter.setShapes( d->document.shapes() );
-    shapePainter.paint( painter, rect, QRectF(QPointF(), d->document.pageSize()) );
+    shapePainter.setShapes(d->document.shapes());
+    shapePainter.paint(painter, rect, QRectF(QPointF(), d->document.pageSize()));
 }
 
 KarbonDocument& KarbonPart::document()
@@ -377,7 +365,7 @@ bool KarbonPart::showStatusBar() const
     return d->showStatusBar;
 }
 
-void KarbonPart::setShowStatusBar( bool b )
+void KarbonPart::setShowStatusBar(bool b)
 {
     d->showStatusBar = b;
 }
@@ -389,11 +377,11 @@ uint KarbonPart::maxRecentFiles() const
 
 void KarbonPart::reorganizeGUI()
 {
-    foreach ( KoView* view, views() ) {
-        KarbonView * kv = qobject_cast<KarbonView*>( view );
-        if( kv ) {
+    foreach(KoView* view, views()) {
+        KarbonView * kv = qobject_cast<KarbonView*>(view);
+        if (kv) {
             kv->reorganizeGUI();
-            d->applyCanvasConfiguration( kv->canvasWidget(), this );
+            d->applyCanvasConfiguration(kv->canvasWidget(), this);
         }
     }
 }
@@ -403,109 +391,98 @@ void KarbonPart::initConfig()
     KSharedConfigPtr config = KarbonPart::componentData().config();
 
     // disable grid by default
-    gridData().setShowGrid( false );
+    gridData().setShowGrid(false);
 
-    if( config->hasGroup( "Interface" ) )
-    {
-        KConfigGroup interfaceGroup = config->group( "Interface" );
-        setAutoSave( interfaceGroup.readEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-        d->maxRecentFiles = interfaceGroup.readEntry( "NbRecentFile", 10 );
-        setShowStatusBar( interfaceGroup.readEntry( "ShowStatusBar" , true ) );
-        setBackupFile( interfaceGroup.readEntry( "BackupFile", true ) );
+    if (config->hasGroup("Interface")) {
+        KConfigGroup interfaceGroup = config->group("Interface");
+        setAutoSave(interfaceGroup.readEntry("AutoSave", defaultAutoSave() / 60) * 60);
+        d->maxRecentFiles = interfaceGroup.readEntry("NbRecentFile", 10);
+        setShowStatusBar(interfaceGroup.readEntry("ShowStatusBar" , true));
+        setBackupFile(interfaceGroup.readEntry("BackupFile", true));
     }
     int undos = 30;
     QString defaultUnit = "cm";
-    if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
+    if (KGlobal::locale()->measureSystem() == KLocale::Imperial)
         defaultUnit = "in";
 
-    if( config->hasGroup( "Misc" ) )
-    {
-        KConfigGroup miscGroup = config->group( "Misc" );
-        undos = miscGroup.readEntry( "UndoRedo", -1 );
-        defaultUnit = miscGroup.readEntry( "Units", defaultUnit );
+    if (config->hasGroup("Misc")) {
+        KConfigGroup miscGroup = config->group("Misc");
+        undos = miscGroup.readEntry("UndoRedo", -1);
+        defaultUnit = miscGroup.readEntry("Units", defaultUnit);
     }
     undoStack()->setUndoLimit(undos);
     setUnit(KoUnit::unit(defaultUnit));
 
-    if( config->hasGroup( "Grid" ) )
-    {
+    if (config->hasGroup("Grid")) {
         KoGridData defGrid;
-        KConfigGroup gridGroup = config->group( "Grid" );
-        qreal spacingX = gridGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );
-        qreal spacingY = gridGroup.readEntry<qreal>( "SpacingY", defGrid.gridY() );
-        gridData().setGrid( spacingX, spacingY );
-        QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
-        gridData().setGridColor( color );
+        KConfigGroup gridGroup = config->group("Grid");
+        qreal spacingX = gridGroup.readEntry<qreal>("SpacingX", defGrid.gridX());
+        qreal spacingY = gridGroup.readEntry<qreal>("SpacingY", defGrid.gridY());
+        gridData().setGrid(spacingX, spacingY);
+        QColor color = gridGroup.readEntry("Color", defGrid.gridColor());
+        gridData().setGridColor(color);
     }
 }
 
-bool KarbonPart::mergeNativeFormat( const QString &file )
+bool KarbonPart::mergeNativeFormat(const QString &file)
 {
     d->merge = true;
-    bool result = loadNativeFormat( file );
-    if ( !result )
+    bool result = loadNativeFormat(file);
+    if (!result)
         showLoadingErrorDialog();
     d->merge = false;
     return result;
 }
 
-void KarbonPart::addShape( KoShape* shape )
+void KarbonPart::addShape(KoShape* shape)
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
-    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-    if( layer )
-    {
-        d->document.insertLayer( layer );
-        if( canvasController )
-        {
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+    if (layer) {
+        d->document.insertLayer(layer);
+        if (canvasController) {
             KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-            selection->setActiveLayer( layer );
+            selection->setActiveLayer(layer);
         }
-    }
-    else
-    {
+    } else {
         // only add shape to active layer if it has no parent yet
-        if( ! shape->parent() )
-        {
-            kDebug(38000) <<"shape has no parent, adding to the active layer!";
+        if (! shape->parent()) {
+            kDebug(38000) << "shape has no parent, adding to the active layer!";
             KoShapeLayer *activeLayer = 0;
-            if( canvasController )
+            if (canvasController)
                 activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
-            else if( d->document.layers().count() )
+            else if (d->document.layers().count())
                 activeLayer = d->document.layers().first();
 
-            if( activeLayer )
-                activeLayer->addChild( shape );
+            if (activeLayer)
+                activeLayer->addChild(shape);
         }
 
-        d->document.add( shape );
+        d->document.add(shape);
 
-        foreach( KoView *view, views() ) {
+        foreach(KoView *view, views()) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->add(shape);
         }
     }
 
-    setModified( true );
+    setModified(true);
 }
 
-void KarbonPart::removeShape( KoShape* shape )
+void KarbonPart::removeShape(KoShape* shape)
 {
-    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-    if( layer )
-    {
-        d->document.removeLayer( layer );
-    }
-    else
-    {
-        d->document.remove( shape );
-        foreach( KoView *view, views() ) {
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+    if (layer) {
+        d->document.removeLayer(layer);
+    } else {
+        d->document.remove(shape);
+        foreach(KoView *view, views()) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->remove(shape);
         }
     }
-    setModified( true );
+    setModified(true);
 }
 
 QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap() const
@@ -513,13 +490,12 @@ QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap() const
     return d->document.dataCenterMap();
 }
 
-void KarbonPart::setPageSize( const QSizeF &pageSize )
+void KarbonPart::setPageSize(const QSizeF &pageSize)
 {
-    d->document.setPageSize( pageSize );
-    foreach( KoView *view, views() )
-    {
+    d->document.setPageSize(pageSize);
+    foreach(KoView *view, views()) {
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-        canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
+        canvas->resourceProvider()->setResource(KoCanvasResource::PageSize, pageSize);
     }
 }
 

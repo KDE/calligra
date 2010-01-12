@@ -53,25 +53,25 @@ class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBa
 {
     Q_OBJECT
 public:
-    explicit KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
-                QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
+    explicit KarbonPart(QWidget* parentWidget = 0L, const char* widgetName = 0L,
+                        QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false);
     virtual ~KarbonPart();
 
     /// reimplemented form KoDocument
-    virtual void paintContent( QPainter& painter, const QRect& rect);
+    virtual void paintContent(QPainter& painter, const QRect& rect);
     /// reimplemented form KoDocument
-    virtual bool loadXML( const KoXmlDocument& document, KoStore *store );
+    virtual bool loadXML(const KoXmlDocument& document, KoStore *store);
     /// reimplemented form KoDocument
-    virtual bool loadOdf( KoOdfReadStore & odfStore );
+    virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// reimplemented form KoDocument
-    virtual bool completeLoading( KoStore* store );
+    virtual bool completeLoading(KoStore* store);
     /// reimplemented form KoDocument
-    virtual bool saveOdf( SavingContext &documentContext );
+    virtual bool saveOdf(SavingContext &documentContext);
 
     /// implemented from KoShapeController
-    virtual void addShape( KoShape* shape );
+    virtual void addShape(KoShape* shape);
     /// implemented from KoShapeController
-    virtual void removeShape( KoShape* shape );
+    virtual void removeShape(KoShape* shape);
     /// implemented from KoShapeController
     virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
@@ -81,7 +81,7 @@ public:
     /// Returns if status bar is shown
     bool showStatusBar() const;
     /// Shows/hides status bar
-    void setShowStatusBar( bool b );
+    void setShowStatusBar(bool b);
     /// update attached view(s) on the current doc settings
     /// at this time only the status bar is handled
     void reorganizeGUI();
@@ -90,26 +90,26 @@ public:
     uint maxRecentFiles() const;
 
     /// Sets page layout of the document
-    virtual void setPageLayout( const KoPageLayout& layout );
+    virtual void setPageLayout(const KoPageLayout& layout);
 
-    bool mergeNativeFormat( const QString & file );
+    bool mergeNativeFormat(const QString & file);
 
 public slots:
     void slotDocumentRestored();
 
 protected:
     /// reimplemented form KoDocument
-    virtual KoView* createViewInstance( QWidget* parent );
+    virtual KoView* createViewInstance(QWidget* parent);
     /// reimplemented form KoDocument
-    virtual void removeView( KoView *view );
+    virtual void removeView(KoView *view);
 
     /// Loads settings like grid and guide lines from given xml document
-    void loadOasisSettings( const KoXmlDocument & settingsDoc );
+    void loadOasisSettings(const KoXmlDocument & settingsDoc);
     /// Saves settings like grid and guide lines to store
-    void saveOasisSettings( KoStore * store );
+    void saveOasisSettings(KoStore * store);
 
     /// Sets given page size to all attached views/canvases
-    void setPageSize( const QSizeF &pageSize );
+    void setPageSize(const QSizeF &pageSize);
 
     /// Reads settings from config file
     void initConfig();

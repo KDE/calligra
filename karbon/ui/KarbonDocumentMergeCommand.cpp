@@ -29,7 +29,7 @@ public:
     Private() : hasMerged(false)
     {
     }
-    
+
     ~Private()
     {
         if (!hasMerged) {
@@ -37,26 +37,26 @@ public:
             qDeleteAll(shapes);
         }
     }
-    
+
     KarbonPart * targetPart;
     QList<KoShapeLayer*> layers;
     QList<KoShape*> shapes;
     bool hasMerged;
 };
 
-KarbonDocumentMergeCommand::KarbonDocumentMergeCommand( KarbonPart * targetPart, KarbonPart * sourcePart )
-: QUndoCommand(0), d(new Private())
+KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart)
+        : QUndoCommand(0), d(new Private())
 {
     d->targetPart = targetPart;
     d->layers = sourcePart->document().layers();
     d->shapes = sourcePart->document().shapes();
-    foreach( KoShapeLayer * layer, d->layers ) {
+    foreach(KoShapeLayer * layer, d->layers) {
         sourcePart->removeShape(layer);
     }
-    foreach( KoShape * shape, d->shapes ) {
+    foreach(KoShape * shape, d->shapes) {
         sourcePart->removeShape(shape);
     }
-    setText( i18n("Insert graphics") );
+    setText(i18n("Insert graphics"));
 }
 
 KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()
@@ -67,28 +67,28 @@ KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()
 void KarbonDocumentMergeCommand::redo()
 {
     if (!d->hasMerged) {
-        foreach( KoShapeLayer * layer, d->layers ) {
-            d->targetPart->addShape( layer );
+        foreach(KoShapeLayer * layer, d->layers) {
+            d->targetPart->addShape(layer);
         }
-        foreach( KoShape * shape, d->shapes ) {
-            d->targetPart->addShape( shape );
+        foreach(KoShape * shape, d->shapes) {
+            d->targetPart->addShape(shape);
         }
         d->hasMerged = true;
     }
-    
+
     QUndoCommand::redo();
 }
 
 void KarbonDocumentMergeCommand::undo()
 {
     QUndoCommand::undo();
-    
+
     if (d->hasMerged) {
-        foreach( KoShapeLayer * layer, d->layers ) {
-            d->targetPart->removeShape( layer );
+        foreach(KoShapeLayer * layer, d->layers) {
+            d->targetPart->removeShape(layer);
         }
-        foreach( KoShape * shape, d->shapes ) {
-            d->targetPart->removeShape( shape );
+        foreach(KoShape * shape, d->shapes) {
+            d->targetPart->removeShape(shape);
         }
         d->hasMerged = false;
     }

@@ -28,14 +28,14 @@
 #include <QtGui/QPainter>
 
 KarbonPrintJob::KarbonPrintJob(KarbonView *view)
-    : KoPrintingDialog(view),
-    m_view(view)
+        : KoPrintingDialog(view),
+        m_view(view)
 {
-    setShapeManager( m_view->canvasWidget()->shapeManager() );
+    setShapeManager(m_view->canvasWidget()->shapeManager());
     printer().setFromTo(1, 1);
 
     QSizeF pageSize = m_view->part()->document().pageSize();
-    if( pageSize.width() > pageSize.height() )
+    if (pageSize.width() > pageSize.height())
         printer().setOrientation(QPrinter::Landscape);
     else
         printer().setOrientation(QPrinter::Portrait);
@@ -48,19 +48,19 @@ QRectF KarbonPrintJob::preparePage(int)
     const QSizeF contentSize = m_view->part()->document().pageSize();
     const QRectF pageRectPt = printer().pageRect(QPrinter::Point);
     const double scale = POINT_TO_INCH(printer().resolution());
-    
+
     qreal zoom = 1.0;
     // fit document page to printer page if it is bigger than the printing page rect
-    if( contentSize.width() > pageRectPt.width() || contentSize.height() > pageRectPt.height() ) {
+    if (contentSize.width() > pageRectPt.width() || contentSize.height() > pageRectPt.height()) {
         qreal zoomX = pageRectPt.width() / contentSize.width();
         qreal zoomY = pageRectPt.height() / contentSize.height();
         zoom = qMin(zoomX, zoomY);
     }
-    
+
     painter().scale(zoom, zoom);
     painter().setRenderHint(QPainter::Antialiasing);
-    
-    return QRectF(QPointF(), scale * contentSize );
+
+    return QRectF(QPointF(), scale * contentSize);
 }
 
 QList<KoShape*> KarbonPrintJob::shapesOnPage(int)

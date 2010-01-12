@@ -25,10 +25,9 @@
 namespace Karbon
 {
 
-    enum KarbonCanvasResource
-    {
-        FirstKarbonResource = KoCanvasResource::KarbonStart,
-    };
+enum KarbonCanvasResource {
+    FirstKarbonResource = KoCanvasResource::KarbonStart,
+};
 }
 
 #endif // _KARBON_H_

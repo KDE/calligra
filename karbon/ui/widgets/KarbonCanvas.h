@@ -56,7 +56,7 @@ class KarbonCanvas: public QWidget, public KoCanvasBase
     Q_OBJECT
 
 public:
-    explicit KarbonCanvas( KarbonPart *p );
+    explicit KarbonCanvas(KarbonPart *p);
     virtual ~KarbonCanvas();
 
     /// reimplemented from KoCanvasBase
@@ -87,13 +87,13 @@ public:
     virtual KoGuidesData * guidesData();
 
     /// Enables/disables showing page margins
-    void setShowPageMargins( bool on );
+    void setShowPageMargins(bool on);
 
     /**
     * Sets the viewing margin around the document in pt
     * @param margin the viewing margin around the document
     */
-    void setDocumentViewMargin( int margin );
+    void setDocumentViewMargin(int margin);
 
     /// Returns the viewing margin around the document
     int documentViewMargin() const;
@@ -106,7 +106,7 @@ public:
     QRectF documentViewRect();
 
     /// Sets the canvas background color to the given color
-    void setBackgroundColor( const QColor &color );
+    void setBackgroundColor(const QColor &color);
 
 public slots:
 
@@ -119,7 +119,7 @@ public slots:
     void setDocumentOffset(const QPoint &offset);
 
     /// Enables/disables outline painting mode
-    void enableOutlineMode( bool on );
+    void enableOutlineMode(bool on);
 
 signals:
 
@@ -129,36 +129,36 @@ signals:
      * canvas where the documents origin (0,0) or the top left
      * corner of the page is.
      */
-    void documentOriginChanged( const QPoint &origin );
+    void documentOriginChanged(const QPoint &origin);
 
 protected:
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void keyReleaseEvent (QKeyEvent *e);
-    void keyPressEvent (QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *e);
-    void tabletEvent( QTabletEvent *e );
-    void wheelEvent( QWheelEvent *e );
-    void resizeEvent( QResizeEvent *e );
+    void tabletEvent(QTabletEvent *e);
+    void wheelEvent(QWheelEvent *e);
+    void resizeEvent(QResizeEvent *e);
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    QPoint widgetToView( const QPoint& p ) const;
-    QRect widgetToView( const QRect& r ) const;
-    QPoint viewToWidget( const QPoint& p ) const;
-    QRect viewToWidget( const QRect& r ) const;
+    QPoint widgetToView(const QPoint& p) const;
+    QRect widgetToView(const QRect& r) const;
+    QPoint viewToWidget(const QPoint& p) const;
+    QRect viewToWidget(const QRect& r) const;
 
 private slots:
     void updateSizeAndOffset();
 
 private:
     /// paint page margins
-    void paintMargins( QPainter &painter, const KoViewConverter &converter );
+    void paintMargins(QPainter &painter, const KoViewConverter &converter);
 
     class KarbonCanvasPrivate;
     KarbonCanvasPrivate * const d;

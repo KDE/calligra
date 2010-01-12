@@ -23,17 +23,17 @@
 #include <KoShapeLayer.h>
 #include <KoShapeContainer.h>
 
-KarbonLayerSortingModel::KarbonLayerSortingModel( QObject * parent )
-    : QSortFilterProxyModel(parent)
-    , m_document(0)
+KarbonLayerSortingModel::KarbonLayerSortingModel(QObject * parent)
+        : QSortFilterProxyModel(parent)
+        , m_document(0)
 {
-    setDynamicSortFilter( true );
+    setDynamicSortFilter(true);
     // in qt-4.5.1 there was a bug (254234) preventing sorting to be enabled
     // so we explicitly trigger the sorting before setting the source model
     sort(0, Qt::DescendingOrder);
 }
 
-void KarbonLayerSortingModel::setDocument( KarbonDocument * newDocument )
+void KarbonLayerSortingModel::setDocument(KarbonDocument * newDocument)
 {
     m_document = newDocument;
     invalidate();
@@ -41,10 +41,10 @@ void KarbonLayerSortingModel::setDocument( KarbonDocument * newDocument )
 
 bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    KoShape * leftShape = static_cast<KoShape*>( left.internalPointer() );
-    KoShape * rightShape = static_cast<KoShape*>( right.internalPointer() );
+    KoShape * leftShape = static_cast<KoShape*>(left.internalPointer());
+    KoShape * rightShape = static_cast<KoShape*>(right.internalPointer());
 
-    if( ! leftShape || ! rightShape )
+    if (! leftShape || ! rightShape)
         return false;
 
     if (m_document) {
@@ -67,7 +67,7 @@ bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelInde
             }
         }
     } else {
-        if( leftShape->zIndex() == rightShape->zIndex() )
+        if (leftShape->zIndex() == rightShape->zIndex())
             return leftShape < rightShape;
         else
             return leftShape->zIndex() < rightShape->zIndex();

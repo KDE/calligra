@@ -35,7 +35,7 @@ class QModelIndex;
 
 namespace KParts
 {
-    class Part;
+class Part;
 }
 
 class KarbonLayerDockerFactory : public KoDockFactory
@@ -45,41 +45,40 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 };
 
 class KarbonLayerDocker : public QDockWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
 public slots:
     void updateView();
-    void setPart( KParts::Part * part );
+    void setPart(KParts::Part * part);
 private slots:
-    void slotButtonClicked( int buttonId );
+    void slotButtonClicked(int buttonId);
     void addLayer();
     void deleteItem();
     void raiseItem();
     void lowerItem();
-    void itemClicked( const QModelIndex &index );
+    void itemClicked(const QModelIndex &index);
     void minimalView();
     void detailedView();
     void thumbnailView();
 private:
-    void extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes, bool addChilds = false );
-    void addChildsRecursive( KoShapeGroup * parent, QList<KoShape*> &shapes );
+    void extractSelectedLayersAndShapes(QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes, bool addChilds = false);
+    void addChildsRecursive(KoShapeGroup * parent, QList<KoShape*> &shapes);
 
-    KoShape * shapeFromIndex( const QModelIndex &index );
+    KoShape * shapeFromIndex(const QModelIndex &index);
 
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
-    void selectLayers( QList<KoShapeLayer*> layers );
-    
+    void selectLayers(QList<KoShapeLayer*> layers);
+
     KarbonPart * m_part;
     KarbonLayerModel * m_model;
     KarbonLayerSortingModel * m_sortModel;

@@ -36,8 +36,7 @@ class KARBONCOMMON_EXPORT KarbonLayerReorderCommand : public QUndoCommand
 {
 public:
     /// The different types of layer commands.
-    enum ReorderType
-    {
+    enum ReorderType {
         RaiseLayer, ///< raises layer in z-order
         LowerLayer  ///< lowers layer in z-order
     };
@@ -48,7 +47,7 @@ public:
      * @param layer the layer which is subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand( KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent = 0 );
+    KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent = 0);
 
     /**
      * Layer command which works on a single layer.
@@ -56,14 +55,14 @@ public:
      * @param layers the list of layers which are subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand( KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent = 0 );
+    KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent = 0);
 
     virtual ~KarbonLayerReorderCommand();
 
     /// redo the command
-    virtual void redo ();
+    virtual void redo();
     /// revert the actions done in redo
-    virtual void undo ();
+    virtual void undo();
 
 private:
     KarbonDocument *m_document;         ///< the document to work on

@@ -28,9 +28,9 @@ class KarbonLayerSortingModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    KarbonLayerSortingModel( QObject * parent );
+    KarbonLayerSortingModel(QObject * parent);
     /// Sets a new document to use for sorting
-    void setDocument( KarbonDocument * newDocument );
+    void setDocument(KarbonDocument * newDocument);
 protected:
     virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 private:

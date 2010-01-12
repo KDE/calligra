@@ -69,7 +69,7 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    explicit KarbonView( KarbonPart* part, QWidget* parent = 0 );
+    explicit KarbonView(KarbonPart* part, QWidget* parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to
@@ -79,12 +79,12 @@ public:
     KarbonCanvas * canvasWidget() const;
 
     void reorganizeGUI();
-    void setNumberOfRecentFiles( uint number );
+    void setNumberOfRecentFiles(uint number);
 
     /// Reimplemented from QWidget
-    virtual void setCursor( const QCursor & );
+    virtual void setCursor(const QCursor &);
     /// Reimplemented from QWidget
-    virtual void dropEvent( QDropEvent *e );
+    virtual void dropEvent(QDropEvent *e);
     /// Reimplemented from KoView
     virtual KoZoomController *zoomController() const;
 
@@ -118,7 +118,7 @@ public slots:
     void excludePaths();
 
     void pathSnapToGrid();
-    
+
     void configure();
 
     void pageLayout();
@@ -138,20 +138,20 @@ protected slots:
     void zoomSelection();
     void zoomDrawing();
 
-    void mousePositionChanged( const QPoint &position );
+    void mousePositionChanged(const QPoint &position);
     void pageOffsetChanged();
 
-    void updateUnit( KoUnit unit );
-    
+    void updateUnit(KoUnit unit);
+
     void applyFillToSelection();
     void applyStrokeToSelection();
-    
+
 signals:
     void pageLayoutChanged();
 
 protected:
-    virtual void updateReadWrite( bool readwrite );
-    virtual void resizeEvent( QResizeEvent* event );
+    virtual void updateReadWrite(bool readwrite);
+    virtual void resizeEvent(QResizeEvent* event);
 
     void createLayersTabDock();
     void createStrokeDock();
@@ -165,7 +165,7 @@ private:
 
     void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
 
-    void booleanOperation( KarbonBooleanCommand::BooleanOperation operation );
+    void booleanOperation(KarbonBooleanCommand::BooleanOperation operation);
 
     /// Returns a list of all selected path shapes
     QList<KoPathShape*> selectedPathShapes();

@@ -24,7 +24,8 @@
 
 class KarbonView;
 
-class KarbonPrintJob : public KoPrintingDialog {
+class KarbonPrintJob : public KoPrintingDialog
+{
 public:
     KarbonPrintJob(KarbonView *view);
 

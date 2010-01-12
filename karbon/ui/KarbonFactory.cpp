@@ -48,8 +48,8 @@
 KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
-KarbonFactory::KarbonFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+KarbonFactory::KarbonFactory(QObject* parent, const char* name)
+        : KoFactory(parent, name)
 {
     componentData();
 
@@ -81,43 +81,42 @@ KarbonFactory::~KarbonFactory()
     s_aboutData = 0L;
 }
 
-KParts::Part* KarbonFactory::createPartObject( QWidget* parentWidget, QObject* parent, const char* classname, const QStringList& )
+KParts::Part* KarbonFactory::createPartObject(QWidget* parentWidget, QObject* parent, const char* classname, const QStringList&)
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and
     // single view.
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
     // parentWidget and widgetName are used by KoDocument for the
     // "readonly+singleView" case.
-    KarbonPart* part = new KarbonPart( parentWidget, 0, parent, 0, !bWantKoDocument );
+    KarbonPart* part = new KarbonPart(parentWidget, 0, parent, 0, !bWantKoDocument);
 
-    if( !bWantKoDocument )
-        part->setReadWrite( false );
+    if (!bWantKoDocument)
+        part->setReadWrite(false);
 
     return part;
 }
 
 KAboutData * KarbonFactory::aboutData()
 {
-    if( !s_aboutData )
-            s_aboutData = newKarbonAboutData();
+    if (!s_aboutData)
+        s_aboutData = newKarbonAboutData();
     return s_aboutData;
 }
 
 const KComponentData &KarbonFactory::componentData()
 {
-    if( !s_instance )
-    {
-        s_instance = new KComponentData( aboutData() );
+    if (!s_instance) {
+        s_instance = new KComponentData(aboutData());
         // Add any application-specific resource directories here
 
-        s_instance->dirs()->addResourceType( "kis_brushes", "data", "krita/brushes/" );
-        s_instance->dirs()->addResourceType( "kis_pattern", "data","krita/patterns/" );
-        s_instance->dirs()->addResourceType( "karbon_gradient", "data","krita/gradients/" );
-        s_instance->dirs()->addResourceType( "karbon_clipart", "data", "karbon/cliparts/" );
-        s_instance->dirs()->addResourceType( "karbon_template", "data", "karbon/templates/" );
-        s_instance->dirs()->addResourceType( "karbon_effects", "data", "karbon/effects/" );
+        s_instance->dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
+        s_instance->dirs()->addResourceType("kis_pattern", "data", "krita/patterns/");
+        s_instance->dirs()->addResourceType("karbon_gradient", "data", "krita/gradients/");
+        s_instance->dirs()->addResourceType("karbon_clipart", "data", "karbon/cliparts/");
+        s_instance->dirs()->addResourceType("karbon_template", "data", "karbon/templates/");
+        s_instance->dirs()->addResourceType("karbon_effects", "data", "karbon/effects/");
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
     }

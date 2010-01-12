@@ -30,12 +30,11 @@ class QPainterPath;
 class KARBONCOMMON_EXPORT KarbonBooleanCommand : public QUndoCommand
 {
 public:
-    enum BooleanOperation
-    {
+    enum BooleanOperation {
         Intersection, ///< the intersection of A and B
         Subtraction,  ///< the subtraction A - B
         Union,        ///< the union A + B
-	Exclusion
+        Exclusion
     };
 
     /**
@@ -46,8 +45,8 @@ public:
      * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand( KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
-                                   BooleanOperation operation, QUndoCommand *parent = 0 );
+    explicit KarbonBooleanCommand(KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+                                  BooleanOperation operation, QUndoCommand *parent = 0);
     virtual ~KarbonBooleanCommand();
     /// redo the command
     void redo();

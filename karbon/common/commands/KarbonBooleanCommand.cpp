@@ -31,15 +31,15 @@
 class KarbonBooleanCommand::Private
 {
 public:
-    Private( KoShapeControllerBase * c )
-    : controller( c ), pathA(0), pathB(0), resultingPath(0)
-    , resultParent(0), resultParentCmd(0)
-    , operation( Intersection ), isExecuted(false)
+    Private(KoShapeControllerBase * c)
+            : controller(c), pathA(0), pathB(0), resultingPath(0)
+            , resultParent(0), resultParentCmd(0)
+            , operation(Intersection), isExecuted(false)
     {}
 
     ~Private()
     {
-        if( ! isExecuted )
+        if (! isExecuted)
             delete resultingPath;
     }
 
@@ -53,19 +53,19 @@ public:
     bool isExecuted;
 };
 
-KarbonBooleanCommand::KarbonBooleanCommand( 
-    KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
-    BooleanOperation operation, QUndoCommand *parent 
+KarbonBooleanCommand::KarbonBooleanCommand(
+    KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+    BooleanOperation operation, QUndoCommand *parent
 )
-    : QUndoCommand( parent ), d( new Private( controller ) )
+        : QUndoCommand(parent), d(new Private(controller))
 {
-    Q_ASSERT( controller );
+    Q_ASSERT(controller);
 
     d->pathA = pathA;
     d->pathB = pathB;
     d->operation = operation;
 
-    setText( i18n( "Boolean Operation" ) );
+    setText(i18n("Boolean Operation"));
 }
 
 KarbonBooleanCommand::~KarbonBooleanCommand()
@@ -75,52 +75,48 @@ KarbonBooleanCommand::~KarbonBooleanCommand()
 
 void KarbonBooleanCommand::redo()
 {
-    if( ! d->resultingPath )
-    {
-        QPainterPath pa = d->pathA->absoluteTransformation(0).map( d->pathA->outline() );
-        QPainterPath pb = d->pathB->absoluteTransformation(0).map( d->pathB->outline() );
+    if (! d->resultingPath) {
+        QPainterPath pa = d->pathA->absoluteTransformation(0).map(d->pathA->outline());
+        QPainterPath pb = d->pathB->absoluteTransformation(0).map(d->pathB->outline());
         QPainterPath pr;
-        switch( d->operation )
-        {
-            case Intersection:
-                pr = pa.intersected( pb );
-                break;
-            case Subtraction:
-                pr = pa.subtracted( pb );
-                break;
-            case Exclusion:
-                pr = pa.subtracted( pb );
-                pr.addPath( pb.subtracted( pa ) );
-                break;
-            case Union:
-                pr = pa.united( pb );
-                break;
+        switch (d->operation) {
+        case Intersection:
+            pr = pa.intersected(pb);
+            break;
+        case Subtraction:
+            pr = pa.subtracted(pb);
+            break;
+        case Exclusion:
+            pr = pa.subtracted(pb);
+            pr.addPath(pb.subtracted(pa));
+            break;
+        case Union:
+            pr = pa.united(pb);
+            break;
         }
 
         QMatrix transformation = d->pathA->transformation();
-        pr = transformation.inverted().map( pr );
-        d->resultingPath = KoPathShape::createShapeFromPainterPath( pr );
-        d->resultingPath->setBorder( d->pathA->border() );
-        d->resultingPath->setBackground( d->pathA->background() );
-        d->resultingPath->setShapeId( d->pathA->shapeId() );
-        d->resultingPath->setTransformation( transformation );
-        d->resultingPath->setName( d->pathA->name() );
-        d->resultingPath->setZIndex( d->pathA->zIndex() );
-        d->resultingPath->setFillRule( d->pathA->fillRule() );
-        
-        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( d->pathA->parent() );
-        if( group )
-        {
+        pr = transformation.inverted().map(pr);
+        d->resultingPath = KoPathShape::createShapeFromPainterPath(pr);
+        d->resultingPath->setBorder(d->pathA->border());
+        d->resultingPath->setBackground(d->pathA->background());
+        d->resultingPath->setShapeId(d->pathA->shapeId());
+        d->resultingPath->setTransformation(transformation);
+        d->resultingPath->setName(d->pathA->name());
+        d->resultingPath->setZIndex(d->pathA->zIndex());
+        d->resultingPath->setFillRule(d->pathA->fillRule());
+
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(d->pathA->parent());
+        if (group) {
             QList<KoShape*> children;
-            d->resultParentCmd = new KoShapeGroupCommand( group, children << d->resultingPath, this );
+            d->resultParentCmd = new KoShapeGroupCommand(group, children << d->resultingPath, this);
         }
     }
 
-    if( d->controller )
-    {
-        if( d->resultParent )
-            d->resultParent->addChild( d->resultingPath );
-        d->controller->addShape( d->resultingPath );
+    if (d->controller) {
+        if (d->resultParent)
+            d->resultParent->addChild(d->resultingPath);
+        d->controller->addShape(d->resultingPath);
     }
 
     QUndoCommand::redo();
@@ -132,15 +128,13 @@ void KarbonBooleanCommand::undo()
 {
     QUndoCommand::undo();
 
-    if( d->controller && d->resultingPath )
-    {
-        if( ! d->resultParentCmd )
-        {
+    if (d->controller && d->resultingPath) {
+        if (! d->resultParentCmd) {
             d->resultParent = d->resultingPath->parent();
-            if( d->resultParent )
-                d->resultParent->removeChild( d->resultingPath );
+            if (d->resultParent)
+                d->resultParent->removeChild(d->resultingPath);
         }
-        d->controller->removeShape( d->resultingPath );
+        d->controller->removeShape(d->resultingPath);
     }
 
     d->isExecuted = false;

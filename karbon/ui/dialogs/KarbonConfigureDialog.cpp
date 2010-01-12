@@ -47,39 +47,39 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <float.h>
 
 
-KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
-    : KPageDialog( parent )
+KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
+        : KPageDialog(parent)
 {
-    setFaceType( List );
-    setCaption( i18n( "Configure" ) );
-    setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default );
-    setDefaultButton( KDialog::Ok );
+    setFaceType(List);
+    setCaption(i18n("Configure"));
+    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
+    setDefaultButton(KDialog::Ok);
 
-    m_interfacePage = new ConfigInterfacePage( parent );
-    KPageWidgetItem* item = addPage( m_interfacePage, i18n( "Interface" ) );
-    item->setHeader( i18n( "Interface" ) );
+    m_interfacePage = new ConfigInterfacePage(parent);
+    KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
+    item->setHeader(i18n("Interface"));
     item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
 
-    m_miscPage = new KoConfigMiscPage( parent->part() );
-    item = addPage( m_miscPage, i18n( "Misc" ) );
-    item->setHeader( i18n( "Misc" ) );
+    m_miscPage = new KoConfigMiscPage(parent->part());
+    item = addPage(m_miscPage, i18n("Misc"));
+    item->setHeader(i18n("Misc"));
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
 
-    m_gridPage = new KoConfigGridPage( parent->part() );
-    item = addPage( m_gridPage, i18n( "Grid" ) );
-    item->setHeader( i18n( "Grid" ) );
+    m_gridPage = new KoConfigGridPage(parent->part());
+    item = addPage(m_gridPage, i18n("Grid"));
+    item->setHeader(i18n("Grid"));
     item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
 
-    connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
+    connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
 
-    m_defaultDocPage = new KoConfigDocumentPage( parent->part() );
-    item = addPage( m_defaultDocPage, i18nc( "@title:tab Document settings page", "Document" ) );
-    item->setHeader( i18n( "Document Settings" ) );
+    m_defaultDocPage = new KoConfigDocumentPage(parent->part());
+    item = addPage(m_defaultDocPage, i18nc("@title:tab Document settings page", "Document"));
+    item->setHeader(i18n("Document Settings"));
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
-    connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 }
 
 void KarbonConfigureDialog::slotApply()
@@ -94,18 +94,18 @@ void KarbonConfigureDialog::slotDefault()
 {
     QWidget* curr = currentPage()->widget();
 
-    if( curr == m_interfacePage )
+    if (curr == m_interfacePage)
         m_interfacePage->slotDefault();
-    else if( curr == m_miscPage )
+    else if (curr == m_miscPage)
         m_miscPage->slotDefault();
-    else if( curr == m_gridPage )
+    else if (curr == m_gridPage)
         m_gridPage->slotDefault();
-    else if( curr == m_defaultDocPage )
+    else if (curr == m_defaultDocPage)
         m_defaultDocPage->slotDefault();
 }
 
 
-ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
+ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
 {
     setObjectName(name);
 
@@ -118,14 +118,13 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
     m_oldCanvasColor = QColor(Qt::white);
     bool oldShowStatusBar = true;
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), this );
+    QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
 
-    KConfigGroup emptyGroup = m_config->group( "GUI" );
-    m_oldDockerFontSize = emptyGroup.readEntry( "palettefontsize", m_oldDockerFontSize );
+    KConfigGroup emptyGroup = m_config->group("GUI");
+    m_oldDockerFontSize = emptyGroup.readEntry("palettefontsize", m_oldDockerFontSize);
 
-    if( m_config->hasGroup( "Interface" ) )
-    {
-        KConfigGroup interfaceGroup = m_config->group( "Interface" );
+    if (m_config->hasGroup("Interface")) {
+        KConfigGroup interfaceGroup = m_config->group("Interface");
 
         m_oldRecentFiles = interfaceGroup.readEntry("NbRecentFile", m_oldRecentFiles);
         oldShowStatusBar = interfaceGroup.readEntry("ShowStatusBar", true);
@@ -133,35 +132,35 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
         m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
     }
 
-    QVBoxLayout *grpLayout = new QVBoxLayout( tmpQGroupBox );
+    QVBoxLayout *grpLayout = new QVBoxLayout(tmpQGroupBox);
 
-    m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
-    m_showStatusBar->setChecked( oldShowStatusBar );
-    grpLayout->addWidget( m_showStatusBar );
+    m_showStatusBar = new QCheckBox(i18n("Show status bar"), tmpQGroupBox);
+    m_showStatusBar->setChecked(oldShowStatusBar);
+    grpLayout->addWidget(m_showStatusBar);
 
-    m_recentFiles = new KIntNumInput( tmpQGroupBox );
-    m_recentFiles->setRange( 1, 20, 1 );
-    m_recentFiles->setValue( m_oldRecentFiles );
-    m_recentFiles->setLabel( i18n( "Number of recent files:" ) );
-    grpLayout->addWidget( m_recentFiles );
+    m_recentFiles = new KIntNumInput(tmpQGroupBox);
+    m_recentFiles->setRange(1, 20, 1);
+    m_recentFiles->setValue(m_oldRecentFiles);
+    m_recentFiles->setLabel(i18n("Number of recent files:"));
+    grpLayout->addWidget(m_recentFiles);
 
-    m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
-    m_copyOffset->setRange( 1, 50, 1 );
-    m_copyOffset->setValue( m_oldCopyOffset );
-    m_copyOffset->setLabel( i18n( "Copy offset:" ) );
-    grpLayout->addWidget( m_copyOffset );
+    m_copyOffset = new KIntNumInput(m_oldCopyOffset, tmpQGroupBox);
+    m_copyOffset->setRange(1, 50, 1);
+    m_copyOffset->setValue(m_oldCopyOffset);
+    m_copyOffset->setLabel(i18n("Copy offset:"));
+    grpLayout->addWidget(m_copyOffset);
 
-    m_dockerFontSize = new KIntNumInput( tmpQGroupBox );
-    m_dockerFontSize->setRange( 5, 20, 1 );
-    m_dockerFontSize->setValue( m_oldDockerFontSize );
-    m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
-    grpLayout->addWidget( m_dockerFontSize );
+    m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
+    m_dockerFontSize->setRange(5, 20, 1);
+    m_dockerFontSize->setValue(m_oldDockerFontSize);
+    m_dockerFontSize->setLabel(i18n("Palette font size:"));
+    grpLayout->addWidget(m_dockerFontSize);
 
-    QLabel* canvasColorLbl = new QLabel( i18n( "Canvas color:" ), tmpQGroupBox);
-    m_canvasColor = new KColorButton( m_oldCanvasColor, tmpQGroupBox);
-    canvasColorLbl->setBuddy( m_canvasColor );
-    grpLayout->addWidget( canvasColorLbl );
-    grpLayout->addWidget( m_canvasColor );
+    QLabel* canvasColorLbl = new QLabel(i18n("Canvas color:"), tmpQGroupBox);
+    m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
+    canvasColorLbl->setBuddy(m_canvasColor);
+    grpLayout->addWidget(canvasColorLbl);
+    grpLayout->addWidget(m_canvasColor);
 
     grpLayout->addStretch();
 }
@@ -172,59 +171,54 @@ void ConfigInterfacePage::apply()
 
     KarbonPart* part = m_view->part();
 
-    KConfigGroup interfaceGroup = m_config->group( "Interface" );
+    KConfigGroup interfaceGroup = m_config->group("Interface");
 
     int recent = m_recentFiles->value();
 
-    if( recent != m_oldRecentFiles )
-    {
-        interfaceGroup.writeEntry( "NbRecentFile", recent );
-        m_view->setNumberOfRecentFiles( recent );
+    if (recent != m_oldRecentFiles) {
+        interfaceGroup.writeEntry("NbRecentFile", recent);
+        m_view->setNumberOfRecentFiles(recent);
         m_oldRecentFiles = recent;
     }
 
     int copyOffset = m_copyOffset->value();
 
-    if( copyOffset != m_oldCopyOffset )
-    {
-        interfaceGroup.writeEntry( "CopyOffset", copyOffset );
+    if (copyOffset != m_oldCopyOffset) {
+        interfaceGroup.writeEntry("CopyOffset", copyOffset);
         m_oldCopyOffset = copyOffset;
     }
 
     bool refreshGUI = false;
 
-    if( showStatusBar != part->showStatusBar() )
-    {
-        interfaceGroup.writeEntry( "ShowStatusBar", showStatusBar );
-        part->setShowStatusBar( showStatusBar );
+    if (showStatusBar != part->showStatusBar()) {
+        interfaceGroup.writeEntry("ShowStatusBar", showStatusBar);
+        part->setShowStatusBar(showStatusBar);
         refreshGUI = true;
     }
 
     int dockerFontSize = m_dockerFontSize->value();
 
-    if( dockerFontSize != m_oldDockerFontSize )
-    {
-        m_config->group( "GUI" ).writeEntry( "palettefontsize", dockerFontSize );
+    if (dockerFontSize != m_oldDockerFontSize) {
+        m_config->group("GUI").writeEntry("palettefontsize", dockerFontSize);
         m_oldDockerFontSize = dockerFontSize;
         refreshGUI = true;
     }
 
     QColor canvasColor = m_canvasColor->color();
-    if( canvasColor != m_oldCanvasColor )
-    {
-        interfaceGroup.writeEntry( "CanvasColor", canvasColor );
+    if (canvasColor != m_oldCanvasColor) {
+        interfaceGroup.writeEntry("CanvasColor", canvasColor);
         refreshGUI = true;
     }
 
-    if( refreshGUI )
+    if (refreshGUI)
         part->reorganizeGUI();
 }
 
 void ConfigInterfacePage::slotDefault()
 {
-    m_recentFiles->setValue( 10 );
-    m_dockerFontSize->setValue( 8 );
-    m_showStatusBar->setChecked( true );
+    m_recentFiles->setValue(10);
+    m_dockerFontSize->setValue(8);
+    m_showStatusBar->setChecked(true);
 }
 
 

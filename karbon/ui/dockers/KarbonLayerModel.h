@@ -34,41 +34,41 @@ class KarbonLayerModel : public KoDocumentSectionModel
 
 public:
     /// Constructs a new layer model using the specified documents data
-    KarbonLayerModel( QObject * parent = 0 );
+    KarbonLayerModel(QObject * parent = 0);
 
     /// Sets a new document to show contents of
-    void setDocument( KarbonDocument * newDocument );
+    void setDocument(KarbonDocument * newDocument);
 
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent( const QModelIndex &child ) const;
+    virtual QModelIndex parent(const QModelIndex &child) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
-    virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
+    virtual QMimeData * mimeData(const QModelIndexList & indexes) const;
+    virtual bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
 
 public slots:
     /// Triggers an update of the complete model
     void update();
-    
+
 private:
     /// Returns properties of the given shape
-    PropertyList properties( KoShape* shape ) const;
+    PropertyList properties(KoShape* shape) const;
     /// Sets the properties on the given shape
-    void setProperties( KoShape* shape, const PropertyList &properties );
+    void setProperties(KoShape* shape, const PropertyList &properties);
     /// Creates a thumbnail image with the specified size from the given shape
-    QImage createThumbnail( KoShape* shape, const QSize &thumbSize ) const;
+    QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
     /// Returns the child shape with the given index from the parent shape
-    KoShape * childFromIndex( KoShapeContainer *parent, int row ) const;
+    KoShape * childFromIndex(KoShapeContainer *parent, int row) const;
     /// Returns the zero based index of a child shape within its parent shape
-    int indexFromChild( KoShapeContainer *parent, KoShape *child ) const;
+    int indexFromChild(KoShapeContainer *parent, KoShape *child) const;
     /// Returns the parent model index from the given child shape
-    QModelIndex parentIndexFromShape( const KoShape * child ) const;
+    QModelIndex parentIndexFromShape(const KoShape * child) const;
 
     KarbonDocument *m_document; ///< the underlying data structure
 };

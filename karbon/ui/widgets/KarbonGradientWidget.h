@@ -48,7 +48,7 @@ public:
      * Constructs a new gradient widget with the given parent
      * @param parent the gradient widgets parent
      */
-    explicit KarbonGradientWidget( QWidget* parent = 0L );
+    explicit KarbonGradientWidget(QWidget* parent = 0L);
 
     /// Destroys the gradient widget
     ~KarbonGradientWidget();
@@ -57,7 +57,7 @@ public:
      * Sets the gradient color stops to be edited.
      * @param stops the gradient color stops to edit
      */
-    void setStops( const QGradientStops & stops );
+    void setStops(const QGradientStops & stops);
 
     /**
      * Returns the edited gradient color stops.
@@ -70,29 +70,29 @@ signals:
     void changed();
 
 protected:
-    virtual void paintEvent( QPaintEvent* );
+    virtual void paintEvent(QPaintEvent*);
 
 private:
     /** mouse events... For color stops manipulation */
-    void mousePressEvent( QMouseEvent* );
-    void mouseReleaseEvent( QMouseEvent* );
-    void mouseDoubleClickEvent( QMouseEvent* );
-    void mouseMoveEvent( QMouseEvent* );
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseDoubleClickEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
     /// paints a color stop handle
-    void paintColorStop( QPainter& p, int x, const QColor& color );
+    void paintColorStop(QPainter& p, int x, const QColor& color);
     /// paints a midpoint handle
-    void paintMidPoint( QPainter& p, int x );
+    void paintMidPoint(QPainter& p, int x);
 
     /// Returns index of color stop at given mouse position, -1 if non found
-    int colorStopFromPosition( const QPoint &mousePos );
+    int colorStopFromPosition(const QPoint &mousePos);
 
     /// Sorts color stops by position, retaining the index of the current stop
     void sortStops();
-    
+
     /// moves color stop with given index setting to new position, returning the new stop index
-    int moveColorStop( int index, qreal newPosition );
-    
+    int moveColorStop(int index, qreal newPosition);
+
     QGradientStops m_stops; ///< the gradient color stops
     int m_currentStop; ///< the stop to modify.
     QRect m_pntArea; ///< the area where the gradient is painted

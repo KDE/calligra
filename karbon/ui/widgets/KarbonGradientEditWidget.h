@@ -41,7 +41,7 @@ class QPushButton;
  */
 class KARBONUI_EXPORT KarbonGradientEditWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     enum GradientTarget {
@@ -53,7 +53,7 @@ public:
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KarbonGradientEditWidget( QWidget* parent = 0L );
+    explicit KarbonGradientEditWidget(QWidget* parent = 0L);
 
     /// Destroys the widget
     virtual ~KarbonGradientEditWidget();
@@ -62,49 +62,49 @@ public:
      * Sets a new gradient to edit.
      * @param gradient the gradient to edit
      */
-    void setGradient( const QGradient & gradient );
+    void setGradient(const QGradient & gradient);
 
     /// Returns the gradient target (fill/stroke)
     GradientTarget target();
 
     /// Sets a new gradient target
-    void setTarget( GradientTarget target );
+    void setTarget(GradientTarget target);
 
     /// Returns the gradient opacity
     qreal opacity() const;
 
     /// Sets the gradients opacity to @p opacity
-    void setOpacity( qreal opacity );
+    void setOpacity(qreal opacity);
 
     /// Sets the index of the stop to edit
-    void setStopIndex( int index );
+    void setStopIndex(int index);
 
     /// Returns the gradient spread
     QGradient::Spread spread() const;
 
     /// Sets the gradient spread
-    void setSpread( QGradient::Spread spread );
+    void setSpread(QGradient::Spread spread);
 
     /// Returns the gradient type
     QGradient::Type type() const;
 
     /// Sets the gradient type
-    void setType( QGradient::Type type );
+    void setType(QGradient::Type type);
 
     /// Returns the gradient stops
     QGradientStops stops() const;
 
     /// Sets the gradient stops
-    void setStops( const QGradientStops &stops );
+    void setStops(const QGradientStops &stops);
 
 Q_SIGNALS:
     /// Is emitted a soon as the gradient changes
     void changed();
 
 protected Q_SLOTS:
-    void combosChange( int );
+    void combosChange(int);
     void addGradientToPredefs();
-    void opacityChanged( qreal value, bool final );
+    void opacityChanged(qreal value, bool final);
     void stopsChanged();
     void stopChanged();
 protected:
@@ -112,7 +112,7 @@ protected:
     void updateUI();
     void updatePredefGradients();
     void setupConnections();
-    void blockChildSignals( bool block );
+    void blockChildSignals(bool block);
 
 private:
     KarbonGradientWidget * m_gradientWidget;

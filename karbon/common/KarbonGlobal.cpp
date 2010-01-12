@@ -24,18 +24,18 @@
 #include "KarbonGlobal.h"
 #include <math.h>
 
-int KarbonGlobal::binomialCoeff( unsigned n, unsigned k )
+int KarbonGlobal::binomialCoeff(unsigned n, unsigned k)
 {
     return
         static_cast<int>(
             0.5 +
             exp(
-                factorialLn( n ) -
-                factorialLn( k ) -
-                factorialLn( n - k ) ) );
+                factorialLn(n) -
+                factorialLn(k) -
+                factorialLn(n - k)));
 }
 
-qreal KarbonGlobal::factorialLn( unsigned n )
+qreal KarbonGlobal::factorialLn(unsigned n)
 {
     const unsigned cacheSize = 100;
 
@@ -43,25 +43,21 @@ qreal KarbonGlobal::factorialLn( unsigned n )
     static qreal cache[ cacheSize ];
 
 
-    if( n <= 1 )
+    if (n <= 1)
         return 0.0;
 
-    if( n <= cacheSize - 1 )
-    {
+    if (n <= cacheSize - 1) {
         return cache[ n ]
-            ? cache[ n ]
-            : ( cache[ n ] = gammaLn( n + 1.0 ) );
-    }
-    else
-    {
-        return gammaLn( n + 1.0 );
+               ? cache[ n ]
+               : (cache[ n ] = gammaLn(n + 1.0));
+    } else {
+        return gammaLn(n + 1.0);
     }
 }
 
-qreal KarbonGlobal::gammaLn( qreal x )
+qreal KarbonGlobal::gammaLn(qreal x)
 {
-    static qreal coeff[ 6 ] =
-    {
+    static qreal coeff[ 6 ] = {
         76.18009172947146,
         -86.50532032941677,
         24.01409824083091,
@@ -73,16 +69,15 @@ qreal KarbonGlobal::gammaLn( qreal x )
     qreal y = x;
 
     qreal tmp = x + 5.5;
-    tmp -= ( x + 0.5 ) * log( tmp );
+    tmp -= (x + 0.5) * log(tmp);
 
     qreal ser = 1.000000000190015;
 
-    for( int i = 0; i < 5; ++i )
-    {
+    for (int i = 0; i < 5; ++i) {
         ser += coeff[ i ] / ++y;
     }
 
-    return -tmp + log( 2.5066282746310005 * ser / x );
+    return -tmp + log(2.5066282746310005 * ser / x);
 }
 
 qreal KarbonGlobal::scalarProduct(const QPointF &p1, const QPointF &p2)
@@ -95,7 +90,7 @@ bool KarbonGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, qreal ran
     return (p2.x() >= p1.x() - range && p2.x() <= p1.x() + range && p2.y() >= p1.y() - range && p2.y() <= p1.y() + range);
 }
 
-QPointF KarbonGlobal::crossProduct( const QPointF &v1, const QPointF &v2 )
+QPointF KarbonGlobal::crossProduct(const QPointF &v1, const QPointF &v2)
 {
-    return QPointF( v1.x() * v2.y(), -v1.y()*v2.x() );
+    return QPointF(v1.x() * v2.y(), -v1.y()*v2.x());
 }

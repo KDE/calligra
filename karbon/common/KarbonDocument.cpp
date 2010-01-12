@@ -60,25 +60,24 @@ class KarbonDocument::Private
 {
 public:
     Private()
-    : pageSize(0.0, 0.0)
-    , hasExternalDataCenterMap(false)
+            : pageSize(0.0, 0.0)
+            , hasExternalDataCenterMap(false)
     {
         // Ask every shapefactory to populate the dataCenterMap
-        foreach( const QString & id, KoShapeRegistry::instance()->keys())
-        {
+        foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
             KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-            shapeFactory->populateDataCenterMap( dataCenterMap );
+            shapeFactory->populateDataCenterMap(dataCenterMap);
         }
     }
 
     ~Private()
     {
-        qDeleteAll( layers );
+        qDeleteAll(layers);
         layers.clear();
-        qDeleteAll( objects );
+        qDeleteAll(objects);
         objects.clear();
         if (!hasExternalDataCenterMap)
-            qDeleteAll( dataCenterMap );
+            qDeleteAll(dataCenterMap);
     }
 
     QSizeF pageSize; ///< the documents page size
@@ -91,14 +90,14 @@ public:
 };
 
 KarbonDocument::KarbonDocument()
-: d( new Private )
+        : d(new Private)
 {
     // create a layer. we need at least one:
-    insertLayer( new KoShapeLayer() );
+    insertLayer(new KoShapeLayer());
 }
 
-KarbonDocument::KarbonDocument( const KarbonDocument& document )
-: d( new Private )
+KarbonDocument::KarbonDocument(const KarbonDocument& document)
+        : d(new Private)
 {
     d->layers = document.layers();
 // TODO
@@ -109,161 +108,157 @@ KarbonDocument::~KarbonDocument()
     delete d;
 }
 
-void KarbonDocument::insertLayer( KoShapeLayer* layer )
+void KarbonDocument::insertLayer(KoShapeLayer* layer)
 {
     if (!d->layers.contains(layer)) {
         if (d->layers.count()) {
-            layer->setZIndex(d->layers.last()->zIndex()+1);
+            layer->setZIndex(d->layers.last()->zIndex() + 1);
         } else {
             layer->setZIndex(d->layers.count());
         }
-        d->layers.append( layer );
+        d->layers.append(layer);
     }
 }
 
-void KarbonDocument::removeLayer( KoShapeLayer* layer )
+void KarbonDocument::removeLayer(KoShapeLayer* layer)
 {
-    d->layers.removeAt( d->layers.indexOf( layer ) );
-    if ( d->layers.count() == 0 )
-        d->layers.append( new KoShapeLayer() );
+    d->layers.removeAt(d->layers.indexOf(layer));
+    if (d->layers.count() == 0)
+        d->layers.append(new KoShapeLayer());
 }
 
-bool KarbonDocument::canRaiseLayer( KoShapeLayer* layer )
+bool KarbonDocument::canRaiseLayer(KoShapeLayer* layer)
 {
-    int pos = d->layers.indexOf( layer );
-    return (pos != int( d->layers.count() ) - 1 && pos >= 0 );
+    int pos = d->layers.indexOf(layer);
+    return (pos != int(d->layers.count()) - 1 && pos >= 0);
 }
 
-bool KarbonDocument::canLowerLayer( KoShapeLayer* layer )
+bool KarbonDocument::canLowerLayer(KoShapeLayer* layer)
 {
-    int pos = d->layers.indexOf( layer );
-    return (pos>0);
+    int pos = d->layers.indexOf(layer);
+    return (pos > 0);
 }
 
-void KarbonDocument::raiseLayer( KoShapeLayer* layer )
+void KarbonDocument::raiseLayer(KoShapeLayer* layer)
 {
-    int pos = d->layers.indexOf( layer );
-    if( pos != int( d->layers.count() ) - 1 && pos >= 0 ) {
-        KoShapeLayer * layerAbove = d->layers.at(pos+1);
+    int pos = d->layers.indexOf(layer);
+    if (pos != int(d->layers.count()) - 1 && pos >= 0) {
+        KoShapeLayer * layerAbove = d->layers.at(pos + 1);
         int lowerZIndex = layer->zIndex();
         int upperZIndex = layerAbove->zIndex();
         layer->setZIndex(upperZIndex);
         layerAbove->setZIndex(lowerZIndex);
-        d->layers.move( pos, pos + 1 );
+        d->layers.move(pos, pos + 1);
     }
 }
 
-void KarbonDocument::lowerLayer( KoShapeLayer* layer )
+void KarbonDocument::lowerLayer(KoShapeLayer* layer)
 {
-    int pos = d->layers.indexOf( layer );
-    if ( pos > 0 ) {
-        KoShapeLayer * layerBelow = d->layers.at(pos-1);
+    int pos = d->layers.indexOf(layer);
+    if (pos > 0) {
+        KoShapeLayer * layerBelow = d->layers.at(pos - 1);
         int upperZIndex = layer->zIndex();
         int lowerZIndex = layerBelow->zIndex();
         layer->setZIndex(lowerZIndex);
         layerBelow->setZIndex(upperZIndex);
-        d->layers.move( pos, pos - 1 );
+        d->layers.move(pos, pos - 1);
     }
 }
 
-int KarbonDocument::layerPos( KoShapeLayer* layer )
+int KarbonDocument::layerPos(KoShapeLayer* layer)
 {
-    return d->layers.indexOf( layer );
+    return d->layers.indexOf(layer);
 }
 
-void KarbonDocument::add( KoShape* shape )
+void KarbonDocument::add(KoShape* shape)
 {
-    if( ! d->objects.contains( shape ) )
-        d->objects.append( shape );
+    if (! d->objects.contains(shape))
+        d->objects.append(shape);
 }
 
-void KarbonDocument::remove( KoShape* shape )
+void KarbonDocument::remove(KoShape* shape)
 {
-    d->objects.removeAt( d->objects.indexOf( shape ) );
+    d->objects.removeAt(d->objects.indexOf(shape));
 }
 
-void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
+void KarbonDocument::saveOasis(KoShapeSavingContext & context) const
 {
-    context.xmlWriter().startElement( "draw:page" );
-    context.xmlWriter().addAttribute( "draw:name", "" );
-    context.xmlWriter().addAttribute( "draw:id", "page1");
-    context.xmlWriter().addAttribute( "draw:master-page-name", "Default");
+    context.xmlWriter().startElement("draw:page");
+    context.xmlWriter().addAttribute("draw:name", "");
+    context.xmlWriter().addAttribute("draw:id", "page1");
+    context.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
-    foreach( KoShapeLayer * layer, d->layers )
-        layer->saveOdf( context );
+    foreach(KoShapeLayer * layer, d->layers)
+    layer->saveOdf(context);
 
-    context.saveLayerSet( context.xmlWriter() );
+    context.saveLayerSet(context.xmlWriter());
     context.xmlWriter().endElement(); // draw:page
 }
 
-bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
+bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // load text styles used by text shapes
-    loadOdfStyles( context );
+    loadOdfStyles(context);
 
-    qDeleteAll( d->layers );
+    qDeleteAll(d->layers);
     d->layers.clear();
-    qDeleteAll( d->objects );
+    qDeleteAll(d->objects);
     d->objects.clear();
 
-    const KoXmlElement & pageLayerSet = KoXml::namedItemNS(  element, KoXmlNS::draw, "layer-set" );
-    const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? context.odfLoadingContext().stylesReader().layerSet(): pageLayerSet;
+    const KoXmlElement & pageLayerSet = KoXml::namedItemNS(element, KoXmlNS::draw, "layer-set");
+    const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? context.odfLoadingContext().stylesReader().layerSet() : pageLayerSet;
 
     KoXmlElement layerElement;
-    forEachElement( layerElement, usedPageLayerSet ) {
+    forEachElement(layerElement, usedPageLayerSet) {
         KoShapeLayer * l = new KoShapeLayer();
-        if( l->loadOdf( layerElement, context ) )
-            insertLayer( l );
+        if (l->loadOdf(layerElement, context))
+            insertLayer(l);
     }
 
     KoShapeLayer * defaultLayer = 0;
 
     // check if we have to insert a default layer
-    if( d->layers.count() == 0 )
+    if (d->layers.count() == 0)
         defaultLayer = new KoShapeLayer();
 
     KoXmlElement child;
-    forEachElement( child, element )
-    {
-        kDebug(38000) <<"loading shape" << child.localName();
+    forEachElement(child, element) {
+        kDebug(38000) << "loading shape" << child.localName();
 
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
-        if( shape )
-            d->objects.append( shape );
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        if (shape)
+            d->objects.append(shape);
     }
 
     // add all toplevel shapes to the default layer
-    foreach( KoShape * shape, d->objects )
-    {
-        if( ! shape->parent() )
-        {
-            if( ! defaultLayer )
+    foreach(KoShape * shape, d->objects) {
+        if (! shape->parent()) {
+            if (! defaultLayer)
                 defaultLayer = new KoShapeLayer();
 
-            defaultLayer->addChild( shape );
+            defaultLayer->addChild(shape);
         }
     }
 
-    if( defaultLayer )
-        insertLayer( defaultLayer );
+    if (defaultLayer)
+        insertLayer(defaultLayer);
 
     return true;
 }
 
 QRectF KarbonDocument::boundingRect() const
 {
-    return contentRect().united( QRectF( QPointF(0,0), d->pageSize ) );
+    return contentRect().united(QRectF(QPointF(0, 0), d->pageSize));
 }
 
 QRectF KarbonDocument::contentRect() const
 {
     QRectF bb;
-    foreach( KoShape* layer, d->layers )
-    {
-        if( bb.isNull() )
+    foreach(KoShape* layer, d->layers) {
+        if (bb.isNull())
             bb = layer->boundingRect();
         else
-            bb = bb.united(  layer->boundingRect() );
+            bb = bb.united(layer->boundingRect());
     }
 
     return bb;
@@ -274,7 +269,7 @@ QSizeF KarbonDocument::pageSize() const
     return d->pageSize;
 }
 
-void KarbonDocument::setPageSize( QSizeF pageSize )
+void KarbonDocument::setPageSize(QSizeF pageSize)
 {
     d->pageSize = pageSize;
 }
@@ -291,7 +286,7 @@ const QList<KoShapeLayer*> KarbonDocument::layers() const
 
 KoImageCollection * KarbonDocument::imageCollection()
 {
-    return dynamic_cast<KoImageCollection *>( d->dataCenterMap["ImageCollection"] );
+    return dynamic_cast<KoImageCollection *>(d->dataCenterMap["ImageCollection"]);
 }
 
 QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
@@ -299,9 +294,9 @@ QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
     return d->dataCenterMap;
 }
 
-void KarbonDocument::useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters )
+void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenter*> dataCenters)
 {
-    qDeleteAll( d->dataCenterMap );
+    qDeleteAll(d->dataCenterMap);
     d->dataCenterMap = dataCenters;
     d->hasExternalDataCenterMap = true;
 }
@@ -310,20 +305,20 @@ void KarbonDocument::useExternalDataCenterMap( QMap<QString, KoDataCenter*> data
 // ODF saving
 //#############################################################################
 
-bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
+bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
 {
     KoStore * store = documentContext.odfStore.store();
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
-    if ( !contentWriter )
+    if (!contentWriter)
         return false;
 
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    KoShapeSavingContext shapeContext( *bodyWriter, mainStyles, documentContext.embeddedSaver );
+    KoShapeSavingContext shapeContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
     // save text styles
-    saveOdfStyles( shapeContext );
+    saveOdfStyles(shapeContext);
 
     // save page
     KoPageLayout page;
@@ -333,54 +328,54 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
     page.height = pageSize().height();
 
     KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.lookup( pageLayout, "PL" );
-    KoGenStyle masterPage( KoGenStyle::StyleMaster );
-    masterPage.addAttribute( "style:page-layout-name", layoutName );
-    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
+    QString layoutName = mainStyles.lookup(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::StyleMaster);
+    masterPage.addAttribute("style:page-layout-name", layoutName);
+    mainStyles.lookup(masterPage, "Default", KoGenStyles::DontForceNumbering);
 
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:drawing" );
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:drawing");
 
-    saveOasis( shapeContext ); // Save contents
+    saveOasis(shapeContext);   // Save contents
 
     bodyWriter->endElement(); // office:drawing
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     documentContext.odfStore.closeContentWriter();
 
     //add manifest line for content.xml
-    documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
+    documentContext.odfStore.manifestWriter()->addManifestEntry("content.xml", "text/xml");
 
-    if ( !shapeContext.saveDataCenter( store, documentContext.odfStore.manifestWriter() ) ) {
+    if (!shapeContext.saveDataCenter(store, documentContext.odfStore.manifestWriter())) {
         return false;
     }
 
-    return mainStyles.saveOdfStylesDotXml( store, documentContext.odfStore.manifestWriter() );
+    return mainStyles.saveOdfStylesDotXml(store, documentContext.odfStore.manifestWriter());
 }
 
-void KarbonDocument::loadOdfStyles( KoShapeLoadingContext & context )
+void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
-    if( ! styleManager )
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>(dataCenterMap()["StyleManager"]);
+    if (! styleManager)
         return;
 
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    if( ! sharedData )
+    if (! sharedData)
         return;
 
-    sharedData->loadOdfStyles( context.odfLoadingContext(), styleManager );
-    context.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
+    sharedData->loadOdfStyles(context.odfLoadingContext(), styleManager);
+    context.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 }
 
-void KarbonDocument::saveOdfStyles( KoShapeSavingContext & context )
+void KarbonDocument::saveOdfStyles(KoShapeSavingContext & context)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
-    if( ! styleManager )
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>(dataCenterMap()["StyleManager"]);
+    if (! styleManager)
         return;
 
-    styleManager->saveOdf( context.mainStyles() );
+    styleManager->saveOdf(context.mainStyles());
 }
 
 void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenter* dataCenter)

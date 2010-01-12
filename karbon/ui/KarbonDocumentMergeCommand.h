@@ -27,11 +27,11 @@ class KarbonPart;
 class KarbonDocumentMergeCommand : public QUndoCommand
 {
 public:
-    KarbonDocumentMergeCommand( KarbonPart * targetPart, KarbonPart * sourcePart );
+    KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart);
     virtual ~KarbonDocumentMergeCommand();
     virtual void redo();
     virtual void undo();
-    
+
 private:
     class Private;
     Private * const d;
