@@ -36,6 +36,7 @@ set(karbon_tools_PART_SRCS
    filterEffectTool/FilterAddCommand.cpp
    filterEffectTool/FilterRemoveCommand.cpp
    filterEffectTool/FilterStackSetCommand.cpp
+   filterEffectTool/FilterRegionChangeCommand.cpp
    filterEffectTool/FilterEffectResource.cpp
    filterEffectTool/FilterResourceServerProvider.cpp
 )
