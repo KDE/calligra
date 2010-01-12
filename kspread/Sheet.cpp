@@ -3227,7 +3227,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
 
     // saving the rows and the cells
     // we have to loop through all rows of the used area
-    for (i = 1; i <= maxRows; ++i) {
+    for (i = 1; i < maxRows; ++i) {
         const RowFormat* row = rowFormat(i);
 
         // default cell style for row
@@ -3324,7 +3324,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + 1;
-            while (compareRows(i, j, maxCols, tableContext) && j <= maxRows) {
+            while (compareRows(i, j, maxCols, tableContext) && j < maxRows) {
                 j++;
                 repeated++;
             }
