@@ -663,7 +663,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shd()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     TRY_READ_ATTR(color)
-kDebug() << m_callsNames;
+//kDebug() << m_callsNames;
     if (!color.isEmpty() && color != MsooXmlReader::constAuto) {
         QColor clr(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
         if (CALLER_IS(rPr) && clr.isValid() && (val.compare("solid", Qt::CaseInsensitive) == 0)) {
