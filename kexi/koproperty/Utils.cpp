@@ -20,6 +20,7 @@
 */
 
 #include "Utils.h"
+#include "Utils_p.h"
 #include "EditorView.h"
 
 #include <QPainter>
@@ -184,6 +185,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
     };
 
 }//namespace
+
 using namespace KoProperty;
 
 GroupContainer::GroupContainer(const QString& title, QWidget* parent)
@@ -236,4 +238,16 @@ bool GroupContainer::event(QEvent * e)
         }
     }
     return QWidget::event(e);
+}
+
+QColor KoProperty::contrastColor(const QColor& c)
+{
+    int g = qGray(c.rgb());
+    if (g > 110)
+        return c.dark(300);
+    else if (g > 80)
+        return c.light(250);
+    else if (g > 20)
+        return c.light(400);
+    return Qt::lightGray;
 }

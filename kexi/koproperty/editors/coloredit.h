@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,37 +21,47 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "koproperty/Factory.h"
-
-//Added by qt3to4:
-#include <QtCore/QEvent>
-
-class KColorCombo;
+#include <KColorCombo>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT ColorButton : public Widget
+//! Color combo box
+//! @todo enable transparency selection
+//! @todo enable transparency as option
+class KOPROPERTY_EXPORT ColorCombo : public KColorCombo
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit ColorButton(Property *property, QWidget *parent = 0);
-    virtual ~ColorButton();
+    explicit ColorCombo(QWidget *parent = 0);
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    ~ColorCombo();
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    QVariant value() const;
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+signals:
+    void commitData( QWidget * editor );
+
+public slots:
+    void setValue(const QVariant &value);
 
 protected slots:
-    void  slotValueChanged(int index);
+    void slotValueChanged(const QColor&);
+};
 
-private:
-    KColorCombo  *m_edit;
+class KOPROPERTY_EXPORT ColorComboDelegate : public EditorCreatorInterface,
+                                             public ValuePainterInterface
+{
+public:
+    ColorComboDelegate() {}
+    
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 }
