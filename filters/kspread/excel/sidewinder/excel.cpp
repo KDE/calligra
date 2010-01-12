@@ -437,8 +437,8 @@ public:
 };
 
 // constructor of BOFRecord
-BOFRecord::BOFRecord():
-        Record()
+BOFRecord::BOFRecord(Swinder::Workbook *book):
+        Record(book)
 {
     d = new BOFRecord::Private();
     d->version  = 0x600; // BIFF8;
@@ -547,9 +547,9 @@ public:
 };
 
 
-ExternBookRecord::ExternBookRecord()
+ExternBookRecord::ExternBookRecord(Workbook *book)
+    : Record(book), d(new Private)
 {
-    d = new Private;
     d->sheetCount = 0;
 }
 
@@ -597,9 +597,9 @@ public:
 };
 
 
-ExternNameRecord::ExternNameRecord()
+ExternNameRecord::ExternNameRecord(Workbook *book)
+    : Record(book), d(new Private)
 {
-    d = new Private;
     d->optionFlags = 0;
     d->sheetIndex = 0;
 }
@@ -654,8 +654,8 @@ void ExternNameRecord::dump(std::ostream& /*out*/) const
 
 const unsigned int FilepassRecord::id = 0x002f;
 
-FilepassRecord::FilepassRecord():
-        Record()
+FilepassRecord::FilepassRecord(Workbook *book)
+    : Record(book)
 {
 }
 
@@ -686,8 +686,8 @@ public:
     bool shared;
 };
 
-FormulaRecord::FormulaRecord():
-        Record()
+FormulaRecord::FormulaRecord(Workbook *book):
+        Record(book)
 {
     d = new FormulaRecord::Private();
     d->shared = true;
@@ -817,8 +817,8 @@ public:
     FormulaTokens tokens;
 };
 
-SharedFormulaRecord::SharedFormulaRecord():
-        Record()
+SharedFormulaRecord::SharedFormulaRecord(Workbook *book):
+        Record(book)
 {
     d = new SharedFormulaRecord::Private();
 }
@@ -896,8 +896,8 @@ public:
     std::vector<unsigned> rkValues;
 };
 
-MulRKRecord::MulRKRecord():
-        Record(), CellInfo(), ColumnSpanInfo()
+MulRKRecord::MulRKRecord(Workbook *book):
+        Record(book), CellInfo(), ColumnSpanInfo()
 {
     d = new MulRKRecord::Private();
 }
@@ -990,7 +990,8 @@ public:
 };
 
 
-NameRecord::NameRecord()
+NameRecord::NameRecord(Workbook *book)
+    : Record(book)
 {
     d = new Private;
     d->optionFlags = 0;
@@ -1092,8 +1093,8 @@ public:
     double f;
 };
 
-RKRecord::RKRecord():
-        Record(), CellInfo()
+RKRecord::RKRecord(Workbook *book):
+        Record(book), CellInfo()
 {
     d = new RKRecord::Private();
     d->integer = true;
@@ -1190,8 +1191,8 @@ public:
     UString label;
 };
 
-RStringRecord::RStringRecord():
-        Record(), CellInfo()
+RStringRecord::RStringRecord(Workbook *book):
+        Record(book), CellInfo()
 {
     d = new RStringRecord::Private();
     d->label = UString::null;
@@ -1250,8 +1251,8 @@ public:
     std::vector<std::map<unsigned, unsigned> > formatRuns;
 };
 
-SSTRecord::SSTRecord():
-        Record()
+SSTRecord::SSTRecord(Workbook *book):
+        Record(book)
 {
     d = new SSTRecord::Private();
     d->total = 0;
@@ -1339,7 +1340,7 @@ void SSTRecord::dump(std::ostream& out) const
 
 const unsigned ObjRecord::id = 0x5D;
 
-ObjRecord::ObjRecord() : Record(), m_object(0) {}
+ObjRecord::ObjRecord(Workbook *book) : Record(book), m_object(0) {}
 ObjRecord::~ObjRecord()
 {
     delete m_object;
@@ -1500,6 +1501,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     }
     break;
     case Object::Chart:
+        printf("ObjRecord::setData Chart\n");
         break;
     default:
         std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
@@ -1650,90 +1652,6 @@ void DrawingObject::readHeader(const unsigned char* data, unsigned *recVer, unsi
     }
 }
 
-// read a drawing object (container or atom) and handle/dispatch according to the recType.
-unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* data)
-{
-    unsigned recVer = 0;
-    unsigned recInstance = 0;
-    unsigned recType = 0;
-    unsigned long recLen = 0;
-    readHeader(data, &recVer, &recInstance, &recType, &recLen);
-    switch(recType) {
-        case 0xF003: // OfficeArtSpgrContainer
-        case 0xF004: { // OfficeArtSpContainer
-            unsigned long offset = 8;
-            while(offset <= recLen) {
-                offset += handleObject(size, data + offset);
-            }
-        } break;
-        case 0xF008: { // OfficeArtFDG
-            unsigned long csp = readU32(data + 8);
-            unsigned long spid = readU32(data + 12); // MSOSPID, shape-identifier of the last shape in the drawing
-            printf("OfficeArtFDG, number of shapes=%i, shapeId of last shape=%i\n", csp, spid);
-        } break;
-        case 0xF009: { // OfficeArtFSPGR
-            printf("OfficeArtFSPGR %i\n",recLen);
-            //xLeft = readU32(data + 8);
-            //yTop = readU32(data + 12);
-            //xRight = readU32(data + 16);
-            //yBottom = readU32(data + 20);
-        } break;
-        case 0xF00A: { // OfficeArtFSP
-            unsigned long spid = readU32(data + 8); // MSOSPID, shape-identifier of the last shape in the drawing
-            printf("OfficeArtFSP, shapeId of current shape=%i\n", spid);
-        } break;
-        case 0xF11D: // OfficeArtFPSPL
-            printf("OfficeArtFPSPL %i\n",recLen);
-            break;
-        case 0xF00B: { // OfficeArtFOPT
-            printf("OfficeArtFPSPL %i\n",recLen);
-            for(int i = 0; i < recInstance; ++i) {
-                const unsigned long opidOpts = readU16(data + 8 + i * 6);
-                const unsigned long opid = opidOpts >> 2;
-                const bool fBid = opidOpts & 0x04000; // BLIP identifier?
-                const bool fComplex = opidOpts & 0x08000; // Complex property?
-                const unsigned long op = readS32(data + 10 + i * 6);
-                if(fComplex) { // op specifies the size of the property in the ComplexData
-                    // ...
-                } else {
-                    if(fBid) { // of specifies the BLIP identifier
-                        // ...
-                    } else { // the property value itself
-                        // ...
-                    }
-                }
-                printf("MsoDrawingRecord: opid=%x fBid=%i fComplex=%i op=%i\n",opid,fBid,fComplex,op);
-            }
-            const unsigned char* startComplexData = data + 8 + recInstance * 6;
-            printf("MsoDrawingRecord: complexDataLength=%i\n",recLen-(recInstance * 6));
-            //TODO
-        } break;
-        case 0xF121: // OfficeArtSecondaryFOPT
-            printf("OfficeArtSecondaryFOPT %i\n",recLen);
-            break;
-        case 0xF122: // OfficeArtTertiaryFOPT
-            printf("OfficeArtTertiaryFOPT %i\n",recLen);
-            break;
-        case 0xF00F: // OfficeArtChildAnchor
-            printf("OfficeArtChildAnchor %i\n",recLen);
-            break;
-        case 0xF010: // OfficeArtChildAnchorHF, OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart
-            switch(recLen) {
-                case 8: printf("OfficeArtChildAnchorHF %i\n",recLen); break;
-                case 18: printf("OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart %i\n",recLen); break;
-                default: printf("Unhandled OfficeArtChildAnchor type=%i\n",recLen);
-            }
-            break;
-        case 0xF011: // OfficeArtClientData
-            printf("OfficeArtClientData %i\n",recLen);
-            break;
-                    
-        default:
-            printf("Unhandled record type=%i size=%i\n",recType,recLen);
-    }
-    return 8 + recLen;
-}
-
 // ========== MsoDrawing ==========
 
 const unsigned MsoDrawingRecord::id = 0xEC;
@@ -1770,11 +1688,126 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
     //printf("MsoDrawingRecord: END_POS %i, recLen=%i\n",data+offset,recLen);
 }
 
+// read a drawing object (container or atom) and handle/dispatch according to the recType.
+unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char* data)
+{
+    unsigned recVer = 0;
+    unsigned recInstance = 0;
+    unsigned recType = 0;
+    unsigned long recLen = 0;
+    readHeader(data, &recVer, &recInstance, &recType, &recLen);
+    switch(recType) {
+        case 0xF003: // OfficeArtSpgrContainer
+        case 0xF004: { // OfficeArtSpContainer
+            unsigned long offset = 8;
+            while(offset <= recLen) { // recursive
+                offset += handleObject(size, data + offset);
+            }
+        } break;
+        case 0xF008: { // OfficeArtFDG
+            unsigned long csp = readU32(data + 8);
+            unsigned long spid = readU32(data + 12); // MSOSPID, shape-identifier of the last shape in the drawing
+            printf("OfficeArtFDG, number of shapes=%i, shapeId of last shape=%i\n", csp, spid);
+        } break;
+        case 0xF009: { // OfficeArtFSPGR
+            unsigned long xLeft = readU32(data + 8);
+            unsigned long yTop = readU32(data + 12);
+            unsigned long xRight = readU32(data + 16);
+            unsigned long yBottom = readU32(data + 20);
+            printf("OfficeArtFSPGR xLeft=%i yTop=%i xRight=%i yBottom=%i recLen=%i\n",xLeft,yTop,xRight,yBottom,recLen);
+        } break;
+        case 0xF00A: { // OfficeArtFSP
+            unsigned long spid = readU32(data + 8); // MSOSPID, shape-identifier of the last shape in the drawing
+            printf("OfficeArtFSP, identifier of this shape=%i\n", spid);
+        } break;
+        case 0xF11D: // OfficeArtFPSPL
+            //printf("OfficeArtFPSPL %i\n",recLen);
+            break;
+        case 0xF00B: { // OfficeArtFOPT
+            printf("OfficeArtFPSPL %i\n",recLen);
+            const unsigned char* startComplexData = data + 8 + recInstance * 6;
+            for(int i = 0; i < recInstance; ++i) {
+                const unsigned long opidOpts = readU16(data + 8 + i * 6);
+                const unsigned long opid = opidOpts & 0x3FFF;
+                const bool fBid = opidOpts & 0x04000; // BLIP identifier?
+                const bool fComplex = opidOpts & 0x08000; // Complex property?
+                const unsigned long op = readS32(data + 10 + i * 6);
+                if(fComplex) { // op specifies the size of the property in the ComplexData
+                    //TODO
+                } else { // op specifies the value
+                    m_properties[opid] = op;
+                }
+                printf("MsoDrawingRecord: opid=%x fBid=%i fComplex=%i op=%i\n",opid,fBid,fComplex,op);
+            }
+            printf("MsoDrawingRecord: complexDataLength=%i\n",recLen-(recInstance * 6));
+            //TODO read complexData
+        } break;
+        case 0xF121: // OfficeArtSecondaryFOPT
+            printf("OfficeArtSecondaryFOPT %i\n",recLen);
+            break;
+        case 0xF122: // OfficeArtTertiaryFOPT
+            printf("OfficeArtTertiaryFOPT %i\n",recLen);
+            break;
+        case 0xF00F: { // OfficeArtChildAnchor
+            unsigned long xLeft = readU32(data + 8);
+            unsigned long yTop = readU32(data + 12);
+            unsigned long xRight = readU32(data + 16);
+            unsigned long yBottom = readU32(data + 20);
+            printf("OfficeArtChildAnchor xLeft=%i yTop=%i xRight=%i yBottom=%i recLen=%i\n",xLeft,yTop,xRight,yBottom,recLen);
+        } break;
+        case 0xF010: // OfficeArtChildAnchorHF, OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart
+            // If this record is in the Worksheet, Macro Sheet, or Dialog Sheet substream, the OfficeArtClientAnchor structure
+            // mentioned in [MS-ODRAW] refers to the OfficeArtClientAnchorSheet structure. If this record appears in the Chart
+            // Sheet substream, the OfficeArtClientAnchor structure refers to the OfficeArtClientAnchorChart structure.
+            switch(recLen) {
+                case 8:
+                    printf("TODO: OfficeArtChildAnchorHF %i\n",recLen);
+                    break;
+                case 18: {
+                    //const unsigned long opts = readU16(data + 8);
+                    //const bool fMove = opts & 0x01;
+                    //const bool fSize = opts & 0x02;
+                    
+                    /*
+                    colL (2 bytes): A Col256U that specifies the column of the cell under the top left corner of the bounding rectangle of the shape.
+                    dxL (2 bytes): A signed integer that specifies the x coordinate of the top left corner of the bounding rectangle relative to the corner of the underlying cell. The value is expressed as 1024th‘s of that cell‘s width.
+                    rwT (2 bytes): A RwU that specifies the row of the cell under the top left corner of the bounding rectangle of the shape.
+                    dyT (2 bytes): A signed integer that specifies the y coordinate of the top left corner of the bounding rectangle relative to the corner of the underlying cell. The value is expressed as 1024th‘s of that cell‘s height.
+                    colR (2 bytes): A Col256U that specifies the column of the cell under the bottom right corner of the bounding rectangle of the shape.
+                    dxR (2 bytes): A signed integer that specifies the x coordinate of the bottom right corner of the bounding rectangle relative to the corner of the underlying cell. The value is expressed as 1024th‘s of that cell‘s width.
+                    rwB (2 bytes): A RwU that specifies the row of the cell under the bottom right corner of the bounding rectangle of the shape.
+                    dyB (2 bytes): A signed integer that specifies the y coordinate of the bottom right corner of the bounding rectangle relative to the corner of the underlying cell. The value is expressed as 1024th‘s of that cell‘s height.
+                    */
+                    m_colL = readU16(data + 10);
+                    m_dxL = readU16(data + 12);
+                    m_rwT = readU16(data + 14);
+                    m_dyT = readU16(data + 16);
+                    m_colR = readU16(data + 18);
+                    m_dxR = readU16(data + 20);
+                    m_rwB = readU16(data + 22);
+                    m_dyB = readU16(data + 24);
+                    std::cout << "OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart colL=" << m_colL << " dxL=" << m_dxL << " rwT=" << m_rwT << " dyT=" << m_dyT << " colR=" << m_colR << " dxR=" << m_dxR << " rwB=" << m_rwB << " dyB=" << m_dyB << " recLen=" << recLen << std::endl;
+                } break;
+                default:
+                    printf("Unhandled OfficeArtChildAnchor type=%i\n",recLen);
+                    break;
+            }
+            break;
+        case 0xF011: // OfficeArtClientData
+            printf("OfficeArtClientData %i\n",recLen);
+            break;
+                    
+        default:
+            printf("Unhandled record type=%i size=%i\n",recType,recLen);
+    }
+    return 8 + recLen;
+}
+
 // ========== MsoDrawingGroup ==========
 
 const unsigned MsoDrawingGroupRecord::id = 0xEB;
 
-MsoDrawingGroupRecord::MsoDrawingGroupRecord() : Record(), m_blipData(0), m_blibSize(0) {}
+MsoDrawingGroupRecord::MsoDrawingGroupRecord(Workbook *book) : Record(book) {}
 MsoDrawingGroupRecord::~MsoDrawingGroupRecord() {}
 
 void MsoDrawingGroupRecord::dump(std::ostream& out) const
@@ -1840,9 +1873,8 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 case 0x11: printf("MsoDrawingGroupRecord: TIFF format.\n"); break;
                 case 0x12: printf("MsoDrawingGroupRecord: JPEG format in YCCK or CMYK color space.\n"); break;
             }
-            char rgbUid[16];
-            for(int i = 0; i < 16; ++i)
-                rgbUid[i] = readU8(blipItemOffset + 2 + i);
+            //char rgbUid[16];
+            //for(int i = 0; i < 16; ++i) rgbUid[i] = readU8(blipItemOffset + 2 + i);
             unsigned tag = readU16(blipItemOffset + 18);
             unsigned long size = readU32(blipItemOffset + 20);
             unsigned long cRef = readU32(blipItemOffset + 24);
@@ -1856,7 +1888,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 nameData = readByteString(blipItemOffset, size);
                 blipItemOffset += size;
             }
-            std::cout << "nameData=" << nameData.ascii() << " rgbUid" << rgbUid << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
+            std::cout << "nameData=" << nameData.ascii() << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
             readHeader(blipItemOffset, &recVer, &recInstance, &recType, &recLen);
             blipItemOffset += 8;
         } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
@@ -1866,8 +1898,17 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             blipStoreOffset += 8 + blibRecLen;
             continue;
         }
-        
+
         // OfficeArtBlip
+
+        char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
+        for(int i = 0; i < 16; ++i)
+            rgbUid[i] = readU8(blipItemOffset + i);
+        printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><< rgbUid=%s\n",QByteArray(rgbUid,16).toHex().data());
+        
+        MsoDrawingBlibItem *item = new MsoDrawingBlibItem(rgbUid);
+        m_items.push_back(item);
+        
         switch(recType) {
             case 0xF01A:
                 printf("TODO: OfficeArtBlipEMF\n");
@@ -1884,15 +1925,12 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             case 0xF01D:
             case 0xF02A: {
                 printf("OfficeArtBlipJPEG\n");
-                char rgbUid[16];
-                for(int i = 0; i < 16; ++i)
-                    rgbUid[i] = readU8(blipItemOffset + i);
                 unsigned tag = readU8(blipItemOffset + 16);
                 Q_ASSERT(tag == 0xFF);
                 
-                m_blipData = blipItemOffset + 17;
-                m_blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
-                Q_ASSERT(m_blibSize <= size);
+                item->m_blipData = blipItemOffset + 17;
+                item->m_blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
+                Q_ASSERT(item->m_blibSize <= size);
                 
 #if 0
 QFile f("/home/q45/Gaga.jpg");
@@ -1966,7 +2004,7 @@ public:
     unsigned patternBackColor;
 };
 
-XFRecord::XFRecord():  Record()
+XFRecord::XFRecord(Workbook *book):  Record(book)
 {
     d = new XFRecord::Private();
     d->fontIndex           = 0;
@@ -2003,7 +2041,7 @@ XFRecord::~XFRecord()
     delete d;
 }
 
-XFRecord::XFRecord(const XFRecord& xf):  Record()
+XFRecord::XFRecord(const XFRecord& xf):  Record(xf.m_workbook)
 {
     d = new XFRecord::Private();
     operator=(xf);
@@ -2455,7 +2493,6 @@ void XFRecord::dump(std::ostream& out) const
 class ExcelReader::Private
 {
 public:
-
     // the workbook
     Workbook* workbook;
 
@@ -2485,7 +2522,6 @@ public:
 ExcelReader::ExcelReader()
 {
     d = new ExcelReader::Private();
-
     d->workbook    = 0;
     d->activeSheet = 0;
     d->formulaCell = 0;
@@ -2498,67 +2534,67 @@ ExcelReader::~ExcelReader()
     delete d;
 }
 
-static Record* createBOFRecord()
+static Record* createBOFRecord(Workbook *book)
 {
-    return new BOFRecord();
+    return new BOFRecord(book);
 }
-static Record* createExternBookRecord()
+static Record* createExternBookRecord(Workbook *book)
 {
-    return new ExternBookRecord();
+    return new ExternBookRecord(book);
 }
-static Record* createExternNameRecord()
+static Record* createExternNameRecord(Workbook *book)
 {
-    return new ExternNameRecord();
+    return new ExternNameRecord(book);
 }
-static Record* createFilepassRecord()
+static Record* createFilepassRecord(Workbook *book)
 {
-    return new FilepassRecord();
+    return new FilepassRecord(book);
 }
-static Record* createFormulaRecord()
+static Record* createFormulaRecord(Workbook *book)
 {
-    return new FormulaRecord();
+    return new FormulaRecord(book);
 }
-static Record* createSharedFormulaRecord()
+static Record* createSharedFormulaRecord(Workbook *book)
 {
-    return new SharedFormulaRecord();
+    return new SharedFormulaRecord(book);
 }
-static Record* createMulRKRecord()
+static Record* createMulRKRecord(Workbook *book)
 {
-    return new MulRKRecord();
+    return new MulRKRecord(book);
 }
-static Record* createNameRecord()
+static Record* createNameRecord(Workbook *book)
 {
-    return new NameRecord();
+    return new NameRecord(book);
 }
-static Record* createRKRecord()
+static Record* createRKRecord(Workbook *book)
 {
-    return new RKRecord();
+    return new RKRecord(book);
 }
-static Record* createRStringRecord()
+static Record* createRStringRecord(Workbook *book)
 {
-    return new RStringRecord();
+    return new RStringRecord(book);
 }
-static Record* createSSTRecord()
+static Record* createSSTRecord(Workbook *book)
 {
-    return new SSTRecord();
+    return new SSTRecord(book);
 }
-static Record* createXFRecord()
+static Record* createXFRecord(Workbook *book)
 {
-    return new XFRecord();
+    return new XFRecord(book);
 }
-static Record* createObjRecord()
+static Record* createObjRecord(Workbook *book)
 {
-    return new ObjRecord();
-}
-
-static Record* createRecordMsoDrawingRecord()
-{
-    return new MsoDrawingRecord();
+    return new ObjRecord(book);
 }
 
-static Record* createMsoDrawingGroupRecord()
+static Record* createRecordMsoDrawingRecord(Workbook *book)
 {
-    return new MsoDrawingGroupRecord();
+    return new MsoDrawingRecord(book);
+}
+
+static Record* createMsoDrawingGroupRecord(Workbook *book)
+{
+    return new MsoDrawingGroupRecord(book);
 }
 
 static void registerAllRecordClasses()
@@ -2871,7 +2907,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         if (type == 0) continue;
 
         // create the record using the factory
-        Record* record = Record::create(type);
+        Record* record = Record::create(type, workbook);
 
         if (record) {
             // setup the record and invoke handler

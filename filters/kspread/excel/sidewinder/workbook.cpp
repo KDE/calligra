@@ -29,14 +29,16 @@ using namespace Swinder;
 class Workbook::Private
 {
 public:
+    KoStore* store;
     std::vector<Sheet*> sheets;
     bool passwordProtected;
     QHash<PropertyType, QVariant> properties;
 };
 
-Workbook::Workbook()
+Workbook::Workbook(KoStore* store)
 {
     d = new Workbook::Private();
+    d->store = store;
     d->passwordProtected = false;
 }
 
@@ -44,6 +46,11 @@ Workbook::~Workbook()
 {
     clear();
     delete d;
+}
+
+KoStore* Workbook::store() const
+{
+    return d->store;
 }
 
 void Workbook::clear()
@@ -58,7 +65,7 @@ void Workbook::clear()
 
 bool Workbook::load(const char* filename)
 {
-    ExcelReader* reader = new ExcelReader;
+    ExcelReader* reader = new ExcelReader();
     bool result = reader->load(this, filename);
     delete reader;
     return result;

@@ -181,7 +181,7 @@ Value errorAsValue(int errorCode)
 
 const unsigned int Record::id = 0; // invalid of-course
 
-Record::Record()
+Record::Record(Workbook*)
 {
     stream_position = 0;
     ver = Excel97;
@@ -192,9 +192,9 @@ Record::~Record()
 {
 }
 
-Record* Record::create(unsigned type)
+Record* Record::create(unsigned type, Workbook *book)
 {
-    return RecordRegistry::createRecord(type);
+    return RecordRegistry::createRecord(type, book);
 }
 
 void Record::setPosition(unsigned pos)
@@ -231,12 +231,12 @@ void RecordRegistry::registerRecordClass(unsigned id, RecordFactory factory)
     instance()->records[id] = factory;
 }
 
-Record* RecordRegistry::createRecord(unsigned id)
+Record* RecordRegistry::createRecord(unsigned id, Workbook *book)
 {
     RecordRegistry* q = instance();
     std::map<unsigned, RecordFactory>::iterator it = q->records.find(id);
     if (it != q->records.end()) {
-        return it->second();
+        return it->second(book);
     } else {
         return 0;
     }

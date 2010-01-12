@@ -21,6 +21,7 @@
 #define SWINDER_WORKBOOK_H
 
 #include <QtCore/QVariant>
+#include <KoStore.h>
 
 namespace Swinder
 {
@@ -31,40 +32,43 @@ class Workbook
 {
 public:
 
-    /*
+    /**
      * Constructs a new workbook.
      */
+    explicit Workbook(KoStore* store = 0);
 
-    Workbook();
-
-    /*
+    /**
      * Destroys the workbook.
      */
-
     virtual ~Workbook();
 
-    /*
+    /**
+    /* Returns the used KoStore or NULL if not KoStore was set.
+    /*/
+    KoStore* store() const;
+    
+    /**
      * Clears the workbook, i.e. makes it as if it is just constructed.
      */
     void clear();
 
-    /*
+    /**
      * Loads the workbook from file. Returns false if error occurred.
      */
     bool load(const char* filename);
 
-    /*
+    /**
      * Appends a new sheet.
      */
     void appendSheet(Sheet* sheet);
 
-    /*
+    /**
      * Returns the number of worksheet in this workbook. A newly created
      * workbook has no sheet, i.e. sheetCount() returns 0.
      */
     unsigned sheetCount() const;
 
-    /*
+    /**
      * Returns a worksheet at given index. If index is invalid (e.g. larger
      * than total number of worksheet), this function returns NULL.
      */

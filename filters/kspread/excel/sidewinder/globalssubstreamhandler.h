@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <map>
+#include <KoStore.h>
 
 #include "substreamhandler.h"
 #include "ustring.h"
@@ -47,6 +48,7 @@ class PaletteRecord;
 class SSTRecord;
 class XFRecord;
 class ProtectRecord;
+class MsoDrawingBlibItem;
 class MsoDrawingGroupRecord;
 
 class GlobalsSubStreamHandler : public SubStreamHandler
@@ -56,7 +58,6 @@ public:
     virtual ~GlobalsSubStreamHandler();
 
     virtual void handleRecord(Record* record);
-
 
     bool passwordProtected() const;
     unsigned version() const;
@@ -83,6 +84,10 @@ public:
 
     UString nameFromIndex(unsigned index) const;
     UString externNameFromIndex(unsigned index) const;
+    
+    MsoDrawingBlibItem* drawing(unsigned long pid) const;
+
+    KoStore* store() const;
 
 private:
     void handleBOF(BOFRecord* record);

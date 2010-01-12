@@ -248,7 +248,7 @@ public:
     /**
      * Creates a new BOF record.
      */
-    BOFRecord();
+    BOFRecord(Swinder::Workbook *book);
 
     /**
       Destroys the record.
@@ -308,7 +308,7 @@ public:
         return this->id;
     }
 
-    ExternBookRecord();
+    ExternBookRecord(Workbook *book);
 
     ~ExternBookRecord();
 
@@ -345,7 +345,7 @@ public:
         return this->id;
     }
 
-    ExternNameRecord();
+    ExternNameRecord(Workbook *book);
 
     ~ExternNameRecord();
 
@@ -391,7 +391,7 @@ public:
     /**
      * Creates a new FILEPASS record.
      */
-    FilepassRecord();
+    FilepassRecord(Workbook *book);
 
     /**
      * Destroy the record.
@@ -431,7 +431,7 @@ public:
     /**
      * Creates a new formula record.
      */
-    FormulaRecord();
+    FormulaRecord(Workbook *book);
 
     /**
      * Destroy the record.
@@ -490,7 +490,7 @@ public:
     /**
      * Creates a new shared formula record.
      */
-    SharedFormulaRecord();
+    SharedFormulaRecord(Workbook *book);
 
     /**
      * Destroy the record.
@@ -536,7 +536,7 @@ public:
     /**
      * Creates a new MulRK record.
      */
-    MulRKRecord();
+    MulRKRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -610,7 +610,7 @@ public:
         return this->id;
     }
 
-    NameRecord();
+    NameRecord(Workbook *book);
 
     ~NameRecord();
 
@@ -653,7 +653,7 @@ public:
     /**
      * Creates a new RK record.
      */
-    RKRecord();
+    RKRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -746,7 +746,7 @@ public:
     /**
      * Creates a new Label record.
      */
-    RStringRecord();
+    RStringRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -805,7 +805,7 @@ public:
     /**
      * Creates a new SST record.
      */
-    SSTRecord();
+    SSTRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -852,10 +852,10 @@ class ObjRecord : public Record
 public:
     Object *m_object;
     static const unsigned id;
-    static Record *createRecord() {
-        return new ObjRecord;
+    static Record *createRecord(Workbook *book) {
+        return new ObjRecord(book);
     }
-    ObjRecord();
+    ObjRecord(Workbook *book);
     virtual ~ObjRecord();
     virtual unsigned rtti() const {
         return this->id;
@@ -874,14 +874,16 @@ public:
     ~DrawingObject() {}
 protected:
     void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0, unsigned *recType = 0, unsigned long *recLen = 0);
-    unsigned long handleObject(unsigned size, const unsigned char* data);
 };
 
-class MsoDrawingRecord : public Record, private DrawingObject
+class MsoDrawingRecord : public Record, public DrawingObject
 {
 public:
+    std::map<unsigned long,unsigned long> m_properties;
+    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
+    
     static const unsigned id;
-    MsoDrawingRecord() : Record() {}
+    MsoDrawingRecord(Workbook *book) : Record(book), m_colL(0), m_dxL(0), m_rwT(0), m_dyT(0), m_colR(0), m_dxR(0), m_rwB(0), m_dyB(0) {}
     virtual ~MsoDrawingRecord() {}
     virtual unsigned rtti() const {
         return this->id;
@@ -891,16 +893,26 @@ public:
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+protected:
+    unsigned long handleObject(unsigned size, const unsigned char* data);
+};
+
+class MsoDrawingBlibItem
+{
+public:
+    const char *rgbUid; // 16 bytes
+    const unsigned char *m_blipData;
+    unsigned long m_blibSize;
+    explicit MsoDrawingBlibItem(const char rgbUid[16]) : rgbUid(rgbUid), m_blipData(0), m_blibSize(0) {}
 };
 
 class MsoDrawingGroupRecord : public Record, private DrawingObject
 {
 public:
-    const unsigned char *m_blipData;
-    unsigned long m_blibSize;
+    std::vector< MsoDrawingBlibItem* > m_items;
 
     static const unsigned id;
-    MsoDrawingGroupRecord();
+    MsoDrawingGroupRecord(Workbook *book);
     virtual ~MsoDrawingGroupRecord();
     virtual unsigned rtti() const {
         return this->id;
@@ -931,7 +943,7 @@ public:
     /**
      * Creates a new XF record.
      */
-    XFRecord();
+    XFRecord(Workbook *book);
 
     /**
      * Creates a copy of XF record.

@@ -26,6 +26,8 @@
 namespace Swinder
 {
 
+class Workbook;
+
 Value errorAsValue(int errorCode);
 
 static inline unsigned long readU16(const void* p)
@@ -157,7 +159,7 @@ public:
     /**
       Creates a new generic record.
     */
-    Record();
+    Record(Workbook*);
 
     /**
       Destroys the record.
@@ -167,7 +169,7 @@ public:
     /**
      * Record factory, create a new record of specified type.
      */
-    static Record* create(unsigned type);
+    static Record* create(unsigned type, Workbook *book);
 
     void setVersion(unsigned v) {
         ver = v;
@@ -208,23 +210,23 @@ public:
     bool isValid() const;
 protected:
     void setIsValid(bool isValid);
-
+    // the workbook
+    Workbook *m_workbook;
     // position of this record in the OLE stream
     unsigned stream_position;
-
     // in which version does this record denote ?
     unsigned ver;
-
+    // is the record valid?
     bool valid;
 };
 
+typedef Record*(*RecordFactory)(Workbook*);
 
-typedef Record*(*RecordFactory)();
 class RecordRegistry
 {
 public:
     static void registerRecordClass(unsigned id, RecordFactory factory);
-    static Record* createRecord(unsigned id);
+    static Record* createRecord(unsigned id, Workbook *book);
 private:
     RecordRegistry() {};
     static RecordRegistry* instance();

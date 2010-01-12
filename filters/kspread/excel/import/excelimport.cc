@@ -138,8 +138,21 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->inputFile = m_chain->inputFile();
     d->outputFile = m_chain->outputFile();
 
+    // create output store
+    KoStore* storeout;
+    storeout = KoStore::createStore(d->outputFile, KoStore::Write,
+                                    "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
+    if (!storeout) {
+        kWarning() << "Couldn't open the requested file.";
+        delete d->workbook;
+        return KoFilter::FileNotFound;
+    }
+
+    // Tell KoStore not to touch the file names
+    storeout->disallowNameExpansion();
+
     // open inputFile
-    d->workbook = new Swinder::Workbook;
+    d->workbook = new Swinder::Workbook(storeout);
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
         d->workbook = 0;
@@ -155,19 +168,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->styles = new KoGenStyles();
     d->mainStyles = new KoGenStyles();
 
-    // create output store
-    KoStore* storeout;
-    storeout = KoStore::createStore(d->outputFile, KoStore::Write,
-                                    "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
-
-    if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
-        delete d->workbook;
-        return KoFilter::FileNotFound;
-    }
-
-    // Tell KoStore not to touch the file names
-    storeout->disallowNameExpansion();
     KoOdfWriteStore oasisStore(storeout);
 
     // header and footer are read from each sheet and saved in styles
