@@ -871,20 +871,21 @@ public:
 class DrawingObject
 {
 public:
-    DrawingObject() {}
+    std::map<unsigned long,unsigned long> m_properties;
+    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
+    DrawingObject() : m_colL(0), m_dxL(0), m_rwT(0), m_dyT(0), m_colR(0), m_dxR(0), m_rwB(0), m_dyB(0) {}
     ~DrawingObject() {}
 protected:
     void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0, unsigned *recType = 0, unsigned long *recLen = 0);
+    unsigned long handleObject(unsigned size, const unsigned char* data, bool* recordHandled = 0);
 };
 
 class MsoDrawingRecord : public Record, public DrawingObject
 {
 public:
-    std::map<unsigned long,unsigned long> m_properties;
-    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
     
     static const unsigned id;
-    MsoDrawingRecord(Workbook *book) : Record(book), m_colL(0), m_dxL(0), m_rwT(0), m_dyT(0), m_colR(0), m_dxR(0), m_rwB(0), m_dyB(0) {}
+    MsoDrawingRecord(Workbook *book) : Record(book) {}
     virtual ~MsoDrawingRecord() {}
     virtual unsigned rtti() const {
         return this->id;
@@ -894,8 +895,6 @@ public:
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
-protected:
-    unsigned long handleObject(unsigned size, const unsigned char* data);
 };
 
 class MsoDrawingBlibItem

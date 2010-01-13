@@ -1653,49 +1653,14 @@ void DrawingObject::readHeader(const unsigned char* data, unsigned *recVer, unsi
     }
 }
 
-// ========== MsoDrawing ==========
-
-const unsigned MsoDrawingRecord::id = 0xEC;
-
-void MsoDrawingRecord::dump(std::ostream& out) const
-{
-    out << "MsoDrawingRecord" << std::endl;
-}
-
-void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
-{
-    if(size < 24) {
-        setIsValid(false);
-        return;
-    }
-
-    //printf("MsoDrawingRecord: START_POS %i\n",data+0);
-    
-    // rh
-    unsigned recType = 0;
-    unsigned long recLen = 0;
-    readHeader(data, 0, 0, &recType, &recLen);
-    if(recType < 0xF000 || recType > 0xFFFF) {
-        std::cerr << "Invalid MsoDrawing record" << std::endl;
-        setIsValid(false);
-        return;
-    }
-    
-    unsigned long offset = 8;
-    while(offset + 8 <= size) {
-        offset += handleObject(size, data + offset);
-    }
-
-    //printf("MsoDrawingRecord: END_POS %i, recLen=%i\n",data+offset,recLen);
-}
-
 // read a drawing object (container or atom) and handle/dispatch according to the recType.
-unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char* data)
+unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* data, bool* recordHandled)
 {
     unsigned recVer = 0;
     unsigned recInstance = 0;
     unsigned recType = 0;
     unsigned long recLen = 0;
+    if(recordHandled) *recordHandled = true;
     readHeader(data, &recVer, &recInstance, &recType, &recLen);
     switch(recType) {
         case 0xF003: // OfficeArtSpgrContainer
@@ -1797,11 +1762,51 @@ unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char*
         case 0xF011: // OfficeArtClientData
             printf("OfficeArtClientData\n");
             break;
-                    
+        case 0xF11E: // OfficeArtSplitMenuColorContainer
+            printf("OfficeArtSplitMenuColorContainer\n");
+            break;
         default:
             std::cout << "Unhandled record type=" << recType << " size=" << recLen << std::endl;
+            if(recordHandled) *recordHandled = false;
+            break;
     }
     return 8 + recLen;
+}
+
+// ========== MsoDrawing ==========
+
+const unsigned MsoDrawingRecord::id = 0xEC;
+
+void MsoDrawingRecord::dump(std::ostream& out) const
+{
+    out << "MsoDrawingRecord" << std::endl;
+}
+
+void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+{
+    if(size < 24) {
+        setIsValid(false);
+        return;
+    }
+
+    //printf("MsoDrawingRecord: START_POS %i\n",data+0);
+    
+    // rh
+    unsigned recType = 0;
+    unsigned long recLen = 0;
+    readHeader(data, 0, 0, &recType, &recLen);
+    if(recType < 0xF000 || recType > 0xFFFF) {
+        std::cerr << "Invalid MsoDrawing record" << std::endl;
+        setIsValid(false);
+        return;
+    }
+    
+    unsigned long offset = 8;
+    while(offset + 8 <= size) {
+        offset += handleObject(size, data + offset);
+    }
+
+    //printf("MsoDrawingRecord: END_POS %i, recLen=%i\n",data+offset,recLen);
 }
 
 // ========== MsoDrawingGroup ==========
@@ -1852,125 +1857,126 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     // blipStore
     const unsigned char* blipStoreOffset = data + 16 + recLen;
     readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &recLen);
-    Q_ASSERT(recType == 0xF001);
-    blipStoreOffset += 8;
-    for(uint i = 0; i < recInstance; ++i) {
-        unsigned long blibRecLen = 0;
-        readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
-        const unsigned char* blipItemOffset = blipStoreOffset + 8;
-        if(recType == 0xF007) { // OfficeArtFBSE
-            std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
-            const unsigned btWin32 = readU8(blipItemOffset);
-            const unsigned btMacOS = readU8(blipItemOffset + 1);
-            switch(btWin32) {
-                case 0x00: printf("MsoDrawingGroupRecord: There was an error reading the file.\n"); break;
-                case 0x01: printf("MsoDrawingGroupRecord: Unknown BLIP type.\n"); break;
-                case 0x02: printf("MsoDrawingGroupRecord: EMF format.\n"); break;
-                case 0x03: printf("MsoDrawingGroupRecord: WMF format.\n"); break;
-                case 0x04: printf("MsoDrawingGroupRecord: Macintosh PICT format.\n"); break;
-                case 0x05: printf("MsoDrawingGroupRecord: JPEG format.\n"); break;
-                case 0x06: printf("MsoDrawingGroupRecord: PNG format.\n"); break;
-                case 0x07: printf("MsoDrawingGroupRecord: DIB format.\n"); break;
-                case 0x11: printf("MsoDrawingGroupRecord: TIFF format.\n"); break;
-                case 0x12: printf("MsoDrawingGroupRecord: JPEG format in YCCK or CMYK color space.\n"); break;
+    if(recType == 0xF001) {
+        blipStoreOffset += 8;
+        for(uint i = 0; i < recInstance; ++i) {
+            unsigned long blibRecLen = 0;
+            readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
+            const unsigned char* blipItemOffset = blipStoreOffset + 8;
+            if(recType == 0xF007) { // OfficeArtFBSE
+                std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
+                const unsigned btWin32 = readU8(blipItemOffset);
+                const unsigned btMacOS = readU8(blipItemOffset + 1);
+                switch(btWin32) {
+                    case 0x00: printf("MsoDrawingGroupRecord: There was an error reading the file.\n"); break;
+                    case 0x01: printf("MsoDrawingGroupRecord: Unknown BLIP type.\n"); break;
+                    case 0x02: printf("MsoDrawingGroupRecord: EMF format.\n"); break;
+                    case 0x03: printf("MsoDrawingGroupRecord: WMF format.\n"); break;
+                    case 0x04: printf("MsoDrawingGroupRecord: Macintosh PICT format.\n"); break;
+                    case 0x05: printf("MsoDrawingGroupRecord: JPEG format.\n"); break;
+                    case 0x06: printf("MsoDrawingGroupRecord: PNG format.\n"); break;
+                    case 0x07: printf("MsoDrawingGroupRecord: DIB format.\n"); break;
+                    case 0x11: printf("MsoDrawingGroupRecord: TIFF format.\n"); break;
+                    case 0x12: printf("MsoDrawingGroupRecord: JPEG format in YCCK or CMYK color space.\n"); break;
+                }
+                //char rgbUid[16];
+                //for(int i = 0; i < 16; ++i) rgbUid[i] = readU8(blipItemOffset + 2 + i);
+                unsigned tag = readU16(blipItemOffset + 18);
+                unsigned long size = readU32(blipItemOffset + 20);
+                unsigned long cRef = readU32(blipItemOffset + 24);
+                unsigned long foDelay = readU32(blipItemOffset + 28);
+                // 1 unused byte
+                unsigned long cbName = readU8(blipItemOffset + 33);
+                // 2 unused bytes
+                UString nameData;
+                blipItemOffset += 36;
+                if(cbName > 0x00) {
+                    nameData = readByteString(blipItemOffset, size);
+                    blipItemOffset += size;
+                }
+                std::cout << "nameData=" << nameData.ascii() << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
+                readHeader(blipItemOffset, &recVer, &recInstance, &recType, &recLen);
+                blipItemOffset += 8;
+            } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
+                // fall through
+            } else {
+                std::cerr << "MsoDrawingGroupRecord: Unknown OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
+                blipStoreOffset += 8 + blibRecLen;
+                continue;
             }
-            //char rgbUid[16];
-            //for(int i = 0; i < 16; ++i) rgbUid[i] = readU8(blipItemOffset + 2 + i);
-            unsigned tag = readU16(blipItemOffset + 18);
-            unsigned long size = readU32(blipItemOffset + 20);
-            unsigned long cRef = readU32(blipItemOffset + 24);
-            unsigned long foDelay = readU32(blipItemOffset + 28);
-            // 1 unused byte
-            unsigned long cbName = readU8(blipItemOffset + 33);
-            // 2 unused bytes
-            UString nameData;
-            blipItemOffset += 36;
-            if(cbName > 0x00) {
-                nameData = readByteString(blipItemOffset, size);
-                blipItemOffset += size;
+
+            // OfficeArtBlip
+
+            char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
+            for(int i = 0; i < 16; ++i)
+                rgbUid[i] = readU8(blipItemOffset + i);
+            
+            MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
+            m_items.push_back(item);
+
+            quint16 offset = 0;
+            const char* namesuffix = "";
+            const char* mimetype = "application/octet-stream";
+            switch(recType) {
+                case 0xF01A:
+                    offset = (recInstance == 0x3D4) ? 50 : 66;
+                    namesuffix = ".emf";
+                    mimetype = "application/octet-stream";
+                    break;
+                case 0xF01B:
+                    offset = (recInstance == 0x216) ? 50 : 66;
+                    namesuffix = ".wmf";
+                    mimetype = "application/octet-stream";
+                    break;
+                case 0xF01C:
+                    offset = (recInstance == 0x542) ? 50 : 66;
+                    namesuffix = ".pict";
+                    mimetype = "image/pict";
+                    break;
+                case 0xF01D:
+                case 0xF02A: {
+                    offset = (recInstance == 0x46A || recInstance==0x6E2) ? 17 : 33;
+                    namesuffix = ".jpg";
+                    mimetype = "image/jpeg";
+                } break;
+                case 0xF01E:
+                    offset = (recInstance == 0x6E0) ? 17 : 33;
+                    namesuffix = ".png";
+                    mimetype = "image/png";
+                    break;
+                case 0xF01F:
+                    offset = (recInstance == 0x7A8) ? 17 : 33;
+                    namesuffix = ".dib";
+                    mimetype = "application/octet-stream";
+                    break;
+                case 0xF029:
+                    offset = (recInstance == 0x6E4) ? 17 : 33;
+                    namesuffix = ".tiff";
+                    mimetype = "image/tiff";
+                    break;
+                default:
+                    printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
+                    break;
             }
-            std::cout << "nameData=" << nameData.ascii() << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
-            readHeader(blipItemOffset, &recVer, &recInstance, &recType, &recLen);
-            blipItemOffset += 8;
-        } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
-            // fall through
-        } else {
-            std::cerr << "MsoDrawingGroupRecord: Unknown OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
+
+            const unsigned char *blipData = blipItemOffset + offset;
+            unsigned long blibSize = recLen - offset;
+            Q_ASSERT(blibSize <= size);
+            Store *store = m_workbook->store();
+            Q_ASSERT(store);
+            item->id = QByteArray(rgbUid,16).toHex().constData();
+            item->filename = "Pictures/" + item->id + namesuffix;
+            if(store->open(item->filename)) {
+                store->write((const char*)blipData, blibSize);
+                store->close();
+            } else {
+                std::cerr << "MsoDrawingGroupRecord: Failed to open file=" << item->filename << " mimetype=" << mimetype << std::endl;
+            }
+
             blipStoreOffset += 8 + blibRecLen;
-            continue;
         }
-
-        // OfficeArtBlip
-
-        char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
-        for(int i = 0; i < 16; ++i)
-            rgbUid[i] = readU8(blipItemOffset + i);
-        
-        MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
-        m_items.push_back(item);
-
-        quint16 offset = 0;
-        const char* namesuffix = "";
-        const char* mimetype = "application/octet-stream";
-        switch(recType) {
-            case 0xF01A:
-                offset = (recInstance == 0x3D4) ? 50 : 66;
-                namesuffix = ".emf";
-                mimetype = "application/octet-stream";
-                break;
-            case 0xF01B:
-                offset = (recInstance == 0x216) ? 50 : 66;
-                namesuffix = ".wmf";
-                mimetype = "application/octet-stream";
-                break;
-            case 0xF01C:
-                offset = (recInstance == 0x542) ? 50 : 66;
-                namesuffix = ".pict";
-                mimetype = "image/pict";
-                break;
-            case 0xF01D:
-            case 0xF02A: {
-                offset = (recInstance == 0x46A || recInstance==0x6E2) ? 17 : 33;
-                namesuffix = ".jpg";
-                mimetype = "image/jpeg";
-            } break;
-            case 0xF01E:
-                offset = (recInstance == 0x6E0) ? 17 : 33;
-                namesuffix = ".png";
-                mimetype = "image/png";
-                break;
-            case 0xF01F:
-                offset = (recInstance == 0x7A8) ? 17 : 33;
-                namesuffix = ".dib";
-                mimetype = "application/octet-stream";
-                break;
-            case 0xF029:
-                offset = (recInstance == 0x6E4) ? 17 : 33;
-                namesuffix = ".tiff";
-                mimetype = "image/tiff";
-                break;
-            default:
-                printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
-                break;
-        }
-
-        const unsigned char *blipData = blipItemOffset + offset;
-        unsigned long blibSize = recLen - offset;
-        Q_ASSERT(blibSize <= size);
-        Store *store = m_workbook->store();
-        Q_ASSERT(store);
-        item->id = QByteArray(rgbUid,16).toHex().constData();
-        item->filename = "Pictures/" + item->id + namesuffix;
-        if(store->open(item->filename)) {
-            store->write((const char*)blipData, blibSize);
-            store->close();
-        } else {
-            std::cerr << "MsoDrawingGroupRecord: Failed to open file=" << item->filename << " mimetype=" << mimetype << std::endl;
-        }
-
-        blipStoreOffset += 8 + blibRecLen;
     }
-    
+
     // draingPrimaryOptions
     // draingTertiaryOptions
     // colorMRU
