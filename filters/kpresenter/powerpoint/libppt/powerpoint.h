@@ -3012,6 +3012,7 @@ public:
         FillType = 384,
         FillColor = 385,
         FillBackColor = 387,
+        FillBlip = 390,
         FillStyleBooleanProperties = 447,
         LineColor = 448,
         LineOpacity = 449,

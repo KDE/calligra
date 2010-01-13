@@ -38,6 +38,7 @@
 #include "libppt.h"
 #include "datetimeformat.h"
 #include <iostream>
+#include <set>
 #include <math.h>
 #include "pictures.h"
 
@@ -92,7 +93,7 @@ createPictures(const char* filename, KoStore* store, KoXmlWriter* manifest)
 
         PictureReference ref = savePicture(*stream, store);
         if (ref.name.length() == 0) break;
-        manifest->addManifestEntry(ref.name, ref.mimetype);
+        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
         fileNames[ref.uid] = ref.name;
     }
     storage.close();
@@ -193,6 +194,40 @@ addElement(KoGenStyle& style, const char* name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
 
+void collectPropertyIntegerValues(const GroupObject* go,
+        const std::string& property, std::set<int>& set)
+{
+    if (go == NULL) return;
+    for (unsigned i = 0; i < go->objectCount(); i++) {
+        const Object* object = go->object(i);
+        if (object && object->hasProperty(property)) {
+            set.insert(object->getIntProperty(property));
+            const GroupObject* cgo = dynamic_cast<const GroupObject*>(object);
+            if (cgo) {
+                collectPropertyIntegerValues(cgo, property, set);
+            }
+        }
+    }
+}
+
+void PowerPointImport::createFillImages(KoGenStyles& styles)
+{
+    // loop over all objects to find all "fillPib" numbers
+    // the names are simply "fillImage" with the pib number concatenated
+    for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
+        Slide* slide = d->presentation->slide(c);
+        GroupObject* root = slide->rootObject();
+        std::set<int> pibs;
+        collectPropertyIntegerValues(root, "fillPib", pibs);
+        for (std::set<int>::const_iterator i = pibs.begin(); i != pibs.end(); ++i) {
+            KoGenStyle fillImage(KoGenStyle::StyleFillImage);
+            fillImage.addAttribute("xlink:href", getPicturePath(*i));
+            styles.lookup(fillImage, "fillImage" + QString::number(*i),
+                KoGenStyles::DontForceNumbering);
+        }
+    }
+}
+
 void PowerPointImport::createMainStyles(KoGenStyles& styles)
 {
     int x = 0;
@@ -209,6 +244,9 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
     marker.addAttribute("svg:viewBox", "0 0 210 210");
     marker.addAttribute("svg:d", "m105 0 105 210h-210z");
     styles.lookup(marker, "msArrowEnd_20_5");
+
+    // add all the fill image definitions
+    createFillImages(styles);
 
     KoGenStyle pl(KoGenStyle::StylePageLayout);
     pl.setAutoStyleInStylesDotXml(true);
@@ -1287,17 +1325,18 @@ void PowerPointImport::processFreeLine(DrawObject* drawObject, KoXmlWriter* xmlW
     xmlWriter->endElement(); // path
 }
 
+QString PowerPointImport::getPicturePath(int pib) const
+{
+    int picturePosition = pib - 1;
+    const char* rgbUid = d->presentation->getRgbUid(picturePosition);
+    return rgbUid ?"Pictures/" + d->pictureNames[QByteArray(rgbUid, 16)] :"";
+}
+
 void PowerPointImport::processPictureFrame(DrawObject* drawObject, KoXmlWriter* xmlWriter)
 {
     if (!drawObject || !xmlWriter) return;
 
-    int picturePosition = drawObject->getIntProperty("pib") - 1;
-    QString pictureName;
-    const char* rgbUid = d->presentation->getRgbUid(picturePosition);
-    if (rgbUid) {
-        pictureName = d->pictureNames[QByteArray(rgbUid, 16)];
-    }
-    QString url = "Pictures/" + pictureName;
+    QString url = getPicturePath(drawObject->getIntProperty("pib"));
     QString widthStr = QString("%1mm").arg(drawObject->width());
     QString heightStr = QString("%1mm").arg(drawObject->height());
     QString xStr = QString("%1mm").arg(drawObject->left());
@@ -2403,7 +2442,12 @@ QString hexname(const Color &c)
 
 void processGraphicStyles(KoGenStyle& style, Object* object)
 {
-    if (object->hasProperty("draw:fill")) {
+    if (object->hasProperty("fillPib")) {
+        style.addProperty("draw:fill", "bitmap");
+        int pib = object->getIntProperty("fillPib");
+        style.addProperty("draw:fill-image-name",
+                "fillImage" + QString::number(pib));
+    } else if (object->hasProperty("draw:fill")) {
         std::string s = object->getStrProperty("draw:fill");
         QString ss(s.c_str());
         style.addProperty("draw:fill", ss, KoGenStyle::GraphicType);
@@ -2417,7 +2461,6 @@ void processGraphicStyles(KoGenStyle& style, Object* object)
         style.addProperty("draw:fill-color", "#99ccff",
                 KoGenStyle::GraphicType);
     }
-
 }
 
 void PowerPointImport::processTextObjectForStyle(TextObject* textObject,

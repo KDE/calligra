@@ -49,6 +49,8 @@ private:
     class Private;
     Private* d;
 
+    QString getPicturePath(int pib) const;
+    void createFillImages(KoGenStyles& styles);
     void createMainStyles(KoGenStyles& styles);
     QByteArray createContent(KoGenStyles& styles);
 
