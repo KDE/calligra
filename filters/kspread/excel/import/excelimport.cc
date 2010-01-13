@@ -1106,28 +1106,11 @@ QString cellFormula(Cell* cell)
 {
     QString formula = string(cell->formula());
     if(!formula.isEmpty()) {
-        if(formula.startsWith("ROUND")) {
-            // Special case the ROUNDUP, ROUNDDOWN and ROUND function cause excel uses another
-            // logic then ODF. In Excel the second argument defines the numbers of fractional
-            // digits displayed (Num_digits) while in ODF the second argument defines
-            // the number of places to which a number is to be rounded (count).
-            // So, what we do is the same OO.org does. We prefix the formula with "of:"
-            // to indicate the changed behavior. Both, OO.org and Excel, do support
-            // that "of:" prefix.
-            //
-            // Again in other words; We need to special case that functions cause KSpread
-            // behaves here like OpenOffice.org but the behavior of OpenOffice.org ist wrong
-            // from the perspective of Excel and Excel defines the standard (that is then
-            // written down in the OpenFormula specs).
-            // OpenOffice.org as well as KSpread cannot easily change  there wrong behavior
-            // cause of backward compatibility. So, what OpenOffice.org does it to
-            // indicate that the ROUND* functions should behave like defined in the
-            // OpenFormula specs (as defined by Excel) and not like at OpenOffice.org (and
-            // KSpread) by prefixing the formula with a "of:".
-            formula.prepend("of:=");
+        if(formula.startsWith("ROUNDUP(") || formula.startsWith("ROUNDDOWN(") || formula.startsWith("ROUND(") || formula.startsWith("RAND(")) {
+            // Special case Excel formulas that differ from OpenFormula
+            formula.prepend("msoxl:=");
         } else if(!formula.isEmpty()) {
-            // Normal formulas are only prefixed with a = sign.
-            formula.prepend("=");
+            formula.prepend("of:=");
         }
     }
     return formula;
@@ -1351,8 +1334,8 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
     if (valueFormat != QString("General")) {
         refName = processValueFormat(valueFormat);
     } else {
-        if(formula.startsWith("of:=")) { // special cases
-            QRegExp roundRegExp( "^of:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+        if(formula.startsWith("msoxl:=")) { // special cases
+            QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
             if (roundRegExp.indexIn(formula) >= 0) {
                 bool ok = false;
                 int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
@@ -1368,6 +1351,19 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
                     style.addChildElement("number", elementContents);
                     refName = styles->lookup(style, "N");
                 }
+            } else if(formula.startsWith("msoxl:=RAND(")) {
+                /*
+                KoGenStyle style(KoGenStyle::StyleNumericNumber);
+                QBuffer buffer;
+                buffer.open(QIODevice::WriteOnly);
+                KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+                xmlWriter.startElement("number:number");
+                xmlWriter.addAttribute("number:decimal-places", 9);
+                xmlWriter.endElement(); // number:number
+                QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+                style.addChildElement("number", elementContents);
+                refName = styles->lookup(style, "N");
+                */
             }
         }
     }
