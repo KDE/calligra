@@ -1691,7 +1691,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
             m_text.append(UString(zc));
         }
     } else {
-        for (unsigned k = 1; k + 2 < size; k += 1) {
+        for (unsigned k = 1; k + 1 < size; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
             m_text.append(UString(uc));
         }
