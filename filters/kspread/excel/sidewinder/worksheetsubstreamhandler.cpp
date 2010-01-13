@@ -281,7 +281,7 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     else if (type == MsoDrawingRecord::id)
         handleMsoDrawing(static_cast<MsoDrawingRecord*>(record));
     else {
-        std::cout << "Unhandled worksheet record with type=" << type << std::endl;
+        std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
 }
 

@@ -1643,6 +1643,63 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     // gbo
 }
 
+// ========== TxO ==========
+
+const unsigned TxORecord::id = 0x1B6;
+
+TxORecord::TxORecord(Workbook *book) : Record(book) {}
+TxORecord::~TxORecord() {}
+
+void TxORecord::dump(std::ostream& out) const
+{
+    out << "TxO" << std::endl;
+}
+
+void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+{
+    //const unsigned long opts1 = readU16(data);
+    //const bool reserved1 = opts1 & 0x01;
+    //const unsigned int hAlignment = (opts1 << 1) >> 13; // 3 bits
+    //const unsigned int vAlignment = (opts1 << 4) >> 13; // 3 bits
+    //const unsigned long rot = readU16(data + 2);
+    // 4 bytes reserved    
+
+    // controlInfo (6 bytes): An optional ControlInfo structure that specifies the properties for some
+    // form controls. The field MUST exist if and only if the value of cmo.ot in the preceding Obj
+    // record is 0, 5, 7, 11, 12, or 14.
+    
+    const unsigned long cchText = readU16(data + 14);
+    const unsigned char* startPict = data + 16;
+    if(cchText > 0) {
+        const unsigned long cbRuns = readU16(startPict);
+        const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
+        startPict += 4 + cbFmla;
+    } else {
+        const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
+        startPict += 2;
+    }
+    
+    const unsigned opts = readU8(startPict);
+    const bool fHighByte = opts & 0x01;
+    Q_ASSERT((opts << 1) == 0x0);
+
+    // XLUnicodeStringNoCch
+    m_text = UString();
+    if(fHighByte) {
+        for (unsigned k = 1; k + 2 < size; k += 2) {
+            unsigned zc = readU16(startPict + k);
+            m_text.append(UString(zc));
+        }
+    } else {
+        for (unsigned k = 1; k + 2 < size; k += 1) {
+            unsigned char uc = readU8(startPict + k) + 0x0*256;
+            m_text.append(UString(uc));
+        }
+    }
+
+    std::cout << "TxORecord::setData size=" << size << " text=" << m_text.ascii() << std::endl;
+}
+
 // ========== DrawingObject ==========
 
 // read a OfficeArtRecordHeader struct.
@@ -2615,6 +2672,11 @@ static Record* createObjRecord(Workbook *book)
     return new ObjRecord(book);
 }
 
+static Record* createTxORecord(Workbook *book)
+{
+    return new TxORecord(book);
+}
+
 static Record* createRecordMsoDrawingRecord(Workbook *book)
 {
     return new MsoDrawingRecord(book);
@@ -2641,6 +2703,7 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(SSTRecord::id, createSSTRecord);
     RecordRegistry::registerRecordClass(XFRecord::id, createXFRecord);
     RecordRegistry::registerRecordClass(ObjRecord::id, createObjRecord);
+    RecordRegistry::registerRecordClass(TxORecord::id, createTxORecord);
     RecordRegistry::registerRecordClass(MsoDrawingRecord::id, createRecordMsoDrawingRecord);
     RecordRegistry::registerRecordClass(MsoDrawingGroupRecord::id, createMsoDrawingGroupRecord);
 }
@@ -2899,6 +2962,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     break;
             } else if(next_type != 0x3C) {
                 break;
+            } else {
+                std::cout << "Continues record (0x3C), size=" << next_size << " parent-record=" << type << std::endl;
             }
 
             // compress multiple MsoDrawingGroup records or continues records (0x3C) into one.

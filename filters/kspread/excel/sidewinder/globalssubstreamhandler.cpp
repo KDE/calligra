@@ -527,7 +527,7 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        std::cout << "Unhandled global record with type=" << type << std::endl;
+        std::cout << "Unhandled global record with type=" << type << " name=" << record->name() << std::endl;
     }
 
 }

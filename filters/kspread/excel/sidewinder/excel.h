@@ -853,9 +853,6 @@ class ObjRecord : public Record
 public:
     Object *m_object;
     static const unsigned id;
-    static Record *createRecord(Workbook *book) {
-        return new ObjRecord(book);
-    }
     ObjRecord(Workbook *book);
     virtual ~ObjRecord();
     virtual unsigned rtti() const {
@@ -863,6 +860,23 @@ public:
     }
     virtual const char* name() const {
         return "Obj";
+    }
+    virtual void dump(std::ostream&) const;
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+};
+
+class TxORecord : public Record
+{
+public:
+    UString m_text;
+    static const unsigned id;
+    TxORecord(Workbook *book);
+    virtual ~TxORecord();
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "TxO";
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
