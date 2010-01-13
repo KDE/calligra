@@ -1749,7 +1749,7 @@ bool Sheet::testListChoose(Selection* selection)
         int bottom = range.bottom();
         if (bottom > d->cellStorage->rows()) bottom = d->cellStorage->rows();
         for (int row = range.top(); row <= bottom; ++row) {
-            int col = range.left() - 1;
+            int col = range.left();
             while (1) {
                 const Cell cell = d->cellStorage->nextInRow(col, row);
                 if (cell.isNull()) break;
