@@ -592,9 +592,12 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 bool grouping = false;
                 bool gotDot = false;
                 bool gotE = false;
+                bool gotFraction = false;
                 int decimalPlaces = 0;
                 int integerDigits = 0;
                 int exponentDigits = 0;
+                int numeratorDigits = 0;
+                int denominatorDigits = 0;
 
                 char ch = numberFormat[ i ].toLatin1();
                 do
@@ -615,27 +618,40 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     }
                     else if( ch == '0' && gotE )
                         ++exponentDigits;
-                    else if( ch == '0' && !gotDot )
+                    else if( ch == '0' && !gotDot && !gotFraction )
                         ++integerDigits;
-                    else if( ch == '0' && gotDot )
+                    else if( ch == '0' && gotDot && !gotFraction )
                         ++decimalPlaces;
-                    else if( ch == '?' )
-                    { /* ignore */ }
+                    else if( ch == '?' && !gotFraction )
+                        ++numeratorDigits;
+                    else if( ch == '?' && gotFraction )
+                        ++denominatorDigits;
                     else if( ch == '/' )
                     {
                         SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericFraction );
-                        if( gotDot || grouping )
+                        if( gotDot )
                             return KoGenStyle();
-                    }
 
+                        gotFraction = true;
+                    }
                     ch = numberFormat[ ++i ].toLatin1();
+
+                    if( ch == ' ' )
+                    {
+                        // spaces are not allowed - but there's an exception: if this is a fraction. Let's check for '?' or '/'
+                        const char c = numberFormat[ i + 1 ].toLatin1();
+                        if( c == '?' || c == '/' )
+                            ch = numberFormat[ ++i ].toLatin1();
+                    }
                 }
-                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' ) );
+                while( i < numberFormat.length() && ( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/' ) );
                
-                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' ) )
+                if( !( ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/' ) )
                     --i;
 
-                if( exponentDigits > 0 )
+                if( gotFraction )
+                    xmlWriter.startElement( "number:fraction" );
+                else if( exponentDigits > 0 )
                     xmlWriter.startElement( "number:scientific-number" );
                 else
                     xmlWriter.startElement( "number:number" );
@@ -646,6 +662,11 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     xmlWriter.addAttribute( "number:min-exponent-digits", exponentDigits );
                 if( grouping )
                     xmlWriter.addAttribute( "number:grouping", grouping ? "true" : "false" );
+                if( gotFraction )
+                {
+                    xmlWriter.addAttribute( "number:min-numerator-digits", numeratorDigits );
+                    xmlWriter.addAttribute( "number:min-denominator-digits", denominatorDigits );
+                }
                 xmlWriter.endElement();
             }
             break;
