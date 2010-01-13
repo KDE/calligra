@@ -27,13 +27,151 @@
 #include <KoXmlWriter.h>
 
 #include <QBuffer>
+#include <QColor>
 #include <QDebug>
 #include <QLocale>
+#include <QPalette>
 #include <QString>
 #include <QStringList>
 
 KoGenStyles* NumberFormatParser::styles = 0;
- 
+
+
+
+QColor NumberFormatParser::color( const QString& name )
+{
+    if( name.toUpper().startsWith( QLatin1String( "COLOR" ) ) )
+    {
+        bool ok = false;
+        const int index = name.mid( 5 ).toInt( &ok ) + 7;
+        if( !ok || index < 8 || index > 65 )
+            return QColor();
+        switch( index )
+        {
+        case 8:
+            return QColor( 0, 0, 0 );
+        case 9:
+            return QColor( 255, 255, 255 );
+        case 10:
+            return QColor( 255, 0, 0 );
+        case 11:
+            return QColor( 0, 255, 0 );
+        case 12:
+            return QColor( 0, 0, 255 );
+        case 13:
+            return QColor( 255, 255, 0 );
+        case 14:
+            return QColor( 255, 0, 255 );
+        case 15:
+            return QColor( 0, 255, 255 );
+        case 16:
+            return QColor( 128, 0, 0 );
+        case 17:
+            return QColor( 0, 128, 0 );
+        case 18:
+            return QColor( 0, 0, 128 );
+        case 19:
+            return QColor( 128, 128, 0 );
+        case 20:
+            return QColor( 128, 0, 128 );
+        case 21:
+            return QColor( 0, 128, 128 );
+        case 22:
+            return QColor( 192, 192, 192 );
+        case 23:
+            return QColor( 128, 128, 128 );
+        case 24:
+            return QColor( 153, 153, 255 );
+        case 25:
+            return QColor( 153, 51, 102 );
+        case 26:
+            return QColor( 255, 255, 204 );
+        case 27:
+            return QColor( 204, 255, 255 );
+        case 28:
+            return QColor( 102, 0, 102 );
+        case 29:
+            return QColor( 255, 128, 128 );
+        case 30:
+            return QColor( 0, 102, 204 );
+        case 31:
+            return QColor( 204, 204, 255 );
+        case 32:
+            return QColor( 0, 0, 128 );
+        case 33:
+            return QColor( 255, 0, 255 );
+        case 34:
+            return QColor( 255, 255, 0 );
+        case 35:
+            return QColor( 0, 255, 255 );
+        case 36:
+            return QColor( 128, 0, 128 );
+        case 37:
+            return QColor( 128, 0, 0 );
+        case 38:
+            return QColor( 0, 128, 128 );
+        case 39:
+            return QColor( 0, 0, 255 );
+        case 40:
+            return QColor( 0, 204, 255 );
+        case 41:
+            return QColor( 204, 255, 255 );
+        case 42:
+            return QColor( 204, 255, 204 );
+        case 43:
+            return QColor( 255, 255, 153 );
+        case 44:
+            return QColor( 153, 204, 255 );
+        case 45:
+            return QColor( 255, 153, 204 );
+        case 46:
+            return QColor( 204, 153, 255 );
+        case 47:
+            return QColor( 255, 204, 153 );
+        case 48:
+            return QColor( 51, 102, 255 );
+        case 49:
+            return QColor( 51, 204, 204 );
+        case 50:
+            return QColor( 153, 204, 0 );
+        case 51:
+            return QColor( 255, 204, 0 );
+        case 52:
+            return QColor( 255, 153, 0 );
+        case 53:
+            return QColor( 255, 102, 0 );
+        case 54:
+            return QColor( 102, 102, 153 );
+        case 55:
+            return QColor( 150, 150, 150 );
+        case 56:
+            return QColor( 0, 51, 102 );
+        case 57:
+            return QColor( 51, 102, 153 );
+        case 58:
+            return QColor( 0, 51, 0 );
+        case 59:
+            return QColor( 51, 51, 0 );
+        case 60:
+            return QColor( 153, 51, 0 );
+        case 61:
+            return QColor( 153, 51, 102 );
+        case 62: 
+            return QColor( 51, 51, 153 );
+        case 63:
+            return QColor( 51, 51, 51 );
+        case 64:
+            return QPalette().color( QPalette::WindowText );
+        case 65:
+            return QPalette().color( QPalette::Window );
+        }
+    }
+    else
+    {
+        return QColor( name );
+    }
+}
+
 
 #define DEFINELOCALE( ID, CODE ) case ID: return QLocale( QLatin1String( CODE ) );
 
@@ -366,6 +504,16 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     while( i < numberFormat.length() && numberFormat[ i ] != QLatin1Char( ']' ) )
                         colorName += numberFormat[ i++ ];
                     
+                    const QColor color = NumberFormatParser::color( colorName );
+                    if( color.isValid() )
+                    {
+
+                        xmlWriter.startElement( "style:text-properties" );
+                        xmlWriter.addAttribute( "fo:color", QString::fromLatin1( "#%1%2%3" ).arg( color.red(), 2, 16, QLatin1Char( '0' ) )
+                                                                                            .arg( color.green(), 2, 16, QLatin1Char( '0' ) )
+                                                                                            .arg( color.blue(), 2, 16, QLatin1Char( '0' ) ) );
+                        xmlWriter.endElement();
+                    }
                 }
                 else if( ch == '$' && i < numberFormat.length() - 2 && numberFormat[ i + 1 ].toLatin1() != '-' )
                 {
