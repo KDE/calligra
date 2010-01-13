@@ -222,17 +222,15 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
     kDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
+	kDebug() << "Schema changed";
         delete m_preRenderer;
 
-        QDomDocument doc;
-        doc.setContent(tempData()->document);
-        QDomElement root = doc.documentElement();
-        QDomElement conn = root.firstChildElement("connection");
-
-        m_preRenderer = new ORPreRender(tempData()->document);
+	kDebug() << tempData()->reportDefinition.tagName();
+	
+        m_preRenderer = new ORPreRender(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
-            if (!conn.isNull())  {
-                m_preRenderer->setSourceData(sourceData(conn));
+            if (!tempData()->connectionDefinition.isNull())  {
+                m_preRenderer->setSourceData(sourceData(tempData()->connectionDefinition));
             }
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;

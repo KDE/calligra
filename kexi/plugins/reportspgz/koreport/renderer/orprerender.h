@@ -46,7 +46,7 @@ class KOREPORT_EXPORT ORPreRender
 {
 public:
 //    ORPreRender(KexiDB::Connection*c = 0);
-    ORPreRender(const QString &);
+    ORPreRender(const QDomElement&);
 
     virtual ~ORPreRender();
 
@@ -54,9 +54,6 @@ public:
     void registerScriptObject(QObject*, const QString&);
 
     ORODocument * generate();
-
-
-//    KexiDB::Connection* database() const;
 
     /**
     @brief Set the name of the report so that it can be used internally by the script engine
@@ -69,7 +66,7 @@ protected:
 
 private:
     ORPreRenderPrivate* d;
-    bool setDom(const QString &);
+    bool setDom(const QDomElement &);
     QMap<QString, QObject*> m_scriptObjects;
 };
 

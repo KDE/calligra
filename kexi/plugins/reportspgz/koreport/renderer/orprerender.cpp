@@ -70,7 +70,6 @@ public:
     virtual ~ORPreRenderPrivate();
 
     bool m_valid;
-    QDomDocument m_docReport;
 
     KexiDB::Connection *m_conn;
 
@@ -831,7 +830,7 @@ void ORPreRenderPrivate::initEngine()
 // ORPreRender
 //
 
-ORPreRender::ORPreRender(const QString & pDocument)
+ORPreRender::ORPreRender(const QDomElement & pDocument)
 {
     d = new ORPreRenderPrivate();
     setDom(pDocument);
@@ -1043,16 +1042,19 @@ void ORPreRender::setSourceData(KoReportData *data)
     }
 }
 
-bool ORPreRender::setDom(const QString & docReport)
+bool ORPreRender::setDom(const QDomElement &docReport)
 {
-    kDebug() << docReport;
     if (d) {
         if (d->m_reportData)
             delete d->m_reportData;
         d->m_valid = false;
 
-        d->m_docReport.setContent(docReport);
-        d->m_reportData = new KRReportData(d->m_docReport.documentElement().firstChildElement("report:content"));
+	if (docReport.tagName() != "report:content") {
+		kDebug() << "report schema is invalid";
+		return false;
+	}
+	
+        d->m_reportData = new KRReportData(docReport);
         d->m_valid = d->m_reportData->isValid();
     }
     return isValid();

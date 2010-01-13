@@ -59,7 +59,6 @@ public:
     {
     public:
         TempData(QObject* parent);
-        QString document;
         QDomElement reportDefinition;
         QDomElement connectionDefinition;
 

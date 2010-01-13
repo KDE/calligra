@@ -127,7 +127,19 @@ KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
     kDebug();
     const QString document(loadReport(window->partItem()->name()));
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-    td->document = document;
+    
+    QDomDocument doc;
+    doc.setContent(document);
+    
+    kDebug() << doc.toString();
+    
+    QDomElement root = doc.documentElement();
+    QDomElement korep = root.firstChildElement("report:content");
+    QDomElement conn = root.firstChildElement("connection");
+
+    td->reportDefinition = korep;
+    td->connectionDefinition = conn;
+
     td->name = window->partItem()->name();
     return td;
 }

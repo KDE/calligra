@@ -90,18 +90,17 @@ QStringList KexiSourceSelector::queryList()
 
 void KexiSourceSelector::setConnectionData(QDomElement c)
 {
-    m_sourceType->setEditText(c.attribute("type"));
-
     if (c.attribute("type") == "internal") {
-        m_internalSource->setCurrentIndex(m_sourceType->findText(c.attribute("source")));
+	m_sourceType->setCurrentIndex(m_sourceType->findData("internal"));
+        m_internalSource->setCurrentIndex(m_internalSource->findText(c.attribute("source")));
     }
 
     if (c.attribute("type") == "external") {
+	m_sourceType->setCurrentIndex(m_sourceType->findText("external"));
         m_externalSource->setText(c.attribute("source"));
     }
 
     emit(setData(sourceData()));
-
 }
 
 QDomElement KexiSourceSelector::connectionData()
@@ -132,6 +131,8 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiMigrateData = 0;
     }
 
+    kDebug() << m_sourceType->itemData(m_sourceType->currentIndex()).toString();
+    
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
         m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
         return m_kexiDBData;

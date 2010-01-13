@@ -222,6 +222,8 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
         kDebug() << "root element was not <report:content>";;
     }
 
+    kDebug() << data.text();
+    
     deleteDetail();
 
     QDomNodeList nlist = data.childNodes();
@@ -409,8 +411,10 @@ void ReportDesigner::slotSectionEditor()
 void ReportDesigner::setReportData(KoReportData* kodata)
 {
     kDebug();
-    m_kordata = kodata; m_conn = static_cast<KexiDB::Connection*>(kodata->connection());
-    setModified(true);
+    if (kodata) {
+	m_kordata = kodata; m_conn = static_cast<KexiDB::Connection*>(kodata->connection());
+	setModified(true);
+    }
 }
 
 ReportSection * ReportDesigner::section(KRSectionData::Section s) const
