@@ -1675,6 +1675,7 @@ unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* da
     if(recordHandled) *recordHandled = true;
     readHeader(data, &recVer, &recInstance, &recType, &recLen);
     switch(recType) {
+        case 0x0: break; // NOPE
         case 0xF003: // OfficeArtSpgrContainer
         case 0xF004: { // OfficeArtSpContainer
             unsigned long offset = 8;
@@ -1778,7 +1779,7 @@ unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* da
             printf("OfficeArtSplitMenuColorContainer\n");
             break;
         default:
-            std::cout << "Unhandled record type=" << recType << " size=" << recLen << std::endl;
+            std::cout << "DrawingObject: Unhandled record type=" << recType << " size=" << recLen << std::endl;
             if(recordHandled) *recordHandled = false;
             break;
     }
