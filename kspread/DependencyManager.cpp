@@ -108,7 +108,7 @@ void DependencyManager::regionChanged(const Region& region)
         int bottom = range.bottom();
         if (bottom > cells->rows()) bottom = cells->rows();
         for (int row = range.top(); row <= bottom; ++row) {
-            int col = range.left() - 1;
+            int col = range.left();
             while (1) {
                 const Cell cell = cells->nextInRow(col, row);
                 if (cell.isNull()) break;
