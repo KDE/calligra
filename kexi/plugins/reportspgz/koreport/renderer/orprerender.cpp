@@ -513,7 +513,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 #if KDE_IS_VERSION(4,2,88)
                     QVariant v = m_scriptHandler->evaluate(cs.mid(1));
 #else
-                    QVariant v = _handler->evaluate(f->entityName());
+                    QVariant v = m_scriptHandler->evaluate(f->entityName());
 #endif
 
                     str = v.toString();
@@ -784,7 +784,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 #if KDE_IS_VERSION(4,2,88)
                 str = m_scriptHandler->evaluate(cs.mid(1)).toString();
 #else
-                str = _handler->evaluate(cd->entityName()).toString();
+                str = m_scriptHandler->evaluate(cd->entityName()).toString();
 #endif
             } else {
                 QString clm = cd->m_controlSource->value().toString();
