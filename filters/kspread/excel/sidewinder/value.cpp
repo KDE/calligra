@@ -263,9 +263,14 @@ UString Value::asString() const
 {
     UString result;
 
-    if (type() == Value::String || type() == Value::RichText)
-        result = d->s;
-
+    switch(type()) {
+        case Value::Error:
+        case Value::String:
+        case Value::RichText:
+            result = d->s;
+            break;
+    }
+    
     return result;
 }
 

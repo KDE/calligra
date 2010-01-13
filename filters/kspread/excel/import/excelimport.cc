@@ -1208,7 +1208,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
                 xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
             }
         }
-    } else if (value.isText()) {
+    } else if (value.isText() || value.isError()) {
         QString str = string(value.asString());
         xmlWriter->addAttribute("office:value-type", "string");
         if (value.isString())
