@@ -218,6 +218,8 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
     if (property == "cursor")
         return false;
 #endif
+    if (property == "acceptDrops")
+        return false;
 
     if (!isTopLevel
             && (property == "windowTitle" || property == "windowIcon" || property == "sizeIncrement" || property == "windowIconText")) {
