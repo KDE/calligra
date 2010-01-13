@@ -743,7 +743,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     }
 
     // add conditional styles:
-    for( QMap< QString, QString >::const_iterator it = conditions.begin(); it != conditions.end(); ++it )
+    for( QMap< QString, QString >::const_iterator it = conditions.constBegin(); it != conditions.constEnd(); ++it )
     {
         xmlWriter.startElement( "style:map" );
         xmlWriter.addAttribute( "style:condition", it.key().isEmpty() ? autoConditions.takeLast() : it.key() );
