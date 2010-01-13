@@ -1,6 +1,7 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1449,7 +1450,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool unused5 = opts2 & 0x3000;
         //const bool unused6 = opts2 & 0x6000;
         //const bool unused7 = opts2 & 0xC000;
-        printf("ObjRecord::setData picture fDde=%i FCtl=%i fPrstm=%i\n",fDde,fCtl,fPrstm);
+        std::cout << "ObjRecord::setData picture fDde=" << fDde << " FCtl=" << fCtl << " fPrstm=" << fPrstm << std::endl;
         startPict += 12;
     }
     break;
@@ -1562,7 +1563,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
             token = FormulaToken(ptg);
             token.setVersion(version());
-            printf("ObjRecord::setData: Picture is of type id=%i name=%s\n",token.id(),token.idAsString());
+            std::cout << "ObjRecord::setData: Picture is of type id=" << token.id() << " name=" << token.idAsString() << std::endl;
             if(token.size() > 0) {
                 token.setData(token.size(), startPict + cbFmlaSize);
                 cbFmlaSize += token.size();
@@ -1585,7 +1586,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                         embedInfoSize += size;
 
                         //TODO
-                        printf( "!!!!!!!!!!!! ObjRecord::setData: className=%s\n", className.ascii() );
+                        std::cout << "ObjRecord::setData: className=" << className.ascii() << std::endl;
                     }
                 }
             }
@@ -1618,7 +1619,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             }
             //fmlaLinkedCell
             //fmlaListFillRange
-            printf("ObjRecord::setData: Runtime license key is \"%s\"\n", key.c_str());
+            std::cout << "ObjRecord::setData: Runtime license key is: " << key.c_str() << std::endl;
         }
     }
 
@@ -1707,26 +1708,26 @@ unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char*
         case 0xF008: { // OfficeArtFDG
             unsigned long csp = readU32(data + 8);
             unsigned long spid = readU32(data + 12); // MSOSPID, shape-identifier of the last shape in the drawing
-            printf("OfficeArtFDG, number of shapes=%i, shapeId of last shape=%i\n", csp, spid);
+            std::cout << "OfficeArtFDG, number of shapes=" << csp << " shapeId of last shape=" << spid << std::endl;
         } break;
         case 0xF009: { // OfficeArtFSPGR
             unsigned long xLeft = readU32(data + 8);
             unsigned long yTop = readU32(data + 12);
             unsigned long xRight = readU32(data + 16);
             unsigned long yBottom = readU32(data + 20);
-            printf("OfficeArtFSPGR xLeft=%i yTop=%i xRight=%i yBottom=%i recLen=%i\n",xLeft,yTop,xRight,yBottom,recLen);
+            std::cout << "OfficeArtFSPGR xLeft=" << xLeft << " yTop=" << yTop << " xRight=" << xRight << " yBottom=" << yBottom << std::endl;
         } break;
         case 0xF00A: { // OfficeArtFSP
             unsigned long spid = readU32(data + 8); // MSOSPID, shape-identifier of the last shape in the drawing
-            printf("OfficeArtFSP, identifier of this shape=%i\n", spid);
+            std::cout << "OfficeArtFSP, identifier of this shape=" << spid << std::endl;
         } break;
         case 0xF11D: // OfficeArtFPSPL
             //printf("OfficeArtFPSPL %i\n",recLen);
             break;
         case 0xF00B: { // OfficeArtFOPT
-            printf("OfficeArtFPSPL %i\n",recLen);
+            printf("OfficeArtFPSPL\n");
             const unsigned char* startComplexData = data + 8 + recInstance * 6;
-            for(int i = 0; i < recInstance; ++i) {
+            for(uint i = 0; i < recInstance; ++i) {
                 const unsigned long opidOpts = readU16(data + 8 + i * 6);
                 const unsigned long opid = opidOpts & 0x3FFF;
                 const bool fBid = opidOpts & 0x04000; // BLIP identifier?
@@ -1737,23 +1738,23 @@ unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char*
                 } else { // op specifies the value
                     m_properties[opid] = op;
                 }
-                printf("MsoDrawingRecord: opid=%x fBid=%i fComplex=%i op=%i\n",opid,fBid,fComplex,op);
+                std::cout << "MsoDrawingRecord: opid=" << opid << " fBid=" << fBid << " fComplex=" << fComplex << " op=" << op << std::endl;
             }
-            printf("MsoDrawingRecord: complexDataLength=%i\n",recLen-(recInstance * 6));
+            std::cout << "MsoDrawingRecord: complexDataLength=" << recLen-(recInstance * 6) << std::endl;
             //TODO read complexData
         } break;
         case 0xF121: // OfficeArtSecondaryFOPT
-            printf("OfficeArtSecondaryFOPT %i\n",recLen);
+            std::cout << "OfficeArtSecondaryFOPT" << std::endl;
             break;
         case 0xF122: // OfficeArtTertiaryFOPT
-            printf("OfficeArtTertiaryFOPT %i\n",recLen);
+            std::cout << "OfficeArtTertiaryFOPT" << std::endl;
             break;
         case 0xF00F: { // OfficeArtChildAnchor
             unsigned long xLeft = readU32(data + 8);
             unsigned long yTop = readU32(data + 12);
             unsigned long xRight = readU32(data + 16);
             unsigned long yBottom = readU32(data + 20);
-            printf("OfficeArtChildAnchor xLeft=%i yTop=%i xRight=%i yBottom=%i recLen=%i\n",xLeft,yTop,xRight,yBottom,recLen);
+            std::cout << "OfficeArtChildAnchor xLeft=" << xLeft << " yTop=" << yTop << " xRight=" << xRight << " yBottom=" << yBottom << std::endl;
         } break;
         case 0xF010: // OfficeArtChildAnchorHF, OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart
             // If this record is in the Worksheet, Macro Sheet, or Dialog Sheet substream, the OfficeArtClientAnchor structure
@@ -1761,7 +1762,7 @@ unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char*
             // Sheet substream, the OfficeArtClientAnchor structure refers to the OfficeArtClientAnchorChart structure.
             switch(recLen) {
                 case 8:
-                    printf("TODO: OfficeArtChildAnchorHF %i\n",recLen);
+                    printf("TODO: OfficeArtChildAnchorHF\n");
                     break;
                 case 18: {
                     //const unsigned long opts = readU16(data + 8);
@@ -1789,16 +1790,16 @@ unsigned long MsoDrawingRecord::handleObject(unsigned size, const unsigned char*
                     std::cout << "OfficeArtChildAnchorSheet or OfficeArtChildAnchorChart colL=" << m_colL << " dxL=" << m_dxL << " rwT=" << m_rwT << " dyT=" << m_dyT << " colR=" << m_colR << " dxR=" << m_dxR << " rwB=" << m_rwB << " dyB=" << m_dyB << " recLen=" << recLen << std::endl;
                 } break;
                 default:
-                    printf("Unhandled OfficeArtChildAnchor type=%i\n",recLen);
+                    std::cout << "Unhandled OfficeArtChildAnchor type=" << recLen << std::endl;
                     break;
             }
             break;
         case 0xF011: // OfficeArtClientData
-            printf("OfficeArtClientData %i\n",recLen);
+            printf("OfficeArtClientData\n");
             break;
                     
         default:
-            printf("Unhandled record type=%i size=%i\n",recType,recLen);
+            std::cout << "Unhandled record type=" << recType << " size=" << recLen << std::endl;
     }
     return 8 + recLen;
 }
@@ -1842,7 +1843,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     unsigned long cspSaved = readU32(data + 24);
     unsigned long cdgSaved = readU32(data + 28);
     std::cout << "MsoDrawingGroupRecord: spidMax=" << spidMax << " cidcl=" << cidcl << " cspSaved=" << cspSaved << " cdgSaved=" << cdgSaved << std::endl;
-    for(int i = 0; i < cidcl; ++i) {
+    for(uint i = 0; i < cidcl; ++i) {
         unsigned long dgid = readU32(data + 32 + (i * 8));
         unsigned long cspidCur = readU32(data + 36 + (i * 8));
         std::cout << "dgid=" << dgid << " cspidCur=" << cspidCur << std::endl;
@@ -1853,14 +1854,14 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &recLen);
     Q_ASSERT(recType == 0xF001);
     blipStoreOffset += 8;
-    for(int i = 0; i < recInstance; ++i) {
+    for(uint i = 0; i < recInstance; ++i) {
         unsigned long blibRecLen = 0;
         readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
         const unsigned char* blipItemOffset = blipStoreOffset + 8;
         if(recType == 0xF007) { // OfficeArtFBSE
             std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
-            unsigned btWin32 = readU8(blipItemOffset);
-            unsigned btMacOS = readU8(blipItemOffset + 1);
+            const unsigned btWin32 = readU8(blipItemOffset);
+            const unsigned btMacOS = readU8(blipItemOffset + 1);
             switch(btWin32) {
                 case 0x00: printf("MsoDrawingGroupRecord: There was an error reading the file.\n"); break;
                 case 0x01: printf("MsoDrawingGroupRecord: Unknown BLIP type.\n"); break;
@@ -1904,54 +1905,67 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
         for(int i = 0; i < 16; ++i)
             rgbUid[i] = readU8(blipItemOffset + i);
-        printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><< rgbUid=%s\n",QByteArray(rgbUid,16).toHex().data());
         
         MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
         m_items.push_back(item);
-        
+
+        quint16 offset = 0;
+        const char* namesuffix = "";
+        const char* mimetype = "application/octet-stream";
         switch(recType) {
             case 0xF01A:
-                printf("TODO: OfficeArtBlipEMF\n");
-                //TODO
+                offset = (recInstance == 0x3D4) ? 50 : 66;
+                namesuffix = ".emf";
+                mimetype = "application/octet-stream";
                 break;
             case 0xF01B:
-                printf("TODO: OfficeArtBlipWMF\n");
-                //TODO
+                offset = (recInstance == 0x216) ? 50 : 66;
+                namesuffix = ".wmf";
+                mimetype = "application/octet-stream";
                 break;
             case 0xF01C:
-                printf("TODO: OfficeArtBlipPICT\n");
-                //TODO
+                offset = (recInstance == 0x542) ? 50 : 66;
+                namesuffix = ".pict";
+                mimetype = "image/pict";
                 break;
             case 0xF01D:
             case 0xF02A: {
-                printf("OfficeArtBlipJPEG\n");
-                unsigned tag = readU8(blipItemOffset + 16);
-                Q_ASSERT(tag == 0xFF);
-                
-                const unsigned char *blipData = blipItemOffset + 17;
-                unsigned long blibSize = recLen - ((recInstance==0x46A || recInstance==0x6E2) ? 17 : (recInstance==0x46B || recInstance==0x6E3) ? 33 : 0);
-                Q_ASSERT(blibSize <= size);
-
-                Store *store = m_workbook->store();
-                item->id = QByteArray(rgbUid,16).toHex().constData();
-                item->filename = "Pictures/" + item->id + ".jpg";
-                if(store->open(item->filename)) {
-                    store->write((const char*)blipData, blibSize);
-                    store->close();
-                }
+                offset = (recInstance == 0x46A || recInstance==0x6E2) ? 17 : 33;
+                namesuffix = ".jpg";
+                mimetype = "image/jpeg";
             } break;
             case 0xF01E:
-                printf("TODO: OfficeArtBlipPNG\n");
+                offset = (recInstance == 0x6E0) ? 17 : 33;
+                namesuffix = ".png";
+                mimetype = "image/png";
                 break;
             case 0xF01F:
-                printf("TODO: OfficeArtBlipDIB\n");
+                offset = (recInstance == 0x7A8) ? 17 : 33;
+                namesuffix = ".dib";
+                mimetype = "application/octet-stream";
                 break;
             case 0xF029:
-                printf("TODO: OfficeArtBlipTIFF\n");
+                offset = (recInstance == 0x6E4) ? 17 : 33;
+                namesuffix = ".tiff";
+                mimetype = "image/tiff";
                 break;
             default:
                 printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
                 break;
+        }
+
+        const unsigned char *blipData = blipItemOffset + offset;
+        unsigned long blibSize = recLen - offset;
+        Q_ASSERT(blibSize <= size);
+        Store *store = m_workbook->store();
+        Q_ASSERT(store);
+        item->id = QByteArray(rgbUid,16).toHex().constData();
+        item->filename = "Pictures/" + item->id + namesuffix;
+        if(store->open(item->filename)) {
+            store->write((const char*)blipData, blibSize);
+            store->close();
+        } else {
+            std::cerr << "MsoDrawingGroupRecord: Failed to open file=" << item->filename << " mimetype=" << mimetype << std::endl;
         }
 
         blipStoreOffset += 8 + blibRecLen;
@@ -2748,7 +2762,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                      if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
                          propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */ )
                      {
-                         printf( "Ignoring property with unknown id %i and type %lu\n", propertyId, type );
+                         std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
                      }
                      break;
               }

@@ -1,5 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,7 +58,7 @@ public:
     virtual ~Workbook();
 
     /**
-    /* Returns the used KoStore or NULL if not KoStore was set.
+     * Returns the used KoStore or NULL if not KoStore was set.
     /*/
     Store* store() const;
     
