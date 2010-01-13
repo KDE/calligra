@@ -84,7 +84,7 @@ public:
     void setBackground(bool bg);
 
 
-    bool hasProperty(std::string name);
+    bool hasProperty(std::string name) const;
 
     void setProperty(std::string name, int value);
     void setProperty(std::string name, double value);
@@ -95,11 +95,11 @@ public:
         setProperty(name, std::string(value));
     }
 
-    int getIntProperty(std::string name);
-    double getDoubleProperty(std::string name);
-    bool getBoolProperty(std::string name);
-    std::string getStrProperty(std::string name);
-    Color getColorProperty(std::string name);
+    int getIntProperty(std::string name) const;
+    double getDoubleProperty(std::string name) const;
+    bool getBoolProperty(std::string name) const;
+    std::string getStrProperty(std::string name) const;
+    Color getColorProperty(std::string name) const;
 
     /**
     * @brief Set the graphic style name
@@ -268,6 +268,7 @@ public:
     }
     unsigned objectCount() const;
     Object* object(unsigned index);
+    const Object* object(unsigned index) const;
     void addObject(Object* object);
     void takeObject(Object* object);
 

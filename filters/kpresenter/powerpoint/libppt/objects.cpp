@@ -153,7 +153,7 @@ void Object::setBackground(bool bg)
     d->background = bg;
 }
 
-bool Object::hasProperty(std::string name)
+bool Object::hasProperty(std::string name) const
 {
     std::map<std::string, PropertyValue>::const_iterator i;
     i = d->properties.find(name);
@@ -203,7 +203,7 @@ void Object::setProperty(std::string name, Color value)
     d->properties[ name ] = pv;
 }
 
-int Object::getIntProperty(std::string name)
+int Object::getIntProperty(std::string name) const
 {
     PropertyValue pv;
     pv = d->properties[ name ];
@@ -213,7 +213,7 @@ int Object::getIntProperty(std::string name)
         return 0;
 }
 
-double Object::getDoubleProperty(std::string name)
+double Object::getDoubleProperty(std::string name) const
 {
     PropertyValue pv;
     pv = d->properties[ name ];
@@ -223,7 +223,7 @@ double Object::getDoubleProperty(std::string name)
         return 0;
 }
 
-bool Object::getBoolProperty(std::string name)
+bool Object::getBoolProperty(std::string name) const
 {
     PropertyValue pv;
     pv = d->properties[ name ];
@@ -234,7 +234,7 @@ bool Object::getBoolProperty(std::string name)
 
 }
 
-std::string Object::getStrProperty(std::string name)
+std::string Object::getStrProperty(std::string name) const
 {
     PropertyValue pv;
     pv = d->properties[ name ];
@@ -244,7 +244,7 @@ std::string Object::getStrProperty(std::string name)
         return "NoString";
 }
 
-Color Object::getColorProperty(std::string name)
+Color Object::getColorProperty(std::string name) const
 {
     PropertyValue pv;
     pv = d->properties[ name ];
@@ -553,6 +553,11 @@ unsigned GroupObject::objectCount() const
 }
 
 Object* GroupObject::object(unsigned i)
+{
+    return d->objects[i];
+}
+
+const Object* GroupObject::object(unsigned i) const
 {
     return d->objects[i];
 }
