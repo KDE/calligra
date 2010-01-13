@@ -420,7 +420,8 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         ;
     }
 
-    diagram->setModel( model );
+    if(diagram)
+        diagram->setModel( model );
 
     adjustAllDiagrams();
 
@@ -1059,9 +1060,11 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
             chartType = d->plotAreaChartType;
         
         KDChart::AbstractDiagram *diagram = d->createDiagramIfNeeded( chartType );
-        Q_ASSERT( diagram );
+        if( ! diagram )
+            return false;
         KDChartModel *model = (KDChartModel*)diagram->model();
-        Q_ASSERT( model );
+        if( !model )
+            return false;
     
         dataSet->setKdDiagram( diagram );
         dataSet->setGlobalChartType( chartType );

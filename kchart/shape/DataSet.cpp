@@ -819,7 +819,6 @@ int DataSet::size() const
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const
 {
-    Q_ASSERT( kdChartModel );
     if ( blockSignals || !kdChartModel )
         return;
 
