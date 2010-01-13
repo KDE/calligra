@@ -175,9 +175,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     {
 
                         xmlWriter.startElement( "style:text-properties" );
-                        xmlWriter.addAttribute( "fo:color", QString::fromLatin1( "#%1%2%3" ).arg( color.red(), 2, 16, QLatin1Char( '0' ) )
-                                                                                            .arg( color.green(), 2, 16, QLatin1Char( '0' ) )
-                                                                                            .arg( color.blue(), 2, 16, QLatin1Char( '0' ) ) );
+                        xmlWriter.addAttribute( "fo:color", color.name() );
                         xmlWriter.endElement();
                     }
                 }
