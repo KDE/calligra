@@ -28,7 +28,6 @@
 
 #include <QBuffer>
 #include <QColor>
-#include <QDebug>
 #include <QLocale>
 #include <QPalette>
 #include <QString>
@@ -836,8 +835,6 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                 KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
                 result.addAttribute( "style:volatile", "true" );
                 const QString styleName = NumberFormatParser::styles->lookup( result, "N" );
-                qDebug() << condition;
-                qDebug() << buffer.data();
                 // start a new style
                 buffer.setData( QByteArray() );
                 buffer.open( QIODevice::WriteOnly );
@@ -889,8 +886,6 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         KoGenStyle result = styleFromTypeAndBuffer( type, buffer );
         result.addAttribute( "style:volatile", "true" );
         const QString styleName = NumberFormatParser::styles->lookup( result, "N" );
-        qDebug() << condition;
-        qDebug() << buffer.data();
         // start a new style
         buffer.setData( QByteArray() );
         buffer.open( QIODevice::WriteOnly );
@@ -923,7 +918,5 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     buffer.close();
     
     // conditional style with the current format
-    qDebug() << buffer.data();
-
     return styleFromTypeAndBuffer( type, buffer );
 }
