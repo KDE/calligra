@@ -9,6 +9,5 @@ set(libppt_SRCS
 		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/ustring.cpp
 		)
 
-add_subdirectory( libppt )
 add_subdirectory( import )
 
