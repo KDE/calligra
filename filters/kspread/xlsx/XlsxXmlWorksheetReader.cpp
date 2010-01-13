@@ -652,6 +652,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     kDebug() << "styleId:" << styleId;
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
     const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
+    
+    const QString formattedStyle = d->processValueFormat( numberFormat );
 
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
@@ -711,9 +713,28 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                     return KoFilter::WrongFormat;
                 }
             }
+            const KoGenStyle* const style = mainStyles->style( formattedStyle );
+            if( style == 0 )
+            {
 //            body->addTextSpan(m_value);
-            valueType = MsooXmlReader::constFloat;
-            valueAttr = XlsxXmlWorksheetReader::officeValue;
+                valueType = MsooXmlReader::constFloat;
+                valueAttr = XlsxXmlWorksheetReader::officeValue;
+            }
+            else
+            {
+                switch( style->type() )
+                {
+                case KoGenStyle::StyleNumericDate:
+                    valueType = MsooXmlReader::constDate;
+                    valueAttr = XlsxXmlWorksheetReader::officeDateValue;
+                    m_value = QDate( 1899, 12, 30 ).addDays( m_value.toInt() ).toString( Qt::ISODate );
+                    break;
+                default:
+                    valueType = MsooXmlReader::constFloat;
+                    valueAttr = XlsxXmlWorksheetReader::officeValue;
+                    break;
+                }
+            }
         } else if (t == QLatin1String("e")) {
             if (m_value == QLatin1String("#REF!"))
                 body->addTextSpan("#NAME?");
@@ -765,7 +786,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 return KoFilter::WrongFormat;
             }
 
-            const QString formattedStyle = d->processValueFormat( numberFormat );
             if( !formattedStyle.isEmpty() )
                 cellStyle.addAttribute( "style:data-style-name", formattedStyle );
 

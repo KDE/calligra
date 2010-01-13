@@ -461,8 +461,11 @@ static KoGenStyle styleFromTypeAndBuffer( KoGenStyle::Type type, const QBuffer& 
     return result;
 }
 
+#include <QDebug>
 KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 {
+    qDebug() << "Parsing" << numberFormat;
+
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter xmlWriter( &buffer );
@@ -816,7 +819,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
             if( isLongest )
             {
                 xmlWriter.addAttribute( "number:style", "long" );
-                i += 2;
+                i += 3;
             }
             else if( isLong )
             {
@@ -918,5 +921,5 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     buffer.close();
     
     // conditional style with the current format
-    return styleFromTypeAndBuffer( type, buffer );
+    return styleFromTypeAndBuffer( conditions.isEmpty() ? type : KoGenStyle::StyleNumericNumber, buffer );
 }
