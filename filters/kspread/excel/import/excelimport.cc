@@ -71,8 +71,8 @@ int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx) {
     QFont font("Arial",10);
     QFontMetricsF fm(font);
     const qreal characterWidth = fm.width("h");
-    long defColWidth = sheet->defaultColWidth();
-    if(defColWidth <= 0) defColWidth = 8;
+    qreal defColWidth = sheet->defaultColWidth();
+    if(defColWidth <= 0) defColWidth = 8.43;
     defColWidth *= characterWidth;
     return (defColWidth * col) + (dx / 1024.0 * defColWidth);
 }
@@ -83,8 +83,8 @@ int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy)
     QFont font("Arial",10);
     QFontMetricsF fm(font);
     const qreal characterHeight = fm.height();
-    long defRowHeight = sheet->defaultRowHeight();
-    if(defRowHeight <= 0) defRowHeight = 1;
+    qreal defRowHeight = sheet->defaultRowHeight();
+    if(defRowHeight <= 0) defRowHeight = 1; // 12.75 points (a point is 1/72 of an inch)
     defRowHeight *= characterHeight;
     return (defRowHeight * row) + (dy / 1024.0 * defRowHeight);
 }
