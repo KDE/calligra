@@ -146,9 +146,6 @@ protected slots:
     void applyFillToSelection();
     void applyStrokeToSelection();
 
-signals:
-    void pageLayoutChanged();
-
 protected:
     virtual void resizeEvent(QResizeEvent* event);
 
