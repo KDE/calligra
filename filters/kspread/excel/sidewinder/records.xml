@@ -720,4 +720,27 @@
   <field name="text"         type="unicodestring" length="stringLength" />
 </record>
 
+<!-- reserved value -->
+<record name="GridSet" id="0x0082" />
+
+<!-- TODO handle following records -->
+<record name="Window1" id="0x003D">
+</record>
+<record name="Window2" id="0x023E">
+</record>
+<record name="FeatHdr" id="0x0867">
+</record>
+<record name="Index" id="0x020b">
+</record>
+<record name="Guts" id="0x0080">
+</record>
+<record name="WsBool" id="0x0081">
+</record>
+<record name="HeaderFooter" id="0x089c">
+</record>
+<record name="PLV" id="0x088b">
+</record>
+<record name="CalcSaveRecalc" id="0x005f">
+</record>
+
 </records>
