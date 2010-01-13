@@ -1501,9 +1501,21 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     }
     break;
-    case Object::Chart:
-        printf("ObjRecord::setData Chart\n");
-        break;
+
+    case Object::Chart: printf("ObjRecord::setData Chart\n"); break;
+    case Object::Rectangle: printf("ObjRecord::setData Rectangle\n"); break;
+    case Object::Line: printf("ObjRecord::setData Line\n"); break;
+    case Object::Oval: printf("ObjRecord::setData Oval\n"); break;
+    case Object::Arc: printf("ObjRecord::setData Arc\n"); break;
+    case Object::Text: printf("ObjRecord::setData Text\n"); break;
+    case Object::Button: printf("ObjRecord::setData Button\n"); break;
+    case Object::Polygon: printf("ObjRecord::setData Polygon\n"); break;
+    case Object::EditBox: printf("ObjRecord::setData EditBox\n"); break;
+    case Object::Label: printf("ObjRecord::setData Label\n"); break;
+    case Object::DialogBox: printf("ObjRecord::setData DialogBox\n"); break;
+    case Object::GroupBox: printf("ObjRecord::setData GroupBox\n"); break;
+    case Object::OfficeArtObject: printf("ObjRecord::setData OfficeArtObject\n"); break;
+
     default:
         std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
         setIsValid(false);
