@@ -1352,7 +1352,6 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
                     refName = styles->lookup(style, "N");
                 }
             } else if(formula.startsWith("msoxl:=RAND(")) {
-                /*
                 KoGenStyle style(KoGenStyle::StyleNumericNumber);
                 QBuffer buffer;
                 buffer.open(QIODevice::WriteOnly);
@@ -1363,7 +1362,6 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
                 QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
                 style.addChildElement("number", elementContents);
                 refName = styles->lookup(style, "N");
-                */
             }
         }
     }
