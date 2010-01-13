@@ -8093,13 +8093,13 @@ void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
     Skip to the start of slideSchemeColorSchemeAtom
     */
     if (fastForwardRecords(0x07F0, 4) == -1) {
-        kWarning("Failed to find header of slideSchemeColorSchemeAtom!");
+        kWarning() << "Failed to find header of slideSchemeColorSchemeAtom!";
         return;
     }
 
     bytes_read = d->docStream->read(buffer, 8);
     if (bytes_read != 8) {
-        kWarning("Failed to read header for slideSchemeColorSchemeAtom!");
+        kWarning() << "Failed to read header for slideSchemeColorSchemeAtom!";
         return;
     }
 
