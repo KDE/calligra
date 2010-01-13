@@ -561,7 +561,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "Unknown217",      0 },
     { "Unknown218",      0 },
     { "ADDRESS",         0 },     // 219
-    { "GETDIFFDATE360",  0 },     // 220
+    { "DAYS360",         0 },     // 220
     { "CURRENTDATE",     0 },     // 221
     { "VBD",             0 },     // 222
     { "Unknown223",      0 },
