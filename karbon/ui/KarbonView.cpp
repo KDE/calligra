@@ -60,7 +60,6 @@
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
 #include "KarbonDocumentMergeCommand.h"
-//#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
@@ -114,7 +113,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
@@ -124,6 +122,7 @@
 #include <kstandardaction.h>
 #include <kparts/partmanager.h>
 #include <KToggleAction>
+#include <KDebug>
 
 // qt header
 #include <QtGui/QIcon>
@@ -141,19 +140,6 @@
 #include <QtGui/QImageReader>
 
 #include <unistd.h>
-
-// Only for debugging.
-#include <kdebug.h>
-
-// Uncomment the #define below to print lots of debug information about the view.
-// Or use the -DKARBON_DEBUG_VIEW flag when using cmake, so the code stays the same.
-#define KARBON_DEBUG_VIEW
-
-#ifdef KARBON_DEBUG_VIEW
-#define debugView(text) kDebug(38000) << "(" << this << ") " << text
-#else
-#define debugView(text)
-#endif
 
 class KarbonView::Private
 {
@@ -203,8 +189,6 @@ public:
 KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         : KoView(p, parent), d(new Private(p))
 {
-    debugView("");
-
     setComponentData(KarbonFactory::componentData(), true);
 
     if (!p->isReadWrite())
@@ -333,8 +317,6 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
 
 KarbonView::~KarbonView()
 {
-    debugView("");
-
     KoToolManager::instance()->removeCanvasController(d->canvasController);
 
     removeStatusBarItem(d->status);
@@ -362,8 +344,6 @@ KoZoomController * KarbonView::zoomController() const
 
 void KarbonView::resizeEvent(QResizeEvent* /*event*/)
 {
-    debugView("");
-
     if (!d->showRulerAction)
         return;
 
@@ -375,8 +355,6 @@ void KarbonView::resizeEvent(QResizeEvent* /*event*/)
 
 void KarbonView::dropEvent(QDropEvent *e)
 {
-    debugView("");
-
     //Accepts QColor - from Color Manager's KColorPatch
     QColor color = KColorMimeData::fromMimeData(e->mimeData());
     if (color.isValid()) {
@@ -411,8 +389,6 @@ void KarbonView::dropEvent(QDropEvent *e)
 
 void KarbonView::fileImportGraphic()
 {
-    debugView("");
-
     QByteArray nativeMimeType = part()->nativeFormatMimeType();
     QStringList filter = KoFilterManager::mimeFilter(nativeMimeType, KoFilterManager::Import);
 
@@ -540,7 +516,6 @@ void KarbonView::fileImportGraphic()
 
 void KarbonView::selectionDuplicate()
 {
-    debugView("");
     d->canvas->toolProxy()->copy();
     // TODO bring back copy offset
     d->canvas->toolProxy()->paste();
@@ -548,8 +523,6 @@ void KarbonView::selectionDuplicate()
 
 void KarbonView::editSelectAll()
 {
-    debugView("");
-
     KoSelection* selection = d->canvas->shapeManager()->selection();
     if (! selection)
         return;
@@ -567,8 +540,6 @@ void KarbonView::editSelectAll()
 
 void KarbonView::editDeselectAll()
 {
-    debugView("");
-
     KoSelection* selection = d->canvas->shapeManager()->selection();
     if (selection)
         selection->deselectAll();
@@ -578,64 +549,46 @@ void KarbonView::editDeselectAll()
 
 void KarbonView::editDeleteSelection()
 {
-    debugView("");
-
     d->canvas->toolProxy()->deleteSelection();
 }
 
 void KarbonView::selectionDistributeHorizontalCenter()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::HorizontalCenterDistribution);
 }
 
 void KarbonView::selectionDistributeHorizontalGap()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::HorizontalGapsDistribution);
 }
 
 void KarbonView::selectionDistributeHorizontalLeft()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::HorizontalLeftDistribution);
 }
 
 void KarbonView::selectionDistributeHorizontalRight()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::HorizontalRightDistribution);
 }
 
 void KarbonView::selectionDistributeVerticalCenter()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::VerticalCenterDistribution);
 }
 
 void KarbonView::selectionDistributeVerticalGap()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::VerticalGapsDistribution);
 }
 
 void KarbonView::selectionDistributeVerticalBottom()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::VerticalBottomDistribution);
 }
 
 void KarbonView::selectionDistributeVerticalTop()
 {
-    debugView("");
-
     selectionDistribute(KoShapeDistributeCommand::VerticalTopDistribution);
 }
 
@@ -655,15 +608,11 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
 
 void KarbonView::closePath()
 {
-    debugView("");
-
     // TODO add the new close path command here
 }
 
 void KarbonView::combinePath()
 {
-    debugView("");
-
     KoSelection* selection = d->canvas->shapeManager()->selection();
     if (! selection)
         return;
@@ -688,7 +637,6 @@ void KarbonView::combinePath()
 
 void KarbonView::separatePath()
 {
-    debugView("");
     KoSelection* selection = d->canvas->shapeManager()->selection();
     if (! selection)
         return;
@@ -710,8 +658,6 @@ void KarbonView::separatePath()
 
 void KarbonView::reversePath()
 {
-    debugView("");
-
     QList<KoPathShape*> paths = selectedPathShapes();
     if (paths.size())
         d->canvas->addCommand(new KoPathReverseCommand(paths));
@@ -822,8 +768,6 @@ void KarbonView::pathSnapToGrid()
 
 void KarbonView::viewModeChanged(bool outlineMode)
 {
-    debugView("");
-
     d->canvas->enableOutlineMode(outlineMode);
     d->canvas->updateCanvas(d->canvas->canvasWidget()->rect());
 }
@@ -867,8 +811,6 @@ void KarbonView::zoomDrawing()
 
 void KarbonView::initActions()
 {
-    debugView("");
-
     // view ----->
     d->viewAction  = new KToggleAction(i18n("Outline &Mode"), this);
     actionCollection()->addAction("view_mode", d->viewAction);
@@ -1066,8 +1008,6 @@ void KarbonView::mousePositionChanged(const QPoint &position)
 
 void KarbonView::reorganizeGUI()
 {
-    debugView("");
-
     if (d->snapGridAction)
         d->snapGridAction->setChecked(part()->gridData().snapToGrid());
     if (statusBar())
@@ -1076,16 +1016,12 @@ void KarbonView::reorganizeGUI()
 
 void KarbonView::setNumberOfRecentFiles(unsigned int number)
 {
-    debugView(QString("to %1").arg(number));
-
     if (shell())     // 0L when embedded into konq !
         shell()->setMaxRecentItems(number);
 }
 
 void KarbonView::showRuler()
 {
-    debugView("");
-
     if (shell() && d->showRulerAction->isChecked()) {
         d->horizRuler->show();
         d->vertRuler->show();
@@ -1098,8 +1034,6 @@ void KarbonView::showRuler()
 
 void KarbonView::togglePageMargins(bool b)
 {
-    debugView(QString("parameter %1").arg(b));
-
     ((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
     d->canvas->setShowPageMargins(b);
     d->canvas->update();
@@ -1119,24 +1053,18 @@ void KarbonView::updateRuler()
 
 void KarbonView::showGuides()
 {
-    debugView("");
-
     d->part->guidesData().setShowGuideLines(d->showGuidesAction->isChecked());
     d->canvas->update();
 }
 
 void KarbonView::snapToGrid()
 {
-    debugView("");
-
     d->part->gridData().setSnapToGrid(d->snapGridAction->isChecked());
     d->canvas->update();
 }
 
 void KarbonView::configure()
 {
-    debugView("");
-
     QPointer<KarbonConfigureDialog> dialog = new KarbonConfigureDialog(this);
     dialog->exec();
     delete dialog;
@@ -1146,8 +1074,6 @@ void KarbonView::configure()
 
 void KarbonView::pageLayout()
 {
-    debugView("");
-
     QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog(this, part()->pageLayout());
     dlg->showPageSpread(false);
     dlg->showTextDirection(false);
@@ -1164,8 +1090,6 @@ void KarbonView::pageLayout()
 
 void KarbonView::selectionChanged()
 {
-    debugView("");
-
     KoSelection *selection = d->canvas->shapeManager()->selection();
     int count = selection->selectedShapes(KoFlake::FullSelection).count();
 
@@ -1222,15 +1146,11 @@ void KarbonView::selectionChanged()
 
 void KarbonView::setCursor(const QCursor &c)
 {
-    debugView("");
-
     d->canvas->setCursor(c);
 }
 
 void KarbonView::createLayersTabDock()
 {
-    debugView("");
-
     KarbonLayerDockerFactory layerFactory;
     KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(createDockWidget(&layerFactory));
     layerDocker->setPart(d->part);
@@ -1240,12 +1160,6 @@ void KarbonView::createLayersTabDock()
             layerDocker, SLOT(updateView()));
     connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
             layerDocker, SLOT(setPart(KParts::Part *)));
-}
-
-void KarbonView::updateReadWrite(bool readwrite)
-{
-    debugView("");
-    kDebug(38000) << "writable state =" << readwrite;
 }
 
 void KarbonView::updateUnit(KoUnit unit)
