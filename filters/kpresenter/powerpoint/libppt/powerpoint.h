@@ -3615,7 +3615,6 @@ public:
     bool load(Presentation* pr, const char* filename);
 
 protected:
-
     void loadUserEdit();
     void loadMaster();
     void loadSlides();

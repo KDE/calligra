@@ -7656,6 +7656,12 @@ public:
     *
     */
     OutlineTextProps9Container outlineContainer;
+    /**
+     * Convert a OfficeArtCOLORREF to an RGB color.
+     * This conversion looks up the color in the color schemes if needed.
+     **/
+    Libppt::Color convertFromLong(unsigned long i);
+
 };
 
 
@@ -9013,12 +9019,29 @@ void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned siz
         loadRecord(container);
 }
 
-Color convertFromLong(unsigned long i)
+Color PPTReader::Private::convertFromLong(unsigned long i)
 {
     unsigned r = (i & 0xff);
     unsigned g = (i >> 8) & 0xff;
     unsigned b = (i >> 16) & 0xff;
-    //unsigned index = (i>>24) & 0xff;
+    //bool fPaletteIndex = i & 0x01000000;
+    //bool fPaletteRgb =   i & 0x02000000;
+    //bool fSystemRgb =    i & 0x04000000;
+    bool fSchemeIndex =  i & 0x08000000;
+    //bool fSysIndex =     i & 0x10000000;
+    if (fSchemeIndex) {
+        // This should get the color from the color scheme of the current slide
+        // or if slideContainer/slideAtom/slideFlags/fMasterScheme == true
+        // from the slides masters color scheme.
+        if (presentation && presentation->getMainMasterContainer()) {
+           ColorSchemeAtom* scheme = presentation->getMainMasterContainer()
+                   ->getSlideSchemeColorSchemeAtom();
+           if (scheme) {
+               QColor c(scheme->getColor(r));
+               return Color(c.red(), c.green(), c.blue());;
+           }
+        }
+    }
     return Color(r, g, b);
 }
 
@@ -9040,7 +9063,7 @@ void PPTReader::handleEscherPropertiesAtom(msofbtOPTAtom* atom)
             break;
         case msofbtOPTAtom::FillColor:
             d->currentObject->setProperty("draw:fill-color",
-                    convertFromLong(pvalue));
+                    d->convertFromLong(pvalue));
             break;
         case msofbtOPTAtom::FillBackColor:
             break;
@@ -9053,7 +9076,7 @@ void PPTReader::handleEscherPropertiesAtom(msofbtOPTAtom* atom)
                     (pvalue&16)?"solid":"none");
             break;
         case msofbtOPTAtom::LineColor:
-            d->currentObject->setProperty("svg:stroke-color", convertFromLong(pvalue));
+            d->currentObject->setProperty("svg:stroke-color", d->convertFromLong(pvalue));
             break;
         case msofbtOPTAtom::LineWidth:
             d->currentObject->setProperty("svg:stroke-width", pvalue*(25.4 / (12700*72)));
