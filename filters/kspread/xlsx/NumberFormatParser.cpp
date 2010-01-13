@@ -918,5 +918,5 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     buffer.close();
     
     // conditional style with the current format
-    return styleFromTypeAndBuffer( conditions.isEmpty() ? type : KoGenStyle::StyleNumericNumber, buffer );
+    return styleFromTypeAndBuffer( conditions.isEmpty() ? type : KoGenStyle::StyleNumericText, buffer );
 }
