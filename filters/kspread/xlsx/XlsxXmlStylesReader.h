@@ -55,7 +55,6 @@ public:
     qreal tint; //!< tint value applied to the color, default is -1
     int theme; //!< default: -1
 
-private:
     QColor themeColor(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
 };
 
@@ -194,7 +193,7 @@ public:
 
     //! @return color style (bgColor or fgColor) depending on the pattern
     //! Can return 0 if no fill should be painted.
-    const XlsxColorStyle* realBackgroundColor() const;
+    const XlsxColorStyle* realBackgroundColor( const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
 
 private:
     mutable XlsxColorStyle* cachedRealBackgroundColor;
