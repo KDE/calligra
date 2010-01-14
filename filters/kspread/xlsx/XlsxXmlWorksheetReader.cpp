@@ -68,6 +68,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
 
 const char* XlsxXmlWorksheetReader::officeValue = "office:value";
 const char* XlsxXmlWorksheetReader::officeDateValue = "office:date-value";
+const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
 const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
@@ -231,7 +232,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 //! @todo table:display="true" hardcoded
     m_tableStyle.addProperty("table:display", XlsxXmlWorksheetReader::constTrue);
 
-    const QString currentTableStyleName(mainStyles->lookup(m_tableStyle));
+    const QString currentTableStyleName(mainStyles->lookup(m_tableStyle, "ta"));
     body->addAttribute("table:style-name", currentTableStyleName);
 
     while (!atEnd()) {
@@ -312,7 +313,7 @@ void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
     tableColumnStyle.addProperty("style:column-width", widthString);
     tableColumnStyle.addProperty("fo:break-before", "auto");
 
-    const QString currentTableColumnStyleName(mainStyles->lookup(tableColumnStyle));
+    const QString currentTableColumnStyleName(mainStyles->lookup(tableColumnStyle, "co"));
     body->addAttribute("table:style-name", currentTableColumnStyleName);
 }
 
@@ -464,7 +465,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::saveRowStyle(const QString& _
             return KoFilter::WrongFormat;
         tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
     }
-    const QString currentTableRowStyleName(mainStyles->lookup(tableRowStyle));
+    const QString currentTableRowStyleName(mainStyles->lookup(tableRowStyle, "ro"));
     body->addAttribute("table:style-name", currentTableRowStyleName);
     return KoFilter::OK;
 }
@@ -661,7 +662,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     QByteArray valueAttr;
 
     if (!m_value.isEmpty()) {
-        body->startElement("text:p", false);
+        if( formattedStyle.isEmpty() ) {
+            body->startElement("text:p", false);
+        }
 
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean) Cell containing a boolean.
@@ -729,6 +732,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                     valueAttr = XlsxXmlWorksheetReader::officeDateValue;
                     m_value = QDate( 1899, 12, 30 ).addDays( m_value.toInt() ).toString( Qt::ISODate );
                     break;
+                case KoGenStyle::StyleNumericText:
+                    valueType = MsooXmlReader::constString;
+                    valueAttr = XlsxXmlWorksheetReader::officeStringValue;
+                    break;
                 default:
                     valueType = MsooXmlReader::constFloat;
                     valueAttr = XlsxXmlWorksheetReader::officeValue;
@@ -749,21 +756,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             return KoFilter::WrongFormat;
         }
 
-        body->endElement(); // text:p
+        if( formattedStyle.isEmpty() ) {
+            body->endElement(); // text:p
+        }
     }
 
     body = tableCellBuf.originalWriter();
     {
         body->startElement("table:table-cell");
-        if (!valueType.isEmpty()) {
-            body->addAttribute("office:value-type", valueType);
-        }
-        if (!valueAttr.isEmpty()) {
-            body->addAttribute(valueAttr, m_value);
-        }
-        if (!m_formula.isEmpty()) {
-            body->addAttribute("table:formula", m_formula);
-        }
         // cell style
         if (!s.isEmpty()) {
             bool ok;
@@ -775,9 +775,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 return KoFilter::WrongFormat;
             }
             KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
-//! @todo hardcoded master style name
-            cellStyle.addAttribute("style:parent-style-name",
-                                   QLatin1String("Excel_20_Built-in_20_Normal"));
 
             KoCharacterStyle cellCharacterStyle;
             cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
@@ -789,15 +786,27 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if( !formattedStyle.isEmpty() )
                 cellStyle.addAttribute( "style:data-style-name", formattedStyle );
 
-            const QString cellStyleName = mainStyles->lookup( cellStyle );
+            const QString cellStyleName = mainStyles->lookup( cellStyle, "ce" );
             body->addAttribute("table:style-name", cellStyleName );
         }
 
+        if (!valueType.isEmpty()) {
+            body->addAttribute("office:value-type", valueType);
+        }
+        if (!valueAttr.isEmpty()) {
+            body->addAttribute(valueAttr, m_value);
+        }
+        if (!m_formula.isEmpty()) {
+            body->addAttribute("table:formula", m_formula);
+        }
+
+        if( formattedStyle.isEmpty() ) {
         if (m_value.isEmpty()) {
             tableCellBuf.clear(); // do not output
         }
         else {
             (void)tableCellBuf.releaseWriter();
+        }
         }
         body->endElement(); // table:table-cell
     }
