@@ -151,10 +151,10 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
     {
         const char c = numberFormat[ i ].toLatin1();
                 
-        const bool isLong = numberFormat[ i + 1 ] == c                         && i < numberFormat.length() - 1;
-        const bool isLonger = isLong && numberFormat[ i + 2 ] == c             && i < numberFormat.length() - 2;
-        const bool isLongest = isLonger && numberFormat[ i + 3 ] == c          && i < numberFormat.length() - 3;
-        const bool isWayTooLong = isWayTooLong && numberFormat[ i + 4 ] == c   && i < numberFormat.length() - 4;
+        const bool isLong = i < numberFormat.length() - 1 && numberFormat[ i + 1 ] == c;
+        const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
+        const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
+        const bool isWayTooLong = isWayTooLong && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
 
 
         switch( c )
