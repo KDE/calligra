@@ -182,6 +182,11 @@ public:
     // mapping from object id's to object instances
     std::map<unsigned long, Object*> sharedObjects;
     
+    // maps object id's of NoteObject's to there continuous number
+    std::map<unsigned long, int> noteMap;
+    // the number of NoteObject's in this worksheet
+    int noteCount;
+    
     // list of textobjects as received via TxO records
     std::vector<UString> textObjects;
 };
@@ -193,6 +198,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->globals = globals;
     d->lastFormulaCell = 0;
     d->formulaStringCell = 0;
+    d->noteCount = 0;
 
     RecordRegistry::registerRecordClass(HLinkRecord::id, HLinkRecord::createRecord);
 }
@@ -761,7 +767,7 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
 {
     if (!record) return;
 
-    std::cout << "WorksheetSubStreamHandler::handleTxO text=" << record->m_text << std::endl;
+    std::cout << "WorksheetSubStreamHandler::handleTxO size=" << d->textObjects.size()+1 << " text=" << record->m_text << std::endl;
     d->textObjects.push_back(record->m_text);
 }
 
@@ -771,9 +777,10 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
     if (!d->sheet) return;
     Cell *cell = d->sheet->cell(record->column(), record->row());
     if (cell) {
-        NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[ record->idObj()]);
+        const unsigned long id = record->idObj();
+        NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[id]);
         if (obj) {
-            int offset = record->idObj()-1;            
+            int offset = d->noteMap[id] - 1;
             Q_ASSERT(offset>=0 && offset<d->textObjects.size());
             cell->setNote(d->textObjects[offset]);
             //cell->setNote(obj->note());
@@ -786,22 +793,22 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (!record) return;
     if (!record->m_object) return;
 
-    /*
-    std::cout << "WorksheetSubStreamHandler::handleObj id=" << record->m_object->id() << " type=" << record->m_object->type() << std::endl;
+    const unsigned long id = record->m_object->id();
+
+    std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << record->m_object->type() << std::endl;
     switch(record->m_object->type()) {
-        case Object::Picture: {
-            PictureObject *r = static_cast<PictureObject*>(record->m_object);
-            if( ! r) return;
-            std::cout << "PICTURE embeddedStorage=" << r->embeddedStorage().c_str() << std::endl;
-        }
-        break;
+        //case Object::Picture:
+        //    PictureObject *r = static_cast<PictureObject*>(record->m_object);
+        //    std::cout << "PICTURE embeddedStorage=" << r->embeddedStorage().c_str() << std::endl;
+        //    break;
+        case Object::Note:
+            d->noteMap[id] = ++d->noteCount;
+            break;
         default:
             break;
     }
-    */
 
-    std::cout << "WorksheetSubStreamHandler::handleObj id=" << record->m_object->id() << " type=" << record->m_object->type() << std::endl;
-    d->sharedObjects[ record->m_object->id()] = record->m_object;
+    d->sharedObjects[id] = record->m_object;
 }
 
 void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* record)
