@@ -478,15 +478,15 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         settingsWriter->addConfigItem("CursorPositionY", point.y());
         settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
         settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
-        //settingsWriter->addConfigItem("ShowZeroValues", getHideZero());
-        //settingsWriter->addConfigItem("ShowGrid", getShowGrid());
-        //settingsWriter->addConfigItem("FirstLetterUpper", getFirstLetterUpper());
-        //settingsWriter->addConfigItem("ShowFormulaIndicator", getShowFormulaIndicator());
-        //settingsWriter->addConfigItem("ShowCommentIndicator", getShowCommentIndicator());
-        //settingsWriter->addConfigItem("ShowPageBorders", isShowPageBorders());
-        //settingsWriter->addConfigItem("lcmode", getLcMode());
-        //settingsWriter->addConfigItem("autoCalc", isAutoCalculationEnabled());
-        //settingsWriter->addConfigItem("ShowColumnNumber", getShowColumnNumber());
+        settingsWriter->addConfigItem("ShowZeroValues", true);
+        settingsWriter->addConfigItem("ShowGrid", true);
+        settingsWriter->addConfigItem("FirstLetterUpper", false);
+        settingsWriter->addConfigItem("ShowFormulaIndicator", false);
+        settingsWriter->addConfigItem("ShowCommentIndicator", true);
+        settingsWriter->addConfigItem("ShowPageBorders", false);
+        settingsWriter->addConfigItem("lcmode", false);
+        settingsWriter->addConfigItem("autoCalc", true);
+        settingsWriter->addConfigItem("ShowColumnNumber", false);
         settingsWriter->endElement();
     }
     settingsWriter->endElement(); // config:config-item-map-named
