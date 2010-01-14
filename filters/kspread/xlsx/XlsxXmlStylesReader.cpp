@@ -186,20 +186,90 @@ XlsxFontStyle::XlsxFontStyle()
 }
 
 XlsxFillStyle::XlsxFillStyle()
-        : patternType(NonePatternType)
+        : patternType(NonePatternType),
+          cachedRealBackgroundColor( 0 )
 {
+}
+
+XlsxFillStyle::~XlsxFillStyle()
+{
+    delete cachedRealBackgroundColor;
+}
+
+static QColor applyPatternDensity( const QColor& bgColor, const QColor& fgColor, qreal percent )
+{
+    QColor result( Qt::white );
+    if( bgColor.isValid() ) {
+        result = QColor( bgColor.red() * percent, 
+                         bgColor.green() * percent, 
+                         bgColor.blue() * percent, 
+                         bgColor.alpha() );
+    }
+    if( fgColor.isValid() ) {
+        result = QColor( result.red()   + fgColor.red() * ( 1.0 - percent ), 
+                         result.green() + fgColor.green() * ( 1.0 - percent ), 
+                         result.blue()  + fgColor.blue() * ( 1.0 - percent ),
+                         bgColor.isValid() ? bgColor.alpha() : fgColor.alpha() );
+    }
+    return result;
 }
 
 const XlsxColorStyle* XlsxFillStyle::realBackgroundColor() const
 {
+    delete cachedRealBackgroundColor;
+    cachedRealBackgroundColor = new XlsxColorStyle;
+
 kDebug() << "patternType:" << patternType;
     switch (patternType) {
     case NonePatternType:
         return 0;
     case SolidPatternType:
         return &fgColor;
-    default:;
-//! @todo support other patterns
+    case DarkDownPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.5 );
+        return cachedRealBackgroundColor;
+    case DarkGrayPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.25 );
+        return cachedRealBackgroundColor;
+    case DarkGridPatternType: // fall through
+    case DarkHorizontalPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.5 );
+        return cachedRealBackgroundColor;
+    case DarkTrellisPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.25 );
+        return cachedRealBackgroundColor;
+    case DarkUpPatternType:  // fall through
+    case DarkVerticalPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.50 );
+        return cachedRealBackgroundColor;
+    case LightPatternType:
+        break; //??
+    case LightDownPatternType:  // fall through
+    case LightGrayPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.75 );
+        return cachedRealBackgroundColor;
+    case LightGridPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.5625 );
+        return cachedRealBackgroundColor;
+    case LightHorizontalPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.75 );
+        return cachedRealBackgroundColor;
+    case LightTrellisPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.625 );
+        return cachedRealBackgroundColor;
+    case LightUpPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.75 );
+        return cachedRealBackgroundColor;
+    case LightVerticalPatternType: // fall through
+    case MediumGrayPatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.50 );
+        return cachedRealBackgroundColor;
+    case Gray0625PatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.9375 );
+        return cachedRealBackgroundColor;
+    case Gray125PatternType:
+        cachedRealBackgroundColor->rgb = applyPatternDensity( bgColor.rgb, fgColor.rgb, 0.875 );
+        return cachedRealBackgroundColor;
     }
     return &bgColor;
 }

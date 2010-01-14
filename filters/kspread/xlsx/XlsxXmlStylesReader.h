@@ -156,6 +156,7 @@ class XlsxFillStyle
 {
 public:
     XlsxFillStyle();
+    ~XlsxFillStyle();
 
     //! 18.18.55 ST_PatternType (Pattern Type), p. 2713
     /*! Indicates the style of fill pattern being used for a cell format.
@@ -194,6 +195,9 @@ public:
     //! @return color style (bgColor or fgColor) depending on the pattern
     //! Can return 0 if no fill should be painted.
     const XlsxColorStyle* realBackgroundColor() const;
+
+private:
+    mutable XlsxColorStyle* cachedRealBackgroundColor;
 };
 
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
