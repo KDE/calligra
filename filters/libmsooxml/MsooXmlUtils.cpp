@@ -447,7 +447,7 @@ public:
      }
 };
 
-QColor Utils::DefaultIndexedColor( int index )
+QColor Utils::defaultIndexedColor( int index )
 {
     K_GLOBAL_STATIC( DefaultIndexedColors, s_defaultIndexedColors )
     if( index < 0 || s_defaultIndexedColors->count() <= index )
@@ -455,12 +455,12 @@ QColor Utils::DefaultIndexedColor( int index )
     return s_defaultIndexedColors->at( index );
 }
 
-class LangIdToLocaleMapping : public QMap< int, QLocale >
+class LangIdToLocaleMapping : public QMap< int, QString >
 {
 public:
     LangIdToLocaleMapping()
     {
-#define DEFINELOCALE( ID, CODE ) insert( ID, QLocale( CODE ) );
+#define DEFINELOCALE( ID, CODE ) insert( ID, QLatin1String( CODE ) );
         DEFINELOCALE( 0x0436, "af-ZA" ) //  Afrikaans   South Africa
         DEFINELOCALE( 0x041c, "sq-AL" ) //  Albanian    Albania
         DEFINELOCALE( 0x0484, "gsw-FR" ) //  Alsatian    France
@@ -672,10 +672,10 @@ public:
     }
 };
 
-QLocale Utils::LocaleForLangId( int langid )
+QLocale Utils::localeForLangId( int langid )
 {
     K_GLOBAL_STATIC( LangIdToLocaleMapping, s_LangIdToLocaleMapping )
-    return s_LangIdToLocaleMapping->value( langid );
+    return QLocale( s_LangIdToLocaleMapping->value( langid ) );
 }
 
 double Utils::ST_Percentage_to_double(const QString& val, bool& ok)

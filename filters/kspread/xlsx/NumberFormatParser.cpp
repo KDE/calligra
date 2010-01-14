@@ -43,7 +43,7 @@ QColor NumberFormatParser::color( const QString& name )
     {
         bool ok = false;
         const int index = name.mid( 5 ).toInt( &ok ) + 7;
-        return MSOOXML::Utils::DefaultIndexedColor( index );
+        return MSOOXML::Utils::defaultIndexedColor( index );
     }
     else
     {
@@ -53,7 +53,7 @@ QColor NumberFormatParser::color( const QString& name )
 
 QLocale NumberFormatParser::locale( int langid )
 {
-    return MSOOXML::Utils::LocaleForLangId( langid );
+    return MSOOXML::Utils::localeForLangId( langid );
 }
     
 void NumberFormatParser::setStyles( KoGenStyles* styles )

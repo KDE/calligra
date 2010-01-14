@@ -209,10 +209,10 @@ inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 MSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
 
 //! @return QColor value for DefaultIndexColor
-MSOOXML_EXPORT QColor DefaultIndexedColor( int index );
+MSOOXML_EXPORT QColor defaultIndexedColor( int index );
 
 //! @return QLocale for the give language id
-MSOOXML_EXPORT QLocale LocaleForLangId( int langid );
+MSOOXML_EXPORT QLocale localeForLangId( int langid );
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! Sets @arg ok to true on success.
