@@ -1,5 +1,5 @@
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder  ${CMAKE_BINARY_DIR}/filters/ ${KOMAIN_INCLUDES})
-
+include_directories( ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
 
 add_custom_command(
     OUTPUT records.cpp
@@ -24,6 +24,7 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/NumberFormatParser.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
@@ -33,7 +34,7 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 
 
-target_link_libraries(excelimport komain)
+target_link_libraries(excelimport msooxml komain)
 
 install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
