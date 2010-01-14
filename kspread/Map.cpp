@@ -404,8 +404,8 @@ void Map::saveOdfSettings(KoXmlWriter &settingsWriter)
         if (view) {
             QPoint marker = view->markerFromSheet(sheet);
             QPointF offset = view->offsetFromSheet(sheet);
-            settingsWriter.addConfigItem("CursorPositionX", marker.x());
-            settingsWriter.addConfigItem("CursorPositionY", marker.y());
+            settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
+            settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
             settingsWriter.addConfigItem("xOffset", offset.x());
             settingsWriter.addConfigItem("yOffset", offset.y());
         }

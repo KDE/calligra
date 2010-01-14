@@ -70,6 +70,7 @@ public:
      * Stores the cursor position @p point for @p sheet .
      */
     void setCursorPosition(Sheet* sheet, const QPoint& point) {
+        Q_ASSERT(point.x() >= 1 && point.y() >= 1);
         m_cursorPositions.insert(sheet, point);
     }
 
