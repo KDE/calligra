@@ -720,8 +720,11 @@
   <field name="text"         type="unicodestring" length="stringLength" />
 </record>
 
-<!-- reserved value -->
-<record name="GridSet" id="0x0082" />
+<!-- reserved/ignored records -->
+<record name="GridSetReserved" id="0x0082" />
+<record name="DSFReserved" id="0x0161" />
+<record name="Excel9FileReserved" id="0x01c0" />
+<record name="MmsReserved" id="0x00c1" />
 
 <record name="Window1" id="0x003D">
   <field name="xWn" type="signed" size="16" />
@@ -766,6 +769,30 @@
   -->
 </record>
 
+<record name="ObjProtected" id="0x0063">
+  <field name="fLockObj" type="unsigned" size="16" />
+</record>
+
+<record name="ScenarioProtect" id="0x00dd">
+  <field name="fScenProtect" type="unsigned" size="16" />
+</record>
+
+<record name="WinProtect" id="0x0019">
+  <field name="fLockWin" type="unsigned" size="16" />
+</record>
+
+<record name="Prot4Rev" id="0x01af">
+  <field name="fRevLock" type="unsigned" size="16" />
+</record>
+
+<record name="Prot4RevPass" id="0x01bc">
+  <field name="protPwdRev" type="unsigned" size="16" />
+</record>
+
+<record name="Password" id="0x0013">
+  <field name="wPassword" type="unsigned" size="16" />
+</record>
+
 <!-- TODO handle following records -->
 <record name="FeatHdr" id="0x0867">
 </record>
@@ -780,6 +807,56 @@
 <record name="PLV" id="0x088b">
 </record>
 <record name="CalcSaveRecalc" id="0x005f">
+</record>
+<record name="InterfaceHdr" id="0x00e1">
+</record>
+<record name="InterfaceEnd" id="0x00e2">
+</record>
+<record name="RRTabId" id="0x013d">
+</record>
+<record name="BuiltInFnGroupCount" id="0x009c">
+</record>
+<record name="HideObj" id="0x008d">
+</record>
+<record name="RefreshAll" id="0x01b7">
+</record>
+<record name="RecalcId" id="0x01c1">
+</record>
+<record name="BookBool" id="0x00da">
+</record>
+<record name="Style" id="0x0293">
+</record>
+<record name="ExtSST" id="0x00ff">
+</record>
+<record name="UsesELFs" id="0x0160">
+</record>
+<record name="DBCell" id="0x00d7">
+</record>
+<record name="PhoneticInfo" id="0x00ef">
+</record>
+<record name="CalcCount" id="0x000c">
+</record>
+<record name="CalcPrecision" id="0x000e">
+</record>
+<record name="CalcDelta" id="0x0010">
+</record>
+<record name="CalcIter" id="0x0011">
+</record>
+<record name="CalcRefMode" id="0x000f">
+</record>
+<record name="CodePage" id="0x0042">
+</record>
+<record name="Country" id="0x008c">
+</record>
+<record name="Selection" id="0x001d">
+</record>
+<record name="PrinterSettings" id="0x004d">
+</record>
+<record name="PrintRowCol" id="0x002a">
+</record>
+<record name="PrintGrid" id="0x002b">
+</record>
+<record name="LastWriteAccess" id="0x005c">
 </record>
 
 </records>
