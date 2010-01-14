@@ -69,7 +69,7 @@ static inline uint qHash(const Swinder::FormatFont& font)
 }
 
 // calculates the column width in pixels
-int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx) {
+int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx = 0) {
     QFont font("Arial",10);
     QFontMetricsF fm(font);
     const qreal characterWidth = fm.width("h");
@@ -80,11 +80,11 @@ int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx) {
 }
 
 // calculates the row height in pixels
-int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy)
+int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy = 0)
 {
     qreal defRowHeight = sheet->defaultRowHeight();
     if(defRowHeight <= 0) defRowHeight = 12.75; // 12.75 points (a point is 1/72 of an inch)
-    return defRowHeight * row;
+    return defRowHeight * row + dy;
 }
 }
 
@@ -473,10 +473,11 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         Sheet* sheet = workbook->sheet(i);
         settingsWriter->startElement("config:config-item-map-entry");
         settingsWriter->addAttribute("config:name", string(sheet->name()));
-        //settingsWriter->addConfigItem("CursorPositionX", marker.x());
-        //settingsWriter->addConfigItem("CursorPositionY", marker.y());
-        //settingsWriter->addConfigItem("xOffset", offset.x());
-        //settingsWriter->addConfigItem("yOffset", offset.y());
+        QPoint point = sheet->firstVisibleCell();
+        settingsWriter->addConfigItem("CursorPositionX", point.x());
+        settingsWriter->addConfigItem("CursorPositionY", point.y());
+        settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
+        settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
         //settingsWriter->addConfigItem("ShowZeroValues", getHideZero());
         //settingsWriter->addConfigItem("ShowGrid", getShowGrid());
         //settingsWriter->addConfigItem("FirstLetterUpper", getFirstLetterUpper());

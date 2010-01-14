@@ -26,6 +26,7 @@
 #include "excel.h"
 #include "cell.h"
 #include "sheet.h"
+#include <QPoint>
 
 //#define SWINDER_XLS2RAW
 
@@ -291,6 +292,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleDimension(static_cast<DimensionRecord*>(record));
     else if (type == MsoDrawingRecord::id)
         handleMsoDrawing(static_cast<MsoDrawingRecord*>(record));
+    else if (type == Window2Record::id)
+        handleWindow2(static_cast<Window2Record*>(record));
     else {
         std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -880,6 +883,13 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     }
 
     std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
+}
+
+void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    d->sheet->setFirstVisibleCell(QPoint(record->colLeft(),record->rwTop()));
 }
 
 typedef std::vector<UString> UStringStack;

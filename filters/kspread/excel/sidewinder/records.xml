@@ -742,9 +742,31 @@
   <field name="wTabRatio" type="unsigned" size="16" />
 </record>
 
-<!-- TODO handle following records -->
 <record name="Window2" id="0x023E">
+  <field name="fDspFmlaRt" type="bool" size="1" />
+  <field name="fDspGridRt" type="bool" size="1" />
+  <field name="fDspRwColRt" type="bool" size="1" />
+  <field name="fFrozenRt" type="bool" size="1" />
+  <field name="fDspZerosRt" type="bool" size="1" />
+  <field name="fDefaultHdr" type="bool" size="1" />
+  <field name="fRightToLeft" type="bool" size="1" />
+  <field name="fDspGuts" type="bool" size="1" />
+  <field name="fFrozenNoSplit" type="bool" size="1" />
+  <field name="fSelected" type="bool" size="1" />
+  <field name="fPaged" type="bool" size="1" />
+  <field name="fSLV" type="bool" size="1" />
+  <field name="reserved1" size="4" />
+  <field name="rwTop" type="unsigned" size="16" />
+  <field name="colLeft" type="unsigned" size="16" />
+  <!--
+  <field name="icvHdr" type="unsigned" size="16" />
+  <field name="reserved2" size="16" />
+  <field name="wScaleSLV" type="unsigned" size="16" />
+  <field name="wScaleNormal" type="unsigned" size="16" />
+  -->
 </record>
+
+<!-- TODO handle following records -->
 <record name="FeatHdr" id="0x0867">
 </record>
 <record name="Index" id="0x020b">

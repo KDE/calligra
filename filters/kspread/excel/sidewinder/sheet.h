@@ -23,6 +23,8 @@
 #include "ustring.h"
 #include "format.h"
 
+class QPoint;
+
 namespace Swinder
 {
 
@@ -142,6 +144,9 @@ public:
 
     double zoomLevel() const;
     void setZoomLevel(double fraction);
+    
+    QPoint firstVisibleCell() const;
+    void setFirstVisibleCell(const QPoint &point);
 
 private:
     // no copy or assign

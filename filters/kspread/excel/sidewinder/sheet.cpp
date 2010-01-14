@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <map>
+#include <QPoint>
 
 namespace Swinder
 {
@@ -61,6 +62,7 @@ public:
     long defaultColWidth;
 
     double zoomLevel;
+    QPoint firstVisibleCell;
 };
 
 }
@@ -84,6 +86,7 @@ Sheet::Sheet(Workbook* wb)
     d->defaultRowHeight = -1;
     d->defaultColWidth = -1;
     d->zoomLevel = 1.0; // 100%
+    d->firstVisibleCell = QPoint(0,0); // A1
 }
 
 Sheet::~Sheet()
@@ -356,6 +359,16 @@ void Sheet::setZoomLevel(double fraction)
     d->zoomLevel = fraction;
 }
 
+QPoint Sheet::firstVisibleCell() const
+{
+    return d->firstVisibleCell;
+}
+
+void Sheet::setFirstVisibleCell(const QPoint &point)
+{
+    d->firstVisibleCell = point;
+}
+
 class Column::Private
 {
 public:
@@ -483,3 +496,4 @@ void Row::setVisible(bool b)
 {
     d->visible = b;
 }
+    
