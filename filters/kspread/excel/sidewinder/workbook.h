@@ -111,6 +111,9 @@ public:
 
     bool isPasswordProtected() const;
     void setPasswordProtected(bool p);
+    
+    int activeTab() const;
+    void setActiveTab(int tab);
 
 private:
     // no copy or assign

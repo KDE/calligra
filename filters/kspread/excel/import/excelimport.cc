@@ -126,6 +126,7 @@ public:
     bool createContent(KoOdfWriteStore* store);
     bool createMeta(KoOdfWriteStore* store);
     bool createManifest(KoOdfWriteStore* store);
+    bool createSettings(KoOdfWriteStore* store);
 
     int sheetFormatIndex;
     int columnFormatIndex;
@@ -240,6 +241,14 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // store meta content
     if (!d->createMeta(&oasisStore)) {
         kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete d->workbook;
+        delete storeout;
+        return KoFilter::CreationError;
+    }
+    
+    // store settings
+    if (!d->createSettings(&oasisStore)) {
+        kWarning() << "Couldn't open the file 'settings.xml'.";
         delete d->workbook;
         delete storeout;
         return KoFilter::CreationError;
@@ -434,6 +443,61 @@ bool ExcelImport::Private::createMeta(KoOdfWriteStore* store)
     metaWriter->endDocument();
 
     delete metaWriter;
+    return store->store()->close();
+}
+
+bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
+{
+    if (!store->store()->open("settings.xml"))
+        return false;
+    
+    KoStoreDevice dev(store->store());
+    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    // units...
+    
+    // settings
+    settingsWriter->startElement("config:config-item-map-indexed");
+    settingsWriter->addAttribute("config:name", "Views");
+    settingsWriter->startElement("config:config-item-map-entry");
+    settingsWriter->addConfigItem("ViewId", QString::fromLatin1("View1"));
+    if(Sheet *sheet = workbook->sheet(workbook->activeTab()))
+        settingsWriter->addConfigItem("ActiveTable", string(sheet->name()));
+
+    settingsWriter->startElement("config:config-item-map-named");
+    settingsWriter->addAttribute("config:name", "Tables");
+    for(int i = 0; i < workbook->sheetCount(); ++i) {
+        Sheet* sheet = workbook->sheet(i);
+        settingsWriter->startElement("config:config-item-map-entry");
+        settingsWriter->addAttribute("config:name", string(sheet->name()));
+        //settingsWriter->addConfigItem("CursorPositionX", marker.x());
+        //settingsWriter->addConfigItem("CursorPositionY", marker.y());
+        //settingsWriter->addConfigItem("xOffset", offset.x());
+        //settingsWriter->addConfigItem("yOffset", offset.y());
+        //settingsWriter->addConfigItem("ShowZeroValues", getHideZero());
+        //settingsWriter->addConfigItem("ShowGrid", getShowGrid());
+        //settingsWriter->addConfigItem("FirstLetterUpper", getFirstLetterUpper());
+        //settingsWriter->addConfigItem("ShowFormulaIndicator", getShowFormulaIndicator());
+        //settingsWriter->addConfigItem("ShowCommentIndicator", getShowCommentIndicator());
+        //settingsWriter->addConfigItem("ShowPageBorders", isShowPageBorders());
+        //settingsWriter->addConfigItem("lcmode", getLcMode());
+        //settingsWriter->addConfigItem("autoCalc", isAutoCalculationEnabled());
+        //settingsWriter->addConfigItem("ShowColumnNumber", getShowColumnNumber());
+        settingsWriter->endElement();
+    }
+    settingsWriter->endElement(); // config:config-item-map-named
+    
+    settingsWriter->endElement(); // config:config-item-map-entry
+    settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // Root:element
+    settingsWriter->endDocument();
+    delete settingsWriter;
     return store->store()->close();
 }
 

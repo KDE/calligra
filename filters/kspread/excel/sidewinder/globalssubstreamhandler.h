@@ -51,6 +51,7 @@ class XFRecord;
 class ProtectRecord;
 class MsoDrawingBlibItem;
 class MsoDrawingGroupRecord;
+class Window1Record;
 
 class GlobalsSubStreamHandler : public SubStreamHandler
 {
@@ -106,6 +107,7 @@ private:
     void handleXF(XFRecord* record);
     void handleProtect(ProtectRecord* record);
     void handleMsoDrawingGroup(MsoDrawingGroupRecord* record);
+    void handleWindow1(Window1Record* record);
 
     class Private;
     Private * const d;

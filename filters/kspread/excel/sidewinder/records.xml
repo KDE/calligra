@@ -723,9 +723,26 @@
 <!-- reserved value -->
 <record name="GridSet" id="0x0082" />
 
-<!-- TODO handle following records -->
 <record name="Window1" id="0x003D">
+  <field name="xWn" type="signed" size="16" />
+  <field name="yWn" type="signed" size="16" />
+  <field name="dxWn" type="signed" size="16" />
+  <field name="dyWn" type="signed" size="16" />
+  <field name="fHidden" type="bool" size="1" />
+  <field name="fIconic" type="bool" size="1" />
+  <field name="fVeryHidden" type="bool" size="1" />
+  <field name="fDspHScroll" type="bool" size="1" />
+  <field name="fDspVScroll" type="bool" size="1" />
+  <field name="fBotAdornment" type="bool" size="1" />
+  <field name="fNoAFDateGroup" type="bool" size="1" />
+  <field name="reserved" size="9" />
+  <field name="itabCur" type="unsigned" size="16" />
+  <field name="itabFirst" type="unsigned" size="16" />
+  <field name="cTabSel" type="unsigned" size="16" />
+  <field name="wTabRatio" type="unsigned" size="16" />
 </record>
+
+<!-- TODO handle following records -->
 <record name="Window2" id="0x023E">
 </record>
 <record name="FeatHdr" id="0x0867">

@@ -522,6 +522,8 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
         handleProtect(static_cast<ProtectRecord*>(record));
     else if (type == MsoDrawingGroupRecord::id)
         handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord*>(record));
+    else if (type == Window1Record::id)
+        handleWindow1(static_cast<Window1Record*>(record));
     else if (type == 0x40) {} //BackupRecord
     else if (type == 0x22) {} //Date1904Record
     else if (type == 0xA) {} //EofRecord
@@ -702,6 +704,11 @@ void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
   if (record->isLocked()) {
       std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
   }
+}
+
+void GlobalsSubStreamHandler::handleWindow1(Window1Record* record)
+{
+    d->workbook->setActiveTab( record->itabCur() );
 }
 
 void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* record)
