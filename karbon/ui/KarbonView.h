@@ -147,6 +147,7 @@ protected slots:
     void applyStrokeToSelection();
 
 protected:
+    virtual void updateReadWrite(bool readwrite);
     virtual void resizeEvent(QResizeEvent* event);
 
     void createLayersTabDock();

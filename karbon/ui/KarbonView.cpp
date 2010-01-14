@@ -1161,6 +1161,11 @@ void KarbonView::createLayersTabDock()
             layerDocker, SLOT(setPart(KParts::Part *)));
 }
 
+void KarbonView::updateReadWrite(bool readwrite)
+{
+    Q_UNUSED(readwrite);
+}
+
 void KarbonView::updateUnit(KoUnit unit)
 {
     d->horizRuler->setUnit(unit);
