@@ -273,6 +273,8 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                     else if( ch == 'E' || ch == 'e' )
                     {
                         SET_TYPE_OR_RETURN( KoGenStyle::StyleNumericScientific );
+
+                        if(i >= numberFormat.length() - 1) break;
                         const char chN = numberFormat[ i + 1 ].toLatin1();
                         if( chN == '-' || chN == '+' )
                         {
@@ -298,6 +300,8 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
 
                         gotFraction = true;
                     }
+                    
+                    if(i >= numberFormat.length() - 1) break;
                     ch = numberFormat[ ++i ].toLatin1();
 
                     if( ch == ' ' )
