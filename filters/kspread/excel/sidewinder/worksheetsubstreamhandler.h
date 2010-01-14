@@ -62,6 +62,7 @@ class TopMarginRecord;
 class HLinkRecord;
 class NoteRecord;
 class ObjRecord;
+class TxORecord;
 class DefaultRowHeightRecord;
 class DefaultColWidthRecord;
 class SetupRecord;
@@ -106,6 +107,7 @@ private:
     void handleLink(HLinkRecord* record);
     void handleNote(NoteRecord* record);
     void handleObj(ObjRecord* record);
+    void handleTxO(TxORecord* record);
     void handleDefaultRowHeight(DefaultRowHeightRecord* record);
     void handleDefaultColWidth(DefaultColWidthRecord* record);
     void handleSetup(SetupRecord* record);

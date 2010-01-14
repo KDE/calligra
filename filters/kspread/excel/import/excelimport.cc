@@ -82,7 +82,7 @@ int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy)
 {
     qreal defRowHeight = sheet->defaultRowHeight();
     if(defRowHeight <= 0) defRowHeight = 12.75; // 12.75 points (a point is 1/72 of an inch)
-    return 12.75 * row;
+    return defRowHeight * row;
 }
 }
 

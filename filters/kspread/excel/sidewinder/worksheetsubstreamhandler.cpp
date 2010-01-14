@@ -261,6 +261,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleNote(static_cast<NoteRecord*>(record));
     else if (type == ObjRecord::id)
         handleObj(static_cast<ObjRecord*>(record));
+    else if (type == TxORecord::id)
+        handleTxO(static_cast<TxORecord*>(record));
     else if (type == BOFRecord::id)
         handleBOF(static_cast<BOFRecord*>(record));
     else if (type == DefaultRowHeightRecord::id)
@@ -752,6 +754,11 @@ void WorksheetSubStreamHandler::handleLink(HLinkRecord* record)
     }
 }
 
+void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
+{
+    std::cout << "TODO: WorksheetSubStreamHandler::handleTxO" << std::endl;
+}
+
 void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 {
     if (!record) return;
@@ -833,10 +840,11 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    const unsigned long pid = record->m_properties[0x0104];
+Q_ASSERT(record->m_properties.find(0x0104) != record->m_properties.end());
+const unsigned long pid = record->m_properties[0x0104];
+    std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
     MsoDrawingBlibItem *drawing = d->globals->drawing(pid);
     if(!drawing) return;
-    std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
     Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
     Q_ASSERT(cell);
     cell->addPicture(new Picture(record,drawing));

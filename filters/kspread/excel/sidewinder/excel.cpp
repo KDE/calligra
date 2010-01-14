@@ -1970,8 +1970,8 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
                 // fall through
             } else {
-                std::cerr << "MsoDrawingGroupRecord: Unknown OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
-                blipStoreOffset += 8 + blibRecLen;
+                std::cerr << "MsoDrawingGroupRecord: OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
+                blipStoreOffset += handleObject(size,blipStoreOffset);
                 continue;
             }
 
@@ -1991,12 +1991,10 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 case 0xF01A:
                     offset = (recInstance == 0x3D4) ? 50 : 66;
                     namesuffix = ".emf";
-                    mimetype = "application/octet-stream";
                     break;
                 case 0xF01B:
                     offset = (recInstance == 0x216) ? 50 : 66;
                     namesuffix = ".wmf";
-                    mimetype = "application/octet-stream";
                     break;
                 case 0xF01C:
                     offset = (recInstance == 0x542) ? 50 : 66;
@@ -2017,12 +2015,10 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 case 0xF01F:
                     offset = (recInstance == 0x7A8) ? 17 : 33;
                     namesuffix = ".dib";
-                    mimetype = "application/octet-stream";
                     break;
                 case 0xF029:
                     offset = (recInstance == 0x6E4) ? 17 : 33;
                     namesuffix = ".tiff";
-                    mimetype = "image/tiff";
                     break;
                 default:
                     printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
@@ -2047,8 +2043,11 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         }
     }
 
-    // draingPrimaryOptions
-    // draingTertiaryOptions
+    // drawingPrimaryOptions
+    blipStoreOffset += handleObject(size, blipStoreOffset);
+    // drawingTertiaryOptions
+    blipStoreOffset += handleObject(size, blipStoreOffset);
+
     // colorMRU
     // splitColors
 }
