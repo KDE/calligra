@@ -6781,6 +6781,7 @@ const char* msofbtSpAtom::shapeTypeAsString() const
     case 74:  return "msosptHeart";
     case 75:  return "msosptPictureFrame";
     case 96:  return "msosptSmileyFace";
+    case 201: return "msosptHostControl";
     case 202: return "msosptTextBox";
     default: break;
     };
@@ -8883,6 +8884,9 @@ void PPTReader::handleEscherSpAtom(msofbtSpAtom* atom)
     case msofbtSpAtom::msosptHeart: sh = DrawObject::Heart; break;
     case msofbtSpAtom::msosptMin: sh = DrawObject::FreeLine; break;
     case msofbtSpAtom::msosptPictureFrame: sh = DrawObject::PictureFrame; break;
+    // MS documentation recommendends not using HostControl, by rendering it
+    // as a picture, a rendering of the original content may be shown
+    case msofbtSpAtom::msosptHostControl: sh = DrawObject::PictureFrame; break;
 
     default: break;
     }
