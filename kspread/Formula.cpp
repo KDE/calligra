@@ -1476,8 +1476,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
         case Opcode::Equal:
             val1 = stack.pop().val;
             val2 = stack.pop().val;
-            if (!val1.allowComparison(val2))
-                val1 = Value::errorNA();
+            if (val1.isError())
+                ;
+            else if (val2.isError())
+                val1 = val2;
             else if (val2.compare(val1) == 0)
                 val1 = Value(true);
             else
@@ -1491,8 +1493,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
         case Opcode::Less:
             val1 = stack.pop().val;
             val2 = stack.pop().val;
-            if (!val1.allowComparison(val2))
-                val1 = Value::errorNA();
+            if (val1.isError())
+                ;
+            else if (val2.isError())
+                val1 = val2;
             else if (val2.compare(val1) < 0)
                 val1 = Value(true);
             else
@@ -1506,8 +1510,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
         case Opcode::Greater: {
             val1 = stack.pop().val;
             val2 = stack.pop().val;
-            if (!val1.allowComparison(val2))
-                val1 = Value::errorNA();
+            if (val1.isError())
+                ;
+            else if (val2.isError())
+                val1 = val2;
             else if (val2.compare(val1) > 0)
                 val1 = Value(true);
             else
