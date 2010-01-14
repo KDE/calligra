@@ -529,6 +529,8 @@ void View::Private::adjustActions(bool mode)
 {
     actions->recalcWorkbook->setEnabled(mode);
     actions->recalcWorksheet->setEnabled(mode);
+    actions->protectSheet->setEnabled(mode);
+    actions->protectDoc->setEnabled(mode);
     actions->paperLayout->setEnabled(mode);
     actions->resetPrintRange->setEnabled(mode);
     actions->deleteSheet->setEnabled(mode);
