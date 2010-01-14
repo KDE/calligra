@@ -288,8 +288,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
         return false;
 
     if(workbook->password() != 0) {
-        contentWriter->addAttribute("table:structure-protected", "true");
-        contentWriter->addAttribute("table:protection-key" , "");
+        contentWriter->addAttribute("table:structure-protected-excel", "true");
         contentWriter->addAttribute("table:protection-key-excel" , uint(workbook->password()));
     }
 
@@ -607,8 +606,7 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
     sheetFormatIndex++;
     
     if(sheet->password() != 0) {
-       xmlWriter->addAttribute("table:protected", "true");
-       xmlWriter->addAttribute("table:protection-key", "");
+       xmlWriter->addAttribute("table:protected-excel", "true");
        xmlWriter->addAttribute("table:protection-key-excel", uint(sheet->password()));
     }
 
