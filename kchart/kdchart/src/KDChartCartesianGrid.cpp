@@ -511,7 +511,7 @@ DataDimension CartesianGrid::calculateGridXY(
                 if( minLog <= 0 && dim.end < 1.0 )
                     min = qMax( minRaw, std::numeric_limits< qreal >::epsilon() );
                 else if( minLog <= 0 )
-                    min = qMax( 0.00001, dim.start );
+                    min = qMax( qreal(0.00001), dim.start );
                 else
                     min = fastPow10( minLog-1 );
 
