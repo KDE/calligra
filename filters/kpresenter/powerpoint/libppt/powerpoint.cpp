@@ -561,23 +561,22 @@ msofbtBstoreContainer::~msofbtBstoreContainer()
 void
 msofbtBstoreContainer::addRgbUid(const char rgbUid[16])
 {
-    if (d->rgbUids.size() != instance()) {
+    // according to ms docs, instance() gives the number of entries
+    // but this number is not always correct, so we only take it as an initial
+    // guess, but resize the array if needed
+    if (d->rgbUids.size() == 0) {
         d->rgbUids.resize(instance());
     }
-    if (d->pos < d->rgbUids.size()) {
-        d->rgbUids[d->pos++].assign(rgbUid, 16);
+    if (d->pos >= d->rgbUids.size()) {
+        d->rgbUids.resize(d->pos+1);
     }
+    d->rgbUids[d->pos++].assign(rgbUid, 16);
 }
 
 std::vector<std::string>
 msofbtBstoreContainer::bstore() const
 {
-    if (d->pos == d->rgbUids.size()) {
-        return d->rgbUids;
-    }
-    std::vector<std::string> subset = d->rgbUids;
-    subset.resize(d->pos);
-    return subset;
+    return d->rgbUids;
 }
 
 // ========== msofbtDgContainer ==========
