@@ -1450,7 +1450,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool unused5 = opts2 & 0x3000;
         //const bool unused6 = opts2 & 0x6000;
         //const bool unused7 = opts2 & 0xC000;
-        std::cout << "ObjRecord::setData picture fDde=" << fDde << " FCtl=" << fCtl << " fPrstm=" << fPrstm << std::endl;
+        std::cout << "ObjRecord::setData picture id=" << id << " fDde=" << fDde << " FCtl=" << fCtl << " fPrstm=" << fPrstm << std::endl;
         startPict += 12;
     }
     break;
@@ -1479,13 +1479,13 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += 24;
         break;
     case Object::Note: { // nts
-        printf("ObjRecord::setData Note\n");
+        std::cout << "ObjRecord::setData note id=" << id << std::endl;
         m_object = new NoteObject(id);
         const unsigned long ft = readU16(startPict);
         const unsigned long cb = readU16(startPict + 2);
         startPict += 20; // skip guid
         if (ft != 0x000D || cb != 0x0016) {
-            std::cerr << "ObjRecord::setData: invalid ObjRecord Note" << std::endl;
+            std::cerr << "ObjRecord::setData: invalid ObjRecord note with id=" << id << std::endl;
             setIsValid(false);
             delete m_object;
             m_object = 0;
@@ -1495,10 +1495,8 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //Q_ASSERT( isShared == 0x0000 || isShared == 0x0001 );
         startPict += 6; // includes 4 unused bytes
 
-        //TODO the TxO record has the text... what we propably need to do is to determinate the TextObject
-        // by the offset this noote object has...
+        //the TxO record that contains the text comes after this record...
         //static_cast<NoteObject*>(m_object)->setNote(  );
-
     }
     break;
 
@@ -1659,8 +1657,8 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 {
     //const unsigned long opts1 = readU16(data);
     //const bool reserved1 = opts1 & 0x01;
-    //const unsigned int hAlignment = (opts1 << 1) >> 13; // 3 bits
-    //const unsigned int vAlignment = (opts1 << 4) >> 13; // 3 bits
+    //const unsigned int hAlignment = opts1 & 0x000e; // 3 bits
+    //const unsigned int vAlignment = opts1 & 0x0070; // 3 bits
     //const unsigned long rot = readU16(data + 2);
     // 4 bytes reserved    
 
@@ -1701,6 +1699,27 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 }
 
 // ========== DrawingObject ==========
+
+
+const char* DrawingObject::propertyName(DrawingObject::Property p)
+{
+    switch(p) {
+        case DrawingObject::pid: return "pid"; break;
+        case DrawingObject::itxid: return "itxid"; break;
+        case DrawingObject::cxk: return "cxk"; break;
+        case DrawingObject::fillColor: return "fillColor"; break;
+        case DrawingObject::fillBackColor: return "fillBackColor"; break;
+        case DrawingObject::fillCrMod: return "fillCrMod"; break;
+        case DrawingObject::fillStyleBooleanProperties: return "fillStyleBooleanProperties"; break;
+        case DrawingObject::lineColor: return "lineColor"; break;
+        case DrawingObject::lineCrMod: return "lineCrMod"; break;
+        case DrawingObject::shadowColor: return "shadowColor"; break;
+        case DrawingObject::shadowCrMod: return "shadowCrMod"; break;
+        case DrawingObject::shadowStyleBooleanProperties: return "shadowStyleBooleanProperties"; break;
+        case DrawingObject::groupShapeBooleanProperties: return "groupShapeBooleanProperties"; break;
+    }
+    return "Unknown";
+}
 
 // read a OfficeArtRecordHeader struct.
 void DrawingObject::readHeader(const unsigned char* data, unsigned *recVer, unsigned *recInstance, unsigned *recType, unsigned long *recLen)
@@ -1754,7 +1773,20 @@ unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* da
         } break;
         case 0xF00A: { // OfficeArtFSP
             unsigned long spid = readU32(data + 8); // MSOSPID, shape-identifier of the last shape in the drawing
-            std::cout << "OfficeArtFSP, identifier of this shape=" << spid << std::endl;
+            const unsigned long opts = readU16(data + 12);
+            const bool fGroup = opts & 0x01;
+            const bool fChild = opts & 0x02;
+            const bool fPatriarch = opts & 0x04;
+            const bool fDeleted = opts & 0x08;
+            const bool fOleShape = opts & 0x10;
+            const bool fHaveMaster = opts & 0x20;
+            const bool fFlipH = opts & 0x60;
+            const bool fFlipV = opts & 0xC0;
+            const bool fConnector = opts & 0x180;
+            const bool fHaveAnchor = opts & 0x300;
+            const bool fBackground = opts & 0x600;
+            const bool fHaveSpt = opts & 0xC00;
+            std::cout << "OfficeArtFSP, shape-identifier=" << spid << " fGroup=" << fGroup << " fChild=" << fChild << " fPatriarch=" << fPatriarch << " fDeleted=" << fDeleted << " fOleShape=" << fOleShape << " fHaveMaster=" << fHaveMaster << " fFlipH=" << fFlipH << " fFlipV=" << fFlipV << " fConnector=" << fConnector << " fHaveAnchor=" << fHaveAnchor << " fBackground=" << fBackground << " fHaveSpt=" << fHaveSpt << std::endl;
         } break;
         case 0xF11D: // OfficeArtFPSPL
             //printf("OfficeArtFPSPL %i\n",recLen);
@@ -1773,7 +1805,7 @@ unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* da
                 } else { // op specifies the value
                     m_properties[opid] = op;
                 }
-                std::cout << "MsoDrawingRecord: opid=" << opid << " fBid=" << fBid << " fComplex=" << fComplex << " op=" << op << std::endl;
+                std::cout << "MsoDrawingRecord: opid=" << opid << " (" << DrawingObject::propertyName((DrawingObject::Property)opid) << ") fBid=" << fBid << " fComplex=" << fComplex << " op=" << op << std::endl;
             }
             std::cout << "MsoDrawingRecord: complexDataLength=" << recLen-(recInstance * 6) << std::endl;
             //TODO read complexData
@@ -2962,7 +2994,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             } else if(next_type != 0x3C) {
                 break;
             } else {
-                std::cout << "Continues record (0x3C), size=" << next_size << " parent-record=" << type << std::endl;
+                //std::cout << "Continues record (0x3C), size=" << next_size << " parent-record=" << type << std::endl;
             }
 
             // compress multiple MsoDrawingGroup records or continues records (0x3C) into one.

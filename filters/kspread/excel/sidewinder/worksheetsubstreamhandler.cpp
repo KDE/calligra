@@ -181,6 +181,9 @@ public:
 
     // mapping from object id's to object instances
     std::map<unsigned long, Object*> sharedObjects;
+    
+    // list of textobjects as received via TxO records
+    std::vector<UString> textObjects;
 };
 
 WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals)
@@ -756,7 +759,10 @@ void WorksheetSubStreamHandler::handleLink(HLinkRecord* record)
 
 void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
 {
-    std::cout << "TODO: WorksheetSubStreamHandler::handleTxO" << std::endl;
+    if (!record) return;
+
+    std::cout << "WorksheetSubStreamHandler::handleTxO text=" << record->m_text << std::endl;
+    d->textObjects.push_back(record->m_text);
 }
 
 void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
@@ -767,11 +773,10 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
     if (cell) {
         NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[ record->idObj()]);
         if (obj) {
-#if 0
-            cell->setNote(obj->note());
-#else
-            std::cout << "TODO: WorksheetSubStreamHandler::handleNote" << std::endl;
-#endif
+            int offset = record->idObj()-1;            
+            Q_ASSERT(offset>=0 && offset<d->textObjects.size());
+            cell->setNote(d->textObjects[offset]);
+            //cell->setNote(obj->note());
         }
     }
 }
@@ -795,7 +800,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     }
     */
 
-    std::cout << "TODO: WorksheetSubStreamHandler::handleObj id=" << record->m_object->id() << " type=" << record->m_object->type() << std::endl;
+    std::cout << "WorksheetSubStreamHandler::handleObj id=" << record->m_object->id() << " type=" << record->m_object->type() << std::endl;
     d->sharedObjects[ record->m_object->id()] = record->m_object;
 }
 
@@ -841,18 +846,33 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     if (!record) return;
     if (!d->sheet) return;
     
-    std::map<unsigned long,unsigned long>::iterator it = record->m_properties.find(0x0104);
-    if(it != record->m_properties.end()) {
-        const unsigned long pid = (*it).second;
-        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
-        MsoDrawingBlibItem *drawing = d->globals->drawing(pid);
+    // picture?
+    std::map<unsigned long,unsigned long>::iterator pit = record->m_properties.find(DrawingObject::pid);
+    if(pit != record->m_properties.end()) {
+        const unsigned long id = (*pit).second;
+        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << id << std::endl;
+        MsoDrawingBlibItem *drawing = d->globals->drawing(id);
         if(!drawing) return;
         Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
         Q_ASSERT(cell);
         cell->addPicture(new Picture(record,drawing));
-    } else {
-        std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
+        return;
     }
+
+    // text?
+    std::map<unsigned long,unsigned long>::iterator txit = record->m_properties.find(DrawingObject::itxid);
+    if(txit != record->m_properties.end()) {
+        const unsigned long id = (*txit).second;
+        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing itxid=" << id << std::endl;
+
+        //TODO
+        //Q_ASSERT(d->globals->drawing(id));
+        //Q_ASSERT(false);
+        
+        return;
+    }
+
+    std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
 }
 
 typedef std::vector<UString> UStringStack;
