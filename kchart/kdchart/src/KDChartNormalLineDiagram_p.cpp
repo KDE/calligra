@@ -108,7 +108,7 @@ void NormalLineDiagram::paint( PaintContext* ctx )
     maxFound = columnCount;
     // ^^^ temp
 
-    for( int column = 0; column < columnCount; ++column ) {
+    for( int column = columnCount - 1; column >= 0; --column ) {
         DataValueTextInfoList textInfoList;
         LineAttributesInfoList lineList;
         LineAttributes laPreviousCell;
