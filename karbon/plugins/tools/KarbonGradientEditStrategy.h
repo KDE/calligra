@@ -161,7 +161,6 @@ protected:
     QGradientStops m_stops;    ///< the gradient stops
     QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
     KoLineBorder m_oldStroke;  ///< the old stroke
-    KoGradientBackground m_oldFill;
 private:
     typedef QPair<QPointF, QPointF> StopHandle;
     QColor invertedColor(const QColor &color);

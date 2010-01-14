@@ -5,7 +5,7 @@
  * Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005,2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2007 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2007-2008 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -597,6 +597,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     if (b.tagName() == "linearGradient") {
         QLinearGradient * g = new QLinearGradient();
         if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
             g->setStart(QPointF(SvgUtil::toPercentage(b.attribute("x1", "0%")),
                                 SvgUtil::toPercentage(b.attribute("y1", "0%"))));
             g->setFinalStop(QPointF(SvgUtil::toPercentage(b.attribute("x2", "100%")),
@@ -614,6 +615,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     } else if (b.tagName() == "radialGradient") {
         QRadialGradient * g = new QRadialGradient();
         if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
             g->setCenter(QPointF(SvgUtil::toPercentage(b.attribute("cx", "50%")),
                                  SvgUtil::toPercentage(b.attribute("cy", "50%"))));
             g->setRadius(SvgUtil::toPercentage(b.attribute("r", "50%")));
@@ -1075,13 +1077,13 @@ void SvgParser::applyFillStyle(KoShape * shape)
         if (gradient) {
             KoGradientBackground * bg = 0;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                // adjust to bounding box
-                QRectF bbox = QRectF(QPoint(), shape->size());
-                bg = new KoGradientBackground(gradient->adjustedGradient(bbox));
+                bg = new KoGradientBackground(*gradient->gradient());
                 bg->setMatrix(gradient->transform());
             } else {
+                QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
+                bg = new KoGradientBackground(*convertedGradient);
+                delete convertedGradient;
                 QMatrix invShapematrix = shape->transformation().inverted();
-                bg = new KoGradientBackground(*gradient->gradient());
                 bg->setMatrix(gradient->transform() * gc->matrix * invShapematrix);
             }
 
@@ -1207,12 +1209,12 @@ void SvgParser::applyStrokeStyle(KoShape * shape)
         if (gradient) {
             QBrush brush;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                // adjust to bbox
-                QRectF bbox = QRectF(QPoint(), shape->size());
-                brush = gradient->adjustedFill(bbox);
+                brush = *gradient->gradient();
                 brush.setMatrix(gradient->transform());
             } else {
-                brush = QBrush(*gradient->gradient());
+                QGradient *convertedGradient(SvgGradientHelper::convertGradient(gradient->gradient(), shape->size()));
+                brush = *convertedGradient;
+                delete convertedGradient;
                 brush.setMatrix(gradient->transform() * gc->matrix * shape->transformation().inverted());
             }
             KoLineBorder * border = new KoLineBorder(gc->stroke);

@@ -26,24 +26,23 @@
 #include <QtGui/QGradient>
 #include <math.h>
 
-QGradient* KarbonGradientHelper::defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
+QGradient* KarbonGradientHelper::defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
 {
     QGradient *gradient = 0;
     switch (type) {
     case QGradient::LinearGradient:
-        gradient = new QLinearGradient(QPointF(0.0, 0.5 * size.height()), QPointF(size.width(), 0.5 * size.height()));
+        gradient = new QLinearGradient(QPointF(0.0, 0.5), QPointF(1, 0.5));
         break;
-    case QGradient::RadialGradient: {
-        qreal radius = 0.5 * sqrt(size.height() * size.height() + size.width() * size.width());
-        gradient = new QRadialGradient(QPointF(0.5 * size.width(), 0.5 * size.height()), radius);
+    case QGradient::RadialGradient:
+        gradient = new QRadialGradient(QPointF(0.5, 0.5), sqrt(0.5));
         break;
-    }
     case QGradient::ConicalGradient:
-        gradient = new QConicalGradient(QPointF(0.5 * size.width(), 0.5 * size.height()), 0.0);
+        gradient = new QConicalGradient(QPointF(0.5, 0.5), 0.0);
         break;
     default:
         return 0;
     }
+    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setSpread(spread);
     gradient->setStops(stops);
 
@@ -71,12 +70,12 @@ QGradient* KarbonGradientHelper::convertGradient(const QGradient * gradient, QGr
         const QConicalGradient *g = static_cast<const QConicalGradient*>(gradient);
         start = g->center();
         qreal radAngle = g->angle() * M_PI / 180.0;
-        stop = QPointF(50.0 * cos(radAngle), 50.0 * sin(radAngle));
+        stop = QPointF(0.5 * cos(radAngle), 0.5 * sin(radAngle));
         break;
     }
     default:
         start = QPointF(0.0, 0.0);
-        stop = QPointF(50.0, 50.0);
+        stop = QPointF(0.5, 0.5);
     }
 
     QGradient *newGradient = 0;
@@ -85,22 +84,23 @@ QGradient* KarbonGradientHelper::convertGradient(const QGradient * gradient, QGr
         newGradient = new QLinearGradient(start, stop);
         break;
     case QGradient::RadialGradient: {
-        QPointF diff = stop - start;
-        qreal radius = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
+        QPointF diff(stop - start);
+        qreal radius = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
         newGradient = new QRadialGradient(start, radius, start);
         break;
     }
     case QGradient::ConicalGradient: {
-        QPointF diff = stop - start;
+        QPointF diff(stop - start);
         qreal angle = atan2(diff.y(), diff.x());
         if (angle < 0.0)
             angle += 2 * M_PI;
-        newGradient = new QConicalGradient(start, angle * 180 / M_PI);
+        newGradient = new QConicalGradient(start, angle * 180/M_PI);
         break;
     }
     default:
         return 0;
     }
+    newGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     newGradient->setSpread(gradient->spread());
     newGradient->setStops(gradient->stops());
 

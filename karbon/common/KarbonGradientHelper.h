@@ -32,8 +32,8 @@ namespace KarbonGradientHelper
 /// applies given gradient stops to given shape returning the new gradient wrapped in a brush
 KARBONCOMMON_EXPORT QBrush applyGradientStops(KoShape *shape, const QGradientStops &stops, bool fillGradient);
 
-/// creates default gradient for given size
-KARBONCOMMON_EXPORT QGradient *defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
+/// creates default gradient
+KARBONCOMMON_EXPORT QGradient *defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
 
 /// Converts gradient type, preserving as much data as possible
 KARBONCOMMON_EXPORT QGradient *convertGradient(const QGradient *gradient, QGradient::Type newType);

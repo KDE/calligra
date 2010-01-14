@@ -15,6 +15,7 @@
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
    Copyright (C) 2006 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -348,6 +349,8 @@ void SvgExport::getGradient(const QGradient * gradient, const QMatrix &gradientT
     if (! gradient)
         return;
 
+    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
+
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
         QString("spreadMethod=\"reflect\" "),
@@ -360,12 +363,12 @@ void SvgExport::getGradient(const QGradient * gradient, const QMatrix &gradientT
         // do linear grad
         printIndentation(m_defs, m_indent2);
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
-        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << getTransform(gradientTransform, "gradientTransform") << " ";
-        *m_defs << "x1=\"" << SvgUtil::toUserSpace(g->start().x()) << "\" ";
-        *m_defs << "y1=\"" << SvgUtil::toUserSpace(g->start().y()) << "\" ";
-        *m_defs << "x2=\"" << SvgUtil::toUserSpace(g->finalStop().x()) << "\" ";
-        *m_defs << "y2=\"" << SvgUtil::toUserSpace(g->finalStop().y()) << "\" ";
+        *m_defs << "gradientUnits=\"objectBoundingBox\" ";
+        *m_defs << "x1=\"" << g->start().x() << "\" ";
+        *m_defs << "y1=\"" << g->start().y() << "\" ";
+        *m_defs << "x2=\"" << g->finalStop().x() << "\" ";
+        *m_defs << "y2=\"" << g->finalStop().y() << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 
@@ -380,13 +383,13 @@ void SvgExport::getGradient(const QGradient * gradient, const QMatrix &gradientT
         // do radial grad
         printIndentation(m_defs, m_indent2);
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
-        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << getTransform(gradientTransform, "gradientTransform") << " ";
-        *m_defs << "cx=\"" << SvgUtil::toUserSpace(g->center().x()) << "\" ";
-        *m_defs << "cy=\"" << SvgUtil::toUserSpace(g->center().y()) << "\" ";
-        *m_defs << "fx=\"" << SvgUtil::toUserSpace(g->focalPoint().x()) << "\" ";
-        *m_defs << "fy=\"" << SvgUtil::toUserSpace(g->focalPoint().y()) << "\" ";
-        *m_defs << "r=\"" << QString().setNum(SvgUtil::toUserSpace(g->radius())) << "\" ";
+        *m_defs << "gradientUnits=\"objectBoundingBox\" ";
+        *m_defs << "cx=\"" << g->center().x() << "\" ";
+        *m_defs << "cy=\"" << g->center().y() << "\" ";
+        *m_defs << "fx=\"" << g->focalPoint().x() << "\" ";
+        *m_defs << "fy=\"" << g->focalPoint().y() << "\" ";
+        *m_defs << "r=\"" << QString().setNum(g->radius()) << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 

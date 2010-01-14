@@ -83,7 +83,7 @@ protected:
             KoGradientBackground * gradientFill = dynamic_cast<KoGradientBackground*>(m_fill);
             if (gradientFill) {
                 const QGradient * gradient = gradientFill->gradient();
-                QGradient * defGradient = KarbonGradientHelper::defaultGradient(size(), gradient->type(), gradient->spread(), gradient->stops());
+                QGradient * defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
                 QBrush brush(*defGradient);
                 delete defGradient;
                 painter.setBrush(brush);
@@ -148,7 +148,7 @@ protected:
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
                 if (brush.gradient()) {
-                    QGradient * defGradient = KarbonGradientHelper::defaultGradient(size(), brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
+                    QGradient * defGradient = KarbonGradientHelper::defaultGradient(brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
                     QBrush brush(*defGradient);
                     delete defGradient;
                     painter.setBrush(brush);

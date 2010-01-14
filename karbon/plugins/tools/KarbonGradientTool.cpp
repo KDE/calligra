@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007,2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -421,7 +421,8 @@ void KarbonGradientTool::initialize()
 
     if (m_strategies.count() == 0) {
         // create a default gradient
-        m_gradient = new QLinearGradient(QPointF(0, 0), QPointF(100, 100));
+        m_gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));
+        m_gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
         m_gradient->setColorAt(0.0, Qt::white);
         m_gradient->setColorAt(1.0, Qt::green);
         return;
@@ -555,8 +556,9 @@ void KarbonGradientTool::gradientChanged()
                 g->setSpread(spread);
                 g->setStops(stops);
                 newFill = new KoGradientBackground(g, oldFill->matrix());
-            } else {
-                QGradient * g = KarbonGradientHelper::defaultGradient(shape->size(), type, spread, stops);
+            }
+            else {
+                QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);
                 newFill = new KoGradientBackground(g);
             }
             newFills.append(newFill);
@@ -578,8 +580,9 @@ void KarbonGradientTool::gradientChanged()
                 g->setStops(stops);
                 newGradient = QBrush(*g);
                 delete g;
-            } else {
-                QGradient * g = KarbonGradientHelper::defaultGradient(shape->size(), type, spread, stops);
+            }
+            else {
+                QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);
                 newGradient = QBrush(*g);
                 delete g;
             }

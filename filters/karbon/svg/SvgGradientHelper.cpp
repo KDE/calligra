@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,9 @@
  */
 
 #include "SvgGradientHelper.h"
+
+#include <cmath>
+#include <KoFlake.h>
 
 SvgGradientHelper::SvgGradientHelper()
         : m_gradient(0), m_gradientUnits(ObjectBoundingBox)
@@ -107,7 +111,7 @@ QGradient * SvgGradientHelper::adjustedGradient(const QRectF &bound) const
     return duplicateGradient(m_gradient, matrix);
 }
 
-QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradient, const QMatrix &transform) const
+QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradient, const QMatrix &transform)
 {
     if (! originalGradient)
         return 0;
@@ -144,8 +148,62 @@ QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradi
         return 0;
     }
 
+    duplicatedGradient->setCoordinateMode(originalGradient->coordinateMode());
     duplicatedGradient->setStops(originalGradient->stops());
     duplicatedGradient->setSpread(originalGradient->spread());
 
     return duplicatedGradient;
 }
+
+QGradient *SvgGradientHelper::convertGradient(const QGradient *originalGradient, const QSizeF &size)
+{
+    if (! originalGradient)
+        return 0;
+
+    if (originalGradient->coordinateMode() != QGradient::LogicalMode) {
+        return duplicateGradient(originalGradient, QMatrix());
+    }
+
+    QGradient *duplicatedGradient = 0;
+
+    switch (originalGradient->type()) {
+    case QGradient::ConicalGradient:
+        {
+            const QConicalGradient *o = static_cast<const QConicalGradient*>(originalGradient);
+            QConicalGradient *g = new QConicalGradient();
+            g->setAngle(o->angle());
+            g->setCenter(KoFlake::toRelative(o->center(),size));
+            duplicatedGradient = g;
+        }
+        break;
+    case QGradient::LinearGradient:
+        {
+            const QLinearGradient *o = static_cast<const QLinearGradient*>(originalGradient);
+            QLinearGradient *g = new QLinearGradient();
+            g->setStart(KoFlake::toRelative(o->start(),size));
+            g->setFinalStop(KoFlake::toRelative(o->finalStop(),size));
+            duplicatedGradient = g;
+        }
+        break;
+    case QGradient::RadialGradient:
+        {
+            const QRadialGradient *o = static_cast<const QRadialGradient*>(originalGradient);
+            QRadialGradient *g = new QRadialGradient();
+            g->setCenter(KoFlake::toRelative(o->center(),size));
+            g->setFocalPoint(KoFlake::toRelative(o->focalPoint(),size));
+            g->setRadius(KoFlake::toRelative(QPointF(o->radius(), 0.0),
+                         QSizeF(sqrt(size.width() * size.width() + size.height() * size.height()), 0.0)).x());
+            duplicatedGradient = g;
+        }
+        break;
+    default:
+        return 0;
+    }
+
+    duplicatedGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+    duplicatedGradient->setStops(originalGradient->stops());
+    duplicatedGradient->setSpread(originalGradient->spread());
+
+    return duplicatedGradient;
+}
+

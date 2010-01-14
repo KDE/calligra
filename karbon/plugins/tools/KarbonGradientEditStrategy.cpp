@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include "KarbonGradientEditStrategy.h"
 #include <KarbonGlobal.h>
 
+#include <KoFlake.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoShapeBackgroundCommand.h>
@@ -41,7 +43,7 @@ const qreal stopDistance = 15.0;
 
 
 GradientStrategy::GradientStrategy(KoShape *shape, const QGradient * gradient, Target target)
-        : m_shape(shape), m_oldFill(new QLinearGradient())
+        : m_shape(shape)
         , m_editing(false), m_target(target)
         , m_gradientLine(0, 1), m_selection(None)
         , m_selectionIndex(0), m_type(gradient->type())
@@ -67,7 +69,6 @@ void GradientStrategy::setEditing(bool on)
         if (m_target == Fill) {
             KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
             if (fill) {
-                m_oldFill = *fill;
                 m_oldBrush = QBrush(*fill->gradient());
                 m_oldBrush.setMatrix(fill->matrix());
             }
@@ -319,7 +320,8 @@ QUndoCommand * GradientStrategy::createCommand(QUndoCommand * parent)
         KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
         if (fill) {
             KoGradientBackground * newFill = new KoGradientBackground(*fill->gradient(), fill->matrix());
-            *fill = m_oldFill;
+            fill->setGradient(*m_oldBrush.gradient());
+            fill->setMatrix(m_oldBrush.matrix());
             return new KoShapeBackgroundCommand(m_shape, newFill, parent);
         }
     } else {
@@ -501,17 +503,20 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles(const KoViewCo
 /////////////////////////////////////////////////////////////////
 // strategy implementations
 /////////////////////////////////////////////////////////////////
-
 LinearGradientStrategy::LinearGradientStrategy(KoShape *shape, const QLinearGradient *gradient, Target target)
         : GradientStrategy(shape, gradient, target)
 {
-    m_handles.append(gradient->start());
-    m_handles.append(gradient->finalStop());
+    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
+    QSizeF size(shape->size());
+    m_handles.append(KoFlake::toAbsolute(gradient->start(), size));
+    m_handles.append(KoFlake::toAbsolute(gradient->finalStop(), size));
 }
 
 QBrush LinearGradientStrategy::brush()
 {
-    QLinearGradient gradient(m_handles[start], m_handles[stop]);
+    QSizeF size(m_shape->size());
+    QLinearGradient gradient(KoFlake::toRelative(m_handles[start], size), KoFlake::toRelative(m_handles[stop], size));
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
@@ -522,17 +527,25 @@ QBrush LinearGradientStrategy::brush()
 RadialGradientStrategy::RadialGradientStrategy(KoShape *shape, const QRadialGradient *gradient, Target target)
         : GradientStrategy(shape, gradient, target)
 {
-    m_handles.append(gradient->center());
-    m_handles.append(gradient->focalPoint());
-    m_handles.append(gradient->center() + QPointF(gradient->radius(), 0));
+    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
+    QSizeF size(shape->size());
+    QPointF absoluteCenter(KoFlake::toAbsolute(gradient->center(), size));
+    qreal radius = gradient->radius() * size.width();
+
+    m_handles.append(absoluteCenter);
+    m_handles.append(KoFlake::toAbsolute(gradient->focalPoint(), size));
+    m_handles.append(absoluteCenter + QPointF(radius, 0));
     setGradientLine(0, 2);
 }
 
 QBrush RadialGradientStrategy::brush()
 {
-    QPointF d = m_handles[radius] - m_handles[center];
-    qreal r = sqrt(d.x() * d.x() + d.y() * d.y());
-    QRadialGradient gradient(m_handles[center], r, m_handles[focal]);
+    QSizeF size(m_shape->size());
+    QPointF relativeCenter(KoFlake::toRelative(m_handles[center], size));
+    QPointF d = KoFlake::toRelative(m_handles[radius], size) - relativeCenter;
+    qreal r = sqrt(d.x()*d.x() + d.y()*d.y());
+    QRadialGradient gradient(relativeCenter, r, KoFlake::toRelative(m_handles[focal], size));
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
@@ -543,10 +556,13 @@ QBrush RadialGradientStrategy::brush()
 ConicalGradientStrategy::ConicalGradientStrategy(KoShape *shape, const QConicalGradient *gradient, Target target)
         : GradientStrategy(shape, gradient, target)
 {
+    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
+    QSizeF size(m_shape->size());
+    qreal scale = 0.25 * (size.height() + size.width());
     qreal angle = gradient->angle() * M_PI / 180.0;
-    qreal scale = 0.25 * (shape->size().height() + shape->size().width());
-    m_handles.append(gradient->center());
-    m_handles.append(gradient->center() + scale * QPointF(cos(angle), -sin(angle)));
+    QPointF center(KoFlake::toAbsolute(gradient->center(), size));
+    m_handles.append(center);
+    m_handles.append(center + scale * QPointF(cos(angle), -sin(angle)));
 }
 
 QBrush ConicalGradientStrategy::brush()
@@ -555,7 +571,8 @@ QBrush ConicalGradientStrategy::brush()
     qreal angle = atan2(-d.y(), d.x()) / M_PI * 180.0;
     if (angle < 0.0)
         angle += 360;
-    QConicalGradient gradient(m_handles[center], angle);
+    QConicalGradient gradient(KoFlake::toRelative( m_handles[center], m_shape->size()), angle);
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
