@@ -243,7 +243,7 @@ void RingDiagram::paint( PaintContext* ctx )
             qreal currentValue = plane ? plane->startPosition() : 0.0;
             const qreal sectorsPerValue = 360.0 / sum;
 
-    	    for ( int iColumn = colCount - 1; iColumn >= 0; --iColumn ) {
+            for ( int iColumn = 0; iColumn < colCount; ++iColumn ) {
     	        // is there anything at all at this column?
     	        bool bOK;
     	        const double cellValue = qAbs( model()->data( model()->index( iRow, iColumn, rootIndex() ) )
