@@ -840,14 +840,19 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-Q_ASSERT(record->m_properties.find(0x0104) != record->m_properties.end());
-const unsigned long pid = record->m_properties[0x0104];
-    std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
-    MsoDrawingBlibItem *drawing = d->globals->drawing(pid);
-    if(!drawing) return;
-    Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
-    Q_ASSERT(cell);
-    cell->addPicture(new Picture(record,drawing));
+    
+    std::map<unsigned long,unsigned long>::iterator it = record->m_properties.find(0x0104);
+    if(it != record->m_properties.end()) {
+        const unsigned long pid = (*it).second;
+        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << pid << std::endl;
+        MsoDrawingBlibItem *drawing = d->globals->drawing(pid);
+        if(!drawing) return;
+        Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
+        Q_ASSERT(cell);
+        cell->addPicture(new Picture(record,drawing));
+    } else {
+        std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
+    }
 }
 
 typedef std::vector<UString> UStringStack;
