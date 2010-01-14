@@ -1437,7 +1437,11 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
     d->actions->protectSheet->setChecked(d->activeSheet->isProtected());
+
+    const bool wasBlocked = d->actions->protectDoc->blockSignals(true);
     d->actions->protectDoc->setChecked(doc()->map()->isProtected());
+    d->actions->protectDoc->blockSignals(wasBlocked);
+
     d->adjustActions(!d->activeSheet->isProtected());
     d->adjustWorkbookActions(!doc()->map()->isProtected());
 
