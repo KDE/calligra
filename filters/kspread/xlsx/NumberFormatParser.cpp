@@ -511,6 +511,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
         // text-content
         case '@':
             FINISH_PLAIN_TEXT_PART;
+            hadPlainText = true;
             xmlWriter.startElement( "number:text-content" );
             xmlWriter.endElement();
             break;
