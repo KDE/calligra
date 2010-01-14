@@ -2362,7 +2362,6 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
             print()->setPrintRange(region.firstRange());
     }
 
-
     if (sheetElement.attributeNS(KoXmlNS::table, "protected", QString()) == "true") {
         if (sheetElement.hasAttributeNS(KoXmlNS::table, "protection-key")) {
             QString p = sheetElement.attributeNS(KoXmlNS::table, "protection-key", QString());
@@ -3704,12 +3703,8 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
 
     if (sheet.hasAttribute("protected")) {
         QString passwd = sheet.attribute("protected");
-
-        if (passwd.length() > 0) {
-            QByteArray str(passwd.toLatin1());
-            setProtected(KCodecs::base64Decode(str));
-        } else
-            setProtected(QByteArray(""));
+        QByteArray str(passwd.toUtf8());
+        setProtected(KCodecs::base64Decode(str));
     }
 
     return true;

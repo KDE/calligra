@@ -529,8 +529,6 @@ void View::Private::adjustActions(bool mode)
 {
     actions->recalcWorkbook->setEnabled(mode);
     actions->recalcWorksheet->setEnabled(mode);
-    actions->protectSheet->setEnabled(mode);
-    actions->protectDoc->setEnabled(mode);
     actions->paperLayout->setEnabled(mode);
     actions->resetPrintRange->setEnabled(mode);
     actions->deleteSheet->setEnabled(mode);
@@ -1437,12 +1435,17 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     d->canvas->update();
 
+    d->actions->showPageBorders->blockSignals(true);
     d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
+    d->actions->showPageBorders->blockSignals(false);
+    
+    d->actions->protectSheet->blockSignals(true);
     d->actions->protectSheet->setChecked(d->activeSheet->isProtected());
+    d->actions->protectSheet->blockSignals(false);
 
-    const bool wasBlocked = d->actions->protectDoc->blockSignals(true);
+    d->actions->protectDoc->blockSignals(true);
     d->actions->protectDoc->setChecked(doc()->map()->isProtected());
-    d->actions->protectDoc->blockSignals(wasBlocked);
+    d->actions->protectDoc->blockSignals(false);
 
     d->adjustActions(!d->activeSheet->isProtected());
     d->adjustWorkbookActions(!doc()->map()->isProtected());
