@@ -71,6 +71,7 @@ class VCenterRecord;
 class ZoomLevelRecord;
 class MsoDrawingRecord;
 class Window2Record;
+class PasswordRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler
 {
@@ -117,6 +118,7 @@ private:
     void handleZoomLevel(ZoomLevelRecord *record);
     void handleMsoDrawing(MsoDrawingRecord* record);
     void handleWindow2(Window2Record* record);
+    void handlePassword(PasswordRecord* record);
 
     UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
     UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);

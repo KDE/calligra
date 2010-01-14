@@ -294,6 +294,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleMsoDrawing(static_cast<MsoDrawingRecord*>(record));
     else if (type == Window2Record::id)
         handleWindow2(static_cast<Window2Record*>(record));
+    else if (type == PasswordRecord::id)
+        handlePassword(static_cast<PasswordRecord*>(record));
     else {
         std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -890,6 +892,65 @@ void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
     if (!record) return;
     if (!d->sheet) return;
     d->sheet->setFirstVisibleCell(QPoint(record->colLeft(),record->rwTop()));
+}
+
+void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    if (!record->wPassword()) return;
+    std::cout << "WorksheetSubStreamHandler::handlePassword passwordHash=" << record->wPassword() << std::endl;
+    d->sheet->setPassword(record->wPassword());
+
+#if 0
+    quint16 nHash = record->wPassword() ^ 0xCE4B;
+    quint16 nDummy = nHash;
+    quint16 nLen = 9;
+    while( !(nDummy & 0x8000) && nLen ) { --nLen; nDummy <<= 1; }
+    if( !nLen ) nLen = 2;
+    if( (nLen ^ nHash) & 0x0001 ) nLen++;
+    if( nLen == 9 ) { nLen = 10; nHash ^= 0x8001; }
+    nHash ^= nLen;
+    if( nLen < 9 ) nHash <<= (8 - nLen);
+    quint16 nNewChar = 0;
+    QByteArray sPasswd;
+    for( quint16 iChar = nLen; iChar > 0; iChar-- ) {
+        switch( iChar ) {
+            case 10:
+                nNewChar = (nHash & 0xC000) | 0x0400;
+                nHash ^= nNewChar;
+                nNewChar >>= 2;
+                break;
+            case 9:
+                nNewChar = 0x4200;
+                nHash ^= nNewChar;
+                nNewChar >>= 1;
+                break;
+            case 1:
+                nNewChar = nHash & 0xFF00;
+                break;
+            default:
+                nNewChar = (nHash & 0xE000) ^ 0x2000;
+                if( !nNewChar ) nNewChar = (nHash & 0xF000) ^ 0x1800;
+                if( nNewChar == 0x6000 ) nNewChar = 0x6100;
+                nHash ^= nNewChar;
+                nHash <<= 1;
+                break;
+        }
+        nNewChar >>= 8;
+        nNewChar &= 0x00FF;
+
+        //QByteArray sDummy = sPasswd;
+        //typedef sal_Char STRING16[ 16 ];
+        //sPasswd = (sal_Char) nNewChar;
+        //sPasswd += sDummy;        
+
+        sPasswd.prepend(QChar(nNewChar));
+    }
+        
+    std::cout << ">>>> " << sPasswd.data() << std::endl; //0x218490a
+#endif
+
 }
 
 typedef std::vector<UString> UStringStack;

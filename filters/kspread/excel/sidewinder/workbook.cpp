@@ -35,6 +35,7 @@ public:
     bool passwordProtected;
     int activeTab;
     QHash<PropertyType, QVariant> properties;
+    unsigned long passwd;
 };
 
 Workbook::Workbook(Store* store)
@@ -43,6 +44,7 @@ Workbook::Workbook(Store* store)
     d->store = store;
     d->passwordProtected = false;
     d->activeTab = -1;
+    d->passwd = 0; // password protection disabled
 }
 
 Workbook::~Workbook()
@@ -124,4 +126,14 @@ int Workbook::activeTab() const
 void Workbook::setActiveTab(int tab)
 {
     d->activeTab = tab;
+}
+
+unsigned long Workbook::password() const
+{
+    return d->passwd;
+}
+
+void Workbook::setPassword(unsigned long hash)
+{
+    d->passwd = hash;
 }

@@ -2370,7 +2370,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 QByteArray str(p.toUtf8());
                 QByteArray passwd = KCodecs::base64Decode(str);
                 kDebug(30518) << "Password password:" << str << "hash:" << passwd;
-                setProtected(pass);
+                setProtected(passwd);
             }
         }
     }

@@ -147,6 +147,9 @@ public:
     
     QPoint firstVisibleCell() const;
     void setFirstVisibleCell(const QPoint &point);
+    
+    unsigned long password() const;
+    void setPassword(unsigned long hash);
 
 private:
     // no copy or assign

@@ -52,6 +52,7 @@ class ProtectRecord;
 class MsoDrawingBlibItem;
 class MsoDrawingGroupRecord;
 class Window1Record;
+class PasswordRecord;
 
 class GlobalsSubStreamHandler : public SubStreamHandler
 {
@@ -108,6 +109,7 @@ private:
     void handleProtect(ProtectRecord* record);
     void handleMsoDrawingGroup(MsoDrawingGroupRecord* record);
     void handleWindow1(Window1Record* record);
+    void handlePassword(PasswordRecord* record);
 
     class Private;
     Private * const d;

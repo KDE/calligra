@@ -287,6 +287,12 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     if (!bodyWriter || !contentWriter)
         return false;
 
+    if(workbook->password() != 0) {
+        contentWriter->addAttribute("table:structure-protected", "true");
+        contentWriter->addAttribute("table:protection-key" , "");
+        contentWriter->addAttribute("table:protection-key-excel" , uint(workbook->password()));
+    }
+
     // FIXME this is dummy and hardcoded, replace with real font names
     contentWriter->startElement("office:font-face-decls");
     contentWriter->startElement("style:font-face");
@@ -597,9 +603,14 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
 
     xmlWriter->addAttribute("table:name", string(sheet->name()));
     xmlWriter->addAttribute("table:print", "false");
-    xmlWriter->addAttribute("table:protected", "false");
     xmlWriter->addAttribute("table:style-name", sheetStyles[sheetFormatIndex]);
     sheetFormatIndex++;
+    
+    if(sheet->password() != 0) {
+       xmlWriter->addAttribute("table:protected", "true");
+       xmlWriter->addAttribute("table:protection-key", "");
+       xmlWriter->addAttribute("table:protection-key-excel", uint(sheet->password()));
+    }
 
     unsigned ci = 0;
     while (ci <= sheet->maxColumn()) {

@@ -63,6 +63,7 @@ public:
 
     double zoomLevel;
     QPoint firstVisibleCell;
+    unsigned long passwd;
 };
 
 }
@@ -87,6 +88,7 @@ Sheet::Sheet(Workbook* wb)
     d->defaultColWidth = -1;
     d->zoomLevel = 1.0; // 100%
     d->firstVisibleCell = QPoint(0,0); // A1
+    d->passwd = 0; // password protection disabled
 }
 
 Sheet::~Sheet()
@@ -369,6 +371,16 @@ void Sheet::setFirstVisibleCell(const QPoint &point)
     d->firstVisibleCell = point;
 }
 
+unsigned long Sheet::password() const
+{
+    return d->passwd;
+}
+
+void Sheet::setPassword(unsigned long hash)
+{
+    d->passwd = hash;
+}
+
 class Column::Private
 {
 public:
@@ -496,4 +508,3 @@ void Row::setVisible(bool b)
 {
     d->visible = b;
 }
-    

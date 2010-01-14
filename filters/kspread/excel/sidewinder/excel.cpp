@@ -2762,10 +2762,10 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         return false;
     }
 
-//#ifdef SWINDER_XLS2RAW
+#ifdef SWINDER_XLS2RAW
     std::cout << "Streams:" << std::endl;
     printEntries(storage);
-//#endif
+#endif
 
     unsigned streamVersion = Swinder::Excel97;
     POLE::Stream* stream;
@@ -3033,7 +3033,16 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // create the record using the factory
         Record* record = Record::create(type, workbook);
 
-        if (record) {
+        if (!record) {
+#ifdef SWINDER_XLS2RAW
+            std::cout << "Unhandled Record 0x";
+            std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
+            std::cout << std::dec;
+            std::cout << " (" << type << ")";
+            std::cout << std::endl;
+            std::cout << std::endl;
+#endif
+        } else {
             // setup the record and invoke handler
             record->setVersion(d->globals->version());
             record->setData(size, buffer, continuePositions);
@@ -3058,18 +3067,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
             delete record;
         }
-
-#ifdef SWINDER_XLS2RAW
-        if (!record) {
-            std::cout << "Unhandled Record 0x";
-            std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
-            std::cout << std::dec;
-            std::cout << " (" << type << ")";
-            std::cout << std::endl;
-            std::cout << std::endl;
-        }
-#endif
-
     }
 
     free(buffer);
