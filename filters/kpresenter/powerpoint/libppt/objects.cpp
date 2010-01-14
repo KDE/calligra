@@ -567,6 +567,9 @@ void GroupObject::addObject(Object* object)
     d->objects.push_back(object);
 }
 
+/**
+ * @brief Remove an object from the group
+ **/
 void GroupObject::takeObject(Object* object)
 {
     std::vector<Object*> result;
@@ -594,7 +597,7 @@ GroupObject::setViewportDimensions(double x, double y,
 void
 GroupObject::setDimensions(double x, double y, double width, double height)
 {
-    if (width && height && d->vwidth && d->vheight) {
+    if (width && height && d->vwidth > 0 && d->vheight > 0) {
         // adapt the offset and scaling
         d->xoffset += d->xscale * x;
         d->xscale *= width / d->vwidth;
