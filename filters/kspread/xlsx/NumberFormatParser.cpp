@@ -407,7 +407,7 @@ KoGenStyle NumberFormatParser::parse( const QString& numberFormat )
                         const char ch = numberFormat[ i ].toLatin1();
                         if( ch == 's' || ch == 'S' )  // minutes
                             break;
-                        if( !(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' ) ) // months
+                        if( !((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ) ) // months
                             continue;
                         minutes = false;
                         break;
