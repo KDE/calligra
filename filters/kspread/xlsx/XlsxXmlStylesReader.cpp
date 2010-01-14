@@ -1334,41 +1334,58 @@ void XlsxXmlStylesReader::handlePatternType(const QString& patternType)
     }
     else if (p.startsWith("dark")) {
         if (p == "darkDown") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkDownPatternType;
         }
         else if (p == "darkGray") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkGrayPatternType;
         }
         else if (p == "darkGrid") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkGridPatternType;
         }
         else if (p == "darkHorizontal") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkGridPatternType;
         }
         else if (p == "darkTrellis") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkTrellisPatternType;
         }
         else if (p == "darkUp") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkUpPatternType;
         }
         else if (p == "darkVertical") {
+            m_currentFillStyle->patternType = XlsxFillStyle::DarkVerticalPatternType;
         }
     }
     else if (p.startsWith("light")) {
         if (p == "lightDown") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightDownPatternType;
         }
         else if (p == "lightGray") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightGrayPatternType;
         }
         else if (p == "lightGrid") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightGridPatternType;
         }
         else if (p == "lightHorizontal") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightHorizontalPatternType;
         }
         else if (p == "lightTrellis") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightTrellisPatternType;
         }
         else if (p == "lightUp") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightUpPatternType;
         }
         else if (p == "lightVertical") {
+            m_currentFillStyle->patternType = XlsxFillStyle::LightVerticalPatternType;
         }
     }
     else if (p == "mediumGray") {
+        m_currentFillStyle->patternType = XlsxFillStyle::MediumGrayPatternType;
     }
     else if (p == "gray0625") {
+        m_currentFillStyle->patternType = XlsxFillStyle::Gray0625PatternType;
     }
     else if (p == "gray125") {
+        m_currentFillStyle->patternType = XlsxFillStyle::Gray125PatternType;
     }
     else {
         kWarning() << "unknown value" << p
