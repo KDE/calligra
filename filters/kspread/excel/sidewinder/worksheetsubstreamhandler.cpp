@@ -863,7 +863,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     std::map<unsigned long,unsigned long>::iterator txit = record->m_properties.find(DrawingObject::itxid);
     if(txit != record->m_properties.end()) {
         const unsigned long id = (*txit).second;
-        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing itxid=" << id << std::endl;
+        std::cout << "TODO WorksheetSubStreamHandler::handleMsoDrawing itxid=" << id << std::endl;
 
         //TODO
         //Q_ASSERT(d->globals->drawing(id));
