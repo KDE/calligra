@@ -285,6 +285,17 @@ void TestFormula::testOperators()
     CHECK_EVAL("4+3*2-1", Value(9));
 }
 
+void TestFormula::testComparsion()
+{
+    CHECK_EVAL("#DIV/0!/0>0", Value::errorDIV0());
+    CHECK_EVAL("5<#VALUE!", Value::errorVALUE());
+    CHECK_EVAL("#N/A=#N/A", Value::errorNA());
+    CHECK_EVAL("6>5", Value(true));
+    CHECK_EVAL("6<5", Value(false));
+    CHECK_EVAL("2=2", Value(false));
+    CHECK_EVAL("2=22", Value(true));
+}
+
 void TestFormula::testString()
 {
     // string expansion ...
