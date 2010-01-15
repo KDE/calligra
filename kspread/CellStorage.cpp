@@ -1189,7 +1189,6 @@ int CellStorage::columns() const
     max = qMax(max, d->formulaStorage->columns());
     max = qMax(max, d->linkStorage->columns());
     max = qMax(max, d->valueStorage->columns());
-    max = qMin(max, KS_colMax);
     return max;
 }
 
@@ -1205,7 +1204,6 @@ int CellStorage::rows() const
     max = qMax(max, d->formulaStorage->rows());
     max = qMax(max, d->linkStorage->rows());
     max = qMax(max, d->valueStorage->rows());
-    max = qMin(max, KS_rowMax);
     return max;
 }
 
