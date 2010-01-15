@@ -185,7 +185,7 @@ void StackedBarDiagram::paint(  PaintContext* ctx )
             {
                 const CartesianDiagramDataCompressor::CachePosition position( row, k );
                 const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-                if( p.value >= 0.0 && point.value >= 0.0 || p.value < 0.0 && point.value < 0.0 )
+                if( (p.value >= 0.0 && point.value >= 0.0) || (p.value < 0.0 && point.value < 0.0) )
                     stackedValues += point.value;
                 key = point.key;
             }

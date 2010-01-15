@@ -292,10 +292,10 @@ void StockDiagram::Private::drawOHLCBar( const CartesianDiagramDataCompressor::D
     if ( threeDAttr.isEnabled() ) {
         const int angle = threeDAttr.angle();
         // Z-order is from right to left
-        if ( angle >= 0 && angle < 90 || angle >= 180 && angle < 270 )
+        if ( (angle >= 0 && angle < 90) || (angle >= 180 && angle < 270) )
             reversedOrder = true;
         // Z-order is from left to right
-        if ( angle >= 90 && angle < 180 || angle >= 270 && angle < 0 )
+        if ( (angle >= 90 && angle < 180) || (angle >= 270 && angle < 0) )
             reversedOrder = false;
     }
 
