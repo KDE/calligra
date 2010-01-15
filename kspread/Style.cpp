@@ -38,6 +38,7 @@
 #include <KoXmlWriter.h>
 
 #include "Condition.h"
+#include "Currency.h"
 #include "Global.h"
 #include "StyleManager.h"
 #include "Util.h"
@@ -262,7 +263,7 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
             // determine data formatting
             switch (dataStyle.type) {
             case KoOdfNumberStyles::Number:
-                setFormatType(Format::Number);
+                setFormatType(numberType(dataStyle.formatStr));
                 break;
             case KoOdfNumberStyles::Scientific:
                 setFormatType(Format::Scientific);
@@ -654,6 +655,23 @@ Format::Type Style::timeType(const QString &_format)
         return Format::Time8;
     else
         return Format::Time;
+}
+
+Format::Type Style::numberType(const QString &_format)
+{
+    // Look up if a prefix or postfix is in the currency table,
+    // use the currency format for proper formatting if it is.
+    QString f = QString(_format.at(0));
+    Currency curr = Currency(f);
+    if (curr.index() > 1)
+        return Format::Money;
+    else {
+        f = QString(_format.at(_format.size()-1));
+        curr = Currency(f);
+        if (curr.index() > 1)
+            return Format::Money;
+    }
+    return Format::Number;
 }
 
 Format::Type Style::fractionType(const QString &_format)
