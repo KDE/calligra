@@ -22,7 +22,6 @@
 #include <QString>
 #include <QPainter>
 #include <QMatrix>
-#include <q3pointarray.h>
 #include <QPen>
 #include <QColor>
 #include <QImage>

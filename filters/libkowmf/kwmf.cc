@@ -24,12 +24,16 @@ DESCRIPTION
     Caolan McNamara).
 */
 
-#include <kdebug.h>
-#include <math.h>
-#include <QFile>
-#include <q3pointarray.h>
 #include "kwmf.h"
+
+#include <math.h>
+
 #include <QRect>
+#include <QPolygon>
+#include <QFile>
+
+#include <kdebug.h>
+
 
 #define PI (3.14159265358979323846)
 
@@ -739,7 +743,7 @@ void KWmf::opRestoreDc(
 
     operands >> pop;
     for (i = 0; i < pop; i++) {
-        m_dc = m_savedDcs.pop();
+        m_dc = m_savedDcs.takeLast();
     }
 }
 
@@ -747,7 +751,7 @@ void KWmf::opSaveDc(
     U32 /*words*/,
     QDataStream &/*operands*/)
 {
-    m_savedDcs.push(m_dc);
+    m_savedDcs.append(m_dc);
 
     // TBD: reinitialise m_dc.
 }

@@ -32,9 +32,10 @@ DESCRIPTION
 
 #include <kwmf_export.h>
 
+#include <QLinkedList>
 #include <QList>
-
-#include <q3valuestack.h>
+#include <QPoint>
+#include <QSize>
 
 class QDataStream;
 class QPolygon;
@@ -116,7 +117,7 @@ private:
     int m_windowFlipX;
     int m_windowFlipY;
     DrawContext m_dc;
-    Q3ValueStack<DrawContext> m_savedDcs;
+    QLinkedList<DrawContext> m_savedDcs;
     QPoint m_lineFrom;
 
     // Windows handle management.
