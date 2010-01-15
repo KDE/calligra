@@ -287,13 +287,35 @@ void TestFormula::testOperators()
 
 void TestFormula::testComparsion()
 {
-    CHECK_EVAL("#DIV/0!/0>0", Value::errorDIV0());
-    CHECK_EVAL("5<#VALUE!", Value::errorVALUE());
-    CHECK_EVAL("#N/A=#N/A", Value::errorNA());
+    // compare numbers
     CHECK_EVAL("6>5", Value(true));
     CHECK_EVAL("6<5", Value(false));
-    CHECK_EVAL("2=2", Value(false));
-    CHECK_EVAL("2=22", Value(true));
+    CHECK_EVAL("2=2", Value(true));
+    CHECK_EVAL("2=22", Value(false));
+    CHECK_EVAL("=3=3.0001", Value(false));
+    // compare booleans
+    CHECK_EVAL("=TRUE()=FALSE()", Value(false));
+    CHECK_EVAL("=TRUE()=TRUE()", Value(true));
+    CHECK_EVAL("=FALSE()=FALSE()", Value(true));
+    // compare strings
+    CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false));
+    CHECK_EVAL("=\"5\"=5", Value(false));
+    CHECK_EVAL("=\"Hi\"=\"HI\"", Value(false));
+    CHECK_EVAL("b>a", Value(true));
+    CHECK_EVAL("b<aa", Value(false));
+    CHECK_EVAL("c<d", Value(true));
+    CHECK_EVAL("cc>d", Value(false));
+    // compare dates
+    CHECK_EVAL("=DATE(2001;12;12)>DATE(2001;12;11)", Value(true));
+    CHECK_EVAL("=DATE(2001;12;12)<DATE(2001;12;11)", Value(false));
+    CHECK_EVAL("=DATE(1999;01;01)=DATE(1999;01;01)", Value(true));
+    CHECK_EVAL("=DATE(1998;01;01)=DATE(1999;01;01)", Value(false));
+    // errors cannot be compared
+    CHECK_EVAL("=NA()=NA()", Value::errorNA());
+    CHECK_EVAL("=NA()>NA()", Value::errorNA());
+    CHECK_EVAL("#DIV/0!>0", Value::errorDIV0());
+    CHECK_EVAL("5<#VALUE!", Value::errorVALUE());
+    CHECK_EVAL("#DIV/0!=#DIV/0!", Value::errorDIV0());
 }
 
 void TestFormula::testString()
@@ -339,27 +361,6 @@ void TestFormula::testInlineArrays()
     CHECK_EVAL("={1;SIN(0)|3;4}", array);   // "dynamic"
     CHECK_EVAL("=SUM({1;2|3;4})", Value(10));
 #endif
-}
-
-void TestFormula::testEquality()
-{
-    CHECK_EVAL("=1=1", Value(true));
-    CHECK_EVAL("=1=0", Value(false));
-    CHECK_EVAL("=3=3.0001", Value(false));
-    CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false));
-    CHECK_EVAL("=TRUE()=FALSE()", Value(false));
-    CHECK_EVAL("=TRUE()=TRUE()", Value(true));
-    CHECK_EVAL("=FALSE()=FALSE()", Value(true));
-    CHECK_EVAL("=\"5\"=5", Value(false));
-    // TODO Error values have to be propagated to the result.
-    //      They cannot be compared according to the OpenFormula spec.
-    //      Currently, KSpread compares them though.
-    QEXPECT_FAIL("", "Will fix after the OpenFormula spec got finalized", Continue);
-    CHECK_EVAL("=NA()=NA()", Value::errorNA());
-    // Case sensitivity is enabled by default according to the OpenDocument spec.
-    // The result differs from the OpenFormula test case, which explicitly makes an exception
-    // for this calculation setting for whatever reason (ch 2.3) and assumes case insensivity.
-    CHECK_EVAL("=\"Hi\"=\"HI\"", Value(false));
 }
 
 QTEST_KDEMAIN(TestFormula, GUI)
