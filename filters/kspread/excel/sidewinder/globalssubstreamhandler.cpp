@@ -731,12 +731,11 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 
 MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
 {
-    const uint index = pid - 1;
-    if(index < 0 || index >= d->drawingTable.size()) {
-        std::cerr << "GlobalsSubStreamHandler::drawing: Invalid index=" << index << std::endl;
+    if (pid <= 0 || pid > d->drawingTable.size()) {
+        std::cerr << "GlobalsSubStreamHandler::drawing: Invalid index=" << (pid - 1) << std::endl;
         return 0;
     }
-    return d->drawingTable.at(index);
+    return d->drawingTable.at(pid - 1);
 }
 
 Store* GlobalsSubStreamHandler::store() const
