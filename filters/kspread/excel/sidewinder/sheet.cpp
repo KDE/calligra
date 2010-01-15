@@ -62,7 +62,11 @@ public:
     long defaultColWidth;
 
     double zoomLevel;
+    bool showGrid;
+    bool showZeroValues;
     QPoint firstVisibleCell;
+    bool isPageBreakViewEnabled;
+
     unsigned long passwd;
 };
 
@@ -87,7 +91,10 @@ Sheet::Sheet(Workbook* wb)
     d->defaultRowHeight = -1;
     d->defaultColWidth = -1;
     d->zoomLevel = 1.0; // 100%
+    d->showGrid = true;
+    d->showZeroValues = true;
     d->firstVisibleCell = QPoint(0,0); // A1
+    d->isPageBreakViewEnabled = false;
     d->passwd = 0; // password protection disabled
 }
 
@@ -361,6 +368,26 @@ void Sheet::setZoomLevel(double fraction)
     d->zoomLevel = fraction;
 }
 
+bool Sheet::showGrid() const
+{
+    return d->showGrid;
+}
+
+void Sheet::setShowGrid(bool show)
+{
+    d->showGrid = show;
+}
+
+bool Sheet::showZeroValues() const
+{
+    return d->showZeroValues;
+}
+
+void Sheet::setShowZeroValues(bool show)
+{
+    d->showZeroValues = show;
+}
+
 QPoint Sheet::firstVisibleCell() const
 {
     return d->firstVisibleCell;
@@ -371,6 +398,16 @@ void Sheet::setFirstVisibleCell(const QPoint &point)
     d->firstVisibleCell = point;
 }
 
+bool Sheet::isPageBreakViewEnabled() const
+{
+    return d->isPageBreakViewEnabled;
+}
+
+void Sheet::setPageBreakViewEnabled(bool enabled)
+{
+    d->isPageBreakViewEnabled = enabled;
+}
+    
 unsigned long Sheet::password() const
 {
     return d->passwd;

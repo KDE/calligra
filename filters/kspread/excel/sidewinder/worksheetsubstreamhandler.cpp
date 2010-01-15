@@ -891,7 +891,10 @@ void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
 {
     if (!record) return;
     if (!d->sheet) return;
+    d->sheet->setShowGrid(record->isFDspGridRt());
+    d->sheet->setShowZeroValues(record->isFDspZerosRt());
     d->sheet->setFirstVisibleCell(QPoint(record->colLeft(),record->rwTop()));
+    d->sheet->setPageBreakViewEnabled(record->isFSLV());
 }
 
 void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)

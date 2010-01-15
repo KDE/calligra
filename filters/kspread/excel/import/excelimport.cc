@@ -483,14 +483,14 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         settingsWriter->addConfigItem("CursorPositionY", point.y());
         settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
         settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
-        settingsWriter->addConfigItem("ShowZeroValues", true);
-        settingsWriter->addConfigItem("ShowGrid", true);
+        settingsWriter->addConfigItem("ShowZeroValues", sheet->showZeroValues());
+        settingsWriter->addConfigItem("ShowGrid", sheet->showGrid());
         settingsWriter->addConfigItem("FirstLetterUpper", false);
         settingsWriter->addConfigItem("ShowFormulaIndicator", false);
         settingsWriter->addConfigItem("ShowCommentIndicator", true);
-        settingsWriter->addConfigItem("ShowPageBorders", false);
+        settingsWriter->addConfigItem("ShowPageBorders", sheet->isPageBreakViewEnabled()); // best match kspread provides
         settingsWriter->addConfigItem("lcmode", false);
-        settingsWriter->addConfigItem("autoCalc", true);
+        settingsWriter->addConfigItem("autoCalc", sheet->autoCalc());
         settingsWriter->addConfigItem("ShowColumnNumber", false);
         settingsWriter->endElement();
     }
