@@ -39,7 +39,7 @@ private Q_SLOTS:
     void testUnary();
     void testBinary();
     void testOperators();
-    void testComparsion();
+    void testComparison();
     void testString();
     void testFunction();
     void testInlineArrays();

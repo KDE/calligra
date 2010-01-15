@@ -285,7 +285,7 @@ void TestFormula::testOperators()
     CHECK_EVAL("4+3*2-1", Value(9));
 }
 
-void TestFormula::testComparsion()
+void TestFormula::testComparison()
 {
     // compare numbers
     CHECK_EVAL("6>5", Value(true));
