@@ -448,8 +448,8 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 
     tableContext.valStyle.writeStyle(xmlWriter);
 
-    d->namedAreaManager->saveOdf(xmlWriter);
-    d->databaseManager->saveOdf(xmlWriter);
+    d->namedAreaManager->saveOdf(savingContext.xmlWriter());
+    d->databaseManager->saveOdf(savingContext.xmlWriter());
     return true;
 }
 
