@@ -51,6 +51,9 @@ public slots:
 //    void resizeEvent(QResizeEvent *ev);
     bool eventFilter(QObject *o, QEvent *ev);
 
+signals:
+    void commitData( QWidget * editor );
+
 protected:
 //    virtual void setReadOnlyInternal(bool readOnly);
 
