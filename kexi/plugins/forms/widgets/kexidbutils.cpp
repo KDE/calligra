@@ -69,7 +69,10 @@ K_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
 
 QColor KexiFormUtils::lighterGrayBackgroundColor(const QPalette& palette)
 {
-    return KexiUtils::blendedColors(palette.active().background(), palette.active().base(), 1, 2);
+    return KexiUtils::blendedColors(
+        palette.color(QPalette::Active, QPalette::Background),
+        palette.color(QPalette::Active, QPalette::Base),
+        1, 2);
 }
 
 QPixmap KexiFormUtils::dataSourceTagIcon()
