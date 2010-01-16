@@ -32,9 +32,10 @@ class Workbook::Private
 public:
     Store* store;
     std::vector<Sheet*> sheets;
-    bool passwordProtected;
-    int activeTab;
     QHash<PropertyType, QVariant> properties;
+    std::map<UString, UString> namedAreas;
+    int activeTab;
+    bool passwordProtected;
     unsigned long passwd;
 };
 
@@ -108,14 +109,14 @@ void Workbook::setProperty(PropertyType type, const QVariant &value)
     d->properties[ type ] = value;
 }
 
-bool Workbook::isPasswordProtected() const
+std::map<UString, UString>& Workbook::namedAreas()
 {
-    return d->passwordProtected;
+    return d->namedAreas;
 }
 
-void Workbook::setPasswordProtected(bool p)
+void Workbook::setNamedArea(UString name, UString formula)
 {
-    d->passwordProtected = p;
+    d->namedAreas[name] = formula;
 }
 
 int Workbook::activeTab() const
@@ -126,6 +127,16 @@ int Workbook::activeTab() const
 void Workbook::setActiveTab(int tab)
 {
     d->activeTab = tab;
+}
+
+bool Workbook::isPasswordProtected() const
+{
+    return d->passwordProtected;
+}
+
+void Workbook::setPasswordProtected(bool p)
+{
+    d->passwordProtected = p;
 }
 
 unsigned long Workbook::password() const

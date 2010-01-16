@@ -152,6 +152,28 @@ typedef std::vector<FormulaToken> FormulaTokens;
 
 std::ostream& operator<<(std::ostream& s, FormulaToken token);
 
+class DataTableRecord;
+class FormulaToken;
+typedef std::vector<FormulaToken> FormulaTokens;
+
+class FormulaDecoder
+{
+public:
+    FormulaDecoder() {}
+    virtual ~FormulaDecoder() {}
+
+    UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
+    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);    
+
+    virtual const std::vector<UString>& externSheets() const { return m_externSheets; }
+    virtual UString nameFromIndex(unsigned /*index*/) const { return UString(); }
+    virtual UString externNameFromIndex(unsigned /*index*/) const { return UString(); }
+    virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return FormulaTokens(); }
+    virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return 0; }
+protected:
+    std::vector<UString> m_externSheets;
+};
+
 } // namespace Swinder
 
 #endif // SWINDER_FORMULAS_H

@@ -21,8 +21,11 @@
 #ifndef SWINDER_WORKBOOK_H
 #define SWINDER_WORKBOOK_H
 
+#include "ustring.h"
+
 #include <QtCore/QVariant>
 #include <string>
+#include <map>
 
 namespace Swinder
 {
@@ -109,12 +112,15 @@ public:
     QVariant property(PropertyType type, const QVariant &defaultValue = QVariant()) const;
     void setProperty(PropertyType type, const QVariant &value);
 
-    bool isPasswordProtected() const;
-    void setPasswordProtected(bool p);
+    std::map<UString, UString>& namedAreas();
+    void setNamedArea(UString name, UString formula);
     
     int activeTab() const;
     void setActiveTab(int tab);
-    
+
+    bool isPasswordProtected() const;
+    void setPasswordProtected(bool p);
+
     unsigned long password() const;
     void setPassword(unsigned long hash);
 

@@ -45,8 +45,9 @@ public:
     std::vector<UString> externBookTable;
     std::vector<UString> externSheetTable;
 
-    // for NAME and EXTERNNAME
+    // for NAME
     std::vector<UString> nameTable;
+    // for EXTERNNAME
     std::vector<UString> externNameTable;
 
     // password protection flag
@@ -77,7 +78,7 @@ public:
 };
 
 GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned version)
-        : d(new Private)
+        : SubStreamHandler(), FormulaDecoder(), d(new Private)
 {
     d->workbook = workbook;
     d->version = version;
@@ -663,6 +664,16 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
     if (!record) return;
 
     d->nameTable.push_back(record->definedName());
+    
+    if(record->m_formula.id() != FormulaToken::Unused) {
+        FormulaTokens tokens;
+        tokens.push_back(record->m_formula);
+        UString f = decodeFormula(0, 0, false, tokens);
+        if(!f.isEmpty()) {
+            UString n = record->definedName();
+            d->workbook->setNamedArea(n, f);
+        }
+    }
 }
 
 void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)

@@ -529,6 +529,24 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
         Sheet* sheet = workbook->sheet(i);
         processSheetForBody(sheet, xmlWriter);
     }
+    
+    std::map<UString, UString> &namedAreas = workbook->namedAreas();
+    if(namedAreas.size() > 0) {
+        xmlWriter->startElement("table:named-expressions");
+        for(std::map<UString, UString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
+            xmlWriter->startElement("table:named-range");
+            xmlWriter->addAttribute("table:name", string((*it).first) ); // e.g. "My Named Range"
+            
+            QString range = string((*it).second);
+            if(range.startsWith('[') && range.endsWith(']')) {
+                range = range.mid(1,range.length()-2);
+            }
+                
+            xmlWriter->addAttribute("table:cell-range-address", range); // e.g. "$Sheet1.$B$2:.$B$3"
+            xmlWriter->endElement();//[Sheet1.$B$2:$B$3]
+        }
+        xmlWriter->endElement();
+    }
 
     xmlWriter->endElement();  // office:spreadsheet
 }
@@ -647,7 +665,7 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
         // FIXME optimized this when operator== in Swinder::Format is implemented
         processRowForBody(sheet->row(i, false), 1, xmlWriter);
     }
-
+    
     xmlWriter->endElement();  // table:table
 }
 

@@ -28,6 +28,7 @@
 #include "substreamhandler.h"
 #include "ustring.h"
 #include "format.h"
+#include "formulas.h"
 
 namespace Swinder
 {
@@ -54,7 +55,7 @@ class MsoDrawingGroupRecord;
 class Window1Record;
 class PasswordRecord;
 
-class GlobalsSubStreamHandler : public SubStreamHandler
+class GlobalsSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
     GlobalsSubStreamHandler(Workbook* workbook, unsigned version);
@@ -83,10 +84,10 @@ public:
 
     UString valueFormat(unsigned index) const;  //
 
-    const std::vector<UString>& externSheets() const;
+    virtual const std::vector<UString>& externSheets() const;
 
-    UString nameFromIndex(unsigned index) const;
-    UString externNameFromIndex(unsigned index) const;
+    virtual UString nameFromIndex(unsigned index) const;
+    virtual UString externNameFromIndex(unsigned index) const;
     
     MsoDrawingBlibItem* drawing(unsigned long pid) const;
 

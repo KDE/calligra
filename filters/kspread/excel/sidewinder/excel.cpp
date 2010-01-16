@@ -1034,7 +1034,11 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     //const bool reserved2 = d->optionFlags & 0xC000;
 
     const unsigned len = readU8(data + 3); // cch
-    // 2 bytes cce + 2 bytes reserved + 2 bytes itab + 4 bytes reserved = 10 bytes
+    const unsigned cce = readU16(data + 4); // len of rgce
+    // 2 bytes reserved
+    const unsigned iTab = readU16(data + 8); // if !=0 then its a local name
+    // 4 bytes reserved
+
     if (version() == Excel95) {
         char* buffer = new char[ len+1 ];
         memcpy(buffer, data + 14, len);
@@ -1075,6 +1079,24 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     } else {
         setIsValid(false);
     }
+    
+    // rgce, NamedParsedFormula 
+    if(cce >= 1) {
+        /*
+        FormulaDecoder decoder;
+        m_formula = decoder.decodeNamedFormula(cce, data + size - cce, version());
+        std::cout << ">>" << m_formula.ascii() << std::endl;
+        */
+        const unsigned char* startNamedParsedFormula = data + size - cce;
+        unsigned ptg = readU8(startNamedParsedFormula);
+        ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+        FormulaToken t(ptg);
+        t.setVersion(version());
+        t.setData(cce - 1, startNamedParsedFormula + 1);
+        m_formula = t;
+    }
+        
+    std::cout << "NameRecord name=" << d->definedName << " iTab=" << iTab << " fBuiltin=" << fBuiltin << " formulaType=" << m_formula.idAsString() << std::endl;
 }
 
 void NameRecord::dump(std::ostream& /*out*/) const

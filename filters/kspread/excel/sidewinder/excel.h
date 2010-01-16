@@ -604,6 +604,7 @@ private:
 class NameRecord : public Record
 {
 public:
+    FormulaToken m_formula;
 
     static const unsigned int id;
 

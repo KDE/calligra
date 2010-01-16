@@ -22,6 +22,7 @@
 #define SWINDER_WORKSHEETSUBSTREAMHANDLER_H
 
 #include "substreamhandler.h"
+#include "formulas.h"
 #include "ustring.h"
 #include <vector>
 
@@ -29,9 +30,6 @@ namespace Swinder
 {
 
 class Sheet;
-class FormulaToken;
-typedef std::vector<FormulaToken> FormulaTokens;
-
 class GlobalsSubStreamHandler;
 
 class BOFRecord;
@@ -73,13 +71,22 @@ class MsoDrawingRecord;
 class Window2Record;
 class PasswordRecord;
 
-class WorksheetSubStreamHandler : public SubStreamHandler
+class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
     WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals);
     virtual ~WorksheetSubStreamHandler();
 
     virtual void handleRecord(Record* record);
+    
+protected:
+    // from FormulaDecoder
+    virtual const std::vector<UString>& externSheets() const;
+    virtual UString nameFromIndex(unsigned index) const;
+    virtual UString externNameFromIndex(unsigned index) const;
+    virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& formulaCellPos) const;
+    virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& formulaCellPos) const;
+
 private:
     void handleBOF(BOFRecord* record);
     void handleBlank(BlankRecord* record);
@@ -119,9 +126,6 @@ private:
     void handleMsoDrawing(MsoDrawingRecord* record);
     void handleWindow2(Window2Record* record);
     void handlePassword(PasswordRecord* record);
-
-    UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
-    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
 
     class Private;
     Private * const d;
