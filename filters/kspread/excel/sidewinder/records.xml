@@ -723,8 +723,9 @@
 <!-- reserved/ignored records -->
 <record name="GridSetReserved" id="0x0082" />
 <record name="DSFReserved" id="0x0161" />
-<record name="Excel9FileReserved" id="0x01c0" />
+<record name="Excel9File" id="0x01c0" />
 <record name="MmsReserved" id="0x00c1" />
+<record name="Compat12" id="0x088c" />
 
 <record name="Window1" id="0x003D">
   <field name="xWn" type="signed" size="16" />
@@ -826,6 +827,8 @@
 </record>
 <record name="Style" id="0x0293">
 </record>
+<record name="StyleExt" id="0x0892">
+</record>
 <record name="ExtSST" id="0x00ff">
 </record>
 <record name="UsesELFs" id="0x0160">
@@ -849,6 +852,11 @@
 <record name="Country" id="0x008c">
 </record>
 <record name="Selection" id="0x001d">
+  <field name="pnn" type="unsigned" size="8" />
+  <field name="rwAct" type="unsigned" size="16" />
+  <field name="colAct" type="unsigned" size="16" />
+  <field name="irefAct" type="unsigned" size="16" />
+  <field name="cref" type="unsigned" size="16" />
 </record>
 <record name="PrinterSettings" id="0x004d">
 </record>
@@ -858,5 +866,22 @@
 </record>
 <record name="LastWriteAccess" id="0x005c">
 </record>
+<record name="XFExt" id="0x087d">
+</record>
+<record name="XFCRC" id="0x087c">
+</record>
+<record name="TableStyles" id="0x088e">
+</record>
+<record name="MTRSettings" id="0x089a">
+</record>
+<record name="ForceFullCalculation" id="0x08a3">
+</record>
+<record name="BookExt" id="0x0863">
+</record>
+<record name="Theme" id="0x0896">
+</record>
+<record name="CompressPictures" id="0x089b">
+</record>
+
 
 </records>
