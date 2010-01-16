@@ -28,6 +28,12 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 {
     m_insideHdr = false;
     m_insideFtr = false;
+    m_currentTextStyleProperties = 0;
+}
+
+void MSOOXML_CURRENT_CLASS::doneInternal()
+{
+    delete m_currentTextStyleProperties;
 }
 
 #undef CURRENT_EL

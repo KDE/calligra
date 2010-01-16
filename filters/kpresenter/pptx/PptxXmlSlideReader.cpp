@@ -110,12 +110,13 @@ PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
 
 PptxXmlSlideReader::~PptxXmlSlideReader()
 {
+    doneInternal(); // MsooXmlCommonReaderImpl.h
     delete d;
 }
 
 void PptxXmlSlideReader::init()
 {
-    initInternal();
+    initInternal(); // MsooXmlCommonReaderImpl.h
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 

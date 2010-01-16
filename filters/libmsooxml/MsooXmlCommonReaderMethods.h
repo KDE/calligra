@@ -27,7 +27,8 @@
 // included by DocxXmlDocumentReader and PptxXmlSlideReader
 
 protected:
-void initInternal();
+void initInternal(); //!< should be called from ctor
+void doneInternal(); //!< sould be called from dtor
 
 KoFilter::ConversionStatus read_hyperlink();
 KoFilter::ConversionStatus read_p();

@@ -63,12 +63,13 @@ DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
 
 DocxXmlDocumentReader::~DocxXmlDocumentReader()
 {
+    doneInternal(); // MsooXmlCommonReaderImpl.h
     delete d;
 }
 
 void DocxXmlDocumentReader::init()
 {
-    initInternal();
+    initInternal(); // MsooXmlCommonReaderImpl.h
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
