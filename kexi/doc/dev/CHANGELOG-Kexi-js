@@ -59,6 +59,11 @@ TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
 TODO: text editor: autofill disabled because this makes the widget disappear entirely; now fix the background color because it is getting transparent on mouse out in design mode
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2010-01-15
+KoProperty
+*ported the line style editor
+
 2010-01-10
 Forms
 *Only add dashed frames for widgets with no frames
