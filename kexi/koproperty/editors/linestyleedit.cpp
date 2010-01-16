@@ -63,11 +63,9 @@ static bool hasVisibleStyle(const QVariant &value)
 void LineStyleCombo::setValue(const QVariant &value)
 {
     if (!hasVisibleStyle(value)) {
-kDebug() << "no value" << value.toInt();
         setLineStyle(Qt::NoPen);
         return;
     }
-kDebug() << value.toInt();
     setLineStyle(static_cast<Qt::PenStyle>(value.toInt()));
 }
 
@@ -91,7 +89,7 @@ void LineStyleComboDelegate::paint( QPainter * painter,
     painter->save();
     QPen pen(Qt::NoPen);
     if (hasVisibleStyle(index.data(Qt::EditRole))) {
-        pen.setColor(option.palette.color(QPalette::Text));
+        pen.setBrush(option.palette.text());
         pen.setWidth(3);
         pen.setStyle(static_cast<Qt::PenStyle>(index.data(Qt::EditRole).toInt()));
     }
