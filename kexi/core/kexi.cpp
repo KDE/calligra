@@ -94,15 +94,6 @@ void Kexi::deleteGlobalObjects()
 
 //temp
 
-bool _tempShowReports = true;
-bool& Kexi::tempShowReports()
-{
-#ifndef KEXI_REPORTS_SUPPORT
-    _tempShowReports = false;
-#endif
-    return _tempShowReports;
-}
-
 bool _tempShowMacros = true;
 bool& Kexi::tempShowMacros()
 {

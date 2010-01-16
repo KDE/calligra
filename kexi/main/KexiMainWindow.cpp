@@ -1103,12 +1103,6 @@ void KexiMainWindow::setupActions()
       */
 #endif
 
-#ifdef KEXI_REPORTS_SUPPORT
-    Kexi::tempShowReports() = true;
-#else
-    Kexi::tempShowReports() = false;
-#endif
-
 #ifdef KEXI_MACROS_SUPPORT
     Kexi::tempShowMacros() = true;
 #else
@@ -4508,8 +4502,6 @@ bool KexiMainWindow::userMode() const
 bool
 KexiMainWindow::setupUserMode(KexiProjectData *projectData)
 {
-// Kexi::tempShowForms() = true;
-// Kexi::tempShowReports() = true;
 // Kexi::tempShowMacros() = true;
 // Kexi::tempShowScripts() = true;
     if (!projectData)

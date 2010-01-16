@@ -77,9 +77,6 @@ KEXICORE_EXPORT void deleteGlobalObjects();
 //some temporary flags
 
 //! false by default, flag loaded on main window startup
-KEXICORE_EXPORT bool& tempShowReports();
-
-//! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowMacros();
 
 //! false by default, flag loaded on main window startup
