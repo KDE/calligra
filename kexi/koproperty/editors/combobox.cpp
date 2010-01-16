@@ -77,7 +77,7 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
 //    setFocusWidget(m_edit);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
     
-    setFrame(0);
+    setFrame(false);
 /*    QList<QWidget*> children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
         kDebug() << w->objectName() << w->metaObject()->className();
