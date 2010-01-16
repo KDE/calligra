@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,34 +21,48 @@
 #define KPROPERTY_LINESTYLEEDIT_H
 
 #include "koproperty/Factory.h"
-
-#include <libs/guiutils/KoLineStyleSelector.h>
-class KoLineStyleSelector;
+#include <KoLineStyleSelector.h>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT LineStyleEdit : public Widget
+//! Line style combo box (Property::LineStyle, equivalent of Qt::PenStyle)
+//! @todo enable transparency selection
+//! @todo add transparency option
+//! @todo reimplement view using KColorCells
+class KOPROPERTY_EXPORT LineStyleCombo : public KoLineStyleSelector
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit LineStyleEdit(Property *property, QWidget *parent = 0);
-    virtual ~LineStyleEdit();
+    explicit LineStyleCombo(QWidget *parent = 0);
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    ~LineStyleCombo();
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    QVariant value() const;
 
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+signals:
+    void commitData(QWidget * editor);
+
+public slots:
+    void setValue(const QVariant &value);
 
 protected slots:
-    void slotValueChanged(int value);
+    void slotValueChanged(int index);
+};
 
-private:
-    KoLineStyleSelector *m_edit;
+class KOPROPERTY_EXPORT LineStyleComboDelegate : public EditorCreatorInterface,
+                                                 public ValuePainterInterface
+{
+public:
+    LineStyleComboDelegate() {options.removeBorders = false;}
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 }

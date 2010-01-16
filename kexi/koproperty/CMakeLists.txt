@@ -7,19 +7,6 @@ add_subdirectory( test )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
-if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
-  add_definitions(-DKOPROPERTY_USE_KOLIBS)
-endif(KOPROPERTY_USE_KOLIBS)
-
-include_directories(
-#  ${CMAKE_SOURCE_DIR}/kexi/koproperty
-#  ${CMAKE_SOURCE_DIR}/kexi/koproperty/editors
-  ${CMAKE_SOURCE_DIR}/libs/odf
-#  ${CMAKE_SOURCE_DIR}/libs/guiutils
-#  ${KOMAIN_INCLUDES}
-)
-
-
 set(libkopropertyeditors_SRCS
   editors/utils.cpp
   editors/booledit.cpp
@@ -30,7 +17,6 @@ set(libkopropertyeditors_SRCS
 #  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp
   editors/fontedit.cpp
-#todo  editors/linestyledit.cpp
   editors/pixmapedit.cpp
   editors/pointedit.cpp
   editors/rectedit.cpp
@@ -43,6 +29,15 @@ set(libkopropertyeditors_SRCS
 #  editors/timeedit.cpp
 #  editors/urledit.cpp
 )
+
+if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
+  add_definitions(-DKOPROPERTY_USE_KOLIBS)
+  include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/odf
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+  )
+  list(APPEND libkopropertyeditors_SRCS editors/linestyleedit.cpp)
+endif(KOPROPERTY_USE_KOLIBS)
 
 ########### next target ###############
 
@@ -62,7 +57,7 @@ kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
 
 set(KOPROPERTY_LINK_LIBS ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY})
 if(KOPROPERTY_USE_KOLIBS)
-	list(APPEND KOPROPERTY_LINK_LIBS kobase)
+	list(APPEND KOPROPERTY_LINK_LIBS kobase kowidgets)
 endif(KOPROPERTY_USE_KOLIBS)
 target_link_libraries(${KOPROPERTY_TARGETNAME} ${KOPROPERTY_LINK_LIBS})
 

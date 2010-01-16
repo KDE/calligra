@@ -27,8 +27,7 @@
 #include "editors/cursoredit.h"
 /*#include "editors/dateedit.h"
 #include "editors/datetimeedit.h"
-#include "editors/dummywidget.h"
-//TODO #include "editors/linestyleedit.h"*/
+#include "editors/dummywidget.h"*/
 #include "editors/pixmapedit.h"
 #include "editors/pointedit.h"
 #include "editors/fontedit.h"
@@ -37,6 +36,9 @@
 #include "editors/sizepolicyedit.h"
 #include "editors/spinbox.h"
 /*#include "stringlistedit.h"*/
+#ifdef KOPROPERTY_USE_KOLIBS
+# include "editors/linestyleedit.h"
+#endif
 #include "editors/stringedit.h"
 /*#include "symbolcombo.h"
 #include "timeedit.h"
@@ -56,6 +58,9 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
     addEditor( KoProperty::Int, new IntSpinBoxDelegate );
+#ifdef KOPROPERTY_USE_KOLIBS
+    addEditor( KoProperty::LineStyle, new LineStyleComboDelegate );
+#endif
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
