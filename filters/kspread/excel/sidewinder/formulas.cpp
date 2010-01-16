@@ -153,6 +153,7 @@ const char* FormulaToken::idAsString() const
     case MemFunc:      s = "MemFunc"; break;
     case MemAreaN:     s = "MemAreaN"; break;
     case MemNoMemN:    s = "MemNoMemN"; break;
+    case Attr:         s = "Attr"; break;
     case 0:            s = ""; break; // NOPE...
     default:
         s = "Unknown";

@@ -324,7 +324,7 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     else if (type == PasswordRecord::id)
         handlePassword(static_cast<PasswordRecord*>(record));
     else {
-        std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
+        //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
 }
 
