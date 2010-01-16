@@ -981,7 +981,7 @@ void MulRKRecord::dump(std::ostream& out) const
 
 // ========== NAME ==========
 
-const unsigned int NameRecord::id = 0x0018;
+const unsigned int NameRecord::id = 0x0018; // Lbl record
 
 class NameRecord::Private
 {
@@ -1047,8 +1047,25 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         delete[] buffer;
     } else  if (version() == Excel97) {
         if( fBuiltin ) { // field is for a build-in name
-            printf( "TODO: build-in name\n" );
-            //d->definedName = ;
+            const unsigned opts = readU8(data + 14);
+            const bool fHighByte = opts & 0x01;
+            const unsigned id = fHighByte ? readU16(data + 15) : readU8(data + 15) + 0x0*256;
+            switch(id) {
+                case 0x00: d->definedName = "Consolidate_Area"; break;
+                case 0x01: d->definedName = "Auto_Open"; break;
+                case 0x02: d->definedName = "Auto_Close"; break;
+                case 0x03: d->definedName = "Extract"; break;
+                case 0x04: d->definedName = "Database"; break;
+                case 0x05: d->definedName = "Criteria"; break;
+                case 0x06: d->definedName = "Print_Area"; break;
+                case 0x07: d->definedName = "Print_Titles"; break;
+                case 0x08: d->definedName = "Recorder"; break;
+                case 0x09: d->definedName = "Data_Form"; break;
+                case 0x0A: d->definedName = "Auto_Activate"; break;
+                case 0x0B: d->definedName = "Auto_Deactivate"; break;
+                case 0x0C: d->definedName = "Sheet_Title"; break;
+                default: break;
+            }
         } else { // must satisfy same restrictions then name field on XLNameUnicodeString
             const unsigned opts = readU8(data + 14);
             const bool fHighByte = opts & 0x01;
@@ -1096,7 +1113,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         m_formula = t;
     }
         
-    std::cout << "NameRecord name=" << d->definedName << " iTab=" << iTab << " fBuiltin=" << fBuiltin << " formulaType=" << m_formula.idAsString() << std::endl;
+    std::cout << "NameRecord name=" << d->definedName << " iTab=" << iTab << " fBuiltin=" << fBuiltin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
 }
 
 void NameRecord::dump(std::ostream& /*out*/) const
