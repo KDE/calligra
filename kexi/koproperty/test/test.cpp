@@ -120,6 +120,15 @@ TestWindow::TestWindow()
     if (singleProperty.isEmpty() || singleProperty=="Size") {
         m_set.addProperty(new Property("Size", QSize(10, 20), "Size"), group);
     }
+    if (singleProperty.isEmpty() || singleProperty=="RectF") {
+        m_set.addProperty(new Property("RectF", QRectF(0.1, 0.5, 10.72, 18.21), "RectF"), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="PointF") {
+        m_set.addProperty(new Property("PointF", QPointF(3.14, 4.15), "PointF"), group);
+    }
+    if (singleProperty.isEmpty() || singleProperty=="SizeF") {
+        m_set.addProperty(new Property("SizeF", QSizeF(1.1, 2.45), "SizeF"), group);
+    }
 
 //  Appearance
     if (!flat) {
