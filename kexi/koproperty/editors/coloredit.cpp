@@ -68,6 +68,9 @@ void ColorCombo::slotValueChanged(const QColor&)
 QWidget * ColorComboDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type)
+    Q_UNUSED(option)
+    Q_UNUSED(index)
     return new ColorCombo(parent);
 }
 
