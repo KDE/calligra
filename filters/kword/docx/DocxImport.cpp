@@ -193,19 +193,6 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         "\n    <!-- /COPIED -->"
     );
 
-    writers->mainStyles->addRawOdfAutomaticStyles(
-        "\n    <!-- COPIED -->"
-        "\n    <style:page-layout style:name=\"Mpm1\">"
-        "\n      <style:page-layout-properties fo:page-width=\"20.999cm\" fo:page-height=\"29.699cm\" style:num-format=\"1\" style:print-orientation=\"portrait\" fo:margin-top=\"2.499cm\" fo:margin-bottom=\"2.499cm\" fo:margin-left=\"2.499cm\" fo:margin-right=\"2.499cm\" style:writing-mode=\"lr-tb\" style:layout-grid-color=\"#c0c0c0\" style:layout-grid-lines=\"24701\" style:layout-grid-base-height=\"0.423cm\" style:layout-grid-ruby-height=\"0cm\" style:layout-grid-mode=\"none\" style:layout-grid-ruby-below=\"false\" style:layout-grid-print=\"false\" style:layout-grid-display=\"false\" style:footnote-max-height=\"0cm\">"
-        "\n        <style:footnote-sep style:width=\"0.018cm\" style:distance-before-sep=\"0.101cm\" style:distance-after-sep=\"0.101cm\" style:adjustment=\"left\" style:rel-width=\"25%\" style:color=\"#000000\"/>"
-        "\n      </style:page-layout-properties>"
-        "\n      <style:header-style/>"
-        "\n      <style:footer-style/>"
-        "\n    </style:page-layout>"
-        "\n    <!-- /COPIED -->",
-        true // styles.xml
-    );
-
     // 1. parse font table
     {
         DocxXmlFontTableReaderContext context(*writers->mainStyles);

@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -758,20 +758,6 @@ QByteArray Utils::ST_PlaceholderType_to_ODF(const QByteArray& ecmaType)
     return it.value();
 }
 
-QString Utils::EMU_to_ODF_CM(const QString& emuValue)
-{
-    if (emuValue.isEmpty())
-        return QLatin1String("0cm");
-    bool ok;
-    const int emu = emuValue.toInt(&ok);
-    if (!ok)
-        return QString();
-    if (emu == 0)
-        return QLatin1String("0cm");
-    return EMU_TO_CM_STRING(emu);
-//    return QString::number(, 'g', 3) + QLatin1String("cm");
-}
-
 //! Mapping for handling u element, used in setupUnderLineStyle()
 struct UnderlineStyle {
     UnderlineStyle(
@@ -920,3 +906,32 @@ void Utils::XmlWriteBuffer::clear()
     m_newWriter = 0;
     m_origWriter = 0;
 }
+
+// <units> -------------------
+
+QString Utils::EMU_to_ODF_CM(const QString& emuValue)
+{
+    if (emuValue.isEmpty())
+        return QLatin1String("0cm");
+    bool ok;
+    const int emu = emuValue.toInt(&ok);
+    if (!ok)
+        return QString();
+    if (emu == 0)
+        return QLatin1String("0cm");
+    return EMU_TO_CM_STRING(emu);
+//    return QString::number(, 'g', 3) + QLatin1String("cm");
+}
+
+QString Utils::ST_EighthPointMeasure_to_pt(const QString& value)
+{
+    if (value.isEmpty())
+        return QString();
+    bool ok;
+    const qreal point = qreal(value.toFloat(&ok)) / 8.0;
+    if (!ok)
+        return QString();
+    return QString::number(point, 'g', 2) + QLatin1String("pt");
+}
+
+// </units> -------------------

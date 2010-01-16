@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -52,13 +52,30 @@ public:
 
 protected:
     KoFilter::ConversionStatus read_body();
+    KoFilter::ConversionStatus read_sectPr();
+    KoFilter::ConversionStatus read_pgSz();
+    KoFilter::ConversionStatus read_pgMar();
+    KoFilter::ConversionStatus read_pgBorders();
+    KoFilter::ConversionStatus read_top();
+    KoFilter::ConversionStatus read_left();
+    KoFilter::ConversionStatus read_bottom();
+    KoFilter::ConversionStatus read_right();
 
     typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
+    KoGenStyle m_currentPageStyle;
+    enum BorderSide {
+        TopBorder, BottomBorder, LeftBorder, RightBorder
+    };
+    QMap<QString, BorderSide> m_pageBorderStyles; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
+    QMap<QString, BorderSide> m_pageBorderPaddings; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
     DocxXmlDocumentReaderContext* m_context;
 private:
     void init();
+    KoFilter::ConversionStatus read_border(BorderSide borderSide, const char *borderSideName);
+    void createBorderStyle(const QString& size, const QString& color,
+                           const QString& lineStyle, BorderSide borderSide);
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>

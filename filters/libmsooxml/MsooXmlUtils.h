@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -230,7 +230,8 @@ struct MSOOXML_EXPORT DoubleModifier {
     bool valid;
 };
 
-MSOOXML_EXPORT QColor colorForLuminance(const QColor& color, const DoubleModifier& modulation, const DoubleModifier& offset);
+MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
+    const DoubleModifier& modulation, const DoubleModifier& offset);
 
 //! Converts shape types from ECMA-376 to ODF.
 /*! @return "Common Presentation Shape Attribute" value (ODF 1.1., 9.6.1)
@@ -243,13 +244,6 @@ MSOOXML_EXPORT QColor colorForLuminance(const QColor& color, const DoubleModifie
 */
 //! CASE #P500
 MSOOXML_EXPORT QByteArray ST_PlaceholderType_to_ODF(const QByteArray& ecmaType);
-
-//! Converts EMU Unit of Measurement to cm.
-/*! Converts value expressed in EMU (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
-    to ODF-compliant "0.000cm" unit.
-    @return empty string on error. */
-//! CASE #P505
-MSOOXML_EXPORT QString EMU_to_ODF_CM(const QString& emuValue);
 
 //! Sets up @a textStyleProperties with underline style matching MSOOXML name @a msooxmlName.
 //! Based on 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681
@@ -270,8 +264,16 @@ MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterS
      XmlWriteBuffer buf;
      body = buf.setWriter(body);
      // ...
-     // ... buf.originalWriter() can be used here
+     // buf.originalWriter() can be used here ...
      // ...
+     // Use the new buffered body writer here, e.g.:
+     body->startElement("text:span", false);
+     body->addAttribute("text:style-name", currentTextStyleName);
+     body->addTextSpan(text);
+     body->endElement();
+     // We are done with the buffered body writer, now release it and restore the original body writer.
+     // This inserts all the XML buffered by buf into the original body writer
+     // (internally using KoXmlWriter::addCompleteElement()).
      body = buf.releaseWriter();
      @endcode */
 class MSOOXML_EXPORT XmlWriteBuffer
@@ -291,9 +293,11 @@ public:
     KoXmlWriter* setWriter(KoXmlWriter* writer);
 
     //! Releases the original writer set before using setWriter(KoXmlWriter*&).
-    /*! @return the original writer set in setWriter();
-                this writer usually should be assigned back to the variable
-                altered by the recent use of setWriter(). */
+    /*! This inserts all the XML buffered by buffer into the original body writer passed in setWriter()
+     (internally using KoXmlWriter::addCompleteElement()).
+     @return the original writer set in setWriter();
+             this writer usually should be assigned back to the variable
+             altered by the recent use of setWriter(). */
     KoXmlWriter* releaseWriter();
 
     //! @return the original writer set in setWriter(). Does not change the state of the buffer.

@@ -69,6 +69,26 @@ inline QString EMU_TO_INCH_STRING(int emu)
     return res.sprintf("%3.3fin", EMU_TO_INCH(double(emu)));
 }
 
+namespace MSOOXML
+{
+
+namespace Utils {
+
+//! Converts EMU Unit of Measurement to cm.
+/*! Converts value expressed in EMU (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
+    to ODF-compliant "0.000cm" unit.
+    @return empty string on error. */
+//! CASE #P505
+MSOOXML_EXPORT QString EMU_to_ODF_CM(const QString& emuValue);
+
+//! ECMA-376, 17.18.23 ST_EighthPointMeasure (Measurement in Eighths of a Point), p. 1540
+/*! Converts eighths of a point (equivalent to 1/576th of an inch) to point.
+    @return empty string on failure. */
+MSOOXML_EXPORT QString ST_EighthPointMeasure_to_pt(const QString& value);
+
+}
+}
+
 // px conversion
 #define PT_TO_PX(pt) ((pt)*1.33597222222)
 #define PX_TO_CM(px) ((px)*0.0264)
