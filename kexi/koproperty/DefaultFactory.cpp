@@ -30,6 +30,7 @@
 #include "editors/dummywidget.h"*/
 #include "editors/pixmapedit.h"
 #include "editors/pointedit.h"
+#include "editors/pointfedit.h"
 #include "editors/fontedit.h"
 #include "editors/rectedit.h"
 #include "editors/sizeedit.h"
@@ -64,6 +65,7 @@ DefaultFactory::DefaultFactory()
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
+    addEditor( KoProperty::PointF, new PointFDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );

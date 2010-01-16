@@ -19,6 +19,7 @@ set(libkopropertyeditors_SRCS
   editors/fontedit.cpp
   editors/pixmapedit.cpp
   editors/pointedit.cpp
+  editors/pointfedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
   editors/sizepolicyedit.cpp
