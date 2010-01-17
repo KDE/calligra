@@ -34,6 +34,7 @@
 #include "editors/fontedit.h"
 #include "editors/rectedit.h"
 #include "editors/sizeedit.h"
+#include "editors/sizefedit.h"
 #include "editors/sizepolicyedit.h"
 #include "editors/spinbox.h"
 /*#include "stringlistedit.h"*/
@@ -68,6 +69,7 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::PointF, new PointFDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );
+    addEditor( KoProperty::SizeF, new SizeFDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
     addEditor( KoProperty::String, new StringDelegate );
     addEditor( KoProperty::UInt, new IntSpinBoxDelegate );

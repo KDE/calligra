@@ -22,6 +22,7 @@ set(libkopropertyeditors_SRCS
   editors/pointfedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
+  editors/sizefedit.cpp
   editors/sizepolicyedit.cpp
   editors/spinbox.cpp
   editors/stringedit.cpp
