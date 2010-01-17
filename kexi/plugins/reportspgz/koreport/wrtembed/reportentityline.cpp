@@ -41,6 +41,7 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
 {
     m_reportDesigner = r;
     setPos(0, 0);
+    setUnit(r->pageUnit());
 
 #if QT_VERSION >= 0x040600
     setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
@@ -84,8 +85,6 @@ ReportEntityLine* ReportEntityLine::clone()
     n = e.firstChild();
     return new ReportEntityLine(n, designer(), 0);
 }
-
-
 
 void ReportEntityLine::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                              QWidget *widget)
@@ -138,11 +137,9 @@ void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prope
 {
     Q_UNUSED(s);
 
-    //TODO KoProperty does not support QPointF
-    if (p.name() == "Start") {
-        //setLine ( _start.toScene().x(), _start.toScene().y(), line().p1().x(), line().p1().y() );
-    } else if (p.name() == "End") {
-        //setLine ( line().p2().x(), line().p2().y(),_end.toScene().x(), _end.toScene().y() );
+    kDebug() << p.name();
+    if (p.name() == "Start" || p.name() == "End") {
+        setLine ( m_start.toScene().x(), m_start.toScene().y(), m_end.toScene().x(), m_end.toScene().y() );
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -164,7 +161,18 @@ void ReportEntityLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 QVariant ReportEntityLine::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+        //Update Properties
+    m_start.setScenePos(mapToScene(line().p1()), true);
+    m_end.setScenePos(mapToScene(line().p2()), true);
     return QGraphicsItem::itemChange(change, value);
+}
+
+void ReportEntityLine::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    //Update Properties
+    //m_start.setScenePos(mapToScene(line().p1()), true);
+    //m_end.setScenePos(mapToScene(line().p2()), true);
+    QGraphicsLineItem::mouseReleaseEvent(event);
 }
 
 void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
@@ -181,15 +189,15 @@ void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     if (y < 0) y = 0;
     if (x > scene()->width()) x = scene()->width();
     if (y > scene()->height()) y = scene()->height();
-    //x = event->pos().x();
-    //y = event->pos().y();
 
     switch (m_grabAction) {
     case 1:
-        setLine(QLineF(x, y, line().x2(), line().y2()));
+	m_start.setScenePos(QPointF(x,y));
+        //setLine(QLineF(x, y, line().x2(), line().y2()));
         break;
     case 2:
-        setLine(QLineF(line().x1(), line().y1(), x, y));
+	m_end.setScenePos(QPointF(x,y));
+        //setLine(QLineF(line().x1(), line().y1(), x, y));
         break;
     default:
         QPointF d = mapToItem(this, dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos())) - mapToItem(this, dynamic_cast<ReportScene*>(scene())->gridPoint(event->lastScenePos()));
@@ -205,10 +213,6 @@ void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
             setLine(QLineF(line().p1() + d, line().p2() + d));
         break;
     }
-    //Update Properties
-    m_start.setScenePos(mapToScene(line().p1()), true);
-    m_end.setScenePos(mapToScene(line().p2()), true);
-
 }
 
 int ReportEntityLine::grabHandle(QPointF pos)
@@ -247,4 +251,8 @@ void ReportEntityLine::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
     }
 }
 
-
+void ReportEntityLine::setUnit(KoUnit u)
+{
+    m_start.setUnit(u);
+    m_end.setUnit(u);
+}

@@ -45,6 +45,8 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual ReportEntityLine* clone();
 
+    void setUnit(KoUnit u);
+    
 private:
     ReportDesigner* m_rd;
     void init(QGraphicsScene*, ReportDesigner *);
@@ -56,6 +58,7 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private slots:

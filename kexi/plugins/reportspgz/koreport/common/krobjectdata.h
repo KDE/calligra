@@ -78,7 +78,8 @@ public:
         EntityImage = 65554,
         EntityChart = 65555,
         EntityShape = 65556,
-        EntityCheck = 65557
+        EntityCheck = 65557,
+        EntityLast = 65558
     };
 
     KRObjectData();

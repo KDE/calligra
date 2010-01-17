@@ -48,8 +48,8 @@ protected:
     int m_dpiX;
     int m_dpiY;
 
-    void setSceneRect(QPointF, QSizeF);
-    void setSceneRect(QRectF);
+    void setSceneRect(QPointF, QSizeF, bool update_property = true);
+    void setSceneRect(QRectF, bool update_property = true);
 
     void drawHandles(QPainter*);
     QRectF pointRect();

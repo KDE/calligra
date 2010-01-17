@@ -81,17 +81,19 @@ QRectF ReportRectEntity::pointRect()
         return QRectF(0, 0, 0, 0);
 }
 
-void ReportRectEntity::setSceneRect(QPointF p, QSizeF s)
+void ReportRectEntity::setSceneRect(QPointF p, QSizeF s, bool update_property)
 {
-    setSceneRect(QRectF(p, s));
+    setSceneRect(QRectF(p, s), update_property);
 }
 
-void ReportRectEntity::setSceneRect(QRectF r)
+void ReportRectEntity::setSceneRect(QRectF r, bool update_property)
 {
     QGraphicsRectItem::setPos(r.x(), r.y());
     setRect(0, 0, r.width(), r.height());
-    m_ppos->setScenePos(QPointF(r.x(), r.y()));
-    m_psize->setSceneSize(QSizeF(r.width(), r.height()));
+    if (update_property) {
+	m_ppos->setScenePos(QPointF(r.x(), r.y()));
+	m_psize->setSceneSize(QSizeF(r.width(), r.height()));
+    }
     update();
 }
 
@@ -213,10 +215,12 @@ void ReportRectEntity::drawHandles(QPainter *painter)
         painter->drawRect(rect());
 
         const QRectF r = rect();
-        int halfW = (int)(r.width() / 2);
-        int halfH = (int)(r.height() / 2);
+        double halfW = (r.width() / 2);
+        double halfH = (r.height() / 2);
         QPointF center = r.center();
 
+	center += QPointF(0.75,0.75);
+	
         painter->fillRect(center.x() - halfW, center.y() - halfH , 5, 5, QColor(128, 128, 255));
         painter->fillRect(center.x() - 2, center.y() - halfH , 5, 5, QColor(128, 128, 255));
         painter->fillRect(center.x() + halfW - 4, center.y() - halfH, 5, 5, QColor(128, 128, 255));

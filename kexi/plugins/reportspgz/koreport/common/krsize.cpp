@@ -27,7 +27,7 @@ KRSize::KRSize(const KoUnit& unit)
 {
     m_unit = unit;
     //TODO When KoProperty can handle QSize
-    m_property = new KoProperty::Property("Size", toScene().toSize(), "Size", "Size");
+    m_property = new KoProperty::Property("Size", toScene(), "Size", "Size");
 }
 
 
@@ -43,7 +43,7 @@ void KRSize::setSceneSize(const QSizeF& s)
     h = INCH_TO_POINT(s.height() / KoDpi::dpiY());
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
-    m_property->setValue(toUnit().toSize());
+    m_property->setValue(toUnit());
 }
 
 void KRSize::setUnitSize(const QSizeF& s)
@@ -53,21 +53,21 @@ void KRSize::setUnitSize(const QSizeF& s)
     h = m_unit.fromUserValue(s.height());
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
-    m_property->setValue(toUnit().toSize());
+    m_property->setValue(toUnit());
 }
 
 void KRSize::setPointSize(const QSizeF& s)
 {
     m_pointSize.setWidth(s.width());
     m_pointSize.setHeight(s.height());
-    m_property->setValue(toUnit().toSize());
+    m_property->setValue(toUnit());
 
 }
 
 void KRSize::setUnit(KoUnit u)
 {
     m_unit = u;
-    m_property->setValue(toUnit().toSize());
+    m_property->setValue(toUnit());
 }
 
 QSizeF KRSize::toPoint()

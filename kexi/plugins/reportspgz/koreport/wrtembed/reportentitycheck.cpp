@@ -150,11 +150,10 @@ void ReportEntityCheck::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
 {
     Q_UNUSED(s)
 
-    //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
-        //_pos.setUnitPos(p.value().value<QPointF>(), false);
+        m_pos.setUnitPos(p.value().toPointF(), false);
     } else if (p.name() == "Size") {
-        //_size.setUnitSize(p.value().value<QSizeF>());
+        m_size.setUnitSize(p.value().toSizeF());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -164,7 +163,7 @@ void ReportEntityCheck::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
         }
     }
 
-    //setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene(), false);
 
     if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();

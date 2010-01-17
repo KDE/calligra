@@ -230,8 +230,11 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
     for (int i = 0; i < itms.size(); ++i) {
-        if (itms[i]->type() >= 65550 && itms[i]->type() <= 65555) {
+        if (itms[i]->type() >= KRObjectData::EntityLabel && itms[i]->type() < KRObjectData::EntityLast) {
             dynamic_cast<ReportRectEntity*>(itms[i])->setUnit(unit);
+        }
+        if (itms[i]->type() == KRObjectData::EntityLine) {
+            dynamic_cast<ReportEntityLine*>(itms[i])->setUnit(unit);
         }
     }
 

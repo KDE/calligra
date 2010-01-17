@@ -158,12 +158,11 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
 }
 
 void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
-{
-    kDebug() << s.typeName() << ":" << p.name() << ":" << p.value();
-
-    //Handle Position
+{       
     if (p.name() == "Position") {
-        m_pos.setUnitPos(p.value().value<QPointF>());
+        m_pos.setUnitPos(p.value().toPointF(), false);
+    } else if (p.name() == "Size") {
+        m_size.setUnitSize(p.value().toSizeF());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -195,8 +194,8 @@ void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
         }
     }
 
+    setSceneRect(m_pos.toScene(), m_size.toScene(), false);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
-
     if (scene()) scene()->update();
 
 }

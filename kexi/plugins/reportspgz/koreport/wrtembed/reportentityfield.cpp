@@ -163,12 +163,11 @@ void ReportEntityField::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
 {
     Q_UNUSED(s);
 
-    //Handle Position
     if (p.name() == "Position") {
-        //TODO _pos.setUnitRect(p.value().value<QRect>() );
-    }
-
-    if (p.name() == "Name") {
+        m_pos.setUnitPos(p.value().toPointF(), false);
+    } else if (p.name() == "Size") {
+        m_size.setUnitSize(p.value().toSizeF());
+    } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
             p.setValue(m_oldName);
@@ -177,11 +176,9 @@ void ReportEntityField::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
         }
     }
 
-    if (m_reportDesigner)
-        m_reportDesigner->setModified(true);
-
-    if (scene())
-        scene()->update();
+    setSceneRect(m_pos.toScene(), m_size.toScene(), false);
+    if (m_reportDesigner)m_reportDesigner->setModified(true);
+    if (scene())scene()->update();
 }
 
 void ReportEntityField::mousePressEvent(QGraphicsSceneMouseEvent * event)
