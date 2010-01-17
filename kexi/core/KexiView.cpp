@@ -229,7 +229,7 @@ KexiView::KexiView(QWidget *parent)
 
             a = sharedAction("project_save");
             d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
-            d->saveDesignButton->setText(i18n("Save Design"));
+            d->saveDesignButton->setText(i18n("Save"));
             d->saveDesignButton->setToolTip(i18n("Save current design"));
             d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
             d->topBarLyr->addWidget(d->saveDesignButton);
