@@ -124,7 +124,9 @@ signals:
 
     void executeItem(KexiPart::Item*);
 
-    void exportItemAsDataTable(KexiPart::Item*);
+    void exportItemToClipboardAsDataTable(KexiPart::Item*);
+
+    void exportItemToFileAsDataTable(KexiPart::Item*);
 
     void printItem(KexiPart::Item*);
 
@@ -147,7 +149,8 @@ protected slots:
     void slotPaste();
     void slotRename();
     void slotExecuteObject();
-    void slotExportAsDataTable();
+    void slotExportToClipboardAsDataTable();
+    void slotExportToFileAsDataTable();
     void slotPrintObject();
     void slotPageSetupForObject();
 
@@ -170,7 +173,7 @@ protected:
     // *m_newObjectToolbarAction,
         *m_openAction, *m_designAction, *m_editTextAction,
         *m_executeAction,
-        *m_dataExportAction, *m_printAction, *m_pageSetupAction;
+        *m_dataExportToClipboardAction, *m_dataExportToFileAction, *m_printAction, *m_pageSetupAction;
     KActionMenu* m_exportActionMenu;
 //  KMenu* m_newObjectMenu;
     QAction *m_itemMenuTitle, *m_partMenuTitle,

@@ -199,12 +199,19 @@ KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
 
     m_actions->addAction("export_object",
                          m_exportActionMenu = new KActionMenu(i18n("Export"), this));
-    m_dataExportAction = addAction("exportAsDataTable", KIcon("table"),
+    m_dataExportToClipboardAction = addAction("exportToClipboardAsDataTable", KIcon("edit-copy"),
+                                   i18nc("Export->To Clipboard as Data... ", "To &Clipboard..."),
+                                   i18n("Export data to clipboard"),
+                                   i18n("Exports data from the currently selected table or query to clipboard."),
+                                   SLOT(slotExportToClipboardAsDataTable()));
+    m_exportActionMenu->addAction(m_dataExportToClipboardAction);
+
+    m_dataExportToFileAction = addAction("exportToFileAsDataTable", KIcon("table"),
                                    i18nc("Export->To File As Data &Table... ", "To &File As Data Table..."),
                                    i18n("Export data to a file"),
-                                   i18n("Exports data from the currently selected table or query data to a file."),
-                                   SLOT(slotExportAsDataTable()));
-    m_exportActionMenu->addAction(m_dataExportAction);
+                                   i18n("Exports data from the currently selected table or query to a file."),
+                                   SLOT(slotExportToFileAsDataTable()));
+    m_exportActionMenu->addAction(m_dataExportToFileAction);
 
     m_printAction = addAction("print_object", KIcon("document-print"), i18n("&Print..."),
                               i18n("Print data"),
@@ -731,13 +738,22 @@ void KexiProjectListView::slotExecuteObject()
         emit executeItem(item);
 }
 
-void KexiProjectListView::slotExportAsDataTable()
+void KexiProjectListView::slotExportToClipboardAsDataTable()
 {
-    if (!m_dataExportAction)
+    if (!m_dataExportToClipboardAction)
         return;
     KexiPart::Item* item = selectedPartItem();
     if (item)
-        emit exportItemAsDataTable(item);
+        emit exportItemToClipboardAsDataTable(item);
+}
+
+void KexiProjectListView::slotExportToFileAsDataTable()
+{
+    if (!m_dataExportToFileAction)
+        return;
+    KexiPart::Item* item = selectedPartItem();
+    if (item)
+        emit exportItemToFileAsDataTable(item);
 }
 
 KexiPart::Item* KexiProjectListView::selectedPartItem() const

@@ -750,7 +750,8 @@ void KexiMainWindow::setupActions()
         ac->addAction("project_import_data_table",
                       d->action_project_import_data_table = new KAction(
             KIcon("table"), /*! @todo: change to "file_import" with a table or so */
-            i18nc("Import->Table Data From File...", "Table Data From &File..."), this));
+            i18nc("Import->Table Data From File...", "Import Data From &File..."), this));
+//orig            i18nc("Import->Table Data From File...", "Table Data From &File..."), this));
         d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
         d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
         connect(d->action_project_import_data_table, SIGNAL(triggered()),
@@ -760,7 +761,8 @@ void KexiMainWindow::setupActions()
     ac->addAction("project_export_data_table",
                   d->action_project_export_data_table = new KAction(
         KIcon("table"), /*! @todo: change to "file_export" with a table or so */
-        i18nc("Export->Table or Query Data to File...", "Table or Query Data to &File..."), this));
+        i18nc("Export->Table or Query Data to File...", "Export Data to &File..."), this));
+//orig:        i18nc("Export->Table or Query Data to File...", "Table or Query Data to &File..."), this));
     d->action_project_export_data_table->setToolTip(
         i18n("Export data from the active table or query data to a file"));
     d->action_project_export_data_table->setWhatsThis(
@@ -808,7 +810,8 @@ void KexiMainWindow::setupActions()
         ac->addAction("edit_paste_special_data_table",
                       d->action_edit_paste_special_data_table = new KAction(
             KIcon("table"),
-            i18nc("Paste Special->As Data &Table...", "As Data &Table..."), this));
+            i18nc("Paste Special->As Data &Table...", "Paste Special..."), this));
+//orig            i18nc("Paste Special->As Data &Table...", "As Data &Table..."), this));
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
@@ -820,7 +823,8 @@ void KexiMainWindow::setupActions()
     ac->addAction("edit_copy_special_data_table",
                   d->action_edit_copy_special_data_table = new KAction(
         KIcon("table"),
-        i18nc("Copy Special->Table or Query Data...", "Table or Query as Data Table..."),
+        i18nc("Copy Special->Table or Query Data...", "Copy Special..."),
+//orig        i18nc("Copy Special->Table or Query Data...", "Table or Query as Data Table..."),
         this));
     d->action_edit_copy_special_data_table->setToolTip(
         i18n("Copy selected table or query data to clipboard"));
@@ -2037,7 +2041,9 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
         connect(d->nav, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(exportItemAsDataTable(KexiPart::Item*)),
+        connect(d->nav, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
+                this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
+        connect(d->nav, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
                 this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
         connect(d->nav, SIGNAL(printItem(KexiPart::Item*)),
                 this, SLOT(printItem(KexiPart::Item*)));

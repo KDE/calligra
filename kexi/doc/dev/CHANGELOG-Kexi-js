@@ -60,6 +60,15 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2010-01-16
+Main Window
+*hide not working items in the Project tab
+*added "cut" action to the "data" tab
+*improve name for "copy special" and "paste special" actions
+*moved "copy special" action to project navigator's context menu
+*moved "import tables" action from "tools" to "external data" tab
+TODO: add show project nav/ show prop editor to the kexi menu
+
 2010-01-15
 KoProperty
 *ported the line style editor
