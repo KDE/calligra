@@ -16,11 +16,11 @@
 
 #include "reportpropertiesbutton.h"
 #include <QPainter>
-#include <KColorScheme>
+#include <KLocale>
 
 ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent)
 {
-
+    setWhatsThis(i18n("A button that allows to select report's surface, so it is possible to see report's properties."));
 }
 
 void ReportPropertiesButton::paintEvent(QPaintEvent* event)
@@ -28,13 +28,15 @@ void ReportPropertiesButton::paintEvent(QPaintEvent* event)
     Q_UNUSED(event);
 
     QPainter painter(this);
-    KColorScheme colorScheme(QPalette::Active, KColorScheme::Window);
-
-    painter.setPen(QPen(colorScheme.foreground(KColorScheme::InactiveText), 2));
+    QPen pen(palette().windowText(), 2.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+    QColor c(pen.color());
+    c.setAlpha(120);
+    pen.setColor(c);
+    painter.setPen(pen);
     painter.drawRect(4, 4, width() - 8, height() - 8);
 
-    if (checkState()) {
-        painter.fillRect(7, 7, width() - 14, height() - 14, colorScheme.foreground(KColorScheme::InactiveText));
+    if (isChecked()) {
+        painter.fillRect(7, 7, width() - 14, height() - 14, pen.brush());
     }
 }
 
