@@ -35,16 +35,20 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
 
     m_reportDesigner = 0;
 
-    m_editCutAction = new KAction(KIcon("edit-cut"), i18n("Cut"), this);
-    m_editCutAction->setObjectName("editcut");
-    m_editCopyAction = new KAction(KIcon("edit-copy"), i18n("Copy"), this);
-    m_editCopyAction->setObjectName("editcopy");
-    m_editPasteAction = new KAction(KIcon("edit-paste"), i18n("Paste"), this);
-    m_editPasteAction->setObjectName("editpaste");
-    m_editDeleteAction = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+    m_editCutAction = KStandardAction::cut(this, 0, 0);
+    m_editCutAction->setProperty("iconOnly", true);
+    m_editCopyAction = KStandardAction::copy(this, 0, 0);
+    m_editCopyAction->setProperty("iconOnly", true);
+    m_editPasteAction = KStandardAction::paste(this, 0, 0);
+    m_editPasteAction->setProperty("iconOnly", true);
+    const KGuiItem del = KStandardGuiItem::del();
+    m_editDeleteAction = new KAction(del.icon(), del.text(), this);
     m_editDeleteAction->setObjectName("editdelete");
+    m_editDeleteAction->setToolTip(del.toolTip());
+    m_editDeleteAction->setWhatsThis(del.whatsThis());
+    m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new KAction(i18n("Section Editor"), this);
+    m_sectionEdit = new KAction(i18n("Edit Sections"), this);
     m_sectionEdit->setObjectName("sectionedit");
 
     m_itemRaiseAction = new KAction(KIcon("arrow-up"), i18n("Raise"), this);
