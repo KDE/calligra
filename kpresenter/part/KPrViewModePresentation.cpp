@@ -157,9 +157,10 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
-    m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
+    m_canvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
+    m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
     m_canvas->show();
-    m_canvas->setFocus();                             // it shown full screen
+    m_canvas->setFocus();
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -179,10 +180,11 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
             m_presenterViewCanvas = new KoPACanvas( m_view, document );
             m_presenterViewWidget = new KPrPresenterViewWidget( this, pages, m_presenterViewCanvas );
-            m_presenterViewWidget->setParent( ( QWidget* )0, Qt::Window );
+            m_presenterViewWidget->setParent( desktop.screen(newscreen), Qt::Window );
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
             m_presenterViewWidget->move( pvRect.topLeft() );
+            m_presenterViewWidget->resize( pvRect.size() );
             m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() );
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
