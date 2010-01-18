@@ -1489,10 +1489,33 @@ void PowerPointImport::writeTextObjectDeIndent(KoXmlWriter* xmlWriter,
     while ((unsigned int)levels.size() > count) {
         // if the style name at the lowest level is empty, there is no
         // list there
-        if (levels.size() > 1 || !levels.top().isEmpty()) {
+        if (levels.size() > 1
+                || (levels.size() == 1 && !levels.top().isNull())) {
             xmlWriter->endElement(); // text:list
         }
         levels.pop();
+        if (levels.size() > 1
+                || (levels.size() == 1 && !levels.top().isNull())) {
+            xmlWriter->endElement(); // text:list-item
+        }
+    }
+}
+namespace {
+    void addListElement(KoXmlWriter* xmlWriter, QStack<QString>& levels,
+            const QString& listStyle)
+    {
+        if (!listStyle.isNull()) {
+            // if the context is a text:list, a text:list-item is needed
+            if (levels.size() > 1
+                    || (levels.size() == 1 && !levels.top().isNull())) {
+                xmlWriter->startElement("text:list-item");
+            }
+            xmlWriter->startElement("text:list");
+            if (!listStyle.isEmpty()) {
+                xmlWriter->addAttribute("text:style-name", listStyle);
+            }
+        }
+        levels.push(listStyle);
     }
 }
 
@@ -1537,45 +1560,41 @@ void PowerPointImport::writeTextPFException(KoXmlWriter* xmlWriter,
         }
     }
     TextCFRun *cf = atom->findTextCFRun(linePos);
-    if (!cf) {
-        return;
-    }
-    // remove levels until the top level is the right indentation
-    writeTextObjectDeIndent(xmlWriter, paragraphIndent + 1, levels);
     // find the name of the list style, if the current style is a list
+    // if the style is null, there is no, list, if the style is an empty string
+    // there is a list but it has no style
     QString listStyle;
-    if (bullet || paragraphIndent > 0) {
+    if (cf && (bullet || paragraphIndent > 0)) {
         listStyle = textObject->listStyleName(cf->textCFException(),
             pf->textPFException());
     }
-    // remove the level at the current indent level if it has a different style
-    if (levels.size() > 0 && levels.top() != listStyle) {
-        // if the style name at the lowest level is empty, there is no
-        // list there
-        if (levels.size() > 1 || !levels.top().isEmpty()) {
-            xmlWriter->endElement(); // text:list
-        }
-        levels.pop();
+    if (listStyle.isNull() && (bullet || paragraphIndent > 0)) {
+        listStyle = "";
+    }
+    // remove levels until the top level is the right indentation
+    if ((unsigned int)levels.size() > paragraphIndent
+            && levels[paragraphIndent] == listStyle) {
+         writeTextObjectDeIndent(xmlWriter, paragraphIndent + 2, levels);
+    } else {
+         writeTextObjectDeIndent(xmlWriter, paragraphIndent + 1, levels);
     }
     // add styleless levels up to the current level of indentation
     while ((unsigned int)levels.size() < paragraphIndent) {
-        xmlWriter->startElement("text:list");
-        levels.push("");
+        addListElement(xmlWriter, levels, "");
     }
     // at this point, levels.size() == paragraphIndent
     if (levels.size() == 0 || listStyle != levels.top()) {
-        if (!listStyle.isEmpty()) {
-            xmlWriter->startElement("text:list");
-            xmlWriter->addAttribute("text:style-name", listStyle);
-        }
-        levels.push(listStyle);
+        addListElement(xmlWriter, levels, listStyle);
     }
-    bool listItem = levels.size() > 1 || !levels.top().isEmpty();
+    bool listItem = levels.size() > 1 || !levels.top().isNull();
     if (listItem) {
         xmlWriter->startElement("text:list-item");
     }
-    QString pstyle = textObject->paragraphStyleName(cf->textCFException(),
-            pf->textPFException());
+    QString pstyle;
+    if (cf) {
+        pstyle = textObject->paragraphStyleName(cf->textCFException(),
+                pf->textPFException());
+    }
     xmlWriter->startElement("text:p");
     if (pstyle.size() > 0) {
         xmlWriter->addAttribute("text:style-name", pstyle);
@@ -1643,6 +1662,7 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
         TextPFRun *pf = 0;
 
         QStack<QString> levels;
+        levels.reserve(5);
         pf = atom->findTextPFRun(0);
         unsigned int index = 0;
         int pos = 0;
