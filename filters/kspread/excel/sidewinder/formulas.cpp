@@ -1268,11 +1268,11 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     for (unsigned c = 0; c < tokens.size(); c++) {
         FormulaToken token = tokens[c];
 
-//#ifdef SWINDER_XLS2RAW
-        std::cout << "=============>> Formula Token " << c << ": ";
+#ifdef SWINDER_XLS2RAW
+        std::cout << "Formula Token " << c << ": ";
         std::cout <<  token.id() << "  ";
         std::cout << token.idAsString() << std::endl;
-//#endif
+#endif
 
         switch (token.id()) {
         case FormulaToken::Add:
