@@ -57,6 +57,7 @@ private:
     void  setFont(const QFont &font);
     // the pen : the width of the pen is in logical coordinate
     void  setPen(const QPen &pen);
+    void  setTextPen(const QPen &pen);
     const QPen &pen() const;
     void  setBrush(const QBrush &brush);
 
@@ -126,6 +127,7 @@ private:
     KarbonDocument *mDoc;
     QRegion   mClippingRegion;
     QPen      mPen;
+    QPen      mTextPen;
     QBrush    mBrush;
     Qt::BGMode mBackgroundMode;
     QColor    mBackgroundColor;

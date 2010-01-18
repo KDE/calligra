@@ -667,9 +667,8 @@ void KoWmfReadPrivate::setTextColor(quint32, QDataStream& stream)
 
     stream >> color;
     mTextColor = qtColor(color);
-    // TODO: not sure if that is the right thing to do here
-    // but the actual reader has to get the color somehow (jaham)
-    mReadWmf->setPen(QPen(mTextColor));
+
+    mReadWmf->setTextPen(QPen(mTextColor));
 }
 
 

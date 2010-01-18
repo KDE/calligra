@@ -337,14 +337,15 @@ QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
 //color = six-digit hexadecimal color value
 QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 {
-    kDebug(30153) << "brc.brcType = " << brc.brcType;
+    kDebug(30153) << "brc.brcType      = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
+    kDebug(30153) << "brc.cv           = " << brc.cv;
 
 
     //set the border width
     qreal w;
     if (brc.brcType < 0x40) // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
-        w =  brc.dptLineWidth / 8.0;
+        w = brc.dptLineWidth / 8.0;
     else
         w = brc.dptLineWidth;
 

@@ -140,6 +140,12 @@ void WMFImportParser::setPen(const QPen &pen)
 }
 
 
+void WMFImportParser::setTextPen(const QPen &pen)
+{
+    mTextPen = pen;
+}
+
+
 const QPen &WMFImportParser::pen() const
 {
     return mPen;
@@ -484,7 +490,7 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
         textShape->applyTransformation(matrix);
     }
 
-    textShape->setBackground(new KoColorBackground(mPen.color()));
+    textShape->setBackground(new KoColorBackground(mTextPen.color()));
 
     mDoc->add(textShape);
 }
