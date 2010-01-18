@@ -792,6 +792,12 @@ void TestMathFunctions::testSUBTOTAL()
 {
     CHECK_EVAL("SUBTOTAL(1;7)", Value(7));     // Average.
     CHECK_EVAL("SUBTOTAL(2;8)", Value(1));     // Count.
+    CHECK_EVAL("SUBTOTAL(3;11)", Value(1));     // Count.
+    CHECK_EVAL("SUBTOTAL(11;33)", Value(0));
+    CHECK_EVAL("SUBTOTAL(12;33)", Value::errorVALUE());
+    CHECK_EVAL("SUBTOTAL(102;8)", Value(1)); // Count.
+    CHECK_EVAL("SUBTOTAL(111;33)", Value(0)); // Average.
+    CHECK_EVAL("SUBTOTAL(1111;33)", Value(0)); // Average.
 }
 
 void TestMathFunctions::testSUMA()
