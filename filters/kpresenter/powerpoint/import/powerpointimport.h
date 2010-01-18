@@ -91,27 +91,17 @@ private:
                   QString pStyle, QString tStyle);
 
     /**
-    * @brief Write itendation element (text:list and text:list-item) specified
-    * amount, so that the last list doesn't contain a list-item.
-    * @param xmlWriter XML Writer to write text:list and text:list-item elements
-    * @param count How many elements to write
-    * @param style name of the style to apply to the first text:list element
-    */
-    void writeTextObjectIndent(KoXmlWriter* xmlWriter,
-                               const unsigned int count,
-                               const QString &style);
-
-    /**
     * @brief Write text deindentations the specified amount. Actually it just
     * closes elements.
     *
     * Doesn't close the last text:list-item though.
     * @param xmlWriter XML writer to write closing tags
-    * @param count how many lists and list items to close (excluding last
-    * list item)
+    * @param count how many lists and list items to leave open
+    * @param levels the list of levels to remove from
     */
     void writeTextObjectDeIndent(KoXmlWriter* xmlWriter,
-                                 const unsigned int count);
+                                 const unsigned int count,
+                                 QStack<QString>& levels);
 
     /**
     * @brief Write text all text within specified paragraph
@@ -121,15 +111,13 @@ private:
     * @param textObject text object whose contents to write
     * @param textPos position of current paragraph within all the text in
     * textObject
-    * @param indent Current intendation level
-    * @param listStyle current list style
+    * @param levels   stack of current list levels by name
     */
     void writeTextPFException(KoXmlWriter* xmlWriter,
                               TextPFRun *pf,
                               TextObject *textObject,
                               const unsigned int textPos,
-                              unsigned int &indent,
-                              QString &listStyle);
+                              QStack<QString>& levels);
 
     /**
     * @brief Write specified line within specified paragraph with xmlWriter
