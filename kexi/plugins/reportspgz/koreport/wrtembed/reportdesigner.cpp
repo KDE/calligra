@@ -961,7 +961,7 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
                 break;
             case KRObjectData::EntityLine :
                 item = new ReportEntityLine(v->designer(), v->scene());
-                dynamic_cast<QGraphicsLineItem*>(item)->setLine(e->x(), e->y(), e->x() + 20, e->y());
+                dynamic_cast<ReportEntityLine*>(item)->setLineScene(QLineF(QPointF(e->x(), e->y()), QPointF(e->x() + 20, e->y())));
                 break;
             case KRObjectData::EntityChart :
                 item = new ReportEntityChart(v->designer(), v->scene());

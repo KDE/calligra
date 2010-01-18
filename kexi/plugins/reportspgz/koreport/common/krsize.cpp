@@ -26,7 +26,6 @@
 KRSize::KRSize(const KoUnit& unit)
 {
     m_unit = unit;
-    //TODO When KoProperty can handle QSize
     m_property = new KoProperty::Property("Size", toScene(), "Size", "Size");
 }
 

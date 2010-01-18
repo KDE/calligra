@@ -24,7 +24,6 @@
 KRPos::KRPos(const KoUnit& unit)
 {
     m_unit = unit;
-    //TODO When KoProperty can handle QPointF
     m_property = new KoProperty::Property("Position", toScene(), "Position", "Position");
 }
 
@@ -54,7 +53,6 @@ void KRPos::setScenePos(const QPointF& pos, bool update)
 
 void KRPos::setUnitPos(const QPointF& pos, bool update)
 {
-    kDebug() << pos;
     qreal x, y;
     x = m_unit.fromUserValue(pos.x());
     y = m_unit.fromUserValue(pos.y());

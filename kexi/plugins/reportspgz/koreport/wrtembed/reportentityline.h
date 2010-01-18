@@ -46,6 +46,7 @@ public:
     virtual ReportEntityLine* clone();
 
     void setUnit(KoUnit u);
+    void setLineScene(QLineF);
     
 private:
     ReportDesigner* m_rd;

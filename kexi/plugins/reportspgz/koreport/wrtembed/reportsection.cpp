@@ -155,7 +155,6 @@ void ReportSection::slotResizeBarDragged(int delta)
 
 void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
 {
-    qreal f = INCH_TO_POINT(m_scene->height() / KoDpi::dpiY());
     QString un = m_sectionData->m_height->option("unit", "cm").toString();
 
     section.setAttribute("svg:height", KoUnit::unit(un).toUserStringValue(m_sectionData->m_height->value().toDouble()) + un);
@@ -230,10 +229,12 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
     for (int i = 0; i < itms.size(); ++i) {
-        if (itms[i]->type() >= KRObjectData::EntityLabel && itms[i]->type() < KRObjectData::EntityLast) {
+	int typ = dynamic_cast<KRObjectData*>(itms[i])->type();
+	
+        if ( typ >= KRObjectData::EntityLabel && typ < KRObjectData::EntityLast) {
             dynamic_cast<ReportRectEntity*>(itms[i])->setUnit(unit);
         }
-        if (itms[i]->type() == KRObjectData::EntityLine) {
+        if (typ == KRObjectData::EntityLine) {
             dynamic_cast<ReportEntityLine*>(itms[i])->setUnit(unit);
         }
     }
