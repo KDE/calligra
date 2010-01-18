@@ -3323,7 +3323,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + 1;
-            while (compareRows(i, j, maxCols, tableContext) && j <= maxRows) {
+            while (j <= maxRows && compareRows(i, j, maxCols, tableContext)) {
                 j++;
                 repeated++;
             }
