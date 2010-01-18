@@ -244,6 +244,8 @@ unsigned FormulaToken::size() const
 
     case MemArea:
         s = 7; break;
+    case MemErr:
+        s = 6; break;
 
     case 0: // NOPE
         s = 0; break;
@@ -251,7 +253,6 @@ unsigned FormulaToken::size() const
     case NatFormula:
     case Sheet:
     case EndSheet:
-    case MemErr:
     case MemNoMem:
     case MemFunc:
     case MemAreaN:
@@ -1267,11 +1268,11 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     for (unsigned c = 0; c < tokens.size(); c++) {
         FormulaToken token = tokens[c];
 
-#ifdef SWINDER_XLS2RAW
-        std::cout << "Formula Token " << c << ": ";
+//#ifdef SWINDER_XLS2RAW
+        std::cout << "=============>> Formula Token " << c << ": ";
         std::cout <<  token.id() << "  ";
         std::cout << token.idAsString() << std::endl;
-#endif
+//#endif
 
         switch (token.id()) {
         case FormulaToken::Add:
@@ -1506,12 +1507,14 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
         }
 
-        case FormulaToken::RefErr:
         case FormulaToken::AreaErr:
-        case FormulaToken::MemErr:
-        case FormulaToken::RefErr3d:
         case FormulaToken::AreaErr3d:
+        case FormulaToken::RefErr:
+        case FormulaToken::RefErr3d:
             stack.push_back(UString("#REF!"));
+            break;
+            
+        case FormulaToken::MemErr: // specifies that the result is an error-code
             break;
 
         case FormulaToken::ErrorCode:
