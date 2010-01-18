@@ -69,6 +69,7 @@
 #include <krecentdocument.h>
 #include <KMenu>
 #include <KXMLGUIFactory>
+#include <KMultiTabBar>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -1952,9 +1953,25 @@ void KexiMainWindow::setupMainWidget()
     d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
     tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
 
+    QWidget *mainWidgetContainer = new QWidget();
+    vlyr->addWidget(mainWidgetContainer, 1);
+    QHBoxLayout *mainWidgetContainerLyr = new QHBoxLayout(mainWidgetContainer);
+    mainWidgetContainerLyr->setContentsMargins(0, 0, 0, 0);
+    mainWidgetContainerLyr->setSpacing(0);
+
+    KMultiTabBar *mtbar = new KMultiTabBar(KMultiTabBar::Left);
+    mtbar->setStyle(KMultiTabBar::KDEV3ICON);
+    mainWidgetContainerLyr->addWidget(mtbar, 0);
+    d->multiTabBars.insert(mtbar->position(), mtbar);
+
     d->mainWidget = new KexiMainWidget();
-    vlyr->addWidget(d->mainWidget, 1);
     d->mainWidget->setParent(this);
+    mainWidgetContainerLyr->addWidget(d->mainWidget, 1);
+
+    mtbar = new KMultiTabBar(KMultiTabBar::Right);
+    mtbar->setStyle(KMultiTabBar::KDEV3ICON);
+    mainWidgetContainerLyr->addWidget(mtbar, 0);
+    d->multiTabBars.insert(mtbar->position(), mtbar);
 
     d->statusBar = new KexiStatusBar(this);
 #if 0 // still disabled, see KexiStatusBar
@@ -1976,6 +1993,30 @@ void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
 {
     if (d->propEditorDockWidget)
         d->propEditorDockWidget->setVisible(set);
+}
+
+void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
+{
+    KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Left];
+    int id = 0; //todo
+    if (visible) {
+        mtbar->removeTab(id);
+    }
+    else {
+        QString t(d->navDockWidget->windowTitle());
+        t.remove('&');
+        mtbar->appendTab(QPixmap(), id, t);
+        KMultiTabBarTab *tab = mtbar->tab(0);
+        connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
+    }
+}
+
+void KexiMainWindow::slotMultiTabBarTabClicked(int id)
+{
+    if (id == 0) { // todo
+        slotProjectNavigatorVisibilityChanged(true);
+        d->navDockWidget->show();
+    }
 }
 
 static Qt::DockWidgetArea loadDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea defaultArea)
@@ -2073,6 +2114,8 @@ void KexiMainWindow::setupProjectNavigator()
         }
         connect(d->nav, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
+        connect(d->navDockWidget, SIGNAL(visibilityChanged(bool)),
+            this, SLOT(slotProjectNavigatorVisibilityChanged(bool)));
 
 //  d->restoreNavigatorWidth();
     }

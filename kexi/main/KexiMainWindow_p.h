@@ -1093,6 +1093,8 @@ public:
 
 //2.0: unused  KMdi::MdiMode mdiModeToSwitchAfterRestart;
 
+    QMap<KMultiTabBar::KMultiTabBarPosition, KMultiTabBar*> multiTabBars;
+
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;

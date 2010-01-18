@@ -705,6 +705,8 @@ protected slots:
 
     void slotSetProjectNavigatorVisible(bool set);
     void slotSetPropertyEditorVisible(bool set);
+    void slotProjectNavigatorVisibilityChanged(bool visible);
+    void slotMultiTabBarTabClicked(int id);
 
 private:
     class MessageHandler;
