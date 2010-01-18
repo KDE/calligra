@@ -717,16 +717,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 }
             }
             const KoGenStyle* const style = mainStyles->style( formattedStyle );
-            if( style == 0 )
-            {
+            if( style == 0 || valueIsNumeric(m_value) ) {
 //            body->addTextSpan(m_value);
                 valueType = MsooXmlReader::constFloat;
                 valueAttr = XlsxXmlWorksheetReader::officeValue;
-            }
-            else
-            {
-                switch( style->type() )
-                {
+            } else {
+                switch( style->type() ) {
                 case KoGenStyle::StyleNumericDate:
                     valueType = MsooXmlReader::constDate;
                     valueAttr = XlsxXmlWorksheetReader::officeDateValue;

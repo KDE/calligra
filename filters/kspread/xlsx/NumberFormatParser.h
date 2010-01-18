@@ -32,11 +32,11 @@ class KoGenStyles;
 class NumberFormatParser
 {
 public:
-    static QColor color( const QString& name );
-    static QLocale locale( int langid );
+    static QColor color(const QString& name);
+    static QLocale locale(int langid);
 
-    static void setStyles( KoGenStyles* styles );
-    static KoGenStyle parse( const QString& numberFormat );
+    static void setStyles(KoGenStyles* styles);
+    static KoGenStyle parse(const QString& numberFormat);
 
 private:
     static KoGenStyles* styles;
