@@ -1956,8 +1956,8 @@ void KexiMainWindow::setupMainWidget()
     vlyr->addWidget(d->mainWidget, 1);
     d->mainWidget->setParent(this);
 
-#if 0 // still disabled, see KexiStatusBar
     d->statusBar = new KexiStatusBar(this);
+#if 0 // still disabled, see KexiStatusBar
     connect(d->statusBar->m_showNavigatorAction, SIGNAL(triggered(bool)),
         this, SLOT(slotSetProjectNavigatorVisible(bool)));
     connect(d->statusBar->m_showPropertyEditorAction, SIGNAL(triggered(bool)),
