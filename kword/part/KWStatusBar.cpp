@@ -100,6 +100,8 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
     m_statusbar->addWidget(m_statusLabel, 1);
     connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString&)),
+            this, SLOT(setText(const QString&)));
 
     m_zoomAction = new KAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
