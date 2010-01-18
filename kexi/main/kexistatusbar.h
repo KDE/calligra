@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -26,27 +26,21 @@
 //temporary
 #define KexiStatusBar_KTEXTEDITOR_USED 0
 
+#include <KStatusBar>
 
-#include <kstatusbar.h>
-#include <qmap.h>
-//Added by qt3to4:
-#include <QLabel>
-
-class QLabel;
+class KMenu;
+class QCheckBox;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor
 {
-class ViewStatusMsgInterface;
-}
-namespace KTextEditor
-{
-class ViewCursorInterface;
+    class ViewStatusMsgInterface;
+    class ViewCursorInterface;
 }
 #endif
 namespace KParts
 {
-class Part;
+    class Part;
 }
 
 class KexiStatusBar : public KStatusBar
@@ -57,14 +51,20 @@ public:
     virtual ~KexiStatusBar();
 //  virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
+//! @todo extend to more generic API
+    QAction *m_showNavigatorAction;
+    QAction *m_showPropertyEditorAction;
+
 public slots:
     virtual void setStatus(const QString &str);
     virtual void setReadOnlyFlag(bool readOnly);
 
+signals:
+
 protected slots:
-    virtual void cursorPositionChanged();
-    virtual void activePartChanged(KParts::Part *part);
-    virtual void setCursorPosition(int line, int col);
+    void cursorPositionChanged();
+    void activePartChanged(KParts::Part *part);
+    void setCursorPosition(int line, int col);
 
 protected:
     int m_msgID, m_readOnlyID;
@@ -75,7 +75,7 @@ protected:
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
     KParts::Part *m_activePart;
+    KMenu *m_viewMenu;
 };
 
 #endif
-

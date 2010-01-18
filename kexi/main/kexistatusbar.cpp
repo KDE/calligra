@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -22,21 +22,36 @@
 
 #include "kexistatusbar.h"
 
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qfontmetrics.h>
+#include <QToolButton>
+#include <QWidgetAction>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
-#include <kdebug.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
+#include <KMenu>
+#include <KDebug>
+#include <KLocale>
 #include <kparts/part.h>
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/viewstatusmsginterface.h>
 #endif
+
+// Smart menu
+class Menu : public KMenu
+{
+public:
+    Menu(QWidget *parent) : KMenu(parent) {}
+protected:
+    void mouseReleaseEvent(QMouseEvent* e);
+};
+
+void Menu::mouseReleaseEvent(QMouseEvent* e)
+{
+    if (activeAction())
+        activeAction()->trigger();
+}
+
 
 KexiStatusBar::KexiStatusBar(QWidget *parent)
         : KStatusBar(parent)
@@ -52,13 +67,31 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     insertPermanentItem("", m_msgID, 1 /*stretch*/);
 
     m_readOnlyID = id++;
-    insertPermanentItem(i18n("Read only"), m_readOnlyID);
+    insertPermanentItem(QString(), m_readOnlyID);
     setReadOnlyFlag(false);
 
-// @todo
-// connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-//  this, SLOT(activePartChanged(KParts::Part*)));
+// still disabled as showing hiding would be implemented as side bars
+//! @todo use this view for something else
+#if 0
+    QToolButton *viewButton = new QToolButton(this);
+    viewButton->setContentsMargins(0, 0, 0, 0);
+    viewButton->setAutoRaise(true);
+    viewButton->setText(i18nc("View menu", "View"));
+    viewButton->setToolTip(i18n("Show view menu"));
+    viewButton->setWhatsThis(i18n("Shows menu with view-related options"));
+    addPermanentWidget(viewButton);
 
+//!@ todo add small close button
+    m_viewMenu = new Menu(this);
+    viewButton->setMenu(m_viewMenu);
+    viewButton->setPopupMode(QToolButton::InstantPopup);
+
+    m_showNavigatorAction = m_viewMenu->addAction(i18n("Project &Navigator"));
+    m_showNavigatorAction->setCheckable(true);
+
+    m_showPropertyEditorAction = m_viewMenu->addAction(i18n("&Property Editor"));
+    m_showPropertyEditorAction->setCheckable(true);
+#endif
     /// @todo remove parts from the map on PartRemoved() ?
 }
 

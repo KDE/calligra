@@ -57,8 +57,16 @@ TODO: replace KexiDataItemChangesListener::handleAction(const QString& actionNam
 TODO: wrap passwordMode property for line edit widget in design mode, otherwise data source is displayed using *
 TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
 TODO: text editor: autofill disabled because this makes the widget disappear entirely; now fix the background color because it is getting transparent on mouse out in design mode
+Main Window TODO
+*View menu still disabled as showing hiding would be implemented as side bars; use this view for something else
+*implemented dock hiding as side bars
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2010-01-17
+Main Window
+*Added view menu to the statusbar (but disabled for now)
+**added "show project navigator" and "show property editor" to the view menu
 
 2010-01-16
 Main Window
@@ -67,7 +75,6 @@ Main Window
 *improve name for "copy special" and "paste special" actions
 *moved "copy special" action to project navigator's context menu
 *moved "import tables" action from "tools" to "external data" tab
-TODO: add show project nav/ show prop editor to the kexi menu
 
 2010-01-15
 KoProperty

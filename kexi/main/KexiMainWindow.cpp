@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1956,8 +1956,26 @@ void KexiMainWindow::setupMainWidget()
     vlyr->addWidget(d->mainWidget, 1);
     d->mainWidget->setParent(this);
 
+#if 0 // still disabled, see KexiStatusBar
     d->statusBar = new KexiStatusBar(this);
+    connect(d->statusBar->m_showNavigatorAction, SIGNAL(triggered(bool)),
+        this, SLOT(slotSetProjectNavigatorVisible(bool)));
+    connect(d->statusBar->m_showPropertyEditorAction, SIGNAL(triggered(bool)),
+        this, SLOT(slotSetPropertyEditorVisible(bool)));
+#endif
     vlyr->addWidget(d->statusBar);
+}
+
+void KexiMainWindow::slotSetProjectNavigatorVisible(bool set)
+{
+    if (d->navDockWidget)
+        d->navDockWidget->setVisible(set);
+}
+
+void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
+{
+    if (d->propEditorDockWidget)
+        d->propEditorDockWidget->setVisible(set);
 }
 
 static Qt::DockWidgetArea loadDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea defaultArea)
