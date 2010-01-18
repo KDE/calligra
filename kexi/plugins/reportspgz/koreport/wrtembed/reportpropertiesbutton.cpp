@@ -20,7 +20,7 @@
 
 ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent)
 {
-    setWhatsThis(i18n("A button that allows to select report's surface, so it is possible to see report's properties."));
+    setWhatsThis(i18n("A button that allows a report's surface to be selected, allowing its properties to be seen."));
 }
 
 void ReportPropertiesButton::paintEvent(QPaintEvent* event)
