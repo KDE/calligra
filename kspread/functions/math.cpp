@@ -1204,6 +1204,10 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
     Value res;
     Function *f;
     valVector a;
+    
+    if(function > 100) // do it like Excel and translate e.g. 106 to 6.
+        function = function - (int(function / 10) * 10);
+    
     switch (function) {
     case 1: // Average
         res = calc->avg(range, false);
