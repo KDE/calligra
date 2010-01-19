@@ -62,6 +62,10 @@ Main Window TODO
 *implemented dock hiding as side bars
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-01-19
+Forms
+*fixed possible crash when setting readonly flag for line edits
+TODO: fix setting readonly flag for line edits
 
 2010-01-18
 Main Window
