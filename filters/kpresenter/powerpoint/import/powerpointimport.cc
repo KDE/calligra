@@ -1993,13 +1993,11 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     }
 
     if (pf && pf->textPFException()->hasSpaceBefore()) {
-        std::cerr << "margin-top" << pf->textPFException()->spaceBefore()<<std::endl;;
         styleParagraph.addProperty("fo:margin-top",
                 paraSpacingToCm(pf->textPFException()->spaceBefore()),
                 KoGenStyle::ParagraphType);
     } else {
         if (masterPF && masterPF->hasSpaceBefore()) {
-        std::cerr << "mmargin-top" << pf->textPFException()->spaceBefore() << std::endl;
             styleParagraph.addProperty("fo:margin-top",
                     paraSpacingToCm(masterPF->spaceBefore()),
                     KoGenStyle::ParagraphType);
