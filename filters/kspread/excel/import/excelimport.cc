@@ -122,10 +122,10 @@ public:
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
 
-    bool createStyles(KoOdfWriteStore* store);
+    bool createStyles(KoOdfWriteStore* store, KoXmlWriter* manifestWriter);
     bool createContent(KoOdfWriteStore* store);
     bool createMeta(KoOdfWriteStore* store);
-    bool createManifest(KoOdfWriteStore* store);
+    bool createManifest(KoOdfWriteStore* store, KoXmlWriter* manifestWriter);
     bool createSettings(KoOdfWriteStore* store);
 
     int sheetFormatIndex;
@@ -217,6 +217,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->mainStyles = new KoGenStyles();
 
     KoOdfWriteStore oasisStore(storeout);
+    KoXmlWriter* manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
 
     // header and footer are read from each sheet and saved in styles
     // So creating content before styles
@@ -230,7 +231,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     // store document styles
-    if ( !d->createStyles( &oasisStore ) )
+    if ( !d->createStyles( &oasisStore, manifestWriter ) )
     {
         kWarning() << "Couldn't open the file 'styles.xml'.";
         delete d->workbook;
@@ -255,7 +256,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     // store document manifest
-    if (!d->createManifest(&oasisStore)) {
+    if (!d->createManifest(&oasisStore, manifestWriter)) {
         kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
         delete d->workbook;
         delete storeout;
@@ -322,7 +323,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     return store->closeContentWriter();
 }
 
-bool ExcelImport::Private::createStyles(KoOdfWriteStore* store)
+bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* manifestWriter)
 {
     if (!store->store()->open("styles.xml"))
         return false;
@@ -340,6 +341,7 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store)
     stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
     stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     stylesWriter->addAttribute("office:version", "1.0");
+#if 0
     stylesWriter->startElement("office:styles");
     stylesWriter->startElement("style:default-style");
     stylesWriter->addAttribute("style:family", "table-cell");
@@ -365,10 +367,11 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store)
     stylesWriter->addAttribute("style:family", "table-cell");
     stylesWriter->endElement(); // style:style
     stylesWriter->endElement(); // office:styles
+#endif
 
-    // office:automatic-styles
-    mainStyles->saveOdfAutomaticStyles(stylesWriter, false);
     mainStyles->saveOdfMasterStyles(stylesWriter);
+    mainStyles->saveOdfDocumentStyles(stylesWriter); // office:style
+    mainStyles->saveOdfAutomaticStyles(stylesWriter, false); // office:automatic-styles
 
     stylesWriter->endElement();  // office:document-styles
     stylesWriter->endDocument();
@@ -507,10 +510,8 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
     return store->store()->close();
 }
 
-bool ExcelImport::Private::createManifest(KoOdfWriteStore* store)
+bool ExcelImport::Private::createManifest(KoOdfWriteStore* store, KoXmlWriter* manifestWriter)
 {
-    KoXmlWriter* manifestWriter = store->manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
-
     manifestWriter->addManifestEntry("meta.xml", "text/xml");
     manifestWriter->addManifestEntry("styles.xml", "text/xml");
     manifestWriter->addManifestEntry("content.xml", "text/xml");
@@ -1589,13 +1590,91 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     }
 
     if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {
+        KoGenStyle fillStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+
         Color backColor = back.backgroundColor();
         if (back.pattern() == FormatBackground::SolidPattern)
             backColor = back.foregroundColor();
-
-        style.addProperty("fo:background-color", convertColor(backColor));
-
-        //TODO patterns
+        const QString bgColor = convertColor(backColor);
+        style.addProperty("fo:background-color", bgColor);
+        switch(back.pattern()) {
+            case FormatBackground::SolidPattern:
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "0%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense3Pattern: // 75% gray
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "75%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense4Pattern: // 50% gray
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "94%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense5Pattern: // 25% gray
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "25%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense6Pattern: // 12.5% gray
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "12%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense7Pattern: // 6.25% gray
+                fillStyle.addProperty("draw:fill-color", bgColor);
+                fillStyle.addProperty("draw:transparency", "6%");
+                fillStyle.addProperty("draw:fill", "solid");
+                break;
+            case FormatBackground::Dense1Pattern: // diagonal crosshatch
+            case FormatBackground::Dense2Pattern: // thick diagonal crosshatch
+            case FormatBackground::HorPattern: // Horizonatal lines
+            case FormatBackground::VerPattern: // Vertical lines
+            case FormatBackground::BDiagPattern: // Left-bottom to right-top diagonal lines
+            case FormatBackground::FDiagPattern: // Left-top to right-bottom diagonal lines
+            case FormatBackground::CrossPattern: // Horizontal and Vertical lines
+            case FormatBackground::DiagCrossPattern: { // Crossing diagonal lines
+                fillStyle.addProperty("draw:fill", "hatch");
+                KoGenStyle hatchStyle(KoGenStyle::StyleHatch);
+                hatchStyle.addAttribute("draw:color", "#000000");
+                switch (back.pattern()) {
+                case FormatBackground::Dense1Pattern:
+                case FormatBackground::HorPattern:
+                    hatchStyle.addAttribute("draw:style", "single");
+                    hatchStyle.addAttribute("draw:rotation", 0);
+                    break;
+                case FormatBackground::VerPattern:
+                    hatchStyle.addAttribute("draw:style", "single");
+                    hatchStyle.addAttribute("draw:rotation", 900);
+                    break;
+                case FormatBackground::Dense2Pattern:
+                case FormatBackground::BDiagPattern:
+                    hatchStyle.addAttribute("draw:style", "single");
+                    hatchStyle.addAttribute("draw:rotation", 450);
+                    break;
+                case FormatBackground::FDiagPattern:
+                    hatchStyle.addAttribute("draw:style", "single");
+                    hatchStyle.addAttribute("draw:rotation", 1350);
+                    break;
+                case FormatBackground::CrossPattern:
+                    hatchStyle.addAttribute("draw:style", "double");
+                    hatchStyle.addAttribute("draw:rotation", 0);
+                    break;
+                case FormatBackground::DiagCrossPattern:
+                    hatchStyle.addAttribute("draw:style", "double");
+                    hatchStyle.addAttribute("draw:rotation", 450);
+                    break;
+                default:
+                    break;
+                }
+                fillStyle.addProperty("draw:fill-hatch-name", mainStyles->lookup(hatchStyle, "hatch"));
+            } break;
+            default:
+                break;
+        }
+        style.addProperty("draw:style-name", styles->lookup(fillStyle, "gr"));
     }
 
     if (!align.isNull()) {
