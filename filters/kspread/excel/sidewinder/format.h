@@ -460,13 +460,13 @@ public:
 
     enum {
         SolidPattern,
-        Dense1Pattern,
-        Dense2Pattern,
-        Dense3Pattern,
-        Dense4Pattern,
-        Dense5Pattern,
-        Dense6Pattern,
-        Dense7Pattern,
+        Dense1Pattern, // diagonal crosshatch
+        Dense2Pattern, // thick diagonal crosshatch
+        Dense3Pattern, // 75% gray
+        Dense4Pattern, // 50% gray
+        Dense5Pattern, // 25% gray
+        Dense6Pattern, // 12.5% gray
+        Dense7Pattern, // 6.25% gray
         HorPattern,  // Horizonatal lines
         VerPattern,  // Vertical lines
         CrossPattern, // Horizontal and Vertical lines
