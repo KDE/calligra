@@ -1982,49 +1982,51 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     KoGenStyle styleParagraph(KoGenStyle::StyleAuto, "paragraph");
     if (pf && pf->textPFException()->hasLeftMargin()) {
         styleParagraph.addProperty("fo:margin-left",
-                                   pptMasterUnitToCm(pf->textPFException()->leftMargin()),
-                                   KoGenStyle::ParagraphType);
+                paraSpacingToCm(pf->textPFException()->leftMargin()),
+                KoGenStyle::ParagraphType);
     } else {
         if (masterPF && masterPF->hasLeftMargin()) {
             styleParagraph.addProperty("fo:margin-left",
-                                       pptMasterUnitToCm(masterPF->leftMargin()),
-                                       KoGenStyle::ParagraphType);
+                    paraSpacingToCm(masterPF->leftMargin()),
+                    KoGenStyle::ParagraphType);
         }
     }
 
     if (pf && pf->textPFException()->hasSpaceBefore()) {
+        std::cerr << "margin-top" << pf->textPFException()->spaceBefore()<<std::endl;;
         styleParagraph.addProperty("fo:margin-top",
-                                   pptMasterUnitToCm(pf->textPFException()->spaceBefore()),
-                                   KoGenStyle::ParagraphType);
+                paraSpacingToCm(pf->textPFException()->spaceBefore()),
+                KoGenStyle::ParagraphType);
     } else {
         if (masterPF && masterPF->hasSpaceBefore()) {
+        std::cerr << "mmargin-top" << pf->textPFException()->spaceBefore() << std::endl;
             styleParagraph.addProperty("fo:margin-top",
-                                       pptMasterUnitToCm(masterPF->spaceBefore()),
-                                       KoGenStyle::ParagraphType);
+                    paraSpacingToCm(masterPF->spaceBefore()),
+                    KoGenStyle::ParagraphType);
         }
     }
 
     if (pf && pf->textPFException()->hasSpaceAfter()) {
         styleParagraph.addProperty("fo:margin-bottom",
-                                   pptMasterUnitToCm(pf->textPFException()->spaceAfter()),
-                                   KoGenStyle::ParagraphType);
+                paraSpacingToCm(pf->textPFException()->spaceAfter()),
+                KoGenStyle::ParagraphType);
     } else {
         if (masterPF && masterPF->hasSpaceAfter()) {
             styleParagraph.addProperty("fo:margin-bottom",
-                                       pptMasterUnitToCm(masterPF->spaceAfter()),
-                                       KoGenStyle::ParagraphType);
+                    paraSpacingToCm(masterPF->spaceAfter()),
+                    KoGenStyle::ParagraphType);
         }
     }
 
     if (pf && pf->textPFException()->hasIndent()) {
         styleParagraph.addProperty("fo:text-indent",
-                                   pptMasterUnitToCm(pf->textPFException()->indent()),
-                                   KoGenStyle::ParagraphType);
+                pptMasterUnitToCm(pf->textPFException()->indent()),
+                KoGenStyle::ParagraphType);
     } else {
         if (masterPF && masterPF->hasIndent()) {
             styleParagraph.addProperty("fo:text-indent",
-                                       pptMasterUnitToCm(masterPF->indent()),
-                                       KoGenStyle::ParagraphType);
+                    pptMasterUnitToCm(masterPF->indent()),
+                    KoGenStyle::ParagraphType);
         }
     }
 

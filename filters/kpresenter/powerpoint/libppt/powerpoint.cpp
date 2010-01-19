@@ -46,7 +46,6 @@ namespace
 {
 
 // TODO: get proper definitions for uint16_t, uint32_t etc
-typedef int int16_t;
 typedef unsigned int uint16_t;
 typedef long int32_t;
 typedef unsigned long uint32_t;
@@ -3350,14 +3349,14 @@ public:
     * the paragraph. It MUST exist if and only if masks.spaceBefore is TRUE.
     *
     */
-    int spaceBefore;
+    int16_t spaceBefore;
 
     /**
     * An optional ParaSpacing that specifies the size of the spacing after the
     * paragraph. It MUST exist if and only if masks.spaceAfter is TRUE.
     *
     */
-    int spaceAfter;
+    int16_t spaceAfter;
 
     /**
     * An optional MarginOrIndent that specifies the left margin of the
