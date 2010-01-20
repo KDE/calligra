@@ -149,6 +149,10 @@ void KoWmfPaint::setFont(const QFont &font)
 
 void KoWmfPaint::setTextPen(const QPen &pen)
 {
+#if DEBUG_WMFPAINT
+    kDebug(31000) << pen;
+#endif
+
     mTextPen = pen;
 }
 
@@ -213,8 +217,13 @@ void KoWmfPaint::setBackgroundColor(const QColor &c)
     // FIXME: This needs more investigation, but it seems that the
     //        concept of "background" in WMF is the same as the
     //        "brush" in QPainter.
-    mPainter->setBrush(QBrush(c));
-    //mPainter->setBackground(QBrush(c));
+    // Update: No, it wasn't.  I changed back now because it didn't work.  I'm leaving
+    //         the fixme and this comment to remind the next fixer that calling
+    //         setBrush() is not the solution.  I hope nothing breaks now.
+    //         The date is now 2010-01-20.  If nothing breaks in a couple of months,
+    //         all this commentry can be removed.
+    //mPainter->setBrush(QBrush(c));
+    mPainter->setBackground(QBrush(c));
 }
 
 
