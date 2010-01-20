@@ -79,7 +79,7 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
             zstream.next_out = (Bytef*)bufout;
             zstream.avail_out = bufferSize;
             int r = inflate(&zstream, Z_SYNC_FLUSH);
-            int32_t nwritten = bufferSize - zstream.avail_out;
+            qint32 nwritten = bufferSize - zstream.avail_out;
             if (r != Z_STREAM_END && r != Z_OK) {
                 inflateEnd(&zstream);
                 return false;
