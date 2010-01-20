@@ -1,0 +1,8 @@
+[Desktop Entry]
+Icon=
+Name=Presentation Variables
+X-KDE-ServiceTypes=KOffice/Text-Variable
+Type=Service
+X-KDE-Library=kprvariables
+X-KoText-MinVersion=0
+X-Flake-PluginVersion=1

@@ -25,6 +25,7 @@
 #include <KoPADocument.h>
 #include "KPrCustomSlideShows.h"
 
+class KPrDeclarations;
 class KPrShapeAnimation;
 class KPrShapeAnimations;
 
@@ -123,12 +124,20 @@ public:
     /// reimplemented
     virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
 
+    /// reimplemented
+    virtual bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context );
+
     /**
      * Get the page type used in the document
      *
      * The default page type KoPageApp::Page is returned
      */
     virtual KoPageApp::PageType pageType() const;
+
+    /**
+     * Get the KPrDeclarations pointer
+     */
+    KPrDeclarations * declarations() const;
 
 public slots:
     virtual void initEmpty();
@@ -185,6 +194,7 @@ private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
     QString m_activeCustomSlideShow;
+    KPrDeclarations *m_declarations;
 };
 
 #endif /* KPRDOCUMENT_H */

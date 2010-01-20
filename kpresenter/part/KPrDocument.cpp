@@ -28,6 +28,7 @@
 #include "KPrViewModeNotes.h"
 #include "KPrPlaceholderShapeFactory.h"
 #include "KPrSoundCollection.h"
+#include "KPrDeclarations.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
@@ -63,6 +64,7 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
 , m_customSlideShows(new KPrCustomSlideShows())
 , m_presentationMonitor( 0 )
 , m_presenterViewEnabled( false )
+, m_declarations( new KPrDeclarations() )
 {
     K_GLOBAL_STATIC( InitOnce, s_initOnce );
     InitOnce * initOnce = s_initOnce;
@@ -340,6 +342,18 @@ void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
         emit activeCustomSlideShowChanged( customSlideShow );
     }
 }
+
+bool KPrDocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context )
+{
+    Q_UNUSED( context );
+    return m_declarations->loadOdfDeclaration( body, context ); 
+}
+
+KPrDeclarations * KPrDocument::declarations() const
+{
+    return m_declarations;
+}
+
 
 #include "KPrDocument.moc"
 

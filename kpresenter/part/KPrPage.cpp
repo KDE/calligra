@@ -32,6 +32,7 @@
 #include <KoPASavingContext.h>
 
 #include "KPrDocument.h"
+#include "KPrDeclarations.h"
 #include "KPrPageApplicationData.h"
 #include "KPrMasterPage.h"
 #include "KPrNotes.h"
@@ -51,14 +52,17 @@ class KPrPage::Private
 public:
     Private( KPrPage * page, KPrDocument * document )
     : pageNotes( new KPrNotes( page, document ) )
+    , declarations( document->declarations() )
     {}
 
     ~Private()
     {
         delete pageNotes;
     }
-
     KPrNotes * pageNotes;
+    QHash<KPrDeclarations::DeclarationType/*name*/, QString>usedDeclaration;
+    KPrDeclarations *declarations; 
+
 };
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
@@ -198,6 +202,19 @@ void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext 
         }
     }
     placeholders().init( layout, childShapes() );
+
+    if (element.hasAttributeNS(KoXmlNS::presentation, "use-footer-name")) {
+        QString name = element.attributeNS (KoXmlNS::presentation, "use-footer-name");
+        d->usedDeclaration.insert(KPrDeclarations::FooterType, name);
+    }
+    if (element.hasAttributeNS( KoXmlNS::presentation, "use-header-name")) {
+        QString name = element.attributeNS (KoXmlNS::presentation, "use-header-name");
+        d->usedDeclaration.insert(KPrDeclarations::HeaderType, name);
+    }
+    if (element.hasAttributeNS( KoXmlNS::presentation, "use-date-time-name")) {
+        QString name = element.attributeNS (KoXmlNS::presentation, "use-date-time-name");
+        d->usedDeclaration.insert(KPrDeclarations::DateTimeType, name);
+    }
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const

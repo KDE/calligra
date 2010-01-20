@@ -15,6 +15,7 @@ add_subdirectory(tools)
 set( kpresenterprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
+     KPrDeclarations.cpp
      KPrView.cpp
      KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
