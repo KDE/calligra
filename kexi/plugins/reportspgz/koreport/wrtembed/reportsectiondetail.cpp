@@ -74,31 +74,7 @@ void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
 
     for (uint i = 0; i < (uint)groupList.count(); i++) {
         ReportSectionDetailGroup * rsdg = groupList.at(i);
-        QDomElement grp = doc.createElement("report:group");
-
-        grp.setAttribute("report:group-column", rsdg->column());
-        if (rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter) {
-            grp.setAttribute("report:group-page-break", "after-footer");
-        } else if (rsdg->pageBreak() == ReportSectionDetailGroup::BreakBeforeGroupHeader) {
-            grp.setAttribute("report:group-page-break", "before-header");
-        }
-
-        //group head
-        if (rsdg->groupHeaderVisible()) {
-            QDomElement gheader = doc.createElement("report:section");
-            gheader.setAttribute("report:section-type", "group-header");
-            rsdg->groupHeader()->buildXML(doc, gheader);
-            grp.appendChild(gheader);
-        }
-        // group foot
-        if (rsdg->groupFooterVisible()) {
-            QDomElement gfooter = doc.createElement("report:section");
-            gfooter.setAttribute("report:section-type", "group-footer");
-            rsdg->groupHeader()->buildXML(doc, gfooter);
-            grp.appendChild(gfooter);
-        }
-
-        section.appendChild(grp);
+        rsdg->buildXML(doc, section);
     }
 
     // detail section
@@ -126,36 +102,8 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
                 setPageBreak(BreakAtEnd);
         } else if (n == "report:group") {
             ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup("unnamed", this, this);
-            QDomNodeList gnl = node.childNodes();
-            QDomNode gnode;
-            bool show_head = false;
-            bool show_foot = false;
-            for (int gi = 0; gi < gnl.count(); gi++) {
-                gnode = gnl.item(gi);
-
-
-                if (gnode.nodeName() == "column") {
-                    rsdg->setColumn(gnode.firstChild().nodeValue());
-                } else if (gnode.nodeName() == "pagebreak") {
-                    QDomElement elemThis = gnode.toElement();
-                    QString n = elemThis.attribute("when");
-                    if ("after foot" == n)
-                        rsdg->setPageBreak(ReportSectionDetailGroup::BreakAfterGroupFooter);
-                } else if (gnode.nodeName() == "groupheader") {
-                    rsdg->groupHeader()->initFromXML(gnode);
-                    rsdg->setGroupHeaderVisible(true);
-                    show_head = true;
-                } else if (gnode.nodeName() == "groupfooter") {
-                    rsdg->groupFooter()->initFromXML(gnode);
-                    rsdg->setGroupFooterVisible(true);
-                    show_foot = true;
-                } else {
-                    kDebug() << "encountered unknown element while parsing group element: " << gnode.nodeName();
-                }
-            }
+            rsdg->initFromXML( node.toElement() );
             insertSection(groupSectionCount(), rsdg);
-            rsdg->setGroupHeaderVisible(show_head);
-            rsdg->setGroupFooterVisible(show_foot);
         } else if (n == "report:section" && node.toElement().attribute("report:section-type") == "detail") {
             kDebug() << "Creating detail section";
             m_detail->initFromXML(node);

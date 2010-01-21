@@ -46,44 +46,40 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
         QDomElement elemThis = sections.item(nodeCounter).toElement();
 
         if (elemThis.tagName() == "report:group") {
-            QDomNodeList gsections = elemSource.childNodes();
             ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
 
-            //TODO Column and page break
-            dgsd->column = elemThis.attribute("report:group-column");
-
-            QString pbreak = elemThis.attribute("report:group-page-break");
-            if (pbreak == "after-footer") {
-                dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
-            } else if (pbreak == "before-header") {
-                dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
-            } else {
-                dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
+            if ( elemThis.hasAttribute( "report:group-column" ) ) {
+                dgsd->column = elemThis.attribute( "report:group-column" );
             }
-
-            for (int gnodeCounter = 0; gnodeCounter < gsections.count(); gnodeCounter++) {
-                QDomElement gsec = gsections.item(gnodeCounter).toElement();
-                if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "header-group") {
-                    //Group Header
-                    KRSectionData * sd = new KRSectionData(gsec);
+            if ( elemThis.hasAttribute( "report:group-page-break" ) ) {
+                QString s = elemThis.attribute( "report:group-page-break" );
+                if ( s == "after-footer" ) {
+                    dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
+                } else if ( s == "before-header" ) {
+                    dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
+                } else {
+                    dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
+                }
+            }
+            for ( QDomElement e = elemThis.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
+                QString s = e.attribute( "report:section-type" );
+                if ( s == "group-header" ) {
+                    KRSectionData * sd = new KRSectionData(e);
                     if (sd->isValid()) {
                         dgsd->groupHeader = sd;
                     } else {
                         delete sd;
                     }
-
-                } else if (gsec.tagName() == "report:section" && gsec.attribute("report:section-type") == "footer-group") {
-                    //Group Footer
-                    KRSectionData * sd = new KRSectionData(gsec);
+                } else if ( s == "group-footer" ) {
+                    KRSectionData * sd = new KRSectionData(e);
                     if (sd->isValid()) {
                         dgsd->groupFooter = sd;
                     } else {
                         delete sd;
                     }
                 }
-                m_groupList.append(dgsd);
-
             }
+            m_groupList.append(dgsd);
         } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {

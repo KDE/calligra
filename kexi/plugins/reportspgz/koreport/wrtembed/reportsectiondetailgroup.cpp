@@ -21,6 +21,8 @@
 
 #include "reportsectiondetailgroup.h"
 #include <qobject.h>
+#include <QDomElement>
+#include <QDomDocument>
 #include "reportdesigner.h"
 #include "reportsection.h"
 #include "reportsectiondetail.h"
@@ -58,6 +60,59 @@ ReportSectionDetailGroup::~ReportSectionDetailGroup()
     delete m_groupFooter;
 }
 
+void ReportSectionDetailGroup::buildXML(QDomDocument & doc, QDomElement & section) const
+{
+    QDomElement grp = doc.createElement("report:group");
+
+    grp.setAttribute("report:group-column", column());
+    if (pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter) {
+        grp.setAttribute("report:group-page-break", "after-footer");
+    } else if (pageBreak() == ReportSectionDetailGroup::BreakBeforeGroupHeader) {
+        grp.setAttribute("report:group-page-break", "before-header");
+    }
+
+    //group head
+    if (groupHeaderVisible()) {
+        QDomElement gheader = doc.createElement("report:section");
+        gheader.setAttribute("report:section-type", "group-header");
+        groupHeader()->buildXML(doc, gheader);
+        grp.appendChild(gheader);
+    }
+    // group foot
+    if (groupFooterVisible()) {
+        QDomElement gfooter = doc.createElement("report:section");
+        gfooter.setAttribute("report:section-type", "group-footer");
+        groupHeader()->buildXML(doc, gfooter);
+        grp.appendChild(gfooter);
+    }
+    section.appendChild(grp);
+}
+
+void ReportSectionDetailGroup::initFromXML( const QDomElement &element )
+{
+    if ( element.hasAttribute( "report:group-column" ) ) {
+        setColumn( element.attribute( "report:group-column" ) );
+    }
+    if ( element.hasAttribute( "report:group-page-break" ) ) {
+        QString s = element.attribute( "report:group-page-break" );
+        if ( s == "after-footer" ) {
+            setPageBreak( ReportSectionDetailGroup::BreakAfterGroupFooter );
+        } else if ( s == "before-header" ) {
+            setPageBreak( ReportSectionDetailGroup::BreakBeforeGroupHeader );
+        }
+    }
+    for ( QDomElement e = element.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
+        QString s = e.attribute( "report:section-type" );
+        if ( s == "group-header" ) {
+            setGroupHeaderVisible( true );
+            m_groupHeader->initFromXML( e );
+        } else if ( s == "group-footer" ) {
+            setGroupFooterVisible( true );
+            m_groupFooter->initFromXML( e );
+        }
+    }
+}
+
 void ReportSectionDetailGroup::setGroupHeaderVisible(bool yes)
 {
     if (groupHeaderVisible() != yes) {
@@ -85,18 +140,20 @@ void ReportSectionDetailGroup::setPageBreak(int pb)
 
 bool ReportSectionDetailGroup::groupHeaderVisible() const
 {
-    return m_groupHeader->isVisible();
+    // Check *explicitly* hidden
+    return ! m_groupHeader->isHidden();
 }
 bool ReportSectionDetailGroup::groupFooterVisible() const
 {
-    return m_groupFooter->isVisible();
+    // Check *explicitly* hidden
+    return ! m_groupFooter->isHidden();
 }
 int ReportSectionDetailGroup::pageBreak() const
 {
     return m_pageBreak;
 }
 
-QString ReportSectionDetailGroup::column()
+QString ReportSectionDetailGroup::column() const
 {
     return m_column;
 }

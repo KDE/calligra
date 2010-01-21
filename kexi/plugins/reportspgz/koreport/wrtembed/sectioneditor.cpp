@@ -271,7 +271,7 @@ void SectionEditor::btnEdit_clicked()
 
         dgsd->cbColumn->clear();
         dgsd->cbColumn->insertItems(0, m_reportDesigner->fieldList());
-        dgsd->cbColumn->setEditText(rsdg->column());
+        dgsd->cbColumn->setCurrentIndex(m_reportDesigner->fieldList().indexOf(rsdg->column()));
 
         dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
         dgsd->cbHead->setChecked(rsdg->groupHeaderVisible());

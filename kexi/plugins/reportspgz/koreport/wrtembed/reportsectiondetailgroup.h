@@ -27,6 +27,9 @@
 class ReportSection;
 class ReportSectionDetail;
 
+class QDomElement;
+class QDomDocument;
+
 /**
  @author
 */
@@ -44,7 +47,7 @@ public:
     };
 
     void setColumn(const QString &);
-    QString column();
+    QString column() const;
 
     void setGroupHeaderVisible(bool yes = TRUE);
     bool groupHeaderVisible() const;
@@ -56,6 +59,9 @@ public:
     ReportSection * groupHeader() const;
     ReportSection * groupFooter() const;
 
+    void buildXML(QDomDocument & doc, QDomElement & section) const;
+    void initFromXML( const QDomElement &element );
+    
 protected:
     QString m_column;
 
