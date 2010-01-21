@@ -831,7 +831,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
     m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
     kDebug() << m_formula;
 
-    while (!atEnd()) {
+    while (!atEnd() && !hasError()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
