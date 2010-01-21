@@ -692,7 +692,7 @@ void ReportDesigner::createProperties()
     keys.clear(); strings.clear();
     keys << "portrait" << "landscape";
     strings << i18n("Portrait") << i18n("Landscape");
-    m_orientation = new KoProperty::Property("print-orientation", keys, strings, "Portrait", "Page Orientation");
+    m_orientation = new KoProperty::Property("print-orientation", keys, strings, "portrait", "Page Orientation");
 
     keys.clear(); strings.clear();
 

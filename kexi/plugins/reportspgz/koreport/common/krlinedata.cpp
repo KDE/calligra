@@ -36,10 +36,10 @@ KRLineData::KRLineData(QDomNode & element)
     m_name->setValue(element.toElement().attribute("report:name"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
-    _s.setX(element.toElement().attribute("report:xstart").toDouble());
-    _s.setY(element.toElement().attribute("report:ystart").toDouble());
-    _e.setX(element.toElement().attribute("report:xend").toDouble());
-    _e.setY(element.toElement().attribute("report:yend").toDouble());
+    _s.setX(KoUnit::parseValue(element.toElement().attribute("svg:x1", "1cm")));
+    _s.setY(KoUnit::parseValue(element.toElement().attribute("svg:y1", "1cm")));
+    _e.setX(KoUnit::parseValue(element.toElement().attribute("svg:x2", "1cm")));
+    _e.setY(KoUnit::parseValue(element.toElement().attribute("svg:y2", "2cm")));
     m_start.setPointPos(_s);
     m_end.setPointPos(_e);
 
