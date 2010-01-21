@@ -25,6 +25,9 @@
 
 class QPolygon;
 
+#define DEBUG_WMFPAINT 0
+
+
 /**
  * KoWmfPaint inherits the abstract class KoWmfRead
  * and redirects WMF actions onto a QPaintDevice.

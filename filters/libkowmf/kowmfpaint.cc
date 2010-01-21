@@ -25,9 +25,6 @@
 #include <kdebug.h>
 
 
-#define DEBUG_WMFPAINT 0
-
-
 KoWmfPaint::KoWmfPaint()
     : KoWmfRead()
     , mTextPen()

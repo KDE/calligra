@@ -38,6 +38,13 @@ class QPolygon;
 class KoWmfReadPrivate
 {
 public:
+    // Taken from the WMF spec.
+    typedef enum {
+        LAYOUT_LTR = 0x0000,
+        LAYOUT_RTL = 0x0001,
+        LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
+    } Layout;
+
     KoWmfReadPrivate();
     virtual ~KoWmfReadPrivate();
 
@@ -154,6 +161,7 @@ public:
     void setRelAbs(quint32, QDataStream& stream);
     void setMapMode(quint32, QDataStream& stream);
     void extFloodFill(quint32, QDataStream& stream);
+    void setLayout(quint32, QDataStream& stream);
     void startDoc(quint32, QDataStream& stream);
     void startPage(quint32, QDataStream& stream);
     void endDoc(quint32, QDataStream& stream);
@@ -218,6 +226,7 @@ private:
     // current coordinate != mBBox
     QRect  mWindow;
     // current state of the drawing
+    Layout  mLayout;
     QColor  mTextColor;
     quint16  mTextAlign;
     int     mTextRotation;
@@ -239,120 +248,121 @@ private:
  */
 static const struct KoWmfFunc {
     void (KoWmfReadPrivate::*method)(quint32, QDataStream&);
+    QString name;
 } koWmfFunc[] = {
-    { &KoWmfReadPrivate::end }, // 0
-    { &KoWmfReadPrivate::setBkColor }, // 1
-    { &KoWmfReadPrivate::setBkMode }, // 2
-    { &KoWmfReadPrivate::setMapMode }, // 3
-    { &KoWmfReadPrivate::setRop }, // 4
-    { &KoWmfReadPrivate::setRelAbs }, // 5
-    { &KoWmfReadPrivate::setPolyFillMode }, // 6
-    { &KoWmfReadPrivate::SetStretchBltMode }, // 7
-    { &KoWmfReadPrivate::notyet }, // 8
-    { &KoWmfReadPrivate::setTextColor }, // 9
-    { &KoWmfReadPrivate::ScaleWindowExt }, // 10
-    { &KoWmfReadPrivate::setWindowOrg }, // 11
-    { &KoWmfReadPrivate::setWindowExt }, // 12
-    { &KoWmfReadPrivate::notyet }, // 13
-    { &KoWmfReadPrivate::notyet }, // 14
-    { &KoWmfReadPrivate::OffsetWindowOrg }, // 15
-    { &KoWmfReadPrivate::notyet }, // 16
-    { &KoWmfReadPrivate::notyet }, // 17
-    { &KoWmfReadPrivate::notyet }, // 18
-    { &KoWmfReadPrivate::lineTo }, // 19
-    { &KoWmfReadPrivate::moveTo }, // 20
-    { &KoWmfReadPrivate::excludeClipRect }, // 21
-    { &KoWmfReadPrivate::intersectClipRect }, // 22
-    { &KoWmfReadPrivate::arc }, // 23
-    { &KoWmfReadPrivate::ellipse }, // 24
-    { &KoWmfReadPrivate::notyet }, // 25
-    { &KoWmfReadPrivate::pie }, // 26
-    { &KoWmfReadPrivate::rectangle }, // 27
-    { &KoWmfReadPrivate::roundRect }, // 28
-    { &KoWmfReadPrivate::notyet }, // 29
-    { &KoWmfReadPrivate::saveDC }, // 30
-    { &KoWmfReadPrivate::setPixel }, // 31
-    { &KoWmfReadPrivate::notyet }, // 32
-    { &KoWmfReadPrivate::textOut }, // 33
-    { &KoWmfReadPrivate::bitBlt }, // 34
-    { &KoWmfReadPrivate::notyet }, // 35
-    { &KoWmfReadPrivate::polygon }, // 36
-    { &KoWmfReadPrivate::polyline }, // 37
-    { &KoWmfReadPrivate::escape }, // 38
-    { &KoWmfReadPrivate::restoreDC }, // 39
-    { &KoWmfReadPrivate::region }, // 40
-    { &KoWmfReadPrivate::region }, // 41
-    { &KoWmfReadPrivate::region }, // 42
-    { &KoWmfReadPrivate::region }, // 43
-    { &KoWmfReadPrivate::region }, // 44
-    { &KoWmfReadPrivate::selectObject }, // 45
-    { &KoWmfReadPrivate::setTextAlign }, // 46
-    { 0 }, // 47
-    { &KoWmfReadPrivate::chord }, // 48
-    { &KoWmfReadPrivate::notyet }, // 49
-    { &KoWmfReadPrivate::extTextOut }, // 50
-    { &KoWmfReadPrivate::setDibToDev }, // 51
-    { &KoWmfReadPrivate::palette }, // 52
-    { &KoWmfReadPrivate::palette }, // 53
-    { &KoWmfReadPrivate::palette }, // 54
-    { &KoWmfReadPrivate::palette }, // 55
-    { &KoWmfReadPrivate::polyPolygon }, // 56
-    { &KoWmfReadPrivate::palette }, // 57
-    { 0 }, // 58
-    { 0 }, // 59
-    { 0 }, // 60
-    { 0 }, // 61
-    { 0 }, // 62
-    { 0 }, // 63
-    { &KoWmfReadPrivate::dibBitBlt }, // 64
-    { &KoWmfReadPrivate::dibStretchBlt }, // 65
-    { &KoWmfReadPrivate::dibCreatePatternBrush }, // 66
-    { &KoWmfReadPrivate::stretchDib }, // 67
-    { 0 }, // 68
-    { 0 }, // 69
-    { 0 }, // 70
-    { 0 }, // 71
-    { &KoWmfReadPrivate::extFloodFill }, // 72
-    { 0 }, // 73
-    { 0 }, // 74
-    { 0 }, // 75
-    { &KoWmfReadPrivate::resetDC }, // 76
-    { &KoWmfReadPrivate::startDoc }, // 77
-    { 0 }, // 78
-    { &KoWmfReadPrivate::startPage }, // 79
-    { &KoWmfReadPrivate::endPage }, // 80
-    { 0 }, // 81
-    { 0 }, // 82
-    { 0 }, // 83
-    { 0 }, // 84
-    { 0 }, // 85
-    { 0 }, // 86
-    { 0 }, // 87
-    { 0 }, // 88
-    { 0 }, // 89
-    { 0 }, // 90
-    { 0 }, // 91
-    { 0 }, // 92
-    { 0 }, // 93
-    { &KoWmfReadPrivate::endDoc }, // 94
-    { 0 }, // 95
+    { &KoWmfReadPrivate::end, "end" }, // 0
+    { &KoWmfReadPrivate::setBkColor, "setBkColor" }, // 1
+    { &KoWmfReadPrivate::setBkMode, "setBkMode" }, // 2
+    { &KoWmfReadPrivate::setMapMode, "setMapMode" }, // 3
+    { &KoWmfReadPrivate::setRop, "setRop" }, // 4
+    { &KoWmfReadPrivate::setRelAbs, "setRelAbs" }, // 5
+    { &KoWmfReadPrivate::setPolyFillMode, "setPolyFillMode" }, // 6
+    { &KoWmfReadPrivate::SetStretchBltMode, "SetStretchBltMode" }, // 7
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 8
+    { &KoWmfReadPrivate::setTextColor, "setTextColor" }, // 9
+    { &KoWmfReadPrivate::ScaleWindowExt, "ScaleWindowExt" }, // 10
+    { &KoWmfReadPrivate::setWindowOrg, "setWindowOrg" }, // 11
+    { &KoWmfReadPrivate::setWindowExt, "setWindowExt" }, // 12
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 13
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 14
+    { &KoWmfReadPrivate::OffsetWindowOrg, "OffsetWindowOrg" }, // 15
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 16
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 17
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 18
+    { &KoWmfReadPrivate::lineTo, "lineTo" }, // 19
+    { &KoWmfReadPrivate::moveTo, "moveTo" }, // 20
+    { &KoWmfReadPrivate::excludeClipRect, "excludeClipRect" }, // 21
+    { &KoWmfReadPrivate::intersectClipRect, "intersectClipRect" }, // 22
+    { &KoWmfReadPrivate::arc, "arc" }, // 23
+    { &KoWmfReadPrivate::ellipse, "ellipse" }, // 24
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 25
+    { &KoWmfReadPrivate::pie, "pie" }, // 26
+    { &KoWmfReadPrivate::rectangle, "rectangle" }, // 27
+    { &KoWmfReadPrivate::roundRect, "roundRect" }, // 28
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 29
+    { &KoWmfReadPrivate::saveDC, "saveDC" }, // 30
+    { &KoWmfReadPrivate::setPixel, "setPixel" }, // 31
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 32
+    { &KoWmfReadPrivate::textOut, "textOut" }, // 33
+    { &KoWmfReadPrivate::bitBlt, "bitBlt" }, // 34
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 35
+    { &KoWmfReadPrivate::polygon, "polygon" }, // 36
+    { &KoWmfReadPrivate::polyline, "polyline" }, // 37
+    { &KoWmfReadPrivate::escape, "escape" }, // 38
+    { &KoWmfReadPrivate::restoreDC, "restoreDC" }, // 39
+    { &KoWmfReadPrivate::region, "region" }, // 40
+    { &KoWmfReadPrivate::region, "region" }, // 41
+    { &KoWmfReadPrivate::region, "region" }, // 42
+    { &KoWmfReadPrivate::region, "region" }, // 43
+    { &KoWmfReadPrivate::region, "region" }, // 44
+    { &KoWmfReadPrivate::selectObject, "selectObject" }, // 45
+    { &KoWmfReadPrivate::setTextAlign, "setTextAlign" }, // 46
+    { 0, "unimplemented" }, // 47
+    { &KoWmfReadPrivate::chord, "chord" }, // 48
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 49
+    { &KoWmfReadPrivate::extTextOut, "extTextOut" }, // 50
+    { &KoWmfReadPrivate::setDibToDev, "setDibToDev" }, // 51
+    { &KoWmfReadPrivate::palette, "palette" }, // 52
+    { &KoWmfReadPrivate::palette, "palette" }, // 53
+    { &KoWmfReadPrivate::palette, "palette" }, // 54
+    { &KoWmfReadPrivate::palette, "palette" }, // 55
+    { &KoWmfReadPrivate::polyPolygon, "polyPolygon" }, // 56
+    { &KoWmfReadPrivate::palette, "palette" }, // 57
+    { 0, "unimplemented" }, // 58
+    { 0, "unimplemented" }, // 59
+    { 0, "unimplemented" }, // 60
+    { 0, "unimplemented" }, // 61
+    { 0, "unimplemented" }, // 62
+    { 0, "unimplemented" }, // 63
+    { &KoWmfReadPrivate::dibBitBlt, "dibBitBlt" }, // 64
+    { &KoWmfReadPrivate::dibStretchBlt, "dibStretchBlt" }, // 65
+    { &KoWmfReadPrivate::dibCreatePatternBrush, "dibCreatePatternBrush" }, // 66
+    { &KoWmfReadPrivate::stretchDib, "stretchDib" }, // 67
+    { 0, "unimplemented" }, // 68
+    { 0, "unimplemented" }, // 69
+    { 0, "unimplemented" }, // 70
+    { 0, "unimplemented" }, // 71
+    { &KoWmfReadPrivate::extFloodFill, "extFloodFill" }, // 72
+    { &KoWmfReadPrivate::setLayout, "setLayout" }, // 73
+    { 0, "unimplemented" }, // 74
+    { 0, "unimplemented" }, // 75
+    { &KoWmfReadPrivate::resetDC, "resetDC" }, // 76
+    { &KoWmfReadPrivate::startDoc, "startDoc" }, // 77
+    { 0, "unimplemented" }, // 78
+    { &KoWmfReadPrivate::startPage, "startPage" }, // 79
+    { &KoWmfReadPrivate::endPage, "endPage" }, // 80
+    { 0, "unimplemented" }, // 81
+    { 0, "unimplemented" }, // 82
+    { 0, "unimplemented" }, // 83
+    { 0, "unimplemented" }, // 84
+    { 0, "unimplemented" }, // 85
+    { 0, "unimplemented" }, // 86
+    { 0, "unimplemented" }, // 87
+    { 0, "unimplemented" }, // 88
+    { 0, "unimplemented" }, // 89
+    { 0, "unimplemented" }, // 90
+    { 0, "unimplemented" }, // 91
+    { 0, "unimplemented" }, // 92
+    { 0, "unimplemented" }, // 93
+    { &KoWmfReadPrivate::endDoc, "endDoc" }, // 94
+    { 0, "unimplemented" }, // 95
     // 0x5F last function until 0xF0
-    { &KoWmfReadPrivate::deleteObject }, // 96
-    { 0 }, // 97
-    { 0 }, // 98
-    { 0 }, // 99
-    { 0 }, // 100
-    { 0 }, // 101
-    { 0 }, // 102
-    { &KoWmfReadPrivate::createPalette }, // 103
-    { &KoWmfReadPrivate::createBrush }, // 104
-    { &KoWmfReadPrivate::createPatternBrush }, // 105
-    { &KoWmfReadPrivate::createPenIndirect }, // 106
-    { &KoWmfReadPrivate::createFontIndirect }, // 107
-    { &KoWmfReadPrivate::createBrushIndirect }, //108
-    { &KoWmfReadPrivate::createBitmapIndirect }, //109
-    { &KoWmfReadPrivate::createBitmap }, // 110
-    { &KoWmfReadPrivate::createRegion } // 111
+    { &KoWmfReadPrivate::deleteObject, "deleteObject" }, // 96
+    { 0, "unimplemented" }, // 97
+    { 0, "unimplemented" }, // 98
+    { 0, "unimplemented" }, // 99
+    { 0, "unimplemented" }, // 100
+    { 0, "unimplemented" }, // 101
+    { 0, "unimplemented" }, // 102
+    { &KoWmfReadPrivate::createPalette, "createPalette" }, // 103
+    { &KoWmfReadPrivate::createBrush, "createBrush" }, // 104
+    { &KoWmfReadPrivate::createPatternBrush, "createPatternBrush" }, // 105
+    { &KoWmfReadPrivate::createPenIndirect, "createPenIndirect" }, // 106
+    { &KoWmfReadPrivate::createFontIndirect, "createFontIndirect" }, // 107
+    { &KoWmfReadPrivate::createBrushIndirect, "createBrushIndirect" }, //108
+    { &KoWmfReadPrivate::createBitmapIndirect, "createBitmapIndirect" }, //109
+    { &KoWmfReadPrivate::createBitmap, "createBitmap" }, // 110
+    { &KoWmfReadPrivate::createRegion, "createRegion" } // 111
 };
 
 
