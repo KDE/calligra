@@ -212,7 +212,7 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         value = sheet->map()->formatter()->formatText(cell.value(), d->style.formatType(),
                 d->style.precision(), d->style.floatFormat(),
                 d->style.prefix(), d->style.postfix(),
-                d->style.currency().symbol());
+                d->style.currency().symbol(), d->style.customFormat());
         d->displayText = value.asString();
 
         QSharedPointer<QTextDocument> doc = cell.richText();

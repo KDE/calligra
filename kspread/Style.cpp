@@ -325,6 +325,8 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
                     precision = -11;
                 setPrecision(precision);
             }
+
+            setCustomFormat(dataStyle.formatStr);
         }
     }
 }

@@ -64,7 +64,7 @@ public:
                      Style::FloatFormat floatFormat = Style::OnlyNegSigned,
                      const QString& prefix = QString(),
                      const QString& postfix = QString(),
-                     const QString& currencySymbol = QString());
+                     const QString& currencySymbol = QString(), const QString& formatString = QString());
 
     /**
      * Creates a date format.
@@ -102,7 +102,7 @@ protected:
     QString createNumberFormat(Number value, int precision,
                                Format::Type formatType,
                                Style::FloatFormat floatFormat,
-                               const QString& currencySymbol);
+                               const QString& currencySymbol, const QString& formatString = QString() );
 
     /**
      * Creates a fraction format.

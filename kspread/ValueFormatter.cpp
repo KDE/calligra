@@ -47,7 +47,7 @@ const CalculationSettings* ValueFormatter::settings() const
 
 Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
                                  Style::FloatFormat floatFormat, const QString &prefix,
-                                 const QString &postfix, const QString &currencySymbol)
+                                 const QString &postfix, const QString &currencySymbol, const QString &formatString)
 {
     if (value.isError())
         return Value(value.errorMessage());
@@ -125,7 +125,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         else {
             Number number = m_converter->asFloat(value, &ok).asFloat();
             if (ok) {
-                result = Value(createNumberFormat(number, precision, fmtType, floatFormat, currencySymbol));
+                result = Value(createNumberFormat(number, precision, fmtType, floatFormat, currencySymbol, formatString));
                 result.setFormat(Value::fmt_Number);
             }
         }
@@ -244,8 +244,16 @@ QString ValueFormatter::removeTrailingZeros(const QString& str, const QString& d
 }
 
 QString ValueFormatter::createNumberFormat(Number value, int precision,
-        Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol)
+        Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol, const QString& formatString)
 {
+    if (!formatString.isEmpty() ) {
+        QRegExp re( QLatin1String( "^([^0#.,E+]*)([0#.,E+]*)(.*)$" ) );
+        if( re.exactMatch( formatString ) ) {
+            return re.cap( 1 ) + createNumberFormat(value, precision, fmt, floatFormat, currencySymbol) + re.cap( 3 );
+        }
+    }
+    
+
     // NOTE: If precision (obtained from the cell style) is -1 (arbitrary),
     //       use the document default decimal precision.
     int p = (precision == -1) ? settings()->defaultDecimalPrecision() : precision;
