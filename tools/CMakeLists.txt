@@ -6,9 +6,9 @@ macro_optional_add_subdirectory( quickprint )
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
 if(X11_FOUND)
-if(Q_WS_11)
+if(Q_WS_X11)
   macro_optional_add_subdirectory( f-office )
-endif(Q_WS_11)
+endif(Q_WS_X11)
 endif(X11_FOUND)
 
 # strigi ships with the odfsaxanalyzer which does already fetch the meta-data of
