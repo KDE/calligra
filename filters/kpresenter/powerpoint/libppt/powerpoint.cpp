@@ -51,7 +51,9 @@ namespace
 
 // TODO: get proper definitions for uint16_t, uint32_t etc
 typedef unsigned int uint16_t;
+#ifdef Q_OS_WIN
 typedef int int16_t;
+#endif
 typedef long int32_t;
 typedef unsigned long uint32_t;
 
