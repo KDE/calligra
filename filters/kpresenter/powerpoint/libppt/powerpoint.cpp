@@ -38,6 +38,10 @@
 
 //#ifdef Q_CC_MSVC
 #define __PRETTY_FUNCTION__ __FUNCTION__
+#ifdef Q_OS_WIN
+#define bcopy(b1,b2,len) (memmove((b2), (b1), (len)), (void) 0)
+#endif
+
 //#define LIBPPT_DEBUG
 //#endif
 
@@ -47,6 +51,7 @@ namespace
 
 // TODO: get proper definitions for uint16_t, uint32_t etc
 typedef unsigned int uint16_t;
+typedef int int16_t;
 typedef long int32_t;
 typedef unsigned long uint32_t;
 
