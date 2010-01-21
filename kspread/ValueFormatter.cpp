@@ -169,8 +169,8 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
                 fmtType = Format::Scientific;
             else
                 fmtType = Format::Number;
-        }
-        break;
+            }
+            break;
         case Value::fmt_Percent:
             fmtType = Format::Percentage;
             break;
