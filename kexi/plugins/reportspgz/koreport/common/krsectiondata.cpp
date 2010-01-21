@@ -169,10 +169,10 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
         sectiontype = "footer-report";
         break;
     case KRSectionData::GroupHeader:
-        sectiontype = "header-group";
+        sectiontype = "group-header";
         break;
     case KRSectionData::GroupFooter:
-        sectiontype = "footer-group";
+        sectiontype = "group-footer";
         break;
     case KRSectionData::Detail:
         sectiontype = "detail";
@@ -211,9 +211,9 @@ KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
         sec = KRSectionData::PageFooterLast;
     else if (s == "footer-report")
         sec = KRSectionData::ReportFooter;
-    else if (s == "header-group")
+    else if (s == "group-header")
         sec = KRSectionData::GroupHeader;
-    else if (s == "footer-group")
+    else if (s == "group-footer")
         sec = KRSectionData::GroupFooter;
     else if (s == "detail")
         sec = KRSectionData::Detail;
