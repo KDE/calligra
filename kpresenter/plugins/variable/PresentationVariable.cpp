@@ -29,7 +29,7 @@
 #include <KoProperties.h>
 #include <kdebug.h>
 #include <KoShape.h>
-#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>

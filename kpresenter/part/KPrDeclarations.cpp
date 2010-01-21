@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoPALoadingContext.h>
 
 KPrDeclarations::KPrDeclarations()
 {
