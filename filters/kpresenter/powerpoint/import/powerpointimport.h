@@ -74,6 +74,12 @@ private:
     void processDocStyles(Slide *master, KoGenStyles &styles);
 
     /**
+    * @brief Write declaration in the content body presentation
+    * @param xmlWriter XML writer to write
+    */
+    void addPresentationDeclaration(KoXmlWriter* xmlWriter);
+
+    /**
     * @brief Write Frame element (KoGenStyle& style,const char* presentation_class,
     *  QString width, QString height, QString x, QString y) specified amount into the 
     *  styles.xml for page-number represtation

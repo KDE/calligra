@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -323,12 +325,16 @@ void PowerPointImport::createMainStyles(KoGenStyles& styles)
         x = master->pageWidth() - 50;
         y = master->pageHeight() - 50;
     }
-
+    //Footer
+    addFrame(s, "footer", "300pt", "20pt",
+             "310pt" , QString("%1pt").arg(y),
+             styles.lookup(p), styles.lookup(text));
+    //Page-number
     addFrame(s, "page-number", "20pt", "20pt",
-
              QString("%1pt").arg(x), QString("%1pt").arg(y),
              styles.lookup(p), styles.lookup(text));
-    addFrame(s, "date-time", "200pt", "20pt", "20pt",
+    //Date-time
+    addFrame(s, "date-time", "300pt", "20pt", "20pt",
              QString("%1pt").arg(y), styles.lookup(p), styles.lookup(text));
     styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
 
@@ -375,13 +381,20 @@ void PowerPointImport::addFrame(KoGenStyle& style, const char* presentationClass
 
     if (strcmp(presentationClass, "date-time") == 0) {
         //Same DateTime object so no need to pass style name for date time
-        if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
+        if (headerFooterAtomFlags & DateTimeFormat::fHasTodayDate) {
             d->dateTime->addMasterDateTimeSection(xmlWriter, tStyle);
-        } else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
+        } else if (headerFooterAtomFlags & DateTimeFormat::fHasUserDate) {
             //Future FixedDate format
         }
     }
-
+    if (strcmp(presentationClass, "footer") == 0) {
+        xmlWriter.startElement("presentation:footer");
+        xmlWriter.endElement(); // presentation:footer
+    }
+    if (strcmp(presentationClass, "header") == 0) {
+        xmlWriter.startElement("presentation:header");
+        xmlWriter.endElement(); // presentation:header
+    }
     xmlWriter.endElement(); // text:p
 
     xmlWriter.endElement(); // draw:text-box
@@ -394,7 +407,6 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
 {
     KoXmlWriter* contentWriter;
     QByteArray contentData;
-    int  headerFooterAtomFlags = 0;
     QBuffer contentBuffer(&contentData);
 
     contentBuffer.open(QIODevice::WriteOnly);
@@ -429,22 +441,7 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:presentation");
 
-    if(master)
-        headerFooterAtomFlags = master->headerFooterFlags();
-
-    if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
-        contentWriter->startElement("presentation:date-time-decl");
-        contentWriter->addAttribute("presentation:name", "dtd1");
-        contentWriter->addAttribute("presentation:source", "current-date");
-        //contentWriter->addAttribute("style:data-style-name", "Dt1");
-        contentWriter->endElement();  // presentation:date-time-decl
-    } else if (headerFooterAtomFlags && DateTimeFormat::fHasUserDate) {
-        contentWriter->startElement("presentation:date-time-decl");
-        contentWriter->addAttribute("presentation:name", "dtd1");
-        contentWriter->addAttribute("presentation:source", "fixed");
-        //Future - Add Fixed date data here
-        contentWriter->endElement();  //presentation:date-time-decl
-    }
+    addPresentationDeclaration( contentWriter );
 
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
         processSlideForBody(c, contentWriter);
@@ -460,6 +457,54 @@ QByteArray PowerPointImport::createContent(KoGenStyles& styles)
     return contentData;
 }
 
+void PowerPointImport::addPresentationDeclaration(KoXmlWriter* xmlWriter)
+{
+    Slide *masterSlide = d->presentation->masterSlide();
+    QHash< Presentation::PresentationDeclaration , QPair< QString, QString > > *pd;
+    pd = d->presentation->presentationDeclaration();
+    if( !pd || !xmlWriter) return;
+
+    int  headerFooterAtomFlags = 0;
+    if(masterSlide)
+        headerFooterAtomFlags = masterSlide->headerFooterFlags();
+
+    if (headerFooterAtomFlags & DateTimeFormat::fHasTodayDate) {
+        xmlWriter->startElement("presentation:date-time-decl");
+        xmlWriter->addAttribute("presentation:name", "dtd1");
+        xmlWriter->addAttribute("presentation:source", "current-date");
+        //xmlWriter->addAttribute("style:data-style-name", "Dt1");
+        xmlWriter->endElement();  // presentation:date-time-decl
+    } else if (headerFooterAtomFlags & DateTimeFormat::fHasUserDate) {
+        xmlWriter->startElement("presentation:date-time-decl");
+        xmlWriter->addAttribute("presentation:name", "dtd1");
+        xmlWriter->addAttribute("presentation:source", "fixed");
+        //Future - Add Fixed date data here
+        xmlWriter->endElement();  //presentation:date-time-decl
+    }
+    if (headerFooterAtomFlags & DateTimeFormat::fHasHeader ) {
+        QList< QPair < QString, QString > > items = pd->values(Presentation::HeaderType);
+        for( int i = 0; i < items.size(); ++i) {
+            QPair<QString, QString > item = items.value(i);
+            xmlWriter->startElement("presentation:header-decl");
+            xmlWriter->addAttribute("presentation:name", item.first);
+            xmlWriter->addTextNode(item.second);
+            xmlWriter->endElement();  //presentation:header-decl
+        }
+    }
+    if (headerFooterAtomFlags & DateTimeFormat::fHasFooter) {
+        QList< QPair < QString, QString > > items = pd->values(Presentation::FooterType);
+        for( int i = items.size()-1 ; i >= 0; --i) {
+            QPair<QString, QString > item = items.at(i);
+            xmlWriter->startElement("presentation:footer-decl");
+            xmlWriter->addAttribute("presentation:name", item.first);
+            xmlWriter->addTextNode(item.second);
+            xmlWriter->endElement();  //presentation:footer-decl
+        }
+    }
+
+}
+
+
 void PowerPointImport::processDocStyles(Slide *master, KoGenStyles &styles)
 {
     int  headerFooterAtomFlags = 0;
@@ -469,12 +514,22 @@ void PowerPointImport::processDocStyles(Slide *master, KoGenStyles &styles)
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.addProperty("presentation:background-objects-visible", "true");
 
-    if (headerFooterAtomFlags && DateTimeFormat::fHasSlideNumber)
+    if (headerFooterAtomFlags & DateTimeFormat::fHasHeader)
+        dp.addProperty("presentation:display-header", "true");
+    else
+        dp.addProperty("presentation:display-header", "false");
+
+    if (headerFooterAtomFlags & DateTimeFormat::fHasFooter)
+        dp.addProperty("presentation:display-footer", "true");
+    else
+        dp.addProperty("presentation:display-footer", "false");
+
+    if (headerFooterAtomFlags & DateTimeFormat::fHasSlideNumber)
         dp.addProperty("presentation:display-page-number", "true");
     else
         dp.addProperty("presentation:display-page-number", "false");
 
-    if (headerFooterAtomFlags && DateTimeFormat::fHasDate)
+    if (headerFooterAtomFlags & DateTimeFormat::fHasDate)
         dp.addProperty("presentation:display-date-time" , "true");
     else
         dp.addProperty("presentation:display-date-time" , "false");
@@ -1548,7 +1603,7 @@ void PowerPointImport::writeTextPFException(KoXmlWriter* xmlWriter,
     if (paragraphIndent > 4) paragraphIndent = 4;
     bool bullet = false;
     //Check if this paragraph has a bullet
-    if (pf->textPFException()->hasBullet()) {
+    if ((pf->textPFException()->hasBullet()) || (pf->textPFException()->hasBulletFont())) {
         bullet = pf->textPFException()->bullet();
     } else {
         //If text paragraph exception doesn't have a definition on bullet
@@ -1743,10 +1798,25 @@ void PowerPointImport::processSlideForBody(unsigned slideNo, KoXmlWriter* xmlWri
 
     xmlWriter->addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
-    int  headerFooterAtomFlags = d->presentation->masterSlide()->headerFooterFlags();
+    int  headerFooterAtomFlags = master->headerFooterFlags();
+    std::cout<<"\n headerFooterAtomFlags:"<<headerFooterAtomFlags;
 
-    if (headerFooterAtomFlags && DateTimeFormat::fHasTodayDate) {
+    if (headerFooterAtomFlags & DateTimeFormat::fHasDate) {
         xmlWriter->addAttribute("presentation:use-date-time-name", "dtd1");
+    }
+    if (headerFooterAtomFlags & DateTimeFormat::fHasHeader) {
+        if(!master->useHeaderName().isNull()) {
+            xmlWriter->addAttribute("presentation:use-header-name", master->useHeaderName());
+        } else {
+            xmlWriter->addAttribute("presentation:use-header-name", slide->useHeaderName());
+        }
+    }
+    if (headerFooterAtomFlags & DateTimeFormat::fHasFooter) {
+        if( !master->useFooterName().isNull() ) {
+            xmlWriter->addAttribute("presentation:use-footer-name", master->useFooterName());
+        } else {
+            xmlWriter->addAttribute("presentation:use-footer-name", slide->useFooterName());
+        }
     }
 
     GroupObject* root = slide->rootObject();

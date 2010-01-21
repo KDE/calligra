@@ -60,14 +60,14 @@ public:
      /**
      * @brief eHeaderFooterAtom - HeaderFooter enum as per spec of formatId
      */
-     enum{
+     enum eHeaderFooterAtom{
         fHasDate = 0x01,       //(1 bit): A bit that specifies whether the date is displayed in the footer.
         fHasTodayDate = 0x02,  //(1 bit): A bit that specifies whether the current datetime is used for displaying the datetime.
         fHasUserDate = 0x04,    //(1 bit): A bit that specifies whether the date specified in UserDateAtom
         fHasSlideNumber = 0x08,  //(1 bit): A bit that specifies whether the slide number is displayed in the footer.
         fHasHeader = 0x10,      //(1 bit): A bit that specifies whether the header text specified by HeaderAtom record is displayed.
         fHasFooter = 0x20,    //(1 bit): A bit that specifies whether the footer text specified by FooterAtom
-    }eHeaderFooterAtom;
+    };
 
 private:
 

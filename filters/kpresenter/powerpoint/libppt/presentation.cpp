@@ -1,5 +1,7 @@
 /* libppt - library to read PowerPoint presentation
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,6 +55,20 @@ public:
     * settings for paragraph-level style and formatting.
     */
     TextPFException *textPFDefaultsAtom;
+
+    /**
+    * @brief An footerDeclaration.
+    * settings for footer footer text and usefooter name.
+    */
+    QHash< Presentation::PresentationDeclaration /*type*/,
+          QPair<QString /*declarationName*/, QString /*text*/> > presentationDeclaration;
+ 
+    /**
+    * @brief An headerDeclaration.
+    * settings for footer footer text and usefooter name.
+    */
+    QHash< Presentation::PresentationDeclaration /*type*/,
+          QPair<QString /*declarationName*/, QString /*text*/> > presentationNotesDeclaration;
 
     /**
      * @brief list of rgbuid for the images in this presentation
@@ -195,3 +211,72 @@ const char* Presentation::getRgbUid(unsigned int bip) const
 {
     return (d->bstore.size() > bip) ?d->bstore[bip].c_str() :0;
 }
+
+ 
+QHash< Presentation::PresentationDeclaration, QPair< QString, QString > > * Presentation::presentationDeclaration()
+{
+    return &d->presentationDeclaration;
+}
+ 
+QHash< Presentation::PresentationDeclaration, QPair< QString, QString > >* Presentation::presentationNotesDeclaration()
+{
+    return &d->presentationNotesDeclaration;
+}
+
+QString Presentation::findPresentationDeclaration(Presentation::PresentationDeclaration type, const QString &text) const
+{
+     QList< QPair< QString , QString > > items = d->presentationDeclaration.values(type);
+ 
+     for( int i = 0; i < items.size(); ++i) {
+         QPair<QString, QString > item = items.at(i);
+         if ( item.second == text ) {
+             return item.first;
+         }
+     }
+     return 0;
+}
+ 
+QString Presentation::findPresentationNotesDeclaration(Presentation::PresentationDeclaration type, const QString &text) const
+{
+     QList< QPair< QString , QString > > items = d->presentationNotesDeclaration.values(type);
+ 
+     for( int i = 0; i < items.size(); ++i) {
+         QPair<QString, QString > item = items.at(i);
+         if ( item.second == text) {
+             return item.first;
+         }
+     }
+     return 0;
+}
+ 
+void Presentation::insertPresentationDeclaration(PresentationDeclaration type, const QString &name, const QString &text)
+{
+     QPair<QString, QString > item;
+     item.first = name;
+     item.second = text;
+ 
+    d->presentationDeclaration.insertMulti(type, item);
+}
+ 
+void Presentation::insertPresentationNotesDeclaration(PresentationDeclaration type, const QString &name, const QString &text)
+{
+     QPair<QString, QString > item;
+     item.first = name;
+     item.second = text;
+ 
+     d->presentationNotesDeclaration.insertMulti(type, item);
+}
+ 
+unsigned int Presentation::countPresentationDeclaration(PresentationDeclaration type)
+{
+     QList< QPair< QString , QString > > items = d->presentationDeclaration.values(type);
+     return items.count();
+ 
+}
+ 
+unsigned int Presentation::countPresentationNotesDeclaration(PresentationDeclaration type)
+{
+     QList< QPair< QString , QString > > items = d->presentationNotesDeclaration.values(type);
+     return items.count();
+} 
+

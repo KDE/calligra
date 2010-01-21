@@ -1,5 +1,7 @@
 /* libppt - library to read PowerPoint presentation
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +49,8 @@ public:
     int notesFormatId;
     QString styleName;
     QString userDate;
+    QString useFooterName;
+    QString useHeaderName;
 };
 
 Slide::Slide(Presentation* pr)
@@ -216,4 +220,28 @@ int Slide::notesDateTimeFormatId()
 { 
   return  d->notesFormatId;
 }
+
+void  Slide::setUseFooterName(const QString &name)
+{
+   d->useFooterName = name;
+}
+
+QString Slide::useFooterName()
+{
+  return  d->useFooterName;
+}
+
+void  Slide::setUseHeaderName(const QString &name)
+{
+   d->useHeaderName = name;
+}
+
+QString Slide::useHeaderName()
+{
+  return  d->useHeaderName;
+}
+
+
+
+
 

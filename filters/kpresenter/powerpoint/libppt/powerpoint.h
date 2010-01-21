@@ -3649,6 +3649,7 @@ protected:
                                       unsigned int size);
     void handleBstoreContainer(msofbtBstoreContainer*c, unsigned int size);
     void handleHeaderFooterAtom(HeadersFootersAtom* atom);
+    bool handleCStringAtom(CStringAtom& atom,unsigned int & recInstance);
 
 
     void loadMainMasterContainer(MainMasterContainer *container);

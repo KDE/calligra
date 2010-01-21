@@ -1,5 +1,7 @@
 /* libppt - library to read PowerPoint presentation
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,15 +37,14 @@
 #include <QtGui/QColor>
 #include <QtCore/QSharedData>
 #include <QtCore/QTextCodec>
+#include <datetimeformat.h>
 
 //#ifdef Q_CC_MSVC
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #ifdef Q_OS_WIN
 #define bcopy(b1,b2,len) (memmove((b2), (b1), (len)), (void) 0)
-#endif
-
 //#define LIBPPT_DEBUG
-//#endif
+#endif
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -975,6 +976,7 @@ void CStringAtom::setData(unsigned size, const unsigned char* data)
         array.append(data[i]);
     }
     d->string = codec->toUnicode(array);
+    //dump(std::cout);
 }
 
 void CStringAtom::dump(std::ostream& out) const
@@ -3356,14 +3358,14 @@ public:
     * the paragraph. It MUST exist if and only if masks.spaceBefore is TRUE.
     *
     */
-    int16_t spaceBefore;
+    int spaceBefore;
 
     /**
     * An optional ParaSpacing that specifies the size of the spacing after the
     * paragraph. It MUST exist if and only if masks.spaceAfter is TRUE.
     *
     */
-    int16_t spaceAfter;
+    int spaceAfter;
 
     /**
     * An optional MarginOrIndent that specifies the left margin of the
@@ -8349,6 +8351,9 @@ void PPTReader::handleRecord(Record* record, int type)
     case msofbtBSEAtom::id:
         handleBSEAtom(static_cast<msofbtBSEAtom*>(record)); break;
     default: 
+#ifdef LIBPPT_DEBUG
+        std::cout  << "handleRecord : default"<< std::endl;
+#endif
       break;
     }
 }
@@ -8360,8 +8365,9 @@ void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
 {
     int flags = 0;
 
-    if (!atom) return;
-    if (!d->presentation) return;
+    if (!d->presentation || !atom) {
+    return;
+    }
     //Note:-   A - fHasDate (1 bit): A bit that specifies whether the date is displayed in the footer.
     //         B - fHasTodayDate (1 bit): A bit that specifies whether the current datetime is used for
     //             displaying the datetime.
@@ -8379,31 +8385,101 @@ void PPTReader::handleHeaderFooterAtom(HeadersFootersAtom* atom)
 
     int instance = parentRecord->instance();
 
+
 #ifdef LIBPPT_DEBUG
     std::cout << "\n****HeaderFooter Instance:" << instance;
-
 #endif
-    //Note:- 0x04 Instance of NotesHeaderFooter and 0x03 for headerfooter for master
+
+    //Note:- 0x04 Instance of NotesHeaderFooter and 0x03 is headerfooter for master
     if (instance == 0x04) {
         d->presentation->masterSlide()->setNotesHeaderFooterFlags(atom->flags());
         d->presentation->masterSlide()->setNotesDateTimeFormatId(atom->formatId());
-    } else {
+        //Need to handle for presentation:notes PerSlideHeaderFooterContainer
+    } else if (( instance == 0x03 ) || ( instance == 0x00)) {
         d->presentation->masterSlide()->setHeaderFooterFlags(atom->flags());
         d->presentation->masterSlide()->setDateTimeFormatId(atom->formatId());
         flags = atom->flags();
         //Fixed Data- user date format
-
-        if (flags & 0x04) {
-            //future -Fixed Date
+        CStringAtom hfAtom;
+        //Invalid value
+        unsigned int recInstance = 3;
+        while( handleCStringAtom(hfAtom, recInstance) ) {
+            if ( recInstance == 0x00 && (flags & DateTimeFormat::fHasUserDate)) {
+                //future -Fixed Date
+                std::cout<<"\nFixedDate";
+            }
+            if ( recInstance == 0x01 && (flags & DateTimeFormat::fHasHeader )) {
+                std::cout<<"\nHeader";
+                QString hdrName = d->presentation->findPresentationDeclaration(Presentation::HeaderType, hfAtom.string());
+                if (hdrName == 0 ) {
+                    hdrName = QString("hdr%1").arg(d->presentation->countPresentationDeclaration(Presentation::HeaderType) + 1);
+                    d->presentation->insertPresentationDeclaration(Presentation::HeaderType, hdrName, hfAtom.string());
+                }
+                if( instance == 0x03)
+                    d->presentation->masterSlide()->setUseHeaderName(hdrName);
+                else
+                    d->currentSlide->setUseHeaderName(hdrName);
+            }
+            if ( recInstance == 0x02 &&  (flags & DateTimeFormat::fHasFooter )) {
+                std::cout<<"\nFooter";
+                QString ftrName = d->presentation->findPresentationDeclaration(Presentation::FooterType, hfAtom.string() );
+                if ( ftrName == 0) {
+                    ftrName = QString("ftr%1").arg((d->presentation->countPresentationDeclaration(Presentation::FooterType) + 1));
+                    d->presentation->insertPresentationDeclaration(Presentation::FooterType, ftrName, hfAtom.string());
+                }
+                if( instance == 0x03){
+                    std::cout<<"\nMasterSlide setFooterName:"<<ftrName.toLatin1().data();
+                    d->presentation->masterSlide()->setUseFooterName(ftrName);
+                    }
+                else {
+                    std::cout<<"\nCurrentSlide setFooterName:"<<d->currentSlide<<" " <<ftrName.toLatin1().data();
+                    if(d->currentSlide !=NULL)
+                        d->currentSlide->setUseFooterName(ftrName);
+                }
+            }
         }
     }
 
+
+
 #ifdef LIBPPT_DEBUG
     std::cout << std::endl << "***Flags " << atom->flags();
-
     std::cout << std::endl << "***FormatId " << atom->formatId();
-
 #endif
+}
+
+bool PPTReader::handleCStringAtom(CStringAtom& atom, unsigned int & recInstance)
+{
+    const unsigned bufferSize = 65536;
+    unsigned char buffer[bufferSize];
+    unsigned bytes_read = d->docStream->read(buffer, 8);
+    unsigned pos = d->docStream->tell();
+
+    if (bytes_read == 8) {
+        RecordHeader rh;
+        rh.setData(buffer);
+        recInstance = rh.recInstance;
+        //Make sure we get RT_CString which indicates that the next
+        //atom is a PrintableUnicodeString or CStringAtom
+        if (rh.recType == CStringAtom::id) {
+            //Then read the data for CStringAtom
+            bytes_read = d->docStream->read(buffer, rh.recLen);
+            if (bytes_read == rh.recLen) {
+                atom.setData(bytes_read, buffer);
+                std::cout << "String : [" << atom.string().toLatin1().data() << "]" <<"RecIn:"<<rh.recInstance<< "Size:"<<rh.recLen<<std::endl;
+                d->docStream->seek(pos + rh.recLen );
+            } else {
+                return false;
+            }
+        }  else {
+            return false;
+        }
+
+    } else {
+        return false;
+    }
+    return true;
+
 }
 
 void PPTReader::handleContainer(Container* container, int type, unsigned size)
@@ -8443,7 +8519,6 @@ void PPTReader::handleContainer(Container* container, int type, unsigned size)
         break;
 
     default:
-
         while (d->docStream->tell() < nextpos)
             loadRecord(container);
     }
@@ -8525,8 +8600,7 @@ void PPTReader::handleProgBinaryTagContainer(ProgBinaryTagContainer* /*r*/,
         //OutlineTextProps9Container
 
         if (atomRH.recType != 4014) {
-            std::cout << "\n**!=4014 type:" << atomRH.recType;
-            d->docStream->seek(d->docStream->tell() + atomRH.recLen);
+            std::cout << "\ntype:" << atomRH.recType;
             continue;
         }
 
@@ -8538,7 +8612,10 @@ void PPTReader::handleProgBinaryTagContainer(ProgBinaryTagContainer* /*r*/,
 
         if (d->outlineContainer.setData(atomRH.recLen, buffer) != 0) {
             return;
+        } else {
+            continue;
         }
+
 
         d->docStream->seek(d->docStream->tell() + atomRH.recLen);
     }

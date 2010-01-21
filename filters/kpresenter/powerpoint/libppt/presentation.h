@@ -1,5 +1,7 @@
 /* libppt - library to read PowerPoint presentation
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +24,7 @@
 
 #include <vector>
 #include <string>
+#include <QHash>
 
 namespace Libppt
 {
@@ -36,6 +39,10 @@ class TextPFException;
 class Presentation
 {
 public:
+     enum PresentationDeclaration {
+         FooterType,
+         HeaderType
+     };
 
     /*
      * Constructs a new presentation.
@@ -143,6 +150,56 @@ public:
      **/
     const char* getRgbUid(unsigned int bip) const;
 
+     /**
+     * @brief Get pointer to presentationDeclaration.
+     * @return pointer of presentationDeclaration.
+     */
+     QHash<PresentationDeclaration , QPair< QString , QString > >* presentationDeclaration();
+
+     /**
+     * @brief Get pointer to notesDeclaration.
+     * @return pointer of notesDeclaration.
+     */
+     QHash<PresentationDeclaration , QPair< QString , QString > >* presentationNotesDeclaration();
+ 
+     /**
+     * @brief find the text from  presentationDeclaration.
+     * @return pointer of the use presentation name.
+     */
+     QString findPresentationDeclaration(PresentationDeclaration type, const QString &text) const;
+
+     /**
+     * @brief find the text from  notesDeclaration.
+     * @return pointer of the use notes name.
+     */
+     QString findPresentationNotesDeclaration(PresentationDeclaration type, const QString &) const;
+ 
+     /**
+     * @brief insert the text into  presentationDeclaration.
+     * @param QString declaration use name string ex: ftr1
+     * @param QString declaration text to displayed.
+     */
+     void insertPresentationDeclaration(PresentationDeclaration type, const QString &name, const QString &text);
+
+     /**
+     * @brief insert the text into  notesDeclaration.
+     * @param QString notes declaration use name string ex: ftr2
+     * @param QString notes text to displayed.
+     */
+     void insertPresentationNotesDeclaration(PresentationDeclaration type, const QString &name, const QString &text);
+ 
+     /**
+     * @brief countPresentationDeclaration.
+     * @return count of insterted PresentationDeclaration.
+     */
+     unsigned int countPresentationDeclaration(PresentationDeclaration type);
+
+     /**
+     * @brief countheaderDeclaration.
+     * @return count of insterted headerDeclaration.
+     */
+     unsigned int countPresentationNotesDeclaration(PresentationDeclaration type);
+ 
 private:
     // no copy or assign
     Presentation(const Presentation&);
@@ -152,7 +209,6 @@ private:
     Private* d;
 };
 
-
-}
+}//namespace
 
 #endif /* LIBPPT_PRESENTATION */
