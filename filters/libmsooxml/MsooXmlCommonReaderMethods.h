@@ -107,4 +107,7 @@ bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
 //! @todo set it
 bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
 
+bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
+bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
+
 #endif

@@ -889,6 +889,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
 #endif
 
+    m_drawing_anchor = false;
+    m_drawing_inline = false;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -898,6 +900,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    m_drawing_anchor = false;
+    m_drawing_inline = false;
     READ_EPILOGUE
 }
 
@@ -973,11 +977,13 @@ void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
 //! CASE #1420
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
 {
+    ReadMethod caller = m_calls.top();
     READ_PROLOGUE
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
     m_docPrName.clear();
     m_docPrDescr.clear();
+    m_drawing_anchor = true; // for pic:pic
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -1376,7 +1382,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
     READ_PROLOGUE
     m_docPrName.clear();
     m_docPrDescr.clear();
-
+    m_drawing_inline = true; // for pic
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {

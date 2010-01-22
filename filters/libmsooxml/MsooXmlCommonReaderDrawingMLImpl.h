@@ -60,6 +60,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 {
     READ_PROLOGUE
     m_xlinkHref.clear();
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    m_posOffsetH = 0;
+    m_posOffsetV = 0;
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
@@ -99,11 +103,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #endif
         kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
         body->addAttribute("draw:style-name", currentDrawStyleName);
-        body->addAttribute("text:anchor-type", "char");
+//! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
+        if (m_drawing_inline) {
+            body->addAttribute("text:anchor-type", "as-char");
+        }
+        else {
+            body->addAttribute("text:anchor-type", "char");
+        }
         if (!m_docPrName.isEmpty()) { // from docPr/@name
             body->addAttribute("draw:name", m_docPrName);
         }
-//! @todo text:anchor-type hardcoded!
+//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
         int realX = m_svgX;
         int realY = m_svgY;
         if (m_hasPosOffsetH) {
