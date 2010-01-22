@@ -28,6 +28,10 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 {
     m_insideHdr = false;
     m_insideFtr = false;
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    m_posOffsetH = 0;
+    m_posOffsetV = 0;
     m_currentTextStyleProperties = 0;
 }
 
