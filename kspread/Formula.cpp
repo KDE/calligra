@@ -1336,10 +1336,26 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
             if(ok)
                 return v;
         } break;
-        case Value::Array:
+        case Value::Array: {
+            if(v.count() == 1) // like valueOrElement()
+                return v.element(0);
+            kDebug()<<v.count();
+            Q_ASSERT(false);
+        } break;
         case Value::CellRange:
             break;
     }
+    return Value::errorVALUE();
+}
+
+// If the value is an array with exactly one element, then the element is transparently unpacked and
+// used instead of the value itself.
+Value valueOrElement(const Value &v)
+{
+    if(!v.isArray())
+        return v;
+    if(v.count() == 1)
+        return v.element(0);
     return Value::errorVALUE();
 }
 
@@ -1439,8 +1455,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
         case Opcode::Pow:
-            val2 = stack.pop().val;
-            val1 = stack.pop().val;
+            val2 = numericOrError(converter, stack.pop().val);
+            val1 = numericOrError(converter, stack.pop().val);
             val2 = calc->pow(val1, val2);
             entry.reset();
             entry.val = val2;
@@ -1474,8 +1490,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             // comparison
         case Opcode::Equal:
-            val1 = stack.pop().val;
-            val2 = stack.pop().val;
+            val1 = valueOrElement(stack.pop().val);
+            val2 = valueOrElement(stack.pop().val);
             if (val1.isError())
                 ;
             else if (val2.isError())
@@ -1491,8 +1507,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             // less than
         case Opcode::Less:
-            val1 = stack.pop().val;
-            val2 = stack.pop().val;
+            val1 = valueOrElement(stack.pop().val);
+            val2 = valueOrElement(stack.pop().val);
             if (val1.isError())
                 ;
             else if (val2.isError())
@@ -1508,8 +1524,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             // greater than
         case Opcode::Greater: {
-            val1 = stack.pop().val;
-            val2 = stack.pop().val;
+            val1 = valueOrElement(stack.pop().val);
+            val2 = valueOrElement(stack.pop().val);
             if (val1.isError())
                 ;
             else if (val2.isError())
