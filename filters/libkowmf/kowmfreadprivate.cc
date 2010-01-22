@@ -198,7 +198,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
 
             numFunction &= 0xFF;
             if (numFunction == 11) {
-                qint16 top, left;
+                // setWindowOrg
+                qint16 top;
+                qint16 left;
 
                 st >> top >> left;
                 if (firstOrg) {
@@ -212,19 +214,24 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                         mBBox.setTop(top);
                 }
             }
-            if (numFunction == 12) {
-                qint16 width, height;
+            else if (numFunction == 12) {
+                // setWindowExt
+                qint16 width;
+                qint16 height;
 
                 st >> height >> width;
-                if (width < 0) width = -width;
-                if (height < 0) height = -height;
+                // Negative values are allowed
+                //if (width < 0) width = -width;
+                //if (height < 0) height = -height;
                 if (firstExt) {
                     firstExt = false;
                     mBBox.setWidth(width);
                     mBBox.setHeight(height);
                 } else {
-                    if (width > mBBox.width()) mBBox.setWidth(width);
-                    if (height > mBBox.height()) mBBox.setHeight(height);
+                    if (width > mBBox.width())
+                        mBBox.setWidth(width);
+                    if (height > mBBox.height())
+                        mBBox.setHeight(height);
                 }
             }
             mBuffer->seek(filePos + (size << 1));
