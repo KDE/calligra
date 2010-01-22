@@ -1488,11 +1488,11 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
 
         case FormulaToken::Name:
-            stack.push_back(nameFromIndex(token.nameIndex()));
+            stack.push_back(nameFromIndex(token.nameIndex()-1));
             break;
 
         case FormulaToken::NameX:
-            stack.push_back(externNameFromIndex(token.nameXIndex()));
+            stack.push_back(externNameFromIndex(token.nameXIndex()-1));
             break;
 
         case FormulaToken::Matrix: {
