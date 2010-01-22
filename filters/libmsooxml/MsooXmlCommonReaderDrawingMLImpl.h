@@ -671,12 +671,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
 
     READ_ATTR_WITHOUT_NS(x)
     STRING_TO_INT(x, m_svgX, "off@x")
-//    m_svgX = MSOOXML::Utils::EMU_to_ODF_CM(x);
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgY, "off@y")
-//    m_svgY = MSOOXML::Utils::EMU_to_ODF_CM(y);
-//    if (m_svgX.isEmpty() || m_svgY.isEmpty())
-//        return KoFilter::WrongFormat;
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
