@@ -598,10 +598,10 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
         QLinearGradient * g = new QLinearGradient();
         if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setStart(QPointF(SvgUtil::toPercentage(b.attribute("x1", "0%")),
-                                SvgUtil::toPercentage(b.attribute("y1", "0%"))));
-            g->setFinalStop(QPointF(SvgUtil::toPercentage(b.attribute("x2", "100%")),
-                                    SvgUtil::toPercentage(b.attribute("y2", "0%"))));
+            g->setStart(QPointF(SvgUtil::fromPercentage(b.attribute("x1", "0%")),
+                                SvgUtil::fromPercentage(b.attribute("y1", "0%"))));
+            g->setFinalStop(QPointF(SvgUtil::fromPercentage(b.attribute("x2", "100%")),
+                                    SvgUtil::fromPercentage(b.attribute("y2", "0%"))));
         } else {
             g->setStart(QPointF(SvgUtil::fromUserSpace(b.attribute("x1").toDouble()),
                                 SvgUtil::fromUserSpace(b.attribute("y1").toDouble())));
@@ -616,11 +616,11 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
         QRadialGradient * g = new QRadialGradient();
         if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
             g->setCoordinateMode(QGradient::ObjectBoundingMode);
-            g->setCenter(QPointF(SvgUtil::toPercentage(b.attribute("cx", "50%")),
-                                 SvgUtil::toPercentage(b.attribute("cy", "50%"))));
-            g->setRadius(SvgUtil::toPercentage(b.attribute("r", "50%")));
-            g->setFocalPoint(QPointF(SvgUtil::toPercentage(b.attribute("fx", "50%")),
-                                     SvgUtil::toPercentage(b.attribute("fy", "50%"))));
+            g->setCenter(QPointF(SvgUtil::fromPercentage(b.attribute("cx", "50%")),
+                                 SvgUtil::fromPercentage(b.attribute("cy", "50%"))));
+            g->setRadius(SvgUtil::fromPercentage(b.attribute("r", "50%")));
+            g->setFocalPoint(QPointF(SvgUtil::fromPercentage(b.attribute("fx", "50%")),
+                                     SvgUtil::fromPercentage(b.attribute("fy", "50%"))));
         } else {
             g->setCenter(QPointF(SvgUtil::fromUserSpace(b.attribute("cx").toDouble()),
                                  SvgUtil::fromUserSpace(b.attribute("cy").toDouble())));
