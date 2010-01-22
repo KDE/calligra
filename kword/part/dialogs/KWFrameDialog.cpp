@@ -82,9 +82,9 @@ void KWFrameDialog::cancelClicked()
 }
 
 // static
-QList<KoShapeConfigFactory *> KWFrameDialog::panels(KWDocument *doc)
+QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
 {
-    QList<KoShapeConfigFactory *> answer;
+    QList<KoShapeConfigFactoryBase *> answer;
     FrameConfigSharedState *state = new FrameConfigSharedState(doc);
     answer.append(new KWFrameConnectSelectorFactory(state));
     answer.append(new KWFrameGeometryFactory(state));

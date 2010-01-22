@@ -71,7 +71,7 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.
-    QList<KoShapeConfigFactory*> panelFactories;
+    QList<KoShapeConfigFactoryBase*> panelFactories;
     // panelFactories.append( new ChartDataConfigFactory() );
     setOptionPanels( panelFactories );
 }

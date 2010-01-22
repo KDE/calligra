@@ -61,7 +61,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoShapeConfigFactory.h>
+#include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactory.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -160,7 +160,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     d->dataCenterMap["SheetAccessModel"] = new SheetAccessModel( d->map );
 
     // Init chart shape factory with KSpread's specific configuration panels.
-    QList<KoShapeConfigFactory*> panels = ChartDialog::panels(this);
+    QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(this);
     // Ask every shapefactory to populate the dataCenterMap
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);

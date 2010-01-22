@@ -21,7 +21,7 @@
 #ifndef CHART_DATABASE_SELECTOR_FACTORY
 #define CHART_DATABASE_SELECTOR_FACTORY
 
-#include <KoShapeConfigFactory.h>
+#include <KoShapeConfigFactoryBase.h>
 
 class KoShape;
 
@@ -30,7 +30,7 @@ namespace KSpread
 class Doc;
 
 /// factory to create a ChartDatabaseSelector widget
-class ChartDatabaseSelectorFactory : public KoShapeConfigFactory
+class ChartDatabaseSelectorFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor

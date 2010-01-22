@@ -21,7 +21,7 @@
 #ifndef KSPREAD_CHART_DIALOG
 #define KSPREAD_CHART_DIALOG
 
-#include <KoShapeConfigFactory.h>
+#include <KoShapeConfigFactoryBase.h>
 
 #include <kpagedialog.h>
 
@@ -54,7 +54,7 @@ public:
      * Create a list of factories that will be able to create widgets to configure shapes.
      * @param document the parent document these panels will work for.
      */
-    static QList<KoShapeConfigFactory*> panels(Doc* document);
+    static QList<KoShapeConfigFactoryBase*> panels(Doc* document);
 
 private slots:
     void okClicked();

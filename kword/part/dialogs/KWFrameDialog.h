@@ -20,7 +20,7 @@
 #ifndef KWFRAMEDIALOG_H
 #define KWFRAMEDIALOG_H
 
-#include <KoShapeConfigFactory.h>
+#include <KoShapeConfigFactoryBase.h>
 
 #include <kpagedialog.h>
 #include <QList>
@@ -53,7 +53,7 @@ public:
      * Create a list of factories that will be able to create widgets to configure shapes.
      * @param document the parent document these panels will work for.
      */
-    static QList<KoShapeConfigFactory *> panels(KWDocument *document);
+    static QList<KoShapeConfigFactoryBase *> panels(KWDocument *document);
 
 private slots:
     void okClicked();

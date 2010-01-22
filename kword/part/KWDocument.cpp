@@ -142,7 +142,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
     // Init shape Factories with our frame based configuration panels.
     // and ask every shapefactory to populate the dataCenterMap
-    QList<KoShapeConfigFactory *> panels = KWFrameDialog::panels(this);
+    QList<KoShapeConfigFactoryBase *> panels = KWFrameDialog::panels(this);
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->setOptionPanels(panels);

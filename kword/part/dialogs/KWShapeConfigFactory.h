@@ -20,7 +20,7 @@
 #ifndef KWSHAPECONFIGFACTORY_H
 #define KWSHAPECONFIGFACTORY_H
 
-#include <KoShapeConfigFactory.h>
+#include <KoShapeConfigFactoryBase.h>
 
 #include <QObject>
 
@@ -69,7 +69,7 @@ private:
 };
 
 /// factory to create a KWFrameConnectSelector widget
-class KWFrameConnectSelectorFactory : public KoShapeConfigFactory
+class KWFrameConnectSelectorFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
@@ -93,7 +93,7 @@ private:
 };
 
 /// factory to create a KWFrameGeometry widget
-class KWFrameGeometryFactory : public KoShapeConfigFactory
+class KWFrameGeometryFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
@@ -116,7 +116,7 @@ private:
 };
 
 /// factory to create a KWFrameRunaroundProperties widget
-class KWFrameRunaroundPropertiesFactory : public KoShapeConfigFactory
+class KWFrameRunaroundPropertiesFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
@@ -140,7 +140,7 @@ private:
 };
 
 /// factory to create a KWGeneralFrameProperties widget
-class KWGeneralFramePropertiesFactory : public KoShapeConfigFactory
+class KWGeneralFramePropertiesFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
