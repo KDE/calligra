@@ -388,6 +388,7 @@ protected:
     KoFilter::ConversionStatus read_i();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_u();
+    KoFilter::ConversionStatus read_vertAlign();
     KoFilter::ConversionStatus read_color();
     KoFilter::ConversionStatus read_cellXfs();
     KoFilter::ConversionStatus read_xf();

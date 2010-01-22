@@ -655,6 +655,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
     
     const QString formattedStyle = d->processValueFormat( numberFormat );
+    QString charStyleName;
 
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
@@ -666,6 +667,22 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             body->startElement("text:p", false);
         }
 
+        KoCharacterStyle cellCharacterStyle;
+        cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
+
+        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript ||
+                cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
+            KoGenStyle charStyle( KoGenStyle::StyleText, "text" );
+            cellCharacterStyle.saveOdf( charStyle );
+            charStyleName = mainStyles->lookup( charStyle, "T" );
+        }
+        
+        if( !charStyleName.isEmpty() ) {
+            body->startElement( "text:span" );
+            body->addAttribute( "text:style-name", charStyleName );
+        }
+
+ 
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean) Cell containing a boolean.
             d (Date) Cell contains a date in the ISO 8601 format.
@@ -752,6 +769,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             return KoFilter::WrongFormat;
         }
 
+        if( !charStyleName.isEmpty() ) {
+            body->endElement(); // text:span
+        }
         if( formattedStyle.isEmpty() ) {
             body->endElement(); // text:p
         }
@@ -760,6 +780,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     body = tableCellBuf.originalWriter();
     {
         body->startElement("table:table-cell");
+
         // cell style
         if (!s.isEmpty()) {
             bool ok;
@@ -772,9 +793,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             }
             KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
 
-            KoCharacterStyle cellCharacterStyle;
-            cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-            cellCharacterStyle.saveOdf(cellStyle);
+            if( charStyleName.isEmpty() ) {
+                KoCharacterStyle cellCharacterStyle;
+                cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
+                cellCharacterStyle.saveOdf(cellStyle);
+            }
             if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
                 return KoFilter::WrongFormat;
             }

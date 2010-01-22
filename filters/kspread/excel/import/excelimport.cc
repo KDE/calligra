@@ -1296,7 +1296,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
     } else if (value.isText() || value.isError()) {
         QString str = string(value.asString());
         xmlWriter->addAttribute("office:value-type", "string");
-        if (value.isString())
+        if (value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript()))
             xmlWriter->addAttribute("office:string-value", str);
 
         xmlWriter->startElement("text:p", false);

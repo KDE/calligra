@@ -917,6 +917,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
             ELSE_TRY_READ_IF(color)
+            ELSE_TRY_READ_IF(vertAlign)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -967,6 +968,31 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_sz()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL vertAlign
+//! vertAlign handler (Vertical Alignment)
+/*! ECMA-376, ???
+
+ No child elements.
+ Parent elements:
+ - [done] font (§18.8.22)
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_vertAlign()
+{
+    Q_ASSERT(m_currentFontStyle);
+
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    m_currentFontStyle->vertAlign = ST_VerticalAlignRun( val );
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        break;
+    }
+    READ_EPILOGUE
+}
 #undef CURRENT_EL
 #define CURRENT_EL name
 //! name handler (Font Name)
