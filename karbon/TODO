@@ -1,41 +1,29 @@
-Work packages toward the koffice 2.0 release
----------------------------------------------------
-
-Here are some main things we have to work on to get ready for koffice 2.0
 Feel free to add or modify todos as they appear when working on karbon.
 Before working on some of the following, just add your name beside the todo 
 you want to work on so there is no duplicate work.
 
-Canvas:
--------
-- we should add/replace the canvas at the document docker (bird eye view)
-
-KoPathShape:
+Svg-Filters:
 ------------
-
-- make sure it supports all we had with the old karbon path
-- some things that are currently lacking (taken from inkscape):
-  - joining selected end nodes by merging them
-  - nearest point on curve
-- fix combine path command
+- http://www.qtsoftware.com/products/appdev/add-on-products/catalog/4/Utilities/qtimagefilters
+- saving/loading filters to odg ?
+- filters on group shapes
 
 Shapes/Tools:
 ---------------
 - implement something like kword/part/frames/KWCopyShape.h
 - an object snap tool:
-    - define a snap point a the selected object(s) which can snap to features of the selection
+    - define a snap point on the selected object(s) which can snap to features of the selection
     - move the selection which then snaps the defined snap point to other objects
 - outline snapping strategy -> snap to path outline
 
 ODF support:
 ------------
 - use http://netmoc.cpe.ucf.edu/Projects/OpenDocument/TestSuite.html for testing (when they have some more drawing tests)
-- save miterlimit using svg:stroke-miterlimit (that is not part of the odf spec as of now)
+- add support for saving shape opacity in odf
 
 Dockers:
 --------
 - implement reordering of shapes and layers in the layer docker (d'n'd)
-- allow switching the view mode (see KoDocumentSectionView::DisplayMode)
 
 Plugins:
 --------
@@ -44,13 +32,19 @@ Plugins:
 
 Filters:
 --------
-- port the filters to create a document with flake shapes
 - fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
+- port pdf filter to plain c++ so it can be included into poppler
+- look at popplers TextOutputDev to fix text conversion
+- svg export filter: save shapes not supported by svg using a switch element and use an image as fallback
 
 Cleanup:
 --------
 - move cut, paste, copy, deleteSelection into KoToolSelection -> patch to Zagge
 - remove selection order actions and use the ones from the default tool
+- make gradient and pattern tool dockers smaller
+- port away from deprecated plugin loading macros:
+-> old: http://websvn.kde.org/trunk/KDE/kdelibs/kdecore/tests/klibloadertest_module.cpp?revision=731001&view=markup
+-> new: http://websvn.kde.org/trunk/KDE/kdelibs/kdecore/tests/klibloadertest4_module.cpp?revision=733166&view=markup
 
 General:
 --------
@@ -72,7 +66,6 @@ General:
     - page crop marks always keep their position
 
 - pattern borders support (is not specified in odf though!)
-- make canvas background color configurable (provide ui)
 - add pasteOffset as canvas resource to be used for pasting shapes
 - add more templates
     - cd label -> lots of guide lines
@@ -80,63 +73,36 @@ General:
     - icon -> quadratic page size
     - wallpaper -> using sreen resolution
 
-- move style docker to plugins (ask translators before!!!)
+- rename Dependee* in KoShape to Follower* as suggested by Thomas
+
+- don't use shape in the svg import filter directly, create a shape using the shape factory and 
+  provide the properties 
+  -> one problem: the shape ids are in the header files
+
+- add Get Hot New Stuff support into filter effects tool
 
 Bugs:
-- fix pattern painting when rotated (see bug 169990)
-- the private commands in ArtisticTextTool lack i18n calls
+-----
 - when undoing text attach/detach commands the text cursor causes some painting artifacts
+- when artistic text is grouped, one cannot edit the text
 
-- make layer view smaller
-- make gradient and pattern tool dockers smaller
-- fix curve fitting with huge amount of points
 - see http://techbase.kde.org/Contribute/Bugsquad/BugDays/KOfficeDay2/Karbon
 - implement pattern stretch other than tile in svg import/export
 
+- svgimport: when object bounding mode, use matrix to scale radius in both directions 
+    -> see pservers-grad-02-b.svg
+- save gradients in bounding box mode for odf and load them like that too
+
+- save and load state of rulers (on/off)
+
+- fix layout of style docker
+
+Backports:
+----------
+1041379
+1042517
+1056096
+
 Screencast:
 ----------
-Snapping: 
-    - tesa strip for orthogonal snapping
-    
-
-All time favourites :)
------------------------
-
-BIG TOPICS:
-5) introduce renderstack. And dont forget to rewrite shadoweffect to use it.
-
-GUI:
--	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
-	try to reuse them.
-
-REAL BUGS:
--	fix i18n singular/plural
--	make curve1To, curve2To work
--	vpolylinetool creates beziers where it could create lines
-
-TODO:
--	make pattern coords absolute and not relative to the shape
--	VPattern like VImage with embedded binaries instead of paths
--	select first/last segment's knot if one of each other's knot is selected
--	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
--	use inside/intersection tests in vpath::combine() for changing winding.
--	change flatness test in intersection code to a estimation used in gems code. otherwise
-	if the 2 input curves are the same our code runs forever.
-
-WISHLIST:
--	krita export filter (with layers)
--	add a nice grid-like shape like in Illu and webdraw
--	pdf import filter (based on poppler)
-
-OPTIMIZATION:
--	check places we use sqrt() if these are really necessary (lenny)
-
-MAKE IT NICE:
--	pass all dialogs a parent
--	why represent opacity as float, not as short?
--	introduce our own "Color drag" class, since we have in addition to rgb also opacity,
-	and maybe also gradient info could be dragged later.
-
-NEW IDEAS:
-- make VDocument a KoDocument?
 
