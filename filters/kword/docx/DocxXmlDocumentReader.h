@@ -60,6 +60,8 @@ protected:
     KoFilter::ConversionStatus read_left();
     KoFilter::ConversionStatus read_bottom();
     KoFilter::ConversionStatus read_right();
+    KoFilter::ConversionStatus read_object();
+    KoFilter::ConversionStatus read_OLEObject();
 
     typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;

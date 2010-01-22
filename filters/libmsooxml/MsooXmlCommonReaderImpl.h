@@ -40,6 +40,22 @@ void MSOOXML_CURRENT_CLASS::doneInternal()
     delete m_currentTextStyleProperties;
 }
 
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
+    QString& destinationName)
+{
+    destinationName =  destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+    if (m_copiedFiles.contains(sourceName)) {
+        kDebug() << sourceName << "already copied - skipping";
+    }
+    else {
+//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_copiedFiles.insert(sourceName);
+    }
+    return KoFilter::OK;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL hyperlink
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
@@ -146,7 +162,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
  - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
- - object (Embedded Object) §17.3.3.19
+ - [done] object (Embedded Object) §17.3.3.19
  - pgNum (Page Number Block) §17.3.3.22
  - ptab (Absolute Position Tab Character) §17.3.3.23
  - [done] rPr (Run Properties) §17.3.2.28
@@ -172,6 +188,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
             ELSE_TRY_READ_IF(drawing)
+#ifdef DOCXXMLDOCREADER_CPP
+            ELSE_TRY_READ_IF(object)
+#endif
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
 //kDebug() <<"[1.5]";
@@ -977,7 +996,6 @@ void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
 //! CASE #1420
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
 {
-    ReadMethod caller = m_calls.top();
     READ_PROLOGUE
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
@@ -1672,15 +1690,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        const QString destinationName(
-            QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1));
-        if (m_copiedFiles.contains(sourceName)) {
-            kDebug() << sourceName << "already copied - skipping";
-        } else {
-//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
-            m_copiedFiles.insert(sourceName);
-        }
+        QString destinationName;
+        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
     }
 

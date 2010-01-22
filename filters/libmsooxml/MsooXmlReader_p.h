@@ -60,12 +60,12 @@
 #ifndef NDEBUG
 # define PUSH_NAME \
     kDebug() << (m_callsNames.isEmpty() ? QByteArray("top level") : m_callsNames.top()).constData() \
-    << "==>" << STRINGIFY(CURRENT_EL); \
+    << "==>" << QUALIFIED_NAME(CURRENT_EL); \
     m_callsNames.push(STRINGIFY(CURRENT_EL));
 # define POP_NAME \
     m_callsNames.pop(); \
     kDebug() << (m_callsNames.isEmpty() ? QByteArray("top level") : m_callsNames.top()).constData() \
-    << "<==" << STRINGIFY(CURRENT_EL);
+    << "<==" << QUALIFIED_NAME(CURRENT_EL);
 #else
 # define PUSH_NAME
 # define POP_NAME

@@ -33,6 +33,7 @@
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS DocxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
+#define DOCXXMLDOCREADER_CPP
 
 #include <MsooXmlReader_p.h>
 
@@ -447,9 +448,81 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
     m_pageBorderStyles.insertMulti(border, borderSide);
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL object
+//! object handler (Embedded Object)
+/*! ECMA-376, 17.3.3.19, p.371.
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo    TRY_READ_ATTR(dxaOrig)?
+//! @todo    TRY_READ_ATTR(dyaOrig)?
+    while (!atEnd()) {
+        readNext();
+//! @todo support VML here
+        TRY_READ_IF_NS(o, OLEObject)
+//! @todo add ELSE_WRONG_FORMAT
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+// ---------------------------------------------------------------------------
+
 #define blipFill_NS "pic"
 
 #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+
+// ---------------------------------------------------------------------------
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "o" // urn:schemas-microsoft-com:office:office
+#undef CURRENT_EL
+#define CURRENT_EL OLEObject
+//! Reads an OLE object
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+// example:
+// <o:OLEObject Type="Embed" ProgID="Visio.Drawing.11" ShapeID="_x0000_i1025"
+//              DrawAspect="Content" ObjectID="_1240488905" r:id="rId10"/>
+
+    TRY_READ_ATTR_WITH_NS(r, id)
+    const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "oleName:" << oleName;
+
+    QString destinationName;
+//! @todo ooo saves binaries to the root dir; should we?
+    RETURN_IF_ERROR( copyFile(oleName, QString(), destinationName) )
+
+    body->startElement("text:p");
+    body->startElement("draw:rect");
+    body->addAttribute("text:anchor-type", "paragraph");
+    body->addAttribute("draw:z-index", "0");
+//! todo    body->addAttribute"draw:style-name", styleName);
+/*eg.
+   <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties svg:stroke-color="#000023" draw:fill="bitmap" draw:fill-color="#ffffff" draw:fill-image-name="Bitmape_20_1"
+       style:repeat="no-repeat" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:run-through="foreground".
+       style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left".
+       style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" style:flow-with-text="false"/>
+    </style:style>*/
+//! todo size!
+    body->addAttribute("svg:width", "14.179cm");
+    body->addAttribute("svg:height", "10.97cm");
+    body->endElement(); //draw:rect
+    body->endElement(); //text:p
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
+    READ_EPILOGUE
+}
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "pic" // DrawingML/Picture

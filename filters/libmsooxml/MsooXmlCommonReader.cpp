@@ -25,6 +25,10 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
+#include <KGlobal>
+
+#include <QMap>
+
 using namespace MSOOXML;
 
 MsooXmlCommonReader::MsooXmlCommonReader(KoOdfWriters *writers)
@@ -50,6 +54,7 @@ void MsooXmlCommonReader::init()
     m_read_p_args = 0;
     m_lstStyleFound = false;
     m_pPr_lvl = 0;
+    m_addManifestEntryForPicturesDirExecuted = false;
 }
 
 //! CASE #420
@@ -74,4 +79,50 @@ void MsooXmlCommonReader::setupParagraphStyle()
     body->addAttribute("text:style-name", currentParagraphStyleName);
     m_paragraphStyleNameWritten = true;
 //kDebug() << "currentParagraphStyleName:" << currentParagraphStyleName;
+}
+
+class MediaTypeMap : public QMap<QByteArray, QByteArray>
+{
+public:
+    MediaTypeMap() {
+        insert("gif", "image/gif");
+        insert("jpg", "image/jpeg");
+        insert("jpeg", "image/jpeg");
+        insert("jpe", "image/jpeg");
+        insert("jfif", "image/jpeg");
+        insert("tif", "image/tiff");
+        insert("tiff", "image/tiff");
+        insert("png", "image/png");
+        insert("emf", "application/x-openoffice-wmf;windows_formatname=\"Image EMF\"");
+        insert("wmf", "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"");
+        insert("bin", "application/vnd.sun.star.oleobject");
+        insert("xls", "application/vnd.sun.star.oleobject");
+        insert("doc", "application/vnd.sun.star.oleobject");
+        insert("ppt", "application/vnd.sun.star.oleobject");
+        insert("", "application/vnd.sun.star.oleobject");
+    }
+};
+
+void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
+{
+    if (path.isEmpty())
+        return;
+
+    if (path.endsWith('/')) { // dir
+        manifest->addManifestEntry(path, QString());
+        return;
+    }
+    const int lastDot = path.lastIndexOf(QLatin1Char('.'));
+    const QByteArray ext(path.mid(lastDot + 1).toLatin1().toLower());
+    K_GLOBAL_STATIC(MediaTypeMap, g_mediaTypes)
+    manifest->addManifestEntry(path, g_mediaTypes->value(ext));
+}
+
+//! Adds manifest entry for "Pictures/"
+void MsooXmlCommonReader::addManifestEntryForPicturesDir()
+{
+    if (m_addManifestEntryForPicturesDirExecuted)
+        return;
+    m_addManifestEntryForPicturesDirExecuted = true;
+    manifest->addManifestEntry("Pictures/", QString());
 }

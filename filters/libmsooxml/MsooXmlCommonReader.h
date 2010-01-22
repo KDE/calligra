@@ -59,6 +59,13 @@ protected:
 
     bool isDefaultTocStyle(const QString& name) const;
 
+    //! Adds reference to a file in the ODF document to manifest.xml
+    //! The media-type attribute is based on the extension of @a path.
+    void addManifestEntryForFile(const QString& path);
+
+    //! Adds manifest entry for "Pictures/"
+    void addManifestEntryForPicturesDir();
+
     //! true if lstStyle element has been found within the current element.
     //! Used for turning paragraphs (p) into list items instead of individual paragraphs.
 //! @todo when list style importing is implemented, this boolean could be replaced by a structure
@@ -68,6 +75,8 @@ protected:
     uint m_pPr_lvl;
 
     bool m_paragraphStyleNameWritten; //!< set by setupParagraphStyle()
+
+    bool m_addManifestEntryForPicturesDirExecuted;
 
 //    //! Used for creating style names (style:style/@style:name attr)
 //    //! To achieve this, in XSLT it generate-id(.) for w:p is used.

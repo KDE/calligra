@@ -80,6 +80,10 @@ void saveStyleWrap(const char * style);
 //! Used by read_wrap*()
 void readWrap();
 
+//! Copies file to destination directory. @a destinationName is set.
+KoFilter::ConversionStatus copyFile(const QString& sourceName, const QString& destinationDir,
+    QString& destinationName);
+
 //! ODF 1.1., 15.14.9 Fill Image Rendering Style
 //! Set by read_stretch()
 QString m_fillImageRenderingStyle;
