@@ -135,8 +135,10 @@ public:
     // only when id is Attr
     unsigned attr() const;
 
+    // only when id is Name
+    unsigned long nameIndex() const;
     // only when id is NameX
-    unsigned nameIndex() const;
+    unsigned long nameXIndex() const;
 
     // only when id is Matrix (tExp)
     std::pair<unsigned, unsigned> baseFormulaRecord() const;

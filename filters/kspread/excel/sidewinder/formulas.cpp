@@ -760,29 +760,49 @@ unsigned FormulaToken::attr() const
     return attr;
 }
 
-unsigned FormulaToken::nameIndex() const
+unsigned long FormulaToken::nameIndex() const
 {
     // FIXME check data size !
-    unsigned ni = 0;
-    unsigned char buf[2];
+    unsigned long ni = 0;
+    unsigned char buf[4];
+    if (d->id == Name) {
+        if (d->ver == Excel97) {
+            buf[0] = d->data[0];
+            buf[1] = d->data[1];
+            buf[2] = d->data[2];
+            buf[3] = d->data[3];
+            ni = readU32(buf);
+        }
+        else if (d->ver == Excel95) {
+            buf[0] = d->data[8];
+            buf[1] = d->data[9];
+            ni = readU16(buf);
+        }
+    }
+    return ni;
+}
 
-    if (d->id == NameX)
+unsigned long FormulaToken::nameXIndex() const
+{
+    // FIXME check data size !
+    unsigned long ni = 0;
+    unsigned char buf[4];
+    if (d->id == NameX) {
         if (d->ver == Excel97) {
             buf[0] = d->data[2];
             buf[1] = d->data[3];
-            ni = readU16(buf);
+            buf[2] = d->data[4];
+            buf[3] = d->data[5];
+            ni = readU32(buf);
         }
-
-    if (d->id == NameX)
-        if (d->ver == Excel95) {
+        else if (d->ver == Excel95) {
             buf[0] = d->data[10];
             buf[1] = d->data[11];
             ni = readU16(buf);
         }
-
+    }
     return ni;
 }
-
 
 UString FormulaToken::area(unsigned row, unsigned col, bool relative) const
 {
@@ -1472,7 +1492,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
 
         case FormulaToken::NameX:
-            stack.push_back(externNameFromIndex(token.nameIndex()));
+            stack.push_back(externNameFromIndex(token.nameXIndex()));
             break;
 
         case FormulaToken::Matrix: {

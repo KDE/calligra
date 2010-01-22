@@ -191,16 +191,16 @@ UString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
     if (index < d->nameTable.size())
         return d->nameTable[index];
-    else
-        return UString();
+    std::cerr << "Invalid index in GlobalsSubStreamHandler::nameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
+    return UString();
 }
 
 UString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
 {
     if (index < d->externNameTable.size())
         return d->externNameTable[index];
-    else
-        return UString();
+    std::cerr << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
+    return UString();
 }
 
 FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
