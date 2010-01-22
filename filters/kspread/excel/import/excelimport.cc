@@ -51,7 +51,9 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 #define UNICODE_EUR 0x20AC
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
-static const int minimumColumnCount = 256;
+
+static const int minimumColumnCount = 1024;
+static const int minimumRowCount = 32768;
 
 // UString -> QConstString conversion. Use  to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
@@ -654,19 +656,28 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
         }
     }
 
-    // in odf default-cell-style's only apply to cells (or at least columns) that are present in the file in xls though
-    // row styles should apply to all cells in that row, so make sure to always write out 256 columns
+    // in odf default-cell-style's only apply to cells/rows/columns that are present in the file while in Excel
+    // row/column styles should apply to all cells in that row/column. So, try to fake that behavior by writting
+    // a number-columns-repeated to apply the styles/formattings to "all" columns.
     if (sheet->maxColumn() < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
         xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - sheet->maxColumn());
         xmlWriter->endElement();
     }
 
+    // add rows
     for (unsigned i = 0; i <= sheet->maxRow(); i++) {
         // FIXME optimized this when operator== in Swinder::Format is implemented
         processRowForBody(sheet->row(i, false), 1, xmlWriter);
     }
-    
+
+    // same we did above with columns is also needed for rows.
+    if(sheet->maxRow() < minimumRowCount-1) {
+        xmlWriter->startElement("table:table-row");
+        xmlWriter->addAttribute("table:number-rows-repeated", minimumRowCount - 1 - sheet->maxRow());
+        xmlWriter->endElement();
+    }
+
     xmlWriter->endElement();  // table:table
 }
 
