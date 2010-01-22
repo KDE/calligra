@@ -290,11 +290,10 @@ QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize)
 
     QList<KoShape*> shapes;
 
+    shapes.append(shape);
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
     if (container)
-        shapes = container->childShapes();
-    else
-        shapes.append(shape);
+        shapes.append(container->childShapes());
 
     painter.setShapes(shapes);
 
