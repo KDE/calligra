@@ -37,7 +37,7 @@ QDockWidget* KPrPageLayoutDockerFactory::createDockWidget()
     return widget;
 }
 
-KoDockFactory::DockPosition KPrPageLayoutDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition KPrPageLayoutDockerFactory::defaultDockPosition() const
 {
     return DockRight;
 }

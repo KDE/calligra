@@ -21,7 +21,7 @@
 #define KPTVIEWLISTDOCKER_H
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 namespace KPlato
 {
@@ -44,7 +44,7 @@ private:
     ViewListWidget *m_viewlist;
 };
 
-class ViewListDockerFactory : public KoDockFactory
+class ViewListDockerFactory : public KoDockFactoryBase
 {
 public:
     ViewListDockerFactory(View *view);
@@ -52,7 +52,7 @@ public:
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     /// @return the dock widget area the widget should appear in by default
-    virtual KoDockFactory::DockPosition defaultDockPosition() const { return DockLeft; }
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const { return DockLeft; }
 
 private:
     View *m_view;

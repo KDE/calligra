@@ -20,9 +20,9 @@
 #ifndef KPRPAGELAYOUTDOCKERFACTORY_H
 #define KPRPAGELAYOUTDOCKERFACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
-class KPrPageLayoutDockerFactory : public KoDockFactory
+class KPrPageLayoutDockerFactory : public KoDockFactoryBase
 {
 public:
     KPrPageLayoutDockerFactory();

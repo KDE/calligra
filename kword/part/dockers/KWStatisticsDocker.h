@@ -21,7 +21,7 @@
 #define KWSTATISTICSDOCKER_H
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 class KWView;
 
@@ -39,7 +39,7 @@ private:
     KWView *m_view;
 };
 
-class KWStatisticsDockerFactory : public KoDockFactory
+class KWStatisticsDockerFactory : public KoDockFactoryBase
 {
 public:
     KWStatisticsDockerFactory(KWView *view);

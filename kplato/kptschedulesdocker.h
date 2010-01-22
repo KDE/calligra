@@ -21,7 +21,7 @@
 #define KPTSCHEDULESDOCKER_H
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 #include "kptschedulemodel.h"
 
@@ -61,7 +61,7 @@ private:
     ScheduleItemModel m_model;
 };
 
-class SchedulesDockerFactory : public KoDockFactory
+class SchedulesDockerFactory : public KoDockFactoryBase
 {
 public:
     SchedulesDockerFactory();
@@ -69,7 +69,7 @@ public:
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     /// @return the dock widget area the widget should appear in by default
-    virtual KoDockFactory::DockPosition defaultDockPosition() const { return DockLeft; }
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const { return DockLeft; }
 
 };
 

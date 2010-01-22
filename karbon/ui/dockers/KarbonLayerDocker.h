@@ -21,7 +21,7 @@
 
 #include <QDockWidget>
 #include <QtCore/QTimer>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoDocumentSectionView.h>
 
 class KoShapeControllerBase;
@@ -38,7 +38,7 @@ namespace KParts
 class Part;
 }
 
-class KarbonLayerDockerFactory : public KoDockFactory
+class KarbonLayerDockerFactory : public KoDockFactoryBase
 {
 public:
     KarbonLayerDockerFactory();
