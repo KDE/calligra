@@ -34,8 +34,10 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-// these two are needed for SUBTOTAL:
+// needed for SUBTOTAL:
 #include "Cell.h"
+#include "Sheet.h"
+#include "RowColumnFormat.h"
 
 // needed by MDETERM and MINVERSE
 #include <Eigen/LU>
@@ -1185,29 +1187,36 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
         c2 = e->ranges[1].col2;
     }
 
-    // if we have a range, run through it, and put an empty value to the place
-    // of all occurrences of the SUBTOTAL function
+    // exclude manually hidden rows. http://tools.oasis-open.org/issues/browse/OFFICE-2030
+    bool excludeHiddenRows = false;
+    if(function > 100) {
+        excludeHiddenRows = true;
+        function = function % 100; // translate e.g. 106 to 6.
+    }
+
+    // run through the cells in the selected range
     Value empty;
     if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
-        for (int r = r1; r <= r2; ++r)
+        for (int r = r1; r <= r2; ++r) {
+            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowFormat(r)->isHidden();
             for (int c = c1; c <= c2; ++c) {
-                Cell cell(e->sheet, c, r);
-                if (cell.isDefault())
+                // put an empty value to all cells in a hidden row
+                if(setAllEmpty) {
+                    range.setElement(c - c1, r - r1, empty);
                     continue;
-                if (cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
-                    // cell contains the word SUBTOTAL - replace value with empty
+                }
+                Cell cell(e->sheet, c, r);
+                // put an empty value to the place of all occurrences of the SUBTOTAL function
+                if (!cell.isDefault() && cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
                     range.setElement(c - c1, r - r1, empty);
             }
+        }
     }
 
     // Good. Now we can execute the necessary function on the range.
     Value res;
     Function *f;
     valVector a;
-    
-    if(function > 100) // do it like Excel and translate e.g. 106 to 6.
-        function = function % 100;
-    
     switch (function) {
     case 1: // Average
         res = calc->avg(range, false);
