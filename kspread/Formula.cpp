@@ -1339,8 +1339,6 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
         case Value::Array: {
             if(v.count() == 1) // like valueOrElement()
                 return v.element(0);
-            kDebug()<<v.count();
-            Q_ASSERT(false);
         } break;
         case Value::CellRange:
             break;
