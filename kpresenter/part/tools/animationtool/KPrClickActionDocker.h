@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QMap>
 #include <QPixmap>
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 
 class QComboBox;
 class QUndoCommand;
@@ -37,7 +37,7 @@ class KoEventActionWidget;
 /**
  * This is the click action docker widget that let's you choose a click action for your shapes
  */
-class KPrClickActionDocker : public QWidget, public KoCanvasObserver
+class KPrClickActionDocker : public QWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
