@@ -20,9 +20,9 @@
 #ifndef KPRSOUNDEVENTACTIONFACTORY_H
 #define KPRSOUNDEVENTACTIONFACTORY_H
 
-#include <KoEventActionFactory.h>
+#include <KoEventActionFactoryBase.h>
 
-class KPrSoundEventActionFactory : public KoEventActionFactory
+class KPrSoundEventActionFactory : public KoEventActionFactoryBase
 {
 public:
     KPrSoundEventActionFactory();

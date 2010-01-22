@@ -23,7 +23,7 @@
 #include "KPrSoundEventActionWidget.h"
 
 KPrSoundEventActionFactory::KPrSoundEventActionFactory()
-: KoEventActionFactory( KPrSoundEventActionId, "sound" )
+: KoEventActionFactoryBase( KPrSoundEventActionId, "sound" )
 {
 }
 
