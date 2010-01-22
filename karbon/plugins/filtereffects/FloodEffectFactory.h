@@ -20,11 +20,11 @@
 #ifndef FLOODEFFECTFACTORY_H
 #define FLOODEFFECTFACTORY_H
 
-#include "KoFilterEffectFactory.h"
+#include "KoFilterEffectFactoryBase.h"
 
 class KoFilterEffect;
 
-class FloodEffectFactory : public KoFilterEffectFactory
+class FloodEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     explicit FloodEffectFactory(QObject *parent);

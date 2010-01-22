@@ -24,7 +24,7 @@
 #include <KLocale>
 
 ColorMatrixEffectFactory::ColorMatrixEffectFactory(QObject *parent)
-        : KoFilterEffectFactory(parent, ColorMatrixEffectId, i18n("Color matrix"))
+        : KoFilterEffectFactoryBase(parent, ColorMatrixEffectId, i18n("Color matrix"))
 {
 }
 

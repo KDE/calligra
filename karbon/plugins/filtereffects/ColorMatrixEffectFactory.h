@@ -20,11 +20,11 @@
 #ifndef COLORMATRIXEFFECTFACTORY_H
 #define COLORMATRIXEFFECTFACTORY_H
 
-#include "KoFilterEffectFactory.h"
+#include "KoFilterEffectFactoryBase.h"
 
 class KoFilterEffect;
 
-class ColorMatrixEffectFactory : public KoFilterEffectFactory
+class ColorMatrixEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     explicit ColorMatrixEffectFactory(QObject *parent);

@@ -20,11 +20,11 @@
 #ifndef MERGEEFFECTFACTORY_H
 #define MERGEEFFECTFACTORY_H
 
-#include "KoFilterEffectFactory.h"
+#include "KoFilterEffectFactoryBase.h"
 
 class KoFilterEffect;
 
-class MergeEffectFactory : public KoFilterEffectFactory
+class MergeEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     explicit MergeEffectFactory(QObject *parent);

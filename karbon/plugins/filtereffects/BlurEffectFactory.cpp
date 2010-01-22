@@ -24,7 +24,7 @@
 #include <KLocale>
 
 BlurEffectFactory::BlurEffectFactory(QObject *parent)
-        : KoFilterEffectFactory(parent, BlurEffectId, i18n("Gaussian blur"))
+        : KoFilterEffectFactoryBase(parent, BlurEffectId, i18n("Gaussian blur"))
 {
 }
 

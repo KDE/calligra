@@ -24,7 +24,7 @@
 #include <KLocale>
 
 BlendEffectFactory::BlendEffectFactory(QObject *parent)
-        : KoFilterEffectFactory(parent, BlendEffectId, i18n("Blend"))
+        : KoFilterEffectFactoryBase(parent, BlendEffectId, i18n("Blend"))
 {
 }
 

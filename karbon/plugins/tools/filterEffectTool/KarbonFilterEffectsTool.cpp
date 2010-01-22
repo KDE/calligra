@@ -22,7 +22,7 @@
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
-#include "KoFilterEffectFactory.h"
+#include "KoFilterEffectFactoryBase.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffectConfigWidgetBase.h"
 #include "KoCanvasBase.h"
@@ -103,7 +103,7 @@ public:
             currentEffect = filterEffect;
 
             KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-            KoFilterEffectFactory * factory = registry->value(currentEffect->id());
+            KoFilterEffectFactoryBase * factory = registry->value(currentEffect->id());
             if (!factory)
                 return;
 

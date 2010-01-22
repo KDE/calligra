@@ -60,7 +60,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     connect(presets, SIGNAL(resourceApplied(KoResource*)),
             this, SLOT(presetSelected(KoResource*)));
 
-    KoGenericRegistryModel<KoFilterEffectFactory*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactory*>(KoFilterEffectRegistry::instance());
+    KoGenericRegistryModel<KoFilterEffectFactoryBase*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase*>(KoFilterEffectRegistry::instance());
 
     effectSelector->setModel(filterEffectModel);
     removeEffect->setIcon(KIcon("list-remove"));
@@ -151,7 +151,7 @@ void FilterEffectEditWidget::showEvent(QShowEvent * event)
 void FilterEffectEditWidget::addSelectedEffect()
 {
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-    KoFilterEffectFactory * factory = registry->values()[effectSelector->currentIndex()];
+    KoFilterEffectFactoryBase * factory = registry->values()[effectSelector->currentIndex()];
     if (!factory)
         return;
 
@@ -429,7 +429,7 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
         // get the config widget and insert it into the option widget
 
         KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
-        KoFilterEffectFactory * factory = registry->value(filterEffect->id());
+        KoFilterEffectFactoryBase * factory = registry->value(filterEffect->id());
         if (!factory)
             return;
 

@@ -24,7 +24,7 @@
 #include <KLocale>
 
 CompositeEffectFactory::CompositeEffectFactory(QObject *parent)
-        : KoFilterEffectFactory(parent, CompositeEffectId, i18n("Composite"))
+        : KoFilterEffectFactoryBase(parent, CompositeEffectId, i18n("Composite"))
 {
 }
 
