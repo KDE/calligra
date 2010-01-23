@@ -170,7 +170,6 @@ void KWView::setupActions()
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
     m_actionFormatFrameSet->setToolTip(i18n("Alter frameset properties"));
     m_actionFormatFrameSet->setEnabled(false);
-    m_actionFormatFrameSet->setWhatsThis(i18n("Alter frameset properties.<p>Currently you can change the frame background."));
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
     m_actionInsertFrameBreak  = new KAction(QString(), this);
