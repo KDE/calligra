@@ -45,6 +45,7 @@
 #include <KoOdfStylesReader.h>
 
 #include <KoShape.h>
+#include <KoResourceManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -176,6 +177,8 @@ Sheet::Sheet(Map* map, const QString& sheetName)
         , KoShapeControllerBase()
         , d(new Private)
 {
+    if (map->doc())
+        resourceManager()->setUndoStack(map->doc()->undoStack());
     if (s_mapSheets == 0)
         s_mapSheets = new QHash<int, Sheet*>;
 

@@ -47,7 +47,6 @@
 
 #include <KoApplication.h>
 #include <KoDataCenter.h>
-#include <KoUndoStack.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -70,6 +69,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <KUndoStack>
 
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -141,7 +141,7 @@ KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* p
     setObjectName(name);
     setComponentData(KarbonFactory::componentData(), false);
     setTemplateType("karbon_template");
-    d->document.addToDataCenterMap("UndoStack", undoStack());
+    resourceManager()->setUndoStack(undoStack());
 
     initConfig();
 

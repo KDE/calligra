@@ -71,7 +71,6 @@
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoShapeSavingContext.h>
-#include <KoUndoStack.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -169,9 +168,6 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
             shapeFactory->setOptionPanels(panels);
         }
     }
-
-    // Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.                                               
-    d->dataCenterMap["UndoStack"] = undoStack();
 
     // Load the function modules.
     FunctionModuleRegistry::instance();

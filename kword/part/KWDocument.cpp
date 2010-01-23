@@ -63,7 +63,6 @@
 #include <KoListLevelProperties.h>
 #include <KoDataCenter.h>
 #include <KoTextShapeData.h>
-#include <KoUndoStack.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -150,8 +149,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         shapeFactory->populateDataCenterMap(m_dataCenterMap);
     }
 
-    //Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.
-    m_dataCenterMap["UndoStack"] = undoStack();
+    resourceManager()->setUndoStack(undoStack());
 
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
             inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
