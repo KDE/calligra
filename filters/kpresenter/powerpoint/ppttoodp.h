@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,19 +34,64 @@
 #include <QtCore/QRectF>
 #include <QtGui/QColor>
 
+/**
+ * Converts PPT files to ODP files.
+ * This internal class is there to separate the koconverter plugin interface
+ * from the koconverter plugin. This allows the conversion code to be reused
+ * in other programs without plugin overhead.
+ * The converter is re-entrant: if you want to conversions in parallel,
+ * you need multiple instances of PptToOdp.
+ */
 class PptToOdp
 {
 public:
+    /**
+     * Constructs a converter.
+     */
     PptToOdp();
+    /**
+     * Destroy the converter.
+     */
     ~PptToOdp();
+    /**
+     * Convert a ppt file to an odp file.
+     *
+     * @param inputfile PowerPoint file to read.
+     * @param ODF file to write.
+     * @param storeType type of storage format the ODF file should be stored in.
+     * @return result code of the conversion.
+     */
     KoFilter::ConversionStatus convert(const QString& inputfile,
-                                       const QString& outputfile, KoStore::Backend storeType);
+                                       const QString& outputfile,
+                                       KoStore::Backend storeType);
+    /**
+     * Convert ppt data to odp data.
+     *
+     * @param input an open OLE container that contains the ppt data.
+     * @param output an open KoStore to write the odp into.
+     * @return result code of the conversion.
+     */
     KoFilter::ConversionStatus convert(POLE::Storage& input,
                                        KoStore* output);
 private:
+    /**
+     * Function that does the actual conversion.
+     *
+     * It is shared by the two convert() functions.
+     * @param input an open OLE container that contains the ppt data.
+     * @param output an open KoStore to write the odp into.
+     * @return result code of the conversion.
+     */
     KoFilter::ConversionStatus doConversion(POLE::Storage& input,
                                             KoStore* output);
 
+    /**
+     * Helper class that for writing xml.
+     *
+     * Besides containing KoXmlWriter, this class keeps track of the coordinate
+     * system. It has convenience functions for writing lengths in physical
+     * dimensions (currently only mm).
+     */
     class Writer
     {
     private:
@@ -54,27 +100,50 @@ private:
         qreal scaleX;
         qreal scaleY;
     public:
+        /**
+         * Xml writer that writes into content.xml.
+         */
         KoXmlWriter& xml;
 
+        /**
+         * Construct a new Writer.
+         *
+         * @param xmlWriter The xml writer that writes content.xml
+         */
         Writer(KoXmlWriter& xmlWriter);
+        /**
+         * Create a new writer with a new coordinate system.
+         *
+         * In different contexts in drawings in PPT files, different coordinate
+         * systems are used. These are defined by specifying a rectangle in the
+         * old coordinate system and the equivalent in the new coordinate
+         * system.
+         */
         Writer transform(const QRectF& oldCoords, const QRectF &newCoords) const;
-        QString vPos(qreal length);
-        QString hPos(qreal length);
+        /**
+         * Convert local length to global length string.
+         *
+         * A length without unit in the local coordinate system is converted
+         * to a global length with a unit.
+         * @param length a local length.
+         * @return string of the global length with "mm" appended.
+         */
         QString vLength(qreal length);
+        /**
+         * @see vLength
+         */
         QString hLength(qreal length);
+        /**
+         * @see vLength
+         */
         QString vOffset(qreal offset);
+        /**
+         * @see vLength
+         */
         QString hOffset(qreal offset);
     };
 
     void createMainStyles(KoGenStyles& styles);
-    QByteArray createContent(KoGenStyles& styles);
-
-    void processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter);
-    void processObjectForBody(const PPT::OfficeArtSpgrContainerFileBlock& o, Writer& out);
-    void processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer& out);
-    void processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
-    void processDrawingObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
-    void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
     template <typename T>
     void processGraphicStyle(KoGenStyle& style, T& o);
@@ -84,6 +153,15 @@ private:
     void processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
     void processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
     void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles);
+
+
+    QByteArray createContent(KoGenStyles& styles);
+    void processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter);
+    void processObjectForBody(const PPT::OfficeArtSpgrContainerFileBlock& o, Writer& out);
+    void processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer& out);
+    void processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
+    void processDrawingObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
+    void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
     /**
     * @brief Write styles (KoGenStyle& style) meant for the whole presentation

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -245,21 +246,32 @@ namespace
 static const QString mm("%1mm");
 
 /**
-  Retrieve an option from a class that has member fopt that is an array of type
-  OfficeArtFOPTEChoice.
-  A is the type of the required option and C is the member pointer.
-  **/
+ * Retrieve an option from an options containing class B
+ *
+ * @p b must have a member fopt that is an array of
+ * type OfficeArtFOPTEChoice.
+ * A is the type of the required option. The option containers
+ * in PPT have only one instance of each option in a option container.
+ * @param b class that contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
 template <typename A, typename B>
 const A*
 get(const B& b)
 {
     foreach(const OfficeArtFOPTEChoice& a, b.fopt) {
-        if (a.anon.is<A>()) {
-            return a.anon.get<A>();
-        }
+        const A *ptr = a.anon.get<A>();
+        if (ptr) return ptr;
     }
     return 0;
 }
+/**
+ * Retrieve an option from an OfficeArtSpContainer
+ *
+ * Look in all option containers in @p o for an option of type A.
+ * @param o OfficeArtSpContainer instance which contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
 template <typename A>
 const A*
 get(const OfficeArtSpContainer& o)
@@ -272,16 +284,24 @@ get(const OfficeArtSpContainer& o)
     if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
     return a;
 }
+/**
+ * Retrieve an option from an OfficeArtDggContainer
+ *
+ * Look in all option containers in @p o for an option of type A.
+ * @param o OfficeArtDggContainer instance which contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
 template <typename A>
-        const A*
-        get(const OfficeArtDggContainer& o)
+const A*
+get(const OfficeArtDggContainer& o)
 {
-    const A* a = 0;
-    a = get<A>(o.drawingPrimaryOptions);
+    const A* a = get<A>(o.drawingPrimaryOptions);
     if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
     return a;
 }
-
+/**
+ * Convert FixedPoint to a qreal
+ */
 qreal
 toFloat(const FixedPoint& f)
 {
@@ -338,12 +358,12 @@ PptToOdp::Writer
 PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 {
     Writer w(xml);
-    w.xOffset = xOffset + oldCoords.x()*scaleX;
-    w.yOffset = yOffset + oldCoords.y()*scaleY;
+    w.xOffset = xOffset + oldCoords.x() * scaleX;
+    w.yOffset = yOffset + oldCoords.y() * scaleY;
     w.scaleX = scaleX * oldCoords.width() / newCoords.width();
     w.scaleY = scaleY * oldCoords.height() / newCoords.height();
-    w.xOffset -= w.scaleX*newCoords.x();
-    w.yOffset -= w.scaleY*newCoords.y();
+    w.xOffset -= w.scaleX * newCoords.x();
+    w.yOffset -= w.scaleY * newCoords.y();
     return w;
 }
 QString PptToOdp::Writer::vLength(qreal length)
@@ -358,12 +378,12 @@ QString PptToOdp::Writer::hLength(qreal length)
 
 QString PptToOdp::Writer::vOffset(qreal offset)
 {
-    return mm.arg(yOffset+offset*scaleY);
+    return mm.arg(yOffset + offset*scaleY);
 }
 
 QString PptToOdp::Writer::hOffset(qreal offset)
 {
-    return mm.arg(xOffset+offset*scaleX);
+    return mm.arg(xOffset + offset*scaleX);
 }
 
 PptToOdp::PptToOdp() : p(0)
@@ -602,13 +622,13 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     //defaultStyle.setDefaultStyle(true);
     defaultStyle.setAutoStyleInStylesDotXml(true);
     const OfficeArtDggContainer& drawingGroup
-            = p->documentContainer->drawingGroup.OfficeArtDgg;
+    = p->documentContainer->drawingGroup.OfficeArtDgg;
     processGraphicStyle(defaultStyle, drawingGroup);
     // add the defaults that were not set yet
     if (!get<LineWidth>(drawingGroup)) {
-                defaultStyle.addProperty("svg:stroke-width",
-                                  QString("%1pt").arg(0x2535 / 12700.f),
-                                  KoGenStyle::GraphicType);
+        defaultStyle.addProperty("svg:stroke-width",
+                                 QString("%1pt").arg(0x2535 / 12700.f),
+                                 KoGenStyle::GraphicType);
     }
     styles.lookup(defaultStyle, "pptDefaults", KoGenStyles::DontForceNumbering);
 
