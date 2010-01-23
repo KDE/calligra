@@ -118,7 +118,7 @@ public slots:
         if (! textcursor) return false;
         KWView* v = dynamic_cast< KWView* >(m_module->view());
         KWCanvas* c = v ? v->kwcanvas() : 0;
-        KoCanvasResourceProvider* r = c ? c->resourceProvider() : 0;
+        KoResourceManager* r = c ? c->resourceProvider() : 0;
         if (! r) return false;
         QVariant variant;
         variant.setValue((QObject*) &textcursor->cursor());

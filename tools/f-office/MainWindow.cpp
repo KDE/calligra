@@ -62,7 +62,7 @@
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
 #include <KoTool.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoToolManager.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -822,7 +822,7 @@ void MainWindow::highlightText(int aIndex)
     KoToolManager::instance()->switchToolRequested(PanTool_ID);
     KoToolManager::instance()->switchToolRequested(TextTool_ID);
 
-    KoCanvasResourceProvider *provider = canvas->resourceProvider();
+    KoResourceManager *provider = canvas->resourceProvider();
     Q_CHECK_PTR(provider);
 
     QString sizeStr = QString::number(m_positions.size());

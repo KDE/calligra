@@ -25,7 +25,7 @@
 
 #include <KDebug>
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>

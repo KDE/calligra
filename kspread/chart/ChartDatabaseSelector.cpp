@@ -22,7 +22,7 @@
 
 #include "ui_ChartDatabaseSelector.h"
 
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 #include "KoShape.h"
 
 #include "KoChartInterface.h"

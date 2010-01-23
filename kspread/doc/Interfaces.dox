@@ -9,7 +9,7 @@
  *
  * \subsection resources Development Resources
  * The interfaces are located in KoTableInterface.h.
- * Pointers to them are stored as canvas resources (KoCanvasResourceProvider).
+ * Pointers to them are stored as canvas resources (KoResourceManager).
  *
  * \subsection ranges About Cell Ranges
  * KSpread is able to export data from and import data to cell ranges. Those cell

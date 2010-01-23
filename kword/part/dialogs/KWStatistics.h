@@ -27,7 +27,7 @@
 
 class QTimer;
 class QTextDocument;
-class KoCanvasResourceProvider;
+class KoResourceManager;
 class KoAction;
 class KoSelection;
 class KWDocument;
@@ -36,7 +36,7 @@ class KWStatistics : public QWidget
 {
     Q_OBJECT
 public:
-    KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document,
+    KWStatistics(KoResourceManager *provider, KWDocument *m_document,
                  KoSelection *selection = 0, QWidget *parent = 0);
 
 private slots:
@@ -52,7 +52,7 @@ private:
 private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
-    KoCanvasResourceProvider *m_resourceProvider;
+    KoResourceManager *m_resourceProvider;
     KoAction *m_action;
     KoSelection *m_selection;
     KWDocument *m_document;

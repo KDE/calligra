@@ -25,7 +25,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>

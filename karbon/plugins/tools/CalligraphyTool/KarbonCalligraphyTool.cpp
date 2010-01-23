@@ -32,7 +32,7 @@
 #include <KoSelection.h>
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoColor.h>
 
 #include <KAction>

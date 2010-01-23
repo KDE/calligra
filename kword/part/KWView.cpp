@@ -46,7 +46,7 @@
 #include <KoTextDocument.h>
 #include <KoShapeCreateCommand.h>
 #include <KoImageSelectionWidget.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoCutController.h>
 #include <KoStandardAction.h>
 #include <KoPasteController.h>
@@ -62,7 +62,7 @@
 #include <KoMainWindow.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoTextAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -919,7 +919,7 @@ void KWView::selectBookmark()
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 
-    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+    KoResourceManager *provider = m_canvas->resourceProvider();
 
     if (bookmark->hasSelection()) {
         provider->setResource(KoText::CurrentTextPosition, bookmark->position());
@@ -949,7 +949,7 @@ void KWView::deleteBookmark(const QString &name)
     KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
 
-    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+    KoResourceManager *provider = m_canvas->resourceProvider();
 
     if (bookmark->hasSelection())
         endPosition = bookmark->endBookmark()->position() - 1;
@@ -1149,7 +1149,7 @@ void KWView::handleDeletePageAction()
 
 void KWView::setShowFormattingChars(bool on)
 {
-    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+    KoResourceManager *provider = m_canvas->resourceProvider();
     provider->setResource(KoText::ShowSpaces, on);
     provider->setResource(KoText::ShowTabs, on);
     provider->setResource(KoText::ShowEnters, on);

@@ -24,7 +24,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include <KActionCollection>
 #include <KLocale>

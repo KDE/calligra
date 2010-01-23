@@ -20,7 +20,7 @@
 #ifndef KSPREAD_CANVAS_RESOURCES
 #define KSPREAD_CANVAS_RESOURCES
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 namespace KSpread
 {

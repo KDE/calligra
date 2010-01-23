@@ -24,7 +24,7 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoExecutePolicy.h>
 #include <KoAction.h>
 #include <KoSelection.h>
@@ -35,7 +35,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
+KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
         m_resourceProvider(provider),
         m_action(new KoAction(this)),
