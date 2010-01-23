@@ -34,6 +34,7 @@ class KoShapeSavingContext;
 class KoShapeUserData;
 class KoViewConverter;
 class PlaceholderData;
+class KoResourceManager;
 
 class KPrPlaceholderStrategy
 {
@@ -54,7 +55,7 @@ public:
 
     virtual ~KPrPlaceholderStrategy();
 
-    virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    virtual KoShape *createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources);
 
     virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect );
 

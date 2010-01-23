@@ -136,6 +136,7 @@ KarbonPart::KarbonPart(QWidget* parentWidget, const char* widgetName, QObject* p
         : KoDocument(parentWidget, parent, singleViewMode), d(new Private())
 {
     Q_UNUSED(widgetName);
+    d->document.setResourceManager(resourceManager());
 
     setObjectName(name);
     setComponentData(KarbonFactory::componentData(), false);
@@ -248,7 +249,7 @@ bool KarbonPart::loadOdf(KoOdfReadStore & odfStore)
     }
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext shapeContext(context, dataCenterMap());
+    KoShapeLoadingContext shapeContext(context, dataCenterMap(), resourceManager());
 
     d->document.loadOasis(page, shapeContext);
 

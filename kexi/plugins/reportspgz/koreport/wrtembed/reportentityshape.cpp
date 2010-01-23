@@ -90,7 +90,7 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     // TODO check if it is ok to pass an empty map. The image shape might not work
     QMap<QString, KoDataCenter *> dataCenterMap;
-    m_shape = (KoShape*)(KoShapeRegistry::instance()->value(m_shapeType->value().toString()))->createDefaultShapeAndInit(dataCenterMap);
+    m_shape = (KoShapeRegistry::instance()->value(m_shapeType->value().toString()))->createDefaultShape(dataCenterMap, 0);
     m_shape->setSize(m_size.toScene());
     shapes << m_shape;
 

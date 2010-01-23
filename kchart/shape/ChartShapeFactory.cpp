@@ -83,9 +83,10 @@ bool ChartShapeFactory::supports( const KoXmlElement &element ) const
         && element.tagName() == "object";
 }
 
-KoShape* ChartShapeFactory::createDefaultShape() const
+KoShape *ChartShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager * /*documentResources*/) const
 {
     ChartShape* shape = new ChartShape();
+    shape->init(dataCenterMap);
 
     // Fill cells with data.
     QStandardItemModel  *m_chartData = new QStandardItemModel();
@@ -171,15 +172,6 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 
     return shape;
 }
-
-KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
-{
-    Q_UNUSED( params );
-    
-    // TODO Use KoProperties to create a custom shape
-    return createDefaultShape();
-}
-
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {

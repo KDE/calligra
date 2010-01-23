@@ -27,6 +27,7 @@
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoShapeController.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <QKeyEvent>
@@ -376,8 +377,7 @@ void KoFormulaTool::loadFormula()
 
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext( stylesReader, 0 );
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext shapeContext( odfContext, dataCenterMap );
+    KoShapeLoadingContext shapeContext(odfContext, canvas()->shapeController()->dataCenterMap(), canvas()->shapeController()->resourceManager());
 
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;

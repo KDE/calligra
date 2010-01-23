@@ -59,8 +59,9 @@
 #include <QtCore/QDir>
 
 
-SvgParser::SvgParser(const QMap<QString, KoDataCenter*> & dataCenters)
-        : m_dataCenters(dataCenters)
+SvgParser::SvgParser(const QMap<QString, KoDataCenter*> & dataCenters, KoResourceManager *documentResourceManager)
+        : m_dataCenters(dataCenters),
+        m_documentResourceManager(documentResourceManager)
 {
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
     // the order of the style attributes is important, don't change without reason !!!
@@ -2015,7 +2016,7 @@ KoShape * SvgParser::createShape(const QString &shapeID)
         return 0;
     }
 
-    KoShape * shape = factory->createDefaultShapeAndInit(m_dataCenters);
+    KoShape *shape = factory->createDefaultShape(m_dataCenters, m_documentResourceManager);
     if (shape && shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
 

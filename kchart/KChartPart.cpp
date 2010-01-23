@@ -98,7 +98,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
     m_chartData( 0 )
 {
     // A KChart part contains a single chart Flake shape. 
-    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShapeAndInit( dataCenterMap() );
+    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape(dataCenterMap(), resourceManager());
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
@@ -643,7 +643,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
 #endif
 
     KoOdfLoadingContext  context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext  shapeContext( context, dataCenterMap() );
+    KoShapeLoadingContext shapeContext(context, dataCenterMap(), resourceManager());
 
     // ----------------------------------------------------------------
     // FIXME: Load chart here.

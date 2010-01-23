@@ -61,7 +61,8 @@ class KarbonDocument::Private
 public:
     Private()
             : pageSize(0.0, 0.0)
-            , hasExternalDataCenterMap(false)
+            , hasExternalDataCenterMap(false),
+            resourceManager(0)
     {
         // Ask every shapefactory to populate the dataCenterMap
         foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
@@ -87,6 +88,7 @@ public:
 
     QMap<QString, KoDataCenter*> dataCenterMap;
     bool hasExternalDataCenterMap;
+    KoResourceManager *resourceManager;
 };
 
 KarbonDocument::KarbonDocument()
@@ -381,4 +383,15 @@ void KarbonDocument::saveOdfStyles(KoShapeSavingContext & context)
 void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenter* dataCenter)
 {
     d->dataCenterMap.insert(key, dataCenter);
+}
+
+KoResourceManager *KarbonDocument::resourceManager() const
+{
+    return d->resourceManager;
+}
+
+void KarbonDocument::setResourceManager(KoResourceManager *rm)
+{
+    //delete d->resourceManager;
+    d->resourceManager = rm;
 }

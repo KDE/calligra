@@ -586,7 +586,7 @@ KoShape * WMFImportParser::createShape(const QString &shapeID)
         return 0;
     }
 
-    KoShape * shape = factory->createDefaultShapeAndInit(mDoc->dataCenterMap());
+    KoShape * shape = factory->createDefaultShape(mDoc->dataCenterMap(), mDoc->resourceManager());
     if (shape && shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
 

@@ -61,7 +61,7 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     if ( factory ) {
         // as this is never saved an empty map is ok here
         QMap<QString, KoDataCenter *> dataCenterMap;
-        KoShape * textShape = factory->createDefaultShapeAndInit( dataCenterMap );
+        KoShape * textShape = factory->createDefaultShape(dataCenterMap, 0);
         QTextDocument * document = qobject_cast<KoTextShapeData*>( textShape->userData() )->document();
         QTextCursor cursor( document );
         QTextCharFormat format;

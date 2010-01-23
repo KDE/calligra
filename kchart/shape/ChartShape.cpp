@@ -405,7 +405,7 @@ ChartShape::ChartShape()
     // We use a empty dataCenterMap here for the creation and then in
     // init() we init the shapes with the correct data.
     QMap<QString, KoDataCenter *> dataCenterMap;
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
+    d->title = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
     if ( !d->title ) {
         d->title = new TextLabelDummy;
         KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
@@ -434,7 +434,7 @@ ChartShape::ChartShape()
     setClipping( d->title, true );
 
     // Create the Subtitle and add it to the shape.
-    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
+    d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
     if ( !d->subTitle ) {
         d->subTitle = new TextLabelDummy;
     }
@@ -455,7 +455,7 @@ ChartShape::ChartShape()
     setClipping( d->subTitle, true );
 
     // Create the Footer and add it to the shape.
-    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
+    d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
     if ( !d->footer ) {
         d->footer = new TextLabelDummy;
     }

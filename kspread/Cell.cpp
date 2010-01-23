@@ -1669,7 +1669,7 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, KoOdfLoadingContext& odfCo
                 KoXmlNS::table, "end-y",
                 "table:end-y"));
 
-    KoShapeLoadingContext shapeContext(odfContext, d->sheet->dataCenterMap());
+    KoShapeLoadingContext shapeContext(odfContext, d->sheet->dataCenterMap(), d->sheet->resourceManager());
     KoXmlElement element;
     forEachElement(element, parent) {
         if (element.namespaceURI() != KoXmlNS::draw)

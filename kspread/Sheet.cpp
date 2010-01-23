@@ -2319,7 +2319,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
-                    KoShapeLoadingContext shapeLoadingContext(odfContext, dataCenterMap());
+                    KoShapeLoadingContext shapeLoadingContext(odfContext, dataCenterMap(), resourceManager());
                     KoXmlElement element;
                     forEachElement(element, rowElement) {
                         if (element.namespaceURI() != KoXmlNS::draw)

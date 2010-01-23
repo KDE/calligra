@@ -127,7 +127,7 @@ void SvgImport::convert(const KoXmlElement &rootElement)
     // set default page size to A4
     QSizeF pageSize(550.0, 841.0);
 
-    SvgParser parser(m_document->dataCenterMap());
+    SvgParser parser(m_document->dataCenterMap(), m_document->resourceManager());
 
     parser.setXmlBaseDir(QFileInfo(m_chain->inputFile()).filePath());
 

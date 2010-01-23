@@ -28,18 +28,11 @@ KexiRelationDesignFactory::KexiRelationDesignFactory ( QObject* parent )
     setLoadingPriority( 1 );
 }
 
-KoShape* KexiRelationDesignFactory::createDefaultShape() const {
+KoShape *KexiRelationDesignFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+{
     kDebug();
     KexiRelationDesignShape* fooShape = new KexiRelationDesignShape();
     // set defaults
-    return fooShape;
-}
-
-KoShape* KexiRelationDesignFactory::createShape (
-    const KoProperties* params ) const {
-        kDebug();
-        KexiRelationDesignShape* fooShape = new KexiRelationDesignShape();
-    // use the params
     return fooShape;
 }
 

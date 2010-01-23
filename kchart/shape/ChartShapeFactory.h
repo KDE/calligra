@@ -54,8 +54,7 @@ public:
 
     bool supports( const KoXmlElement &element ) const;
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape( const KoProperties* params ) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

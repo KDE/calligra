@@ -41,15 +41,9 @@ KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory()
 {
 }
 
-KoShape * KPrPlaceholderShapeFactory::createDefaultShape() const
+KoShape *KPrPlaceholderShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
     return new KPrPlaceholderShape();
-}
-
-KoShape * KPrPlaceholderShapeFactory::createShape(const KoProperties * params) const
-{
-    Q_UNUSED( params );
-    return createDefaultShape();
 }
 
 bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e) const

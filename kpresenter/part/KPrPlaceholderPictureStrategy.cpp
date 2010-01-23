@@ -37,13 +37,13 @@ KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy()
 {
 }
 
-KoShape * KPrPlaceholderPictureStrategy::createShape( const QMap<QString, KoDataCenter *> & dataCenterMap )
+KoShape *KPrPlaceholderPictureStrategy::createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *rm)
 {
     KoShape * shape = 0;
 
     KUrl url = KFileDialog::getOpenUrl();
     if ( !url.isEmpty() ) {
-        shape = KPrPlaceholderStrategy::createShape( dataCenterMap );
+        shape = KPrPlaceholderStrategy::createShape(dataCenterMap, rm);
 
         KoImageCollection * collection = dynamic_cast<KoImageCollection *>( dataCenterMap.value( "ImageCollection" ) );
 

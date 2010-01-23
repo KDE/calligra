@@ -43,11 +43,8 @@ public:
     ~KoFormulaShapeFactory();
 
     /// reimplemented
-    KoShape* createDefaultShape() const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
 
-    /// reimplemented
-    KoShape* createShape( const KoProperties* params ) const;
-    
     virtual bool supports(const KoXmlElement& e) const;
 };
 

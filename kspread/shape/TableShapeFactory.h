@@ -46,9 +46,7 @@ public:
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
     virtual bool supports(const KoXmlElement &element) const;
 
-protected:
-    virtual KoShape* createDefaultShape() const;
-    virtual KoShape* createShape(const KoProperties* params) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
 
 private:
     class Private;

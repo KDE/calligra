@@ -78,16 +78,10 @@ bool TableShapeFactory::supports(const KoXmlElement &element) const
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
 
-KoShape* TableShapeFactory::createDefaultShape() const
+KoShape *TableShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
 {
     TableShape* shape = new TableShape();
-    return shape;
-}
-
-KoShape* TableShapeFactory::createShape(const KoProperties* params) const
-{
-    Q_UNUSED(params);
-    TableShape* shape = new TableShape();
+    shape->setShapeId(TableShapeId);
     return shape;
 }
 

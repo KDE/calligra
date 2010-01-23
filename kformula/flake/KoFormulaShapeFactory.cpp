@@ -43,25 +43,12 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
 {}
 
-KoShape* KoFormulaShapeFactory::createDefaultShape() const
+KoShape *KoFormulaShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
     KoFormulaShape* formula = new KoFormulaShape();
     formula->setShapeId( KoFormulaShapeId );
     return formula;
 }
-
-KoShape* KoFormulaShapeFactory::createShape( const KoProperties* params ) const
-{
-    Q_UNUSED( params );
-
-    KoFormulaShape* formula = new KoFormulaShape();
-    if( !formula )
-        return 0;
-
-    formula->setShapeId( KoFormulaShapeId );
-    return formula;
-}
-
 
 bool KoFormulaShapeFactory::supports(const KoXmlElement& e) const
 {

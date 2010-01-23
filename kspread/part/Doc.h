@@ -111,7 +111,7 @@ public:
         return MIME_TYPE;
     }
 
-    // KoShapeControllerBase interface
+    // KoShapeControllerBase interface // TODO; this is not a KoShapeControllerBase!! Sheet is.
     virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
     /**

@@ -25,6 +25,7 @@
 #define KPrPlaceholderShapeId "KPrPlaceholderShapeId"
 
 class KPrPlaceholderStrategy;
+class KoResourceManager;
 
 /**
  * This shape is used as placeholder as long as the shape is not modified
@@ -40,7 +41,7 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    KoShape *createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources);
 
     virtual void initStrategy( const QMap<QString, KoDataCenter *> & dataCenterMap );
     KoShapeUserData * userData() const;

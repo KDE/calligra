@@ -489,7 +489,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
 
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
         Q_ASSERT(factory);
-        KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
+        KoShape *shape = factory->createDefaultShape(m_document->dataCenterMap(), m_document->resourceManager());
         shape->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
 
         KoImageCollection *collection = dynamic_cast<KoImageCollection*>(m_document->dataCenterMap()["ImageCollection"]);
@@ -545,7 +545,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
         if (frameElem.tagName() == "FRAME") {
             KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
-            KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
+            KoShape *shape = factory->createDefaultShape(m_document->dataCenterMap(), m_document->resourceManager());
             KWTextFrame *frame = new KWTextFrame(shape, fs);
             fill(frame, frameElem);
 
