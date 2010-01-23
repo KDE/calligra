@@ -1170,7 +1170,7 @@ void KarbonView::updateUnit(KoUnit unit)
 {
     d->horizRuler->setUnit(unit);
     d->vertRuler->setUnit(unit);
-    d->canvas->resourceManager()->setUnitChanged();
+    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
 }
 
 QList<KoPathShape*> KarbonView::selectedPathShapes()
