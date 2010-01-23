@@ -323,7 +323,8 @@ void SQLiteCursor::drv_bufferMovePointerPrev()
 //and move internal buffer pointer to that place
 void SQLiteCursor::drv_bufferMovePointerTo(qint64 at)
 {
-    d->curr_coldata = d->records.at(at);
+    if (d->records.count() > at)
+	d->curr_coldata = d->records.at(at);
 }
 
 void SQLiteCursor::drv_clearBuffer()
