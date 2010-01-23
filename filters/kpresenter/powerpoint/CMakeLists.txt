@@ -1,13 +1,16 @@
-include_directories(${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/ ${CMAKE_BINARY_DIR}/filters/)
+include_directories(${ZLIB_INCLUDE_DIR})
 
-set(libppt_SRCS 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/slide.cpp 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/objects.cpp 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/presentation.cpp 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/pole.cpp 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/powerpoint.cpp 
-		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/ustring.cpp
-		)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
 
-add_subdirectory( import )
+kde4_add_library(ppttoodplib STATIC ppttoodp.cpp parsedpresentation.cpp datetimeformat.cpp powerpointimport.cpp pictures.cpp pole.cpp mso/simpleParser.cpp)
+target_link_libraries(ppttoodplib komain ${ZLIB_LIBRARIES})
+
+kde4_add_executable(ppttoodp ppttoodpmain.cpp)
+target_link_libraries(ppttoodp ppttoodplib)
+
+kde4_add_plugin(powerpointimport WITH_PREFIX powerpointimport.cpp)
+target_link_libraries(powerpointimport ppttoodplib)
+
+install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

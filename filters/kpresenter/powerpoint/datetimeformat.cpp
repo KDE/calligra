@@ -31,14 +31,11 @@
 
 
 
-DateTimeFormat::DateTimeFormat(Slide *master)
-        : master(master)
-        , formatId(0)
+DateTimeFormat::DateTimeFormat(int dateTimeFormatId)
+        : formatId(dateTimeFormatId)
 {
-    if(master)
-        formatId = master->dateTimeFormatId();
 //#ifdef LIBDATE_DEBUG
-    std::cout<<"\nDateTimeConstructor formatId :"<<formatId ;
+    std::cout << "\nDateTimeConstructor formatId :" << formatId ;
 //#endif
 }
 
@@ -72,9 +69,9 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
     xmlWriter.startElement("number:month");
     if (longmonth == true) {
-        xmlWriter.addAttribute("number:style","long");
+        xmlWriter.addAttribute("number:style", "long");
         if (textualmonth == true)
-           xmlWriter.addAttribute("number:textual","true");
+            xmlWriter.addAttribute("number:textual", "true");
     }
     xmlWriter.endElement();  //number:month
     xmlWriter.startElement("number:text");
@@ -83,7 +80,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
     xmlWriter.startElement("number:year");
     if (longyear == true) {
-        xmlWriter.addAttribute("number-style","long");
+        xmlWriter.addAttribute("number-style", "long");
     }
     xmlWriter.endElement(); // number:year
 
@@ -141,117 +138,118 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
 }
 
 
-void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles)
+void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
+        bool hasTodayDate,
+        bool hasUserDate)
 {
-    int  headerFooterAtomFlags = master->headerFooterFlags();
 
-    if (headerFooterAtomFlags && fHasTodayDate) {
+    if (hasTodayDate) {
         switch (formatId) {
         case ShortDate:
-             break;
+            break;
         case LongDate:
-             addDateStyle(styles, true, true, true, true,".");
-         break;
+            addDateStyle(styles, true, true, true, true, ".");
+            break;
         case LongDateWithoutWeekday:
-           addDateStyle(styles, false, true, false, true,".");
-         break;
+            addDateStyle(styles, false, true, false, true, ".");
+            break;
         case ShortDateWithAbbrMonth:
-           addDateStyle(styles, false, false, false, true);
-         break;
+            addDateStyle(styles, false, false, false, true);
+            break;
         case ShortDateWithSlashes:
-           addDateStyle(styles, false, false, false, false);
-         break;
+            addDateStyle(styles, false, false, false, false);
+            break;
         case DateAnd12HrTime:
-           addDateStyle(styles, false, false, false, false);
-           addTimeStyle(styles, true, false);
-         break;
+            addDateStyle(styles, false, false, false, false);
+            addTimeStyle(styles, true, false);
+            break;
         case Hr24Time:
-           addTimeStyle(styles, false, false);
-         break;
+            addTimeStyle(styles, false, false);
+            break;
         case Hr24TimeWithSec:
-           addTimeStyle(styles, false, true);
-         break;
+            addTimeStyle(styles, false, true);
+            break;
         case Hr12Time:
-           addTimeStyle(styles, true, false);
-         break;
+            addTimeStyle(styles, true, false);
+            break;
         case Hr12TimeWithSec:
-           addTimeStyle(styles, true, true);
-         break;
+            addTimeStyle(styles, true, true);
+            break;
         default:
-         break;
+            break;
         } //switch
     }//if
-  else if (headerFooterAtomFlags && fHasUserDate) {
-   //Future - Fixed date
-  }
+    else if (hasUserDate) {
+        //Future - Fixed date
+    }
 }
 
-void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tStyle)
+void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle)
 {
     QDateTime dt = QDateTime::currentDateTime();
     QString format, result;
     bool hasDate = true;
     bool hasTime = false;
 
-    switch(formatId){
+    switch (formatId) {
     case ShortDate:
-           format = "dd-MM-yy";
-         break;
+        format = "dd-MM-yy";
+        break;
     case LongDate:
-           format = "dddd dd MMMM yyyy";
-         break;
+        format = "dddd dd MMMM yyyy";
+        break;
     case LongDateWithoutWeekday:
-           format = "dd MMMM yyyy";
-         break;
+        format = "dd MMMM yyyy";
+        break;
     case ShortDateWithAbbrMonth:
-           format = "dd MMM yyyy";
-         break;
+        format = "dd MMM yyyy";
+        break;
     case ShortDateWithSlashes:
-           format = "dd/MM/yy";
-         break;
+        format = "dd/MM/yy";
+        break;
     case DateAnd12HrTime:
-           hasTime = true;
-           format = "dd-MM-yy hh:mm ap";
-         break;
+        hasTime = true;
+        format = "dd-MM-yy hh:mm ap";
+        break;
     case Hr24Time:
-           hasTime = true;
-           hasDate = false;
-           format = "hh:mm";
-         break;
+        hasTime = true;
+        hasDate = false;
+        format = "hh:mm";
+        break;
     case Hr24TimeWithSec:
-           hasTime = true;
-           hasDate = false;
-           format = "hh:mm:ss";
-         break;
+        hasTime = true;
+        hasDate = false;
+        format = "hh:mm:ss";
+        break;
     case Hr12Time:
-           hasTime = true;
-           hasDate = false;
-           format = "hh:mm ap";
-         break;
+        hasTime = true;
+        hasDate = false;
+        format = "hh:mm ap";
+        break;
     case Hr12TimeWithSec:
-           hasTime = true;
-           hasDate = false;
-           format = "hh:mm:ss ap";
-         break;
+        hasTime = true;
+        hasDate = false;
+        format = "hh:mm:ss ap";
+        break;
     case XMLSchemaDate:
-           // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#date
-           format = "yyyy-MM-dd";
-         break;
+        // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#date
+        format = "yyyy-MM-dd";
+        break;
     case XMLSchemaDateTime:
-           // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dateTime
-           hasTime = true;
-           format = "yyyy-MM-ddTHH:mm:ss.z";
-         break;
+        // http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dateTime
+        hasTime = true;
+        format = "yyyy-MM-ddTHH:mm:ss.z";
+        break;
     case FixedUserDateFormat:
-           //Future - Fixed Date
+        //Future - Fixed Date
     default:
-           // XML Schema time format
-           format = "yyyy-MM-ddTHH:mm:ss.z";
-         break;
+        // XML Schema time format
+        format = "yyyy-MM-ddTHH:mm:ss.z";
+        break;
     }
 
     result = dt.toString(format);
-    if ( hasDate == true ) {
+    if (hasDate == true) {
         xmlWriter.startElement("text:span");
         xmlWriter.addAttribute("text:style-name", tStyle);
         xmlWriter.startElement("text:date");
@@ -261,7 +259,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
         xmlWriter.endElement();//text:date
         xmlWriter.endElement(); // text:span
     }
-    if ( hasTime == true ) {
+    if (hasTime == true) {
         xmlWriter.startElement("text:span");
         xmlWriter.addAttribute("text:style-name", tStyle);
         xmlWriter.startElement("text:time");
@@ -273,7 +271,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tSt
     }
 
 #ifdef LIBDATE_DEBUG
-    std::cout<<"****Date formatted here: "<<result.toLatin1().data();
+    std::cout << "****Date formatted here: " << result.toLatin1().data();
 #endif
 
 }
@@ -285,14 +283,14 @@ void DateTimeFormat::setDateStyleName(const QString &name)
 
 QString DateTimeFormat::getDateStyleName() const
 {
-    std::cout<<"\n**DateStyleName: "<<dateStyleName.toLatin1().data()<<"\n";
+    std::cout << "\n**DateStyleName: " << dateStyleName.toLatin1().data() << "\n";
     return dateStyleName;
 }
 
 void DateTimeFormat::setTimeStyleName(const QString &name)
 {
     timeStyleName = name;
-    std::cout<<"\n**TimeStyleName:" << timeStyleName.toLatin1().data();
+    std::cout << "\n**TimeStyleName:" << timeStyleName.toLatin1().data();
 }
 
 QString DateTimeFormat::getTimeStyleName() const

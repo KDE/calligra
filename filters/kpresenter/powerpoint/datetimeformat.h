@@ -27,10 +27,6 @@
 
 #include <KoGenStyles.h>
 
-#include "libppt.h"
-
-using namespace Libppt;
-
 class DateTimeFormat
 {
 public:
@@ -38,36 +34,38 @@ public:
     * @brief Constructor
     * @param Slide* master-  Master Slide
     */
-     DateTimeFormat(Slide *master);
+    DateTimeFormat(int dateTimeFormatId);
 
-     /**
-     * @brief Destructor
-     */
+    /**
+    * @brief Destructor
+    */
     ~DateTimeFormat();
 
-     /**
-     * @brief addMasterDateTimeSection(KoXmlWriter& xmlWriter) - Add DateTime section Master styles in styles.xml
-     * @param KoXmlWriter - Content Writer
-     */
-     void addMasterDateTimeSection(KoXmlWriter& xmlWriter,QString tStyle);
+    /**
+    * @brief addMasterDateTimeSection(KoXmlWriter& xmlWriter) - Add DateTime section Master styles in styles.xml
+    * @param KoXmlWriter - Content Writer
+    */
+    void addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle);
 
-     /**
-     * @brief addDateTimeAutoStyles - Add DateTime styles in styles.xml
-     * @param KoGenStyles - Styles generator handle
-     */
-     void addDateTimeAutoStyles(KoGenStyles& styles);
+    /**
+    * @brief addDateTimeAutoStyles - Add DateTime styles in styles.xml
+    * @param KoGenStyles - Styles generator handle
+    */
+    void addDateTimeAutoStyles(KoGenStyles& styles,
+                               bool hasTodayDate,
+                               bool hasUserDate);
 
-     /**
-     * @brief eHeaderFooterAtom - HeaderFooter enum as per spec of formatId
-     */
-     enum eHeaderFooterAtom{
+    /**
+    * @brief eHeaderFooterAtom - HeaderFooter enum as per spec of formatId
+    */
+    enum {
         fHasDate = 0x01,       //(1 bit): A bit that specifies whether the date is displayed in the footer.
         fHasTodayDate = 0x02,  //(1 bit): A bit that specifies whether the current datetime is used for displaying the datetime.
         fHasUserDate = 0x04,    //(1 bit): A bit that specifies whether the date specified in UserDateAtom
         fHasSlideNumber = 0x08,  //(1 bit): A bit that specifies whether the slide number is displayed in the footer.
         fHasHeader = 0x10,      //(1 bit): A bit that specifies whether the header text specified by HeaderAtom record is displayed.
         fHasFooter = 0x20,    //(1 bit): A bit that specifies whether the footer text specified by FooterAtom
-    };
+    }eHeaderFooterAtom;
 
 private:
 
@@ -82,7 +80,7 @@ private:
      */
     void addDateStyle(KoGenStyles& styles,
                       bool dayofweek, bool longMonth, bool textualmonth, bool longyear,
-                      QString separator="/");
+                      QString separator = "/");
 
     /**
      * @brief addTimeStyle - Add Time styles in as per the formatId in styles.xml.
@@ -91,7 +89,7 @@ private:
      * @param bool second - Second is required in time or not.
      * @param QString separator=":" - Separator b/w time.
      */
-    void addTimeStyle(KoGenStyles& styles, bool hr12Format,bool second,QString separator=":");
+    void addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator = ":");
 
     /**
      * @brief setDateStyleName - set the date style name for further usage.
@@ -120,24 +118,24 @@ private:
     /**
      * @brief eDateTimeFormat - DateTime different format enum
      */
-    enum{
-       ShortDate,                         //0
-       LongDate,                          //1
-       LongDateWithoutWeekday,            //2
-       AltShortDate,                      //3
-       ShortDateWithAbbrMonth,             //4
-       ShortDateWithSlashes,               //5
-       DateAnd12HrTime,                    //6
-       Hr24Time,                           //7
-       Hr24TimeWithSec,                    //8
-       Hr12Time,                           //9
-       Hr12TimeWithSec,                    //10
-       XMLSchemaDate,                      //11
-       XMLSchemaDateTime,                  //12
-       FixedUserDateFormat,                //13
+    enum {
+        ShortDate,                         //0
+        LongDate,                          //1
+        LongDateWithoutWeekday,            //2
+        AltShortDate,                      //3
+        ShortDateWithAbbrMonth,             //4
+        ShortDateWithSlashes,               //5
+        DateAnd12HrTime,                    //6
+        Hr24Time,                           //7
+        Hr24TimeWithSec,                    //8
+        Hr12Time,                           //9
+        Hr12TimeWithSec,                    //10
+        XMLSchemaDate,                      //11
+        XMLSchemaDateTime,                  //12
+        FixedUserDateFormat,                //13
     }eDateTimeFormat;
 
-    Slide *master;
+    //Slide *master;
     /**
      * @brief formatId - Date represtation format
      */

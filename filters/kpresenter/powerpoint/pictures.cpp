@@ -39,7 +39,8 @@ static inline quint32 readU32(const void* p)
 
 }
 void
-saveStream(POLE::Stream& stream, quint32 size, KoStore* out) {
+saveStream(POLE::Stream& stream, quint32 size, KoStore* out)
+{
     const quint16 bufferSize = 1024;
     unsigned char buffer[bufferSize];
     unsigned long nread = stream.read(buffer,
@@ -51,7 +52,8 @@ saveStream(POLE::Stream& stream, quint32 size, KoStore* out) {
     }
 }
 bool
-saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
+saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
+{
     const quint16 bufferSize = 1024;
     unsigned char bufin[bufferSize];
     unsigned char bufout[bufferSize];
@@ -70,7 +72,7 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
     }
 
     unsigned long nread = stream.read(bufin,
-            (bufferSize < size) ? bufferSize : size);
+                                      (bufferSize < size) ? bufferSize : size);
     while (nread > 0) { // loop over the available data
         size -= nread;
         zstream.next_in = (Bytef*)bufin;
@@ -79,7 +81,7 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out) {
             zstream.next_out = (Bytef*)bufout;
             zstream.avail_out = bufferSize;
             int r = inflate(&zstream, Z_SYNC_FLUSH);
-            qint32 nwritten = bufferSize - zstream.avail_out;
+            int32_t nwritten = bufferSize - zstream.avail_out;
             if (r != Z_STREAM_END && r != Z_OK) {
                 inflateEnd(&zstream);
                 return false;
