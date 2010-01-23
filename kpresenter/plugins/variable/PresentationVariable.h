@@ -5,6 +5,8 @@
 *
 * Contact: Amit Aggarwal <amit.5.aggarwal@nokia.com>
 *
+* Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
+*
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
 * License as published by the Free Software Foundation; either
@@ -27,6 +29,8 @@
 
 #include <KoVariable.h>
 
+#include <KPrDeclarations.h>
+
 /**
  * This is a PresentationVariable for document declaration.
  * Ex: - Footer, Header, Date-time etc
@@ -44,18 +48,13 @@ public:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
     ///reimplemented
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
 
     ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
-    
-     enum PresentationType{
-         Header,
-         Footer 
-     };
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
-    PresentationType m_type;
+    KPrDeclarations::Type m_type;
 };
 
 #endif

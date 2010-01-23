@@ -5,6 +5,8 @@
 *
 * Contact: Amit Aggarwal <amit.5.aggarwal@nokia.com>
 *
+* Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+*
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
 * License as published by the Free Software Foundation; either
@@ -33,10 +35,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
+#include <KoPATextPage.h>
+#include <KPrPage.h>
 
 PresentationVariable::PresentationVariable()
     : KoVariable(true)
-    ,m_type(Footer)
+    , m_type(KPrDeclarations::Footer)
 {
 }
 
@@ -44,10 +48,10 @@ void PresentationVariable::setProperties(const KoProperties *props)
 {
     switch (props->intProperty("vartype")) {
     case 1:
-        m_type = Header;
+        m_type = KPrDeclarations::Header;
         break;
     case 2:
-        m_type = Footer;
+        m_type = KPrDeclarations::Footer;
         break;
     default:
         Q_ASSERT(false);
@@ -59,24 +63,13 @@ void PresentationVariable::variableMoved(const KoShape *shape, const QTextDocume
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
-    
-    switch (m_type) {
-    case Footer:
-        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-            KoTextPage* page = shapeData->page();
-            if (page) {
+
+    if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+        if (KoPATextPage *textPage = dynamic_cast<KoPATextPage*>(shapeData->page())) {
+            if (KPrPage *page = dynamic_cast<KPrPage*>(textPage->page())) {
+                setValue(page->declaration(m_type));
             }
-            setValue("Sample Footer Text"); //TBD
         }
-        break;
-    case Header:
-        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-            KoTextPage* page = shapeData->page();
-            if (page) {
-            }
-            setValue("Text Data to be changed"); //TBD
-        }
-        break;
     }
 }
 
@@ -92,10 +85,10 @@ bool PresentationVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingC
     const QString localName(element.localName());
 
     if (localName == "footer") {
-        m_type = Footer;
-    } 
+        m_type = KPrDeclarations::Footer;
+    }
     else if (localName == "header") {
-        m_type = Header;
-    } 
+        m_type = KPrDeclarations::Header;
+    }
     return true;
 }

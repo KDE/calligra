@@ -23,6 +23,7 @@
 #include <KoPAPage.h>
 
 #include "KPrPageData.h"
+#include "KPrDeclarations.h"
 
 #include "kpresenter_export.h"
 
@@ -31,6 +32,7 @@ class KPrDocument;
 class KPrPageApplicationData;
 class KPrNotes;
 class KPrPageLayout;
+class KPrDeclarations;
 
 class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
@@ -81,6 +83,8 @@ public:
      * @return KoPageApp::Slide
      */
     virtual KoPageApp::PageType pageType() const;
+
+    QString declaration(KPrDeclarations::Type type) const;
 
 protected:
     /// reimplemented

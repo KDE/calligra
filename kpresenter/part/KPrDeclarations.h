@@ -33,12 +33,12 @@ class KPrDeclarations
 {
 public:
     /**
-     * Declaration Type of presentation
+     * Presentation declaration type
      */
-    enum DeclarationType {
-        FooterType,
-        HeaderType,
-        DateTimeType
+    enum Type {
+        Footer,
+        Header,
+        DateTime
     };
 
     /**
@@ -57,14 +57,16 @@ public:
      * @param KoPALoadingContext
      * @return bool value
      */
-    bool loadOdfDeclaration( const KoXmlElement & body, KoPALoadingContext & context );
+    bool loadOdf(const KoXmlElement &body, KoPALoadingContext &context);
 
     /**
      * Similar to findStyle but for decls only.
      * \note Searches in content.xml added declaration!
      */
-    const QString findOdfDeclarationText(DeclarationType type, const QString& declName);
+    const QString declaration(Type type, const QString &key);
+
 private:
-    QHash<DeclarationType, QHash<QString /*name*/, QString /*text*/> >declaration;
+    QHash<Type, QHash<QString /*key*/, QString /*text*/> > m_declarations;
 };
+
 #endif /* KPRDECLARATIONS_H */

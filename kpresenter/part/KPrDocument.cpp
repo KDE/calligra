@@ -347,7 +347,7 @@ void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
 bool KPrDocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context )
 {
     Q_UNUSED( context );
-    return m_declarations->loadOdfDeclaration( body, context ); 
+    return m_declarations->loadOdf( body, context );
 }
 
 KPrDeclarations * KPrDocument::declarations() const

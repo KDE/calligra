@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  )
+include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kpresenter/part )
 
 set(kprvariables_PART_SRCS 
     PresentationVariable.cpp
