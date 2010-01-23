@@ -37,7 +37,6 @@ Forms TODO
 TODO Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
- - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - clicking too many time on undo CRASHES
  - fix syncing form geometry with properties in the propeditor
@@ -62,6 +61,11 @@ Main Window TODO
 *implemented dock hiding as side bars
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2010-01-23
+Main Window
+*Added tabbar for the property editor pane
+
 2010-01-19
 Forms
 *fixed possible crash when setting readonly flag for line edits
@@ -89,6 +93,16 @@ Main Window
 2010-01-15
 KoProperty
 *ported the line style editor
+
+2010-01-12
+KoProperty
+*color editor ported, improved: oxygen colors displayed
+TODO: enable transparency selection
+TODO: add transparency option
+TODO: reimplement view using KColorCells
+TODO: line style editor: copy from plugins/dockers/LineStyleSelector.h
+Forms
+TODO: add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x (add special case on load/save)
 
 2010-01-10
 Forms
