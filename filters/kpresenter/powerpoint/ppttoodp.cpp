@@ -258,13 +258,13 @@ PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) co
 {
     Writer w(xml);
     qDebug() << "ct " << oldCoords << " " << newCoords;
-    w.scaleX = oldCoords.width()/newCoords.width();
-    w.scaleY = oldCoords.height()/newCoords.height();
+    w.scaleX = oldCoords.width() / newCoords.width();
+    w.scaleY = oldCoords.height() / newCoords.height();
     return w;
 }
 QString PptToOdp::Writer::vLength(qreal length)
 {
-    qDebug() << scaleY << " " << length << " " <<length*scaleY;
+    qDebug() << scaleY << " " << length << " " << length*scaleY;
     return mm.arg(length*scaleY);
 }
 
@@ -792,7 +792,7 @@ getRect(const OfficeArtClientAnchor &a)
         const RectStruct &r = *a.rect2;
         return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
-    return QRect(0,0,1,1);
+    return QRect(0, 0, 1, 1);
 }
 /**
  * Return the bounding rectangle for this object.
@@ -806,7 +806,7 @@ getRect(const OfficeArtSpContainer &o)
     } else if (o.clientAnchor) {
         return getRect(*o.clientAnchor);
     }
-    return QRect(0,0,1,1);
+    return QRect(0, 0, 1, 1);
 }
 
 void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
@@ -1973,17 +1973,17 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer
        a new coordinate system is introduced.
        */
     const OfficeArtSpContainer* first
-            = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    = o.rgfb[0].anon.get<OfficeArtSpContainer>();
     if (first && first->clientAnchor && first->shapeGroup) {
         const QRect oldCoords = getRect(*first->clientAnchor);
         QRect newCoords = getRect(*first->shapeGroup);
         Writer transformedOut = out.transform(oldCoords, newCoords);
-        for (int i=1; i< o.rgfb.size(); ++i){
-        //foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
+        for (int i = 1; i < o.rgfb.size(); ++i) {
+            //foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
             processObjectForBody(o.rgfb[i], transformedOut);
         }
     }
-    for (int i=1; i< o.rgfb.size(); ++i){
+    for (int i = 1; i < o.rgfb.size(); ++i) {
         processObjectForBody(o.rgfb[i], out);
     }
     out.xml.endElement(); // draw:g
@@ -2077,7 +2077,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     }
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
-          //  processObjectForBody(*slide->drawing.OfficeArtDg.shape, out);
+        //  processObjectForBody(*slide->drawing.OfficeArtDg.shape, out);
     }
 
     xmlWriter.endElement(); // draw:page
@@ -2853,34 +2853,53 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
     style.setParentName("standard");
 
-    const LineStyleBooleanProperties* bp = get<LineStyleBooleanProperties>(o);
-    const LineDashing* ld = get<LineDashing>(o);
-    if (bp && bp->fNoLineDrawDash) {
-        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
-    } else if (ld) {
-        if (ld->lineDashing == 0 || ld->lineDashing >= 11) { // solid
-            style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-        } else {
-            style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-            style.addProperty("draw:stroke-dash", dashses[ld->lineDashing],
-                              KoGenStyle::GraphicType);
-        }
-    } else {
-        // default style is a solid line, this must be set explicitly as long
-        // as kpresenter takes draw:stroke="none" as default
-        style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-    }
-
-    const LineWidth* lw = get<LineWidth>(o);
-    if (lw) {
-        style.addProperty("svg:stroke-width", QString("%1mm").arg(lw->lineWidth),
-                          KoGenStyle::GraphicType);
-    }
-
+    /** 2.3.8 Line Style **/
+    // 2.3.8.1 lineColor
     const LineColor* lc = get<LineColor>(o);
     if (lc) {
         style.addProperty("svg:stroke-color", toQColor(lc->lineColor).name(),
                           KoGenStyle::GraphicType);
+    }
+    // 2.3.8.2 lineOpacity
+    const LineOpacity* lo = get<LineOpacity>(o);
+    if (lo) {
+        style.addProperty("svg:stroke-opacity", lo->lineOpacity / 0x10000f);
+    }
+    // 2.3.8.5 lineType
+    // solid, pattern or texture
+    // 2.3.8.14 lineWidth
+    const LineWidth* lw = get<LineWidth>(o);
+    if (lw) {
+        style.addProperty("svg:stroke-width",
+                          QString("%1pt").arg(lw->lineWidth / 12700.f),
+                          KoGenStyle::GraphicType);
+    }
+    // 2.3.8.16 lineStyle
+    // single, double, tiple etc line
+    // 2.3.8.17 lineDashing
+    const LineDashing* ld = get<LineDashing>(o);
+
+    // This is not nearly complete. left, right, top and bottom lines not yes
+    // supported.
+    // for now, go by the assumption that there is only a line
+    // when fUsefLine and fLine are true
+    const LineStyleBooleanProperties* bp = get<LineStyleBooleanProperties>(o);
+    if (bp && bp->fUsefLine && bp->fLine) {
+        if (bp->fNoLineDrawDash) {
+            style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
+        } else if (ld) {
+            if (ld->lineDashing == 0 || ld->lineDashing >= 11) { // solid
+                style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+            } else {
+                style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+                style.addProperty("draw:stroke-dash", dashses[ld->lineDashing],
+                                  KoGenStyle::GraphicType);
+            }
+        } else {
+            // default style is a solid line, this must be set explicitly as long
+            // as kpresenter takes draw:stroke="none" as default
+            style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+        }
     }
 
     const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);

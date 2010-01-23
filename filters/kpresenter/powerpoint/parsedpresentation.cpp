@@ -27,8 +27,8 @@ parseCurrentUserStream(POLE::Storage& storage, CurrentUserStream& cus)
     LEInputStream stream(&buffer);
     parseCurrentUserStream(stream, cus);
     if (stream.getPosition() != buffer.size()) {
-        qDebug() << (buffer.size()-stream.getPosition())
-                << "bytes left at the end of CurrentUserStream";
+        qDebug() << (buffer.size() - stream.getPosition())
+        << "bytes left at the end of CurrentUserStream";
         return false;
     }
     return true;
@@ -43,8 +43,8 @@ parsePowerPointStructs(POLE::Storage& storage, PowerPointStructs& pps)
     LEInputStream stream(&buffer);
     parsePowerPointStructs(stream, pps);
     if (stream.getPosition() != buffer.size()) {
-        qDebug() << (buffer.size()-stream.getPosition())
-                << "bytes left at the end of PowerPointStructs, so probably an error at position " << stream.getMaxPosition();
+        qDebug() << (buffer.size() - stream.getPosition())
+        << "bytes left at the end of PowerPointStructs, so probably an error at position " << stream.getMaxPosition();
         return false;
     }
     return true;

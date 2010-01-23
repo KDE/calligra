@@ -576,12 +576,16 @@ class FillStyleBooleanProperties;
 void parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanProperties& _s);
 class LineColor;
 void parseLineColor(LEInputStream& in, LineColor& _s);
+class LineOpacity;
+void parseLineOpacity(LEInputStream& in, LineOpacity& _s);
 class LineBackColor;
 void parseLineBackColor(LEInputStream& in, LineBackColor& _s);
 class LineFillBlip;
 void parseLineFillBlip(LEInputStream& in, LineFillBlip& _s);
 class LineWidth;
 void parseLineWidth(LEInputStream& in, LineWidth& _s);
+class LineStyle;
+void parseLineStyle(LEInputStream& in, LineStyle& _s);
 class LineDashing;
 void parseLineDashing(LEInputStream& in, LineDashing& _s);
 class LineStartArrowhead;
@@ -3416,6 +3420,12 @@ public:
     OfficeArtCOLORREF lineColor;
     LineColor(void* /*dummy*/ = 0) {}
 };
+class LineOpacity : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 lineOpacity;
+    LineOpacity(void* /*dummy*/ = 0) {}
+};
 class LineBackColor : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -3433,6 +3443,12 @@ public:
     OfficeArtFOPTEOPID opid;
     quint32 lineWidth;
     LineWidth(void* /*dummy*/ = 0) {}
+};
+class LineStyle : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 lineStyle;
+    LineStyle(void* /*dummy*/ = 0) {}
 };
 class LineDashing : public StreamOffset {
 public:
@@ -3973,9 +3989,11 @@ public:
         explicit anonChoice(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit anonChoice(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit anonChoice(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
