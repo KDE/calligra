@@ -141,7 +141,7 @@ protected slots:
     void mousePositionChanged(const QPoint &position);
     void pageOffsetChanged();
 
-    void updateUnit(KoUnit unit);
+    void updateUnit(const KoUnit &unit);
 
     void applyFillToSelection();
     void applyStrokeToSelection();
