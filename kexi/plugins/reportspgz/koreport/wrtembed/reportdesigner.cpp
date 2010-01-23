@@ -241,7 +241,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
                 m_interpreter->setValue(it.toElement().attribute("report:script-interpreter"));
                 m_script->setValue(it.firstChild().nodeValue());
             } else if (n == "report:grid") {
-                m_showGrid->setValue(it.toElement().attribute("report:grid-snap", QString::number(1)).toInt() != 0);
+                m_showGrid->setValue(it.toElement().attribute("report:grid-visible", QString::number(1)).toInt() != 0);
                 m_gridSnap->setValue(it.toElement().attribute("report:grid-snap", QString::number(1)).toInt() != 0);
                 m_gridDivisions->setValue(it.toElement().attribute("report:grid-divisions", QString::number(4)).toInt());
                 m_unit->setValue(it.toElement().attribute("report:page-unit", "cm"));
