@@ -408,7 +408,7 @@ KWTextFrameSet *KWDocument::mainFrameSet() const
 KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
-    return static_cast<KoInlineTextObjectManager*>(var.value<void*>());
+    return var.value<KoInlineTextObjectManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString& suggestion)

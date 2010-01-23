@@ -53,7 +53,7 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     bool retval = false;
 
     if ( ! sound.isNull() ) {
-        KPrSoundCollection *soundCollection = static_cast<KPrSoundCollection*>(context.documentResourceManager()->resource(KPresenter::SoundCollection).value<void*>());
+        KPrSoundCollection *soundCollection = context.documentResourceManager()->resource(KPresenter::SoundCollection).value<KPrSoundCollection*>();
 
         if ( soundCollection ) {
             QString href = sound.attributeNS( KoXmlNS::xlink, "href" );

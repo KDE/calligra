@@ -70,7 +70,7 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     // remove the layouts from the last view
     m_layoutsView->clear();
 
-    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(view->kopaDocument()->resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
+    KPrPageLayouts *layouts = view->kopaDocument()->resourceManager()->resource(KPresenter::PageLayouts).value<KPrPageLayouts*>();
 
     Q_ASSERT( layouts );
 

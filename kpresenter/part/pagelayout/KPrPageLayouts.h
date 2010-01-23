@@ -23,6 +23,7 @@
 #include <QMap>
 #include <QString>
 #include <QObject>
+#include <QVariant>
 
 class QRectF;
 class KPrPageLayout;
@@ -56,4 +57,5 @@ private:
     QMap<KPrPageLayoutWrapper, KPrPageLayout *> m_pageLayouts;
 };
 
+Q_DECLARE_METATYPE(KPrPageLayouts*)
 #endif /* KPRPAGELAYOUTS_H */

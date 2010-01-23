@@ -55,7 +55,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
         Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<void*>());
+        KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
         Q_ASSERT(changeTracker);
         doc.setChangeTracker(changeTracker);
         doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
@@ -78,7 +78,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
         doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<void*>());
+        KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
         doc.setChangeTracker(changeTracker);
         doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
     }
@@ -142,7 +142,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             KoTextDocument doc(m_document);
             KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
             doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<void*>());
+            KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             doc.setChangeTracker(changeTracker);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
             doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());

@@ -124,7 +124,7 @@ void KPrClickActionDocker::setView(KoPAView  *view )
     m_view = view;
     if (m_view->kopaDocument()->resourceManager()->hasResource(KPresenter::SoundCollection)) {
         QVariant variant = m_view->kopaDocument()->resourceManager()->resource(KPresenter::SoundCollection);
-        m_soundCollection = static_cast<KPrSoundCollection*>(variant.value<void*>());
+        m_soundCollection = variant.value<KPrSoundCollection*>();
     }
 
     setCanvas(view->kopaCanvas());

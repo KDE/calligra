@@ -86,10 +86,10 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
                                                        "presentation:class" ) );
 
     QVariant variant;
-    variant.setValue<void*>(new KPrSoundCollection(this));
+    variant.setValue(new KPrSoundCollection(this));
     resourceManager()->setResource(KPresenter::SoundCollection, variant);
 
-    variant.setValue<void*>(new KPrPageLayouts(this));
+    variant.setValue(new KPrPageLayouts(this));
     resourceManager()->setResource(KPresenter::PageLayouts, variant);
 
     loadKPrConfig();
@@ -125,7 +125,7 @@ bool KPrDocument::saveOdfEpilogue( KoPASavingContext & context )
 void KPrDocument::saveOdfDocumentStyles( KoPASavingContext & context )
 {
     KoPADocument::saveOdfDocumentStyles( context );
-    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
+    KPrPageLayouts *layouts = resourceManager()->resource(KPresenter::PageLayouts).value<KPrPageLayouts*>();
 
     Q_ASSERT( layouts );
     if ( layouts ) {
@@ -153,7 +153,7 @@ bool KPrDocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext
 
 bool KPrDocument::loadOdfDocumentStyles( KoPALoadingContext & context )
 {
-    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
+    KPrPageLayouts *layouts = resourceManager()->resource(KPresenter::PageLayouts).value<KPrPageLayouts*>();
     if ( layouts ) {
         layouts->loadOdf( context );
     }

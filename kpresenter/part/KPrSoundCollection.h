@@ -22,6 +22,7 @@
 #include <KoDataCenter.h>
 #include <QStringList>
 #include <QObject>
+#include <QVariant>
 
 #include "kpresenter_export.h"
 
@@ -31,7 +32,7 @@ class KoStore;
 /**
  * An collection of KPrSoundData objects to allow loading and saving them all together to the KoStore.
  */
-class KPRESENTER_EXPORT KPrSoundCollection : public QObject, KoDataCenter {
+class KPRESENTER_EXPORT KPrSoundCollection : public QObject, public KoDataCenter {
 public:
     /// constructor
     KPrSoundCollection(QObject *parent = 0);
@@ -65,4 +66,5 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_METATYPE(KPrSoundCollection*)
 #endif
