@@ -198,7 +198,8 @@ QObject* Module::standardPageLayout()
 
 QObject* Module::defaultParagraphStyle()
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    KoStyleManager *styleManager = static_cast<KoStyleManager *>(kwDoc()->resourceManager()->resource(KoText::StyleManager).value<void*>());
+
     Q_ASSERT(styleManager);
     KoParagraphStyle* s = styleManager->defaultParagraphStyle();
     return s ? new ParagraphStyle(this, s) : 0;

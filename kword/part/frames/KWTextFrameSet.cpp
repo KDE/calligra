@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -52,10 +52,10 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     if (m_kwordDocument) {
         KoTextDocument doc(m_document);
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+        KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
         Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTrackerResource).value<void*>());
         Q_ASSERT(changeTracker);
         doc.setChangeTracker(changeTracker);
         doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
@@ -76,9 +76,9 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     if (m_kwordDocument) {
         KoTextDocument doc(m_document);
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+        KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
         doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTrackerResource).value<void*>());
         doc.setChangeTracker(changeTracker);
         doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
     }
@@ -140,9 +140,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         m_document->setDocumentLayout(new KWTextDocumentLayout(this));
         if (m_kwordDocument) {
             KoTextDocument doc(m_document);
-            KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+            KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
             doc.setStyleManager(styleManager);
-            KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+        KoChangeTracker *changeTracker = static_cast<KoChangeTracker *>(m_kwordDocument->resourceManager()->resource(KoText::ChangeTrackerResource).value<void*>());
             doc.setChangeTracker(changeTracker);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
             doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());

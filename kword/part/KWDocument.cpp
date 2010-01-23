@@ -411,7 +411,7 @@ KWTextFrameSet *KWDocument::mainFrameSet() const
 
 KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
-    QVariant var = resourceManager()->resource(KoDocumentResource::InlineTextObjectManager);
+    QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return static_cast<KoInlineTextObjectManager*>(var.value<void*>());
 }
 
@@ -467,7 +467,8 @@ void KWDocument::initEmpty()
 
     appendPage("Standard");
 
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap()["StyleManager"]);
+    Q_ASSERT(resourceManager()->hasResource(KoText::StyleManager));
+    KoStyleManager *styleManager = static_cast<KoStyleManager *>(resourceManager()->resource(KoText::StyleManager).value<void*>());
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
@@ -524,7 +525,7 @@ void KWDocument::clear()
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    if (dataCenterMap().contains("InlineTextObjectManager"))
+    if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
