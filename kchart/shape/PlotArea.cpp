@@ -44,7 +44,6 @@
 #include <KoViewConverter.h>
 #include <KoShapeBackground.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoDataCenter.h>
 
 // KDChart
 #include <KDChartChart>
@@ -595,7 +594,11 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         proxyModel()->setFirstColumnIsLabel( false );
     }
 
-    QAbstractItemModel *sheetAccessModel = dynamic_cast<QAbstractItemModel*>( d->shape->dataCenterMap()["SheetAccessModel"] );
+    QAbstractItemModel *sheetAccessModel = 0;
+    if (d->shape->resourceManager()->hasResource(75751149)) { // duplicated from kspread
+        QVariant var = d->shape->resourceManager()->resource(75751149);
+        sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
+    }
 
     QString sheetName;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )

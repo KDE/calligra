@@ -61,7 +61,6 @@
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
-#include <KoDataCenter.h>
 #include <KoTextShapeData.h>
 
 // KDE + Qt includes
@@ -141,12 +140,10 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
 
     // Init shape Factories with our frame based configuration panels.
-    // and ask every shapefactory to populate the dataCenterMap
     QList<KoShapeConfigFactoryBase *> panels = KWFrameDialog::panels(this);
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->setOptionPanels(panels);
-        shapeFactory->populateDataCenterMap(m_dataCenterMap);
     }
 
     resourceManager()->setUndoStack(undoStack());
@@ -163,7 +160,6 @@ KWDocument::~KWDocument()
     delete m_magicCurtain;
     saveConfig();
     qDeleteAll(m_frameSets);
-    qDeleteAll(m_dataCenterMap);
 }
 
 void KWDocument::addShape(KoShape *shape)
@@ -706,19 +702,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // Note that more stuff will happen in completeLoading
     firePageSetupChanged();
     setModified(false);
-}
-
-bool KWDocument::completeLoading(KoStore *store)
-{
-    bool ok = true;
-    foreach (KoDataCenter *dataCenter, m_dataCenterMap) {
-        ok = ok && dataCenter->completeLoading(store);
-    }
-    foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, false);
-    }
-    return ok;
 }
 
 bool KWDocument::saveOdf(SavingContext &documentContext)

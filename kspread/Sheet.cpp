@@ -177,8 +177,12 @@ Sheet::Sheet(Map* map, const QString& sheetName)
         , KoShapeControllerBase()
         , d(new Private)
 {
-    if (map->doc())
+    if (map->doc()) {
         resourceManager()->setUndoStack(map->doc()->undoStack());
+        QVariant variant;
+        variant.setValue<void*>(map->doc()->sheetAccessModel());
+        resourceManager()->setResource(75751149, variant); // duplicated in kchart.
+    }
     if (s_mapSheets == 0)
         s_mapSheets = new QHash<int, Sheet*>;
 
@@ -363,11 +367,6 @@ void Sheet::removeShape(KoShape* shape)
             }
         }
     }
-}
-
-QMap<QString, KoDataCenter*> Sheet::dataCenterMap() const
-{
-    return doc() ? doc()->dataCenterMap() : QMap<QString, KoDataCenter*>();
 }
 
 QList<KoShape*> Sheet::shapes() const
@@ -2322,7 +2321,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
-                    KoShapeLoadingContext shapeLoadingContext(odfContext, dataCenterMap(), resourceManager());
+                    KoShapeLoadingContext shapeLoadingContext(odfContext, resourceManager());
                     KoXmlElement element;
                     forEachElement(element, rowElement) {
                         if (element.namespaceURI() != KoXmlNS::draw)

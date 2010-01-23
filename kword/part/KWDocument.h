@@ -97,11 +97,6 @@ public:
         return &m_pageManager;
     }
 
-    /// @return the data center map for this document.
-    QMap<QString, KoDataCenter *>  dataCenterMap() const {
-        return m_dataCenterMap;
-    }
-
     /**
      * Insert a new page after another,
      * creating followup frames (but not headers/footers),
@@ -199,10 +194,6 @@ private slots:
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
-protected:
-    /// reimplemented from KoDocument
-    virtual bool completeLoading(KoStore *store);
-
 private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
@@ -231,8 +222,6 @@ private:
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
-
-    QMap<QString, KoDataCenter *>  m_dataCenterMap;
 
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;

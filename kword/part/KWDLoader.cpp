@@ -489,7 +489,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
 
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
         Q_ASSERT(factory);
-        KoShape *shape = factory->createDefaultShape(m_document->dataCenterMap(), m_document->resourceManager());
+        KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
         shape->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
 
         KoImageCollection *collection = m_document->resourceManager()->imageCollection();
@@ -545,7 +545,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
         if (frameElem.tagName() == "FRAME") {
             KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
-            KoShape *shape = factory->createDefaultShape(m_document->dataCenterMap(), m_document->resourceManager());
+            KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
             KWTextFrame *frame = new KWTextFrame(shape, fs);
             fill(frame, frameElem);
 
@@ -576,7 +576,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                 cursor.insertBlock(emptyTbf, emptyCf);
             }
 
-            KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
+            KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_document->resourceManager()->resource(KoText::StyleManager).value<void*>());
             Q_ASSERT(styleManager);
 
             firstParag = false;
@@ -1114,7 +1114,8 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement)
 
 void KWDLoader::loadStyleTemplates(const KoXmlElement &stylesElem)
 {
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
+    KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_document->resourceManager()->resource(KoText::StyleManager).value<void*>());
+
     Q_ASSERT(styleManager);
 
     KoXmlElement style;

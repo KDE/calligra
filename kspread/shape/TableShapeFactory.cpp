@@ -60,16 +60,12 @@ TableShapeFactory::~TableShapeFactory()
 {
 }
 
-void TableShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
-{
-}
-
 bool TableShapeFactory::supports(const KoXmlElement &element) const
 {
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
 
-KoShape *TableShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *TableShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
     TableShape *shape = new TableShape();
     shape->setShapeId(TableShapeId);

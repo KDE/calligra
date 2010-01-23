@@ -31,8 +31,9 @@ public:
     QList<KPrSoundData*> sounds;
 };
 
-KPrSoundCollection::KPrSoundCollection()
-    : d(new Private())
+KPrSoundCollection::KPrSoundCollection(QObject *parent)
+    : QObject(parent),
+    d(new Private())
 {
 }
 

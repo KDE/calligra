@@ -27,6 +27,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KPrSoundData.h>
 #include <KPrSoundCollection.h>
+#include <KPresenter.h>
 
 #include <kdebug.h>
 
@@ -52,7 +53,8 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     bool retval = false;
 
     if ( ! sound.isNull() ) {
-        KPrSoundCollection * soundCollection = dynamic_cast<KPrSoundCollection *>( context.dataCenter( "SoundCollection" ) );
+        KPrSoundCollection *soundCollection = static_cast<KPrSoundCollection*>(context.documentResourceManager()->resource(KPresenter::SoundCollection).value<void*>());
+
         if ( soundCollection ) {
             QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
             if ( !href.isEmpty() ) {

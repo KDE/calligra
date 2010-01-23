@@ -19,7 +19,6 @@
 
 #include <QStandardItemModel>
 
-#include "KoDataCenter.h"
 #include "Sheet.h"
 
 namespace KSpread {
@@ -43,17 +42,12 @@ namespace KSpread {
      * view->setModel( firstSheet.data() );
      * @endcode
      */
-    class SheetAccessModel : public QStandardItemModel, public KoDataCenter
+    class SheetAccessModel : public QStandardItemModel
     {
         Q_OBJECT
 
     public:
         SheetAccessModel( Map *map );
-
-        // reimplemented from KoDataCenter
-        bool completeSaving( KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context );
-        // reimplemented from KoDataCenter
-        bool completeLoading( KoStore *store );
 
     public Q_SLOTS:
         void slotSheetAdded( Sheet *sheet );

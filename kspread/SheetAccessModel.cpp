@@ -62,21 +62,6 @@ SheetAccessModel::SheetAccessModel( Map *map )
     setColumnCount( 0 );
 }
 
-
-bool SheetAccessModel::completeLoading(KoStore *store)
-{
-    Q_UNUSED(store);
-    return true;
-}
-
-bool SheetAccessModel::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context)
-{
-    Q_UNUSED(store);
-    Q_UNUSED(manifestWriter);
-    Q_UNUSED(context);
-    return true;
-}
-
 void SheetAccessModel::slotSheetAdded( Sheet *sheet )
 {
     QStandardItem *item = new QStandardItem;

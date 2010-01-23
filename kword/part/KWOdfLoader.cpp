@@ -38,7 +38,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoTextShapeData.h>
-#include <KoDataCenter.h>
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
@@ -110,7 +109,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     }
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
-    KoShapeLoadingContext sc(odfContext, m_document->dataCenterMap(), m_document->resourceManager());
+    KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
 
     // Load all styles before the corresponding paragraphs try to use them!
     KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
@@ -270,7 +269,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles(true);
 
-    KoShapeLoadingContext ctxt(context, m_document->dataCenterMap(), m_document->resourceManager());
+    KoShapeLoadingContext ctxt(context, m_document->resourceManager());
     KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);

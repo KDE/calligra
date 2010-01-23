@@ -916,7 +916,7 @@ Axis::Axis( PlotArea *parent )
     setShowMajorGrid( false );
     setShowMinorGrid( false );
     
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape(parent->parent()->dataCenterMap(), 0);
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape();
     if ( d->title ) {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );
         if ( d->titleData == 0 ) {

@@ -54,7 +54,6 @@ class KoGenStyles;
 class KoOasisSettings;
 class KoStore;
 class KoXmlWriter;
-class KoDataCenter;
 
 #define MIME_TYPE "application/x-kspread"
 
@@ -66,6 +65,7 @@ class View;
 class Map;
 class Region;
 class UndoAction;
+class SheetAccessModel;
 
 /**
  * This class holds the data that makes up a spreadsheet.
@@ -110,9 +110,6 @@ public:
     virtual QByteArray mimeType() const {
         return MIME_TYPE;
     }
-
-    // KoShapeControllerBase interface // TODO; this is not a KoShapeControllerBase!! Sheet is.
-    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
     /**
      * @return the Map that belongs to this Document
@@ -242,6 +239,8 @@ public:
 
     // repaint (update) all views
     void repaint(const QRectF&);
+
+    SheetAccessModel *sheetAccessModel() const;
 
 #if 0 // UNDOREDOLIMIT
     int undoRedoLimit() const;

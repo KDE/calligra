@@ -44,7 +44,8 @@ public:
     KPrPageLayout * layout;
 };
 
-KPrPageLayouts::KPrPageLayouts()
+KPrPageLayouts::KPrPageLayouts(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -54,20 +55,6 @@ KPrPageLayouts::~KPrPageLayouts()
     for ( ; it != m_pageLayouts.end(); ++it ) {
         delete it.value();
     }
-}
-
-bool KPrPageLayouts::completeLoading( KoStore *store )
-{
-    Q_UNUSED( store );
-    return true;
-}
-
-bool KPrPageLayouts::completeSaving( KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context )
-{
-    Q_UNUSED( store );
-    Q_UNUSED( manifestWriter );
-    Q_UNUSED( context );
-    return true;
 }
 
 bool KPrPageLayouts::saveOdf( KoPASavingContext & context )

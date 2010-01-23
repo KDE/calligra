@@ -86,10 +86,11 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
                                                        "presentation:class" ) );
 
     QVariant variant;
-    variant.setValue<void*>(new KPrSoundCollection());
+    variant.setValue<void*>(new KPrSoundCollection(this));
     resourceManager()->setResource(KPresenter::SoundCollection, variant);
 
-    insertIntoDataCenterMap( PageLayouts, new KPrPageLayouts() );
+    variant.setValue<void*>(new KPrPageLayouts(this));
+    resourceManager()->setResource(KPresenter::PageLayouts, variant);
 
     loadKPrConfig();
 }
@@ -124,7 +125,8 @@ bool KPrDocument::saveOdfEpilogue( KoPASavingContext & context )
 void KPrDocument::saveOdfDocumentStyles( KoPASavingContext & context )
 {
     KoPADocument::saveOdfDocumentStyles( context );
-    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( dataCenterMap().value( PageLayouts ) );
+    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
+
     Q_ASSERT( layouts );
     if ( layouts ) {
         layouts->saveOdf( context );
@@ -151,8 +153,7 @@ bool KPrDocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext
 
 bool KPrDocument::loadOdfDocumentStyles( KoPALoadingContext & context )
 {
-    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( dataCenterMap().value( PageLayouts ) );
-    Q_ASSERT( layouts );
+    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
     if ( layouts ) {
         layouts->loadOdf( context );
     }

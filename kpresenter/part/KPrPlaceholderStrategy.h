@@ -55,7 +55,7 @@ public:
 
     virtual ~KPrPlaceholderStrategy();
 
-    virtual KoShape *createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources);
+    virtual KoShape *createShape(KoResourceManager *documentResources);
 
     virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect );
 
@@ -63,7 +63,7 @@ public:
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
-    virtual void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    virtual void init(KoResourceManager *documentResources);
 
     virtual KoShapeUserData * userData() const;
 

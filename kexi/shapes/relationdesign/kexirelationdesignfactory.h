@@ -23,7 +23,7 @@
 class KexiRelationDesignFactory : public KoShapeFactory {
     public:
         KexiRelationDesignFactory( QObject *parent );
-        virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources = 0) const;
+        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
         virtual bool supports(const KoXmlElement & e) const;
 };
 

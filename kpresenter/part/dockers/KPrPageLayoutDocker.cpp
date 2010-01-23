@@ -28,6 +28,7 @@
 #include <KoPADocument.h>
 
 #include "KPrPage.h"
+#include "KPresenter.h"
 #include "KPrView.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
@@ -69,7 +70,8 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     // remove the layouts from the last view
     m_layoutsView->clear();
 
-    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( view->kopaDocument()->dataCenterMap()[ PageLayouts ] );
+    KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(view->kopaDocument()->resourceManager()->resource(KPresenter::PageLayouts).value<void*>());
+
     Q_ASSERT( layouts );
 
     const QList<KPrPageLayout *> layoutMap = layouts->layouts();

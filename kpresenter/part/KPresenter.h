@@ -24,12 +24,13 @@
 
 #include <KoResourceManager.h>
 
-/// The kword-global namespace for all KWord related things.
+/// The kpresenter-global namespace for all KPresenter related things.
 namespace KPresenter
 {
     /// Specifies the KPresenter specific resources that you can put and get from the KoResourceManager
     enum KPresenterDocumentResources {
-        SoundCollection = KoDocumentResource::KPresenterStart + 1
+        SoundCollection = KoDocumentResource::KPresenterStart + 1,
+        PageLayouts ///< of type KPrPageLayouts
     };
 }
 

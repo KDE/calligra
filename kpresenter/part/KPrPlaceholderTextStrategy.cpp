@@ -56,9 +56,9 @@ KPrPlaceholderTextStrategy::~KPrPlaceholderTextStrategy()
     delete m_paragraphStyle;
 }
 
-KoShape *KPrPlaceholderTextStrategy::createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources)
+KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentResources)
 {
-    KoShape * shape = KPrPlaceholderStrategy::createShape(dataCenterMap, documentResources);
+    KoShape * shape = KPrPlaceholderStrategy::createShape(documentResources);
     if ( m_textShape ) {
         KoTextShapeData * data = qobject_cast<KoTextShapeData*>( m_textShape->userData() );
         KoTextShapeData * newData = qobject_cast<KoTextShapeData*>( shape->userData() );
@@ -141,7 +141,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
 
         KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
         Q_ASSERT( factory );
-        m_textShape = factory->createDefaultShape(context.dataCenterMap(), context.documentResourceManager());
+        m_textShape = factory->createDefaultShape(context.documentResourceManager());
 
         KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
         shapeData->document()->setUndoRedoEnabled(false);
@@ -160,13 +160,13 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     return true;
 }
 
-void KPrPlaceholderTextStrategy::init(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources)
+void KPrPlaceholderTextStrategy::init(KoResourceManager *documentResources)
 {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
     KoProperties props;
     props.setProperty("text", text());
-    m_textShape = factory->createShape(&props, dataCenterMap, documentResources);
+    m_textShape = factory->createShape(&props, documentResources);
 }
 
 KoShapeUserData * KPrPlaceholderTextStrategy::userData() const

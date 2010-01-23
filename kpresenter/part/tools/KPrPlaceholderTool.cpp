@@ -79,7 +79,7 @@ void KPrPlaceholderTool::activate( bool temporary )
 
     KPrPlaceholderShape * shape = selectedShapes.at( 0 );
 
-    KoShape * newShape = shape->createShape(canvas()->shapeController()->dataCenterMap(), canvas()->shapeController()->resourceManager());
+    KoShape * newShape = shape->createShape(canvas()->shapeController()->resourceManager());
     // only do anything when we got a shape back
     if ( newShape ) {
         // copy settings from placeholder shape

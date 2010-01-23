@@ -115,7 +115,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
         QList<QRectF>::const_iterator listIt( list.begin() );
         for ( ; listIt != list.end(); ++listIt ) {
              KPrPlaceholderShape * shape = new KPrPlaceholderShape( itPlaceholder.key() );
-             shape->initStrategy( document->dataCenterMap() );
+             shape->initStrategy(document->resourceManager());
              shape->setAdditionalAttribute( "presentation:placeholder", "true" );
              shape->setAdditionalAttribute( "presentation:class", itPlaceholder.key() );
              shape->setSize( ( * listIt ).size() );

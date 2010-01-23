@@ -41,9 +41,9 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    KoShape *createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources);
+    KoShape *createShape(KoResourceManager *documentResources);
 
-    virtual void initStrategy( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    virtual void initStrategy(KoResourceManager *documentResources);
     KoShapeUserData * userData() const;
 private:
     KPrPlaceholderStrategy * m_strategy;

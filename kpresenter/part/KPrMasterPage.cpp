@@ -21,6 +21,8 @@
 
 #include "pagelayout/KPrPageLayouts.h"
 #include <KoXmlNS.h>
+//#include <KoResourceManager.h>
+#include "KPresenter.h"
 #include <KoPALoadingContext.h>
 #include <kdebug.h>
 
@@ -42,7 +44,7 @@ void KPrMasterPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingCo
     // the layout needs to be loaded after the shapes are already loaded so the initialization of the data works
     KPrPageLayout * layout = 0;
     if ( element.hasAttributeNS( KoXmlNS::presentation, "presentation-page-layout-name" ) ) {
-        KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
+        KPrPageLayouts *layouts = static_cast<KPrPageLayouts*>(loadingContext.documentResourceManager()->resource(KPresenter::PageLayouts).value<void*>());
         Q_ASSERT( layouts );
         if ( layouts ) {
             QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );

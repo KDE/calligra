@@ -47,6 +47,7 @@ class QColor;
 class QString;
 class QFont;
 
+class KoResourceManager;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoStore;
@@ -101,13 +102,13 @@ class CHARTSHAPELIB_EXPORT ChartShape
     Q_INTERFACES(KoChart::ChartInterface)
 
 public:
-    ChartShape();
+    ChartShape(KoResourceManager *documentResourceManager);
     ~ChartShape();
-    
+
     // Getter methods
     QAbstractItemModel  *model()      const;
     ChartProxyModel     *proxyModel() const;
-    
+
     // Parts of the chart
     KoShape        *title() const;
     TextLabelData  *titleData() const;
@@ -121,59 +122,58 @@ public:
     void showTitle();
     void showSubTitle();
     void showFooter();
-    
+
     // Setter methods
     void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
     void setModel( QAbstractItemModel *model, const QVector<QRect> &selection );
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
-    
+
     void setPosition( const QPointF &size );
     void setSize( const QSizeF &size );
 
     void setLegendSize( const QSizeF &size );
-    
+
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
     bool          isThreeD() const;
-    
+
     // Inherited from chart interface
     void setFirstRowIsLabel( bool isLabel );
     void setFirstColumnIsLabel( bool isLabel );
     void setDataDirection( Qt::Orientation orientation );
-    
+
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype subType );
     void setThreeD( bool threeD );
-    
+
     /// reimplemented
     void paintComponent( QPainter &painter, const KoViewConverter &converter );
     void paintDecorations( QPainter &painter, const KoViewConverter &converter,
                            const KoCanvasBase *canvas );
-    
+
     /// reimplemented
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
-    
+
     bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
     bool loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
 
-    void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
-    
     void updateChildrenPositions();
-    
+
     using KoShapeContainer::update;
     /// reimplemented
     void update() const;
     void relayout() const;
-    
+
     void requestRepaint() const;
-    
-    QMap<QString, KoDataCenter*> dataCenterMap() const;
+
+    /// the document resource manager we got on construction
+    KoResourceManager *resourceManager() const;
 
 signals:
     void chartTypeChanged( ChartType );
@@ -181,7 +181,7 @@ signals:
 private:
     class Private;
     Private *const d;
-    
+
     void showLabel( KoShape *label );
 };
 

@@ -377,7 +377,7 @@ void KoFormulaTool::loadFormula()
 
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext( stylesReader, 0 );
-    KoShapeLoadingContext shapeContext(odfContext, canvas()->shapeController()->dataCenterMap(), canvas()->shapeController()->resourceManager());
+    KoShapeLoadingContext shapeContext(odfContext, canvas()->shapeController()->resourceManager());
 
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;

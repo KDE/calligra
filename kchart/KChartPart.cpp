@@ -66,7 +66,6 @@ using std::cerr;
 #include <KoOdfWriteStore.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
-#include <KoDataCenter.h>
 
 // KDChart
 #include "KDChartChart"
@@ -98,7 +97,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
     m_chartData( 0 )
 {
     // A KChart part contains a single chart Flake shape. 
-    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape(dataCenterMap(), resourceManager());
+    m_chartShape = (ChartShape*)(KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape(resourceManager());
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
@@ -323,14 +322,6 @@ void KChartPart::addShape( KoShape *shape )
 
 void KChartPart::removeShape( KoShape* )
 {
-}
-
-QMap<QString, KoDataCenter *> KChartPart::dataCenterMap() const
-{
-    //Q_ASSERT(false);
-    // if the kchart app ever supports more than a single shape this should be implemented
-    // along with several other methods - see any other app or ask boemann
-    return QMap<QString, KoDataCenter *>() ;
 }
 
 // ----------------------------------------------------------------
@@ -643,7 +634,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
 #endif
 
     KoOdfLoadingContext  context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext shapeContext(context, dataCenterMap(), resourceManager());
+    KoShapeLoadingContext shapeContext(context, resourceManager());
 
     // ----------------------------------------------------------------
     // FIXME: Load chart here.

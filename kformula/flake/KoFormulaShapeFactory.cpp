@@ -43,7 +43,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
 {}
 
-KoShape *KoFormulaShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *KoFormulaShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     KoFormulaShape* formula = new KoFormulaShape();
     formula->setShapeId( KoFormulaShapeId );

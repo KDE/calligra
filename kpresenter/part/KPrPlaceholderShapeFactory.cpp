@@ -41,7 +41,7 @@ KPrPlaceholderShapeFactory::~KPrPlaceholderShapeFactory()
 {
 }
 
-KoShape *KPrPlaceholderShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     return new KPrPlaceholderShape();
 }

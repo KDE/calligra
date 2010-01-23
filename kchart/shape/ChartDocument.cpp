@@ -102,9 +102,7 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
         return false;
     }
     KoOdfLoadingContext odfLoadingContext( odfStore.styles(), odfStore.store() );
-    // tz: check if it is possible to get a dataCenterMap otherwise thinks like styles may not work
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext context( odfLoadingContext, dataCenterMap, 0);
+    KoShapeLoadingContext context(odfLoadingContext, d->parent->resourceManager());
 
     return d->parent->loadOdfEmbedded( chartElement, context );
 }

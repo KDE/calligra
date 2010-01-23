@@ -85,21 +85,21 @@ void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // draw:frame
 }
 
-KoShape *KPrPlaceholderShape::createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources)
+KoShape *KPrPlaceholderShape::createShape(KoResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     KoShape * shape = 0;
     if ( m_strategy ) {
-        shape = m_strategy->createShape(dataCenterMap, documentResources);
+        shape = m_strategy->createShape(documentResources);
     }
     return shape;
 }
 
-void KPrPlaceholderShape::initStrategy( const QMap<QString, KoDataCenter *> & dataCenterMap )
+void KPrPlaceholderShape::initStrategy(KoResourceManager *documentResources)
 {
     Q_ASSERT( m_strategy );
     if ( m_strategy ) {
-        m_strategy->init( dataCenterMap );
+        m_strategy->init(documentResources);
     }
 }
 

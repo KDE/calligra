@@ -280,11 +280,12 @@ public:
 
     ChartShape *shape;		// The chart that owns this ChartShape::Private
 
-    QMap<QString, KoDataCenter*> dataCenterMap;
+    KoResourceManager *resourceManager;
 };
 
 
 ChartShape::Private::Private( ChartShape *shape )
+    : resourceManager(0)
 {
     // Register the owner.
     this->shape = shape;
@@ -371,10 +372,11 @@ void ChartShape::Private::showLabel( KoShape *label )
 // ================================================================
 
 
-ChartShape::ChartShape()
+ChartShape::ChartShape(KoResourceManager *resourceManager)
     : KoFrameShape( KoXmlNS::draw, "object" )
     , d ( new Private( this ) )
 {
+    d->resourceManager = resourceManager;
     setShapeId( ChartShapeId );
 
     // Instantiated all children first
@@ -402,10 +404,7 @@ ChartShape::ChartShape()
     setChartSubType( NormalChartSubtype );
 
     // Create the Title, which is a standard TextShape.
-    // We use a empty dataCenterMap here for the creation and then in
-    // init() we init the shapes with the correct data.
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    d->title = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
+    d->title = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
     if ( !d->title ) {
         d->title = new TextLabelDummy;
         KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
@@ -434,7 +433,7 @@ ChartShape::ChartShape()
     setClipping( d->title, true );
 
     // Create the Subtitle and add it to the shape.
-    d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
+    d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
     if ( !d->subTitle ) {
         d->subTitle = new TextLabelDummy;
     }
@@ -455,7 +454,7 @@ ChartShape::ChartShape()
     setClipping( d->subTitle, true );
 
     // Create the Footer and add it to the shape.
-    d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(dataCenterMap, 0);
+    d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
     if ( !d->footer ) {
         d->footer = new TextLabelDummy;
     }
@@ -1382,14 +1381,6 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.endElement(); // table:table
 }
 
-void ChartShape::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
-{
-    d->dataCenterMap = dataCenterMap;
-    d->title->init( dataCenterMap );
-    d->subTitle->init( dataCenterMap );
-    d->footer->init( dataCenterMap );
-}
-
 void ChartShape::update() const
 {
     KoShape::update();
@@ -1408,9 +1399,9 @@ void ChartShape::requestRepaint() const
     d->plotArea->requestRepaint();
 }
 
-QMap<QString, KoDataCenter*> ChartShape::dataCenterMap() const
+KoResourceManager *ChartShape::resourceManager() const
 {
-    return d->dataCenterMap;
+    return d->resourceManager;
 }
 
 } // Namespace KChart

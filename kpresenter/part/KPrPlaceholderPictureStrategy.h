@@ -27,7 +27,7 @@ class KPrPlaceholderPictureStrategy : public KPrPlaceholderStrategy
 public:
     virtual ~KPrPlaceholderPictureStrategy();
 
-    virtual KoShape *createShape(const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documenResources);
+    virtual KoShape *createShape(KoResourceManager *documenResources);
 
 protected:
     /**

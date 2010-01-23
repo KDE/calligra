@@ -36,7 +36,7 @@ KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()
 {
 }
 
-KoShape *KarbonCalligraphicShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
+KoShape *KarbonCalligraphicShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     KarbonCalligraphicShape *path = new KarbonCalligraphicShape();
 

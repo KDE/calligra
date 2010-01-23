@@ -510,7 +510,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     tableContext.validities = Validity::preloadValidities(body); // table:content-validations
 
     // load text styles for rich-text content
-    KoShapeLoadingContext shapeContext(odfContext, doc()->dataCenterMap(), 0); // TODO find a proper documentResourceManager somewhere.
+    KoShapeLoadingContext shapeContext(odfContext, 0); // TODO find a proper documentResourceManager somewhere.
     tableContext.shapeContext = &shapeContext;
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(odfContext, textStyleManager());

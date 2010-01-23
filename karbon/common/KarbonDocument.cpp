@@ -66,11 +66,6 @@ public:
             , hasExternalDataCenterMap(false),
             resourceManager(0)
     {
-        // Ask every shapefactory to populate the dataCenterMap
-        foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
-            KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-            shapeFactory->populateDataCenterMap(dataCenterMap);
-        }
     }
 
     ~Private()
@@ -395,6 +390,5 @@ KoResourceManager *KarbonDocument::resourceManager() const
 
 void KarbonDocument::setResourceManager(KoResourceManager *rm)
 {
-    //delete d->resourceManager;
     d->resourceManager = rm;
 }

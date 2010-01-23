@@ -37,13 +37,12 @@
 class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
-class KoDataCenter;
 class KoResourceManager;
 
 class SvgParser
 {
 public:
-    SvgParser(const QMap<QString, KoDataCenter*> &dataCenters, KoResourceManager *documentResourceManager);
+    SvgParser(KoResourceManager *documentResourceManager);
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes
@@ -158,7 +157,6 @@ private:
     QMap<QString, KoXmlElement>     m_defs;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
-    QMap<QString, KoDataCenter*> m_dataCenters;
     KoResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;

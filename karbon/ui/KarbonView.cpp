@@ -451,7 +451,7 @@ void KarbonView::fileImportGraphic()
             return;
         }
 
-        KoShape *picture = factory->createDefaultShape(dataCenters, part()->document().resourceManager());
+        KoShape *picture = factory->createDefaultShape(part()->document().resourceManager());
         KoImageCollection *imageCollection = part()->document().resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
