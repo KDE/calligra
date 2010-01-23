@@ -243,6 +243,87 @@ enum {
 namespace
 {
 static const QString mm("%1mm");
+
+/**
+  Retrieve an option from a class that has member fopt that is an array of type
+  OfficeArtFOPTEChoice.
+  A is the type of the required option and C is the member pointer.
+  **/
+template <typename A, typename B>
+const A*
+get(const B& b)
+{
+    foreach(const OfficeArtFOPTEChoice& a, b.fopt) {
+        if (a.anon.is<A>()) {
+            return a.anon.get<A>();
+        }
+    }
+    return 0;
+}
+template <typename A>
+const A*
+get(const OfficeArtSpContainer& o)
+{
+    const A* a = 0;
+    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
+    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
+    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
+    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
+    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
+    return a;
+}
+template <typename A>
+        const A*
+        get(const OfficeArtDggContainer& o)
+{
+    const A* a = 0;
+    a = get<A>(o.drawingPrimaryOptions);
+    if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
+    return a;
+}
+
+qreal
+toFloat(const FixedPoint& f)
+{
+    return f.integral + f.fractional / 65536.0;
+}
+/**
+ * Return the bounding rectangle for this object.
+ **/
+QRect
+getRect(const OfficeArtFSPGR &r)
+{
+    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+}
+/**
+ * Return the bounding rectangle for this object.
+ **/
+QRect
+getRect(const OfficeArtClientAnchor &a)
+{
+    if (a.rect1) {
+        const SmallRectStruct &r = *a.rect1;
+        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    } else {
+        const RectStruct &r = *a.rect2;
+        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    }
+}
+/**
+ * Return the bounding rectangle for this object.
+ **/
+QRect
+getRect(const OfficeArtSpContainer &o)
+{
+    if (o.childAnchor) {
+        const OfficeArtChildAnchor& r = *o.childAnchor;
+        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    } else if (o.clientAnchor) {
+        return getRect(*o.clientAnchor);
+    }
+    return QRect(0, 0, 1, 1);
+}
+
 }
 
 PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter) : xOffset(0),
@@ -257,8 +338,12 @@ PptToOdp::Writer
 PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 {
     Writer w(xml);
+    w.xOffset = xOffset + oldCoords.x()*scaleX;
+    w.yOffset = yOffset + oldCoords.y()*scaleY;
     w.scaleX = scaleX * oldCoords.width() / newCoords.width();
     w.scaleY = scaleY * oldCoords.height() / newCoords.height();
+    w.xOffset -= w.scaleX*newCoords.x();
+    w.yOffset -= w.scaleY*newCoords.y();
     return w;
 }
 QString PptToOdp::Writer::vLength(qreal length)
@@ -269,6 +354,16 @@ QString PptToOdp::Writer::vLength(qreal length)
 QString PptToOdp::Writer::hLength(qreal length)
 {
     return mm.arg(length*scaleX);
+}
+
+QString PptToOdp::Writer::vOffset(qreal offset)
+{
+    return mm.arg(yOffset+offset*scaleY);
+}
+
+QString PptToOdp::Writer::hOffset(qreal offset)
+{
+    return mm.arg(xOffset+offset*scaleX);
 }
 
 PptToOdp::PptToOdp() : p(0)
@@ -502,6 +597,21 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     QString pageHeight = QString("%1in").arg(
                              p->documentContainer->documentAtom.slideSize.y / 576);
 
+    //KoGenStyle defaultStyle(KoGenStyle::StyleUser, "graphic");
+    KoGenStyle defaultStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+    //defaultStyle.setDefaultStyle(true);
+    defaultStyle.setAutoStyleInStylesDotXml(true);
+    const OfficeArtDggContainer& drawingGroup
+            = p->documentContainer->drawingGroup.OfficeArtDgg;
+    processGraphicStyle(defaultStyle, drawingGroup);
+    // add the defaults that were not set yet
+    if (!get<LineWidth>(drawingGroup)) {
+                defaultStyle.addProperty("svg:stroke-width",
+                                  QString("%1pt").arg(0x2535 / 12700.f),
+                                  KoGenStyle::GraphicType);
+    }
+    styles.lookup(defaultStyle, "pptDefaults", KoGenStyles::DontForceNumbering);
+
     KoGenStyle marker(KoGenStyle::StyleMarker);
     marker.addAttribute("draw:display-name", "msArrowEnd 5");
     marker.addAttribute("svg:viewBox", "0 0 210 210");
@@ -570,7 +680,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     text.addProperty("fo:country", "US");
     text.addProperty("style:font-size-asian", "12pt");
     text.addProperty("style:font-size-complex", "12pt");
-
 
     KoGenStyle Mpr(KoGenStyle::StylePresentationAuto, "presentation");
     Mpr.setAutoStyleInStylesDotXml(true);
@@ -675,7 +784,6 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     // office:automatic-styles
     processDocStyles(styles);
 
-    qDebug() << "found " << p->slides.size() << " slides!";
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForStyle(c, styles);
     }
@@ -735,76 +843,7 @@ void PptToOdp::processDocStyles(KoGenStyles &styles)
 
     masterStyleName = styles.lookup(dp);
 }
-/**
-  Retrieve an option from a class that has member fopt that is an array of type
-  OfficeArtFOPTEChoice.
-  A is the type of the required option and C is the member pointer.
-  **/
-template <typename A, typename B>
-const A*
-get(const B& b)
-{
-    foreach(const OfficeArtFOPTEChoice& a, b.fopt) {
-        if (a.anon.is<A>()) {
-            return a.anon.get<A>();
-        }
-    }
-    return 0;
-}
-template <typename A>
-const A*
-get(const OfficeArtSpContainer& o)
-{
-    const A* a = 0;
-    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
-    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
-    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
-    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
-    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
-    return a;
-}
 
-qreal
-toFloat(const FixedPoint& f)
-{
-    return f.integral + f.fractional / 65536.0;
-}
-/**
- * Return the bounding rectangle for this object.
- **/
-QRect
-getRect(const OfficeArtFSPGR &r)
-{
-    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
-}
-/**
- * Return the bounding rectangle for this object.
- **/
-QRect
-getRect(const OfficeArtClientAnchor &a)
-{
-    if (a.rect1) {
-        const SmallRectStruct &r = *a.rect1;
-        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-    } else {
-        const RectStruct &r = *a.rect2;
-        return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-    }
-}
-/**
- * Return the bounding rectangle for this object.
- **/
-QRect
-getRect(const OfficeArtSpContainer &o)
-{
-    if (o.childAnchor) {
-        const OfficeArtChildAnchor& r = *o.childAnchor;
-        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
-    } else if (o.clientAnchor) {
-        return getRect(*o.clientAnchor);
-    }
-    return QRect(0, 0, 1, 1);
-}
 
 void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -813,8 +852,8 @@ void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.endElement(); // draw:ellipse
 }
@@ -840,8 +879,8 @@ void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
         QString rot = rotate.arg(rotAngle).arg(xNew + xMid).arg(yMid - yNew);
         out.xml.addAttribute("draw:transform", rot);
     } else {
-        out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-        out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     }
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.endElement(); // draw:rect
@@ -886,11 +925,11 @@ void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
     } else {
         out.xml.addAttribute("svg:width", out.hLength(rect.width()));
         out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-        out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-        out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     }
-// out.xml.addAttribute( "svg:x", out.hLength(rect.x()) );
-// out.xml.addAttribute( "svg:y", out.vLength(rect.y()) );
+// out.xml.addAttribute( "svg:x", out.hOffset(rect.x()) );
+// out.xml.addAttribute( "svg:y", out.vOffset(rect.y()) );
 
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:enhanced-geometry");
@@ -926,8 +965,8 @@ void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -959,8 +998,8 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -1057,8 +1096,8 @@ void PptToOdp::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
 
     out.xml.startElement("draw:glue-point");
@@ -1129,8 +1168,8 @@ void PptToOdp::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 6.25);
@@ -1236,8 +1275,8 @@ void PptToOdp::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -1293,8 +1332,8 @@ void PptToOdp::processOctagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -1366,8 +1405,8 @@ void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:enhanced-geometry");
 
@@ -1468,8 +1507,8 @@ void PptToOdp::processSmiley(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -1526,8 +1565,8 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -1559,8 +1598,8 @@ void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.endElement(); // path
 }
@@ -1585,8 +1624,8 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
@@ -1913,8 +1952,8 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o, const PPT
 
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hLength(rect.x()));
-    out.xml.addAttribute("svg:y", out.vLength(rect.y()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("presentation:class", classStr);
     out.xml.startElement("draw:text-box");
 
@@ -1992,11 +2031,9 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& 
         if (p->position >= 0 && p->position < currentSlideTexts->atoms.size()) {
             const TextContainer& tc = currentSlideTexts->atoms[p->position];
             processTextObjectForBody(o, tc, out);
-            qDebug() << "awooej " << getText(tc);
         } else {
             processDrawingObjectForBody(o, out);
         }
-        qDebug() << "awoej";
     } else if (o.clientTextbox) { // TODO
         foreach(const TextClientDataSubContainerOrAtom& tc, o.clientTextbox->rgChildRec) {
             if (tc.anon.is<TextContainer>()) {
@@ -2012,7 +2049,6 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
 {
     const SlideContainer* slide = p->slides[slideNo];
     const MasterOrSlideContainer* master = p->getMaster(slide);
-    qDebug() << "slide " << slide << " master " << master;
     if (!master) return;
     int masterNumber = p->masters.indexOf(master);
     if (masterNumber == -1) return;
@@ -2749,28 +2785,6 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
         break;
     }
 }
-void PptToOdp::processGraphicStyles(const PPT::OfficeArtSpContainer& o,
-                                    KoGenStyle& style)
-{
-    const FillBlip* fb = get<FillBlip>(o);
-    const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
-    if (fb) {
-        style.addProperty("draw:fill", "bitmap");
-        style.addProperty("draw:fill-image-name",
-                          "fillImage" + QString::number(fb->fillBlip));
-    } else if (fs && fs->fUseFilled) {
-        style.addProperty("draw:fill", fs->fFilled ? "solid" : "none",
-                          KoGenStyle::GraphicType);
-    }
-    const FillColor* fc = get<FillColor>(o);
-    if (fc) {
-        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(),
-                          KoGenStyle::GraphicType);
-    } else {
-        style.addProperty("draw:fill-color", "#99ccff",
-                          KoGenStyle::GraphicType);
-    }
-}
 
 void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
         const PPT::TextContainer& tc,
@@ -2803,7 +2817,7 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
     // set the presentation style
     QString styleName;
     KoGenStyle kostyle(KoGenStyle::StyleGraphicAuto, "presentation");
-    processGraphicStyles(o, kostyle);
+    processGraphicStyle(kostyle, o);
     styleName = styles.lookup(kostyle);
     setGraphicStyleName(o, styleName);
 }
@@ -2817,13 +2831,10 @@ const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
-
 }
-void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles)
+template <typename T>
+void PptToOdp::processGraphicStyle(KoGenStyle& style, T& o)
 {
-    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
-    style.setParentName("standard");
-
     /** 2.3.8 Line Style **/
     // 2.3.8.1 lineColor
     const LineColor* lc = get<LineColor>(o);
@@ -2872,6 +2883,8 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
             style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
         }
     }
+    style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+
 
     const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);
     if (lsa && lsa->lineStartArrowhead > 0 && lsa->lineStartArrowhead < 6) {
@@ -2896,7 +2909,24 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
         style.addProperty("draw:marker-end-width", QString("%1cm").arg(lw->lineWidth*lew->lineEndArrowWidth), KoGenStyle::GraphicType);
     }
 
-    processGraphicStyles(o, style);
+    const FillBlip* fb = get<FillBlip>(o);
+    const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
+    if (fb) {
+        style.addProperty("draw:fill", "bitmap");
+        style.addProperty("draw:fill-image-name",
+                          "fillImage" + QString::number(fb->fillBlip));
+    } else if (fs && fs->fUseFilled) {
+        style.addProperty("draw:fill", fs->fFilled ? "solid" : "none",
+                          KoGenStyle::GraphicType);
+    }
+    const FillColor* fc = get<FillColor>(o);
+    if (fc) {
+        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(),
+                          KoGenStyle::GraphicType);
+    } else {
+        style.addProperty("draw:fill-color", "#99ccff",
+                          KoGenStyle::GraphicType);
+    }
 
 #if 0
     if (drawObject->hasProperty("draw:shadow-color")) {
@@ -2923,6 +2953,11 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
     if (soy) {
         style.addProperty("draw:shadow-offset-y", QString("%1cm").arg(soy->shadowOffsetY), KoGenStyle::GraphicType);
     }
-
+}
+void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles)
+{
+    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
+    style.setParentName("pptDefaults");
+    processGraphicStyle(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }

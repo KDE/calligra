@@ -62,6 +62,8 @@ private:
         QString hPos(qreal length);
         QString vLength(qreal length);
         QString hLength(qreal length);
+        QString vOffset(qreal offset);
+        QString hOffset(qreal offset);
     };
 
     void createMainStyles(KoGenStyles& styles);
@@ -74,13 +76,14 @@ private:
     void processDrawingObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
+    template <typename T>
+    void processGraphicStyle(KoGenStyle& style, T& o);
     void processSlideForStyle(int slideNo, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
     void processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
     void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles);
-    void processGraphicStyles(const PPT::OfficeArtSpContainer& o, KoGenStyle& style);
 
     /**
     * @brief Write styles (KoGenStyle& style) meant for the whole presentation

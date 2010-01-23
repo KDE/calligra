@@ -111,7 +111,6 @@ ParsedPresentation::parse(POLE::Storage& storage)
         qDebug() << "caught unknown exception!";
         return false;
     }
-    qDebug() << "parsing ok!";
 // Part 1: Construct the persist object directory
     const UserEditAtom* userEditAtom = get<UserEditAtom>(presentation,
                                        currentUserStream.anon1.offsetToCurrentEdit);
@@ -191,7 +190,6 @@ ParsedPresentation::parse(POLE::Storage& storage)
                 return false;
             }
         }
-        qDebug() << "found " << slides.size() << " slides.";
     }
 // Part 7: Identify the notes slide persist object
     if (documentContainer->notesList) {

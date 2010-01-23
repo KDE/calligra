@@ -283,14 +283,18 @@ void DateTimeFormat::setDateStyleName(const QString &name)
 
 QString DateTimeFormat::getDateStyleName() const
 {
+#ifdef LIBDATE_DEBUG
     std::cout << "\n**DateStyleName: " << dateStyleName.toLatin1().data() << "\n";
+#endif
     return dateStyleName;
 }
 
 void DateTimeFormat::setTimeStyleName(const QString &name)
 {
     timeStyleName = name;
+#ifdef LIBDATE_DEBUG
     std::cout << "\n**TimeStyleName:" << timeStyleName.toLatin1().data();
+#endif
 }
 
 QString DateTimeFormat::getTimeStyleName() const
