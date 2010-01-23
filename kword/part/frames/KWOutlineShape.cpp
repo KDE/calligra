@@ -75,7 +75,7 @@ void KWOutlineShape::paintDecorations(QPainter &painter, const KoViewConverter &
 
     applyConversion(painter, converter);
 
-    QPen pen = QPen(canvas->resourceProvider()->koColorResource(KWord::FrameOutlineColor).toQColor());
+    QPen pen = QPen(canvas->resourceManager()->koColorResource(KWord::FrameOutlineColor).toQColor());
     QPointF onePixel = converter.viewToDocument(QPointF(1, 1));
     pen.setWidthF(onePixel.x());
     painter.strokePath(outline(), pen);

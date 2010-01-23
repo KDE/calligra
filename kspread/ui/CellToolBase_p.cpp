@@ -836,10 +836,10 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
 
     case Qt::Key_Ampersand:
         command->setText(i18n("Change Border"));
-        command->setTopBorderPen(QPen(q->canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setBottomBorderPen(QPen(q->canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setLeftBorderPen(QPen(q->canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-        command->setRightBorderPen(QPen(q->canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setTopBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setBottomBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setLeftBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setRightBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
         break;
 
     default:

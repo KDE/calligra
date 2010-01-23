@@ -286,7 +286,7 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
         removeFrame(frame);
     foreach (KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+        canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
 }
 
@@ -356,7 +356,7 @@ void KWDocument::addFrame(KWFrame *frame)
             canvas->shapeManager()->add(frame->outlineShape()->parent());
         else
             canvas->shapeManager()->add(frame->shape());
-        canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+        canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     if (frame->loadingPageNumber() > 0) {
         if (m_magicCurtain == 0) {
@@ -533,7 +533,7 @@ bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
     clear();
     foreach (KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
+        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, true);
     }
     KWOdfLoader loader(this);
     bool rc = loader.load(odfStore);
@@ -546,7 +546,7 @@ bool KWDocument::loadXML(const KoXmlDocument & doc, KoStore *store)
 {
     foreach (KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
+        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, true);
     }
     clear();
     KoXmlElement root = doc.documentElement();
@@ -715,7 +715,7 @@ bool KWDocument::completeLoading(KoStore *store)
     }
     foreach (KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, false);
+        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, false);
     }
     return ok;
 }

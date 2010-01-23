@@ -77,7 +77,7 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    connect(d->canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(resourceChanged(int, const QVariant &)));
 }
 

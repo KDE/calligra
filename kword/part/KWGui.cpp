@@ -81,7 +81,7 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
     gridLayout->addWidget(m_verticalRuler, 1, 0);
     gridLayout->addWidget(m_canvasController, 1, 1);
 
-    new KoRulerController(m_horizontalRuler, m_canvas->resourceProvider());
+    new KoRulerController(m_horizontalRuler, m_canvas->resourceManager());
 
     connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
     connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));

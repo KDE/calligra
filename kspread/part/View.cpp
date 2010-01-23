@@ -737,9 +737,9 @@ void View::initView()
     // Let the selection pointer become a canvas resource.
     QVariant variant;
     variant.setValue<void*>(d->selection);
-    d->canvas->resourceProvider()->setResource(CanvasResource::Selection, variant);
+    d->canvas->resourceManager()->setResource(CanvasResource::Selection, variant);
     variant.setValue<QObject*>(doc()->map()->bindingManager());
-    d->canvas->resourceProvider()->setResource(KoTable::Resource::SourceRangeManager, variant);
+    d->canvas->resourceManager()->setResource(KoTable::Resource::SourceRangeManager, variant);
 
     // Load the KSpread Tools
     ToolRegistry::instance();
@@ -2419,7 +2419,7 @@ void View::reviveSheet(Sheet* sheet)
 
 QColor View::borderColor() const
 {
-    return d->canvas->resourceProvider()->foregroundColor().toQColor();
+    return d->canvas->resourceManager()->foregroundColor().toQColor();
 }
 
 void View::updateShowSheetMenu()

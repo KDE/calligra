@@ -135,12 +135,12 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_I: {
-        uint handleRadius = canvas()->resourceProvider()->handleRadius();
+        uint handleRadius = canvas()->resourceManager()->handleRadius();
         if (event->modifiers() & Qt::ControlModifier)
             handleRadius--;
         else
             handleRadius++;
-        canvas()->resourceProvider()->setHandleRadius(handleRadius);
+        canvas()->resourceManager()->setHandleRadius(handleRadius);
     }
     break;
     default:
@@ -221,8 +221,8 @@ void KarbonPatternTool::activate(bool temporary)
 
     initialize();
 
-    KarbonPatternEditStrategyBase::setHandleRadius(canvas()->resourceProvider()->handleRadius());
-    KarbonPatternEditStrategyBase::setGrabSensitivity(canvas()->resourceProvider()->grabSensitivity());
+    KarbonPatternEditStrategyBase::setHandleRadius(canvas()->resourceManager()->handleRadius());
+    KarbonPatternEditStrategyBase::setGrabSensitivity(canvas()->resourceManager()->grabSensitivity());
 
     useCursor(Qt::ArrowCursor);
 

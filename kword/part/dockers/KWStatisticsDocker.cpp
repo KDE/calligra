@@ -51,7 +51,7 @@ void KWStatisticsDocker::setView(KWView *view)
     QWidget *wdg = widget();
     if (wdg)
         delete wdg;
-    KWStatistics *statistics = new KWStatistics(view->kwcanvas()->resourceProvider(), view->kwdocument(),
+    KWStatistics *statistics = new KWStatistics(view->kwcanvas()->resourceManager(), view->kwdocument(),
             view->kwcanvas()->shapeManager()->selection(), this);
     setWidget(statistics);
 }

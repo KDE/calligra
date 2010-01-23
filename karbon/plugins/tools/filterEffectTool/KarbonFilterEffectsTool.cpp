@@ -199,7 +199,7 @@ void KarbonFilterEffectsTool::repaintDecorations()
 {
     if (d->currentShape && d->currentShape->filterEffectStack()) {
         QRectF bb = d->currentShape->boundingRect();
-        int radius = canvas()->resourceProvider()->handleRadius();
+        int radius = canvas()->resourceManager()->handleRadius();
         canvas()->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
     }
 }

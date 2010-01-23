@@ -52,7 +52,7 @@ private:
 private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
-    KoResourceManager *m_resourceProvider;
+    KoResourceManager *m_resourceManager;
     KoAction *m_action;
     KoSelection *m_selection;
     KWDocument *m_document;

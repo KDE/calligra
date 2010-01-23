@@ -261,7 +261,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->horizRuler->setUnit(p->unit());
     d->horizRuler->setRightToLeft(false);
     d->horizRuler->setVisible(false);
-    new KoRulerController(d->horizRuler, d->canvas->resourceProvider());
+    new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
     layout->addWidget(d->horizRuler, 0, 1);
     connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
@@ -365,7 +365,7 @@ void KarbonView::dropEvent(QDropEvent *e)
         if (! part())
             return;
 
-        if (d->canvas->resourceProvider()->intResource(KoCanvasResource::ActiveStyleType) == KoFlake::Foreground) {
+        if (d->canvas->resourceManager()->intResource(KoCanvasResource::ActiveStyleType) == KoFlake::Foreground) {
             QList<KoShapeBorderModel*> borders;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
@@ -1170,7 +1170,7 @@ void KarbonView::updateUnit(KoUnit unit)
 {
     d->horizRuler->setUnit(unit);
     d->vertRuler->setUnit(unit);
-    d->canvas->resourceProvider()->setUnitChanged();
+    d->canvas->resourceManager()->setUnitChanged();
 }
 
 QList<KoPathShape*> KarbonView::selectedPathShapes()

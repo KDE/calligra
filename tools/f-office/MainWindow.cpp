@@ -408,7 +408,7 @@ void MainWindow::openDocument(const QString &fileName)
     QTimer::singleShot(250, this, SLOT(updateUI()));
 
     KoCanvasBase *canvas = m_controller->canvas();
-    connect(canvas->resourceProvider(),
+    connect(canvas->resourceManager(),
             SIGNAL(resourceChanged(int, const QVariant &)),
             this,
             SLOT(resourceChanged(int, const QVariant &)));
@@ -691,7 +691,7 @@ void MainWindow::startSearch()
     if (padoc) {
         // loop over all pages starting from current page to get
         // search results in the right order
-        int curPage = canvas->resourceProvider()->resource(\
+        int curPage = canvas->resourceManager()->resource(\
                       KoCanvasResource::CurrentPage).toInt() - 1;
         QList<QPair<KoPAPageBase*, KoShape*> > textShapes;
         QList<QTextDocument*> textDocs;
@@ -822,7 +822,7 @@ void MainWindow::highlightText(int aIndex)
     KoToolManager::instance()->switchToolRequested(PanTool_ID);
     KoToolManager::instance()->switchToolRequested(TextTool_ID);
 
-    KoResourceManager *provider = canvas->resourceProvider();
+    KoResourceManager *provider = canvas->resourceManager();
     Q_CHECK_PTR(provider);
 
     QString sizeStr = QString::number(m_positions.size());

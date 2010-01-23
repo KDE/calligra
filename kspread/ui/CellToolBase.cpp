@@ -1719,7 +1719,7 @@ void CellToolBase::changeTextColor()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Text Color"));
-    command->setFontColor(canvas()->resourceProvider()->foregroundColor().toQColor());
+    command->setFontColor(canvas()->resourceManager()->foregroundColor().toQColor());
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1790,9 +1790,9 @@ void CellToolBase::borderLeft()
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setRightBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     else
-        command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setLeftBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1803,9 +1803,9 @@ void CellToolBase::borderRight()
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setLeftBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     else
-        command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+        command->setRightBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1815,7 +1815,7 @@ void CellToolBase::borderTop()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1825,7 +1825,7 @@ void CellToolBase::borderBottom()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1835,12 +1835,12 @@ void CellToolBase::borderAll()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setHorizontalPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setVerticalPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setHorizontalPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setVerticalPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1865,10 +1865,10 @@ void CellToolBase::borderOutline()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Border"));
-    command->setTopBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setBottomBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setLeftBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
-    command->setRightBorderPen(QPen(canvas()->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setTopBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1877,7 +1877,7 @@ void CellToolBase::borderColor()
 {
     BorderColorCommand* command = new BorderColorCommand();
     command->setSheet(selection()->activeSheet());
-    command->setColor(canvas()->resourceProvider()->foregroundColor().toQColor());
+    command->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2006,7 +2006,7 @@ void CellToolBase::changeBackgroundColor()
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Background Color"));
-    command->setBackgroundColor(canvas()->resourceProvider()->backgroundColor().toQColor());
+    command->setBackgroundColor(canvas()->resourceManager()->backgroundColor().toQColor());
     command->add(*selection());
     command->execute(canvas());
 }

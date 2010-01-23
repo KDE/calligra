@@ -100,7 +100,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape(m_caps);
-    m_shape->setBackground(new KoColorBackground(canvas()->resourceProvider()->backgroundColor().toQColor()));
+    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->backgroundColor().toQColor()));
     //addPoint( event );
 }
 

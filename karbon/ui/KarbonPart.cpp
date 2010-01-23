@@ -115,8 +115,8 @@ public:
             grabSensitivity = miscGroup.readEntry("GrabSensitivity", grabSensitivity);
             handleRadius = miscGroup.readEntry("HandleRadius", handleRadius);
         }
-        canvas->resourceProvider()->setHandleRadius(handleRadius);
-        canvas->resourceProvider()->setGrabSensitivity(grabSensitivity);
+        canvas->resourceManager()->setHandleRadius(handleRadius);
+        canvas->resourceManager()->setGrabSensitivity(grabSensitivity);
 
         QColor color(Qt::white);
         if (config->hasGroup("Interface")) {
@@ -168,7 +168,7 @@ KoView* KarbonPart::createViewInstance(QWidget* parent)
 {
     KarbonView *result = new KarbonView(this, parent);
 
-    KoResourceManager * provider = result->canvasWidget()->resourceProvider();
+    KoResourceManager * provider = result->canvasWidget()->resourceManager();
     provider->setResource(KoCanvasResource::PageSize, d->document.pageSize());
 
     d->applyCanvasConfiguration(result->canvasWidget(), this);
@@ -495,7 +495,7 @@ void KarbonPart::setPageSize(const QSizeF &pageSize)
     d->document.setPageSize(pageSize);
     foreach(KoView *view, views()) {
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-        canvas->resourceProvider()->setResource(KoCanvasResource::PageSize, pageSize);
+        canvas->resourceManager()->setResource(KoCanvasResource::PageSize, pageSize);
     }
 }
 
