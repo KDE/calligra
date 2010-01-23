@@ -222,9 +222,8 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
     tableContext.valStyle.writeStyle(context.xmlWriter());
 }
 
-void TableShape::init(const QMap<QString, KoDataCenter*> & dataCenterMap)
+void TableShape::setMap(Map *map)
 {
-    Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
     if (map == 0)
         return;
     Sheet* const sheet = map->addNewSheet();

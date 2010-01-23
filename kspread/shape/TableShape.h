@@ -50,13 +50,13 @@ public:
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual void init(const QMap<QString, KoDataCenter*> & dataCenterMap);
     virtual void setSize(const QSizeF &size);
 
     /**
      * \return the map containing the data for this shape
      */
     Map* map() const;
+    void setMap(Map *map);
 
     /**
      * \return the sheet containing the data for this shape

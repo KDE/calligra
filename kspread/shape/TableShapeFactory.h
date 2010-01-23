@@ -44,13 +44,10 @@ public:
     ~TableShapeFactory();
 
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
+    virtual void newDocumentResourceManager(KoResourceManager *manager);
     virtual bool supports(const KoXmlElement &element) const;
 
     virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
-
-private:
-    class Private;
-    Private * const d;
 };
 
 #endif // KSPREAD_TABLE_SHAPE_FACTORY
