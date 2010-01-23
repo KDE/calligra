@@ -21,6 +21,7 @@
 
 
 #include "KPrView.h"
+#include "KPresenter.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrShapeApplicationData.h"
@@ -84,8 +85,9 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
                                                        KoXmlNS::presentation, "class",
                                                        "presentation:class" ) );
 
-    KPrSoundCollection *soundCol = new KPrSoundCollection();
-    insertIntoDataCenterMap("SoundCollection", soundCol);
+    QVariant variant;
+    variant.setValue<void*>(new KPrSoundCollection());
+    resourceManager()->setResource(KPresenter::SoundCollection, variant);
 
     insertIntoDataCenterMap( PageLayouts, new KPrPageLayouts() );
 

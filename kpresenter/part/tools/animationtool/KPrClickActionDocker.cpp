@@ -40,6 +40,7 @@
 #include <KoEventActionRegistry.h>
 #include <KPrEventActionWidget.h>
 #include "KPrSoundData.h"
+#include <KPresenter.h>
 #include "KPrSoundCollection.h"
 #include "KPrView.h"
 #include "KPrPage.h"
@@ -121,7 +122,10 @@ void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
 void KPrClickActionDocker::setView(KoPAView  *view )
 {
     m_view = view;
-    m_soundCollection = dynamic_cast<KPrSoundCollection *>( m_view->kopaDocument()->dataCenterMap()["SoundCollection"] );
+    if (m_view->kopaDocument()->resourceManager()->hasResource(KPresenter::SoundCollection)) {
+        QVariant variant = m_view->kopaDocument()->resourceManager()->resource(KPresenter::SoundCollection);
+        m_soundCollection = static_cast<KPrSoundCollection*>(variant.value<void*>());
+    }
 
     setCanvas(view->kopaCanvas());
 }
