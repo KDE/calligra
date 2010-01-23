@@ -53,6 +53,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>
+#include <KoResourceManager.h>
 #include <KoInteractionTool.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
@@ -412,7 +413,8 @@ KWTextFrameSet *KWDocument::mainFrameSet() const
 
 KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
-    return dynamic_cast<KoInlineTextObjectManager*>(dataCenterMap()["InlineTextObjectManager"]);
+    QVariant var = resourceManager()->resource(KoDocumentResource::InlineTextObjectManager);
+    return static_cast<KoInlineTextObjectManager*>(var.value<void*>());
 }
 
 QString KWDocument::uniqueFrameSetName(const QString& suggestion)
