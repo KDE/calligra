@@ -492,7 +492,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
         KoShape *shape = factory->createDefaultShape(m_document->dataCenterMap(), m_document->resourceManager());
         shape->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
 
-        KoImageCollection *collection = dynamic_cast<KoImageCollection*>(m_document->dataCenterMap()["ImageCollection"]);
+        KoImageCollection *collection = m_document->resourceManager()->imageCollection();
         Q_ASSERT(collection);
         KoImageData *data = collection->createImageData(imageKey.filename, m_store);
         shape->setUserData(data);

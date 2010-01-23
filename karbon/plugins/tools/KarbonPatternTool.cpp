@@ -183,8 +183,7 @@ void KarbonPatternTool::initialize()
         strategy->repaint();
     }
 
-    KoDataCenter * dataCenter = canvas()->shapeController()->dataCenter("ImageCollection");
-    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>(dataCenter);
+    KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
 
     // now create new strategies if needed
     foreach(KoShape *shape, selectedShapes) {
@@ -297,8 +296,7 @@ void KarbonPatternTool::patternSelected(KoResource * resource)
     if (! currentPattern || ! currentPattern->valid())
         return;
 
-    KoDataCenter * dataCenter = canvas()->shapeController()->dataCenter("ImageCollection");
-    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>(dataCenter);
+    KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
         QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
         KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
@@ -329,10 +327,7 @@ void KarbonPatternTool::patternChanged()
         KoPatternBackground * oldFill = dynamic_cast<KoPatternBackground*>(shape->background());
         if (! oldFill)
             return;
-        KoDataCenter * dataCenter = canvas()->shapeController()->dataCenter("ImageCollection");
-        if (! dataCenter)
-            return;
-        KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>(dataCenter);
+        KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
         if (! imageCollection)
             return;
         KoPatternBackground * newFill = new KoPatternBackground(imageCollection);

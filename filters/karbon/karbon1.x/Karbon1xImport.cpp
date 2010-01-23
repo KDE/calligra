@@ -33,6 +33,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
+#include <KoResourceManager.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeGroup.h>
 #include <commands/KoShapeGroupCommand.h>
@@ -514,8 +515,7 @@ void KarbonImport::loadPattern(KoShape * shape, const KoXmlElement &element)
         return;
     }
 
-    KoDataCenter * dataCenter = m_document.dataCenterMap().value("ImageCollection", 0);
-    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>(dataCenter);
+    KoImageCollection *imageCollection = m_document.resourceManager()->imageCollection();
     if (imageCollection) {
         KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
         newFill->setPattern(img.mirrored(false, true));

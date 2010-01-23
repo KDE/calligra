@@ -23,6 +23,7 @@
 #include <KFileDialog>
 #include <KUrl>
 #include <KoImageCollection.h>
+#include <KoResourceManager.h>
 #include <KoImageData.h>
 #include <KoShape.h>
 #include <kio/netaccess.h>
@@ -45,7 +46,8 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(const QMap<QString, KoDataCe
     if ( !url.isEmpty() ) {
         shape = KPrPlaceholderStrategy::createShape(dataCenterMap, rm);
 
-        KoImageCollection * collection = dynamic_cast<KoImageCollection *>( dataCenterMap.value( "ImageCollection" ) );
+        KoImageCollection *collection = rm->imageCollection();
+        Q_ASSERT(collection);
 
         QString tmpFile;
         if (KIO::NetAccess::download(url, tmpFile, 0)) {

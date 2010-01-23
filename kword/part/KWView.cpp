@@ -1199,7 +1199,7 @@ void KWView::createCustomOutline()
 
 void KWView::insertImage()
 {
-    KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->dataCenterMap(), this);
+    KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->resourceManager(), this);
     if (shape) {
         if (m_currentPage.isValid()) {
             QRectF page = m_currentPage.rect();

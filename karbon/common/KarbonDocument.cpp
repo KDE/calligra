@@ -39,6 +39,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
+#include <KoResourceManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
@@ -47,6 +48,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoImageCollection.h>
 #include <KoDataCenter.h>
+#include <KoText.h>
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 
@@ -288,7 +290,7 @@ const QList<KoShapeLayer*> KarbonDocument::layers() const
 
 KoImageCollection * KarbonDocument::imageCollection()
 {
-    return dynamic_cast<KoImageCollection *>(d->dataCenterMap["ImageCollection"]);
+    return resourceManager()->imageCollection();
 }
 
 QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
