@@ -1325,7 +1325,7 @@ Value Formula::Private::valueOrElement(const Map* map, int index, FuncExtra &fe,
         return v;
     QString c = constants[index].asString();
     const Region region(c, map, sheet);
-    if(!region.isValid() || !region.isSingular())
+    if(!region.isValid())
         return v; // if there is no selected region continude with the array
     const QPoint position = region.firstRange().topLeft();
     const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
