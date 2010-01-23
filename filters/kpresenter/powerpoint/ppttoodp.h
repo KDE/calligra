@@ -378,7 +378,7 @@ private:
     * @param numPrefix - suffix of prefix
     * @return none
     */
-    void   processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix);
+    void processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix);
 
 
     void processEllipse(const PPT::OfficeArtSpContainer& fsp, Writer& out);
