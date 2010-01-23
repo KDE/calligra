@@ -1,6 +1,7 @@
 /*
  * This file is part of Maemo 5 Office UI for KOffice
  *
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Manikandaprasad N C <manikandaprasad.chandrasekar@nokia.com>
@@ -36,13 +37,15 @@ AboutDialog::AboutDialog(QWidget *parent) :
     \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" \
     content=\"1\" /><style type=\"text/css\">\n p, li { white-space: pre-wrap; }\n \
     </style></head><body style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:400; \
-    font-style:normal;\">\n <p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; \
-    margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + \
-    i18n("KOffice Office Viewer - Alpha Release for Maemo 5 is based on the KOffice Open Source Project. <br> \
-    The application currently supports ODF (ODT & ODP) and Microsoft formats (Word and <br> \
-    Powerpoint). The support for Microsoft formats is not complete and is still missing many<br> \
-    features. The software is packaged by Maemo, in collaboration with members of the KOffice <br> \
-    community. The software source code is available from Maemo Extras under GPL license.") + \
+    font-style:normal;\">\n <p>" +
+
+    i18n("Office Viewer - Alpha for Maemo 5 is based on KOffice.<br>"
+    "KOffice is an active open source project of many more office applications.<br>"
+    "Office Viewer supports ODF (odt, odp & ods) and Microsoft formats (Word and <br>"
+    "PowerPoint and Excel).<br>"
+    "Support for Microsoft formats is currently not feature complete.<br>"
+    "Office Viewer is packaged by Maemo, in collaboration with members of<br>"
+    "the KOffice community.") +
     "</p></body></html>";
 
     m_ui->setupUi(this);
