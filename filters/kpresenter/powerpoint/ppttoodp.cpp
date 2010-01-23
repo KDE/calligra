@@ -257,14 +257,12 @@ PptToOdp::Writer
 PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 {
     Writer w(xml);
-    qDebug() << "ct " << oldCoords << " " << newCoords;
-    w.scaleX = oldCoords.width() / newCoords.width();
-    w.scaleY = oldCoords.height() / newCoords.height();
+    w.scaleX = scaleX * oldCoords.width() / newCoords.width();
+    w.scaleY = scaleY * oldCoords.height() / newCoords.height();
     return w;
 }
 QString PptToOdp::Writer::vLength(qreal length)
 {
-    qDebug() << scaleY << " " << length << " " << length*scaleY;
     return mm.arg(length*scaleY);
 }
 
@@ -792,7 +790,6 @@ getRect(const OfficeArtClientAnchor &a)
         const RectStruct &r = *a.rect2;
         return QRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
-    return QRect(0, 0, 1, 1);
 }
 /**
  * Return the bounding rectangle for this object.
@@ -1958,7 +1955,6 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o, const PPT
 
 void PptToOdp::processObjectForBody(const OfficeArtSpgrContainerFileBlock& of, Writer& out)
 {
-    // TODO: add more magic for setting the viewport
     if (of.anon.is<OfficeArtSpgrContainer>()) {
         processObjectForBody(*of.anon.get<OfficeArtSpgrContainer>(), out);
     } else { // OfficeArtSpContainer
@@ -1979,12 +1975,12 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer
         QRect newCoords = getRect(*first->shapeGroup);
         Writer transformedOut = out.transform(oldCoords, newCoords);
         for (int i = 1; i < o.rgfb.size(); ++i) {
-            //foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
             processObjectForBody(o.rgfb[i], transformedOut);
         }
-    }
-    for (int i = 1; i < o.rgfb.size(); ++i) {
-        processObjectForBody(o.rgfb[i], out);
+    } else {
+        for (int i = 1; i < o.rgfb.size(); ++i) {
+            processObjectForBody(o.rgfb[i], out);
+        }
     }
     out.xml.endElement(); // draw:g
 }
@@ -2002,10 +1998,8 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& 
         }
         qDebug() << "awoej";
     } else if (o.clientTextbox) { // TODO
-        //o.clientTextbox->
         foreach(const TextClientDataSubContainerOrAtom& tc, o.clientTextbox->rgChildRec) {
             if (tc.anon.is<TextContainer>()) {
-                qDebug() << "yo";
                 processTextObjectForBody(o, *tc.anon.get<TextContainer>(), out);
             }
         }
@@ -2117,19 +2111,6 @@ void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenSt
     }
     processDrawingObjectForStyle(o, styles);
 }
-/*
-void PptToOdp::processObjectForStyle(Object* object, KoGenStyles &styles)
-{
-    if (!object) return;
-
-    if (object->isText())
-        processTextObjectForStyle(static_cast<TextObject*>(object), styles);
-    else if (object->isGroup())
-        processGroupObjectForStyle(static_cast<GroupObject*>(object), styles);
-    else if (object->isDrawing())
-        processDrawingObjectForStyle(static_cast<DrawObject*>(object), styles);
-}
-*/
 QString PptToOdp::paraSpacingToCm(int value) const
 {
     if (value < 0) {
@@ -2298,7 +2279,9 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
     int indent = 0;
     if (pf) {
         indentLevel = pf->indentLevel;
-        indent = pf->pf.indent;
+        if (pf->pf.masks.indent) {
+            indent = pf->pf.indent;
+        }
     }
 
     qint16 textType = tc.textHeaderAtom.textType;
@@ -2356,7 +2339,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
                                    paraSpacingToCm(pf->pf.spaceBefore),
                                    KoGenStyle::ParagraphType);
     } else {
-        if (masterPF && masterPF->spaceBefore) {
+        if (masterPF && pf->pf.masks.spaceBefore) {
             styleParagraph.addProperty("fo:margin-top",
                                        paraSpacingToCm(masterPF->spaceBefore),
                                        KoGenStyle::ParagraphType);
@@ -2576,7 +2559,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
             // every text:list-level-style-bullet must have a text:bullet-char
             const char bullet[4] = {0xe2, 0x97, 0x8f, 0};
             QString bulletChar(QString::fromUtf8(bullet)); //  "●";
-            if (pf && i == pf->pf.indent &&
+            if (pf && pf->pf.masks.indent && i == pf->pf.indent &&
                     pf->pf.masks.bulletChar) {
                 bulletChar = pf->pf.bulletChar;
             } else if (!isListLevelStyleNumber
@@ -2610,7 +2593,8 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
 
         elementWriter.startElement("style:list-level-properties");
 
-        if (pf && i == pf->pf.indent && pf->pf.masks.spaceBefore) {
+        bool hasIndent = pf && pf->pf.masks.indent && i == pf->pf.indent;
+        if (hasIndent && pf->pf.masks.spaceBefore) {
             elementWriter.addAttribute("text:space-before",
                                        paraSpacingToCm(pf->pf.spaceBefore));
         } else if (levelPF && levelPF->masks.spaceBefore) {
@@ -2621,7 +2605,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
 
         elementWriter.startElement("style:text-properties");
 
-        if (pf && i == pf->pf.indent && pf->pf.masks.bulletFont) {
+        if (hasIndent && pf->pf.masks.bulletFont) {
             font = getFont(pf->pf.bulletFontRef);
         } else if (levelPF && levelPF->masks.bulletFont) {
             font = getFont(levelPF->bulletFontRef);
@@ -2633,8 +2617,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
                                                           font->lfFaceName.size()));
         }
 
-        if (pf && i == pf->pf.indent &&
-                pf->pf.masks.bulletColor) {
+        if (hasIndent && pf->pf.masks.bulletColor) {
             elementWriter.addAttribute("fo:color",
                                        toQColor(*pf->pf.bulletColor).name());
         } else {
@@ -2644,8 +2627,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
             }
         }
 
-        if (pf && i == pf->pf.indent &&
-                pf->pf.masks.bulletSize) {
+        if (hasIndent && pf->pf.masks.bulletSize) {
             elementWriter.addAttribute("fo:font-size",
                                        QString("%1%").arg(pf->pf.bulletSize));
         } else {
@@ -2825,17 +2807,6 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
     styleName = styles.lookup(kostyle);
     setGraphicStyleName(o, styleName);
 }
-/*
-void PptToOdp::processGroupObjectForStyle(GroupObject* groupObject,
-        KoGenStyles &styles)
-{
-    if (!groupObject) return;
-
-    for (unsigned int i = 0; i < groupObject->objectCount(); ++i) {
-        processObjectForStyle(groupObject->object(i), styles);
-    }
-}
-*/
 namespace
 {
 const char* dashses[11] = {

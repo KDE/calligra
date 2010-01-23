@@ -288,8 +288,14 @@ class ExCDAudioContainer;
 void parseExCDAudioContainer(LEInputStream& in, ExCDAudioContainer& _s);
 class ExControlAtom;
 void parseExControlAtom(LEInputStream& in, ExControlAtom& _s);
-class ExHyperlinkContainer;
-void parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s);
+class ExHyperlinkAtom;
+void parseExHyperlinkAtom(LEInputStream& in, ExHyperlinkAtom& _s);
+class FriendlyNameAtom;
+void parseFriendlyNameAtom(LEInputStream& in, FriendlyNameAtom& _s);
+class TargetAtom;
+void parseTargetAtom(LEInputStream& in, TargetAtom& _s);
+class LocationAtom;
+void parseLocationAtom(LEInputStream& in, LocationAtom& _s);
 class ExMCIMovieContainer;
 void parseExMCIMovieContainer(LEInputStream& in, ExMCIMovieContainer& _s);
 class ExMIDIAudioContainer;
@@ -520,6 +526,8 @@ class ExObjListContainer;
 void parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s);
 class ExControlContainer;
 void parseExControlContainer(LEInputStream& in, ExControlContainer& _s);
+class ExHyperlinkContainer;
+void parseExHyperlinkContainer(LEInputStream& in, ExHyperlinkContainer& _s);
 class ExOleLinkContainer;
 void parseExOleLinkContainer(LEInputStream& in, ExOleLinkContainer& _s);
 class ExOleEmbedContainer;
@@ -552,6 +560,8 @@ class HspNext;
 void parseHspNext(LEInputStream& in, HspNext& _s);
 class Pib;
 void parsePib(LEInputStream& in, Pib& _s);
+class PibName;
+void parsePibName(LEInputStream& in, PibName& _s);
 class ShapePath;
 void parseShapePath(LEInputStream& in, ShapePath& _s);
 class adjust2Value;
@@ -1833,11 +1843,29 @@ public:
     quint32 slideIdRef;
     ExControlAtom(void* /*dummy*/ = 0) {}
 };
-class ExHyperlinkContainer : public StreamOffset {
+class ExHyperlinkAtom : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    QByteArray todo;
-    ExHyperlinkContainer(void* /*dummy*/ = 0) {}
+    quint32 exHyperLinkId;
+    ExHyperlinkAtom(void* /*dummy*/ = 0) {}
+};
+class FriendlyNameAtom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QVector<quint16> friendlyName;
+    FriendlyNameAtom(void* /*dummy*/ = 0) {}
+};
+class TargetAtom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QVector<quint32> target;
+    TargetAtom(void* /*dummy*/ = 0) {}
+};
+class LocationAtom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QVector<quint32> location;
+    LocationAtom(void* /*dummy*/ = 0) {}
 };
 class ExMCIMovieContainer : public StreamOffset {
 public:
@@ -3164,6 +3192,15 @@ public:
     QSharedPointer<MetafileBlob> metafile;
     ExControlContainer(void* /*dummy*/ = 0) {}
 };
+class ExHyperlinkContainer : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    ExHyperlinkAtom exHyperlinkAtom;
+    QSharedPointer<FriendlyNameAtom> friendlyNameAtom;
+    QSharedPointer<TargetAtom> targetAtom;
+    QSharedPointer<LocationAtom> locationAtom;
+    ExHyperlinkContainer(void* /*dummy*/ = 0) {}
+};
 class ExOleLinkContainer : public StreamOffset {
 public:
     RecordHeader rh;
@@ -3313,6 +3350,12 @@ public:
     OfficeArtFOPTEOPID opid;
     quint32 pib;
     Pib(void* /*dummy*/ = 0) {}
+};
+class PibName : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 pibName;
+    PibName(void* /*dummy*/ = 0) {}
 };
 class ShapePath : public StreamOffset {
 public:
@@ -3981,6 +4024,7 @@ public:
         explicit anonChoice(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(Pib* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit anonChoice(PibName* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
         explicit anonChoice(FillType* a) :QSharedPointer<StreamOffset>(a) {}
