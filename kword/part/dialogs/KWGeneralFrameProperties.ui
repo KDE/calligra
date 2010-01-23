@@ -48,7 +48,7 @@
      <item>
       <widget class="QGroupBox" name="textGroupBox" >
        <property name="title" >
-        <string>If Text is Too Long for Frame</string>
+        <string>If Frame Overflows</string>
        </property>
        <property name="flat" >
         <bool>false</bool>
@@ -109,7 +109,7 @@
      <item>
       <widget class="QGroupBox" name="newPageGroupBox" >
        <property name="title" >
-        <string>On New Page Creation</string>
+        <string>When Creating a Page</string>
        </property>
        <layout class="QVBoxLayout" >
         <item>
@@ -129,7 +129,7 @@
         <item>
          <widget class="QRadioButton" name="placeCopy" >
           <property name="text" >
-           <string>Place a copy of this frame</string>
+           <string>Copy this Frame</string>
           </property>
          </widget>
         </item>
