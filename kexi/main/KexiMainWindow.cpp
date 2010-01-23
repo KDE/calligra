@@ -1995,10 +1995,13 @@ void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
         d->propEditorDockWidget->setVisible(set);
 }
 
+#define PROJECT_NAVIGATOR_TABBAR_ID 0
+#define PROPERTY_EDITOR_TABBAR_ID 1
+
 void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
 {
     KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Left];
-    int id = 0; //todo
+    int id = PROJECT_NAVIGATOR_TABBAR_ID;
     if (visible) {
         mtbar->removeTab(id);
     }
@@ -2006,16 +2009,36 @@ void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
         QString t(d->navDockWidget->windowTitle());
         t.remove('&');
         mtbar->appendTab(QPixmap(), id, t);
-        KMultiTabBarTab *tab = mtbar->tab(0);
+        KMultiTabBarTab *tab = mtbar->tab(id);
+        connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
+    }
+}
+
+void KexiMainWindow::slotPropertyEditorVisibilityChanged(bool visible)
+{
+    KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Right];
+    int id = PROPERTY_EDITOR_TABBAR_ID;
+    if (visible) {
+        mtbar->removeTab(id);
+    }
+    else {
+        QString t(d->propEditorDockWidget->windowTitle());
+        t.remove('&');
+        mtbar->appendTab(QPixmap(), id, t);
+        KMultiTabBarTab *tab = mtbar->tab(id);
         connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
     }
 }
 
 void KexiMainWindow::slotMultiTabBarTabClicked(int id)
 {
-    if (id == 0) { // todo
+    if (id == PROJECT_NAVIGATOR_TABBAR_ID) {
         slotProjectNavigatorVisibilityChanged(true);
         d->navDockWidget->show();
+    }
+    else if (id == PROPERTY_EDITOR_TABBAR_ID) {
+        slotPropertyEditorVisibilityChanged(true);
+        d->propEditorDockWidget->show();
     }
 }
 
@@ -2177,6 +2200,8 @@ void KexiMainWindow::setupPropertyEditor()
             d->propEditorDockWidget,
             Qt::Vertical
         );
+        connect(d->propEditorDockWidget, SIGNAL(visibilityChanged(bool)),
+            this, SLOT(slotPropertyEditorVisibilityChanged(bool)));
 
         d->propEditorDockableWidget = new KexiDockableWidget(d->propEditorDockWidget);
         d->propEditorDockWidget->setWidget(d->propEditorDockableWidget);

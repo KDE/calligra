@@ -706,6 +706,7 @@ protected slots:
     void slotSetProjectNavigatorVisible(bool set);
     void slotSetPropertyEditorVisible(bool set);
     void slotProjectNavigatorVisibilityChanged(bool visible);
+    void slotPropertyEditorVisibilityChanged(bool visible);
     void slotMultiTabBarTabClicked(int id);
 
 private:
