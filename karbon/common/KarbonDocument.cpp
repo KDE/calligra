@@ -356,7 +356,7 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
 
 void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
 {
-    KoStyleManager *styleManager = static_cast<KoStyleManager *>(resourceManager()->resource(KoText::StyleManager).value<void*>());
+    KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
     if (! styleManager)
         return;

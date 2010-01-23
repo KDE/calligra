@@ -464,7 +464,7 @@ void KWDocument::initEmpty()
     appendPage("Standard");
 
     Q_ASSERT(resourceManager()->hasResource(KoText::StyleManager));
-    KoStyleManager *styleManager = static_cast<KoStyleManager *>(resourceManager()->resource(KoText::StyleManager).value<void*>());
+    KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));

@@ -919,15 +919,14 @@ void KWView::selectBookmark()
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 
-    KoResourceManager *provider = m_canvas->resourceManager();
-
+    KoResourceManager *rm = m_canvas->resourceManager();
     if (bookmark->hasSelection()) {
-        provider->setResource(KoText::CurrentTextPosition, bookmark->position());
-        provider->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
-        provider->clearResource(KoText::SelectedTextPosition);
-        provider->clearResource(KoText::SelectedTextAnchor);
+        rm->setResource(KoText::CurrentTextPosition, bookmark->position());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
+        rm->clearResource(KoText::SelectedTextPosition);
+        rm->clearResource(KoText::SelectedTextAnchor);
     } else
-        provider->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
+        rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
 }
 
 void KWView::deleteBookmark(const QString &name)
@@ -949,16 +948,16 @@ void KWView::deleteBookmark(const QString &name)
     KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
 
-    KoResourceManager *provider = m_canvas->resourceManager();
+    KoResourceManager *rm = m_canvas->resourceManager();
 
     if (bookmark->hasSelection())
         endPosition = bookmark->endBookmark()->position() - 1;
 
-    provider->setResource(KoText::CurrentTextPosition, bookmark->position());
+    rm->setResource(KoText::CurrentTextPosition, bookmark->position());
     handler->deleteInlineObjects(false);
 
     if (endPosition != -1) {
-        provider->setResource(KoText::CurrentTextPosition, endPosition);
+        rm->setResource(KoText::CurrentTextPosition, endPosition);
         handler->deleteInlineObjects(false);
     }
 }
@@ -1149,11 +1148,11 @@ void KWView::handleDeletePageAction()
 
 void KWView::setShowFormattingChars(bool on)
 {
-    KoResourceManager *provider = m_canvas->resourceManager();
-    provider->setResource(KoText::ShowSpaces, on);
-    provider->setResource(KoText::ShowTabs, on);
-    provider->setResource(KoText::ShowEnters, on);
-    provider->setResource(KoText::ShowSpecialCharacters, on);
+    KoResourceManager *rm = m_canvas->resourceManager();
+    rm->setResource(KoText::ShowSpaces, on);
+    rm->setResource(KoText::ShowTabs, on);
+    rm->setResource(KoText::ShowEnters, on);
+    rm->setResource(KoText::ShowSpecialCharacters, on);
 }
 
 void KWView::editSelectAllFrames()

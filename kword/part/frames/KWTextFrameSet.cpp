@@ -52,7 +52,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     if (m_kwordDocument) {
         KoTextDocument doc(m_document);
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
+        KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
         Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
         KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
@@ -76,7 +76,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     if (m_kwordDocument) {
         KoTextDocument doc(m_document);
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
+        KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
         doc.setStyleManager(styleManager);
         KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
         doc.setChangeTracker(changeTracker);
@@ -140,7 +140,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         m_document->setDocumentLayout(new KWTextDocumentLayout(this));
         if (m_kwordDocument) {
             KoTextDocument doc(m_document);
-            KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<void*>());
+            KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
             doc.setStyleManager(styleManager);
             KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             doc.setChangeTracker(changeTracker);

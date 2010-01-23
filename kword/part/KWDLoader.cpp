@@ -576,7 +576,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                 cursor.insertBlock(emptyTbf, emptyCf);
             }
 
-            KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_document->resourceManager()->resource(KoText::StyleManager).value<void*>());
+            KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
             Q_ASSERT(styleManager);
 
             firstParag = false;
@@ -1114,7 +1114,7 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement)
 
 void KWDLoader::loadStyleTemplates(const KoXmlElement &stylesElem)
 {
-    KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_document->resourceManager()->resource(KoText::StyleManager).value<void*>());
+    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
     Q_ASSERT(styleManager);
 

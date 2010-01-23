@@ -113,7 +113,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     // Load all styles before the corresponding paragraphs try to use them!
     KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
-    KoStyleManager *styleManager = static_cast<KoStyleManager *>(m_document->resourceManager()->resource(KoText::StyleManager).value<void*>());
+    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     sharedData->loadOdfStyles(odfContext, styleManager);
     sc.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);

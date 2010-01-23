@@ -158,12 +158,10 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     d->sheetAccessModel = new SheetAccessModel(d->map);
 
     // Init chart shape factory with KSpread's specific configuration panels.
-    QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(this);
-    foreach(QString id, KoShapeRegistry::instance()->keys()) {
-        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-        if (id == ChartShapeId) {
-            shapeFactory->setOptionPanels(panels);
-        }
+    KoShapeFactory *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
+    if (chartShape) {
+        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(this);
+        chartShape->setOptionPanels(panels);
     }
 
     // Load the function modules.
