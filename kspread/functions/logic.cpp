@@ -184,23 +184,20 @@ Value func_false(valVector, ValueCalc *, FuncExtra *)
 //
 Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if ((!args[0].isBoolean()) && (!args[0].isInteger()))
-        return Value::errorVALUE();
-
-    if (asBool(args[0], calc)) {
+    if ((args[0].isError()))
+        return args[0];
+    if (asBool(args[0], calc))
         return args[1];
-    } else {
-        // evaluated to false
-        if (args.count() == 3) {
-            if (args[2].isEmpty()) {
-                return Value(0);
-            } else {
-                return args[2];
-            }
+    // evaluated to false
+    if (args.count() == 3) {
+        if (args[2].isEmpty()) {
+            return Value(0);
         } else {
-            // only two arguments
-            return Value(false);
+            return args[2];
         }
+    } else {
+        // only two arguments
+        return Value(false);
     }
 }
 
