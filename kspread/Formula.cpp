@@ -1318,22 +1318,22 @@ Value Formula::eval(CellIndirection cellIndirections) const
     return evalRecursive(cellIndirections, values);
 }
 
-// We need to unroll arrays.
+// We need to unroll arrays. Do use the same order to unroll like OpenOffice.org and Excel are using.
 Value Formula::Private::valueOrElement(const Map* map, int index, FuncExtra &fe, const Value &v) const
 {
     if(!v.isArray())
         return v;
     QString c = constants[index].asString();
     const Region region(c, map, sheet);
-    if( ! region.isValid())
-        return Value::errorREF();
+    if(!region.isValid() || !region.isSingular())
+        return v; // if there is no selected region continude with the array
     const QPoint position = region.firstRange().topLeft();
-    const int idx = fe.myrow - position.y();
+    const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
     if(idx >= 0 && idx < int(v.count()))
-        return v.element(idx);
-    if(v.count() == 1)
+        return v.element(idx); // within the range returns the selected element
+    if(v.count() == 1) // if there is only one item, use that one
         return v.element(0);
-    return Value::errorVALUE();
+    return v; // continue with the array
 }
 
 // On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is

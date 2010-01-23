@@ -1874,6 +1874,11 @@ Value ValueCalc::sumsq(const Value &range, bool full)
 Value ValueCalc::sumIf(const Value &range,
                        const Value &checkRange, const Condition &cond)
 {
+    if(range.isError())
+        return range;
+    if(checkRange.isError())
+        return checkRange;
+
     if (!range.isArray()) {
         if (matches(cond, checkRange.element(0, 0))) {
             //kDebug()<<"return non array value "<<range;
