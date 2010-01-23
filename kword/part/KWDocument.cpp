@@ -132,6 +132,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         m_mainFramesetEverFinished(false)
 {
     m_frameLayout.setDocument(this);
+    resourceManager()->setOdfDocument(this);
 
     setComponentData(KWFactory::componentData(), false);
     setTemplateType("kword_template");
