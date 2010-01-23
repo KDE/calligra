@@ -1318,26 +1318,26 @@ Value Formula::eval(CellIndirection cellIndirections) const
     return evalRecursive(cellIndirections, values);
 }
 
-// We need to unroll arrays. Do use the same order to unroll like OpenOffice.org and Excel are using.
+// We need to unroll arrays. Do use the same logic to unroll like OpenOffice.org and Excel are using.
 Value Formula::Private::valueOrElement(const Map* map, int index, FuncExtra &fe, const Value &v) const
 {
-    if(!v.isArray())
-        return v;
-    QString c = constants[index].asString();
-    const Region region(c, map, sheet);
-    if(!region.isValid())
-        return v; // if there is no selected region continude with the array
-    const QPoint position = region.firstRange().topLeft();
-    const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
-    if(idx >= 0 && idx < int(v.count()))
-        return v.element(idx); // within the range returns the selected element
-    if(v.count() == 1) // if there is only one item, use that one
-        return v.element(0);
-    return v; // continue with the array
+    if(v.isArray()) {
+        if(v.count() == 1) // if there is only one item, use that one
+            return v.element(0);
+        QString c = constants[index].asString();
+        const Region region(c, map, sheet);
+        if(region.isValid()) {
+            const QPoint position = region.firstRange().topLeft();
+            const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
+            if(idx >= 0 && idx < int(v.count()))
+                return v.element(idx); // within the range returns the selected element
+        }
+    }
+    return v;
 }
 
 // On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
-// non-numeric. This differs from formulas like SUM which just ignore non numeric values.
+// non-numeric. This differs from formulas like SUM which just ignores non numeric values.
 Value numericOrError(const ValueConverter* converter, const Value &v)
 {
     switch (v.type()) {
