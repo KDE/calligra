@@ -5198,13 +5198,17 @@ void PPT::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         _s.style.clear();
         in.rewind(_m);
     }
-    if ((_s.text.is<TextCharsAtom>() || _s.text.is<TextBytesAtom>()) && _s.style) {
-        quint32 count = (_s.text.is<TextCharsAtom>())
-                ?_s.text.get<TextCharsAtom>()->textChars.size()
-                :_s.text.get<TextBytesAtom>()->textChars.size();
+    if (_s.style) {
+        quint32 count = 0;
+        if (_s.text.is<TextCharsAtom>()) {
+            count = _s.text.get<TextCharsAtom>()->textChars.size();
+        }
+        if (_s.text.is<TextBytesAtom>()) {
+            count = _s.text.get<TextBytesAtom>()->textChars.size();
+        }
         quint32 sum = 0;
         do {
-            _s.style->rgTextPFRun.append(TextPFRun(_s.style.data()));
+        _s.style->rgTextPFRun.append(TextPFRun(_s.style.data()));
             parseTextPFRun(in, _s.style->rgTextPFRun.last());
             sum += _s.style->rgTextPFRun.last().count;
         } while (sum <= count);
@@ -7568,9 +7572,6 @@ void PPT::parseTextCFRun(LEInputStream& in, TextCFRun& _s) {
     _s.count = in.readuint32();
     if (!(((quint32)_s.count)>0)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.count)>0");
-    }
-    if (!(((quint32)_s.count)<1000)) {
-        throw IncorrectValueException(in.getPosition(), "((quint32)_s.count)<1000");
     }
     parseTextCFException(in, _s.cf);
 }
