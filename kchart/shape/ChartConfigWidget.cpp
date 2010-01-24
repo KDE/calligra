@@ -368,7 +368,8 @@ ChartConfigWidget::ChartConfigWidget()
     setupDialogs();
     createActions();
     
-    // Activate spin box "acceleration" for "Data Sets"->"Bar Properties"
+    // Activate spin box "acceleration" for "Data Sets"->"Foo Properties"
+    // where Foo is one of the chart types with special property settings.
     d->ui.gapBetweenBars->setAccelerated( true );
     d->ui.gapBetweenSets->setAccelerated( true );
     d->ui.pieExplodeFactor->setAccelerated( true );
@@ -483,6 +484,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     ChartType     type = LastChartType;
     ChartSubtype  subtype = NoChartSubtype;
     
+    // Bar charts
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;
         subtype = NormalChartSubtype;
@@ -494,6 +496,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = PercentChartSubtype;
     }
     
+    // Line charts
     else if ( action == d->normalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
@@ -504,7 +507,8 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type    = LineChartType;
         subtype = PercentChartSubtype;
     }
-    
+
+    // Area charts
     else if ( action == d->normalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
@@ -522,7 +526,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = NoChartSubtype;
     }
 
-    // also known as pie chart
+    // Also known as pie chart
     else if ( action == d->circleChartAction ) {
         type    = CircleChartType;
         subtype = NoChartSubtype;
@@ -564,11 +568,23 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     if ( isPolar( type ) ) {
         setPolarChartTypesEnabled( true );
         setCartesianChartTypesEnabled( false );
-        d->ui.axisConfiguration->setEnabled( false );
+
+        // Pie charts and ring charts have no axes but radar charts do.
+        // Disable choosing of attached axis if there is none.
+        bool hasAxes = !(type == CircleChartType || type == RingChartType );
+        d->ui.axisConfiguration->setEnabled( hasAxes );
+        d->ui.dataSetAxes->setEnabled( hasAxes );
+        d->ui.dataSetHasChartType->setEnabled( hasAxes );
+        d->ui.dataSetChartTypeMenu->setEnabled( hasAxes );
     } else {
         setPolarChartTypesEnabled( false );
         setCartesianChartTypesEnabled( true );
+
+        // All the cartesian chart types have axes.
         d->ui.axisConfiguration->setEnabled( true );
+        d->ui.dataSetAxes->setEnabled( true );
+        d->ui.dataSetHasChartType->setEnabled( true );
+        d->ui.dataSetChartTypeMenu->setEnabled( true );
     }
     
     emit chartTypeChanged( type );
