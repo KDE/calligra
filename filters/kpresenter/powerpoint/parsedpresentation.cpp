@@ -117,16 +117,27 @@ ParsedPresentation::parse(POLE::Storage& storage)
 
 // read the CurrentUserStream and PowerPointStructs
     try {
-        if (!parseCurrentUserStream(storage, currentUserStream)) {
-            qDebug() << "error parsing CurrentUserStream";
-            return false;
-        }
         if (!parsePowerPointStructs(storage, presentation)) {
             qDebug() << "error parsing PowerPointStructs";
             return false;
         }
+    } catch (IOException e) {
+        qDebug() << "caught IOException while parsing PowerPointStructs " << e.what() << " " << e.msg;
+        return false;
     } catch (...) {
-        qDebug() << "caught unknown exception!";
+        qDebug() << "caught unknown exception while parsing PowerPointStructs";
+        return false;
+    }
+    try {
+        if (!parseCurrentUserStream(storage, currentUserStream)) {
+            qDebug() << "error parsing CurrentUserStream";
+            return false;
+        }
+    } catch (IOException e) {
+        qDebug() << "caught IOException while parsing CurrentUserStream: " << e.what() << " " << e.msg;
+        return false;
+    } catch (...) {
+        qDebug() << "caught unknown exception while parsing CurrentUserStream";
         return false;
     }
 // Part 1: Construct the persist object directory

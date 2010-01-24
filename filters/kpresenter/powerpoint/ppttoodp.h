@@ -339,7 +339,7 @@ private:
     * in MainMasterContainer's SlideSchemeColorSchemeAtom. This method
     * returns the rgb values the specified struct refers to.
     * @param color Color to convert
-    * @return QColor value
+    * @return QColor value, may be undefined
     */
     QColor toQColor(const PPT::ColorIndexStruct &color);
     QColor toQColor(const PPT::OfficeArtCOLORREF& c);
@@ -438,7 +438,7 @@ private:
     };
 
     QMap<QByteArray, QString> pictureNames;
-    DateTimeFormat *dateTime;
+    DateTimeFormat dateTime;
     QString masterStyleName;
     typedef QPair<const PPT::TextCFException*, const PPT::TextPFException*> StyleKey;
     QMap<StyleKey, StyleName> textStyles;

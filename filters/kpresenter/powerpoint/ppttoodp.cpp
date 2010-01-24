@@ -689,7 +689,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         int dateTimeFomatId = getSlideHF()->hfAtom.formatId;
         bool hasTodayDate = getSlideHF()->hfAtom.fHasTodayDate;
         bool hasUserDate = getSlideHF()->hfAtom.fHasUserDate;
-        DateTimeFormat dateTime(dateTimeFomatId);
+        dateTime = DateTimeFormat(dateTimeFomatId);
         dateTime.addDateTimeAutoStyles(styles, hasTodayDate, hasUserDate);
     }
 
@@ -766,7 +766,7 @@ void PptToOdp::addFrame(KoGenStyle& style, const char* presentationClass,
         //Same DateTime object so no need to pass style name for date time
         if (getSlideHF()) {
             if (getSlideHF()->hfAtom.fHasTodayDate) {
-                dateTime->addMasterDateTimeSection(xmlWriter, tStyle);
+                dateTime.addMasterDateTimeSection(xmlWriter, tStyle);
             } else if (getSlideHF()->hfAtom.fHasUserDate) {
                 //Future FixedDate format
             }
@@ -2246,19 +2246,25 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
     if (color.index == 0xFE) {
         return QColor(color.red, color.green, color.blue);
     }
+    if (color.index == 0xFF) { // color is undefined
+        return QColor();
+    }
 
-    ColorStruct c;
+    const QList<ColorStruct>* colorScheme;
     // TODO: use the current master
     const MasterOrSlideContainer* m = p->masters[0];
     if (m->anon.is<MainMasterContainer>()) {
         const MainMasterContainer* n = m->anon.get<MainMasterContainer>();
-        c = n->slideSchemeColorSchemeAtom.rgSchemeColor.value(color.index);
+        colorScheme = &n->slideSchemeColorSchemeAtom.rgSchemeColor;
     } else {
         const SlideContainer* n = m->anon.get<SlideContainer>();
-        c = n->slideSchemeColorSchemeAtom.rgSchemeColor.value(color.index);
+        colorScheme = &n->slideSchemeColorSchemeAtom.rgSchemeColor;
     }
-
-    return QColor(c.red, c.green, c.blue);
+    if (colorScheme->size() > color.index) {
+        const ColorStruct c = colorScheme->at(color.index);
+        return QColor(c.red, c.green, c.blue);
+    }
+    return QColor();
 }
 QColor PptToOdp::toQColor(const OfficeArtCOLORREF& c)
 {
@@ -2451,15 +2457,19 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
     //Text style
     KoGenStyle styleText(KoGenStyle::StyleTextAuto, "text");
     if (cf && cf->cf.color) {
-        styleText.addProperty("fo:color",
-                              toQColor(*cf->cf.color).name(),
-                              KoGenStyle::TextType);
+        QColor color = toQColor(*cf->cf.color);
+        if (color.isValid()) {
+            styleText.addProperty("fo:color", color.name(),
+                                  KoGenStyle::TextType);
+        }
     } else {
         //Make sure that character formatting has color aswell
         if (masterCF && masterCF->color) {
-            styleText.addProperty("fo:color",
-                                  toQColor(*masterCF->color).name(),
-                                  KoGenStyle::TextType);
+            QColor color = toQColor(*masterCF->color);
+            if (color.isValid()) {
+                styleText.addProperty("fo:color", color.name(),
+                                      KoGenStyle::TextType);
+            }
         }
     }
 

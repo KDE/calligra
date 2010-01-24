@@ -34,7 +34,7 @@ public:
     * @brief Constructor
     * @param Slide* master-  Master Slide
     */
-    DateTimeFormat(int dateTimeFormatId);
+    DateTimeFormat(int dateTimeFormatId = 0);
 
     /**
     * @brief Destructor
