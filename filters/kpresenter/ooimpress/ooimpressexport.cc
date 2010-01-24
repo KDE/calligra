@@ -719,7 +719,7 @@ void OoImpressExport::appendNote(QDomDocument & doc, QDomElement & source, QDomE
     //TODO : add draw:text-box size :
     //<draw:text-box draw:style-name="gr2" draw:text-style-name="P2" draw:layer="layout" svg:width="13.336cm" svg:height="56.288cm" svg:x="-0.54cm" svg:y="-14.846cm">
 
-    QStringList text = noteText.split("\n");
+    QStringList text = noteText.split('\n');
     for (QStringList::Iterator it = text.begin(); it != text.end(); ++it) {
         QDomElement tmp = doc.createElement("text:p");
         tmp.appendChild(doc.createTextNode(*it));

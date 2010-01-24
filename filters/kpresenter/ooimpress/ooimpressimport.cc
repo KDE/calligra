@@ -1609,7 +1609,7 @@ void OoImpressImport::parseSpanOrSimilar(QDomDocument& doc, const QDomElement& p
                     || localName == "file-name"
                     || localName == "author-name"
                     || localName == "author-initials")) {
-            textData = "#";     // field placeholder
+            textData = '#';     // field placeholder
             appendField(doc, outputParagraph, ts, pos);
         } else if (t.isNull()) { // no textnode, we must ignore
             kWarning(30518) << "Ignoring tag " << ts.tagName();
@@ -1645,7 +1645,7 @@ void OoImpressImport::parseSpanOrSimilar(QDomDocument& doc, const QDomElement& p
             else if (m_styleStack.property(ooNS::fo, "font-family") == "Albany")
                 text.setAttribute("family", "Arial");
             else
-                text.setAttribute("family", m_styleStack.property(ooNS::fo, "font-family").remove("'"));
+                text.setAttribute("family", m_styleStack.property(ooNS::fo, "font-family").remove('\''));
         }
         if (m_styleStack.hasProperty(ooNS::fo, "font-size")) {
             double pointSize = m_styleStack.fontSize();
