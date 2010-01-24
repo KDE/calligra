@@ -63,7 +63,7 @@ signals:
      * This signal is emitted during loading with a percentage within 1-100 range
      * \param percent the progress as a percentage
      */
-    void sigProgress(int percent);
+    void progressUpdate(int percent);
 
 
 private:

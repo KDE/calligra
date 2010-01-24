@@ -50,7 +50,7 @@ KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
         m_document(document)
 {
-    connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
+    connect(this, SIGNAL(progressUpdate(int)), m_document, SIGNAL(sigProgress(int)));
 }
 
 KWOdfLoader::~KWOdfLoader()
@@ -65,7 +65,7 @@ KWDocument* KWOdfLoader::document() const
 //1.6: KWDocument::loadOasis
 bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 {
-    emit sigProgress(0);
+    emit progressUpdate(0);
     //kDebug(32001) << "========================> KWOdfLoader::load START";
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -202,7 +202,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     loadSettings(odfStore.settingsDoc());
 
     //kDebug(32001) << "========================> KWOdfLoader::load END";
-    emit sigProgress(100);
+    emit progressUpdate(100);
     return true;
 }
 
