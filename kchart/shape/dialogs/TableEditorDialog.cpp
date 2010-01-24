@@ -259,10 +259,14 @@ void TableEditorDialog::slotCurrentIndexChanged( const QModelIndex &index )
     const bool isValid = index.isValid();
 
     m_deleteRowsAction->setEnabled( isValid );
+    m_insertRowsAction->setEnabled( isValid );
     deleteRow->setEnabled( isValid );
+    insertRow->setEnabled( isValid );
 
     m_deleteColumnsAction->setEnabled( isValid );
+    m_insertColumnsAction->setEnabled( isValid );
     deleteColumn->setEnabled( isValid );
+    insertColumn->setEnabled( isValid );
 }
 
 void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
