@@ -2395,7 +2395,7 @@ void PptToOdp::processTextExceptionsForStyle(const TextCFRun *cf,
                                    paraSpacingToCm(pf->pf.spaceBefore),
                                    KoGenStyle::ParagraphType);
     } else {
-        if (masterPF && pf->pf.masks.spaceBefore) {
+        if (masterPF && masterPF->masks.spaceBefore) {
             styleParagraph.addProperty("fo:margin-top",
                                        paraSpacingToCm(masterPF->spaceBefore),
                                        KoGenStyle::ParagraphType);
