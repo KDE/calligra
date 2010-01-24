@@ -45,8 +45,8 @@ main(int argc, char** argv)
     }
 
     PptToOdp ppttoodp;
-    ppttoodp.convert(storage, storeout);
+    int r = ppttoodp.convert(storage, storeout);
     delete storeout;
 
-    return 0;
+    return r;
 }
