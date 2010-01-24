@@ -27,6 +27,9 @@
 # define KEXI_NO_PENDING_DIALOGS
 #endif
 
+#define PROJECT_NAVIGATOR_TABBAR_ID 0
+#define PROPERTY_EDITOR_TABBAR_ID 1
+
 #include <KToolBar>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -581,6 +584,8 @@ public:
         forceHideProjectNavigatorOnCreation = false;
         navWasVisibleBeforeProjectClosing = false;
         saveSettingsForShowProjectNavigator = true;
+        propertyEditorCollapsed = false;
+        enable_slotPropertyEditorVisibilityChanged = true;
     }
     ~Private() {
         qDeleteAll(m_openedCustomObjectsForItem);
@@ -774,7 +779,31 @@ public:
         const bool visible = (viewMode == Kexi::DesignViewMode)
             && ((currentWindow && currentWindow->propertySet()) || info->isPropertyEditorAlwaysVisibleInDesignMode());
         kDebug() << "visible == " << visible;
-        propEditorDockWidget->setVisible(visible);
+        enable_slotPropertyEditorVisibilityChanged = false;
+        if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
+            propEditorDockWidget->setVisible(!visible);
+            setPropertyEditorTabBarVisible(true);
+        }
+        else {
+            propEditorDockWidget->setVisible(visible);
+            setPropertyEditorTabBarVisible(false);
+        }
+        enable_slotPropertyEditorVisibilityChanged = true;
+    }
+
+    void setPropertyEditorTabBarVisible(bool visible) {
+        KMultiTabBar *mtbar = multiTabBars[KMultiTabBar::Right];
+        int id = PROPERTY_EDITOR_TABBAR_ID;
+        if (!visible) {
+            mtbar->removeTab(id);
+        }
+        else if (!mtbar->tab(id)) {
+            QString t(propEditorDockWidget->windowTitle());
+            t.remove('&');
+            mtbar->appendTab(QPixmap(), id, t);
+            KMultiTabBarTab *tab = mtbar->tab(id);
+            QObject::connect(tab, SIGNAL(clicked(int)), wnd, SLOT(slotMultiTabBarTabClicked(int)));
+        }
     }
 
 //2.0: unused
@@ -1094,6 +1123,9 @@ public:
 //2.0: unused  KMdi::MdiMode mdiModeToSwitchAfterRestart;
 
     QMap<KMultiTabBar::KMultiTabBarPosition, KMultiTabBar*> multiTabBars;
+    bool propertyEditorCollapsed;
+
+    bool enable_slotPropertyEditorVisibilityChanged;
 
 private:
     //! @todo move to KexiProject

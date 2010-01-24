@@ -65,6 +65,7 @@ Main Window TODO
 2010-01-23
 Main Window
 *Added tabbar for the property editor pane
+*Make property editor pane's tabbar show properly when switching between windows being in design/view modes, make is also behave properly when propery pane is collapsed
 
 2010-01-19
 Forms

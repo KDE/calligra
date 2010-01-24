@@ -1995,9 +1995,6 @@ void KexiMainWindow::slotSetPropertyEditorVisible(bool set)
         d->propEditorDockWidget->setVisible(set);
 }
 
-#define PROJECT_NAVIGATOR_TABBAR_ID 0
-#define PROPERTY_EDITOR_TABBAR_ID 1
-
 void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
 {
     KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Left];
@@ -2016,18 +2013,11 @@ void KexiMainWindow::slotProjectNavigatorVisibilityChanged(bool visible)
 
 void KexiMainWindow::slotPropertyEditorVisibilityChanged(bool visible)
 {
-    KMultiTabBar *mtbar = d->multiTabBars[KMultiTabBar::Right];
-    int id = PROPERTY_EDITOR_TABBAR_ID;
-    if (visible) {
-        mtbar->removeTab(id);
-    }
-    else {
-        QString t(d->propEditorDockWidget->windowTitle());
-        t.remove('&');
-        mtbar->appendTab(QPixmap(), id, t);
-        KMultiTabBarTab *tab = mtbar->tab(id);
-        connect(tab, SIGNAL(clicked(int)), this, SLOT(slotMultiTabBarTabClicked(int)));
-    }
+    if (!d->enable_slotPropertyEditorVisibilityChanged)
+        return;
+    d->setPropertyEditorTabBarVisible(!visible);
+    if (!visible)
+        d->propertyEditorCollapsed = true;
 }
 
 void KexiMainWindow::slotMultiTabBarTabClicked(int id)
@@ -2039,6 +2029,7 @@ void KexiMainWindow::slotMultiTabBarTabClicked(int id)
     else if (id == PROPERTY_EDITOR_TABBAR_ID) {
         slotPropertyEditorVisibilityChanged(true);
         d->propEditorDockWidget->show();
+        d->propertyEditorCollapsed = false;
     }
 }
 
@@ -2241,7 +2232,9 @@ void KexiMainWindow::setupPropertyEditor()
               ds->setSeparatorPosInPercent(d->config->readEntry("RightDockPosition", 80));
           #endif
             }*/
+        d->enable_slotPropertyEditorVisibilityChanged = false;
         d->propEditorDockWidget->setVisible(false);
+        d->enable_slotPropertyEditorVisibilityChanged = true;
     }
 }
 
