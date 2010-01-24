@@ -1858,13 +1858,13 @@ public:
 class TargetAtom : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    QVector<quint32> target;
+    QVector<quint16> target;
     TargetAtom(void* /*dummy*/ = 0) {}
 };
 class LocationAtom : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    QVector<quint32> location;
+    QVector<quint16> location;
     LocationAtom(void* /*dummy*/ = 0) {}
 };
 class ExMCIMovieContainer : public StreamOffset {

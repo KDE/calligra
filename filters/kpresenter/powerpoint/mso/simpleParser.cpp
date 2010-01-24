@@ -2975,7 +2975,7 @@ void PPT::parseTargetAtom(LEInputStream& in, TargetAtom& _s) {
     _c = _s.rh.recLen/2;
     _s.target.resize(_c);
     for (int _i=0; _i<_c; ++_i) {
-        _s.target[_i] = in.readuint32();
+        _s.target[_i] = in.readuint16();
     }
 }
 void PPT::parseLocationAtom(LEInputStream& in, LocationAtom& _s) {
@@ -2998,7 +2998,7 @@ void PPT::parseLocationAtom(LEInputStream& in, LocationAtom& _s) {
     _c = _s.rh.recLen/2;
     _s.location.resize(_c);
     for (int _i=0; _i<_c; ++_i) {
-        _s.location[_i] = in.readuint32();
+        _s.location[_i] = in.readuint16();
     }
 }
 void PPT::parseExMCIMovieContainer(LEInputStream& in, ExMCIMovieContainer& _s) {
