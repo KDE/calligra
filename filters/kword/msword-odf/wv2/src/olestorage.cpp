@@ -202,7 +202,7 @@ bool OLEStorage::enterDirectory( const std::string& directory )
         if ( !m_path.empty() )
             currentDir = m_path.back().outfile;
 
-        GsfOutput* newDir( gsf_outfile_new_child( currentDir, directory.c_str(), TRUE ) );
+        GsfOutput* newDir( gsf_outfile_new_child( currentDir, directory.c_str(), true ) );
         if ( newDir ) {
             m_path.push_back( GSF_OUTFILE( newDir ) );
             return true;
@@ -314,7 +314,7 @@ OLEStreamWriter* OLEStorage::createStreamWriter( const std::string& stream )
     GsfOutfile* currentDir( m_outputFile );
     if ( !m_path.empty() )
         currentDir = m_path.back().outfile;
-    GsfOutput* output( gsf_outfile_new_child( currentDir, stream.c_str(), FALSE ) );
+    GsfOutput* output( gsf_outfile_new_child( currentDir, stream.c_str(), false ) );
 
     if ( !output )
         return 0;

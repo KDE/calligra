@@ -127,8 +127,8 @@ ZCodec::~ZCodec()
 void ZCodec::BeginCompression( ULONG nCompressMethod )
 {
 	mbInit = 0;
-	mbStatus = TRUE;
-	mbFinish = FALSE;
+	mbStatus = true;
+	mbFinish = false;
 	mpIStm = NULL;
         mpOStm = NULL;
 	mnInToRead = 0xffffffff;
@@ -186,20 +186,20 @@ long ZCodec::Compress( OLEStreamReader& rIStm, OLEStreamWriter& rOStm )
             //set streams
 	    mpIStm = &rIStm;
 	    mpOStm = &rOStm;
-	    ImplInitBuf( FALSE );
+	    ImplInitBuf( false );
 	    mpInBuf = new BYTE[ mnInBufSize ];
 	}
 	while (( PZSTREAM->avail_in = mpIStm->read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
 	{
             //fix this if I ever use this function...
-		if ( PZSTREAM->avail_out == 0 ); 
-			//ImplWriteBack();
-		if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 ) 
-		{
-			mbStatus = FALSE;
-			break;
-		}
-	};
+            if ( PZSTREAM->avail_out == 0 ) {
+                //ImplWriteBack();
+            }
+            if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 ) {
+                mbStatus = false;
+                break;
+            }
+	}
 	return ( mbStatus ) ? (long)(PZSTREAM->total_in - nOldTotal_In) : -1;
 }
 
@@ -221,7 +221,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
             wvlog << "  decompression initialization" << std::endl;
 		mpIStm = &rIStm;
 		//mpOStm = &rOStm;
-		ImplInitBuf( TRUE );
+		ImplInitBuf( true );
 		PZSTREAM->next_out = mpOutBuf = new BYTE[ PZSTREAM->avail_out = mnOutBufSize ];
 	}
         //loop through all the data to be decompressed
@@ -259,7 +259,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
                 wvlog << "inflate() return code: " << err << std::endl;
 		if ( err < 0 )
 		{
-			mbStatus = FALSE;
+			mbStatus = false;
 			break;
 		}
                 //now write that decompressed data to the data vector
@@ -269,7 +269,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 	
         //set the "finished" flag if we got the stream-end signal?
 	if ( err == Z_STREAM_END ) 
-		mbFinish = TRUE;	
+		mbFinish = true;	
         wvlog << "  total_in=" << PZSTREAM->total_in << ",total_out=" << PZSTREAM->total_out << std::endl;
         //return code: -1 if mbStatus is false, otherwise # of bytes decompressed
 	return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
@@ -288,8 +288,7 @@ void ZCodec::ImplWriteBack( std::vector<U8>* outBuffer )
 		//if ( mbInit & 2 && ( mnCompressMethod & ZCODEC_UPDATE_CRC ) )
 		//	mnCRC = UpdateCRC( mnCRC, mpOutBuf, nAvail );
 		//mpOStm->write( PZSTREAM->next_out = mpOutBuf, nAvail );
-            for(int i = 0; i < nAvail; i++)
-            {
+            for(uint i = 0; i < nAvail; i++) {
                 outBuffer->push_back( (U8) mpOutBuf[i]);
             }
             //reset PZSTREAM settings
@@ -322,16 +321,16 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
 					//*mpIStm >> j;
                                         mpIStm->read(&j, 1);
 					if ( j != gz_magic[ i ] )
-						mbStatus = FALSE;
+						mbStatus = false;
 				}
 				//*mpIStm >> nMethod;
                                 mpIStm->read(&nMethod, 1);
 				//*mpIStm >> nFlags;
                                 mpIStm->read(&nFlags, 1);
 				if ( nMethod != Z_DEFLATED )
-					mbStatus = FALSE;
+					mbStatus = false;
 				if ( ( nFlags & GZ_RESERVED ) != 0 )
-					mbStatus = FALSE;
+					mbStatus = false;
 				/* Discard time, xflags and OS code: */
 				//mpIStm->SeekRel( 6 );
                                 mpIStm->seek( 6, G_SEEK_CUR );
@@ -371,7 +370,7 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
 					//mpIStm->SeekRel( 2 );
                                         mpIStm->seek( 2, G_SEEK_CUR);
 				if ( mbStatus )
-				    mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? FALSE : TRUE;
+				    mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? false : true;
 			}
 			else
 			{
@@ -399,7 +398,7 @@ long ZCodec::Write( OLEStreamWriter& rOStm, const BYTE* pData, ULONG nSize )
 	if ( mbInit == 0 )
 	{
 		mpOStm = &rOStm;
-		ImplInitBuf( FALSE );
+		ImplInitBuf( false );
 	}
 		
 	PZSTREAM->avail_in = nSize;
@@ -412,7 +411,7 @@ long ZCodec::Write( OLEStreamWriter& rOStm, const BYTE* pData, ULONG nSize )
 
 		if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 )
 		{	
-			mbStatus = FALSE;
+			mbStatus = false;
 			break;
 		}
     }
@@ -432,7 +431,7 @@ long ZCodec::Read( OLEStreamReader& rIStm, BYTE* pData, ULONG nSize )
 	mpIStm = &rIStm;
 	if ( mbInit == 0 )
 	{
-		ImplInitBuf( TRUE );
+		ImplInitBuf( true );
 	}
 	PZSTREAM->avail_out = nSize;
 	PZSTREAM->next_out = pData;
@@ -462,7 +461,7 @@ long ZCodec::Read( OLEStreamReader& rIStm, BYTE* pData, ULONG nSize )
 			(PZSTREAM->avail_out != 0) &&
 			(PZSTREAM->avail_in || mnInToRead) );
 	if ( err == Z_STREAM_END ) 
-		mbFinish = TRUE;
+		mbFinish = true;
 
 	return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
@@ -480,7 +479,7 @@ long ZCodec::ReadAsynchron( OLEStreamReader& rIStm, BYTE* pData, ULONG nSize )
 	if ( mbInit == 0 )
 	{
 		mpIStm = &rIStm;
-		ImplInitBuf( TRUE );
+		ImplInitBuf( true );
 	}
 	PZSTREAM->avail_out = nSize;
 	PZSTREAM->next_out = pData;
@@ -523,7 +522,7 @@ long ZCodec::ReadAsynchron( OLEStreamReader& rIStm, BYTE* pData, ULONG nSize )
 			(PZSTREAM->avail_out != 0) &&
 			(PZSTREAM->avail_in || mnInToRead) );
 	if ( err == Z_STREAM_END ) 
-		mbFinish = TRUE;
+		mbFinish = true;
 
 	return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }

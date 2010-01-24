@@ -120,7 +120,7 @@ OLEStreamReader* OLEStreamReader::inflate( int offset ) const
     //create an OLEStreamReader from that
     OLEStreamReader* reader = new OLEStreamReader( input, 0 );
     //free memory
-    g_byte_array_free (gbArray, TRUE);
+    g_byte_array_free (gbArray, true);
     delete[] buffer;
     //store.close();
 
