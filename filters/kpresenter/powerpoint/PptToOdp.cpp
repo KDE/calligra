@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "ppttoodp.h"
+#include "PptToOdp.h"
 #include "pictures.h"
 
 #include <kdebug.h>
@@ -1861,9 +1861,10 @@ void PptToOdp::writeTextPFException(KoXmlWriter& xmlWriter,
     } else {
         //If text paragraph exception doesn't have a definition on bullet
         //then we'll have to check master style with our indentation level
-        const TextPFException *masterPF = masterTextPFException(tc.textHeaderAtom.textType,
-                                          pf->indentLevel);
-        if (masterPF && masterPF->masks.hasBullet) {
+        const TextPFException *masterPF
+                = masterTextPFException(tc.textHeaderAtom.textType,
+                                        pf->indentLevel);
+        if (masterPF && masterPF->masks.bulletChar) {
             bullet = masterPF->bulletChar;
         }
     }

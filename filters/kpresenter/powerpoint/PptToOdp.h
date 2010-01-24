@@ -22,8 +22,8 @@
 #define PPTTOODP_H
 
 #include "mso/simpleParser.h"
-#include "datetimeformat.h"
-#include "parsedpresentation.h"
+#include "DateTimeFormat.h"
+#include "ParsedPresentation.h"
 
 #include <KoFilter.h>
 #include <KoGenStyles.h>

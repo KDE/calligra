@@ -58,11 +58,19 @@ void PPT::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
     if (!(((quint32)_s.relVersion) == 0x8 || ((quint32)_s.relVersion) == 0x9)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.relVersion) == 0x8 || ((quint32)_s.relVersion) == 0x9");
     }
-    _s._has_unicodeUserName = _s.rh.recLen==3*_s.lenUserName+0x14;
+    _s._has_unicodeUserName = _s.rh.recLen>3*_s.lenUserName+0x18;
     if (_s._has_unicodeUserName) {
-        _c = 2*_s.lenUserName;
+        _c = _s.lenUserName;
         _s.unicodeUserName.resize(_c);
-        in.readBytes(_s.unicodeUserName);
+        for (int _i=0; _i<_c; ++_i) {
+            _s.unicodeUserName[_i] = in.readuint16();
+        }
+    }
+    _s._has_unknown = _s.rh.recLen-0x18-3*_s.lenUserName>0;
+    if (_s._has_unknown) {
+        _c = _s.rh.recLen-0x18-3*_s.lenUserName;
+        _s.unknown.resize(_c);
+        in.readBytes(_s.unknown);
     }
 }
 void PPT::parseTODOS(LEInputStream& in, TODOS& _s) {
@@ -970,7 +978,8 @@ void PPT::parseFontEmbedFlags10Atom(LEInputStream& in, FontEmbedFlags10Atom& _s)
     }
     _s.fSubset = in.readbit();
     _s.fSubsetOptionConfirmed = in.readbit();
-    _s.unused = in.readuint30();
+    _s.unuseda = in.readuint14();
+    _s.unusedb = in.readuint16();
 }
 void PPT::parseCopyrightAtom(LEInputStream& in, CopyrightAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -1036,17 +1045,17 @@ void PPT::parseFilterPrivacyFlags10Atom(LEInputStream& in, FilterPrivacyFlags10A
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x04");
     }
     _s.fRemovePII = in.readbit();
-    _s.reserved2a = in.readuint20();
-    if (!(((quint32)_s.reserved2a) == 0x0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved2a) == 0x0");
+    _s.reserved2a = in.readuint7();
+    if (!(((quint8)_s.reserved2a) == 0x0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2a) == 0x0");
     }
-    _s.reserved2b = in.readuint6();
+    _s.reserved2b = in.readuint8();
     if (!(((quint8)_s.reserved2b) == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2b) == 0x0");
     }
-    _s.reserved2c = in.readuint5();
-    if (!(((quint8)_s.reserved2c) == 0x0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2c) == 0x0");
+    _s.reserved2c = in.readuint16();
+    if (!(((quint16)_s.reserved2c) == 0x0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.reserved2c) == 0x0");
     }
 }
 void PPT::parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10Container& _s) {
@@ -4648,7 +4657,25 @@ void PPT::parseDocumentSummaryInformationPropertySetStream(LEInputStream& in, Do
 }
 void PPT::parsePicturesStream(LEInputStream& in, PicturesStream& _s) {
     _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _atend;
     parseOfficeArtBStoreDelay(in, _s.anon1);
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.trailing.append(Byte(&_s));
+            parseByte(in, _s.trailing.last());
+        } catch(IncorrectValueException _e) {
+            _s.trailing.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.trailing.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
+    }
 }
 void PPT::parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeader& _s) {
     _s.streamOffset = in.getPosition();
@@ -9586,13 +9613,13 @@ void PPT::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     parseNotesAtom(in, _s.notesAtom);
     _m = in.setMark();
     try {
-        _s.perSlideHeadersFootersContainer = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
-        parsePerSlideHeadersFootersContainer(in, *_s.perSlideHeadersFootersContainer.data());
+        _s.perSlideHFContainer = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
+        parsePerSlideHeadersFootersContainer(in, *_s.perSlideHFContainer.data());
     } catch(IncorrectValueException _e) {
-        _s.perSlideHeadersFootersContainer.clear();
+        _s.perSlideHFContainer.clear();
         in.rewind(_m);
     } catch(EOFException _e) {
-        _s.perSlideHeadersFootersContainer.clear();
+        _s.perSlideHFContainer.clear();
         in.rewind(_m);
     }
     parseDrawingContainer(in, _s.drawing);
@@ -9617,6 +9644,17 @@ void PPT::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
         in.rewind(_m);
     } catch(EOFException _e) {
         _s.slideProgTagsContainer.clear();
+        in.rewind(_m);
+    }
+    _m = in.setMark();
+    try {
+        _s.perSlideHFContainer2 = QSharedPointer<PerSlideHeadersFootersContainer>(new PerSlideHeadersFootersContainer(&_s));
+        parsePerSlideHeadersFootersContainer(in, *_s.perSlideHFContainer2.data());
+    } catch(IncorrectValueException _e) {
+        _s.perSlideHFContainer2.clear();
+        in.rewind(_m);
+    } catch(EOFException _e) {
+        _s.perSlideHFContainer2.clear();
         in.rewind(_m);
     }
     _atend = false;

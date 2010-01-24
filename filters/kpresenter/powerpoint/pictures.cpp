@@ -20,6 +20,7 @@
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>
+#include <QtCore/QDebug>
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -106,7 +107,6 @@ savePicture(POLE::Stream& stream, KoStore* out)
     unsigned char buffer[bufferSize];
     if (stream.read(buffer, 8) != 8) return ref;
 
-
     quint16 instance = readU16(buffer) >> 4;
     quint16 type = readU16(buffer + 2);
     quint32 size = readU32(buffer + 4);
@@ -171,10 +171,7 @@ savePicture(POLE::Stream& stream, KoStore* out)
         ref.mimetype = "image/jpeg";
         break;
     default:
-        offset = 0;
-        namesuffix = "";
-        ref.mimetype = "application/octet-stream";
-        break;
+        return ref;
     }
 
     // skip offset
@@ -186,7 +183,6 @@ savePicture(POLE::Stream& stream, KoStore* out)
         // read the compressed field from the OfficeArtMetafileHeader
         compressed = buffer[offset-2] == 0;
     }
-
     ref.uid = QByteArray((const char*)buffer, 16);
     ref.name = ref.uid.toHex() + namesuffix;
     if (!out->open(ref.name.toLocal8Bit())) {

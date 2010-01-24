@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "parsedpresentation.h"
+#include "ParsedPresentation.h"
 #include <QtCore/QBuffer>
 
 using namespace PPT;
@@ -24,7 +24,12 @@ using namespace PPT;
 bool
 readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 {
-    POLE::Stream stream(&storage, streampath);
+    std::string path(streampath);
+    if (storage.isDirectory("PP97_DUALSTORAGE")) {
+        qDebug() << "PP97_DUALSTORAGE";
+        path = "PP97_DUALSTORAGE" + path;
+    }
+    POLE::Stream stream(&storage, path);
     QByteArray array;
     array.resize(stream.size());
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
@@ -43,7 +48,16 @@ parseCurrentUserStream(POLE::Storage& storage, CurrentUserStream& cus)
         return false;
     }
     LEInputStream stream(&buffer);
-    parseCurrentUserStream(stream, cus);
+    try {
+        parseCurrentUserStream(stream, cus);
+    } catch (IOException e) {
+        qDebug() << "caught IOException while parsing CurrentUserStream: " << " " << e.msg;
+        qDebug() << "stream position: " << stream.getPosition();
+        return false;
+    } catch (...) {
+        qDebug() << "caught unknown exception while parsing CurrentUserStream";
+        return false;
+    }
     if (stream.getPosition() != buffer.size()) {
         qDebug() << (buffer.size() - stream.getPosition())
         << "bytes left at the end of CurrentUserStream";
@@ -59,10 +73,44 @@ parsePowerPointStructs(POLE::Storage& storage, PowerPointStructs& pps)
         return false;
     }
     LEInputStream stream(&buffer);
-    parsePowerPointStructs(stream, pps);
+    try {
+        parsePowerPointStructs(stream, pps);
+    } catch (IOException e) {
+        qDebug() << "caught IOException while parsing PowerPointStructs " << " " << e.msg;
+        qDebug() << "stream position: " << stream.getPosition();
+        return false;
+    } catch (...) {
+        qDebug() << "caught unknown exception while parsing PowerPointStructs";
+        return false;
+    }
     if (stream.getPosition() != buffer.size()) {
         qDebug() << (buffer.size() - stream.getPosition())
         << "bytes left at the end of PowerPointStructs, so probably an error at position " << stream.getMaxPosition();
+        return false;
+    }
+    return true;
+}
+bool
+parsePictures(POLE::Storage& storage, PicturesStream& pps)
+{
+    QBuffer buffer;
+    if (!readStream(storage, "/Pictures", buffer)) {
+        return false;
+    }
+    LEInputStream stream(&buffer);
+    try {
+        parsePicturesStream(stream, pps);
+    } catch (IOException e) {
+        qDebug() << "caught IOException while parsing Pictures " << " " << e.msg;
+        qDebug() << "stream position: " << stream.getPosition();
+        return false;
+    } catch (...) {
+        qDebug() << "caught unknown exception while parsing Pictures";
+        return false;
+    }
+    if (stream.getPosition() != buffer.size()) {
+        qDebug() << (buffer.size() - stream.getPosition())
+        << "bytes left at the end of PicturesStream, so probably an error at position " << stream.getMaxPosition();
         return false;
     }
     return true;
@@ -116,28 +164,16 @@ ParsedPresentation::parse(POLE::Storage& storage)
     notesMaster = 0;
 
 // read the CurrentUserStream and PowerPointStructs
-    try {
-        if (!parsePowerPointStructs(storage, presentation)) {
-            qDebug() << "error parsing PowerPointStructs";
-            return false;
-        }
-    } catch (IOException e) {
-        qDebug() << "caught IOException while parsing PowerPointStructs " << e.what() << " " << e.msg;
-        return false;
-    } catch (...) {
-        qDebug() << "caught unknown exception while parsing PowerPointStructs";
+    if (!parsePowerPointStructs(storage, presentation)) {
+        qDebug() << "error parsing PowerPointStructs";
         return false;
     }
-    try {
-        if (!parseCurrentUserStream(storage, currentUserStream)) {
-            qDebug() << "error parsing CurrentUserStream";
-            return false;
-        }
-    } catch (IOException e) {
-        qDebug() << "caught IOException while parsing CurrentUserStream: " << e.what() << " " << e.msg;
+    if (!parseCurrentUserStream(storage, currentUserStream)) {
+        qDebug() << "error parsing CurrentUserStream";
         return false;
-    } catch (...) {
-        qDebug() << "caught unknown exception while parsing CurrentUserStream";
+    }
+    if (!parsePictures(storage, pictures)) {
+        qDebug() << "error parsing PicturesStream";
         return false;
     }
 // Part 1: Construct the persist object directory

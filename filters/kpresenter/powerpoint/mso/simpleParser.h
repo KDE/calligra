@@ -777,6 +777,7 @@ public:
 class CurrentUserAtom : public StreamOffset {
 public:
     bool _has_unicodeUserName;
+    bool _has_unknown;
     RecordHeader rh;
     quint32 size;
     quint32 headerToken;
@@ -788,7 +789,8 @@ public:
     quint16 unused;
     QByteArray ansiUserName;
     quint32 relVersion;
-    QByteArray unicodeUserName;
+    QVector<quint16> unicodeUserName;
+    QByteArray unknown;
     CurrentUserAtom(void* /*dummy*/ = 0) {}
 };
 class TODOS : public StreamOffset {
@@ -1097,7 +1099,8 @@ public:
     RecordHeader rh;
     bool fSubset;
     bool fSubsetOptionConfirmed;
-    quint32 unused;
+    quint16 unuseda;
+    quint16 unusedb;
     FontEmbedFlags10Atom(void* /*dummy*/ = 0) {}
 };
 class CopyrightAtom : public StreamOffset {
@@ -1116,9 +1119,9 @@ class FilterPrivacyFlags10Atom : public StreamOffset {
 public:
     RecordHeader rh;
     bool fRemovePII;
-    quint32 reserved2a;
+    quint8 reserved2a;
     quint8 reserved2b;
-    quint8 reserved2c;
+    quint16 reserved2c;
     FilterPrivacyFlags10Atom(void* /*dummy*/ = 0) {}
 };
 class OutlineTextProps10Container : public StreamOffset {
@@ -2789,6 +2792,7 @@ public:
 class PicturesStream : public StreamOffset {
 public:
     OfficeArtBStoreDelay anon1;
+    QList<Byte> trailing;
     PicturesStream(void* /*dummy*/ = 0) {}
 };
 class OfficeArtMetafileHeader : public StreamOffset {
@@ -4411,11 +4415,12 @@ class NotesContainer : public StreamOffset {
 public:
     RecordHeader rh;
     NotesAtom notesAtom;
-    QSharedPointer<PerSlideHeadersFootersContainer> perSlideHeadersFootersContainer;
+    QSharedPointer<PerSlideHeadersFootersContainer> perSlideHFContainer;
     DrawingContainer drawing;
     SlideSchemeColorSchemeAtom slideSchemeColorSchemeAtom;
     QSharedPointer<SlideNameAtom> slideNameAtom;
     QSharedPointer<SlideProgTagsContainer> slideProgTagsContainer;
+    QSharedPointer<PerSlideHeadersFootersContainer> perSlideHFContainer2;
     QList<NotesRoundTripAtom> rgNotesRoundTripAtom;
     NotesContainer(void* /*dummy*/ = 0) {}
 };

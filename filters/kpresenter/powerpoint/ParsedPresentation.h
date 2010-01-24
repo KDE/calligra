@@ -28,6 +28,7 @@ class ParsedPresentation
 public:
     PPT::CurrentUserStream currentUserStream;
     PPT::PowerPointStructs presentation;
+    PPT::PicturesStream pictures;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
     const PPT::DocumentContainer* documentContainer;
