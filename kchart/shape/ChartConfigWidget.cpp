@@ -792,7 +792,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     default:
         break;
     }
-    
+
     emit dataSetChartTypeChanged( dataSet, type );
     emit dataSetChartSubTypeChanged( dataSet, subtype );
     
@@ -910,83 +910,80 @@ void ChartConfigWidget::update()
         d->ui.propertiesSeparator->setVisible( needSeparator );
 
         // Set the chart type icon in the chart type button.
-        switch ( d->shape->chartSubType() ) {
-        case NormalChartSubtype:
-            switch ( d->shape->chartType() ) {
-            case BarChartType:
+        switch ( d->shape->chartType() ) {
+        case BarChartType:
+            switch ( d->shape->chartSubType() ) {
+            case NormalChartSubtype:
                 d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
                 break;
-            case LineChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
-                break;
-            case AreaChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
-                break;
-            case CircleChartType:
-            case RingChartType:
-            case RadarChartType:
-            case StockChartType:
-            case BubbleChartType:
-            case SurfaceChartType:
-            case GanttChartType:
-            case LastChartType:
-            default:
-                break;
-            }
-            break;
-        case StackedChartSubtype:
-            //d->ui.subtypeStacked->blockSignals( true );
-            //d->ui.subtypeStacked->setChecked( true );
-            //d->ui.subtypeStacked->blockSignals( false );
-            switch ( d->shape->chartType() ) {
-            case BarChartType:
+            case StackedChartSubtype:
                 d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
                 break;
-            case LineChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
-                break;
-            case AreaChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
-                break;
-            case CircleChartType:
-            case RingChartType:
-            case RadarChartType:
-            case StockChartType:
-            case BubbleChartType:
-            case SurfaceChartType:
-            case GanttChartType:
-            case LastChartType:
-            default:
-                break;
-            }
-            break;
-        case PercentChartSubtype:
-            //d->ui.subtypePercent->blockSignals( true );
-            //d->ui.subtypePercent->setChecked( true );
-            //d->ui.subtypePercent->blockSignals( false );
-            switch ( d->shape->chartType() ) {
-            case BarChartType:
+            case PercentChartSubtype:
                 d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
                 break;
-            case LineChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
-                break;
-            case AreaChartType:
-                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
-                break;
-            case CircleChartType:
-            case RingChartType:
-            case RadarChartType:
-            case StockChartType:
-            case BubbleChartType:
-            case SurfaceChartType:
-            case GanttChartType:
-            case LastChartType:
+            case NoChartSubtype:
             default:
                 break;
             }
             break;
-        case NoChartSubtype:
+        case LineChartType:
+            switch ( d->shape->chartSubType() ) {
+            case NormalChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+                break;
+            case StackedChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                break;
+            case PercentChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                break;
+            case NoChartSubtype:
+            default:
+                break;
+            }
+            break;
+        case AreaChartType:
+            switch ( d->shape->chartSubType() ) {
+            case NormalChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
+                break;
+            case StackedChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+                break;
+            case PercentChartSubtype:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
+                break;
+            case NoChartSubtype:
+            default:
+                break;
+            }
+            break;
+        case CircleChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_pie_normal" ) );
+            break;
+        case RingChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_ring_normal" ) );
+            break;
+        case RadarChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_polar_normal" ) );
+            break;
+        case StockChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_stock_normal" ) );
+            break;
+        case ScatterChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_scatter_normal" ) );
+            break;
+        case BubbleChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_bubble_normal" ) );
+            break;
+        case SurfaceChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_surface_normal" ) );
+            break;
+        case GanttChartType:
+            d->ui.chartTypeMenu->setIcon( KIcon( "chart_gantt_normal" ) );
+            break;
+        case LastChartType:
         default:
             break;
         }
