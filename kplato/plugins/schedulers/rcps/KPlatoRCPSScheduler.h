@@ -30,6 +30,8 @@
 
 class ProgressInfo;
 
+class KLocale;
+
 namespace KPlato
 {
     class Project;
@@ -133,6 +135,7 @@ private:
     bool m_stopScheduling; // Stop next time progress is called
     bool m_haltScheduling; // Do not access project structure anymore !
 
+    KLocale *m_locale;
 };
 
 #endif // KPLATORCPSPSCHEDULER_H

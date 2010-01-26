@@ -30,6 +30,7 @@
 #include <QString>
 #include <QTimer>
 
+#include <KGlobal>
 #include <KLocale>
 #include <KDebug>
 
@@ -61,6 +62,7 @@ KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm,
     m_stopScheduling(false ),
     m_haltScheduling( false )
 {
+    m_locale = project->locale() ? project->locale() : KGlobal::locale();
     m_starttime = sm->recalculate() ? sm->recalculateFrom() : m_project->constraintStartTime();
 
     connect( this, SIGNAL( started() ), this, SLOT( slotStarted() ) );
@@ -77,8 +79,8 @@ KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm,
     m_project->initiateCalculation( *cs );
     m_project->initiateCalculationLists( *cs );
     cs->setPhaseName( 0, i18n( "Init" ) );
-    cs->logInfo( i18n( "Schedule project using RCPS Scheduler, starting at %1", m_project->locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
-    cs->logInfo( i18n( "Project start %1", m_project->locale()->formatDateTime( project->constraintStartTime() ) ), 0 );
+    cs->logInfo( i18n( "Schedule project using RCPS Scheduler, starting at %1", m_locale->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+    cs->logInfo( i18n( "Project start %1", m_locale->formatDateTime( project->constraintStartTime() ) ), 0 );
     
     connect( this, SIGNAL( maxProgress( int ) ), project, SIGNAL( maxProgress( int ) ) );
     connect( this, SIGNAL( sigProgress( int ) ), project, SIGNAL( sigProgress( int ) ) );
@@ -241,7 +243,6 @@ int KPlatoRCPSScheduler::kplatoToRCPS()
 
 void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap )
 {
-    KLocale *locale = m_project->locale();
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
     struct rcps_mode *mode = rcps_mode_get(job, rcps_job_getmode_res(job));
@@ -263,7 +264,7 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
     }
     DateTime start = m_starttime.addSecs(st * m_timeunit);
     DateTime end = start + Duration( dur * m_timeunit * 1000 );
-    cs->logDebug( i18n( "Task '%1' start=%2, duration=%3: %4 - %5", rcps_job_getname(job), st, dur, locale->formatDateTime( start ), locale->formatDateTime( end ) ), 1 );
+    cs->logDebug( i18n( "Task '%1' start=%2, duration=%3: %4 - %5", rcps_job_getname(job), st, dur, m_locale->formatDateTime( start ), m_locale->formatDateTime( end ) ), 1 );
 
     task->setStartTime( start );
     task->setEndTime( end );
@@ -288,10 +289,10 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
     if ( m_manager->recalculate() ) {
         if ( task->completion().isFinished() ) {
             task->copySchedule();
-            cs->logInfo( i18n( "Task is completed, copied schedule: %2 to %3", task->name(), locale->formatDateTime( task->startTime() ), locale->formatDateTime( task->endTime() ) ), 1 );
+            cs->logInfo( i18n( "Task is completed, copied schedule: %2 to %3", task->name(), m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( task->endTime() ) ), 1 );
         } else if ( task->completion().isStarted() ) {
             task->copyAppointments( DateTime(), start );
-            cs->logInfo( i18n( "Task is %4% completed, copied appointments from %2 to %3", task->name(), locale->formatDateTime( task->startTime() ), locale->formatDateTime( start ), task->completion().percentFinished() ), 1 );
+            cs->logInfo( i18n( "Task is %4% completed, copied appointments from %2 to %3", task->name(), m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( start ), task->completion().percentFinished() ), 1 );
         }
     }
     cs->setScheduled( true );
@@ -313,7 +314,7 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
         }
     } //else  Fixed duration
     task->setDuration( task->endTime() - task->startTime() );
-    cs->logInfo( i18n( "Scheduled from %1 to %2", locale->formatDateTime( task->startTime() ), locale->formatDateTime( task->endTime() ) ), 1 );
+    cs->logInfo( i18n( "Scheduled from %1 to %2", m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( task->endTime() ) ), 1 );
 }
 
 void KPlatoRCPSScheduler::kplatoFromRCPS()
@@ -344,7 +345,7 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
     DateTime end = m_starttime.addSecs( et );
     m_project->setStartTime( projectstart );
     m_project->setEndTime( end );
-    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", m_project->locale()->formatDateTime( projectstart ), m_project->locale()->formatDateTime( end ) ), 1 );
+    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", m_locale->formatDateTime( projectstart ), m_locale->formatDateTime( end ) ), 1 );
 
     m_project->adjustSummarytask();
     
@@ -421,7 +422,7 @@ Duration KPlatoRCPSScheduler::calculateLateStuff( const QMap<Node*, QList<Resour
     task->setPositiveFloat( pf );
     task->setLateFinish( task->endTime() + pf );
     task->setLateStart( task->lateFinish() - ( task->endTime() - task->startTime() ) );
-    if ( cs ) cs->logInfo( i18n( "Late start %1, late finish %2, positive float %3", m_project->locale()->formatDateTime( task->lateStart() ), m_project->locale()->formatDateTime( task->lateFinish() ), pf.toString() ), 2 );
+    if ( cs ) cs->logInfo( i18n( "Late start %1, late finish %2, positive float %3", m_locale->formatDateTime( task->lateStart() ), m_locale->formatDateTime( task->lateFinish() ), pf.toString() ), 2 );
     return pf;
 }
 
@@ -472,7 +473,7 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
     }
     task->setEarlyStart( task->startTime() - tot );
     task->setEarlyFinish( task->earlyStart() + ( task->endTime() - task->startTime() ) );
-    if ( cs ) cs->logInfo( i18n( "Early start %1, early finish %2", m_project->locale()->formatDateTime( task->earlyStart() ), m_project->locale()->formatDateTime( task->earlyFinish() ) ), 2 );
+    if ( cs ) cs->logInfo( i18n( "Early start %1, early finish %2", m_locale->formatDateTime( task->earlyStart() ), m_locale->formatDateTime( task->earlyFinish() ) ), 2 );
     return tot;
 }
 
