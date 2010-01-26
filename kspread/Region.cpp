@@ -93,6 +93,8 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
             return;
         if (!sheet)
             sheet = fallbackSheet;
+        if (!sheet)
+            continue;
 
         int delimiterPos = sRegion.indexOf(':');
         if (delimiterPos > -1) {
