@@ -97,7 +97,7 @@ public:
     QString debugString() const;
 
     //! true if this column is visible to the user (and its data is fetched by the engine)
-    bool visible : 1;
+    bool visible;
 
 private:
     /*! Index of column with visible lookup value within the 'fields expanded' vector.
@@ -165,12 +165,10 @@ protected:
     //! Column to sort
     QueryColumnInfo* m_column; //!< 0 if m_field is non-0.
     int m_pos; //!< A helper for m_column that allows to know that sorting column
-    //!< was defined by providing its position. -1 by default.
-    //!< e.g. SELECT a, b FROM T ORDER BY 2
+               //!< was defined by providing its position. -1 by default.
+               //!< e.g. SELECT a, b FROM T ORDER BY 2
     Field* m_field; //!< Used only in case when the second contructor is used.
-
-    //! true if ascending sorting should be performed (the default).
-    bool m_ascending : 1;
+    bool m_ascending; //!< true if ascending sorting should be performed (the default).
 };
 
 //! A base for KexiDB::OrderByColumnList
@@ -182,6 +180,9 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 public:
     /*! Constructs empty list of ordered columns. */
     OrderByColumnList();
+
+    /*! Copy constructor. */
+    OrderByColumnList(const OrderByColumnList& other);
 
     ~OrderByColumnList();
 
@@ -245,10 +246,8 @@ public:
         return OrderByColumnListBase::count();
     }
 
-    /*! Removes all elements from the list. */
-    void clear() {
-        OrderByColumnListBase::clear();
-    }
+    /*! Removes all elements from the list (deletes them). */
+    void clear();
 
     iterator begin() {
         return OrderByColumnListBase::begin();

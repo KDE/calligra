@@ -47,9 +47,15 @@ QueryColumnInfo::~QueryColumnInfo()
 
 QString QueryColumnInfo::debugString() const
 {
-    return field->name() +
+    QString res;
+    if (field->table()) {
+        res += field->table()->name() + QLatin1String(".");
+    }
+    res += field->debugString() +
            (alias.isEmpty() ? QString()
-            : (QString::fromLatin1(" AS ") + QString(alias)));
+            : (QLatin1String(" AS ") + QString(alias)))
+            + (visible ? QString() : QLatin1String(" [INVISIBLE]"));
+    return res;
 }
 
 //=======================================
@@ -450,6 +456,13 @@ OrderByColumnList::OrderByColumnList()
 {
 }
 
+OrderByColumnList::OrderByColumnList(const OrderByColumnList& other)
+{
+    for (QList<OrderByColumn*>::ConstIterator it(other.constBegin()); it != other.constEnd(); ++it) {
+        appendColumn(**it);
+    }
+}
+
 bool OrderByColumnList::appendFields(QuerySchema& querySchema,
                                      const QString& field1, bool ascending1,
                                      const QString& field2, bool ascending2,
@@ -549,6 +562,12 @@ QString OrderByColumnList::toSQLString(bool includeTableNames, Driver *drv, int 
         string += (*it)->toSQLString(includeTableNames, drv, identifierEscaping);
     }
     return string;
+}
+
+void OrderByColumnList::clear()
+{
+    qDeleteAll(begin(), end());
+    OrderByColumnListBase::clear();
 }
 
 //=======================================
@@ -1712,7 +1731,10 @@ BaseExpr *QuerySchema::whereExpression() const
 
 void QuerySchema::setOrderByColumnList(const OrderByColumnList& list)
 {
-    d->orderByColumnList = list;
+    d->orderByColumnList.clear();
+    for (QList<OrderByColumn*>::ConstIterator it(list.constBegin()); it != list.constEnd(); ++it) {
+        d->orderByColumnList.appendColumn(**it);
+    }
 // all field names should be found, exit otherwise ..........?
 }
 
