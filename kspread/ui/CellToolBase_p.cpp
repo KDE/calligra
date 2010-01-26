@@ -1179,7 +1179,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             actions.append(popupMenuActions["separator3"]);
             actions.append(popupMenuActions["insertCell"]);
             actions.append(popupMenuActions["deleteCell"]);
-        } else if (q->selection()->isColumnSelected() && q->selection()->isSingular()) {
+        } else if (q->selection()->isColumnSelected()) {
             actions.append(q->action("resizeCol"));
             actions.append(popupMenuActions["adjustColumn"]);
             actions.append(popupMenuActions["separator4"]);
@@ -1216,7 +1216,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
                     break;
                 }
             }
-        } else if (q->selection()->isRowSelected() && q->selection()->isSingular()) {
+        } else if (q->selection()->isRowSelected()) {
             actions.append(q->action("resizeRow"));
             actions.append(popupMenuActions["adjustRow"]);
             actions.append(popupMenuActions["separator5"]);
