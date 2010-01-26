@@ -95,6 +95,7 @@ GenericName[wa]=Tåvleu
 GenericName[x-test]=xxSpreadsheetxx
 GenericName[zh_CN]=电子表格
 GenericName[zh_TW]=工作表
+Comment=Write spreadsheet documents
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
 Type=Application
 Icon=kspread
