@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="38">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="39">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -184,7 +184,7 @@
  <Action name="menu_min"/>
  <Action name="menu_sum"/>
 </Menu>
-<ToolBar fullWidth="true" iconText="icontextbottom" name="editToolBar"><text>Edit</text>
+<ToolBar fullWidth="true" iconText="icontextright" name="editToolBar"><text>Edit</text>
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
  <Separator/>
@@ -192,16 +192,17 @@
  <Action name="copy"/>
  <Action name="paste"/>
 </ToolBar>
-<ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
+<ToolBar fullWidth="true" iconText="icontextright" hidden="true" name="navigationToolBar"><text>Navigation</text>
  <Action name="firstSheet"/>
  <Action name="previousSheet"/>
  <Action name="nextSheet"/>
  <Action name="lastSheet"/>
 </ToolBar>
-<ToolBar fullWidth="true" hidden="true" name="fontPropertyToolBar"><text>Format</text>
+<ToolBar fullWidth="true" iconText="icontextright" hidden="true" name="fontToolBar"><text>Font</text>
  <Action name="font"/>
  <Action name="fontSize"/>
- <Separator/>
+</ToolBar>
+<ToolBar fullWidth="true" iconText="icontextright" hidden="true" name="formatToolBar"><text>Format</text>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
@@ -223,7 +224,7 @@
  <Action name="currency"/>
  //-->
 </ToolBar>
-<ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
+<ToolBar fullWidth="true" iconText="icontextright" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
  <Action name="borderTop"/>
  <Action name="borderRight"/>
