@@ -3135,9 +3135,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     if (tableContext.rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
     // OpenDocument needs at least one cell per sheet.
-    maxCols = qMax(1, maxCols);
-    maxRows = qMax(1, maxRows);
-    maxMaxRows = qMax(1, maxMaxRows);
+    maxCols = qMin(KS_colMax, qMax(1, maxCols));
+    maxRows = qMin(KS_rowMax, qMax(1, maxRows));
+    maxMaxRows = maxMaxRows;
     kDebug(36003) << "\t Sheet dimension:" << maxCols << " x" << maxRows;
 
     // saving the columns
