@@ -1001,7 +1001,7 @@
         <Text>The RANK() function returns the rank of a number in a list of numbers.</Text>
         <Text>Order specifies how to rank the numbers:</Text>
         <Text>If 0 or omitted, Data is ranked in descending order.</Text>
-        <Text>If not 0, Data is ranked in descending order.</Text>
+        <Text>If not 0, Data is ranked in ascending order.</Text>
         <Syntax>RSQ(Value; Data; Order)</Syntax>
         <Example>RANK (2;{1;2;3}) equals 2</Example>
       </Help>
