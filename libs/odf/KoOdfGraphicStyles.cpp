@@ -633,7 +633,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                         kDebug(30003) << " draw:rotation 'angle' :" << angle;
                         break;
                     }
-                } else if (styleHash == "qreal") {
+                } else if (styleHash == "double") {
                     switch (angle) {
                     case 0:
                     case 180:
