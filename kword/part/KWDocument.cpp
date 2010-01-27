@@ -149,6 +149,10 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
     resourceManager()->setUndoStack(undoStack());
 
+    QVariant variant;
+    variant.setValue(new KoChangeTracker(resourceManager()));
+    resourceManager()->setResource(KoText::ChangeTracker, variant);
+
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
             inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
 
