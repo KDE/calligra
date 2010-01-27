@@ -97,6 +97,11 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     } else {
         kWarning() << "No mainStyles!";
     }
+
+    //[MS-DOC] — v20090708 - 2.7.2 DopBase pg.163
+    if ((0x00D9 >= m_parser->fib().nFib) && (m_parser->dop().nfcFtnRef2 == 0)) {
+        m_footNoteNumber = m_parser->dop().nFtn - 1;
+    }
 }
 
 //increment m_sectionNumber
