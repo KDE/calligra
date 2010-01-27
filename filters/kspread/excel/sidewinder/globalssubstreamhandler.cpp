@@ -479,6 +479,20 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     pen.color = convertedColor(xf.bottomBorderColor());
     borders.setBottomBorder(pen);
 
+    if(xf.diagonalTopLeft()) {
+        pen = convertBorderStyle(xf.diagonalStyle());
+        if(pen.width <= 0) pen.width = 0.1;
+        pen.color = convertedColor(xf.diagonalColor());
+        borders.setTopLeftBorder(pen);
+    }
+
+    if(xf.diagonalBottomLeft()) {
+        pen = convertBorderStyle(xf.diagonalStyle());
+        if(pen.width <= 0) pen.width = 0.1;
+        pen.color = convertedColor(xf.diagonalColor());
+        borders.setBottomLeftBorder(pen);
+    }
+    
     format.setBorders(borders);
 
     FormatBackground background;

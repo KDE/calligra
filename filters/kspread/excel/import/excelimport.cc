@@ -1490,11 +1490,10 @@ QString convertColor(const Color& color)
 
 void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
 {
-    QString result;
     if (pen.style == Pen::NoLine || pen.width == 0) {
-        result = "none";
-        style.addProperty("fo:border-" + which, result);
+        //style.addProperty(which, "none");
     } else {
+        QString result;
         if (pen.style == Pen::DoubleLine) {
             result += QString::number(pen.width * 3);
         } else {
@@ -1513,10 +1512,11 @@ void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
 
         result += convertColor(pen.color);
 
-        style.addProperty("fo:border-" + which, result);
+        style.addProperty(which, result);
         if (pen.style == Pen::DoubleLine) {
             result = QString::number(pen.width);
             result = result + "pt " + result + "pt " + result + "pt";
+//if(fo:border)
             style.addProperty("fo:border-line-width-" + which, result);
         }
     }
@@ -1593,11 +1593,12 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     }
 
     if (!borders.isNull()) {
-        convertBorder("left", borders.leftBorder(), style);
-        convertBorder("right", borders.rightBorder(), style);
-        convertBorder("top", borders.topBorder(), style);
-        convertBorder("bottom", borders.bottomBorder(), style);
-        //TODO diagonal 'borders'
+        convertBorder("fo:border-left", borders.leftBorder(), style);
+        convertBorder("fo:border-right", borders.rightBorder(), style);
+        convertBorder("fo:border-top", borders.topBorder(), style);
+        convertBorder("fo:border-bottom", borders.bottomBorder(), style);
+        convertBorder("style:diagonal-tl-br", borders.topLeftBorder(), style);
+        convertBorder("style:diagonal-tr-bl", borders.bottomLeftBorder(), style);
     }
 
     if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {

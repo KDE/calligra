@@ -478,6 +478,8 @@ public:
     Pen rightBorder;
     Pen topBorder;
     Pen bottomBorder;
+    Pen topLeftBorder;
+    Pen bottomLeftBorder;
 };
 
 // constructor
@@ -514,6 +516,8 @@ FormatBorders& FormatBorders::assign(const FormatBorders& border)
     d->rightBorder  = border.rightBorder();
     d->topBorder    = border.topBorder();
     d->bottomBorder = border.bottomBorder();
+    d->topLeftBorder = border.topLeftBorder();
+    d->bottomLeftBorder = border.bottomLeftBorder();
     return *this;
 }
 
@@ -566,13 +570,37 @@ void FormatBorders::setBottomBorder(const Pen& pen)
     d->null = false;
 }
 
+const Pen& FormatBorders::topLeftBorder() const
+{
+    return d->topLeftBorder;
+}
+
+void FormatBorders::setTopLeftBorder(const Pen& pen)
+{
+    d->topLeftBorder = pen;
+    d->null = false;
+}
+
+const Pen& FormatBorders::bottomLeftBorder() const
+{
+    return d->bottomLeftBorder;
+}
+
+void FormatBorders::setBottomLeftBorder(const Pen& pen)
+{
+    d->bottomLeftBorder = pen;
+    d->null = false;
+}
+    
 bool FormatBorders::operator==(const FormatBorders& font) const
 {
     return
         d->leftBorder == font.d->leftBorder &&
         d->rightBorder == font.d->rightBorder &&
         d->topBorder == font.d->topBorder &&
-        d->bottomBorder == font.d->bottomBorder;
+        d->bottomBorder == font.d->bottomBorder &&
+        d->topLeftBorder == font.d->topLeftBorder &&
+        d->bottomLeftBorder == font.d->bottomLeftBorder;
 }
 
 bool FormatBorders::operator!=(const FormatBorders& font) const
@@ -581,7 +609,9 @@ bool FormatBorders::operator!=(const FormatBorders& font) const
         d->leftBorder != font.d->leftBorder ||
         d->rightBorder != font.d->rightBorder ||
         d->topBorder != font.d->topBorder ||
-        d->bottomBorder != font.d->bottomBorder;
+        d->bottomBorder != font.d->bottomBorder ||
+        d->topLeftBorder != font.d->topLeftBorder ||
+        d->bottomLeftBorder != font.d->bottomLeftBorder;
 }
 
 // helper class for Format class

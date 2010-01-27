@@ -91,11 +91,8 @@ inline bool operator!=(const Color& c1, const Color& c2)
 class Pen
 {
 public:
-
     unsigned style;
-
     float width;
-
     Color color;
 
     enum {
@@ -628,6 +625,12 @@ public:
      */
     void setBottomBorder(const Pen& pen);
 
+    // diagonal borders
+    const Pen& topLeftBorder() const;
+    void setTopLeftBorder(const Pen& pen);
+    const Pen& bottomLeftBorder() const;
+    void setBottomLeftBorder(const Pen& pen);
+    
     /**
      * Returns true if this background is equal to f; otherwise returns false.
      */

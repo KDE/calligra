@@ -2575,13 +2575,13 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
         setTopBorderStyle((linestyle >> 8) & 0xf);
         setBottomBorderStyle((linestyle >> 12) & 0xf);
 
-        setLeftBorderColor(color1 & 0x7f);
+        setLeftBorderColor(color1 & 0x7f);//127
         setRightBorderColor((color1 >> 7) & 0x7f);
         setTopBorderColor(color2 & 0x7f);
         setBottomBorderColor((color2 >> 7) & 0x7f);
 
-        setDiagonalTopLeft(color1 & 0x40);
-        setDiagonalBottomLeft(color1 & 0x80);
+        setDiagonalTopLeft((color1 >> 14) == 0x1);
+        setDiagonalBottomLeft((color1 >> 14) == 0x2);
         setDiagonalStyle((flag >> 4) & 0x1e);
         setDiagonalColor(((flag & 0x1f) << 2) + ((color2 >> 14) & 3));
 
