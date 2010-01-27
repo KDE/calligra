@@ -61,6 +61,8 @@ Main Window TODO
 *implemented dock hiding as side bars
 TableView TODO
 *mouse move over large ables scrolls the table!
+Security:
+*Set SECURE DELETE on by default http://sqlite.org/compile.html#secure_delete - should be also possible to disable it in the config
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
