@@ -411,9 +411,14 @@
 </record>
 
 <record name="SheetExt" id="0x0862">
-   <field name="cb"        type="unsigned"   size="32" />
-   <field name="icvPlain"  type="unsigned"   size="7" />
-   <field name="reserved" size="25" />
+   <field name="cb" type="unsigned" size="32" />
+   <field name="icvPlain" type="unsigned" size="7" />
+   <field name="reserved1" size="25" />
+   <field name="icvPlain12" type="unsigned" size="7" />
+   <field name="fCondFmtCalc" type="bool" size="1" />
+   <field name="fNotPublished" type="bool" size="1" />
+   <field name="reserved2" size="23" />
+   <field name="color" type="unsigned" size="16" />
 </record>
 
 <record name="Begin" id="0x1033" />

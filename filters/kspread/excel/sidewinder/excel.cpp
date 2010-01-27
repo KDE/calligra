@@ -2580,8 +2580,9 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
         setTopBorderColor(color2 & 0x7f);
         setBottomBorderColor((color2 >> 7) & 0x7f);
 
-        setDiagonalTopLeft((color1 >> 14) == 0x1);
-        setDiagonalBottomLeft((color1 >> 14) == 0x2);
+        const unsigned grbitDiag = color1 >> 14;
+        setDiagonalTopLeft(grbitDiag == 0x1 || grbitDiag == 0x3);
+        setDiagonalBottomLeft(grbitDiag == 0x2 || grbitDiag == 0x3);
         setDiagonalStyle((flag >> 4) & 0x1e);
         setDiagonalColor(((flag & 0x1f) << 2) + ((color2 >> 14) & 3));
 

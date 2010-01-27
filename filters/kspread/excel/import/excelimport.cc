@@ -1488,7 +1488,7 @@ QString convertColor(const Color& color)
     return QString(buf);
 }
 
-void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
+void convertBorder(const QString& which, const QString& lineWidthProperty, const Pen& pen, KoGenStyle& style)
 {
     if (pen.style == Pen::NoLine || pen.width == 0) {
         //style.addProperty(which, "none");
@@ -1516,8 +1516,7 @@ void convertBorder(const QString& which, const Pen& pen, KoGenStyle& style)
         if (pen.style == Pen::DoubleLine) {
             result = QString::number(pen.width);
             result = result + "pt " + result + "pt " + result + "pt";
-//if(fo:border)
-            style.addProperty("fo:border-line-width-" + which, result);
+            style.addProperty(lineWidthProperty, result);
         }
     }
 }
@@ -1593,12 +1592,12 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     }
 
     if (!borders.isNull()) {
-        convertBorder("fo:border-left", borders.leftBorder(), style);
-        convertBorder("fo:border-right", borders.rightBorder(), style);
-        convertBorder("fo:border-top", borders.topBorder(), style);
-        convertBorder("fo:border-bottom", borders.bottomBorder(), style);
-        convertBorder("style:diagonal-tl-br", borders.topLeftBorder(), style);
-        convertBorder("style:diagonal-tr-bl", borders.bottomLeftBorder(), style);
+        convertBorder("fo:border-left", "fo:border-line-width-left", borders.leftBorder(), style);
+        convertBorder("fo:border-right", "fo:border-line-width-right", borders.rightBorder(), style);
+        convertBorder("fo:border-top", "fo:border-line-width-top", borders.topBorder(), style);
+        convertBorder("fo:border-bottom", "fo:border-line-width-bottom", borders.bottomBorder(), style);
+        convertBorder("style:diagonal-tl-br", "style:diagonal-tl-br-widths", borders.topLeftBorder(), style);
+        convertBorder("style:diagonal-tr-bl", "style:diagonal-tr-bl-widths", borders.bottomLeftBorder(), style);
     }
 
     if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {
