@@ -65,6 +65,7 @@ KoFilter::ConversionStatus read_wrapTight();
 KoFilter::ConversionStatus read_wrapThrough();
 KoFilter::ConversionStatus read_shd();
 KoFilter::ConversionStatus read_jc();
+KoFilter::ConversionStatus read_vertAlign();
 
 void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
 

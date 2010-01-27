@@ -284,7 +284,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lang()
  - szCs (Complex Script Font Size) §17.3.2.39
  - [done] u (Underline) §17.3.2.40
  - vanish (Hidden Text) §17.3.2.41
- - vertAlign (Subscript/Superscript Text) §17.3.2.42
+ - [done] vertAlign (Subscript/Superscript Text) §17.3.2.42
  - w (Expanded/Compressed Text) §17.3.2.43
  - webHidden (Web Hidden Text) §17.3.2.44
 */
@@ -319,6 +319,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
             ELSE_TRY_READ_IF(highlight)
             ELSE_TRY_READ_IF(lang)
             ELSE_TRY_READ_IF(shd)
+            ELSE_TRY_READ_IF(vertAlign)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -469,6 +470,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sz()
         break;
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vertAlign
+//! vertAlign handler (Subscript/Superscript Text) ECMA-376, 17.3.2.42, p.349
+/*!    This element specifies the alignment which shall be applied to
+       the contents of this run when displayed.
+*/
+/*!
+ Parent elements:
+ - [done] rPr
+ No child elements.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_vertAlign()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+    if (QString::compare(val, "superscript", Qt::CaseInsensitive) == 0)
+        m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    else if (QString::compare(val, "subscript", Qt::CaseInsensitive) == 0)
+        m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    readNext();
     READ_EPILOGUE
 }
 
