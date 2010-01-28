@@ -884,6 +884,7 @@ void StorageIO::load()
             delete[] buffer;
             return;
         }
+        bbat->load(buffer, buflen);
         delete[] buffer;
     }
 
