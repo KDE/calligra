@@ -862,8 +862,8 @@ void StorageIO::load()
         unsigned k = 109;
         unsigned mblock = header->mbat_start;
         for (unsigned r = 0; r < header->num_mbat; r++) {
-            unsigned long r = loadBigBlock(mblock, buffer2, bbat->blockSize);
-            if (r != bbat->blockSize) {
+            unsigned long rr = loadBigBlock(mblock, buffer2, bbat->blockSize);
+            if (rr != bbat->blockSize) {
                 delete[] buffer2;
                 return;
             }
