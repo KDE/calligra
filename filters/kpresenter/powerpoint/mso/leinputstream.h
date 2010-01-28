@@ -41,7 +41,7 @@ public:
 
 class EOFException : public IOException {
 public:
-    EOFException() :IOException() {}
+    EOFException(const QString& msg = QString()) :IOException(msg) {}
     ~EOFException() throw() {}
 };
 
@@ -77,7 +77,7 @@ private:
     void checkStatus() const {
         if (data.status() != QDataStream::Ok) {
             if (data.status() == QDataStream::ReadPastEnd) {
-                throw EOFException();
+                throw EOFException("Stream claims to be at the end at position: " + QString::number(input->pos()) + "." );
             }
             throw IOException("Error reading data at position " + QString::number(input->pos()) + ".");
         }

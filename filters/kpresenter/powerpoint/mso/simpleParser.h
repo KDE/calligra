@@ -164,6 +164,8 @@ class RTFDateTimeMCAtom;
 void parseRTFDateTimeMCAtom(LEInputStream& in, RTFDateTimeMCAtom& _s);
 class TextBookmarkAtom;
 void parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s);
+class TextRange;
+void parseTextRange(LEInputStream& in, TextRange& _s);
 class MouseTextInteractiveInfoAtom;
 void parseMouseTextInteractiveInfoAtom(LEInputStream& in, MouseTextInteractiveInfoAtom& _s);
 class SlideId;
@@ -1342,10 +1344,16 @@ public:
     qint32 bookmarkID;
     TextBookmarkAtom(void* /*dummy*/ = 0) {}
 };
+class TextRange : public StreamOffset {
+public:
+    qint32 begin;
+    qint32 end;
+    TextRange(void* /*dummy*/ = 0) {}
+};
 class MouseTextInteractiveInfoAtom : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray range;
+    TextRange range;
     MouseTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
 };
 class SlideId : public StreamOffset {
@@ -2942,16 +2950,16 @@ public:
 class TextContainer : public StreamOffset {
 public:
     TextHeaderAtom textHeaderAtom;
-    class textChoice : public QSharedPointer<StreamOffset> {
+    class choice1060411409 : public QSharedPointer<StreamOffset> {
     public:
-        textChoice() {}
-        explicit textChoice(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit textChoice(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice1060411409() {}
+        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    textChoice text;
+    choice1060411409 text;
     QSharedPointer<StyleTextPropAtom> style;
     QList<TextContainerMeta> meta;
     QSharedPointer<MasterTextPropAtom> master;
@@ -2962,20 +2970,20 @@ public:
 };
 class TextContainerMeta : public StreamOffset {
 public:
-    class metaChoice : public QSharedPointer<StreamOffset> {
+    class choice242357012 : public QSharedPointer<StreamOffset> {
     public:
-        metaChoice() {}
-        explicit metaChoice(SlideNumberMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit metaChoice(DateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit metaChoice(GenericDateMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit metaChoice(HeaderMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit metaChoice(FooterMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit metaChoice(RTFDateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice242357012() {}
+        explicit choice242357012(SlideNumberMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice242357012(DateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice242357012(GenericDateMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice242357012(HeaderMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice242357012(FooterMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice242357012(RTFDateTimeMCAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    metaChoice meta;
+    choice242357012 meta;
     TextContainerMeta(void* /*dummy*/ = 0) {}
 };
 class SlidePersistAtom : public StreamOffset {
@@ -3236,17 +3244,17 @@ public:
 };
 class OfficeArtSolverContainerFileBlock : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice3062460075 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(OfficeArtFConnectorRule* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtFArcRule* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtFCalloutRule* a) :QSharedPointer<StreamOffset>(a) {}
+        choice3062460075() {}
+        explicit choice3062460075(OfficeArtFConnectorRule* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3062460075(OfficeArtFArcRule* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3062460075(OfficeArtFCalloutRule* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice3062460075 anon;
     OfficeArtSolverContainerFileBlock(void* /*dummy*/ = 0) {}
 };
 class ProtectionBooleanProperties : public StreamOffset {
@@ -3731,16 +3739,16 @@ public:
 };
 class Prm : public StreamOffset {
 public:
-    class prmChoice : public QSharedPointer<StreamOffset> {
+    class choice1129181155 : public QSharedPointer<StreamOffset> {
     public:
-        prmChoice() {}
-        explicit prmChoice(Prm0* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit prmChoice(Prm1* a) :QSharedPointer<StreamOffset>(a) {}
+        choice1129181155() {}
+        explicit choice1129181155(Prm0* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1129181155(Prm1* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    prmChoice prm;
+    choice1129181155 prm;
     Prm(void* /*dummy*/ = 0) {}
 };
 class OfficeArtBlipEMF : public StreamOffset {
@@ -3775,21 +3783,21 @@ public:
 };
 class OfficeArtBlip : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice279968329 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(OfficeArtBlipEMF* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipWMF* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipPICT* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipJPEG* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipPNG* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipDIB* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlipTIFF* a) :QSharedPointer<StreamOffset>(a) {}
+        choice279968329() {}
+        explicit choice279968329(OfficeArtBlipEMF* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipWMF* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipPICT* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipJPEG* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipPNG* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipDIB* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice279968329(OfficeArtBlipTIFF* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice279968329 anon;
     OfficeArtBlip(void* /*dummy*/ = 0) {}
 };
 class ZoomViewInfoAtom : public StreamOffset {
@@ -3869,31 +3877,31 @@ public:
 };
 class TextContainerInteractiveInfo : public StreamOffset {
 public:
-    class interactiveChoice : public QSharedPointer<StreamOffset> {
+    class choice2203269482 : public QSharedPointer<StreamOffset> {
     public:
-        interactiveChoice() {}
-        explicit interactiveChoice(MouseInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit interactiveChoice(MouseTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2203269482() {}
+        explicit choice2203269482(MouseInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2203269482(MouseTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    interactiveChoice interactive;
+    choice2203269482 interactive;
     TextContainerInteractiveInfo(void* /*dummy*/ = 0) {}
 };
 class TextClientDataSubContainerOrAtom : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice948925432 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(OutlineTextRefAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(TextRulerAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice948925432() {}
+        explicit choice948925432(OutlineTextRefAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice948925432(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice948925432(TextRulerAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice948925432 anon;
     TextClientDataSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class TextPFRun : public StreamOffset {
@@ -3963,39 +3971,39 @@ public:
 };
 class SlideProgTagsSubContainerOrAtom : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice310259039 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice310259039() {}
+        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice310259039 anon;
     SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class ExObjListSubContainer : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice2338534801 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(ExAviMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExCDAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExControlContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExHyperlinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExMCIMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExMIDIAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExOleEmbedContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExOleLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExWAVAudioEmbeddedContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExWAVAudioLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(UnknownExObjListSubContainerChild* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2338534801() {}
+        explicit choice2338534801(ExAviMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExCDAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExControlContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExHyperlinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExMCIMovieContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExMIDIAudioContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExOleEmbedContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExOleLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExWAVAudioEmbeddedContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(ExWAVAudioLinkContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2338534801(UnknownExObjListSubContainerChild* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice2338534801 anon;
     ExObjListSubContainer(void* /*dummy*/ = 0) {}
 };
 class OfficeArtDggContainer : public StreamOffset {
@@ -4012,64 +4020,64 @@ public:
 };
 class OfficeArtFOPTEChoice : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice1276819694 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(Pib* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(PibName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShadowStyleBooleanPropertiesr* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
+        choice1276819694() {}
+        explicit choice1276819694(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(Pib* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(PibName* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillType* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShadowStyleBooleanPropertiesr* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1276819694(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice1276819694 anon;
     OfficeArtFOPTEChoice(void* /*dummy*/ = 0) {}
 };
 class OfficeArtClientData : public StreamOffset {
@@ -4137,16 +4145,16 @@ public:
 };
 class OfficeArtBStoreContainerFileBlock : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice2043165903 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(OfficeArtFBSE* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2043165903() {}
+        explicit choice2043165903(OfficeArtFBSE* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2043165903(OfficeArtBlip* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice2043165903 anon;
     OfficeArtBStoreContainerFileBlock(void* /*dummy*/ = 0) {}
 };
 class SlideViewInfoInstance : public StreamOffset {
@@ -4280,21 +4288,21 @@ public:
 };
 class DocInfoListSubContainerOrAtom : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice2631814737 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(DocProgTagsContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(NormalViewSetInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(NotesTextViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OutlineViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(SlideViewInfoInstance* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(SorterViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(VBAInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2631814737() {}
+        explicit choice2631814737(DocProgTagsContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(NormalViewSetInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(NotesTextViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(OutlineViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(SlideViewInfoInstance* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(SorterViewInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2631814737(VBAInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice2631814737 anon;
     DocInfoListSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class PP9DocBinaryTagExtension : public StreamOffset {
@@ -4335,33 +4343,33 @@ public:
 };
 class OfficeArtSpgrContainerFileBlock : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice3415770141 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice3415770141() {}
+        explicit choice3415770141(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3415770141(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice3415770141 anon;
     OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
 };
 class DocProgBinaryTagSubContainerOrAtom : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice214961565 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(PP9DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(PP10DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(PP11DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(PP12DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
+        choice214961565() {}
+        explicit choice214961565(PP9DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice214961565(PP10DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice214961565(PP11DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice214961565(PP12DocBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice214961565(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice214961565 anon;
     DocProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DrawingContainer : public StreamOffset {
@@ -4426,52 +4434,52 @@ public:
 };
 class DocProgTagsSubContainerOrAtom : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice61655436 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(DocProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice61655436() {}
+        explicit choice61655436(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice61655436(DocProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice61655436 anon;
     DocProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class MasterOrSlideContainer : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice2788643208 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(MainMasterContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2788643208() {}
+        explicit choice2788643208(MainMasterContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2788643208(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice2788643208 anon;
     MasterOrSlideContainer(void* /*dummy*/ = 0) {}
 };
 class PowerPointStruct : public StreamOffset {
 public:
-    class anonChoice : public QSharedPointer<StreamOffset> {
+    class choice394521820 : public QSharedPointer<StreamOffset> {
     public:
-        anonChoice() {}
-        explicit anonChoice(DocumentContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(MasterOrSlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(PersistDirectoryAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(NotesContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(HandoutContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExOleObjStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(ExControlStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(VbaProjectStg* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit anonChoice(UserEditAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice394521820() {}
+        explicit choice394521820(DocumentContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(MasterOrSlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(PersistDirectoryAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(NotesContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(HandoutContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(SlideContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(ExOleObjStg* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(ExControlStg* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(VbaProjectStg* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice394521820(UserEditAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    anonChoice anon;
+    choice394521820 anon;
     PowerPointStruct(void* /*dummy*/ = 0) {}
 };
 } // close namespace
