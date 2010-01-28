@@ -827,6 +827,10 @@ void StorageIO::load()
     buffer = new unsigned char[512];
     file.seekg(0);
     file.read((char*)buffer, 512);
+    if (!file.good()) {
+        delete[] buffer;
+        return;
+    }
     header->load(buffer);
     delete[] buffer;
 
@@ -857,7 +861,11 @@ void StorageIO::load()
         unsigned k = 109;
         unsigned mblock = header->mbat_start;
         for (unsigned r = 0; r < header->num_mbat; r++) {
-            loadBigBlock(mblock, buffer2, bbat->blockSize);
+            unsigned long r = loadBigBlock(mblock, buffer2, bbat->blockSize);
+            if (r != bbat->blockSize) {
+                delete[] buffer2;
+                return;
+            }
             for (unsigned s = 0; s < bbat->blockSize - 4; s += 4) {
                 if (k >= header->num_bat) break;
                 else  blocks[k++] = readU32(buffer2 + s);
@@ -871,8 +879,11 @@ void StorageIO::load()
     buflen = blocks.size() * bbat->blockSize;
     if (buflen > 0) {
         buffer = new unsigned char[ buflen ];
-        loadBigBlocks(blocks, buffer, buflen);
-        bbat->load(buffer, buflen);
+        unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+        if (r != buflen) {
+            delete[] buffer;
+            return;
+        }
         delete[] buffer;
     }
 
@@ -882,7 +893,11 @@ void StorageIO::load()
     buflen = blocks.size() * bbat->blockSize;
     if (buflen > 0) {
         buffer = new unsigned char[ buflen ];
-        loadBigBlocks(blocks, buffer, buflen);
+        unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+        if (r != buflen) {
+            delete[] buffer;
+            return;
+        }
         sbat->load(buffer, buflen);
         delete[] buffer;
     }
@@ -892,7 +907,11 @@ void StorageIO::load()
     blocks = bbat->follow(header->dirent_start);
     buflen = blocks.size() * bbat->blockSize;
     buffer = new unsigned char[ buflen ];
-    loadBigBlocks(blocks, buffer, buflen);
+    unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+    if (r != buflen) {
+        delete[] buffer;
+        return;
+    }
     dirtree->load(buffer, buflen);
     unsigned sb_start = readU32(buffer + 0x74);
     delete[] buffer;
@@ -986,6 +1005,7 @@ unsigned long StorageIO::loadBigBlocks(std::vector<unsigned long> blocks,
         if (pos + p > filesize) p = filesize - pos;
         file.seekg(pos);
         file.read((char*)data + bytes, p);
+        if (!file.good()) return 0;
         bytes += p;
     }
 
@@ -1030,7 +1050,11 @@ unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
         unsigned long bbindex = pos / bbat->blockSize;
         if (bbindex >= sb_blocks.size()) break;
 
-        loadBigBlock(sb_blocks[ bbindex ], buf, bbat->blockSize);
+        unsigned long r = loadBigBlock(sb_blocks[ bbindex ], buf, bbat->blockSize);
+        if (r != bbat->blockSize) {
+            delete[] buf;
+            return 0;
+        }
 
         // copy the data
         unsigned offset = pos % bbat->blockSize;
@@ -1156,7 +1180,11 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
         unsigned long offset = pos % io->bbat->blockSize;
         while (totalbytes < maxlen) {
             if (index >= blocks.size()) break;
-            io->loadBigBlock(blocks[index], buf, io->bbat->blockSize);
+            unsigned long r = io->loadBigBlock(blocks[index], buf, io->bbat->blockSize);
+            if (r != io->bbat->blockSize) {
+                delete [] buf;
+                return 0;
+            }
             unsigned long count = io->bbat->blockSize - offset;
             if (count > maxlen - totalbytes) count = maxlen - totalbytes;
             memcpy(data + totalbytes, buf + offset, count);

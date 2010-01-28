@@ -32,9 +32,9 @@
 #include <string>
 #include <vector>
 
-#include <string.h>
-
 #include "pole.h"
+
+#include <string.h>
 
 // enable to activate debugging output
 // #define POLE_DEBUG
@@ -274,15 +274,15 @@ bool Header::valid()
 
 void Header::load(const unsigned char* buffer)
 {
-    b_shift      = readU16(buffer + 0x1e);
-    s_shift      = readU16(buffer + 0x20);
-    num_bat      = readU32(buffer + 0x2c);
-    dirent_start = readU32(buffer + 0x30);
-    threshold    = readU32(buffer + 0x38);
-    sbat_start   = readU32(buffer + 0x3c);
-    num_sbat     = readU32(buffer + 0x40);
-    mbat_start   = readU32(buffer + 0x44);
-    num_mbat     = readU32(buffer + 0x48);
+    b_shift      = readU16(buffer + 0x1e); // sector shift
+    s_shift      = readU16(buffer + 0x20); // mini sector shift
+    num_bat      = readU32(buffer + 0x2c); // number of fat sectors
+    dirent_start = readU32(buffer + 0x30); // first directory sector location
+    threshold    = readU32(buffer + 0x38); // transaction signature number
+    sbat_start   = readU32(buffer + 0x3c); // mini stream cutoff size
+    num_sbat     = readU32(buffer + 0x40); // first mini fat sector location
+    mbat_start   = readU32(buffer + 0x44); // first mini difat sector location
+    num_mbat     = readU32(buffer + 0x48); // number of difat sectors
 
     for (unsigned i = 0; i < 8; i++)
         id[i] = buffer[i];
@@ -681,10 +681,15 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         e.next = readU32(buffer + 0x48 + p);
         e.child = readU32(buffer + 0x4C + p);
         e.dir = (type != 2);
-
+        
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
         if (name_len < 1) e.valid = false;
+
+        // CLSID, contains a object class GUI if this entry is a storage or root
+        // storage or all zero if not.
+        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
+               name.c_str(),type,e.prev,e.next,e.child,e.start,e.size,readU32(buffer+0x50+p),readU32(buffer+0x54+p),readU32(buffer+0x58+p),readU32(buffer+0x5C+p));
 
         entries.push_back(e);
     }
@@ -822,6 +827,10 @@ void StorageIO::load()
     buffer = new unsigned char[512];
     file.seekg(0);
     file.read((char*)buffer, 512);
+    if (!file.good()) {
+        delete[] buffer;
+        return;
+    }
     header->load(buffer);
     delete[] buffer;
 
@@ -850,12 +859,18 @@ void StorageIO::load()
     if ((header->num_bat > 109) && (header->num_mbat > 0)) {
         unsigned char* buffer2 = new unsigned char[ bbat->blockSize ];
         unsigned k = 109;
+        unsigned mblock = header->mbat_start;
         for (unsigned r = 0; r < header->num_mbat; r++) {
-            loadBigBlock(header->mbat_start + r, buffer2, bbat->blockSize);
-            for (unsigned s = 0; s < bbat->blockSize; s += 4) {
+            unsigned long r = loadBigBlock(mblock, buffer2, bbat->blockSize);
+            if (r != bbat->blockSize) {
+                delete[] buffer2;
+                return;
+            }
+            for (unsigned s = 0; s < bbat->blockSize - 4; s += 4) {
                 if (k >= header->num_bat) break;
                 else  blocks[k++] = readU32(buffer2 + s);
             }
+            mblock = readU32(buffer2 + bbat->blockSize - 4);
         }
         delete[] buffer2;
     }
@@ -864,8 +879,11 @@ void StorageIO::load()
     buflen = blocks.size() * bbat->blockSize;
     if (buflen > 0) {
         buffer = new unsigned char[ buflen ];
-        loadBigBlocks(blocks, buffer, buflen);
-        bbat->load(buffer, buflen);
+        unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+        if (r != buflen) {
+            delete[] buffer;
+            return;
+        }
         delete[] buffer;
     }
 
@@ -875,7 +893,11 @@ void StorageIO::load()
     buflen = blocks.size() * bbat->blockSize;
     if (buflen > 0) {
         buffer = new unsigned char[ buflen ];
-        loadBigBlocks(blocks, buffer, buflen);
+        unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+        if (r != buflen) {
+            delete[] buffer;
+            return;
+        }
         sbat->load(buffer, buflen);
         delete[] buffer;
     }
@@ -885,7 +907,11 @@ void StorageIO::load()
     blocks = bbat->follow(header->dirent_start);
     buflen = blocks.size() * bbat->blockSize;
     buffer = new unsigned char[ buflen ];
-    loadBigBlocks(blocks, buffer, buflen);
+    unsigned long r = loadBigBlocks(blocks, buffer, buflen);
+    if (r != buflen) {
+        delete[] buffer;
+        return;
+    }
     dirtree->load(buffer, buflen);
     unsigned sb_start = readU32(buffer + 0x74);
     delete[] buffer;
@@ -894,7 +920,7 @@ void StorageIO::load()
     sb_blocks = bbat->follow(sb_start);   // small files
 
     // for troubleshooting, just enable this block
-#if 0
+#ifdef POLE_DEBUG
     header->debug();
     sbat->debug();
     bbat->debug();
@@ -972,13 +998,14 @@ unsigned long StorageIO::loadBigBlocks(std::vector<unsigned long> blocks,
 
     // read block one by one, seems fast enough
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) & (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
         unsigned long pos =  bbat->blockSize * (block + 1);
         unsigned long p = (bbat->blockSize < maxlen - bytes) ? bbat->blockSize : maxlen - bytes;
         if (pos + p > filesize) p = filesize - pos;
         file.seekg(pos);
         file.read((char*)data + bytes, p);
+        if (!file.good()) return 0;
         bytes += p;
     }
 
@@ -1015,7 +1042,7 @@ unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
 
     // read small block one by one
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) & (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
 
         // find where the small-block exactly is
@@ -1023,7 +1050,11 @@ unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
         unsigned long bbindex = pos / bbat->blockSize;
         if (bbindex >= sb_blocks.size()) break;
 
-        loadBigBlock(sb_blocks[ bbindex ], buf, bbat->blockSize);
+        unsigned long r = loadBigBlock(sb_blocks[ bbindex ], buf, bbat->blockSize);
+        if (r != bbat->blockSize) {
+            delete[] buf;
+            return 0;
+        }
 
         // copy the data
         unsigned offset = pos % bbat->blockSize;
@@ -1149,7 +1180,11 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
         unsigned long offset = pos % io->bbat->blockSize;
         while (totalbytes < maxlen) {
             if (index >= blocks.size()) break;
-            io->loadBigBlock(blocks[index], buf, io->bbat->blockSize);
+            unsigned long r = io->loadBigBlock(blocks[index], buf, io->bbat->blockSize);
+            if (r != io->bbat->blockSize) {
+                delete [] buf;
+                return 0;
+            }
             unsigned long count = io->bbat->blockSize - offset;
             if (count > maxlen - totalbytes) count = maxlen - totalbytes;
             memcpy(data + totalbytes, buf + offset, count);
@@ -1215,13 +1250,14 @@ std::list<std::string> Storage::entries(const std::string& path)
     std::list<std::string> result;
     DirTree* dt = io->dirtree;
     DirEntry* e = dt->entry(path, false);
-    if (e  && e->dir) {
-        unsigned parent = dt->indexOf(e);
-        std::vector<unsigned> children = dt->children(parent);
-        for (unsigned i = 0; i < children.size(); i++)
-            result.push_back(dt->entry(children[i])->name);
+    if (e) {
+        if (e->dir) {
+            unsigned parent = dt->indexOf(e);
+            std::vector<unsigned> children = dt->children(parent);
+            for (unsigned i = 0; i < children.size(); i++)
+                result.push_back(dt->entry(children[i])->name);
+        }
     }
-
     return result;
 }
 
