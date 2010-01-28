@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kpresenter/part )
+include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kpresenter/part ${Boost_INCLUDE_DIR} )
 
 set(kprvariables_PART_SRCS 
     PresentationVariable.cpp
