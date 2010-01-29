@@ -65,7 +65,7 @@ KWFrameGeometry::~KWFrameGeometry()
     m_state->removeUser();
 }
 
-void KWFrameGeometry::open(KWFrame* frame)
+void KWFrameGeometry::open(KWFrame *frame)
 {
     m_frame = frame;
     open(frame->shape());

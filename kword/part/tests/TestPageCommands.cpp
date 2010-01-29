@@ -115,7 +115,7 @@ void TestPageCommands::testInsertPageCommand() // move of frames
 
     KWFrameSet *fs = new KWFrameSet();
     MockShape *shape = new MockShape();
-    KWFrame * frame = new KWFrame(shape, fs);
+    KWFrame *frame = new KWFrame(shape, fs);
     Q_UNUSED(frame);
     document.addFrameSet(fs);
     QPointF startPos = shape->position();

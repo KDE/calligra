@@ -42,7 +42,7 @@
 // #define DEBUG_REPAINT
 
 
-KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent)
+KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, KWGui *parent)
         : QWidget(parent),
         KoCanvasBase(document),
         m_document(document),
@@ -102,7 +102,7 @@ void KWCanvas::addCommand(QUndoCommand *command)
     m_document->addCommand(command);
 }
 
-void KWCanvas::updateCanvas(const QRectF& rc)
+void KWCanvas::updateCanvas(const QRectF &rc)
 {
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
@@ -337,7 +337,7 @@ void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRec
     // Get the zoom.
     qreal zoomX;
     qreal zoomY;
-    viewConverter()->zoom( &zoomX, &zoomY );
+    viewConverter()->zoom(&zoomX, &zoomY);
 
     KoBorder::BorderData borderSide = border.leftBorderData();
     painter.save();
@@ -388,11 +388,11 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
     case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
     case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
 
-    case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine ); break;
-    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine ); break;
+    case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;
     }
 
-    if (borderData.style == KoBorder::BorderDouble ) {
+    if (borderData.style == KoBorder::BorderDouble) {
         // outerWidth is the width of the outer line.  The offsets
         // are the distances from the center line of the whole
         // border to the centerlines of the outer and inner

@@ -66,7 +66,7 @@ QString KWStatisticsDockerFactory::id() const
     return QString("Statistics");
 }
 
-QDockWidget* KWStatisticsDockerFactory::createDockWidget()
+QDockWidget *KWStatisticsDockerFactory::createDockWidget()
 {
     KWStatisticsDocker *widget = new KWStatisticsDocker(m_view);
     widget->setObjectName(id());

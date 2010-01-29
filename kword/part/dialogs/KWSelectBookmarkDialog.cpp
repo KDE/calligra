@@ -53,7 +53,7 @@ KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
 
 QString KWSelectBookmark::bookmarkName() const
 {
-    const QListWidgetItem* item = widget.bookmarkList->currentItem();
+    const QListWidgetItem *item = widget.bookmarkList->currentItem();
     return item ? item->text() : QString();
 }
 
@@ -71,7 +71,7 @@ void KWSelectBookmark::selectionChanged(int currentRow)
 
 void KWSelectBookmark::slotBookmarkRename()
 {
-    QListWidgetItem* item = widget.bookmarkList->currentItem();
+    QListWidgetItem *item = widget.bookmarkList->currentItem();
     Q_ASSERT(item);
     QString curName = item->text();
     QString newName = item->text();

@@ -41,7 +41,7 @@ const KLocalizedString i18nPage = ki18n("Page: %1/%2");
 
 #define KWSTATUSBAR "KWStatusBarPointer"
 
-KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
+KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     : QObject(view),
     m_statusbar(statusBar),
     m_document(view->kwdocument()),

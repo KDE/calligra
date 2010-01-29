@@ -48,7 +48,7 @@
 #include <QTextCursor>
 #include <KDebug>
 
-QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs)
+QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges  &changes, KWTextFrameSet *fs)
 {
     QByteArray tag;
     switch (fs->textFrameSetType()) {
@@ -82,9 +82,9 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
 }
 
 // rename to save pages ?
-void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges& changes)
+void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes)
 {
-    //kDebug(32001 )<< "START saveHeaderFooter ############################################";
+    //kDebug(32001)<< "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
     // this avoids iterating till we drop
     QHash<KWPageStyle, QHash<int, KWTextFrameSet*> > data;
@@ -152,7 +152,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
     }
 
     //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
-    //    mainStyles.markStyleForStylesXml( s.name );
+    //    mainStyles.markStyleForStylesXml(s.name);
 
     //kDebug(32001) << "END saveHeaderFooter ############################################";
 }
@@ -169,11 +169,11 @@ KWOdfWriter::~KWOdfWriter()
 }
 
 // 1.6: KWDocument::saveOasisHelper()
-bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
+bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
 {
     //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
-    KoStore * store = odfStore.store();
+    KoStore *store = odfStore.store();
 
     if (! store->open("settings.xml")) {
         return false;
@@ -184,11 +184,11 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     if (!store->close())
         return false;
 
-    KoXmlWriter * manifestWriter = odfStore.manifestWriter();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter();
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     if (!contentWriter)
         return false;
 
@@ -268,7 +268,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         const QList<KWFrame*> frames = fs->frames();
         for (int i = 0; i < frames.count(); ++i) {
             KWFrame *frame = frames.at(i);
-            KoShape * shape = frame->shape();
+            KoShape *shape = frame->shape();
             // frame properties first
             shape->setAdditionalStyleAttribute("fo:margin", QString::number(frame->runAroundDistance()) + "pt");
             shape->setAdditionalStyleAttribute("style:horizontal-pos", "from-left");
@@ -356,7 +356,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     if (mainTextFrame) {
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
-            KoTextShapeData * shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
+            KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
                 KWPageManager *pm = m_document->pageManager();
                 if (pm->pageCount()) { // make the first page refer to our page master
@@ -419,7 +419,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 bool KWOdfWriter::saveOdfSettings(KoStore *store)
 {
     KoStoreDevice settingsDev(store);
-    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
+    KoXmlWriter *settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
 
     // add this so that OOo reads guides lines and grid data from ooo:view-settings
     settingsWriter->addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
@@ -481,9 +481,9 @@ void KWOdfWriter::addShapeToTree(KoShape *shape)
         m_shapeTree.insert(shape->boundingRect(), shape);
 
     // add the children of a KoShapeContainer
-    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape* containerShape, container->childShapes()) {
+        foreach(KoShape *containerShape, container->childShapes()) {
             addShapeToTree(containerShape);
         }
     }

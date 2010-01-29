@@ -51,7 +51,7 @@ void KWPageStylePrivate::clear()
 
 ///////////
 
-KWPageStyle::KWPageStyle(const QString& name)
+KWPageStyle::KWPageStyle(const QString &name)
     : d (new KWPageStylePrivate())
 {
     d->name = name;
@@ -242,10 +242,10 @@ KoGenStyle KWPageStyle::saveOdf() const
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
     //writer.startElement("style:footnote-sep");
     // TODO
-    //writer.addAttribute("style:adjustment", )
-    //writer.addAttribute("style:width", )
-    //writer.addAttribute("style:rel-width", )
-    //writer.addAttribute("style:line-style", )
+    //writer.addAttribute("style:adjustment",)
+    //writer.addAttribute("style:width",)
+    //writer.addAttribute("style:rel-width",)
+    //writer.addAttribute("style:line-style",)
     //writer.endElement();
 
     QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());

@@ -41,7 +41,7 @@
 #include <QAction>
 #include <QScrollBar>
 
-KWGui::KWGui(const QString& viewMode, KWView *parent)
+KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),
         m_view(parent)
 {

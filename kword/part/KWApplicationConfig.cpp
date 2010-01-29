@@ -48,14 +48,14 @@ void KWApplicationConfig::load(KWDocument *document)
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
-//    setCursorInProtectedArea( interface.readEntry( "cursorInProtectArea", true ));
+//    setCursorInProtectedArea(interface.readEntry("cursorInProtectArea", true));
     // Config-file value in mm, default 10 pt
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
     m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
 
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
-//    m_maxRecentFiles = interface.readEntry( "NbRecentFile", 10 );
+//    m_maxRecentFiles = interface.readEntry("NbRecentFile", 10);
 
     m_viewFormattingChars = interface.readEntry("ViewFormattingChars", m_viewFormattingChars);
     m_viewFormattingBreak = interface.readEntry("ViewFormattingBreaks", m_viewFormattingBreak);
@@ -73,20 +73,20 @@ void KWApplicationConfig::load(KWDocument *document)
     m_statusBarShowMouse = interface.readEntry("StatusBarShowMouse", m_statusBarShowMouse);
     m_statusBarShowZoom = interface.readEntry("StatusBarShowZoom", m_statusBarShowZoom);
 
-//    m_bShowDocStruct = interface.readEntry( "showDocStruct", true );
-//    m_viewModeType = interface.readEntry( "viewmode", "ModeNormal" );
-//    setShowStatusBarShow( interface.readEntry( "ShowStatusBarShow" , true ) );
-//    setAllowAutoFormat( interface.readEntry( "AllowAutoFormat" , true ) );
-//    setShowScrollBar( interface.readEntry( "ShowScrollBar", true ) );
-//    if ( isEmbedded() )
+//    m_bShowDocStruct = interface.readEntry("showDocStruct", true);
+//    m_viewModeType = interface.readEntry("viewmode", "ModeNormal");
+//    setShowStatusBarShow(interface.readEntry("ShowStatusBarShow" , true));
+//    setAllowAutoFormat(interface.readEntry("AllowAutoFormat" , true));
+//    setShowScrollBar(interface.readEntry("ShowScrollBar", true));
+//    if (isEmbedded())
 //        m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
-//    m_pgUpDownMovesCaret = interface.readEntry( "PgUpDownMovesCaret", true );
-//    m_bInsertDirectCursor= interface.readEntry( "InsertDirectCursor", false );
+//    m_pgUpDownMovesCaret = interface.readEntry("PgUpDownMovesCaret", true);
+//    m_bInsertDirectCursor= interface.readEntry("InsertDirectCursor", false);
 //    m_globalLanguage=interface.readEntry("language", KGlobal::locale()->language());
 //    m_bGlobalHyphenation=interface.readEntry("hyphenation", false);
 
-//    setShowGrid( interface.readEntry( "ShowGrid" , false ));
-//    setSnapToGrid( interface.readEntry( "SnapToGrid", false ));
+//    setShowGrid(interface.readEntry("ShowGrid" , false));
+//    setSnapToGrid(interface.readEntry("SnapToGrid", false));
 
     int undo = 30;
     KConfigGroup misc = config->group("Misc");
@@ -103,22 +103,22 @@ void KWApplicationConfig::load(KWDocument *document)
 //        setUndoRedoLimit(undo);
 
     //text mode view is not a good default for a readonly document...
-//    if ( !isReadWrite() && m_viewModeType =="ModeText" )
+//    if (!isReadWrite() && m_viewModeType =="ModeText")
 //        m_viewModeType= "ModeNormal";
 
-//    m_layoutViewMode = KWViewMode::create( m_viewModeType, this, 0 /*no canvas*/);
+//    m_layoutViewMode = KWViewMode::create(m_viewModeType, this, 0 /*no canvas*/);
 
     KConfigGroup path = config->group("Kword Path");
     if (path.exists()) {
-//        if ( path.hasKey( "expression path" ) )
-//            m_personalExpressionPath = path.readPathEntry( "expression path", QStringList() );
+//        if (path.hasKey("expression path"))
+//            m_personalExpressionPath = path.readPathEntry("expression path", QStringList());
         if (document)
             document->setBackupPath(path.readPathEntry("backup path", QString()));
     }
 
     // Load personal dict
     KConfigGroup spelling = KoGlobal::kofficeConfig()->group("Spelling");
-//    m_spellCheckPersonalDict = spelling.readListEntry( "PersonalDict" );
+//    m_spellCheckPersonalDict = spelling.readListEntry("PersonalDict");
 
 }
 
@@ -134,12 +134,12 @@ void KWApplicationConfig::save()
     interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
     interface.writeEntry("Zoom", m_zoom);
     interface.writeEntry("ZoomMode", (int)m_zoomMode);
-//    interface.writeEntry( "showDocStruct", m_bShowDocStruct );
+//    interface.writeEntry("showDocStruct", m_bShowDocStruct);
     interface.writeEntry("Rulers", m_viewRulers);
-//    interface.writeEntry( "viewmode", m_viewModeType) ;
-//    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
-//    interface.writeEntry( "ShowGrid" , m_bShowGrid );
-//    interface.writeEntry( "SnapToGrid" , m_bSnapToGrid );
+//    interface.writeEntry("viewmode", m_viewModeType) ;
+//    interface.writeEntry("AllowAutoFormat", m_bAllowAutoFormat);
+//    interface.writeEntry("ShowGrid" , m_bShowGrid);
+//    interface.writeEntry("SnapToGrid" , m_bSnapToGrid);
     interface.writeEntry("StatusBarShowPage", m_statusBarShowPage);
     interface.writeEntry("StatusBarShowModified", m_statusBarShowModified);
     interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);

@@ -125,7 +125,7 @@ void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
 
 
 // KWDocument
-KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode)
+KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_magicCurtain(0),
@@ -206,12 +206,12 @@ void KWDocument::removeShape(KoShape *shape)
     }
 }
 
-void KWDocument::paintContent(QPainter&, const QRect& rect)
+void KWDocument::paintContent(QPainter&, const QRect &rect)
 {
     // TODO
 }
 
-KoView* KWDocument::createViewInstance(QWidget* parent)
+KoView *KWDocument::createViewInstance(QWidget *parent)
 {
     KWView *view = new KWView(m_viewMode, this, parent);
     if (m_magicCurtain)
@@ -396,7 +396,7 @@ void KWDocument::mainTextFrameSetLayoutDone()
     m_mainFramesetEverFinished = true;
 }
 
-KWFrameSet *KWDocument::frameSetByName(const QString & name)
+KWFrameSet *KWDocument::frameSetByName(const QString &name)
 {
     foreach (KWFrameSet *fs, m_frameSets) {
         if (fs->name() == name)
@@ -416,21 +416,21 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
     return var.value<KoInlineTextObjectManager*>();
 }
 
-QString KWDocument::uniqueFrameSetName(const QString& suggestion)
+QString KWDocument::uniqueFrameSetName(const QString &suggestion)
 {
     // make up a new name for the frameset, use "[base] [digits]" as template.
     // Fully translatable naturally :)
     return renameFrameSet("", suggestion);
 }
 
-QString KWDocument::suggestFrameSetNameForCopy(const QString& base)
+QString KWDocument::suggestFrameSetNameForCopy(const QString &base)
 {
     // make up a new name for the frameset, use Copy[digits]-[base] as template.
     // Fully translatable naturally :)
     return renameFrameSet(i18n("Copy"), base);
 }
 
-QString KWDocument::renameFrameSet(const QString &prefix, const QString& base)
+QString KWDocument::renameFrameSet(const QString &prefix, const QString &base)
 {
     if (! frameSetByName(base))
         return base;
@@ -494,7 +494,7 @@ void KWDocument::initEmpty()
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Bullet List"));
-    KoListStyle * list = new KoListStyle(parag);
+    KoListStyle *list = new KoListStyle(parag);
     KoListLevelProperties llp = list->levelProperties(0);
     llp.setStyle(KoListStyle::DiscItem);
     list->setLevelProperties(llp);
@@ -530,7 +530,7 @@ void KWDocument::clear()
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
-bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
+bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 {
     clear();
     foreach (KoView *view, views()) {
@@ -544,7 +544,7 @@ bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
     return rc;
 }
 
-bool KWDocument::loadXML(const KoXmlDocument & doc, KoStore *store)
+bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
     foreach (KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
@@ -574,7 +574,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // insert pages
     qreal maxBottom = 0;
-    foreach (KWFrameSet* fs, m_frameSets) {
+    foreach (KWFrameSet *fs, m_frameSets) {
         foreach (KWFrame *frame, fs->frames())
         maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
     }
@@ -776,7 +776,7 @@ void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
     }
 }
 
-void KWDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
+void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // print error if kotext not available
     if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
@@ -874,8 +874,8 @@ void KWDocument::saveConfig()
 {
     if (!isReadWrite())
         return;
-//   KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
-//   group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
+//   KConfigGroup group(KoGlobal::kofficeConfig(), "Spelling");
+//   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
 
     if (isEmbedded())
         return;

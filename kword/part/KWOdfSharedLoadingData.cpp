@@ -41,7 +41,7 @@
 #include <QTextCursor>
 #include <kdebug.h>
 
-KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
+KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
         : KoTextSharedLoadingData()
         , m_loader(loader)
 {
@@ -53,7 +53,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
             KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
-void KWOdfSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &element, KoShapeLoadingContext &context)
+void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     int pageNumber = -1;
     if (shape->hasAdditionalAttribute("text:anchor-type")) {
@@ -66,7 +66,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &e
         }
     }
 
-    //kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute( "text:anchor-page-number" ) << pageNumber;
+    //kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute("text:anchor-page-number") << pageNumber;
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
@@ -109,7 +109,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &e
                 frame->setMinimumFrameHeight(KoUnit::parseValue(textBox.attributeNS(KoXmlNS::fo, "min-height")));
         }
     } else {
-        KWFrameSet* fs = new KWFrameSet();
+        KWFrameSet *fs = new KWFrameSet();
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
         KWFrame *frame = new KWFrame(shape, fs, pageNumber);
         if (style)

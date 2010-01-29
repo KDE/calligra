@@ -35,7 +35,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
+KWStatistics::KWStatistics(KoResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
         : QWidget(parent),
         m_resourceManager(provider),
         m_action(new KoAction(this)),
@@ -317,7 +317,7 @@ int KWStatistics::countCJKChars(const QString &text)
          * Katakana: 0x30A0 - 0x30FF
          * CJK Unified Ideographs: 4E00 - 9FFF (Chinese Traditional & Simplified, Kanji and Hanja
          * Hangul: 0xAC00 - 0xD7AF
-         */   
+         */
         if ((qChar >= 0x3040 && qChar <= 0x309F)
                 || (qChar >= 0x30A0 && qChar <= 0x30FF)
                 || (qChar >= 0x4E00 && qChar <= 0x9FFF)

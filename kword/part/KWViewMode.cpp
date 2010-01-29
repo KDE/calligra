@@ -32,7 +32,7 @@ KWViewMode::KWViewMode()
 {
 }
 
-QRectF KWViewMode::documentToView(const QRectF & rect) const
+QRectF KWViewMode::documentToView(const QRectF &rect) const
 {
     QRectF r;
     QPointF topLeft(documentToView(rect.topLeft()));
@@ -42,7 +42,7 @@ QRectF KWViewMode::documentToView(const QRectF & rect) const
     return r;
 }
 
-QRectF KWViewMode::viewToDocument(const QRectF & rect) const
+QRectF KWViewMode::viewToDocument(const QRectF &rect) const
 {
     QRectF r;
     QPointF topLeft(viewToDocument(rect.topLeft()));
@@ -58,7 +58,7 @@ void KWViewMode::pageSetupChanged()
 }
 
 // static
-KWViewMode *KWViewMode::create(const QString& viewModeType, KWCanvas* canvas)
+KWViewMode *KWViewMode::create(const QString &viewModeType, KWCanvas *canvas)
 {
     KWViewMode * vm = 0;
     if (viewModeType == KWViewModePreview::viewMode())

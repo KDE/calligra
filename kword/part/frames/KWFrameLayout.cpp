@@ -92,7 +92,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                 m_parent = parent;
             }
             void create(const KWPage &page, KWTextFrameSet *fs) {
-                KWFrame* frame;
+                KWFrame *frame;
                 if (fs->textFrameSetType() == KWord::MainTextFrameSet)
                     frame = new KWTextFrame(m_parent->createTextShape(page), fs);
                 else
@@ -664,7 +664,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     }
 }
 
-KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
+KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 {
     Q_ASSERT(page.isValid());
     if (fs->frameCount() == 0) { // special case for the headers. Just return a new textframe.

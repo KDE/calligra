@@ -25,10 +25,10 @@
 
 #include <kiconloader.h>
 
-KComponentData* KWFactory::s_instance = 0;
-KAboutData* KWFactory::s_aboutData = 0;
+KComponentData *KWFactory::s_instance = 0;
+KAboutData *KWFactory::s_aboutData = 0;
 
-KWFactory::KWFactory(QObject* parent, const char* name)
+KWFactory::KWFactory(QObject *parent, const char *name)
         : KoFactory(parent, name)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
@@ -44,7 +44,7 @@ KWFactory::~KWFactory()
     s_instance = 0;
 }
 
-KParts::Part* KWFactory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
+KParts::Part *KWFactory::createPartObject(QWidget *parentWidget, QObject *parent, const char *classname, const QStringList &)
 {
     bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
@@ -56,7 +56,7 @@ KParts::Part* KWFactory::createPartObject(QWidget *parentWidget, QObject* parent
     return doc;
 }
 
-KAboutData* KWFactory::aboutData()
+KAboutData *KWFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newKWordAboutData();

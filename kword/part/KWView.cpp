@@ -94,7 +94,7 @@ static KWFrame *frameForShape(KoShape *shape)
     return dynamic_cast<KWFrame*>(parent->applicationData());
 }
 
-KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
+KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
 {
     m_document = document;
@@ -362,51 +362,51 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     This saves problems with finding out which we missed near the end.
 
         // -------------- File menu
-        m_actionExtraCreateTemplate = new KAction( i18n( "Create Template From Document..." ), 0,
-        this, SLOT( extraCreateTemplate() ),
-        actionCollection(), "extra_template" );
-        m_actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
-        m_actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
+        m_actionExtraCreateTemplate = new KAction(i18n("Create Template From Document..."), 0,
+        this, SLOT(extraCreateTemplate()),
+        actionCollection(), "extra_template");
+        m_actionExtraCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
+        m_actionExtraCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
 
-        (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
-        this, SLOT( editMailMergeDataBase() ),
-        actionCollection(), "edit_sldatabase" );
+        (void) new KAction(i18n("Configure Mail Merge..."), "configure",0,
+        this, SLOT(editMailMergeDataBase()),
+        actionCollection(), "edit_sldatabase");
 
 
-        QAction * mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
-        i18n("Drag Mail Merge Variable"), actionCollection(), "mailmerge_draglabel" );
-        connect( mailMergeLabelAction, SIGNAL( triggered(bool) ), this, SLOT(editMailMergeDataBase()) );
+        QAction *mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
+        i18n("Drag Mail Merge Variable"), actionCollection(), "mailmerge_draglabel");
+        connect(mailMergeLabelAction, SIGNAL(triggered(bool)), this, SLOT(editMailMergeDataBase()));
 
         //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
         // -------------- View menu
 
-        if ( !m_doc->isEmbedded() ) {
+        if (!m_doc->isEmbedded()) {
 
-            QActionGroup* viewModeActionGroup = new QActionGroup( this );
-            viewModeActionGroup->setExclusive( true );
-            m_actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
-                    this, SLOT( viewTextMode() ),
-                    actionCollection(), "view_textmode" );
-            m_actionViewTextMode->setToolTip( i18n( "Only show the text of the document" ) );
-            m_actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout. KWord will display only the text for editing." ) );
+            QActionGroup *viewModeActionGroup = new QActionGroup(this);
+            viewModeActionGroup->setExclusive(true);
+            m_actionViewTextMode = new KToggleAction(i18n("Text Mode"), 0,
+                    this, SLOT(viewTextMode()),
+                    actionCollection(), "view_textmode");
+            m_actionViewTextMode->setToolTip(i18n("Only show the text of the document"));
+            m_actionViewTextMode->setWhatsThis(i18n("Do not show any pictures, formatting or layout. KWord will display only the text for editing."));
 
-            m_actionViewTextMode->setActionGroup( viewModeActionGroup );
-            m_actionViewPageMode = new KToggleAction( i18n( "Page Mode" ), 0,
-                    this, SLOT( viewPageMode() ),
-                    actionCollection(), "view_pagemode" );
-            m_actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode." ) );
-            m_actionViewPageMode->setToolTip( i18n( "Switch to page editing mode" ) );
+            m_actionViewTextMode->setActionGroup(viewModeActionGroup);
+            m_actionViewPageMode = new KToggleAction(i18n("Page Mode"), 0,
+                    this, SLOT(viewPageMode()),
+                    actionCollection(), "view_pagemode");
+            m_actionViewPageMode->setWhatsThis(i18n("Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode."));
+            m_actionViewPageMode->setToolTip(i18n("Switch to page editing mode"));
 
-            m_actionViewPageMode->setActionGroup( viewModeActionGroup );
-            m_actionViewPageMode->setChecked( true );
-            m_actionViewPreviewMode = new KToggleAction( i18n( "Preview Mode" ), 0,
-                    this, SLOT( viewPreviewMode() ),
-                    actionCollection(), "view_previewmode" );
-            m_actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
-            m_actionViewPreviewMode->setToolTip( i18n( "Zoom out to a multiple page view" ) );
+            m_actionViewPageMode->setActionGroup(viewModeActionGroup);
+            m_actionViewPageMode->setChecked(true);
+            m_actionViewPreviewMode = new KToggleAction(i18n("Preview Mode"), 0,
+                    this, SLOT(viewPreviewMode()),
+                    actionCollection(), "view_previewmode");
+            m_actionViewPreviewMode->setWhatsThis(i18n("Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized."));
+            m_actionViewPreviewMode->setToolTip(i18n("Zoom out to a multiple page view"));
 
-            m_actionViewPreviewMode->setActionGroup( viewModeActionGroup );
+            m_actionViewPreviewMode->setActionGroup(viewModeActionGroup);
         }
         else // no viewmode switching when embedded; at least "Page" makes no sense
         {
@@ -417,405 +417,405 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
 
         // -------------- Insert menu
 
-        new KAction( m_doc->processingType() == KWDocument::WP ? i18n( "Page" ) : i18n( "Page..." ), "page", 0,
-                this, SLOT( insertPage() ),
-                actionCollection(), "insert_page" );
+        new KAction(m_doc->processingType() == KWDocument::WP ? i18n("Page") : i18n("Page..."), "page", 0,
+                this, SLOT(insertPage()),
+                actionCollection(), "insert_page");
 
-        m_actionInsertLink = new KAction( i18n( "Link..." ), 0,
-                this, SLOT( insertLink() ),
-                actionCollection(), "insert_link" );
-        actionInsertLink->setToolTip( i18n( "Insert a Web address, email address or hyperlink to a file" ) );
-        m_actionInsertLink->setWhatsThis( i18n( "Insert a Web address, email address or hyperlink to a file." ) );
+        m_actionInsertLink = new KAction(i18n("Link..."), 0,
+                this, SLOT(insertLink()),
+                actionCollection(), "insert_link");
+        actionInsertLink->setToolTip(i18n("Insert a Web address, email address or hyperlink to a file"));
+        m_actionInsertLink->setWhatsThis(i18n("Insert a Web address, email address or hyperlink to a file."));
 
-        m_actionInsertComment = new KAction( i18n( "Comment..." ), 0,
-                this, SLOT( insertComment() ),
-                actionCollection(), "insert_comment" );
-        m_actionInsertComment->setToolTip( i18n( "Insert a comment about the selected text" ) );
-        m_actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text. These comments are not designed to appear on the final page." ) );
+        m_actionInsertComment = new KAction(i18n("Comment..."), 0,
+                this, SLOT(insertComment()),
+                actionCollection(), "insert_comment");
+        m_actionInsertComment->setToolTip(i18n("Insert a comment about the selected text"));
+        m_actionInsertComment->setWhatsThis(i18n("Insert a comment about the selected text. These comments are not designed to appear on the final page."));
 
-        m_actionEditComment = new KAction( i18n("Edit Comment..."), 0,
+        m_actionEditComment = new KAction(i18n("Edit Comment..."), 0,
                 this,SLOT(editComment()),
                 actionCollection(), "edit_comment");
-        m_actionEditComment->setToolTip( i18n( "Change the content of a comment" ) );
-        m_actionEditComment->setWhatsThis( i18n( "Change the content of a comment." ) );
+        m_actionEditComment->setToolTip(i18n("Change the content of a comment"));
+        m_actionEditComment->setWhatsThis(i18n("Change the content of a comment."));
 
-        m_actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
+        m_actionRemoveComment = new KAction(i18n("Remove Comment"), 0,
                 this,SLOT(removeComment()),
                 actionCollection(), "remove_comment");
-        m_actionRemoveComment->setToolTip( i18n( "Remove the selected document comment" ) );
-        m_actionRemoveComment->setWhatsThis( i18n( "Remove the selected document comment." ) );
-        m_actionCopyTextOfComment = new KAction( i18n("Copy Text of Comment..."), 0,
+        m_actionRemoveComment->setToolTip(i18n("Remove the selected document comment"));
+        m_actionRemoveComment->setWhatsThis(i18n("Remove the selected document comment."));
+        m_actionCopyTextOfComment = new KAction(i18n("Copy Text of Comment..."), 0,
                 this,SLOT(copyTextOfComment()),
                 actionCollection(), "copy_text_comment");
 
 
-        m_actionInsertFootEndNote = new KAction( i18n( "Footnote/Endnote..." ), 0,
-                this, SLOT( insertFootNote() ),
-                actionCollection(), "insert_footendnote" );
-        m_actionInsertFootEndNote->setToolTip( i18n( "Insert a footnote referencing the selected text" ) );
-        m_actionInsertFootEndNote->setWhatsThis( i18n( "Insert a footnote referencing the selected text." ) );
+        m_actionInsertFootEndNote = new KAction(i18n("Footnote/Endnote..."), 0,
+                this, SLOT(insertFootNote()),
+                actionCollection(), "insert_footendnote");
+        m_actionInsertFootEndNote->setToolTip(i18n("Insert a footnote referencing the selected text"));
+        m_actionInsertFootEndNote->setWhatsThis(i18n("Insert a footnote referencing the selected text."));
 
-        m_actionInsertContents = new KAction( i18n( "Table of Contents" ), 0,
-                this, SLOT( insertContents() ),
-                actionCollection(), "insert_contents" );
-        m_actionInsertContents->setToolTip( i18n( "Insert table of contents at the current cursor position" ) );
-        m_actionInsertContents->setWhatsThis( i18n( "Insert table of contents at the current cursor position." ) );
+        m_actionInsertContents = new KAction(i18n("Table of Contents"), 0,
+                this, SLOT(insertContents()),
+                actionCollection(), "insert_contents");
+        m_actionInsertContents->setToolTip(i18n("Insert table of contents at the current cursor position"));
+        m_actionInsertContents->setWhatsThis(i18n("Insert table of contents at the current cursor position."));
 
-        actionInsertVariable = new KActionMenu( i18n( "Variable" ),
-                actionCollection(), "insert_variable" );
+        actionInsertVariable = new KActionMenu(i18n("Variable"),
+                actionCollection(), "insert_variable");
 
         // The last argument is only needed if a submenu is to be created
-        addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document Information") );
-        addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("Date") );
-        addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("Time") );
-        addVariableActions( VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("Page") );
-        addVariableActions( VT_STATISTIC, KWStatisticVariable::actionTexts(), actionInsertVariable, i18n("Statistic") );
+        addVariableActions(VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document Information"));
+        addVariableActions(VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("Date"));
+        addVariableActions(VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("Time"));
+        addVariableActions(VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("Page"));
+        addVariableActions(VT_STATISTIC, KWStatisticVariable::actionTexts(), actionInsertVariable, i18n("Statistic"));
 
-        m_actionInsertCustom = new KActionMenu( i18n( "Custom" ),
-                actionCollection(), "insert_custom" );
+        m_actionInsertCustom = new KActionMenu(i18n("Custom"),
+                actionCollection(), "insert_custom");
         actionInsertVariable->insert(m_actionInsertCustom);
 
-        //addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
+        //addVariableActions(VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null);
 
-        addVariableActions( VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null );
+        addVariableActions(VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null);
 
         actionInsertVariable->popupMenu()->insertSeparator();
-        m_actionRefreshAllVariable = new KAction( i18n( "Refresh All Variables" ), 0,
-                this, SLOT( refreshAllVariable() ),
-                actionCollection(), "refresh_all_variable" );
-        m_actionRefreshAllVariable->setToolTip( i18n( "Update all variables to current values" ) );
-        m_actionRefreshAllVariable->setWhatsThis( i18n( "Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variables that need updating." ) );
+        m_actionRefreshAllVariable = new KAction(i18n("Refresh All Variables"), 0,
+                this, SLOT(refreshAllVariable()),
+                actionCollection(), "refresh_all_variable");
+        m_actionRefreshAllVariable->setToolTip(i18n("Update all variables to current values"));
+        m_actionRefreshAllVariable->setWhatsThis(i18n("Update all variables in the document to current values.<br><br>This will update page numbers, dates or any other variables that need updating."));
 
         actionInsertVariable->insert(m_actionRefreshAllVariable);
 
-        m_actionInsertExpression = new KActionMenu( i18n( "Expression" ),
-                actionCollection(), "insert_expression" );
-        loadexpressionActions( m_actionInsertExpression);
+        m_actionInsertExpression = new KActionMenu(i18n("Expression"),
+                actionCollection(), "insert_expression");
+        loadexpressionActions(m_actionInsertExpression);
 
-        m_actionInsertFile = new KAction( i18n( "File..." ), 0,
-                this, SLOT( insertFile() ),
-                actionCollection(), "insert_file" );
+        m_actionInsertFile = new KAction(i18n("File..."), 0,
+                this, SLOT(insertFile()),
+                actionCollection(), "insert_file");
 
 
         // ------------------------- Format menu
-        m_actionFormatFrameStylist = new KAction( i18n( "Frame Style Manager" ), 0,
-                this, SLOT( extraFrameStylist() ),
-                actionCollection(), "frame_stylist" );
-        m_actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles" ) );
-        m_actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
+        m_actionFormatFrameStylist = new KAction(i18n("Frame Style Manager"), 0,
+                this, SLOT(extraFrameStylist()),
+                actionCollection(), "frame_stylist");
+        m_actionFormatFrameStylist->setToolTip(i18n("Change attributes of framestyles"));
+        m_actionFormatFrameStylist->setWhatsThis(i18n("Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box."));
 
         // ---------------------------- frame toolbar actions
 
-        m_actionFrameStyleMenu = new KActionMenu( i18n( "Framestyle" ),
-                actionCollection(), "frame_stylemenu" );
-        m_actionFrameStyle = new KSelectAction( i18n( "Framestyle" ),
-                actionCollection(), "frame_style" );
-        connect( m_actionFrameStyle, SIGNAL( activated( int ) ),
-                this, SLOT( frameStyleSelected( int ) ) );
+        m_actionFrameStyleMenu = new KActionMenu(i18n("Framestyle"),
+                actionCollection(), "frame_stylemenu");
+        m_actionFrameStyle = new KSelectAction(i18n("Framestyle"),
+                actionCollection(), "frame_style");
+        connect(m_actionFrameStyle, SIGNAL(activated(int)),
+                this, SLOT(frameStyleSelected(int)));
         updateFrameStyleList();
-        m_actionBorderOutline = new KToggleAction( KIcon("borderoutline"), i18n( "Border Outline" ),
-                actionCollection(), "border_outline" );
-        connect( m_actionBorderOutline, SIGNAL( triggered(bool) ), this, SLOT( borderOutline() ) );
-        m_actionBorderLeft = new KToggleAction( KIcon("borderleft"), i18n( "Border Left" ),
-                actionCollection(), "border_left" );
-        connect( m_actionBorderLeft, SIGNAL( triggered(bool) ), this, SLOT( borderLeft() ) );
-        m_actionBorderRight = new KToggleAction( KIcon("borderright"), i18n( "Border Right" ),
-                actionCollection(), "border_right" );
-        connect( m_actionBorderRight, SIGNAL( triggered(bool) ), this, SLOT( borderRight() ) );
-        m_actionBorderTop = new KToggleAction( KIcon("bordertop"), i18n( "Border Top" ),
-                actionCollection(), "border_top" );
-        connect( m_actionBorderTop, SIGNAL( triggered(bool) ), this, SLOT( borderTop() ) );
-        m_actionBorderBottom = new KToggleAction( KIcon("borderbottom"), i18n( "Border Bottom" ),
-                actionCollection(), "border_bottom" );
-        connect( m_actionBorderBottom, SIGNAL( triggered(bool) ), this, SLOT( borderBottom() ) );
-        m_actionBorderStyle = new KSelectAction( i18n( "Border Style" ),
-                actionCollection(), "border_style" );
+        m_actionBorderOutline = new KToggleAction(KIcon("borderoutline"), i18n("Border Outline"),
+                actionCollection(), "border_outline");
+        connect(m_actionBorderOutline, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));
+        m_actionBorderLeft = new KToggleAction(KIcon("borderleft"), i18n("Border Left"),
+                actionCollection(), "border_left");
+        connect(m_actionBorderLeft, SIGNAL(triggered(bool)), this, SLOT(borderLeft()));
+        m_actionBorderRight = new KToggleAction(KIcon("borderright"), i18n("Border Right"),
+                actionCollection(), "border_right");
+        connect(m_actionBorderRight, SIGNAL(triggered(bool)), this, SLOT(borderRight()));
+        m_actionBorderTop = new KToggleAction(KIcon("bordertop"), i18n("Border Top"),
+                actionCollection(), "border_top");
+        connect(m_actionBorderTop, SIGNAL(triggered(bool)), this, SLOT(borderTop()));
+        m_actionBorderBottom = new KToggleAction(KIcon("borderbottom"), i18n("Border Bottom"),
+                actionCollection(), "border_bottom");
+        connect(m_actionBorderBottom, SIGNAL(triggered(bool)), this, SLOT(borderBottom()));
+        m_actionBorderStyle = new KSelectAction(i18n("Border Style"),
+                actionCollection(), "border_style");
 
         QStringList lst;
-        lst << KoBorder::getStyle( KoBorder::SOLID );
-        lst << KoBorder::getStyle( KoBorder::DASH );
-        lst << KoBorder::getStyle( KoBorder::DOT );
-        lst << KoBorder::getStyle( KoBorder::DASH_DOT );
-        lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
-        lst << KoBorder::getStyle( KoBorder::DOUBLE_LINE );
-        m_actionBorderStyle->setItems( lst );
-        m_actionBorderWidth = new KSelectAction( i18n( "Border Width" ),
-                actionCollection(), "border_width" );
+        lst << KoBorder::getStyle(KoBorder::SOLID);
+        lst << KoBorder::getStyle(KoBorder::DASH);
+        lst << KoBorder::getStyle(KoBorder::DOT);
+        lst << KoBorder::getStyle(KoBorder::DASH_DOT);
+        lst << KoBorder::getStyle(KoBorder::DASH_DOT_DOT);
+        lst << KoBorder::getStyle(KoBorder::DOUBLE_LINE);
+        m_actionBorderStyle->setItems(lst);
+        m_actionBorderWidth = new KSelectAction(i18n("Border Width"),
+                actionCollection(), "border_width");
         lst.clear();
-        for ( unsigned int i = 1; i < 10; i++ )
-            lst << QString::number( i );
-        m_actionBorderWidth->setItems( lst );
-        m_actionBorderWidth->setCurrentItem( 0 );
+        for (unsigned int i = 1; i < 10; i++)
+            lst << QString::number(i);
+        m_actionBorderWidth->setItems(lst);
+        m_actionBorderWidth->setCurrentItem(0);
 
-        m_actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true );
+        m_actionBorderColor = new TKSelectColorAction(i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true);
         m_actionBorderColor->setDefaultColor(QColor());
 
 
         // ---------------------- Table menu
-        m_actionTablePropertiesMenu = new KAction( i18n( "Properties" ), 0,
-                this, SLOT( tableProperties() ),
-                actionCollection(), "table_propertiesmenu" );
-        m_actionTablePropertiesMenu->setToolTip( i18n( "Adjust properties of the current table" ) );
-        m_actionTablePropertiesMenu->setWhatsThis( i18n( "Adjust properties of the current table." ) );
+        m_actionTablePropertiesMenu = new KAction(i18n("Properties"), 0,
+                this, SLOT(tableProperties()),
+                actionCollection(), "table_propertiesmenu");
+        m_actionTablePropertiesMenu->setToolTip(i18n("Adjust properties of the current table"));
+        m_actionTablePropertiesMenu->setWhatsThis(i18n("Adjust properties of the current table."));
 
-        m_actionTableInsertRow = new KAction( i18n( "Insert Row..." ), "insert_table_row", 0,
-                this, SLOT( tableInsertRow() ),
-                actionCollection(), "table_insrow" );
-        m_actionTableInsertRow->setToolTip( i18n( "Insert one or more rows at cursor location" ) );
-        m_actionTableInsertRow->setWhatsThis( i18n( "Insert one or more rows at current cursor location." ) );
+        m_actionTableInsertRow = new KAction(i18n("Insert Row..."), "insert_table_row", 0,
+                this, SLOT(tableInsertRow()),
+                actionCollection(), "table_insrow");
+        m_actionTableInsertRow->setToolTip(i18n("Insert one or more rows at cursor location"));
+        m_actionTableInsertRow->setWhatsThis(i18n("Insert one or more rows at current cursor location."));
 
-        m_actionTableInsertCol = new KAction( i18n( "Insert Column..." ), "insert_table_col", 0,
-                this, SLOT( tableInsertCol() ),
-                actionCollection(), "table_inscol" );
-        m_actionTableInsertCol->setToolTip( i18n( "Insert one or more columns into the current table" ) );
-        m_actionTableInsertCol->setWhatsThis( i18n( "Insert one or more columns into the current table." ) );
+        m_actionTableInsertCol = new KAction(i18n("Insert Column..."), "insert_table_col", 0,
+                this, SLOT(tableInsertCol()),
+                actionCollection(), "table_inscol");
+        m_actionTableInsertCol->setToolTip(i18n("Insert one or more columns into the current table"));
+        m_actionTableInsertCol->setWhatsThis(i18n("Insert one or more columns into the current table."));
 
-        m_actionTableDelRow = new KAction( 0, "delete_table_row", 0,
-                this, SLOT( tableDeleteRow() ),
-                actionCollection(), "table_delrow" );
-        m_actionTableDelRow->setToolTip( i18n( "Delete selected rows from the current table" ) );
-        m_actionTableDelRow->setWhatsThis( i18n( "Delete selected rows from the current table." ) );
+        m_actionTableDelRow = new KAction(0, "delete_table_row", 0,
+                this, SLOT(tableDeleteRow()),
+                actionCollection(), "table_delrow");
+        m_actionTableDelRow->setToolTip(i18n("Delete selected rows from the current table"));
+        m_actionTableDelRow->setWhatsThis(i18n("Delete selected rows from the current table."));
 
-        m_actionTableDelCol = new KAction( 0, "delete_table_col", 0,
-                this, SLOT( tableDeleteCol() ),
-                actionCollection(), "table_delcol" );
-        m_actionTableDelCol->setToolTip( i18n( "Delete selected columns from the current table" ) );
-        m_actionTableDelCol->setWhatsThis( i18n( "Delete selected columns from the current table." ) );
+        m_actionTableDelCol = new KAction(0, "delete_table_col", 0,
+                this, SLOT(tableDeleteCol()),
+                actionCollection(), "table_delcol");
+        m_actionTableDelCol->setToolTip(i18n("Delete selected columns from the current table"));
+        m_actionTableDelCol->setWhatsThis(i18n("Delete selected columns from the current table."));
 
-        m_actionTableResizeCol = new KAction( i18n( "Resize Column..." ), 0,
-                this, SLOT( tableResizeCol() ),
-                actionCollection(), "table_resizecol" );
-        m_actionTableResizeCol->setToolTip( i18n( "Change the width of the currently selected column" ) );
-        m_actionTableResizeCol->setWhatsThis( i18n( "Change the width of the currently selected column." ) );
-
-
-        m_actionTableJoinCells = new KAction( i18n( "Join Cells" ), 0,
-                this, SLOT( tableJoinCells() ),
-                actionCollection(), "table_joincells" );
-        m_actionTableJoinCells->setToolTip( i18n( "Join two or more cells into one large cell" ) );
-        m_actionTableJoinCells->setWhatsThis( i18n( "Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table." ) );
-
-        m_actionTableSplitCells= new KAction( i18n( "Split Cell..." ), 0,
-                this, SLOT( tableSplitCells() ),
-                actionCollection(), "table_splitcells" );
-        m_actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells" ) );
-        m_actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once." ) );
-
-        m_actionTableProtectCells= new KToggleAction( i18n( "Protect Cells" ), 0, 0, 0,
-                actionCollection(), "table_protectcells" );
-        m_actionTableProtectCells->setToolTip( i18n( "Prevent changes to content of selected cells" ) );
-        connect (m_actionTableProtectCells, SIGNAL( toggled(bool) ), this,
-                SLOT( tableProtectCells(bool) ));
-
-        m_actionTableProtectCells->setWhatsThis( i18n( "Toggles cell protection on and off.<br><br>When cell protection is on, the user can not alter the content or formatting of the text within the cell." ) );
-
-        m_actionTableDelete = new KAction( i18n( "Delete Table" ), 0,
-                this, SLOT( tableDelete() ),
-                actionCollection(), "table_delete" );
-        m_actionTableDelete->setToolTip( i18n( "Delete the entire table" ) );
-        m_actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
+        m_actionTableResizeCol = new KAction(i18n("Resize Column..."), 0,
+                this, SLOT(tableResizeCol()),
+                actionCollection(), "table_resizecol");
+        m_actionTableResizeCol->setToolTip(i18n("Change the width of the currently selected column"));
+        m_actionTableResizeCol->setWhatsThis(i18n("Change the width of the currently selected column."));
 
 
-        m_actionTableStylist = new KAction( i18n( "Table Style Manager" ), 0,
-                this, SLOT( tableStylist() ),
-                actionCollection(), "table_stylist" );
-        m_actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles" ) );
-        m_actionTableStylist->setWhatsThis( i18n( "Change textstyle and framestyle of the tablestyles.<p>Multiple tablestyles can be changed using the dialog box." ) );
+        m_actionTableJoinCells = new KAction(i18n("Join Cells"), 0,
+                this, SLOT(tableJoinCells()),
+                actionCollection(), "table_joincells");
+        m_actionTableJoinCells->setToolTip(i18n("Join two or more cells into one large cell"));
+        m_actionTableJoinCells->setWhatsThis(i18n("Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table."));
 
-        m_actionTableStyleMenu = new KActionMenu( i18n( "Tablestyle" ),
-                actionCollection(), "table_stylemenu" );
-        m_actionTableStyle = new KSelectAction( i18n( "Tablestyle" ),
-                actionCollection(), "table_style" );
-        connect( m_actionTableStyle, SIGNAL( activated( int ) ),
-                this, SLOT( tableStyleSelected( int ) ) );
+        m_actionTableSplitCells= new KAction(i18n("Split Cell..."), 0,
+                this, SLOT(tableSplitCells()),
+                actionCollection(), "table_splitcells");
+        m_actionTableSplitCells->setToolTip(i18n("Split one cell into two or more cells"));
+        m_actionTableSplitCells->setWhatsThis(i18n("Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once."));
+
+        m_actionTableProtectCells= new KToggleAction(i18n("Protect Cells"), 0, 0, 0,
+                actionCollection(), "table_protectcells");
+        m_actionTableProtectCells->setToolTip(i18n("Prevent changes to content of selected cells"));
+        connect (m_actionTableProtectCells, SIGNAL(toggled(bool)), this,
+                SLOT(tableProtectCells(bool)));
+
+        m_actionTableProtectCells->setWhatsThis(i18n("Toggles cell protection on and off.<br><br>When cell protection is on, the user can not alter the content or formatting of the text within the cell."));
+
+        m_actionTableDelete = new KAction(i18n("Delete Table"), 0,
+                this, SLOT(tableDelete()),
+                actionCollection(), "table_delete");
+        m_actionTableDelete->setToolTip(i18n("Delete the entire table"));
+        m_actionTableDelete->setWhatsThis(i18n("Deletes all cells and the content within the cells of the currently selected table."));
+
+
+        m_actionTableStylist = new KAction(i18n("Table Style Manager"), 0,
+                this, SLOT(tableStylist()),
+                actionCollection(), "table_stylist");
+        m_actionTableStylist->setToolTip(i18n("Change attributes of tablestyles"));
+        m_actionTableStylist->setWhatsThis(i18n("Change textstyle and framestyle of the tablestyles.<p>Multiple tablestyles can be changed using the dialog box."));
+
+        m_actionTableStyleMenu = new KActionMenu(i18n("Tablestyle"),
+                actionCollection(), "table_stylemenu");
+        m_actionTableStyle = new KSelectAction(i18n("Tablestyle"),
+                actionCollection(), "table_style");
+        connect(m_actionTableStyle, SIGNAL(activated(int)),
+                this, SLOT(tableStyleSelected(int)));
         updateTableStyleList();
 
-        m_actionConvertTableToText = new KAction( i18n( "Convert Table to Text" ), 0,
-                this, SLOT( convertTableToText() ),
-                actionCollection(), "convert_table_to_text" );
-        m_actionSortText= new KAction( i18n( "Sort Text..." ), 0,
-                this, SLOT( sortText() ),
-                actionCollection(), "sort_text" );
+        m_actionConvertTableToText = new KAction(i18n("Convert Table to Text"), 0,
+                this, SLOT(convertTableToText()),
+                actionCollection(), "convert_table_to_text");
+        m_actionSortText= new KAction(i18n("Sort Text..."), 0,
+                this, SLOT(sortText()),
+                actionCollection(), "sort_text");
 
-        m_actionAddPersonalExpression= new KAction( i18n( "Add Expression" ), 0,
-                this, SLOT( addPersonalExpression() ),
-                actionCollection(), "add_personal_expression" );
+        m_actionAddPersonalExpression= new KAction(i18n("Add Expression"), 0,
+                this, SLOT(addPersonalExpression()),
+                actionCollection(), "add_personal_expression");
 
 
         // ---------------------- Tools menu
 
 
-        m_actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
-                this, SLOT( slotAllowAutoFormat() ),
-                actionCollection(), "enable_autocorrection" );
+        m_actionAllowAutoFormat = new KToggleAction(i18n("Enable Autocorrection"), 0,
+                this, SLOT(slotAllowAutoFormat()),
+                actionCollection(), "enable_autocorrection");
         m_actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
-        m_actionAllowAutoFormat->setToolTip( i18n( "Toggle autocorrection on and off" ) );
-        m_actionAllowAutoFormat->setWhatsThis( i18n( "Toggle autocorrection on and off." ) );
+        m_actionAllowAutoFormat->setToolTip(i18n("Toggle autocorrection on and off"));
+        m_actionAllowAutoFormat->setWhatsThis(i18n("Toggle autocorrection on and off."));
 
-        m_actionAutoFormat = new KAction( i18n( "Configure Autocorrection..." ), 0,
-                this, SLOT( extraAutoFormat() ),
-                actionCollection(), "configure_autocorrection" );
-        m_actionAutoFormat->setToolTip( i18n( "Change autocorrection options" ) );
-        m_actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
+        m_actionAutoFormat = new KAction(i18n("Configure Autocorrection..."), 0,
+                this, SLOT(extraAutoFormat()),
+                actionCollection(), "configure_autocorrection");
+        m_actionAutoFormat->setToolTip(i18n("Change autocorrection options"));
+        m_actionAutoFormat->setWhatsThis(i18n("Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>."));
 
-        m_actionEditCustomVarsEdit = new KAction( i18n( "Custom Variables..." ), 0,
-                this, SLOT( editCustomVars() ), // TODO: new dialog w add etc.
-                actionCollection(), "custom_vars" );
+        m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
+                this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
+                actionCollection(), "custom_vars");
 
-        m_actionEditPersonnalExpr=new KAction( i18n( "Edit Personal Expressions..." ), 0,
-                this, SLOT( editPersonalExpr() ),
-                actionCollection(), "personal_expr" );
-        m_actionEditPersonnalExpr->setToolTip( i18n( "Add or change one or more personal expressions" ) );
-        m_actionEditPersonnalExpr->setWhatsThis( i18n( "Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document." ) );
+        m_actionEditPersonnalExpr=new KAction(i18n("Edit Personal Expressions..."), 0,
+                this, SLOT(editPersonalExpr()),
+                actionCollection(), "personal_expr");
+        m_actionEditPersonnalExpr->setToolTip(i18n("Add or change one or more personal expressions"));
+        m_actionEditPersonnalExpr->setWhatsThis(i18n("Add or change one or more personal expressions.<p>Personal expressions are a way to quickly insert commonly used phrases or text into your document."));
 
-        m_actionChangeCase=new KAction( i18n( "Change Case..." ), 0,
-                this, SLOT( changeCaseOfText() ),
-                actionCollection(), "change_case" );
-        m_actionChangeCase->setToolTip( i18n( "Alter the capitalization of selected text" ) );
-        m_actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move." ) );
+        m_actionChangeCase=new KAction(i18n("Change Case..."), 0,
+                this, SLOT(changeCaseOfText()),
+                actionCollection(), "change_case");
+        m_actionChangeCase->setToolTip(i18n("Alter the capitalization of selected text"));
+        m_actionChangeCase->setWhatsThis(i18n("Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move."));
 
         //------------------------ Settings menu
         m_actionConfigure = actionCollection()->addAction(KStandardAction::Preferences,  "configure", this, SLOT(configure()));
 
         //------------------------ Menu frameSet
-        QAction *actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
-                this, SLOT( changePicture() ),
-                actionCollection(), "change_picture" );
-        actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame" ) );
-        actionChangePicture->setWhatsThis( i18n( "You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame." ) );
+        QAction *actionChangePicture=new KAction(i18n("Change Picture..."),"frame_image",0,
+                this, SLOT(changePicture()),
+                actionCollection(), "change_picture");
+        actionChangePicture->setToolTip(i18n("Change the picture in the currently selected frame"));
+        actionChangePicture->setWhatsThis(i18n("You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame."));
 
-        m_actionConfigureHeaderFooter=new KAction( i18n( "Configure Header/Footer..." ), 0,
-                this, SLOT( configureHeaderFooter() ),
-                actionCollection(), "configure_headerfooter" );
-        m_actionConfigureHeaderFooter->setToolTip( i18n( "Configure the currently selected header or footer" ) );
-        m_actionConfigureHeaderFooter->setWhatsThis( i18n( "Configure the currently selected header or footer." ) );
+        m_actionConfigureHeaderFooter=new KAction(i18n("Configure Header/Footer..."), 0,
+                this, SLOT(configureHeaderFooter()),
+                actionCollection(), "configure_headerfooter");
+        m_actionConfigureHeaderFooter->setToolTip(i18n("Configure the currently selected header or footer"));
+        m_actionConfigureHeaderFooter->setWhatsThis(i18n("Configure the currently selected header or footer."));
 
-        m_actionOpenLink = new KAction( i18n( "Open Link" ), 0,
-                this, SLOT( openLink() ),
-                actionCollection(), "open_link" );
-        m_actionOpenLink->setToolTip( i18n( "Open the link with the appropriate application" ) );
-        m_actionOpenLink->setWhatsThis( i18n( "Open the link with the appropriate application.<br><br>Web addresses are opened in a browser.<br>Email addresses begin a new message addressed to the link.<br>File links are opened by the appropriate viewer or editor." ) );
+        m_actionOpenLink = new KAction(i18n("Open Link"), 0,
+                this, SLOT(openLink()),
+                actionCollection(), "open_link");
+        m_actionOpenLink->setToolTip(i18n("Open the link with the appropriate application"));
+        m_actionOpenLink->setWhatsThis(i18n("Open the link with the appropriate application.<br><br>Web addresses are opened in a browser.<br>Email addresses begin a new message addressed to the link.<br>File links are opened by the appropriate viewer or editor."));
 
-        m_actionChangeLink=new KAction( i18n("Change Link..."), 0,
+        m_actionChangeLink=new KAction(i18n("Change Link..."), 0,
                 this,SLOT(changeLink()),
                 actionCollection(), "change_link");
-        m_actionChangeLink->setToolTip( i18n( "Change the content of the currently selected link" ) );
-        m_actionChangeLink->setWhatsThis( i18n( "Change the details of the currently selected link." ) );
+        m_actionChangeLink->setToolTip(i18n("Change the content of the currently selected link"));
+        m_actionChangeLink->setWhatsThis(i18n("Change the details of the currently selected link."));
 
-        m_actionCopyLink = new KAction( i18n( "Copy Link" ), 0,
-                this, SLOT( copyLink() ),
-                actionCollection(), "copy_link" );
+        m_actionCopyLink = new KAction(i18n("Copy Link"), 0,
+                this, SLOT(copyLink()),
+                actionCollection(), "copy_link");
 
-        m_actionAddLinkToBookmak = new KAction( i18n( "Add to Bookmark" ), 0,
-                this, SLOT( addToBookmark() ),
-                actionCollection(), "add_to_bookmark" );
+        m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
+                this, SLOT(addToBookmark()),
+                actionCollection(), "add_to_bookmark");
 
-        m_actionRemoveLink = new KAction( i18n( "Remove Link" ), 0,
-                this, SLOT( removeLink() ),
-                actionCollection(), "remove_link" );
+        m_actionRemoveLink = new KAction(i18n("Remove Link"), 0,
+                this, SLOT(removeLink()),
+                actionCollection(), "remove_link");
 
-        m_actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
-                this, SLOT( showDocStructure() ),
-                actionCollection(), "show_docstruct" );
+        m_actionShowDocStruct = new KToggleAction(i18n("Show Doc Structure"), 0,
+                this, SLOT(showDocStructure()),
+                actionCollection(), "show_docstruct");
         m_actionShowDocStruct->setCheckedState(i18n("Hide Doc Structure"));
-        m_actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar" ) );
-        m_actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
+        m_actionShowDocStruct->setToolTip(i18n("Open document structure sidebar"));
+        m_actionShowDocStruct->setWhatsThis(i18n("Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc."));
 
-        m_actionConfigureCompletion = new KAction( i18n( "Configure Completion..." ), 0,
-                this, SLOT( configureCompletion() ),
-                actionCollection(), "configure_completion" );
-        m_actionConfigureCompletion->setToolTip( i18n( "Change the words and options for autocompletion" ) );
-        m_actionConfigureCompletion->setWhatsThis( i18n( "Add words or change the options for autocompletion." ) );
+        m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
+                this, SLOT(configureCompletion()),
+                actionCollection(), "configure_completion");
+        m_actionConfigureCompletion->setToolTip(i18n("Change the words and options for autocompletion"));
+        m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
 
 
-        new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
+        new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
 
-        new KAction( i18n( "Increase Numbering Level" ), Qt::ALT+Qt::Key_Right,
-                this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
-        new KAction( i18n( "Decrease Numbering Level" ), Qt::ALT+Qt::Key_Left,
-                this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
+        new KAction(i18n("Increase Numbering Level"), Qt::ALT+Qt::Key_Right,
+                this, SLOT(slotIncreaseNumberingLevel()), actionCollection(), "increase_numbering_level");
+        new KAction(i18n("Decrease Numbering Level"), Qt::ALT+Qt::Key_Left,
+                this, SLOT(slotDecreaseNumberingLevel()), actionCollection(), "decrease_numbering_level");
 
 
         // --------
-        m_actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
-                this, SLOT( editCustomVariable() ),
-                actionCollection(), "edit_customvars" );
-        m_actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection" ), 0,
-                this, SLOT( applyAutoFormat() ),
-                actionCollection(), "apply_autoformat" );
-        m_actionApplyAutoFormat->setToolTip( i18n( "Manually force KWord to scan the entire document and apply autocorrection" ) );
-        m_actionApplyAutoFormat->setWhatsThis( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
+        m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
+                this, SLOT(editCustomVariable()),
+                actionCollection(), "edit_customvars");
+        m_actionApplyAutoFormat= new KAction(i18n("Apply Autocorrection"), 0,
+                this, SLOT(applyAutoFormat()),
+                actionCollection(), "apply_autoformat");
+        m_actionApplyAutoFormat->setToolTip(i18n("Manually force KWord to scan the entire document and apply autocorrection"));
+        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force KWord to scan the entire document and apply autocorrection."));
 
-        m_actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection..." ), 0,
-                this, SLOT( createStyleFromSelection()),
-                actionCollection(), "create_style" );
-        m_actionCreateStyleFromSelection->setToolTip( i18n( "Create a new style based on the currently selected text" ) );
-        m_actionCreateStyleFromSelection->setWhatsThis( i18n( "Create a new style based on the currently selected text." ) ); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
+        m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
+                this, SLOT(createStyleFromSelection()),
+                actionCollection(), "create_style");
+        m_actionCreateStyleFromSelection->setToolTip(i18n("Create a new style based on the currently selected text"));
+        m_actionCreateStyleFromSelection->setWhatsThis(i18n("Create a new style based on the currently selected text.")); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
 
-        m_actionConfigureFootEndNote = new KAction( i18n( "Footnote..." ), 0,
-                this, SLOT( configureFootEndNote()),
-                actionCollection(), "format_footendnote" );
-        m_actionConfigureFootEndNote->setToolTip( i18n( "Change the look of footnotes" ) );
-        m_actionConfigureFootEndNote->setWhatsThis( i18n( "Change the look of footnotes." ) );
+        m_actionConfigureFootEndNote = new KAction(i18n("Footnote..."), 0,
+                this, SLOT(configureFootEndNote()),
+                actionCollection(), "format_footendnote");
+        m_actionConfigureFootEndNote->setToolTip(i18n("Change the look of footnotes"));
+        m_actionConfigureFootEndNote->setWhatsThis(i18n("Change the look of footnotes."));
 
-        m_actionEditFootEndNote= new KAction( i18n("Edit Footnote"), 0,
-                this, SLOT( editFootEndNote()),
-                actionCollection(), "edit_footendnote" );
-        m_actionEditFootEndNote->setToolTip( i18n( "Change the content of the currently selected footnote" ) );
-        m_actionEditFootEndNote->setWhatsThis( i18n( "Change the content of the currently selected footnote." ) );
+        m_actionEditFootEndNote= new KAction(i18n("Edit Footnote"), 0,
+                this, SLOT(editFootEndNote()),
+                actionCollection(), "edit_footendnote");
+        m_actionEditFootEndNote->setToolTip(i18n("Change the content of the currently selected footnote"));
+        m_actionEditFootEndNote->setWhatsThis(i18n("Change the content of the currently selected footnote."));
 
 
-        m_actionChangeFootNoteType = new KAction( i18n("Change Footnote/Endnote Parameter"), 0,
-                this, SLOT( changeFootNoteType() ),
+        m_actionChangeFootNoteType = new KAction(i18n("Change Footnote/Endnote Parameter"), 0,
+                this, SLOT(changeFootNoteType()),
                 actionCollection(), "change_footendtype");
 
-        m_actionSavePicture= new KAction( i18n("Save Picture As..."), 0,
-                this, SLOT( savePicture() ),
+        m_actionSavePicture= new KAction(i18n("Save Picture As..."), 0,
+                this, SLOT(savePicture()),
                 actionCollection(), "save_picture");
-        m_actionSavePicture->setToolTip( i18n( "Save the picture in a separate file" ) );
-        m_actionSavePicture->setWhatsThis( i18n( "Save the picture in the currently selected frame in a separate file, outside the KWord document." ) );
+        m_actionSavePicture->setToolTip(i18n("Save the picture in a separate file"));
+        m_actionSavePicture->setWhatsThis(i18n("Save the picture in the currently selected frame in a separate file, outside the KWord document."));
 
-        m_actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
-                this, SLOT( autoSpellCheck() ),
-                actionCollection(), "tool_auto_spellcheck" );
+        m_actionAllowBgSpellCheck = new KToggleAction(i18n("Autospellcheck"), 0,
+                this, SLOT(autoSpellCheck()),
+                actionCollection(), "tool_auto_spellcheck");
 
 
-        m_actionGoToFootEndNote = new KAction( QString::null, //set dynamically
-                0, this, SLOT( goToFootEndNote() ),
-                actionCollection(), "goto_footendnote" );
+        m_actionGoToFootEndNote = new KAction(QString::null, //set dynamically
+                0, this, SLOT(goToFootEndNote()),
+                actionCollection(), "goto_footendnote");
 
-        m_actionAddBookmark= new KAction( i18n( "Bookmark..." ), 0,
-                this, SLOT( addBookmark() ),
-                actionCollection(), "add_bookmark" );
-        m_actionSelectBookmark= new KAction( i18n( "Select Bookmark..." ), 0,
-                this, SLOT( selectBookmark() ),
-                actionCollection(), "select_bookmark" );
+        m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
+                this, SLOT(addBookmark()),
+                actionCollection(), "add_bookmark");
+        m_actionSelectBookmark= new KAction(i18n("Select Bookmark..."), 0,
+                this, SLOT(selectBookmark()),
+                actionCollection(), "select_bookmark");
 
-        m_actionImportStyle= new KAction( i18n( "Import Styles..." ), 0,
-                this, SLOT( importStyle() ),
-                actionCollection(), "import_style" );
+        m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
+                this, SLOT(importStyle()),
+                actionCollection(), "import_style");
 
-        m_actionCreateFrameStyle = new KAction( i18n( "Create Framestyle From Frame..." ), 0,
-                this, SLOT( createFrameStyle()),
-                actionCollection(), "create_framestyle" );
-        m_actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the currently selected frame" ) );
-        m_actionCreateFrameStyle->setWhatsThis( i18n( "Create a new framestyle based on the currently selected frame." ) );
+        m_actionCreateFrameStyle = new KAction(i18n("Create Framestyle From Frame..."), 0,
+                this, SLOT(createFrameStyle()),
+                actionCollection(), "create_framestyle");
+        m_actionCreateFrameStyle->setToolTip(i18n("Create a new style based on the currently selected frame"));
+        m_actionCreateFrameStyle->setWhatsThis(i18n("Create a new framestyle based on the currently selected frame."));
 
-        m_actionConvertToTextBox = new KAction( i18n( "Convert to Text Box" ), 0,
-                this, SLOT( convertToTextBox() ),
-                actionCollection(), "convert_to_text_box" );
+        m_actionConvertToTextBox = new KAction(i18n("Convert to Text Box"), 0,
+                this, SLOT(convertToTextBox()),
+                actionCollection(), "convert_to_text_box");
 
-        m_actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
-                this, SLOT( slotAddIgnoreAllWord() ),
-                actionCollection(), "ignore_all" );
+        m_actionSpellIgnoreAll = new KAction(i18n("Ignore All"), 0,
+                this, SLOT(slotAddIgnoreAllWord()),
+                actionCollection(), "ignore_all");
 
-        m_actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
-                this, SLOT( addWordToDictionary() ),
-                actionCollection(), "add_word_to_dictionary" );
+        m_actionAddWordToPersonalDictionary=new KAction(i18n("Add Word to Dictionary"),0,
+                this, SLOT(addWordToDictionary()),
+                actionCollection(), "add_word_to_dictionary");
 
-        m_actionEmbeddedStoreInternal=new KToggleAction( i18n( "Store Document Internally" ),0,
-                this, SLOT( embeddedStoreInternal() ),
-                actionCollection(), "embedded_store_internal" );
+        m_actionEmbeddedStoreInternal=new KToggleAction(i18n("Store Document Internally"),0,
+                this, SLOT(embeddedStoreInternal()),
+                actionCollection(), "embedded_store_internal");
 
     */
 }
@@ -839,7 +839,7 @@ void KWView::editFrameProperties()
     delete frameDialog;
 }
 
-KoPrintJob * KWView::createPrintJob()
+KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(this);
     dia->printer().setResolution(600);
@@ -1157,7 +1157,7 @@ void KWView::setShowFormattingChars(bool on)
 void KWView::editSelectAllFrames()
 {
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
-    foreach (KWFrameSet* fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
         foreach (KWFrame *frame, fs->frames()) {
             if (frame->shape()->isVisible())
                 selection->select(frame->shape());
