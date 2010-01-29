@@ -161,7 +161,42 @@ QWidget *KWView::canvas() const
 
 void KWView::updateReadWrite(bool readWrite)
 {
-    // TODO
+    m_actionFormatFrameSet->setEnabled(readWrite);
+    m_actionInsertFrameBreak->setEnabled(readWrite);
+    m_actionViewHeader->setEnabled(readWrite);
+    m_actionViewFooter->setEnabled(readWrite);
+    m_actionViewSnapToGrid->setEnabled(readWrite);
+    m_actionRaiseFrame->setEnabled(readWrite);
+    m_actionLowerFrame->setEnabled(readWrite);
+    m_actionBringToFront->setEnabled(readWrite);
+    m_actionSendBackward->setEnabled(readWrite);
+    m_actionAddBookmark->setEnabled(readWrite);
+    QAction *action = actionCollection()->action("insert_variable");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_picture");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("format_page");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("inline_frame");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_cut");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_copy");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_paste");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("delete_page");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("edit_delete");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("create_linked_frame");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("create_custom_outline");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("showStatusBar");
+    if (action) action->setEnabled(readWrite);
 }
 
 void KWView::setupActions()
