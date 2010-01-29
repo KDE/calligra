@@ -135,7 +135,7 @@
       <attribute name="title">
        <string>Text</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout2">
        <item row="0" column="0" colspan="3">
         <widget class="QCheckBox" name="footEndNotes">
          <property name="text">
