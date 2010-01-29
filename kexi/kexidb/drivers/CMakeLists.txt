@@ -2,15 +2,18 @@
 # drivers will be moved out of this dir in Predicate, and then area will be redefined
 #remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
-INCLUDE (FindPkgConfig)
+SET (SQLITE_MIN_VERSION "3.6.20")
+IF(NOT WIN32)
+  INCLUDE (FindPkgConfig)
+  pkg_check_modules (SQLITE3 REQUIRED sqlite3>=3.6.20) #todo let's have this check in FindSqlite instead
+ENDIF(NOT WIN32)
 
-pkg_check_modules (SQLITE3 REQUIRED sqlite3>=3.6.20)
-
-IF (SQLITE3_FOUND)
+INCLUDE (MacroLogFeature)
+INCLUDE (FindSqlite)
+macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org" TRUE SQLITE_MIN_VERSION "Required by the default Kexi database driver.")
+IF (SQLITE_FOUND)
   add_subdirectory( sqlite )
-ENDIF (SQLITE3_FOUND)
-
-#ancient add_subdirectory( sqlite2 )
+ENDIF (SQLITE_FOUND)
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
@@ -42,26 +45,3 @@ ENDIF(XBASE_FOUND)
 
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")
-
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#if compile_mysql_plugin
-#mysql_dir=mySQL
-#endif
-#
-#
-#if compile_pgsql_plugin
-#pgsql_dir=pqxx
-#endif
-#
-#SUBDIRS =  sqlite sqlite2 $(pgsql_dir) $(mysql_dir)
-#
