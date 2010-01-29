@@ -46,15 +46,26 @@ public:
         BreakBeforeGroupHeader = 2
     };
 
+    enum Sort {
+        Ascending = 1,
+        Descending
+    };
+    
+
     void setColumn(const QString &);
     QString column() const;
 
     void setGroupHeaderVisible(bool yes = TRUE);
     bool groupHeaderVisible() const;
+
     void setGroupFooterVisible(bool yes = TRUE);
     bool groupFooterVisible() const;
-    void setPageBreak(int);
-    int  pageBreak() const;
+
+    void setPageBreak(PageBreak);
+    PageBreak  pageBreak() const;
+
+    void setSort(Sort);
+    Sort sort();
 
     ReportSection * groupHeader() const;
     ReportSection * groupFooter() const;
@@ -70,7 +81,8 @@ protected:
 
     ReportSectionDetail * m_reportSectionDetail;
 
-    int m_pageBreak;
+    PageBreak m_pageBreak;
+    Sort m_sort;
 };
 
 

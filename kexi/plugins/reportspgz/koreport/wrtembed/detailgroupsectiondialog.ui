@@ -1,4 +1,5 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <comment> * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
@@ -18,8 +19,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.</comment>
  <class>DetailGroupSectionDialog</class>
- <widget class="QDialog" name="DetailGroupSectionDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="DetailGroupSectionDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -27,23 +28,40 @@
     <height>178</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Group Section Editor</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" >
-     <item>
-      <widget class="QLabel" name="lblColumn" >
-       <property name="text" >
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblColumn">
+       <property name="text">
         <string>Column:</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QComboBox" name="cbColumn" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+     <item row="0" column="1">
+      <widget class="QComboBox" name="cbColumn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblSort">
+       <property name="text">
+        <string>Sort</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cbSort">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -53,35 +71,35 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="cbHead" >
-     <property name="text" >
+    <widget class="QCheckBox" name="cbHead">
+     <property name="text">
       <string>Show Group Header</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="cbFoot" >
-     <property name="text" >
+    <widget class="QCheckBox" name="cbFoot">
+     <property name="text">
       <string>Show Group Footer</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="breakAfterFooter" >
-     <property name="text" >
+    <widget class="QCheckBox" name="breakAfterFooter">
+     <property name="text">
       <string>Insert Page Break After this Footer</string>
      </property>
     </widget>
    </item>
    <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>239</width>
        <height>16</height>
@@ -90,31 +108,22 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -123,21 +132,21 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="btnOk" >
-       <property name="text" >
+      <widget class="QPushButton" name="btnOk">
+       <property name="text">
         <string>&amp;OK</string>
        </property>
-       <property name="autoDefault" >
+       <property name="autoDefault">
         <bool>true</bool>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="bntCancel" >
-       <property name="text" >
+      <widget class="QPushButton" name="bntCancel">
+       <property name="text">
         <string>&amp;Cancel</string>
        </property>
       </widget>
@@ -146,8 +155,8 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
-  <tabstops>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
   <tabstop>cbHead</tabstop>
   <tabstop>cbFoot</tabstop>
   <tabstop>breakAfterFooter</tabstop>
@@ -162,11 +171,11 @@
    <receiver>DetailGroupSectionDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
@@ -178,11 +187,11 @@
    <receiver>DetailGroupSectionDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>

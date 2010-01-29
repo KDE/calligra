@@ -34,16 +34,13 @@
 class KexiDBReportData : public KoReportData
 {
 private:
-    QString         m_qstrQuery;
+    QString m_qstrQuery;
 
-    KexiDB::Cursor   *m_cursor;
+    KexiDB::Cursor *m_cursor;
+    KexiDB::Connection *m_connection;
+    KexiDB::QuerySchema *m_schema;
 
-    KexiDB::Connection   *m_connection;
-    KexiDB::TableOrQuerySchema *m_schema;
-
-    bool executeInternal();
-
-    bool m_valid;
+    bool getSchema();
 
 public:
     KexiDBReportData(const QString &, KexiDB::Connection *conn);
@@ -53,6 +50,7 @@ public:
     virtual void* schema() const;
 
     virtual QStringList fieldNames();
+    virtual void setSorting(KoReportData::SortList);
 
     virtual QString source() const;
     virtual unsigned int fieldNumber(const QString &field);

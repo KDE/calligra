@@ -273,6 +273,17 @@ void SectionEditor::btnEdit_clicked()
         dgsd->cbColumn->insertItems(0, m_reportDesigner->fieldList());
         dgsd->cbColumn->setCurrentIndex(m_reportDesigner->fieldList().indexOf(rsdg->column()));
 
+        dgsd->cbSort->clear();
+        dgsd->cbSort->addItem(i18n("Ascending"), "ascending");
+        dgsd->cbSort->addItem(i18n("Descending"), "descending");
+
+        if (rsdg->sort() == ReportSectionDetailGroup::Ascending) {
+            dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData("ascending"));
+        }
+        else {
+            dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData("descending"));
+        }
+
         dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
         dgsd->cbHead->setChecked(rsdg->groupHeaderVisible());
         dgsd->cbFoot->setChecked(rsdg->groupFooterVisible());
@@ -300,6 +311,12 @@ void SectionEditor::btnEdit_clicked()
                     else
                         rsdg->setPageBreak(ReportSectionDetailGroup::BreakNone);
 
+                    if (dgsd->cbSort->itemData(dgsd->cbSort->currentItem()).toString() == "ascending") {
+                        rsdg->setSort(ReportSectionDetailGroup::Ascending);
+                    }
+                    else {
+                        rsdg->setSort(ReportSectionDetailGroup::Descending);
+                    }
                     exitLoop = true;
                 }
             } else {

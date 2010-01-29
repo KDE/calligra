@@ -241,7 +241,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 cnt++;
                 grp = detailData.m_groupList[i];
 
-                keys.append(grp->column);
+                keys.append(grp->m_column);
                 if (!keys[i].isEmpty())
                     keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys[i])).toString());
                 else
@@ -251,8 +251,8 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 kDebug() << "EMIT1";
                 emit(enteredGroup(keys[i], keyValues[i]));
 
-                if (grp->groupHeader)
-                    renderSection(*(grp->groupHeader));
+                if (grp->m_groupHeader)
+                    renderSection(*(grp->m_groupHeader));
             }
 
             do {
@@ -303,13 +303,13 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 do_break = false;
                                 grp = detailData.m_groupList[i];
 
-                                if (grp->groupFooter) {
-                                    if (renderSectionSize(*(grp->groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
+                                if (grp->m_groupFooter) {
+                                    if (renderSectionSize(*(grp->m_groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
                                         createNewPage();
-                                    renderSection(*(grp->groupFooter));
+                                    renderSection(*(grp->m_groupFooter));
                                 }
 
-                                if (ORDetailGroupSectionData::BreakAfterGroupFooter == grp->pagebreak)
+                                if (ORDetailGroupSectionData::BreakAfterGroupFooter == grp->m_pagebreak)
                                     do_break = true;
                             }
                             // step ahead to where we should be and print the needed headers
@@ -321,15 +321,15 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 for (i = pos; i < cnt; i++) {
                                     grp = detailData.m_groupList[i];
 
-                                    if (grp->groupHeader) {
-                                        if (renderSectionSize(*(grp->groupHeader)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight) {
+                                    if (grp->m_groupHeader) {
+                                        if (renderSectionSize(*(grp->m_groupHeader)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight) {
                                             m_kodata->movePrevious();
                                             createNewPage();
                                             m_kodata->moveNext();
                                         }
 
 
-                                        renderSection(*(grp->groupHeader));
+                                        renderSection(*(grp->m_groupHeader));
                                     }
 
                                     if (!keys[i].isEmpty())
@@ -351,10 +351,10 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 for (i = cnt - 1; i >= 0; i--) {
                     grp = detailData.m_groupList[i];
 
-                    if (grp->groupFooter) {
-                        if (renderSectionSize(*(grp->groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
+                    if (grp->m_groupFooter) {
+                        if (renderSectionSize(*(grp->m_groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
                             createNewPage();
-                        renderSection(*(grp->groupFooter));
+                        renderSection(*(grp->m_groupFooter));
                         emit(exitedGroup(keys[i], keyValues[i]));
                     }
                 }
@@ -917,6 +917,7 @@ ORODocument* ORPreRender::generate()
     kDebug() << "Page Size:" << d->m_maxWidth << d->m_maxHeight;
 
     d->m_document->setPageOptions(rpo);
+    d->m_kodata->setSorting(d->m_reportData->m_detailSection->m_sortList);
     d->m_kodata->open();
     d->initEngine();
 

@@ -180,11 +180,11 @@ QList<KRObjectData*> KRReportData::objects() const
     if (m_detailSection) {
         kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
-            if (g->groupHeader) {
-                obs << g->groupHeader->objects();
+            if (g->m_groupHeader) {
+                obs << g->m_groupHeader->objects();
             }
-            if (g->groupFooter) {
-                obs << g->groupFooter->objects();
+            if (g->m_groupFooter) {
+                obs << g->m_groupFooter->objects();
             }
         }
         if (m_detailSection->m_detailSection)
@@ -224,11 +224,11 @@ QList<KRSectionData*> KRReportData::sections() const
     if (m_detailSection) {
         kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
-            if (g->groupHeader) {
-                secs << g->groupHeader;
+            if (g->m_groupHeader) {
+                secs << g->m_groupHeader;
             }
-            if (g->groupFooter) {
-                secs << g->groupFooter;
+            if (g->m_groupFooter) {
+                secs << g->m_groupFooter;
             }
         }
         if (m_detailSection->m_detailSection)

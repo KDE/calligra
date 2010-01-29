@@ -37,6 +37,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
     Q_UNUSED(name);
 
     m_pageBreak = BreakNone;
+    m_sort = Ascending;
     ReportDesigner * rd = 0;
     m_reportSectionDetail = rsd;
     if (m_reportSectionDetail) {
@@ -71,6 +72,13 @@ void ReportSectionDetailGroup::buildXML(QDomDocument & doc, QDomElement & sectio
         grp.setAttribute("report:group-page-break", "before-header");
     }
 
+    if (m_sort == ReportSectionDetailGroup::Ascending) {
+        grp.setAttribute("report:group-sort", "ascending");
+    }
+    else {
+        grp.setAttribute("report:group-sort", "descending");
+    }
+
     //group head
     if (groupHeaderVisible()) {
         QDomElement gheader = doc.createElement("report:section");
@@ -93,6 +101,7 @@ void ReportSectionDetailGroup::initFromXML( const QDomElement &element )
     if ( element.hasAttribute( "report:group-column" ) ) {
         setColumn( element.attribute( "report:group-column" ) );
     }
+    
     if ( element.hasAttribute( "report:group-page-break" ) ) {
         QString s = element.attribute( "report:group-page-break" );
         if ( s == "after-footer" ) {
@@ -101,6 +110,14 @@ void ReportSectionDetailGroup::initFromXML( const QDomElement &element )
             setPageBreak( ReportSectionDetailGroup::BreakBeforeGroupHeader );
         }
     }
+    
+    if (element.attribute("report:group-sort", "ascending") == "ascending") {
+        setSort(ReportSectionDetailGroup::Ascending);
+    }
+    else {
+        setSort(ReportSectionDetailGroup::Descending);
+    }
+    
     for ( QDomElement e = element.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
         QString s = e.attribute( "report:section-type" );
         if ( s == "group-header" ) {
@@ -133,10 +150,21 @@ void ReportSectionDetailGroup::setGroupFooterVisible(bool yes)
     m_reportSectionDetail->adjustSize();
 }
 
-void ReportSectionDetailGroup::setPageBreak(int pb)
+void ReportSectionDetailGroup::setPageBreak(ReportSectionDetailGroup::PageBreak pb)
 {
     m_pageBreak = pb;
 }
+
+void ReportSectionDetailGroup::setSort(ReportSectionDetailGroup::Sort s)
+{
+    m_sort = s;
+}
+
+ReportSectionDetailGroup::Sort ReportSectionDetailGroup::sort()
+{
+    return m_sort;
+}
+    
 
 bool ReportSectionDetailGroup::groupHeaderVisible() const
 {
@@ -148,7 +176,7 @@ bool ReportSectionDetailGroup::groupFooterVisible() const
     // Check *explicitly* hidden
     return ! m_groupFooter->isHidden();
 }
-int ReportSectionDetailGroup::pageBreak() const
+ReportSectionDetailGroup::PageBreak ReportSectionDetailGroup::pageBreak() const
 {
     return m_pageBreak;
 }

@@ -22,6 +22,7 @@
 
 #include "krdetailsectiondata.h"
 #include "krsectiondata.h"
+
 #include <kdebug.h>
 
 KRDetailSectionData::KRDetailSectionData()
@@ -49,37 +50,54 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
             ORDetailGroupSectionData * dgsd = new ORDetailGroupSectionData();
 
             if ( elemThis.hasAttribute( "report:group-column" ) ) {
-                dgsd->column = elemThis.attribute( "report:group-column" );
+                dgsd->m_column = elemThis.attribute( "report:group-column" );
             }
+
             if ( elemThis.hasAttribute( "report:group-page-break" ) ) {
                 QString s = elemThis.attribute( "report:group-page-break" );
                 if ( s == "after-footer" ) {
-                    dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
+                    dgsd->m_pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
                 } else if ( s == "before-header" ) {
-                    dgsd->pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
+                    dgsd->m_pagebreak = ORDetailGroupSectionData::BreakBeforeGroupHeader;
                 } else {
-                    dgsd->pagebreak = ORDetailGroupSectionData::BreakNone;
+                    dgsd->m_pagebreak = ORDetailGroupSectionData::BreakNone;
                 }
             }
+
+            if (elemThis.attribute("report:group-sort", "ascending") == "ascending") {
+                dgsd->m_sort = ORDetailGroupSectionData::Ascending;
+            } else {
+                dgsd->m_sort = ORDetailGroupSectionData::Descending;
+            }
+            
             for ( QDomElement e = elemThis.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
                 QString s = e.attribute( "report:section-type" );
                 if ( s == "group-header" ) {
                     KRSectionData * sd = new KRSectionData(e);
                     if (sd->isValid()) {
-                        dgsd->groupHeader = sd;
+                        dgsd->m_groupHeader = sd;
                     } else {
                         delete sd;
                     }
                 } else if ( s == "group-footer" ) {
                     KRSectionData * sd = new KRSectionData(e);
                     if (sd->isValid()) {
-                        dgsd->groupFooter = sd;
+                        dgsd->m_groupFooter = sd;
                     } else {
                         delete sd;
                     }
                 }
             }
             m_groupList.append(dgsd);
+            KoReportData::Sort s;
+            s.field = dgsd->m_column;
+            if (dgsd->m_sort == ORDetailGroupSectionData::Ascending)
+                s.order = KoReportData::Sort::Ascending;
+            else
+                s.order = KoReportData::Sort::Descending;
+            
+            m_sortList.append(s);
+	    
         } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
@@ -91,6 +109,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
             kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
         }
     }
+    
     m_valid = true;
 }
 
@@ -100,8 +119,9 @@ KRDetailSectionData::~KRDetailSectionData()
 
 ORDetailGroupSectionData::ORDetailGroupSectionData()
 {
-    pagebreak = BreakNone;
-    groupHeader = 0;
-    groupFooter = 0;
+    m_pagebreak = BreakNone;
+    m_sort = Ascending;
+    m_groupHeader = 0;
+    m_groupFooter = 0;
 }
 

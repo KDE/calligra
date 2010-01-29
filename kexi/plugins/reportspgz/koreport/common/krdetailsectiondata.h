@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <qdom.h>
+#include <koreportdata.h>
 
 class KRSectionData;
 class ORDetailGroupSectionData;
@@ -45,6 +46,7 @@ public:
 
     QString m_name;
     int m_pageBreak;
+    KoReportData::SortList m_sortList;
 
     KRSectionData * m_detailSection;
 
@@ -56,7 +58,6 @@ public:
 
 private:
     bool m_valid;
-
 };
 
 class ORDetailGroupSectionData
@@ -70,13 +71,18 @@ public:
         BreakBeforeGroupHeader = 2
     };
 
+    enum Sort {
+        Ascending = 1,
+        Descending
+    };
+    
     //QString name;
-    QString column;
-    int pagebreak;
+    QString m_column;
+    PageBreak m_pagebreak;
+    Sort m_sort;
 
-
-    KRSectionData *groupHeader;
-    KRSectionData *groupFooter;
+    KRSectionData *m_groupHeader;
+    KRSectionData *m_groupFooter;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* Koffice/Kexi report engine
- * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2010 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,20 @@ class KoReportData
 public:
     virtual ~KoReportData() {};
 
+    class Sort
+    {
+        public:
+        enum Order {
+            Ascending = 1,
+            Descending
+        };
+
+        QString field;
+        Order order;
+        //bool group; //probably not required?
+    };
+    typedef QList<Sort> SortList;
+
     virtual bool open() = 0;
     virtual bool close() = 0;
     virtual bool moveNext() = 0;
@@ -43,17 +57,28 @@ public:
     virtual QVariant value(unsigned int) = 0;
     virtual QVariant value(const QString &field) = 0;
 
+    //Should be called before open() so that the data source can be edited accordingly
+    //Default impl does nothing
+    virtual void setSorting(SortList) {}
+
     //!Special functions only needed by kexidb driver
+    //!Needs to return a KexiDB::Connection pointer
     virtual void* connection() const {
         return 0;
-    } //!Needs to return a KexiDB::Connection pointer
+    } 
+    
     virtual QString source() const {
         return QString();
     }
+    
+    //!Needs to return a KexiDB::TableOrQuerySchema pointer, only needs implemented if access via scripting is desirbale
     virtual void* schema() const {
         return 0;
-    } //!Needs to return a KexiDB::TableOrQuerySchema pointer, only needs implemented if access via scripting is desirbale
+    } 
 };
+
+
+
 
 #endif
 
