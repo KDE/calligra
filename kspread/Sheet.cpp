@@ -2999,8 +2999,8 @@ void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
     setShowGrid(items.parseConfigItemBool("ShowGrid"));
     setFirstLetterUpper(items.parseConfigItemBool("FirstLetterUpper"));
 
-    int cursorX = qMax(1, items.parseConfigItemInt("CursorPositionX") + 1);
-    int cursorY = qMax(1, items.parseConfigItemInt("CursorPositionY") + 1);
+    int cursorX = qMin(KS_colMax, qMax(1, items.parseConfigItemInt("CursorPositionX") + 1));
+    int cursorY = qMin(KS_rowMax, qMax(1, items.parseConfigItemInt("CursorPositionY") + 1));
     map()->loadingInfo()->setCursorPosition(this, QPoint(cursorX, cursorY));
 
     double offsetX = items.parseConfigItemDouble("xOffset");
