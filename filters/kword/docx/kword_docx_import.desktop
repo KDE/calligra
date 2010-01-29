@@ -2,6 +2,7 @@
 Type=Service
 Name=MS Word 2007 Import Filter for KWord
 Name[cs]=Importní filtr MS Word 2007 pro KWord
+Name[el]=Φίλτρο εισαγωγής MS Word 2007 για το KSpread
 Name[en_GB]=MS Word 2007 Import Filter for KWord
 Name[es]=Filtro de KWord de importación de MS Word 2007
 Name[et]=KWordi MS Word 2007 impordifilter

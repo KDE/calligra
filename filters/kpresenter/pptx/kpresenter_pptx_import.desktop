@@ -2,6 +2,7 @@
 Type=Service
 Name=MS PowerPoint 2007 Import Filter for KPresenter
 Name[cs]=Importní filtr MS PowerPoint 2007 pro KPresenter
+Name[el]=Φίλτρο εισαγωγής MS PowerPoint 2007 PowerPoint για το KPresenter
 Name[en_GB]=MS PowerPoint 2007 Import Filter for KPresenter
 Name[es]=Filtro de KPresenter de importación de MS PowerPoint 2007
 Name[et]=KPresenteri MS PowerPoint 2007 impordifilter
