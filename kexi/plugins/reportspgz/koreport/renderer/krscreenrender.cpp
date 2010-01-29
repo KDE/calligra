@@ -70,7 +70,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             m_painter->setBackgroundMode(Qt::TransparentMode);
             m_painter->setFont(tb->textStyle().font);
             m_painter->setPen(tb->textStyle().foregroundColor);
-            m_painter->drawText(rc, tb->flags(), tb->text());
+            m_painter->drawText(rc.adjusted(2, 2, 0, 0), tb->flags(), tb->text());
 
             //outer line
             m_painter->setPen(QPen(tb->lineStyle().lineColor, tb->lineStyle().weight, tb->lineStyle().style));
