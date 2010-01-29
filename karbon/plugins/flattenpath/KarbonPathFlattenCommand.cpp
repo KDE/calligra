@@ -63,7 +63,7 @@ struct PointData
     // old control points in document coordinates
     QPointF oldControlPoint1;
     QPointF oldControlPoint2;
-    KoPathPoint::KoPointProperties oldProperties;
+    KoPathPoint::PointProperties oldProperties;
     uint insertedPoints;
     bool activeControlPoint1;
     bool activeControlPoint2;
