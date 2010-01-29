@@ -20,9 +20,9 @@
 #ifndef _KARBONCALLIGRAPHYTOOLFACTORY_H_
 #define _KARBONCALLIGRAPHYTOOLFACTORY_H_
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class KarbonCalligraphyToolFactory : public KoToolFactory
+class KarbonCalligraphyToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
 public:

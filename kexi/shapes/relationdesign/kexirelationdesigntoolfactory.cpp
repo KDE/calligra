@@ -19,7 +19,7 @@
 #include "kexirelationdesignshape.h"
 
 KexiRelationDesignToolFactory::KexiRelationDesignToolFactory( QObject* parent)
-: KoToolFactory(parent, "KexiRelationDesignToolFactoryId")
+: KoToolFactoryBase(parent, "KexiRelationDesignToolFactoryId")
 {
     setToolTip( i18n( "Relation design tool" ) );
     setIcon( "kexi" );

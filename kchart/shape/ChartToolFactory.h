@@ -23,12 +23,12 @@
 
 #include "kchart_export.h"
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 namespace KChart
 {
 
-class CHARTSHAPELIB_EXPORT ChartToolFactory : public KoToolFactory
+class CHARTSHAPELIB_EXPORT ChartToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
 

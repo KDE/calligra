@@ -20,9 +20,9 @@
 #ifndef KPRPLACEHOLDERTOOLFACTORY_H
 #define KPRPLACEHOLDERTOOLFACTORY_H
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class KPrPlaceholderToolFactory : public KoToolFactory
+class KPrPlaceholderToolFactory : public KoToolFactoryBase
 {
 public:
     KPrPlaceholderToolFactory(QObject *parent);

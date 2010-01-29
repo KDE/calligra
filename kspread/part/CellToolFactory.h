@@ -20,7 +20,7 @@
 #ifndef KSPREAD_CELL_TOOL_FACTORY
 #define KSPREAD_CELL_TOOL_FACTORY
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 #include "kspread_export.h"
 
@@ -30,7 +30,7 @@ namespace KSpread
 /**
  * The Factory, that creates a CellTool.
  */
-class KSPREAD_EXPORT CellToolFactory : public KoToolFactory
+class KSPREAD_EXPORT CellToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
 public:

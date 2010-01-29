@@ -33,7 +33,7 @@ using namespace KChart;
 
 
 ChartToolFactory::ChartToolFactory( QObject *parent )
-    : KoToolFactory(parent, "ChartToolFactory_ID")
+    : KoToolFactoryBase(parent, "ChartToolFactory_ID")
 {
     setToolTip ( i18n( "Chart Editing Tool" ) );
     setToolType ( dynamicToolType() );

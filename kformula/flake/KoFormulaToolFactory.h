@@ -20,24 +20,24 @@
 #ifndef KOFORMULATOOLFACTORY_H
 #define KOFORMULATOOLFACTORY_H
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
 /**
  * @short The factory for KoFormulaTool
  *
- * This reimplements the KoToolFactory class from the flake library in order
+ * This reimplements the KoToolFactoryBase class from the flake library in order
  * to provide a factory for the KoTool based class KoFormulaTool. This is the
  * KoTool that is used to edit a KoFormulaShape.
  * This class is part of the FormulaShape plugin and follows the factory design
  * pattern.
  */
-class KoFormulaToolFactory : public KoToolFactory {
+class KoFormulaToolFactory : public KoToolFactoryBase {
     Q_OBJECT
 public:
-    /// The constructor - reimplemented from KoToolFactory
+    /// The constructor - reimplemented from KoToolFactoryBase
     explicit KoFormulaToolFactory( QObject* parent );
 
-    /// The destructor - reimplemented from KoToolFactory
+    /// The destructor - reimplemented from KoToolFactoryBase
     ~KoFormulaToolFactory();
 
     /// @return an instance of KoFormulaTool

@@ -20,9 +20,9 @@
 #ifndef KARBONFILTEREFFECTSTOOLFACTORY_H
 #define KARBONFILTEREFFECTSTOOLFACTORY_H
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class KarbonFilterEffectsToolFactory : public KoToolFactory
+class KarbonFilterEffectsToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
 public:
