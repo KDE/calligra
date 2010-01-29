@@ -62,7 +62,7 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeConfigFactoryBase.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
@@ -158,7 +158,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     d->sheetAccessModel = new SheetAccessModel(d->map);
 
     // Init chart shape factory with KSpread's specific configuration panels.
-    KoShapeFactory *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
+    KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
         QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(this);
         chartShape->setOptionPanels(panels);

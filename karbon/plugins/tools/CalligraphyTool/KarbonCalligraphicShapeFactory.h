@@ -20,12 +20,12 @@
 #ifndef KARBONCALLIGRAPHICSHAPEFACTORY_H
 #define KARBONCALLIGRAPHICSHAPEFACTORY_H
 
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 
 class KoShape;
 
 /// Factory for ellipse shapes
-class KarbonCalligraphicShapeFactory : public KoShapeFactory
+class KarbonCalligraphicShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor

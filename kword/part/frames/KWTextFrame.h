@@ -37,7 +37,7 @@ public:
     /**
      * Constructor
      * @param shape a ready made shape that is capable of showing text
-     *      This shape should be created using a KoShapeFactory from the textShape plugin
+     *      This shape should be created using a KoShapeFactoryBase from the textShape plugin
      * @param parent the frameSet this frame will be associated with.
      */
     KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber = -1);

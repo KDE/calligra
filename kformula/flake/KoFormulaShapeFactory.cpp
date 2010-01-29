@@ -19,12 +19,12 @@
 #include "KoFormulaShapeFactory.h"
 #include "KoFormulaShape.h"
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
-    : KoShapeFactory( parent, KoFormulaShapeId, i18n( "Formula" ) )
+    : KoShapeFactoryBase( parent, KoFormulaShapeId, i18n( "Formula" ) )
 {
     setToolTip(i18n( "A formula"));
     setIcon( "x-shape-formula" );

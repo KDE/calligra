@@ -32,7 +32,7 @@
 #include <KoParagraphStyle.h>
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
@@ -139,7 +139,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         KoParagraphStyle paragraphStyle;
         paragraphStyle.loadOdf( style, context.odfLoadingContext() );
 
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
         Q_ASSERT( factory );
         m_textShape = factory->createDefaultShape(context.documentResourceManager());
 
@@ -162,7 +162,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
 
 void KPrPlaceholderTextStrategy::init(KoResourceManager *documentResources)
 {
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
     KoProperties props;
     props.setProperty("text", text());

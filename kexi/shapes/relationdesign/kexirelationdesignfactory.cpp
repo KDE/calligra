@@ -20,7 +20,7 @@
 #include <kdebug.h>
 
 KexiRelationDesignFactory::KexiRelationDesignFactory ( QObject* parent )
-        : KoShapeFactory ( parent, "KexiRelationDesignShape",
+        : KoShapeFactoryBase ( parent, "KexiRelationDesignShape",
                            i18n ( "Kexi Relation Design" ) ) {
     setToolTip ( i18n ( "A kexi relation design shape" ) );
     setIcon( "kexi" );

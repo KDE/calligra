@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <KoShape.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -117,7 +117,7 @@ KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
 KoShape *KPrPlaceholderStrategy::createShape(KoResourceManager *rm)
 {
     KoShape * shape = 0;
-    KoShapeFactory * factory = KoShapeRegistry::instance()->value( m_placeholderData->m_shapeId );
+    KoShapeFactoryBase * factory = KoShapeRegistry::instance()->value( m_placeholderData->m_shapeId );
     Q_ASSERT( factory );
     if ( factory ) {
         shape = factory->createDefaultShape(rm);

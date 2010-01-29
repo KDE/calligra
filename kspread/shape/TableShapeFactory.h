@@ -22,7 +22,7 @@
 
 #include <QStringList>
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 #include "KoXmlReaderForward.h"
@@ -36,7 +36,7 @@ public:
     ~TableShapePlugin() {}
 };
 
-class TableShapeFactory : public KoShapeFactory
+class TableShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 public:

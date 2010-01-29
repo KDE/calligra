@@ -25,7 +25,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoShape.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
@@ -67,7 +67,7 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     addChild( layer );
 
     // All sizes and positions are hardcoded for now
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value("TextShapeID");
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
     Q_ASSERT(factory);
     m_textShape = factory->createDefaultShape(m_doc->resourceManager());
     m_textShape->setGeometryProtected(true);

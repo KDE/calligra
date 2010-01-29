@@ -24,7 +24,7 @@
 
 
 KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory(QObject *parent)
-        : KoShapeFactory(parent, KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
+        : KoShapeFactoryBase(parent, KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
 {
     setToolTip(i18n("Calligraphic Shape"));
     setIcon("calligraphy");

@@ -61,7 +61,7 @@ ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
 
 
 ChartShapeFactory::ChartShapeFactory( QObject* parent )
-    : KoShapeFactory( parent, ChartShapeId, i18n( "Chart" ) )
+    : KoShapeFactoryBase( parent, ChartShapeId, i18n( "Chart" ) )
 {
     setOdfElementNames( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", QStringList( "object" ) );
     setToolTip( i18n( "Business charts" ) );

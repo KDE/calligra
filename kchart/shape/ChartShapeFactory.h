@@ -28,7 +28,7 @@
 #include <QStringList>
 
 // KOffice
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 
 class KoShape;
@@ -45,7 +45,7 @@ public:
 };
 
 
-class ChartShapeFactory : public KoShapeFactory
+class ChartShapeFactory : public KoShapeFactoryBase
 {
     Q_OBJECT
 public:

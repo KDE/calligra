@@ -20,7 +20,7 @@
 #ifndef KOFORMULASHAPEFACTORY_H
 #define KOFORMULASHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 
@@ -30,16 +30,16 @@ class KoShape;
  * This class is a part of the FormulaShape plugin and provides a generic
  * way to obtain instances of the KoFormulaShape class.
  * It follows the factory design pattern and implements the two virtual methods 
- * createDefaultShape() and createShape() of KoShapeFactory.
+ * createDefaultShape() and createShape() of KoShapeFactoryBase.
  */
-class KoFormulaShapeFactory : public KoShapeFactory {
+class KoFormulaShapeFactory : public KoShapeFactoryBase {
     Q_OBJECT
 
 public:
-    /// The constructor - reimplemented from KoShapeFactory
+    /// The constructor - reimplemented from KoShapeFactoryBase
     explicit KoFormulaShapeFactory( QObject *parent );
 
-    /// The destructor - reimplemented from KoShapeFactory
+    /// The destructor - reimplemented from KoShapeFactoryBase
     ~KoFormulaShapeFactory();
 
     /// reimplemented

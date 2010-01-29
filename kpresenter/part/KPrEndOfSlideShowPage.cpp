@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 #include <KoShapeLayer.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoColorBackground.h>
 #include <KoTextShapeData.h>
@@ -56,7 +56,7 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     KoShapeLayer* layer = new KoShapeLayer;
     addChild( layer );
 
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
     if ( factory ) {
         KoShape * textShape = factory->createDefaultShape();

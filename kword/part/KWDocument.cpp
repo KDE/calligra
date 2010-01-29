@@ -51,7 +51,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
-#include <KoShapeFactory.h>
+#include <KoShapeFactoryBase.h>
 #include <KoStyleManager.h>
 #include <KoResourceManager.h>
 #include <KoInteractionTool.h>
@@ -143,7 +143,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     // Init shape Factories with our frame based configuration panels.
     QList<KoShapeConfigFactoryBase *> panels = KWFrameDialog::panels(this);
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
-        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        KoShapeFactoryBase *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->setOptionPanels(panels);
     }
 
