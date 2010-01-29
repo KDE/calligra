@@ -31,6 +31,8 @@ void initInternal(); //!< should be called from ctor
 void doneInternal(); //!< sould be called from dtor
 
 KoFilter::ConversionStatus read_hyperlink();
+//KoFilter::ConversionStatus read_commentRangeEnd();
+KoFilter::ConversionStatus read_commentRangeStart();
 KoFilter::ConversionStatus read_p();
 KoFilter::ConversionStatus read_pPr();
 KoFilter::ConversionStatus read_rPr();

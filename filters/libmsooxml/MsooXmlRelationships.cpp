@@ -24,6 +24,7 @@
 #include "MsooXmlRelationships.h"
 #include "MsooXmlRelationshipsReader.h"
 #include "MsooXmlImport.h"
+#include "MsooXmlCommentsReader.h"
 #include <KoOdfExporter.h>
 #include <QSet>
 #include <KDebug>
@@ -43,6 +44,9 @@ public:
     QString *errorMessage;
     QMap<QString, QString> rels;
     QSet<QString> loadedFiles;
+    
+    KoFilter::ConversionStatus loadComments();
+    QMap<QString, QStringList> comments;    
 };
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
@@ -57,6 +61,14 @@ KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString
                &reader, realPath, *errorMessage, &context);
 }
 
+KoFilter::ConversionStatus MsooXmlRelationships::Private::loadComments()
+{       
+    MsooXmlCommentsReaderContext context(comments);
+    MsooXmlCommentsReader reader(writers);        
+    return importer->loadAndParseDocument(&reader, "word/comments.xml", *errorMessage, &context);;
+}
+
+
 MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage)
         : d(new Private)
 {
@@ -69,6 +81,22 @@ MsooXmlRelationships::~MsooXmlRelationships()
 {
     delete d;
 }
+
+
+bool MsooXmlRelationships::get_comment(const QString id, QString &author, QString &date, QString &text) {
+    if (d->comments.count() == 0)
+        d->loadComments();
+    
+    if (d->comments.contains(id)) {
+        QStringList list = d->comments[id];
+        author = list[0];
+        date   = list[1];
+        text   = list[2];
+    }
+   
+    return true;
+}
+
 
 QString MsooXmlRelationships::link_target(const QString& id)
 {

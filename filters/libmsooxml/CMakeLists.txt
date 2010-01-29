@@ -13,8 +13,8 @@ set(msooxml_LIB_SRCS
     MsooXmlRelationshipsReader.cpp
     MsooXmlRelationships.cpp
     MsooXmlImport.cpp
-
     KoOdfExporter.cpp
+    MsooXmlCommentsReader.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
@@ -40,6 +40,7 @@ install( FILES
     MsooXmlUtils.h
     MsooXmlRelationships.h
     MsooXmlImport.h
+    MsooXmlCommentsReader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
 endif (FALSE)

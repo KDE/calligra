@@ -21,39 +21,42 @@
  *
  */
 
-#ifndef MSOOXMLRELATIONSHIPS_H
-#define MSOOXMLRELATIONSHIPS_H
+#ifndef MSOOXMLCOMMENTSREADER_H
+#define MSOOXMLCOMMENTSREADER_H
 
-#include "msooxml_export.h"
-
-struct KoOdfWriters;
+#include "MsooXmlReader.h"
+#include <QMap>
 
 namespace MSOOXML
 {
-class MsooXmlImport;
-//class QStringList;
 
-//! Global document relationships handler.
-/*! It supports delayed loading of any *.xml.rels file. */
-//! @todo add write methods and saving support
-class MSOOXML_EXPORT MsooXmlRelationships
+//! A context structure for MsooXmlRelationshipsReader
+class MsooXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage);
+    MsooXmlCommentsReaderContext(QMap<QString, QStringList>& _comments);
+    QMap<QString, QStringList> *comments;
+};
 
-    ~MsooXmlRelationships();
+//! A class reading MSOOXML rels markup - *.xml.rels part.
+class MsooXmlCommentsReader : public MSOOXML::MsooXmlReader
+{
+public:
+    explicit MsooXmlCommentsReader(KoOdfWriters *writers);
+    virtual ~MsooXmlCommentsReader();
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
-    QString target(const QString& path, const QString& file, const QString& id);
-
-    QString link_target(const QString& id);
+protected:
+    KoFilter::ConversionStatus readInternal();
+    typedef KoFilter::ConversionStatus(MsooXmlCommentsReader::*ReadMethod)();
+    MsooXmlCommentsReaderContext* m_context;
     
-    bool get_comment(const QString id, QString &author, QString &date, QString &text);
-
 private:
+    void init();
     class Private;
     Private* const d;
 };
 
 }
 
-#endif //MSOOXMLRELATIONSHIPSREADER_H
+#endif //MSOOXMLCOMMENTSREADER_H

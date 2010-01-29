@@ -95,46 +95,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL commentRangeStart
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_commentRangeStart()
-{
-    QString link_target;
-    MSOOXML::Utils::XmlWriteBuffer linkBuf;
-
-    if (isStartElement()) {
-        if (attributes().hasAttribute("w:id")) {
-                        
-            QString id, author, date, text;
-            id = attributes().value("w:id").toString();
-            kDebug() << "Comment: id = " << id;
-            m_context->relationships->get_comment(id, author, date, text);
-            
-            body->startElement("office:annotation");
-            
-            body->startElement("dc:creator");
-            body->addTextSpan(author);
-            body->endElement(); // dc:creator
-                
-            body->startElement("dc:date");
-            body->addTextSpan(date);
-            body->endElement(); // dc:date
-                
-            body->startElement("text:p");
-            body->addAttribute("text:style-name", "P1");
-            body->startElement("text:span");
-            body->addTextSpan(text);
-            body->endElement(); // text:span
-            body->endElement(); // text:p
-                
-            body->endElement(); // office:annotation
-        }
-    }
-
-    return KoFilter::OK;
-}
-
-
-#undef CURRENT_EL
 #define CURRENT_EL t
 //! t handler (Text)
 /*! ECMA-376, 17.3.3.31, p.389.
@@ -867,8 +827,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
                 TRY_READ_WITH_ARGS(p, read_p_Skip;)
             }
             ELSE_TRY_READ_IF(hyperlink)
-            //ELSE_TRY_READ_IF(commentRangeEnd)
-            ELSE_TRY_READ_IF(commentRangeStart)
 // CASE #400.1
             ELSE_TRY_READ_IF(pPr)
 // CASE #400.2
