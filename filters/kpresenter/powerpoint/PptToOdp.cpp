@@ -2278,9 +2278,15 @@ QColor PptToOdp::toQColor(const OfficeArtCOLORREF& c)
         const MasterOrSlideContainer* m = p->masters[0];
         if (m->anon.is<MainMasterContainer>()) {
             const MainMasterContainer* n = m->anon.get<MainMasterContainer>();
-            cs = n->slideSchemeColorSchemeAtom.rgSchemeColor.value(c.red);
+            if (n->slideSchemeColorSchemeAtom.rgSchemeColor.size() <= c.red) {
+                return QColor();
+            }
+            cs = n->slideSchemeColorSchemeAtom.rgSchemeColor[c.red];
         } else {
             const SlideContainer* n = m->anon.get<SlideContainer>();
+            if (n->slideSchemeColorSchemeAtom.rgSchemeColor.size() <= c.red) {
+                return QColor();
+            }
             cs = n->slideSchemeColorSchemeAtom.rgSchemeColor.value(c.red);
         }
         return QColor(cs.red, cs.green, cs.blue);
