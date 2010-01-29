@@ -247,8 +247,8 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext &context, bool hasMai
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
         if (masterPageStyle) {
             masterPage.loadOdf(*masterPageStyle);
-            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadHeader);
-            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadFooter);
+            loadHeaderFooter(context, masterPage, *masterNode, LoadHeader);
+            loadHeaderFooter(context, masterPage, *masterNode, LoadFooter);
         }
         masterPage.setHasMainTextFrame(hasMainText);
         if (!alreadyExists)
@@ -257,7 +257,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext &context, bool hasMai
 }
 
 // helper function to create a KWTextFrameSet for a header/footer.
-void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
+void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
@@ -279,7 +279,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPage, const KoXmlElement &masterPageStyle, HFLoadType headerFooter)
+void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPage, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header" : "footer");
@@ -290,11 +290,11 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pa
     KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeNone : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if (! leftElem.isNull()) {   // header-left and footer-left
-        loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, headerFooter == LoadHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, leftElem, headerFooter == LoadHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
     }
 
     if (! elem.isNull()) {   // header and footer
-        loadHeaderFooterFrame(context, pageStyle, elem, hfType, headerFooter == LoadHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, elem, headerFooter == LoadHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
     }
 
     if (headerFooter == LoadHeader) {
