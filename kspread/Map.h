@@ -27,7 +27,7 @@
 
 #include "kspread_export.h"
 
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <KoXmlReader.h>
 
 class KoStore;
@@ -67,7 +67,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class KSPREAD_EXPORT Map : public QObject, public KoDataCenter
+class KSPREAD_EXPORT Map : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 public:
@@ -96,7 +96,7 @@ public:
      */
     bool isReadWrite() const;
 
-    // KoDataCenter interface
+    // KoDataCenterBase interface
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context);
 

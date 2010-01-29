@@ -43,7 +43,7 @@
 #include <karbonui_export.h>
 
 class QRect;
-class KoDataCenter;
+class KoDataCenterBase;
 
 /**
  * Keeps track of visual per document properties.
@@ -73,7 +73,7 @@ public:
     /// implemented from KoShapeController
     virtual void removeShape(KoShape* shape);
     /// implemented from KoShapeController
-    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
+    virtual QMap<QString, KoDataCenterBase*> dataCenterMap() const;
 
     /// Gives access to document content
     KarbonDocument& document();

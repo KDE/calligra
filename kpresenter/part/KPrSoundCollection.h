@@ -19,7 +19,7 @@
 #ifndef KPRSOUNDCOLLECTION_H
 #define KPRSOUNDCOLLECTION_H
 
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <QStringList>
 #include <QObject>
 #include <QVariant>
@@ -32,7 +32,7 @@ class KoStore;
 /**
  * An collection of KPrSoundData objects to allow loading and saving them all together to the KoStore.
  */
-class KPRESENTER_EXPORT KPrSoundCollection : public QObject, public KoDataCenter {
+class KPRESENTER_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
 public:
     /// constructor
     KPrSoundCollection(QObject *parent = 0);

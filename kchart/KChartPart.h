@@ -53,7 +53,7 @@ class QStandardItemModel;
 
 class KoXmlWriter;
 class KoGenStyles;
-class KoDataCenter;
+class KoDataCenterBase;
 
 class KoShape;
 class KoOdfStylesReader;

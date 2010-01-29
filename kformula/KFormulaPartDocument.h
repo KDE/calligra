@@ -32,7 +32,7 @@
 
 class QIODevice;
 class QUndoStack;
-class KoDataCenter;
+class KoDataCenterBase;
 class KoXmlWriter;
 
 class FormulaElement;
@@ -60,7 +60,7 @@ public:
     /// reimplemented from KoShapeControllerBase
     void removeShape (KoShape *shape);
     /// reimplemented from KoShapeControllerBase
-    virtual QMap<QString, KoDataCenter *> dataCenterMap() const;
+    virtual QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
 
     // KoDocument interface

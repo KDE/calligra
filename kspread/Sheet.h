@@ -45,7 +45,7 @@ class QDomElement;
 class QUndoCommand;
 class QWidget;
 
-class KoDataCenter;
+class KoDataCenterBase;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;

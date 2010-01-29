@@ -47,7 +47,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoImageCollection.h>
-#include <KoDataCenter.h>
+#include <KoDataCenterBase.h>
 #include <KoText.h>
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
@@ -83,7 +83,7 @@ public:
     QList<KoShape*> objects;     ///< The list of all object of the document.
     QList<KoShapeLayer*> layers; ///< The layers in this document.
 
-    QMap<QString, KoDataCenter*> dataCenterMap;
+    QMap<QString, KoDataCenterBase*> dataCenterMap;
     bool hasExternalDataCenterMap;
     KoResourceManager *resourceManager;
 };
@@ -288,12 +288,12 @@ KoImageCollection * KarbonDocument::imageCollection()
     return resourceManager()->imageCollection();
 }
 
-QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
+QMap<QString, KoDataCenterBase*> KarbonDocument::dataCenterMap() const
 {
     return d->dataCenterMap;
 }
 
-void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenter*> dataCenters)
+void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> dataCenters)
 {
     qDeleteAll(d->dataCenterMap);
     d->dataCenterMap = dataCenters;
@@ -378,7 +378,7 @@ void KarbonDocument::saveOdfStyles(KoShapeSavingContext & context)
     styleManager->saveOdf(context.mainStyles());
 }
 
-void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenter* dataCenter)
+void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter)
 {
     d->dataCenterMap.insert(key, dataCenter);
 }
