@@ -22,9 +22,9 @@
 #include "sqlitecursor.h"
 #include "sqlitepreparedstatement.h"
 
-#include "sqlite.h"
+#include "sqlite3.h"
 
-#include "kexisql.h" //for isReadOnly()
+//#include "kexisql.h" //for isReadOnly()
 
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
@@ -166,17 +166,19 @@ bool SQLiteConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
 // KexiDBDrvDbg << "drv_useDatabase(): " << data()->fileName();
     //TODO: perhaps allow to use sqlite3_open16() as well for SQLite ~ 3.3 ?
 //! @todo add option (command line or in kexirc?)
-    int exclusiveFlag = Connection::isReadOnly() ? SQLITE_OPEN_READONLY : SQLITE_OPEN_WRITE_LOCKED; // <-- shared read + (if !r/o): exclusive write
+//!TODO    int exclusiveFlag = Connection::isReadOnly() ? SQLITE_OPEN_READONLY : SQLITE_OPEN_WRITE_LOCKED; // <-- shared read + (if !r/o): exclusive write
+int exclusiveFlag = 1;
 //! @todo add option
     int allowReadonly = 1;
     const bool wasReadOnly = Connection::isReadOnly();
 
-    d->res = sqlite3_open(
+    d->res = sqlite3_open_v2(
                  //QFile::encodeName( data()->fileName() ),
                  data()->fileName().toUtf8().constData(), /* unicode expected since SQLite 3.1 */
                  &d->data,
-                 exclusiveFlag,
-                 allowReadonly /* If 1 and locking fails, try opening in read-only mode */
+                 SQLITE_OPEN_READWRITE, /*exclusiveFlag,
+                 allowReadonly *//* If 1 and locking fails, try opening in read-only mode */
+                 0
              );
     d->storeResult();
 
@@ -199,7 +201,8 @@ bool SQLiteConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
             return false;
         }
     }
-
+//!TODO
+/*
     if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
         setError(ERR_ACCESS_RIGHTS,
                  i18n("The file is probably already open on this or another computer.") + "\n\n"
@@ -211,6 +214,7 @@ bool SQLiteConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
                  + i18n("Could not gain exclusive access for writing the file.") + " "
                  + i18n("Check the file's permissions and whether it is already opened and locked by another application."));
     }
+    */
     return d->res == SQLITE_OK;
 }
 
@@ -357,8 +361,11 @@ PreparedStatement::Ptr SQLiteConnection::prepareStatement(PreparedStatement::Sta
 
 bool SQLiteConnection::isReadOnly() const
 {
+    //!TODO
+   /* 
     return (d->data ? sqlite3_is_readonly(d->data) : false)
-           || Connection::isReadOnly();
+           || Connection::isReadOnly();*/
+           return false;
 }
 
 #include "sqliteconnection.moc"

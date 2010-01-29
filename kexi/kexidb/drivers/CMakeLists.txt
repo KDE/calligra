@@ -2,8 +2,14 @@
 # drivers will be moved out of this dir in Predicate, and then area will be redefined
 #remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
+INCLUDE (FindPkgConfig)
 
-add_subdirectory( sqlite )
+pkg_check_modules (SQLITE3 REQUIRED sqlite3>=3.6.20)
+
+IF (SQLITE3_FOUND)
+  add_subdirectory( sqlite )
+ENDIF (SQLITE3_FOUND)
+
 #ancient add_subdirectory( sqlite2 )
 
 INCLUDE (FindMySQL)
@@ -11,7 +17,7 @@ IF (MYSQL_FOUND)
    add_subdirectory( mySQL )
 ENDIF (MYSQL_FOUND)
 
-INCLUDE (FindPkgConfig)
+
 INCLUDE (FindPostgreSQL)
 
 set (PQXX_MIN_VERSION "3.0.0")

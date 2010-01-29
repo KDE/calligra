@@ -22,7 +22,7 @@
 #include <kexidb/driver_p.h>
 #include <kexidb/utils.h>
 
-#include "sqlite.h"
+#include "sqlite3.h"
 #include "sqlitedriver.h"
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"

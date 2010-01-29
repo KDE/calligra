@@ -22,7 +22,7 @@
 
 #include <kexidb/connection_p.h>
 
-#include "sqlite.h"
+#include "sqlite3.h"
 
 //for compatibility
 #ifdef _SQLITE3_H_
