@@ -966,7 +966,7 @@ ORODocument* ORPreRender::generate()
         if (detailData->m_detailSection) {
             KoReportData *mydata = d->m_kodata;
 
-            if (mydata) { /* && !((query = orqThis->getQuery())->eof()))*/
+            if (mydata && mydata->recordCount() > 0) { /* && !((query = orqThis->getQuery())->eof()))*/
                 mydata->moveFirst();
                 do {
                     tmp = d->m_yOffset; // store the value as renderSection changes it
