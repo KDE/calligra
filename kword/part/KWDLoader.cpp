@@ -394,7 +394,7 @@ void KWDLoader::loadFrameSets(const KoXmlElement &framesets)
     }
 }
 
-void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote)
+void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem)
 {
     QString fsname = framesetElem.attribute("name");
 
@@ -531,8 +531,18 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
 
 void KWDLoader::fill(KWFrameSet *fs, const KoXmlElement &framesetElem)
 {
-    //m_visible = static_cast<bool>(KWDocument::getAttribute(framesetElem, "visible", true)); // TODO
-    //m_protectSize=static_cast<bool>(KWDocument::getAttribute(framesetElem, "protectSize", false)); TODO
+    if (framesetElem.hasAttribute("visible")) {
+        bool visible = framesetElem.attribute("visible").toLower() == "true";
+        foreach (KWFrame *frame, fs->frames()) {
+            frame->shape()->setVisible(visible);
+        }
+    }
+    if (framesetElem.hasAttribute("protectSize")) {
+        bool protectSize = framesetElem.attribute("protectSize").toLower() == "true";
+        foreach (KWFrame *frame, fs->frames()) {
+            frame->shape()->setGeometryProtected(protectSize);
+        }
+    }
 
 }
 

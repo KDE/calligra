@@ -75,7 +75,7 @@ private:
     /// find and load all framesets
     void loadFrameSets(const KoXmlElement &framesets);
     /// load one frameset
-    void loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    void loadFrameSet(const KoXmlElement &framesetElem);
     /// fill the data of fs with the info from the element
     void fill(KWFrameSet *fs, const KoXmlElement &element);
     /// fill the data of fs with the info from the element
