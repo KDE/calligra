@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    MergeStrategy(KoTool *parent, Selection *selection,
+    MergeStrategy(KoToolBase *parent, Selection *selection,
                   const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**

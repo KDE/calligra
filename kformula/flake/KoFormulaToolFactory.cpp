@@ -36,7 +36,7 @@ KoFormulaToolFactory::KoFormulaToolFactory( QObject* parent )
 KoFormulaToolFactory::~KoFormulaToolFactory()
 {}
 
-KoTool* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
 {
     return new KoFormulaTool( canvas );
 }

@@ -62,7 +62,7 @@ GradientStrategy * createStrategy(KoShape * shape, const QGradient * gradient, G
 }
 
 KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
-        : KoTool(canvas)
+        : KoToolBase(canvas)
         , m_gradient(0)
         , m_currentStrategy(0)
         , m_hoverStrategy(0)

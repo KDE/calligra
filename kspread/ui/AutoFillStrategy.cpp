@@ -33,7 +33,7 @@ public:
     QRect autoFillSource;
 };
 
-AutoFillStrategy::AutoFillStrategy(KoTool *parent, Selection *selection,
+AutoFillStrategy::AutoFillStrategy(KoToolBase *parent, Selection *selection,
                                    const QPointF documentPos, Qt::KeyboardModifiers modifiers)
         : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)

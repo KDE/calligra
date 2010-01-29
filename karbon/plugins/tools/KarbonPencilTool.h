@@ -20,14 +20,14 @@
 #ifndef _KARBONPENCILTOOL_H_
 #define _KARBONPENCILTOOL_H_
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <QtCore/QRectF>
 
 class KoPathShape;
 class KoLineBorder;
 class KoPathPoint;
 
-class KarbonPencilTool : public KoTool
+class KarbonPencilTool : public KoToolBase
 {
     Q_OBJECT
 public:

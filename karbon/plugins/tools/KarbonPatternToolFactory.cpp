@@ -38,7 +38,7 @@ KarbonPatternToolFactory::~KarbonPatternToolFactory()
 {
 }
 
-KoTool * KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonPatternTool(canvas);
 }

@@ -29,7 +29,7 @@ public:
     explicit KarbonGradientToolFactory(QObject *parent);
     ~KarbonGradientToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif // _KARBONGRADIENTTOOLFACTORY_H_

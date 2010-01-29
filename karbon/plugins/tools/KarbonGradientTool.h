@@ -20,7 +20,7 @@
 #ifndef KARBONGRADIENTTOOL_H
 #define KARBONGRADIENTTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <KoSnapGuide.h>
 #include <QtGui/QGradient>
 #include <QtCore/QMultiMap>
@@ -37,7 +37,7 @@ class KoResource;
  * The gradients can be edited by moving gradient
  * handles directly on the canvas.
  */
-class KarbonGradientTool : public KoTool
+class KarbonGradientTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -57,9 +57,9 @@ public:
     virtual void deactivate();
 
 protected:
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual QWidget * createOptionWidget();
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private Q_SLOTS:

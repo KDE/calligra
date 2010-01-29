@@ -30,7 +30,7 @@ public:
     QRect initialSelection;
 };
 
-MergeStrategy::MergeStrategy(KoTool *parent, Selection *selection,
+MergeStrategy::MergeStrategy(KoToolBase *parent, Selection *selection,
                              const QPointF documentPos, Qt::KeyboardModifiers modifiers)
         : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)

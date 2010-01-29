@@ -26,7 +26,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <KMessageBox>
 #include <KMimeType>
@@ -45,7 +45,7 @@ public:
     QString url;
 };
 
-HyperlinkStrategy::HyperlinkStrategy(KoTool* parent, Selection* selection,
+HyperlinkStrategy::HyperlinkStrategy(KoToolBase* parent, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
         : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)

@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    PasteStrategy(KoTool *parent, Selection *selection,
+    PasteStrategy(KoToolBase *parent, Selection *selection,
                   const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**

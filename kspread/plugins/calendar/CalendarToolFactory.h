@@ -34,7 +34,7 @@ public:
     explicit CalendarToolFactory(QObject* parent, const QVariantList& args);
     ~CalendarToolFactory();
 
-    KoTool* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
 } // namespace

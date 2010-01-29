@@ -37,7 +37,7 @@ KarbonFilterEffectsToolFactory::~KarbonFilterEffectsToolFactory()
 {
 }
 
-KoTool * KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonFilterEffectsTool(canvas);
 }

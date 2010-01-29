@@ -40,7 +40,7 @@ CellToolFactory::~CellToolFactory()
 {
 }
 
-KoTool* CellToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase* CellToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new CellTool(canvas);
 }

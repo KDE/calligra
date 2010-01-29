@@ -25,7 +25,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 using namespace KSpread;
 
@@ -34,7 +34,7 @@ class SelectionStrategy::Private
 public:
 };
 
-SelectionStrategy::SelectionStrategy(KoTool *parent, Selection *selection,
+SelectionStrategy::SelectionStrategy(KoToolBase *parent, Selection *selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers)
         : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)

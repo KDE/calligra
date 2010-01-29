@@ -36,7 +36,7 @@ KPrPlaceholderToolFactory::~KPrPlaceholderToolFactory()
 {
 }
 
-KoTool * KPrPlaceholderToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KPrPlaceholderToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KPrPlaceholderTool(canvas);
 }

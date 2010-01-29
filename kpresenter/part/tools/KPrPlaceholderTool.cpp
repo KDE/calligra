@@ -32,7 +32,7 @@
 #include "KPrPlaceholderShape.h"
 
 KPrPlaceholderTool::KPrPlaceholderTool( KoCanvasBase *canvas )
-: KoTool( canvas )
+: KoToolBase( canvas )
 {
 }
 

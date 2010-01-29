@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      */
-    AbstractSelectionStrategy(KoTool* parent, Selection* selection,
+    AbstractSelectionStrategy(KoToolBase* parent, Selection* selection,
                               const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**

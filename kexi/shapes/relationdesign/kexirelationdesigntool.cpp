@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <KComboBox>
 
-KexiRelationDesignTool::KexiRelationDesignTool ( KoCanvasBase* canvas ) : KoTool ( canvas ) {
+KexiRelationDesignTool::KexiRelationDesignTool ( KoCanvasBase* canvas ) : KoToolBase ( canvas ) {
     m_dbDialog = 0;
     
 }

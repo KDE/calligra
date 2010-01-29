@@ -153,7 +153,7 @@ public:
 };
 
 KarbonFilterEffectsTool::KarbonFilterEffectsTool(KoCanvasBase *canvas)
-        : KoTool(canvas), d(new Private())
+        : KoToolBase(canvas), d(new Private())
 {
     connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));

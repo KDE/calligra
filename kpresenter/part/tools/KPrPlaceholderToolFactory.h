@@ -29,7 +29,7 @@ public:
     virtual ~KPrPlaceholderToolFactory();
 
     /// reimplemented
-    virtual KoTool * createTool(KoCanvasBase *canvas);
+    virtual KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif /* KPRPLACEHOLDERTOOLFACTORY_H */

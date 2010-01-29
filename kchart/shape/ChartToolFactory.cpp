@@ -46,7 +46,7 @@ ChartToolFactory::~ChartToolFactory()
 {
 }
 
-KoTool *ChartToolFactory::createTool( KoCanvasBase *canvas )
+KoToolBase *ChartToolFactory::createTool( KoCanvasBase *canvas )
 {
     return new ChartTool( canvas );
 }

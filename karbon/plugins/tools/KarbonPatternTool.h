@@ -20,7 +20,7 @@
 #ifndef _KARBONPATTERNTOOL_H_
 #define _KARBONPATTERNTOOL_H_
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <QtCore/QMap>
 
 class QPainter;
@@ -30,7 +30,7 @@ class KarbonPatternOptionsWidget;
 class KoShape;
 
 
-class KarbonPatternTool : public KoTool
+class KarbonPatternTool : public KoToolBase
 {
     Q_OBJECT
 public:

@@ -33,7 +33,7 @@ public:
     explicit TableToolFactory(QObject* parent);
     ~TableToolFactory();
 
-    KoTool* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
 } // namespace

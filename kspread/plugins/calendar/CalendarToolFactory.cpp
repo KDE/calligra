@@ -43,7 +43,7 @@ CalendarToolFactory::~CalendarToolFactory()
 {
 }
 
-KoTool* CalendarToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new CalendarTool(canvas);
 }

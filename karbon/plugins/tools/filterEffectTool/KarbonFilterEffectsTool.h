@@ -20,33 +20,33 @@
 #ifndef KARBONFILTEREFFECTSTOOL_H
 #define KARBONFILTEREFFECTSTOOL_H
 
-#include "KoTool.h"
+#include "KoToolBase.h"
 
 class KoResource;
 
-class KarbonFilterEffectsTool : public KoTool
+class KarbonFilterEffectsTool : public KoToolBase
 {
     Q_OBJECT
 public:
     explicit KarbonFilterEffectsTool(KoCanvasBase *canvas);
     virtual ~KarbonFilterEffectsTool();
 
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void repaintDecorations();
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual void activate(bool temporary = false);
 
 protected:
-    /// reimplemented from KoTool
+    /// reimplemented from KoToolBase
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private slots:

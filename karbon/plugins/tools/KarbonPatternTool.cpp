@@ -44,7 +44,7 @@
 #include <QtGui/QUndoCommand>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
-        : KoTool(canvas), m_currentStrategy(0), m_optionsWidget(0)
+        : KoToolBase(canvas), m_currentStrategy(0), m_optionsWidget(0)
 {
 }
 

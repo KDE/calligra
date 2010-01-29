@@ -55,7 +55,7 @@ qreal squareDistance(const QPointF &p1, const QPointF &p2)
 }
 
 KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
-        : KoTool(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
+        : KoToolBase(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
         , m_optimizeCurve(false), m_combineAngle(15.0), m_fittingError(5.0)
         , m_close(false), m_shape(0)
         , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)

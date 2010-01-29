@@ -21,7 +21,7 @@
 #ifndef KOFORMULATOOL_H
 #define KOFORMULATOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class KoFormulaShape;
 class BasicElement;
@@ -33,7 +33,7 @@ class QSignalMapper;
  * @short The flake tool for a formula
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KoFormulaTool : public KoTool {
+class KoFormulaTool : public KoToolBase {
     Q_OBJECT
 public:
     /// The standard constructor

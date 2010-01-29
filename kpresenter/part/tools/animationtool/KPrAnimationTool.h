@@ -21,13 +21,13 @@
 #ifndef KPRANIMATIONTOOL_H
 #define KPRANIMATIONTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 /**
  * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
  * animates shapes and sets up slide transitions.
  */
-class KPrAnimationTool : public KoTool
+class KPrAnimationTool : public KoToolBase
 {
     Q_OBJECT
 public:

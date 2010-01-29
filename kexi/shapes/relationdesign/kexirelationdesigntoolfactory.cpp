@@ -28,7 +28,7 @@ KexiRelationDesignToolFactory::KexiRelationDesignToolFactory( QObject* parent)
     setActivationShapeId( KEXIRELATIONDEISGNSHAPEID );
 }
 
-KoTool* KexiRelationDesignToolFactory::createTool ( KoCanvasBase* canvas ) {
+KoToolBase* KexiRelationDesignToolFactory::createTool ( KoCanvasBase* canvas ) {
     return new KexiRelationDesignTool(canvas);
 }
 

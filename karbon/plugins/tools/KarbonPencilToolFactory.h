@@ -29,7 +29,7 @@ public:
     explicit KarbonPencilToolFactory(QObject *parent);
     ~KarbonPencilToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif // _KARBONPENCILTOOLFACTORY_H_

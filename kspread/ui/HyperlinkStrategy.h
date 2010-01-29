@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    HyperlinkStrategy(KoTool* parent, Selection* selection,
+    HyperlinkStrategy(KoToolBase* parent, Selection* selection,
                       const QPointF position, Qt::KeyboardModifiers modifiers,
                       const QString& url, const QRectF& textRect);
 

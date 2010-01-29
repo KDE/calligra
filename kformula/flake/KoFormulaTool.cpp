@@ -53,7 +53,7 @@
 
 
 
-KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
+KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaEditor( 0 )
 {
@@ -491,7 +491,7 @@ void KoFormulaTool::copy() const
 
 void KoFormulaTool::deleteSelection()
 {
-    KoTool::deleteSelection();
+    KoToolBase::deleteSelection();
 }
 
 bool KoFormulaTool::paste()

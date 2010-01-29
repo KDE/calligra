@@ -88,7 +88,7 @@ ChartTool::Private::~Private()
 }
 
 ChartTool::ChartTool( KoCanvasBase *canvas )
-    : KoTool( canvas ),
+    : KoToolBase( canvas ),
       d( new Private() )
 {
     // Create QActions here.

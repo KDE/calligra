@@ -46,7 +46,7 @@ bool KPrAnimationToolFactory::canCreateTool(KoCanvasBase *canvas) const
     return paCanvas!=0; // we only work in KPresenter
 }
 
-KoTool* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KPrAnimationTool(canvas);
 }

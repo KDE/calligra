@@ -33,7 +33,7 @@
 #include "KPrClickActionDocker.h"
 
 KPrAnimationTool::KPrAnimationTool( KoCanvasBase *canvas )
-    : KoTool( canvas )
+    : KoToolBase( canvas )
 {
 }
 

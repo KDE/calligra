@@ -44,7 +44,7 @@
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
-: KoTool( viewMode.canvas() )
+: KoToolBase( viewMode.canvas() )
 , m_viewMode( viewMode )
 , m_strategy( new KPrPresentationStrategy( this ) )
 {

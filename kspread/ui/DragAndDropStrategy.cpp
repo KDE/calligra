@@ -24,7 +24,7 @@
 #include "Sheet.h"
 
 #include <KoCanvasBase.h>
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -47,7 +47,7 @@ public:
     bool started;
 };
 
-DragAndDropStrategy::DragAndDropStrategy(KoTool *parent, Selection *selection,
+DragAndDropStrategy::DragAndDropStrategy(KoToolBase *parent, Selection *selection,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
         : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
         , d(new Private)

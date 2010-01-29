@@ -23,7 +23,7 @@
 #define KCHART_CHARTTOOL_H
 
 // KOffice
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 // KChart
 #include "ChartShape.h"
@@ -40,7 +40,7 @@ namespace KChart
  * This is the tool for the chart shape, which is a flake-based plugin.
  */
 
-class CHARTSHAPELIB_EXPORT ChartTool : public KoTool
+class CHARTSHAPELIB_EXPORT ChartTool : public KoToolBase
 {
     Q_OBJECT
 public:

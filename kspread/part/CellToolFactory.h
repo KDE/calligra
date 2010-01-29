@@ -37,7 +37,7 @@ public:
     explicit CellToolFactory(QObject* parent, const QString& id);
     ~CellToolFactory();
 
-    KoTool* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas);
 
     void setPriority(int priority);
     void setToolTip(const QString& toolTip);

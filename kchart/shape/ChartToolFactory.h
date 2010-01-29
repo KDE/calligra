@@ -36,7 +36,7 @@ public:
     explicit ChartToolFactory( QObject *parent );
     ~ChartToolFactory();
 
-    KoTool * createTool( KoCanvasBase *canvas );
+    KoToolBase * createTool( KoCanvasBase *canvas );
 };
 
 } // namespace KChart

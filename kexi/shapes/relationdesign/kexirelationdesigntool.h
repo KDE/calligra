@@ -17,34 +17,34 @@
 #ifndef KEXIRELATIONDESIGNTOOL_H
 #define KEXIRELATIONDESIGNTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 #include <core/kexi.h>
 
 class KexiRelationDesignShape;
 class KexiStartupDialog;
 class KComboBox;
 
-class KexiRelationDesignTool : public KoTool {
+class KexiRelationDesignTool : public KoToolBase {
     Q_OBJECT
     public:
         
         KexiRelationDesignTool ( KoCanvasBase* canvas );
         
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void mouseReleaseEvent ( KoPointerEvent* event );
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void mouseMoveEvent ( KoPointerEvent* event );
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void mousePressEvent ( KoPointerEvent* event );
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void paint ( QPainter& painter, const KoViewConverter& converter );
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void activate (bool temporary=false);
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual void deactivate();
         
     protected:
-        /// reimplemented from KoTool
+        /// reimplemented from KoToolBase
         virtual QWidget* createOptionWidget();
 
     private:

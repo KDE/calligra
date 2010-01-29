@@ -20,9 +20,9 @@
 #ifndef KPRPLACEHOLDERTOOL_H
 #define KPRPLACEHOLDERTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
-class KPrPlaceholderTool : public KoTool
+class KPrPlaceholderTool : public KoToolBase
 {
     Q_OBJECT
 public:

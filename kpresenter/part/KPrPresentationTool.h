@@ -24,7 +24,7 @@
 #ifndef KPRPRESENTATIONTOOL_H
 #define KPRPRESENTATIONTOOL_H
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 #include <QSet>
 
@@ -35,7 +35,7 @@ class KPrPresentationToolWidget;
 class KPrPresentationStrategyBase;
 
 /// The tool used for presentations
-class KPrPresentationTool : public KoTool
+class KPrPresentationTool : public KoToolBase
 {
     Q_OBJECT
 public:

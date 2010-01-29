@@ -39,7 +39,7 @@ KarbonGradientToolFactory::~KarbonGradientToolFactory()
 {
 }
 
-KoTool * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonGradientTool(canvas);
 }
