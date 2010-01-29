@@ -50,8 +50,6 @@ void KWApplicationConfig::load(KWDocument *document)
     KConfigGroup interface = config->group("Interface");
 //    setCursorInProtectedArea( interface.readEntry( "cursorInProtectArea", true ));
     // Config-file value in mm, default 10 pt
-    qreal indent = interface.readEntry("Indent", MM_TO_POINT(10.0)) ;
-//    setIndentValue(indent);
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
     m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
