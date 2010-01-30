@@ -363,6 +363,8 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     beginResetModel();
 
     if ( this->sourceModel() ) {
+        disconnect( this->sourceModel(), SIGNAL( modelReset() ),
+                    this,                SLOT( slotModelReset() ) );
         disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
                     this,                SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
         disconnect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
@@ -376,6 +378,8 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     }
 
     if ( sourceModel ) {
+        connect( sourceModel, SIGNAL( modelReset() ),
+                 this,        SLOT( slotModelReset() ) );
         connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
                  this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
         connect( sourceModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
@@ -867,5 +871,10 @@ void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
     endResetModel();
 }
 
+void ChartProxyModel::slotModelReset()
+{
+    rebuildDataMap();
+    reset(); // propagate
+}
 
 #include "ChartProxyModel.moc"
