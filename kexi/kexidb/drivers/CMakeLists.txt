@@ -2,15 +2,6 @@
 # drivers will be moved out of this dir in Predicate, and then area will be redefined
 #remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
-SET (SQLITE_MIN_VERSION "3.6.20")
-IF(NOT WIN32)
-  INCLUDE (FindPkgConfig)
-  pkg_check_modules (SQLITE3 REQUIRED sqlite3>=3.6.20) #todo let's have this check in FindSqlite instead
-ENDIF(NOT WIN32)
-
-INCLUDE (MacroLogFeature)
-INCLUDE (FindSqlite)
-macro_log_feature(SQLITE_FOUND "SQLite" "SQLite is an embedded SQL database engine." "http://www.sqlite.org" TRUE SQLITE_MIN_VERSION "Required by the default Kexi database driver.")
 IF (SQLITE_FOUND)
   add_subdirectory( sqlite )
 ENDIF (SQLITE_FOUND)
