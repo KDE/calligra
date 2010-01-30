@@ -48,7 +48,7 @@ void KPrClockWipeSubpathHelper::addSubpathForCircularArc(QPainterPath* clipPath,
         endAngle += 2*M_PI;
 
     QPoint center = boundingRect.center();
-    double maxRadius = sqrt(width*width/4 + height*height/4);
+    double maxRadius = sqrt(double(width*width/4 + height*height/4));
 
     double startAngleInQuadrant = fmod(startAngle, 0.5*M_PI);
     double quadrantAngle = static_cast<int>(startAngle / (0.5*M_PI))*(0.5*M_PI);
