@@ -3170,7 +3170,7 @@ void DocumentModifyStatusCmd::unexecute()
 }
 
 //----------------
-DocumentModifySendAsCmd::DocumentModifySendAsCmd( Document *doc, Document::SendAs value, const QString& name )
+DocumentModifySendAsCmd::DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const QString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {

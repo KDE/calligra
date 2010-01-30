@@ -1463,7 +1463,7 @@ void DoubleTreeViewBase::hideColumns( TreeViewBase *view, const QList<int> &list
     view->setColumnsHidden( list );
 }
 
-void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> slaveList )
+void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<int> slaveList )
 {
     m_leftview->setColumnsHidden( masterList );
     m_rightview->setColumnsHidden( slaveList );
