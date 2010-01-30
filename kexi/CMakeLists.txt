@@ -38,7 +38,6 @@ SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove wh
 SET(KOPROPERTY_USE_KOLIBS TRUE)                                 # TODO remove when we move to independent place
 add_subdirectory( koproperty )
 
-add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
 add_subdirectory( core )
