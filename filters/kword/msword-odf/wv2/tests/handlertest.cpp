@@ -92,7 +92,7 @@ public:
 
     virtual void specialCharacter( SpecialCharacter character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
-    virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UChar character,
+    virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UString characters,
                                 wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote );
     virtual void footnoteAutoNumber( wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
@@ -315,13 +315,13 @@ void TextTest::specialCharacter( SpecialCharacter character, SharedPtr<const Wor
     TextHandler::specialCharacter( character, chp );
 }
 
-void TextTest::footnoteFound( FootnoteData::Type type, UChar character,
+void TextTest::footnoteFound( FootnoteData::Type type, UString characters,
                               SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote )
 {
     std::cout << indent << "TEXT: footnote found " << static_cast<int>( type )
-              << " character " << character.unicode() << std::endl;
+              << " character " << characters.ascii() << std::endl;
     chp->dump();
-    TextHandler::footnoteFound( type, character, chp, parseFootnote );
+    TextHandler::footnoteFound( type, characters, chp, parseFootnote );
 }
 
 void TextTest::footnoteAutoNumber( SharedPtr<const Word97::CHP> chp )

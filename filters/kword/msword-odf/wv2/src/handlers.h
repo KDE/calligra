@@ -331,8 +331,8 @@ namespace wvWare {
          * runOfText (that it doesn't get lost if someone doesn't override this method) and
          * invokes the functor.
          */
-        virtual void footnoteFound( FootnoteData::Type type, UChar character,
-                                    SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote );
+        virtual void footnoteFound( FootnoteData::Type type, UString characters,
+                                    SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
         /**
          * This callback will get triggered when parsing a auto-numbered footnote.
          * The passed CHP is the character formatting information provided for the

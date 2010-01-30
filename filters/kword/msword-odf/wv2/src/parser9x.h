@@ -163,6 +163,7 @@ namespace wvWare
         // to make the parsing code reentrant.
 
     private:
+        UString m_customFootnote;
         // Don't copy or assign us
         Parser9x( const Parser9x& rhs );
         Parser9x& operator=( const Parser9x& rhs );
@@ -228,7 +229,7 @@ namespace wvWare
                          U32 length, U32 index, U32 currentStart );
 
         void processSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
-        void processFootnote( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
+        void processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
 
         // Helper methods to gather and emit the information needed for the functors
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );

@@ -74,7 +74,7 @@ public:
     virtual void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep);
     virtual void sectionEnd();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UChar character,
+    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote);
 
     virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);

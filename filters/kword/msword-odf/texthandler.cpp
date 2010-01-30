@@ -205,7 +205,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
-                                     wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                     wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
     Q_UNUSED(chp);
@@ -224,7 +224,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     m_footnoteWriter->addAttribute("text:note-class", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
-    if (character.unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
+    if (characters[0].unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
         //Note: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
 
         int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
@@ -261,6 +261,17 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
             noteNumberString += QChar(letter - 1 + noteNumber);
             break;
         }
+        case 9: {
+                QChar chicagoStyle[] =  {42, 8224, 8225, 167};
+                int styleIndex = (noteNumber - 1) % 4;
+                int repeatCount = (noteNumber - 1) / 4;
+                noteNumberString = QString(chicagoStyle[styleIndex]);
+                while (repeatCount > 0) {
+                    noteNumberString += QString(chicagoStyle[styleIndex]);
+                    repeatCount--;
+                }
+                break;
+        }
         default:
             noteNumberString = QString::number(noteNumber);
             break;
@@ -268,7 +279,14 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
         m_footnoteWriter->addTextNode(noteNumberString);
     } else {
-        m_footnoteWriter->addTextNode(QString(QChar(character.unicode())));
+        int index = 0;
+        int length = characters.length();
+        QString customNote;
+        while (index != length) {
+            customNote.append(characters[index].unicode());
+            ++index;
+        }
+        m_footnoteWriter->addTextNode(customNote);
     }
     m_footnoteWriter->endElement();//text:note-citation
     //start the body of the footnote

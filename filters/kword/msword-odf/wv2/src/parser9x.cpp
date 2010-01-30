@@ -697,13 +697,17 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 processRun( chunk, chp, disLen, index, currentStart );
             length -= disLen;
             index += disLen;
-            processFootnote( chunk.m_text[ index ], disruption, chp );
-            --length;
-            ++index;
+            m_customFootnote = chunk.m_text.substr(index, length);
+            processFootnote( m_customFootnote, disruption, chp, length );
+            index+=length;
+            length=0;
+            m_customFootnote = "";
         }
         else {
             // common case, no disruption at all (or the end of a disrupted chunk)
-            processRun( chunk, chp, length, index, currentStart );
+            //In case of custom footnotes do not add label to footnote body.
+            if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0)
+                processRun( chunk, chp, length, index, currentStart );
             break;   // should be faster than messing with length...
         }
     }
@@ -767,7 +771,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
             if ( m_subDocument == Footnote || m_subDocument == Endnote )
                 m_textHandler->footnoteAutoNumber( chp );
             else
-                processFootnote( character, globalCP, chp );
+                processFootnote( UString(character), globalCP, chp);
             break;
         case TextHandler::FieldBegin:
         {
@@ -800,7 +804,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
     }
 }
 
-void Parser9x::processFootnote( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp )
+void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << std::endl;
@@ -812,7 +816,7 @@ void Parser9x::processFootnote( UChar character, U32 globalCP, SharedPtr<const W
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
     if ( ok )
-        m_textHandler->footnoteFound( data.type, character, chp, make_functor( *this, &Parser9x::parseFootnote, data ) );
+        m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
 }
 
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )

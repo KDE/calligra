@@ -178,11 +178,11 @@ void TextHandler::specialCharacter( SpecialCharacter /*character*/, SharedPtr<co
 {
 }
 
-void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UChar character,
-                                 SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote )
+void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters,
+                                 SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote)
 {
-    if ( character.unicode() != 2 )
-        runOfText( UString( character ), chp ); // The character shouldn't get lost unless it's the auto-number
+    if ( characters[0].unicode() != 2 )
+        runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
     parseFootnote();
 }
 
