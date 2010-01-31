@@ -41,6 +41,12 @@
 #include <KoGenStyles.h>
 #include <KoOdfWorkaround.h>
 
+#include <KoImageData.h>
+#include <KoStore.h>
+#include <KoUnit.h>
+
+#include <KDebug>
+
 // KDChart
 #include <KDChartAbstractCoordinatePlane>
 #include <KDChartBackgroundAttributes>
@@ -193,7 +199,7 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
             }
             else if ( fill == "bitmap" ) {
                 brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+                brush = loadOdfPatternStyle(styleStack, context.odfLoadingContext(), QSizeF(5.0, 60.0));
             }
 
             backgroundAttributes.setBrush( brush );
@@ -245,3 +251,102 @@ void Surface::saveOdf( KoShapeSavingContext &context,
     bodyWriter.endElement(); // chart:floor or chart:wall
 }
 
+QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size)
+{
+    QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
+
+    KoXmlElement* e = context.stylesReader().drawStyles()[styleName];
+    if (! e)
+        return QBrush();
+
+    const QString href = e->attributeNS(KoXmlNS::xlink, "href", QString());
+
+    if (href.isEmpty())
+        return QBrush();
+
+    QString strExtension;
+    const int result = href.lastIndexOf(".");
+    if (result >= 0) {
+        strExtension = href.mid(result + 1); // As we are using KoPicture, the extension should be without the dot.
+    }
+    QString filename(href);
+
+    KoImageData data;
+    data.setImage(href, context.store());
+    if (data.errorCode() != KoImageData::Success)
+        return QBrush();
+
+    // read the pattern repeat style
+    QString style = styleStack.property(KoXmlNS::style, "repeat");
+    kDebug(35001) << "pattern style =" << style;
+
+    QSize imageSize = data.image().size();
+
+    if (style == "stretch") {
+        imageSize = size.toSize();
+    } else {
+        // optional attributes which can override original image size
+        if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-height") && styleStack.hasProperty(KoXmlNS::draw, "fill-image-width")) {
+            QString height = styleStack.property(KoXmlNS::draw, "fill-image-height");
+            qreal newHeight = 0.0;
+            if (height.endsWith('%'))
+                newHeight = 0.01 * height.remove('%').toDouble() * imageSize.height();
+            else
+                newHeight = KoUnit::parseValue(height);
+            QString width = styleStack.property(KoXmlNS::draw, "fill-image-width");
+            qreal newWidth = 0.0;
+            if (width.endsWith('%'))
+                newWidth = 0.01 * width.remove('%').toDouble() * imageSize.width();
+            else
+                newWidth = KoUnit::parseValue(width);
+            if (newHeight > 0.0)
+                imageSize.setHeight(static_cast<int>(newHeight));
+            if (newWidth > 0.0)
+                imageSize.setWidth(static_cast<int>(newWidth));
+        }
+    }
+
+    kDebug(35001) << "shape size =" << size;
+    kDebug(35001) << "original image size =" << data.image().size();
+    kDebug(35001) << "resulting image size =" << imageSize;
+
+    QBrush resultBrush(QPixmap::fromImage(data.image()).scaled(imageSize));
+
+    if (style == "repeat") {
+        QMatrix matrix;
+        if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point")) {
+            // align pattern to the given size
+            QString align = styleStack.property(KoXmlNS::draw, "fill-image-ref-point");
+            kDebug(35001) << "pattern align =" << align;
+            if (align == "top-left")
+                matrix.translate(0, 0);
+            else if (align == "top")
+                matrix.translate(0.5*size.width(), 0);
+            else if (align == "top-right")
+                matrix.translate(size.width(), 0);
+            else if (align == "left")
+                matrix.translate(0, 0.5*size.height());
+            else if (align == "center")
+                matrix.translate(0.5*size.width(), 0.5*size.height());
+            else if (align == "right")
+                matrix.translate(size.width(), 0.5*size.height());
+            else if (align == "bottom-left")
+                matrix.translate(0, size.height());
+            else if (align == "bottom")
+                matrix.translate(0.5*size.width(), size.height());
+            else if (align == "bottom-right")
+                matrix.translate(size.width(), size.height());
+        }
+        if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point-x")) {
+            QString pointX = styleStack.property(KoXmlNS::draw, "fill-image-ref-point-x");
+            matrix.translate(0.01 * pointX.remove('%').toDouble() * imageSize.width(), 0);
+        }
+        if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point-y")) {
+            QString pointY = styleStack.property(KoXmlNS::draw, "fill-image-ref-point-y");
+            matrix.translate(0, 0.01 * pointY.remove('%').toDouble() * imageSize.height());
+        }
+        resultBrush.setMatrix(matrix);
+    }
+
+    return resultBrush;
+}

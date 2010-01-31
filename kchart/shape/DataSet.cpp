@@ -43,6 +43,7 @@
 #include "ChartProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
+#include "Surface.h"
 
 // KOffice
 #include <KoXmlNS.h>
@@ -992,7 +993,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                 brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
             } else if ( fill == "bitmap" ) {
                 brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
+                brush = Surface::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
             }
             setBrush( brush );
         }
