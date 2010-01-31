@@ -102,6 +102,9 @@ protected:
 
     SQLiteConnectionInternal* d;
 
+private:
+    bool drv_useDatabaseInternal(bool *cancelled, MessageHandler* msgHandler, bool createIfMissing);
+
     friend class SQLiteDriver;
     friend class SQLiteCursor;
 };
