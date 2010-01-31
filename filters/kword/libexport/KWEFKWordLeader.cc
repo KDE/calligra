@@ -67,7 +67,7 @@ KWEFKWordLeader::~KWEFKWordLeader(void)
 {
 }
 
-static FrameAnchor *findAnchor(const KoPictureKey& key,
+static FrameAnchor *findAnchor(const PictureKey& key,
                                QList<ParaData>& paraList)
 {
     kDebug(30508) << "findAnchor" << key.toString();
@@ -450,12 +450,12 @@ static void ProcessFramesetTag(QDomNode        myNode,
                     kDebug(30508) << "DEBUG - FRAMESET: table" << name << " col, row ="
                     << col << ", " << row << ", Mgr = " << grpMgr << endl;
 #endif
-                    FrameAnchor *frameAnchor = findAnchor(KoPictureKey(grpMgr), *paraList);
+                    FrameAnchor *frameAnchor = findAnchor(PictureKey(grpMgr), *paraList);
                     if (frameAnchor) {
                         ProcessTableAnchor(myNode, leader, frameAnchor, col, row, cols, rows);
                     } else {
                         bool found = false;
-                        KoPictureKey key(grpMgr);
+                        PictureKey key(grpMgr);
                         QList<FrameAnchor>::Iterator it;
                         for (it = leader->m_nonInlinedTableAnchors.begin(); it !=  leader->m_nonInlinedTableAnchors.end(); ++it) {
                             if ((*it).key == key) {
@@ -496,7 +496,7 @@ static void ProcessFramesetTag(QDomNode        myNode,
         kDebug(30508) << "DEBUG: FRAMESET name of picture is" << name;
 #endif
 
-        FrameAnchor *frameAnchor = findAnchor(KoPictureKey(leader->m_currentFramesetName), *paraList);
+        FrameAnchor *frameAnchor = findAnchor(PictureKey(leader->m_currentFramesetName), *paraList);
 
         if (frameAnchor) {
             ProcessPictureAnchor(myNode, leader, frameAnchor, frameType);
@@ -765,9 +765,9 @@ static void ProcessPixmapsKeyTag(QDomNode         myNode,
 {
     QList<ParaData> *paraList = (QList<ParaData> *) tagData;
 
-    KoPictureKey key;
+    PictureKey key;
 
-    // Let KoPictureKey do most of the loading
+    // Let PictureKey do most of the loading
     key.loadAttributes(myNode.toElement());
     const QString name(myNode.toElement().attribute("name"));
 

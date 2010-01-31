@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPictureBase.h"
+#include "PictureBase.h"
 
 #include <KoXmlWriter.h>
 
@@ -35,63 +35,63 @@
 
 static int s_useSlowResizeMode = -1; // unset
 
-KoPictureBase::KoPictureBase(void)
+PictureBase::PictureBase(void)
 {
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if (s_useSlowResizeMode == -1) {
         KConfigGroup group(KGlobal::config(), "KOfficeImage");
         s_useSlowResizeMode = group.readEntry("HighResolution", 1);
-        kDebug(30003) << "HighResolution =" << s_useSlowResizeMode;
+        kDebug(30508) << "HighResolution =" << s_useSlowResizeMode;
     }
 }
 
-KoPictureBase::~KoPictureBase(void)
+PictureBase::~PictureBase(void)
 {
 }
 
-KoPictureBase* KoPictureBase::newCopy(void) const
+PictureBase* PictureBase::newCopy(void) const
 {
-    return new KoPictureBase(*this);
+    return new PictureBase(*this);
 }
 
-KoPictureType::Type KoPictureBase::getType(void) const
+PictureType::Type PictureBase::getType(void) const
 {
-    return KoPictureType::TypeUnknown;
+    return PictureType::TypeUnknown;
 }
 
-bool KoPictureBase::isNull(void) const
+bool PictureBase::isNull(void) const
 {
-    return true;    // A KoPictureBase is always null.
+    return true;    // A PictureBase is always null.
 }
 
-void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height, int, int, int, int, bool /*fastMode*/)
+void PictureBase::draw(QPainter& painter, int x, int y, int width, int height, int, int, int, int, bool /*fastMode*/)
 {
     // Draw a light red box (easier DEBUG)
-    kWarning(30003) << "Drawing light red rectangle! (KoPictureBase::draw)";
+    kWarning(30508) << "Drawing light red rectangle! (PictureBase::draw)";
     painter.save();
     painter.setBrush(QColor(128, 0, 0));
     painter.drawRect(x, y, width, height);
     painter.restore();
 }
 
-bool KoPictureBase::load(QIODevice* io, const QString& extension)
+bool PictureBase::load(QIODevice* io, const QString& extension)
 {
     return loadData(io->readAll(), extension);
 }
 
-bool KoPictureBase::loadData(const QByteArray&, const QString&)
+bool PictureBase::loadData(const QByteArray&, const QString&)
 {
     // Nothing to load!
     return false;
 }
 
-bool KoPictureBase::save(QIODevice*) const
+bool PictureBase::save(QIODevice*) const
 {
     // Nothing to save!
     return false;
 }
 
-bool KoPictureBase::saveAsBase64(KoXmlWriter& writer) const
+bool PictureBase::saveAsBase64(KoXmlWriter& writer) const
 {
     QBuffer buffer;
     buffer.open(QIODevice::ReadWrite);
@@ -102,27 +102,27 @@ bool KoPictureBase::saveAsBase64(KoXmlWriter& writer) const
     return true;
 }
 
-QSize KoPictureBase::getOriginalSize(void) const
+QSize PictureBase::getOriginalSize(void) const
 {
     return QSize(0, 0);
 }
 
-QPixmap KoPictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
+QPixmap PictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
 {
     return QPixmap();
 }
 
-QString KoPictureBase::getMimeType(const QString&) const
+QString PictureBase::getMimeType(const QString&) const
 {
     return QString(NULL_MIME_TYPE);
 }
 
-bool KoPictureBase::isSlowResizeModeAllowed(void) const
+bool PictureBase::isSlowResizeModeAllowed(void) const
 {
     return s_useSlowResizeMode != 0;
 }
 
-QMimeData* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
+QMimeData* PictureBase::dragObject(QWidget * dragSource, const char * name)
 {
     Q_UNUSED(dragSource);
     QImage image(generateImage(getOriginalSize()));
@@ -136,12 +136,12 @@ QMimeData* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
     }
 }
 
-QImage KoPictureBase::generateImage(const QSize& size)
+QImage PictureBase::generateImage(const QSize& size)
 {
     return generatePixmap(size, true).toImage();
 }
 
-void KoPictureBase::clearCache(void)
+void PictureBase::clearCache(void)
 {
     // Nothign to do!
 }

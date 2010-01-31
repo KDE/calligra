@@ -24,7 +24,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-#include "KoPictureBase.h"
+#include "PictureBase.h"
 
 class QPainter;
 class QSize;
@@ -34,24 +34,24 @@ class QSize;
 
 /**
  * @internal
- * KoPictureEps is a container class for a EPS picture
+ * PictureEps is a container class for a EPS picture
  */
-class KoPictureEps : public KoPictureBase
+class PictureEps : public PictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureEps();
+    PictureEps();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureEps();
+    virtual ~PictureEps();
 
-    KoPictureType::Type getType(void) const;
+    PictureType::Type getType(void) const;
 
-    KoPictureBase* newCopy(void) const;
+    PictureBase* newCopy(void) const;
 
     /**
      * Returns true if the picture is null.

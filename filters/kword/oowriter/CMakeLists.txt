@@ -15,7 +15,7 @@ kde4_add_plugin(oowriterimport WITH_PREFIX ${oowriterimport_PART_SRCS})
 
 
 
-target_link_libraries(oowriterimport komain ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(oowriterimport kwordexportfilters komain ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS oowriterimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

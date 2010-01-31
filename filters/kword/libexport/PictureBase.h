@@ -20,7 +20,7 @@
 #ifndef __koPictureBase_h__
 #define __koPictureBase_h__
 
-#include "KoPictureKey.h" // for KoPictureType
+#include "PictureKey.h" // for PictureType
 
 #include <QString>
 #include <QImage>
@@ -39,24 +39,24 @@ const char NULL_MIME_TYPE[] = "application/x-zerosize";
 
 /**
  * @internal
- * Base class for KoPictureImage, KoPictureClipart, KoPictureEps
+ * Base class for PictureImage, PictureClipart, PictureEps
  */
-class KoPictureBase
+class PictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureBase();
+    PictureBase();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureBase();
+    virtual ~PictureBase();
 
-    virtual KoPictureType::Type getType(void) const;
+    virtual PictureType::Type getType(void) const;
 
-    virtual KoPictureBase* newCopy(void) const;
+    virtual PictureBase* newCopy(void) const;
 
     /**
      * Returns true if the picture is null.

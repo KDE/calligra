@@ -83,7 +83,7 @@ public:
     bool doFullDocument(const QList<ParaData> &paraList);
 
 private:
-    void ProcessPictureData(const Picture  &picture);
+    void ProcessPictureData(const PictureData &picture);
 
     void ProcessTableData(const Table &table);
 
@@ -113,7 +113,7 @@ private:
 // copy of the image file into *.sgml.d/pictures/*.* from KoStore
 // pictures/*.*, and creates the necessary DocBook tags for it.
 
-void DocBookWorker::ProcessPictureData(const Picture  &picture)
+void DocBookWorker::ProcessPictureData(const PictureData &picture)
 {
     QByteArray byteArray;
 

@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPictureKey.h"
+#include "PictureKey.h"
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -37,12 +37,12 @@ static void resetDateTimeToEpoch(QDateTime& dt)
     // Note: we cannot use QDateTime;;setTime_t as it makes a local time correction! (### TODO: not true anymore with recent Qt versions)
 }
 
-KoPictureKey::KoPictureKey()
+PictureKey::PictureKey()
 {
     resetDateTimeToEpoch(m_lastModified);
 }
 
-KoPictureKey::KoPictureKey(const QString &fn, const QDateTime &mod)
+PictureKey::PictureKey(const QString &fn, const QDateTime &mod)
         : m_filename(fn), m_lastModified(mod)
 {
     if (!m_lastModified.isValid()) {
@@ -51,36 +51,36 @@ KoPictureKey::KoPictureKey(const QString &fn, const QDateTime &mod)
     }
 }
 
-KoPictureKey::KoPictureKey(const QString &fn)
+PictureKey::PictureKey(const QString &fn)
         : m_filename(fn)
 {
     resetDateTimeToEpoch(m_lastModified);
 }
 
-KoPictureKey::KoPictureKey(const KoPictureKey &key)
+PictureKey::PictureKey(const PictureKey &key)
         : m_filename(key.m_filename), m_lastModified(key.m_lastModified)
 {
 }
 
-KoPictureKey& KoPictureKey::operator=(const KoPictureKey & key)
+PictureKey& PictureKey::operator=(const PictureKey & key)
 {
     m_filename = key.m_filename;
     m_lastModified = key.m_lastModified;
     return *this;
 }
 
-bool KoPictureKey::operator==(const KoPictureKey &key) const
+bool PictureKey::operator==(const PictureKey &key) const
 {
     return (key.m_filename == m_filename &&
             key.m_lastModified == m_lastModified);
 }
 
-bool KoPictureKey::operator<(const KoPictureKey &key) const
+bool PictureKey::operator<(const PictureKey &key) const
 {
     return key.toString() < toString();
 }
 
-void KoPictureKey::saveAttributes(QDomElement &elem) const
+void PictureKey::saveAttributes(QDomElement &elem) const
 {
     QDate date = m_lastModified.date();
     QTime time = m_lastModified.time();
@@ -94,7 +94,7 @@ void KoPictureKey::saveAttributes(QDomElement &elem) const
     elem.setAttribute("msec", time.msec());
 }
 
-void KoPictureKey::loadAttributes(const QDomElement &elem)
+void PictureKey::loadAttributes(const QDomElement &elem)
 {
     // Default date/time is the *nix epoch: 1970-01-01 00:00:00,000
     int year = 1970, month = 1, day = 1;
@@ -128,19 +128,19 @@ void KoPictureKey::loadAttributes(const QDomElement &elem)
 
     if (!m_lastModified.isValid()) {
         // If the date/time is not valid, make it valid by force!
-        kWarning(30003) << "Correcting invalid date/time: " << toString()  << " (in KoPictureKey::loadAttributes)";
+        kWarning(30003) << "Correcting invalid date/time: " << toString()  << " (in PictureKey::loadAttributes)";
         resetDateTimeToEpoch(m_lastModified);
     }
 }
 
-QString KoPictureKey::toString() const
+QString PictureKey::toString() const
 {
     // We do not use the default QDateTime::toString has it does not show microseconds
     return QString::fromLatin1("%1 %2")
            .arg(m_filename, m_lastModified.toString("yyyy-MM-dd hh:mm:ss.zzz"));
 }
 
-void KoPictureKey::setKeyFromFile(const QString& filename)
+void PictureKey::setKeyFromFile(const QString& filename)
 {
     QFileInfo inf(filename);
     m_filename = filename;

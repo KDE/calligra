@@ -23,9 +23,9 @@
 #include <QtCore/QString>
 #include <QtCore/QIODevice>
 #include <QtGui/QPixmap>
-#include "../koodf_export.h"
+#include "kword_libexport_export.h"
 
-#include "KoPictureKey.h"
+#include "PictureKey.h"
 
 class KoXmlWriter;
 class QPainter;
@@ -33,57 +33,57 @@ class QSize;
 class QMimeData;
 class KUrl;
 
-class KoPictureShared;
+class PictureShared;
 
 /**
- * KoPicture is a container class for various types of pictures supported by %KOffice.
+ * Picture is a container class for various types of pictures supported by %KOffice.
  *
  * @short A picture container class
  */
-class KOODF_EXPORT KoPicture
+class KWORD_LIBEXPORT_EXPORT Picture
 {
 public:
     /**
      * Default constructor.
      */
-    KoPicture();
+    Picture();
 
     /**
      * Destructor.
      */
-    ~KoPicture(void);
+    ~Picture(void);
 
     /**
      * Copy constructor
      */
-    KoPicture(const KoPicture &other);
+    Picture(const Picture &other);
 
     /**
      * Assignment operator
      */
-    KoPicture& operator=(const KoPicture& other);
+    Picture& operator=(const Picture& other);
 
     /**
      * Comparison operator
      */
-    bool operator==(const KoPicture& other) const {
+    bool operator==(const Picture& other) const {
         return m_key == other.m_key;
     }
 
     /**
      * Returns type of the picture.
      */
-    KoPictureType::Type getType(void) const;
+    PictureType::Type getType(void) const;
 
     /**
      * Retrieve the key structure describing the picture in a unique way.
      */
-    KoPictureKey getKey(void) const;
+    PictureKey getKey(void) const;
 
     /**
      * Set the key structure describing the picture in a unique way
      */
-    void setKey(const KoPictureKey& key);
+    void setKey(const PictureKey& key);
 
     /**
      * Returns true if the picture is null.
@@ -151,14 +151,14 @@ public:
     QSize getOriginalSize(void) const;
 
     /**
-     * Clear and set the mode of this KoPicture
+     * Clear and set the mode of this Picture
      *
      * @param newMode a file extension (like "png") giving the wanted mode
      */
     void clearAndSetMode(const QString& newMode);
 
     /**
-     * Reset the KoPicture (but not the key!)
+     * Reset the Picture (but not the key!)
      */
     void clear(void);
 
@@ -178,10 +178,10 @@ public:
     bool loadXpm(QIODevice* io);
 
     /**
-     * @deprecated To be replaced by @ref KoPicture::draw
+     * @deprecated To be replaced by @ref Picture::draw
      *
      * Returns a QPixmap from an image
-     * Returns an empty QPixmap if the KoPicture is not an image.
+     * Returns an empty QPixmap if the Picture is not an image.
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
@@ -225,7 +225,7 @@ public:
      * @brief Clear any cache
      *
      * This is used to avoid using too much memory
-     * especially if the application somehow also caches the KoPicture's output
+     * especially if the application somehow also caches the Picture's output
      */
     void clearCache(void);
 
@@ -255,12 +255,12 @@ protected:
      * @internal
      * The key
      */
-    KoPictureKey m_key;
+    PictureKey m_key;
     /**
      * @internal
      * The shared data
      */
-    KoPictureShared* m_sharedData;
+    PictureShared* m_sharedData;
     static uint uniqueValue;
 
     QString m_uniqueName;

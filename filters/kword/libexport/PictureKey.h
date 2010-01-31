@@ -22,18 +22,18 @@
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
-#include "koodf_export.h"
+#include "kword_libexport_export.h"
 /**
- * \file KoPictureKey.h
+ * \file PictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")
  */
 
 class QDomElement;
 
-namespace KoPictureType
+namespace PictureType
 {
 /**
- * QPicture version used by KoPictureClipart
+ * QPicture version used by PictureClipart
  *
  * Possible values:
  * \li 3 for Qt 2.1.x and later Qt 2.x
@@ -44,15 +44,15 @@ namespace KoPictureType
 const int formatVersionQPicture = -1;
 
 enum Type {
-    TypeUnknown = 0,    ///< Unknown or not-an-image @see KoPictureBase
-    TypeImage,          ///< Image, QImage-based @see KoPictureImage
-    TypeEps,            ///< Encapsulated Postscript @see KoPictureEps
-    TypeClipart        ///< Clipart, QPicture-based @see KoPictureClipart
+    TypeUnknown = 0,    ///< Unknown or not-an-image @see PictureBase
+    TypeImage,          ///< Image, QImage-based @see PictureImage
+    TypeEps,            ///< Encapsulated Postscript @see PictureEps
+    TypeClipart        ///< Clipart, QPicture-based @see PictureClipart
 };
 }
 
 /**
- * KoPictureKey is the structure describing a picture in a unique way.
+ * PictureKey is the structure describing a picture in a unique way.
  * It currently includes the original path to the picture and the modification
  * date.
  *
@@ -70,13 +70,13 @@ enum Type {
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
  *  used to download the file.
  */
-class KOODF_EXPORT KoPictureKey
+class KWORD_LIBEXPORT_EXPORT PictureKey
 {
 public:
     /**
      * Default constructor. Creates a null key
      */
-    KoPictureKey();
+    PictureKey();
 
     /**
      * @brief Constructs a key, from a filename and a modification date
@@ -85,34 +85,34 @@ public:
      * to update the file and import it into the application again, without
      * the application reusing the old copy from the collection.
      */
-    KoPictureKey(const QString &fn, const QDateTime &mod);
+    PictureKey(const QString &fn, const QDateTime &mod);
 
     /**
      * Constructs a key from a filename
      * @note The modification date is set to 1970-01-01
      */
-    explicit KoPictureKey(const QString &fn);
+    explicit PictureKey(const QString &fn);
 
     /**
      * Copy constructor
      */
-    KoPictureKey(const KoPictureKey &key);
+    PictureKey(const PictureKey &key);
 
     /**
      * Assignment operator
      */
-    KoPictureKey &operator=(const KoPictureKey &key);
+    PictureKey &operator=(const PictureKey &key);
 
     /**
      * Comparison operator
      */
-    bool operator==(const KoPictureKey &key) const;
+    bool operator==(const PictureKey &key) const;
 
     /**
      * Comparison operator
      * @note Used for sorting in the collection's map
      */
-    bool operator<(const KoPictureKey &key) const;
+    bool operator<(const PictureKey &key) const;
 
     /**
      * Convert this key into a string representation of it

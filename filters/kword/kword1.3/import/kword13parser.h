@@ -117,7 +117,7 @@ protected:
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
-     * \note The generated key is different that one of the class KoPictureKey
+     * \note The generated key is different that one of the class PictureKey
      */
     QString calculatePictureKey(const QString& filename,
                                 const QString& year,  const QString& month,  const QString& day,

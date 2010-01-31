@@ -1,18 +1,29 @@
-
-
 include_directories( ${KOMAIN_INCLUDES} )
-
 
 ########### next target ###############
 
-set(kwordexportfilters_LIB_SRCS 
-   TagProcessing.cc 
-   KWEFStructures.cc 
-   ProcessDocument.cc 
-   KWEFUtil.cc 
-   KWEFKWordLeader.cc 
-   KWEFBaseWorker.cc )
-
+set(kwordexportfilters_LIB_SRCS
+    TagProcessing.cc
+    KWEFStructures.cc
+    ProcessDocument.cc
+    KWEFUtil.cc
+    KWEFKWordLeader.cc
+    KWEFBaseWorker.cc
+    Picture.h
+    PictureBase.h
+    PictureClipart.h
+    PictureEps.h
+    PictureImage.h
+    PictureKey.h
+    PictureShared.h
+    Picture.cpp
+    PictureBase.cpp
+    PictureClipart.cpp
+    PictureEps.cpp
+    PictureImage.cpp
+    PictureKey.cpp
+    PictureShared.cpp
+)
 
 kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 

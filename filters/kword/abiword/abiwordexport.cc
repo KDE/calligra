@@ -46,12 +46,12 @@
 
 #include <KoPageLayout.h>
 #include <KoFilterChain.h>
-#include <kopicture/KoPictureKey.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
+#include <PictureKey.h>
 
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
@@ -130,7 +130,7 @@ private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
-    QMap<QString, KoPictureKey> m_mapPictureData;
+    QMap<QString, PictureKey> m_mapPictureData;
     StyleMap m_styleMap;
     double m_paperBorderTop, m_paperBorderLeft, m_paperBorderBottom, m_paperBorderRight;
     bool m_inIgnoreWords; // true if <ignorewords> has been written
@@ -286,8 +286,8 @@ bool AbiWordWorker::doCloseDocument(void)
     if (m_kwordLeader && !m_mapPictureData.isEmpty()) {
         *m_streamOut << "<data>\n";
 
-        QMap<QString, KoPictureKey>::ConstIterator it;
-        QMap<QString, KoPictureKey>::ConstIterator end(m_mapPictureData.constEnd());
+        QMap<QString, PictureKey>::ConstIterator it;
+        QMap<QString, PictureKey>::ConstIterator end(m_mapPictureData.constEnd());
         // all images first
         for (it = m_mapPictureData.constBegin(); it != end; ++it) {
             // Warning: do not mix up KWord's key and the iterator's key!

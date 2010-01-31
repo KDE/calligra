@@ -24,7 +24,7 @@
 #include <qpicture.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include "KoPictureBase.h"
+#include "PictureBase.h"
 class QPainter;
 class QSize;
 
@@ -32,24 +32,24 @@ class QSize;
 
 /**
  * @internal
- * KoPictureClipart is a container class for cliparts
+ * PictureClipart is a container class for cliparts
  */
-class KoPictureClipart : public KoPictureBase
+class PictureClipart : public PictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureClipart();
+    PictureClipart();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureClipart();
+    virtual ~PictureClipart();
 
-    virtual KoPictureType::Type getType(void) const;
+    virtual PictureType::Type getType(void) const;
 
-    virtual KoPictureBase* newCopy(void) const;
+    virtual PictureBase* newCopy(void) const;
 
 
     /**

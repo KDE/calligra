@@ -31,7 +31,7 @@
 #include <QFontInfo>
 #include <QTextStream>
 
-#include <kopicture/KoPicture.h>
+#include <Picture.h>
 #include <KoFilterManager.h>
 
 
@@ -1448,7 +1448,7 @@ void RTFImport::addImportedPicture(const QString& rawFileName)
 
     kDebug(30515) << "Path:" << url.prettyUrl();
 
-    KoPicture pic;
+    Picture pic;
     pic.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     if (pic.isNull()) {
         kError(30515) << "Import field: file is empty: " << rawFileName;

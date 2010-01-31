@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPictureClipart.h"
+#include "PictureClipart.h"
 
 #include <QBuffer>
 #include <QPainter>
@@ -28,74 +28,74 @@
 #include <kdebug.h>
 
 
-#include "KoPictureKey.h"
-#include "KoPictureBase.h"
+#include "PictureKey.h"
+#include "PictureBase.h"
 
 
-KoPictureClipart::KoPictureClipart(void) : m_clipart(KoPictureType::formatVersionQPicture)
+PictureClipart::PictureClipart(void) : m_clipart(PictureType::formatVersionQPicture)
 {
 }
 
-KoPictureClipart::~KoPictureClipart(void)
+PictureClipart::~PictureClipart(void)
 {
 }
 
-KoPictureBase* KoPictureClipart::newCopy(void) const
+PictureBase* PictureClipart::newCopy(void) const
 {
-    return new KoPictureClipart(*this);
+    return new PictureClipart(*this);
 }
 
-KoPictureType::Type KoPictureClipart::getType(void) const
+PictureType::Type PictureClipart::getType(void) const
 {
-    return KoPictureType::TypeClipart;
+    return PictureType::TypeClipart;
 }
 
-bool KoPictureClipart::isNull(void) const
+bool PictureClipart::isNull(void) const
 {
     return m_clipart.isNull();
 }
 
-void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
+void PictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
                                     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kDebug(30003) << "Drawing KoPictureClipart" << this;
-    kDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height;
-    kDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh;
+    kDebug(30508) << "Drawing PictureClipart" << this;
+    kDebug(30508) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height;
+    kDebug(30508) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    kDebug(30003) << "  Bounding rect." << br;
+    kDebug(30508) << "  Bounding rect." << br;
 
     painter.translate(x, y); // Translating must be done before scaling!
     if (br.width() && br.height())
         painter.scale(qreal(width) / qreal(br.width()), qreal(height) / qreal(br.height()));
     else
-        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height();
+        kWarning(30508) << "Null bounding rectangle: " << br.width() << " x " << br.height();
     painter.drawPicture(0, 0, clipart);
     painter.restore();
 }
 
-void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
+void PictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
 {
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
-bool KoPictureClipart::loadData(const QByteArray& array, const QString& extension)
+bool PictureClipart::loadData(const QByteArray& array, const QString& extension)
 {
     // Second, create the original clipart
-    kDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")";
+    kDebug(30508) << "Trying to load clipart... (Size:" << m_rawData.size() << ")";
     m_rawData = array;
     QBuffer buffer(&m_rawData);
     buffer.open(QIODevice::ReadOnly);
     bool check = true;
     if (extension == "svg") {
         if (!m_clipart.load(&buffer, "svg")) {
-            kWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)";
+            kWarning(30508) << "Loading SVG has failed! (PictureClipart::load)";
             check = false;
         }
     } else {
         if (!m_clipart.load(&buffer, NULL)) {
-            kWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)";
+            kWarning(30508) << "Loading QPicture has failed! (PictureClipart::load)";
             check = false;
         }
     }
@@ -103,21 +103,21 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
     return check;
 }
 
-bool KoPictureClipart::save(QIODevice* io) const
+bool PictureClipart::save(QIODevice* io) const
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
     qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size == m_rawData.size());
 }
 
-QSize KoPictureClipart::getOriginalSize(void) const
+QSize PictureClipart::getOriginalSize(void) const
 {
     return m_clipart.boundingRect().size();
 }
 
-QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/)
+QPixmap PictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/)
 {
-    // Not sure if it works, but it worked for KoPictureFilePreviewWidget::setClipart
+    // Not sure if it works, but it worked for PictureFilePreviewWidget::setClipart
     QPixmap pixmap(size);
     QPainter p;
 
@@ -133,7 +133,7 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
     return pixmap;
 }
 
-QString KoPictureClipart::getMimeType(const QString& extension) const
+QString PictureClipart::getMimeType(const QString& extension) const
 {
     if (extension == "svg")
         return "image/svg+xml";

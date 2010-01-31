@@ -46,8 +46,8 @@
 #include <kzip.h>
 
 #include <KoPageLayout.h>
-#include <kopicture/KoPictureKey.h>
-#include <kopicture/KoPicture.h>
+#include <PictureKey.h>
+#include <Picture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -1237,14 +1237,14 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const AnchorType anc
         // Text image have no frameset, so the only size information is in the picture itself.
         QByteArray tmp(image);
         QBuffer buffer(&tmp);   // Be more safe than sorry and do not allow shallow copy
-        KoPicture pic;
+        Picture pic;
         buffer.open(QIODevice::ReadOnly);
         if (pic.load(&buffer, strExtension)) {
             const QSize size(pic.getOriginalSize());
             height = size.height();
             width = size.width();
         } else {
-            kWarning(30518) << "Could not load KoPicture: " << koStoreName;
+            kWarning(30518) << "Could not load Picture: " << koStoreName;
         }
         buffer.close();
     } else {

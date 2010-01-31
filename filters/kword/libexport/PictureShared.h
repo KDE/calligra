@@ -24,14 +24,14 @@
 #include <QIODevice>
 #include <QPixmap>
 
-#include "KoPictureKey.h"
+#include "PictureKey.h"
 
 class KoXmlWriter;
 class QPainter;
 class QSize;
 class QMimeData;
 
-class KoPictureBase;
+class PictureBase;
 
 struct Shared
 {
@@ -41,39 +41,39 @@ struct Shared
     uint count;
 };
 
-#include "koodf_export.h"
+#include "kword_libexport_export.h"
 /**
  * @internal
- * KoPictureShared is the class that contains the shared part for KoPicture
+ * PictureShared is the class that contains the shared part for Picture
  */
-class KOODF_EXPORT KoPictureShared : public Shared
+class KWORD_LIBEXPORT_EXPORT PictureShared : public Shared
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureShared();
+    PictureShared();
 
     /**
      * Destructor.
      */
-    ~KoPictureShared(void);
+    ~PictureShared(void);
 
     /**
      * @brief Copy constructor
      *
      * This makes a deep copy. Do not use if you want to share!
      */
-    KoPictureShared(const KoPictureShared &other);
+    PictureShared(const PictureShared &other);
 
     /**
      * @brief Assignment operator
      *
      * This makes a deep copy. Do not use if you want to share!
      */
-    KoPictureShared& operator=(const KoPictureShared& other);
+    PictureShared& operator=(const PictureShared& other);
 
-    KoPictureType::Type getType(void) const;
+    PictureType::Type getType(void) const;
 
     /**
      * Returns true if the picture is null.
@@ -124,14 +124,14 @@ public:
     QSize getOriginalSize(void) const;
 
     /**
-     * Clear and set the mode of this KoPictureShared
+     * Clear and set the mode of this PictureShared
      *
      * @param newMode file extension (like "png") giving the wanted mode
      */
     void clearAndSetMode(const QString& newMode);
 
     /**
-     * Reset the KoPictureShared (but not the key!)
+     * Reset the PictureShared (but not the key!)
      */
     void clear(void);
 
@@ -174,7 +174,7 @@ public:
      * Clear any cache
      *
      * It is used to avoid using too much memory
-     * especially if the application somehow caches the KoPicture too.
+     * especially if the application somehow caches the Picture too.
      */
     void clearCache(void);
 
@@ -204,7 +204,7 @@ protected:
     bool loadCompressed(QIODevice* io, const QString& mimeType, const QString& extension);
 
 protected:
-    KoPictureBase* m_base;
+    PictureBase* m_base;
     QString m_extension;
     uint m_pictureId;
 };

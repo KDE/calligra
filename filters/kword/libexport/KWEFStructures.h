@@ -47,8 +47,8 @@
 #include <qdom.h>
 #include <QDateTime>
 
-#include <kopicture/KoPictureKey.h>
-#include <kword_libexport_export.h>
+#include "PictureKey.h"
+#include "kword_libexport_export.h"
 /**
  * TextFormatting is a container for data retrieved from the \<FORMAT\> tag
  * and its subtags to be used in the \<PARAGRAPH\> tag.
@@ -112,12 +112,12 @@ public:
 };
 
 
-class Picture
+class PictureData
 {
 public:
-    Picture() {}
+    PictureData() {}
 
-    KoPictureKey key;      ///< Picture key: where the picture came from
+    PictureKey key;      ///< Picture key: where the picture came from
     QString koStoreName;   ///< Picture store name: filename within KWord archive
 };
 
@@ -199,13 +199,13 @@ public:
     FrameAnchor():
             type(-1) {}
 
-    FrameAnchor(const KoPictureKey& n) : key(n), type(-1) {}
+    FrameAnchor(const PictureKey& n) : key(n), type(-1) {}
 
-    KoPictureKey key; ///< Picture key
+    PictureKey key; ///< Picture key
     int     type;
     FrameData   frame;
 
-    Picture picture;
+    PictureData picture;
     Table   table;
 };
 

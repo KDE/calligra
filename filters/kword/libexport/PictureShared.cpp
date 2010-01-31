@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPictureShared.h"
+#include "PictureShared.h"
 
 #include <QFile>
 #include <QImageReader>
@@ -33,75 +33,75 @@
 #include <kfilterdev.h>
 #include <kio/netaccess.h>
 #include <QBuffer>
-#include "KoPictureKey.h"
-#include "KoPictureBase.h"
-#include "KoPictureImage.h"
-#include "KoPictureEps.h"
-#include "KoPictureClipart.h"
+#include "PictureKey.h"
+#include "PictureBase.h"
+#include "PictureImage.h"
+#include "PictureEps.h"
+#include "PictureClipart.h"
 
 #include <kcodecs.h>
 
 
-KoPictureShared::KoPictureShared(void) : m_base(NULL)
+PictureShared::PictureShared(void) : m_base(NULL)
 {
 }
 
-void KoPictureShared::assignPictureId(uint _id)
+void PictureShared::assignPictureId(uint _id)
 {
     m_pictureId = _id;
 }
 
-QString KoPictureShared::uniquePictureId() const
+QString PictureShared::uniquePictureId() const
 {
     return "Pictures" + QString::number(m_pictureId);
 }
 
-KoPictureShared::~KoPictureShared(void)
+PictureShared::~PictureShared(void)
 {
     delete m_base;
 }
 
-KoPictureShared::KoPictureShared(const KoPictureShared &other)
+PictureShared::PictureShared(const PictureShared &other)
         : Shared() // Some compilers want it explicitly!
 {
-    // We need to use newCopy, because we want a real copy, not just a copy of the part of KoPictureBase
+    // We need to use newCopy, because we want a real copy, not just a copy of the part of PictureBase
     if (other.m_base)
         m_base = other.m_base->newCopy();
     else
         m_base = NULL;
 }
 
-KoPictureShared& KoPictureShared::operator=(const KoPictureShared & other)
+PictureShared& PictureShared::operator=(const PictureShared & other)
 {
     clear();
-    kDebug(30003) << "KoPictureShared::= before";
+    kDebug(30508) << "PictureShared::= before";
     if (other.m_base)
         m_base = other.m_base->newCopy();
-    kDebug(30003) << "KoPictureShared::= after";
+    kDebug(30508) << "PictureShared::= after";
     return *this;
 }
 
-KoPictureType::Type KoPictureShared::getType(void) const
+PictureType::Type PictureShared::getType(void) const
 {
     if (m_base)
         return m_base->getType();
-    return KoPictureType::TypeUnknown;
+    return PictureType::TypeUnknown;
 }
 
-bool KoPictureShared::isNull(void) const
+bool PictureShared::isNull(void) const
 {
     if (m_base)
         return m_base->isNull();
     return true;
 }
 
-void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
+void PictureShared::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
     if (m_base)
         m_base->draw(painter, x, y, width, height, sx, sy, sw, sh, fastMode);
     else {
         // Draw a red box (easier DEBUG)
-        kWarning(30003) << "Drawing red rectangle! (KoPictureShared::draw)";
+        kWarning(30508) << "Drawing red rectangle! (PictureShared::draw)";
         painter.save();
         painter.setBrush(QColor(255, 0, 0));
         painter.drawRect(x, y, width, height);
@@ -109,13 +109,13 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
     }
 }
 
-bool KoPictureShared::loadTmp(QIODevice* io)
+bool PictureShared::loadTmp(QIODevice* io)
 // We have a temp file, probably from a downloaded file
 //   We must check the file type
 {
-    kDebug(30003) << "KoPictureShared::loadTmp";
+    kDebug(30508) << "PictureShared::loadTmp";
     if (!io) {
-        kError(30003) << "No QIODevice!" << endl;
+        kError(30508) << "No QIODevice!" << endl;
         return false;
     }
 
@@ -123,10 +123,10 @@ bool KoPictureShared::loadTmp(QIODevice* io)
     return identifyAndLoad(array);
 }
 
-bool KoPictureShared::identifyAndLoad(const QByteArray& _array)
+bool PictureShared::identifyAndLoad(const QByteArray& _array)
 {
     if (_array.size() < 5) {
-        kError(30003) << "Picture is less than 5 bytes long!" << endl;
+        kError(30508) << "Picture is less than 5 bytes long!" << endl;
         return false;
     }
 
@@ -171,35 +171,35 @@ bool KoPictureShared::identifyAndLoad(const QByteArray& _array)
         buffer.close();
         return flag;
     } else {
-        kDebug(30003) << "Cannot identify the type of temp file!"
-        << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
+        kDebug(30508) << "Cannot identify the type of temp file!"
+        << " Trying to convert to PNG! (in PictureShared::loadTmp" << endl;
 
         // Do not trust QBuffer and do not work directly on the QByteArray array
         // DF: It would be faster to work on array here, and to create a completely
         // different QBuffer for the writing code!
         QBuffer buf(&array);
         if (!buf.open(QIODevice::ReadOnly)) {
-            kError(30003) << "Could not open read buffer!" << endl;
+            kError(30508) << "Could not open read buffer!" << endl;
             return false;
         }
 
         QImageReader imageReader(&buf);
         QImage image = imageReader.read();
         if (image.isNull()) {
-            kError(30003) << "Could not read image!" << endl;
+            kError(30508) << "Could not read image!" << endl;
             return false;
         }
         buf.close();
 
         if (!buf.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            kError(30003) << "Could not open write buffer!" << endl;
+            kError(30508) << "Could not open write buffer!" << endl;
             return false;
         }
 
         QImageWriter imageWriter(&buf, "PNG");
 
         if (!imageWriter.write(image)) {
-            kError(30003) << "Could not write converted image!" << endl;
+            kError(30508) << "Could not write converted image!" << endl;
             return false;
         }
         buf.close();
@@ -209,7 +209,7 @@ bool KoPictureShared::identifyAndLoad(const QByteArray& _array)
         strExtension = "png";
     }
 
-    kDebug(30003) << "Temp file considered to be" << strExtension;
+    kDebug(30508) << "Temp file considered to be" << strExtension;
 
     clearAndSetMode(strExtension);
     if (m_base)
@@ -221,11 +221,11 @@ bool KoPictureShared::identifyAndLoad(const QByteArray& _array)
 
 
 
-bool KoPictureShared::loadXpm(QIODevice* io)
+bool PictureShared::loadXpm(QIODevice* io)
 {
-    kDebug(30003) << "KoPictureShared::loadXpm";
+    kDebug(30508) << "PictureShared::loadXpm";
     if (!io) {
-        kError(30003) << "No QIODevice!" << endl;
+        kError(30508) << "No QIODevice!" << endl;
         return false;
     }
 
@@ -246,7 +246,7 @@ bool KoPictureShared::loadXpm(QIODevice* io)
 
     // Now that the XPM file is corrected, we need to load it.
 
-    m_base = new KoPictureImage();
+    m_base = new PictureImage();
 
     QBuffer buffer(&array);
     bool check = m_base->load(&buffer, "xpm");
@@ -254,7 +254,7 @@ bool KoPictureShared::loadXpm(QIODevice* io)
     return check;
 }
 
-bool KoPictureShared::save(QIODevice* io) const
+bool PictureShared::save(QIODevice* io) const
 {
     if (!io)
         return false;
@@ -263,21 +263,21 @@ bool KoPictureShared::save(QIODevice* io) const
     return false;
 }
 
-bool KoPictureShared::saveAsBase64(KoXmlWriter& writer) const
+bool PictureShared::saveAsBase64(KoXmlWriter& writer) const
 {
     if (m_base)
         m_base->saveAsBase64(writer);
     return false;
 }
 
-void KoPictureShared::clear(void)
+void PictureShared::clear(void)
 {
     // Clear does not reset the key m_key!
     delete m_base;
     m_base = NULL;
 }
 
-void KoPictureShared::clearAndSetMode(const QString& newMode)
+void PictureShared::clearAndSetMode(const QString& newMode)
 {
     delete m_base;
     m_base = NULL;
@@ -285,25 +285,25 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     const QString mode = newMode.toLower();
 
     if ((mode == "svg") || (mode == "qpic")) {
-        m_base = new KoPictureClipart();
+        m_base = new PictureClipart();
     } else if ((mode == "eps") || (mode == "epsi") || (mode == "epsf")) {
-        m_base = new KoPictureEps();
+        m_base = new PictureEps();
     } else {  // TODO: test if QImageIO really knows the file format
-        m_base = new KoPictureImage();
+        m_base = new PictureImage();
     }
 }
 
-QString KoPictureShared::getExtension(void) const
+QString PictureShared::getExtension(void) const
 {
     return m_extension;
 }
 
-void KoPictureShared::setExtension(const QString& extension)
+void PictureShared::setExtension(const QString& extension)
 {
     m_extension = extension;
 }
 
-QString KoPictureShared::getMimeType(void) const
+QString PictureShared::getMimeType(void) const
 {
     if (m_base)
         return m_base->getMimeType(m_extension);
@@ -311,15 +311,15 @@ QString KoPictureShared::getMimeType(void) const
 }
 
 
-bool KoPictureShared::loadFromBase64(const QByteArray& str)
+bool PictureShared::loadFromBase64(const QByteArray& str)
 {
     clear();
     return identifyAndLoad(QByteArray::fromBase64(str));
 }
 
-bool KoPictureShared::load(QIODevice* io, const QString& extension)
+bool PictureShared::load(QIODevice* io, const QString& extension)
 {
-    kDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&)" << extension;
+    kDebug(30508) << "PictureShared::load(QIODevice*, const QString&)" << extension;
     bool flag = false;
     QString ext(extension.toLower());
     if (ext == "tmp") // ### TODO: also remote scripts need this, don't they?
@@ -337,16 +337,16 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
         setExtension(ext);
     }
     if (!flag) {
-        kError(30003) << "File was not loaded! (KoPictureShared::load)" << endl;
+        kError(30508) << "File was not loaded! (PictureShared::load)" << endl;
     }
     return flag;
 }
 
-bool KoPictureShared::loadFromFile(const QString& fileName)
+bool PictureShared::loadFromFile(const QString& fileName)
 {
-    kDebug(30003) << "KoPictureShared::loadFromFile" << fileName;
+    kDebug(30508) << "PictureShared::loadFromFile" << fileName;
     if (fileName.isEmpty()) {
-        kError(30003) << "Cannot load file with empty name!" << endl;
+        kError(30508) << "Cannot load file with empty name!" << endl;
         return false;
     }
     QFile file(fileName);
@@ -356,7 +356,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
     bool flag = false;
     const int pos = fileName.lastIndexOf('.');
     if (pos == -1) {
-        kDebug(30003) << "File with no extension!";
+        kDebug(30508) << "File with no extension!";
         // As we have no extension, consider it like a temporary file
         flag = loadTmp(&file);
     } else {
@@ -368,73 +368,73 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
     return flag;
 }
 
-QSize KoPictureShared::getOriginalSize(void) const
+QSize PictureShared::getOriginalSize(void) const
 {
     if (m_base)
         return m_base->getOriginalSize();
     return QSize(0, 0);
 }
 
-QPixmap KoPictureShared::generatePixmap(const QSize& size, bool smoothScale)
+QPixmap PictureShared::generatePixmap(const QSize& size, bool smoothScale)
 {
     if (m_base)
         return m_base->generatePixmap(size, smoothScale);
     return QPixmap();
 }
 
-QMimeData* KoPictureShared::dragObject(QWidget *dragSource, const char *name)
+QMimeData* PictureShared::dragObject(QWidget *dragSource, const char *name)
 {
     if (m_base)
         return m_base->dragObject(dragSource, name);
     return 0;
 }
 
-QImage KoPictureShared::generateImage(const QSize& size)
+QImage PictureShared::generateImage(const QSize& size)
 {
     if (m_base)
         return m_base->generateImage(size);
     return QImage();
 }
 
-bool KoPictureShared::hasAlphaBuffer() const
+bool PictureShared::hasAlphaBuffer() const
 {
     if (m_base)
         return m_base->hasAlphaBuffer();
     return false;
 }
 
-void KoPictureShared::setAlphaBuffer(bool enable)
+void PictureShared::setAlphaBuffer(bool enable)
 {
     if (m_base)
         m_base->setAlphaBuffer(enable);
 }
 
-QImage KoPictureShared::createAlphaMask(Qt::ImageConversionFlags flags) const
+QImage PictureShared::createAlphaMask(Qt::ImageConversionFlags flags) const
 {
     if (m_base)
         return m_base->createAlphaMask(flags);
     return QImage();
 }
 
-void KoPictureShared::clearCache(void)
+void PictureShared::clearCache(void)
 {
     if (m_base)
         m_base->clearCache();
 }
 
-bool KoPictureShared::loadCompressed(QIODevice* io, const QString& mimeType, const QString& extension)
+bool PictureShared::loadCompressed(QIODevice* io, const QString& mimeType, const QString& extension)
 {
     // ### TODO: check that we do not have an endless recursion
     QIODevice* in = KFilterDev::device(io, mimeType, false);
 
     if (!in) {
-        kError(30003) << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError(30508) << "Cannot create device for uncompressing! Aborting!" << endl;
         return false;
     }
 
 
     if (!in->open(QIODevice::ReadOnly)) {
-        kError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError(30508) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return false;
     }

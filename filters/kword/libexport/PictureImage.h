@@ -20,7 +20,7 @@
 #ifndef __koPictureImage_h__
 #define __koPictureImage_h__
 
-#include "KoPictureBase.h"
+#include "PictureBase.h"
 #include <QString>
 #include <QPixmap>
 
@@ -28,25 +28,25 @@
 
 /**
  * @internal
- * KoPictureImage is a container class for a QImage-based picture
+ * PictureImage is a container class for a QImage-based picture
  * \todo remove private class, as the header is not installed
  */
-class KoPictureImage : public KoPictureBase
+class PictureImage : public PictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureImage();
+    PictureImage();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureImage();
+    virtual ~PictureImage();
 
-    KoPictureType::Type getType(void) const;
+    PictureType::Type getType(void) const;
 
-    KoPictureBase* newCopy(void) const;
+    PictureBase* newCopy(void) const;
 
     /**
      * Returns true if the picture is null.

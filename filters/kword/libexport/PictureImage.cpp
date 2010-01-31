@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoPictureImage.h"
+#include "PictureImage.h"
 
-#include "KoPictureKey.h"
+#include "PictureKey.h"
 
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -34,35 +34,35 @@
 #include <QApplication>
 #include <QMimeData>
 
-class KoPictureImage::Private
+class PictureImage::Private
 {
 };
 
-KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true), d(0)
+PictureImage::PictureImage(void) : m_cacheIsInFastMode(true), d(0)
 {
 }
 
-KoPictureImage::~KoPictureImage(void)
+PictureImage::~PictureImage(void)
 {
     delete d;
 }
 
-KoPictureBase* KoPictureImage::newCopy(void) const
+PictureBase* PictureImage::newCopy(void) const
 {
-    return new KoPictureImage(*this);
+    return new PictureImage(*this);
 }
 
-KoPictureType::Type KoPictureImage::getType(void) const
+PictureType::Type PictureImage::getType(void) const
 {
-    return KoPictureType::TypeImage;
+    return PictureType::TypeImage;
 }
 
-bool KoPictureImage::isNull(void) const
+bool PictureImage::isNull(void) const
 {
     return m_originalImage.isNull();
 }
 
-void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
+void PictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 {
     if ((size == m_cachedSize)
             && ((fastMode) || (!m_cacheIsInFastMode))) {
@@ -75,7 +75,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if (!isSlowResizeModeAllowed()) {
-        kDebug(30003) << "User has disallowed slow mode!";
+        kDebug(30508) << "User has disallowed slow mode!";
         fastMode = true;
     }
 
@@ -92,9 +92,9 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     m_cachedSize = size;
 }
 
-void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
+void PictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
-    //kDebug(30003) <<"KoImage::draw currentSize:" << currentSize.width() <<"x" << currentSize.height();
+    //kDebug(30508) <<"KoImage::draw currentSize:" << currentSize.width() <<"x" << currentSize.height();
     if (!width || !height)
         return;
     QSize origSize = getOriginalSize();
@@ -115,7 +115,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
         painter.restore();
     } else {
         QSize screenSize(width, height);
-        //kDebug(30003) <<"KoPictureImage::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
+        //kDebug(30508) <<"PictureImage::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
 
         scaleAndCreatePixmap(screenSize, fastMode);
 
@@ -125,7 +125,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     }
 }
 
-bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extension*/)
+bool PictureImage::loadData(const QByteArray& array, const QString& /* extension*/)
 {
     m_rawData = array;
     // Second, create the original image
@@ -136,7 +136,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
     QImage image = imageReader.read();
     buffer.close();
     if (image.isNull()) {
-        kError(30003) << "Image could not be loaded!" << endl;
+        kError(30508) << "Image could not be loaded!" << endl;
         return false;
     }
     m_originalImage = image;
@@ -144,37 +144,37 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
     return true;
 }
 
-bool KoPictureImage::save(QIODevice* io) const
+bool PictureImage::save(QIODevice* io) const
 {
-    kDebug(30003) << "writing raw data. size=" << m_rawData.size();
+    kDebug(30508) << "writing raw data. size=" << m_rawData.size();
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
     qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size == m_rawData.size());
 }
 
-QSize KoPictureImage::getOriginalSize(void) const
+QSize PictureImage::getOriginalSize(void) const
 {
     return m_originalImage.size();
 }
 
-QPixmap KoPictureImage::generatePixmap(const QSize& size, bool smoothScale)
+QPixmap PictureImage::generatePixmap(const QSize& size, bool smoothScale)
 {
     scaleAndCreatePixmap(size, !smoothScale);
     return m_cachedPixmap;
 }
 
-QString KoPictureImage::getMimeType(const QString& extension) const
+QString PictureImage::getMimeType(const QString& extension) const
 {
     QString fileName("/tmp/temp.");
     fileName += extension;
     // Find the mimetype only by the extension, not by file content (as the file is empty!)
     const QString mimetype(KMimeType::findByPath(fileName, 0 , true)->name());
     // ### TODO: use KMimeType::findByContent (but then the mimetype probably need to be cached)
-    kDebug(30003) << "Image is mime type:" << mimetype;
+    kDebug(30508) << "Image is mime type:" << mimetype;
     return mimetype;
 }
 
-QMimeData* KoPictureImage::dragObject(QWidget *dragSource, const char *name)
+QMimeData* PictureImage::dragObject(QWidget *dragSource, const char *name)
 {
     Q_UNUSED(dragSource); // Was used in Qt3? 
     QMimeData* mimeData = new QMimeData();
@@ -183,13 +183,13 @@ QMimeData* KoPictureImage::dragObject(QWidget *dragSource, const char *name)
     return mimeData;
 }
 
-QImage KoPictureImage::generateImage(const QSize& size)
+QImage PictureImage::generateImage(const QSize& size)
 {
     // We do not cache the image, as we will seldom need it again.
     return m_originalImage.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
-void KoPictureImage::clearCache(void)
+void PictureImage::clearCache(void)
 {
     m_cachedPixmap = QPixmap();
     m_cacheIsInFastMode = true;

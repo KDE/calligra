@@ -44,7 +44,7 @@
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include <kopicture/KoPicture.h>
+#include <Picture.h>
 #include "conversion.h"
 
 typedef KGenericFactory<OoWriterImport> OoWriterImportFactory;
@@ -1693,15 +1693,15 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& obj
 
     kDebug(30518) << "Picture:" << frameName << "" << href << " (in OoWriterImport::appendPicture)";
 
-    KoPicture picture;
+    Picture picture;
     if (href[0] == '#') {
         QString strExtension;
         const int result = href.findRev(".");
         if (result >= 0) {
-            strExtension = href.mid(result + 1); // As we are using KoPicture, the extension should be without the dot.
+            strExtension = href.mid(result + 1); // As we are using Picture, the extension should be without the dot.
         }
         QString filename(href.mid(1));
-        KoPictureKey key(filename, QDateTime::currentDateTime().toUTC());
+        PictureKey key(filename, QDateTime::currentDateTime().toUTC());
         picture.setKey(key);
 
         if (!m_zip)

@@ -528,14 +528,14 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
     QList<TagProcessing> tagProcessingList;
 
     QString fileName; // KWord 0.8
-    KoPictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
+    PictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
     tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &fileName));
     tagProcessingList.append(TagProcessing("PICTURE",  ProcessImageTag, &key));
     ProcessSubtags(myNode, tagProcessingList, leader);
 
     if (!fileName.isEmpty()) {
         kDebug(30508) << "KWord 0.8 text image:" << fileName;
-        key = KoPictureKey(fileName);
+        key = PictureKey(fileName);
     } else {
         kDebug(30508) << "KWord 1.2/1.3 text image:" << key.toString();
     }
@@ -600,7 +600,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
         kDebug(30508) << "DEBUG: Adding frame anchor" << instance;
 #endif
 
-        (*formatDataList) << FormatData(formatPos, formatLen, FrameAnchor(KoPictureKey(instance)));
+        (*formatDataList) << FormatData(formatPos, formatLen, FrameAnchor(PictureKey(instance)));
     } else {
         kWarning(30508) << "Missing or bad anchor formatting!";
     }
@@ -993,9 +993,9 @@ void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 static void ProcessImageKeyTag(QDomNode myNode,
                                void *tagData, KWEFKWordLeader *)
 {
-    KoPictureKey *key = (KoPictureKey*) tagData;
+    PictureKey *key = (PictureKey*) tagData;
 
-    // Let KoPicture do the loading
+    // Let Picture do the loading
     key->loadAttributes(myNode.toElement());
 }
 

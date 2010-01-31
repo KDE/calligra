@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-#include <kopicture/KoPicture.h>
+#include <Picture.h>
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
@@ -102,13 +102,13 @@ QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QStri
 
     kDebug(30508) << "Picture" << strName << " has size:" << io->size();
 
-    KoPicture picture;
-    if (!picture.load(io, inExtension)) { // we do not care about KoPictureKey
+    Picture picture;
+    if (!picture.load(io, inExtension)) { // we do not care about PictureKey
         kWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)";
         return QImage();
     }
 
-    return picture.generateImage(picture.getOriginalSize()); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+    return picture.generateImage(picture.getOriginalSize()); // ### TODO: Picture::getOriginalSize is bad for cliparts
 }
 
 bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const
