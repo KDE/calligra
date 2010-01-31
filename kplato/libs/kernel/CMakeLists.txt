@@ -1,7 +1,7 @@
 
 add_subdirectory( tests )
 
-include_directories(${KOSTORE_INCLUDES})
+include_directories(${KOODF_INCLUDES})
 
 ########### KPlato kernel library ###############
 
@@ -29,7 +29,7 @@ set(kplatokernel_LIB_SRCS
 
 kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
 
-target_link_libraries(kplatokernel kostore ${QT_QTGUI_LIBRARY})
+target_link_libraries(kplatokernel koodf ${QT_QTGUI_LIBRARY})
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

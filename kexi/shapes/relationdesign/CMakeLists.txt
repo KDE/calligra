@@ -17,9 +17,7 @@ kexirelationdesignshape
 kexidb
 kexicore
 keximain
-flake
 komain
-kostore
 ${KDE4_KDECORE_LIBS}
 ${KDE4_KDEUI_LIBS}
 ${QT_QTCORE_LIBRARY}
