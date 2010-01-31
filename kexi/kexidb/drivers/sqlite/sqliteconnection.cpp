@@ -22,7 +22,7 @@
 #include "sqlitecursor.h"
 #include "sqlitepreparedstatement.h"
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
