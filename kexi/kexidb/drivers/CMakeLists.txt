@@ -2,15 +2,14 @@
 # drivers will be moved out of this dir in Predicate, and then area will be redefined
 #remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
-IF (SQLITE_FOUND)
-  add_subdirectory( sqlite )
-ENDIF (SQLITE_FOUND)
+
+# always available
+add_subdirectory( sqlite )
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
    add_subdirectory( mySQL )
 ENDIF (MYSQL_FOUND)
-
 
 INCLUDE (FindPostgreSQL)
 
