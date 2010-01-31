@@ -58,13 +58,24 @@ TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
 TODO: text editor: autofill disabled because this makes the widget disappear entirely; now fix the background color because it is getting transparent on mouse out in design mode
 Main Window TODO
 *View menu still disabled as showing hiding would be implemented as side bars; use this view for something else
-*implemented dock hiding as side bars
 TableView TODO
-*mouse move over large ables scrolls the table!
+*mouse move over large tables scrolls the table!
 Security:
-*Set SECURE DELETE on by default http://sqlite.org/compile.html#secure_delete - should be also possible to disable it in the config
+*SECURE DELETE http://sqlite.org/compile.html#secure_delete - should be also possible to disable it in the config
+KexiDB
+*edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-01-30
+*KexiDB
+**SQLite version handling improvements (FindSqlite macro)
+*kexisql updated to 3.6.22
+**we're still embedding sqlite in Kexi because of many options that are not set in distros, e.g. SECURE DELETE should be on by default http://sqlite.org/compile.html#secure_delete
+**moved to amalgamation version for efficiency http://sqlite.org/amalgamation.html - makes it run faster
+**moved directly to sqlite driver - even more efficiency
+**SQLite: make readonly flag work again
+**SQlite: "use database" operation no longer attempts to create new database if missing
+** (Predicate updated)
 
 2010-01-27
 KexiDB
