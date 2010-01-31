@@ -33,9 +33,11 @@ namespace wvWare {
     class UString;
     template<class ParserT, typename Data> class Functor;
     typedef Functor<Parser9x, HeaderData> HeaderFunctor;
+    typedef Functor<Parser9x, CommentData> CommentFunctor;
     typedef Functor<Parser9x, TableRowData> TableRowFunctor;
     typedef Functor<Parser9x, FootnoteData> FootnoteFunctor;
     typedef Functor<Parser9x, PictureData> PictureFunctor;
+
 
     /**
      * This class allows to replace the character values of some
@@ -124,6 +126,24 @@ namespace wvWare {
          * The end of the current header or footer.
          */
         virtual void headerEnd();
+
+        /**
+         * 2.3.4
+         *
+         * Comments
+         * The comment document contains all of the content in the comments. It begins at the CP
+         * immediately following the Header Document and is FibRgLw97.ccpAtn characters long.
+         * The locations of individual comments within the comment document are specified by a PlcfandTxt
+         * whose location is specified by the fcPlcfandTxt member of FibRgFcLcb97. The locations of the
+         * comment reference characters in the Main Document are specified by a PlcfandRef whose location is
+         * specified by the fcPlcfandRef member of FibRgFcLcb97.
+         *
+         * Let's see whether it makes sense when I continue implementing this...
+         */
+        virtual void commentsStart();
+        virtual void commentsEnd();
+        virtual void commentStart();
+        virtual void commentEnd();
     };
 
 

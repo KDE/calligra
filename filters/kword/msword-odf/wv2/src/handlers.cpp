@@ -94,6 +94,21 @@ void SubDocumentHandler::headerEnd()
 {
 }
 
+void SubDocumentHandler::commentsStart()
+{
+}
+
+void SubDocumentHandler::commentsEnd()
+{
+}
+
+void SubDocumentHandler::commentStart()
+{
+}
+
+void SubDocumentHandler::commentEnd()
+{
+}
 
 TableHandler::~TableHandler()
 {
@@ -124,11 +139,11 @@ void PictureHandler::bitmapData( OLEImageReader& /*reader*/, SharedPtr<const Wor
 {
 }
 
-void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int type )
+void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/ )
 {
 }
 
-void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int type )
+void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/ )
 {
 }
 

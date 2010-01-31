@@ -42,6 +42,14 @@ namespace wvWare
         unsigned char headerMask;
     };
 
+    /**
+     * @internal
+     * Holds all the necessary information for asynchronous comment parsing.
+     */
+    struct WV2_EXPORT CommentData
+    {
+        CommentData() {}
+    };
 
     /**
      * @internal
