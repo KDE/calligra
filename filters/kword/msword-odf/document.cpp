@@ -590,6 +590,16 @@ void Document::headerEnd()
     m_textHandler->m_writingHeader = false;
 }
 
+void Document::commentStart()
+{
+    // XXX: add the comment
+}
+
+void Document::commentEnd()
+{
+    // XXX !!
+}
+
 void Document::footnoteStart()
 {
     kDebug(30513) ;
@@ -709,6 +719,14 @@ void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
 }
 
 void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
+{
+    kDebug(30513) ;
+    SubDocument subdoc(functor, data, QString(), QString());
+    (*subdoc.functorPtr)();
+    delete subdoc.functorPtr;
+}
+
+void Document::slotCommentsFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
     SubDocument subdoc(functor, data, QString(), QString());

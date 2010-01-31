@@ -37,6 +37,7 @@
 #include <queue>
 #include <string>
 #include <QBuffer>
+#include <QDomElement>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -82,6 +83,9 @@ public:
     virtual void headerStart(wvWare::HeaderData::Type type);
     virtual void headerEnd();
 
+    virtual void commentStart();
+    virtual void commentEnd();
+
     virtual void footnoteStart();
     virtual void footnoteEnd();
 
@@ -109,13 +113,15 @@ public slots:
 
     void slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
-    // Add to our parsing queue, for headers, footers, footnotes, text boxes etc.
+    // Add to our parsing queue, for headers, footers, footnotes, comments, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
     void slotSubDocFound(const wvWare::FunctorBase* functor, int data);
 
     void slotFootnoteFound(const wvWare::FunctorBase* functor, int data);
 
     void slotHeadersFound(const wvWare::FunctorBase* functor, int data);
+
+    void slotCommentsFound(const wvWare::FunctorBase* functor, int data);
 
     void slotTableFound(KWord::Table* table);
 

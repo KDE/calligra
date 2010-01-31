@@ -203,6 +203,11 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
     }
 }
 
+void KWordTextHandler::commentsFound(const wvWare::CommentFunctor& parseComments)
+{
+    emit commentsFound(new wvWare::CommentFunctor(parseComments), 0);
+}
+
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
                                      wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,

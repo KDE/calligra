@@ -75,7 +75,9 @@ public:
     virtual void sectionEnd();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
-                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote);
+                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                               const wvWare::FootnoteFunctor& parseFootnote);
+    virtual void commentsFound(const wvWare::CommentFunctor& parseComments);
 
     virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
     virtual void paragraphEnd();
@@ -124,6 +126,7 @@ signals:
     void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
+    void commentsFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);
     void pictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
                       const wvWare::FunctorBase* pictureFunctor);
