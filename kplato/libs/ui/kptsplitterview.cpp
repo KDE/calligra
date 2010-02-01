@@ -101,33 +101,6 @@ void SplitterView::slotGuiActivated( ViewBase *v, bool active )
     emit guiActivated( v, active );
 }
 
-ViewBase *SplitterView::hitView( const QPoint &pos )
-{
-    qDebug()<<pos;
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        kDebug()<<m_splitter->widget( i );
-        ViewBase *w = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( w && w->frameGeometry().contains( pos ) ) {
-            kDebug()<<w<<pos<<"in"<<w->frameGeometry();
-            return w;
-        }
-        QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-        /*if (tw && tw->frameGeometry().contains( tw->mapFromGlobal( glpos ) ) ) {
-        //FIXME: tw->frameGeometry() returns geometry ex tw->tabBar()*/
-        //FIXME: and when hitting the tab, this is called before currentWidget() has changed
-        
-        if ( tw ) {
-            w = dynamic_cast<ViewBase*>( tw->currentWidget() );
-            if ( w && w->frameGeometry().contains( pos ) ) {
-                kDebug()<<w<<pos<<"in"<<w->frameGeometry();
-            }
-            kDebug()<<w;
-            return w;
-        }
-    }
-    return const_cast<SplitterView*>( this );
-}
-
 ViewBase *SplitterView::findView( const QPoint &pos ) const
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {

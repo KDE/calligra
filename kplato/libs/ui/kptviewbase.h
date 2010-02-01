@@ -225,8 +225,6 @@ public:
     virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const {}
-    
-    virtual ViewBase *hitView( const QPoint &pos );
 
     virtual KoPrintJob *createPrintJob();
     PrintingOptions printingOptions() const { return m_printingOptions; }

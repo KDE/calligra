@@ -334,12 +334,6 @@ void ViewBase::setGuiActive( bool active ) // virtual slot
     emit guiActivated( this, active );
 }
 
-ViewBase *ViewBase::hitView( const QPoint &glpos )
-{
-    //kDebug()<<glpos;
-    return this;
-}
-
 void ViewBase::slotUpdateReadWrite( bool rw )
 {
     updateReadWrite( rw );
