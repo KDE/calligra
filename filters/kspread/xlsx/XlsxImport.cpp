@@ -60,20 +60,60 @@
 typedef KGenericFactory<XlsxImport> XlsxImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libxlsximport, XlsxImportFactory("kofficefilters"))
 
+enum XlsxDocumentType {
+    XlsxDocument,
+    XlsxTemplate
+};
+
+class XlsxImport::Private
+{
+public:
+    Private() : type(XlsxDocument), macrosEnabled(false) {
+    }
+
+    const char* mainDocumentContentType() const
+    {
+        if (type == XlsxTemplate)
+            return MSOOXML::ContentTypes::spreadsheetTemplate;
+        return MSOOXML::ContentTypes::spreadsheetDocument;
+    }
+
+    XlsxDocumentType type;
+    bool macrosEnabled;
+};
+
 XlsxImport::XlsxImport(QObject* parent, const QStringList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent)
+        : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent), d(new Private)
 {
 }
 
 XlsxImport::~XlsxImport()
 {
+    delete d;
 }
 
 bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
     kDebug() << "Entering XLSX Import filter: from " << mime;
-    return    mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              || mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+    if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        d->type = XlsxDocument;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
+        d->type = XlsxTemplate;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
+        d->type = XlsxDocument;
+        d->macrosEnabled = true;
+    }
+    else if (mime == "application/vnd.ms-excel.template.macroEnabled.12") {
+        d->type = XlsxTemplate;
+        d->macrosEnabled = true;
+    }
+    else
+        return false;
+    return true;
 }
 
 bool XlsxImport::acceptsDestinationMimeType(const QByteArray& mime) const
@@ -534,7 +574,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
-            MSOOXML::ContentTypes::spreadsheetDocument, &documentReader, writers, errorMessage, &context) )
+            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;

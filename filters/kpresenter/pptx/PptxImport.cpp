@@ -59,20 +59,71 @@
 typedef KGenericFactory<PptxImport> PptxImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libpptximport, PptxImportFactory("kofficefilters"))
 
+enum PptxDocumentType {
+    PptxDocumentPresentation,
+    PptxDocumentTemplate,
+    PptxDocumentSlideShow
+};
+
+class PptxImport::Private
+{
+public:
+    Private() : type(PptxDocumentPresentation), macrosEnabled(false) {
+    }
+
+    const char* mainDocumentContentType() const
+    {
+        if (type == PptxDocumentSlideShow)
+            return MSOOXML::ContentTypes::presentationSlideShow;
+        if (type == PptxDocumentTemplate)
+            return MSOOXML::ContentTypes::presentationTemplate;
+        return MSOOXML::ContentTypes::presentationDocument;
+    }
+
+    PptxDocumentType type;
+    bool macrosEnabled;
+};
+
 PptxImport::PptxImport(QObject* parent, const QStringList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("presentation"), parent)
+        : MSOOXML::MsooXmlImport(QLatin1String("presentation"), parent), d(new Private)
 {
 }
 
 PptxImport::~PptxImport()
 {
+    delete d;
 }
 
 bool PptxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
     kDebug() << "Entering PPTX Import filter: from " << mime;
-    return    mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-              || mime == "application/vnd.openxmlformats-officedocument.presentationml.template";
+    if (mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+        d->type = PptxDocumentPresentation;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.template") {
+        d->type = PptxDocumentTemplate;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.slideshow") {
+        d->type = PptxDocumentSlideShow;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.ms-powerpoint.presentation.macroEnabled.12") {
+        d->type = PptxDocumentPresentation;
+        d->macrosEnabled = true;
+    }
+    else if (mime == "application/vnd.ms-powerpoint.template.macroEnabled.12") {
+        d->type = PptxDocumentTemplate;
+        d->macrosEnabled = true;
+    }
+    else if (mime == "application/vnd.ms-powerpoint.slideshow.macroEnabled.12") {
+        d->type = PptxDocumentSlideShow;
+        d->macrosEnabled = true;
+    }
+    else
+        return false;
+    return true;
 }
 
 bool PptxImport::acceptsDestinationMimeType(const QByteArray& mime) const
@@ -1096,7 +1147,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
             *relationships);
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
-            MSOOXML::ContentTypes::presentationDocument, &documentReader, writers, errorMessage, &context) )
+            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Remove as soon as this lands in shared-mime-info and we depend on that version.
+-->
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <comment>Word 2007 document</comment>
+        <glob pattern="*.docx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-word.document.macroEnabled.12">
+        <comment>Word 2007 document (macros enabled)</comment>
+        <glob pattern="*.docm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.wordprocessingml.template">
+        <comment>Word 2007 template</comment>
+        <glob pattern="*.dotx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-word.template.macroEnabled.12">
+        <comment>Word 2007 template (macros enabled)</comment>
+        <glob pattern="*.dotm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.presentationml.presentation">
+        <comment>PowerPoint 2007 presentation</comment>
+        <glob pattern="*.pptx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-powerpoint.presentation.macroEnabled.12">
+        <comment>PowerPoint 2007 presentation (macros enabled)</comment>
+        <glob pattern="*.pptm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.presentationml.template">
+        <comment>PowerPoint 2007 template</comment>
+        <glob pattern="*.potx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-powerpoint.template.macroEnabled.12">
+        <comment>PowerPoint 2007 template (macros enabled)</comment>
+        <glob pattern="*.potm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.presentationml.slideshow">
+        <comment>PowerPoint 2007 slideshow</comment>
+        <glob pattern="*.ppsx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-powerpoint.slideshow.macroEnabled.12">
+        <comment>PowerPoint 2007 slideshow (macros enabled)</comment>
+        <glob pattern="*.ppsm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        <comment>Excel 2007 spreadsheet</comment>
+        <glob pattern="*.xlsx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-excel.sheet.macroEnabled.12">
+        <comment>Excel 2007 spreadsheet (macros enabled)</comment>
+        <glob pattern="*.xlsm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.openxmlformats-officedocument.spreadsheetml.template">
+        <comment>Excel 2007 template</comment>
+        <glob pattern="*.xltx" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-excel.template.macroEnabled.12">
+        <comment>Excel 2007 template (macros enabled)</comment>
+        <glob pattern="*.xltm" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+    <mime-type type="application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+        <comment>Excel 2007 binary (macros enabled)</comment>
+        <glob pattern="*.xlsb" />
+        <sub-class-of type="application/zip"/>
+        <generic-icon name="x-office-document"/>
+    </mime-type>
+</mime-info>

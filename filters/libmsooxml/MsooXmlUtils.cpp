@@ -64,6 +64,7 @@ const char* const MSOOXML::ContentTypes::wordFootnotes =        "application/vnd
 const char* const MSOOXML::ContentTypes::wordEndnotes =         "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml";
 const char* const MSOOXML::ContentTypes::wordFontTable =        "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
 const char* const MSOOXML::ContentTypes::wordWebSettings =      "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
+const char* const MSOOXML::ContentTypes::wordTemplate =         "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
 
 // presentationml-specific content types
 const char* const MSOOXML::ContentTypes::presentationDocument =      "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml";
@@ -83,6 +84,7 @@ const char* const MSOOXML::ContentTypes::spreadsheetStyles =          "applicati
 const char* const MSOOXML::ContentTypes::spreadsheetWorksheet =       "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetCalcChain =       "application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetSharedStrings =   "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
+const char* const MSOOXML::ContentTypes::spreadsheetTemplate =        "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
 
 // common namespaces
 const char* const MSOOXML::Schemas::contentTypes =                               "http://schemas.openxmlformats.org/package/2006/content-types";

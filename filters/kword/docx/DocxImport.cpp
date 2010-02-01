@@ -57,20 +57,60 @@
 typedef KGenericFactory<DocxImport> DocxImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libdocximport, DocxImportFactory("kofficefilters"))
 
+enum DocxDocumentType {
+    DocxDocument,
+    DocxTemplate
+};
+
+class DocxImport::Private
+{
+public:
+    Private() : type(DocxDocument), macrosEnabled(false) {
+    }
+
+    const char* mainDocumentContentType() const
+    {
+        if (type == DocxTemplate)
+            return MSOOXML::ContentTypes::wordTemplate;
+        return MSOOXML::ContentTypes::wordDocument;
+    }
+
+    DocxDocumentType type;
+    bool macrosEnabled;
+};
+
 DocxImport::DocxImport(QObject* parent, const QStringList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("text"), parent)
+        : MSOOXML::MsooXmlImport(QLatin1String("text"), parent), d(new Private)
 {
 }
 
 DocxImport::~DocxImport()
 {
+    delete d;
 }
 
 bool DocxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
     kDebug() << "Entering DOCX Import filter: from " << mime;
-    return    mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              || mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+    if (mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        d->type = DocxDocument;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.template") {
+        d->type = DocxTemplate;
+        d->macrosEnabled = false;
+    }
+    else if (mime == "application/vnd.ms-word.document.macroEnabled.12") {
+        d->type = DocxDocument;
+        d->macrosEnabled = true;
+    }
+    else if (mime == "application/vnd.ms-word.template.macroEnabled.12") {
+        d->type = DocxTemplate;
+        d->macrosEnabled = true;
+    }
+    else
+        return false;
+    return true;
 }
 
 bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
@@ -214,7 +254,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             *relationships);
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
-            MSOOXML::ContentTypes::wordDocument, &documentReader, writers, errorMessage, &context) )
+            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
     // more here...
     return KoFilter::OK;
