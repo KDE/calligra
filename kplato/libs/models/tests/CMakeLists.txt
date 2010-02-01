@@ -18,7 +18,7 @@ set(FlatProxyModelTester_SRCS FlatProxyModelTester.cpp)
  
 kde4_add_unit_test(FlatProxyModelTester TESTNAME KPlato-FlatProxyModelTester  ${FlatProxyModelTester_SRCS})
  
-target_link_libraries(FlatProxyModelTester  ${KDE4_KDECORE_LIBS} kplatomodels ${QT_QTTEST_LIBRARY})
+target_link_libraries(FlatProxyModelTester  ${KDE4_KDEUI_LIBS} kplatomodels ${QT_QTTEST_LIBRARY})
  
 
 ########## next target ###############
