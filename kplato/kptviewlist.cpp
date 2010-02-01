@@ -478,6 +478,7 @@ KoView *ViewListWidget::findView( const QString &tag ) const
 {
     ViewListItem *i = findItem( tag );
     if ( i == 0 ) {
+        qDebug()<<"ViewListWidget::findView: Cannot find view"<<tag;
         return 0;
     }
     return i->view();

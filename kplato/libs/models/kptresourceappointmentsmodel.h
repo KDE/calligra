@@ -56,7 +56,6 @@ public:
     ~ResourceAppointmentsItemModel();
 
     virtual void setProject( Project *project );
-    virtual void setScheduleManager( ScheduleManager *sm );
     long id() const;
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
@@ -108,6 +107,9 @@ signals:
     void refreshed();
     void appointmentInserted( Resource*, Appointment* );
     
+public slots:
+    virtual void setScheduleManager( ScheduleManager *sm );
+
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );

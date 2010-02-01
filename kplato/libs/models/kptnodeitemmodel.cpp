@@ -1995,7 +1995,7 @@ void NodeItemModel::setProject( Project *project )
     reset();
 }
 
-void NodeItemModel::setManager( ScheduleManager *sm )
+void NodeItemModel::setScheduleManager( ScheduleManager *sm )
 {
     if ( m_nodemodel.manager() ) {
     }

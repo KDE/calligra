@@ -20,6 +20,7 @@
 #include "kptitemmodelbase.h"
 
 #include "kptproject.h"
+#include "kptschedule.h"
 #include "kptdurationspinbox.h"
 #include "kptresourcemodel.h"
 #include "kptresourceallocationmodel.h"
@@ -565,6 +566,7 @@ void TimeDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 ItemModelBase::ItemModelBase( QObject *parent )
     : QAbstractItemModel( parent ),
     m_project(0),
+    m_manager( 0 ),
     m_readWrite( false )//part->isReadWrite() )
 {
 }
@@ -576,6 +578,11 @@ ItemModelBase::~ItemModelBase()
 void ItemModelBase::setProject( Project *project )
 {
     m_project = project;
+}
+
+void ItemModelBase::setScheduleManager( ScheduleManager *sm )
+{
+    m_manager = sm;
 }
 
 void ItemModelBase::slotLayoutChanged()
@@ -600,6 +607,22 @@ bool ItemModelBase::dropAllowed( const QModelIndex &index, int, const QMimeData 
         }
     }
     return false;
+}
+
+QVariant ItemModelBase::data( const QModelIndex &index, int role ) const
+{
+    if ( index.isValid() && role == Role::ColumnTag ) {
+        return columnMap().key( index.column() );
+    }
+    return QVariant();
+}
+
+QVariant ItemModelBase::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( role == Role::ColumnTag ) {
+        return columnMap().key( section );
+    }
+    return QVariant();
 }
 
 bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, int role )

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="17">
+<kpartgui name="KPlato" version="18">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -30,7 +30,7 @@
             <Separator/>
             <ActionList name="calendareditor_day_list"/>
             <Separator/>
-            <Action name="link_mode"/>
+            <ActionList name="reportdesigner_edit_list"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
@@ -58,14 +58,6 @@
             <Action name="kplato_introduction"/>
         </Menu>
     </MenuBar>
-<!--    <ToolBar name="view" position="left"><Text>View</Text>
-        <Action name="view_gantt"/>
-        <Action name="view_pert"/> 
-        <Action name="view_resources"/>
-        <Action name="view_resourceuse"/>
-        <Action name="view_accounts"/>
-        <Action name="view_reports"/>
-    </ToolBar> -->
     <ToolBar name="project" position="top"><Text>Project</Text>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
@@ -90,6 +82,12 @@
         <ActionList name="calendareditor_day_list"/>
         <Separator/>
         <ActionList name="workpackage_list"/>
+        <Separator/>
+        <ActionList name="reportdesigner_add_list"/>
+        <Separator/>
+        <ActionList name="reportdesigner_edit_list"/>
+        <Separator/>
+        <ActionList name="reportview_list"/>
     </ToolBar>
     <Menu name="task_edit_popup">
         <Action name="node_properties"/>

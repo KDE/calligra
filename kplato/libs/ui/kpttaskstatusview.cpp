@@ -226,7 +226,7 @@ void TaskStatusView::updateReadWrite( bool rw )
 void TaskStatusView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug();
-    static_cast<TaskStatusItemModel*>( m_view->model() )->setManager( sm );
+    static_cast<TaskStatusItemModel*>( m_view->model() )->setScheduleManager( sm );
 }
 
 Node *TaskStatusView::currentNode() const 
@@ -788,7 +788,7 @@ NodeItemModel *PerformanceStatusTreeView::nodeModel() const
 
 void PerformanceStatusTreeView::setScheduleManager( ScheduleManager *sm )
 {
-    nodeModel()->setManager( sm );
+    nodeModel()->setScheduleManager( sm );
     m_chart->setScheduleManager( sm );
 }
 

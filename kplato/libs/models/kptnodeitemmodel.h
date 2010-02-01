@@ -252,7 +252,6 @@ public:
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
     virtual void setProject( Project *project );
-    void setManager( ScheduleManager *sm );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
 
@@ -291,6 +290,9 @@ public:
 signals:
     void nodeInserted( Node *node );
     
+public slots:
+    virtual void setScheduleManager( ScheduleManager *sm );
+
 protected slots:
     virtual void slotWbsDefinitionChanged();
     virtual void slotNodeChanged( Node* );

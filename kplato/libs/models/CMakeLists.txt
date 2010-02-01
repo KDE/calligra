@@ -23,6 +23,8 @@ set(kplatomodels_LIB_SRCS
     kptabstractchartmodel.cpp
     kptnodechartmodel.cpp
     
+    kptflatproxymodel.cpp
+
     kptrelationmodel.cpp
     kptworkpackagemodel.cpp
     kptdocumentmodel.cpp

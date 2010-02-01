@@ -595,6 +595,10 @@ ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), v, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
 }
 
+void ScheduleHandlerView::currentTabChanged( int )
+{
+}
+
 ViewBase *ScheduleHandlerView::hitView( const QPoint &glpos )
 {
     //kDebug()<<this<<glpos<<"->"<<mapFromGlobal( glpos )<<"in"<<frameGeometry();

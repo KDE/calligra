@@ -51,7 +51,6 @@ public:
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
     virtual void setProject( Project *project );
-    void setManager( ScheduleManager *sm );
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
@@ -92,7 +91,8 @@ public:
     int weekday() const { return m_weekday; }
     
 public slots:
-    void refresh();
+    virtual void setScheduleManager( ScheduleManager *sm );
+    virtual void refresh();
 
 protected slots:
     void slotAboutToBeReset();

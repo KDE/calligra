@@ -260,7 +260,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
 void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
-    m_view->baseModel()->setManager( sm );
+    m_view->baseModel()->setScheduleManager( sm );
 }
 
 void TaskEditor::slotEnableActions()
@@ -739,7 +739,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
 void TaskView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
-    m_view->baseModel()->setManager( sm );
+    m_view->baseModel()->setScheduleManager( sm );
 }
 
 void TaskView::slotEnableActions()
@@ -1029,7 +1029,7 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, co
 void TaskWorkPackageView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
-    m_view->baseModel()->setManager( sm );
+    m_view->baseModel()->setScheduleManager( sm );
 }
 
 void TaskWorkPackageView::slotEnableActions()

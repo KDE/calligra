@@ -245,6 +245,7 @@ public slots:
 protected slots:
     /// Noop, we handle subviews ourselves
     virtual void slotGuiActivated( ViewBase *v, bool active );
+    virtual void currentTabChanged( int i );
 
 private:
     ScheduleEditor *m_scheduleEditor;

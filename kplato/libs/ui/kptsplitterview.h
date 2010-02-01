@@ -119,6 +119,7 @@ public slots:
 
 protected slots:
     virtual void slotGuiActivated( ViewBase *v, bool active );
+    virtual void currentTabChanged( int i );
     
 protected:
     QSplitter *m_splitter;

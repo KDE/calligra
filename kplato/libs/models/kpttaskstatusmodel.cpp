@@ -140,7 +140,7 @@ void TaskStatusItemModel::setProject( Project *project )
     reset();
 }
 
-void TaskStatusItemModel::setManager( ScheduleManager *sm )
+void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
 {
     clear();
     if ( m_nodemodel.manager() ) {
@@ -189,7 +189,7 @@ void TaskStatusItemModel::setNow()
 
 void TaskStatusItemModel::refresh()
 {
-    //kDebug();
+    qDebug()<<"TaskStatusItemModel::refresh:";
     clear();
     if ( m_project == 0 ) {
         return;

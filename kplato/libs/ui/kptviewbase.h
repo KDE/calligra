@@ -195,9 +195,9 @@ public:
     bool isActive() const;
     
     /// Set the project this view shall handle.
-    virtual void setProject( Project * /*project*/ ) {}
+    virtual void setProject( Project *project ) { m_proj = project; }
     /// Return the project
-    virtual Project *project() const { return 0; }
+    virtual Project *project() const { return m_proj; }
     /// Draw data from current part / project
     virtual void draw() {}
     /// Draw data from project.
@@ -260,6 +260,8 @@ protected:
     
     bool m_readWrite;
     PrintingOptions m_printingOptions;
+    
+    Project *m_proj;
 };
 
 //------------------

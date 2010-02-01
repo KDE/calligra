@@ -47,7 +47,19 @@ QTabWidget *SplitterView::addTabWidget(  )
 {
     KTabWidget *w = new KTabWidget( m_splitter );
     m_splitter->addWidget( w );
+    connect( w, SIGNAL( currentChanged( int ) ), SLOT( currentTabChanged( int ) ) );
     return w;
+}
+
+void SplitterView::currentTabChanged( int )
+{
+    ViewBase *v = qobject_cast<ViewBase*>( qobject_cast<KTabWidget*>( sender() )->currentWidget() );
+    if ( v && v != m_activeview ) {
+        if ( m_activeview ) {
+            m_activeview->setGuiActive( false );
+        }
+        v->setGuiActive( true );
+    }
 }
 
 void SplitterView::addView( ViewBase *view )
@@ -89,14 +101,14 @@ void SplitterView::slotGuiActivated( ViewBase *v, bool active )
     emit guiActivated( v, active );
 }
 
-ViewBase *SplitterView::hitView( const QPoint &glpos )
+ViewBase *SplitterView::hitView( const QPoint &pos )
 {
-    kDebug()<<glpos;
+    qDebug()<<pos;
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         kDebug()<<m_splitter->widget( i );
         ViewBase *w = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( w && w->frameGeometry().contains( w->mapFromGlobal( glpos ) ) ) {
-            kDebug()<<w<<glpos<<"->"<<w->mapFromGlobal( glpos )<<"in"<<w->frameGeometry();
+        if ( w && w->frameGeometry().contains( pos ) ) {
+            kDebug()<<w<<pos<<"in"<<w->frameGeometry();
             return w;
         }
         QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
@@ -106,8 +118,8 @@ ViewBase *SplitterView::hitView( const QPoint &glpos )
         
         if ( tw ) {
             w = dynamic_cast<ViewBase*>( tw->currentWidget() );
-            if ( w && w->frameGeometry().contains( w->mapFromGlobal( glpos ) ) ) {
-                kDebug()<<w<<glpos<<"->"<<w->mapFromGlobal( glpos )<<"in"<<w->frameGeometry();
+            if ( w && w->frameGeometry().contains( pos ) ) {
+                kDebug()<<w<<pos<<"in"<<w->frameGeometry();
             }
             kDebug()<<w;
             return w;
@@ -138,22 +150,10 @@ ViewBase *SplitterView::findView( const QPoint &pos ) const
 
 void SplitterView::setProject( Project *project )
 {
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v ) {
-            v->setProject( project );
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
-                    if ( v ) {
-                        v->setProject( project );
-                    }
-                }
-            }
-        }
+    foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
+        v->setProject( project );
     }
+    ViewBase::setProject( project );
 }
     
 void SplitterView::draw()
@@ -232,20 +232,24 @@ ViewBase *SplitterView::focusView() const
 
 QStringList SplitterView::actionListNames() const
 {
+    QStringList lst = ViewActionLists::actionListNames();
     ViewBase *view = focusView();
-    if ( view ) {
-        return view->actionListNames();
+    if ( view && view != this ) {
+        lst << view->actionListNames();
     }
-    return QStringList();
+    return lst;
 }
     
 QList<QAction*> SplitterView::actionList( const QString name ) const
 {
-    ViewBase *view = focusView();
-    if ( view ) {
-        return view->actionList( name );
+    QList<QAction*> lst = ViewActionLists::actionList( name );
+    if ( lst.isEmpty() ) {
+        ViewBase *view = focusView();
+        if ( view && view != this ) {
+            lst = view->actionList( name );
+        }
     }
-    return QList<QAction*>();
+    return lst;
 }
     
 QList<QAction*> SplitterView::contextActionList() const

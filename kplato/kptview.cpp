@@ -38,6 +38,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QProgressBar>
+#include <QSortFilterProxyModel>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -108,8 +109,11 @@
 #include "kptworkpackageconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
+#include "reports/reportview.h"
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
+#include "kptflatproxymodel.h"
+#include "kpttaskstatusmodel.h"
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -437,6 +441,8 @@ void View::createViews()
                         v = createAccountsView( cat, tag, name, tip );
                     } else if ( type == "PerformanceStatusView" ) {
                         v = createPerformanceStatusView( cat, tag, name, tip );
+                    } else if ( type == "Report" ) {
+                        v = createReportView( cat, tag, name, tip );
                     } else  {
                         kWarning()<<"Unknown viewtype: "<<type;
                     }
@@ -493,6 +499,9 @@ void View::createViews()
         createResourceAppointmentsGanttView( cat, "ResourceAppointmentsGanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
+        createReportView( cat, "Report", QString(), TIP_USE_DEFAULT_TEXT );
 
     }
 }
@@ -570,6 +579,9 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     } else if ( type == "PerformanceStatusView" ) {
         vi.name = i18n( "Tasks Performance Chart" );
         vi.tip = i18n( "View tasks performance status information" );
+    } else if ( type == "Report" ) {
+        vi.name = i18n( "Report" );
+        vi.tip = i18n( "View and design report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
     }
@@ -1203,6 +1215,75 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
 
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    v->updateReadWrite( m_readWrite );
+    return v;
+
+}
+
+ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+{
+    qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
+    Report *v = new Report( getPart(), m_tab );
+    QDockWidget *w = v->createPropertyDocker();
+    mainWindow()->addDockWidget( Qt::LeftDockWidgetArea, w );
+    w->setVisible( false );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "Report" );
+    if ( name.isEmpty() ) {
+        i->setText( 0, vi.name );
+    }
+    if ( tip == TIP_USE_DEFAULT_TEXT ) {
+        i->setToolTip( 0, vi.tip );
+    } else {
+        i->setToolTip( 0, tip );
+    }
+
+    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
+    
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( this );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    ItemModelBase *m = new GeneralNodeItemModel( fm );
+    m->setProject( &getProject() );
+    fm->setSourceModel( m );
+    v->insertDataModel( "tasks", sf );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
+    sf = new QSortFilterProxyModel( this );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    m = new TaskStatusItemModel( fm );
+    m->setProject( &getProject() );
+    fm->setSourceModel( m );
+    v->insertDataModel( "taskstatus", sf );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+
+    fm = new FlatProxyModel( this );
+    m = new ResourceAppointmentsRowModel( fm );
+    m->setProject( &getProject() );
+    fm->setSourceModel( m );
+    v->insertDataModel( "resourceassignments", fm );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+
+    fm = new FlatProxyModel( this );
+    m = new ResourceItemModel( fm );
+    m->setProject( &getProject() );
+    fm->setSourceModel( m );
+    v->insertDataModel( "resourcesandgroups", fm );
+
+    v->setProject( &getProject() );
+    
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
@@ -2295,7 +2376,7 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
-    //qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
+    qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
     foreach( const QString &name, view->actionListNames() ) {
@@ -2304,7 +2385,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
     }
     if ( activate ) {
         foreach( const QString &name, view->actionListNames() ) {
-            //qDebug()<<"View::slotGuiActivated:"<<"activate"<<name<<","<<view->actionList( name ).count();
+            qDebug()<<"View::slotGuiActivated:"<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
         }
     }
@@ -2312,7 +2393,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    //qDebug()<<"View::guiActivateEvent:"<<ev->activated();
+    qDebug()<<"View::guiActivateEvent:"<<ev->activated();
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -2447,9 +2528,10 @@ void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListIt
 
 bool View::loadContext()
 {
-    kDebug();
+    qDebug()<<"View::loadContext:";
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
+        qDebug()<<"View::loadContext: No context to load";
         return true;
     }
     KoXmlElement n = ctx->context();

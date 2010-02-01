@@ -85,7 +85,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "ResourceAppointmentsGanttView"
             << "AccountsView"
             << "ProjectStatusView"
-            << "PerformanceStatusView";
+            << "PerformanceStatusView"
+            << "Report";
     /* Deactivate for koffice 2.0
             << "Tasks by Resources";
     */
@@ -106,7 +107,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Resource Assignments (Gantt)" )
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
-            << i18n( "Tasks Performance Chart" );
+            << i18n( "Tasks Performance Chart" )
+            << i18n( "Report" );
     /* Deactivate for koffice 2.0
             << i18n( "Tasks by Resources" );
     */
@@ -256,6 +258,9 @@ bool AddViewPanel::ok()
             break; }
         case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 17: { // Report view
+            v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         default:
             kError()<<"Unknown view type!";
