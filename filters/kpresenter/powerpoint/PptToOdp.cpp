@@ -344,6 +344,25 @@ getRect(const OfficeArtSpContainer &o)
     return QRect(0, 0, 1, 1);
 }
 
+QString
+getText(const TextContainer& tc)
+{
+    if (tc.text.is<TextCharsAtom>()) {
+        const QVector<quint16> textChars(tc.text.get<TextCharsAtom>()->textChars);
+        return QString::fromUtf16(textChars.data(), textChars.size());
+    } else if (tc.text.is<TextBytesAtom>()) {
+        // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
+        const QByteArray& textChars(tc.text.get<TextBytesAtom>()->textChars);
+        return QString::fromAscii(textChars, textChars.size());
+    }
+    return QString();
+}
+
+QString getText(const TextContainer& tc, int start, int count)
+{
+    return getText(tc).mid(start,count);
+}
+
 }
 
 PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter) : xOffset(0),
@@ -1702,18 +1721,152 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
     }
 }
 
+void PptToOdp::writeTextSpan(KoXmlWriter& xmlWriter,
+                                     const QString &text)
+{
+    QString copy = text;
+    copy.remove('\v'); //Remove vertical tabs which appear in some ppt files
+    copy.remove('\r'); //Carriage returns indicate line change, they shouldn't
+                       //be here, so we'll remove them just to be safe
+    xmlWriter.addTextSpan(copy);
+}
+
+
+
+PptToOdp::HyperlinkRange PptToOdp::findNextHyperlinkStart(const PPT::TextContainer& text,
+                                                          const int currentPos)
+{
+    HyperlinkRange range;
+    range.end = range.start = range.id = -1;
+
+    //Last found hyperlink id reference
+    int lastId = -1;
+
+    /*
+      Text contains list of MouseInteractiveInfoContainers and MouseTextInteractiveInfoAtoms
+      in the same list.
+
+      MouseInteractiveInfoContainer describes a action for a hyperlink
+      and an ID for the hyperlink.
+
+      MouseTextInteractiveInfoAtom describes the range of text that is to be
+      replaced with hyperlink's user readable text.
+
+      They are related together so that MouseTextInteractiveInfoAtoms
+      always refers to previous MouseInteractiveInfoContainers.
+      */
+    for(int i=0;i<text.interactive.size();i++) {
+        if (text.interactive[i].interactive.is<MouseInteractiveInfoContainer>()) {
+            const MouseInteractiveInfoContainer *container = text.interactive[i].interactive.get<MouseInteractiveInfoContainer>();
+
+            /**
+            * [MS-PPT].PDF states exHyperlinkIdRef must be ignored unless action is
+            * equal to II_JumpAction (0x3), II_HyperlinkAction (0x4), or
+            * II_CustomShowAction (0x7).
+            */
+            if (container->interactiveInfoAtom.action == II_JumpAction ||
+                container->interactiveInfoAtom.action == II_HyperlinkAction ||
+                container->interactiveInfoAtom.action == II_CustomShowAction) {
+                lastId = container->interactiveInfoAtom.exHyperlinkIdRef;
+            } else { //TODO until we support other type of interactive actions, we'll ignore them
+                lastId = -1;
+            }
+        } else if (text.interactive[i].interactive.is<MouseTextInteractiveInfoAtom>() && lastId != -1) {
+            const MouseTextInteractiveInfoAtom *atom = text.interactive[i].interactive.get<MouseTextInteractiveInfoAtom>();
+            if (atom->range.begin >= currentPos &&
+                lastId != -1 &&
+                (range.start == -1 || range.start > atom->range.begin)) {
+                range.start = atom->range.begin;
+                range.end = atom->range.end;
+                range.id = lastId;
+            }
+        }
+    }
+    return range;
+}
+
+QString PptToOdp::utf16ToString(const QVector<quint16> &data)
+{
+    return QString::fromUtf16(data.data(), data.size());
+}
+
+QPair<QString, QString> PptToOdp::findHyperlink(const unsigned int id)
+{
+    foreach(ExObjListSubContainer container,p->documentContainer->exObjList->rgChildRec) {
+        //Search all ExHyperlinkContainers for specified id
+        if (container.anon.is<ExHyperlinkContainer>()) {
+            ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
+            if (hyperlink &&
+                hyperlink->exHyperlinkAtom.exHyperLinkId == id &&
+                hyperlink->targetAtom &&
+                hyperlink->friendlyNameAtom) {
+                //TODO currently location is ignored. Location referes to
+                //position within a file
+                return qMakePair(utf16ToString(hyperlink->targetAtom->target),
+                                 utf16ToString(hyperlink->friendlyNameAtom->friendlyName));
+            }
+        }
+    }
+
+    return qMakePair(QString(""),QString(""));
+}
+
+
+void PptToOdp::writeTextSpanWithHyperlinks(KoXmlWriter& xmlWriter,
+                                 const PPT::TextContainer& text,
+                                 const int start,
+                                 const int end)
+{
+    int currentPos = start;
+
+    //Get the range of text for the next hyperlink
+    HyperlinkRange range = findNextHyperlinkStart(text,currentPos);
+
+    //loop through all text ranges before and between hyperlinks
+    while(currentPos < end && range.start < end && range.start > -1) {
+
+        //Check if we have one before the next hyperlink
+        if (range.start-currentPos > 0) {
+            writeTextSpan(xmlWriter,getText(text,currentPos,range.start-currentPos));
+        }
+
+        //Get specified hyperlink
+        QPair<QString,QString> hyperlink = findHyperlink(range.id);
+
+        //Write the hyperlink
+        xmlWriter.startElement("text:a");
+
+        //PPT file structure allows the target to be empty. In that case
+        //we'll use the name as the target.
+        if (hyperlink.first.isEmpty()) {
+            xmlWriter.addAttribute("xlink:href",hyperlink.second);
+        } else {
+            xmlWriter.addAttribute("xlink:href",hyperlink.first);
+        }
+        xmlWriter.addTextSpan(hyperlink.second);
+        xmlWriter.endElement();
+        //Finally move to the position after hyperlink
+        currentPos = range.end;
+        //And get the next hyperlink
+        range = findNextHyperlinkStart(text,currentPos);
+    }
+
+    //after writing all hyperlinks, check if there is still text to be written
+    if (currentPos < end) {
+        writeTextSpan(xmlWriter,getText(text,currentPos,end-currentPos));
+    }
+}
+
 void PptToOdp::writeTextCFException(KoXmlWriter& xmlWriter,
                                     const TextCFException *cf,
                                     const TextPFException *pf,
-                                    const QString &text)
+                                    const PPT::TextContainer& tc,
+                                    const unsigned int textPosition,
+                                    const unsigned int textLength)
 {
     xmlWriter.startElement("text:span");
     xmlWriter.addAttribute("text:style-name", getTextStyleName(cf, pf));
-
-    QString copy = text;
-    copy.remove(QChar(11)); //Remove vertical tabs which appear in some ppt files
-    xmlWriter.addTextSpan(copy);
-
+    writeTextSpanWithHyperlinks(xmlWriter,tc,textPosition,textPosition+textLength);
     xmlWriter.endElement(); // text:span
 }
 
@@ -1743,17 +1896,19 @@ const TextPFRun *findTextPFRun(const StyleTextPropAtom& style, unsigned int pos)
 void PptToOdp::writeTextLine(KoXmlWriter& xmlWriter,
                              const StyleTextPropAtom& style,
                              const TextPFException *pf,
+                             const PPT::TextContainer& tc,
                              const QString& text,
                              const unsigned int linePosition)
 {
     QString part = "";
+    unsigned int currentPos = linePosition;
     const TextCFRun *cf = findTextCFRun(style, linePosition);
     if (!cf) {
         return;
     }
 
     if (text.isEmpty()) {
-        writeTextCFException(xmlWriter, &cf->cf, pf, text);
+        writeTextCFException(xmlWriter, &cf->cf, pf, tc,currentPos,text.size());
         return;
     }
 
@@ -1773,7 +1928,14 @@ void PptToOdp::writeTextLine(KoXmlWriter& xmlWriter,
             */
             if (nextCFRun &&
                     getTextStyleName(&cf->cf, pf) != getTextStyleName(&nextCFRun->cf, pf)) {
-                writeTextCFException(xmlWriter, &cf->cf, pf, part);
+                writeTextCFException(xmlWriter,
+                                     &cf->cf,
+                                     pf,
+                                     tc,
+                                     currentPos,
+                                     part.size());
+
+                currentPos += part.size();
                 part = text[i];
             } else {
                 part += text[i];
@@ -1785,7 +1947,12 @@ void PptToOdp::writeTextLine(KoXmlWriter& xmlWriter,
 
     //If at the end we still have some text left, write it out
     if (!part.isEmpty()) {
-        writeTextCFException(xmlWriter, &cf->cf, pf, part);
+        writeTextCFException(xmlWriter,
+                             &cf->cf,
+                             pf,
+                             tc,
+                             currentPos,
+                             part.size());
     }
 }
 
@@ -1900,7 +2067,7 @@ void PptToOdp::writeTextPFException(KoXmlWriter& xmlWriter,
     }
     QString pstyle;
     if (cf) {
-        pstyle = getParagraphStyleName(&cf->cf,                                     &pf->pf);
+        pstyle = getParagraphStyleName(&cf->cf, &pf->pf);
     }
     xmlWriter.startElement("text:p");
     if (pstyle.size() > 0) {
@@ -1911,7 +2078,7 @@ void PptToOdp::writeTextPFException(KoXmlWriter& xmlWriter,
     for (int i = 0;i < lines.size();i++) {
         cf = findTextCFRun(*style, linePos);
         if (cf) {
-            writeTextCFException(xmlWriter, &cf->cf, &pf->pf, lines[i]);
+            writeTextCFException(xmlWriter, &cf->cf, &pf->pf, tc,linePos,lines[i].size());
         }
 
         //Add +1 to line position to compensate for carriage return that is
@@ -1937,21 +2104,11 @@ enum {
     QuarterBody = 8   // body in four-body slide
 };
 }
-QString
-getText(const TextContainer& tc)
-{
-    if (tc.text.is<TextCharsAtom>()) {
-        const QVector<quint16> textChars(tc.text.get<TextCharsAtom>()->textChars);
-        return QString::fromUtf16(textChars.data(), textChars.size());
-    } else if (tc.text.is<TextBytesAtom>()) {
-        // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
-        const QByteArray& textChars(tc.text.get<TextBytesAtom>()->textChars);
-        return QString::fromAscii(textChars, textChars.size());
-    }
-    return QString();
-}
 
-void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out)
+
+void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
+                                        const PPT::TextContainer& tc,
+                                        Writer& out)
 {
     const QRect& rect = getRect(o);
     QString classStr = "subtitle";
@@ -1993,20 +2150,50 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o, const PPT
 
         writeTextObjectDeIndent(out.xml, 0, levels);
     } else {
-        out.xml.startElement("text:p");
+        //For text that don't have StyleTextPropAtom we'll assume
+        //they are in a list.
 
-        if (!getParagraphStyleName(0, 0).isEmpty()) {
-            out.xml.addAttribute("text:style-name", getParagraphStyleName(0, 0));
+        //There seems to be an extra carriage return at the end. We'll remove the last
+        // carriage return so we don't end up with a single empty line in the end
+        if (text.endsWith("\r")) {
+            text = text.left(text.length() - 1);
         }
 
-        out.xml.startElement("text:span");
-        if (!getTextStyleName(0, 0).isEmpty()) {
-            out.xml.addAttribute("text:style-name", getTextStyleName(0, 0));
+        //Lines are separated by \r, so we'll split the text to lines
+        QStringList lines = text.split("\r");
+
+        unsigned int linePos = 0;
+
+        out.xml.startElement("text:list");
+
+        if (!getListStyleName(0, 0).isEmpty()) {
+            out.xml.addAttribute("text:style-name", getListStyleName(0, 0));
         }
 
-        out.xml.addTextSpan(text);
-        out.xml.endElement(); // text:span
-        out.xml.endElement(); // text:p
+        //Then write each line from the list as list-item
+        for(int i=0;i<lines.size();i++) {
+            out.xml.startElement("text:list-item");
+            out.xml.startElement("text:p");
+
+            if (!getParagraphStyleName(0, 0).isEmpty()) {
+                out.xml.addAttribute("text:style-name", getParagraphStyleName(0, 0));
+            }
+
+            out.xml.startElement("text:span");
+            if (!getTextStyleName(0, 0).isEmpty()) {
+                out.xml.addAttribute("text:style-name", getTextStyleName(0, 0));
+            }
+            //Write the text and any possible hyperlinks as well
+            writeTextSpanWithHyperlinks(out.xml,tc,linePos,linePos+lines[i].size());
+            linePos += lines[i].size() + 1; //compensate +1 for removed '\r'
+
+            out.xml.endElement(); // text:span
+            out.xml.endElement(); // text:p
+
+            out.xml.endElement(); //text:list-item
+        }
+
+        out.xml.endElement(); //text:list
     }
 
     out.xml.endElement(); // draw:text-box
@@ -2089,8 +2276,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
         }
     }
 
-    if (nameStr.isEmpty())
+    if (nameStr.isEmpty()) {
         nameStr = QString("page%1").arg(slideNo + 1);
+    }
+
+    nameStr.remove('\r');
+    nameStr.remove('\v');
 
     xmlWriter.startElement("draw:page");
     xmlWriter.addAttribute("draw:master-page-name", "Default");

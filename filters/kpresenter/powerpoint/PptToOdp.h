@@ -143,6 +143,37 @@ private:
         QString hOffset(qreal offset);
     };
 
+    /**
+      * @brief Simple pre parsed hyperlink range.
+      *
+      * PPT file format describes hyperlinks with 3 structures:
+      * 1) Range of text the hyperlink replaces
+      * 2) Hyperlink action
+      * 3) Hyperlink location and name
+      *
+      * This struct contains structures 1 and 2 to simplify applying hyperlinks.
+      */
+    typedef struct {
+        /**
+          * @brief Start index of text that is to be replaced with hyperlink's
+          * user readable name
+          *
+          */
+        int start;
+
+        /**
+          * @brief End index of text that is to be replaced with hyperlink's
+          * user readable name
+          *
+          */
+        int end;
+
+        /**
+          * @brief ID of the hyperlink we want to this specific range
+          */
+        int id;
+    }HyperlinkRange;
+
     void createMainStyles(KoGenStyles& styles);
 
     template <typename T>
@@ -186,6 +217,100 @@ private:
     void addFrame(KoGenStyle& style, const char* presentationName,
                   QString width, QString height, QString x, QString y,
                   QString pStyle, QString tStyle);
+    /**
+      * @brief An enumeration that specifies an action that can be performed
+      * when interacting with an object during a slide show.
+      */
+    enum {
+        /**
+          * @brief No effect.
+          */
+        II_NoAction,
+
+        /**
+          * @brief A macro is executed.
+          */
+        II_MacroAction,
+
+        /**
+          * @brief A program is run.
+          */
+        II_RunProgramAction,
+
+        /**
+          * @brief The current presentation slide of the slide show jumps to
+          * another presentation slide in the same presentation.
+          */
+        II_JumpAction,
+
+        /**
+          * @brief A URL is executed.
+          */
+        II_HyperlinkAction,
+
+        /**
+          * @brief An OLE action (only valid if the object this applies to is an
+          * OLE embedded object).
+          */
+        II_OLEAction,
+
+        /**
+          * @brief A media object is played.
+          */
+        II_MediaAction,
+
+        /**
+          * @brief A named show is displayed.
+          */
+        II_CustomShowAction,
+    }InteractiveInfoActionEnum;
+
+    /**
+      * @brief Converts vector of quint16 to String
+      *
+      * Powerpoint files have text as utf16.
+      * @param data Vector to convert
+      * @return data as string
+      */
+    inline QString utf16ToString(const QVector<quint16> &data);
+
+    /**
+      * @brief Find hyperlink with specified id
+      *
+      * @param id Id of the hyperlink to find
+      * @return QPair where first element is hyperlink's target, second is
+      * user readable name. If both are empty, hyperlink is not found
+      */
+    QPair<QString, QString> findHyperlink(const unsigned int id);
+
+     /**
+      * @brief Find the next hyperlink range that starts after current position
+      * @param text TextContainer to search hyperlinks from
+      * @param currentPos current position on the text
+      * @return Range for next hyperlink, or a invalid range (where values are
+      * negative) if none found.
+      */
+    HyperlinkRange findNextHyperlinkStart(const PPT::TextContainer& text,
+                                          const int currentPos);
+
+    /**
+      * @brief Write a text span and replace vertical tabs and carriage returns.
+      * @param xmlWriter writer to write with
+      * @param text text to write
+      */
+    void writeTextSpan(KoXmlWriter& xmlWriter, const QString &text);
+
+    /**
+      * @brief Write a text span while replacing text with possible hyperlinks
+      * @param text TextContainer to write
+      * @param xmlWriter XML writer to write with
+      * @param start Starting index of the textObject's text that is written
+      * @param end Ending index of the textObject's text that is written
+      */
+    void writeTextSpanWithHyperlinks(KoXmlWriter& xmlWriter,
+                                     const PPT::TextContainer& text,
+                                     const int start,
+                                     const int end);
 
     /**
     * @brief Write text deindentations the specified amount. Actually it just
@@ -229,6 +354,7 @@ private:
     void writeTextLine(KoXmlWriter& xmlWriter,
                        const PPT::StyleTextPropAtom& style,
                        const PPT::TextPFException* pf,
+                       const PPT::TextContainer& tc,
                        const QString& text,
                        const unsigned int linePosition);
 
@@ -237,13 +363,16 @@ private:
     * @param xmlWriter XML writer to write with
     * @param cf character exception that applies to text we are about to write
     * @param pf paragraph exception that applies to text we are about to write
-    * @param textObject text object that contains the text
-    * @param text text to write
+    * @param textPosition starting index of the text line within all text
+    * in the same text bytes/chars struct
+    * @param textLength length of text in characters
     */
     void writeTextCFException(KoXmlWriter& xmlWriter,
                               const PPT::TextCFException *cf,
                               const PPT::TextPFException *pf,
-                              const QString &text);
+                              const PPT::TextContainer& tc,
+                              const unsigned int textPosition,
+                              const unsigned int textLength);
 
     /**
     * @brief Parse all styles from given PPT::TextCFRun and PPT::TextPFRun pair
