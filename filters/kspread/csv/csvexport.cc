@@ -76,6 +76,7 @@ QString CSVExport::exportCSVCell(const KSpread::Doc* doc, Sheet const * const sh
     //  - protecting quote characters within cells, if any
     //  - enclosing the cell in quotes if the cell is non empty
 
+    Q_UNUSED(doc);
     const KSpread::Cell cell(sheet, col, row);
     QString text;
 

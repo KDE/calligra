@@ -659,7 +659,7 @@ void OpenCalcImport::loadCondition(const Cell& cell, const KoXmlElement &propert
 void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &property)
 {
     KoXmlElement elementItem(property);
-    StyleManager * manager = cell.sheet()->map()->styleManager();
+    //StyleManager * manager = cell.sheet()->map()->styleManager();
 
     QLinkedList<Conditional> cond;
     while (!elementItem.isNull()) {

@@ -92,7 +92,7 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     // define columns
     QFontMetrics fm(font);
-    for (unsigned i = 0; i < dbase.fields.count(); i++) {
+    for (int i = 0; i < dbase.fields.count(); i++) {
         int mw = qMax((int)dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
         double w = POINT_TO_MM(fm.maxWidth() * mw);
         root += "<column column=\"" + QString::number(i + 1) + "\"";
@@ -107,7 +107,7 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
     }
 
     // field names come as first row
-    for (unsigned i = 0; i < dbase.fields.count(); i++) {
+    for (int i = 0; i < dbase.fields.count(); i++) {
         root += "<cell row=\"1\" column=\"" + QString::number(i + 1) + "\" >\n";
         root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
         root += "<font family=\"" + font.family() + "\"" +

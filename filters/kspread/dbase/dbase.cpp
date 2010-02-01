@@ -172,7 +172,7 @@ QStringList DBase::readRecord(unsigned recno)
 
     // out of range ? return empty strings
     if (recno >= m_recordCount) {
-        for (unsigned i = 0; i < fields.count(); i++)
+        for (int i = 0; i < fields.count(); i++)
             result.append("");
         return result;
     }
@@ -189,7 +189,7 @@ QStringList DBase::readRecord(unsigned recno)
         return result;
 
     // load it
-    for (unsigned i = 0; i < fields.count(); i++)
+    for (int i = 0; i < fields.count(); i++)
         switch (fields.at(i)->type) {
             // Numeric or Character
         case DBaseField::Numeric:
