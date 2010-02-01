@@ -20,7 +20,7 @@
 #define FUNCTORDATA_H
 
 #include "sharedptr.h"
-
+#include "wvlog.h"
 #include "wv2_export.h"
 namespace wvWare
 {
@@ -48,7 +48,7 @@ namespace wvWare
      */
     struct WV2_EXPORT CommentData
     {
-        CommentData() {}
+        CommentData() { wvlog << "comment"; }
     };
 
     /**

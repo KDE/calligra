@@ -205,6 +205,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 void KWordTextHandler::commentsFound(const wvWare::CommentFunctor& parseComments)
 {
+    kDebug(30513);
     emit commentsFound(new wvWare::CommentFunctor(parseComments), 0);
 }
 

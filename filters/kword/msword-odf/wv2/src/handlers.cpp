@@ -20,6 +20,7 @@
 #include "parser9x.h"
 #include "paragraphproperties.h"
 #include "functor.h"
+#include "wvlog.h"
 
 using namespace wvWare;
 
@@ -96,18 +97,22 @@ void SubDocumentHandler::headerEnd()
 
 void SubDocumentHandler::commentsStart()
 {
+    wvlog << "comments start";
 }
 
 void SubDocumentHandler::commentsEnd()
 {
+    wvlog << "comments end";
 }
 
 void SubDocumentHandler::commentStart()
 {
+    wvlog << "comment start";
 }
 
 void SubDocumentHandler::commentEnd()
 {
+    wvlog << "comment end";
 }
 
 TableHandler::~TableHandler()

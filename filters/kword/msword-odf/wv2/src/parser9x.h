@@ -200,6 +200,7 @@ namespace wvWare
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
         void emitDrawnObject( SharedPtr<const Word97::CHP> chp );
+        void emitAnnotation( SharedPtr<const Word97::CHP> chp );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 
