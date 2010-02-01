@@ -335,8 +335,15 @@ namespace wvWare {
          * Very special characters (bad, bad name) are the ones which need additional
          * information from the file (i.e. the plain "put the current date there" isn't sufficent).
          */
-        enum VerySpecialCharacter { Picture = 1, FootnoteAuto = 2, DrawnObject = 8, FieldBegin = 19,
-                                FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
+        enum VerySpecialCharacter { Picture = 1, FootnoteAuto = 2, AnnotationRef = 5,
+                                    DrawnObject = 8, FieldBegin = 19,
+                                    FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
+
+        /**
+         * special charachters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
+         */
+        enum UnusedSpecialCharacter {FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7,
+                                 AbbrevDate = 10, MergeHelper = 41};
 
         /**
          * This method passes the simple cases of special characters we find. More complex ones

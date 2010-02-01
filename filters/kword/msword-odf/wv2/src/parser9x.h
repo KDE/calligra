@@ -50,41 +50,6 @@ namespace wvWare
     const unsigned char FIELD_ESCAPE_CHAR = '\\';
     const unsigned char FORMULA_MARK = '\\';
 
-    // Special chars (fSpec==1)
-    const unsigned char SPEC_CURRENT_PAGE_NUMBER = 0;
-    const unsigned char SPEC_PICTURE = 1;
-    const unsigned char SPEC_AUTONUM_FOOTNOTE_REF = 2;
-    const unsigned char SPEC_FOOTNOTE_SEPARATOR = 3;
-    const unsigned char SPEC_FOOTNOTE_CONTINUATION = 4;
-    const unsigned char SPEC_ANNOTATION_REF = 5;
-    const unsigned char SPEC_LINE_NUMBER = 6;
-    const unsigned char SPEC_HAND_ANNOTATION_PIC = 7;
-    const unsigned char SPEC_DRAWN_OBJECT = 8;
-    const unsigned char SPEC_ABBREV_DATE = 10;
-    const unsigned char SPEC_TIME_HMS = 11;
-    const unsigned char SPEC_CURRENT_SECTION_NUMBER = 12;
-    const unsigned char SPEC_ABBREV_WEEKDAY = 14;
-    const unsigned char SPEC_WEEKDAY = 15;
-    const unsigned char SPEC_DAY_SHORT = 16;
-    const unsigned char SPEC_CURRENT_HOUR = 22;
-    const unsigned char SPEC_CURRENT_HOUR_TWODIG = 23;
-    const unsigned char SPEC_CURRENT_MINUTE = 24;
-    const unsigned char SPEC_CURRENT_MINUTE_TWODIG = 25;
-    const unsigned char SPEC_CURRENT_SECONDS = 26;
-    const unsigned char SPEC_CURRENT_AMPM = 27;
-    const unsigned char SPEC_CURRENT_TIME_HMS = 28;
-    const unsigned char SPEC_DATE_M = 29;
-    const unsigned char SPEC_DATE_SHORT = 30;
-    const unsigned char SPEC_MONTH_SHORT = 33;
-    const unsigned char SPEC_YEAR_LONG = 34;
-    const unsigned char SPEC_YEAR_SHORT = 35;
-    const unsigned char SPEC_MONTH_ABBREV = 36;
-    const unsigned char SPEC_MONTH_LONG = 37;
-    const unsigned char SPEC_CURRENT_TIME_HM = 38;
-    const unsigned char SPEC_DATE_LONG = 39;
-    const unsigned char SPEC_MERGE_HELPER = 41;
-
-
     class Properties97;
     class ListInfoProvider;
     class FontCollection;
@@ -290,7 +255,7 @@ namespace wvWare
         // Needed to have reentrant parsing methods (to make the functor approach work)
         struct ParsingState
         {
-            ParsingState( Position* tableRowS, U32 tableRowL, bool cMarkFound, 
+            ParsingState( Position* tableRowS, U32 tableRowL, bool cMarkFound,
                           int remCells, Paragraph* parag, U32 remChars, U32 sectionNum,
                           SubDocument subD, ParsingMode mode ) :
                 tableRowStart( tableRowS ), tableRowLength( tableRowL ), cellMarkFound( cMarkFound),

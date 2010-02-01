@@ -112,6 +112,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     wvlog << "   pnFbpPapFirst=" << m_fib.pnFbpPapFirst << std::endl;
     wvlog << "   pnPapFirst=" << m_fib.pnPapFirst << std::endl;
     wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << std::endl;
+    wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << std::endl;
+    wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << std::endl;
+    
 #endif
 
     // Initialize all the cached data structures like stylesheets, fonts,
