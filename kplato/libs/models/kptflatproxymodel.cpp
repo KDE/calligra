@@ -25,7 +25,7 @@
 #include <QPersistentModelIndex>
 #include <QItemSelection>
 
-#include <qdebug.h>
+#include <kdebug.h>
 
 namespace KPlato
 {
@@ -78,7 +78,7 @@ void FlatProxyModel::sourceRowsAboutToBeInserted(
 void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int start, int end)
 {
     if ( sourceModel() == 0 ) {
-        qDebug()<<"FlatProxyModel::sourceRowsInserted: No source model";
+        kDebug()<<"No source model";
         return;
     }
     initiateMaps();
@@ -201,20 +201,20 @@ bool FlatProxyModel::hasChildren(const QModelIndex &parent) const
 QVariant FlatProxyModel::data(const QModelIndex &index, int role) const
 {
     if ( sourceModel() == 0 || !index.isValid()) {
-        qDebug()<<"FlatProxyModel::data: No source model || invalid index";
+        kDebug()<<"No source model || invalid index";
         return QVariant();
     }
     QModelIndex source_index;
     int col = index.column() - sourceModel()->columnCount();
     if ( col < 0 ) {
         source_index = mapToSource(index);
-        qDebug()<<"FlatProxyModel::data: source column"<<col<<sourceModel()->columnCount();
+        //kDebug()<<"source column"<<col<<sourceModel()->columnCount();
     } else {
         source_index = mapToSource( this->index( index.row(), 0 ) );
-        qDebug()<<"FlatProxyModel::data: proxy column"<<col<<sourceModel()->columnCount();
+        //kDebug()<<"proxy column"<<col<<sourceModel()->columnCount();
     }
     if ( !source_index.isValid() ) {
-        qDebug()<<"FlatProxyModel::data: index valid but source index not valid";
+        kDebug()<<"index valid but source index not valid";
         return QVariant();
     }
     QVariant r;
@@ -226,7 +226,7 @@ QVariant FlatProxyModel::data(const QModelIndex &index, int role) const
             r = sourceModel()->data(source_index, role);
         }
     }
-    qDebug()<<"FlatProxyModel::data:"<<index<<r;
+    //kDebug()<<index<<r;
     return r;
 }
 
@@ -347,7 +347,7 @@ QModelIndex FlatProxyModel::mapToSource(const QModelIndex &proxyIndex) const
     if ( proxyIndex.column() != 0 ) {
         source_index = sourceModel()->index( source_index.row(), proxyIndex.column(), source_index.parent() );
     }
-    //qDebug()<<"FlatProxyModel::mapToSource:"<<proxyIndex<<"->"<<source_index;
+    //kDebug()<<proxyIndex<<"->"<<source_index;
     return source_index;
 }
 
@@ -365,7 +365,7 @@ QModelIndex FlatProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
         idx = sourceModel()->index( idx.row(), 0, idx.parent() );
     }
     QModelIndex proxy_index = index( m_sourceIndexList.indexOf( QPersistentModelIndex( sourceIndex ) ), idx.column() );
-    //qDebug()<<"FlatProxyModel::mapFromSource:"<<sourceIndex<<"->"<<proxy_index;
+    //kDebug()<<sourceIndex<<"->"<<proxy_index;
     return proxy_index;
 }
 
@@ -387,7 +387,7 @@ void FlatProxyModel::initiateMaps(  const QModelIndex &sourceParent )
     }
     QAbstractItemModel *m = sourceModel();
     if ( m == 0 ) {
-        qDebug()<<"FlatProxyModel::initiateMaps: No source model";
+        kDebug()<<"No source model";
         return;
     }
     int count = m->rowCount( sourceParent );
@@ -399,7 +399,7 @@ void FlatProxyModel::initiateMaps(  const QModelIndex &sourceParent )
 
         initiateMaps( idx );
     }
-    //qDebug()<<"FlatProxyModel::initiateMaps: source index list="<<m_sourceIndexList;
+    //kDebug()<<"source index list="<<m_sourceIndexList;
 }
 
 
