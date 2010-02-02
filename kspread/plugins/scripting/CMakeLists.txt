@@ -17,7 +17,7 @@ set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp Scrip
 qt4_wrap_cpp(krossmodulekspread_PART_SRCS ScriptingReader.h ScriptingWriter.h)
 kde4_add_plugin(krossmodulekspread ${krossmodulekspread_PART_SRCS})
 
-target_link_libraries(krossmodulekspread ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} kspreadcommon kokross)
+target_link_libraries(krossmodulekspread ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} kspreadcommon kokross)
 install(TARGETS krossmodulekspread DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
