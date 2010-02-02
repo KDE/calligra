@@ -134,6 +134,13 @@ public:
      */
     QList<KoShape*> shapes() const;
 
+    /**
+     *  \param size of the thumbnail
+     *  Creates thumbnail of the sheet
+     *  \return the thumbnail of this sheet
+     */
+    QPixmap generateThumbnail(const QSize& size);
+
     //////////////////////////////////////////////////////////////////////////
     //
     //BEGIN Methods related to sheet properties

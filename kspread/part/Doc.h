@@ -189,27 +189,6 @@ public:
 
     bool docData(QString const & xmlTag, QDomElement & data);
 
-
-    /**
-     * \ingroup Painting
-     * Primary entry point for painting.  Use this function to paint groups of cells
-     *
-     * @param painter the painter object to use.  This should already be
-     *                initialized with the world matrix.  The begin and end calls
-     *                should surround this function.
-     *
-     * @param viewRect the document coordinates showing what is actually visible in
-     *                 the screen
-     *
-     * @param view the view of the region -- may be 0 but no selection markers
-     *        can be passed in that case.
-     *
-     * @param region a list of rectangles indicating the cell ranges needing
-     *               painted.
-     */
-    void paintCellRegions(QPainter& painter, const QRect &viewRect,
-                          View* view, const Region& region);
-
     /**
      * \ingroup Painting
      */

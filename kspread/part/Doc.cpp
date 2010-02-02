@@ -747,83 +747,15 @@ void Doc::newZoomAndResolution(bool updateViews, bool /*forPrint*/)
 
 void Doc::paintContent(QPainter& painter, const QRect& rect)
 {
-#ifndef KSPREAD_DOC_ZOOM
-    Q_UNUSED(painter);
-    Q_UNUSED(rect);
-#else
-//     kDebug(36001) <<"paintContent() called on" << rect;
-
-//     ElapsedTime et( "Doc::paintContent1" );
-
-    // choose sheet: the first or the active
-    Sheet* sheet = 0;
-    if (!d->activeSheet)
-        sheet = map()->sheet(0);
-    else
-        sheet = d->activeSheet;
-    if (!sheet)
-        return;
-
-    // save current zoom
-    double oldZoom = m_zoom;
-    // set the resolution once
-    setZoom(1.0 / m_zoomedResolutionX);
-
-    // KSpread support zoom, therefore no need to scale with worldMatrix
-    // Save the translation though.
-    QMatrix matrix = painter.matrix();
-    matrix.setMatrix(1, 0, 0, 1, matrix.dx(), matrix.dy());
-
-    // Unscale the rectangle.
-    QRect prect = rect;
-    prect.setWidth((int)(prect.width() * painter.matrix().m11()));
-    prect.setHeight((int)(prect.height() * painter.matrix().m22()));
-
-    // paint the content, now zoom is correctly set
-    kDebug(36001) << "paintContent-------------------------------------";
-    painter.save();
-    painter.setMatrix(matrix);
-    paintContent(painter, prect, sheet, false);
-    painter.restore();
-
-    // restore zoom
-    setZoom(oldZoom);
-#endif // KSPREAD_DOC_ZOOM
+    paintContent(painter, rect, map()->sheet(0), false);
 }
 
 void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor)
 {
-#ifndef KSPREAD_DOC_ZOOM
-    Q_UNUSED(painter);
-    Q_UNUSED(rect);
-    Q_UNUSED(sheet);
-    Q_UNUSED(drawCursor);
-#else
     Q_UNUSED(drawCursor);
 
-    if (isLoading())
-        return;
-    //    ElapsedTime et( "Doc::paintContent2" );
-
-    double xpos;
-    double ypos;
-    int left_col   = sheet->leftColumn(unzoomItX(rect.x()), xpos);
-    int right_col  = sheet->rightColumn(unzoomItX(rect.right()));
-    int top_row    = sheet->topRow(unzoomItY(rect.y()), ypos);
-    int bottom_row = sheet->bottomRow(unzoomItY(rect.bottom()));
-
-    QPen pen;
-    pen.setWidth(1);
-    painter.setPen(pen);
-
-    /* Update the entire visible area. */
-    Region region;
-    region.add(QRect(left_col, top_row,
-                     right_col - left_col + 1,
-                     bottom_row - top_row + 1), sheet);
-
-    paintCellRegions(painter, rect, 0, region);
-#endif // KSPREAD_DOC_ZOOM
+    QPixmap thumbnail = sheet->generateThumbnail(rect.size());
+    painter.drawPixmap(rect, thumbnail);
 }
 
 void Doc::paintUpdates()
@@ -831,41 +763,6 @@ void Doc::paintUpdates()
     foreach(KoView* view, views()) {
         static_cast<View *>(view)->paintUpdates();
     }
-}
-
-void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
-                           View* view, const Region& region)
-{
-#ifndef KSPREAD_DOC_ZOOM
-    Q_UNUSED(painter);
-    Q_UNUSED(viewRect);
-    Q_UNUSED(view);
-    Q_UNUSED(region);
-#else
-    //
-    // Clip away children
-    //
-    QRegion rgn = painter.clipRegion();
-    if (rgn.isEmpty())
-        rgn = QRegion(QRect(0, 0, viewRect.width(), viewRect.height()));
-
-//   QMatrix matrix;
-//   if ( view ) {
-//     matrix.scale( zoomedResolutionX(),
-//                   zoomedResolutionY() );
-//     matrix.translate( - view->canvasWidget()->xOffset(),
-//                       - view->canvasWidget()->yOffset() );
-//   }
-//   else {
-//     matrix = painter.matrix();
-//   }
-    painter.setClipRegion(rgn);
-
-    Region::ConstIterator endOfList(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
-        paintRegion(painter, viewToDocument(viewRect), view, (*it)->rect(), (*it)->sheet());
-    }
-#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::paintRegion(QPainter &painter, const QRectF &viewRegion,

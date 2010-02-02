@@ -335,6 +335,11 @@ public:
      */
     void printHeaderFooter(QPainter &painter, int pageNo);
 
+    /**
+     *  Generate thumbnail of the sheet
+     */
+    void generateThumbnail(QPainter &painter);
+
 signals:
     void sig_updateView(Sheet *_sheet);
 

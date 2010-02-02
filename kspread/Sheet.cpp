@@ -30,6 +30,7 @@
 #include <QMimeData>
 #include <QStack>
 #include <QTextStream>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -3918,6 +3919,18 @@ void Sheet::convertObscuringBorders()
         }
     }
 #endif
+}
+
+QPixmap Sheet::generateThumbnail(const QSize& size)
+{
+    if (size.isEmpty())
+        return QPixmap();
+
+    QPixmap pixmap( size.width(), size.height() );
+    pixmap.fill( Qt::white );
+    QPainter painter( &pixmap );
+    d->print->generateThumbnail(painter);
+    return pixmap;
 }
 
 /**********************

@@ -213,6 +213,13 @@ bool SheetPrint::pageNeedsPrinting(QRect& page_range)
     return false;
 }
 
+void SheetPrint::generateThumbnail(QPainter &painter)
+{
+    painter.scale(m_zoomHandler->zoomedResolutionX(), m_zoomHandler->zoomedResolutionY());
+    painter.setClipRect(0, 0, (int)paperLayout().width, (int)paperLayout().height);
+    printPage(painter, cellsPrintRange(), QRect(0, 0, paperLayout().width, paperLayout().height), QPointF(0,0));
+}
+
 bool SheetPrint::print(QPainter &painter, QPrinter *_printer)
 {
     kDebug(36001) << "PRINTING ....";
