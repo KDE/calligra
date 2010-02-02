@@ -153,21 +153,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
 
         // Add style information
+        QString  mirror;
         if (m_flipH || m_flipV) {
-            QString  mirror;
             if (m_flipH && m_flipV)
                 mirror = "horizontal vertical";
             else if (m_flipH)
                 mirror = "horizontal";
             else if (m_flipV)
                 mirror = "vertical";
-
-            //! @todo: horizontal-on-{odd,even}?
-            m_currentDrawStyle.addAttribute("style:mirror", mirror);
+            else
+                mirror = "none";
         }
+        //! @todo: horizontal-on-{odd,even}?
+        m_currentDrawStyle.addAttribute("style:mirror", mirror);
 
         //! @todo: m_rot
-            
+
+        // Reset values of flip? and rot to neutral.
+        m_flipH = false;
+        m_flipV = false;
+        m_rot = 0;
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
