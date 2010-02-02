@@ -916,7 +916,7 @@ void PptToOdp::processContentStyles(KoGenStyles &styles)
 
     styles.lookup(dp, "dp");
 
-    masterStyleName = styles.lookup(dp);
+    declarationStyleName = styles.lookup(dp);
 }
 
 
@@ -2332,7 +2332,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     xmlWriter.startElement("draw:page");
     xmlWriter.addAttribute("draw:master-page-name", "Default");
     xmlWriter.addAttribute("draw:name", nameStr);
-    xmlWriter.addAttribute("draw:style-name", QString("master%1").arg(masterNumber));
+    xmlWriter.addAttribute("draw:style-name", declarationStyleName);
     xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
     const HeadersFootersAtom* headerFooterAtom = 0;

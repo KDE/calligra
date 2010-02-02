@@ -668,7 +668,7 @@ private:
 
     QMap<QByteArray, QString> pictureNames;
     DateTimeFormat dateTime;
-    QString masterStyleName;
+    QString declarationStyleName;
     typedef QPair<const PPT::TextCFException*, const PPT::TextPFException*> StyleKey;
     QMap<StyleKey, StyleName> textStyles;
     QMap<const PPT::OfficeArtSpContainer*, QString> graphicStyles;
