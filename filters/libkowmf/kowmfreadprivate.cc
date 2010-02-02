@@ -97,10 +97,14 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mStandard = false;
     mPlaceable = false;
     mEnhanced = false;
-    mBBoxTop = 0;
-    mBBoxLeft = 0;
-    mBBoxRight = 0;
-    mBBoxBottom = 0;
+
+    // Initialize the bounding box.
+    mBBoxTop = 32767;           // Is there a constant for this?
+    mBBoxLeft = 32767;
+    mBBoxRight = -32768;
+    mBBoxBottom = -32768;
+
+    kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
 
     //----- Read placeable metafile header
     st >> pheader.key;
@@ -196,9 +200,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     if ((mValid) && (mStandard)) {
         quint16 numFunction = 1;
         quint32 size;
-        bool firstOrg = true, firstExt = true;
 
-        // search functions setWindowOrg and setWindowExt
+        // Search for records setWindowOrg and setWindowExt to
+        // determine what the total bounding box of this WMF is.
         while (numFunction) {
             qint16 curOrgX = 0;
             qint16 curOrgY = 0;
@@ -215,8 +219,6 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
             numFunction &= 0xFF;
             if (numFunction == 11) {
                 // setWindowOrg
-                //qint16 top;
-                //qint16 left;
 
                 st >> curOrgY >> curOrgX;
                 //kDebug(31000) << curOrgY << curOrgY;
@@ -224,19 +226,6 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 if (curOrgX < mBBoxLeft)   mBBoxLeft = curOrgX;
                 if (curOrgX > mBBoxRight)  mBBoxRight = curOrgX;
                 if (curOrgY > mBBoxBottom) mBBoxBottom = curOrgY;
-                    
-#if 0
-                if (firstOrg) {
-                    firstOrg = false;
-                    mBBox.setLeft(left);
-                    mBBox.setTop(top);
-                } else {
-                    if (left < mBBox.left())
-                        mBBox.setLeft(left);
-                    if (top < mBBox.top())
-                        mBBox.setTop(top);
-                }
-#endif
             }
             else if (numFunction == 12) {
                 // setWindowExt
@@ -267,24 +256,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                         mBBoxBottom = curOrgY + height;
                     }
                 }
-                    
-#if 0
-                //if (width < 0) width = -width;
-                //if (height < 0) height = -height;
-                if (firstExt) {
-                    firstExt = false;
-                    mBBox.setWidth(width);
-                    mBBox.setHeight(height);
-                } else {
-                    if (width > mBBox.width())
-                        mBBox.setWidth(width);
-                    if (height > mBBox.height())
-                        mBBox.setHeight(height);
-                }
-#endif
             }
+
             mBuffer->seek(filePos + (size << 1));
-            // ## shouldn't we break from the loop as soon as we found what we were looking for?
         }
     }
 
@@ -421,10 +395,11 @@ void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
 
     // negative value allowed for width and height
     stream >> height >> width;
+    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+
     mReadWmf->setWindowExt(width, height);
     mWindow.setWidth(width);
     mWindow.setHeight(height);
-    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
 }
 
 

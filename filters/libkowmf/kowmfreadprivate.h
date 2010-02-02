@@ -213,10 +213,10 @@ public:
 
     /// bounding rectangle.
     // We can't use a QRect here because width and/or height may be negative.
-    int mBBoxTop;
-    int mBBoxLeft;
-    int mBBoxRight;
-    int mBBoxBottom;
+    qint16 mBBoxTop;
+    qint16 mBBoxLeft;
+    qint16 mBBoxRight;
+    qint16 mBBoxBottom;
     QRect  mBBox;     // placeable file : this is the header
 
     // standard file : this is the value in setWindowOrg and setWindowExt
