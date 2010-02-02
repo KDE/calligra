@@ -109,7 +109,7 @@
 #include "kptworkpackageconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-#include "reports/reportview.h"
+//#include "reports/reportview.h"
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -1223,6 +1223,8 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
+    return 0;
+#if 0
     qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
     Report *v = new Report( getPart(), m_tab );
     QDockWidget *w = v->createPropertyDocker();
@@ -1287,7 +1289,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
-
+#endif
 }
 
 Project& View::getProject() const
