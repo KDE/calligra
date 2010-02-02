@@ -25,6 +25,7 @@
 #include "lists.h"
 #include "handlers.h"
 #include "footnotes97.h"
+#include "annotations.h"
 #include "headers.h"
 #include "fonts.h"
 #include "textconverter.h"
@@ -65,7 +66,7 @@ Parser9x::Position::Position( U32 cp, const PLCF<Word97::PCD>* plcfpcd ) :
 
 Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib ) :
         Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ), m_properties( 0 ),
-        m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ), m_footnotes( 0 ),
+        m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ), m_footnotes( 0 ), m_annotations( 0 ),
         m_fonts( 0 ), m_drawings( 0 ), m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ),
         m_cellMarkFound( false ), m_remainingCells( 0 ), m_currentParagraph( new Paragraph ),
         m_remainingChars( 0 ), m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
@@ -135,6 +136,7 @@ Parser9x::~Parser9x()
     delete m_plcfpcd;
     delete m_headers;
     delete m_footnotes;
+    delete m_annotations;
     delete m_fields;
     delete m_textconverter;
     delete m_properties;
@@ -228,6 +230,28 @@ void Parser9x::parseFootnote( const FootnoteData& data )
 #endif
 }
 
+void Parser9x::parseAnnotation( const AnnotationData& data )
+{
+#ifdef WV2_DEBUG_ANNOTATIONS
+    wvlog << "Parser9x::parseAnnotation() #####################" << std::endl;
+#endif
+    if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
+        return;
+
+    saveState( data.limCP - data.startCP, Annotation );
+    m_subDocumentHandler->annotationStart();
+
+    U32 offset = m_fib.ccpText + data.startCP;
+    parseHelper( Position( offset, m_plcfpcd ) );
+
+    m_subDocumentHandler->annotationEnd();
+    restoreState();
+#ifdef WV2_DEBUG_ANNOTATIONS
+    wvlog << "Parser9x::parseAnnotation() done ################" << std::endl;
+#endif
+}
+
+
 void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
@@ -317,6 +341,11 @@ void Parser9x::init()
 
     if (( m_fib.ccpFtn != 0 ) || ( m_fib.ccpEdn != 0 ))
         m_footnotes = new Footnotes97( m_table, m_fib );
+
+    if ( m_fib.ccpAtn != 0 ) {
+        m_annotations = new Annotations( m_table, m_fib );
+    }
+
 }
 
 bool Parser9x::readPieceTable()
@@ -663,6 +692,8 @@ void Parser9x::processParagraph( U32 fc )
 void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
                              U32 length, U32 index, U32 currentStart )
 {
+    // XXX: does the following hold for Annotations as well? (BSAR)
+
     // Some characters have a special meaning (e.g. a footnote is anchored at some
     // position inside the text) and they *don't* have the fSpec flag set. This means
     // that we have to watch out for such characters even in plain text. Slooow :}
@@ -800,7 +831,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
     case TextHandler::AnnotationRef:
         {
             wvlog << "Found an annotation" << std::endl;
-            emitAnnotation(chp);
+            processAnnotation(UString(character), globalCP, chp);
         }
     case TextHandler::FieldEscapeChar:
             wvlog << "Found an escape character ++++++++++++++++++++?" << std::endl;
@@ -827,9 +858,19 @@ void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<cons
         m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
 }
 
-void Parser9x::emitAnnotation( SharedPtr<const Word97::CHP> chp )
+void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
 {
-    // XXX
+    if ( !m_annotations ) {
+        wvlog << "Bug: Found an annotation, but m_annotations == 0!" << std::endl;
+        return;
+    }
+#ifdef WV2_DEBUG_ANNOTATIONS
+    wvlog << "######### Annotation found: CP=" << globalCP << std::endl;
+#endif
+    bool ok;
+    AnnotationData data( m_annotations->annotation( globalCP, ok ) );
+    if ( ok )
+        m_textHandler->annotationFound(characters, chp, make_functor( *this, &Parser9x::parseAnnotation, data ));
 }
 
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )

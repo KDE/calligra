@@ -36,19 +36,10 @@ namespace wvWare
                     FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 };
 
         HeaderData( int sectionNum ) : sectionNumber( sectionNum ),
-                                       headerMask( HeaderOdd | FooterOdd ) {}
+        headerMask( HeaderOdd | FooterOdd ) {}
 
         int sectionNumber;
         unsigned char headerMask;
-    };
-
-    /**
-     * @internal
-     * Holds all the necessary information for asynchronous comment parsing.
-     */
-    struct WV2_EXPORT CommentData
-    {
-        CommentData() { wvlog << "comment"; }
     };
 
     /**
@@ -60,7 +51,7 @@ namespace wvWare
         enum Type { Footnote, Endnote };
 
         FootnoteData( Type t, bool autoNum, unsigned int start, unsigned int lim ) :
-            type( t ), autoNumbered( autoNum ), startCP( start ), limCP( lim ) {}
+                type( t ), autoNumbered( autoNum ), startCP( start ), limCP( lim ) {}
 
         Type type;
         bool autoNumbered;
@@ -68,6 +59,18 @@ namespace wvWare
         unsigned int limCP;
     };
 
+    /**
+     * @internal
+     * Holds all necessary information for delayed annotation parsing.
+     */
+    struct WV2_EXPORT AnnotationData
+    {
+        AnnotationData( unsigned int start, unsigned int lim ) :
+                startCP( start ), limCP( lim ) {}
+
+        unsigned int startCP;
+        unsigned int limCP;
+    };
 
     namespace Word97
     {

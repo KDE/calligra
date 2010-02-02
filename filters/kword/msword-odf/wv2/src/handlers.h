@@ -33,11 +33,10 @@ namespace wvWare {
     class UString;
     template<class ParserT, typename Data> class Functor;
     typedef Functor<Parser9x, HeaderData> HeaderFunctor;
-    typedef Functor<Parser9x, CommentData> CommentFunctor;
+    typedef Functor<Parser9x, AnnotationData> AnnotationFunctor;
     typedef Functor<Parser9x, TableRowData> TableRowFunctor;
     typedef Functor<Parser9x, FootnoteData> FootnoteFunctor;
     typedef Functor<Parser9x, PictureData> PictureFunctor;
-
 
     /**
      * This class allows to replace the character values of some
@@ -89,7 +88,7 @@ namespace wvWare {
         virtual void bodyEnd();
 
         /**
-         * Every time you invoke a @ref FoonoteFunctor this method will be called.
+         * Every time you invoke a @ref FootnoteFunctor this method will be called.
          * Note that @ref FoonoteFunctor is also emitted when we find endnotes.
          */
         virtual void footnoteStart();
@@ -97,6 +96,29 @@ namespace wvWare {
          * Once the footnote characters are processed this method is called.
          */
         virtual void footnoteEnd();
+
+        /**
+         * 2.3.4
+         *
+         * Comments/Annotations (Microsoft isn't consistent)
+         *
+         * The comment document contains all of the content in the comments/annotation. It begins at the CP
+         * immediately following the Header Document and is FibRgLw97.ccpAtn characters long.
+         * The locations of individual comments within the comment document are specified by a PlcfandTxt
+         * whose location is specified by the fcPlcfandTxt member of FibRgFcLcb97. The locations of the
+         * comment reference characters in the Main Document are specified by a PlcfandRef whose location is
+         * specified by the fcPlcfandRef member of FibRgFcLcb97.
+         *
+         * Let's see whether it makes sense when I continue implementing this...
+         */
+        /**
+         * Every time you invoke a @ref AnnotationFunctor this method will be called.
+         */
+        virtual void annotationStart();
+        /**
+         * Once the annotation characters are processed this method is called.
+         */
+        virtual void annotationEnd();
 
         /**
          * For every section in a Word document a @ref HeaderFunctor is emitted.
@@ -127,23 +149,6 @@ namespace wvWare {
          */
         virtual void headerEnd();
 
-        /**
-         * 2.3.4
-         *
-         * Comments
-         * The comment document contains all of the content in the comments. It begins at the CP
-         * immediately following the Header Document and is FibRgLw97.ccpAtn characters long.
-         * The locations of individual comments within the comment document are specified by a PlcfandTxt
-         * whose location is specified by the fcPlcfandTxt member of FibRgFcLcb97. The locations of the
-         * comment reference characters in the Main Document are specified by a PlcfandRef whose location is
-         * specified by the fcPlcfandRef member of FibRgFcLcb97.
-         *
-         * Let's see whether it makes sense when I continue implementing this...
-         */
-        virtual void commentsStart();
-        virtual void commentsEnd();
-        virtual void commentStart();
-        virtual void commentEnd();
     };
 
 
@@ -360,6 +365,17 @@ namespace wvWare {
          */
         virtual void footnoteFound( FootnoteData::Type type, UString characters,
                                     SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
+
+
+        /**
+         * The parser found an annotation. The passed functor will trigger the parsing of this
+         * annotation, the default implementation just emits the passed character with
+         * runOfText (that it doesn't get lost if someone doesn't override this method) and
+         * invokes the functor.
+         */
+        virtual void annotationFound( UString characters,
+                                      SharedPtr<const Word97::CHP> chp, const AnnotationFunctor& parseAnnotation);
+
         /**
          * This callback will get triggered when parsing a auto-numbered footnote.
          * The passed CHP is the character formatting information provided for the

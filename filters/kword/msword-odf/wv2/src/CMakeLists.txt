@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR/filters/kwor
 ADD_DEFINITIONS( -DHAVE_CONFIG_H )
 
 SET( wv2_SOURCES 
+    annotations.cpp
 	olestorage.cpp 
 	olestream.cpp 
 	word97_generated.cpp 
@@ -42,6 +43,7 @@ SET( wv2_SOURCES
     )
 
 SET( wv2_HEADERS 
+    annotations.h
 	olestorage.h 
 	olestream.h 
 	word95_generated.h 

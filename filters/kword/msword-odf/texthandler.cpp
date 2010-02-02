@@ -203,11 +203,6 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
     }
 }
 
-void KWordTextHandler::commentsFound(const wvWare::CommentFunctor& parseComments)
-{
-    kDebug(30513);
-    emit commentsFound(new wvWare::CommentFunctor(parseComments), 0);
-}
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
@@ -338,6 +333,22 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //    footnoteElem.setAttribute( "frameset", i18n("Footnote %1", ++m_footNoteNumber ) );
     //varElem.appendChild( footnoteElem );
 }
+
+
+void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                        const wvWare::AnnotationFunctor& parseAnnotation)
+{
+    int index = 0;
+    int length = characters.length();
+    qDebug() << ">>>>>>>>>>>>>>>>>>> Annotation length" << length;
+    QString annotation;
+    while (index != length) {
+        annotation.append(characters[index].unicode());
+        ++index;
+    }
+    qDebug() << ">>>>>>>>>>>>>>>> Annotation found" << annotation;
+}
+
 
 //create an element for the variable
 QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)

@@ -57,12 +57,14 @@ namespace wvWare
     class Fields;
     class Headers;
     class Footnotes97;
+    class Annotations;
     class Drawings;
     template<class T> class PLCF;
 
     // Helper structures for the Functor-based approach
     struct HeaderData;
     struct FootnoteData;
+    struct AnnotationData;
     struct TableRowData;
     struct PictureData;
 
@@ -108,6 +110,7 @@ namespace wvWare
         //    - Be very careful, these calls can possibly be triggered at any time
         void parseHeaders( const HeaderData& data );
         void parseFootnote( const FootnoteData& data );
+        void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
 
@@ -195,12 +198,12 @@ namespace wvWare
 
         void processSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
         void processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
+        void processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
 
         // Helper methods to gather and emit the information needed for the functors
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
         void emitDrawnObject( SharedPtr<const Word97::CHP> chp );
-        void emitAnnotation( SharedPtr<const Word97::CHP> chp );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 
@@ -228,6 +231,7 @@ namespace wvWare
         TextConverter* m_textconverter;
         Fields* m_fields;
         Footnotes97* m_footnotes;
+        Annotations* m_annotations;
         FontCollection* m_fonts;
         Drawings* m_drawings;
 

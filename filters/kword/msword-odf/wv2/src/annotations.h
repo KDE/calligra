@@ -16,8 +16,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef FOOTNOTES97_H
-#define FOOTNOTES97_H
+#ifndef ANNOTATIONS_H
+#define ANNOTATIONS_H
 
 #include "global.h"
 #include "functordata.h"
@@ -35,56 +35,47 @@ namespace wvWare
     template<class T> class PLCF;
     template<class T> class PLCFIterator;
     class OLEStreamReader;
-    struct FootnoteData;
+    struct AnnotationData;
 
     /**
      * @internal
      */
-    class Footnotes97
+    class Annotations
     {
     public:
-        Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib );
-        ~Footnotes97();
+        Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib );
+        ~Annotations();
 
         /**
-         * Get the FootnoteData for the footnote/endnote at @param globalCP.
-         * The @param ok flag is true if a footnote/endnote has been found.
-         * If @param ok is false no footnote/endnote has been found and the
-         * returned FootnoteData structure is invalid.
+         * Get the AnnotationData for the Annotation at @param globalCP.
+         * The @param ok flag is true if a Annotation has been found.
+         * If @param ok is false no Annotation has been found and the
+         * returned AnnotationData structure is invalid.
          */
-        FootnoteData footnote( U32 globalCP, bool& ok );
+        AnnotationData annotation( U32 globalCP, bool& ok );
 
         /**
-         * Returns the global CP of the next footnote reference,
+         * Returns the global CP of the next Annotation reference,
          * 0xffffffff if none exists.
          */
-        U32 nextFootnote() const;
-        /**
-         * Returns the global CP of the next endnote reference,
-         * 0xffffffff if none exists.
-         */
-        U32 nextEndnote() const;
+        U32 nextAnnotation() const;
 
     private:
-        Footnotes97( const Footnotes97& rhs );
-        Footnotes97& operator=( const Footnotes97& rhs );
+        Annotations( const Annotations& rhs );
+        Annotations& operator=( const Annotations& rhs );
 
         // Ugly, but helps to avoid code duplication
         void init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamReader* tableStream,
                    PLCF<Word97::FRD>** ref, PLCFIterator<Word97::FRD>** refIt,
                    std::vector<U32>& txt, std::vector<U32>::const_iterator& txtIt );
 
-        PLCF<Word97::FRD>* m_footnoteRef;
-        PLCFIterator<Word97::FRD>* m_footnoteRefIt;
-        std::vector<U32> m_footnoteTxt;
-        std::vector<U32>::const_iterator m_footnoteTxtIt;
+        PLCF<Word97::FRD>* m_annotationRef;
+        PLCFIterator<Word97::FRD>* m_annotationRefIt;
+        std::vector<U32> m_annotationTxt;
+        std::vector<U32>::const_iterator m_annotationTxtIt;
 
-        PLCF<Word97::FRD>* m_endnoteRef;
-        PLCFIterator<Word97::FRD>* m_endnoteRefIt;
-        std::vector<U32> m_endnoteTxt;
-        std::vector<U32>::const_iterator m_endnoteTxtIt;
     };
 
 } // namespace wvWare
 
-#endif // FOOTNOTES97_H
+#endif // ANNOTATIONS_H

@@ -79,6 +79,18 @@ void SubDocumentHandler::footnoteEnd()
 {
 }
 
+
+void SubDocumentHandler::annotationStart()
+{
+    wvlog << "annotation start";
+}
+
+void SubDocumentHandler::annotationEnd()
+{
+    wvlog << "annotation end";
+}
+
+
 void SubDocumentHandler::headersStart()
 {
 }
@@ -93,26 +105,6 @@ void SubDocumentHandler::headerStart( HeaderData::Type /*type*/ )
 
 void SubDocumentHandler::headerEnd()
 {
-}
-
-void SubDocumentHandler::commentsStart()
-{
-    wvlog << "comments start";
-}
-
-void SubDocumentHandler::commentsEnd()
-{
-    wvlog << "comments end";
-}
-
-void SubDocumentHandler::commentStart()
-{
-    wvlog << "comment start";
-}
-
-void SubDocumentHandler::commentEnd()
-{
-    wvlog << "comment end";
 }
 
 TableHandler::~TableHandler()
@@ -205,6 +197,13 @@ void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters
         runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
     parseFootnote();
 }
+
+void TextHandler::annotationFound( UString characters,
+                                   SharedPtr<const Word97::CHP> chp, const AnnotationFunctor& parseAnnotation)
+{
+    parseAnnotation();
+}
+
 
 void TextHandler::footnoteAutoNumber( SharedPtr<const Word97::CHP> /*chp*/ )
 {

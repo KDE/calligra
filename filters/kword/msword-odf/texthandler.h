@@ -32,7 +32,7 @@
 #include <wv2/src/lists.h>
 #include <QString>
 #include <QObject>
-#include <qdom.h>
+#include <QDomElement>
 #include <QBuffer>
 
 #include <KoXmlWriter.h>
@@ -77,7 +77,9 @@ public:
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
-    virtual void commentsFound(const wvWare::CommentFunctor& parseComments);
+    virtual void annotationFound(wvWare::UString characters,
+                                 wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                 const wvWare::AnnotationFunctor& parseAnnotation);
 
     virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
     virtual void paragraphEnd();
@@ -125,8 +127,8 @@ signals:
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
+    void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void commentsFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);
     void pictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
                       const wvWare::FunctorBase* pictureFunctor);
