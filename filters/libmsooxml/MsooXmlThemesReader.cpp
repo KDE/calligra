@@ -47,7 +47,7 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-kDebug() << systemColor;
+    kDebug() << systemColor;
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))

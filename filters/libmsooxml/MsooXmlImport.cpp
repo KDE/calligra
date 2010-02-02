@@ -137,16 +137,6 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
     return status;
 }
 
-static bool checkParsedXML(const char *xmlName, KoFilter::ConversionStatus status)
-{
-    if (status != KoFilter::OK) {
-//! @todo transmit the error to the GUI...
-        kDebug() << xmlName << "could not be parsed correctly! Aborting!";
-        return false;
-    }
-    return true;
-}
-
 // private
 KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
     const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
@@ -221,7 +211,8 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
 {
     static const char *Content_Types_xml =  "[Content_Types].xml";
     KoFilter::ConversionStatus status = loadAndParse(Content_Types_xml, m_contentTypesXML, errorMessage);
-    if (!checkParsedXML(Content_Types_xml, status)) {
+    if (status != KoFilter::OK) {
+        kDebug() << Content_Types_xml << "could not be parsed correctly! Aborting!";
         return status;
     }
 

@@ -100,14 +100,13 @@ KoFilter::ConversionStatus MsooXmlCommentsReader::readInternal()
         // this could be done better! Text can have formatting and this extracts only pure text
         if (name() == "t" && isStartElement()) {
             readNext();
-            if (text().toString() != "")
-                commentText += text().toString();
+            commentText += text().toString();
         }
         
         if (name() == "comment" && isEndElement()) {
             QStringList list;
             
-            if (commentId != "") {
+            if (!commentId.isEmpty()) {
                 
                 if (commentDate.endsWith("Z"))
                     commentDate.remove(commentDate.length()-1, 1); 
@@ -117,10 +116,10 @@ KoFilter::ConversionStatus MsooXmlCommentsReader::readInternal()
                 //kDebug() << "MsooXmlCommentsReader::readInternal() id: " <<  commentId << " date: " << commentDate <<  " author: " << commentAuthor <<  " text: " << commentText;
             }
             
-            commentId = "";
-            commentDate = "";
-            commentAuthor = "";
-            commentText = "";
+            commentId.clear();
+            commentDate.clear();
+            commentAuthor.clear();
+            commentText.clear();
         }
                 
         readNext();

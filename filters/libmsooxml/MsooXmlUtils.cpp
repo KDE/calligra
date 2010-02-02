@@ -136,10 +136,8 @@ using namespace MSOOXML;
 KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc,
         QString& errorMessage, const QString & fileName)
 {
-    // Error variables for QDomDocument::setContent
     errorMessage.clear();
-    QString errorMsg;
-    int errorLine, errorColumn;
+
     // We need to be able to see the space in <text:span> </text:span>, this is why
     // we activate the "report-whitespace-only-CharData" feature.
     // Unfortunately this leads to lots of whitespace text nodes in between real
@@ -149,6 +147,8 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
     QXmlSimpleReader reader;
     KoOdfReadStore::setupXmlReader(reader, true /*namespaceProcessing*/);
 
+    QString errorMsg;
+    int errorLine, errorColumn;
     bool ok = doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError() << "Parsing error in " << fileName << ", aborting!" << endl
@@ -165,6 +165,7 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
 KoFilter::ConversionStatus Utils::loadAndParse(KoXmlDocument& doc, const KZip* zip,
         QString& errorMessage, const QString& fileName)
 {
+    errorMessage.clear();
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
     if (!device.get())
@@ -180,6 +181,7 @@ KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
         MsooXmlReaderContext* context)
 {
     Q_UNUSED(writers)
+    errorMessage.clear();
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
     if (!device.get())
@@ -191,7 +193,6 @@ KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
         errorMessage = reader->errorString();
         return status;
     }
-    errorMessage.clear();
     kDebug() << "File" << fileName << "loaded and parsed.";
     return KoFilter::OK;
 }
@@ -200,8 +201,8 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
                                     KoFilter::ConversionStatus& status)
 {
     kDebug() << "Trying to open" << fileName;
-    const KArchiveEntry* entry = zip->directory()->entry(fileName);
     errorMessage.clear();
+    const KArchiveEntry* entry = zip->directory()->entry(fileName);
     if (!entry) {
         errorMessage = i18n("Entry '%1' not found.", fileName);
         kDebug() << errorMessage;
@@ -242,7 +243,7 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
     while (true) {
         const qint64 in = inputDevice->read(block, BLOCK_SIZE);
 //        kDebug() << "in:" << in;
-        if (in == 0 || in == -1)
+        if (in <= 0)
             break;
         if (in != outputStore->write(block, in)) {
             errorMessage = i18n("Could not write block");
