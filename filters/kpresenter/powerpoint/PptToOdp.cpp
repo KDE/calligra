@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -363,7 +365,22 @@ QString getText(const TextContainer& tc, int start, int count)
     return getText(tc).mid(start,count);
 }
 
+/**
+ * Return the placementId of the PlaceHolderAtom
+ **/
+quint8 getPlacementId(const OfficeArtSpContainer &o) {
+    if (o.clientData) {
+        const OfficeArtClientData & d = *o.clientData;
+        if (d.placeholderAtom) {
+            const PlaceholderAtom &h = *d.placeholderAtom;
+            return h.placementId;
+        }
+        return 0;
+    }
+    return 0;
 }
+
+}//namespace
 
 PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter) : xOffset(0),
         yOffset(0),
@@ -496,6 +513,7 @@ KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
     storeout->leaveDirectory();
 
     KoGenStyles styles;
+
     createMainStyles(styles);
 
     // store document content
@@ -627,8 +645,14 @@ void PptToOdp::createFillImages(KoGenStyles& styles)
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
-    int x = 0;
-    int y = 0;
+    QBuffer buffer;
+
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);
+    Writer out(xmlWriter);
+
+    //Process main Master Container
+    processMainMasterSlide(styles, out);
 
     // x and y are given in master units (1/576 inches)
     QString pageWidth = QString("%1in").arg(
@@ -734,44 +758,51 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     s.addAttribute("style:page-layout-name", styles.lookup(pl));
     s.addAttribute("draw:style-name", styles.lookup(dp));
 
-    x = p->documentContainer->documentAtom.slideSize.x - 50;
-    y = p->documentContainer->documentAtom.slideSize.y - 50;
+   QList<ClientPlacementId> items = masterObjects.keys();
+   for( int i = 0; i < items.size(); i++) {
+       switch(items.at(i)) {
+       case PptToOdp::MasterDate:
+            addFrame(s, out, "date-time", masterObjects.value(items.at(i)), styles.lookup(Mpr),
+                    styles.lookup(pa), styles.lookup(text));
+            break;
+       case PptToOdp::MasterSlideNumber:
+            addFrame(s, out, "page-number", masterObjects.value(items.at(i)), styles.lookup(Mpr),
+                    styles.lookup(pa), styles.lookup(text));
+            break;
+       case PptToOdp::MasterFooter:
+            //Footer
+            addFrame(s, out, "footer", masterObjects.value(items.at(i)), styles.lookup(Mpr),
+                     styles.lookup(pa), styles.lookup(text));
+            break;
+       case PptToOdp::MasterHeader:
+           break;
+       default:
+           break;
+       }
+   }
 
-    addFrame(s, "page-number", "20pt", "20pt",
-
-             QString("%1pt").arg(x), QString("%1pt").arg(y),
-             styles.lookup(pa), styles.lookup(text));
-    addFrame(s, "date-time", "200pt", "20pt", "20pt",
-             QString("%1pt").arg(y), styles.lookup(pa), styles.lookup(text));
     styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
 }
 
-void PptToOdp::addFrame(KoGenStyle& style, const char* presentationClass,
-                        QString width, QString height,
-                        QString x, QString y, QString pStyle, QString tStyle)
+void PptToOdp::addFrame(KoGenStyle& style, Writer& out, const char* presentationClass,
+                 const QRect &rect, QString mStyle, QString pStyle, QString tStyle)
 {
     QBuffer buffer;
-    //int  headerFooterAtomFlags = 0;
-    //Slide *master = presentation->masterSlide();
-    // if (master)
-    //    headerFooterAtomFlags = master->headerFooterFlags();
-    //QString datetime;
 
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
     xmlWriter.startElement("draw:frame");
-    xmlWriter.addAttribute("presentation:style-name", "Mpr1");
+    xmlWriter.addAttribute("presentation:style-name", mStyle);
     xmlWriter.addAttribute("draw:layer", "layout");
-    xmlWriter.addAttribute("svg:width", width);
-    xmlWriter.addAttribute("svg:height", height);
-    xmlWriter.addAttribute("svg:x", x);
-    xmlWriter.addAttribute("svg:y", y);
+    xmlWriter.addAttribute("svg:width", out.hLength(rect.width()));
+    xmlWriter.addAttribute("svg:height", out.vLength(rect.height()));
+    xmlWriter.addAttribute("svg:x", out.hOffset(rect.x()));
+    xmlWriter.addAttribute("svg:y", out.vOffset(rect.y()));
     xmlWriter.addAttribute("presentation:class", presentationClass);
     xmlWriter.startElement("draw:text-box");
     xmlWriter.startElement("text:p");
     xmlWriter.addAttribute("text:style-name", pStyle);
-
     if (strcmp(presentationClass, "page-number") == 0) {
         xmlWriter.startElement("text:span");
         xmlWriter.addAttribute("text:style-name", tStyle);
@@ -791,6 +822,15 @@ void PptToOdp::addFrame(KoGenStyle& style, const char* presentationClass,
             }
         }
     }
+    if (strcmp(presentationClass, "footer") == 0) {
+        xmlWriter.startElement("presentation:footer");
+        xmlWriter.endElement(); // presentation:footer
+    }
+    if (strcmp(presentationClass, "header") == 0) {
+        xmlWriter.startElement("presentation:header");
+        xmlWriter.endElement(); // presentation:header
+    }
+
 
     xmlWriter.endElement(); // text:p
 
@@ -821,7 +861,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("office:version", "1.0");
 
     // office:automatic-styles
-    processDocStyles(styles);
+    processContentStyles(styles);
 
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForStyle(c, styles);
@@ -830,25 +870,10 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     styles.saveOdfAutomaticStyles(&contentWriter, false);
 
     // office:body
-
     contentWriter.startElement("office:body");
     contentWriter.startElement("office:presentation");
 
-    if (getSlideHF()) {
-        if (getSlideHF()->hfAtom.fHasTodayDate) {
-            contentWriter.startElement("presentation:date-time-decl");
-            contentWriter.addAttribute("presentation:name", "dtd1");
-            contentWriter.addAttribute("presentation:source", "current-date");
-            //contentWriter.addAttribute("style:data-style-name", "Dt1");
-            contentWriter.endElement();  // presentation:date-time-decl
-        } else if (getSlideHF()->hfAtom.fHasUserDate) {
-            contentWriter.startElement("presentation:date-time-decl");
-            contentWriter.addAttribute("presentation:name", "dtd1");
-            contentWriter.addAttribute("presentation:source", "fixed");
-            //Future - Add Fixed date data here
-            contentWriter.endElement();  //presentation:date-time-decl
-        }
-    }
+    processDeclaration(&contentWriter);
 
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForBody(c, contentWriter);
@@ -863,7 +888,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     return contentData;
 }
 
-void PptToOdp::processDocStyles(KoGenStyles &styles)
+void PptToOdp::processContentStyles(KoGenStyles &styles)
 {
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.addProperty("presentation:background-objects-visible", "true");
@@ -877,6 +902,17 @@ void PptToOdp::processDocStyles(KoGenStyles &styles)
         dp.addProperty("presentation:display-date-time" , "true");
     else
         dp.addProperty("presentation:display-date-time" , "false");
+
+    if (getSlideHF() && getSlideHF()->hfAtom.fHasHeader)
+        dp.addProperty("presentation:display-header", "true");
+    else
+        dp.addProperty("presentation:display-header", "false");
+
+    if (getSlideHF() && getSlideHF()->hfAtom.fHasFooter)
+        dp.addProperty("presentation:display-footer", "true");
+    else
+        dp.addProperty("presentation:display-footer", "false");
+
 
     styles.lookup(dp, "dp");
 
@@ -2272,6 +2308,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
         foreach(const TextContainer& tc, p->documentContainer->slideList->rgChildRec[slideNo].atoms) {
             if (tc.textHeaderAtom.textType == Text::Title) {
                 nameStr = getText(tc);
+                break;
             }
         }
     }
@@ -2304,8 +2341,16 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     if (!headerFooterAtom && getSlideHF()) {
         headerFooterAtom = &getSlideHF()->hfAtom;
     }
-    if (headerFooterAtom && headerFooterAtom->fHasTodayDate) {
-        xmlWriter.addAttribute("presentation:use-date-time-name", "dtd1");
+    if (headerFooterAtom && headerFooterAtom->fHasDate) {
+        xmlWriter.addAttribute("presentation:use-date-time-name", usedDateTimeDeclaration[slideNo]);
+    }
+    if (headerFooterAtom && headerFooterAtom->fHasHeader) {
+        if(usedHeaderDeclaration[slideNo] != "")
+            xmlWriter.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
+    }
+    if (headerFooterAtom && headerFooterAtom->fHasFooter) {
+        if(usedFooterDeclaration[slideNo] != "")
+            xmlWriter.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
 
     QRectF rect; // TODO add some geometry magic
@@ -3189,3 +3234,211 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
     processGraphicStyle(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }
+
+void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
+{
+    const HeadersFootersAtom* headerFooterAtom = 0;
+    QSharedPointer<UserDateAtom> userDateAtom;
+    QSharedPointer<FooterAtom> footerAtom;
+    HeaderAtom* headerAtom = 0;
+    const PPT::SlideHeadersFootersContainer* slideHF = getSlideHF();
+
+    for (int slideNo = 0; slideNo < p->slides.size(); slideNo++) {
+        const SlideContainer* slide = p->slides[slideNo];
+        if (slide->perSlideHFContainer) {
+            userDateAtom = slide->perSlideHFContainer->userDateAtom;
+            footerAtom = slide->perSlideHFContainer->footerAtom;
+            headerFooterAtom = &slide->perSlideHFContainer->hfAtom;
+        }
+        else if (slideHF) {
+            userDateAtom = slideHF->userDateAtom;
+            footerAtom = slideHF->footerAtom;
+            headerFooterAtom = &slideHF->hfAtom;
+        }
+
+
+        if (headerFooterAtom && headerFooterAtom->fHasHeader && headerAtom) {
+#if 0
+            QString headerText = QString::fromAscii(headerAtom->header, headerAtom->header.size());
+            QString hdrName = findDeclaration(Header, headerText);
+            if (hdrName == 0 ) {
+                hdrName = QString("hdr%1").arg(declaration.values(Header).count() + 1);
+                insertDeclaration(Header, hdrName, headerText);
+            }
+            usedHeaderDeclaration.insert(slideNo,hdrName);
+#endif
+        }
+        if (headerFooterAtom && headerFooterAtom->fHasFooter && footerAtom) {
+            QString footerText = QString::fromUtf16(footerAtom->footer.data(), footerAtom->footer.size());
+            QString ftrName = findDeclaration(Footer, footerText);
+            if ( ftrName == 0) {
+                ftrName = QString("ftr%1").arg((declaration.values(Footer).count() + 1));
+                insertDeclaration(Footer, ftrName, footerText);
+            }
+            usedFooterDeclaration.insert(slideNo,ftrName);
+        }
+        if (headerFooterAtom && headerFooterAtom->fHasDate) {
+            if(headerFooterAtom->fHasUserDate && userDateAtom) {
+                QString userDate = QString::fromUtf16(userDateAtom->userDate.data(), userDateAtom->userDate.size());
+                QString dtdName = findDeclaration(DateTime, userDate);
+                if ( dtdName == 0) {
+                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
+                    insertDeclaration(DateTime, dtdName, userDate);
+                }
+                usedDateTimeDeclaration.insert(slideNo,dtdName);
+            }
+            if(headerFooterAtom->fHasTodayDate) {
+                QString dtdName = findDeclaration(DateTime, "");
+                if ( dtdName == 0) {
+                    dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
+                    insertDeclaration(DateTime, dtdName, "");
+                }
+                usedDateTimeDeclaration.insert(slideNo,dtdName);
+            }
+        }
+    }
+
+    if (slideHF) {
+        if (slideHF->hfAtom.fHasTodayDate) {
+           QList<QPair<QString, QString> >items = declaration.values(DateTime);
+           for( int i = items.size()-1; i >= 0; --i) {
+                QPair<QString, QString > item = items.at(i);
+                xmlWriter->startElement("presentation:date-time-decl");
+                xmlWriter->addAttribute("presentation:name", item.first);
+                xmlWriter->addAttribute("presentation:source", "current-date");
+                //xmlWrite->addAttribute("style:data-style-name", "Dt1");
+                xmlWriter->endElement();  // presentation:date-time-decl
+            }
+        } else if (slideHF->hfAtom.fHasUserDate) {
+            QList<QPair<QString, QString> >items = declaration.values(DateTime);
+            for( int i = 0; i < items.size(); ++i) {
+                QPair<QString, QString > item = items.at(i);
+                xmlWriter->startElement("presentation:date-time-decl");
+                xmlWriter->addAttribute("presentation:name", item.first);
+                xmlWriter->addAttribute("presentation:source", "fixed");
+                xmlWriter->addTextNode(item.second);
+                //Future - Add Fixed date data here
+                xmlWriter->endElement();  //presentation:date-time-decl
+            }
+        }
+        if (headerAtom && slideHF->hfAtom.fHasHeader) {
+            QList< QPair < QString, QString > > items = declaration.values(Header);
+            for( int i = items.size()-1; i >= 0; --i) {
+                QPair<QString, QString > item = items.value(i);
+                xmlWriter->startElement("presentation:header-decl");
+                xmlWriter->addAttribute("presentation:name", item.first);
+                xmlWriter->addTextNode(item.second);
+                xmlWriter->endElement();  //presentation:header-decl
+            }
+        }
+        if (footerAtom && slideHF->hfAtom.fHasFooter) {
+            QList< QPair < QString, QString > > items = declaration.values(Footer);
+            for( int i = items.size()-1 ; i >= 0; --i) {
+                QPair<QString, QString > item = items.at(i);
+                xmlWriter->startElement("presentation:footer-decl");
+                xmlWriter->addAttribute("presentation:name", item.first);
+                xmlWriter->addTextNode(item.second);
+                xmlWriter->endElement();  //presentation:footer-decl
+            }
+        }
+    }
+}
+
+QString PptToOdp::findDeclaration(DeclarationType type, const QString &text) const
+{
+    QList< QPair< QString , QString > > items = declaration.values(type);
+
+    for( int i = 0; i < items.size(); ++i) {
+        QPair<QString, QString>item = items.at(i);
+        if ( item.second == text ) {
+            return item.first;
+        }
+    }
+    return 0;
+}
+
+QString PptToOdp::findNotesDeclaration(DeclarationType type, const QString &text) const
+{
+    QList<QPair<QString, QString> >items = notesDeclaration.values(type);
+
+    for( int i = 0; i < items.size(); ++i) {
+        QPair<QString, QString>item = items.at(i);
+        if ( item.second == text) {
+            return item.first;
+        }
+    }
+    return 0;
+}
+
+void PptToOdp::insertDeclaration(DeclarationType type, const QString &name, const QString &text)
+{
+    QPair<QString, QString>item;
+    item.first = name;
+    item.second = text;
+
+    declaration.insertMulti(type, item);
+}
+
+void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text)
+{
+    QPair<QString, QString > item;
+    item.first = name;
+    item.second = text;
+
+    notesDeclaration.insertMulti(type, item);
+}
+
+void PptToOdp::processMainMasterSlide(KoGenStyles &/*styles*/, Writer& out)
+{
+    const MasterOrSlideContainer* m = p->masters[0];
+    if (m->anon.is<MainMasterContainer>()) {
+        const MainMasterContainer* mainMaster = m->anon.get<MainMasterContainer>();
+        //Future colorScheme and MasterStyleLevel
+        processMainMasterDrawingObject(mainMaster->drawing.OfficeArtDg.groupShape, out);
+        if (mainMaster->drawing.OfficeArtDg.shape) {
+            //processMainMasterDrawingObject(mainMaster->drawing.OfficeArtDg.shape);
+        }
+    }
+}
+
+void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainer& o, Writer& out)
+{
+    if (o.rgfb.size() < 2) return;
+    // if the first OfficeArtSpContainer has a clientAnchor,
+    //   a new coordinate system is introduced.
+    //
+    const OfficeArtSpContainer* first
+    = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    if (first && first->clientAnchor && first->shapeGroup) {
+        const QRect oldCoords = getRect(*first->clientAnchor);
+        QRect newCoords = getRect(*first->shapeGroup);
+        Writer transformedOut = out.transform(oldCoords, newCoords);
+        for (int i = 1; i < o.rgfb.size(); ++i) {
+            processMainMasterDrawingObject(o.rgfb[i], transformedOut);
+        }
+    }
+    else {
+        foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
+            processMainMasterDrawingObject(co, out);
+        }
+    }
+}
+
+void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainerFileBlock& of, Writer& out)
+{
+    if (of.anon.is<OfficeArtSpgrContainer>()) {
+        processMainMasterDrawingObject(*of.anon.get<OfficeArtSpgrContainer>(), out);
+    } else { // OfficeArtSpContainer
+        processMainMasterDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
+    }
+}
+void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpContainer& o, Writer& out)
+{
+    Q_UNUSED(out);
+    //computing the Master slide obeject cordinates
+    const QRect rect = getRect(o);
+    ClientPlacementId placementId = (ClientPlacementId)getPlacementId(o);
+    masterObjects.insert(placementId, rect);
+}
+
+

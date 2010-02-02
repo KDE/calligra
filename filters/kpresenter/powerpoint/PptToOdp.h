@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Contact: Amit Aggarwal <amitcs06@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -199,24 +201,27 @@ private:
     * @param KoGenStyle& style To represent the style
     * @param Slide master - master slide
     */
-    void processDocStyles(KoGenStyles &styles);
+    void processContentStyles(KoGenStyles &styles);
 
-    /**
-    * @brief Write Frame element (KoGenStyle& style,const char* presentation_class,
-    *  QString width, QString height, QString x, QString y) specified amount into the
-    *  styles.xml for page-number represtation
-    * @param KoGenStyle& style To represent the style
-    * @param presentaton_class represent the class for ex: page-number etc
-    * @param width - width of the frame
-    * @param height - Height of the frame
-    * @param x - X cordinate
-    * @param y - Y cordinate
-    * @param pStyle - paragraph style
-    * @param tStyle - text style
-    */
-    void addFrame(KoGenStyle& style, const char* presentationName,
-                  QString width, QString height, QString x, QString y,
-                  QString pStyle, QString tStyle);
+     /**
+     * @brief Write declaration in the content body presentation
+     * @param xmlWriter XML writer to write
+     */
+     void processDeclaration(KoXmlWriter* xmlWriter);
+
+     /**
+     * @brief Write Frame element.
+     * @param KoGenStyle& style To represent the style
+     * @param Writer& out writer xml.
+     * @param presentatonName represent the class for ex: page-number etc
+     * @param QRect -  co-ordinates of the frame
+     * @param mStyle - presentation style
+     * @param pStyle - paragraph style
+     * @param tStyle - text style
+     */
+     void addFrame(KoGenStyle& style, Writer& out, const char* presentationName,
+            const QRect& rect, QString mStyle, QString pStyle, QString tStyle);
+
     /**
       * @brief An enumeration that specifies an action that can be performed
       * when interacting with an object during a slide show.
@@ -500,6 +505,59 @@ private:
     }TextAutoNumberSchemeEnum;
 
     /**
+    * Declaration Type
+    * Referenced by: Declaration Type
+    * A declaration type ex:- Header,Footer,DateTime
+    */
+    enum DeclarationType {
+        Footer,
+        Header,
+        DateTime
+    };
+
+    /**
+    * ClientPlacementId
+    * Referenced by: ClientTextData
+    * Used in master,notes placement id to define the default location
+    */
+    enum ClientPlacementId {
+        None = 0,
+        MasterTitle = 1,
+        MasterBody = 2,
+        MasterCenteredTitle = 3,
+        MasterNotesSlideImage,
+        MasterNotesBodyImage,
+        //Missing
+        MasterDate = 7 ,
+        MasterSlideNumber = 8,
+        MasterFooter = 9,
+        MasterHeader = 10,
+        MasterSubtitle,
+        GenericTextObject,
+        Title,
+        Body,
+        NotesBody,
+        CenteredTitle,
+        Subtitle,
+        VerticalTextTitle,
+        VerticalTextBody,
+        NotesSlideImage,
+        Object,
+        Graph,
+        Table,
+        ClipArt,
+        OrganizationChart,
+        MediaClip
+    };
+
+    /**
+    * QHash ClientPlacementId, QRect
+    * Referenced by: masterObects
+    * Store the masterObjects placement co-ordinates with placementId.
+    */
+    QHash<ClientPlacementId/*placementId*/,QRect>masterObjects;
+
+    /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
     * @param TextAutomNumberSchemeEnum - enum values of textautoscheme.
     * @param numFormat - Format of the bulletand numbering scheme
@@ -526,6 +584,48 @@ private:
     void processFreeLine(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const PPT::OfficeArtSpContainer& o, Writer& out);
 
+    /**
+    * @brief process the mainMasterSlideContainer
+    *
+    * From [MS-PPT].pdf
+    * @param -  KoGenStyles &styles
+    * @param -  KoXmlWriter* xmlWriter
+    * @return - None
+    */
+    void processMainMasterSlide(KoGenStyles &styles, Writer& out);
+
+    /**
+    * @brief process the main Master DrawingObject.
+    * ShapeGroupContainer as per the MS-PPT spec
+    *
+    * From [MS-PPT].pdf
+    * @param -  OfficeArtSpgrContainer
+    * @param -   Writer& out
+    * @return - None
+    */
+    void processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainer& o, Writer& out);
+
+    /**
+    * @brief process the main Master DrawingObject FileBlock Container.
+    * SpgrContainerFileBlock as per the MS-PPT spec
+    *
+    * From [MS-PPT].pdf
+    * @param -  OfficeArtSpgrContainerFileBlock
+    * @param -  Writer& out
+    * @return - None
+    */
+    void processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainerFileBlock& of, Writer& out);
+
+    /**
+    * @brief process the main Master DrawingObject.
+    * ShapeContainer as per the MS-PPT spec
+    *
+    * From [MS-PPT].pdf
+    * @param -  OfficeArtSpContainer
+    * @param -  Writer& out
+    * @return - None
+    */
+    void processMainMasterDrawingObject(const PPT::OfficeArtSpContainer& o, Writer& out);
 
     /**
     * @brief Struct that contains precalculated style names based on
@@ -655,6 +755,60 @@ private:
 
     void createFillImages(KoGenStyles& styles);
     QString getPicturePath(int pib) const;
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString /*usedDeclarationName*/>usedFooterDeclaration;
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedHeaderDeclaration;
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedDateTimeDeclaration;
+
+    /**
+    * @brief An declaration.
+    * settings for declaration text and usedeclaration name.
+    */
+    QHash<DeclarationType/*type*/,QPair<QString/*declarationName*/,QString/*text*/> >declaration;
+
+    /**
+    * @brief An notesDeclaration.
+    * settings for notes declaration  text and usenotes declaration name.
+    */
+    QHash<DeclarationType/*type*/,QPair<QString /*declarationName*/,QString/*text*/> >notesDeclaration;
+
+    /**
+    * @brief find the text from  Declaration.
+    * @return pointer of the use name.
+    */
+    QString findDeclaration(DeclarationType type, const QString &text) const;
+    /**
+    * @brief find the text from  notesDeclaration.
+    * @return pointer of the use notes name.
+    */
+    QString findNotesDeclaration(DeclarationType type, const QString &) const;
+
+    /**
+    * @brief insert the text into  Declaration.
+    * @param QString declaration use name string ex: ftr1
+    * @param QString declaration text to displayed.
+    */
+    void insertDeclaration(DeclarationType type, const QString &name, const QString &text);
+    /**
+    * @brief insert the text into  notesDeclaration.
+    * @param QString notes declaration use name string ex: ftr2
+    * @param QString notes text to displayed.
+    */
+    void insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text);
 };
 
 #endif // POWERPOINTIMPORT_H

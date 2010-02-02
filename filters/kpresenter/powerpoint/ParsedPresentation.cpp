@@ -193,7 +193,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
         qDebug() << "no documentContainer";
         return false;
     }
-// Part 3: identify the node master slide persist object
+// Part 3: identify the note master slide persist object
     quint32 persistId = documentContainer->documentAtom.notesMasterPersistIdRef;
     if (persistId) {
         if (!persistDirectory.contains(persistId)) {
