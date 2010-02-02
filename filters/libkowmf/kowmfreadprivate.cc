@@ -2,6 +2,7 @@
  * Copyright (c) 1998 Stefan Taferner
  *               2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
  *               2007-2008 Jan Hambrecht <jaham@gmx.net>
+ *               2009-2010 Inge Wallin <inge@lysator.liu.se>
  * With the help of WMF documentation by Caolan Mc Namara
  *
  * This library is free software; you can redistribute it and/or
@@ -89,12 +90,17 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     st.setByteOrder(QDataStream::LittleEndian);
     mStackOverflow = mWinding = false;
     mLayout = LAYOUT_LTR;
-    mTextAlign = mTextRotation = 0;
+    mTextAlign = 0;
+    mTextRotation = 0;
     mTextColor = Qt::black;
     mValid = false;
     mStandard = false;
     mPlaceable = false;
     mEnhanced = false;
+    mBBoxTop = 0;
+    mBBoxLeft = 0;
+    mBBoxRight = 0;
+    mBBoxBottom = 0;
 
     //----- Read placeable metafile header
     st >> pheader.key;
@@ -120,7 +126,14 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         st >> header.numOfObjects;
         st >> header.maxRecordSize;
         st >> header.numOfParameters;
+
         mNbrObject = header.numOfObjects;
+        mBBoxLeft = pheader.left;
+        mBBoxTop = pheader.top;
+        mBBoxRight = pheader.right;
+        mBBoxBottom = pheader.bottom;
+
+        // TODO: To be removed
         mBBox.setLeft(pheader.left);
         mBBox.setTop(pheader.top);
         mBBox.setRight(pheader.right);
@@ -187,6 +200,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
 
         // search functions setWindowOrg and setWindowExt
         while (numFunction) {
+            qint16 curOrgX = 0;
+            qint16 curOrgY = 0;
+
             filePos = mBuffer->pos();
             st >> size >> numFunction;
 
@@ -199,10 +215,17 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
             numFunction &= 0xFF;
             if (numFunction == 11) {
                 // setWindowOrg
-                qint16 top;
-                qint16 left;
+                //qint16 top;
+                //qint16 left;
 
-                st >> top >> left;
+                st >> curOrgY >> curOrgX;
+                //kDebug(31000) << curOrgY << curOrgY;
+                if (curOrgY < mBBoxTop)    mBBoxTop = curOrgY;
+                if (curOrgX < mBBoxLeft)   mBBoxLeft = curOrgX;
+                if (curOrgX > mBBoxRight)  mBBoxRight = curOrgX;
+                if (curOrgY > mBBoxBottom) mBBoxBottom = curOrgY;
+                    
+#if 0
                 if (firstOrg) {
                     firstOrg = false;
                     mBBox.setLeft(left);
@@ -213,6 +236,7 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                     if (top < mBBox.top())
                         mBBox.setTop(top);
                 }
+#endif
             }
             else if (numFunction == 12) {
                 // setWindowExt
@@ -220,7 +244,31 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 qint16 height;
 
                 st >> height >> width;
+                //kDebug(31000) << width << height;
                 // Negative values are allowed
+                if (width < 0) {
+                    if (curOrgX + width < mBBoxLeft) {
+                        mBBoxLeft = curOrgX + width;
+                    }
+                }
+                else {
+                    if (curOrgX + width > mBBoxRight) {
+                        mBBoxRight = curOrgX + width;
+                    }
+                }
+
+                if (height < 0) {
+                    if (curOrgY + height < mBBoxTop) {
+                        mBBoxTop = curOrgY + height;
+                    }
+                }
+                else {
+                    if (curOrgY + height > mBBoxBottom) {
+                        mBBoxBottom = curOrgY + height;
+                    }
+                }
+                    
+#if 0
                 //if (width < 0) width = -width;
                 //if (height < 0) height = -height;
                 if (firstExt) {
@@ -233,11 +281,15 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                     if (height > mBBox.height())
                         mBBox.setHeight(height);
                 }
+#endif
             }
             mBuffer->seek(filePos + (size << 1));
             // ## shouldn't we break from the loop as soon as we found what we were looking for?
         }
     }
+
+    mBBox = QRect(QPoint(mBBoxLeft, mBBoxTop), 
+                  QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
 
     return (mValid);
 }
@@ -357,7 +409,7 @@ void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
     mReadWmf->setWindowOrg(left, top);
     mWindow.setLeft(left);
     mWindow.setTop(top);
-    //kDebug(31000) <<"Org : (" << left <<","  << top <<")";
+    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
 }
 
 /*  TODO : deeper look in negative width and height
@@ -372,7 +424,7 @@ void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
     mReadWmf->setWindowExt(width, height);
     mWindow.setWidth(width);
     mWindow.setHeight(height);
-    //kDebug(31000) <<"Ext : (" << width <<","  << height <<")";
+    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
 }
 
 
@@ -708,6 +760,8 @@ void KoWmfReadPrivate::textOut(quint32, QDataStream& stream)
     stream >> y;
     stream >> x;
 
+    // FIXME: If we ever want to support vertical text (e.g. japanese),
+    //        we need to send the vertical text align as well.
     mReadWmf->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 
@@ -731,6 +785,8 @@ void KoWmfReadPrivate::extTextOut(quint32 , QDataStream& stream)
         stream.readRawData(text.data(), textLength);
     }
 
+    // FIXME: If we ever want to support vertical text (e.g. japanese),
+    //        we need to send the vertical text align as well.
     mReadWmf->drawText(parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 

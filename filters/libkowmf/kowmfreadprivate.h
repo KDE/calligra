@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 1998 Stefan Taferner
- *                       2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2009-2010 Inge Wallin <inge@lysator.liu.se>
  * With the help of WMF documentation by Caolan Mc Namara
 
    This library is free software; you can redistribute it and/or
@@ -210,8 +211,14 @@ public:
     bool mPlaceable;
     bool mEnhanced;
 
-    /// bounding rectangle
+    /// bounding rectangle.
+    // We can't use a QRect here because width and/or height may be negative.
+    int mBBoxTop;
+    int mBBoxLeft;
+    int mBBoxRight;
+    int mBBoxBottom;
     QRect  mBBox;     // placeable file : this is the header
+
     // standard file : this is the value in setWindowOrg and setWindowExt
     /// number of points per inch for the default size
     int mDpi;
