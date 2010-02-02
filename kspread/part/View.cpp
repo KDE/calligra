@@ -1115,7 +1115,7 @@ void View::initialPosition()
     Sheet* sheet = loadingInfo->initialActiveSheet();
     if (!sheet) {
         //activate first table which is not hiding
-        sheet = doc()->map()->findSheet(doc()->map()->visibleSheets().first());
+        sheet = doc()->map()->visibleSheets().isEmpty() ? 0 : doc()->map()->findSheet(doc()->map()->visibleSheets().first());
         if (!sheet) {
             sheet = doc()->map()->sheet(0);
             if (sheet) {
@@ -2230,7 +2230,7 @@ void View::calcStatusBarOp()
     ValueCalc* calc = doc()->map()->calc();
     Value val;
     MethodOfCalc tmpMethod = doc()->map()->settings()->getTypeOfCalc();
-    if (tmpMethod != NoneCalc) {
+    if (sheet && tmpMethod != NoneCalc) {
         Value range = sheet->cellStorage()->valueRegion(*d->selection);
         switch (tmpMethod) {
         case SumOfNumber:
@@ -2424,10 +2424,12 @@ QColor View::borderColor() const
 
 void View::updateShowSheetMenu()
 {
-    if (d->activeSheet->isProtected())
-        d->actions->showSheet->setEnabled(false);
-    else
-        d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+    if (d->activeSheet) {
+        if (d->activeSheet->isProtected())
+            d->actions->showSheet->setEnabled(false);
+        else
+            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+    }
 }
 
 void View::markSelectionAsDirty()
