@@ -812,7 +812,7 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
     m_streamOut = new QTextStream(m_ioDevice);
 
     // ### TODO: should "CP 1252" be used directly? (But RTFWorker::escapeRtfText is beased on ISO-8859-1 only.)
-    m_streamOut->setEncoding(QTextStream::Latin1); // We are declaring the RTF document as CP 1252, so use ISO-8859-1
+    m_streamOut->setCodec("ISO-8859-1"); // We are declaring the RTF document as CP 1252, so use ISO-8859-1
 
     m_fileName = filenameOut;
 
