@@ -710,8 +710,7 @@ Container* Form::toplevelContainer() const
     return d->toplevel;
 }
 
-void
-Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArray &)
+void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArray &)
 {
     kDebug() << "container= " << (container ? container->objectName() : "<NULL>")
         << " formWidget=" << formWidget;
@@ -747,8 +746,7 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArra
     }
 }
 
-Container*
-Form::activeContainer()
+Container* Form::activeContainer()
 {
     if (d->selected.isEmpty())
         return d->toplevel;
@@ -767,8 +765,7 @@ Form::activeContainer()
         return it->parent()->container();
 }
 
-ObjectTreeItem*
-Form::commonParentContainer(const QWidgetList& wlist)
+ObjectTreeItem* Form::commonParentContainer(const QWidgetList& wlist)
 {
     // create a list of all widget parents
     QSet<QWidget*> parents;
@@ -791,8 +788,7 @@ Form::commonParentContainer(const QWidgetList& wlist)
     return item;
 }
 
-Container*
-Form::parentContainer(QWidget *w) const
+Container* Form::parentContainer(QWidget *w) const
 {
     if (!w)
         return 0;
@@ -945,8 +941,7 @@ bool Form::isTopLevelWidget(QWidget *w) const
 //    return w == formWidget();
 }
 
-ResizeHandleSet*
-Form::resizeHandlesForWidget(QWidget* w)
+ResizeHandleSet* Form::resizeHandlesForWidget(QWidget* w)
 {
     return d->resizeHandles.value(w->objectName());
 }
@@ -1242,8 +1237,7 @@ void Form::disableWidgetActions()
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
-void
-Form::formDeleted()
+void Form::formDeleted()
 {
 // clearSelection();
     d->selected.clear();
@@ -1258,8 +1252,7 @@ Form::formDeleted()
     deleteLater();
 }
 
-void
-Form::changeName(const QByteArray &oldname, const QByteArray &newname)
+void Form::changeName(const QByteArray &oldname, const QByteArray &newname)
 {
     if (oldname == newname)
         return;
@@ -1387,8 +1380,7 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
     }
 }
 
-void
-Form::updateTabStopsOrder()
+void Form::updateTabStopsOrder()
 {
     ObjectTreeList newList(d->tabstops);
     foreach (ObjectTreeItem *item, d->tabstops) {
