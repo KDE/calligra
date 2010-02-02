@@ -41,6 +41,11 @@ KoFilter::ConversionStatus read_ext();
 
 KoGenStyle m_currentDrawStyle; //!< set by read_drawing(), used by read_pic()
 
-int m_svgX, m_svgY; //!< set by read_off()
-int m_svgWidth, m_svgHeight; //! set by read_ext()
+int m_svgX; //!< set by read_off()
+int m_svgY; //!< set by read_off()
+int m_svgWidth; //! set by read_ext()
+int m_svgHeight; //! set by read_ext()
+int m_flipH; //! set by read_xfrm()
+int m_flipV; //! set by read_xfrm()
+int m_rot; //! set by read_xfrm()
 #endif

@@ -152,6 +152,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             m_xlinkHref.clear();
         }
 
+        // Add style information
+        if (m_flipH || m_flipV) {
+            QString  mirror;
+            if (m_flipH && m_flipV)
+                mirror = "horizontal vertical";
+            else if (m_flipH)
+                mirror = "horizontal";
+            else if (m_flipV)
+                mirror = "vertical";
+
+            //! @todo: horizontal-on-{odd,even}?
+            m_currentDrawStyle.addAttribute("style:mirror", mirror);
+        }
+
+        //! @todo: m_rot
+            
+
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
         body->endElement(); //draw:frame
@@ -592,8 +609,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
 
-    bool off_read = false, ext_read = false;
+    // Read attributes.
+    m_flipH = readBooleanAttr("flipH", false);
+    m_flipV = readBooleanAttr("flipV", false);
+    m_rot = 0;
+    TRY_READ_ATTR_WITHOUT_NS(rot)
+    STRING_TO_INT(rot, m_rot, "xfrm@rot")
+    
+    bool off_read = false;
+    bool ext_read = false;
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
