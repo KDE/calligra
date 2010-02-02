@@ -1,4 +1,3 @@
-remove_definitions(-DQT3_SUPPORT)
 include_directories(${QT_INCLUDES} ${KOMAIN_INCLUDES}  )
 
 ########### KFormula Library ###############
