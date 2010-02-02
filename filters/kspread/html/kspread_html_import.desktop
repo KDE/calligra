@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=HTML Import Filter for KSpread
+X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
+X-KDE-Import=text/html
+X-KDE-Weight=50
+X-KDE-Library=libkspreadhtmlimport
+X-KDE-ServiceTypes=KOfficeFilter
