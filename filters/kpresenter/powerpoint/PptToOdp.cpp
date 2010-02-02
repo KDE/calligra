@@ -1792,28 +1792,37 @@ PptToOdp::HyperlinkRange PptToOdp::findNextHyperlinkStart(const PPT::TextContain
       always refers to previous MouseInteractiveInfoContainers.
       */
     for(int i=0;i<text.interactive.size();i++) {
-        if (text.interactive[i].interactive.is<MouseInteractiveInfoContainer>()) {
-            const MouseInteractiveInfoContainer *container = text.interactive[i].interactive.get<MouseInteractiveInfoContainer>();
-
+        const TextContainerInteractiveInfo& t = text.interactive[i];
+        const InteractiveInfoAtom* interactiveAtom = 0;
+        const TextRange* textRange = 0;
+        if (t.interactive.is<MouseClickInteractiveInfoContainer>()) {
+            interactiveAtom = &t.interactive.get<MouseClickInteractiveInfoContainer>()->interactiveInfoAtom;
+        } else if (t.interactive.is<MouseOverInteractiveInfoContainer>()) {
+            interactiveAtom = &t.interactive.get<MouseOverInteractiveInfoContainer>()->interactiveInfoAtom;
+        } else if (t.interactive.is<MouseClickTextInteractiveInfoAtom>()) {
+            textRange = &t.interactive.get<MouseClickTextInteractiveInfoAtom>()->range;
+        } else if (t.interactive.is<MouseOverTextInteractiveInfoAtom>()) {
+            textRange = &t.interactive.get<MouseOverTextInteractiveInfoAtom>()->range;
+        }
+        if (interactiveAtom) {
             /**
             * [MS-PPT].PDF states exHyperlinkIdRef must be ignored unless action is
             * equal to II_JumpAction (0x3), II_HyperlinkAction (0x4), or
             * II_CustomShowAction (0x7).
             */
-            if (container->interactiveInfoAtom.action == II_JumpAction ||
-                container->interactiveInfoAtom.action == II_HyperlinkAction ||
-                container->interactiveInfoAtom.action == II_CustomShowAction) {
-                lastId = container->interactiveInfoAtom.exHyperlinkIdRef;
+            if (interactiveAtom->action == II_JumpAction ||
+                    interactiveAtom->action == II_HyperlinkAction ||
+                    interactiveAtom->action == II_CustomShowAction) {
+                lastId = interactiveAtom->exHyperlinkIdRef;
             } else { //TODO until we support other type of interactive actions, we'll ignore them
                 lastId = -1;
             }
-        } else if (text.interactive[i].interactive.is<MouseTextInteractiveInfoAtom>() && lastId != -1) {
-            const MouseTextInteractiveInfoAtom *atom = text.interactive[i].interactive.get<MouseTextInteractiveInfoAtom>();
-            if (atom->range.begin >= currentPos &&
+        } else if (textRange && lastId != -1) {
+            if (textRange->begin >= currentPos &&
                 lastId != -1 &&
-                (range.start == -1 || range.start > atom->range.begin)) {
-                range.start = atom->range.begin;
-                range.end = atom->range.end;
+                (range.start == -1 || range.start > textRange->begin)) {
+                range.start = textRange->begin;
+                range.end = textRange->end;
                 range.id = lastId;
             }
         }
