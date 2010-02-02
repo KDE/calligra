@@ -146,7 +146,7 @@ public:
     void processRowForStyle(Row* row, int repeat, KoXmlWriter* xmlWriter);
     void processCellForBody(Cell* cell, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
-    QString processCellFormat(Format* format, const QString& formula = QString(), int rowRepeat = 1, int rowHeight = -1);
+    QString processCellFormat(Format* format, const QString& formula = QString(), const QString& breakBefore = QString(), int rowRepeat = 1, int rowHeight = -1);
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
@@ -916,7 +916,7 @@ void ExcelImport::Private::processRowForStyle(Row* row, int repeat, KoXmlWriter*
 
     Format format = row->format();
     QString formula;
-    QString cellStyleName = processCellFormat(&format, formula, repeat, row->height());
+    QString cellStyleName = processCellFormat(&format, formula, "auto", repeat, row->height());
     rowStyles.append(cellStyleName);
 
     for (int i = 0; i <= lastCol; i++) {
@@ -1420,7 +1420,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
-QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula, int rowRepeat, int rowHeight)
+QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula, const QString& breakBefore, int rowRepeat, int rowHeight)
 {
     // handle data format, e.g. number style
     QString refName;
@@ -1461,10 +1461,12 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
     }
 
     KoGenStyle style(KoGenStyle::StyleAutoTableCell, "table-cell");
-    style.addProperty("fo:break-before", "auto");
     // now the real table-cell
     if (!refName.isEmpty())
         style.addAttribute("style:data-style-name", refName);
+    // set break-before
+    if(!breakBefore.isEmpty())
+        style.addProperty("fo:break-before", breakBefore);
     // set how often the row should be repeated
     if (rowRepeat > 1)
         style.addAttribute("table:number-rows-repeated", rowRepeat);
