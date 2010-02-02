@@ -154,7 +154,7 @@ void ReportEntityBarcode::slotPropertyChanged(KoProperty::Set &s, KoProperty::Pr
     if (p.name() == "Position") {
         m_pos.setUnitPos(p.value().toPointF(), false);
     } else if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF());
+        m_size.setUnitSize(p.value().toSizeF(), false);
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {

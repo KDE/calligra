@@ -35,9 +35,9 @@ public:
     QSizeF toUnit();
     QSizeF toPoint();
     QSizeF toScene();
-    void setSceneSize(const QSizeF&);
-    void setUnitSize(const QSizeF&);
-    void setPointSize(const QSizeF&);
+    void setSceneSize(const QSizeF&, bool update= true);
+    void setUnitSize(const QSizeF&, bool update = true);
+    void setPointSize(const QSizeF&, bool update = true);
     void setUnit(KoUnit);
 
     KoProperty::Property* property() {

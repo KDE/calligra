@@ -34,7 +34,7 @@ KRSize::~KRSize()
 {
 }
 
-void KRSize::setSceneSize(const QSizeF& s)
+void KRSize::setSceneSize(const QSizeF& s, bool update)
 {
     qreal w, h;
 
@@ -42,25 +42,30 @@ void KRSize::setSceneSize(const QSizeF& s)
     h = INCH_TO_POINT(s.height() / KoDpi::dpiY());
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
-    m_property->setValue(toUnit());
+
+    if (update)
+        m_property->setValue(toUnit());
 }
 
-void KRSize::setUnitSize(const QSizeF& s)
+void KRSize::setUnitSize(const QSizeF& s, bool update)
 {
     qreal w, h;
     w = m_unit.fromUserValue(s.width());
     h = m_unit.fromUserValue(s.height());
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
-    m_property->setValue(toUnit());
+    
+    if (update)
+        m_property->setValue(toUnit());
 }
 
-void KRSize::setPointSize(const QSizeF& s)
+void KRSize::setPointSize(const QSizeF& s, bool update)
 {
     m_pointSize.setWidth(s.width());
     m_pointSize.setHeight(s.height());
-    m_property->setValue(toUnit());
 
+    if (update)
+        m_property->setValue(toUnit());
 }
 
 void KRSize::setUnit(KoUnit u)
