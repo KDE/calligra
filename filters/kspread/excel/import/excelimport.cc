@@ -117,7 +117,6 @@ public:
     KoGenStyles *mainStyles;
     QList<QString> cellStyles;
     QList<QString> rowStyles;
-    QList<QString> rowCellStyles;
     QList<QString> colStyles;
     QList<QString> colCellStyles;
     QList<QString> sheetStyles;
@@ -147,7 +146,7 @@ public:
     void processRowForStyle(Row* row, int repeat, KoXmlWriter* xmlWriter);
     void processCellForBody(Cell* cell, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
-    QString processCellFormat(Format* format, const QString& formula = QString());
+    QString processCellFormat(Format* format, const QString& formula = QString(), int rowRepeat = 1, int rowHeight = -1);
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
@@ -275,7 +274,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->styles = 0;
     d->cellStyles.clear();
     d->rowStyles.clear();
-    d->rowCellStyles.clear();
     d->colStyles.clear();
     d->colCellStyles.clear();
     d->sheetStyles.clear();
@@ -479,7 +477,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
 
     settingsWriter->startElement("config:config-item-map-named");
     settingsWriter->addAttribute("config:name", "Tables");
-    for(int i = 0; i < workbook->sheetCount(); ++i) {
+    for(uint i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         settingsWriter->startElement("config:config-item-map-entry");
         settingsWriter->addAttribute("config:name", string(sheet->name()));
@@ -889,7 +887,6 @@ void ExcelImport::Private::processRowForBody(Row* row, int /*repeat*/, KoXmlWrit
     xmlWriter->startElement("table:table-row");
     xmlWriter->addAttribute("table:visibility", row->visible() ? "visible" : "collapse");
     xmlWriter->addAttribute("table:style-name", rowStyles[rowFormatIndex]);
-    xmlWriter->addAttribute("table:default-cell-style-name", rowCellStyles[rowFormatIndex]);
     rowFormatIndex++;
 
     for (int i = 0; i <= lastCol; i++) {
@@ -917,18 +914,10 @@ void ExcelImport::Private::processRowForStyle(Row* row, int repeat, KoXmlWriter*
     for (unsigned i = 0; i <= row->sheet()->maxColumn(); i++)
         if (row->sheet()->cell(i, row->index(), false)) lastCol = i;
 
-    KoGenStyle style(KoGenStyle::StyleAutoTableRow, "table-row");
-    if (repeat > 1) style.addAttribute("table:number-rows-repeated", repeat);
-
-    style.addProperty("fo:break-before", "auto");
-    style.addPropertyPt("style:row-height", row->height());
-
-    QString styleName = styles->lookup(style, "ro");
-    rowStyles.append(styleName);
-
     Format format = row->format();
-    QString cellStyleName = processCellFormat(&format);
-    rowCellStyles.append(cellStyleName);
+    QString formula;
+    QString cellStyleName = processCellFormat(&format, formula, repeat, row->height());
+    rowStyles.append(cellStyleName);
 
     for (int i = 0; i <= lastCol; i++) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
@@ -1431,7 +1420,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
-QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
+QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula, int rowRepeat, int rowHeight)
 {
     // handle data format, e.g. number style
     QString refName;
@@ -1472,9 +1461,16 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
     }
 
     KoGenStyle style(KoGenStyle::StyleAutoTableCell, "table-cell");
+    style.addProperty("fo:break-before", "auto");
     // now the real table-cell
     if (!refName.isEmpty())
         style.addAttribute("style:data-style-name", refName);
+    // set how often the row should be repeated
+    if (rowRepeat > 1)
+        style.addAttribute("table:number-rows-repeated", rowRepeat);
+    // set the height of the row
+    if (rowHeight >= 0)
+        style.addPropertyPt("style:row-height", rowHeight);
 
     processFormat(format, style);
     QString styleName = styles->lookup(style, "ce");

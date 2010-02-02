@@ -1583,7 +1583,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     // pictFmla
     if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
-        const unsigned long cb = readU16(startPict + 2);
+        //const unsigned long cb = readU16(startPict + 2);
         startPict += 4;
 
         /* from the specs;
