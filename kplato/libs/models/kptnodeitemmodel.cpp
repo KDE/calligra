@@ -1897,7 +1897,8 @@ QVariant NodeModel::headerData( int section, int role )
 //----------------------------
 NodeItemModel::NodeItemModel( QObject *parent )
     : ItemModelBase( parent ),
-    m_node( 0 )
+    m_node( 0 ),
+    m_projecthidden( true )
 {
 }
 
@@ -1905,6 +1906,12 @@ NodeItemModel::~NodeItemModel()
 {
 }
     
+void NodeItemModel::setProjectHidden( bool on )
+{
+    m_projecthidden = on;
+    reset();
+}
+
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
     //kDebug()<<parent->name()<<"; "<<row;
@@ -1952,9 +1959,14 @@ void NodeItemModel::slotWbsDefinitionChanged()
     if ( m_project == 0 ) {
         return;
     }
+    if ( ! m_projecthidden ) {
+        QModelIndex idx = createIndex( 0, NodeModel::NodeWBSCode, m_project );
+        emit dataChanged( idx, idx );
+    }
     foreach ( Node *n, m_project->allNodes() ) {
         int row = n->parentNode()->indexOf( n );
-        emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, n ), createIndex( row, NodeModel::NodeWBSCode, n ) );
+        QModelIndex idx = createIndex( row, NodeModel::NodeWBSCode, n );
+        emit dataChanged( idx, idx );
     }
 }
 
@@ -2147,13 +2159,16 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     
 QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 {
-    if ( !index.isValid() ) {
+    if ( ! index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
-    Node *p = node( index )->parentNode();
-    if ( p == 0 || p->type() == Node::Type_Project ) {
+    Node *n = node( index );
+    if ( n == 0 || n == m_project ) {
         return QModelIndex();
+    }
+    Node *p = n->parentNode();
+    if ( p == m_project ) {
+        return m_projecthidden ? QModelIndex() : createIndex( 0, 0, p );
     }
     int row = p->parentNode()->indexOf( p );
     if ( row == -1 ) {
@@ -2171,6 +2186,9 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
         return QModelIndex();
+    }
+    if ( ! m_projecthidden && ! parent.isValid() ) {
+        return createIndex( row, column, m_project );
     }
     Node *p = node( parent );
     if ( row >= p->numChildren() ) {
@@ -2830,6 +2848,9 @@ int NodeItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 
 int NodeItemModel::rowCount( const QModelIndex &parent ) const
 {
+    if ( ! m_projecthidden && ! parent.isValid() ) {
+        return m_project == 0 ? 0 : 1;
+    }
     Node *p = node( parent );
     return p == 0 ? 0 : p->numChildren();
 }
@@ -3005,9 +3026,6 @@ Node *NodeItemModel::node( const QModelIndex &index ) const
 {
     Node *n = m_project;
     if ( index.isValid() ) {
-        if ( index.internalPointer() == 0 ) {
-            
-        }
         //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
         n = static_cast<Node*>( index.internalPointer() );
         Q_ASSERT( n );
@@ -3558,6 +3576,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
         if ( idx.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
             QVariant result = NodeItemModel::data( idx, Qt::EditRole );
             switch ( result.toInt() ) {
+                case Node::Type_Project: return KDGantt::TypeSummary;
                 case Node::Type_Summarytask: return KDGantt::TypeSummary;
                 case Node::Type_Milestone: return KDGantt::TypeEvent;
                 default: return m_showSpecial ? KDGantt::TypeMulti : KDGantt::TypeTask;
@@ -3657,7 +3676,7 @@ void MilestoneItemModel::setProject( Project *project )
     resetModel();
 }
 
-void MilestoneItemModel::setManager( ScheduleManager *sm )
+void MilestoneItemModel::setScheduleManager( ScheduleManager *sm )
 {
     if ( m_nodemodel.manager() ) {
     }

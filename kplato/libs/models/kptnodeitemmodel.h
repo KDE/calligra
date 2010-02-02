@@ -251,6 +251,7 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
+    void setProjectHidden( bool on );
     virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
@@ -333,6 +334,7 @@ protected:
 protected:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
+    bool m_projecthidden;
 };
 
 //--------------------------------------
@@ -421,7 +423,6 @@ public:
     ~MilestoneItemModel();
 
     virtual void setProject( Project *project );
-    void setManager( ScheduleManager *sm );
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
@@ -457,6 +458,9 @@ public:
 
     QList<Node*> mileStones() const;
     
+public slots:
+    virtual void setScheduleManager( ScheduleManager *sm );
+
 protected slots:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
