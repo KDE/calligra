@@ -166,8 +166,10 @@ class TextBookmarkAtom;
 void parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s);
 class TextRange;
 void parseTextRange(LEInputStream& in, TextRange& _s);
-class MouseTextInteractiveInfoAtom;
-void parseMouseTextInteractiveInfoAtom(LEInputStream& in, MouseTextInteractiveInfoAtom& _s);
+class MouseClickTextInteractiveInfoAtom;
+void parseMouseClickTextInteractiveInfoAtom(LEInputStream& in, MouseClickTextInteractiveInfoAtom& _s);
+class MouseOverTextInteractiveInfoAtom;
+void parseMouseOverTextInteractiveInfoAtom(LEInputStream& in, MouseOverTextInteractiveInfoAtom& _s);
 class SlideId;
 void parseSlideId(LEInputStream& in, SlideId& _s);
 class TabStops;
@@ -350,8 +352,6 @@ class OfficeArtSecondaryFOPT;
 void parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT& _s);
 class OfficeArtTertiaryFOPT;
 void parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _s);
-class OfficeArtFOPTEComplexData;
-void parseOfficeArtFOPTEComplexData(LEInputStream& in, OfficeArtFOPTEComplexData& _s);
 class FixedPoint;
 void parseFixedPoint(LEInputStream& in, FixedPoint& _s);
 class OfficeArtCOLORREF;
@@ -640,8 +640,10 @@ class OfficeArtClientAnchor;
 void parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s);
 class AnimationInfoContainer;
 void parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer& _s);
-class MouseInteractiveInfoContainer;
-void parseMouseInteractiveInfoContainer(LEInputStream& in, MouseInteractiveInfoContainer& _s);
+class MouseClickInteractiveInfoContainer;
+void parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s);
+class MouseOverInteractiveInfoContainer;
+void parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s);
 class TextRulerAtom;
 void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
 class OfficeArtFOPTE;
@@ -906,19 +908,19 @@ public:
 class UserDateAtom : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray userDate;
+    QVector<quint16> userDate;
     UserDateAtom(void* /*dummy*/ = 0) {}
 };
 class HeaderAtom : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray footer;
+    QVector<quint16> header;
     HeaderAtom(void* /*dummy*/ = 0) {}
 };
 class FooterAtom : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray footer;
+    QVector<quint16> footer;
     FooterAtom(void* /*dummy*/ = 0) {}
 };
 class PerSlideHeadersFootersContainer : public StreamOffset {
@@ -1005,8 +1007,7 @@ public:
     bool fDisableTooManyFontsRule;
     bool fDisablePrintTip;
     quint8 reserveda;
-    quint8 reservedb;
-    quint8 reservedc;
+    quint16 reservedb;
     PresAdvisorFlags9Atom(void* /*dummy*/ = 0) {}
 };
 class EnvelopeData9Atom : public StreamOffset {
@@ -1023,7 +1024,8 @@ public:
     quint8 reserved1;
     bool fEnvelopeDirty;
     quint8 reserved2a;
-    quint32 reserved2b;
+    quint8 reserved2b;
+    quint16 reserved2c;
     EnvelopeFlags9Atom(void* /*dummy*/ = 0) {}
 };
 class HTMLDocInfo9Atom : public StreamOffset {
@@ -1350,11 +1352,17 @@ public:
     qint32 end;
     TextRange(void* /*dummy*/ = 0) {}
 };
-class MouseTextInteractiveInfoAtom : public StreamOffset {
+class MouseClickTextInteractiveInfoAtom : public StreamOffset {
 public:
     RecordHeader rh;
     TextRange range;
-    MouseTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
+    MouseClickTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
+};
+class MouseOverTextInteractiveInfoAtom : public StreamOffset {
+public:
+    RecordHeader rh;
+    TextRange range;
+    MouseOverTextInteractiveInfoAtom(void* /*dummy*/ = 0) {}
 };
 class SlideId : public StreamOffset {
 public:
@@ -2072,11 +2080,6 @@ public:
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
     OfficeArtTertiaryFOPT(void* /*dummy*/ = 0) {}
-};
-class OfficeArtFOPTEComplexData : public StreamOffset {
-public:
-    QByteArray data;
-    OfficeArtFOPTEComplexData(void* /*dummy*/ = 0) {}
 };
 class FixedPoint : public StreamOffset {
 public:
@@ -3684,12 +3687,19 @@ public:
     QSharedPointer<SoundContainer> animationSound;
     AnimationInfoContainer(void* /*dummy*/ = 0) {}
 };
-class MouseInteractiveInfoContainer : public StreamOffset {
+class MouseClickInteractiveInfoContainer : public StreamOffset {
 public:
     RecordHeader rh;
     InteractiveInfoAtom interactiveInfoAtom;
     QSharedPointer<MacroNameAtom> macroNameAtom;
-    MouseInteractiveInfoContainer(void* /*dummy*/ = 0) {}
+    MouseClickInteractiveInfoContainer(void* /*dummy*/ = 0) {}
+};
+class MouseOverInteractiveInfoContainer : public StreamOffset {
+public:
+    RecordHeader rh;
+    InteractiveInfoAtom interactiveInfoAtom;
+    QSharedPointer<MacroNameAtom> macroNameAtom;
+    MouseOverInteractiveInfoContainer(void* /*dummy*/ = 0) {}
 };
 class TextRulerAtom : public StreamOffset {
 public:
@@ -3877,16 +3887,18 @@ public:
 };
 class TextContainerInteractiveInfo : public StreamOffset {
 public:
-    class choice2203269482 : public QSharedPointer<StreamOffset> {
+    class choice1543770607 : public QSharedPointer<StreamOffset> {
     public:
-        choice2203269482() {}
-        explicit choice2203269482(MouseInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2203269482(MouseTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice1543770607() {}
+        explicit choice1543770607(MouseClickInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1543770607(MouseOverInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1543770607(MouseClickTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1543770607(MouseOverTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice2203269482 interactive;
+    choice1543770607 interactive;
     TextContainerInteractiveInfo(void* /*dummy*/ = 0) {}
 };
 class TextClientDataSubContainerOrAtom : public StreamOffset {
@@ -4087,8 +4099,8 @@ public:
     QSharedPointer<ShapeFlags10Atom> shapeFlags10Atom;
     QSharedPointer<ExObjRefAtom> exObjRefAtom;
     QSharedPointer<AnimationInfoContainer> animationInfo;
-    QSharedPointer<MouseInteractiveInfoContainer> mouseClickInteractiveInfo;
-    QSharedPointer<MouseInteractiveInfoContainer> mouseOverInteractiveInfo;
+    QSharedPointer<MouseClickInteractiveInfoContainer> mouseClickInteractiveInfo;
+    QSharedPointer<MouseOverInteractiveInfoContainer> mouseOverInteractiveInfo;
     QSharedPointer<PlaceholderAtom> placeholderAtom;
     QSharedPointer<RecolorInfoAtom> recolorInfoAtom;
     QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData;

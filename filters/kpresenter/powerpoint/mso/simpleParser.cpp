@@ -362,9 +362,11 @@ void PPT::parseUserDateAtom(LEInputStream& in, UserDateAtom& _s) {
     if (!(_s.rh.recLen<=510)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen<=510");
     }
-    _c = _s.rh.recLen;
+    _c = _s.rh.recLen/2;
     _s.userDate.resize(_c);
-    in.readBytes(_s.userDate);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.userDate[_i] = in.readuint16();
+    }
 }
 void PPT::parseHeaderAtom(LEInputStream& in, HeaderAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -383,9 +385,11 @@ void PPT::parseHeaderAtom(LEInputStream& in, HeaderAtom& _s) {
     if (!(_s.rh.recLen%2==0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen;
-    _s.footer.resize(_c);
-    in.readBytes(_s.footer);
+    _c = _s.rh.recLen/2;
+    _s.header.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.header[_i] = in.readuint16();
+    }
 }
 void PPT::parseFooterAtom(LEInputStream& in, FooterAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -404,9 +408,11 @@ void PPT::parseFooterAtom(LEInputStream& in, FooterAtom& _s) {
     if (!(_s.rh.recLen%2==0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen%2==0");
     }
-    _c = _s.rh.recLen;
+    _c = _s.rh.recLen/2;
     _s.footer.resize(_c);
-    in.readBytes(_s.footer);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.footer[_i] = in.readuint16();
+    }
 }
 void PPT::parsePerSlideHeadersFootersContainer(LEInputStream& in, PerSlideHeadersFootersContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -696,17 +702,13 @@ void PPT::parsePresAdvisorFlags9Atom(LEInputStream& in, PresAdvisorFlags9Atom& _
     _s.fDisableNumberOfLinesBodyRule = in.readbit();
     _s.fDisableTooManyFontsRule = in.readbit();
     _s.fDisablePrintTip = in.readbit();
-    _s.reserveda = in.readuint7();
+    _s.reserveda = in.readuint5();
     if (!(((quint8)_s.reserveda) == 0)) {
         throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserveda) == 0");
     }
-    _s.reservedb = in.readuint7();
-    if (!(((quint8)_s.reservedb) == 0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reservedb) == 0");
-    }
-    _s.reservedc = in.readuint7();
-    if (!(((quint8)_s.reservedc) == 0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reservedc) == 0");
+    _s.reservedb = in.readuint16();
+    if (!(((quint16)_s.reservedb) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.reservedb) == 0");
     }
 }
 void PPT::parseEnvelopeData9Atom(LEInputStream& in, EnvelopeData9Atom& _s) {
@@ -745,17 +747,21 @@ void PPT::parseEnvelopeFlags9Atom(LEInputStream& in, EnvelopeFlags9Atom& _s) {
     _s.fHasEnvelope = in.readbit();
     _s.fEnvelopeVisible = in.readbit();
     _s.reserved1 = in.readuint2();
-    if (!(((quint8)_s.reserved1) == 0x0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved1) == 0x0");
+    if (!(((quint8)_s.reserved1) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved1) == 0");
     }
     _s.fEnvelopeDirty = in.readbit();
-    _s.reserved2a = in.readuint7();
-    if (!(((quint8)_s.reserved2a) == 0x0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2a) == 0x0");
+    _s.reserved2a = in.readuint3();
+    if (!(((quint8)_s.reserved2a) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2a) == 0");
     }
-    _s.reserved2b = in.readuint20();
-    if (!(((quint32)_s.reserved2b) == 0x0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint32)_s.reserved2b) == 0x0");
+    _s.reserved2b = in.readuint8();
+    if (!(((quint8)_s.reserved2b) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint8)_s.reserved2b) == 0");
+    }
+    _s.reserved2c = in.readuint16();
+    if (!(((quint16)_s.reserved2c) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.reserved2c) == 0");
     }
 }
 void PPT::parseHTMLDocInfo9Atom(LEInputStream& in, HTMLDocInfo9Atom& _s) {
@@ -1588,9 +1594,6 @@ void PPT::parseTextCharsAtom(LEInputStream& in, TextCharsAtom& _s) {
     _s.textChars.resize(_c);
     for (int _i=0; _i<_c; ++_i) {
         _s.textChars[_i] = in.readuint16();
-        if (!(((quint16)_s.textChars[_i]) != 0)) {
-            throw IncorrectValueException(in.getPosition(), "((quint16)_s.textChars[_i]) != 0");
-        }
     }
 }
 void PPT::parseTextBytesAtom(LEInputStream& in, TextBytesAtom& _s) {
@@ -1793,14 +1796,31 @@ void PPT::parseTextRange(LEInputStream& in, TextRange& _s) {
     _s.begin = in.readint32();
     _s.end = in.readint32();
 }
-void PPT::parseMouseTextInteractiveInfoAtom(LEInputStream& in, MouseTextInteractiveInfoAtom& _s) {
+void PPT::parseMouseClickTextInteractiveInfoAtom(LEInputStream& in, MouseClickTextInteractiveInfoAtom& _s) {
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1");
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFDF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFDF");
+    }
+    if (!(_s.rh.recLen == 8)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
+    }
+    parseTextRange(in, _s.range);
+}
+void PPT::parseMouseOverTextInteractiveInfoAtom(LEInputStream& in, MouseOverTextInteractiveInfoAtom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 1)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 1");
     }
     if (!(_s.rh.recType == 0xFDF)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFDF");
@@ -3540,14 +3560,6 @@ void PPT::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _
     _c = _s.rh.recLen-6*_s.rh.recInstance;
     _s.complexData.resize(_c);
     in.readBytes(_s.complexData);
-}
-void PPT::parseOfficeArtFOPTEComplexData(LEInputStream& in, OfficeArtFOPTEComplexData& _s) {
-    _s.streamOffset = in.getPosition();
-    int _c;
-    LEInputStream::Mark _m;
-    _c = 0;
-    _s.data.resize(_c);
-    in.readBytes(_s.data);
 }
 void PPT::parseFixedPoint(LEInputStream& in, FixedPoint& _s) {
     _s.streamOffset = in.getPosition();
@@ -7241,14 +7253,32 @@ void PPT::parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer&
         }
     }
 }
-void PPT::parseMouseInteractiveInfoContainer(LEInputStream& in, MouseInteractiveInfoContainer& _s) {
+void PPT::parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s) {
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1");
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFF2)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFF2");
+    }
+    parseInteractiveInfoAtom(in, _s.interactiveInfoAtom);
+    if (_s.rh.recLen>24) {
+        _s.macroNameAtom = QSharedPointer<MacroNameAtom>(new MacroNameAtom(&_s));
+        parseMacroNameAtom(in, *_s.macroNameAtom.data());
+    }
+}
+void PPT::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 1)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 1");
     }
     if (!(_s.rh.recType == 0xFF2)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFF2");
@@ -7922,12 +7952,18 @@ void PPT::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInte
     RecordHeader _choice(&_s);
     parseRecordHeader(in, _choice);
     in.rewind(_m);
-    if ((_choice.recVer == 0xF)&&(_choice.recType == 0xFF2)) {
-        _s.interactive = TextContainerInteractiveInfo::choice2203269482(new MouseInteractiveInfoContainer(&_s));
-        parseMouseInteractiveInfoContainer(in, *(MouseInteractiveInfoContainer*)_s.interactive.data());
+    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFF2)) {
+        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseClickInteractiveInfoContainer(&_s));
+        parseMouseClickInteractiveInfoContainer(in, *(MouseClickInteractiveInfoContainer*)_s.interactive.data());
+    } else if ((_choice.recVer == 0xF)&&(_choice.recInstance == 1)&&(_choice.recType == 0xFF2)) {
+        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseOverInteractiveInfoContainer(&_s));
+        parseMouseOverInteractiveInfoContainer(in, *(MouseOverInteractiveInfoContainer*)_s.interactive.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFDF)&&(_choice.recLen == 8)) {
+        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseClickTextInteractiveInfoAtom(&_s));
+        parseMouseClickTextInteractiveInfoAtom(in, *(MouseClickTextInteractiveInfoAtom*)_s.interactive.data());
     } else {
-        _s.interactive = TextContainerInteractiveInfo::choice2203269482(new MouseTextInteractiveInfoAtom(&_s));
-        parseMouseTextInteractiveInfoAtom(in, *(MouseTextInteractiveInfoAtom*)_s.interactive.data());
+        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseOverTextInteractiveInfoAtom(&_s));
+        parseMouseOverTextInteractiveInfoAtom(in, *(MouseOverTextInteractiveInfoAtom*)_s.interactive.data());
     }
 }
 void PPT::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s) {
@@ -8560,14 +8596,14 @@ void PPT::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
     {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFF2);
+        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFF2);
     }
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
         try {
-            _s.mouseClickInteractiveInfo = QSharedPointer<MouseInteractiveInfoContainer>(new MouseInteractiveInfoContainer(&_s));
-            parseMouseInteractiveInfoContainer(in, *_s.mouseClickInteractiveInfo.data());
+            _s.mouseClickInteractiveInfo = QSharedPointer<MouseClickInteractiveInfoContainer>(new MouseClickInteractiveInfoContainer(&_s));
+            parseMouseClickInteractiveInfoContainer(in, *_s.mouseClickInteractiveInfo.data());
         } catch(IncorrectValueException _e) {
             _s.mouseClickInteractiveInfo.clear();
             in.rewind(_m);
@@ -8580,14 +8616,14 @@ void PPT::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
     {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0 || _optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFF2);
+        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xFF2);
     }
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
         try {
-            _s.mouseOverInteractiveInfo = QSharedPointer<MouseInteractiveInfoContainer>(new MouseInteractiveInfoContainer(&_s));
-            parseMouseInteractiveInfoContainer(in, *_s.mouseOverInteractiveInfo.data());
+            _s.mouseOverInteractiveInfo = QSharedPointer<MouseOverInteractiveInfoContainer>(new MouseOverInteractiveInfoContainer(&_s));
+            parseMouseOverInteractiveInfoContainer(in, *_s.mouseOverInteractiveInfo.data());
         } catch(IncorrectValueException _e) {
             _s.mouseOverInteractiveInfo.clear();
             in.rewind(_m);
