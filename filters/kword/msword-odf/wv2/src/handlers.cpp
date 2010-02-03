@@ -82,12 +82,10 @@ void SubDocumentHandler::footnoteEnd()
 
 void SubDocumentHandler::annotationStart()
 {
-    wvlog << "annotation start";
 }
 
 void SubDocumentHandler::annotationEnd()
 {
-    wvlog << "annotation end";
 }
 
 
@@ -201,6 +199,14 @@ void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters
 void TextHandler::annotationFound( UString characters,
                                    SharedPtr<const Word97::CHP> chp, const AnnotationFunctor& parseAnnotation)
 {
+#ifdef WV_DEBUG_ANNOTATIONS
+    wvlog << "TextHandler::annotationFound: ";
+    for (int i = 0; i < characters.length(); ++i) {
+        wvlog << characters[i].unicode();
+    }
+    wvlog << std::endl;
+#endif
+    runOfText(characters, chp);
     parseAnnotation();
 }
 

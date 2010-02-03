@@ -190,9 +190,15 @@ private:
     bool m_fieldAfterSeparator;
     int m_fieldType; //0 if we're not in a field, -1 for a field we can't handle,
     //anything else is the type of the field
+
     bool m_insideFootnote;
     KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
     QBuffer* m_footnoteBuffer; //buffer for the footnote data
+
+    bool m_insideAnnotation;
+    KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
+    QBuffer* m_annotationBuffer; //buffer for the annotation data
+
     int m_maxColumns;//max number of columns in a table
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);

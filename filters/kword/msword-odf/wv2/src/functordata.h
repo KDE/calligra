@@ -66,7 +66,9 @@ namespace wvWare
     struct WV2_EXPORT AnnotationData
     {
         AnnotationData( unsigned int start, unsigned int lim ) :
-                startCP( start ), limCP( lim ) {}
+                startCP( start ), limCP( lim )
+        {
+        }
 
         unsigned int startCP;
         unsigned int limCP;

@@ -26,12 +26,16 @@
 using namespace wvWare;
 
 Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
-    m_annotationRef( 0 ), m_annotationRefIt( 0 )
+        m_annotationRef( 0 ), m_annotationRefIt( 0 )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::Annotations()" << std::endl
+    wvlog << "Annotations::Annotations "<< std::endl
+          << "footnotes" << std::endl
           << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << std::endl
-          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << std::endl;
+          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << std::endl
+          << "annotations" << std::endl
+          << "   fcPlcfandRef=" << fib.fcPlcfandRef << " lcbPlcfandRef=" << fib.lcbPlcfandRef << std::endl
+          << "   fcPlcfandTxt=" << fib.fcPlcfandTxt << " lcbPlcfandTxt=" << fib.lcbPlcfandTxt << std::endl;
 #endif
     tableStream->push();
     // Annotations
@@ -53,7 +57,7 @@ AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
 #endif
     ok = true; // let's assume we will find it
     if (    m_annotationRefIt && m_annotationRefIt->currentStart() == globalCP
-         && m_annotationTxtIt != m_annotationTxt.end() ) {
+            && m_annotationTxtIt != m_annotationTxt.end() ) {
 
         ++( *m_annotationRefIt ); // yay, but it is hard to make that more elegant
 
@@ -69,6 +73,7 @@ AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
 
 U32 Annotations::nextAnnotation() const
 {
+    wvlog << "Annotations::nextAnnotation()" << std::endl;
     return m_annotationRefIt && m_annotationRefIt->current() ? m_annotationRefIt->currentStart() : 0xffffffff;
 }
 

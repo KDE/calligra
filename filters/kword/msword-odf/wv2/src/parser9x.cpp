@@ -251,7 +251,6 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
 #endif
 }
 
-
 void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
@@ -830,7 +829,6 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
         }
     case TextHandler::AnnotationRef:
         {
-            wvlog << "Found an annotation" << std::endl;
             processAnnotation(UString(character), globalCP, chp);
         }
     case TextHandler::FieldEscapeChar:
@@ -860,13 +858,15 @@ void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<cons
 
 void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
 {
+    for (int i = 0; i < characters.length(); ++i) {
+        wvlog << characters[i].unicode();
+    }
+    wvlog << std::endl;
     if ( !m_annotations ) {
         wvlog << "Bug: Found an annotation, but m_annotations == 0!" << std::endl;
         return;
     }
-#ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "######### Annotation found: CP=" << globalCP << std::endl;
-#endif
+
     bool ok;
     AnnotationData data( m_annotations->annotation( globalCP, ok ) );
     if ( ok )

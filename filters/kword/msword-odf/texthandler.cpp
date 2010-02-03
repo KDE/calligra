@@ -59,28 +59,30 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 
 KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
-        : m_writingHeader(false)
-        , m_writeMasterStyleName(false)
-        , m_headerWriter(0)
-        , m_mainStyles(0)
-        , m_sectionNumber(0)
-        , m_document(0)
-        , m_parser(parser)
-        , m_footNoteNumber(0)
-        , m_endNoteNumber(0)
-        , m_index(0)
-        , m_currentTable(0)
-        , m_paragraph(0)
-        , m_insideField(false)
-        , m_fieldAfterSeparator(false)
-        , m_fieldType(0)
-        , m_insideFootnote(false)
-        , m_footnoteWriter(0)
-        , m_footnoteBuffer(0)
-        , m_maxColumns(0)
-        , m_currentListDepth(-1)
-        , m_currentListID(0)
-        , m_previousListID(0)
+    : m_writingHeader(false)
+    , m_writeMasterStyleName(false)
+    , m_headerWriter(0)
+    , m_mainStyles(0)
+    , m_sectionNumber(0)
+    , m_document(0)
+    , m_parser(parser)
+    , m_footNoteNumber(0)
+    , m_endNoteNumber(0)
+    , m_index(0)
+    , m_currentTable(0)
+    , m_paragraph(0)
+    , m_fieldAfterSeparator(false)
+    , m_fieldType(0)
+    , m_insideFootnote(false)
+    , m_footnoteWriter(0)
+    , m_footnoteBuffer(0)
+    , m_insideAnnotation(false)
+    , m_annotationWriter(0)
+    , m_annotationBuffer(0)
+    , m_maxColumns(0)
+    , m_currentListDepth(-1)
+    , m_currentListID(0)
+    , m_previousListID(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -215,7 +217,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
     m_insideFootnote = true;
 
-    //create temp writer for footnote contentthat we'll add to m_paragraph
+    //create temp writer for footnote content that we'll add to m_paragraph
     m_footnoteBuffer = new QBuffer();
     m_footnoteBuffer->open(QIODevice::WriteOnly);
     m_footnoteWriter = new KoXmlWriter(m_footnoteBuffer);
@@ -238,30 +240,30 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
             break;
         case 1: // uppercase roman
         case 2:  { // lowercase roman
-            QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
-            QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-            QString *numDigits = (m_parser->dop().nfcFtnRef2 == 1 ? numDigitsUpper : numDigitsLower);
-            int numValues[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+                QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
+                QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+                QString *numDigits = (m_parser->dop().nfcFtnRef2 == 1 ? numDigitsUpper : numDigitsLower);
+                int numValues[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
-            for (int i = 0; i < 13; ++i) {
-                while (noteNumber >= numValues[i]) {
-                    noteNumber -= numValues[i];
-                    noteNumberString += numDigits[i];
+                for (int i = 0; i < 13; ++i) {
+                    while (noteNumber >= numValues[i]) {
+                        noteNumber -= numValues[i];
+                        noteNumberString += numDigits[i];
+                    }
                 }
+                break;
             }
-            break;
-        }
         case 3: // uppercase letter
             letter = 'A';
         case 4: { // lowercase letter
-            while (noteNumber / 25 > 0) {
-                noteNumberString += QString::number(noteNumber / 25);
-                noteNumber = noteNumber % 25;
-                noteNumberString += QChar(letter - 1 + noteNumber / 25);
+                while (noteNumber / 25 > 0) {
+                    noteNumberString += QString::number(noteNumber / 25);
+                    noteNumber = noteNumber % 25;
+                    noteNumberString += QChar(letter - 1 + noteNumber / 25);
+                }
+                noteNumberString += QChar(letter - 1 + noteNumber);
+                break;
             }
-            noteNumberString += QChar(letter - 1 + noteNumber);
-            break;
-        }
         case 9: {
                 QChar chicagoStyle[] =  {42, 8224, 8225, 167};
                 int styleIndex = (noteNumber - 1) % 4;
@@ -272,7 +274,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
                     repeatCount--;
                 }
                 break;
-        }
+            }
         default:
             noteNumberString = QString::number(noteNumber);
             break;
@@ -307,7 +309,6 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     m_insideFootnote = false;
 
     QString contents = QString::fromUtf8(m_footnoteBuffer->buffer(), m_footnoteBuffer->buffer().size());
-    kDebug(30513) << "add footnote to Paragraph: " << contents;
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
 
     //cleanup
@@ -338,15 +339,43 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
 {
-    int index = 0;
-    int length = characters.length();
-    qDebug() << ">>>>>>>>>>>>>>>>>>> Annotation length" << length;
-    QString annotation;
-    while (index != length) {
-        annotation.append(characters[index].unicode());
-        ++index;
-    }
-    qDebug() << ">>>>>>>>>>>>>>>> Annotation found" << annotation;
+    Q_UNUSED(chp);
+    m_insideAnnotation = true;
+
+    m_annotationBuffer = new QBuffer();
+    m_annotationBuffer->open(QIODevice::WriteOnly);
+    m_annotationWriter = new KoXmlWriter(m_annotationBuffer);
+
+    m_annotationWriter->startElement("office:annotation");
+
+    m_annotationWriter->startElement("dc:creator");
+    m_annotationWriter->endElement();
+
+    m_annotationWriter->startElement("dc:date");
+    m_annotationWriter->endElement();
+
+    // XXX: how to write the text?
+
+    //save the state of tables & paragraphs because we'll get new ones in the annotation
+    saveState();
+    //signal Document to parse the annotation
+    emit annotationFound(new wvWare::AnnotationFunctor(parseAnnotation), 0);
+    //and now restore state
+    restoreState();
+
+    //end the elements
+    m_annotationWriter->endElement();//office:annotation
+
+    m_insideAnnotation = false;
+
+    QString contents = QString::fromUtf8(m_annotationBuffer->buffer(), m_annotationBuffer->buffer().size());
+    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+
+    //cleanup
+    delete m_annotationWriter;
+    m_annotationWriter = 0;
+    delete m_annotationBuffer;
+    m_annotationBuffer = 0;
 }
 
 
@@ -494,6 +523,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     } else if (m_writingHeader) {
         writer = m_headerWriter;
         inStylesDotXml = true;
+    }
+    else if (m_insideAnnotation) {
+        writer = m_annotationWriter;
     } else {
         writer = m_bodyWriter;
     }
@@ -537,7 +569,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
             // Looks like a heading, so that'll be processed in Paragraph.
             kDebug(30513) << "found heading, pap().ilvl="
-            << paragraphProperties->pap().ilvl;
+                    << paragraphProperties->pap().ilvl;
             isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         } else {
@@ -598,9 +630,13 @@ void KWordTextHandler::paragraphEnd()
     if (m_insideFootnote) {
         kDebug(30513) << "writing a footnote";
         m_paragraph->writeToFile(m_footnoteWriter);
+    } else if (m_insideAnnotation) {
+        kDebug(30513) << "writing an annotation";
+        m_paragraph->writeToFile(m_annotationWriter);
     } else if (!m_writingHeader) {
         kDebug(30513) << "writing to body";
         m_paragraph->writeToFile(m_bodyWriter);
+
     } else {
         kDebug(30513) << "writing a header";
         m_paragraph->writeToFile(m_headerWriter);
@@ -1030,6 +1066,8 @@ void KWordTextHandler::closeList()
         writer = m_footnoteWriter;
     } else if (m_writingHeader) {
         writer = m_headerWriter;
+    } else if (m_insideAnnotation) {
+        writer = m_annotationWriter;
     } else {
         writer = m_bodyWriter;
     }

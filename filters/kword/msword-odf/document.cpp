@@ -605,12 +605,10 @@ void Document::footnoteEnd()
 
 void Document::annotationStart()
 {
-    kDebug(30513);
 }
 
 void Document::annotationEnd()
 {
-    kDebug(30513);
 }
 
 
