@@ -2462,7 +2462,9 @@ KexiMainWindow::storeSettings()
 // d->mainWidget->saveMainWindowSettings( mainWindowGroup );
 // d->mainWidget->saveState();
 
-    mainWindowGroup.writeEntry("ProjectNavigatorSize", d->nav->parentWidget()->size());
+    if (d->nav)
+        mainWindowGroup.writeEntry("ProjectNavigatorSize", d->nav->parentWidget()->size());
+
     mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
 
     KGlobal::config()->sync();
