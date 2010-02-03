@@ -4785,7 +4785,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
         args.insert("connectionData", str);
     }
 
-    QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, 0, &args);
+    QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", "migration", this, 0, &args);
     if (!dlg)
         return false; //error msg has been shown by KexiInternalPart
 
