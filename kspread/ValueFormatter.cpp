@@ -292,8 +292,8 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         break;
     case Format::Money:
         // The formatMoney method always adds the currency symbol but we need the result without currency symbol. So, just use the formatNumber method...
-        //localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);
-        localizedNumber = m_converter->settings()->locale()->formatNumber(val, p);
+        localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);
+        //localizedNumber = m_converter->settings()->locale()->formatNumber(val, p);
         break;
     case Format::Scientific: {
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
