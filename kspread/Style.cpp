@@ -263,8 +263,7 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
             // determine data formatting
             switch (dataStyle.type) {
             case KoOdfNumberStyles::Number:
-                setFormatType(numberType(dataStyle.formatStr));
-                kDebug() << "== number:" << numberType(dataStyle.formatStr);
+                setFormatType(Format::Number);
                 if (!dataStyle.currencySymbol.isEmpty())
                     setCurrency(numberCurrency(dataStyle.currencySymbol));
                 else
@@ -663,23 +662,6 @@ Format::Type Style::timeType(const QString &_format)
         return Format::Time8;
     else
         return Format::Time;
-}
-
-Format::Type Style::numberType(const QString &_format)
-{
-    // Look up if a prefix or postfix is in the currency table,
-    // use the currency format for proper formatting if it is.
-    QString f = QString(_format.at(0));
-    Currency curr = Currency(f);
-    if (curr.index() > 1)
-        return Format::Money;
-    else {
-        f = QString(_format.at(_format.size()-1));
-        curr = Currency(f);
-        if (curr.index() > 1)
-            return Format::Money;
-    }
-    return Format::Number;
 }
 
 Currency Style::numberCurrency(const QString &_format)
