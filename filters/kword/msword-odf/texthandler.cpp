@@ -349,15 +349,12 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationWriter->startElement("office:annotation");
 
     m_annotationWriter->startElement("dc:creator");
+    // XXX: get the creator from the .doc
     m_annotationWriter->endElement();
 
     m_annotationWriter->startElement("dc:date");
+    // XXX: get the date from the .doc
     m_annotationWriter->endElement();
-
-    // XXX: how to write the text?
-    //m_annotationWriter->startElement("text:p");
-    //m_annotationWriter->addTextNode(Conversion::string(characters));
-    //m_annotationWriter->endElement();
 
     //save the state of tables & paragraphs because we'll get new ones in the annotation
     saveState();
