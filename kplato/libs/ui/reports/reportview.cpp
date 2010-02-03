@@ -1,7 +1,7 @@
 /*
  * KPlato Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2009 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2010 by Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- */
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include "reportview.h"
 #include "report.h"
@@ -75,7 +75,7 @@ Report::Report(KoDocument *part, QWidget *parent)
 void Report::setGuiActive( bool active ) // virtual slot
 {
     ViewBase *v = qobject_cast<ViewBase*>( m_tab->currentWidget() );
-    qDebug()<<"Report::setGuiActive:"<<active<<m_activeview<<"->"<<v;
+    //qDebug()<<"Report::setGuiActive:"<<active<<m_activeview<<"->"<<v;
     if ( m_activeview && m_activeview != v ) {
         m_activeview->setGuiActive( false );
     }
@@ -112,14 +112,14 @@ void Report::insertDataModel( const QString &tag, QAbstractItemModel *model )
 
 bool Report::loadContext( const KoXmlElement &context )
 {
-    qDebug()<<"Report::loadContext:";
+    //qDebug()<<"Report::loadContext:";
     return SplitterView::loadContext( context );
 
 }
 
 void Report::saveContext( QDomElement &context ) const
 {
-    qDebug()<<"Report::saveContext:";
+    //qDebug()<<"Report::saveContext:";
     SplitterView::saveContext( context );
 }
 
@@ -285,7 +285,7 @@ void ReportView::setGuiActive( bool active ) // virtual slot
 
 void ReportView::refresh()
 {
-    qDebug()<<"ReportView::refresh:";
+    //qDebug()<<"ReportView::refresh:";
     delete m_preRenderer;
     QDomElement e = tempData().documentElement();
     m_preRenderer = new ORPreRender( e.firstChildElement( "report:content" ) );
@@ -338,9 +338,9 @@ ReportData *ReportView::createReportData( const QDomElement &element ) const
         }
         m = setGroupByModels( element, m );
     } else {
-        qDebug()<<"ReportView::createReportData: No model selected";
+        //qDebug()<<"ReportView::createReportData: No model selected";
     }
-    qDebug()<<"ReportView::createReportData:"<<project();
+    //qDebug()<<"ReportView::createReportData:"<<project();
     rd->setModel( m );
     return rd;
 }
@@ -374,8 +374,8 @@ QDomDocument ReportView::tempData() const
         return QDomDocument();
     }
     QDomDocument doc = m_designer->document();
-    qDebug()<<"ReportView::tempData:";
-//    qDebug()<<doc.toString();
+/*    qDebug()<<"ReportView::tempData:";
+    qDebug()<<doc.toString();*/
     return doc;
 }
 
@@ -388,13 +388,13 @@ KoReportData* ReportView::sourceData(QDomElement e)
 
 bool ReportView::loadContext( const KoXmlElement &context )
 {
-    qDebug()<<"ReportView::loadContext:";
+    //qDebug()<<"ReportView::loadContext:";
     return true;
 }
 
 void ReportView::saveContext( QDomElement &context ) const
 {
-    qDebug()<<"ReportView::saveContext:";
+    //qDebug()<<"ReportView::saveContext:";
 }
 
 //---------------------------
@@ -412,7 +412,7 @@ ReportDesignerView::ReportDesignerView(KoDocument *part, QWidget *parent)
     m_propertyeditor( 0 ),
     m_sourceeditor( 0 )
 {
-    qDebug()<<"ReportDesignerView::ReportDesignerView -----------";
+    //qDebug()<<"ReportDesignerView::ReportDesignerView -----------";
     setObjectName( "KPlatoReportDesigner" );
 
     m_scrollarea = new QScrollArea( this );
@@ -479,24 +479,24 @@ void ReportDesignerView::setupGui()
     a = coll->addAction( KStandardAction::Clear, "edit-delete", m_designer,  SLOT( slotEditDelete() ) );
     addAction( name, a );
 
-    qDebug()<<"ReportDesignerView::setupGui:"<<actionList( name );
+    //qDebug()<<"ReportDesignerView::setupGui:"<<actionList( name );
 }
 
 void ReportDesignerView::slotSectionEditor()
 {
-    qDebug()<<"ReportDesignerView::slotSectionEditor:"<<sender();
+    //qDebug()<<"ReportDesignerView::slotSectionEditor:"<<sender();
     m_designer->slotSectionEditor();
 }
 
 void ReportDesignerView::slotInsertAction()
 {
-    qDebug()<<"ReportDesignerView::slotInsertAction:"<<sender();
+    //qDebug()<<"ReportDesignerView::slotInsertAction:"<<sender();
     emit insertItem( sender()->objectName() );
 }
 
 void ReportDesignerView::setGuiActive( bool active ) // virtual slot
 {
-    qDebug()<<"ReportDesignerView::setGuiActive:"<<active<<m_propertydocker;
+    //qDebug()<<"ReportDesignerView::setGuiActive:"<<active<<m_propertydocker;
     if ( m_propertydocker ) {
         m_propertydocker->setVisible( active );
     }
@@ -591,9 +591,9 @@ void ReportDesignerView::insertDataModel( const QString &tag, QAbstractItemModel
     if ( ! m_modelmap.contains( tag ) ) {
         m_modelmap[ tag ] = model;
     } else {
-        qDebug()<<"ReportView::insertDataModel: Model tag already exists:"<<tag;
+        //qDebug()<<"ReportView::insertDataModel: Model tag already exists:"<<tag;
     }
-    qDebug()<<"ReportView::insertDataModel:"<<m_modelmap;
+    //qDebug()<<"ReportView::insertDataModel:"<<m_modelmap;
 }
 
 QAbstractItemModel *ReportDesignerView::dataModel( const QString &tag ) const
@@ -603,7 +603,7 @@ QAbstractItemModel *ReportDesignerView::dataModel( const QString &tag ) const
 
 void ReportDesignerView::slotPropertySetChanged()
 {
-    qDebug()<<"ReportDesignerView::slotPropertySetChanged:"<<m_designer->itemPropertySet();
+    //qDebug()<<"ReportDesignerView::slotPropertySetChanged:"<<m_designer->itemPropertySet();
     if ( m_propertyeditor ) {
         m_propertyeditor->changeSet( m_designer->itemPropertySet() );
     }
@@ -611,7 +611,7 @@ void ReportDesignerView::slotPropertySetChanged()
 
 void ReportDesignerView::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
 {
-    qDebug()<<"ReportDesignerView::slotSourceChanged:"<<topLeft<<bottomRight;
+    //qDebug()<<"ReportDesignerView::slotSourceChanged:"<<topLeft<<bottomRight;
     QAbstractItemModel *m = const_cast<QAbstractItemModel*>( topLeft.model() );
     QModelIndex parent = topLeft.parent();
     if ( ! parent.isValid() ) {
@@ -629,7 +629,7 @@ void ReportDesignerView::slotSourceChanged( const QModelIndex &topLeft, const QM
             m->setData( idx, tag, Reports::TagRole );
             // update checked mark
             setChecked( topLeft );
-            qDebug()<<"ReportDesignerView::slotSourceChanged:"<<tag<<m_modelmap[ tag ];
+            //qDebug()<<"ReportDesignerView::slotSourceChanged:"<<tag<<m_modelmap[ tag ];
             rd->setModel( m_modelmap[ tag ] );
             m_designer->setReportData( rd );
         } else {
@@ -666,21 +666,21 @@ QDomDocument ReportDesignerView::document() const
         m_sourceeditor->sourceData( e );
     } else qDebug()<<"ReportDesignerView::document: source data not available";
     e.appendChild( m_designer->document() );
-    qDebug()<<"ReportDesignerView::document:";
-//    qDebug()<<doc.toString();
+/*    qDebug()<<"ReportDesignerView::document:";
+    qDebug()<<doc.toString();*/
     return doc;
 }
 
 bool ReportDesignerView::loadContext( const KoXmlElement &context )
 {
-    qDebug()<<"ReportDesignerView::loadContext:";
+    //qDebug()<<"ReportDesignerView::loadContext:";
     QDomDocument doc( "Context" );
     QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdesign" );
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
 
     if ( e.tagName() == "kplatoreportdesign" ) {
         setReportDesigner( new ReportDesigner( this, e.firstChildElement( "report:content" ) ) );
-        qDebug()<<"ReportDesignerView::loadContext: load connection";
+        //qDebug()<<"ReportDesignerView::loadContext: load connection";
         m_sourceeditor->setSourceData( e.firstChildElement( "connection" ) );
         emit dataChanged();
         return true;
@@ -690,9 +690,9 @@ bool ReportDesignerView::loadContext( const KoXmlElement &context )
 
 void ReportDesignerView::saveContext( QDomElement &context ) const
 {
-    qDebug()<<"ReportDesignerView::saveContext:";
+    //qDebug()<<"ReportDesignerView::saveContext:";
     QDomDocument doc = document();
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
     context.appendChild( doc.documentElement() );
 }
 
@@ -733,7 +733,7 @@ void ReportNavigator::slotMaxChanged( int value )
 
 void ReportNavigator::setButtonsEnabled()
 {
-    qDebug()<<"ReportNavigator::setButtonsEnabled:"<<ui_selector->value()<<ui_selector->minimum()<<ui_selector->maximum();
+    //qDebug()<<"ReportNavigator::setButtonsEnabled:"<<ui_selector->value()<<ui_selector->minimum()<<ui_selector->maximum();
     bool backw = ui_selector->value() > ui_selector->minimum();
     ui_first->setEnabled( backw );
     ui_prev->setEnabled( backw );
