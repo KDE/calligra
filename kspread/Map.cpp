@@ -389,7 +389,8 @@ void Map::saveOdfSettings( KoXmlWriter &settingsWriter )
         // save current sheet selection before to save marker, otherwise current pos is not saved
         view->saveCurrentSheetSelection();
         //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        settingsWriter.addConfigItem( "ActiveTable",  view->activeSheet()->sheetName() );
+        if(Sheet* sheet = view->activeSheet())
+            settingsWriter.addConfigItem("ActiveTable",  sheet->sheetName());
     }
 
     //<config:config-item-map-named config:name="Tables">
