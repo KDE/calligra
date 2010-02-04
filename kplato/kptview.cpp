@@ -158,7 +158,7 @@ View::View( Part* part, QWidget* parent )
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
         ViewListDockerFactory vl(this);
-        ViewListDocker *docker = dynamic_cast<ViewListDocker *>(createDockWidget(&vl));
+        ViewListDocker *docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
         if (docker->view() != this) docker->setView(this);
         m_viewlist = docker->viewList();
 
