@@ -113,6 +113,8 @@ int TableShape::rows() const
 void TableShape::setColumns( int columns )
 {
     Q_ASSERT( columns > 0 );
+    if(!sheet())
+        return;
     const double factor = (double) d->columns / columns;
     d->columns = columns;
     d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
@@ -129,6 +131,8 @@ void TableShape::setColumns( int columns )
 void TableShape::setRows( int rows )
 {
     Q_ASSERT( rows > 0 );
+    if(!sheet())
+        return;
     const double factor = (double) d->rows / rows;
     d->rows = rows;
     d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
