@@ -564,83 +564,104 @@ addElement(KoGenStyle& style, const char* name,
     style.addChildElement(name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
-template <typename T>
-void addFillBlips(const T& fopt, QSet<quint32>& fillBlips)
+template <typename C, typename T>
+void collectGlobalObjects(C& collector, const T& fopt)
 {
     foreach(const OfficeArtFOPTEChoice& f, fopt.fopt) {
-        // complex blips are ignored for now
-        const FillBlip* fb = f.anon.get<FillBlip>();
-        if (fb && !fb->opid.fComplex && fb->fillBlip) {
-            fillBlips.insert(fb->fillBlip);
-        }
+        collector.add(fopt, f.anon);
     }
 }
-void addFillBlips(const OfficeArtSpContainer& sp, QSet<quint32>& fillBlips)
+template <typename C>
+void collectGlobalObjects(C& collector, const OfficeArtSpContainer& sp)
 {
     if (sp.shapePrimaryOptions)
-        addFillBlips(*sp.shapePrimaryOptions, fillBlips);
+        collectGlobalObjects(collector, *sp.shapePrimaryOptions);
     if (sp.shapeSecondaryOptions1)
-        addFillBlips(*sp.shapeSecondaryOptions1, fillBlips);
+        collectGlobalObjects(collector, *sp.shapeSecondaryOptions1);
     if (sp.shapeSecondaryOptions2)
-        addFillBlips(*sp.shapeSecondaryOptions2, fillBlips);
+        collectGlobalObjects(collector, *sp.shapeSecondaryOptions2);
     if (sp.shapeTertiaryOptions1)
-        addFillBlips(*sp.shapeTertiaryOptions1, fillBlips);
+        collectGlobalObjects(collector, *sp.shapeTertiaryOptions1);
     if (sp.shapeTertiaryOptions2)
-        addFillBlips(*sp.shapeTertiaryOptions2, fillBlips);
+        collectGlobalObjects(collector, *sp.shapeTertiaryOptions2);
 }
-void addFillBlips(const OfficeArtSpgrContainerFileBlock& spgr, QSet<quint32>& fillBlips);
-void addFillBlips(const OfficeArtSpgrContainer& spgr, QSet<quint32>& fillBlips)
+template <typename C>
+void collectGlobalObjects(C& collector,
+                          const OfficeArtSpgrContainerFileBlock& spgr);
+template <typename C>
+void collectGlobalObjects(C& collector,
+                          const OfficeArtSpgrContainer& spgr)
 {
     foreach(const OfficeArtSpgrContainerFileBlock& o, spgr.rgfb) {
-        addFillBlips(o, fillBlips);
+        collectGlobalObjects(collector, o);
     }
 }
-void addFillBlips(const OfficeArtDgContainer& dg, QSet<quint32>& fillBlips)
+template <typename C>
+void collectGlobalObjects(C& collector, const OfficeArtDgContainer& dg)
 {
-    addFillBlips(dg.groupShape, fillBlips);
+    collectGlobalObjects(collector, dg.groupShape);
     if (dg.shape)
-        addFillBlips(*dg.shape, fillBlips);
+        collectGlobalObjects(collector, *dg.shape);
     foreach(const OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes) {
-        addFillBlips(o, fillBlips);
+        collectGlobalObjects(collector, o);
     }
 }
-void addFillBlips(const OfficeArtSpgrContainerFileBlock& spgr, QSet<quint32>& fillBlips)
+template <class C>
+void collectGlobalObjects(C& collector,
+                          const OfficeArtSpgrContainerFileBlock& spgr)
 {
     if (spgr.anon.is<OfficeArtSpContainer>())
-        addFillBlips(*spgr.anon.get<OfficeArtSpContainer>(), fillBlips);
+        collectGlobalObjects(collector, *spgr.anon.get<OfficeArtSpContainer>());
     if (spgr.anon.is<OfficeArtSpgrContainer>())
-        addFillBlips(*spgr.anon.get<OfficeArtSpgrContainer>(), fillBlips);
+        collectGlobalObjects(collector, *spgr.anon.get<OfficeArtSpgrContainer>());
 }
+template <class C>
+void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
+    // loop over all objects to find all "fillPib" numbers
+    // get object from default options
+    const DrawingGroupContainer& dg = p.documentContainer->drawingGroup;
+    collectGlobalObjects(collector, dg.OfficeArtDgg.drawingPrimaryOptions);
+    if (dg.OfficeArtDgg.drawingTertiaryOptions)
+        collectGlobalObjects(collector, *dg.OfficeArtDgg.drawingTertiaryOptions);
+    // get objects from masters
+    foreach(const MasterOrSlideContainer* master, p.masters) {
+        if (master->anon.is<SlideContainer>())
+            collectGlobalObjects(collector,
+                                 master->anon.get<SlideContainer>()->drawing.OfficeArtDg);
+        if (master->anon.is<MainMasterContainer>())
+            collectGlobalObjects(collector,
+                                 master->anon.get<MainMasterContainer>()->drawing.OfficeArtDg);
+    }
+    // get objects from slides
+    foreach(const SlideContainer* slide, p.slides) {
+        collectGlobalObjects(collector, slide->drawing.OfficeArtDg);
+    }
+    // get objects from notes
+    foreach(const NotesContainer* notes, p.notes) {
+        collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
+    }
+}
+class FillImageCollector {
+public:
+    KoGenStyles& styles;
+    const PptToOdp& pto;
+    QMap<const void*, QString> fillImageNames;
+
+    FillImageCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
+
+    template <class O, class T>
+    void add(const O& o, const T& t) {
+        const FillBlip* fb = t.get<FillBlip>();
+        if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return;
+        KoGenStyle fillImage(KoGenStyle::StyleFillImage);
+        fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
+        fillImageNames[&o] = styles.lookup(fillImage, "fillImage");
+    }
+};
 void PptToOdp::createFillImages(KoGenStyles& styles)
 {
-    // loop over all objects to find all "fillPib" numbers
-    QSet<quint32> fillBlips;
-    // get blips from default options
-    const DrawingGroupContainer& dg = p->documentContainer->drawingGroup;
-    addFillBlips(dg.OfficeArtDgg.drawingPrimaryOptions, fillBlips);
-    if (dg.OfficeArtDgg.drawingTertiaryOptions)
-        addFillBlips(*dg.OfficeArtDgg.drawingTertiaryOptions, fillBlips);
-    // get blips from masters
-    foreach(const MasterOrSlideContainer* master, p->masters) {
-        if (master->anon.is<SlideContainer>())
-            addFillBlips(master->anon.get<SlideContainer>()->drawing.OfficeArtDg, fillBlips);
-        if (master->anon.is<MainMasterContainer>())
-            addFillBlips(master->anon.get<MainMasterContainer>()->drawing.OfficeArtDg, fillBlips);
-    }
-    // get blips from slides
-    foreach(const SlideContainer* slide, p->slides) {
-        addFillBlips(slide->drawing.OfficeArtDg, fillBlips);
-    }
-    // get blips from notes
-    foreach(const NotesContainer* notes, p->notes) {
-        addFillBlips(notes->drawing.OfficeArtDg, fillBlips);
-    }
-    foreach(quint32 pib, fillBlips) {
-        KoGenStyle fillImage(KoGenStyle::StyleFillImage);
-        fillImage.addAttribute("xlink:href", getPicturePath(pib));
-        styles.lookup(fillImage, "fillImage" + QString::number(pib),
-                      KoGenStyles::DontForceNumbering);
-    }
+    FillImageCollector c(styles, *this);
+    collectGlobalObjects(c, *p);
 }
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)

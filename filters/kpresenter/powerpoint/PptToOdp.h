@@ -75,6 +75,7 @@ public:
      */
     KoFilter::ConversionStatus convert(POLE::Storage& input,
                                        KoStore* output);
+    QString getPicturePath(int pib) const;
 private:
     /**
      * Function that does the actual conversion.
@@ -754,7 +755,6 @@ private:
     }
 
     void createFillImages(KoGenStyles& styles);
-    QString getPicturePath(int pib) const;
 
     /**
     * @brief An usedDeclaration.
