@@ -214,7 +214,7 @@ bool StyleManager::loadXML(KoXmlElement const & styles)
     for (it = names.begin(); it != names.end(); ++it) {
         if (*it != "Default") {
             CustomStyle * styleData = style(*it);
-            if (!styleData->parentName().isNull() && m_styles.value(styleData->parentName()))
+            if (styleData && !styleData->parentName().isNull() && m_styles.value(styleData->parentName()))
                 styleData->setParentName(m_styles.value(styleData->parentName())->name());
         }
     }
