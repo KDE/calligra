@@ -978,6 +978,8 @@ KSpread::Region::Range* Selection::createRange(const Region::Range& range) const
 void Selection::emitChanged(const Region& region)
 {
     Sheet * const sheet = d->activeSheet;
+    if(!sheet) // no sheet no update needed
+        return;
     Region extendedRegion;
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
