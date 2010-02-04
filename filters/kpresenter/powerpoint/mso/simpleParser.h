@@ -236,8 +236,12 @@ class SlideNameAtom;
 void parseSlideNameAtom(LEInputStream& in, SlideNameAtom& _s);
 class SlideProgTagsContainer;
 void parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer& _s);
-class SlideProgBinaryTagContainer;
-void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
+class PP9SlideBinaryTagExtension;
+void parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s);
+class PP10SlideBinaryTagExtension;
+void parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s);
+class PP12SlideBinaryTagExtension;
+void parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s);
 class TagNameAtom;
 void parseTagNameAtom(LEInputStream& in, TagNameAtom& _s);
 class TagValueAtom;
@@ -520,6 +524,8 @@ class TextMasterStyleLevel;
 void parseTextMasterStyleLevel(LEInputStream& in, TextMasterStyleLevel& _s);
 class DocumentAtom;
 void parseDocumentAtom(LEInputStream& in, DocumentAtom& _s);
+class SlideProgBinaryTagSubContainerOrAtom;
+void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s);
 class ProgStringTagContainer;
 void parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s);
 class NotesAtom;
@@ -704,8 +710,8 @@ class TextSIExceptionAtom;
 void parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s);
 class TextMasterStyleAtom;
 void parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s);
-class SlideProgTagsSubContainerOrAtom;
-void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
+class SlideProgBinaryTagContainer;
+void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
 class ExObjListSubContainer;
 void parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _s);
 class OfficeArtDggContainer;
@@ -736,6 +742,8 @@ class TextMasterStyle10Atom;
 void parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s);
 class DocumentTextInfoContainer;
 void parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s);
+class SlideProgTagsSubContainerOrAtom;
+void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
 class DrawingGroupContainer;
 void parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s);
 class OfficeArtSpContainer;
@@ -928,7 +936,9 @@ public:
     RecordHeader rh;
     HeadersFootersAtom hfAtom;
     QSharedPointer<UserDateAtom> userDateAtom;
+    QSharedPointer<HeaderAtom> headerAtom;
     QSharedPointer<FooterAtom> footerAtom;
+    QSharedPointer<UserDateAtom> userDateAtom2;
     PerSlideHeadersFootersContainer(void* /*dummy*/ = 0) {}
 };
 class EndDocumentAtom : public StreamOffset {
@@ -1639,11 +1649,29 @@ public:
     QList<SlideProgTagsSubContainerOrAtom> rgTypeRec;
     SlideProgTagsContainer(void* /*dummy*/ = 0) {}
 };
-class SlideProgBinaryTagContainer : public StreamOffset {
+class PP9SlideBinaryTagExtension : public StreamOffset {
 public:
     RecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    QList<TextMasterStyle9Atom> rgTextMasterStyleAtom;
+    PP9SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+};
+class PP10SlideBinaryTagExtension : public StreamOffset {
+public:
+    RecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
     QByteArray todo;
-    SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
+    PP10SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+};
+class PP12SlideBinaryTagExtension : public StreamOffset {
+public:
+    RecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    QByteArray todo;
+    PP12SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
 class TagNameAtom : public StreamOffset {
 public:
@@ -3174,6 +3202,22 @@ public:
     quint8 fShowComments;
     DocumentAtom(void* /*dummy*/ = 0) {}
 };
+class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset {
+public:
+    class choice2884387559 : public QSharedPointer<StreamOffset> {
+    public:
+        choice2884387559() {}
+        explicit choice2884387559(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice2884387559 anon;
+    SlideProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+};
 class ProgStringTagContainer : public StreamOffset {
 public:
     RecordHeader rh;
@@ -3981,19 +4025,11 @@ public:
     QSharedPointer<TextMasterStyleLevel> lstLvl5;
     TextMasterStyleAtom(void* /*dummy*/ = 0) {}
 };
-class SlideProgTagsSubContainerOrAtom : public StreamOffset {
+class SlideProgBinaryTagContainer : public StreamOffset {
 public:
-    class choice310259039 : public QSharedPointer<StreamOffset> {
-    public:
-        choice310259039() {}
-        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice310259039 anon;
-    SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    RecordHeader rh;
+    SlideProgBinaryTagSubContainerOrAtom rec;
+    SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
 };
 class ExObjListSubContainer : public StreamOffset {
 public:
@@ -4244,6 +4280,20 @@ public:
     TextSIExceptionAtom textSIDefaultsAtom;
     TextMasterStyleAtom textMasterStyleAtom;
     DocumentTextInfoContainer(void* /*dummy*/ = 0) {}
+};
+class SlideProgTagsSubContainerOrAtom : public StreamOffset {
+public:
+    class choice310259039 : public QSharedPointer<StreamOffset> {
+    public:
+        choice310259039() {}
+        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice310259039 anon;
+    SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DrawingGroupContainer : public StreamOffset {
 public:
