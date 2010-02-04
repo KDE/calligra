@@ -290,16 +290,10 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         createLayersTabDock();
 
         KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
-        createDockWidget(&toolBoxFactory);
-
-        KoDockerManager *dockerMng = dockerManager();
-        if (!dockerMng) {
-            dockerMng = new KoDockerManager(this);
-            setDockerManager(dockerMng);
-        }
+        shell()->createDockWidget(&toolBoxFactory);
 
         connect(d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -1150,15 +1144,18 @@ void KarbonView::setCursor(const QCursor &c)
 
 void KarbonView::createLayersTabDock()
 {
-    KarbonLayerDockerFactory layerFactory;
-    KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(createDockWidget(&layerFactory));
-    layerDocker->setPart(d->part);
-    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
-            layerDocker, SLOT(updateView()));
-    connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-            layerDocker, SLOT(updateView()));
-    connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
-            layerDocker, SLOT(setPart(KParts::Part *)));
+    if (shell())
+    {
+        KarbonLayerDockerFactory layerFactory;
+        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
+        layerDocker->setPart(d->part);
+        connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
+                layerDocker, SLOT(updateView()));
+        connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+                layerDocker, SLOT(updateView()));
+        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
+                layerDocker, SLOT(setPart(KParts::Part *)));
+    }
 }
 
 void KarbonView::updateReadWrite(bool readwrite)

@@ -744,21 +744,18 @@ void View::initView()
     // Load the KSpread Tools
     ToolRegistry::instance();
 
-    // Setup the tool dock widget.
-    KoToolManager::instance()->addController(d->canvasController);
-    KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-    KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
-    createDockWidget(&toolBoxFactory);
+    if (shell())
+    {
+        // Setup the tool dock widget.
+        KoToolManager::instance()->addController(d->canvasController);
+        KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
+        KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
+        shell()->createDockWidget(&toolBoxFactory);
 
-    // Setup the tool options dock widget manager.
-    KoDockerManager *dockerMng = dockerManager();
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(this);
-        setDockerManager(dockerMng);
+        // Setup the tool options dock widget manager.
+        connect(d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
     }
-    connect(d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
-
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
     d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);

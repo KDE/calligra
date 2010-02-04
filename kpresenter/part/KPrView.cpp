@@ -119,7 +119,7 @@ void KPrView::initGUI()
     // add page effect docker to the main window
     if (shell()) {
         KPrPageLayoutDockerFactory pageLayoutFactory;
-        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( createDockWidget( &pageLayoutFactory ) );
+        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( shell()->createDockWidget( &pageLayoutFactory ) );
         pageLayoutDocker->setView( this );
     }
 

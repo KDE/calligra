@@ -77,6 +77,7 @@
 #include "prefs.h"
 
 #include "commands/ChartTypeCommand.h"
+#include <KoMainWindow.h>
 
 
 using namespace std;
@@ -163,12 +164,14 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    KoDockerManager *dockerManager = new KoDockerManager(this);
-    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+    if (shell())
+    {
+        connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             shell()->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
-    KoToolBoxFactory toolBoxFactory( m_canvasController, i18n("Tools") );
-    createDockWidget( &toolBoxFactory );
+        KoToolBoxFactory toolBoxFactory( m_canvasController, i18n("Tools") );
+        shell()->createDockWidget( &toolBoxFactory );
+    }
 	
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.

@@ -40,6 +40,7 @@
 #include <QTimer>
 #include <QAction>
 #include <QScrollBar>
+#include <KoMainWindow.h>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),
@@ -65,16 +66,14 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
-    m_view->createDockWidget(&toolBoxFactory);
+    if (m_view->shell())
+    {
+        KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
+        m_view->shell()->createDockWidget(&toolBoxFactory);
 
-    KoDockerManager *dockerMng = m_view->dockerManager();
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(m_view);
-        m_view->setDockerManager(dockerMng);
+        connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+            m_view->shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
     }
-    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
