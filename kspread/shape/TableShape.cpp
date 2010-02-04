@@ -163,7 +163,7 @@ void TableShape::paint(QPainter& painter, const KoViewConverter& converter)
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     //kDebug() << "LOADING TABLE SHAPE";
-    if (element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
+    if (sheet() && element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
         OdfLoadingContext tableContext(odfContext);
@@ -201,6 +201,8 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 void TableShape::saveOdf(KoShapeSavingContext & context) const
 {
+    if (!sheet())
+        return;
     const Map* map = sheet()->map();
     // Saving the custom cell styles including the default cell style.
     map->styleManager()->saveOdf(context.mainStyles());
