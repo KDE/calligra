@@ -564,26 +564,41 @@ addElement(KoGenStyle& style, const char* name,
     style.addChildElement(name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
+/**
+ * Report global objects belonging to global options to the collector.
+ */
 template <typename C, typename T>
-void collectGlobalObjects(C& collector, const T& fopt)
+void collectGlobalObjects(C& collector, const DrawingGroupContainer& c,
+                          const T& fopt)
 {
     foreach(const OfficeArtFOPTEChoice& f, fopt.fopt) {
-        collector.add(fopt, f.anon);
+        collector.add(c, f);
+    }
+}
+/**
+ * Report global objects belonging to incidental options to the collector.
+ */
+template <typename C, typename T>
+void collectGlobalObjects(C& collector, const OfficeArtSpContainer& sp,
+                          const T& fopt)
+{
+    foreach(const OfficeArtFOPTEChoice& f, fopt.fopt) {
+        collector.add(sp, f);
     }
 }
 template <typename C>
 void collectGlobalObjects(C& collector, const OfficeArtSpContainer& sp)
 {
     if (sp.shapePrimaryOptions)
-        collectGlobalObjects(collector, *sp.shapePrimaryOptions);
+        collectGlobalObjects(collector, sp, *sp.shapePrimaryOptions);
     if (sp.shapeSecondaryOptions1)
-        collectGlobalObjects(collector, *sp.shapeSecondaryOptions1);
+        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions1);
     if (sp.shapeSecondaryOptions2)
-        collectGlobalObjects(collector, *sp.shapeSecondaryOptions2);
+        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions2);
     if (sp.shapeTertiaryOptions1)
-        collectGlobalObjects(collector, *sp.shapeTertiaryOptions1);
+        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions1);
     if (sp.shapeTertiaryOptions2)
-        collectGlobalObjects(collector, *sp.shapeTertiaryOptions2);
+        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions2);
 }
 template <typename C>
 void collectGlobalObjects(C& collector,
@@ -617,12 +632,14 @@ void collectGlobalObjects(C& collector,
 }
 template <class C>
 void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
-    // loop over all objects to find all "fillPib" numbers
+    // loop over all objects to find all OfficeArtFOPTE instances and feed them
+    // into the collector
     // get object from default options
     const DrawingGroupContainer& dg = p.documentContainer->drawingGroup;
-    collectGlobalObjects(collector, dg.OfficeArtDgg.drawingPrimaryOptions);
+    collectGlobalObjects(collector, dg, dg.OfficeArtDgg.drawingPrimaryOptions);
     if (dg.OfficeArtDgg.drawingTertiaryOptions)
-        collectGlobalObjects(collector, *dg.OfficeArtDgg.drawingTertiaryOptions);
+        collectGlobalObjects(collector, dg,
+                             *dg.OfficeArtDgg.drawingTertiaryOptions);
     // get objects from masters
     foreach(const MasterOrSlideContainer* master, p.masters) {
         if (master->anon.is<SlideContainer>())
@@ -641,6 +658,9 @@ void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
         collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
     }
 }
+/**
+  * Collector that retrieves all fill images.
+  **/
 class FillImageCollector {
 public:
     KoGenStyles& styles;
@@ -649,20 +669,109 @@ public:
 
     FillImageCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
 
-    template <class O, class T>
-    void add(const O& o, const T& t) {
-        const FillBlip* fb = t.get<FillBlip>();
+    template <class O>
+    void add(const O& o, const OfficeArtFOPTEChoice& t) {
+        const FillBlip* fb = t.anon.get<FillBlip>();
         if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return;
         KoGenStyle fillImage(KoGenStyle::StyleFillImage);
         fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
         fillImageNames[&o] = styles.lookup(fillImage, "fillImage");
     }
 };
-void PptToOdp::createFillImages(KoGenStyles& styles)
-{
-    FillImageCollector c(styles, *this);
-    collectGlobalObjects(c, *p);
-}
+/**
+  * Collector that retrieves all dash styles used in the document.
+  * TODO: handle LineDashStyle and top, left, rigth and bottom line dashes
+  **/
+class StrokeDashCollector {
+public:
+    KoGenStyles& styles;
+    const PptToOdp& pto;
+    QMap<const void*, QString> strokeDashNames;
+
+    StrokeDashCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
+
+    template <class O>
+    void add(const O& o, const OfficeArtFOPTEChoice& t) {
+        quint32 lineDashing = 0;
+        const LineDashing* ld1 = t.anon.get<LineDashing>();
+        if (ld1) lineDashing = ld1->lineDashing;
+        /* TODO
+        const LineBottomDashing* ld2 = t.anon.get<LineBottomDashing>();
+        if (ld2) lineDashing = ld2->lineDashing;
+        const LineTopDashing* ld3 = t.anon.get<LineTopDashing>();
+        if (ld3) lineDashing = ld3->lineDashing;
+        const LineLeftDashing* ld4 = t.anon.get<LineLeftDashing>();
+        if (ld4) lineDashing = ld4->lineDashing;
+        const LineRightDashing* ld5 = t.anon.get<LineRightDashing>();
+        if (ld5) lineDashing = ld5->lineDashing;
+        */
+        if (lineDashing <= 0 || lineDashing > 10) return;
+
+        //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>();
+        KoGenStyle strokeDash(KoGenStyle::StyleStrokeDash);
+        switch (lineDashing) {
+        case 0: // msolineSolid, not a real stroke dash
+            break;
+        case 1: // msolineDashSys
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "300%");
+            strokeDash.addAttribute("draw:distance", "100%");
+            break;
+        case 2: // msolineDotSys
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "200%");
+            break;
+        case 3: // msolineDashDotSys
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "300%");
+            strokeDash.addAttribute("draw:dots2", "1");
+            strokeDash.addAttribute("draw:dots2-length", "100%");
+            break;
+        case 4: // msolineDashDotDotSys
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "300%");
+            strokeDash.addAttribute("draw:dots2", "1");
+            strokeDash.addAttribute("draw:dots2-length", "100%");
+            break;
+        case 5: // msolineDotGEL
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "100%");
+            break;
+        case 6: // msolineDashGEL
+            strokeDash.addAttribute("draw:dots1", "4");
+            strokeDash.addAttribute("draw:dots1-length", "100%");
+            break;
+        case 7: // msolineLongDashGEL
+            strokeDash.addAttribute("draw:dots1", "8");
+            strokeDash.addAttribute("draw:dots1-length", "100%");
+            break;
+        case 8: // msolineDashDotGEL
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "300%");
+            strokeDash.addAttribute("draw:dots2", "1");
+            strokeDash.addAttribute("draw:dots2-length", "100%");
+            break;
+        case 9: // msolineLongDashDotGEL
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "800%");
+            strokeDash.addAttribute("draw:dots2", "1");
+            strokeDash.addAttribute("draw:dots2-length", "100%");
+            break;
+        case 10: // msolineLongDashDotDotGEL
+            strokeDash.addAttribute("draw:dots1", "1");
+            strokeDash.addAttribute("draw:dots1-length", "800%");
+            strokeDash.addAttribute("draw:dots2", "2");
+            strokeDash.addAttribute("draw:dots2-length", "100%");
+            break;
+        };
+        if (lineDashing < 5) {
+            strokeDash.addAttribute("draw:distance", "100%");
+        } else {
+            strokeDash.addAttribute("draw:distance", "300%");
+        }
+        strokeDashNames[&o] = styles.lookup(strokeDash, "strokeDash");
+    }
+};
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
@@ -703,7 +812,11 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     styles.lookup(marker, "msArrowEnd_20_5");
 
     // add all the fill image definitions
-    createFillImages(styles);
+    FillImageCollector fillImageCollector(styles, *this);
+    collectGlobalObjects(fillImageCollector, *p);
+
+    StrokeDashCollector strokeDashCollector(styles, *this);
+    collectGlobalObjects(strokeDashCollector, *p);
 
     KoGenStyle pl(KoGenStyle::StylePageLayout);
     pl.setAutoStyleInStylesDotXml(true);

@@ -754,8 +754,6 @@ private:
         return 0;
     }
 
-    void createFillImages(KoGenStyles& styles);
-
     /**
     * @brief An usedDeclaration.
     * settings for slideNo &  usedeclaration name.
