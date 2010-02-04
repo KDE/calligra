@@ -674,6 +674,18 @@ private:
     QMap<StyleKey, StyleName> textStyles;
     QMap<const PPT::OfficeArtSpContainer*, QString> graphicStyles;
 
+    /**
+      * name for to use in the style:page-layout-name attribute for master
+      * slides (style:master-page)
+      */
+    QString slidePageLayoutName;
+    /**
+      * name for to use in the style:page-layout-name attribute for notes
+      * and handout slides (presentation:notes and style:handout-master)
+      */
+    QString notesPageLayoutName;
+
+
     const ParsedPresentation* p;
 
     const PPT::SlideContainer* currentSlide;

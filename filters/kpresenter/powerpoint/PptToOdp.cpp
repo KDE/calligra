@@ -566,8 +566,75 @@ addElement(KoGenStyle& style, const char* name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
 
+QString
+definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
+    // x and y are given in master units (1/576 inches)
+    QString pageWidth = QString("%1in").arg(size.x / 576);
+    QString pageHeight = QString("%1in").arg(size.y / 576);
+
+    KoGenStyle pl(KoGenStyle::StylePageLayout);
+    // pl.setAutoStyleInStylesDotXml(true); // probably not needed
+    // pl.addAttribute("style:page-usage", "all"); // probably not needed
+    // pl.addProperty("style:print-orientation", "landscape"); // probably not needed
+    pl.addProperty("fo:margin-bottom", "0pt");
+    pl.addProperty("fo:margin-left", "0pt");
+    pl.addProperty("fo:margin-right", "0pt");
+    pl.addProperty("fo:margin-top", "0pt");
+    pl.addProperty("fo:page-height", pageHeight);
+    pl.addProperty("fo:page-width", pageWidth);
+    return styles.lookup(pl, "pm");
+}
+
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
+    /* This function is follows the flow of the styles.xml file.
+       -> style:styles
+       first, the global objects are looked up and defined. This includes the
+       style:presentation-page-layout elements. Next, the
+       default styles for the 12 style families are defined.
+
+       -> style:automatic-styles
+       After that, style:page-layout and automatic styles are defined
+
+       -> office:master-styles
+       And lastly, the master slides are defined
+    */
+    /*
+       collect all the global objects into
+       styles.xml/office:document-styles/office:styles
+    */
+    // TODO: draw:gradient
+    // TODO: svg:linearGradient
+    // TODO: svg:radialGradient
+    // TODO: draw:hatch
+    // style:fill-image
+    FillImageCollector fillImageCollector(styles, *this);
+    collectGlobalObjects(fillImageCollector, *p);
+    // TODO: draw:marker
+    // draw:stroke-dash
+    StrokeDashCollector strokeDashCollector(styles, *this);
+    collectGlobalObjects(strokeDashCollector, *p);
+    // TODO: draw:opacity
+
+    /*
+       Define the style:presentation-page-layout elements.
+    */
+    // TODO
+
+    /*
+       Define all 12 default styles.
+    */
+    // TODO
+
+    /*
+       Define the style:page-layout elements, for ppt files there are only two.
+     */
+    slidePageLayoutName = definePageLayout(styles,
+            p->documentContainer->documentAtom.slideSize);
+    notesPageLayoutName = definePageLayout(styles,
+            p->documentContainer->documentAtom.notesSize);
+
+
     QBuffer buffer;
 
     buffer.open(QIODevice::WriteOnly);
@@ -576,12 +643,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
 
     //Process main Master Container
     processMainMasterSlide(styles, out);
-
-    // x and y are given in master units (1/576 inches)
-    QString pageWidth = QString("%1in").arg(
-                            p->documentContainer->documentAtom.slideSize.x / 576);
-    QString pageHeight = QString("%1in").arg(
-                             p->documentContainer->documentAtom.slideSize.y / 576);
 
     //KoGenStyle defaultStyle(KoGenStyle::StyleUser, "graphic");
     KoGenStyle defaultStyle(KoGenStyle::StyleGraphicAuto, "graphic");
@@ -603,27 +664,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     marker.addAttribute("svg:viewBox", "0 0 210 210");
     marker.addAttribute("svg:d", "m105 0 105 210h-210z");
     styles.lookup(marker, "msArrowEnd_20_5");
-
-    /* collect all the global object */
-
-    // add all the fill image definitions
-    FillImageCollector fillImageCollector(styles, *this);
-    collectGlobalObjects(fillImageCollector, *p);
-
-    StrokeDashCollector strokeDashCollector(styles, *this);
-    collectGlobalObjects(strokeDashCollector, *p);
-
-    KoGenStyle pl(KoGenStyle::StylePageLayout);
-    pl.setAutoStyleInStylesDotXml(true);
-    pl.addAttribute("style:page-usage", "all");
-    pl.addProperty("fo:margin-bottom", "0pt");
-    pl.addProperty("fo:margin-left", "0pt");
-    pl.addProperty("fo:margin-right", "0pt");
-    pl.addProperty("fo:margin-top", "0pt");
-    pl.addProperty("fo:page-height", pageHeight);
-    pl.addProperty("fo:page-width", pageWidth);
-    pl.addProperty("style:print-orientation", "landscape");
-    styles.lookup(pl, "pm");
 
     KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
     dp.setAutoStyleInStylesDotXml(true);
@@ -684,7 +724,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     styles.lookup(Mpr, "Mpr");
 
     KoGenStyle s(KoGenStyle::StyleMaster);
-    s.addAttribute("style:page-layout-name", styles.lookup(pl));
+    s.addAttribute("style:page-layout-name", slidePageLayoutName);
     s.addAttribute("draw:style-name", styles.lookup(dp));
 
    QList<ClientPlacementId> items = masterObjects.keys();
