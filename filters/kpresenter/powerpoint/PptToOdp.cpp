@@ -21,6 +21,7 @@
 */
 
 #include "PptToOdp.h"
+#include "globalobjectcollectors.h"
 #include "pictures.h"
 
 #include <kdebug.h>
@@ -564,214 +565,6 @@ addElement(KoGenStyle& style, const char* name,
     style.addChildElement(name,
                           QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
-/**
- * Report global objects belonging to global options to the collector.
- */
-template <typename C, typename T>
-void collectGlobalObjects(C& collector, const DrawingGroupContainer& c,
-                          const T& fopt)
-{
-    foreach(const OfficeArtFOPTEChoice& f, fopt.fopt) {
-        collector.add(c, f);
-    }
-}
-/**
- * Report global objects belonging to incidental options to the collector.
- */
-template <typename C, typename T>
-void collectGlobalObjects(C& collector, const OfficeArtSpContainer& sp,
-                          const T& fopt)
-{
-    foreach(const OfficeArtFOPTEChoice& f, fopt.fopt) {
-        collector.add(sp, f);
-    }
-}
-template <typename C>
-void collectGlobalObjects(C& collector, const OfficeArtSpContainer& sp)
-{
-    if (sp.shapePrimaryOptions)
-        collectGlobalObjects(collector, sp, *sp.shapePrimaryOptions);
-    if (sp.shapeSecondaryOptions1)
-        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions1);
-    if (sp.shapeSecondaryOptions2)
-        collectGlobalObjects(collector, sp, *sp.shapeSecondaryOptions2);
-    if (sp.shapeTertiaryOptions1)
-        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions1);
-    if (sp.shapeTertiaryOptions2)
-        collectGlobalObjects(collector, sp, *sp.shapeTertiaryOptions2);
-}
-template <typename C>
-void collectGlobalObjects(C& collector,
-                          const OfficeArtSpgrContainerFileBlock& spgr);
-template <typename C>
-void collectGlobalObjects(C& collector,
-                          const OfficeArtSpgrContainer& spgr)
-{
-    foreach(const OfficeArtSpgrContainerFileBlock& o, spgr.rgfb) {
-        collectGlobalObjects(collector, o);
-    }
-}
-template <typename C>
-void collectGlobalObjects(C& collector, const OfficeArtDgContainer& dg)
-{
-    collectGlobalObjects(collector, dg.groupShape);
-    if (dg.shape)
-        collectGlobalObjects(collector, *dg.shape);
-    foreach(const OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes) {
-        collectGlobalObjects(collector, o);
-    }
-}
-template <class C>
-void collectGlobalObjects(C& collector,
-                          const OfficeArtSpgrContainerFileBlock& spgr)
-{
-    if (spgr.anon.is<OfficeArtSpContainer>())
-        collectGlobalObjects(collector, *spgr.anon.get<OfficeArtSpContainer>());
-    if (spgr.anon.is<OfficeArtSpgrContainer>())
-        collectGlobalObjects(collector, *spgr.anon.get<OfficeArtSpgrContainer>());
-}
-template <class C>
-void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
-    // loop over all objects to find all OfficeArtFOPTE instances and feed them
-    // into the collector
-    // get object from default options
-    const DrawingGroupContainer& dg = p.documentContainer->drawingGroup;
-    collectGlobalObjects(collector, dg, dg.OfficeArtDgg.drawingPrimaryOptions);
-    if (dg.OfficeArtDgg.drawingTertiaryOptions)
-        collectGlobalObjects(collector, dg,
-                             *dg.OfficeArtDgg.drawingTertiaryOptions);
-    // get objects from masters
-    foreach(const MasterOrSlideContainer* master, p.masters) {
-        if (master->anon.is<SlideContainer>())
-            collectGlobalObjects(collector,
-                                 master->anon.get<SlideContainer>()->drawing.OfficeArtDg);
-        if (master->anon.is<MainMasterContainer>())
-            collectGlobalObjects(collector,
-                                 master->anon.get<MainMasterContainer>()->drawing.OfficeArtDg);
-    }
-    // get objects from slides
-    foreach(const SlideContainer* slide, p.slides) {
-        collectGlobalObjects(collector, slide->drawing.OfficeArtDg);
-    }
-    // get objects from notes
-    foreach(const NotesContainer* notes, p.notes) {
-        collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
-    }
-}
-/**
-  * Collector that retrieves all fill images.
-  **/
-class FillImageCollector {
-public:
-    KoGenStyles& styles;
-    const PptToOdp& pto;
-    QMap<const void*, QString> fillImageNames;
-
-    FillImageCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
-
-    template <class O>
-    void add(const O& o, const OfficeArtFOPTEChoice& t) {
-        const FillBlip* fb = t.anon.get<FillBlip>();
-        if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return;
-        KoGenStyle fillImage(KoGenStyle::StyleFillImage);
-        fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
-        fillImageNames[&o] = styles.lookup(fillImage, "fillImage");
-    }
-};
-/**
-  * Collector that retrieves all dash styles used in the document.
-  * TODO: handle LineDashStyle and top, left, rigth and bottom line dashes
-  **/
-class StrokeDashCollector {
-public:
-    KoGenStyles& styles;
-    const PptToOdp& pto;
-    QMap<const void*, QString> strokeDashNames;
-
-    StrokeDashCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
-
-    template <class O>
-    void add(const O& o, const OfficeArtFOPTEChoice& t) {
-        quint32 lineDashing = 0;
-        const LineDashing* ld1 = t.anon.get<LineDashing>();
-        if (ld1) lineDashing = ld1->lineDashing;
-        /* TODO
-        const LineBottomDashing* ld2 = t.anon.get<LineBottomDashing>();
-        if (ld2) lineDashing = ld2->lineDashing;
-        const LineTopDashing* ld3 = t.anon.get<LineTopDashing>();
-        if (ld3) lineDashing = ld3->lineDashing;
-        const LineLeftDashing* ld4 = t.anon.get<LineLeftDashing>();
-        if (ld4) lineDashing = ld4->lineDashing;
-        const LineRightDashing* ld5 = t.anon.get<LineRightDashing>();
-        if (ld5) lineDashing = ld5->lineDashing;
-        */
-        if (lineDashing <= 0 || lineDashing > 10) return;
-
-        //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>();
-        KoGenStyle strokeDash(KoGenStyle::StyleStrokeDash);
-        switch (lineDashing) {
-        case 0: // msolineSolid, not a real stroke dash
-            break;
-        case 1: // msolineDashSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:distance", "100%");
-            break;
-        case 2: // msolineDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "200%");
-            break;
-        case 3: // msolineDashDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 4: // msolineDashDotDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 5: // msolineDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 6: // msolineDashGEL
-            strokeDash.addAttribute("draw:dots1", "4");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 7: // msolineLongDashGEL
-            strokeDash.addAttribute("draw:dots1", "8");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 8: // msolineDashDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 9: // msolineLongDashDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "800%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 10: // msolineLongDashDotDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "800%");
-            strokeDash.addAttribute("draw:dots2", "2");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        };
-        if (lineDashing < 5) {
-            strokeDash.addAttribute("draw:distance", "100%");
-        } else {
-            strokeDash.addAttribute("draw:distance", "300%");
-        }
-        strokeDashNames[&o] = styles.lookup(strokeDash, "strokeDash");
-    }
-};
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
@@ -810,6 +603,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     marker.addAttribute("svg:viewBox", "0 0 210 210");
     marker.addAttribute("svg:d", "m105 0 105 210h-210z");
     styles.lookup(marker, "msArrowEnd_20_5");
+
+    /* collect all the global object */
 
     // add all the fill image definitions
     FillImageCollector fillImageCollector(styles, *this);
