@@ -178,6 +178,18 @@ private:
     }HyperlinkRange;
 
     void createMainStyles(KoGenStyles& styles);
+    void defineDefaultTextStyle(KoGenStyles& styles);
+    void defineDefaultParagraphStyle(KoGenStyles& styles);
+    void defineDefaultSectionStyle(KoGenStyles& styles);
+    void defineDefaultRubyStyle(KoGenStyles& styles);
+    void defineDefaultTableStyle(KoGenStyles& styles);
+    void defineDefaultTableColumnStyle(KoGenStyles& styles);
+    void defineDefaultTableRowStyle(KoGenStyles& styles);
+    void defineDefaultTableCellStyle(KoGenStyles& styles);
+    void defineDefaultGraphicStyle(KoGenStyles& styles);
+    void defineDefaultPresentationStyle(KoGenStyles& styles);
+    void defineDefaultDrawingPageStyle(KoGenStyles& styles);
+    void defineDefaultChartStyle(KoGenStyles& styles);
 
     template <typename T>
     void processGraphicStyle(KoGenStyle& style, T& o);

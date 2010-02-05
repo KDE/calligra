@@ -587,6 +587,120 @@ definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
     return styles.lookup(pl, "pm");
 }
 
+void PptToOdp::defineDefaultTextStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="text">
+    KoGenStyle style(KoGenStyle::StyleText, "text");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultParagraphStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="paragraph">
+    KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultSectionStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="section">
+    KoGenStyle style(KoGenStyle::StyleSection, "section");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultRubyStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="ruby">
+    KoGenStyle style(KoGenStyle::StyleRuby, "ruby");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultTableStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="table">
+    KoGenStyle style(KoGenStyle::StyleTable, "table");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultTableColumnStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="table-column">
+    KoGenStyle style(KoGenStyle::StyleTableColumn, "table-column");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultTableRowStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="table-row">
+    KoGenStyle style(KoGenStyle::StyleTableRow, "table-row");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultTableCellStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="table-cell">
+    KoGenStyle style(KoGenStyle::StyleTableCell, "table-cell");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultGraphicStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="graphic">
+    KoGenStyle style(KoGenStyle::StyleGraphic, "graphic");
+    style.setDefaultStyle(true);
+    const OfficeArtDggContainer& drawingGroup
+        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    processGraphicStyle(style, drawingGroup);
+    // add the defaults that were not set yet
+    if (!get<LineWidth>(drawingGroup)) {
+        style.addProperty("svg:stroke-width",
+                                 QString("%1pt").arg(0x2535 / 12700.f),
+                                 KoGenStyle::GraphicType);
+    }
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultPresentationStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="presentation">
+    KoGenStyle style(KoGenStyle::StylePresentation, "presentation");
+    style.setDefaultStyle(true);
+    const OfficeArtDggContainer& drawingGroup
+        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    processGraphicStyle(style, drawingGroup);
+    // add the defaults that were not set yet
+    if (!get<LineWidth>(drawingGroup)) {
+        style.addProperty("svg:stroke-width",
+                                 QString("%1pt").arg(0x2535 / 12700.f),
+                                 KoGenStyle::GraphicType);
+    }
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="drawing-page">
+    KoGenStyle style(KoGenStyle::StyleDrawingPage, "drawing-page");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
+{
+    // write style <style:default-style style:family="chart">
+    KoGenStyle style(KoGenStyle::StyleChart, "chart");
+    style.setDefaultStyle(true);
+    styles.lookup(style, "");
+}
+
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function is follows the flow of the styles.xml file.
@@ -624,9 +738,20 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // TODO
 
     /*
-       Define all 12 default styles.
+       Define default styles for all 12 style families.
     */
-    // TODO
+    defineDefaultTextStyle(styles);
+    defineDefaultParagraphStyle(styles);
+    defineDefaultSectionStyle(styles);
+    defineDefaultRubyStyle(styles);
+    defineDefaultTableStyle(styles);
+    defineDefaultTableColumnStyle(styles);
+    defineDefaultTableRowStyle(styles);
+    defineDefaultTableCellStyle(styles);
+    defineDefaultGraphicStyle(styles);
+    defineDefaultPresentationStyle(styles);
+    defineDefaultDrawingPageStyle(styles);
+    defineDefaultChartStyle(styles);
 
     /*
        Define the style:page-layout elements, for ppt files there are only two.
