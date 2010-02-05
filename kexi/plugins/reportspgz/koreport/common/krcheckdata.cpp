@@ -18,13 +18,13 @@ KRCheckData::KRCheckData(QDomNode &element)
     m_foregroundColor->setValue(element.toElement().attribute("fo:foreground-color"));
     m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
 
+    parseReportRect(element.toElement(), &m_pos, &m_size);
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
 
-        if (n == "report:rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else if (n == "report:line-style") {
+        if (n == "report:line-style") {
             KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);

@@ -39,17 +39,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_maxLength->setValue(element.toElement().attribute("report:barcode-max-length"));
     m_format->setValue(element.toElement().attribute("report:barcode-format"));
-
-    for (int i = 0; i < nl.count(); i++) {
-        node = nl.item(i);
-        n = node.nodeName();
-
-        if (n == "report:rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else {
-            kDebug() << "while parsing barcode element encountered unknow element: " << n;
-        }
-    }
+    parseReportRect(element.toElement(), &m_pos, &m_size);
 
 }
 

@@ -70,16 +70,12 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
 
 void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, KRPos *pos, KRSize *siz)
 {
-    QDomElement element = doc.createElement("report:rect");
-
     KoUnit unit = pos->unit();
     
-    element.setAttribute("svg:x", QString::number(pos->toUnit().x()) + KoUnit::unitName(unit));
-    element.setAttribute("svg:y", QString::number(pos->toUnit().y()) + KoUnit::unitName(unit));
-    element.setAttribute("svg:width", QString::number(siz->toUnit().width()) + KoUnit::unitName(unit));
-    element.setAttribute("svg:height", QString::number(siz->toUnit().height()) + KoUnit::unitName(unit));
-
-    entity.appendChild(element);
+    entity.setAttribute("svg:x", QString::number(pos->toUnit().x()) + KoUnit::unitName(unit));
+    entity.setAttribute("svg:y", QString::number(pos->toUnit().y()) + KoUnit::unitName(unit));
+    entity.setAttribute("svg:width", QString::number(siz->toUnit().width()) + KoUnit::unitName(unit));
+    entity.setAttribute("svg:height", QString::number(siz->toUnit().height()) + KoUnit::unitName(unit));
 }
 
 void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts)

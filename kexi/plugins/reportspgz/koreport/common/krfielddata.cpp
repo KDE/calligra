@@ -41,13 +41,13 @@ KRFieldData::KRFieldData(QDomNode & element)
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
 
+    parseReportRect(element.toElement(), &m_pos, &m_size);
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
 
-        if (n == "report:rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else if (n == "report:text-style") {
+        if (n == "report:text-style") {
             KRTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
                 m_backgroundColor->setValue(ts.backgroundColor);

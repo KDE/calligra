@@ -112,9 +112,7 @@ bool KRObjectData::parseReportLineStyleData(const QDomElement & elemSource, KRLi
 
 bool KRObjectData::parseReportRect(const QDomElement & elemSource, KRPos *pos, KRSize *siz)
 {
-    
-    if (elemSource.tagName() == "report:rect") {
-        QString sUnit = elemSource.attribute("svg:x", "1cm").right(2);
+    QString sUnit = elemSource.attribute("svg:x", "1cm").right(2);
 	KoUnit unit = KoUnit::unit(sUnit);
 	pos->setUnit(unit);
 	siz->setUnit(unit);
@@ -129,9 +127,6 @@ bool KRObjectData::parseReportRect(const QDomElement & elemSource, KRPos *pos, K
 	pos->setPointPos(_pos);
 	siz->setPointSize(_siz);
 	
-        return true;
-    }
-
-    return false;
+    return true;
 }
 

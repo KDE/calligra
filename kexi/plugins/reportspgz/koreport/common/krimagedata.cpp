@@ -39,13 +39,13 @@ KRImageData::KRImageData(QDomNode & element)
     m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
+    parseReportRect(element.toElement(), &m_pos, &m_size);
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
 
-        if (n == "report:rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else if (n == "report:inline-image-data") {
+        if (n == "report:inline-image-data") {
 
             setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else {
