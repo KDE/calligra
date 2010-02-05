@@ -87,7 +87,10 @@ KoFilter::ConversionStatus copyFile(const QString& sourceName, const QString& de
 
 //! ODF 1.1., 15.14.9 Fill Image Rendering Style
 //! Set by read_stretch()
-QString m_fillImageRenderingStyle;
+bool m_fillImageRenderingStyleStretch;
+
+//! true if no fill should be applied for element; used e.g. by pic:spPr/a:noFill elem.
+bool m_noFill;
 
 QString m_xlinkHref; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()

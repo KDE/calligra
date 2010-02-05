@@ -67,6 +67,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
+    m_fillImageRenderingStyleStretch = false;
+    m_flipH = false;
+    m_flipV = false;
+    m_rot = 0;
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
@@ -97,8 +101,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #endif
 //todo        body->addAttribute("presentation:style-name", styleName);
 //! @todo for pptx: maybe use KoGenStyle::StylePresentationAuto?
+        if (m_noFill)
+            m_currentDrawStyle.addAttribute("style:fill", constNone);
+
 #ifdef DOCXXMLDOCREADER_H
-        QString currentDrawStyleName(mainStyles->lookup(m_currentDrawStyle));
+        QString currentDrawStyleName(mainStyles->lookup(m_currentDrawStyle, "gr"));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
 //! @todo hardcoded draw:style-name = gr1
@@ -171,11 +178,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle.addAttribute("style:mirror", mirror);
 
         //! @todo: m_rot
-
-        // Reset values of flip? and rot to neutral.
-        m_flipH = false;
-        m_flipV = false;
-        m_rot = 0;
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -533,7 +535,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     - gradFill (Gradient Fill) §20.1.8.33
     - grpFill (Group Fill) §20.1.8.35
     - ln (Outline) §20.1.2.2.24
-    - noFill (No Fill) §20.1.8.44
+    - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
     - prstGeom (Preset geometry) §20.1.9.18
     - scene3d (3D Scene Properties) §20.1.4.1.26
@@ -548,6 +550,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     bool xfrm_read = false;
+    m_noFill = false;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -555,6 +558,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
                 xfrm_read = true;
+            }
+            else if (qualifiedName() == QLatin1String("a:noFill")) {
+                SKIP_EVERYTHING // safely skip
+                m_noFill = true;
             }
 //! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT

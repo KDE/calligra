@@ -33,6 +33,7 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_posOffsetH = 0;
     m_posOffsetV = 0;
     m_currentTextStyleProperties = 0;
+    m_fillImageRenderingStyleStretch = false;
 }
 
 void MSOOXML_CURRENT_CLASS::doneInternal()
@@ -1644,6 +1645,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
 {
     READ_PROLOGUE
 
+    m_fillImageRenderingStyleStretch = false;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1653,6 +1656,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
             } else if (qualifiedName() == QLatin1String("a:stretch")) {
                 TRY_READ(stretch)
             }
+            //! @todo read_tile
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1759,7 +1763,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
 {
     READ_PROLOGUE
 
-    m_fillImageRenderingStyle.clear();
+    m_fillImageRenderingStyleStretch = true;
+    //! todo for tead_tile: m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
+    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("stretch"));
 
     while (!atEnd()) {
         readNext();
@@ -1806,7 +1812,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
         TRY_READ_ATTR_WITHOUT_NS(r, t)*/
 //MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
-    m_fillImageRenderingStyle = QLatin1String("stretch");
+    //m_fillImageRenderingStyle = QLatin1String("stretch");
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
