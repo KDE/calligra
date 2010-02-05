@@ -18,10 +18,11 @@
  */
 
 #include "FilterEffectResource.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectRegistry.h"
-#include "KoXmlWriter.h"
+#include <KoFilterEffect.h>
+#include <KoFilterEffectStack.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffectLoadingContext.h>
+#include <KoXmlWriter.h>
 
 #include <KDebug>
 
@@ -131,12 +132,14 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     filterRegion.setHeight(fromPercentage(e.attribute("height", "1.2")));
     filterStack->setClipRect(filterRegion);
 
+    KoFilterEffectLoadingContext context(QString(""));
+
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 
     // create the filter effects and add them to the shape
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement primitive = n.toElement();
-        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive);
+        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
             kWarning(38000) << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;

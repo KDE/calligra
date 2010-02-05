@@ -19,6 +19,7 @@
 
 #include "BlurEffect.h"
 #include "KoFilterEffectRenderContext.h"
+#include "KoFilterEffectLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
@@ -306,7 +307,7 @@ QImage BlurEffect::processImage(const QImage &image, const KoFilterEffectRenderC
     return result;
 }
 
-bool BlurEffect::load(const KoXmlElement &element, const QMatrix &matrix)
+bool BlurEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
     if (element.tagName() != id())
         return false;
@@ -327,7 +328,7 @@ bool BlurEffect::load(const KoXmlElement &element, const QMatrix &matrix)
         return false;
     }
 
-    m_deviation = matrix.map(m_deviation);
+    m_deviation = context.fromUserSpace(m_deviation);
 
     return true;
 }

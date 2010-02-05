@@ -143,7 +143,7 @@ QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilte
     return result;
 }
 
-bool CompositeEffect::load(const KoXmlElement &element, const QMatrix &)
+bool CompositeEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
     if (element.tagName() != id())
         return false;

@@ -25,6 +25,8 @@
 
 #define FloodEffectId "feFlood"
 
+class KoFilterEffectLoadingContext;
+
 /// A flood fill effect
 class FloodEffect : public KoFilterEffect
 {
@@ -37,7 +39,7 @@ public:
     /// reimplemented from KoFilterEffect
     virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
     /// reimplemented from KoFilterEffect
-    virtual bool load(const KoXmlElement &element, const QMatrix &matrix);
+    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
     /// reimplemented from KoFilterEffect
     virtual void save(KoXmlWriter &writer);
 

@@ -59,7 +59,7 @@ QImage MergeEffect::processImages(const QList<QImage> &images, const KoFilterEff
     return result;
 }
 
-bool MergeEffect::load(const KoXmlElement &element, const QMatrix &)
+bool MergeEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
     if (element.tagName() != id())
         return false;

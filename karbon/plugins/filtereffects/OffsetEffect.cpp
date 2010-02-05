@@ -19,6 +19,7 @@
 
 #include "OffsetEffect.h"
 #include "KoFilterEffectRenderContext.h"
+#include "KoFilterEffectLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
@@ -60,7 +61,7 @@ QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRende
     return result;
 }
 
-bool OffsetEffect::load(const KoXmlElement &element, const QMatrix &matrix)
+bool OffsetEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
     if (element.tagName() != id())
         return false;
@@ -70,7 +71,7 @@ bool OffsetEffect::load(const KoXmlElement &element, const QMatrix &matrix)
     if (element.hasAttribute("dy"))
         m_offset.ry() = element.attribute("dy").toDouble();
 
-    m_offset = matrix.map(m_offset);
+    m_offset = context.fromUserSpace(m_offset);
 
     return true;
 }

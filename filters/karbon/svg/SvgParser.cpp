@@ -51,6 +51,7 @@
 #include <KoFilterEffectRegistry.h>
 #include <KoFilterEffect.h>
 #include "KoFilterEffectStack.h"
+#include "KoFilterEffectLoadingContext.h"
 
 #include <KDebug>
 
@@ -1256,10 +1257,14 @@ void SvgParser::applyFilter(KoShape * shape)
     objectFilterRegion.setTopLeft(SvgUtil::userSpaceToObject(filterRegion.topLeft(), bound));
     objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
 
+    KoFilterEffectLoadingContext context(gc->xmlBaseDir.isEmpty() ? m_xmlBaseDir : gc->xmlBaseDir);
+
     // matrix to transform from use space units
     QMatrix matrix;
-    if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse)
+    if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse) {
+        context.setShapeBoundingBox(bound);
         matrix = QMatrix().scale(1.0 / bound.width(), 1.0 / bound.height());
+    }
 
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 
@@ -1275,7 +1280,7 @@ void SvgParser::applyFilter(KoShape * shape)
     // create the filter effects and add them to the shape
     for (KoXmlNode n = content.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement primitive = n.toElement();
-        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, matrix);
+        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
             kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
@@ -1300,7 +1305,7 @@ void SvgParser::applyFilter(KoShape * shape)
                         break;
                     }
                 }
-                if (hasStdInput) {
+                if (hasStdInput || primitive.tagName() == "feImage") {
                     // default to 0%, 0%, 100%, 100%
                     subRegion.setTopLeft(QPointF(0, 0));
                     subRegion.setSize(QSizeF(1, 1));

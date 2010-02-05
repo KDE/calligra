@@ -124,10 +124,8 @@ QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEff
     return result;
 }
 
-bool BlendEffect::load(const KoXmlElement &element, const QMatrix &matrix)
+bool BlendEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    Q_UNUSED(matrix);
-
     if (element.tagName() != id())
         return false;
 

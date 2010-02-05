@@ -176,10 +176,8 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
     return value;
 }
 
-bool ComponentTransferEffect::load(const KoXmlElement &element, const QMatrix &matrix)
+bool ComponentTransferEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    Q_UNUSED(matrix);
-
     if (element.tagName() != id())
         return false;
 
