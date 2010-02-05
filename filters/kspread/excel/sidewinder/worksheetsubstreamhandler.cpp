@@ -111,10 +111,11 @@ public:
 
         if (hlstmfHasMonikor) {
             if (hlstmfMonikerSavedAsStr) {  // moniker
-                length = readU32(startHyperlinkObject);
-                UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-                std::cout << "HLinkRecord: Unhandled moniker=" << moniker.ascii() << std::endl;
-                startHyperlinkObject += 4 + sizeReaded;
+                // seems following code leads to a crash on readUnicodeChars...
+                //length = readU32(startHyperlinkObject);
+                //UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+                //startHyperlinkObject += 4 + sizeReaded;
+                std::cout << "HLinkRecord: Unhandled hlstmfMonikerSavedAsStr moniker" << std::endl;
             } else { // oleMoniker
                 const unsigned long clsid = readU32(startHyperlinkObject);
                 startHyperlinkObject += 16; // the clsid is actually 16 byte long but we only need the first 4 to differ
