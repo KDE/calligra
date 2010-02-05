@@ -2996,7 +2996,7 @@ void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
     KoOasisSettings::Items items = settings.entry(sheetName());
     if (items.isNull())
         return;
-    setHideZero(items.parseConfigItemBool("ShowZeroValues"));
+    setHideZero(!items.parseConfigItemBool("ShowZeroValues"));
     setShowGrid(items.parseConfigItemBool("ShowGrid"));
     setFirstLetterUpper(items.parseConfigItemBool("FirstLetterUpper"));
 
@@ -3019,7 +3019,7 @@ void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
 void Sheet::saveOdfSettings(KoXmlWriter &settingsWriter) const
 {
     //not into each page into oo spec
-    settingsWriter.addConfigItem("ShowZeroValues", getHideZero());
+    settingsWriter.addConfigItem("ShowZeroValues", !getHideZero());
     settingsWriter.addConfigItem("ShowGrid", getShowGrid());
     //not define into oo spec
     settingsWriter.addConfigItem("FirstLetterUpper", getFirstLetterUpper());
