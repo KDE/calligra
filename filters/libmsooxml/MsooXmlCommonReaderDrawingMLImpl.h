@@ -64,6 +64,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_hasPosOffsetV = false;
     m_posOffsetH = 0;
     m_posOffsetV = 0;
+    m_cNvPrId.clear();
+    m_cNvPrName.clear();
+    m_cNvPrDescr.clear();
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
@@ -143,9 +146,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #endif
             body->endElement(); //draw:image
 #ifdef DOCXXMLDOCREADER_H
-            if (!m_cNvPrName.isEmpty()) {
+            if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
                 body->startElement("svg:title");
-                body->addTextSpan(m_cNvPrName);
+                body->addTextSpan(m_cNvPrDescr.isEmpty() ? m_cNvPrName : m_cNvPrDescr);
                 body->endElement(); //svg:title
             }
 #endif
@@ -287,6 +290,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr()
     ReadMethod caller = m_calls.top();
     READ_PROLOGUE
 
+    m_cNvPrId.clear();
+    m_cNvPrName.clear();
+    m_cNvPrDescr.clear();
     const QXmlStreamAttributes attrs(attributes());
     if (CALLER_IS(nvSpPr) || CALLER_IS(nvPicPr)) { // for sanity, p:nvGrpSpPr can be also the caller
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
@@ -425,6 +431,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif
     m_cNvPrId.clear();
     m_cNvPrName.clear();
+    m_cNvPrDescr.clear();
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
     // to write after the child elements are generated
