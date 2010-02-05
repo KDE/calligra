@@ -13,8 +13,10 @@ set(msooxml_LIB_SRCS
     MsooXmlRelationshipsReader.cpp
     MsooXmlRelationships.cpp
     MsooXmlImport.cpp
-    KoOdfExporter.cpp
     MsooXmlCommentsReader.cpp
+
+    # TODO: move back to kolibs
+    KoOdfExporter.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})

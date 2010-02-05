@@ -27,6 +27,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlCommentsReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
@@ -468,6 +469,42 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL commentRangeStart
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_commentRangeStart()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR(id)
+    const MSOOXML::Comment comment = m_context->relationships->comment(id);
+    if (!comment.author.isEmpty()) {
+        body->startElement("office:annotation");
+
+        body->startElement("dc:creator");
+        body->addTextSpan(comment.author);
+        body->endElement(); // dc:creator
+
+        body->startElement("dc:date");
+        //! @todo date ok?
+        body->addTextSpan(comment.date);
+        body->endElement(); // dc:date
+
+        body->startElement("text:p");
+        //! @todo hardcoded style
+        body->addAttribute("text:style-name", "P1");
+        body->startElement("text:span");
+        body->addTextSpan(comment.text);
+        body->endElement(); // text:span
+        body->endElement(); // text:p
+
+        body->endElement(); // office:annotation
+    }
+
+    return KoFilter::OK;
 }
 
 // ---------------------------------------------------------------------------

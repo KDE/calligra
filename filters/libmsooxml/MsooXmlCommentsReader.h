@@ -30,12 +30,19 @@
 namespace MSOOXML
 {
 
+struct Comment
+{
+    QString author;
+    QString date;
+    QString text;
+};
+
 //! A context structure for MsooXmlRelationshipsReader
 class MsooXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlCommentsReaderContext(QMap<QString, QStringList>& _comments);
-    QMap<QString, QStringList> *comments;
+    MsooXmlCommentsReaderContext(QMap<QString, Comment>& _comments);
+    QMap<QString, Comment> *comments;
 };
 
 //! A class reading MSOOXML rels markup - *.xml.rels part.

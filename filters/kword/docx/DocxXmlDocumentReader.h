@@ -62,6 +62,8 @@ protected:
     KoFilter::ConversionStatus read_right();
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_OLEObject();
+    //KoFilter::ConversionStatus read_commentRangeEnd();
+    KoFilter::ConversionStatus read_commentRangeStart();
 
     typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;

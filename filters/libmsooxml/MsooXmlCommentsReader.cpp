@@ -33,7 +33,7 @@
 
 using namespace MSOOXML;
 
-MsooXmlCommentsReaderContext::MsooXmlCommentsReaderContext(QMap<QString, QStringList>& _comments)
+MsooXmlCommentsReaderContext::MsooXmlCommentsReaderContext(QMap<QString, Comment>& _comments)
         : comments(&_comments)
 {
 }
@@ -76,11 +76,13 @@ KoFilter::ConversionStatus MsooXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 KoFilter::ConversionStatus MsooXmlCommentsReader::readInternal()
 {
     readNext();
-    
-    QString commentId, commentAuthor, commentDate, commentText;
-    
+
+    QString commentId;
+    MSOOXML::Comment comment;
+
+    //! @todo use READ_* macros?
+
     while (!atEnd()) {
-        
         if (name() == "comment") {
             QXmlStreamAttributes attr = attributes();
             
@@ -89,45 +91,40 @@ KoFilter::ConversionStatus MsooXmlCommentsReader::readInternal()
             }
             
             if (attr.hasAttribute("w:author")) {
-                commentAuthor = attr.value("w:author").toString();
+                comment.author = attr.value("w:author").toString();
             }
             
             if (attr.hasAttribute("w:date")) {
-                commentDate = attr.value("w:date").toString();
+                comment.date = attr.value("w:date").toString();
             }
         }
         
-        // this could be done better! Text can have formatting and this extracts only pure text
+        //! @todo this could be done better! Text can have formatting and this extracts only pure text
         if (name() == "t" && isStartElement()) {
             readNext();
-            commentText += text().toString();
+            comment.text += text().toString();
         }
         
         if (name() == "comment" && isEndElement()) {
-            QStringList list;
-            
             if (!commentId.isEmpty()) {
                 
-                if (commentDate.endsWith("Z"))
-                    commentDate.remove(commentDate.length()-1, 1); 
+                if (comment.date.endsWith("Z"))
+                    comment.date.remove(comment.date.length()-1, 1);
                 
-                list << commentAuthor << commentDate << commentText;
-                m_context->comments->insert(commentId, list);
-                //kDebug() << "MsooXmlCommentsReader::readInternal() id: " <<  commentId << " date: " << commentDate <<  " author: " << commentAuthor <<  " text: " << commentText;
+                m_context->comments->insert(commentId, comment);
+                //kDebug() << "id:" <<  commentId << "date:" << comment.date <<  " author: " << comment.author <<  "text:" << comment.text;
             }
-            
+
             commentId.clear();
-            commentDate.clear();
-            commentAuthor.clear();
-            commentText.clear();
+            comment = MSOOXML::Comment();
         }
-                
+
         readNext();
-        
+
         if (hasError()) {
-            break;
+            return KoFilter::WrongFormat;
         }
-    }    
-    
-    return KoFilter::OK;    
+    }
+
+    return KoFilter::OK;
 }

@@ -69,7 +69,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
     if (isStartElement()) {
         if (attributes().hasAttribute("r:id")) {
             QString id(attributes().value("r:id").toString());
-            link_target = m_context->relationships->link_target(id);
+            link_target = m_context->relationships->linkTarget(id);
             kDebug() << "link_target = " << link_target;
         }
 
@@ -88,51 +88,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
         (void)linkBuf.releaseWriter();
-        body->endElement();
+        body->endElement(); // text:a
     }
 
     READ_EPILOGUE
 }
-
-#undef CURRENT_EL
-#define CURRENT_EL commentRangeStart
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_commentRangeStart()
-{
-    QString link_target;
-    MSOOXML::Utils::XmlWriteBuffer linkBuf;
-
-    if (isStartElement()) {
-        if (attributes().hasAttribute("w:id")) {
-                        
-            QString id, author, date, text;
-            id = attributes().value("w:id").toString();
-            kDebug() << "Comment: id = " << id;
-            m_context->relationships->get_comment(id, author, date, text);
-            
-            body->startElement("office:annotation");
-            
-            body->startElement("dc:creator");
-            body->addTextSpan(author);
-            body->endElement(); // dc:creator
-                
-            body->startElement("dc:date");
-            body->addTextSpan(date);
-            body->endElement(); // dc:date
-                
-            body->startElement("text:p");
-            body->addAttribute("text:style-name", "P1");
-            body->startElement("text:span");
-            body->addTextSpan(text);
-            body->endElement(); // text:span
-            body->endElement(); // text:p
-                
-            body->endElement(); // office:annotation
-        }
-    }
-
-    return KoFilter::OK;
-}
-
 
 #undef CURRENT_EL
 #define CURRENT_EL t
@@ -802,7 +762,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shd()
  - bookmarkEnd (Bookmark End) §17.13.6.1
  - bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
- - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Inline-Level Custom XML Element) §17.5.1.3
  - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
  - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
@@ -868,7 +828,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
             }
             ELSE_TRY_READ_IF(hyperlink)
             //ELSE_TRY_READ_IF(commentRangeEnd)
+#ifdef DOCXXMLDOCREADER_CPP
             ELSE_TRY_READ_IF(commentRangeStart)
+#endif
 // CASE #400.1
             ELSE_TRY_READ_IF(pPr)
 // CASE #400.2

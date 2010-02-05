@@ -34,7 +34,8 @@ using namespace MSOOXML;
 class MsooXmlRelationships::Private
 {
 public:
-    Private() {
+    Private() : commentsLoaded(false)
+    {
     }
     ~Private() {
     }
@@ -44,9 +45,11 @@ public:
     QString *errorMessage;
     QMap<QString, QString> rels;
     QSet<QString> loadedFiles;
-    
+
     KoFilter::ConversionStatus loadComments();
-    QMap<QString, QStringList> comments;    
+    QMap<QString, Comment> comments;
+private:
+    bool commentsLoaded;
 };
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
@@ -62,7 +65,10 @@ KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString
 }
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadComments()
-{       
+{
+    if (commentsLoaded)
+        return KoFilter::OK;
+    commentsLoaded = true;
     MsooXmlCommentsReaderContext context(comments);
     MsooXmlCommentsReader reader(writers);        
     return importer->loadAndParseDocument(&reader, "word/comments.xml", *errorMessage, &context);;
@@ -83,35 +89,30 @@ MsooXmlRelationships::~MsooXmlRelationships()
 }
 
 
-bool MsooXmlRelationships::get_comment(const QString id, QString &author, QString &date, QString &text) {
-    if (d->comments.count() == 0)
+Comment MsooXmlRelationships::comment(const QString& id)
+{
+    if (d->comments.isEmpty())
         d->loadComments();
-    
-    if (d->comments.contains(id)) {
-        QStringList list = d->comments[id];
-        author = list[0];
-        date   = list[1];
-        text   = list[2];
-    }
-   
-    return true;
+
+    return d->comments.value(id);
 }
 
 
-QString MsooXmlRelationships::link_target(const QString& id)
+QString MsooXmlRelationships::linkTarget(const QString& id)
 {
     if (!d->loadedFiles.contains("word/document.xml"))
         d->loadRels("word", "document.xml");
 
     // try to find link target from rels. Only data at right side of target is needed.
-    foreach(QString key, d->rels.keys()) {
-        if (key.endsWith(id)) {
-            int from_right = d->rels[key].length() - 5;
-            return d->rels[key].right(from_right);
+    for (QMap<QString, QString>::ConstIterator it(d->rels.constBegin()); it!=d->rels.constEnd(); ++it) {
+        if (it.key().endsWith(id)) {
+//! @todo is this hardcoded offset?
+            const int from_right = it.value().length() - 5;
+            return it.value().right(from_right);
         }
     }
 
-    return "";
+    return QString();
 }
 
 QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
