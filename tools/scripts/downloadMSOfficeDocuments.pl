@@ -26,6 +26,7 @@ my $maxjobs = 10;
 
 my %mimetypes = (
 	"ppt", "application/vnd.ms-powerpoint",
+	"pdf", "application/pdf",
 	"doc", "application/msword",
 	"xls", "application/vnd.ms-excel",
 	"rtf", "application/rtf",

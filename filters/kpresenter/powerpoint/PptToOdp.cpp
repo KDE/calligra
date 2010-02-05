@@ -569,19 +569,21 @@ addElement(KoGenStyle& style, const char* name,
 QString
 definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
     // x and y are given in master units (1/576 inches)
-    QString pageWidth = QString("%1in").arg(size.x / 576);
-    QString pageHeight = QString("%1in").arg(size.y / 576);
+    double sizeX = size.x * (25.4 / (double)576);
+    double sizeY = size.y * (25.4 / (double)576);
+    QString pageWidth = QString("%1mm").arg(sizeX);
+    QString pageHeight = QString("%1mm").arg(sizeY);
 
     KoGenStyle pl(KoGenStyle::StylePageLayout);
-    // pl.setAutoStyleInStylesDotXml(true); // probably not needed
+    pl.setAutoStyleInStylesDotXml(true);
     // pl.addAttribute("style:page-usage", "all"); // probably not needed
-    // pl.addProperty("style:print-orientation", "landscape"); // probably not needed
     pl.addProperty("fo:margin-bottom", "0pt");
     pl.addProperty("fo:margin-left", "0pt");
     pl.addProperty("fo:margin-right", "0pt");
     pl.addProperty("fo:margin-top", "0pt");
     pl.addProperty("fo:page-height", pageHeight);
     pl.addProperty("fo:page-width", pageWidth);
+    pl.addProperty("style:print-orientation", "landscape");
     return styles.lookup(pl, "pm");
 }
 
