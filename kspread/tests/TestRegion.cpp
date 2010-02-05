@@ -90,6 +90,7 @@ void TestRegion::testSheet()
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
     region = Region("A1");
+qDebug()<<">>>>>>>>>>>>>>>>>>>>>"<<region.name();
     QCOMPARE(region.name(), QString("A1"));
     QCOMPARE(region.firstSheet(), (Sheet*)0);
     region = Region("A1", m_doc->map(), m_doc->map()->sheet(0));

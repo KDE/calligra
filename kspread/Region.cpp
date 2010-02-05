@@ -93,8 +93,6 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
             return;
         if (!sheet)
             sheet = fallbackSheet;
-        if (!sheet)
-            continue;
 
         int delimiterPos = sRegion.indexOf(':');
         if (delimiterPos > -1) {
@@ -104,21 +102,21 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
 
             if (ul.isValid() && lr.isValid()) {
                 Range* range = createRange(sRegion);
-                range->setSheet(sheet);
+                if(sheet) range->setSheet(sheet);
                 d->cells.append(range);
             } else if (ul.isValid()) {
                 Point* point = createPoint(sRegion.left(delimiterPos));
-                point->setSheet(sheet);
+                if(sheet) point->setSheet(sheet);
                 d->cells.append(point);
             } else { // lr.isValid()
                 Point* point = createPoint(sRegion.right(delimiterPos + 1));
-                point->setSheet(sheet);
+                if(sheet) point->setSheet(sheet);
                 d->cells.append(point);
             }
         } else {
             // single cell
             Point* point = createPoint(sRegion);
-            point->setSheet(sheet);
+            if(sheet) point->setSheet(sheet);
             d->cells.append(point);
         }
     }
