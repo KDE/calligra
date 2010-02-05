@@ -188,6 +188,11 @@ void DBConditions::parse(Value conds)
     rows = conds.rows() - 1;
     cols = db.columns();
     int count = rows * cols;
+
+    // if rows or cols is zero or negative, then we don't need to parse anything
+    if(count <= 0)
+        return;
+    
     cond = new Condition* [count];
     for (int r = 0; r < count; ++r)
         cond[r] = 0;
