@@ -668,11 +668,11 @@ Currency Style::numberCurrency(const QString &_format)
 {
     // Look up if a prefix or postfix is in the currency table,
     // return the currency symbol to use for formatting purposes.
-    QString f = QString(_format.at(0));
-    Currency currStart = Currency(f);
-    if (currStart.index() > 1)
-        return currStart;
-    else {
+    if(!_format.isEmpty()) {
+        QString f = QString(_format.at(0));
+        Currency currStart = Currency(f);
+        if (currStart.index() > 1)
+            return currStart;
         f = QString(_format.at(_format.size()-1));
         Currency currEnd = Currency(f);
         if (currEnd.index() > 1)
