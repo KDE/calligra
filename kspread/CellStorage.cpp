@@ -1180,7 +1180,6 @@ Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 int CellStorage::columns() const
 {
     int max = 0;
-    max = qMax(max, d->bindingStorage->usedArea().right());
     max = qMax(max, d->commentStorage->usedArea().right());
     max = qMax(max, d->conditionsStorage->usedArea().right());
     max = qMax(max, d->fusionStorage->usedArea().right());
@@ -1189,13 +1188,16 @@ int CellStorage::columns() const
     max = qMax(max, d->formulaStorage->columns());
     max = qMax(max, d->linkStorage->columns());
     max = qMax(max, d->valueStorage->columns());
+
+    // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
+    //max = qMax(max, d->bindingStorage->usedArea().right());
+
     return max;
 }
 
 int CellStorage::rows() const
 {
     int max = 0;
-    max = qMax(max, d->bindingStorage->usedArea().bottom());
     max = qMax(max, d->commentStorage->usedArea().bottom());
     max = qMax(max, d->conditionsStorage->usedArea().bottom());
     max = qMax(max, d->fusionStorage->usedArea().bottom());
@@ -1204,6 +1206,10 @@ int CellStorage::rows() const
     max = qMax(max, d->formulaStorage->rows());
     max = qMax(max, d->linkStorage->rows());
     max = qMax(max, d->valueStorage->rows());
+
+    // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
+    //max = qMax(max, d->bindingStorage->usedArea().bottom());
+
     return max;
 }
 
