@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2009-2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +26,7 @@
 
 class QPolygon;
 
-#define DEBUG_WMFPAINT 0
+#define DEBUG_WMFPAINT 1
 
 
 /**
@@ -90,7 +91,7 @@ private:
      * others wmf files doesn't call setWindow* at all
      * negative width and height are possible
      */
-    void  setWindowOrg(int left, int top);
+    void  setWindowOrg(int orgX, int orgY);
     void  setWindowExt(int width, int height);
 
     // Clipping

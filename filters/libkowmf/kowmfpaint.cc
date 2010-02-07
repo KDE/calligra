@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2009-2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -104,6 +105,7 @@ bool KoWmfPaint::begin()
 
 bool KoWmfPaint::end()
 {
+    // FIXME: Remove
     if (mRelativeCoord) {
         QRect rec = boundingRect();
 
@@ -253,10 +255,11 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 // - change the origin or the scale in the middle of the drawing
 // - negative width or height
 // and relative/absolute coordinate
-void KoWmfPaint::setWindowOrg(int left, int top)
+
+void KoWmfPaint::setWindowOrg(int orgX, int orgY) // Love that parameter name...
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << left << " " << top;
+    kDebug(31000) << orgX << " " << orgY;
 #endif
     //return;
     if (mRelativeCoord) {
@@ -266,36 +269,36 @@ void KoWmfPaint::setWindowOrg(int left, int top)
         // translation : Don't use setWindow()
         mInternalWorldMatrix.translate(-dx, -dy);
         mPainter->translate(-dx, -dy);
-        mInternalWorldMatrix.translate(-left, -top);
-        mPainter->translate(-left, -top);
+        mInternalWorldMatrix.translate(-orgX, -orgY);
+        mPainter->translate(-orgX, -orgY);
     } else {
         QRect rec = mPainter->window();
-        mPainter->setWindow(left, top, rec.width(), rec.height());
+        mPainter->setWindow(orgX, orgY, rec.width(), rec.height());
     }
 }
 
 
-void KoWmfPaint::setWindowExt(int w, int h)
+void KoWmfPaint::setWindowExt(int width, int height)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << w << " " << h;
+    kDebug(31000) << width << " " << height;
 #endif
     //return;
     if (mRelativeCoord) {
         QRect r = mPainter->window();
-        double dx = mInternalWorldMatrix.dx();
-        double dy = mInternalWorldMatrix.dy();
-        double sx = mInternalWorldMatrix.m11();
-        double sy = mInternalWorldMatrix.m22();
+        qreal dx = mInternalWorldMatrix.dx();
+        qreal dy = mInternalWorldMatrix.dy();
+        qreal sx = mInternalWorldMatrix.m11();
+        qreal sy = mInternalWorldMatrix.m22();
 
-        // scale : don't use setWindow()
+        // Use explicit scaling instead of setWindow()
         mInternalWorldMatrix.translate(-dx, -dy);
         mPainter->translate(-dx, -dy);
         mInternalWorldMatrix.scale(1 / sx, 1 / sy);
         mPainter->scale(1 / sx, 1 / sy);
 
-        sx = (double)r.width() / (double)w;
-        sy = (double)r.height() / (double)h;
+        sx = (qreal)r.width()  / (qreal)width;
+        sy = (qreal)r.height() / (qreal)height;
 
         mInternalWorldMatrix.scale(sx, sy);
         mPainter->scale(sx, sy);
@@ -303,7 +306,7 @@ void KoWmfPaint::setWindowExt(int w, int h)
         mPainter->translate(dx, dy);
     } else {
         QRect rec = mPainter->window();
-        mPainter->setWindow(rec.left(), rec.top(), w, h);
+        mPainter->setWindow(rec.left(), rec.top(), width, height);
     }
 }
 
