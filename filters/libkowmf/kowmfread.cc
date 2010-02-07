@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
- * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ * Copyright (c) 2003      Thierry Lorthiois (lorthioist@wanadoo.fr)
+ *               2009-2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,7 +90,9 @@ bool KoWmfRead::isEnhanced(void) const
 
 QRect KoWmfRead::boundingRect(void) const
 {
-    return mKwmf->mBBox;
+    return QRect(QPoint(mKwmf->mBBoxLeft, mKwmf->mBBoxTop),
+                 QSize(mKwmf->mBBoxRight - mKwmf->mBBoxLeft,
+                       mKwmf->mBBoxBottom - mKwmf->mBBoxTop));
 }
 
 

@@ -88,7 +88,8 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
 
     QDataStream st(mBuffer);
     st.setByteOrder(QDataStream::LittleEndian);
-    mStackOverflow = mWinding = false;
+    mStackOverflow = false;
+    mWinding = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
     mTextRotation = 0;
@@ -106,9 +107,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
 
     kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
 
-    //----- Read placeable metafile header
     st >> pheader.key;
     if (pheader.key == (quint32)APMHEADER_KEY) {
+        //----- Read placeable metafile header
         mPlaceable = true;
         st >> pheader.handle;
         st >> pheader.left;
@@ -132,16 +133,13 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         st >> header.numOfParameters;
 
         mNbrObject = header.numOfObjects;
-        mBBoxLeft = pheader.left;
-        mBBoxTop = pheader.top;
-        mBBoxRight = pheader.right;
+
+        // The bounding box of the WMF
+        mBBoxLeft   = pheader.left;
+        mBBoxTop    = pheader.top;
+        mBBoxRight  = pheader.right;
         mBBoxBottom = pheader.bottom;
 
-        // TODO: To be removed
-        mBBox.setLeft(pheader.left);
-        mBBox.setTop(pheader.top);
-        mBBox.setRight(pheader.right);
-        mBBox.setBottom(pheader.bottom);
         mDpi = pheader.inch;
     } else {
         mBuffer->reset();
@@ -157,6 +155,7 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         st >> eheader.frameTop;
         st >> eheader.frameRight;
         st >> eheader.frameBottom;
+
         st >> eheader.signature;
         if (eheader.signature == ENHMETA_SIGNATURE) {
             mEnhanced = true;
@@ -262,9 +261,6 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         }
     }
 
-    mBBox = QRect(QPoint(mBBoxLeft, mBBoxTop), 
-                  QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
-
     return (mValid);
 }
 
@@ -278,16 +274,18 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
 
     if (mNbrFunc) {
         if ((mStandard)) {
-            kDebug(31000) << "Standard :" << mBBox.left() << ""  << mBBox.top() << ""  << mBBox.width() << ""  << mBBox.height();
+            kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
-            kDebug(31000) << "DPI :" << mDpi << " :" << mBBox.left() << ""  << mBBox.top() << ""  << mBBox.width() << ""  << mBBox.height();
-            kDebug(31000) << "inch :" << mBBox.width() / mDpi << "" << mBBox.height() / mDpi;
-            kDebug(31000) << "mm :" << mBBox.width()*25.4 / mDpi << "" << mBBox.height()*25.4 / mDpi;
+            kDebug(31000) << "DPI :" << mDpi;
+            kDebug(31000) << "inch :" << (mBBoxRight - mBBoxLeft) / mDpi
+                          << "" << (mBBoxBottom - mBBoxTop) / mDpi;
+            kDebug(31000) << "mm :" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
+                          << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
         kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
     }
 
-    // stack of handle
+    // Stack of handles
     mObjHandleTab = new KoWmfHandle* [ mNbrObject ];
     for (int i = 0; i < mNbrObject ; i++) {
         mObjHandleTab[ i ] = 0;
@@ -301,8 +299,14 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
     QDataStream st(mBuffer);
     st.setByteOrder(QDataStream::LittleEndian);
 
+    // Set the output strategy.
     mReadWmf = readWmf;
-    mWindow = mBBox;
+
+    // Set the full bounding box as the output window just to have something to go with.
+    mWindowTop    = mBBoxTop;
+    mWindowLeft   = mBBoxLeft;
+    mWindowWidth  = mBBoxRight - mBBoxLeft;
+    mWindowHeight = mBBoxBottom - mBBoxTop;
     if (mReadWmf->begin()) {
         // play wmf functions
         mBuffer->seek(mOffsetFirstRecord);
@@ -381,8 +385,8 @@ void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
 
     stream >> top >> left;
     mReadWmf->setWindowOrg(left, top);
-    mWindow.setLeft(left);
-    mWindow.setTop(top);
+    mWindowLeft = left;
+    mWindowTop = top;
     kDebug(31000) <<"Org: (" << left <<","  << top <<")";
 }
 
@@ -398,8 +402,8 @@ void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
     kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
 
     mReadWmf->setWindowExt(width, height);
-    mWindow.setWidth(width);
-    mWindow.setHeight(height);
+    mWindowWidth  = width;
+    mWindowHeight = height;
 }
 
 
@@ -408,27 +412,31 @@ void KoWmfReadPrivate::OffsetWindowOrg(quint32, QDataStream &stream)
     qint16 offTop, offLeft;
 
     stream >> offTop >> offLeft;
-    mReadWmf->setWindowOrg(mWindow.left() + offLeft, mWindow.top() + offTop);
-    mWindow.setLeft(mWindow.left() + offLeft);
-    mWindow.setTop(mWindow.top() + offTop);
+    mReadWmf->setWindowOrg(mWindowLeft + offLeft, mWindowTop + offTop);
+
+    // FIXME: Check if we must move the right and bottom edges too.
+    mWindowLeft = mWindowLeft + offLeft;
+    mWindowTop  = mWindowTop + offTop;
 }
 
 
 void KoWmfReadPrivate::ScaleWindowExt(quint32, QDataStream &stream)
 {
-    qint16 width, height;
-    qint16 heightDenom, heightNum, widthDenom, widthNum;
+    // Use 32 bits in the calculations to not lose precision.
+    qint32 width, height;
+    qint16 heightDenum, heightNum, widthDenum, widthNum;
 
-    stream >> heightDenom >> heightNum >> widthDenom >> widthNum;
+    stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
 
-    if ((widthDenom != 0) && (heightDenom != 0)) {
-        width = (mWindow.width() * widthNum) / widthDenom;
-        height = (mWindow.height() * heightNum) / heightDenom;
+    if ((widthDenum != 0) && (heightDenum != 0)) {
+        width = (qint32(mWindowWidth) * widthNum) / widthDenum;
+        height = (qint32(mWindowHeight) * heightNum) / heightDenum;
         mReadWmf->setWindowExt(width, height);
-        mWindow.setWidth(width);
-        mWindow.setHeight(height);
+
+        mWindowWidth  = width;
+        mWindowHeight = height;
     }
-//    kDebug(31000) <<"KoWmfReadPrivate::ScaleWindowExt :" << widthDenom <<"" << heightDenom;
+    //kDebug(31000) <<"KoWmfReadPrivate::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
 }
 
 

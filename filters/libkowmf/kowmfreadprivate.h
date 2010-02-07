@@ -211,42 +211,48 @@ public:
     bool mPlaceable;
     bool mEnhanced;
 
-    /// bounding rectangle.
+    // Bounding rectangle.  In a placeable file this is in the header,
+    // otherwise its comprised of calls to setWindowOrg and setWindowExt.
+    //
     // We can't use a QRect here because width and/or height may be negative.
     qint16 mBBoxTop;
     qint16 mBBoxLeft;
     qint16 mBBoxRight;
     qint16 mBBoxBottom;
-    QRect  mBBox;     // placeable file : this is the header
 
     // standard file : this is the value in setWindowOrg and setWindowExt
-    /// number of points per inch for the default size
+    // number of points per inch for the default size
     int mDpi;
 
     /// number of functions to draw (==0 for all)
     int mNbrFunc;
 
 private:
-    // the output
+    // the output strategy
     KoWmfRead *mReadWmf;
 
-    // current coordinate != mBBox
-    QRect  mWindow;
-    // current state of the drawing
-    Layout  mLayout;
-    QColor  mTextColor;
-    quint16  mTextAlign;
-    int     mTextRotation;
-    bool    mWinding;
+    // The current window.  The union of all windows in the file is the bounding box.
+    //
+    // We can't use a QRect here because width/height may be negative -- see mBBox* above.
+    qint16   mWindowTop;
+    qint16   mWindowLeft;
+    qint16   mWindowWidth;
+    qint16   mWindowHeight;
 
-    // memory allocation for WMF file
+    // Current state of the drawing
+    Layout   mLayout;
+    QColor   mTextColor;
+    quint16  mTextAlign;
+    int      mTextRotation;
+    bool     mWinding;
+
+    // Memory allocation for WMF file
     QBuffer*  mBuffer;
     int    mOffsetFirstRecord;
 
     // stack of object handle
     KoWmfHandle**  mObjHandleTab;
-    // number of object on the stack
-    int    mNbrObject;
+    int    mNbrObject;          // number of object on the stack
     bool   mStackOverflow;
 };
 
