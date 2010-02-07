@@ -202,7 +202,7 @@
  <Action name="font"/>
  <Action name="fontSize"/>
 </ToolBar>
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="formatToolBar"><text>Format</text>
+<ToolBar fullWidth="true" iconText="icontextbottom" name="formatToolBar"><text>Format</text>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
