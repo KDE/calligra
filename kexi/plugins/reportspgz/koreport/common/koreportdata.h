@@ -44,21 +44,48 @@ public:
     };
     typedef QList<Sort> SortList;
 
+    //!Open the dataset
     virtual bool open() = 0;
+
+    //!Close the dataset
     virtual bool close() = 0;
+
+    //!Move to the next record
     virtual bool moveNext() = 0;
+
+    //!Move to the previous record
     virtual bool movePrevious() = 0;
+
+    //!Move to the first record
     virtual bool moveFirst() = 0;
+
+    //!Move to the last record
     virtual bool moveLast() = 0;
+
+    //!Return the current position in the dataset
     virtual long at() const = 0;
+
+    //!Return the total number of records
     virtual long recordCount() const = 0;
+
+    //!Return the index number of the field given by nane field
     virtual unsigned int fieldNumber(const QString &field) const = 0;
+
+    //!Return the list of field names
     virtual QStringList fieldNames() const = 0;
+
+    //!Return the value of the field at the given position for the current record
     virtual QVariant value(unsigned int) const = 0;
+
+    //!Return the value of the field fir the given name for the current record
     virtual QVariant value(const QString &field) const = 0;
 
-    //Should be called before open() so that the data source can be edited accordingly
-    //Default impl does nothing
+    //!Return the name of this source
+    virtual QString sourceName() const {return QString();}
+    
+    //!Sets the sorting for the data
+    //!Should be called before open() so that the data source can be edited accordingly
+    //!Default impl does nothing
     virtual void setSorting(SortList) {}
 
 
@@ -72,14 +99,14 @@ public:
     //!and a language, as set in the report
     virtual QString scriptCode(const QString& script, const QString& language) const {return QString();}
 
-    //!Return the name of this source
-    virtual QString sourceName() const {return QString();}
+
 
     //!Return a list of data sources possible for advanced controls
     virtual QStringList dataSources() const {return QStringList();}
     
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
+    //!Owner of the returned pointer is the caller
     virtual KoReportData* data(const QString &source){return 0;}
 
 };
