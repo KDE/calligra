@@ -48,7 +48,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 
-//!TODO    setConnection(m_reportDesigner->theConn());
+    setConnection(m_reportDesigner->reportData());
 }
 
 ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)

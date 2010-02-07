@@ -345,5 +345,5 @@ QStringList KexiDBReportData::dataSources() const
 
 KoReportData* KexiDBReportData::data(const QString& source)
 {
-return this;
+return new KexiDBReportData(source, m_connection);
 }

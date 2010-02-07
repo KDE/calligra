@@ -242,60 +242,71 @@ void KRChartData::populateData()
 
     QStringList fn;
 
+
     delete m_chartWidget;
     m_chartWidget = 0;
 
     if (m_reportData) {
+        QString src = m_dataSource->value().toString();
 
-//!TODO            fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
-        fn = m_reportData->fieldNames();
-        
-        //resize the data lists to match the number of columns
-        int cols = fn.count() - 1;
-        data.resize(cols);
+        if (!src.isEmpty()) {
+            KoReportData *curs = m_reportData->data(src);
+            if (curs->open()) {
+                fn = curs->fieldNames();
 
-        m_chartWidget = new KDChart::Widget();
-        //_chartWidget->setStyle ( new QMotifStyle() );
+                //resize the data lists to match the number of columns
+                int cols = fn.count() - 1;
+                data.resize(cols);
 
-        m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
-        m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
-        set3D(m_threeD->value().toBool());
-        setAA(m_aa->value().toBool());
-        setColorScheme(m_colorScheme->value().toString());
-        setBackgroundColor(m_backgroundColor->value().value<QColor>());
-        m_reportData->moveFirst();
-        bool status = true;
-        do {
-            labels << m_reportData->value(0).toString();
-            for (int i = 1; i <= cols; ++i) {
-                data[i - 1] << m_reportData->value(i).toDouble();
-            }
-        } while (m_reportData->moveNext());
-        
-        kDebug() << labels;
-        if (data.size() > 0) {
-            kDebug() << data[0];
-        }
-        for (int i = 1; i <= cols; ++i) {
-            m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
-        }
+                m_chartWidget = new KDChart::Widget();
+                //_chartWidget->setStyle ( new QMotifStyle() );
 
-        setLegend(m_displayLegend->value().toBool());
+                m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
+                m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
+                set3D(m_threeD->value().toBool());
+                setAA(m_aa->value().toBool());
+                setColorScheme(m_colorScheme->value().toString());
+                setBackgroundColor(m_backgroundColor->value().value<QColor>());
+                curs->moveFirst();
+                bool status = true;
+                do {
+                    labels << curs->value(0).toString();
+                    for (int i = 1; i <= cols; ++i) {
+                        data[i - 1] << curs->value(i).toDouble();
+                        kDebug() << data[i-1];
+                    }
+                } while (curs->moveNext());
 
-        //Add the axis
-        setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
-
-        //Add the bottom labels
-        if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
-            KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
-
-            foreach(KDChart::CartesianAxis* axis, dia->axes()) {
-                if (axis->position() == KDChart::CartesianAxis::Bottom) {
-                    axis->setLabels(labels);
+                kDebug() << labels;
+                if (data.size() > 0) {
+                    kDebug() << data[0];
                 }
-            }
-        }
+                for (int i = 1; i <= cols; ++i) {
+                    m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
+                }
 
+                setLegend(m_displayLegend->value().toBool());
+
+                //Add the axis
+                setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
+
+                //Add the bottom labels
+                if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
+                    KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
+
+                    foreach(KDChart::CartesianAxis* axis, dia->axes()) {
+                        if (axis->position() == KDChart::CartesianAxis::Bottom) {
+                            axis->setLabels(labels);
+                        }
+                    }
+                }
+            } else {
+                kDebug() << "Unable to open data set";
+            }
+            delete curs;
+        } else {
+            kDebug() << "No source set";
+        }
     } else {
         kDebug() << "No connection!";
     }
@@ -463,7 +474,7 @@ void KRChartData::setLegend(bool le)
         if (le) {
 //!TODO            QStringList fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
             QStringList fn = m_reportData->fieldNames();
-            
+
             m_chartWidget->addLegend(KDChart::Position::East);
             m_chartWidget->legend()->setOrientation(Qt::Horizontal);
             m_chartWidget->legend()->setTitleText("Legend");
