@@ -35,23 +35,21 @@ using namespace KSpread;
 class Binding::Private : public QSharedData
 {
 public:
-    Private() : model(0) {}
-    ~Private() { delete model; }
-
     BindingModel* model;
+    Private(Binding *q) : model(new BindingModel(q)) {}
+    ~Private() { delete model; }
 };
 
 
 Binding::Binding()
-    : d(new Private)
+    : d(new Private(this))
 {
 }
 
 Binding::Binding(const Region& region)
-    : d(new Private)
+    : d(new Private(this))
 {
     Q_ASSERT(region.isValid());
-    d->model = new BindingModel(this);
     d->model->setRegion(region);
 }
 
