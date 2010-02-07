@@ -20,14 +20,11 @@
 #include "Karbon1xImport.h"
 
 #include <KarbonGlobal.h>
+#include <KarbonPart.h>
 
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
-#include <KoOdfWriteStore.h>
 #include <KoOdfGraphicStyles.h>
-#include <KoGenStyles.h>
-#include <KoDocument.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoPageLayout.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
@@ -51,7 +48,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 
-#include <kgenericfactory.h>
+#include <KGenericFactory>
 
 #include <QtGui/QTextCursor>
 
@@ -61,7 +58,7 @@ K_PLUGIN_FACTORY(KarbonImportFactory, registerPlugin<KarbonImport>();)
 K_EXPORT_PLUGIN(KarbonImportFactory("kofficefilters"))
 
 KarbonImport::KarbonImport(QObject*parent, const QVariantList&)
-        : KoFilter(parent)
+        : KoFilter(parent), m_document(0)
 {
 }
 
@@ -81,9 +78,14 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
         return KoFilter::StupidError;
     }
 
+    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
+    if (! part)
+        return KoFilter::CreationError;
+
+    m_document = &part->document();
+
     KoStore* store = KoStore::createStore(fileName, KoStore::Read);
     if (store && store->hasFile("maindoc.xml")) {
-        kDebug() << "Maindoc.xml found in KoStore!";
 
         if (! store->open("maindoc.xml")) {
             kError() << "Opening root has failed";
@@ -92,7 +94,6 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
         }
         KoStoreDevice ioMain(store);
         ioMain.open(QIODevice::ReadOnly);
-        kDebug() << "Processing root...";
         if (! parseRoot(&ioMain)) {
             kWarning() << "Parsing maindoc.xml has failed! Aborting!";
             delete store;
@@ -117,36 +118,10 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
     }
 
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
-    kDebug() << "Deleting input store...";
     delete store;
     store = 0;
-    kDebug() << "Input store deleted!";
 
-    // create output store
-    KoStore* storeout = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
-
-    if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
-        return KoFilter::FileNotFound;
-    }
-
-    // Tell KoStore not to touch the file names
-    storeout->disallowNameExpansion();
-    KoOdfWriteStore odfStore(storeout);
-    //KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
-
-    bool success = m_document.saveOdf(documentContext);
-
-    // cleanup
-    odfStore.closeManifestWriter();
-    delete storeout;
-
-    if (! success)
-        return KoFilter::CreationError;
-    else
-        return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 bool KarbonImport::parseRoot(QIODevice* io)
@@ -186,8 +161,8 @@ bool KarbonImport::convert(const KoXmlDocument &document)
         pageLayout.orientation = static_cast<KoPageFormat::Orientation>(getAttribute(paper, "orientation", 0));
 
         if (pageLayout.format == KoPageFormat::CustomSize) {
-            pageLayout.width = m_document.pageSize().width();
-            pageLayout.height = m_document.pageSize().height();
+            pageLayout.width = m_document->pageSize().width();
+            pageLayout.height = m_document->pageSize().height();
         } else {
             pageLayout.width = getAttribute(paper, "width", 0.0);
             pageLayout.height = getAttribute(paper, "height", 0.0);
@@ -197,8 +172,6 @@ bool KarbonImport::convert(const KoXmlDocument &document)
         pageLayout.height = getAttribute(doc, "height", 841.891);
     }
 
-    kDebug() << " width=" << pageLayout.width;
-    kDebug() << " height=" << pageLayout.height;
     KoXmlElement borders = paper.namedItem("PAPERBORDERS").toElement();
     if (!borders.isNull()) {
         if (borders.hasAttribute("left"))
@@ -242,29 +215,28 @@ bool KarbonImport::loadXML(const KoXmlElement& doc)
     double width = doc.attribute("width", "800.0").toDouble();
     double height = doc.attribute("height", "550.0").toDouble();
 
-    m_document.setPageSize(QSizeF(width, height));
-    //m_document.setUnit(KoUnit::unit(doc.attribute("unit", KoUnit::unitName(m_document.unit()))));
+    m_document->setPageSize(QSizeF(width, height));
+    //m_document->setUnit(KoUnit::unit(doc.attribute("unit", KoUnit::unitName(m_document->unit()))));
 
     m_mirrorMatrix.scale(1.0, -1.0);
-    m_mirrorMatrix.translate(0, -m_document.pageSize().height());
+    m_mirrorMatrix.translate(0, -m_document->pageSize().height());
 
-    KoShapeLayer * defaulLayer = m_document.layers().first();
+    KoShapeLayer * defaulLayer = m_document->layers().first();
 
     KoXmlElement e;
     forEachElement(e, doc) {
         if (e.tagName() == "LAYER") {
-            kDebug() << "loading layer";
             KoShapeLayer * layer = new KoShapeLayer();
             layer->setZIndex(nextZIndex());
             layer->setVisible(e.attribute("visible") == 0 ? false : true);
             loadGroup(layer, e);
 
-            m_document.insertLayer(layer);
+            m_document->insertLayer(layer);
         }
     }
 
-    if (defaulLayer && m_document.layers().count() > 1)
-        m_document.removeLayer(defaulLayer);
+    if (defaulLayer && m_document->layers().count() > 1)
+        m_document->removeLayer(defaulLayer);
 
     return true;
 }
@@ -316,7 +288,7 @@ void KarbonImport::loadGroup(KoShapeContainer * parent, const KoXmlElement &elem
     }
 
     foreach(KoShape * shape, shapes) {
-        m_document.add(shape);
+        m_document->add(shape);
     }
 
     KoShapeGroup * g = dynamic_cast<KoShapeGroup*>(parent);
@@ -515,7 +487,7 @@ void KarbonImport::loadPattern(KoShape * shape, const KoXmlElement &element)
         return;
     }
 
-    KoImageCollection *imageCollection = m_document.resourceManager()->imageCollection();
+    KoImageCollection *imageCollection = m_document->resourceManager()->imageCollection();
     if (imageCollection) {
         KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
         newFill->setPattern(img.mirrored(false, true));
@@ -718,7 +690,6 @@ KoShape * KarbonImport::loadRect(const KoXmlElement &element)
     double x = KoUnit::parseValue(element.attribute("x"));
     double y = KoUnit::parseValue(element.attribute("y"));
     rect->setAbsolutePosition(QPointF(x, y), KoFlake::BottomLeftCorner);
-    kDebug() << "rect position = " << QPointF(x, y);
 
     double rx  = KoUnit::parseValue(element.attribute("rx"));
     double ry  = KoUnit::parseValue(element.attribute("ry"));
@@ -1182,7 +1153,7 @@ KoShape * KarbonImport::loadImage(const KoXmlElement &element)
 
     QImage img(fname);
 
-    KoImageData * data = m_document.imageCollection()->createImageData(QImage(fname).mirrored(false, true));
+    KoImageData * data = m_document->imageCollection()->createImageData(QImage(fname).mirrored(false, true));
 
     PictureShape * picture = new PictureShape();
     picture->setUserData(data);

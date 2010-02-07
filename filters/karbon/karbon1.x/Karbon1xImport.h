@@ -72,7 +72,7 @@ protected:
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
     int nextZIndex();
 private:
-    KarbonDocument m_document;
+    KarbonDocument * m_document;
     QMatrix m_mirrorMatrix;
 };
 

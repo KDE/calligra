@@ -23,16 +23,13 @@ DESCRIPTION
 #include "wmfimport.h"
 #include "wmfimportparser.h"
 
+#include <KarbonPart.h>
 #include <KarbonDocument.h>
 
-#include <kdebug.h>
-#include <kgenericfactory.h>
 #include <KoFilterChain.h>
-#include <KoStoreDevice.h>
-#include <KoOdfWriteStore.h>
-#include <KoGenStyles.h>
-#include <KoDocument.h>
-#include <KoEmbeddedDocumentSaver.h>
+
+#include <KDebug>
+#include <KGenericFactory>
 
 typedef KGenericFactory<WMFImport> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libwmfimport, WMFImportFactory("kofficefilters"))
@@ -57,38 +54,16 @@ KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
     }
 
+    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
+    if (! part)
+        return KoFilter::CreationError;
+
     // Do the conversion!
-    KarbonDocument document;
-    if (!wmfParser.play(document)) {
+    if (!wmfParser.play(part->document())) {
         return KoFilter::WrongFormat;
     }
 
-    // create output store
-    KoStore* storeout = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
-
-    if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
-        return KoFilter::FileNotFound;
-    }
-
-    // Tell KoStore not to touch the file names
-    storeout->disallowNameExpansion();
-    KoOdfWriteStore odfStore(storeout);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(to);
-    Q_UNUSED(manifestWriter);
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
-
-    bool success = document.saveOdf(documentContext);
-
-    // cleanup
-    odfStore.closeManifestWriter();
-    delete storeout;
-
-    if (! success)
-        return KoFilter::CreationError;
-    else
-        return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 
