@@ -3,9 +3,7 @@
 
 include_directories( ${KOMAIN_INCLUDES} 
  
-${KOODF_INCLUDES} 
-${CMAKE_SOURCE_DIR}/kexi/kexidb/
-${CMAKE_SOURCE_DIR}/kexi/core/
+${KOODF_INCLUDES}
 ${CMAKE_SOURCE_DIR}/kexi/koproperty
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
@@ -44,7 +42,6 @@ set(koreport_LIB_SRCS
 	renderer/krhtmlrender.cpp
 
 	renderer/scripting/krscripthandler.cpp
-	renderer/scripting/krscriptfunctions.cpp
 	renderer/scripting/krscriptconstants.cpp
 	renderer/scripting/krscriptdebug.cpp
 	renderer/scripting/krscriptdraw.cpp
@@ -94,7 +91,7 @@ kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembe
 kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY}
-  kexidb ${KOPROPERTY_LIBS} kdchart ${KDE4_KROSSCORE_LIBS} komain ${QT_QT3SUPPORT_LIBRARY})
+  ${KOPROPERTY_LIBS} kdchart ${KDE4_KROSSCORE_LIBS} komain ${QT_QT3SUPPORT_LIBRARY})
 if (SHOULD_BUILD_KSPREAD)
     target_link_libraries(koreport kspreadcommon)
 endif (SHOULD_BUILD_KSPREAD)

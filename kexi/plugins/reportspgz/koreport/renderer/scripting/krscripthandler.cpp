@@ -20,10 +20,8 @@
 #include "krscripthandler.h"
 #include <kdebug.h>
 
-#include <kexidb/cursor.h>
 #include <kexiutils/tristate.h>
 
-#include "krscriptfunctions.h"
 #include <krsectiondata.h>
 #include "krscriptsection.h"
 #include "krscriptdebug.h"
@@ -40,12 +38,10 @@
 
 KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
 {
-    m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
     m_reportData = d;
-    m_cursor = kodata;
+    m_koreportData = kodata;
 
     m_action = 0;
-    m_functions = 0;
     m_constants = 0;
     m_debug = 0;
     m_draw = 0;
@@ -54,10 +50,6 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     m_action = new Kross::Action(this, "ReportScript");
 
     m_action->setInterpreter(d->interpreter());
-
-    //Add math functions to the script
-    m_functions = new KRScriptFunctions(m_cursor);
-    m_action->addObject(m_functions, "field");
 
     //Add constants object
     m_constants = new KRScriptConstants();
@@ -79,14 +71,17 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     foreach(KRSectionData *sec, secs) {
         m_sectionMap[sec] = new Scripting::Section(sec);
         m_sectionMap[sec]->setParent(m_report);
-        m_sectionMap[sec]->setObjectName(sec->name());
+        m_sectionMap[sec]->setObjectName(sec->name().replace("-", "_").replace("report:", ""));
+        kDebug() << "Added" << m_sectionMap[sec]->objectName() << "to report" << m_reportData->name();
     }
 
     m_action->addObject(m_report, m_reportData->name());
     kDebug() << "Report name is" << m_reportData->name();
 
+   QString code = m_koreportData->scriptCode(m_reportData->script(), m_reportData->interpreter());
+
 #if KDE_IS_VERSION(4,2,88)
-    m_action->setCode(scriptCode().toLocal8Bit());
+    m_action->setCode(code.toLocal8Bit());
 #else
     m_action->setCode(fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
 #endif
@@ -110,7 +105,6 @@ void KRScriptHandler::trigger()
 KRScriptHandler::~KRScriptHandler()
 {
     delete m_report;
-    delete m_functions;
     delete m_constants;
     delete m_debug;
     delete m_draw;
@@ -124,23 +118,18 @@ void KRScriptHandler::newPage()
     }
 }
 
-void KRScriptHandler::setSource(const QString &s)
-{
-    m_source = s;
-    m_functions->setSource(m_source);
-}
-
 void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
 {
+    kDebug() << key << value;
     m_groups[key] = value;
-
-    m_functions->setWhere(where());
+    emit(groupChanged(where()));
 }
 void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 {
     Q_UNUSED(value);
+    kDebug() << key << value;
     m_groups.remove(key);
-    m_functions->setWhere(where());
+    emit(groupChanged(where()));
 }
 
 void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QPointF off)
@@ -152,13 +141,6 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
     Scripting::Section *ss = m_sectionMap[section];
     if (ss) {
         ss->eventOnRender();
-    }
-
-    return;
-
-    if (!m_action->hadError() && m_action->functionNames().contains(section->name() + "_onrender")) {
-        QVariant result = m_action->callFunction(section->name() + "_onrender");
-        displayErrors();
     }
 }
 
@@ -231,7 +213,7 @@ QString KRScriptHandler::where()
     QString w;
     QMap<QString, QVariant>::const_iterator i = m_groups.constBegin();
     while (i != m_groups.constEnd()) {
-        w += "(" + i.key() + " = " + i.value().toString() + ") AND ";
+        w += "(" + i.key() + " = '" + i.value().toString() + "') AND ";
         ++i;
     }
     w = w.mid(0, w.length() - 4);
@@ -239,52 +221,9 @@ QString KRScriptHandler::where()
     return w;
 }
 
-QString KRScriptHandler::scriptCode()
-{
-    QString scripts;
+#if 0
 
-    if (m_connection) {
-        QList<int> scriptids = m_connection->objectIds(5 /*KexiPart::ScriptObjectType*/);
-        QStringList scriptnames = m_connection->objectNames(5 /*KexiPart::ScriptObjectType*/);
-
-        int id;
-        int i = 0;
-        QString script;
-
-        foreach(id, scriptids) {
-            kDebug() << "ID:" << id;
-            tristate res;
-            res = m_connection->loadDataBlock(id, script, QString());
-            if (res == true) {
-                QDomDocument domdoc;
-                bool parsed = domdoc.setContent(script, false);
-
-                if (! parsed) {
-                    kDebug() << "XML parsing error";
-                    return false;
-                }
-
-                QDomElement scriptelem = domdoc.namedItem("script").toElement();
-                if (scriptelem.isNull()) {
-                    kDebug() << "script domelement is null";
-                    return false;
-                }
-
-                QString interpretername = scriptelem.attribute("language");
-                kDebug() << interpretername;
-                kDebug() << scriptelem.attribute("scripttype");
-
-                if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i])) {
-                    scripts += '\n' + scriptelem.text().toUtf8();
-                }
-                ++i;
-            } else {
-                kDebug() << "Unable to loadDataBlock";
-            }
-        }
-    }
-    return scripts;
-}
+#endif
 
 void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
 {

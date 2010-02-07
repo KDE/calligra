@@ -52,29 +52,36 @@ public:
     virtual bool moveLast() = 0;
     virtual long at() const = 0;
     virtual long recordCount() const = 0;
-    virtual unsigned int fieldNumber(const QString &field) = 0;
-    virtual QStringList fieldNames() = 0;
-    virtual QVariant value(unsigned int) = 0;
-    virtual QVariant value(const QString &field) = 0;
+    virtual unsigned int fieldNumber(const QString &field) const = 0;
+    virtual QStringList fieldNames() const = 0;
+    virtual QVariant value(unsigned int) const = 0;
+    virtual QVariant value(const QString &field) const = 0;
 
     //Should be called before open() so that the data source can be edited accordingly
     //Default impl does nothing
     virtual void setSorting(SortList) {}
 
-    //!Special functions only needed by kexidb driver
-    //!Needs to return a KexiDB::Connection pointer
-    virtual void* connection() const {
-        return 0;
-    } 
+
+    //!Utility Functions
+    //!TODO These are probably eligable to be moved into a new class
     
-    virtual QString source() const {
-        return QString();
-    }
+    //!Allow the reportdata implementation to return a list of possible scripts for a given language
+    virtual QStringList scriptList(const QString& language) const {return QStringList();}
     
-    //!Needs to return a KexiDB::TableOrQuerySchema pointer, only needs implemented if access via scripting is desirbale
-    virtual void* schema() const {
-        return 0;
-    } 
+    //!Allow the reportdata implementation to return some script code based on a specific script name
+    //!and a language, as set in the report
+    virtual QString scriptCode(const QString& script, const QString& language) const {return QString();}
+
+    //!Return the name of this source
+    virtual QString sourceName() const {return QString();}
+
+    //!Return a list of data sources possible for advanced controls
+    virtual QStringList dataSources() const {return QStringList();}
+    
+    //!Allow a driver to create a new instance with a new data source
+    //!source is a driver specific identifier
+    virtual KoReportData* data(const QString &source){return 0;}
+
 };
 
 

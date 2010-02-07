@@ -22,25 +22,15 @@
 #include <kexidb/utils.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(const KoReportData *kodata)
+KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
 {
-    m_connection = 0;
-    m_cursor = 0;
-
-    if (kodata) {
-        m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
-        m_cursor = kodata;
-    }
+    m_cursor = kodata;
+    m_connection = conn;
+    m_source = kodata->sourceName();
 }
-
 
 KRScriptFunctions::~KRScriptFunctions()
 {
-}
-
-void KRScriptFunctions::setSource(const QString &s)
-{
-    m_source = s;
 }
 
 void KRScriptFunctions::setWhere(const QString&w)
@@ -68,6 +58,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
         ret = 0.0;
     }
     delete curs;
+
     return ret;
 }
 
@@ -104,15 +95,9 @@ QVariant KRScriptFunctions::value(const QString &field)
         return val;
     }
 
-    if (m_cursor->schema()) {
-        KexiDB::QueryColumnInfo::Vector flds = static_cast<KexiDB::TableOrQuerySchema*>(m_cursor->schema())->columns();
-        for (int i = 0; i < flds.size() ; ++i) {
+    QStringList fields = m_cursor->fieldNames();
 
-            if (flds[i]->aliasOrName().toLower() == field.toLower()) {
-                val = const_cast<KoReportData*>(m_cursor)->value(i);
-            }
-        }
-    }
+    val = m_cursor->value(fields.indexOf(field));
 
     return val;
 }

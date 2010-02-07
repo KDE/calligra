@@ -27,6 +27,7 @@
 #include <QFont>
 #include <QMap>
 #include "koreport_export.h"
+#include "scripting/krscripthandler.h"
 
 class ORPreRenderPrivate;
 class ParameterList;
@@ -45,14 +46,13 @@ class Connection;
 class KOREPORT_EXPORT ORPreRender
 {
 public:
-//    ORPreRender(KexiDB::Connection*c = 0);
     ORPreRender(const QDomElement&);
 
     virtual ~ORPreRender();
 
     void setSourceData(KoReportData*);
     void registerScriptObject(QObject*, const QString&);
-
+    
     ORODocument * generate();
 
     /**

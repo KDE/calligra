@@ -26,13 +26,7 @@
 #include "krsize.h"
 #include "krpos.h"
 #include <KDChartWidget>
-
-namespace KexiDB
-{
-class Connection;
-class Cursor;
-class Field;
-}
+#include "koreportdata.h"
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -47,7 +41,7 @@ class KRChartData : public KRObjectData
 {
 public:
     KRChartData() {
-        m_connection = 0; createProperties();
+        m_reportData = 0; createProperties();
     }
     KRChartData(QDomNode & element);
     ~KRChartData();
@@ -61,7 +55,7 @@ public:
     @brief Perform the query for the chart and set the charts data
     */
     void populateData();
-    void setConnection(KexiDB::Connection*);
+    void setConnection(KoReportData*);
 
     /**
     @brief Set the value of a field from the master (report) data set
@@ -103,19 +97,19 @@ protected:
     void setAxis(const QString&, const QString&);
     void setBackgroundColor(const QColor&);
     void setLegend(bool);
-
-    QStringList fieldNames(const QString &);
-    QStringList fieldNamesHackUntilImprovedParser(const QString &);
+//!TODO
+//    QStringList fieldNames(const QString &);
+//    QStringList fieldNamesHackUntilImprovedParser(const QString &);
 
 private:
     virtual void createProperties();
     static int RTTI;
-    KexiDB::Connection* m_connection;
+    KoReportData* m_reportData;
 
     friend class ORPreRenderPrivate;
     friend class Scripting::Chart;
 
-    KexiDB::Cursor *dataSet();
+    //KexiDB::Cursor *dataSet();
 
     QMap<QString, QVariant> m_links; //Map of field->value for child/master links
 

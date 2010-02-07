@@ -25,6 +25,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	kexidbreportdata.cpp
 	keximigratereportdata.cpp
     kexisourceselector.cpp
+    krscriptfunctions.cpp
 	)
 
 qt4_wrap_cpp(pgzkexireportpart2_LIB_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)

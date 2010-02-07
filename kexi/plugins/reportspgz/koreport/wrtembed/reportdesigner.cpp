@@ -63,13 +63,6 @@
 #include <QMenu>
 #include <QSplitter>
 
-#include <kexidb/connection.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
-#include <kexidb/schemadata.h>
-#include <kexiutils/tristate.h>
-#include <kexipart.h>
-
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
@@ -142,7 +135,6 @@ public:
 ReportDesigner::ReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
-    m_conn = 0;
     m_kordata = 0;
     init();
 }
@@ -212,7 +204,6 @@ ReportDesigner::~ReportDesigner()
 ///The loading Code
 ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(parent), d(new Private())
 {
-    m_conn = 0;
     m_kordata = 0;
 
     init();
@@ -412,8 +403,9 @@ void ReportDesigner::setReportData(KoReportData* kodata)
 {
     kDebug();
     if (kodata) {
-	m_kordata = kodata; m_conn = static_cast<KexiDB::Connection*>(kodata->connection());
-	setModified(true);
+        m_kordata = kodata;
+        slotPageButton_Pressed();
+        setModified(true);
     }
 }
 
@@ -629,52 +621,6 @@ QStringList ReportDesigner::fieldList() const
     return qs;
 }
 
-QStringList ReportDesigner::scriptList() const
-{
-    QStringList scripts;
-
-    if (isConnected()) {
-        QList<int> scriptids = m_conn->objectIds(KexiPart::ScriptObjectType);
-        QStringList scriptnames = m_conn->objectNames(KexiPart::ScriptObjectType);
-        QString script;
-
-        int id, i;
-        id = i = 0;
-
-        kDebug() << scriptids << scriptnames;
-        kDebug() << m_interpreter->value().toString();
-
-        //A blank entry
-        scripts << "";
-
-        if (isConnected()) {
-            foreach(id, scriptids) {
-                kDebug() << "ID:" << id;
-                tristate res;
-                res = m_conn->loadDataBlock(id, script, QString());
-                if (res == true) {
-                    QDomDocument domdoc;
-                    bool parsed = domdoc.setContent(script, false);
-
-                    QDomElement scriptelem = domdoc.namedItem("script").toElement();
-                    if (parsed && !scriptelem.isNull()) {
-                        if (m_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
-                            scripts << scriptnames[i];
-                        }
-                    } else {
-                        kDebug() << "Unable to parse script";
-                    }
-                } else {
-                    kDebug() << "Unable to loadDataBlock";
-                }
-                ++i;
-            }
-        }
-        kDebug() << scripts;
-    }
-    return scripts;
-}
-
 void ReportDesigner::createProperties()
 {
     QStringList keys, strings;
@@ -721,7 +667,6 @@ void ReportDesigner::createProperties()
     keys = Kross::Manager::self().interpreters();
     m_interpreter = new KoProperty::Property("script-interpreter", keys, keys, keys[0], "Script Interpreter");
 
-    keys = scriptList();
     m_script = new KoProperty::Property("script", keys, keys, "", "Object Script");
 
     m_set->addProperty(m_title);
@@ -762,21 +707,16 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
     }
 }
 
-/**
-@brief When the 'page' button in the top left is pressed, change the property set to the reports properties.
-*/
 void ReportDesigner::slotPageButton_Pressed()
 {
-    QStringList sl = scriptList();
+    if (m_kordata) {
+        QStringList sl = m_kordata->scriptList(m_interpreter->value().toString());
 
-    m_script->setListData(sl, sl);
-    changeSet(m_set);
+        m_script->setListData(sl, sl);
+        changeSet(m_set);
+    }
 }
 
-/**
-@brief Return a list of supported page formats
-@return A QStringList of page formats
-*/
 QStringList ReportDesigner::pageFormats() const
 {
     QStringList lst;
@@ -825,10 +765,6 @@ QSize ReportDesigner::sizeHint() const
     return QSize(w, h);
 }
 
-/**
-@brief Calculate the width of the page in pixels given the paper size, orientation, dpi and margin
-@return integer value of width in pixels
-*/
 int ReportDesigner::pageWidthPx() const
 {
     int cw = 0;

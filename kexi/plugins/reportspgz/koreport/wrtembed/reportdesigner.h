@@ -30,7 +30,7 @@
 #include <QCloseEvent>
 
 #include <krreportdata.h>
-#include <kexidb/connection.h>
+//#include <kexidb/connection.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 #include <kdebug.h>
@@ -71,6 +71,7 @@ public:
     ~ReportDesigner();
 
     void setReportData(KoReportData* kodata);
+    KoReportData *reportData(){return m_kordata;}
 
     ReportSection* section(KRSectionData::Section) const;
     void removeSection(KRSectionData::Section);
@@ -90,25 +91,14 @@ public:
 
     bool isModified() const;
 
-    KexiDB::Connection *theConn() const {
-        return m_conn;
-    }
-    bool isConnected() const {
-        return m_conn &&  m_conn->isConnected();
-    }
-
     /**
     \return a list of fields in the selected query
     */
     QStringList fieldList() const;
 
     /**
-    \return a list of object scripts in the database
-    */
-    QStringList scriptList() const;
-
-    /**
-    \return the page width in pixels for the current paper size
+    @brief Calculate the width of the page in pixels given the paper size, orientation, dpi and margin
+    @return integer value of width in pixels
     */
     int pageWidthPx() const;
 
@@ -183,9 +173,12 @@ private:
     void init();
     bool m_modified; // true if this document has been modified, false otherwise
 
-    KexiDB::Connection *m_conn;
     KoReportData *m_kordata;
 
+    /**
+    @brief Return a list of supported page formats
+    @return A QStringList of page formats
+    */
     QStringList pageFormats() const;
 
     virtual void resizeEvent(QResizeEvent * event);
@@ -216,6 +209,10 @@ private:
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
+
+    /**
+    @brief When the 'page' button in the top left is pressed, change the property set to the reports properties.
+    */
     void slotPageButton_Pressed();
 
 signals:

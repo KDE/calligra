@@ -20,6 +20,8 @@
 #include "kexidbreportdata.h"
 #include <kdebug.h>
 #include <kexidb/queryschema.h>
+#include <core/kexipart.h>
+#include <QDomDocument>
 
 KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
                                      KexiDB::Connection * pDb )
@@ -106,17 +108,19 @@ bool KexiDBReportData::getSchema()
     return false;
 }
 
+#if 0
 void* KexiDBReportData::connection() const
 {
     return m_connection;
 }
+#endif
 
-QString KexiDBReportData::source() const
+QString KexiDBReportData::sourceName() const
 {
     return m_qstrQuery;
 }
 
-uint KexiDBReportData::fieldNumber ( const QString &fld )
+uint KexiDBReportData::fieldNumber ( const QString &fld ) const
 {
     KexiDB::QueryColumnInfo::Vector flds;
     
@@ -133,13 +137,10 @@ uint KexiDBReportData::fieldNumber ( const QString &fld )
             x = i;
         }
     }
-
-    kDebug() << "Field number of" << fld << "is" << x;
-
     return x;
 }
 
-QStringList KexiDBReportData::fieldNames()
+QStringList KexiDBReportData::fieldNames() const
 {
     QStringList names;
 
@@ -154,12 +155,7 @@ QStringList KexiDBReportData::fieldNames()
     return names;
 }
 
-void* KexiDBReportData::schema() const
-{
-    return m_schema;
-}
-
-QVariant KexiDBReportData::value ( unsigned int i )
+QVariant KexiDBReportData::value ( unsigned int i ) const
 {
     if ( m_cursor )
         return m_cursor->value ( i );
@@ -167,7 +163,7 @@ QVariant KexiDBReportData::value ( unsigned int i )
     return QVariant();
 }
 
-QVariant KexiDBReportData::value ( const QString &fld )
+QVariant KexiDBReportData::value ( const QString &fld ) const
 {
     int i = fieldNumber ( fld );
 
@@ -225,4 +221,129 @@ long KexiDBReportData::recordCount() const
     {
         return 1;
     }
+}
+
+QStringList KexiDBReportData::scriptList(const QString& interpreter) const
+{
+    QStringList scripts;
+
+    if( m_connection) {
+        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
+        QString script;
+
+        int id, i;
+        id = i = 0;
+
+        kDebug() << scriptids << scriptnames;
+        kDebug() << interpreter;
+
+        //A blank entry
+        scripts << "";
+
+       
+        foreach(id, scriptids) {
+            kDebug() << "ID:" << id;
+            tristate res;
+            res = m_connection->loadDataBlock(id, script, QString());
+            if (res == true) {
+                QDomDocument domdoc;
+                bool parsed = domdoc.setContent(script, false);
+
+                QDomElement scriptelem = domdoc.namedItem("script").toElement();
+                if (parsed && !scriptelem.isNull()) {
+                    if (interpreter == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
+                        scripts << scriptnames[i];
+                    }
+                } else {
+                    kDebug() << "Unable to parse script";
+                }
+            } else {
+                kDebug() << "Unable to loadDataBlock";
+            }
+            ++i;
+        }
+        
+        kDebug() << scripts;
+    }
+
+    return scripts;
+}
+
+QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& language) const
+{
+    QString scripts;
+
+    if (m_connection) {
+        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
+
+        int id;
+        int i = 0;
+        QString script;
+
+        foreach(id, scriptids) {
+            kDebug() << "ID:" << id;
+            tristate res;
+            res = m_connection->loadDataBlock(id, script, QString());
+            if (res == true) {
+                QDomDocument domdoc;
+                bool parsed = domdoc.setContent(script, false);
+
+                if (! parsed) {
+                    kDebug() << "XML parsing error";
+                    return false;
+                }
+
+                QDomElement scriptelem = domdoc.namedItem("script").toElement();
+                if (scriptelem.isNull()) {
+                    kDebug() << "script domelement is null";
+                    return false;
+                }
+
+                QString interpretername = scriptelem.attribute("language");
+                kDebug() << language << interpretername;
+                kDebug() << scriptelem.attribute("scripttype");
+                kDebug() << scriptname << scriptnames[i];
+
+                if (language == interpretername && (scriptelem.attribute("scripttype") == "module" || scriptname == scriptnames[i])) {
+                    scripts += '\n' + scriptelem.text().toUtf8();
+                }
+                ++i;
+            } else {
+                kDebug() << "Unable to loadDataBlock";
+            }
+        }
+    }
+    return scripts;
+}
+
+QStringList KexiDBReportData::dataSources() const
+{
+    //Get the list of queries in the database
+    QStringList qs;
+    if (m_connection && m_connection->isConnected()) {
+        QList<int> tids = m_connection->tableIds();
+        qs << "";
+        for (int i = 0; i < tids.size(); ++i) {
+            KexiDB::TableSchema* tsc = m_connection->tableSchema(tids[i]);
+            if (tsc)
+                qs << tsc->name();
+        }
+
+        QList<int> qids = m_connection->queryIds();
+        qs << "";
+        for (int i = 0; i < qids.size(); ++i) {
+            KexiDB::QuerySchema* qsc = m_connection->querySchema(qids[i]);
+            if (qsc)
+                qs << qsc->name();
+        }
+    }
+
+    return qs;
+}
+
+KoReportData* KexiDBReportData::data(const QString& source)
+{
+return this;
 }

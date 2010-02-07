@@ -45,7 +45,7 @@ class KRScriptHandler : public QObject
 public:
     KRScriptHandler(const KoReportData *, KRReportData*);
     ~KRScriptHandler();
-    void setSource(const QString &s);
+
     QVariant evaluate(const QString&);
     void displayErrors();
     void registerScriptObject(QObject*, const QString&);
@@ -64,8 +64,10 @@ public slots:
     }
     void newPage();
 
+signals:
+    void groupChanged(const QString& whereCondition);    
+
 private:
-    KRScriptFunctions *m_functions;
     KRScriptConstants *m_constants;
     KRScriptDebug *m_debug;
     KRScriptDraw *m_draw;
@@ -76,12 +78,7 @@ private:
     QString fieldFunctions();
 #endif
 
-    QString scriptCode();
-
-    KexiDB::Connection *m_connection;
-    //const KexiDB::Cursor *m_cursor;
-
-    const KoReportData *m_cursor;
+    const KoReportData *m_koreportData;
 
     QString m_source;
     KRReportData  *m_reportData;

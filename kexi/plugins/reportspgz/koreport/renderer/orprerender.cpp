@@ -221,10 +221,6 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
     kDebug();
 
     if (detailData.m_detailSection) {
-        if (m_kodata) {
-            //TODO init the engine earlier?
-            m_scriptHandler->setSource(m_kodata->source());
-        }
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
@@ -241,22 +237,23 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 cnt++;
                 grp = detailData.m_groupList[i];
 
-                keys.append(grp->m_column);
-                if (!keys[i].isEmpty())
-                    keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys[i])).toString());
-                else
-                    keyValues.append(QString());
+                //If the group has a header or footer, then emit a change of group value
+                if(grp->m_groupFooter || grp->m_groupHeader) {
+                    keys.append(grp->m_column);
+                    if (!keys[i].isEmpty())
+                        keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys[i])).toString());
+                    else
+                        keyValues.append(QString());
 
-                //Tell interested parties we're about to render a header
-                kDebug() << "EMIT1";
-                emit(enteredGroup(keys[i], keyValues[i]));
-
+                    //Tell interested parties we're about to render a header
+                    kDebug() << "EMIT1";
+                    emit(enteredGroup(keys[i], keyValues[i]));
+                }
                 if (grp->m_groupHeader)
                     renderSection(*(grp->m_groupHeader));
             }
 
             do {
-                kDebug() << "...getting pos";
                 long l = m_kodata->at();
 
                 kDebug() << "At:" << l << "Y:" << m_yOffset;
@@ -327,17 +324,18 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                             createNewPage();
                                             m_kodata->moveNext();
                                         }
+                                        
+                                        if (!keys[i].isEmpty())
+                                            keyValues[i] = m_kodata->value(m_kodata->fieldNumber(keys[i])).toString();
 
+                                        //Tell interested parties thak key values changed
+                                        kDebug() << "EMIT2";
+                                        emit(enteredGroup(keys[i], keyValues[i]));
 
                                         renderSection(*(grp->m_groupHeader));
                                     }
 
-                                    if (!keys[i].isEmpty())
-                                        keyValues[i] = m_kodata->value(m_kodata->fieldNumber(keys[i])).toString();
 
-                                    //Tell interested parties thak key values changed
-                                    kDebug() << "EMIT2";
-                                    emit(enteredGroup(keys[i], keyValues[i]));
                                 }
                             }
                         }
@@ -729,7 +727,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             sec->addPrimitive(i2);
         } else if (elemThis->type() == KRObjectData::EntityChart) {
             KRChartData * ch = elemThis->toChart();
-            ch->setConnection(m_conn);
+            ch->setConnection(m_kodata);
 
             QStringList masterFields = ch->masterFields();
             for (int i = 0; i < masterFields.size(); ++i) {
@@ -927,6 +925,10 @@ ORODocument* ORPreRender::generate()
         while (i.hasNext()) {
             i.next();
             d->m_scriptHandler->registerScriptObject(i.value(), i.key());
+
+            //!TODO This is a hack
+            if (i.key() == "field")
+                QObject::connect(d->m_scriptHandler, SIGNAL(groupChanged(const QString&)), i.value(), SLOT(setWhere(const QString&)));
         }
     }
 
@@ -1039,7 +1041,7 @@ void ORPreRender::setSourceData(KoReportData *data)
 {
     if (d && data) {
         d->m_kodata = data;
-        d->m_conn  = static_cast<KexiDB::Connection*>(data->connection());
+//!TODO        d->m_conn  = static_cast<KexiDB::Connection*>(data->connection());
     }
 }
 

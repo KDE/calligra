@@ -57,7 +57,7 @@ KexiMigrateReportData::~KexiMigrateReportData()
     m_KexiMigrate = 0;
 }
 
-uint KexiMigrateReportData::fieldNumber(const QString &fld)
+uint KexiMigrateReportData::fieldNumber(const QString &fld) const
 {
     KexiDB::QueryColumnInfo::Vector flds;
 
@@ -73,7 +73,7 @@ uint KexiMigrateReportData::fieldNumber(const QString &fld)
     return x;
 }
 
-QStringList KexiMigrateReportData::fieldNames()
+QStringList KexiMigrateReportData::fieldNames() const
 {
     KexiDB::QueryColumnInfo::Vector flds;
     QStringList names;
@@ -86,12 +86,7 @@ QStringList KexiMigrateReportData::fieldNames()
     return names;
 }
 
-void* KexiMigrateReportData::schema() const
-{
-    return m_schema;
-}
-
-QVariant KexiMigrateReportData::value(unsigned int i)
+QVariant KexiMigrateReportData::value(unsigned int i) const
 {
     if (!m_valid)
         return QVariant();
@@ -100,7 +95,7 @@ QVariant KexiMigrateReportData::value(unsigned int i)
 
 }
 
-QVariant KexiMigrateReportData::value(const QString &fld)
+QVariant KexiMigrateReportData::value(const QString &fld) const
 {
     if (!m_valid)
         return QVariant();

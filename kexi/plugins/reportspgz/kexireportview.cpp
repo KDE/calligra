@@ -36,6 +36,7 @@
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
+#include "krscriptfunctions.h"
 
 #ifdef HAVE_KSPREAD
 #include <krkspreadrender.h>
@@ -229,8 +230,10 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 	
         m_preRenderer = new ORPreRender(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
+            KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                m_preRenderer->setSourceData(sourceData(tempData()->connectionDefinition));
+                reportData = sourceData(tempData()->connectionDefinition);
+                m_preRenderer->setSourceData(reportData);
             }
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
@@ -239,6 +242,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_kexi = new KexiScriptAdaptor();
             m_preRenderer->registerScriptObject(m_kexi, "Kexi");
 
+            //If using a kexidb source, add a functions scripting object
+            if (tempData()->connectionDefinition.attribute("type") == "internal") {
+                m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
+                m_preRenderer->registerScriptObject(m_functions, "field");
+            }
+            
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
                 m_pageCount = m_reportDocument->pages();
@@ -261,8 +270,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
 KoReportData* KexiReportView::sourceData(QDomElement e)
 {
-    KoReportData *kodata;
-    kodata = 0;
+    KoReportData *kodata = 0;
 
     if (e.attribute("type") == "internal") {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());

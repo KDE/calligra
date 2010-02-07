@@ -34,8 +34,6 @@
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
 
-
-
 void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
 {
     m_reportDesigner = designer;
@@ -50,7 +48,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 
-    setConnection(m_reportDesigner->theConn());
+//!TODO    setConnection(m_reportDesigner->theConn());
 }
 
 ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)
@@ -97,21 +95,9 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     painter->setBackground(bg);
     painter->setPen(Qt::black);
-
     painter->drawText(rect(), 0, m_dataSource->value().toString() + QObject::tr(":") + QObject::tr("chart"));
-
-
-// if ( ( Qt::PenStyle ) _lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0 )
-// {
     painter->setPen(QPen(QColor(224, 224, 224)));
-// }
-// else
-// {
-//  painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), ( Qt::PenStyle ) _lnStyle->value().toInt() ) );
-// }
-
     painter->drawRect(rect());
-
     painter->setBackgroundMode(Qt::TransparentMode);
 
     drawHandles(painter);
@@ -202,33 +188,11 @@ void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
 
 void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    QStringList ql = queryList(m_reportDesigner->theConn());
-    m_dataSource->setListData(ql, ql);
+    if (m_reportDesigner->reportData()) {
+        QStringList ql = m_reportDesigner->reportData()->dataSources();
+        m_dataSource->setListData(ql, ql);
+    }
     ReportRectEntity::mousePressEvent(event);
 }
 
-QStringList ReportEntityChart::queryList(KexiDB::Connection* conn)
-{
-    //Get the list of queries in the database
-    QStringList qs;
-    if (conn && conn->isConnected()) {
-        QList<int> tids = conn->tableIds();
-        qs << "";
-        for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = conn->tableSchema(tids[i]);
-            if (tsc)
-                qs << tsc->name();
-        }
-
-        QList<int> qids = conn->queryIds();
-        qs << "";
-        for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = conn->querySchema(qids[i]);
-            if (qsc)
-                qs << qsc->name();
-        }
-    }
-
-    return qs;
-}
 

@@ -33,6 +33,7 @@ class KexiReportPage;
 class KexiReportViewPageSelect;
 class KexiRecordNavigator;
 class KexiScriptAdaptor;
+class KRScriptFunctions;
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -58,8 +59,10 @@ private:
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
-    KexiScriptAdaptor *m_kexi;
 
+    KexiScriptAdaptor *m_kexi;
+    KRScriptFunctions *m_functions;
+    
 private slots:
     void nextPage();
     void prevPage();

@@ -30,10 +30,10 @@
 #include "koreport_export.h"
 
 class ORODocument;
-namespace KexiDB
-{
-class Connection;
-}
+//namespace KexiDB
+//{
+//class Connection;
+//}
 //
 // KRHtmlRender
 //

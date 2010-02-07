@@ -43,11 +43,11 @@ public:
 
     virtual ~KexiMigrateReportData();
 
-    virtual unsigned int fieldNumber(const QString &field);
-    virtual QStringList fieldNames();
+    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual QStringList fieldNames() const;
 
-    virtual QVariant value(unsigned int);
-    virtual QVariant value(const QString &field);
+    virtual QVariant value(unsigned int) const;
+    virtual QVariant value(const QString &field) const;
 
     virtual bool open() {
         return true;
@@ -63,8 +63,6 @@ public:
     virtual long at() const;
 
     virtual long recordCount() const;
-
-    virtual void* schema() const;
 };
 
 #endif

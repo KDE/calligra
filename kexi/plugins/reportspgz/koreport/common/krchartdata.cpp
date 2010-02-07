@@ -49,7 +49,7 @@ typedef QVector<double> datalist;
 
 KRChartData::KRChartData(QDomNode & element)
 {
-    m_connection = 0;
+    m_reportData = 0;
     createProperties();
 
     QDomNodeList nl = element.childNodes();
@@ -230,14 +230,13 @@ void KRChartData::setColorScheme(const QString &cs)
     }
 }
 
-void KRChartData::setConnection(KexiDB::Connection *c)
+void KRChartData::setConnection(KoReportData *c)
 {
-    m_connection = c;
+    m_reportData = c;
 }
 
 void KRChartData::populateData()
 {
-    KexiDB::Cursor* curs = 0;
     QVector<datalist> data;
     QStringList labels;
 
@@ -246,64 +245,57 @@ void KRChartData::populateData()
     delete m_chartWidget;
     m_chartWidget = 0;
 
-    if (m_connection) {
-        curs = dataSet();
+    if (m_reportData) {
 
-        if (curs) {
-            fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
+//!TODO            fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
+        fn = m_reportData->fieldNames();
+        
+        //resize the data lists to match the number of columns
+        int cols = fn.count() - 1;
+        data.resize(cols);
 
-            //resize the data lists to match the number of columns
-            int cols = fn.count() - 1;
-            data.resize(cols);
+        m_chartWidget = new KDChart::Widget();
+        //_chartWidget->setStyle ( new QMotifStyle() );
 
-            m_chartWidget = new KDChart::Widget();
-            //_chartWidget->setStyle ( new QMotifStyle() );
-
-            m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
-            m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
-            set3D(m_threeD->value().toBool());
-            setAA(m_aa->value().toBool());
-            setColorScheme(m_colorScheme->value().toString());
-            setBackgroundColor(m_backgroundColor->value().value<QColor>());
-            curs->moveFirst();
-            while (!curs->eof()) {
-                labels << curs->value(0).toString();
-
-                for (int i = 1; i <= cols; ++i) {
-                    data[i - 1] << curs->value(i).toDouble();
-                }
-                curs->moveNext();
-            }
-            kDebug() << labels;
-            if (data.size() > 0) {
-                kDebug() << data[0];
-            }
+        m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
+        m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
+        set3D(m_threeD->value().toBool());
+        setAA(m_aa->value().toBool());
+        setColorScheme(m_colorScheme->value().toString());
+        setBackgroundColor(m_backgroundColor->value().value<QColor>());
+        m_reportData->moveFirst();
+        bool status = true;
+        do {
+            labels << m_reportData->value(0).toString();
             for (int i = 1; i <= cols; ++i) {
-                m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
+                data[i - 1] << m_reportData->value(i).toDouble();
             }
+        } while (m_reportData->moveNext());
+        
+        kDebug() << labels;
+        if (data.size() > 0) {
+            kDebug() << data[0];
+        }
+        for (int i = 1; i <= cols; ++i) {
+            m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
+        }
 
-            setLegend(m_displayLegend->value().toBool());
+        setLegend(m_displayLegend->value().toBool());
 
+        //Add the axis
+        setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
 
+        //Add the bottom labels
+        if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
+            KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
 
-            //Add the axis
-            setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
-
-            //Add the bottom labels
-            if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
-                KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
-
-                foreach(KDChart::CartesianAxis* axis, dia->axes()) {
-                    if (axis->position() == KDChart::CartesianAxis::Bottom) {
-                        axis->setLabels(labels);
-                    }
+            foreach(KDChart::CartesianAxis* axis, dia->axes()) {
+                if (axis->position() == KDChart::CartesianAxis::Bottom) {
+                    axis->setLabels(labels);
                 }
             }
-
-
-        } else {
-            kDebug() << "Cursor was invalid: " << m_dataSource->value().toString();
         }
+
     } else {
         kDebug() << "No connection!";
     }
@@ -320,11 +312,13 @@ void KRChartData::setLinkData(QString fld, QVariant val)
     m_links[fld] = val;
 }
 
+//!TODO
+#if 0
 QStringList KRChartData::fieldNames(const QString &stmt)
 {
     KexiDB::Parser *pars;
 
-    pars = new KexiDB::Parser(m_connection);
+    pars = new KexiDB::Parser(m_reportData);
 
     pars->setOperation(KexiDB::Parser::OP_Select);
     pars->parse(stmt);
@@ -354,12 +348,12 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser(const QString &stmt)
     KexiDB::Field::List fl;
     QString s;
 
-    if (m_connection && m_connection->tableSchema(ds)) {
+    if (m_reportData && m_reportData->tableSchema(ds)) {
         kDebug() << ds << "is a table";
-        fn = m_connection->tableSchema(ds)->names();
-    } else if (m_connection && m_connection->querySchema(ds)) {
+        fn = m_reportData->tableSchema(ds)->names();
+    } else if (m_reportData && m_reportData->querySchema(ds)) {
         kDebug() << ds << "is a query";
-        fn = m_connection->querySchema(ds)->names();
+        fn = m_reportData->querySchema(ds)->names();
     } else {
         QString s = stmt.mid(6, stmt.indexOf("from", 0, Qt::CaseInsensitive) - 6).simplified();
         kDebug() << s;
@@ -368,6 +362,7 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser(const QString &stmt)
     return fn;
 }
 
+#endif
 
 void KRChartData::setAxis(const QString& xa, const QString &ya)
 {
@@ -405,6 +400,8 @@ void KRChartData::setAxis(const QString& xa, const QString &ya)
     }
 }
 
+//!TODO
+#if 0
 KexiDB::Cursor *KRChartData::dataSet()
 {
     QString ds = m_dataSource->value().toString();
@@ -412,16 +409,16 @@ KexiDB::Cursor *KRChartData::dataSet()
     KexiDB::QuerySchema *qs;
 
     //Determin the type of the source data and create a queryschema
-    if (m_connection && m_connection->tableSchema(ds)) {
+    if (m_reportData && m_reportData->tableSchema(ds)) {
         kDebug() << ds << "is a table";
-        qs = new KexiDB::QuerySchema(*(m_connection->tableSchema(ds)));
-    } else if (m_connection && m_connection->querySchema(ds)) {
+        qs = new KexiDB::QuerySchema(*(m_reportData->tableSchema(ds)));
+    } else if (m_reportData && m_reportData->querySchema(ds)) {
         kDebug() << ds << "is a query";
-        qs = m_connection->querySchema(ds);
+        qs = m_reportData->querySchema(ds);
     } else {
         kDebug() << ds << "is a statement";
         KexiDB::Parser *pars;
-        pars = new KexiDB::Parser(m_connection);
+        pars = new KexiDB::Parser(m_reportData);
         pars->setOperation(KexiDB::Parser::OP_Select);
         pars->parse(ds);
         qs = pars->select();
@@ -441,10 +438,12 @@ KexiDB::Cursor *KRChartData::dataSet()
             }
         }
 
-        c = m_connection->executeQuery(*qs, 1);
+        c = m_reportData->executeQuery(*qs, 1);
     }
     return c;
 }
+#endif
+
 void KRChartData::setBackgroundColor(const QColor&)
 {
     //Set the background color
@@ -462,8 +461,9 @@ void KRChartData::setLegend(bool le)
     //Add the legend
     if (m_chartWidget) {
         if (le) {
-            QStringList fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
-
+//!TODO            QStringList fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
+            QStringList fn = m_reportData->fieldNames();
+            
             m_chartWidget->addLegend(KDChart::Position::East);
             m_chartWidget->legend()->setOrientation(Qt::Horizontal);
             m_chartWidget->legend()->setTitleText("Legend");

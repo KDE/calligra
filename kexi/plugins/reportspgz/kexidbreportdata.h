@@ -46,16 +46,15 @@ public:
     KexiDBReportData(const QString &, KexiDB::Connection *conn);
     virtual ~KexiDBReportData();
 
-    virtual void* connection() const;
-    virtual void* schema() const;
+    //virtual void* connection() const;
 
-    virtual QStringList fieldNames();
+    virtual QStringList fieldNames() const;
     virtual void setSorting(KoReportData::SortList);
 
-    virtual QString source() const;
-    virtual unsigned int fieldNumber(const QString &field);
-    virtual QVariant value(unsigned int);
-    virtual QVariant value(const QString &field);
+    virtual QString sourceName() const;
+    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual QVariant value(unsigned int) const;
+    virtual QVariant value(const QString &field) const;
 
     virtual bool open();
     virtual bool close();
@@ -66,6 +65,12 @@ public:
 
     virtual long at() const;
     virtual long recordCount() const;
+
+    //Utility Functions
+    virtual QStringList scriptList(const QString& language) const;
+    virtual QString scriptCode(const QString& script, const QString& language) const;
+    virtual QStringList dataSources() const;
+    virtual KoReportData* data(const QString&);
 };
 
 #endif

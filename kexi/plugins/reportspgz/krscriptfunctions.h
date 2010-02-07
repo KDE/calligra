@@ -33,11 +33,10 @@ class KRScriptFunctions : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptFunctions(const KoReportData*);
+    KRScriptFunctions(const KoReportData *, KexiDB::Connection*);
 
     ~KRScriptFunctions();
-    void setWhere(const QString&);
-    void setSource(const QString&);
+    
 private:
     KexiDB::Connection *m_connection;
     const KoReportData *m_cursor;
@@ -46,6 +45,8 @@ private:
 
     QString m_where;
 public slots:
+    void setWhere(const QString&);
+    
     qreal sum(const QString &);
     qreal avg(const QString &);
     qreal min(const QString &);

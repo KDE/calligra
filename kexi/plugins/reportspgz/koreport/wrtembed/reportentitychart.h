@@ -23,6 +23,7 @@
 #include <QObject>
 #include <krchartdata.h>
 #include "reportrectentity.h"
+
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
@@ -43,7 +44,6 @@ protected:
 
 private:
     void init(QGraphicsScene*, ReportDesigner *r);
-    QStringList queryList(KexiDB::Connection* conn);
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
