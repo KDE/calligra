@@ -90,7 +90,7 @@ void ReportSectionDetailGroup::buildXML(QDomDocument & doc, QDomElement & sectio
     if (groupFooterVisible()) {
         QDomElement gfooter = doc.createElement("report:section");
         gfooter.setAttribute("report:section-type", "group-footer");
-        groupHeader()->buildXML(doc, gfooter);
+        groupFooter()->buildXML(doc, gfooter);
         grp.appendChild(gfooter);
     }
     section.appendChild(grp);
