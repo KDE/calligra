@@ -56,66 +56,24 @@ KRChartData::KRChartData(QDomNode & element)
 
     QString n;
     QDomNode node;
+    QDomElement e = element.toElement();
+    m_name->setValue(e.attribute("report:name"));
+    m_dataSource->setValue(e.attribute("report:data-source"));
+    Z = e.attribute("report:z-index").toDouble();
+    m_chartType->setValue(e.attribute("report:chart-type").toInt());
+    m_chartSubType->setValue(e.attribute("report:chart-sub-type").toInt());
+    m_threeD->setValue(e.attribute("report:three-dimensions"));
 
-    for (int i = 0; i < nl.count(); i++) {
-        node = nl.item(i);
-        n = node.nodeName();
+    m_colorScheme->setValue(e.attribute("report:chart-color-scheme"));
+    m_aa->setValue(e.attribute("report:antialiased"));
+    m_xTitle->setValue(e.attribute("report:title-x-axis"));
+    m_yTitle->setValue(e.attribute("report:title-y-axis"));
+    m_backgroundColor->setValue(e.attribute("report:background-color"));
+    m_displayLegend->setValue(e.attribute("report:display-legend"));
+    m_linkMaster->setValue(e.attribute("report:link-master"));
+    m_linkChild->setValue(e.attribute("report:link-child"));
 
-        kDebug() << node.nodeName() << node.firstChild().nodeValue();
-        if (n == "data") {
-            QDomNodeList dnl = node.childNodes();
-            for (int di = 0; di < dnl.count(); di++) {
-                //TODO link child, master
-                node = dnl.item(di);
-                n = node.nodeName();
-                if (n == "datasource") {
-                    m_dataSource->setValue(node.firstChild().nodeValue());
-                } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n;
-                }
-            }
-        } else if (n == "name") {
-            m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "z-index") {
-            Z = node.firstChild().nodeValue().toDouble();
-        } else if (n == "type") {
-            m_chartType->setValue(node.firstChild().nodeValue().toInt());
-        } else if (n == "subtype") {
-            m_chartSubType->setValue(node.firstChild().nodeValue().toInt());
-        } else if (n == "threed") {
-            m_threeD->setValue(node.firstChild().nodeValue() == "true" ? true : false);
-        } else if (n == "colorscheme") {
-            m_colorScheme->setValue(node.firstChild().nodeValue());
-        } else if (n == "antialiased") {
-            m_aa->setValue(node.firstChild().nodeValue() == "true" ? true : false);
-        } else if (n == "xtitle") {
-            m_xTitle->setValue(node.firstChild().nodeValue());
-        } else if (n == "ytitle") {
-            m_yTitle->setValue(node.firstChild().nodeValue());
-        } else if (n == "rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else if (n == "backgroundcolor") {
-            m_backgroundColor->setValue(QColor(node.firstChild().nodeValue()));
-
-        } else if (n == "displaylegend") {
-            m_displayLegend->setValue(node.firstChild().nodeValue() == "true" ? true : false);
-
-        } else if (n == "linestyle") {
-            KRLineStyleData ls;
-//   if (parseReportLineStyleData( node.toElement(), ls ))
-//   {
-//    _lnWeight->setValue(ls.weight);
-//    _lnColor->setValue(ls.lnColor);
-//    _lnStyle->setValue(ls.style);
-//   }
-        } else if (n == "linkmaster") {
-            m_linkMaster->setValue(node.firstChild().nodeValue());
-        } else if (n == "linkchild") {
-            m_linkChild->setValue(node.firstChild().nodeValue());
-        } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n;
-        }
-    }
+    parseReportRect(e, &m_pos, &m_size);
 
 }
 
