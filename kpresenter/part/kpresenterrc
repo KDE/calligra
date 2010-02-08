@@ -4,9 +4,6 @@ ColorSpacePluginsDisabled=kritacmykplugin,krita_cmyk_u16_plugin,kritagrayplugin,
 FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
 
-[KoShapeCollection]
-QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
-
 [DockerManager]                                                               
 HiddenToolDockers=                                                            
 VisibleToolDockers=DefaultToolWidget,DefaultToolArrangeWidget,SnapGuideConfigWidget
