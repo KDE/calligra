@@ -1574,6 +1574,10 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 // store the reference, so we can use it within functions
                 entry.col1 = entry.col2 = position.x();
                 entry.row1 = entry.row2 = position.y();
+            } else {
+                QStringList l;
+                foreach(QRect r, region.rects()) l << QString("(%1,%2,%3,%4)").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
+                kWarning() << "Unhandled non singular region in Opcode::Cell with rects=" << l.join(",");
             }
             entry.val = val1;
             stack.push(entry);
