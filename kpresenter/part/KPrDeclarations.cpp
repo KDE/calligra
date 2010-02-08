@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoPALoadingContext.h>
+#include <KoPASavingContext.h>
 
 KPrDeclarations::KPrDeclarations()
 {
@@ -54,10 +55,51 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
             else if(element.tagName() == "date-time-decl") {
                 const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
                 m_declarations[DateTime].insert(name, element.text());
+                // TODO needs more work there are other attributes to keep.
             }
         }
         else if (element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw) {
             break;
+        }
+    }
+    return true;
+}
+
+
+bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
+{
+    /*
+       <presentation:header-decl presentation:name="hdr1">header</presentation:header-decl>
+       <presentation:footer-decl presentation:name="ftr1">Footer for the slide</presentation:footer-decl>
+       <presentation:footer-decl presentation:name="ftr2">footer</presentation:footer-decl>
+       <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
+    */
+    KoXmlWriter &writer(paContext.xmlWriter());
+
+    QHash<Type, QHash<QString, QString> >::const_iterator typeIt(m_declarations.constBegin());
+    for (; typeIt != m_declarations.constEnd(); ++typeIt) {
+        QHash<QString, QString>::const_iterator keyIt(typeIt.value().begin());
+        for (; keyIt != typeIt.value().constEnd(); ++keyIt) {
+            switch (typeIt.key()) {
+            case Footer:
+                writer.startElement("presentation:footer-decl");
+                break;
+            case Header:
+                writer.startElement("presentation:header-decl");
+                break;
+            case DateTime:
+                writer.startElement("presentation:date-time-decl");
+                break;
+            }
+
+            writer.addAttribute("presentation:name", keyIt.key());
+            if (typeIt.key() == DateTime) {
+                //TODO
+            }
+            else {
+                writer.addTextNode(keyIt.value());
+            }
+            writer.endElement();
         }
     }
     return true;

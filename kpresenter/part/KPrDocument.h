@@ -167,6 +167,9 @@ protected:
     virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
 
     /// reimplemented
+    virtual bool saveOdfProlog( KoPASavingContext & paContext );
+
+    /// reimplemented
     virtual bool saveOdfEpilogue( KoPASavingContext & context );
 
     /// reimplemented

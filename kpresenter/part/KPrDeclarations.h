@@ -28,6 +28,7 @@
 
 class KoXmlElement;
 class KoPALoadingContext;
+class KoPASavingContext;
 
 class KPrDeclarations
 {
@@ -58,6 +59,11 @@ public:
      * @return bool value
      */
     bool loadOdf(const KoXmlElement &body, KoPALoadingContext &context);
+
+    /**
+     * Save presentation:declaration entries
+     */
+    bool saveOdf(KoPASavingContext &paContext) const;
 
     /**
      * Similar to findStyle but for decls only.

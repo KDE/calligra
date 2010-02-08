@@ -120,14 +120,29 @@ KPrPageLayout * KPrPage::layout() const
 
 void KPrPage::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
+    KoXmlWriter &writer(paContext.xmlWriter());
     if ( layout() ) {
         KPrPageLayoutSharedSavingData * layouts = dynamic_cast<KPrPageLayoutSharedSavingData *>( paContext.sharedData( KPR_PAGE_LAYOUT_SHARED_SAVING_ID ) );
         Q_ASSERT( layouts );
         if ( layouts ) {
             QString layoutStyle = layouts->pageLayoutStyle( layout() );
             if ( ! layoutStyle.isEmpty() ) {
-                paContext.xmlWriter().addAttribute( "presentation:presentation-page-layout-name", layoutStyle );
+                writer.addAttribute( "presentation:presentation-page-layout-name", layoutStyle );
             }
+        }
+    }
+    QHash<KPrDeclarations::Type, QString>::const_iterator it(d->usedDeclaration.constBegin());
+    for (; it != d->usedDeclaration.constEnd(); ++it) {
+        switch (it.key()) {
+        case KPrDeclarations::Footer:
+            writer.addAttribute("presentation:use-footer-name", it.value());
+            break;
+        case KPrDeclarations::Header:
+            writer.addAttribute("presentation:use-header-name", it.value());
+            break;
+        case KPrDeclarations::DateTime:
+            writer.addAttribute("presentation:use-date-time-name", it.value());
+            break;
         }
     }
     KoPAPageBase::saveOdfPageContent( paContext );
