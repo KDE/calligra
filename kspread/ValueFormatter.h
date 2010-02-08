@@ -102,7 +102,8 @@ protected:
     QString createNumberFormat(Number value, int precision,
                                Format::Type formatType,
                                Style::FloatFormat floatFormat,
-                               const QString& currencySymbol, const QString& formatString = QString() );
+                               const QString& currencySymbol,
+                               const QString& formatString);
 
     /**
      * Creates a fraction format.
