@@ -886,7 +886,7 @@ void CellEditor::slotTextChanged()
 
     if ((cell().style().formatType()) == Format::Percentage) {
         if ((t.length() == 1) && t[0].isDigit()) {
-            QString tmp = t;// + " %";
+            QString tmp = t + " %";
             d->textEdit->setPlainText(tmp);
             setCursorPosition(1);
             return;
