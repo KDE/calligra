@@ -1191,6 +1191,9 @@ void Project::takeTask( Node *node, bool emitSignal )
 bool Project::canMoveTask( Node* node, Node *newParent )
 {
     //kDebug()<<node->name()<<" to"<<newParent->name();
+    if ( node == this ) {
+        return false;
+    }
     Node *p = newParent;
     while ( p && p != this ) {
         if ( ! node->canMoveTo( p ) ) {
