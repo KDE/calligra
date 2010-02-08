@@ -209,7 +209,7 @@ void KRChartData::populateData()
 
         if (!src.isEmpty()) {
             KoReportData *curs = m_reportData->data(src);
-            if (curs->open()) {
+            if (curs && curs->open()) {
                 fn = curs->fieldNames();
 
                 //resize the data lists to match the number of columns
