@@ -26,7 +26,7 @@
 
 class QPolygon;
 
-#define DEBUG_WMFPAINT 1
+#define DEBUG_WMFPAINT 0
 
 
 /**
@@ -136,6 +136,11 @@ protected:
     QMatrix  mInternalWorldMatrix;
     QPoint mLastPos;
 
+    // For debug;
+    int  mOrgX;
+    int  mOrgY;
+    int  mExtWidth;
+    int  mExtHeight;
 };
 
 #endif

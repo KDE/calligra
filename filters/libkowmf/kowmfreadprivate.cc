@@ -196,21 +196,22 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     }
 
     // check bounding rectangle for standard meta file
-    if ((mValid) && (mStandard)) {
+    if (mStandard && mValid) {
         quint16 numFunction = 1;
         quint32 size;
 
         // Search for records setWindowOrg and setWindowExt to
         // determine what the total bounding box of this WMF is.
+        // This initialization assumes that setWindowOrg comes before setWindowExt.
+        qint16 curOrgX = 0;
+        qint16 curOrgY = 0;
         while (numFunction) {
-            qint16 curOrgX = 0;
-            qint16 curOrgY = 0;
 
             filePos = mBuffer->pos();
             st >> size >> numFunction;
 
             if (size == 0) {
-                kDebug(31000) << "KoWmfReadPrivate : incorrect file!";
+                kDebug(31000) << "KoWmfReadPrivate: incorrect file!";
                 mValid = 0;
                 break;
             }
@@ -220,7 +221,7 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 // setWindowOrg
 
                 st >> curOrgY >> curOrgX;
-                //kDebug(31000) << curOrgY << curOrgY;
+                //kDebug(31000) << "setWindowOrg" << curOrgX << curOrgY;
                 if (curOrgY < mBBoxTop)    mBBoxTop = curOrgY;
                 if (curOrgX < mBBoxLeft)   mBBoxLeft = curOrgX;
                 if (curOrgX > mBBoxRight)  mBBoxRight = curOrgX;
@@ -232,7 +233,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 qint16 height;
 
                 st >> height >> width;
-                //kDebug(31000) << width << height;
+                //kDebug(31000) << "setWindowExt" << width << height
+                //              << "(curOrg = " << curOrgX << curOrgY << ")";
+
                 // Negative values are allowed
                 if (width < 0) {
                     if (curOrgX + width < mBBoxLeft) {
@@ -256,6 +259,10 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                     }
                 }
             }
+
+            //kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
+            //kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
+            //kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
 
             mBuffer->seek(filePos + (size << 1));
         }
@@ -325,7 +332,8 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
             }
             
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
-                          << " (" << hex << numFunction << dec << ", index" << index << ")";
+                          << " (" << hex << numFunction
+                          << ", index" << dec << index << ")";
 
             if ((index > 111) || (koWmfFunc[ index ].method == 0)) {
                 // function outside WMF specification
@@ -387,7 +395,7 @@ void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
     mReadWmf->setWindowOrg(left, top);
     mWindowLeft = left;
     mWindowTop = top;
-    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+    //kDebug(31000) <<"Org: (" << left <<","  << top <<")";
 }
 
 /*  TODO : deeper look in negative width and height
@@ -399,7 +407,7 @@ void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
 
     // negative value allowed for width and height
     stream >> height >> width;
-    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+    //kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
 
     mReadWmf->setWindowExt(width, height);
     mWindowWidth  = width;
