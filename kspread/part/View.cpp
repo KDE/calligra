@@ -657,8 +657,6 @@ View::View(QWidget *_parent, Doc *_doc)
 
 View::~View()
 {
-    KoToolManager::instance()->removeCanvasController(d->canvasController);
-
     //  ElapsedTime el( "~View" );
     if (doc()->isReadWrite())   // make sure we're not embedded in Konq
         selection()->emitCloseEditor(true); // save changes
@@ -684,6 +682,12 @@ View::~View()
 
     delete d->actions;
     delete d->zoomHandler;
+    // NOTE sebsauer: We need to remove the canvasController right before deleting it and
+    // nothing needs to be done in between cause flake does first delete the TableTool
+    // on removeCanvasController and the proxytool which points to that TableTool later
+    // while the canvasController is destroyed. That means, that we will have a dangling
+    // pointer in the KoToolProxy that points to the KoToolBase the time in between.
+    KoToolManager::instance()->removeCanvasController(d->canvasController);
     // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
     //              parent. Otherwise, it leads to crashes, because it tries to
     //              access this View in some events (Bug #126492).
