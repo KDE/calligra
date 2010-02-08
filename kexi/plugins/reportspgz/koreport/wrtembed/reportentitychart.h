@@ -47,6 +47,7 @@ private:
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
+    void slotReportDataChanged();
 
 };
 

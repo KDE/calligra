@@ -289,7 +289,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
         }
     }
     this->slotPageButton_Pressed();
-
+    emit(reportDataChanged());
     setModified(false);
 }
 
@@ -406,6 +406,7 @@ void ReportDesigner::setReportData(KoReportData* kodata)
         m_kordata = kodata;
         slotPageButton_Pressed();
         setModified(true);
+        emit(reportDataChanged());
     }
 }
 

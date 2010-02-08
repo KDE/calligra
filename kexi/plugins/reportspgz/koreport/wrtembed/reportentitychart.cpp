@@ -48,7 +48,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 
-    setConnection(m_reportDesigner->reportData());
+    connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
 }
 
 ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)
@@ -179,6 +179,7 @@ void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
             m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
         }
     }
+    setConnection(m_reportDesigner->reportData());
 
     setSceneRect(m_pos.toScene(), m_size.toScene(), false);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
@@ -195,4 +196,7 @@ void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
     ReportRectEntity::mousePressEvent(event);
 }
 
-
+void ReportEntityChart::slotReportDataChanged()
+{
+    setConnection(m_reportDesigner->reportData());
+}

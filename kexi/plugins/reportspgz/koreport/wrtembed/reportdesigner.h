@@ -219,6 +219,7 @@ signals:
     void pagePropertyChanged(KoProperty::Set &s);
     void propertySetChanged();
     void dirty();
+    void reportDataChanged();
 };
 
 static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)

@@ -191,6 +191,7 @@ void KRChartData::setColorScheme(const QString &cs)
 void KRChartData::setConnection(KoReportData *c)
 {
     m_reportData = c;
+    populateData();
 }
 
 void KRChartData::populateData()
