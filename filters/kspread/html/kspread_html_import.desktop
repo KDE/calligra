@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=HTML Import Filter for KSpread
+Name[en_GB]=HTML Import Filter for KSpread
 Name[nl]=HTML-importfilter voor KSpread
 Name[pt]=Filtro de Importação de HTML para o KSpread
 Name[pt_BR]=Filtro de importação HTML para o KSpread
