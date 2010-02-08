@@ -609,7 +609,9 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
     // Does the cell intersect the clipped painting region?
     if (!painter.clipRegion().intersects(QRectF(coordinate, QSizeF(d->width, d->height)).toRect()))
         return;
-
+    // Don't draw the border if a background fill-color was define.
+    if (d->style.backgroundColor().isValid())
+        return;
     // disable antialiasing
     painter.setRenderHint(QPainter::Antialiasing, false);
 
@@ -676,7 +678,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
         d->style.setBottomBorderPen(sheetView->cellView(col, row + cell.mergedYCells()).style().topBorderPen());
     else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
         paintBorder |= BottomBorder;
-
+    
     // Check merging...
     if (d->merged) {
         // by default: none ...
@@ -722,6 +724,16 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
     if (d->style.rightBorderPen().style() != Qt::NoPen)
         paintBorder &= ~RightBorder;
     if (d->style.bottomBorderPen().style() != Qt::NoPen)
+        paintBorder &= ~BottomBorder;
+
+    // Check if the neighbor-cells do have a background fill-color in which case the border is not drawn.
+    if(col > 1 && sheetView->cellView(col - 1, row).style().backgroundColor().isValid())
+        paintBorder &= ~LeftBorder;
+    if(col < KS_colMax && sheetView->cellView(col + 1, row).style().backgroundColor().isValid())
+        paintBorder &= ~RightBorder;
+    if(row > 1 && sheetView->cellView(col, row - 1).style().backgroundColor().isValid())
+        paintBorder &= ~TopBorder;
+    if(row < KS_rowMax && sheetView->cellView(col, row + 1).style().backgroundColor().isValid())
         paintBorder &= ~BottomBorder;
 
     // Set the single-pixel width pen for drawing the borders with.
