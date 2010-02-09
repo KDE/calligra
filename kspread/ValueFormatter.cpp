@@ -119,7 +119,6 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
                 result = Value(complexFormat(complexValue, precision, fmtType, floatFormat, currencySymbol));
                 result.setFormat(Value::fmt_Number);
             }
-Q_ASSERT(false);
         }
 
         // real number
