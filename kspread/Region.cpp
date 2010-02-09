@@ -255,9 +255,6 @@ QString Region::name(Sheet* originSheet) const
 
 Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 {
-    if (!isValid(point)) {
-        return 0;
-    }
     return insert(d->cells.count(), point, sheet, false);
 }
 
@@ -686,6 +683,12 @@ QRect Region::normalized(const QRect& rect)
         normalizedRect.setTop(rect.bottom());
         normalizedRect.setBottom(rect.top());
     }
+    if (rect.right() > KS_colMax) {
+        normalizedRect.setRight(KS_colMax);
+    }
+    if (rect.bottom() > KS_rowMax) {
+        normalizedRect.setBottom(KS_rowMax);
+    }
     return normalizedRect;
 }
 
@@ -957,6 +960,10 @@ Region::Point::Point(const QPoint& point)
         , m_fixedColumn(false)
         , m_fixedRow(false)
 {
+    if (m_point.y() > KS_colMax)
+        m_point.setY(KS_colMax);
+    if (m_point.x() > KS_rowMax)
+        m_point.setX(KS_rowMax);
 }
 
 Region::Point::Point(const QString& string)
@@ -1084,6 +1091,10 @@ Region::Range::Range(const QRect& rect)
         , m_fixedBottom(false)
         , m_fixedRight(false)
 {
+    if (m_range.right() > KS_colMax)
+        m_range.setRight(KS_colMax);
+    if (m_range.bottom() > KS_rowMax)
+        m_range.setBottom(KS_rowMax);
 }
 
 Region::Range::Range(const QString& sRange)

@@ -36,6 +36,7 @@ private Q_SLOTS:
     void testComparison();
     void testFixation();
     void testSheet();
+    void testExtrem();
     void cleanupTestCase();
 
 private:

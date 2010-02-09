@@ -117,6 +117,31 @@ void TestRegion::testSheet()
     QVERIFY(region.isEmpty());
 }
 
+void TestRegion::testExtrem()
+{
+    Region region1 = Region(QPoint(-1, -1), m_doc->map()->sheet(0));
+    QVERIFY(region1.isEmpty());
+    QVERIFY(!region1.isValid());
+
+    Region region2 = Region("A1:A6553634523563453456356");
+    QVERIFY(region2.isValid());
+
+    Region region3 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_doc->map()->sheet(0));
+    QVERIFY(region3.isValid());
+
+    Region region4 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_doc->map()->sheet(0));
+    QVERIFY(region4.isValid());
+    Region region5 = Region(QRect(1,1,KS_colMax+12345,KS_rowMax+12345), m_doc->map()->sheet(0));
+    QVERIFY(region5.isValid());
+    QCOMPARE(region4.name(), region5.name());
+    
+    Region region6 = Region(QPoint(KS_colMax, KS_rowMax), m_doc->map()->sheet(0));
+    QVERIFY(region6.isValid());
+    Region region7 = Region(QPoint(KS_colMax+22, KS_rowMax+22), m_doc->map()->sheet(0));
+    QVERIFY(region7.isValid());
+    QCOMPARE(region6.name(), region7.name());
+}
+
 void TestRegion::cleanupTestCase()
 {
     delete m_doc;
