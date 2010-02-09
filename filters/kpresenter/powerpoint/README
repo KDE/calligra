@@ -21,6 +21,16 @@ content.xml also contains style information. This is styling information that is
 
 According to this distinction, a powerpoint template would give a nearly empty content.xml file but the same styles.xml file that would be produced for a document created from the template.
 
+== style inheritance in PPT files ==
+
+Slides, handouts and notes can have a master. The master has an OfficeArtDggContainer that specifies the default styles for all drawing objects. For text objects the default styles are defined in textCFDefaultsAtom, textPFDefaultsAtom, and textSIDefaultsAtom.
+For placeholders, slightly different rules apply. A placeholder is first defined in the master. The slide instances can re-use the placeholder and also inherits all the styles from the placeholder. Every shape (OfficeArtSpContainer) can be a placeholder. It is a placeholder if the optional field clientData.placeholderAtom.position exists and is not 0xFFFFFFFF.
+
+If a shape is not placeholder, only the global defaults apply to it. If a shape is a placeholder, the styles derive from the styles of the placeholder.
+
+
+
+
 === styles.xml ===
 
 == styles ==

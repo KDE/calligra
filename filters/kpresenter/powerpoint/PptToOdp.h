@@ -191,8 +191,24 @@ private:
     void defineDefaultDrawingPageStyle(KoGenStyles& styles);
     void defineDefaultChartStyle(KoGenStyles& styles);
 
+    // we assume that these functions are the same for all style families
+    void defineDefaultTextProperties(KoGenStyle& style);
+    void defineDefaultParagraphProperties(KoGenStyle& style);
+    void defineDefaultGraphicProperties(KoGenStyle& style);
+
+    /* Extract data from TextCFException into the style */
+    void defineTextProperties(KoGenStyle& style, const PPT::TextCFException* cf,
+                              const PPT::TextSIException * si);
+
+    /* Extract data from TextPFException into the style */
+    void defineParagraphProperties(KoGenStyle& style, const PPT::TextPFException* pf);
+
+    /* Extract data into the style */
     template <typename T>
-    void processGraphicStyle(KoGenStyle& style, T& o);
+    void defineGraphicProperties(KoGenStyle& style, T& o);
+    /* Extract data into the style element style:list */
+    void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels);
+
     void processSlideForStyle(int slideNo, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles);

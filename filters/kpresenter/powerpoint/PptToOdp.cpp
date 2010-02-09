@@ -592,6 +592,7 @@ void PptToOdp::defineDefaultTextStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="text">
     KoGenStyle style(KoGenStyle::StyleText, "text");
     style.setDefaultStyle(true);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
 }
 
@@ -600,6 +601,8 @@ void PptToOdp::defineDefaultParagraphStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="paragraph">
     KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
     style.setDefaultStyle(true);
+    defineDefaultParagraphProperties(style);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
 }
 
@@ -648,6 +651,8 @@ void PptToOdp::defineDefaultTableCellStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="table-cell">
     KoGenStyle style(KoGenStyle::StyleTableCell, "table-cell");
     style.setDefaultStyle(true);
+    defineDefaultParagraphProperties(style);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
 }
 
@@ -656,15 +661,9 @@ void PptToOdp::defineDefaultGraphicStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::StyleGraphic, "graphic");
     style.setDefaultStyle(true);
-    const OfficeArtDggContainer& drawingGroup
-        = p->documentContainer->drawingGroup.OfficeArtDgg;
-    processGraphicStyle(style, drawingGroup);
-    // add the defaults that were not set yet
-    if (!get<LineWidth>(drawingGroup)) {
-        style.addProperty("svg:stroke-width",
-                                 QString("%1pt").arg(0x2535 / 12700.f),
-                                 KoGenStyle::GraphicType);
-    }
+    defineDefaultGraphicProperties(style);
+    defineDefaultParagraphProperties(style);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
 }
 
@@ -673,15 +672,9 @@ void PptToOdp::defineDefaultPresentationStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="presentation">
     KoGenStyle style(KoGenStyle::StylePresentation, "presentation");
     style.setDefaultStyle(true);
-    const OfficeArtDggContainer& drawingGroup
-        = p->documentContainer->drawingGroup.OfficeArtDgg;
-    processGraphicStyle(style, drawingGroup);
-    // add the defaults that were not set yet
-    if (!get<LineWidth>(drawingGroup)) {
-        style.addProperty("svg:stroke-width",
-                                 QString("%1pt").arg(0x2535 / 12700.f),
-                                 KoGenStyle::GraphicType);
-    }
+    defineDefaultGraphicProperties(style);
+    defineDefaultParagraphProperties(style);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
 }
 
@@ -698,7 +691,231 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="chart">
     KoGenStyle style(KoGenStyle::StyleChart, "chart");
     style.setDefaultStyle(true);
+    defineDefaultGraphicProperties(style);
+    defineDefaultParagraphProperties(style);
+    defineDefaultTextProperties(style);
     styles.lookup(style, "");
+}
+
+void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
+    const TextCFException* cf = 0;
+    const TextSIException* si = 0;
+    if (p->documentContainer) {
+        if (p->documentContainer->documentTextInfo.textCFDefaultsAtom) {
+            cf = &p->documentContainer->documentTextInfo.textCFDefaultsAtom->cf;
+        }
+        si = &p->documentContainer->documentTextInfo.textSIDefaultsAtom.textSIException;
+    }
+    defineTextProperties(style, cf, si);
+}
+
+void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
+    const TextPFException* pf = 0;
+    if (p->documentContainer) {
+        if (p->documentContainer->documentTextInfo.textPFDefaultsAtom) {
+            pf = &p->documentContainer->documentTextInfo.textPFDefaultsAtom->pf;
+        }
+    }
+    defineParagraphProperties(style, pf);
+}
+
+void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
+    style.addProperty("svg:stroke-width",
+                          QString("%1pt").arg(0x2535 / 12700.f),
+                          KoGenStyle::GraphicType);
+    const OfficeArtDggContainer& drawingGroup
+        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    const TextMasterStyleAtom& textMasterStyle
+        = p->documentContainer->documentTextInfo.textMasterStyleAtom;
+    defineGraphicProperties(style, drawingGroup);
+    defineListStyle(style, textMasterStyle);
+}
+
+void PptToOdp::defineTextProperties(KoGenStyle& style,
+                                     const TextCFException* cf,
+                                     const TextSIException* si) {
+    const KoGenStyle::PropertyType text = KoGenStyle::TextType;
+    /* We try to get information for all the possible attributes in
+       style:text-properties for clarity we handle then in alphabetical order */
+    // fo:background-color
+    // fo:color
+    if (cf && cf->masks.color && cf->color) {
+        QColor color = toQColor(*cf->color);
+        if (color.isValid()) {
+            style.addProperty("fo:color", color.name(), text);
+        }
+    }
+    // fo:country
+    // fo:font-family
+    if (cf && cf->masks.typeface) {
+        const FontEntityAtom* font = getFont(cf->fontRef);
+        if (font) {
+            const QString name= QString::fromUtf16(font->lfFaceName.data(),
+                                                   font->lfFaceName.size());
+            style.addProperty("fo:font-family", name, text);
+        }
+    }
+    // fo:font-size
+    if (cf && cf->masks.size) {
+        style.addProperty("fo:font-size", QString("%1pt").arg(cf->fontSize),
+                          text);
+    }
+    // fo:font-style: "italic", "normal" or "oblique
+    if (cf && cf->masks.italic && cf->fontStyle) {
+        style.addProperty("fo:font-style",
+                          cf->fontStyle->italic ?"italic" :"normal", text);
+    }
+    // fo:font-variant: "normal" or "small-caps"
+    // fo:font-weight: "100", "200", "300", "400", "500", "600", "700", "800", "900", "bold" or "normal"
+    if (cf && cf->masks.bold && cf->fontStyle) {
+        style.addProperty("fo:font-style",
+                          cf->fontStyle->bold ?"bold" :"normal", text);
+    }
+    // fo:hyphenate
+    // fo:hyphenation-push-char
+    // fo:hyphenation-remain-char-count
+    // fo:language
+    if (si && si->lang) {
+        // TODO: get mapping from lid to language code
+    }
+    // fo:letter-spacing
+    // fo:text-shadow
+    if (cf && cf->masks.shadow) {
+        style.addProperty("fo:text-shadow",
+                          cf->fontStyle->bold ?"1pt 1pt" :"none", text);
+    }
+    // fo:text-transform: "capitalize", "lowercase", "none" or "uppercase"
+    // style:country-asian
+    // style:country-complex
+    // style:font-charset
+    // style:font-family-asian
+    // style:font-family-complex
+    // style:font-family-generic
+    // style:font-family-generic-asian
+    // style:font-family-generic-complex
+    // style:font-name
+    // style:font-name-asian
+    // style:font-name-complex
+    // style:font-pitch
+    // style:font-pitch-asian
+    // style:font-pitch-complex
+    // style:font-relief: "embossed", "engraved" or "none"
+    if (cf && cf->masks.emboss) {
+        style.addProperty("fo:font-relief",
+                          cf->fontStyle->emboss ?"embossed" :"none", text);
+    }
+    // style:font-size-asian
+    // style:font-size-complex
+    // style:font-size-rel
+    // style:font-size-rel-asian
+    // style:font-size-rel-complex
+    // style:font-style-asian
+    // style:font-style-complex
+    // style:font-style-name
+    // style:font-style-name-asian
+    // style:font-style-name-complex
+    // style:font-weight-asian
+    // style:font-weight-complex
+    // style:language-asian
+    // style:language-complex
+    // style:letter-kerning
+    // style:script-type
+    // style:text-blinking
+    // style:text-combine
+    // style:text-combine-end-char
+    // style:text-combine-start-char
+    // style:text-emphasize
+    // style:text-line-through-color
+    // style:text-line-through-mode
+    // style:text-line-through-style
+    // style:text-line-through-text
+    // style:text-line-through-text-style
+    // style:text-line-through-type
+    // style:text-line-through-width
+    // style:text-outline
+    // style:text-position
+    // style:text-rotation-angle
+    // style:text-rotation-scale
+    // style:text-scale
+    // style:text-underline-color
+    // style:text-underline-mode
+    // style:text-underline-style
+    // style:text-underline-type: "double", "none" or "single"
+    if (cf && cf->masks.underline) {
+        style.addProperty("style:text-underline-type",
+                          cf->fontStyle->underline ?"single" :"none", text);
+    }
+    // style:text-underline-width
+    // style:use-window-font-color
+}
+
+void PptToOdp::defineParagraphProperties(KoGenStyle& style, const TextPFException* pf) {
+    const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
+    // fo:background-color
+    // fo:border
+    // fo:border-bottom
+    // fo:border-left
+    // fo:border-right
+    // fo:border-top
+    // fo:break-after
+    // fo:break-before
+    // fo:hyphenation-keep
+    // fo:hyphenation-ladder-count
+    // fo:keep-together
+    // fo:keep-with-next
+    // fo:line-height
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
+    // fo:orphans
+    // fo:padding
+    // fo:padding-bottom
+    // fo:padding-left
+    // fo:padding-right
+    // fo:padding-top
+    // fo:text-align
+    if (pf && pf->masks.align) {
+        const QString align = textAlignmentToString(pf->textAlignment);
+        if (!align.isEmpty()) {
+            style.addProperty("fo:text-align", align, para);
+        }
+    }
+    // fo:text-align-last
+    // fo:text-indent
+    // fo:widows
+    // style:auto-text-indent
+    // style:background-transparency
+    // style:border-line-width
+    // style:border-line-width-bottom
+    // style:border-line-width-left
+    // style:border-line-width-right
+    // style:border-line-width-top
+    // style:font-independent-line-spacing
+    // style:justify-single-word
+    // style:line-break
+    // style:line-height-at-least
+    // style:line-spacing
+    // style:page-number
+    // style:punctuation-wrap
+    // style:register-true
+    // style:shadow
+    // style:snap-to-layout-grid
+    // style:tab-stop-distance
+    // style:text-autospace
+    // style:vertical-align
+    // style:writing-mode
+    // style:writing-mode-automatic
+    // text:line-number
+    // text:number-lines
+}
+
+void PptToOdp::defineListStyle(KoGenStyle& style, const TextMasterStyleAtom& levels)
+{
+    KoGenStyle list(KoGenStyle::StyleList);
+    //style.addChildElement("text:list-style", "hello");
+    //style.addProperty("fo:text-align", "hello", KoGenStyle::GraphicType);
 }
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)
@@ -761,6 +978,10 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     notesPageLayoutName = definePageLayout(styles,
             p->documentContainer->documentAtom.notesSize);
 
+    /*
+      Define the draw:layer-set.
+     */
+    // TODO
 
     QBuffer buffer;
 
@@ -777,7 +998,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     defaultStyle.setAutoStyleInStylesDotXml(true);
     const OfficeArtDggContainer& drawingGroup
     = p->documentContainer->drawingGroup.OfficeArtDgg;
-    processGraphicStyle(defaultStyle, drawingGroup);
+    defineGraphicProperties(defaultStyle, drawingGroup);
     // add the defaults that were not set yet
     if (!get<LineWidth>(drawingGroup)) {
         defaultStyle.addProperty("svg:stroke-width",
@@ -3195,7 +3416,7 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
     // set the presentation style
     QString styleName;
     KoGenStyle kostyle(KoGenStyle::StyleGraphicAuto, "presentation");
-    processGraphicStyle(kostyle, o);
+    defineGraphicProperties(kostyle, o);
     styleName = styles.lookup(kostyle);
     setGraphicStyleName(o, styleName);
 }
@@ -3211,8 +3432,12 @@ const char* arrowHeads[6] = {
 };
 }
 template <typename T>
-void PptToOdp::processGraphicStyle(KoGenStyle& style, T& o)
+void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o)
 {
+    // TODO: change this function so it goes through the attributes
+    // of ODF style:graphic-properties instead of going through
+    // the properties found in ppt
+
     /** 2.3.8 Line Style **/
     // 2.3.8.1 lineColor
     const LineColor* lc = get<LineColor>(o);
@@ -3336,7 +3561,7 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
 {
     KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
     style.setParentName("pptDefaults");
-    processGraphicStyle(style, o);
+    defineGraphicProperties(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }
 
