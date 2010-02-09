@@ -2115,8 +2115,11 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     }
 
     // drawingPrimaryOptions
+    if(blipStoreOffset-data < 8) return;
     blipStoreOffset += handleObject(size, blipStoreOffset);
+
     // drawingTertiaryOptions
+    if(blipStoreOffset-data < 8) return;
     blipStoreOffset += handleObject(size, blipStoreOffset);
 
     // colorMRU
