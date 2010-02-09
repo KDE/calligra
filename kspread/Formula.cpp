@@ -1598,7 +1598,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 entry.row2 = region.firstRange().bottom();
             }
 
-            entry.val = d->valueOrElement(map, index, fe, val1);
+            entry.val = val1; // any array is valid here
             stack.push(entry);
         }
         break;
