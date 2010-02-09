@@ -1296,7 +1296,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
             }
         }
 
-        if (value.isString() && !str.isEmpty() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
+        if (value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
             xmlWriter->addAttribute("office:value-type", "string");
             xmlWriter->addAttribute("office:string-value", str);
         }
