@@ -587,6 +587,26 @@ definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
     return styles.lookup(pl, "pm");
 }
 
+template<class T>
+const T*
+getPP(const DocumentContainer* dc) {
+    if (dc == 0 || dc->docInfoList == 0) return 0;
+    foreach (const DocInfoListSubContainerOrAtom& a, dc->docInfoList->rgChildRec) {
+        const DocProgTagsContainer* d = a.anon.get<DocProgTagsContainer>();
+        if (d) {
+            foreach (const DocProgTagsSubContainerOrAtom& da, d->rgChildRec) {
+                const DocProgBinaryTagContainer* c
+                        = da.anon.get<DocProgBinaryTagContainer>();
+                if (c) {
+                    const T* t = c->rec.anon.get<T>();
+                    if (t) return t;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 void PptToOdp::defineDefaultTextStyle(KoGenStyles& styles)
 {
     // write style <style:default-style style:family="text">
@@ -699,24 +719,42 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
 
 void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
     const TextCFException* cf = 0;
+    const TextCFException9* cf9 = 0;
+    const TextCFException10* cf10 = 0;
     const TextSIException* si = 0;
     if (p->documentContainer) {
         if (p->documentContainer->documentTextInfo.textCFDefaultsAtom) {
             cf = &p->documentContainer->documentTextInfo.textCFDefaultsAtom->cf;
         }
+        const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
+                p->documentContainer);
+        const PP10DocBinaryTagExtension* pp10 = getPP<PP10DocBinaryTagExtension>(
+                p->documentContainer);
+        if (pp9) {
+            cf9 = &pp9->textDefaultsAtom.cf9;
+        }
+        if (pp10 && pp10->textDefaultsAtom) {
+            cf10 = &pp10->textDefaultsAtom->cf10;
+        }
         si = &p->documentContainer->documentTextInfo.textSIDefaultsAtom.textSIException;
     }
-    defineTextProperties(style, cf, si);
+    defineTextProperties(style, cf, cf9, cf10, si);
 }
 
 void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
     const TextPFException* pf = 0;
+    const TextPFException9* pf9 = 0;
     if (p->documentContainer) {
         if (p->documentContainer->documentTextInfo.textPFDefaultsAtom) {
             pf = &p->documentContainer->documentTextInfo.textPFDefaultsAtom->pf;
         }
+        const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
+                p->documentContainer);
+        if (pp9) {
+            pf9 = &pp9->textDefaultsAtom.pf9;
+        }
     }
-    defineParagraphProperties(style, pf);
+    defineParagraphProperties(style, pf, pf9);
 }
 
 void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
@@ -732,6 +770,8 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
                                      const TextCFException* cf,
+                                     const TextCFException9* /*cf9*/,
+                                     const TextCFException10* /*cf10*/,
                                      const TextSIException* si) {
     const KoGenStyle::PropertyType text = KoGenStyle::TextType;
     /* We try to get information for all the possible attributes in
@@ -848,7 +888,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:use-window-font-color
 }
 
-void PptToOdp::defineParagraphProperties(KoGenStyle& style, const TextPFException* pf) {
+void PptToOdp::defineParagraphProperties(KoGenStyle& style,
+                                         const TextPFException* pf,
+                                         const TextPFException9* pf9) {
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
     // fo:border
@@ -910,19 +952,42 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const TextPFExceptio
     // text:number-lines
 }
 
-void PptToOdp::defineListStyle(KoGenStyle& style, const TextMasterStyleAtom& levels)
+void PptToOdp::defineListStyle(KoGenStyle& style,
+                               const TextMasterStyleAtom& levels,
+                               const TextMasterStyle9Atom* levels9,
+                               const TextMasterStyle10Atom* levels10)
 {
-    if (levels.lstLvl1) defineListStyle(style, 1, *levels.lstLvl1);
-    if (levels.lstLvl2) defineListStyle(style, 2, *levels.lstLvl2);
-    if (levels.lstLvl3) defineListStyle(style, 3, *levels.lstLvl3);
-    if (levels.lstLvl4) defineListStyle(style, 4, *levels.lstLvl4);
-    if (levels.lstLvl5) defineListStyle(style, 5, *levels.lstLvl5);
+    if (levels.lstLvl1) {
+        defineListStyle(style, 1, *levels.lstLvl1,
+                        ((levels9) ?levels9->lstLvl1.data() :0),
+                        ((levels10) ?levels10->lstLvl1.data() :0));
+    }
+    if (levels.lstLvl2) {
+        defineListStyle(style, 2, *levels.lstLvl2,
+                        ((levels9) ?levels9->lstLvl2.data() :0),
+                        ((levels10) ?levels10->lstLvl2.data() :0));
+    }
+    if (levels.lstLvl3) {
+        defineListStyle(style, 3, *levels.lstLvl3,
+                        ((levels9) ?levels9->lstLvl3.data() :0),
+                        ((levels10) ?levels10->lstLvl3.data() :0));
+    }
+    if (levels.lstLvl4) {
+        defineListStyle(style, 1, *levels.lstLvl4,
+                        ((levels9) ?levels9->lstLvl4.data() :0),
+                        ((levels10) ?levels10->lstLvl4.data() :0));
+    }
+    if (levels.lstLvl5) {
+        defineListStyle(style, 5, *levels.lstLvl5,
+                        ((levels9) ?levels9->lstLvl5.data() :0),
+                        ((levels10) ?levels10->lstLvl5.data() :0));
+    }
 }
 
 void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                                const TextMasterStyleLevel& level,
                                const TextMasterStyle9Level* level9,
-                               const TextMasterStyle10Level* /*level10*/)
+                               const TextMasterStyle10Level* level10)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -931,7 +996,9 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
 
     const TextPFException& pf = level.pf;
     const TextPFException9* pf9 = (level9) ?&level9->pf9 :0;
-    //const TextPFException10* pf10 = (level10) ?level10->pf9 :0;
+    const TextCFException& cf = level.cf;
+    const TextCFException9* cf9 = (level9) ?&level9->cf9 :0;
+    const TextCFException10* cf10 = (level10) ?&level10->cf10 :0;
 
     if (pf9 && pf9->masks.bulletBlip) {
         elementName = "text:list-level-style-image";
@@ -995,7 +1062,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     out.endElement(); // style:list-level-properties
 
     KoGenStyle ls(KoGenStyle::StyleText);
-    defineTextProperties(ls, &level.cf, 0);
+    defineTextProperties(ls, &cf, cf9, cf10, 0);
 
     // override some properties with information from the paragraph
 

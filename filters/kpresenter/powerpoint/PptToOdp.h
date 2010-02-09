@@ -198,17 +198,23 @@ private:
 
     /* Extract data from TextCFException into the style */
     void defineTextProperties(KoGenStyle& style, const PPT::TextCFException* cf,
+                              const PPT::TextCFException9* cf9,
+                              const PPT::TextCFException10* cf10,
                               const PPT::TextSIException * si);
 
     /* Extract data from TextPFException into the style */
-    void defineParagraphProperties(KoGenStyle& style, const PPT::TextPFException* pf);
+    void defineParagraphProperties(KoGenStyle& style,
+                                   const PPT::TextPFException* pf,
+                                   const PPT::TextPFException9* pf9);
 
     /* Extract data into the style */
     template <typename T>
     void defineGraphicProperties(KoGenStyle& style, T& o,
                                  const PPT::TextMasterStyleAtom* listStyles = 0);
     /* Extract data into the style element style:list */
-    void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels);
+    void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels,
+                         const PPT::TextMasterStyle9Atom* levels9 = 0,
+                         const PPT::TextMasterStyle10Atom* levels10 = 0);
     void defineListStyle(KoGenStyle& style, quint8 depth,
                          const PPT::TextMasterStyleLevel& level,
                          const PPT::TextMasterStyle9Level* level9 = 0,
