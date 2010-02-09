@@ -40,8 +40,8 @@ class POINT;
 void parsePOINT(LEInputStream& in, POINT& _s);
 class PowerPointStructs;
 void parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s);
-class SoundCollectionContainer;
-void parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContainer& _s);
+class SoundCollectionAtom;
+void parseSoundCollectionAtom(LEInputStream& in, SoundCollectionAtom& _s);
 class HeadersFootersAtom;
 void parseHeadersFootersAtom(LEInputStream& in, HeadersFootersAtom& _s);
 class UserDateAtom;
@@ -214,12 +214,6 @@ class PersistDirectoryAtom;
 void parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s);
 class UnknownDocumentContainerChild;
 void parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentContainerChild& _s);
-class UnknownDocumentContainerChild2;
-void parseUnknownDocumentContainerChild2(LEInputStream& in, UnknownDocumentContainerChild2& _s);
-class UnknownDocumentContainerChild3;
-void parseUnknownDocumentContainerChild3(LEInputStream& in, UnknownDocumentContainerChild3& _s);
-class UnknownDocumentContainerChild4;
-void parseUnknownDocumentContainerChild4(LEInputStream& in, UnknownDocumentContainerChild4& _s);
 class UnknownOfficeArtClientDataChild;
 void parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s);
 class UnknownSlideContainerChild;
@@ -286,6 +280,8 @@ class PrintOptionsAtom;
 void parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s);
 class RoundTripCustomTableStyles12Atom;
 void parseRoundTripCustomTableStyles12Atom(LEInputStream& in, RoundTripCustomTableStyles12Atom& _s);
+class RoundTripCompositeMasterId12Atom;
+void parseRoundTripCompositeMasterId12Atom(LEInputStream& in, RoundTripCompositeMasterId12Atom& _s);
 class ColorStruct;
 void parseColorStruct(LEInputStream& in, ColorStruct& _s);
 class ExObjListAtom;
@@ -388,8 +384,16 @@ class RecolorInfoAtom;
 void parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s);
 class OutlineTextRefAtom;
 void parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s);
-class ShapeClientRoundtripDataSubcontainerOrAtom;
-void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
+class ShapeProgsTagContainer;
+void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
+class RoundTripNewPlaceHolderId12Atom;
+void parseRoundTripNewPlaceHolderId12Atom(LEInputStream& in, RoundTripNewPlaceHolderId12Atom& _s);
+class RoundTripShapeId12Atom;
+void parseRoundTripShapeId12Atom(LEInputStream& in, RoundTripShapeId12Atom& _s);
+class RoundTripHFPlaceholder12Atom;
+void parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceholder12Atom& _s);
+class RoundTripShapeCheckSumForCustomLayouts12Atom;
+void parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, RoundTripShapeCheckSumForCustomLayouts12Atom& _s);
 class OfficeArtClientTextBox;
 void parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s);
 class OfficeArtIDCL;
@@ -470,6 +474,8 @@ class PicturesStream;
 void parsePicturesStream(LEInputStream& in, PicturesStream& _s);
 class OfficeArtMetafileHeader;
 void parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeader& _s);
+class SoundCollectionContainer;
+void parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContainer& _s);
 class SlideHeadersFootersContainer;
 void parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFootersContainer& _s);
 class NotesHeadersFootersContainer;
@@ -502,8 +508,6 @@ class VBAInfoContainer;
 void parseVBAInfoContainer(LEInputStream& in, VBAInfoContainer& _s);
 class NormalViewSetInfoAtom;
 void parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _s);
-class TextContainer;
-void parseTextContainer(LEInputStream& in, TextContainer& _s);
 class TextContainerMeta;
 void parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s);
 class SlidePersistAtom;
@@ -650,6 +654,8 @@ class MouseClickInteractiveInfoContainer;
 void parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s);
 class MouseOverInteractiveInfoContainer;
 void parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s);
+class ShapeClientRoundtripDataSubcontainerOrAtom;
+void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
 class TextRulerAtom;
 void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
 class OfficeArtFOPTE;
@@ -690,6 +696,8 @@ class NormalViewSetInfoContainer;
 void parseNormalViewSetInfoContainer(LEInputStream& in, NormalViewSetInfoContainer& _s);
 class SlideListWithTextSubContainerOrAtom;
 void parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListWithTextSubContainerOrAtom& _s);
+class TextContainer;
+void parseTextContainer(LEInputStream& in, TextContainer& _s);
 class TextContainerInteractiveInfo;
 void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
 class TextClientDataSubContainerOrAtom;
@@ -893,11 +901,11 @@ public:
     QList<PowerPointStruct> anon;
     PowerPointStructs(void* /*dummy*/ = 0) {}
 };
-class SoundCollectionContainer : public StreamOffset {
+class SoundCollectionAtom : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray todo;
-    SoundCollectionContainer(void* /*dummy*/ = 0) {}
+    quint32 soundIdSeed;
+    SoundCollectionAtom(void* /*dummy*/ = 0) {}
 };
 class HeadersFootersAtom : public StreamOffset {
 public:
@@ -1583,24 +1591,6 @@ public:
     QByteArray todo;
     UnknownDocumentContainerChild(void* /*dummy*/ = 0) {}
 };
-class UnknownDocumentContainerChild2 : public StreamOffset {
-public:
-    RecordHeader rh;
-    QByteArray todo;
-    UnknownDocumentContainerChild2(void* /*dummy*/ = 0) {}
-};
-class UnknownDocumentContainerChild3 : public StreamOffset {
-public:
-    RecordHeader rh;
-    QByteArray todo;
-    UnknownDocumentContainerChild3(void* /*dummy*/ = 0) {}
-};
-class UnknownDocumentContainerChild4 : public StreamOffset {
-public:
-    RecordHeader rh;
-    QByteArray todo;
-    UnknownDocumentContainerChild4(void* /*dummy*/ = 0) {}
-};
 class UnknownOfficeArtClientDataChild : public StreamOffset {
 public:
     RecordHeader rh;
@@ -1857,6 +1847,12 @@ public:
     RecordHeader rh;
     QByteArray todo;
     RoundTripCustomTableStyles12Atom(void* /*dummy*/ = 0) {}
+};
+class RoundTripCompositeMasterId12Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    quint32 compositeMasterId;
+    RoundTripCompositeMasterId12Atom(void* /*dummy*/ = 0) {}
 };
 class ColorStruct : public StreamOffset {
 public:
@@ -2237,11 +2233,37 @@ public:
     qint32 index;
     OutlineTextRefAtom(void* /*dummy*/ = 0) {}
 };
-class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+class ShapeProgsTagContainer : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
     QByteArray todo;
-    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
+    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
+};
+class RoundTripNewPlaceHolderId12Atom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint8 newPlaceHolderId;
+    RoundTripNewPlaceHolderId12Atom(void* /*dummy*/ = 0) {}
+};
+class RoundTripShapeId12Atom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint32 shapeId;
+    RoundTripShapeId12Atom(void* /*dummy*/ = 0) {}
+};
+class RoundTripHFPlaceholder12Atom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint8 placeHolderId;
+    RoundTripHFPlaceholder12Atom(void* /*dummy*/ = 0) {}
+};
+class RoundTripShapeCheckSumForCustomLayouts12Atom : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint32 shapeCheckSum;
+    quint32 textCheckSum;
+    QByteArray unknown;
+    RoundTripShapeCheckSumForCustomLayouts12Atom(void* /*dummy*/ = 0) {}
 };
 class OfficeArtClientTextBox : public StreamOffset {
 public:
@@ -2844,6 +2866,13 @@ public:
     quint8 filter;
     OfficeArtMetafileHeader(void* /*dummy*/ = 0) {}
 };
+class SoundCollectionContainer : public StreamOffset {
+public:
+    RecordHeader rh;
+    SoundCollectionAtom soundCollectionAtom;
+    QList<SoundContainer> rgSoundContainer;
+    SoundCollectionContainer(void* /*dummy*/ = 0) {}
+};
 class SlideHeadersFootersContainer : public StreamOffset {
 public:
     RecordHeader rh;
@@ -2977,27 +3006,6 @@ public:
     bool fBarSnapped;
     quint8 reserved;
     NormalViewSetInfoAtom(void* /*dummy*/ = 0) {}
-};
-class TextContainer : public StreamOffset {
-public:
-    TextHeaderAtom textHeaderAtom;
-    class choice1060411409 : public QSharedPointer<StreamOffset> {
-    public:
-        choice1060411409() {}
-        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice1060411409 text;
-    QSharedPointer<StyleTextPropAtom> style;
-    QList<TextContainerMeta> meta;
-    QSharedPointer<MasterTextPropAtom> master;
-    QList<TextBookmarkAtom> bookmark;
-    QSharedPointer<TextSpecialInfoAtom> specialinfo;
-    QList<TextContainerInteractiveInfo> interactive;
-    TextContainer(void* /*dummy*/ = 0) {}
 };
 class TextContainerMeta : public StreamOffset {
 public:
@@ -3222,7 +3230,7 @@ class ProgStringTagContainer : public StreamOffset {
 public:
     RecordHeader rh;
     TagNameAtom tagNameAtom;
-    TagValueAtom tagValueAtom;
+    QSharedPointer<TagValueAtom> tagValueAtom;
     ProgStringTagContainer(void* /*dummy*/ = 0) {}
 };
 class NotesAtom : public StreamOffset {
@@ -3745,6 +3753,23 @@ public:
     QSharedPointer<MacroNameAtom> macroNameAtom;
     MouseOverInteractiveInfoContainer(void* /*dummy*/ = 0) {}
 };
+class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+public:
+    class choice3146562028 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3146562028() {}
+        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3146562028 anon;
+    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
+};
 class TextRulerAtom : public StreamOffset {
 public:
     RecordHeader rh;
@@ -3929,6 +3954,29 @@ public:
     QList<TextContainer> atoms;
     SlideListWithTextSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
+class TextContainer : public StreamOffset {
+public:
+    TextHeaderAtom textHeaderAtom;
+    class choice1060411409 : public QSharedPointer<StreamOffset> {
+    public:
+        choice1060411409() {}
+        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice1060411409 text;
+    QSharedPointer<StyleTextPropAtom> style;
+    QList<TextContainerMeta> meta;
+    QSharedPointer<MasterTextPropAtom> master;
+    QList<TextBookmarkAtom> bookmark;
+    QSharedPointer<TextRulerAtom> textRuler;
+    QSharedPointer<TextSpecialInfoAtom> specialinfo;
+    QList<TextContainerInteractiveInfo> interactive;
+    QSharedPointer<TextSpecialInfoAtom> specialinfo2;
+    TextContainer(void* /*dummy*/ = 0) {}
+};
 class TextContainerInteractiveInfo : public StreamOffset {
 public:
     class choice1543770607 : public QSharedPointer<StreamOffset> {
@@ -4063,6 +4111,7 @@ public:
     QSharedPointer<OfficeArtTertiaryFOPT> drawingTertiaryOptions;
     QSharedPointer<OfficeArtColorMRUContainer> colorMRU;
     OfficeArtSplitMenuColorContainer splitColors;
+    QSharedPointer<OfficeArtBStoreContainer> blipStore2;
     QSharedPointer<OfficeArtTertiaryFOPT> unknown;
     OfficeArtDggContainer(void* /*dummy*/ = 0) {}
 };
@@ -4137,10 +4186,12 @@ public:
     QSharedPointer<AnimationInfoContainer> animationInfo;
     QSharedPointer<MouseClickInteractiveInfoContainer> mouseClickInteractiveInfo;
     QSharedPointer<MouseOverInteractiveInfoContainer> mouseOverInteractiveInfo;
+    QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData0;
     QSharedPointer<PlaceholderAtom> placeholderAtom;
     QSharedPointer<RecolorInfoAtom> recolorInfoAtom;
+    QSharedPointer<UnknownOfficeArtClientDataChild> unknown1;
     QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData;
-    QSharedPointer<UnknownOfficeArtClientDataChild> unknown;
+    QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
     OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class WordDocument : public StreamOffset {
@@ -4215,22 +4266,12 @@ public:
 };
 class TextMasterStyle9Atom : public StreamOffset {
 public:
-    bool _has_lstLvl1level;
-    bool _has_lstLvl2level;
-    bool _has_lstLvl3level;
-    bool _has_lstLvl4level;
-    bool _has_lstLvl5level;
     RecordHeader rh;
     quint16 cLevels;
-    quint16 lstLvl1level;
     QSharedPointer<TextMasterStyle9Level> lstLvl1;
-    quint16 lstLvl2level;
     QSharedPointer<TextMasterStyle9Level> lstLvl2;
-    quint16 lstLvl3level;
     QSharedPointer<TextMasterStyle9Level> lstLvl3;
-    quint16 lstLvl4level;
     QSharedPointer<TextMasterStyle9Level> lstLvl4;
-    quint16 lstLvl5level;
     QSharedPointer<TextMasterStyle9Level> lstLvl5;
     TextMasterStyle9Atom(void* /*dummy*/ = 0) {}
 };
@@ -4279,6 +4320,7 @@ public:
     QSharedPointer<DefaultRulerAtom> defaultRulerAtom;
     TextSIExceptionAtom textSIDefaultsAtom;
     TextMasterStyleAtom textMasterStyleAtom;
+    QSharedPointer<TextMasterStyleAtom> textMasterStyleAtom2;
     DocumentTextInfoContainer(void* /*dummy*/ = 0) {}
 };
 class SlideProgTagsSubContainerOrAtom : public StreamOffset {
@@ -4338,14 +4380,14 @@ public:
     QSharedPointer<SummaryContainer> summary;
     QSharedPointer<DocRoutingSlipAtom> docRoutingSlipAtom;
     QSharedPointer<PrintOptionsAtom> printOptionsAtom;
+    QList<UnknownDocumentContainerChild> unknown0;
     QSharedPointer<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom1;
-    QSharedPointer<UnknownDocumentContainerChild> unknown1;
+    QList<UnknownDocumentContainerChild> unknown1;
     EndDocumentAtom endDocumentAtom;
-    QSharedPointer<UnknownDocumentContainerChild3> unknown2;
-    QSharedPointer<UnknownDocumentContainerChild2> unknown3;
-    QSharedPointer<UnknownDocumentContainerChild3> unknown4;
-    QSharedPointer<UnknownDocumentContainerChild4> unknown5;
+    QList<UnknownDocumentContainerChild> unknown2;
     QSharedPointer<RoundTripCustomTableStyles12Atom> rtCustomTableStylesAtom2;
+    QList<UnknownDocumentContainerChild> unknown4;
+    QSharedPointer<TextMasterStyle10Atom> unknown5;
     DocumentContainer(void* /*dummy*/ = 0) {}
 };
 class DocInfoListSubContainerOrAtom : public StreamOffset {
@@ -4461,7 +4503,6 @@ public:
     QSharedPointer<SlideNameAtom> slideNameAtom;
     QSharedPointer<SlideProgTagsContainer> slideProgTagsContainer;
     QList<RoundTripMainMasterRecord> rgRoundTripMainMaster;
-    QSharedPointer<UnknownSlideContainerChild> unknown2;
     QSharedPointer<TemplateNameAtom> templateNameAtom;
     QSharedPointer<SlideProgTagsContainer> unknown3;
     MainMasterContainer(void* /*dummy*/ = 0) {}
@@ -4477,8 +4518,9 @@ public:
     SlideSchemeColorSchemeAtom slideSchemeColorSchemeAtom;
     QSharedPointer<SlideNameAtom> slideNameAtom;
     QSharedPointer<SlideProgTagsContainer> slideProgTagsContainer;
-    QList<RoundTripSlideRecord> rgRoundTripSlide;
     QSharedPointer<UnknownSlideContainerChild> unknown;
+    QList<RoundTripSlideRecord> rgRoundTripSlide;
+    QSharedPointer<UnknownSlideContainerChild> unknown2;
     SlideContainer(void* /*dummy*/ = 0) {}
 };
 class NotesContainer : public StreamOffset {
