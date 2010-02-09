@@ -1363,14 +1363,12 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
     const UString note = cell->note();
     if (! note.isEmpty()) {
         const QString n = string(note);
-        const QString name = n.section('\n',0,0);
-        const QString text = n.section('\n',1,-1);
         xmlWriter->startElement("office:annotation");
-        xmlWriter->startElement("dc:creator");
-        xmlWriter->addTextNode(name);
-        xmlWriter->endElement(); // dc:creator
+        //xmlWriter->startElement("dc:creator");
+        //xmlWriter->addTextNode(authorName); //TODO
+        //xmlWriter->endElement(); // dc:creator
         xmlWriter->startElement("text:p");
-        xmlWriter->addTextNode(text);
+        xmlWriter->addTextNode(n);
         xmlWriter->endElement(); // text:p
         xmlWriter->endElement(); // office:annotation
     }
