@@ -307,9 +307,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                 } else {
                     xmlWriter.startElement("number:number");
                 }
-                if (gotDot) {
-                    xmlWriter.addAttribute("number:decimal-places", decimalPlaces);
-                }
+                xmlWriter.addAttribute("number:decimal-places", decimalPlaces);
                 xmlWriter.addAttribute("number:min-integer-digits", integerDigits);
                 if (exponentDigits > 0) {
                     xmlWriter.addAttribute("number:min-exponent-digits", exponentDigits);
