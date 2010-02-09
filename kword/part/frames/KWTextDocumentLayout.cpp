@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -583,7 +583,7 @@ void KWTextDocumentLayout::layout()
         while (m_state->addLine(line.line)) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
-                line.line.setPosition(QPointF(0, m_state->y() + 20));
+                line.line.setPosition(QPointF(0, m_state->y() + 10000)); // move it away from any place that we're likely going to paint
 
                 if (requestFrameResize) { // plenty more text, but first lets resize the shape.
                     TDEBUG << "  we need more space; we require at least:" << m_dummyShape->size().height();
@@ -626,7 +626,7 @@ void KWTextDocumentLayout::layout()
                 if (list.count() > 0)
                     down2 = QLineF(down2.p1(), list.last());
                 const qreal maxFrameLength = qMin(down.length(), down2.length());
-                if (maxFrameLength <= currentShape->size().height()) {
+                if (qAbs(maxFrameLength - currentShape->size().height()) < 1) {
                     m_state->clearTillEnd();
                     TDEBUG << "  we need another page";
                     m_frameSet->requestMoreFrames(0); // new page, please.
