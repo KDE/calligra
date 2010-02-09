@@ -119,6 +119,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
                 result = Value(complexFormat(complexValue, precision, fmtType, floatFormat, currencySymbol));
                 result.setFormat(Value::fmt_Number);
             }
+Q_ASSERT(false);
         }
 
         // real number
@@ -165,7 +166,7 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
             break;
         case Value::fmt_Number: {
             Number val = fabs(value.asFloat());
-            if (((val > 1e+10) || (val < 1e-10)) && (val != 0.0))
+            if (((val > 10000e+10) || (val < 10000e-10)) && (val != 0.0))
                 fmtType = Format::Scientific;
             else
                 fmtType = Format::Number;
