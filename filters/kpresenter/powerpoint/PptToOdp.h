@@ -205,9 +205,14 @@ private:
 
     /* Extract data into the style */
     template <typename T>
-    void defineGraphicProperties(KoGenStyle& style, T& o);
+    void defineGraphicProperties(KoGenStyle& style, T& o,
+                                 const PPT::TextMasterStyleAtom* listStyles = 0);
     /* Extract data into the style element style:list */
     void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels);
+    void defineListStyle(KoGenStyle& style, quint8 depth,
+                         const PPT::TextMasterStyleLevel& level,
+                         const PPT::TextMasterStyle9Level* level9 = 0,
+                         const PPT::TextMasterStyle10Level* level10 = 0);
 
     void processSlideForStyle(int slideNo, KoGenStyles &styles);
     void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles);
