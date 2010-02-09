@@ -1284,67 +1284,78 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
         }
     } else if (value.isText() || value.isError()) {
         QString str = string(value.asString());
-        xmlWriter->addAttribute("office:value-type", "string");
-        if (value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript()))
-            xmlWriter->addAttribute("office:string-value", str);
-
-        xmlWriter->startElement("text:p", false);
-
-        if (cell->format().font().subscript() || cell->format().font().superscript()) {
-            xmlWriter->startElement("text:span");
-            if (cell->format().font().subscript())
-                xmlWriter->addAttribute("text:style-name", subScriptStyle);
-            else
-                xmlWriter->addAttribute("text:style-name", superScriptStyle);
-        }
-
-        if (value.isString())
-            xmlWriter->addTextNode(str);
-        else {
-            // rich text
-            std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
-
-            // add sentinel to list of format runs
-            formatRuns[str.length()] = cell->format().font();
-
-            unsigned index = 0;
-            QString style;
-            for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
-                if (!style.isEmpty() && it->first > index) {
-                    xmlWriter->startElement("text:span");
-                    xmlWriter->addAttribute("text:style-name", style);
-                }
-                if (it->first > index)
-                    xmlWriter->addTextNode(str.mid(index, it->first - index));
-                if (!style.isEmpty() && it->first > index) {
-                    xmlWriter->endElement(); // text:span
-                }
-
-                index = it->first;
-
-                if (it->second == cell->format().font())
-                    style = "";
-                else {
-                    style = fontStyles.value(it->second);
-                }
+        QString linkName, linkLocation;
+        
+        if (cell->hasHyperlink()) {
+            linkLocation = string(cell->hyperlinkLocation());
+            if(!linkLocation.isEmpty()) {
+                linkName = string(cell->hyperlinkDisplayName()).trimmed();
+                if(linkName.isEmpty())
+                    linkName = str;
+                str.clear(); // at Excel cells with links don't have additional text content
             }
         }
 
-        if (cell->hasHyperlink()) {
-            QString displayName = string(cell->hyperlinkDisplayName());
-            QString location = string(cell->hyperlinkLocation());
-            if (displayName.isEmpty())
-                displayName = str;
-            xmlWriter->startElement("text:a");
-            xmlWriter->addAttribute("xlink:href", location);
-            if (! cell->hyperlinkTargetFrameName().isEmpty())
-                xmlWriter->addAttribute("office:target-frame-name", string(cell->hyperlinkTargetFrameName()));
-            xmlWriter->addTextNode(displayName);
-            xmlWriter->endElement(); // text:a
+        if (value.isString() && !str.isEmpty() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
+            xmlWriter->addAttribute("office:value-type", "string");
+            xmlWriter->addAttribute("office:string-value", str);
         }
 
-        if (cell->format().font().subscript() || cell->format().font().superscript())
-            xmlWriter->endElement(); // text:span
+        xmlWriter->startElement("text:p", false);
+
+        if(!str.isEmpty()) {
+            if (cell->format().font().subscript() || cell->format().font().superscript()) {
+                xmlWriter->startElement("text:span");
+                if (cell->format().font().subscript())
+                    xmlWriter->addAttribute("text:style-name", subScriptStyle);
+                else
+                    xmlWriter->addAttribute("text:style-name", superScriptStyle);
+            }
+
+            if (value.isString()) {
+                xmlWriter->addTextNode(str);
+            } else {
+                // rich text
+                std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
+
+                // add sentinel to list of format runs
+                formatRuns[str.length()] = cell->format().font();
+
+                unsigned index = 0;
+                QString style;
+                for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
+                    if (!style.isEmpty() && it->first > index) {
+                        xmlWriter->startElement("text:span");
+                        xmlWriter->addAttribute("text:style-name", style);
+                    }
+                    if (it->first > index)
+                        xmlWriter->addTextNode(str.mid(index, it->first - index));
+                    if (!style.isEmpty() && it->first > index) {
+                        xmlWriter->endElement(); // text:span
+                    }
+
+                    index = it->first;
+
+                    if (it->second == cell->format().font())
+                        style = "";
+                    else {
+                        style = fontStyles.value(it->second);
+                    }
+                }
+            }
+
+            if (cell->format().font().subscript() || cell->format().font().superscript())
+                xmlWriter->endElement(); // text:span
+        }
+
+        if (!linkName.isEmpty()) {
+            xmlWriter->startElement("text:a");
+            xmlWriter->addAttribute("xlink:href", linkLocation);
+            if (! cell->hyperlinkTargetFrameName().isEmpty())
+                xmlWriter->addAttribute("office:target-frame-name", string(cell->hyperlinkTargetFrameName()));
+            xmlWriter->addTextNode(linkName);
+            xmlWriter->endElement(); // text:a
+        }
 
         xmlWriter->endElement(); //  text:p
     }
