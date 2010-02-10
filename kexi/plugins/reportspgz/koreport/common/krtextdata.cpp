@@ -27,58 +27,34 @@
 
 KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
 {
-    createProperties();
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
+
+    createProperties();
+    m_name->setValue(element.toElement().attribute("report:name"));
+    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    Z = element.toElement().attribute("report:z-index").toDouble();
+    m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
+    m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
+    m_bottomPadding = element.toElement().attribute("report:bottom-padding").toDouble();
+
+    parseReportRect(element.toElement(), &m_pos, &m_size);
+    
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-        if (n == "data") {
-            QDomNodeList dnl = node.childNodes();
-            for (int di = 0; di < dnl.count(); di++) {
-                node = dnl.item(di);
-                n = node.nodeName();
-                /*if ( n == "query" )
-                {
-                 _query->setValue ( node.firstChild().nodeValue() );
-                }
-                else */if (n == "controlsource") {
-                    m_controlSource->setValue(node.firstChild().nodeValue());
-                } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n;
-                }
-            }
-        } else if (n == "name") {
-            m_name->setValue(node.firstChild().nodeValue());
-        } else if (n == "zvalue") {
-            Z = node.firstChild().nodeValue().toDouble();
-        } else if (n == "bottompad") {
-            m_bottomPadding = node.firstChild().nodeValue().toDouble() / 100.0;
-        } else if (n == "left") {
-            m_horizontalAlignment->setValue("Left");
-        } else if (n == "hcenter") {
-            m_horizontalAlignment->setValue("Center");
-        } else if (n == "right") {
-            m_horizontalAlignment->setValue("Right");
-        } else if (n == "top") {
-            m_verticalAlignment->setValue("Top");
-        } else if (n == "vcenter") {
-            m_verticalAlignment->setValue("Center");
-        } else if (n == "bottom") {
-            m_verticalAlignment->setValue("Bottom");
-        } else if (n == "rect") {
-            parseReportRect(node.toElement(), &m_pos, &m_size);
-        } else if (n == "textstyle") {
 
+        if (n == "report:text-style") {
             KRTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
                 m_backgroundColor->setValue(ts.backgroundColor);
                 m_foregroundColor->setValue(ts.foregroundColor);
                 m_backgroundOpacity->setValue(ts.backgroundOpacity);
                 m_font->setValue(ts.font);
+
             }
-        } else if (n == "linestyle") {
+        } else if (n == "report:line-style") {
             KRLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
@@ -86,9 +62,10 @@ KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing text element encountered unknow element: " << n;
+            kDebug() << "while parsing field element encountered unknow element: " << n;
         }
     }
+
 }
 
 KRTextData::~KRTextData()
