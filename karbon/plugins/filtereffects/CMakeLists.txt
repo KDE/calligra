@@ -26,6 +26,9 @@ set(karbonfiltereffects_PART_SRCS
     ComponentTransferEffect.cpp
     ComponentTransferEffectFactory.cpp
     ComponentTransferEffectConfigWidget.cpp
+    ImageEffect.cpp
+    ImageEffectFactory.cpp
+    ImageEffectConfigWidget.cpp
     )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})

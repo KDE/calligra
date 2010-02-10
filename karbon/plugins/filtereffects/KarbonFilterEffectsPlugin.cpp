@@ -26,6 +26,7 @@
 #include "CompositeEffectFactory.h"
 #include "BlendEffectFactory.h"
 #include "ComponentTransferEffectFactory.h"
+#include "ImageEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
@@ -46,6 +47,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QLis
     KoFilterEffectRegistry::instance()->add(new CompositeEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new BlendEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ComponentTransferEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new ImageEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"
