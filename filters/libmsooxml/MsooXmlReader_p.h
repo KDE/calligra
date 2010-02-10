@@ -28,6 +28,10 @@
 #error Please include MsooXmlReader_p.h after defining MSOOXML_CURRENT_CLASS and MSOOXML_CURRENT_NS!
 #endif
 
+#ifndef MSOOXML_CALL_STACK
+#define MSOOXML_CALL_STACK m_calls
+#endif
+
 #define TRY_READ_WITH_ARGS_INTERNAL(name, args) \
     args \
     RETURN_IF_ERROR( read_ ## name () )
@@ -72,7 +76,7 @@
 #endif
 
 #define READ_PROLOGUE \
-    m_calls.push(PASTE(&MSOOXML_CURRENT_CLASS::read_, CURRENT_EL)); \
+    MSOOXML_CALL_STACK.push(PASTE(&MSOOXML_CURRENT_CLASS::read_, CURRENT_EL)); \
     PUSH_NAME \
     /*kDebug() << *this;*/ \
     if (!expectEl(QUALIFIED_NAME(CURRENT_EL))) { \
@@ -80,7 +84,7 @@
     }
 
 #define READ_EPILOGUE_WITHOUT_RETURN \
-    m_calls.pop(); \
+    MSOOXML_CALL_STACK.pop(); \
     POP_NAME \
     kDebug() << "READ_EPILOGUE_WITHOUT_RETURN"; \
     if (!expectElEnd(QUALIFIED_NAME(CURRENT_EL))) { \

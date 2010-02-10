@@ -565,4 +565,3 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 #define MSOOXML_CURRENT_NS "pic" // DrawingML/Picture
 
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic:pic, etc.
-#include <MsooXmlVmlReaderImpl.h> // this adds w:pict, etc.

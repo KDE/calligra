@@ -50,6 +50,8 @@ public:
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
+#include <MsooXmlVmlReaderMethods.h> // separated as it is not a part of OOXML
+
 protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_sectPr();

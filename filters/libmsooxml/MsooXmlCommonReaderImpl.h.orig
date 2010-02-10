@@ -175,9 +175,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
  - tab (Tab Character) §17.3.3.32
  - yearLong (Date Block - Long Year Format) §17.3.3.33
  - yearShort (Date Block - Short Year Format) §17.3.3.34
-
- VML child elements (see Part 4):
- - pict (VML Object) §9.2.2.2
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
@@ -194,7 +191,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
             ELSE_TRY_READ_IF(drawing)
 #ifdef DOCXXMLDOCREADER_CPP
             ELSE_TRY_READ_IF(object)
-            ELSE_TRY_READ_IF(pict)
 #endif
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
