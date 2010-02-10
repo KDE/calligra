@@ -30,7 +30,9 @@ class PointStorageBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testInsertionPerformance();
+    void testInsertionPerformance_loadingLike();
+    void testInsertionPerformance_singular();
+    void testLookupPerformance_data();
     void testLookupPerformance();
     void testInsertColumnsPerformance();
     void testDeleteColumnsPerformance();
@@ -40,6 +42,7 @@ private Q_SLOTS:
     void testShiftRightPerformance();
     void testShiftUpPerformance();
     void testShiftDownPerformance();
+    void testIterationPerformance_data();
     void testIterationPerformance();
 };
 
