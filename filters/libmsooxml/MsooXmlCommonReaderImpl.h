@@ -154,10 +154,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
  - delText (Deleted Text) §17.3.3.7
  - [done] drawing (DrawingML Object) §17.3.3.9
  - endnoteRef (Endnote Reference Mark) §17.11.6
- - endnoteReference (Endnote Reference) §17.11.7
+ - [done] endnoteReference (Endnote Reference) §17.11.7
  - fldChar (Complex Field Character) §17.16.18
  - footnoteRef (Footnote Reference Mark) §17.11.13
- - footnoteReference (Footnote Reference) §17.11.14
+ - [done] footnoteReference (Footnote Reference) §17.11.14
  - instrText (Field Code) §17.16.23
  - lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
  - monthLong (Date Block - Long Month Format) §17.3.3.15
@@ -193,6 +193,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
             ELSE_TRY_READ_IF(t)
             ELSE_TRY_READ_IF(drawing)
 #ifdef DOCXXMLDOCREADER_CPP
+            ELSE_TRY_READ_IF(endnoteReference)
+            ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
             ELSE_TRY_READ_IF(pict)
 #endif

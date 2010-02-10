@@ -28,6 +28,7 @@
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
 #include <MsooXmlCommentsReader.h>
+#include <MsooXmlNotesReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
@@ -473,7 +474,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
 
 #undef CURRENT_EL
 #define CURRENT_EL commentRangeStart
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_commentRangeStart()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_commentRangeStart()
 {
     READ_PROLOGUE
 
@@ -502,6 +503,94 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_commentRangeStart()
         body->endElement(); // text:p
 
         body->endElement(); // office:annotation
+    }
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL endnoteReference
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
+{
+    /*
+    # example endnote from odt document converted with OpenOffice
+    <text:note text:id="ftn1" text:note-class="endnote">
+    <text:note-citation>i</text:note-citation>
+    <text:note-body>
+    <text:p text:style-name="Endnote">Tassa olisi endnote!</text:p>
+    </text:note-body>
+    </text:note></text:p>
+    */
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(id)
+    const MSOOXML::Note note = m_context->relationships->endnote(id);
+    if (note.number > 0) {
+        body->startElement("text:note");
+        body->addAttribute("text:id", "ftn1");
+        body->addAttribute("text:note-class", "endnote");
+
+        body->startElement("text:note-citation");
+        body->addTextSpan(QString::number(note.number)); // this needs to be improved in future!
+        body->endElement(); // text:note-citation
+
+        body->startElement("text:note-body");
+        body->startElement("text:p");
+        body->addAttribute("text:style-name", "Endnote");
+        body->addTextSpan(note.text);
+        body->endElement(); // text:p
+        body->endElement(); // text:note-body
+
+        body->endElement(); // text:note
+    }
+    else {
+        //! @todo show error
+        return KoFilter::WrongFormat;
+    }
+
+    return KoFilter::OK;
+}
+
+
+
+#undef CURRENT_EL
+#define CURRENT_EL footnoteReference
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
+{
+    /*
+    # example endnote from odt document converted with OpenOffice
+    <text:note text:id="ftn1" text:note-class="footnote">
+    <text:note-citation>1</text:note-citation>
+    <text:note-body>
+    <text:p text:style-name="P2">
+    <text:span text:style-name="footnote_20_reference" />studies</text:p>
+    <text:p text:style-name="Footnote" />
+    </text:note-body>
+    </text:note>
+    */
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(id)
+    const MSOOXML::Note note = m_context->relationships->footnote(id);
+    if (note.number > 0) {
+        body->startElement("text:note");
+        body->addAttribute("text:id", "ftn1");
+        body->addAttribute("text:note-class", "footnote");
+
+        body->startElement("text:note-citation");
+        body->addTextSpan(QString::number(note.number)); // this needs to be improved in future!
+        body->endElement(); // text:note-citation
+
+        body->startElement("text:note-body");
+        body->startElement("text:p");
+        body->addAttribute("text:style-name", "Footnote");
+        body->addTextSpan(note.text);
+        body->endElement(); // text:p
+        body->endElement(); // text:note-body
+
+        body->endElement(); // text:note
+    }
+    else {
+        //! @todo show error
+        return KoFilter::WrongFormat;
     }
 
     return KoFilter::OK;
