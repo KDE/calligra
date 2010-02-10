@@ -358,7 +358,7 @@ Value func_filename(valVector, ValueCalc *calc, FuncExtra *)
     return Value(calc->settings()->fileName());
 }
 
-Value func_formula(valVector args, ValueCalc *calc, FuncExtra *e)
+Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
     if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
         return Value::errorVALUE();
