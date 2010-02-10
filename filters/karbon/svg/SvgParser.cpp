@@ -1258,13 +1258,10 @@ void SvgParser::applyFilter(KoShape * shape)
     objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
 
     KoFilterEffectLoadingContext context(gc->xmlBaseDir.isEmpty() ? m_xmlBaseDir : gc->xmlBaseDir);
-
-    // matrix to transform from use space units
-    QMatrix matrix;
-    if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse) {
-        context.setShapeBoundingBox(bound);
-        matrix = QMatrix().scale(1.0 / bound.width(), 1.0 / bound.height());
-    }
+    context.setShapeBoundingBox(bound);
+    // enable units conversion
+    context.enableFilterUnitsConversion(filter->filterUnits() == SvgFilterHelper::UserSpaceOnUse);
+    context.enableFilterPrimitiveUnitsConversion(filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse);
 
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 

@@ -49,7 +49,7 @@ QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRende
         return image;
 
     // transform from bounding box coordinates
-    QPointF offset = context.coordinateTransformation().map(m_offset);
+    QPointF offset = context.toUserSpace(m_offset);
     // transform to view coordinates
     offset = context.viewConverter()->documentToView(offset);
 
@@ -71,7 +71,7 @@ bool OffsetEffect::load(const KoXmlElement &element, const KoFilterEffectLoading
     if (element.hasAttribute("dy"))
         m_offset.ry() = element.attribute("dy").toDouble();
 
-    m_offset = context.fromUserSpace(m_offset);
+    m_offset = context.convertFilterPrimitiveUnits(m_offset);
 
     return true;
 }

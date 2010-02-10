@@ -297,7 +297,7 @@ QImage BlurEffect::processImage(const QImage &image, const KoFilterEffectRenderC
     // TODO: take filter region into account
     // TODO: blur with different kernels in x and y
     // convert from bounding box coordinates
-    QPointF dev = context.coordinateTransformation().map(m_deviation);
+    QPointF dev = context.toUserSpace(m_deviation);
     // transform to view coordinates
     dev = context.viewConverter()->documentToView(dev);
 
@@ -328,7 +328,7 @@ bool BlurEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingCo
         return false;
     }
 
-    m_deviation = context.fromUserSpace(m_deviation);
+    m_deviation = context.convertFilterPrimitiveUnits(m_deviation);
 
     return true;
 }
