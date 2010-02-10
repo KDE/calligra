@@ -239,14 +239,9 @@ void KRChartData::populateData()
                     labels << curs->value(0).toString();
                     for (int i = 1; i <= cols; ++i) {
                         data[i - 1] << curs->value(i).toDouble();
-                        kDebug() << data[i-1];
                     }
                 } while (curs->moveNext());
 
-                kDebug() << labels;
-                if (data.size() > 0) {
-                    kDebug() << data[0];
-                }
                 for (int i = 1; i <= cols; ++i) {
                     m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
                 }
@@ -438,8 +433,6 @@ void KRChartData::setLegend(bool le, const QStringList &legends)
     //Add the legend
     if (m_chartWidget) {
         if (le && ! legends.isEmpty()) {
-//!TODO            QStringList fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
-
             m_chartWidget->addLegend(KDChart::Position::East);
             m_chartWidget->legend()->setOrientation(Qt::Horizontal);
             m_chartWidget->legend()->setTitleText("Legend");
