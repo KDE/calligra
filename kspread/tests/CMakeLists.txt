@@ -149,4 +149,4 @@ target_link_libraries(BenchmarkPointStorage ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIB
 
 set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
 kde4_add_executable(BenchmarkRTree TEST ${BenchmarkRTree_SRCS})
-target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
+target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
