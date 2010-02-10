@@ -191,6 +191,8 @@ private:
     void defineDefaultDrawingPageStyle(KoGenStyles& styles);
     void defineDefaultChartStyle(KoGenStyles& styles);
 
+    void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
+
     // we assume that these functions are the same for all style families
     void defineDefaultTextProperties(KoGenStyle& style);
     void defineDefaultParagraphProperties(KoGenStyle& style);
@@ -224,11 +226,11 @@ private:
                          const PPT::TextMasterStyle10Level* level10 = 0);
 
     void processSlideForStyle(int slideNo, KoGenStyles &styles);
-    void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles);
-    void processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles);
-    void processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
-    void processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles);
-    void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles);
+    void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles, bool stylesxml);
+    void processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles, bool stylesxml);
+    void processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml);
+    void processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml);
+    void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles, bool stylesxml);
 
 
     QByteArray createContent(KoGenStyles& styles);
@@ -560,48 +562,6 @@ private:
     };
 
     /**
-    * ClientPlacementId
-    * Referenced by: ClientTextData
-    * Used in master,notes placement id to define the default location
-    */
-    enum ClientPlacementId {
-        None = 0,
-        MasterTitle = 1,
-        MasterBody = 2,
-        MasterCenteredTitle = 3,
-        MasterNotesSlideImage,
-        MasterNotesBodyImage,
-        //Missing
-        MasterDate = 7 ,
-        MasterSlideNumber = 8,
-        MasterFooter = 9,
-        MasterHeader = 10,
-        MasterSubtitle,
-        GenericTextObject,
-        Title,
-        Body,
-        NotesBody,
-        CenteredTitle,
-        Subtitle,
-        VerticalTextTitle,
-        VerticalTextBody,
-        NotesSlideImage,
-        Object,
-        Graph,
-        Table,
-        ClipArt,
-        OrganizationChart,
-        MediaClip
-    };
-
-    /**
-    * QHash ClientPlacementId, QRect
-    * Referenced by: masterObects
-    * Store the masterObjects placement co-ordinates with placementId.
-    */
-    QHash<ClientPlacementId/*placementId*/,QRect>masterObjects;
-
-    /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
     * @param TextAutomNumberSchemeEnum - enum values of textautoscheme.
     * @param numFormat - Format of the bulletand numbering scheme
@@ -627,49 +587,6 @@ private:
     void processHeart(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processFreeLine(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const PPT::OfficeArtSpContainer& o, Writer& out);
-
-    /**
-    * @brief process the mainMasterSlideContainer
-    *
-    * From [MS-PPT].pdf
-    * @param -  KoGenStyles &styles
-    * @param -  KoXmlWriter* xmlWriter
-    * @return - None
-    */
-    void processMainMasterSlide(KoGenStyles &styles, Writer& out);
-
-    /**
-    * @brief process the main Master DrawingObject.
-    * ShapeGroupContainer as per the MS-PPT spec
-    *
-    * From [MS-PPT].pdf
-    * @param -  OfficeArtSpgrContainer
-    * @param -   Writer& out
-    * @return - None
-    */
-    void processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainer& o, Writer& out);
-
-    /**
-    * @brief process the main Master DrawingObject FileBlock Container.
-    * SpgrContainerFileBlock as per the MS-PPT spec
-    *
-    * From [MS-PPT].pdf
-    * @param -  OfficeArtSpgrContainerFileBlock
-    * @param -  Writer& out
-    * @return - None
-    */
-    void processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainerFileBlock& of, Writer& out);
-
-    /**
-    * @brief process the main Master DrawingObject.
-    * ShapeContainer as per the MS-PPT spec
-    *
-    * From [MS-PPT].pdf
-    * @param -  OfficeArtSpContainer
-    * @param -  Writer& out
-    * @return - None
-    */
-    void processMainMasterDrawingObject(const PPT::OfficeArtSpContainer& o, Writer& out);
 
     /**
     * @brief Struct that contains precalculated style names based on
@@ -808,6 +725,10 @@ private:
         }
         return 0;
     }
+    QMap<const void*, QString> presentationPageLayouts;
+    QMap<const void*, QString> drawingPageStyles;
+    QMap<const PPT::MasterOrSlideContainer*, QString> masterNames;
+    QString notesMasterName;
 
     /**
     * @brief An usedDeclaration.

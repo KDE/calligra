@@ -1153,6 +1153,62 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     style.addChildElement(elementName, elementContents);
 }
 
+void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
+{
+    // define for master for use in <master-page style:name="...">
+    foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
+        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        dp.setAutoStyleInStylesDotXml(true);
+        const SlideContainer* sc = m->anon.get<SlideContainer>();
+        const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+        const HeadersFootersAtom* hf = 0;
+        if (sc && sc->perSlideHFContainer) {
+            hf = &sc->perSlideHFContainer->hfAtom;
+        } else if (mm && mm->perSlideHeadersFootersContainer) {
+            hf = &mm->perSlideHeadersFootersContainer->hfAtom;
+        }
+        defineDrawingPageStyle(dp, hf);
+        drawingPageStyles[m] = styles.lookup(dp);
+    }
+    if (p->notesMaster) {
+        const HeadersFootersAtom* hf = 0;
+        if (p->notesMaster->perSlideHFContainer) {
+            hf = &p->notesMaster->perSlideHFContainer->hfAtom;
+        } else if (p->notesMaster->perSlideHFContainer2) {
+            hf = &p->notesMaster->perSlideHFContainer2->hfAtom;
+        }
+        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        dp.setAutoStyleInStylesDotXml(false);
+        defineDrawingPageStyle(dp, hf);
+        drawingPageStyles[p->notesMaster] = styles.lookup(dp);
+    }
+
+    // define for handouts for use in <style:handout-master style:name="...">
+    // TODO
+
+    // define for slides for use in <draw:page style:name="...">
+    foreach (const PPT::SlideContainer* sc, p->slides) {
+        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        dp.setAutoStyleInStylesDotXml(false);
+        defineDrawingPageStyle(dp, &sc->perSlideHFContainer->hfAtom);
+        drawingPageStyles[sc] = styles.lookup(dp);
+    }
+
+    // define for notes for use in <presentation:notes style:name="...">
+    foreach (const PPT::NotesContainer* nc, p->notes) {
+        const HeadersFootersAtom* hf = 0;
+        if (nc->perSlideHFContainer) {
+            hf = &nc->perSlideHFContainer->hfAtom;
+        } else if (nc->perSlideHFContainer2) {
+            hf = &nc->perSlideHFContainer2->hfAtom;
+        }
+        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        dp.setAutoStyleInStylesDotXml(false);
+        defineDrawingPageStyle(dp, hf);
+        drawingPageStyles[nc] = styles.lookup(dp);
+    }
+}
+
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function is follows the flow of the styles.xml file.
@@ -1214,6 +1270,12 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
             p->documentContainer->documentAtom.notesSize);
 
     /*
+      Define the automatic styles
+     */
+    // TODO
+    defineAutomaticDrawingPageStyles(styles);
+
+    /*
       Define the draw:layer-set.
      */
     // TODO
@@ -1224,30 +1286,21 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // TODO
 
     /*
-      Define the style:master-page s
+      Define the style:master-pages
      */
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
-        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
         const DrawingContainer* drawing = 0;
-        const HeadersFootersAtom* hf = 0;
         if (sc) {
-            if (sc->perSlideHFContainer) {
-                hf = &sc->perSlideHFContainer->hfAtom;
-            }
             drawing = &sc->drawing;
         } else if (mm) {
-            if (mm->perSlideHeadersFootersContainer) {
-                hf = &mm->perSlideHeadersFootersContainer->hfAtom;
-            }
             drawing = &mm->drawing;
         }
-        defineDrawingPageStyle(dp, hf);
 
         KoGenStyle master(KoGenStyle::StyleMaster);
         master.addAttribute("style:page-layout-name", slidePageLayoutName);
-        master.addAttribute("draw:style-name", styles.lookup(dp));
+        master.addAttribute("draw:style-name", drawingPageStyles[m]);
         currentSlideTexts = 0;
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 drawing->OfficeArtDg.groupShape.rgfb) {
@@ -1257,72 +1310,30 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
             Writer out(writer);
             processObjectForBody(co, out);
             master.addChildElement("draw:frame",
-                                  QString::fromUtf8(buffer.buffer(),
-                                                    buffer.buffer().size()));
+                                   QString::fromUtf8(buffer.buffer(),
+                                                     buffer.buffer().size()));
         }
-        styles.lookup(master, "M");
+        masterNames[m] = styles.lookup(master, "M");
     }
-
-    QBuffer buffer;
-
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter xmlWriter(&buffer);
-    Writer out(xmlWriter);
-
-    //Process main Master Container
-    processMainMasterSlide(styles, out);
-
-    //KoGenStyle defaultStyle(KoGenStyle::StyleUser, "graphic");
-    KoGenStyle defaultStyle(KoGenStyle::StyleGraphicAuto, "graphic");
-    //defaultStyle.setDefaultStyle(true);
-    defaultStyle.setAutoStyleInStylesDotXml(true);
-    const OfficeArtDggContainer& drawingGroup
-    = p->documentContainer->drawingGroup.OfficeArtDgg;
-    defineGraphicProperties(defaultStyle, drawingGroup);
-    // add the defaults that were not set yet
-    if (!get<LineWidth>(drawingGroup)) {
-        defaultStyle.addProperty("svg:stroke-width",
-                                 QString("%1pt").arg(0x2535 / 12700.f),
-                                 KoGenStyle::GraphicType);
+    if (p->notesMaster) {
+        KoGenStyle master(KoGenStyle::StyleMaster);
+        master.addAttribute("style:page-layout-name", notesPageLayoutName);
+        master.addAttribute("draw:style-name",
+                            drawingPageStyles[p->notesMaster]);
+        currentSlideTexts = 0;
+        foreach(const OfficeArtSpgrContainerFileBlock& co,
+                p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
+            QBuffer buffer;
+            buffer.open(QIODevice::WriteOnly);
+            KoXmlWriter writer(&buffer);
+            Writer out(writer);
+            processObjectForBody(co, out);
+            master.addChildElement("draw:frame",
+                                   QString::fromUtf8(buffer.buffer(),
+                                                     buffer.buffer().size()));
+        }
+        notesMasterName = styles.lookup(master, "M");
     }
-    styles.lookup(defaultStyle, "pptDefaults", KoGenStyles::DontForceNumbering);
-
-    KoGenStyle marker(KoGenStyle::StyleMarker);
-    marker.addAttribute("draw:display-name", "msArrowEnd 5");
-    marker.addAttribute("svg:viewBox", "0 0 210 210");
-    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
-    styles.lookup(marker, "msArrowEnd_20_5");
-
-    KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
-    dp.setAutoStyleInStylesDotXml(true);
-    dp.addProperty("draw:background-size", "border");
-    dp.addProperty("draw:fill", "solid");
-    dp.addProperty("draw:fill-color", "#ffffff");
-    styles.lookup(dp, "dp");
-
-    KoGenStyle pa(KoGenStyle::StyleAuto, "paragraph");
-    pa.setAutoStyleInStylesDotXml(true);
-    pa.addProperty("fo:margin-left", "0cm");
-    pa.addProperty("fo:margin-right", "0cm");
-    pa.addProperty("fo:text-indent", "0cm");
-    pa.addProperty("fo:font-size", "14pt", KoGenStyle::TextType);
-    pa.addProperty("style:font-size-asian", "14pt", KoGenStyle::TextType);
-    pa.addProperty("style:font-size-complex", "14pt", KoGenStyle::TextType);
-    styles.lookup(pa, "P");
-
-    KoGenStyle l(KoGenStyle::StyleListAuto);
-    l.setAutoStyleInStylesDotXml(true);
-    QMap<const char*, QString> lmap;
-    lmap["text:level"] = "1";
-    const char bullet[4] = {0xe2, 0x97, 0x8f, 0};
-    lmap["text:bullet-char"] = QString::fromUtf8(bullet);//  "●";
-    QMap<const char*, QString> ltextmap;
-    ltextmap["fo:font-family"] = "StarSymbol";
-    ltextmap["style:font-pitch"] = "variable";
-    ltextmap["fo:color"] = "#000000";
-    ltextmap["fo:font-size"] = "45%";
-    addElement(l, "text:list-level-style-bullet", lmap, ltextmap);
-    styles.lookup(l, "L");
 
     // Creating dateTime class object
     if (getSlideHF()) {
@@ -1332,53 +1343,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         dateTime = DateTimeFormat(dateTimeFomatId);
         dateTime.addDateTimeAutoStyles(styles, hasTodayDate, hasUserDate);
     }
-
-    KoGenStyle text(KoGenStyle::StyleTextAuto, "text");
-    text.setAutoStyleInStylesDotXml(true);
-    text.addProperty("fo:font-size", "12pt");
-    text.addProperty("fo:language", "en");
-    text.addProperty("fo:country", "US");
-    text.addProperty("style:font-size-asian", "12pt");
-    text.addProperty("style:font-size-complex", "12pt");
-
-    KoGenStyle Mpr(KoGenStyle::StylePresentationAuto, "presentation");
-    Mpr.setAutoStyleInStylesDotXml(true);
-    Mpr.addProperty("draw:stroke", "none");
-    Mpr.addProperty("draw:fill", "none");
-    Mpr.addProperty("draw:fill-color", "#bbe0e3");
-    Mpr.addProperty("draw:textarea-horizontal-align", "justify");
-    Mpr.addProperty("draw:textarea-vertical-align", "top");
-    Mpr.addProperty("fo:wrap-option", "wrap");
-    styles.lookup(Mpr, "Mpr");
-
-    KoGenStyle s(KoGenStyle::StyleMaster);
-    s.addAttribute("style:page-layout-name", slidePageLayoutName);
-    s.addAttribute("draw:style-name", styles.lookup(dp));
-
-   QList<ClientPlacementId> items = masterObjects.keys();
-   for( int i = 0; i < items.size(); i++) {
-       switch(items.at(i)) {
-       case PptToOdp::MasterDate:
-            addFrame(s, out, "date-time", masterObjects.value(items.at(i)), styles.lookup(Mpr),
-                    styles.lookup(pa), styles.lookup(text));
-            break;
-       case PptToOdp::MasterSlideNumber:
-            addFrame(s, out, "page-number", masterObjects.value(items.at(i)), styles.lookup(Mpr),
-                    styles.lookup(pa), styles.lookup(text));
-            break;
-       case PptToOdp::MasterFooter:
-            //Footer
-            addFrame(s, out, "footer", masterObjects.value(items.at(i)), styles.lookup(Mpr),
-                     styles.lookup(pa), styles.lookup(text));
-            break;
-       case PptToOdp::MasterHeader:
-           break;
-       default:
-           break;
-       }
-   }
-
-    styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
 }
 
 void PptToOdp::addFrame(KoGenStyle& style, Writer& out, const char* presentationClass,
@@ -2998,9 +2962,15 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     nameStr.remove('\v');
 
     xmlWriter.startElement("draw:page");
-    xmlWriter.addAttribute("draw:master-page-name", "Default");
+    QString value = masterNames.value(master);
+    if (!value.isEmpty()) {
+        xmlWriter.addAttribute("draw:master-page-name", value);
+    }
     xmlWriter.addAttribute("draw:name", nameStr);
-    xmlWriter.addAttribute("draw:style-name", declarationStyleName);
+    value = drawingPageStyles[slide];
+    if (!value.isEmpty()) {
+        xmlWriter.addAttribute("draw:style-name", value);
+    }
     xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
     const HeadersFootersAtom* headerFooterAtom = 0;
@@ -3050,36 +3020,36 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
 void PptToOdp::processSlideForStyle(int slideNo, KoGenStyles &styles)
 {
     const SlideContainer* slide = p->slides[slideNo];
-    processObjectForStyle(slide->drawing.OfficeArtDg.groupShape, styles);
+    processObjectForStyle(slide->drawing.OfficeArtDg.groupShape, styles, false);
     if (slide->drawing.OfficeArtDg.shape) {
-        processObjectForStyle(*slide->drawing.OfficeArtDg.shape, styles);
+        processObjectForStyle(*slide->drawing.OfficeArtDg.shape, styles, false);
     }
 }
-void PptToOdp::processObjectForStyle(const OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles)
+void PptToOdp::processObjectForStyle(const OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles, bool stylesxml)
 {
     if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processObjectForStyle(*of.anon.get<OfficeArtSpgrContainer>(), styles);
+        processObjectForStyle(*of.anon.get<OfficeArtSpgrContainer>(), styles, stylesxml);
     } else { // OfficeArtSpContainer
-        processObjectForStyle(*of.anon.get<OfficeArtSpContainer>(), styles);
+        processObjectForStyle(*of.anon.get<OfficeArtSpContainer>(), styles, stylesxml);
     }
 }
-void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles)
+void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles, bool stylesxml)
 {
     foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
-        processObjectForStyle(co, styles);
+        processObjectForStyle(co, styles, stylesxml);
     }
 }
-void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles)
+void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
 {
     // text is process separately until drawing objects support it
     if (o.clientTextbox) {
         foreach(const TextClientDataSubContainerOrAtom& tc, o.clientTextbox->rgChildRec) {
             if (tc.anon.is<TextContainer>()) {
-                processTextObjectForStyle(o, *tc.anon.get<TextContainer>(), styles);
+                processTextObjectForStyle(o, *tc.anon.get<TextContainer>(), styles, stylesxml);
             }
         }
     }
-    processDrawingObjectForStyle(o, styles);
+    processDrawingObjectForStyle(o, styles, stylesxml);
 }
 QString PptToOdp::paraSpacingToCm(int value) const
 {
@@ -3738,7 +3708,7 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
 
 void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
         const PPT::TextContainer& tc,
-        KoGenStyles &styles)
+        KoGenStyles &styles, bool stylesxml)
 {
     const StyleTextPropAtom* style  = tc.style.data();
     if (!style) {
@@ -3767,6 +3737,7 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
     // set the presentation style
     QString styleName;
     KoGenStyle kostyle(KoGenStyle::StyleGraphicAuto, "presentation");
+    kostyle.setAutoStyleInStylesDotXml(stylesxml);
     defineGraphicProperties(kostyle, o);
     styleName = styles.lookup(kostyle);
     setGraphicStyleName(o, styleName);
@@ -3923,10 +3894,11 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
         style.addChildElement("text:list-style", elementContents);
     }
 }
-void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles)
+void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
 {
     KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
-    style.setParentName("pptDefaults");
+    style.setAutoStyleInStylesDotXml(stylesxml);
+    style.setParentName("pptDefaults"); // TODO find proper parent name
     defineGraphicProperties(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }
@@ -4084,57 +4056,5 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
     notesDeclaration.insertMulti(type, item);
 }
 
-void PptToOdp::processMainMasterSlide(KoGenStyles &/*styles*/, Writer& out)
-{
-    const MasterOrSlideContainer* m = p->masters[0];
-    if (m->anon.is<MainMasterContainer>()) {
-        const MainMasterContainer* mainMaster = m->anon.get<MainMasterContainer>();
-        //Future colorScheme and MasterStyleLevel
-        processMainMasterDrawingObject(mainMaster->drawing.OfficeArtDg.groupShape, out);
-        if (mainMaster->drawing.OfficeArtDg.shape) {
-            //processMainMasterDrawingObject(mainMaster->drawing.OfficeArtDg.shape);
-        }
-    }
-}
-
-void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainer& o, Writer& out)
-{
-    if (o.rgfb.size() < 2) return;
-    // if the first OfficeArtSpContainer has a clientAnchor,
-    //   a new coordinate system is introduced.
-    //
-    const OfficeArtSpContainer* first
-    = o.rgfb[0].anon.get<OfficeArtSpContainer>();
-    if (first && first->clientAnchor && first->shapeGroup) {
-        const QRect oldCoords = getRect(*first->clientAnchor);
-        QRect newCoords = getRect(*first->shapeGroup);
-        Writer transformedOut = out.transform(oldCoords, newCoords);
-        for (int i = 1; i < o.rgfb.size(); ++i) {
-            processMainMasterDrawingObject(o.rgfb[i], transformedOut);
-        }
-    }
-    else {
-        foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
-            processMainMasterDrawingObject(co, out);
-        }
-    }
-}
-
-void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpgrContainerFileBlock& of, Writer& out)
-{
-    if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processMainMasterDrawingObject(*of.anon.get<OfficeArtSpgrContainer>(), out);
-    } else { // OfficeArtSpContainer
-        processMainMasterDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
-    }
-}
-void PptToOdp::processMainMasterDrawingObject(const PPT::OfficeArtSpContainer& o, Writer& out)
-{
-    Q_UNUSED(out);
-    //computing the Master slide obeject cordinates
-    const QRect rect = getRect(o);
-    ClientPlacementId placementId = (ClientPlacementId)getPlacementId(o);
-    masterObjects.insert(placementId, rect);
-}
 
 
