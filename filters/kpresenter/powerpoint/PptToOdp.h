@@ -206,6 +206,9 @@ private:
     void defineParagraphProperties(KoGenStyle& style,
                                    const PPT::TextPFException* pf,
                                    const PPT::TextPFException9* pf9);
+    /* Extract data into the style */
+    void defineDrawingPageStyle(KoGenStyle& style,
+                                const PPT::HeadersFootersAtom* hf);
 
     /* Extract data into the style */
     template <typename T>
@@ -234,6 +237,7 @@ private:
     void processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer& out);
     void processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processDrawingObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
+    void processTextForBody(const PPT::TextContainer& tc, Writer& out);
     void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
     /**

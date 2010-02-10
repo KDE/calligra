@@ -703,6 +703,8 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="drawing-page">
     KoGenStyle style(KoGenStyle::StyleDrawingPage, "drawing-page");
     style.setDefaultStyle(true);
+    const PPT::SlideHeadersFootersContainer* hf = getSlideHF();
+    defineDrawingPageStyle(style, (hf) ?&hf->hfAtom :0);
     styles.lookup(style, "");
 }
 
@@ -952,6 +954,62 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // text:number-lines
 }
 
+void PptToOdp::defineDrawingPageStyle(KoGenStyle& style,
+                                      const HeadersFootersAtom* hf)
+{
+    const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
+    // draw:background-size
+    // draw:fill-color
+    // draw:fill-gradient-name
+    // draw:fill-hatch-name
+    // draw:fill-hatch-solid
+    // draw:fill-image-height
+    // draw:fill-image-name
+    // draw:fill-image-ref-point-x
+    // draw:fill-image-ref-point-y
+    // draw:fill-image-ref-point
+    // draw:fill-image-width
+    // draw:fill
+    // draw:gradient-step-count
+    // draw:opacity-name
+    // draw:opacity
+    // draw:secondary-fill-color
+    // draw:tile-repeat-offset
+    // presentation:background-objects-visible
+    // presentation:background-visible
+    // presentation:display-date-time
+    if (hf) {
+        style.addProperty("presentation:display-date-time",
+                          hf->fHasDate, dp);
+    }
+    // presentation:display-footer
+    if (hf) {
+        style.addProperty("presentation:display-footer",
+                          hf->fHasFooter, dp);
+    }
+    // presentation:display-header
+    if (hf) {
+        style.addProperty("presentation:display-header",
+                          hf->fHasHeader, dp);
+    }
+    // presentation:display-page-number
+    if (hf) {
+        style.addProperty("presentation:display-page-number",
+                          hf->fHasSlideNumber, dp);
+    }
+    // presentation:duration
+    // presentation:transition-speed
+    // presentation:transition-style
+    // presentation:transition-type
+    // presentation:visibility
+    // smil:direction
+    // smil:fadeColor
+    // smil:subtype
+    // smil:type
+    // style:repeat
+    // svg:fill-rule
+}
+
 void PptToOdp::defineListStyle(KoGenStyle& style,
                                const TextMasterStyleAtom& levels,
                                const TextMasterStyle9Atom* levels9,
@@ -1031,8 +1089,11 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             if (!numFormat.isNull()) {
                 out.addAttribute("style:num-format", numFormat);
             }
-            out.addAttribute("style:display-levels", "TODO");
-            out.addAttribute("style:start-value", "TODO");
+            //out.addAttribute("style:display-levels", "TODO");
+            if (pf9 && pf9->masks.bulletScheme) {
+                out.addAttribute("style:start-value",
+                                 pf9->bulletAutoNumberScheme->startNum);
+            }
         }
         if (!numPrefix.isNull()) {
             out.addAttribute("style:num-prefix", numPrefix);
@@ -1156,6 +1217,51 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
       Define the draw:layer-set.
      */
     // TODO
+
+    /*
+      Define the style:handout-master
+     */
+    // TODO
+
+    /*
+      Define the style:master-page s
+     */
+    foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
+        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        const SlideContainer* sc = m->anon.get<SlideContainer>();
+        const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+        const DrawingContainer* drawing = 0;
+        const HeadersFootersAtom* hf = 0;
+        if (sc) {
+            if (sc->perSlideHFContainer) {
+                hf = &sc->perSlideHFContainer->hfAtom;
+            }
+            drawing = &sc->drawing;
+        } else if (mm) {
+            if (mm->perSlideHeadersFootersContainer) {
+                hf = &mm->perSlideHeadersFootersContainer->hfAtom;
+            }
+            drawing = &mm->drawing;
+        }
+        defineDrawingPageStyle(dp, hf);
+
+        KoGenStyle master(KoGenStyle::StyleMaster);
+        master.addAttribute("style:page-layout-name", slidePageLayoutName);
+        master.addAttribute("draw:style-name", styles.lookup(dp));
+        currentSlideTexts = 0;
+        foreach(const OfficeArtSpgrContainerFileBlock& co,
+                drawing->OfficeArtDg.groupShape.rgfb) {
+            QBuffer buffer;
+            buffer.open(QIODevice::WriteOnly);
+            KoXmlWriter writer(&buffer);
+            Writer out(writer);
+            processObjectForBody(co, out);
+            master.addChildElement("draw:frame",
+                                  QString::fromUtf8(buffer.buffer(),
+                                                    buffer.buffer().size()));
+        }
+        styles.lookup(master, "M");
+    }
 
     QBuffer buffer;
 
@@ -2639,37 +2745,81 @@ enum {
     HalfBody    = 7,  // body in two-column slide
     QuarterBody = 8   // body in four-body slide
 };
+
 }
 
-
-void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
-                                        const PPT::TextContainer& tc,
-                                        Writer& out)
+/* The placementId is mapped to one of
+   "chart", "date-time", "footer", "graphic", "handout", "header", "notes",
+   "object", "orgchart", "outline", "page", "page-number", "subtitle", "table",
+   "text" or "title" */
+const char*
+getPresentationClass(const PlaceholderAtom* p)
 {
-    const QRect& rect = getRect(o);
-    QString classStr = "subtitle";
-
-    if (tc.textHeaderAtom.textType == Text::Title)
-        classStr = "title";
-
-    if (tc.textHeaderAtom.textType == Text::Body)
-        classStr = "outline";
-
-    out.xml.startElement("draw:frame");
-
-    if (!getGraphicStyleName(o).isEmpty()) {
-        out.xml.addAttribute("presentation:style-name",
-                             getGraphicStyleName(o));
+    if (p == 0) return 0;
+    switch (p->placementId) {
+    case 0x01: return "title";       // PT_MasterTitle
+    case 0x02: return "text";        // PT_MasterBody
+    case 0x03: return "title";       // PT_MasterCenterTitle
+    case 0x04: return "subtitle";    // PT_MasterSubTitle
+    case 0x05: return "graphic";     // PT_MasterNotesSlideImage
+    case 0x06: return "text";        // PT_MasterNotesBody
+    case 0x07: return "date-time";   // PT_MasterDate
+    case 0x08: return "page-number"; // PT_MasterSlideNumber
+    case 0x09: return "footer";      // PT_MasterFooter
+    case 0x0A: return "header";      // PT_MasterHeader
+    case 0x0B: return "graphic";     // PT_NotesSlideImage
+    case 0x0C: return "text";        // PT_NotesBody
+    case 0x0D: return "title";       // PT_Title
+    case 0x0E: return "text";        // PT_Body
+    case 0x0F: return "title";       // PT_CenterTitle
+    case 0x10: return "subtitle";    // PT_SubTitle
+    case 0x11: return "title";       // PT_VerticalTitle
+    case 0x12: return "text";        // PT_VerticalBody
+    case 0x13: return "object";      // PT_Object
+    case 0x14: return "chart";       // PT_Graph
+    case 0x15: return "table";       // PT_Table
+    case 0x16: return "object";      // PT_ClipArt
+    case 0x17: return "orgchart";    // PT_OrgChart
+    case 0x18: return "object";      // PT_Media
+    case 0x19: return "object";      // PT_VerticalObject
+    case 0x1A: return "graphic";     // PT_Picture
+    default: return 0;
     }
+}
+qint32
+getPosition(const TextContainerMeta& m)
+{
+    if (m.meta.is<SlideNumberMCAtom>())
+        return m.meta.get<SlideNumberMCAtom>()->position;
+    if (m.meta.is<DateTimeMCAtom>())
+        return m.meta.get<DateTimeMCAtom>()->position;
+    if (m.meta.is<GenericDateMCAtom>())
+        return m.meta.get<GenericDateMCAtom>()->position;
+    if (m.meta.is<HeaderMCAtom>())
+        return m.meta.get<HeaderMCAtom>()->position;
+    if (m.meta.is<FooterMCAtom>())
+        return m.meta.get<FooterMCAtom>()->position;
+    if (m.meta.is<RTFDateTimeMCAtom>())
+        return m.meta.get<RTFDateTimeMCAtom>()->position;
+    return -1;
+}
 
-    out.xml.addAttribute("draw:layer", "layout");
+void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
+{
+    /* Text in a textcontainer is divided into sections.
+       The sections occur on different levels:
+       - paragraph (TextPFRun) 1-n characters
+       - character (TextCFRun) 1-n characters
+       - variables (TextContainerMeta) 1 character
+       - spelling and language (TextSIRun) 1-n characters
+       - indentation (MasterTextPropRun) 1-n characters
 
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
-    out.xml.addAttribute("presentation:class", classStr);
-    out.xml.startElement("draw:text-box");
+       Variables are the smallest level, they should be replaced by special
+       xml elements.
+       TextCFRun is probably the next smallest section. We make the assumption
+       that ranges from all other levels contain complete TextCFRun ranges.
+       Another assumption is that each line is a separate TextPFRun.
+    */
 
     QString text = getText(tc);
 
@@ -2731,7 +2881,34 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
 
         out.xml.endElement(); //text:list
     }
+}
 
+void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
+                                        const PPT::TextContainer& tc,
+                                        Writer& out)
+{
+    const PlaceholderAtom* p = 0;
+    if (o.clientData) {
+        p = o.clientData->placeholderAtom.data();
+    }
+    const char* const classStr = getPresentationClass(p);
+    const QRect& rect = getRect(o);
+
+    out.xml.startElement("draw:frame");
+    if (!getGraphicStyleName(o).isEmpty()) {
+        out.xml.addAttribute("presentation:style-name",
+                             getGraphicStyleName(o));
+    }
+    out.xml.addAttribute("draw:layer", "layout");
+    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
+    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
+    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
+    if (classStr) {
+        out.xml.addAttribute("presentation:class", classStr);
+    }
+    out.xml.startElement("draw:text-box");
+    processTextForBody(tc, out);
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }
@@ -2770,7 +2947,7 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer
 void PptToOdp::processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out)
 {
     // text is process separately until drawing objects support it
-    if (o.clientData && o.clientData->placeholderAtom) {
+    if (o.clientData && o.clientData->placeholderAtom && currentSlideTexts) {
         const PlaceholderAtom* p = o.clientData->placeholderAtom.data();
         if (p->position >= 0 && p->position < currentSlideTexts->atoms.size()) {
             const TextContainer& tc = currentSlideTexts->atoms[p->position];
