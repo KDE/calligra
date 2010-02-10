@@ -47,6 +47,12 @@
 
 typedef QVector<double> datalist;
 
+KRChartData::KRChartData()
+{
+    m_reportData = 0;
+    createProperties();
+}
+
 KRChartData::KRChartData(QDomNode & element)
 {
     m_reportData = 0;
@@ -212,10 +218,11 @@ void KRChartData::populateData()
             KoReportData *curs = m_reportData->data(src);
             if (curs && curs->open()) {
                 fn = curs->fieldNames();
-
                 //resize the data lists to match the number of columns
                 int cols = fn.count() - 1;
-                data.resize(cols);
+                if ( cols > 0 ) {
+                    data.resize(cols);
+                }
 
                 m_chartWidget = new KDChart::Widget();
                 //_chartWidget->setStyle ( new QMotifStyle() );
@@ -244,7 +251,7 @@ void KRChartData::populateData()
                     m_chartWidget->setDataset(i - 1, data[i - 1], fn[i]);
                 }
 
-                setLegend(m_displayLegend->value().toBool());
+                setLegend(m_displayLegend->value().toBool(), fn);
 
                 //Add the axis
                 setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
@@ -426,19 +433,18 @@ void KRChartData::setBackgroundColor(const QColor&)
     cht->setBackgroundAttributes(ba);
 }
 
-void KRChartData::setLegend(bool le)
+void KRChartData::setLegend(bool le, const QStringList &legends)
 {
     //Add the legend
     if (m_chartWidget) {
-        if (le) {
+        if (le && ! legends.isEmpty()) {
 //!TODO            QStringList fn = fieldNamesHackUntilImprovedParser(m_dataSource->value().toString());
-            QStringList fn = m_reportData->fieldNames();
 
             m_chartWidget->addLegend(KDChart::Position::East);
             m_chartWidget->legend()->setOrientation(Qt::Horizontal);
             m_chartWidget->legend()->setTitleText("Legend");
-            for (uint i = 1; i < (uint)fn.count(); ++i) {
-                m_chartWidget->legend()->setText(i - 1, fn[i]);
+            for (uint i = 1; i < (uint)legends.count(); ++i) {
+                m_chartWidget->legend()->setText(i - 1, legends[i]);
             }
 
             m_chartWidget->legend()->setShowLines(true);

@@ -40,9 +40,7 @@ class Chart;
 class KRChartData : public KRObjectData
 {
 public:
-    KRChartData() {
-        m_reportData = 0; createProperties();
-    }
+    KRChartData();
     KRChartData(QDomNode & element);
     ~KRChartData();
     virtual KRChartData * toChart();
@@ -96,7 +94,7 @@ protected:
     void setColorScheme(const QString &);
     void setAxis(const QString&, const QString&);
     void setBackgroundColor(const QColor&);
-    void setLegend(bool);
+    void setLegend(bool, const QStringList &legends = QStringList());
 //!TODO
 //    QStringList fieldNames(const QString &);
 //    QStringList fieldNamesHackUntilImprovedParser(const QString &);
@@ -104,7 +102,7 @@ protected:
 private:
     virtual void createProperties();
     static int RTTI;
-    KoReportData* m_reportData;
+    KoReportData *m_reportData;
 
     friend class ORPreRenderPrivate;
     friend class Scripting::Chart;
