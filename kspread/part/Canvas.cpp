@@ -533,60 +533,68 @@ void Canvas::slotMaxRow(int _max_row)
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
     // flake
-    d->toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+    if(d->toolProxy) {
+        d->toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
 
-    if (!event->isAccepted() && event->button() == Qt::RightButton) {
-        d->view->unplugActionList("toolproxy_action_list");
-        d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
-        QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
-        // Only show the menu, if there are items. The plugged action list counts as one action.
-        if (menu && menu->actions().count() > 1) {
-            menu->exec(event->globalPos());
+        if (!event->isAccepted() && event->button() == Qt::RightButton) {
+            d->view->unplugActionList("toolproxy_action_list");
+            d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
+            QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
+            // Only show the menu, if there are items. The plugged action list counts as one action.
+            if (menu && menu->actions().count() > 1) {
+                menu->exec(event->globalPos());
+            }
+            event->setAccepted(true);
         }
-        event->setAccepted(true);
     }
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent* event)
 {
     // flake
-    d->toolProxy->mouseReleaseEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+    if(d->toolProxy)
+        d->toolProxy->mouseReleaseEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent* event)
 {
     // flake
-    d->toolProxy->mouseMoveEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+    if(d->toolProxy)
+        d->toolProxy->mouseMoveEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
 {
     // flake
-    d->toolProxy->mouseDoubleClickEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+    if(d->toolProxy)
+        d->toolProxy->mouseDoubleClickEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
 }
 
 void Canvas::keyPressEvent(QKeyEvent* event)
 {
     // flake
-    d->toolProxy->keyPressEvent(event);
+    if(d->toolProxy)
+        d->toolProxy->keyPressEvent(event);
 }
 
 void Canvas::tabletEvent(QTabletEvent *e)
 {
     // flake
-    d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
+    if(d->toolProxy)
+        d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
 }
 
 QVariant Canvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     // flake
-    return d->toolProxy->inputMethodQuery(query, *(viewConverter()));
+    return d->toolProxy ? d->toolProxy->inputMethodQuery(query, *(viewConverter())) : 0;
 }
 
 void Canvas::inputMethodEvent(QInputMethodEvent *event)
 {
     // flake
-    d->toolProxy->inputMethodEvent(event);
+    if(d->toolProxy)
+        d->toolProxy->inputMethodEvent(event);
 }
 
 bool Canvas::highlightRangeSizeGripAt(double x, double y)
@@ -679,7 +687,8 @@ void Canvas::paintEvent(QPaintEvent* event)
     painter.restore();
     d->shapeManager->paint(painter, *viewConverter(), false);
     painter.setRenderHint(QPainter::Antialiasing, false);
-    d->toolProxy->paint(painter, *viewConverter());
+    if(d->toolProxy)
+        d->toolProxy->paint(painter, *viewConverter());
 
     event->accept();
 }

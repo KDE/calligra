@@ -682,6 +682,7 @@ View::~View()
 
     delete d->actions;
     delete d->zoomHandler;
+    
     // NOTE sebsauer: We need to remove the canvasController right before deleting it and
     // nothing needs to be done in between cause flake does first delete the TableTool
     // on removeCanvasController and the proxytool which points to that TableTool later

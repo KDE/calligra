@@ -23,6 +23,7 @@
 
 #include <QPen>
 #include <QPoint>
+#include <QPointer>
 
 #include "Canvas.h"
 
@@ -59,7 +60,7 @@ public:
 
     // flake
     KoShapeManager* shapeManager;
-    KoToolProxy* toolProxy;
+    QPointer<KoToolProxy> toolProxy;
 };
 
 } //namespace KSpread
