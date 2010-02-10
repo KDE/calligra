@@ -1135,10 +1135,10 @@ void CellView::paintText(QPainter& painter,
 
     KoPostscriptPaintDevice device;
     const QFontMetricsF fontMetrics(font, &device);
-    qreal offsetFont = 0.0;
+    qreal fontOffset = 0.0;
 
-    if (style().valign() == Style::Bottom && style().underline())
-        offsetFont = fontMetrics.underlinePos() + 1;
+    if ((style().valign() == Style::Bottom || style().valign() == Style::VAlignUndefined) && style().underline())
+        fontOffset = fontMetrics.underlinePos() + 1;
 
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
@@ -1158,7 +1158,7 @@ void CellView::paintText(QPainter& painter,
         // Case 1: The simple case, one line, no angle.
 
         const QPointF position(indent + coordinate.x() - offsetCellTooShort,
-                               coordinate.y() + d->textY - offsetFont);
+                               coordinate.y() + d->textY - fontOffset);
         drawText(painter, position, d->displayText.split('\n'), cell);
     } else if (tmpAngle != 0) {
         // Case 2: an angle.
@@ -1942,7 +1942,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     case Style::VAlignUndefined: // fall through
     case Style::Bottom: {
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle && !tmpRichText) {
-            d->textY = effBottom - d->textHeight + ascent;
+            d->textY = effBottom;
         } else if (tmpAngle != 0) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
@@ -1959,7 +1959,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                 }
             }
         } else if (tmpRichText) {
-            d->textY = effBottom - d->textHeight + ascent;
+            d->textY = effBottom - d->textHeight;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
