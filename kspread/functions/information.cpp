@@ -34,6 +34,10 @@
 #include "InformationModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "Sheet.h"
+#include "Region.h"
+#include "Cell.h"
+#include "Formula.h"
 
 #include "part/Doc.h" // FIXME detach from part
 
@@ -42,6 +46,7 @@ using namespace KSpread;
 // prototypes (sorted alphabetically)
 Value func_errortype(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_filename(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_formula(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_info(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isblank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isdate(valVector args, ValueCalc *calc, FuncExtra *);
@@ -89,6 +94,10 @@ void InformationModule::registerFunctions()
     repo->add(f);
     f = new Function("FILENAME", func_filename);
     f->setParamCount(0);
+    repo->add(f);
+    f = new Function("FORMULA", func_formula);
+    f->setParamCount(1);
+    f->setNeedsExtra(true);
     repo->add(f);
     f = new Function("INFO", func_info);
     repo->add(f);
@@ -347,6 +356,18 @@ Value func_type(valVector args, ValueCalc *, FuncExtra *)
 Value func_filename(valVector, ValueCalc *calc, FuncExtra *)
 {
     return Value(calc->settings()->fileName());
+}
+
+Value func_formula(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
+        return Value::errorVALUE();
+    const KSpread::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
+    if (c.isNull())
+        return Value::errorVALUE();
+    if (!c.isFormula())
+        return Value::errorNA();
+    return Value(c.formula().expression());
 }
 
 // Function: N

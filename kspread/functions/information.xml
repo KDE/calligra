@@ -20,6 +20,20 @@
     </Function>
 
     <Function>
+      <Name>FORMULA</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>Reference</Type>
+      </Parameter>
+      <Help>
+        <Text>The FORMULA() function returns the formula of a cell as string.</Text>
+        <Syntax>FORMULA(x)</Syntax>
+        <Example>FORMULA(A1) returns "=SUM(1+2)" if the cell A1 contains such a formula.</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>N</Name>
       <Type>Int</Type>
       <Parameter>
