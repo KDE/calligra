@@ -1942,7 +1942,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     case Style::VAlignUndefined: // fall through
     case Style::Bottom: {
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle && !tmpRichText) {
-            d->textY = effBottom;
+            d->textY = effBottom - d->textHeight + ascent;
         } else if (tmpAngle != 0) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
@@ -1959,7 +1959,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                 }
             }
         } else if (tmpRichText) {
-            d->textY = effBottom - d->textHeight;
+            d->textY = effBottom - d->textHeight + ascent;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
