@@ -2971,7 +2971,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     if (!value.isEmpty()) {
         xmlWriter.addAttribute("draw:style-name", value);
     }
-    xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
+    //xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
     const HeadersFootersAtom* headerFooterAtom = 0;
     if (master->anon.is<MainMasterContainer>()) {
@@ -3012,6 +3012,22 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
         //  processObjectForBody(*slide->drawing.OfficeArtDg.shape, out);
+    }
+
+    // draw the notes
+    const NotesContainer* nc = p->notes[slideNo];
+    if (nc) {
+        currentSlideTexts = 0;
+        xmlWriter.startElement("presentation:notes");
+        value = drawingPageStyles[nc];
+        if (!value.isEmpty()) {
+            xmlWriter.addAttribute("draw:style-name", value);
+        }
+        foreach(const OfficeArtSpgrContainerFileBlock& co,
+                nc->drawing.OfficeArtDg.groupShape.rgfb) {
+            processObjectForBody(co, out);
+        }
+        xmlWriter.endElement();
     }
 
     xmlWriter.endElement(); // draw:page

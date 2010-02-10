@@ -34,9 +34,9 @@
 DateTimeFormat::DateTimeFormat(int dateTimeFormatId)
         : formatId(dateTimeFormatId)
 {
-//#ifdef LIBDATE_DEBUG
+#ifdef LIBDATE_DEBUG
     std::cout << "\nDateTimeConstructor formatId :" << formatId ;
-//#endif
+#endif
 }
 
 DateTimeFormat::~DateTimeFormat()

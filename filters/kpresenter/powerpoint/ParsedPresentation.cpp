@@ -259,18 +259,37 @@ ParsedPresentation::parse(POLE::Storage& storage)
 // Part 7: Identify the notes slide persist object
     if (documentContainer->notesList) {
         size = documentContainer->notesList->rgNotesPersistAtom.size();
-        notes.resize(size);
-        for (int i = 0; i < size;++i) {
-            persistId = documentContainer->notesList->rgNotesPersistAtom[i].persistIdRef;
+        notes.resize(slides.size());
+        for (int i = 0; i < size; ++i) {
+            const NotesPersistAtom& atom
+                    = documentContainer->notesList->rgNotesPersistAtom[i];
+            persistId = atom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
                 qDebug() << "cannot load notes " << i;
                 return false;
             }
-            notes[i] = get<NotesContainer>(presentation, persistDirectory[persistId]);
-            if (!notes[i]) {
+            const NotesContainer* nc
+               = get<NotesContainer>(presentation, persistDirectory[persistId]);
+            if (!nc) {
                 qDebug() << "cannot load notes " << i;
                 return false;
             }
+            // find the slide the note belongs to
+            int pos = -1;
+            for (int j=0; j < slides.size(); ++j) {
+                if (slides[j]->slideAtom.notesIdRef == atom.notesId) {
+                    if (notes[j] != 0) {
+                        qDebug() << "slide " << j << " has more than one note";
+                        return false;
+                    }
+                    pos = j;
+                }
+            }
+            if (pos == -1) {
+                qDebug() << "notes " << i << " do not belong to a slide";
+                return false;
+            }
+            notes[pos] = nc;
         }
     }
 // Part 8: Identify the ActiveX control persist objects
