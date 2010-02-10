@@ -581,7 +581,7 @@ public:
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward );
 
-    const QList<Resource*> &requiredResources() const { return m_required; }
+    const QList<Resource*> requiredResources() const { return m_required; }
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
 protected:
