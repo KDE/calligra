@@ -156,6 +156,7 @@ private:
     KAction *actionIndentTask;
     KAction *actionUnindentTask;
 
+    KAction *actionShowProject;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -169,6 +170,7 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
+    NodeItemModel *baseModel() const { return m_view->baseModel(); }
     NodeSortFilterProxyModel *proxyModel() const { return m_view->proxyModel(); }
 
     virtual Node *currentNode() const;
@@ -211,6 +213,7 @@ private slots:
 
 private:
     NodeTreeView *m_view;
+    KAction *actionShowProject;
 
 };
 

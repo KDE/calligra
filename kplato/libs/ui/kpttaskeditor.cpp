@@ -234,6 +234,9 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     kDebug()<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
+        case Node::Type_Project:
+            name = "task_edit_popup";
+            break;
         case Node::Type_Task:
             name = node->isScheduled( baseModel()->id() ) ? "task_popup" : "task_edit_popup";
             break;
@@ -242,8 +245,6 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
             break;
         case Node::Type_Summarytask:
             name = "summarytask_popup";
-            break;
-        case Node::Type_Project:
             break;
         default:
             name = "node_popup";
@@ -355,6 +356,10 @@ void TaskEditor::setupGui()
     addAction( name, actionMoveTaskDown );
 
     // Add the context menu actions for the view options
+    actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
+    connect(actionShowProject, SIGNAL(triggered(bool) ), baseModel(), SLOT(setShowProject(bool)));
+    addContextAction( actionShowProject );
+
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
@@ -543,11 +548,15 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug();
+    bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
+    actionShowProject->setChecked( show );
+    baseModel()->setShowProject( show ); // why is this not called by the action?
     return m_view->loadContext( baseModel()->columnMap(), context );
 }
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
+    context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( baseModel()->columnMap(), context );
 }
 
@@ -757,6 +766,10 @@ void TaskView::setupGui()
     KActionCollection *coll = actionCollection();
     
     // Add the context menu actions for the view options
+    actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
+    connect(actionShowProject, SIGNAL(triggered(bool) ), baseModel(), SLOT(setShowProject(bool)));
+    addContextAction( actionShowProject );
+
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
@@ -779,12 +792,15 @@ void TaskView::slotOptions()
 
 bool TaskView::loadContext( const KoXmlElement &context )
 {
-    kDebug();
+    bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
+    actionShowProject->setChecked( show );
+    baseModel()->setShowProject( show ); // why is this not called by the action?
     return m_view->loadContext( m_view->baseModel()->columnMap(), context );
 }
 
 void TaskView::saveContext( QDomElement &context ) const
 {
+    context.setAttribute( "show-project", baseModel()->projectShown() );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
 
