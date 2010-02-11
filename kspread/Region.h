@@ -265,6 +265,12 @@ public:
     void sub(const Region& region);
 
     /**
+     * Intersects the region @p region and this region and
+     * returns the result of the intersection as a new Region.
+     */
+    Region intersected(const Region& region);
+    
+    /**
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */

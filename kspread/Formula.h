@@ -72,6 +72,7 @@ public:
         Asterisk,       ///<  * (multiplication)
         Slash,          ///<  / (division)
         Caret,          ///<  ^ (power)
+        Intersect,      ///< " " (a space means intersection)
         LeftPar,        ///<  (
         RightPar,       ///<  )
         Comma,          ///<  ,

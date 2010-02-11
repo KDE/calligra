@@ -328,6 +328,30 @@ void Region::sub(const Region& region)
     }
 }
 
+Region Region::intersected(const Region& region)
+{
+    Region result;
+    ConstIterator end(region.constEnd());
+    for (ConstIterator it = region.constBegin(); it != end; ++it) {
+        Element *element = *it;
+        if (element->type() == Element::Point) {
+            Point* point = static_cast<Point*>(element);
+            if(contains(point->pos(), element->sheet()))
+                result.add(point->pos(), element->sheet());
+        } else {
+            QRect rect = element->rect();
+            for(int c = rect.top(); c <= rect.bottom(); ++c) {
+                for(int r = rect.left(); r <= rect.right(); ++r) {
+                    QPoint p(r,c);
+                    if(contains(p, element->sheet()))
+                        result.add(p, element->sheet());
+                }
+            }
+        }
+    }
+    return result;
+}
+
 Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
 {
     bool containsPoint = false;

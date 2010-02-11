@@ -85,7 +85,7 @@ class Opcode
 public:
 
     enum { Nop = 0, Load, Ref, Cell, Range, Function, Add, Sub, Neg, Mul, Div,
-           Pow, Concat, Not, Equal, Less, Greater, Array
+           Pow, Concat, Intersect, Not, Equal, Less, Greater, Array
          };
 
     unsigned type;
@@ -148,6 +148,7 @@ Token::Op KSpread::matchOperator(const QString& text)
         case '^': result = Token::Caret; break;
         case ',': result = Token::Comma; break;
         case ';': result = Token::Semicolon; break;
+        case ' ': result = Token::Intersect; break;
         case '(': result = Token::LeftPar; break;
         case ')': result = Token::RightPar; break;
         case '&': result = Token::Ampersand; break;
@@ -194,6 +195,7 @@ static int opPrecedence(Token::Op op)
     case Token::Plus         : prec = 3; break;
     case Token::Minus        : prec = 3; break;
     case Token::Ampersand    : prec = 2; break;
+    case Token::Intersect    : prec = 2; break;
     case Token::Equal        : prec = 1; break;
     case Token::NotEqual     : prec = 1; break;
     case Token::Less         : prec = 1; break;
@@ -570,11 +572,11 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
 
             tokenStart = i;
 
-            // skip any whitespaces
-            if (ch.isSpace()) i++;
+            // don't just skip whitespaces cause they could also be used to intersect two arrays
+            //if (ch.isSpace()) { i++; break; }
 
             // check for number
-            else if (ch.isDigit()) {
+            if (ch.isDigit()) {
                 state = InNumber;
             }
 
@@ -1198,6 +1200,7 @@ void Formula::compile(const Tokens& tokens) const
                                                 case Token::Slash:        d->codes.append(Opcode::Div); break;
                                                 case Token::Caret:        d->codes.append(Opcode::Pow); break;
                                                 case Token::Ampersand:    d->codes.append(Opcode::Concat); break;
+                                                case Token::Intersect:    d->codes.append(Opcode::Intersect); break;
 
                                                     // simple value comparisons
                                                 case Token::Equal:        d->codes.append(Opcode::Equal); break;
@@ -1480,6 +1483,34 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             stack.push(entry);
             break;
 
+           // array intersection
+        case Opcode::Intersect: {
+            val1 = stack.pop().val;
+            val2 = stack.pop().val;
+            Region r1(d->constants[index].asString(), map, d->sheet);
+            Region r2(d->constants[index+1].asString(), map, d->sheet);
+            if(!r1.isValid() || !r2.isValid()) {
+                val1 = Value::errorVALUE();
+            } else {
+                Region r = r1.intersected(r2);
+                QRect rect = r.boundingRect();
+                Cell cell;
+                if(rect.top() == rect.bottom())
+                    cell = Cell(r.firstSheet(), fe.mycol, rect.top());
+                else if(rect.left() == rect.right())
+                    cell = Cell(r.firstSheet(), rect.left(), fe.mycol);
+                if(cell.isNull())
+                    val1 = Value::errorVALUE();
+                if(cell.isEmpty())
+                    val1 = Value::errorNULL();
+                else
+                    val1 = cell.value();
+            }
+            entry.reset();
+            entry.val = val1;
+            stack.push(entry);
+        } break;
+
             // logical not
         case Opcode::Not:
             val1 = converter->asBoolean(d->valueOrElement(map, index, fe, stack.pop().val));
@@ -1728,21 +1759,22 @@ QString Formula::dump() const
     for (int i = 0; i < d->codes.count(); i++) {
         QString ctext;
         switch (d->codes[i].type) {
-        case Opcode::Load:     ctext = QString("Load #%1").arg(d->codes[i].index); break;
-        case Opcode::Ref:      ctext = QString("Ref #%1").arg(d->codes[i].index); break;
-        case Opcode::Function: ctext = QString("Function (%1)").arg(d->codes[i].index); break;
-        case Opcode::Add:      ctext = "Add"; break;
-        case Opcode::Sub:      ctext = "Sub"; break;
-        case Opcode::Mul:      ctext = "Mul"; break;
-        case Opcode::Div:      ctext = "Div"; break;
-        case Opcode::Neg:      ctext = "Neg"; break;
-        case Opcode::Concat:   ctext = "Concat"; break;
-        case Opcode::Pow:      ctext = "Pow"; break;
-        case Opcode::Equal:    ctext = "Equal"; break;
-        case Opcode::Not:      ctext = "Not"; break;
-        case Opcode::Less:     ctext = "Less"; break;
-        case Opcode::Greater:  ctext = "Greater"; break;
-        case Opcode::Array:    ctext = QString("Array (%1x%2)").arg(d->constants[d->codes[i].index].asInteger()).arg(d->constants[d->codes[i].index+1].asInteger()); break;
+        case Opcode::Load:      ctext = QString("Load #%1").arg(d->codes[i].index); break;
+        case Opcode::Ref:       ctext = QString("Ref #%1").arg(d->codes[i].index); break;
+        case Opcode::Function:  ctext = QString("Function (%1)").arg(d->codes[i].index); break;
+        case Opcode::Add:       ctext = "Add"; break;
+        case Opcode::Sub:       ctext = "Sub"; break;
+        case Opcode::Mul:       ctext = "Mul"; break;
+        case Opcode::Div:       ctext = "Div"; break;
+        case Opcode::Neg:       ctext = "Neg"; break;
+        case Opcode::Concat:    ctext = "Concat"; break;
+        case Opcode::Pow:       ctext = "Pow"; break;
+        case Opcode::Intersect: ctext = "Intersect"; break;
+        case Opcode::Equal:     ctext = "Equal"; break;
+        case Opcode::Not:       ctext = "Not"; break;
+        case Opcode::Less:      ctext = "Less"; break;
+        case Opcode::Greater:   ctext = "Greater"; break;
+        case Opcode::Array:     ctext = QString("Array (%1x%2)").arg(d->constants[d->codes[i].index].asInteger()).arg(d->constants[d->codes[i].index+1].asInteger()); break;
         default: ctext = "Unknown"; break;
         }
         result.append("   ").append(ctext).append("\n");
