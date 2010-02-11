@@ -251,7 +251,6 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
-    void setProjectHidden( bool on );
     virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
@@ -288,11 +287,14 @@ public:
     
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     
+    bool projectShown() const { return m_projectshown; }
+
 signals:
     void nodeInserted( Node *node );
     
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
+    void setShowProject( bool on );
 
 protected slots:
     virtual void slotWbsDefinitionChanged();
@@ -334,7 +336,7 @@ protected:
 protected:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
-    bool m_projecthidden;
+    bool m_projectshown;
 };
 
 //--------------------------------------
