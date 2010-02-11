@@ -72,7 +72,9 @@ namespace Role
         ObjectType,
         InternalAppointments,
         ExternalAppointments,
-        ColumnTag
+        ColumnTag,
+        Planned,
+        Actual
     };
 } //namespace Role
 

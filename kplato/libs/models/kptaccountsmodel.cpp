@@ -837,8 +837,70 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
         }
     } else if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
+    } else {
+        switch ( index.column() ) {
+            case 0:
+            case 1: return QVariant();
+            default: {
+                return cost( a, index.column() - 3, role );
+            }
+        }
     }
     return QVariant();
+}
+
+QVariant CostBreakdownItemModel::cost( const Account *a, int offset, int role ) const
+{
+    EffortCostMap costmap;
+    if ( role == Role::Planned ) {
+        costmap = m_plannedCostMap.value( const_cast<Account*>( a ) );
+    } else if ( role == Role::Actual ) {
+        costmap = m_actualCostMap.value( const_cast<Account*>( a ) );
+    } else {
+        return QVariant();
+    }
+    double cost = 0.0;
+    switch ( m_periodtype ) {
+        case Period_Day: {
+            if ( m_cumulative ) {
+                cost = costmap.costTo( startDate().addDays( offset ) );
+            } else {
+                cost = costmap.costOnDate( startDate().addDays( offset ) );
+            }
+            break;
+        }
+        case Period_Week: {
+            int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+            if ( days > 0 ) {
+                days -= 7; ;
+            }
+            QDate start = startDate().addDays( days );
+            int week = offset;
+            if ( m_cumulative ) {
+                cost = costmap.costTo( start.addDays( ++week * 7 ) );
+            } else {
+                cost = week == 0 ? costmap.cost( startDate(), startDate().daysTo( start.addDays( 7 ) ) ) : costmap.cost( start.addDays( week * 7 ) );
+            }
+            break;
+        }
+        case Period_Month: {
+            int days = startDate().daysInMonth() - startDate().day() + 1;
+            QDate start = startDate();
+            for ( int i = 0; i < offset; ++i ) {
+                start = start.addDays( days );
+                days = start.daysInMonth();
+            }
+            if ( m_cumulative ) {
+                cost = costmap.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
+            } else {
+                cost = costmap.cost( start, start.daysInMonth() - start.day() + 1);
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return cost;
 }
 
 int CostBreakdownItemModel::periodType() const

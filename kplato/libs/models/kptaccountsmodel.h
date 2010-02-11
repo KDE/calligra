@@ -154,6 +154,8 @@ protected:
     EffortCostMap fetchPlannedCost( Account *account );
     EffortCostMap fetchActualCost( Account *account );
     
+    QVariant cost( const Account *a, int offset, int role ) const;
+
 protected slots:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
