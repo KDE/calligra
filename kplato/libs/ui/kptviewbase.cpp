@@ -293,7 +293,8 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     : KoView( doc, parent ),
     m_readWrite( false ),
-    m_proj( 0 )
+    m_proj( 0 ),
+    m_schedulemanager( 0 )
 {
 }
     

@@ -235,7 +235,7 @@ public:
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
-
+    virtual void setScheduleManager( ScheduleManager *sm ) { m_schedulemanager = sm; }
     void slotUpdateReadWrite( bool );
     virtual void slotHeaderContextMenuRequested( const QPoint &pos );
 
@@ -260,6 +260,7 @@ protected:
     PrintingOptions m_printingOptions;
     
     Project *m_proj;
+    ScheduleManager *m_schedulemanager;
 };
 
 //------------------
