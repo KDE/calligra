@@ -52,7 +52,7 @@ public:
 
     void setColumn(const QString&);
     void setTrackTotal(bool);
-    void setTrackTotalFormat(const QString &, bool = FALSE);
+    void setTrackTotalFormat(const QString &, bool = false);
     void setUseSubTotal(bool);
 
     QString controlSource() const;

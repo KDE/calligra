@@ -199,7 +199,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
     html += "<style type=\"text/css\">";
 
     for (int i = 0; i < styles.count(); ++i) {
-        html += ".style" + QString::number(i) + "{" + styles[i] + "}\n";
+        html += ".style" + QString::number(i) + '{' + styles[i] + "}\n";
     }
 
     html += "</style>";

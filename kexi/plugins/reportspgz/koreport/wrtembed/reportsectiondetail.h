@@ -34,7 +34,7 @@ class ReportSectionDetail : public QWidget
 {
     Q_OBJECT
 public:
-    ReportSectionDetail(ReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSectionDetail(ReportDesigner * rptdes, const char * name = 0);
     virtual ~ReportSectionDetail();
 
     enum PageBreak {
@@ -56,7 +56,7 @@ public:
     ReportSectionDetailGroup * groupSection(int i) const;
     void insertSection(int idx, ReportSectionDetailGroup * rsd);
     int indexOfSection(const QString & name) const;
-    void removeSection(int idx, bool del = FALSE);
+    void removeSection(int idx, bool del = false);
     virtual QSize sizeHint() const;
 
 protected:

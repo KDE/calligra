@@ -24,7 +24,7 @@
 //!connStr is in the form driver|connection_string|table
 KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
 {
-    QStringList extConn = connStr.split("|");
+    QStringList extConn = connStr.split('|');
 
     if (extConn.size() == 3) {
         KexiMigration::MigrateManager mm;

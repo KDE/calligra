@@ -71,7 +71,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     foreach(KRSectionData *sec, secs) {
         m_sectionMap[sec] = new Scripting::Section(sec);
         m_sectionMap[sec]->setParent(m_report);
-        m_sectionMap[sec]->setObjectName(sec->name().replace("-", "_").replace("report:", ""));
+        m_sectionMap[sec]->setObjectName(sec->name().replace('-', '_').replace("report:", ""));
         kDebug() << "Added" << m_sectionMap[sec]->objectName() << "to report" << m_reportData->name();
     }
 
@@ -83,7 +83,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
 #if KDE_IS_VERSION(4,2,88)
     m_action->setCode(code.toLocal8Bit());
 #else
-    m_action->setCode(fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
+    m_action->setCode(fieldFunctions().toLocal8Bit() + '\n' + scriptCode().toLocal8Bit());
 #endif
 }
 
@@ -159,7 +159,7 @@ QString KRScriptHandler::fieldFunctions()
             if (fld->controlSource()[0] == '=') {
                 func = QString("function %1_onrender_(){return %2;}").arg(fld->entityName().toLower()).arg(fld->controlSource().mid(1));
 
-                funcs += func + "\n";
+                funcs += func + '\n';
             }
         }
         if (o->type() == KRObjectData::EntityCheck) {
@@ -167,7 +167,7 @@ QString KRScriptHandler::fieldFunctions()
             if (chk->controlSource()[0] == '=') {
                 func = QString("function %1_onrender_(){return %2;}").arg(chk->entityName().toLower()).arg(chk->controlSource().mid(1));
 
-                funcs += func + "\n";
+                funcs += func + '\n';
             }
 
         }
@@ -213,7 +213,7 @@ QString KRScriptHandler::where()
     QString w;
     QMap<QString, QVariant>::const_iterator i = m_groups.constBegin();
     while (i != m_groups.constEnd()) {
-        w += "(" + i.key() + " = '" + i.value().toString() + "') AND ";
+        w += '(' + i.key() + " = '" + i.value().toString() + "') AND ";
         ++i;
     }
     w = w.mid(0, w.length() - 4);

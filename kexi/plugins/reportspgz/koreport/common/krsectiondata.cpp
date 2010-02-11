@@ -125,7 +125,7 @@ void KRSectionData::createProperties()
 
 QString KRSectionData::name() const
 {
-    return (m_name + "-" + sectionTypeString(m_type));
+    return (m_name + '-' + sectionTypeString(m_type));
 }
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)

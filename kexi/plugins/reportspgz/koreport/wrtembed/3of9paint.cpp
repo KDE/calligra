@@ -151,7 +151,7 @@ void render3of9(const QRect & r, const QString & _str, int align, QPainter * pPa
     int top = r.top();
 
     // ok we need to prepend and append the str with a *
-    str = "*" + str + "*";
+    str = '*' + str + '*';
 
     if (pPainter) {
         pPainter->save();

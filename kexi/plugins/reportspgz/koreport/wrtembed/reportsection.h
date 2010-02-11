@@ -58,7 +58,7 @@ class ReportSection : public QWidget
 {
     Q_OBJECT
 public:
-    ReportSection(ReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSection(ReportDesigner * rptdes, const char * name = 0);
     virtual ~ReportSection();
 
     void setTitle(const QString & s);
@@ -95,7 +95,7 @@ class ReportResizeBar : public QFrame
 {
     Q_OBJECT
 public:
-    ReportResizeBar(QWidget * parent = 0, Qt::WFlags f = 0);
+    explicit ReportResizeBar(QWidget * parent = 0, Qt::WFlags f = 0);
 
 signals:
     void barDragged(int delta);
@@ -108,7 +108,7 @@ class ReportSectionTitle : public QLabel
 {
     Q_OBJECT
 public:
-    ReportSectionTitle(QWidget *parent = 0);
+    explicit ReportSectionTitle(QWidget *parent = 0);
     ~ReportSectionTitle();
 
 protected:

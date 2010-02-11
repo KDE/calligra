@@ -393,7 +393,7 @@ void ReportDesigner::closeEvent(QCloseEvent * e)
 
 void ReportDesigner::slotSectionEditor()
 {
-    SectionEditor * se = new SectionEditor(this);
+    QPointer<SectionEditor> se = new SectionEditor(this);
     se->init(this);
     se->exec();
     delete se;

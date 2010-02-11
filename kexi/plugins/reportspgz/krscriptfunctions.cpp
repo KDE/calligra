@@ -43,10 +43,10 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
     qreal ret;
     QString sql;
 
-    sql = "SELECT " + function + "(" + field + ") FROM (" + m_source + ")" ;
+    sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')' ;
 
     if (!m_where.isEmpty()) {
-        sql += " WHERE(" + m_where + ")";
+        sql += " WHERE(" + m_where + ')';
     }
 
     kDebug() << sql;

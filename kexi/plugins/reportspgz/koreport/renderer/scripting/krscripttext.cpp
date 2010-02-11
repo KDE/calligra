@@ -197,7 +197,7 @@ void Text::loadFromFile(const QString &fn)
       QString line = in.readLine();
       process_line(line);
     }*/
-    m_text->m_controlSource->setValue("$" + data);
+    m_text->m_controlSource->setValue('$' + data);
 }
 
 }

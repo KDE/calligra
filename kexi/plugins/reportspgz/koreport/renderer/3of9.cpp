@@ -158,7 +158,7 @@ void render3of9(OROPage * page, const QRectF & r, const QString & _str, int alig
 
     // ok we need to prepend and append the str with a *
     //str = QString().sprintf("*%s*",(const char*)str);
-    str = "*" + str + "*";
+    str = '*' + str + '*';
 
     QPen pen(Qt::NoPen);
     QBrush brush(QColor("black"));

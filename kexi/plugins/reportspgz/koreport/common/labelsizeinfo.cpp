@@ -65,7 +65,7 @@ LabelSizeInfo::LabelSizeInfo(const QString & n, const QString & p, int c,
     m_xgap = xg;
     m_ygap = yg;
 
-    m_null = FALSE;
+    m_null = false;
 }
 
 LabelSizeInfo::LabelSizeInfo()
@@ -82,7 +82,7 @@ LabelSizeInfo::LabelSizeInfo()
     m_xgap = 0;
     m_ygap = 0;
 
-    m_null = TRUE;
+    m_null = true;
 }
 
 LabelSizeInfo::~LabelSizeInfo()

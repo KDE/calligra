@@ -55,10 +55,10 @@ public:
     void setColumn(const QString &);
     QString column() const;
 
-    void setGroupHeaderVisible(bool yes = TRUE);
+    void setGroupHeaderVisible(bool yes = true);
     bool groupHeaderVisible() const;
 
-    void setGroupFooterVisible(bool yes = TRUE);
+    void setGroupFooterVisible(bool yes = true);
     bool groupFooterVisible() const;
 
     void setPageBreak(PageBreak);

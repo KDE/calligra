@@ -179,7 +179,7 @@ void ReportSectionDetail::removeSection(int idx, bool del)
 
     groupList.removeAt(idx);
 
-    if (m_reportDesigner) m_reportDesigner->setModified(TRUE);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (del) delete rsd;
     adjustSize();
 }

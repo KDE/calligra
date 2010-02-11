@@ -33,7 +33,7 @@ class SectionEditor : public QDialog, public Ui::SectionEditor
     Q_OBJECT
 
 public:
-    SectionEditor(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
+    explicit SectionEditor(QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
     ~SectionEditor();
 
 public slots:

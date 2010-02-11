@@ -156,11 +156,11 @@ void KexiReportView::slotPrintReport()
     pr.setPrinter(&printer);
     pr.setupPrinter(m_reportDocument, &printer);
 
-    QPrintDialog *dialog = new QPrintDialog(&printer, this);
-    if (dialog->exec() != QDialog::Accepted)
-        return;
-
-    pr.render(m_reportDocument);
+    QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, this);
+    if (dialog->exec() == QDialog::Accepted) {
+        pr.render(m_reportDocument);
+    }
+    delete dialog;
 }
 
 void KexiReportView::slotRenderKSpread()

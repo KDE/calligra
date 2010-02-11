@@ -79,9 +79,9 @@ bool KRObjectData::parseReportTextStyleData(const QDomElement & elemSource, KRTe
         ts.backgroundOpacity = opacity_percent.toInt();
         ts.font.fromString(elemSource.attribute("report:qtfont"));
 
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool KRObjectData::parseReportLineStyleData(const QDomElement & elemSource, KRLineStyleData & ls)
@@ -104,9 +104,9 @@ bool KRObjectData::parseReportLineStyleData(const QDomElement & elemSource, KRLi
         } else if (l == "dashdotdot") {
             ls.style = Qt::DashDotDotLine;
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 
