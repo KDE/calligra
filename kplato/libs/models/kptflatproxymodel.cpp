@@ -379,7 +379,7 @@ QItemSelection FlatProxyModel::mapSelectionFromSource(const QItemSelection &sour
     return QAbstractProxyModel::mapSelectionFromSource(sourceSelection);
 }
 
-void FlatProxyModel::initiateMaps(  const QModelIndex &sourceParent )
+void FlatProxyModel::initiateMaps( const QModelIndex &sourceParent )
 {
     if ( ! sourceParent.isValid() ) {
         m_sourceIndexList.clear();
@@ -393,11 +393,12 @@ void FlatProxyModel::initiateMaps(  const QModelIndex &sourceParent )
     int count = m->rowCount( sourceParent );
     for ( int row = 0; row < count; ++row ) {
         QPersistentModelIndex idx = m->index( row, 0, sourceParent );
+        if ( idx.isValid() ) { // fail safe
+            m_sourceIndexList.append( idx );
+            m_sourceIndexMap.insert( idx.parent(), idx );
 
-        m_sourceIndexList.append( idx );
-        m_sourceIndexMap.insert( idx.parent(), idx );
-
-        initiateMaps( idx );
+            initiateMaps( idx );
+        }
     }
     //kDebug()<<"source index list="<<m_sourceIndexList;
 }
