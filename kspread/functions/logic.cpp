@@ -157,7 +157,7 @@ Value func_and(valVector args, ValueCalc *calc, FuncExtra *)
     int cnt = args.count();
     for (int i = 0; i < cnt; ++i) {
         if (args[i].isError())
-            return Value::errorNA();
+            return args[i];
     }
     for (int i = 0; i < cnt; ++i) {
         calc->arrayWalk(args[i], result, awAnd, Value(0));
@@ -228,7 +228,7 @@ Value func_nor(valVector args, ValueCalc *calc, FuncExtra *extra)
 Value func_not(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isError())
-        return Value::errorNA();
+        return args[0];
 
     bool val = asBool(args[0], calc) ? false : true;
     return Value(val);
@@ -244,7 +244,7 @@ Value func_or(valVector args, ValueCalc *calc, FuncExtra *)
     int cnt = args.count();
     for (int i = 0; i < cnt; ++i) {
         if (args[i].isError())
-            return Value::errorNA();
+            return args[i];
     }
     for (int i = 0; i < cnt; ++i) {
         calc->arrayWalk(args[i], result, awOr, Value(0));
@@ -276,7 +276,7 @@ Value func_xor(valVector args, ValueCalc *calc, FuncExtra *)
     Value count(0);
     for (int i = 0; i < cnt; ++i) {
         if (args[i].isError())
-            return Value::errorNA();
+            return args[i];
     }
     for (int i = 0; i < cnt; ++i)
         calc->arrayWalk(args[i], count, awXor, Value(0));
