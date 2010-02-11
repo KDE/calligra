@@ -1490,7 +1490,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             Region r1(d->constants[index].asString(), map, d->sheet);
             Region r2(d->constants[index+1].asString(), map, d->sheet);
             if(!r1.isValid() || !r2.isValid()) {
-                val1 = Value::errorVALUE();
+                val1 = Value::errorNULL();
             } else {
                 Region r = r1.intersected(r2);
                 QRect rect = r.boundingRect();
@@ -1500,8 +1500,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 else if(rect.left() == rect.right())
                     cell = Cell(r.firstSheet(), rect.left(), fe.mycol);
                 if(cell.isNull())
-                    val1 = Value::errorVALUE();
-                if(cell.isEmpty())
+                    val1 = Value::errorNULL();
+                else if(cell.isEmpty())
                     val1 = Value::errorNULL();
                 else
                     val1 = cell.value();
