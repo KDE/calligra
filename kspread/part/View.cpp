@@ -660,13 +660,8 @@ View::~View()
     //  ElapsedTime el( "~View" );
     if (doc()->isReadWrite())   // make sure we're not embedded in Konq
         selection()->emitCloseEditor(true); // save changes
-    /*if (d->calcLabel)
-    {
-        disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
-        }*/
-
-    qDeleteAll(d->sheetViews);
+    // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
@@ -676,10 +671,13 @@ View::~View()
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
 
+    // delete the sheetView's after calling d->selection->emitCloseEditor cause the
+    // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
+    // which in turn needs the sheetview's to access the sheet itself.
+    qDeleteAll(d->sheetViews);
+
     delete d->selection;
-
     delete d->calcLabel;
-
     delete d->actions;
     delete d->zoomHandler;
     
