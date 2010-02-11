@@ -1295,8 +1295,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
                 str.clear(); // at Excel cells with links don't have additional text content
             }
         }
-
-        if (value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
+        if (linkLocation.isEmpty() && value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
             xmlWriter->addAttribute("office:value-type", "string");
             xmlWriter->addAttribute("office:string-value", str);
         }
