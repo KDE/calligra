@@ -24,8 +24,6 @@
 #include "MsooXmlRelationships.h"
 #include "MsooXmlRelationshipsReader.h"
 #include "MsooXmlImport.h"
-#include "MsooXmlCommentsReader.h"
-#include "MsooXmlNotesReader.h"
 #include <KoOdfExporter.h>
 #include <QSet>
 #include <KDebug>
@@ -35,28 +33,18 @@ using namespace MSOOXML;
 class MsooXmlRelationships::Private
 {
 public:
-    Private() : commentsLoaded(false), endnotesLoaded(false), footnotesLoaded(false)
+    Private()
     {
     }
     ~Private() {
     }
     KoFilter::ConversionStatus loadRels(const QString& path, const QString& file);
-    KoFilter::ConversionStatus loadComments();
-    KoFilter::ConversionStatus loadEndnotes();
-    KoFilter::ConversionStatus loadFootnotes();
 
     MsooXmlImport* importer;
     KoOdfWriters* writers;
     QString *errorMessage;
     QMap<QString, QString> rels;
     QSet<QString> loadedFiles;
-    QMap<QString, Comment> comments;
-    QMap<QString, Note> endnotes;
-    QMap<QString, Note> footnotes;
-private:
-    bool commentsLoaded;
-    bool endnotesLoaded;
-    bool footnotesLoaded;
 };
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
@@ -71,38 +59,6 @@ KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString
                &reader, realPath, *errorMessage, &context);
 }
 
-KoFilter::ConversionStatus MsooXmlRelationships::Private::loadComments()
-{
-    if (commentsLoaded)
-        return KoFilter::OK;
-    commentsLoaded = true;
-    MsooXmlCommentsReaderContext context(comments);
-    MsooXmlCommentsReader reader(writers);
-    return importer->loadAndParseDocument(&reader, "word/comments.xml", *errorMessage, &context);
-}
-
-KoFilter::ConversionStatus MsooXmlRelationships::Private::loadEndnotes()
-{
-    if (endnotesLoaded)
-        return KoFilter::OK;
-    endnotesLoaded = true;
-    MsooXmlNotesReaderContext context(endnotes);
-    MsooXmlNotesReader reader(writers);
-    return importer->loadAndParseDocument(&reader, "word/endnotes.xml", *errorMessage, &context);
-}
-
-KoFilter::ConversionStatus MsooXmlRelationships::Private::loadFootnotes()
-{
-    if (footnotesLoaded)
-        return KoFilter::OK;
-    footnotesLoaded = true;
-    MsooXmlNotesReaderContext context(footnotes);
-    MsooXmlNotesReader reader(writers);
-    return importer->loadAndParseDocument(&reader, "word/footnotes.xml", *errorMessage, &context);
-
-    return KoFilter::OK;
-}
-
 MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage)
         : d(new Private)
 {
@@ -114,27 +70,6 @@ MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters
 MsooXmlRelationships::~MsooXmlRelationships()
 {
     delete d;
-}
-
-Comment MsooXmlRelationships::comment(const QString& id)
-{
-    if (KoFilter::OK != d->loadComments())
-        return Comment();
-    return d->comments.value(id);
-}
-
-Note MsooXmlRelationships::endnote(const QString& id)
-{
-    if (KoFilter::OK != d->loadEndnotes())
-        return Note();
-    return d->endnotes.value(id);
-}
-
-Note MsooXmlRelationships::footnote(const QString& id)
-{
-    if (KoFilter::OK != d->loadFootnotes())
-        return Note();
-    return d->footnotes.value(id);
 }
 
 QString MsooXmlRelationships::linkTarget(const QString& id)

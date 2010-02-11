@@ -1,0 +1,11 @@
+--- filters/libmsooxml/CMakeLists.txt
++++ filters/libmsooxml/CMakeLists.txt
+@@ -13,8 +13,6 @@
+     MsooXmlRelationshipsReader.cpp
+     MsooXmlRelationships.cpp
+     MsooXmlImport.cpp
+-    MsooXmlCommentsReader.cpp
+-    MsooXmlNotesReader.cpp
+ 
+     # TODO: move back to kolibs
+     KoOdfExporter.cpp

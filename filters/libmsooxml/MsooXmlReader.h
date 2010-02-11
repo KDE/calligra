@@ -107,6 +107,7 @@ protected:
     bool expectElName(const char* qualifiedElementName);
     bool expectElNameEnd(const char* elementName);
     bool expectEl(const char* elementName);
+    bool expectEl(const QList<QByteArray>& qualifiedElementNames);
     bool expectElEnd(const QString& qualifiedElementName);
     bool expectElEnd(const char* qualifiedElementName);
     bool expectNS(const char* nsName);

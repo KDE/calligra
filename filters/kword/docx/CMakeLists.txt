@@ -7,6 +7,8 @@ include_directories(${CMAKE_SOURCE_DIR}/filters/libmsooxml)
 set(docximport_PART_SRCS
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
+    DocxXmlCommentsReader.cpp
+    DocxXmlNotesReader.cpp
     DocxXmlDocumentReader.cpp
     DocxImport.cpp
 )

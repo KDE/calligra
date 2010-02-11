@@ -194,6 +194,26 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
     return true;
 }
 
+bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
+{
+    if (isStartElement()) {
+        foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
+            if (qualifiedName().toString() == qualifiedElementName) {
+                kDebug() << qualifiedElementNames << "found:" << qualifiedName();
+                return true;
+            }
+        }
+    }
+    QString list;
+    foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
+        if (!list.isEmpty())
+            list += QLatin1String(", ");
+        list += qualifiedElementName;
+    }
+    raiseError(i18n("None of expected elements found: %1", list));
+    return false;
+}
+
 bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
 {
     kDebug() << qualifiedElementName << "found:" << qualifiedName();

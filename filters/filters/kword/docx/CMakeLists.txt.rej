@@ -1,0 +1,11 @@
+--- filters/kword/docx/CMakeLists.txt
++++ filters/kword/docx/CMakeLists.txt
+@@ -7,6 +7,8 @@
+ set(docximport_PART_SRCS
+     DocxXmlStylesReader.cpp
+     DocxXmlFontTableReader.cpp
++    DocxXmlCommentsReader.cpp
++    DocxXmlNotesReader.cpp
+     DocxXmlDocumentReader.cpp
+     DocxImport.cpp
+ )

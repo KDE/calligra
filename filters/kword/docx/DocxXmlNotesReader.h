@@ -21,42 +21,44 @@
  *
  */
 
-#ifndef MSOOXMLNOTESREADER_H
-#define MSOOXMLNOTESREADER_H
+#ifndef DOCXXMLNOTESREADER_H
+#define DOCXXMLNOTESREADER_H
 
-#include "MsooXmlReader.h"
+#include <MsooXmlReader.h>
 #include <QMap>
 
-namespace MSOOXML
+//! Data structure for a single note
+class DocxNote
 {
-
-struct Note
-{
-    Note() : number(0) {}
+public:
+    DocxNote() : number(-1) {}
+    bool isNull() const { return number < 0; }
     QString text;
-    int number; //!< Note number, initialized to 0
+    int number; //!< Note number, initialized to -1
 };
 
-//! A context structure for MsooXmlRelationshipsReader
-class MsooXmlNotesReaderContext : public MSOOXML::MsooXmlReaderContext
+//! A context structure for DocxXmlNotesReader
+class DocxXmlNotesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlNotesReaderContext(QMap<QString, Note>& _notes);
-    QMap<QString, Note> *notes;
+    DocxXmlNotesReaderContext(QMap<int, DocxNote>& _notes);
+    QMap<int, DocxNote> *notes;
 };
 
-//! A class reading MSOOXML rels markup - *.xml.rels part.
-class MsooXmlNotesReader : public MSOOXML::MsooXmlReader
+//! A class reading MSOOXML notes markup - endnotes.xml or footnotes.xml part.
+class DocxXmlNotesReader : public MSOOXML::MsooXmlReader
 {
 public:
-    explicit MsooXmlNotesReader(KoOdfWriters *writers);
-    virtual ~MsooXmlNotesReader();
+    explicit DocxXmlNotesReader(KoOdfWriters *writers);
+    virtual ~DocxXmlNotesReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
-    KoFilter::ConversionStatus readInternal();
-    typedef KoFilter::ConversionStatus(MsooXmlNotesReader::*ReadMethod)();
-    MsooXmlNotesReaderContext* m_context;
+    KoFilter::ConversionStatus read_notes();
+    KoFilter::ConversionStatus read_note(const char *noteType);
+
+    typedef KoFilter::ConversionStatus(DocxXmlNotesReader::*ReadMethod)();
+    DocxXmlNotesReaderContext* m_context;
 
 private:
     void init();
@@ -64,6 +66,4 @@ private:
     Private* const d;
 };
 
-}
-
-#endif //MSOOXMLNOTESREADER_H
+#endif //DOCXXMLNOTESREADER_H

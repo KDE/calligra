@@ -13,8 +13,6 @@ set(msooxml_LIB_SRCS
     MsooXmlRelationshipsReader.cpp
     MsooXmlRelationships.cpp
     MsooXmlImport.cpp
-    MsooXmlCommentsReader.cpp
-    MsooXmlNotesReader.cpp
 
     # TODO: move back to kolibs
     KoOdfExporter.cpp

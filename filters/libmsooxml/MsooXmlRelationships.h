@@ -31,8 +31,6 @@ struct KoOdfWriters;
 namespace MSOOXML
 {
 class MsooXmlImport;
-struct Comment;
-struct Note;
 
 //! Global document relationships handler.
 /*! It supports delayed loading of any *.xml.rels file. */
@@ -47,13 +45,6 @@ public:
     QString target(const QString& path, const QString& file, const QString& id);
 
     QString linkTarget(const QString& id);
-
-    Comment comment(const QString& id);
-
-    Note endnote(const QString& id);
-
-    Note footnote(const QString& id);
-
 private:
     class Private;
     Private* const d;
