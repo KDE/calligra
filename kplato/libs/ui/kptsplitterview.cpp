@@ -128,7 +128,15 @@ void SplitterView::setProject( Project *project )
     }
     ViewBase::setProject( project );
 }
-    
+
+void SplitterView::setScheduleManager( ScheduleManager *sm )
+{
+    foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
+        v->setScheduleManager( sm );
+    }
+    ViewBase::setScheduleManager( sm );
+}
+
 void SplitterView::draw()
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {

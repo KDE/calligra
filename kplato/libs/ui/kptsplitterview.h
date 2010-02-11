@@ -113,6 +113,7 @@ public:
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );
+    virtual void setScheduleManager( ScheduleManager *sm );
     virtual void slotEditCopy();
 
 protected slots:
