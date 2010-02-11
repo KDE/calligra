@@ -284,58 +284,6 @@ void KRChartData::setLinkData(QString fld, QVariant val)
     m_links[fld] = val;
 }
 
-//!TODO
-#if 0
-QStringList KRChartData::fieldNames(const QString &stmt)
-{
-    KexiDB::Parser *pars;
-
-    pars = new KexiDB::Parser(m_reportData);
-
-    pars->setOperation(KexiDB::Parser::OP_Select);
-    pars->parse(stmt);
-
-    KexiDB::QuerySchema *qs = pars->select();
-
-    if (qs) {
-        kDebug() << "Parsed OK " << qs->fieldCount();
-        KexiDB::Field::List fl = qs->fields();
-        QStringList fn;
-
-        for (unsigned int i = 0; i < qs->fieldCount(); ++i) {
-            fn << qs->field(i)->name();
-        }
-        return fn;
-    } else {
-        kDebug() << "Unable to parse statement";
-        return QStringList();
-    }
-
-}
-
-QStringList KRChartData::fieldNamesHackUntilImprovedParser(const QString &stmt)
-{
-    QStringList fn;
-    QString ds = m_dataSource->value().toString();
-    KexiDB::Field::List fl;
-    QString s;
-
-    if (m_reportData && m_reportData->tableSchema(ds)) {
-        kDebug() << ds << "is a table";
-        fn = m_reportData->tableSchema(ds)->names();
-    } else if (m_reportData && m_reportData->querySchema(ds)) {
-        kDebug() << ds << "is a query";
-        fn = m_reportData->querySchema(ds)->names();
-    } else {
-        QString s = stmt.mid(6, stmt.indexOf("from", 0, Qt::CaseInsensitive) - 6).simplified();
-        kDebug() << s;
-        fn = s.split(",");
-    }
-    return fn;
-}
-
-#endif
-
 void KRChartData::setAxis(const QString& xa, const QString &ya)
 {
     Q_ASSERT(m_chartWidget);
@@ -371,50 +319,6 @@ void KRChartData::setAxis(const QString& xa, const QString &ya)
         yAxis->setTitleText(ya);
     }
 }
-
-//!TODO
-#if 0
-KexiDB::Cursor *KRChartData::dataSet()
-{
-    QString ds = m_dataSource->value().toString();
-    KexiDB::Cursor *c = 0;
-    KexiDB::QuerySchema *qs;
-
-    //Determin the type of the source data and create a queryschema
-    if (m_reportData && m_reportData->tableSchema(ds)) {
-        kDebug() << ds << "is a table";
-        qs = new KexiDB::QuerySchema(*(m_reportData->tableSchema(ds)));
-    } else if (m_reportData && m_reportData->querySchema(ds)) {
-        kDebug() << ds << "is a query";
-        qs = m_reportData->querySchema(ds);
-    } else {
-        kDebug() << ds << "is a statement";
-        KexiDB::Parser *pars;
-        pars = new KexiDB::Parser(m_reportData);
-        pars->setOperation(KexiDB::Parser::OP_Select);
-        pars->parse(ds);
-        qs = pars->select();
-    }
-
-    //Now go through each master field value, and add the correspanding child field
-    //as a where condition on the query
-    if (qs) {
-        QStringList childFields = m_linkChild->value().toString().split(",");
-        QStringList masterFields = m_linkMaster->value().toString().split(",");
-
-        for (int i = 0; i < childFields.size(); ++i) {
-            KexiDB::Field *f = qs->findTableField(childFields[i]);
-            //Only add the condition if we found the child field, and we have data for the master field
-            if (f && m_links.contains(masterFields[i])) {
-                qs->addToWhereExpression(f, m_links[masterFields[i]]);
-            }
-        }
-
-        c = m_reportData->executeQuery(*qs, 1);
-    }
-    return c;
-}
-#endif
 
 void KRChartData::setBackgroundColor(const QColor&)
 {
