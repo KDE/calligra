@@ -254,6 +254,7 @@ public:
     virtual const QMetaEnum columnMap() const { return QMetaEnum(); }
     Project *project() const { return m_project; }
     virtual void setProject( Project *project );
+    ScheduleManager *scheduleManager() const { return m_manager; }
     virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     bool isReadWrite() { return m_readWrite; }
     void setReadOnly( int column, bool ro ) { m_columnROMap[ column ] = ro; }
