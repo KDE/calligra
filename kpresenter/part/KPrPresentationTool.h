@@ -42,7 +42,7 @@ public:
     explicit KPrPresentationTool( KPrViewModePresentation & viewMode );
     ~KPrPresentationTool();
 
-    bool wantsAutoScroll();
+    bool wantsAutoScroll() const;
 
     void paint( QPainter &painter, const KoViewConverter &converter );
 

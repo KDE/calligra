@@ -74,7 +74,7 @@ KPrPresentationTool::~KPrPresentationTool()
     delete m_strategy;
 }
 
-bool KPrPresentationTool::wantsAutoScroll()
+bool KPrPresentationTool::wantsAutoScroll() const
 {
     return false;
 }
