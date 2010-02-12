@@ -30,6 +30,9 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 
+#include <QTextLayout>
+#include <QTextDocument>
+#include <QTextBlock>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
@@ -290,6 +293,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             }
             main[--columnsCount] = static_cast<KWTextFrame *>(frame);
             minimumHeight[3] = 10;
+            // make at least one line fit lest we add endless pages.
+            QTextLayout *layout = textFrameSet->document()->begin().layout();
+            if (layout && layout->lineCount() > 0) {
+                minimumHeight[3] = qMax((qreal) 10, layout->lineAt(0).height());
+            }
+
             requestedHeight[3] = -1; // rest
             break;
         }
