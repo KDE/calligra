@@ -53,6 +53,9 @@ void PresentationVariable::setProperties(const KoProperties *props)
     case 2:
         m_type = KPrDeclarations::Footer;
         break;
+    case 3:
+        m_type = KPrDeclarations::DateTime;
+        break;
     default:
         Q_ASSERT(false);
         break;

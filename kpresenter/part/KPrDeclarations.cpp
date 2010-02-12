@@ -22,12 +22,16 @@
 *  Boston, MA 02110-1301, USA.
 */
 #include "KPrDeclarations.h"
-
+#include <QDateTime>
+#include <QVariant>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoPALoadingContext.h>
 #include <KoPASavingContext.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfNumberStyles.h>
 
 KPrDeclarations::KPrDeclarations()
 {
@@ -53,9 +57,25 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
                 m_declarations[Footer].insert(name, element.text());
             }
             else if(element.tagName() == "date-time-decl") {
-                const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
-                m_declarations[DateTime].insert(name, element.text());
-                // TODO needs more work there are other attributes to keep.
+                QMap<QString, QVariant> data;
+                data["name"] = element.attributeNS(KoXmlNS::presentation, "name", QString());
+                data["fixed"] = element.attributeNS(KoXmlNS::presentation, "source", "fixed") == "fixed";
+
+                QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", "");
+                if (!styleName.isEmpty()) {
+                    KoOdfStylesReader::DataFormatsMap::const_iterator it = context.odfLoadingContext().stylesReader().dataFormats().constFind(styleName);
+                    if (it != context.odfLoadingContext().stylesReader().dataFormats().constEnd()) {
+
+                        QString formatString = (*it).prefix + (*it).formatStr + (*it).suffix;
+                        data["format"] = formatString;
+                    }
+                }
+                else {
+                    data["format"] = QString("");
+                    data["fixed value"] = element.text();
+                }
+
+
             }
         }
         else if (element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw) {
@@ -76,9 +96,9 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
     */
     KoXmlWriter &writer(paContext.xmlWriter());
 
-    QHash<Type, QHash<QString, QString> >::const_iterator typeIt(m_declarations.constBegin());
+    QHash<Type, QHash<QString, QVariant> >::const_iterator typeIt(m_declarations.constBegin());
     for (; typeIt != m_declarations.constEnd(); ++typeIt) {
-        QHash<QString, QString>::const_iterator keyIt(typeIt.value().begin());
+        QHash<QString, QVariant>::const_iterator keyIt(typeIt.value().begin());
         for (; keyIt != typeIt.value().constEnd(); ++keyIt) {
             switch (typeIt.key()) {
             case Footer:
@@ -97,7 +117,7 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
                 //TODO
             }
             else {
-                writer.addTextNode(keyIt.value());
+                writer.addTextNode(keyIt.value().value<QString>());
             }
             writer.endElement();
         }
@@ -107,5 +127,29 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
 
 const QString KPrDeclarations::declaration(Type type, const QString &key)
 {
-    return m_declarations.value(type).value(key);
+    QString retVal;
+    if (type == DateTime) {
+        QMap<QString, QVariant> dateTimeDefinition =
+                m_declarations.value(type).value(key).value<QMap<QString, QVariant> >();
+
+        if (dateTimeDefinition["fixed"].toBool()) {
+            retVal = dateTimeDefinition["fixed value"].toString();
+        }
+        else  {
+            QDateTime target = QDateTime::currentDateTime();
+
+            QString formatString = dateTimeDefinition["format"].toString();
+            if (!formatString.isEmpty()) {
+                retVal = target.toString(formatString);
+            }
+            else {
+                // XXX: What do we do here?
+                retVal = target.date().toString(Qt::ISODate);
+            }
+        }
+    }
+    else {
+        retVal = m_declarations.value(type).value(key).toString();
+    }
+    return retVal;
 }
