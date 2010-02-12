@@ -66,6 +66,15 @@ KexiDB
 *edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-02-12
+Reports
+*Font properties are saved to ODF-like attributes instead of single qtFont value
+
+2010-02-02
+Forms
+*fixed disappearing properties of renamed widgets (regression in 2.x)
+*update header of the data source pane when widget is renamed
+
 2010-01-30
 *KexiDB
 **SQLite version handling improvements (FindSqlite macro)
