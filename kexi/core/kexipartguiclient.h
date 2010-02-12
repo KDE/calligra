@@ -33,6 +33,7 @@ namespace KexiPart
 */
 class GUIClient : public QObject, public KXMLGUIClient
 {
+    Q_OBJECT
 public:
     virtual ~GUIClient() {}
 

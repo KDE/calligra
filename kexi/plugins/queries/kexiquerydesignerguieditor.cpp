@@ -1290,22 +1290,22 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     //1. get token
     token = 0;
     //2-char-long tokens
-    if (str.startsWith(">="))
+    if (str.startsWith(QLatin1String(">=")))
         token = GREATER_OR_EQUAL;
-    else if (str.startsWith("<="))
+    else if (str.startsWith(QLatin1String("<=")))
         token = LESS_OR_EQUAL;
-    else if (str.startsWith("<>"))
+    else if (str.startsWith(QLatin1String("<>")))
         token = NOT_EQUAL;
-    else if (str.startsWith("!="))
+    else if (str.startsWith(QLatin1String("!=")))
         token = NOT_EQUAL2;
-    else if (str.startsWith("=="))
+    else if (str.startsWith(QLatin1String("==")))
         token = '=';
 
     if (token != 0)
         len = 2;
-    else if (str.startsWith("=") //1-char-long tokens
-             || str.startsWith("<")
-             || str.startsWith(">")) {
+    else if (str.startsWith(QLatin1String("=")) //1-char-long tokens
+             || str.startsWith(QLatin1String("<"))
+             || str.startsWith(QLatin1String(">"))) {
         token = str[0].toLatin1();
         len = 1;
     } else {
@@ -1326,11 +1326,11 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     QRegExp re;
     if (str.length() >= 2 &&
             (
-                (str.startsWith("\"") && str.endsWith("\""))
-                || (str.startsWith("'") && str.endsWith("'")))
+                (str.startsWith(QLatin1String("\"")) && str.endsWith(QLatin1String("\"")))
+                || (str.startsWith(QLatin1String("'")) && str.endsWith(QLatin1String("'"))))
        ) {
         valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
-    } else if (str.startsWith("[") && str.endsWith("]")) {
+    } else if (str.startsWith(QLatin1String("[")) && str.endsWith(QLatin1String("]"))) {
         valueExpr = new KexiDB::QueryParameterExpr(str.mid(1, str.length() - 2));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch(str)) {
         valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(

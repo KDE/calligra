@@ -42,6 +42,7 @@ public:
  actions when "read only" flag is true. */
 class KexiDBWidgetContextMenuExtender : public QObject
 {
+    Q_OBJECT
 public:
     KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface);
     ~KexiDBWidgetContextMenuExtender();

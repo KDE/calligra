@@ -555,3 +555,4 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
 }
 
 #include "kexipart.moc"
+#include "kexipartguiclient.moc"
