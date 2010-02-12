@@ -156,6 +156,26 @@ QStringList ReportData::dataSources() const
     return QStringList() << "costbreakdown";
 }
 
+void ReportData::setSorting( SortList lst )
+{
+    //FIXME the actual sorting should prob be in open(), but I don't think it matters for now
+    if ( lst.isEmpty() ) {
+        return;
+    }
+    QSortFilterProxyModel *sf = 0;
+    QAbstractItemModel *source_model = m_model.sourceModel();
+
+    foreach ( const Sort &sort, lst ) {
+        Qt::SortOrder order = sort.order == Sort::Ascending ? Qt::AscendingOrder : Qt::DescendingOrder;
+        int col = fieldNumber( sort.field );
+        sf = new QSortFilterProxyModel( &m_model );
+        sf->setSourceModel( source_model );
+        sf->sort( col, order );
+        source_model = sf;
+    }
+    m_model.setSourceModel( sf );
+}
+
 KoReportData* ReportData::data(const QString &source)
 {
     //qDebug()<<"ReportData::data:"<<source;

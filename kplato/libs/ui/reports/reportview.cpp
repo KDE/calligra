@@ -420,32 +420,10 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     } else {
         r = new ReportData( m_designer );
     }
-    createGroupByModels( r, element, m_designer->dataModel( modelname ) );
     r->setProject( project() );
     r->setScheduleManager( m_schedulemanager );
+    r->setModel( m_designer->dataModel( modelname ) );
     return r;
-}
-
-void ReportView::createGroupByModels( ReportData *rd, const QDomElement &element, QAbstractItemModel *datamodel )
-{
-    QSortFilterProxyModel *sf = 0;
-    QAbstractItemModel *source_model = datamodel;
-    QDomElement e = element.firstChildElement( "report:content" );
-    e = e.firstChildElement( "report:body" );
-    e = e.firstChildElement( "report:detail" );
-    e = e.firstChildElement( "report:group" );
-    for ( ; ! e.isNull(); e = e.nextSiblingElement( "report:group" ) ) {
-        int column = rd->fieldNumber( e.attribute( "report:group-column" ) );
-        if ( column < 0 ) {
-            continue;
-        }
-        //qDebug()<<"ReportView::createGroupByModels:"<<rd<<"group by col"<<column;
-        sf = new QSortFilterProxyModel( rd->model() );
-        sf->setSourceModel( source_model );
-        sf->sort( column );
-        source_model = sf;
-    }
-    rd->setModel( sf ? sf : datamodel );
 }
 
 QDomDocument ReportView::tempData() const

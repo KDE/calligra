@@ -120,7 +120,6 @@ private slots:
 private:
     QDomDocument tempData() const;
     ReportData *createReportData( const QDomElement &connection );
-    void createGroupByModels(ReportData* rd,  const QDomElement &element, QAbstractItemModel *datamodel );
     KoReportData* sourceData( QDomElement e );
 
 private:

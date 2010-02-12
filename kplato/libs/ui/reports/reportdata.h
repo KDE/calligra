@@ -85,6 +85,11 @@ public:
     //!Return the name of this source
     virtual QString sourceName() const;
 
+    //!Sets the sorting for the data
+    //!Should be called before open() so that the data source can be edited accordingly
+    //!Default impl does nothing
+    virtual void setSorting(SortList);
+
     //!Return a list of data sources possible for advanced controls
     virtual QStringList dataSources() const;
 
