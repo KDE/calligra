@@ -195,6 +195,9 @@ private:
       families
       */
     void defineMostAutomaticStyles(KoGenStyles& styles);
+    void defineMasterAutomaticStyles(KoGenStyles& styles,
+                                     const PPT::TextMasterStyleAtom& style);
+    void defineMasterAutomaticStyles(KoGenStyles& styles);
     void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
 
     // we assume that these functions are the same for all style families

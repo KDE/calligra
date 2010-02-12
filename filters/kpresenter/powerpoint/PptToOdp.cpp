@@ -882,24 +882,37 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     style.addChildElement(elementName, elementContents);
 }
 
+void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles,
+                                           const TextMasterStyleAtom& style)
+{
+
+}
 
 void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
 {
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
+        const TextPFException* pf = 0;
+        const TextPFException9* pf9 = 0;
+        const TextCFException* cf = 0;
+        const TextCFException9* cf9 = 0;
+        const TextCFException10* cf10 = 0;
+        const TextSIException* si;
+
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
         const DrawingContainer* drawing = 0;
         if (sc) {
             drawing = &sc->drawing;
         } else if (mm) {
-            drawing = &mm->drawing;
+            foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
+                KoGenStyle style(KoGenStyle::StyleGraphicAuto);
+                defineGraphicProperties(style, *mm->drawing.OfficeArtDg.shape,
+                                        &ma);
+            }
         }
 
-        currentSlideTexts = 0;
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                drawing->OfficeArtDg.groupShape.rgfb) {
-            processObjectForStyle(co, styles, true);
-        }
+        KoGenStyle style(KoGenStyle::StyleTextAuto);
+        defineTextProperties(style, cf, cf9, cf10, si);
     }
 }
 /*
@@ -923,25 +936,6 @@ void PptToOdp::defineMostAutomaticStyles(KoGenStyles& styles)
     }
 }
 */
-void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
-{
-    foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
-        const SlideContainer* sc = m->anon.get<SlideContainer>();
-        const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-        const DrawingContainer* drawing = 0;
-        if (sc) {
-            drawing = &sc->drawing;
-        } else if (mm) {
-            drawing = &mm->drawing;
-        }
-
-        currentSlideTexts = 0;
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                drawing->OfficeArtDg.groupShape.rgfb) {
-            processObjectForStyle(co, styles, true);
-        }
-    }
-}
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     // define for master for use in <master-page style:name="...">
@@ -1061,7 +1055,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the automatic styles
      */
-    defineMostAutomaticStyles(styles);
+    defineMasterAutomaticStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
 
     /*
@@ -2728,7 +2722,6 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
     kostyle.setAutoStyleInStylesDotXml(master);
     defineGraphicProperties(kostyle, o);
     styleName = styles.lookup(kostyle);
-    qDebug() << "processTextObjectForStylee " << master << " " << styleName;
     setGraphicStyleName(o, styleName);
 }
 namespace
