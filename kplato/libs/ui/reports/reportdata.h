@@ -18,55 +18,131 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KEXIDBREPORTDATA_H__
-#define __KEXIDBREPORTDATA_H__
+#ifndef KPLATO_REPORTDATA_H
+#define KPLATO_REPORTDATA_H
 
-#include <QString>
-#include <QStringList>
+#include "kplatoui_export.h"
 
 #include "koreportdata.h"
 
+#include "kptitemmodelbase.h"
+#include "kptproject.h"
+
 #include <QSortFilterProxyModel>
+#include <QPointer>
+#include <QString>
+#include <QStringList>
 
 namespace KPlato
 {
 
-class ReportData : public KoReportData
-{
+class ScheduleManager;
+class ReportDesignerView;
 
+class KPLATOUI_EXPORT ReportData : public QObject, public KoReportData
+{
+    Q_OBJECT
 public:
-    ReportData();
+    explicit ReportData( ReportDesignerView *view );
     virtual ~ReportData();
 
-    virtual QStringList fieldNames();
-    
-    virtual QString source() const;
-    virtual unsigned int fieldNumber ( const QString &field );
-    virtual QVariant value ( unsigned int );
-    virtual QVariant value ( const QString &field );
-
-    QString fieldTag( int index ) const;
-    QStringList fieldTags() const;
-    
+    //!Open the dataset
     virtual bool open();
+
+    //!Close the dataset
     virtual bool close();
+
+    //!Move to the next record
     virtual bool moveNext();
+
+    //!Move to the previous record
     virtual bool movePrevious();
+
+    //!Move to the first record
     virtual bool moveFirst();
+
+    //!Move to the last record
     virtual bool moveLast();
 
+    //!Return the current position in the dataset
     virtual long at() const;
+
+    //!Return the total number of records
     virtual long recordCount() const;
 
+    //!Return the index number of the field given by nane field
+    virtual unsigned int fieldNumber(const QString &field) const;
+
+    //!Return the list of field names
+    virtual QStringList fieldNames() const;
+
+    //!Return the value of the field at the given position for the current record
+    virtual QVariant value(unsigned int) const;
+
+    //!Return the value of the field fir the given name for the current record
+    virtual QVariant value(const QString &field) const;
+
+    //!Return the name of this source
+    virtual QString sourceName() const;
+
+    //!Return a list of data sources possible for advanced controls
+    virtual QStringList dataSources() const;
+
+    //!Allow a driver to create a new instance with a new data source
+    //!source is a driver specific identifier
+    //!Owner of the returned pointer is the caller
+    virtual KoReportData* data(const QString &source);
+
     void setModel( QAbstractItemModel *model );
+    QAbstractItemModel *model() const;
+    ItemModelBase *itemModel() const;
     
-private:
+    Project *project() const { return m_project; }
+    ScheduleManager *scheduleManager() const { return m_schedulemanager; }
+    
+public slots:
+    void setProject( Project *project ) { m_project = project; }
+    void setScheduleManager( ScheduleManager *sm );
+
+signals:
+    void scheduleManagerChanged( ScheduleManager *sm );
+
+protected:
+    ReportDesignerView *m_view;
     QSortFilterProxyModel m_model;
     long m_row;
+    Project *m_project;
+    ScheduleManager *m_schedulemanager;
+};
+
+class KPLATOUI_EXPORT ChartReportData : public ReportData
+{
+public:
+    explicit ChartReportData( ReportDesignerView *view );
+
+    //!Move to the next record
+    virtual bool moveNext();
+
+    //!Move to the previous record
+    virtual bool movePrevious();
+
+    //!Move to the first record
+    virtual bool moveFirst();
+
+    //!Move to the last record
+    virtual bool moveLast();
+
+    //!Return the total number of records
+    virtual long recordCount() const;
+
+    //!Return the value of the field at the given position for the current record
+    virtual QVariant value(unsigned int) const;
+    using ReportData::value;
+    
+    //!Return the list of field names, used for legends in a chart
+    virtual QStringList fieldNames() const;
 };
 
 } //namespace KPlato
 
-
 #endif
-

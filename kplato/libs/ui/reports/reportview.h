@@ -73,11 +73,12 @@ public:
     virtual void saveContext( QDomElement &context ) const;
 
     void insertDataModel( const QString &tag, QAbstractItemModel *model );
+    void createDefaultReportModels();
     
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );
-    
+
 private:
     QTabWidget *m_tab;
     ReportDesignerView *m_designer;
@@ -92,15 +93,15 @@ public:
 public slots:
     void setGuiActive( bool active );
     
-    /// refresh display
-    void refresh();
-    
     void renderPage( int page );
     
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
+
+    /// refresh display
+    void refresh();
 
 protected:
     void setupGui();
@@ -118,8 +119,8 @@ private slots:
 
 private:
     QDomDocument tempData() const;
-    ReportData *createReportData( const QDomElement &connection ) const;
-    QAbstractItemModel *setGroupByModels( const QDomElement &element, QAbstractItemModel *model ) const;
+    ReportData *createReportData( const QDomElement &connection );
+    void createGroupByModels(ReportData* rd,  const QDomElement &element, QAbstractItemModel *datamodel );
     KoReportData* sourceData( QDomElement e );
 
 private:
@@ -139,6 +140,7 @@ class KPLATOUI_EXPORT ReportDesignerView : public ViewBase
     Q_OBJECT
 public:
     ReportDesignerView( KoDocument *part, QWidget *parent);
+    ~ReportDesignerView();
 
     void setupGui();
 
@@ -148,8 +150,12 @@ public:
     
     QDomDocument document() const;
     
+    /// Set model for the data source editor
     void setSourceModel( QAbstractItemModel *model );
+    
+    /// Insert a new data model @p model with id @p tag
     void insertDataModel( const QString &tag, QAbstractItemModel *model );
+    /// Return the data model for @p tag
     QAbstractItemModel *dataModel( const QString &tag ) const;
     
     void setReportDesigner( ReportDesigner *designer );
@@ -159,15 +165,20 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
+    ReportData *createReportData( const QString &type );
+
 signals:
     void insertItem( const QString &name );
     void modelChanged( const QAbstractItemModel *model );
     void dataChanged();
     
+    void scheduleManagerChanged( ScheduleManager* );
+    
 public slots:
     /// Activate/deactivate the gui 
     virtual void setGuiActive( bool activate );
-
+    void setScheduleManager( ScheduleManager *sm );
+    
     void slotSourceChanged( const QModelIndex&, const QModelIndex& );
     
 protected slots:

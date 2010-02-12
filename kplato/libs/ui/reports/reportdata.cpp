@@ -20,21 +20,27 @@
 
 #include "reportdata.h"
 
-#include "kptglobal.h"
+#include "reportview.h"
 
 #include <kdebug.h>
 
+#include <QSortFilterProxyModel>
 
 namespace KPlato
 {
 
-ReportData::ReportData()
-    : m_row( 0 )
+ReportData::ReportData( ReportDesignerView *view )
+    : m_view( view ),
+    m_row( 0 ),
+    m_project( 0 ),
+    m_schedulemanager( 0 )
 {
+    qDebug()<<"ReportData:"<<this;
 }
 
 ReportData::~ReportData()
 {
+    qDebug()<<"~ReportData:"<<this;
 }
 
 bool ReportData::open()
@@ -49,46 +55,30 @@ bool ReportData::close()
     return true;
 }
 
-QString ReportData::source() const {
-    qDebug()<<"ReportData::source:";
-    return "";
+QString ReportData::sourceName() const {
+    qDebug()<<"ReportData::sourceName:";
+    return QString();
 }
 
-uint ReportData::fieldNumber ( const QString &fld )
+unsigned int ReportData::fieldNumber ( const QString &fld ) const
 {
     //qDebug()<<"ReportData::fieldNumber:"<<fld;
     QStringList names = fieldNames();
     return names.indexOf( fld );
 }
 
-QString ReportData::fieldTag( int index ) const
+QStringList ReportData::fieldNames() const
 {
-    return fieldTags().value( index );
-}
-
-QStringList ReportData::fieldTags() const
-{
-    //qDebug()<<"ReportData::fieldNames:";
-    QStringList names;
-    int count = m_model.columnCount();
-    for ( int i = 0; i < count; ++i ) {
-        names << m_model.headerData( i, Qt::Horizontal, Role::ColumnTag ).toString();
-    }
-    return names;
-}
-
-QStringList ReportData::fieldNames()
-{
-    //qDebug()<<"ReportData::fieldNames:";
     QStringList names;
     int count = m_model.columnCount();
     for ( int i = 0; i < count; ++i ) {
         names << m_model.headerData( i, Qt::Horizontal ).toString();
     }
+    //qDebug()<<"ReportData::fieldNames:"<<recordCount()<<names;
     return names;
 }
 
-QVariant ReportData::value ( unsigned int i ) {
+QVariant ReportData::value ( unsigned int i ) const {
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
@@ -97,9 +87,9 @@ QVariant ReportData::value ( unsigned int i ) {
     return value;
 }
 
-QVariant ReportData::value ( const QString &fld )
+QVariant ReportData::value ( const QString &fld ) const
 {
-    qDebug()<<"ReportData::value:"<<fld;
+    //qDebug()<<"ReportData::value:"<<fld;
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
@@ -160,9 +150,136 @@ long ReportData::recordCount() const {
     return m_model.rowCount();
 }
 
+QStringList ReportData::dataSources() const
+{
+    //TODO
+    return QStringList() << "costbreakdown";
+}
+
+KoReportData* ReportData::data(const QString &source)
+{
+    //qDebug()<<"ReportData::data:"<<source;
+    return m_view->createReportData( source );
+}
+
 void ReportData::setModel( QAbstractItemModel *model )
 {
     m_model.setSourceModel( model );
 }
 
+QAbstractItemModel *ReportData::model() const
+{
+    return const_cast<QSortFilterProxyModel*>( &m_model );
+}
+
+ItemModelBase *ReportData::itemModel() const
+{
+    QAbstractItemModel *m = m_model.sourceModel();
+    QAbstractProxyModel *p = 0;
+    do {
+        p = qobject_cast<QAbstractProxyModel*>( m );
+        if ( p ) {
+            m = p->sourceModel();
+        }
+    } while ( p );
+    return qobject_cast<ItemModelBase*>( m );
+}
+
+void ReportData::setScheduleManager( ScheduleManager *sm )
+{
+    //qDebug()<<"ReportData::setScheduleManager:"<<sm;
+    m_schedulemanager = sm;
+    emit scheduleManagerChanged( sm );
+}
+
+
+//---------------------------
+ChartReportData::ChartReportData( ReportDesignerView *view )
+    : ReportData( view )
+{
+}
+
+bool ChartReportData::moveNext()
+{
+    //qDebug()<<"ReportData::moveNext:";
+    if ( recordCount() <= m_row + 1 ) {
+        qDebug()<<"ChartReportData::moveNext: failed"<<m_row;
+        return false;
+    }
+    ++m_row;
+    return true;
+}
+
+bool ChartReportData::movePrevious()
+{
+    //qDebug()<<"ReportData::movePrevious:";
+    if ( m_row == 0  ) {
+        qDebug()<<"ReportData::movePrevious: failed";
+        return false;
+    }
+    --m_row;
+    return true;
+}
+
+bool ChartReportData::moveFirst()
+{
+    if ( recordCount() <= 0  ) {
+        qDebug()<<"ChartReportData::moveFirst: failed"<<recordCount();
+        return false;
+    }
+    m_row = 0;
+    return true;
+}
+
+bool ChartReportData::moveLast()
+{
+    //qDebug()<<"ReportData::moveLast:";
+    if ( recordCount() == 0  ) {
+        return false;
+    }
+    m_row = recordCount() - 1;
+    return true;
+}
+
+long ChartReportData::recordCount() const
+{
+    //qDebug()<<"ChartReportData::recordCount: model="<<m_model.columnCount();
+    return m_model.columnCount() - 4;
+}
+
+QVariant ChartReportData::value ( unsigned int i ) const
+{
+    if ( recordCount() == 0 ) {
+        return QVariant();
+    }
+    QVariant value;
+    if ( i == 0 ) {
+        // x-axis labels
+        value = m_model.headerData( m_row + 3, Qt::Horizontal );
+        //qDebug()<<"ChartReportData::value x label"<<m_row+2<<value;
+    } else {
+        // data
+        value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+        //qDebug()<<"ChartReportData::value data"<<i<<m_row + 2<<value;
+    }
+    return value;
+}
+
+QStringList ChartReportData::fieldNames() const
+{
+    // Legends
+    //qDebug()<<"ReportData::fieldNames:";
+    QStringList names;
+    names << "";
+    int count = m_model.rowCount();
+    for ( int i = 0; i < count; ++i ) {
+        names << m_model.index( i, 0 ).data().toString();
+    }
+    //qDebug()<<"ChartReportData::fieldNames:"<<recordCount()<<names;
+    return names;
+}
+
+
 } //namespace KPlato
+
+#include "reportdata.moc"
