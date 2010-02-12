@@ -163,7 +163,7 @@ bool pqxxSqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
         if (data()->localSocketFileName.isEmpty()) {
             sockets.append("/tmp/.s.PGSQL.5432");
 
-            for (QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++) {
+            for (QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); ++it) {
                 if (QFile(*it).exists()) {
                     socket = (*it);
                     break;

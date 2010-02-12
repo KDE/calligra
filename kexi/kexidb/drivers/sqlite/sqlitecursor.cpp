@@ -395,7 +395,7 @@ bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
     //const uint fieldsExpandedCount = m_fieldsExpanded->count();
     const uint maxCount = qMin(m_fieldCount, (uint)m_fieldsExpanded->count());
     // i - visible field's index, j - physical index
-    for (uint i = 0, j = 0; i < m_fieldCount; i++, j++) {
+    for (uint i = 0, j = 0; i < m_fieldCount; ++i, ++j) {
 //  while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 //   j++;
         while (j < maxCount && !m_fieldsExpanded->at(j)->visible)

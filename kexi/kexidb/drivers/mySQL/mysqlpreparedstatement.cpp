@@ -144,7 +144,7 @@ bool MySqlPreparedStatement::execute()
 
     Field::ListIterator itFields(fieldList->constBegin());
     for (QList<QVariant>::ConstIterator it(m_args.constBegin());
-            itFields != fieldList->constEnd() && arg < m_realParamCount; ++it, ++itFields, arg++) {
+            itFields != fieldList->constEnd() && arg < m_realParamCount; ++it, ++itFields, ++arg) {
         KexiDB::Field *field = *itFields;
         if (it == m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL
             BIND_NULL;

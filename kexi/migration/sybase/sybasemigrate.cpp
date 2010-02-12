@@ -114,8 +114,8 @@ bool SybaseMigrate::drv_readTableSchema(
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(originalName, dbcoltype(d->dbProcess, i)));
         fld->setCaption(fldName);
-        fld->setAutoIncrement(colInfo->Identity == TRUE ? true : false);
-        fld->setNotNull(colInfo->Null == FALSE ? true : false);
+        fld->setAutoIncrement(colInfo->Identity == true ? true : false);
+        fld->setNotNull(colInfo->Null == false ? true : false);
 
         // collect the fields for post-processing
         fieldVector.append(fld);

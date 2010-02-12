@@ -863,7 +863,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
     // This will be used when recreateTable is false to update kexi__fields
     for (ActionDictDictIterator it(fieldActions.constBegin()); it != fieldActions.constEnd(); ++it) {
         for (AlterTableHandler::ActionDictIterator it2(it.value()->constBegin());
-                it2 != it.value()->constEnd(); ++it2, currentActionsCount++) {
+                it2 != it.value()->constEnd(); ++it2, ++currentActionsCount) {
             if (it2.value()->shouldBeRemoved(fieldActions))
                 continue;
             actionsVector[ it2.value()->m_order ] = it2.value();

@@ -1318,7 +1318,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
     }
     if (res == true) {
         //for every field, create KexiDB::Field definition
-        for (i = 0;i < (int)d->sets->size();i++) {
+        for (i = 0;i < (int)d->sets->size();++i) {
             KoProperty::Set *s = d->sets->at(i);
             if (!s)
                 continue;

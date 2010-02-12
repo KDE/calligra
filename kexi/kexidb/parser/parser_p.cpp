@@ -92,7 +92,7 @@ void yyerror(const char *str)
     {
         KexiDBDbg << parser->statement();
         QString ptrline = "";
-        for (int i = 0; i < current; i++)
+        for (int i = 0; i < current; ++i)
             ptrline += " ";
 
         ptrline += "^";
@@ -408,7 +408,7 @@ QuerySchema* buildSelectQuery(
 // QDict<char> tableNamesAndTableAliases(997, false);
 // QString repeatedTableNameOrTableAlias;
     if (tablesList) {
-        for (int i = 0; i < tablesList->args(); i++, columnNum++) {
+        for (int i = 0; i < tablesList->args(); ++i, ++columnNum) {
             BaseExpr *e = tablesList->arg(i);
             VariableExpr* t_e = 0;
             QString aliasString;
@@ -476,7 +476,7 @@ QuerySchema* buildSelectQuery(
     //-------add fields
     if (colViews) {
         columnNum = 0;
-        for (QMutableListIterator<BaseExpr*> it(colViews->list); it.hasNext(); columnNum++) {
+        for (QMutableListIterator<BaseExpr*> it(colViews->list); it.hasNext(); ++columnNum) {
             BaseExpr *e = it.next();
 //Qt4   bool moveNext = true; //used to avoid ++it when an item is taken from the list
             BaseExpr *columnExpr = e;

@@ -1486,7 +1486,7 @@ void QuerySchema::computeFieldsExpanded()
 
     //update QueryColumnInfo::indexForVisibleLookupValue() cache for columns
     numberOfColumnsWithMultipleVisibleFields = 0;
-    for (i = 0; i < (int)d->fieldsExpanded->size(); i++) {
+    for (i = 0; i < (int)d->fieldsExpanded->size(); ++i) {
         QueryColumnInfo* ci = d->fieldsExpanded->at(i);
 //! @todo QuerySchema itself will also support lookup fields...
         LookupFieldSchema *lookupFieldSchema

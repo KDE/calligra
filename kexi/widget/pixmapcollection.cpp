@@ -277,14 +277,14 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 void
 PixmapCollectionEditor::newItemByName()
 {
-    LoadIconDialog d(parentWidget());
-    if (d.exec() == QDialog::Accepted) {
-        if (d.iconName().isEmpty())
-            return;
-
-        QString name = m_collection->addPixmapName(d.iconName(), d.iconSize());
-        createIconViewItem(name);
+    QPointer<LoadIconDialog> d = new LoadIconDialog(parentWidget());
+    if (d->exec() == QDialog::Accepted) {
+        if (!d->iconName().isEmpty()) {
+            QString name = m_collection->addPixmapName(d->iconName(), d->iconSize());
+            createIconViewItem(name);
+        }
     }
+    delete d;
 }
 
 void
@@ -416,14 +416,16 @@ PixmapCollectionChooser::getPixmap(const QString &name)
 void
 PixmapCollectionChooser::slotUser1()
 {
-    PixmapCollectionEditor dialog(m_collection, parentWidget());
-    dialog.exec();
+    QPointer <PixmapCollectionEditor> dialog = new PixmapCollectionEditor(m_collection, parentWidget());
+    dialog->exec();
 
     m_iconView->clear();
     PixmapMap::ConstIterator it;
     PixmapMap::ConstIterator endIt = m_collection->m_pixmaps.constEnd();
     for (it = m_collection->m_pixmaps.constBegin(); it != endIt; ++it)
         new PixmapIconViewItem(m_iconView, it.key(), getPixmap(it.key()));
+
+    delete dialog;
 }
 
 #include "pixmapcollection.moc"

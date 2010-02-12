@@ -978,13 +978,13 @@ void ImportWizard::helpClicked()
 
 void ImportWizard::slotOptionsButtonClicked()
 {
-    OptionsDialog dlg(m_srcConn->selectedFileName(), m_sourceDBEncoding, this);
-    if (QDialog::Accepted != dlg.exec())
-        return;
-
-    if (m_sourceDBEncoding != dlg.encodingComboBox()->selectedEncoding()) {
-        m_sourceDBEncoding = dlg.encodingComboBox()->selectedEncoding();
+    QPointer<OptionsDialog> dlg = new OptionsDialog(m_srcConn->selectedFileName(), m_sourceDBEncoding, this);
+    if (QDialog::Accepted == dlg->exec()) {
+        if (m_sourceDBEncoding != dlg->encodingComboBox()->selectedEncoding()) {
+            m_sourceDBEncoding = dlg->encodingComboBox()->selectedEncoding();
+        }
     }
+    delete dlg;
 }
 
 #include "importwizard.moc"

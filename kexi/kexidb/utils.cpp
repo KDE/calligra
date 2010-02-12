@@ -1129,7 +1129,7 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
             array.resize(output);
             output = 0;
         }
-        for (int input = 0; s < end; output++) {
+        for (int input = 0; s < end; ++output) {
             //  KexiDBDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4];
             if (s[0] == '\\' && (s + 1) < end) {
                 //special cases as in http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
