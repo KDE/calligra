@@ -13,6 +13,7 @@ ${KDE4_INCLUDES} )
 
 #build a shared library
 set(koreport_LIB_SRCS
+	common/krutils.cpp
 	common/krpos.cpp
 	common/krsize.cpp
 	common/krobjectdata.cpp

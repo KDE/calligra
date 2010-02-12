@@ -38,6 +38,7 @@
 #include <koproperty/EditorView.h>
 #include <KoGlobal.h>
 #include <krobjectdata.h>
+#include <krutils.h>
 
 #include "reportentitylabel.h"
 #include "reportentityfield.h"
@@ -83,7 +84,7 @@ void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, K
     element.setAttribute("fo:background-color", ts.backgroundColor.name());
     element.setAttribute("fo:foreground-color", ts.foregroundColor.name());
     element.setAttribute("fo:background-opacity", QString::number(ts.backgroundOpacity) + '%');
-    element.setAttribute("report:qtfont", ts.font.toString());
+    KRUtils::writeFontAttributes(element, ts.font);
 
     entity.appendChild(element);
 }
