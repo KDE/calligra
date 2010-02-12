@@ -708,6 +708,7 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style,
     // presentation:background-visible
     // presentation:display-date-time
     if (hf) {
+        qDebug() << hf->fHasDate;
         style.addProperty("presentation:display-date-time",
                           hf->fHasDate, dp);
     }
@@ -973,7 +974,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
     foreach (const PPT::SlideContainer* sc, p->slides) {
         KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
-        defineDrawingPageStyle(dp, &sc->perSlideHFContainer->hfAtom);
+        const HeadersFootersAtom* hf = 0;
+        if (sc->perSlideHFContainer) {
+            hf = &sc->perSlideHFContainer->hfAtom;
+        }
+        defineDrawingPageStyle(dp, hf);
         drawingPageStyles[sc] = styles.lookup(dp);
     }
 
