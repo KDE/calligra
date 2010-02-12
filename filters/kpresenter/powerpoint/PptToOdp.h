@@ -191,6 +191,10 @@ private:
     void defineDefaultDrawingPageStyle(KoGenStyles& styles);
     void defineDefaultChartStyle(KoGenStyles& styles);
 
+    /** define automatic styles for text, paragraphs, graphic and presentation
+      families
+      */
+    void defineMostAutomaticStyles(KoGenStyles& styles);
     void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
 
     // we assume that these functions are the same for all style families
@@ -632,7 +636,8 @@ private:
     QString declarationStyleName;
     typedef QPair<const PPT::TextCFException*, const PPT::TextPFException*> StyleKey;
     QMap<StyleKey, StyleName> textStyles;
-    QMap<const PPT::OfficeArtSpContainer*, QString> graphicStyles;
+    QMap<const PPT::OfficeArtSpContainer*, QString> graphicStyleNames;
+    QMap<const PPT::OfficeArtSpContainer*, QString> presentationStyleNames;
 
     /**
       * name for to use in the style:page-layout-name attribute for master
@@ -648,7 +653,6 @@ private:
 
     const ParsedPresentation* p;
 
-    const PPT::SlideContainer* currentSlide;
     const PPT::SlideListWithTextSubContainerOrAtom* currentSlideTexts;
 
     bool parse(POLE::Storage& storage);
@@ -664,15 +668,15 @@ private:
                : p->documentContainer->slideHF2.data();
     }
     void setGraphicStyleName(const PPT::OfficeArtSpContainer& o, const QString& name) {
-        graphicStyles[&o] = name;
+        graphicStyleNames[&o] = name;
     }
 
     /**
       *Return the name of the style associated with this object.
       * If no style is present, create one.
       **/
-    QString getGraphicStyleName(const PPT::OfficeArtSpContainer& o) {
-        return graphicStyles.value(&o);
+    QString getGraphicStyleName(const PPT::OfficeArtSpContainer& o) const {
+        return graphicStyleNames[&o];
     }
     void addStyleNames(const PPT::TextCFException *cf, const PPT::TextPFException *pf,
                        const QString& text, const QString& paragraph, const QString& list) {
@@ -725,6 +729,8 @@ private:
         }
         return 0;
     }
+    QRect getRect(const PPT::OfficeArtSpContainer &o);
+
     QMap<const void*, QString> presentationPageLayouts;
     QMap<const void*, QString> drawingPageStyles;
     QMap<const PPT::MasterOrSlideContainer*, QString> masterNames;
@@ -784,5 +790,61 @@ private:
     */
     void insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text);
 };
+
+
+/**
+ * Retrieve an option from an options containing class B
+ *
+ * @p b must have a member fopt that is an array of
+ * type OfficeArtFOPTEChoice.
+ * A is the type of the required option. The option containers
+ * in PPT have only one instance of each option in a option container.
+ * @param b class that contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
+template <typename A, typename B>
+const A*
+get(const B& b)
+{
+    foreach(const PPT::OfficeArtFOPTEChoice& a, b.fopt) {
+        const A *ptr = a.anon.get<A>();
+        if (ptr) return ptr;
+    }
+    return 0;
+}
+/**
+ * Retrieve an option from an OfficeArtSpContainer
+ *
+ * Look in all option containers in @p o for an option of type A.
+ * @param o OfficeArtSpContainer instance which contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
+template <typename A>
+const A*
+get(const PPT::OfficeArtSpContainer& o)
+{
+    const A* a = 0;
+    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
+    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
+    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
+    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
+    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
+    return a;
+}
+/**
+ * Retrieve an option from an OfficeArtDggContainer
+ *
+ * Look in all option containers in @p o for an option of type A.
+ * @param o OfficeArtDggContainer instance which contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
+template <typename A>
+const A*
+get(const PPT::OfficeArtDggContainer& o)
+{
+    const A* a = get<A>(o.drawingPrimaryOptions);
+    if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
+    return a;
+}
 
 #endif // POWERPOINTIMPORT_H
