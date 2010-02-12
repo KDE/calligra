@@ -58,7 +58,7 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
             }
             else if(element.tagName() == "date-time-decl") {
                 QMap<QString, QVariant> data;
-                data["name"] = element.attributeNS(KoXmlNS::presentation, "name", QString());
+                const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
                 data["fixed"] = element.attributeNS(KoXmlNS::presentation, "source", "fixed") == "fixed";
 
                 QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", "");
@@ -75,7 +75,7 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
                     data["fixed value"] = element.text();
                 }
 
-
+                m_declarations[DateTime].insert(name, data);
             }
         }
         else if (element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw) {

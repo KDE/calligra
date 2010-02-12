@@ -107,7 +107,7 @@ bool PresentationVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingC
         m_type = KPrDeclarations::Header;
     }
     else if (localName == "date-time") {
-        m_type = KPrDeclarations::Header;
+        m_type = KPrDeclarations::DateTime;
     }
     return true;
 }

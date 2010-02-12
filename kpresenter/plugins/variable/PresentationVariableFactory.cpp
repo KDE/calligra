@@ -52,7 +52,7 @@ PresentationVariableFactory::PresentationVariableFactory()
 
 
     QStringList elementNames;
-    elementNames << "footer" << "header";
+    elementNames << "footer" << "header" << "date-time";
     setOdfElementNames(KoXmlNS::presentation, elementNames);
 }
 
