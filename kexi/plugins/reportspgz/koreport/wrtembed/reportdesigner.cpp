@@ -21,10 +21,8 @@
 
 #include "reportdesigner.h"
 #include "reportsection.h"
-#include "reportentities.h"
 #include "reportscene.h"
 #include "reportsceneview.h"
-#include "reportentities.h"
 #include "reportentitylabel.h"
 #include "reportentityfield.h"
 #include "reportentitytext.h"
@@ -36,33 +34,15 @@
 #include "reportentitycheck.h"
 #include "reportsectiondetailgroup.h"
 #include "reportpropertiesbutton.h"
-
-// dialogs
 #include "sectioneditor.h"
 #include "reportsectiondetail.h"
 
-// qt
-//#include <qpixmap.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qdom.h>
-#include <qtextstream.h>
-#include <qiodevice.h>
-#include <qfile.h>
-#include <QFileDialog>
-
-#include <QCloseEvent>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QPushButton>
-#include <qregexp.h>
-#include <qmessagebox.h>
-#include <qsqlerror.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
-#include <QSplitter>
-
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
@@ -124,7 +104,6 @@ class ReportDesigner::Private
 {
 public:
     QGridLayout *grid;
-    QSplitter *splitter;
     QGraphicsScene *activeScene;
     KoRuler *hruler;
     KoZoomHandler *zoom;
@@ -645,8 +624,8 @@ void ReportDesigner::createProperties()
 
     strings = KoUnit::listOfUnitName();
     QString unit;
-    foreach(unit, strings) {
-        unit = unit.mid(unit.indexOf("(") + 1, 2);
+    foreach(const QString &un, strings) {
+        unit = un.mid(un.indexOf('(') + 1, 2);
         keys << unit;
     }
 

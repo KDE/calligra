@@ -19,9 +19,8 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 
-#include "reportdesigner.h"
 #include "reportsection.h"
-
+#include "reportdesigner.h"
 #include "reportentities.h"
 #include "reportentitylabel.h"
 #include "reportentityfield.h"

@@ -18,12 +18,12 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 
-#include "reportentities.h"
 #include "reportentityshape.h"
+#include "reportentities.h"
 #include "reportdesigner.h"
 
 #include <qdom.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <koproperty/EditorView.h>

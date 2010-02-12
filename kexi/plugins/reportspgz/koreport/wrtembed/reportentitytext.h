@@ -34,6 +34,7 @@ class ReportEntity;
 //
 class ReportEntityText : public QObject, public KRTextData, public ReportRectEntity
 {
+    Q_OBJECT
 public:
     ReportEntityText(ReportDesigner *, QGraphicsScene * scene);
     ReportEntityText(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);

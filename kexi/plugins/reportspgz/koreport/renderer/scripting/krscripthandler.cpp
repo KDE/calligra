@@ -71,7 +71,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     foreach(KRSectionData *sec, secs) {
         m_sectionMap[sec] = new Scripting::Section(sec);
         m_sectionMap[sec]->setParent(m_report);
-        m_sectionMap[sec]->setObjectName(sec->name().replace('-', '_').replace("report:", ""));
+        m_sectionMap[sec]->setObjectName(sec->name().replace('-', '_').remove("report:"));
         kDebug() << "Added" << m_sectionMap[sec]->objectName() << "to report" << m_reportData->name();
     }
 

@@ -19,8 +19,8 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 
-#ifndef __BARCODES_H__
-#define __BARCODES_H__
+#ifndef BARCODEPAINT_H
+#define BARCODEPAINT_H
 
 #include <QRect>
 #include <QString>

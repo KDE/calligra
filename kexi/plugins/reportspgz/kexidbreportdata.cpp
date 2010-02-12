@@ -232,8 +232,8 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
         QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
         QString script;
 
-        int id, i;
-        id = i = 0;
+        int i;
+        i = 0;
 
         kDebug() << scriptids << scriptnames;
         kDebug() << interpreter;
@@ -242,7 +242,7 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
         scripts << "";
 
        
-        foreach(id, scriptids) {
+        foreach(int id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
             res = m_connection->loadDataBlock(id, script, QString());
@@ -277,12 +277,11 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
     if (m_connection) {
         QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
         QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
-
-        int id;
+        
         int i = 0;
         QString script;
 
-        foreach(id, scriptids) {
+        foreach(int id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
             res = m_connection->loadDataBlock(id, script, QString());

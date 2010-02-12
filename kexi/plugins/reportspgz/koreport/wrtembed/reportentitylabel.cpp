@@ -19,8 +19,8 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 
-#include "reportentities.h"
 #include "reportentitylabel.h"
+#include "reportentities.h"
 #include "reportdesigner.h"
 
 #include <qdom.h>

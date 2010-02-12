@@ -19,26 +19,24 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 
-
+#include "reportentityimage.h"
+#include "reportentities.h"
+#include "reportdesigner.h"
 
 #include <QImageWriter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QBuffer>
 #include <kcodecs.h>
-
-#include "reportentities.h"
-#include "reportentityimage.h"
-#include "reportdesigner.h"
-
 #include <qdom.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
+
 //
 // ReportEntitiesImage
 //

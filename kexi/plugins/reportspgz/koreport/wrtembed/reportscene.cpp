@@ -26,18 +26,17 @@
 
 #include "reportscene.h"
 #include <reportpageoptions.h>
-#include <labelsizeinfo.h>
-#include <qpainter.h>
+#include "reportrectentity.h"
 #include "reportdesigner.h"
 
+#include <labelsizeinfo.h>
+#include <QPainter>
 #include <KoDpi.h>
 #include <kdebug.h>
-
 #include <KoPageFormat.h>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
-#include "reportrectentity.h"
-#include <QGraphicsSceneMouseEvent>
+
 
 ReportScene::ReportScene(qreal w, qreal h, ReportDesigner *rd)
         : QGraphicsScene(0, 0, w, h)

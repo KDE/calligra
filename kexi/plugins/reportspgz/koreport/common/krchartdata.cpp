@@ -275,7 +275,7 @@ void KRChartData::populateData()
 
 QStringList KRChartData::masterFields()
 {
-    return m_linkMaster->value().toString().split(",");
+    return m_linkMaster->value().toString().split(',');
 }
 
 void KRChartData::setLinkData(QString fld, QVariant val)
