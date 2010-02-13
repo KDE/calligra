@@ -408,7 +408,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     // update references to xml:id to be to new xml:id
     // in the external Rdf
-    if (KoDocumentRdfBase* rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
         QMap<QString, QString> m = sharedData->getRdfIdMapping();
         rdf->updateXmlIdReferences(m);
     }

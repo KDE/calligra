@@ -202,7 +202,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     textShapeData.loadOdf(body, sc);
 
     // Grab weak references to all the Rdf stuff that was loaded
-    if (KoDocumentRdfBase* rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 

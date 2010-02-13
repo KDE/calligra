@@ -151,7 +151,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
         connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)),
                 this, SLOT(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)));
     }
@@ -321,7 +321,7 @@ void KWView::setupActions()
 #ifdef SHOULD_BUILD_RDF
     action = new KAction(i18n("Semantic Stylesheets..."), this);
     actionCollection()->addAction("edit_semantic_stylesheets", action);
-    action->setToolTip(i18n("Modify and add Semantic Stylesheets"));
+    action->setToolTip(i18n("Modify and add semantic stylesheets"));
     action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 #endif
@@ -1100,9 +1100,10 @@ void KWView::formatPage()
 void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
         SemanticStylesheetsEditor* dia = new SemanticStylesheetsEditor(this, rdf);
         dia->show();
+        // TODO this leaks memory
     }
 #endif
 }
