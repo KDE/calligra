@@ -87,13 +87,18 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
             this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
     connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
 
+    QSet<ConnectionSource::SourceType> inputs;
+    inputs << ConnectionSource::SourceGraphic;
+    inputs << ConnectionSource::SourceAlpha;
+    inputs << ConnectionSource::BackgroundImage;
+    inputs << ConnectionSource::BackgroundAlpha;
+    inputs << ConnectionSource::FillPaint;
+    inputs << ConnectionSource::StrokePaint;
+
     m_defaultSourceSelector = new KComboBox(this);
-    m_defaultSourceSelector->addItem("SourceGraphic");
-    m_defaultSourceSelector->addItem("SourceAlpha");
-    m_defaultSourceSelector->addItem("FillPaint");
-    m_defaultSourceSelector->addItem("StrokePaint");
-    m_defaultSourceSelector->addItem("BackgroundImage");
-    m_defaultSourceSelector->addItem("BackgroundAlpha");
+    foreach(ConnectionSource::SourceType source, inputs) {
+        m_defaultSourceSelector->addItem(ConnectionSource::typeToString(source));
+    }
     m_defaultSourceSelector->hide();
     m_defaultSourceSelector->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     connect(m_defaultSourceSelector, SIGNAL(currentIndexChanged(int)),
