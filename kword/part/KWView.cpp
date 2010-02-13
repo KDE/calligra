@@ -37,6 +37,7 @@
 #include "dialogs/KWPrintingDialog.h"
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
+#include "dialogs/KWInsertPageDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWCreateOutlineCommand.h"
@@ -1180,16 +1181,9 @@ void KWView::deletePage()
 
 void KWView::insertPage()
 {
-    // TODO show dialog with option;
-    //    * before current page
-    //    * after current page
-    //    * at end of document
-    //    * named page style
-    // for now we assume stuff
-    if (m_currentPage.isValid())
-        m_document->insertPage(m_currentPage.pageNumber());
-    else
-        m_document->appendPage();
+    KWInsertPageDialog *diag = new KWInsertPageDialog(m_document, this);
+    connect(diag, SIGNAL(finished(int)), diag, SLOT(deleteLater()));
+    diag->show();
 }
 
 void KWView::handleDeletePageAction()
