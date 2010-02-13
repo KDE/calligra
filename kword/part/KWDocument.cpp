@@ -63,6 +63,11 @@
 #include <KoListLevelProperties.h>
 #include <KoTextShapeData.h>
 
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#endif
+
 // KDE + Qt includes
 #include <klocale.h>
 #include <kstandardaction.h>
@@ -148,6 +153,9 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     }
 
     resourceManager()->setUndoStack(undoStack());
+    if (documentRdfBase()) {
+        documentRdfBase()->linkToResourceManager(resourceManager());
+    }
 
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));

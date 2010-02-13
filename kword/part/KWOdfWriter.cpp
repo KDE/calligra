@@ -23,6 +23,7 @@
 
 #include "KWOdfWriter.h"
 #include "KWDocument.h"
+#include <rdf/KoDocumentRdfBase.h>
 #include "KWPage.h"
 
 #include <ktemporaryfile.h>
@@ -405,6 +406,12 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     // add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
+    // update references to xml:id to be to new xml:id
+    // in the external Rdf
+    if (KoDocumentRdfBase* rdf = m_document->documentRdfBase()) {
+        QMap<QString, QString> m = sharedData->getRdfIdMapping();
+        rdf->updateXmlIdReferences(m);
+    }
     // save the styles.xml
     if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter))
         return false;

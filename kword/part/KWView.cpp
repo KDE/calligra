@@ -22,6 +22,13 @@
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
+#include <rdf/KoDocumentRdfBase.h>
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#include <rdf/SemanticStylesheetsEditor.h>
+#include "dockers/KWRdfDocker.h"
+#include "dockers/KWRdfDockerFactory.h"
+#endif
 #include "KWCanvas.h"
 #include "KWViewMode.h"
 #include "KWFactory.h"
@@ -142,6 +149,13 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+
+#ifdef SHOULD_BUILD_RDF
+    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)),
+                this, SLOT(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)));
+    }
+#endif
 }
 
 KWView::~KWView()
@@ -303,6 +317,14 @@ void KWView::setupActions()
     action->setToolTip(i18n("Change properties of entire page"));
     action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
+
+#ifdef SHOULD_BUILD_RDF
+    action = new KAction(i18n("Semantic Stylesheets..."), this);
+    actionCollection()->addAction("edit_semantic_stylesheets", action);
+    action->setToolTip(i18n("Modify and add Semantic Stylesheets"));
+    action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
+    connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
+#endif
 
     action = new KAction(i18n("Make inline"), this);
     action->setToolTip(i18n("Convert current frame to an inline frame"));
@@ -1075,6 +1097,16 @@ void KWView::formatPage()
     dia->show();
 }
 
+void KWView::editSemanticStylesheets()
+{
+#ifdef SHOULD_BUILD_RDF
+    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+        SemanticStylesheetsEditor* dia = new SemanticStylesheetsEditor(this, rdf);
+        dia->show();
+    }
+#endif
+}
+
 void KWView::inlineFrame()
 {
     Q_ASSERT(kwdocument()->mainFrameSet());
@@ -1413,3 +1445,19 @@ void KWView::offsetInDocumentMoved(int yOffset)
     if (page.isValid())
         setCurrentPage(page);
 }
+
+void KWView::semanticObjectViewSiteUpdated(RdfSemanticItem* item, QString xmlid)
+{
+#ifdef SHOULD_BUILD_RDF
+    kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
+    KoTextEditor *editor = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    if (!editor) {
+        kDebug(30015) << "no editor, not reflowing rdf semantic item.";
+        return;
+    }
+    kDebug(30015) << "reflowing rdf semantic item.";
+    RdfSemanticItemViewSite vs(item, xmlid);
+    vs.reflowUsingCurrentStylesheet(editor);
+#endif
+}
+

@@ -61,6 +61,10 @@
   <Action name="insert_footendnote"/>
   <Action name="insert_contents"/>
   <Action name="insert_variable"/> <!-- menu -->
+  <Menu name="semantic_object_menu"><text>Semantic Object</text>
+    <Action name="insert_semanticobject_ref"/>
+    <Action name="insert_semanticobject_new"/> <!-- menu -->
+  </Menu>
   <Action name="insert_expression"/> <!-- menu -->
   <Action name="insert_link"/>
   <Action name="insert_comment"/>
@@ -86,6 +90,7 @@
   <Action name="create_style"/>
   <Separator/>
   <Action name="format_page"/>
+  <Action name="edit_semantic_stylesheets"/>
   <Separator/>
   <Action name="format_header"/>
   <Action name="format_footer"/>

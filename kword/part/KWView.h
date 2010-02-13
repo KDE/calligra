@@ -37,6 +37,7 @@ class KWGui;
 
 class KoZoomController;
 class KToggleAction;
+class RdfSemanticItem;
 
 /**
  * KWords view class. Following the broad model-view-controller idea this class
@@ -152,6 +153,8 @@ private slots:
     void toggleViewFrameBorders(bool on);
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
+    /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
+    void editSemanticStylesheets();
     /// convert current frame to an inline frame
     void inlineFrame();
     /// called if the zoom changed
@@ -188,6 +191,8 @@ private slots:
     void goToPreviousPage();
     /// go to next page
     void goToNextPage();
+    /// A semantic item was updated and should have it's text refreshed.
+    void semanticObjectViewSiteUpdated(RdfSemanticItem *item, QString xmlid);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

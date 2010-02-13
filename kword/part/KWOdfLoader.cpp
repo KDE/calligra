@@ -46,6 +46,8 @@
 #include <QTextCursor>
 #include <KDebug>
 
+#include <rdf/KoDocumentRdfBase.h>
+
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
         m_document(document)
@@ -198,6 +200,11 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     }
     // Let the TextShape handle loading the body element.
     textShapeData.loadOdf(body, sc);
+
+    // Grab weak references to all the Rdf stuff that was loaded
+    if (KoDocumentRdfBase* rdf = m_document->documentRdfBase()) {
+        rdf->updateInlineRdfStatements(textShapeData.document());
+    }
 
     loadSettings(odfStore.settingsDoc());
 
