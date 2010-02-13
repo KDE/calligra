@@ -1249,7 +1249,11 @@ void SvgParser::applyFilter(KoShape * shape)
     KoXmlElement content = filter->content();
 
     // parse filter region
-    QRectF bound(QPoint(), shape->size());
+    QRectF bound(shape->position(), shape->size());
+    // work on bounding box without viewbox tranformation applied
+    // so user space coordinates of bounding box and filter region match up
+    bound = gc->viewboxTransform.inverted().mapRect(bound);
+
     QRectF filterRegion(filter->position(bound), filter->size(bound));
 
     // convert filter region to boundingbox units
@@ -1477,6 +1481,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF * fragmentSize
         double y = e.hasAttribute("y") ? parseUnit(e.attribute("y")) : 0.0;
         move.translate(x, y);
         gc->matrix = move * gc->matrix;
+        gc->viewboxTransform = move *gc->viewboxTransform;
     }
 
     if (hasViewBox) {
@@ -1484,6 +1489,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF * fragmentSize
         viewTransform.translate(viewBox.x(), viewBox.y());
         viewTransform.scale(width / viewBox.width() , height / viewBox.height());
         gc->matrix = viewTransform * gc->matrix;
+        gc->viewboxTransform = viewTransform *gc->viewboxTransform;
         gc->currentBoundbox.setWidth(gc->currentBoundbox.width() * (viewBox.width() / width));
         gc->currentBoundbox.setHeight(gc->currentBoundbox.height() * (viewBox.height() / height));
     }

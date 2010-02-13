@@ -66,6 +66,7 @@ public:
 
     QRectF currentBoundbox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
+    QMatrix viewboxTransform; ///< view box transformation
 
     bool display;           ///< controls display of shape
 };
