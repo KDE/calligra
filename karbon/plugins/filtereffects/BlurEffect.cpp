@@ -313,7 +313,7 @@ bool BlurEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingCo
         return false;
 
     QString deviationStr = element.attribute("stdDeviation");
-    QStringList params = deviationStr.trimmed().split(',');
+    QStringList params = deviationStr.replace(',', ' ').simplified().split(' ');
 
     switch (params.count()) {
     case 1:
