@@ -167,14 +167,6 @@ void KoWmfPaint::setPen(const QPen &pen)
     QPen p = pen;
     int width = pen.width();
 
-    // FIXME: For some reason, this seems to be necessary.  There are
-    //        some calls to setPen() that contains the wrong color,
-    //        but with width == 0.  If these are ignored, the image
-    //        looks much more correct.  It should be investigated why
-    //        this is so.
-    if (width == 0)
-        return;
-
     if (dynamic_cast<QPrinter *>(mTarget)) {
         width = 0;
     } else {
@@ -246,7 +238,8 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 #endif
 
     // FIXME: This doesn't work.  I don't understand why, but when I
-    //        enable this all backgrounds become black.
+    //        enable this all backgrounds become black. /iw
+    Q_UNUSED(mode);
     //mPainter->setCompositionMode(mode);
 }
 
@@ -508,10 +501,10 @@ void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int 
 }
 
 
-void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& s, double)
+void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& text, double)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << " " << y << " " << w << " " << h << " " << flags << " " << s;
+    kDebug(31000) << x << " " << y << " " << w << " " << h << " " << flags << " " << text;
 #endif
 
     // This enum is taken from the karbon WMF import filter.
@@ -525,30 +518,39 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& 
         y = mLastPos.y();
     }
 
+    QFontMetrics  fm(mPainter->font(), mTarget);
+    int width = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
+    //int height = fm.height();
+
+    if (flags & AlignHCenter)
+        x -= (width / 2);
     // If this flag is set, the point to draw the text is the
     // baseline, otherwise it should be the upper left corner.
     if (!(flags & AlignBottom)) {
-        QFontMetrics  fontMetrics(mPainter->font(), mTarget);
-        y += fontMetrics.ascent();
+        y += fm.ascent();
 
 #if DEBUG_WMFPAINT
         kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
-                      << "ascent = " << fontMetrics.ascent() << " height = " << fontMetrics.height()
-                      << "leading = " << fontMetrics.leading();
+                      << "ascent = " << fm.ascent() << " height = " << fm.height()
+                      << "leading = " << fm.leading();
 #endif
     }
 
+    // Use the special pen defined by mTextPen for text.
     QPen  savePen = mPainter->pen();
+    mPainter->setPen(mTextPen);
 
     // Sometimes it happens that w and/or h == -1, and then the
     // bounding box isn't valid any more.  In that case, no text at
     // all is shown.
-    mPainter->setPen(mTextPen);
-    if (w == -1 || h == -1)
-        mPainter->drawText(x, y, s);
-    else
+    if (w == -1 || h == -1) {
+        mPainter->drawText(x, y, text);
+        //mPainter->drawText(x, y, width, height, 0, text);
+    }
+    else {
         // FIXME: Find out which Qt flags should be there instead of the 0.
-        mPainter->drawText(x, y, w, h, 0, s);
+        mPainter->drawText(x, y, w, h, 0, text);
+    }
 
     mPainter->setPen(savePen);
 }

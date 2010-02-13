@@ -34,6 +34,10 @@
 
 #include <math.h>
 
+
+//#define DEBUG_RECORDS
+
+
 KoWmfReadPrivate::KoWmfReadPrivate()
 {
     mNbrFunc = 0;
@@ -105,8 +109,9 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mBBoxRight = -32768;
     mBBoxBottom = -32768;
 
+#ifdef DEBUG_RECORDS
     kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
-
+#endif
     st >> pheader.key;
     if (pheader.key == (quint32)APMHEADER_KEY) {
         //----- Read placeable metafile header
@@ -280,6 +285,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
     }
 
     if (mNbrFunc) {
+#ifdef DEBUG_RECORDS
         if ((mStandard)) {
             kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
@@ -290,6 +296,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
                           << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
         kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
+#endif
     }
 
     // Stack of handles
@@ -331,9 +338,11 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
                 index -= 0x90;
             }
             
+#ifdef DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << numFunction
                           << ", index" << dec << index << ")";
+#endif
 
             if ((index > 111) || (koWmfFunc[ index ].method == 0)) {
                 // function outside WMF specification
