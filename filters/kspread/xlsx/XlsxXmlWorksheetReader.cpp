@@ -845,19 +845,57 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
  - nc (§18.11.1.3)
  - oc (§18.11.1.5)
 
- @todo support all parent elements
+ @todo support all elements
 */
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 {
     READ_PROLOGUE
-    readNext();
-    m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
-    kDebug() << m_formula;
+    const QXmlStreamAttributes attrs(attributes());
+
+    // Type of formula. The possible values defined by the ST_CellFormulaType (§18.18.6), p. 2677
+    TRY_READ_ATTR(t)
+    if (!t.isEmpty()) {
+        if (t == QLatin1String("shared")) {
+            /* Shared Group Index, p. 1815
+            Optional attribute to optimize load performance by sharing formulas.
+            When a formula is a shared formula (t value is shared) then this value indicates the
+            group to which this particular cell's formula belongs. The first formula in a group of
+            shared formulas is saved in the f element. This is considered the 'master' formula cell.
+            Subsequent cells sharing this formula need not have the formula written in their f
+            element. Instead, the attribute si value for a particular cell is used to figure what the
+            formula expression should be based on the cell's relative location to the master formula
+            cell.
+            */
+            TRY_READ_ATTR(si)
+            int sharedGroupIndex;
+            STRING_TO_INT(si, sharedGroupIndex, "f@si")
+
+            /* Range of Cells
+            Range of cells which the formula applies to. Only required for shared formula, array
+            formula or data table. Only written on the master formula, not subsequent formulas
+            belonging to the same shared group, array, or data table. */
+            TRY_READ_ATTR(ref)
+            //! @todo handle shared group
+        }
+        else if (t == QLatin1String("normal")) { // Formula is a regular cell formula
+            
+        }
+        else if (t == QLatin1String("array")) { // Formula is an array formula
+            //! @todo array
+        }
+        else if (t == QLatin1String("dataTable")) { // Formula is a data table formula
+            //! @todo dataTable
+        }
+    }
+    //! @todo more attrs
 
     while (!atEnd() && !hasError()) {
-        readNext();
-        kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        if (isCharacters()) {
+            m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
+            kDebug() << m_formula;
+        }
     }
     READ_EPILOGUE
 }
