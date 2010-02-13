@@ -134,7 +134,6 @@ public:
 
     /**
      * Return an ordered list of all pages.
-// TODO create iterator instead
      */
     QList<KWPage> pages() const;
 
