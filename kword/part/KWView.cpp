@@ -888,10 +888,14 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::insertFrameBreak()
 {
-    // TODO should this be removed??
     KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
-    if (handler)
+    if (handler) {
+        // this means we have the text tool selected right now.
         handler->insertFrameBreak();
+    } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
+        KoTextDocument doc(m_document->mainFrameSet()->document());
+        doc.textEditor()->insertFrameBreak();
+    }
 }
 
 void KWView::addBookmark()
