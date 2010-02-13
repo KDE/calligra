@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include <KoXmlNS.h>
+#include <KoOdfWorkaround.h>
 #include "KPrPlaceholderShape.h"
 
 #include <kdebug.h>
@@ -53,8 +54,15 @@ bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e) const
     if ( !parent.isNull() ) {
         KoXmlElement element = parent.toElement();
         if ( !element.isNull() ) {
-            kDebug(33001) << "placeholder:" << ( element.attributeNS( KoXmlNS::presentation, "placeholder", "false" ) == "true" ); 
-            return ( element.attributeNS( KoXmlNS::presentation, "placeholder", "false" ) == "true" );
+            bool supported =  element.attributeNS( KoXmlNS::presentation, "placeholder", "false" ) == "true";
+            kDebug(33001) << "placeholder:" << supported;
+#ifndef NWORKAROUND_ODF_BUGS
+            if (!supported && KoOdfWorkaround::fixPresentationPlaceholder() && element.hasAttributeNS(KoXmlNS::presentation, "class")) {
+                supported = true;
+                kDebug(33001) << "workaround OO placeholder bug" << supported;
+            }
+#endif
+            return supported;
         }
     }
     return false;

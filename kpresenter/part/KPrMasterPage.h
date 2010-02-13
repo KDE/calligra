@@ -38,6 +38,9 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+    /// reimplemented
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
 protected:
     /// reimplemented
     virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );

@@ -24,6 +24,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
+#include <KoOdfWorkaround.h>
 
 #include "KPrPlaceholderStrategy.h"
 
@@ -61,6 +62,9 @@ void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &conve
 bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     loadOdfAttributes( element, context, OdfAllAttributes );
+#ifndef NWORKAROUND_ODF_BUGS
+    KoOdfWorkaround::fixPresentationPlaceholder(this);
+#endif
 
     delete m_strategy;
 
