@@ -16,16 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-//
-// C++ Implementation: pqxxpreparedstatement
-//
-// Description:
-//
-//
-// Author: Adam Pigg <adam@piggz.co.uk>, (C) 2005
-//
-// Copyright: See COPYING file that comes with this distribution
-//
+
 #include "pqxxpreparedstatement.h"
 #include <kdebug.h>
 using namespace KexiDB;

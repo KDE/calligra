@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2003-2009 Kexi Team
+   Copyright (c) 2003-2009 Kexi Team <kexi@kde.org>
 
    Version information based on kofficeversion.h,
    Copyright (c) 2003 KOffice Team
