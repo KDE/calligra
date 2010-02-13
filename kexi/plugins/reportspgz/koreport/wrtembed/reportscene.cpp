@@ -182,7 +182,7 @@ qreal ReportScene::lowestZValue()
     qreal zz;
     z = 0;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); ++it) {
         zz = (*it)->zValue();
         if (zz < z) {
             z = zz;
@@ -198,7 +198,7 @@ qreal ReportScene::highestZValue()
     qreal zz;
     z = 0;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); ++it) {
         zz = (*it)->zValue();
         if (zz > z) {
             z = zz;
@@ -212,7 +212,7 @@ void ReportScene::lowerSelected()
 {
     QGraphicsItemList list = selectedItems();
     for (QGraphicsItemList::iterator it = list.begin();
-            it != list.end(); it++) {
+            it != list.end(); ++it) {
         (*it)->setZValue(lowestZValue() - 1);
     }
 }
@@ -221,7 +221,7 @@ void ReportScene::raiseSelected()
 {
     QGraphicsItemList list = selectedItems();
     for (QGraphicsItemList::iterator it = list.begin();
-            it != list.end(); it++) {
+            it != list.end(); ++it) {
         (*it)->setZValue(highestZValue() + 1);
     }
 }
@@ -230,8 +230,8 @@ QGraphicsItemList ReportScene::itemsOrdered()
 {
     QGraphicsItemList r;
     QGraphicsItemList list = items();
-    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); it++) {
-        for (QGraphicsItemList::iterator rit = r.begin(); rit != r.end(); rit++) {
+    for (QGraphicsItemList::iterator it = list.begin(); it != list.end(); ++it) {
+        for (QGraphicsItemList::iterator rit = r.begin(); rit != r.end(); ++rit) {
 
 
         }

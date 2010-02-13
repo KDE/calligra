@@ -87,7 +87,7 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 13; i++) {
+    for (i = 0; i < 13; ++i) {
         val[i] = -1;
     }
 
@@ -98,7 +98,7 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar) _str.at(i)).digitValue();
         if (val[i] == -1) return;
     }
@@ -106,7 +106,7 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
     // calculate and append the checksum value
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < 12; ++i) {
         checksum += val[i] * (i % 2 ? 3 : 1);
     }
     checksum = (checksum % 10);
@@ -177,9 +177,9 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
         pos ++;
 
         // render first set
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 6; ++i) {
             b = val[i+1];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][_parity[val[0]][i]][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - 7, pPainter->pen().color());
                 }
@@ -195,9 +195,9 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
         pos += 2;
 
         // render last set
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 6; ++i) {
             b = val[i+7];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][RIGHTHAND][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - 7, pPainter->pen().color());
                 }
@@ -238,7 +238,7 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 13; i++) {
+    for (i = 0; i < 13; ++i) {
         val[i] = -1;
     }
 
@@ -250,7 +250,7 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
     // if we can't convert all characters then this is
     // an invalid number
     val[0] = 0;
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i+1] = ((QChar) _str.at(i)).digitValue();
         if (val[i+1] == -1) return;
     }
@@ -258,7 +258,7 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
     // calculate and append the checksum value
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < 12; ++i) {
         checksum += val[i] * (i % 2 ? 3 : 1);
     }
     checksum = (checksum % 10);
@@ -329,9 +329,9 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
         pos ++;
 
         // render first set
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 6; ++i) {
             b = val[i+1];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][_parity[val[0]][i]][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - (i == 0 ? 0 : 7), pPainter->pen().color());
                 }
@@ -347,9 +347,9 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
         pos += 2;
 
         // render last set
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 6; ++i) {
             b = val[i+7];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][RIGHTHAND][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - (i == 5 ? 0 : 7), pPainter->pen().color());
                 }
@@ -394,7 +394,7 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; ++i) {
         val[i] = -1;
     }
 
@@ -405,7 +405,7 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar) _str.at(i)).digitValue();
         if (val[i] == -1) return;
     }
@@ -413,7 +413,7 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
     // calculate and append the checksum value
     int old_sum = val[7]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < 7; ++i) {
         checksum += val[i] * (i % 2 ? 1 : 3);
     }
     checksum = (checksum % 10);
@@ -484,9 +484,9 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
         pos ++;
 
         // render first set
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4; ++i) {
             b = val[i];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][LEFTHAND_ODD][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - 6, pPainter->pen().color());
                 }
@@ -502,9 +502,9 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
         pos += 2;
 
         // render last set
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4; ++i) {
             b = val[i+4];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][RIGHTHAND][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - 6, pPainter->pen().color());
                 }
@@ -541,7 +541,7 @@ void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter *
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; ++i) {
         val[i] = -1;
     }
 
@@ -552,7 +552,7 @@ void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter *
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar) _str.at(i)).digitValue();
         if (val[i] == -1) return;
     }
@@ -623,9 +623,9 @@ void renderCodeUPCE(const QRect & r, const QString & _str, int align, QPainter *
         pos ++;
 
         // render first set
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 6; ++i) {
             b = val[i+1];
-            for (w = 0; w < 7; w++) {
+            for (w = 0; w < 7; ++w) {
                 if (_encodings[b][_upcparenc[val[7]][val[0]][i]][w]) {
                     pPainter->fillRect(pos, top, 1, draw_height - 7, pPainter->pen().color());
                 }

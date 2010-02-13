@@ -741,7 +741,7 @@ public:
     */
     uint pkeyFieldsCount();
 
-    /*! \return a list of field infos for all auto-incremented fields
+    /*! \return a list of field information for all auto-incremented fields
      from master table of this query. This result is cached for efficiency.
      fieldsExpanded() is used for that.
     */

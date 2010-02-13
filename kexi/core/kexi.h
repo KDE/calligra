@@ -60,7 +60,7 @@ KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 //! A set of known connections
 KEXICORE_EXPORT KexiDBConnectionSet& connset();
 
-//! A set avaiulable of project infos
+//! A set available of project information
 KEXICORE_EXPORT KexiProjectSet& recentProjects();
 
 //! shared driver manager

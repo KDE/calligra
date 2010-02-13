@@ -38,11 +38,11 @@ public:
 
     virtual ~KexiDataAwareWidgetInfo();
 
-    //! Sets flag controling inline editing when data source is set (frue e.g. for line edit, text edit).
+    //! Sets flag controlling inline editing when data source is set (frue e.g. for line edit, text edit).
     //! True by default.
     void setInlineEditingEnabledWhenDataSourceSet(bool set);
 
-    //! @return flag controling inline editing when data source is set
+    //! @return flag controlling inline editing when data source is set
     bool inlineEditingEnabledWhenDataSourceSet() const;
 
 private:

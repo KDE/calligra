@@ -92,7 +92,7 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 13; i++)
+    for (i = 0; i < 13; ++i)
         val[i] = -1;
 
     // verify that the passed in string is valid
@@ -103,7 +103,7 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar)_str.at(i)).digitValue();
         if (val[i] == -1)
             return;
@@ -112,7 +112,7 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     // calculate and append the checksum value
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 12; i++)
+    for (i = 0; i < 12; ++i)
         checksum += val[i] * (i % 2 ? 3 : 1);
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;
@@ -190,9 +190,9 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     pos += bar_width;
 
     // render first set
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; ++i) {
         b = val[i+1];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][_parity[val[0]][i]][w]) {
                 rect = new ORORect();
                 rect->setPen(pen);
@@ -224,9 +224,9 @@ void renderCodeEAN13(OROPage * page, const QRectF & r, const QString & _str, int
     pos += (bar_width * 2.0);
 
     // render last set
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; ++i) {
         b = val[i+7];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][RIGHTHAND][w]) {
                 rect = new ORORect();
                 rect->setPen(pen);
@@ -291,7 +291,7 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 13; i++)
+    for (i = 0; i < 13; ++i)
         val[i] = -1;
 
     // verify that the passed in string is valid
@@ -303,7 +303,7 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     // if we can't convert all characters then this is
     // an invalid number
     val[0] = 0;
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i+1] = ((QChar)_str.at(i)).digitValue();
         if (val[i+1] == -1)
             return;
@@ -312,7 +312,7 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     // calculate and append the checksum value
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 12; i++)
+    for (i = 0; i < 12; ++i)
         checksum += val[i] * (i % 2 ? 3 : 1);
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;
@@ -388,9 +388,9 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     pos += bar_width;
 
     // render first set
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; ++i) {
         b = val[i+1];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][_parity[val[0]][i]][w]) {
                 rect = new ORORect();
                 rect->setPen(pen);
@@ -421,9 +421,9 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
     pos += (bar_width * 2.0);
 
     // render last set
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; ++i) {
         b = val[i+7];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][RIGHTHAND][w]) {
                 rect = new ORORect();
                 rect->setPen(pen);
@@ -501,7 +501,7 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < 8; ++i)
         val[i] = -1;
 
     // verify that the passed in string is valid
@@ -512,7 +512,7 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar)_str.at(i)).digitValue();
         if (val[i] == -1)
             return;
@@ -521,7 +521,7 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     // calculate and append the checksum value
     int old_sum = val[7]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
-    for (i = 0; i < 7; i++)
+    for (i = 0; i < 7; ++i)
         checksum += val[i] * (i % 2 ? 1 : 3);
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;
@@ -598,9 +598,9 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     pos += bar_width;
 
     // render first set
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; ++i) {
         b = val[i];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][LEFTHAND_ODD][w]) {
                 ORORect * rect = new ORORect();
                 rect->setPen(pen);
@@ -632,9 +632,9 @@ void renderCodeEAN8(OROPage * page, const QRectF & r, const QString & _str, int 
     pos += (bar_width * 2.0);
 
     // render last set
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; ++i) {
         b = val[i+4];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][RIGHTHAND][w]) {
                 ORORect * rect = new ORORect();
                 rect->setPen(pen);
@@ -690,7 +690,7 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     int i = 0;
 
     // initialize all the values just so we can be predictable
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < 8; ++i)
         val[i] = -1;
 
     // verify that the passed in string is valid
@@ -701,7 +701,7 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     // loop through and convert each char to a digit.
     // if we can't convert all characters then this is
     // an invalid number
-    for (i = 0; i < _str.length(); i++) {
+    for (i = 0; i < _str.length(); ++i) {
         val[i] = ((QChar)_str.at(i)).digitValue();
         if (val[i] == -1)
             return;
@@ -780,9 +780,9 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
     pos += bar_width;
 
     // render first set
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; ++i) {
         b = val[i+1];
-        for (w = 0; w < 7; w++) {
+        for (w = 0; w < 7; ++w) {
             if (_encodings[b][_upcparenc[val[7]][val[0]][i]][w]) {
                 rect = new ORORect();
                 rect->setPen(pen);

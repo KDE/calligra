@@ -160,7 +160,7 @@ void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
     // now get a list of all the QGraphicsItems on this scene and output them.
     QGraphicsItemList list = m_scene->items();
     for (QGraphicsItemList::iterator it = list.begin();
-            it != list.end(); it++) {
+            it != list.end(); ++it) {
         ReportEntity::buildXML((*it), doc, section);
     }
 }
@@ -181,7 +181,7 @@ void ReportSection::initFromXML(QDomNode & section)
 
     m_sectionData->m_backgroundColor->setValue(QColor(section.toElement().attribute("fo:background-color", "#ffffff")));
 
-    for (int i = 0; i < nl.count(); i++) {
+    for (int i = 0; i < nl.count(); ++i) {
         node = nl.item(i);
         n = node.nodeName();
 

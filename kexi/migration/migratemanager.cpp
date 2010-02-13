@@ -45,7 +45,7 @@ MigrateManagerInternal* MigrateManagerInternal::s_self = 0L;
  Temporary, needed because MigrateManagerInternal::m_drivers is autodeleted
  drivers currently own KexiMigrate::Data members so these are destroyed when
  last MigrateManager instance is deleted. Remove this hack when
- KexiMigrate is splitted into Driver and Connection. */
+ KexiMigrate is split into Driver and Connection. */
 MigrateManager __manager;
 
 MigrateManagerInternal::MigrateManagerInternal() /* protected */
@@ -117,7 +117,7 @@ bool MigrateManagerInternal::lookupDrivers()
 //! @todo could be merged. Copied from KexiDB::DriverManager.
 //<COPIED>
         QString srv_ver_str = ptr->property("X-Kexi-KexiMigrationVersion").toString();
-        QStringList lst(srv_ver_str.split("."));
+        QStringList lst(srv_ver_str.split('.'));
         int minor_ver, major_ver;
         bool ok = (lst.count() == 2);
         if (ok)
@@ -158,7 +158,7 @@ bool MigrateManagerInternal::lookupDrivers()
         }
         m_services.insert(srv_name, ptr);
         m_services_lcase.insert(srv_name.toLower(), ptr);
-        KexiDBDbg << "registered driver:" << ptr->name() << "(" << ptr->library() << ")";
+        KexiDBDbg << "registered driver:" << ptr->name() << '(' << ptr->library() << ")";
     }
 
     if (tlist.isEmpty()) {

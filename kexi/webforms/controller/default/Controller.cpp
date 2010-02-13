@@ -115,7 +115,7 @@ void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPCo
     kDebug() << "PARAMETERS COUNT: " << requestURI.count();
 
     bool malformedRequest = true;
-    if (action == "") {
+    if (action.isEmpty()) {
         if (requestURI.count() == 0) {
             malformedRequest = false;
             m_index->view(data, writer);

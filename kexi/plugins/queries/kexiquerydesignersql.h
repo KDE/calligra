@@ -31,7 +31,7 @@ class KexiQueryDesignerSQLEditor;
 
 //! The KexiQueryDesignerSQLView class for editing Queries in text mode.
 /*! It is a view containing SQL text editor
- and SQL history/status widget splitted vertically.
+ and SQL history/status widget split vertically.
  Depending on user's will, the widget can be in "sql history"
  mode or in "sql status" mode. */
 class KexiQueryDesignerSQLView : public KexiView

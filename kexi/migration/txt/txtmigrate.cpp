@@ -82,7 +82,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
     m_DataFile = 0;
   }
   
-  m_DataFile = new QFile(m_Folder + "/" + tableName);
+  m_DataFile = new QFile(m_Folder + '/' + tableName);
 
   kDebug() << m_DataFile->fileName();
   m_Row = -1;

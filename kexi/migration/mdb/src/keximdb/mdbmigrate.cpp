@@ -109,7 +109,7 @@ bool MDBMigrate::drv_connect()
         mdb_set_encoding(m_mdb, encoding.constData());
         kDebug() << "non-unicode encoding set to \""
         << encoding
-        << "\"";
+        << '\"';
     }
 
     // Supports setting source encoding
@@ -171,7 +171,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         // Field name
         QString fldName = QString::fromUtf8(col->name);
         kDebug() << "got column "
-        << fldName << "\"" << col->name;
+        << fldName << '\"' << col->name;
 
         QString fldID(KexiUtils::string2Identifier(fldName));
 

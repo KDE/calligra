@@ -146,7 +146,7 @@ void ReportSectionDetail::insertSection(int idx, ReportSectionDetailGroup * rsd)
     m_vboxlayout->removeWidget(m_detail);
     m_vboxlayout->insertWidget(idx, m_detail);
     idx++;
-    for (gi = ((int) groupList.count() - 1); gi >= 0; gi--) {
+    for (gi = ((int) groupList.count() - 1); gi >= 0; --gi) {
         rsd = groupList.at(gi);
         m_vboxlayout->removeWidget(rsd->groupFooter());
         m_vboxlayout->insertWidget(idx, rsd->groupFooter());

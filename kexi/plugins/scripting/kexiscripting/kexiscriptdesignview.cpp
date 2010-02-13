@@ -269,7 +269,7 @@ void KexiScriptDesignView::updateProperties()
     KoProperty::Property* t = new KoProperty::Property(
         "type", // name
         typelist, // ListData
-        (d->scriptType.isEmpty() ? "execuable" : d->scriptType), // value
+        (d->scriptType.isEmpty() ? "executable" : d->scriptType), // value
         i18n("Script Type"), // caption
         i18n("The type of script"), // description
         KoProperty::List // type

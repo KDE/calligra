@@ -250,7 +250,7 @@ tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
 bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
                                  KexiDB::TableSchema* dstTable)
 {
-    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable)) + "`")
+    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable)) + '`')
         return false;
     MYSQL_RES *res = mysql_use_result(d->mysql);
     if (!res) {
@@ -286,7 +286,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
 bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
 {
-    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table)) + "`")
+    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table)) + '`')
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
@@ -397,7 +397,7 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
 {
     QString mysqlType;
     const QString query("SHOW COLUMNS FROM `" + drv_escapeIdentifier(table) +
-                        "` LIKE '" + QString::fromLatin1(fld->name) + "'");
+                        "` LIKE '" + QString::fromLatin1(fld->name) + '\'');
 
     if (!d->executeSQL(query)) {
         // Huh? MySQL wont tell us what kind of field it is! Lets guess.
@@ -437,7 +437,7 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
 {
     QString vals;
     const QString query("SHOW COLUMNS FROM `" + drv_escapeIdentifier(table) +
-                        "` LIKE '" + QString::fromLatin1(fld->name) + "'");
+                        "` LIKE '" + QString::fromLatin1(fld->name) + '\'');
 
     if (!d->executeSQL(query))
         // Huh? MySQL wont tell us what values it can take.
@@ -463,7 +463,7 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
         kDebug() << "MySQLMigrate::examineEnumField:1 not an enum!";
         return QStringList();
     }
-    if (!vals.endsWith(")")) {
+    if (!vals.endsWith(')')) {
         kDebug() << "MySQLMigrate::examineEnumField:2 not an enum!";
         return QStringList();
     }

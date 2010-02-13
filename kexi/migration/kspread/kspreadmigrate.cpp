@@ -36,7 +36,7 @@ KSpreadMigrate::~KSpreadMigrate()
 
 bool KSpreadMigrate::drv_connect()
 {
-  m_FileName = m_migrateData->source->dbPath() + "/" + m_migrateData->source->dbFileName();
+  m_FileName = m_migrateData->source->dbPath() + '/' + m_migrateData->source->dbFileName();
   
   if (!QFile::exists(m_FileName)) 
     return false;
@@ -82,7 +82,7 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
   
   KSpread::Cell *cell;
   KexiDB::Field *fld;
-  tableSchema.setName(QString(originalName).replace(" ", "_").toLower());
+  tableSchema.setName(QString(originalName).replace(' ', '_').toLower());
   tableSchema.setCaption(originalName);
   
   do
@@ -93,7 +93,7 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
       col++;
       if (!cell->isEmpty())
       {
-          fld = new KexiDB::Field(fieldname.replace(" ", "_"), KexiDB::Field::Text);
+          fld = new KexiDB::Field(fieldname.replace(' ', '_'), KexiDB::Field::Text);
           fld->setCaption(fieldname);
           tableSchema.addField( fld );
           kDebug() << fieldname;

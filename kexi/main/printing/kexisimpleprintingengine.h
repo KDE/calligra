@@ -60,7 +60,7 @@ public:
  - date and time in the header
  - optional table borders
  - page title
- - text large fields that could not fit on a full single page are splitted between pages
+ - text large fields that could not fit on a full single page are split between pages
 */
 class KexiSimplePrintingEngine : public QObject
 {
@@ -127,7 +127,7 @@ protected:
     KexiTableViewData *m_data;
 
     //! Information about record/field/place-in-text offset for a given page
-    //! Needed because large text values can be splitted between pages
+    //! Needed because large text values can be split between pages
     struct DataOffset {
         DataOffset() : record(-1), field(0), textOffset(0) {}
         DataOffset(const DataOffset& other) {

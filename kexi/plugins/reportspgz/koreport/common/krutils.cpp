@@ -112,7 +112,7 @@ bool KRUtils::readFontAttributes(const QDomElement& el, QFont& font)
     const QByteArray underlineType(el.attribute("style:text-underline-type").toLatin1());
     font.setUnderline(!underlineType.isEmpty() && underlineType != "none");
 
-    // striked-out
+    // stricken-out
     const QByteArray strikeOutType(el.attribute("style:text-line-through-type").toLatin1());
     font.setStrikeOut(!strikeOutType.isEmpty() && strikeOutType != "none");
 
@@ -195,7 +195,7 @@ void KRUtils::writeFontAttributes(QDomElement& el, const QFont &font)
     if (font.underline()) {
         el.setAttribute("style:text-underline-type", "single");
     }
-    // striked-out, default is "none"
+    // stricken-out, default is "none"
     if (font.strikeOut()) {
         el.setAttribute("style:text-line-through-type", "single");
     }

@@ -174,7 +174,7 @@ static const struct code128 _128codes[] = {
 
 int code128Index(QChar code, int set)
 {
-    for (int idx = 0; _128codes[idx]._null == false; idx++) {
+    for (int idx = 0; _128codes[idx]._null == false; ++idx) {
         if (set == SETA && _128codes[idx].codea == code.toAscii()) return idx;
         if (set == SETB && _128codes[idx].codeb == code.toAscii()) return idx;
         if (set == SETC && _128codes[idx].codec == code.toAscii()) return idx;
@@ -198,7 +198,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
         int rank_c = 0;
 
         QChar c;
-        for (i = 0; i < _str.length(); i++) {
+        for (i = 0; i < _str.length(); ++i) {
             c = _str.at(i);
             rank_a += (code128Index(c, SETA) != -1 ? 1 : 0);
             rank_b += (code128Index(c, SETB) != -1 ? 1 : 0);
@@ -233,7 +233,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
             int set = (rank_a > rank_b ? SETA : SETB);
             str.push_back((rank_a > rank_b ? 103 : 104));
             int v = -1;
-            for (i = 0; i < _str.length(); i++) {
+            for (i = 0; i < _str.length(); ++i) {
                 c = _str.at(i);
                 v = code128Index(c, set);
                 if (v == -1) {
@@ -250,7 +250,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
 
     // calculate and append the checksum value to the list
     int checksum = str.at(0);
-    for (i = 1; i < str.size(); i++)
+    for (i = 1; i < str.size(); ++i)
         checksum += (str.at(i) * i);
     checksum = checksum % 103;
     str.push_back(checksum);
@@ -308,7 +308,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
     bool space = false;
     int idx = 0, b = 0;
     qreal w = 0.0;
-    for (i = 0; i < str.size(); i++) {
+    for (i = 0; i < str.size(); ++i) {
         // loop through each value and render the barcode
         idx = str.at(i);
         if (idx < 0 || idx > 105) {
@@ -316,7 +316,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
             continue;
         }
         space = false;
-        for (b = 0; b < 6; b++, space = !space) {
+        for (b = 0; b < 6; ++b, space = !space) {
             w = _128codes[idx].values[b] * bar_width;
             if (!space) {
                 ORORect * rect = new ORORect();
@@ -333,7 +333,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
     // 7 elements in it's bar sequence rather than 6 like the others
     int STOP_CHARACTER[] = { 2, 3, 3, 1, 1, 1, 2 };
     space = false;
-    for (b = 0; b < 7; b++, space = !space) {
+    for (b = 0; b < 7; ++b, space = !space) {
         w = STOP_CHARACTER[b] * bar_width;
         if (!space) {
             ORORect * rect = new ORORect();

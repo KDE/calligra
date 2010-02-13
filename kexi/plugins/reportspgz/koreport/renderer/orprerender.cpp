@@ -231,7 +231,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
             kDebug() << "Record Count:" << m_recordCount;
 
-            for (i = 0; i < (int) detailData.m_groupList.count(); i++) {
+            for (i = 0; i < (int) detailData.m_groupList.count(); ++i) {
                 cnt++;
                 grp = detailData.m_groupList[i];
 
@@ -276,7 +276,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 if (status == true && keys.count() > 0) {
                     // check to see where it is we need to start
                     pos = -1; // if it's still -1 by the time we are done then no keyValues changed
-                    for (i = 0; i < keys.count(); i++) {
+                    for (i = 0; i < keys.count(); ++i) {
                         if (keyValues[i] != m_kodata->value(m_kodata->fieldNumber(keys[i])).toString()) {
                             pos = i;
                             break;
@@ -313,7 +313,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                             if (do_break)
                                 createNewPage();
                             if (status == true) {
-                                for (i = pos; i < cnt; i++) {
+                                for (i = pos; i < cnt; ++i) {
                                     grp = detailData.m_groupList[i];
 
                                     if (grp->m_groupHeader) {
@@ -974,12 +974,12 @@ ORODocument* ORPreRender::generate()
                     d->renderSection(*(detailData->m_detailSection));
                     d->m_yOffset = tmp; // restore the value that renderSection modified
 
-                    col ++;
+                    col++;
                     d->m_leftMargin += w + wg;
                     if (col >= numCols) {
                         d->m_leftMargin = margin; // reset back to original value
                         col = 0;
-                        row ++;
+                        row++;
                         d->m_yOffset += h + hg;
                         if (row >= numRows) {
                             d->m_yOffset = d->m_topMargin;

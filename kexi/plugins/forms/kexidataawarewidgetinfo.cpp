@@ -57,7 +57,7 @@ void KexiDataAwareWidgetInfo::setInlineEditingEnabledWhenDataSourceSet(bool set)
     d->inlineEditingEnabledWhenDataSourceSet = set;
 }
 
-//! @return flag controling inline editing when data source is set
+//! @return flag controlling inline editing when data source is set
 bool KexiDataAwareWidgetInfo::inlineEditingEnabledWhenDataSourceSet() const
 {
     return d->inlineEditingEnabledWhenDataSourceSet;

@@ -114,7 +114,7 @@ bool PqxxMigrate::drv_readTableSchema(
         m_f->setPrecision(0);*/
 
         kDebug() << "Added field [" << f->name() << "] type [" << f->typeName()
-        << "]";
+        << ']';
     }
     return true;
 }
@@ -195,7 +195,7 @@ bool PqxxMigrate::drv_connect()
             socket = m_migrateData->source->fileName();
         }
     } else {
-        conninfo = "host='" + m_migrateData->source->hostName + "'";
+        conninfo = "host='" + m_migrateData->source->hostName + '\'';
     }
 
     //Build up the connection string
@@ -321,7 +321,7 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
     delete tran;
     tran = 0;
 
-    kDebug() << "OID for table [" << table << "] is [" << toid << "]";
+    kDebug() << "OID for table [" << table << "] is [" << toid << ']';
     return toid;
 }
 
