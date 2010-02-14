@@ -89,6 +89,7 @@ set( kpresenterprivate_LIB_SRCS
      animations/KPrAnimateTransform.cpp
      animations/KPrAnimationFactory.cpp
      animations/KPrAnimationCache.cpp
+     animations/KPrTextBlockPaintStrategy.cpp
 
      pagelayout/KPrPlaceholder.cpp
      pagelayout/KPrPageLayout.cpp

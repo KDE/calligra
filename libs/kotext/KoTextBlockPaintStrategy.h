@@ -17,41 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrTextBlockPaintStrategy.h"
+#ifndef KOTEXTBLOCKPAINTSTRATEGY_H
+#define KOTEXTBLOCKPAINTSTRATEGY_H
+
+#include "kotext_export.h"
 
 #include <QBrush>
-#include "KPrAnimationCache.h"
 
-
-KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(KoTextBlockData *blockData)
-    : m_animationCache(0)
-    , m_textBlockData(blockData)
+/**
+ * This class is used to control aspects of textblock painting
+ * Which is used when KPresenter animate text. Though KPresenter uses a subclass.
+ */
+class KOTEXT_EXPORT KoTextBlockPaintStrategy
 {
-}
+public:
+    KoTextBlockPaintStrategy();
+    virtual ~KoTextBlockPaintStrategy() {}
+    virtual QBrush background(const QBrush &defaultBackground) {return defaultBackground;};
+    virtual void modifyPainter(QPainter *painter) {}
+    virtual bool visible() {return true;}
+};
 
-KPrTextBlockPaintStrategy::~KPrTextBlockPaintStrategy()
-{
-}
-
-void KPrTextBlockPaintStrategy::setAnimationCache(KPrAnimationCache *animationCache)
-{
-    m_animationCache = animationCache;
-}
-
-QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
-{
-    return defaultBackground;
-}
-
-void KPrTextBlockPaintStrategy::modifyPainter(QPainter *painter)
-{
-}
-
-bool KPrTextBlockPaintStrategy::visible()
-{
-    if (m_animationCache) {
-        return m_animationCache->value(m_textBlockData, "visibility", true).toBool();
-    } else {
-        return true;
-    }
-}
+#endif

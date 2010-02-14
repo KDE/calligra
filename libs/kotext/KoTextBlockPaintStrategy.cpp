@@ -17,41 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrTextBlockPaintStrategy.h"
+#include <QPainter>
 
-#include <QBrush>
-#include "KPrAnimationCache.h"
+#include "KoTextBlockPaintStrategy.h"
 
 
-KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(KoTextBlockData *blockData)
-    : m_animationCache(0)
-    , m_textBlockData(blockData)
-{
-}
-
-KPrTextBlockPaintStrategy::~KPrTextBlockPaintStrategy()
-{
-}
-
-void KPrTextBlockPaintStrategy::setAnimationCache(KPrAnimationCache *animationCache)
-{
-    m_animationCache = animationCache;
-}
-
-QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
-{
-    return defaultBackground;
-}
-
-void KPrTextBlockPaintStrategy::modifyPainter(QPainter *painter)
-{
-}
-
-bool KPrTextBlockPaintStrategy::visible()
-{
-    if (m_animationCache) {
-        return m_animationCache->value(m_textBlockData, "visibility", true).toBool();
-    } else {
-        return true;
-    }
-}
+KoTextBlockPaintStrategy::KoTextBlockPaintStrategy() {}

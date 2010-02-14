@@ -22,7 +22,10 @@
 
 #include <QBrush>
 
-#include <KoTextBlockPaintStrategy>
+#include <KoTextBlockPaintStrategy.h>
+
+class KPrAnimationCache;
+class KoTextBlockData;
 
 /**
  * This class is used to control aspects of textblock painting
@@ -30,14 +33,15 @@
 class KOTEXT_EXPORT KPrTextBlockPaintStrategy : public KoTextBlockPaintStrategy
 {
 public:
-    KoTextBlockPaintStrategy(KPrAnimationCache *animationCache);
-    virtual ~KoTextBlockPaintStrategy() {}
+    KPrTextBlockPaintStrategy(KoTextBlockData *blockData);
+    virtual ~KPrTextBlockPaintStrategy();
     void setAnimationCache(KPrAnimationCache *animationCache);
     virtual QBrush background(const QBrush &defaultBackground);
     virtual void modifyPainter(QPainter *painter);
     virtual bool visible();
 
     KPrAnimationCache *m_animationCache;
+    KoTextBlockData *m_textBlockData;
 };
 
 #endif

@@ -27,6 +27,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoTextBlockData.h>
 #include "KPrAnimationCache.h"
+#include "KPrTextBlockPaintStrategy.h"
 
 #include <kdebug.h>
 
@@ -48,6 +49,9 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
             m_shape = pair.first;
             m_textBlockData = pair.second.value<KoTextBlockData *>();
+            KPrTextBlockPaintStrategy *paintStrategy = new KPrTextBlockPaintStrategy(m_textBlockData);
+            m_textBlockData->setPaintStrategy(paintStrategy);
+
         } else {
             m_shape = context.shapeById(targetElement);
         }
@@ -80,4 +84,14 @@ void KPrAnimSet::saveOdf(KoShapeSavingContext &context) const
 
 void KPrAnimSet::init(KPrAnimationCache *animationCache) const
 {
+    if (m_textBlockData) {
+        dynamic_cast<KPrTextBlockPaintStrategy*>(m_textBlockData->paintStrategy())->setAnimationCache(animationCache);
+        if (!animationCache->hasValue(m_textBlockData, "visibility")) {
+            animationCache->setValue(m_textBlockData, "visibility", !m_visible);
+        }
+    } else {
+        if (!animationCache->hasValue(m_shape, "visibility")) {
+            animationCache->setValue(m_shape, "visibility", !m_visible);
+        }
+    }
 }
