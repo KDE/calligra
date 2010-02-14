@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWRdfDOCKERTREE_H
-#define KWRdfDOCKERTREE_H
+#ifndef KWRDFDOCKERTREE_H
+#define KWRDFDOCKERTREE_H
 
 #include <QTreeWidget>
 #include <KoCanvasObserverBase.h>
@@ -47,8 +47,7 @@ class KoTextEditor;
  */
 class KWRdfDockerTree : public QTreeWidget, public KoCanvasObserverBase
 {
-    Q_OBJECT;
-
+    Q_OBJECT
 public:
     KWRdfDockerTree(QWidget *parent = 0);
 
