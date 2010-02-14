@@ -25,6 +25,8 @@
 
 #include <kdebug.h>
 
+#include "kowmfenums.h"
+
 
 KoWmfPaint::KoWmfPaint()
     : KoWmfRead()
@@ -501,33 +503,34 @@ void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int 
 }
 
 
-void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& text, double)
+void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text, double)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << " " << y << " " << w << " " << h << " " << flags << " " << text;
+    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text;
 #endif
 
-    // This enum is taken from the karbon WMF import filter.
-    // FIXME: This is just a small subset of the align flags that WMF defines.  
-    //        They should all be handled.
-    enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
-
-    if (flags & CurrentPosition) {
+    // The TA_UPDATECP flag tells us to use the current position
+    if (textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
         x = mLastPos.x();
         y = mLastPos.y();
     }
 
     QFontMetrics  fm(mPainter->font(), mTarget);
-    int width = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
-    //int height = fm.height();
+    int width  = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
+    int height = fm.height();
 
-    if (flags & AlignHCenter)
+    // Horizontal align.  These flags are supposed to be mutually exclusive.
+    if ((textAlign & TA_CENTER) == TA_CENTER)
         x -= (width / 2);
-    // If this flag is set, the point to draw the text is the
-    // baseline, otherwise it should be the upper left corner.
-    if (!(flags & AlignBottom)) {
-        y += fm.ascent();
+    else if ((textAlign & TA_RIGHT) == TA_RIGHT)
+        x -= width;
+
+    // Vertical align. 
+    if ((textAlign & TA_BASELINE) == TA_BASELINE)
+        y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
+    else if ((textAlign & TA_BOTTOM) == TA_BOTTOM) {
+        y -= height;
 
 #if DEBUG_WMFPAINT
         kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
@@ -540,16 +543,13 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& 
     QPen  savePen = mPainter->pen();
     mPainter->setPen(mTextPen);
 
-    // Sometimes it happens that w and/or h == -1, and then the
-    // bounding box isn't valid any more.  In that case, no text at
-    // all is shown.
+    // Sometimes it happens that w and/or h == -1, and then the bounding box
+    // isn't valid any more.  In that case, use our own calculated values.
     if (w == -1 || h == -1) {
-        mPainter->drawText(x, y, text);
-        //mPainter->drawText(x, y, width, height, 0, text);
+        mPainter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
     }
     else {
-        // FIXME: Find out which Qt flags should be there instead of the 0.
-        mPainter->drawText(x, y, w, h, 0, text);
+        mPainter->drawText(x, y, w, h, Qt::AlignLeft|Qt::AlignTop, text);
     }
 
     mPainter->setPen(savePen);

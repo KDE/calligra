@@ -373,7 +373,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
                 j++;
             }
 
-            // execute the function
+            // Execute the function.
             (this->*koWmfFunc[ index ].method)(size, st);
 
             mBuffer->seek(bufferOffset + (size << 1));
@@ -925,6 +925,21 @@ void KoWmfReadPrivate::dibCreatePatternBrush(quint32 size, QDataStream& stream)
         }
     }
 }
+
+
+void KoWmfReadPrivate::patBlt(quint32, QDataStream& stream)
+{
+    quint32 rasterOperation;
+    quint16 height, width;
+    qint16  y, x;
+
+    stream >> rasterOperation;
+    stream >> height >> width;
+    stream >> y >> x;
+
+    //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec << x << y << width << height;
+}
+
 
 
 //-----------------------------------------------------------------------------
