@@ -35,7 +35,7 @@
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 
-KWRdfDockerTree::KWRdfDockerTree(QWidget * parent)
+KWRdfDockerTree::KWRdfDockerTree(QWidget *parent)
         : QTreeWidget(parent),
         m_rdf(0),
         m_canvas(0)
@@ -46,7 +46,7 @@ KWRdfDockerTree::KWRdfDockerTree(QWidget * parent)
     setDropIndicatorShown(true);
 }
 
-void KWRdfDockerTree::setDocumentRdf(KoDocumentRdf* rdf)
+void KWRdfDockerTree::setDocumentRdf(KoDocumentRdf *rdf)
 {
     m_rdf = rdf;
 }
@@ -79,15 +79,13 @@ void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
 
 KoTextEditor* KWRdfDockerTree::editor()
 {
-    KoTextEditor* ret = 0;
-    if (m_canvas) {
-        ret = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
-    }
-    return ret;
+    if (m_canvas)
+        return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    return 0;
 }
 
-bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index, const
-                                   QMimeData *data, Qt::DropAction action)
+bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
+        const QMimeData *data, Qt::DropAction action)
 {
     kDebug(30015) << "KWRdfDockerTree::dropMimeData() mime format:" << data->formats();
 
@@ -97,7 +95,7 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index, const
     } else if (data->hasFormat("text/calendar")) {
         QByteArray ba = data->data("text/calendar");
         kDebug(30015) << "data:" << ba;
-        RdfSemanticItem* semObj = RdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
+        RdfSemanticItem *semObj = RdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/x-vcard")) {
         QByteArray ba = data->data("text/x-vcard");
@@ -126,7 +124,6 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index, const
                 semObj->importFromData(ba, m_rdf, m_canvas);
             }
         }
-
     }
     return true;
 }
@@ -137,8 +134,8 @@ void KWRdfDockerTree::mouseMoveEvent(QMouseEvent *event)
         return;
     if (!currentItem())
         return;
-    QTreeWidgetItem* baseitem = currentItem();
-    if (RdfSemanticTreeWidgetItem* item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
+    QTreeWidgetItem *baseitem = currentItem();
+    if (RdfSemanticTreeWidgetItem *item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
         QMimeData *mimeData = new QMimeData;
         item->semanticItem()->exportToMime(mimeData);
         QDrag *drag = new QDrag(this);
@@ -149,9 +146,8 @@ void KWRdfDockerTree::mouseMoveEvent(QMouseEvent *event)
 
 QStringList KWRdfDockerTree::mimeTypes() const
 {
-    QStringList ret;
     kDebug(30015) << "default mt:" << QTreeWidget::mimeTypes();
-    return ret;
+    return QStringList();
 }
 
 QMimeData *KWRdfDockerTree::mimeData(QList<QTreeWidgetItem *> items) const

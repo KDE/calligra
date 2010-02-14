@@ -152,8 +152,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = m_document->documentRdf()) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)),
-                this, SLOT(semanticObjectViewSiteUpdated(RdfSemanticItem*, QString)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(RdfSemanticItem*, const QString&)),
+                this, SLOT(semanticObjectViewSiteUpdated(RdfSemanticItem*, const QString&)));
     }
 #endif
 }
@@ -1101,7 +1101,7 @@ void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = m_document->documentRdf()) {
-        SemanticStylesheetsEditor* dia = new SemanticStylesheetsEditor(this, rdf);
+        SemanticStylesheetsEditor *dia = new SemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory
     }
@@ -1447,11 +1447,11 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
-void KWView::semanticObjectViewSiteUpdated(RdfSemanticItem* item, QString xmlid)
+void KWView::semanticObjectViewSiteUpdated(RdfSemanticItem* item, const QString &xmlid)
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
-    KoTextEditor *editor = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *editor = qobject_cast<KoTextEditor*>(kwcanvas()->toolProxy()->selection());
     if (!editor) {
         kDebug(30015) << "no editor, not reflowing rdf semantic item.";
         return;

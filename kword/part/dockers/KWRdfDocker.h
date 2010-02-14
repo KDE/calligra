@@ -23,7 +23,7 @@
 #include <QDockWidget>
 #include <ui_KWRdfDocker.h>
 #include <rdf/KoDocumentRdf.h>
-#include "KoCanvasObserverBase.h"
+#include <KoCanvasObserverBase.h>
 
 class QTimer;
 class QTextDocument;
@@ -55,8 +55,8 @@ private slots:
     void setAutoUpdate(int);
     void selectionChanged();
     void showSemanticViewContextMenu(const QPoint &);
-    void semanticObjectAdded(RdfSemanticItem* item);
-    void semanticObjectUpdated(RdfSemanticItem* item);
+    void semanticObjectAdded(RdfSemanticItem *item);
+    void semanticObjectUpdated(RdfSemanticItem *item);
 
 
 private:
@@ -71,7 +71,7 @@ private:
     QTextDocument *m_textDocument;
     RdfSemanticTree m_rdfSemanticTree;
 
-    QWidget* m_widget;
+    QWidget *m_widget;
     Ui::KWRdfDocker widgetDocker;
 };
 #endif

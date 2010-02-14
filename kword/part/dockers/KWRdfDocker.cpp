@@ -28,6 +28,7 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 
+#include <rdf/KoDocumentRdf.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoToolManager.h>
@@ -36,7 +37,6 @@
 #include <KoInlineObject.h>
 #include <KoShapeContainer.h>
 #include <KoInlineTextObjectManager.h>
-#include <libs/kopageapp/KoShapeTraversal.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoTextInlineRdf.h>
@@ -49,12 +49,8 @@
 #include <QTextDocument>
 #include <KMenu>
 
-#include <rdf/KoDocumentRdf.h>
-
-
 KWRdfDocker::KWRdfDocker(KWView *parent)
-    :
-    QDockWidget(parent),
+    : QDockWidget(parent),
     m_lastCursorPosition(-1),
     m_autoUpdate(false),
     m_document(0),
@@ -79,7 +75,7 @@ KWRdfDocker::KWRdfDocker(KWView *parent)
     connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     // Semantic view
-    if (QTreeWidget* v = widgetDocker.semanticView) {
+    if (QTreeWidget *v = widgetDocker.semanticView) {
         m_rdfSemanticTree = RdfSemanticTree::createTree(v);
 
         v->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -118,14 +114,14 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
     widgetDocker.semanticView->setCanvas(m_canvas);
 }
 
-void KWRdfDocker::semanticObjectAdded(RdfSemanticItem* item)
+void KWRdfDocker::semanticObjectAdded(RdfSemanticItem *item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "new item...";
     updateData();
 }
 
-void KWRdfDocker::semanticObjectUpdated(RdfSemanticItem* item)
+void KWRdfDocker::semanticObjectUpdated(RdfSemanticItem *item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "updated item...";
@@ -135,21 +131,22 @@ void KWRdfDocker::semanticObjectUpdated(RdfSemanticItem* item)
 /**
  * As the QTreeWidgetItem for the actions that can be performed on it.
  */
-void KWRdfDocker::showSemanticViewContextMenu(const QPoint& position)
+void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
-    QPointer<KMenu> menu = new KMenu(0);
+    QPointer<KMenu> menu = new KMenu(0); // TODO why QPointer???
     QList<KAction *> actions;
-    if (QTreeWidgetItem* baseitem = widgetDocker.semanticView->itemAt(position)) {
-        if (RdfSemanticTreeWidgetItem* item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
+    if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
+        if (RdfSemanticTreeWidgetItem *item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu, m_canvas);
         }
     }
     if (actions.count() > 0) {
-        foreach (KAction* a, actions) {
+        foreach (KAction *a, actions) {
             menu->addAction(a);
         }
         menu->exec(widgetDocker.semanticView->mapToGlobal(position));
     }
+    // TODO this leaks
 }
 
 void KWRdfDocker::updateDataForced()
@@ -164,8 +161,8 @@ void KWRdfDocker::updateData()
     if (!m_document || !m_canvas)
         return;
     kDebug(30015) << "updating docker...";
-    KoTextEditor* handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
-    KoDocumentRdf* rdf = m_document->documentRdf();
+    KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
+    KoDocumentRdf *rdf = m_document->documentRdf();
     if (handler && rdf) {
         kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
         kDebug(30015) << " currentpos:" << handler->position();
@@ -195,11 +192,13 @@ void KWRdfDocker::setAutoUpdate(int state)
         KoDocumentRdf::ensureTextTool();
         m_autoUpdate = true;
         m_timer->start();
-        connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SLOT(updateData()));
+        connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
+                this, SLOT(updateData()));
     } else {
         m_autoUpdate = false;
         m_timer->stop();
-        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SLOT(updateData()));
+        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
+                this, SLOT(updateData()));
     }
     widgetDocker.refresh->setVisible(!m_autoUpdate);
 }
@@ -207,7 +206,8 @@ void KWRdfDocker::setAutoUpdate(int state)
 void KWRdfDocker::selectionChanged()
 {
     if (m_textDocument) {
-        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SLOT(updateData()));
+        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
+                this, SLOT(updateData()));
     }
     if (m_selection->count() != 1) {
         return;
@@ -224,7 +224,8 @@ void KWRdfDocker::selectionChanged()
     if (fs) {
         m_textDocument = fs->document();
         if (m_autoUpdate) {
-            connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SLOT(updateData()));
+            connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
+                    this, SLOT(updateData()));
         }
     }
 }

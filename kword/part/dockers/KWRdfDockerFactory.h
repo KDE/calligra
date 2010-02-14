@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWRdfDOCKERFACTORY_H
-#define KWRdfDOCKERFACTORY_H
+#ifndef KWRDFDOCKERFACTORY_H
+#define KWRDFDOCKERFACTORY_H
 
 #include <KoDockFactoryBase.h>
 
@@ -30,7 +30,7 @@ public:
     KWRdfDockerFactory(KWView *view);
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     DockPosition defaultDockPosition() const {
         return DockMinimized;
     }

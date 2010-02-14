@@ -192,7 +192,7 @@ private slots:
     /// go to next page
     void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(RdfSemanticItem *item, QString xmlid);
+    void semanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
