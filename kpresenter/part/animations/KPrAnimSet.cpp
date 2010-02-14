@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -24,6 +25,8 @@
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextBlockData.h>
+#include "KPrAnimationCache.h"
 
 #include <kdebug.h>
 
@@ -40,7 +43,15 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     bool retval = false;
     QString targetElement(element.attributeNS(KoXmlNS::smil, "targetElement", QString()));
     if (!targetElement.isEmpty()) {
-        m_shape = context.shapeById(targetElement);
+        bool isText = element.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text";
+        if(isText) {
+            QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
+            m_shape = pair.first;
+            m_textBlockData = pair.second.value<KoTextBlockData *>();
+        } else {
+            m_shape = context.shapeById(targetElement);
+        }
+
         if (m_shape) {
             QString attributeName(element.attributeNS(KoXmlNS::smil, "attributeName", QString()));
             if (attributeName == "visibility") {
@@ -63,5 +74,10 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 }
 
 void KPrAnimSet::saveOdf(KoShapeSavingContext &context) const
+{
+}
+
+
+void KPrAnimSet::init(KPrAnimationCache *animationCache) const
 {
 }

@@ -23,6 +23,7 @@ KPrAnimationBase::KPrAnimationBase()
 : m_begin(0)
 , m_duration(0)
 , m_shape(0)
+, m_textBlockData(0)
 {
 }
 

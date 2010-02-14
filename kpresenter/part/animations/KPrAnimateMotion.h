@@ -30,6 +30,7 @@ public:
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext &context ) const;
+    virtual void init(KPrAnimationCache *animationCache) const;
 };
 
 #endif // KPRANIMATEMOTION_H

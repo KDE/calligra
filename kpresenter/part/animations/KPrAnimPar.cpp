@@ -21,6 +21,7 @@
 
 #include <KoXmlReader.h>
 #include "KPrAnimationFactory.h"
+#include "KPrAnimationCache.h"
 
 KPrAnimPar::KPrAnimPar()
 {
@@ -42,5 +43,9 @@ bool KPrAnimPar::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 }
 
 void KPrAnimPar::saveOdf(KoShapeSavingContext &context) const
+{
+}
+
+void KPrAnimPar::init(KPrAnimationCache *animationCache) const
 {
 }

@@ -16,22 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifndef KPRANIMATIONCACHE_H
-#define KPRANIMATIONCACHE_H
+#include "KPrAnimationCache.h"
 
 #include <QMap>
 #include <QString>
 #include <QVariant>
 
-class KoShape;
-class KoTextBlockData;
+#include <KoShape.h>
+#include <KoTextBlockData.h>
 
 KPrAnimationCache::KPrAnimationCache()
 {
 }
 
-virtual KPrAnimationCache::~KPrAnimationData()
+KPrAnimationCache::~KPrAnimationCache()
 {
 }
 
@@ -45,8 +43,8 @@ bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id)
 
 bool KPrAnimationCache::hasValue(KoTextBlockData *textBlockData, const QString &id)
 {
-    if (m_textBlockDataValues.contains(shape))
-        return m_textBlockDataValues.value(shape).contains(id);
+    if (m_textBlockDataValues.contains(textBlockData))
+        return m_textBlockDataValues.value(textBlockData).contains(id);
     return false;
 }
 
@@ -67,11 +65,9 @@ QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVari
     return defaultValue;
 }
 
-QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVariant &defaultValue)
+QVariant KPrAnimationCache::value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue)
 {
-    if (m_textBlockDataValues.contains(shape))
-        return m_textBlockDataValues.value(shape).value(id, defaultValue);
+    if (m_textBlockDataValues.contains(textBlockData))
+        return m_textBlockDataValues.value(textBlockData).value(id, defaultValue);
     return defaultValue;
 }
-
-#endif /* KPRANIMATIONCACHE_H */

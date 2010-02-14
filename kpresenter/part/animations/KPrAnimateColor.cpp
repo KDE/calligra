@@ -17,7 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+
 #include "KPrAnimateColor.h"
+
+#include "KPrAnimationCache.h"
 
 KPrAnimateColor::KPrAnimateColor()
 {
@@ -33,5 +36,9 @@ bool KPrAnimateColor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
 }
 
 void KPrAnimateColor::saveOdf(KoShapeSavingContext &context) const
+{
+}
+
+void KPrAnimateColor::init(KPrAnimationCache *animationCache) const
 {
 }

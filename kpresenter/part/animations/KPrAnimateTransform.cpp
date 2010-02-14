@@ -19,6 +19,8 @@
 
 #include "KPrAnimateTransform.h"
 
+#include "KPrAnimationCache.h"
+
 KPrAnimateTransform::KPrAnimateTransform()
 {
 }
@@ -32,5 +34,9 @@ bool KPrAnimateTransform::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 }
 
 void KPrAnimateTransform::saveOdf(KoShapeSavingContext &context) const
+{
+}
+
+void KPrAnimateTransform::init(KPrAnimationCache *animationCache) const
 {
 }

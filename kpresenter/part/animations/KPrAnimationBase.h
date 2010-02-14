@@ -24,6 +24,8 @@ class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShape;
+class KoTextBlockData;
+class KPrAnimationCache;
 
 class KPrAnimationBase
 {
@@ -34,10 +36,16 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
     virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
+    /**
+     * initialize the case and set the cache onto each of the animated objects (textBlocks and shapes)
+     */
+    virtual void init(KPrAnimationCache *animationCache) const = 0;
+
 protected:
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
-    KoShape * m_shape;
+    KoShape *m_shape;
+    KoTextBlockData *m_textBlockData;
 };
 
 #endif /* KPRANIMATIONBASE_H */

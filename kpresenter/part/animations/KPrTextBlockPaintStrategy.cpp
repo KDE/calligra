@@ -20,13 +20,18 @@
 #include <QBrush>
 
 
-KoTextBlockPaintStrategy(KPrAnimationCache *animationCache)
-    : m_animationCache(animationCache)
+KoTextBlockPaintStrategy()
+    : m_animationCache(0)
 {
 }
 
 ~KoTextBlockPaintStrategy()
 {
+}
+
+void setAnimationCache(KPrAnimationCache *animationCache)
+{
+    m_animationCache = animationCache;
 }
 
 QBrush background(const QBrush &defaultBackground)
@@ -40,5 +45,9 @@ void modifyPainter(QPainter *painter)
 
 bool visible()
 {
-    return m_animationCache.value(m_textBlockData, "visibility", true).toBool();
+    if (m_animationCache) {
+        return m_animationCache.value(m_textBlockData, "visibility", true).toBool();
+    } else {
+        return true;
+    }
 }

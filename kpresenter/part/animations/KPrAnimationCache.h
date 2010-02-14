@@ -33,7 +33,7 @@ class KoTextBlockData;
  * It relies on the Animation Framework to update it's state.
  *
  * It provides a central place for painters of text and shapes to get information
- * about any needed attributes (psition, visibillity etc) of the animated objects
+ * about any needed attributes (position, visibillity etc) of the animated objects
  * (shapes or paragraphs)
  **/
 class KPrAnimationCache
@@ -41,7 +41,7 @@ class KPrAnimationCache
 public:
     KPrAnimationCache();
 
-    virtual ~KPrAnimationData();
+    virtual ~KPrAnimationCache();
 
     /**
      * Tells if a value has ever been set
@@ -77,7 +77,7 @@ public:
      * @param id The id of the value
      * @param value The value is should have
      */
-    void setValue(KoShape *shape, const QString &id, QVariant &value);
+    void setValue(KoShape *shape, const QString &id, const QVariant &value);
 
     /**
      * Sets a value, either initially or updating it
@@ -111,11 +111,11 @@ public:
      * @param id The id of the value we are asking if is set
      * @return the value as a QVariant
      */
-    QVariant value(KoShape *shape, const QString &id, const QVariant &defaultValue);
+    QVariant value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue);
 
 private:
-    QMap<KoShape *, QMap<QString, QVariant>> m_shapeValues;
-    QMap<KoTextBlockData *, QMap<QString, QVariant>> m_textBlockDataValues;
+    QMap<KoShape *, QMap<QString, QVariant> > m_shapeValues;
+    QMap<KoTextBlockData *, QMap<QString, QVariant> > m_textBlockDataValues;
 };
 
 
