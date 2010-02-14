@@ -35,7 +35,7 @@
 #include <math.h>
 
 
-//#define DEBUG_RECORDS
+#define DEBUG_RECORDS 0
 
 
 KoWmfReadPrivate::KoWmfReadPrivate()
@@ -109,7 +109,7 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mBBoxRight = -32768;
     mBBoxBottom = -32768;
 
-#ifdef DEBUG_RECORDS
+#if DEBUG_RECORDS
     kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
 #endif
     st >> pheader.key;
@@ -285,7 +285,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
     }
 
     if (mNbrFunc) {
-#ifdef DEBUG_RECORDS
+#if DEBUG_RECORDS
         if ((mStandard)) {
             kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
@@ -338,7 +338,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
                 index -= 0x90;
             }
             
-#ifdef DEBUG_RECORDS
+#if DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << numFunction
                           << ", index" << dec << index << ")";
@@ -937,7 +937,10 @@ void KoWmfReadPrivate::patBlt(quint32, QDataStream& stream)
     stream >> height >> width;
     stream >> y >> x;
 
-    //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec << x << y << width << height;
+    //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec
+    //              << x << y << width << height;
+
+    mReadWmf->patBlt(x, y, width, height, rasterOperation);
 }
 
 

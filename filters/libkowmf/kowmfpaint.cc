@@ -89,11 +89,11 @@ bool KoWmfPaint::begin()
             // This window is used for scaling in setWindowExt().
             mPainter->setWindow(boundingRect());
         } else {
-            // Some wmf files don't call setwindowOrg and
+            // Some WMF files don't call setwindowOrg and
             // setWindowExt, so it's better to do it here.  Note that
             // boundingRect() is the rect of the WMF file, not the device.
             QRect rec = boundingRect();
-            kDebug(31000) << "BoundingRect: " << rec;
+            //kDebug(31000) << "BoundingRect: " << rec;
             mPainter->setWindow(rec);
         }
     }
@@ -500,6 +500,25 @@ void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int 
     kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
 #endif
     mPainter->drawImage(x, y, img, sx, sy, sw, sh);
+}
+
+
+void KoWmfPaint::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+{
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << y << width << height << hex << rasterOperation << dec;
+#endif
+
+    // 0x00f00021 is the PatCopy raster operation which just fills a rectangle with a brush.
+    // This seems to be the most common one.
+    //
+    // FIXME: Implement the rest of the raster operations.
+    if (rasterOperation == 0x00f00021) {
+        // Would have been nice if we didn't have to pull out the
+        // brush to use it with fillRect()...
+        QBrush brush = mPainter->brush();
+        mPainter->fillRect(x, y, width, height, brush);
+    }
 }
 
 

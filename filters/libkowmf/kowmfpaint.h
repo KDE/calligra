@@ -117,6 +117,7 @@ private:
      */
     void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false);
     void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
+    void  patBlt(int x, int y, int width, int height, quint32 rasterOperation);
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise

@@ -137,6 +137,7 @@ public:
     // listPa : list of polygons
     virtual void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false) = 0;
     virtual void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
+    virtual void  patBlt(int x, int y, int width, int height, quint32 rasterOperation) = 0;
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise

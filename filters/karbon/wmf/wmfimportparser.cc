@@ -445,6 +445,18 @@ void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int s
 }
 
 
+void WMFImportParser::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+{
+    // Not Yet Implemented
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(width);
+    Q_UNUSED(height);
+    Q_UNUSED(rasterOperation);
+}
+
+
+
 void WMFImportParser::drawText(int x, int y, int , int , int flags, const QString& text, double rotation)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
