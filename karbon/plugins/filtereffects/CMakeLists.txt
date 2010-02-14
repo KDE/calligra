@@ -29,6 +29,9 @@ set(karbonfiltereffects_PART_SRCS
     ImageEffect.cpp
     ImageEffectFactory.cpp
     ImageEffectConfigWidget.cpp
+    MorphologyEffect.cpp
+    MorphologyEffectFactory.cpp
+    MorphologyEffectConfigWidget.cpp
     )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})

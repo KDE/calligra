@@ -27,11 +27,11 @@
 #include "BlendEffectFactory.h"
 #include "ComponentTransferEffectFactory.h"
 #include "ImageEffectFactory.h"
+#include "MorphologyEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
 #include <KPluginFactory>
-
 
 K_PLUGIN_FACTORY(KarbonFilterEffectsPluginFacory, registerPlugin<KarbonFilterEffectsPlugin>();)
 K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
@@ -48,6 +48,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QLis
     KoFilterEffectRegistry::instance()->add(new BlendEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ComponentTransferEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ImageEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"
