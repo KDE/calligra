@@ -188,7 +188,8 @@ void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     if (m_reportDesigner->reportData()) {
         QStringList ql = m_reportDesigner->reportData()->dataSources();
-        m_dataSource->setListData(ql, ql);
+        QStringList qn = m_reportDesigner->reportData()->dataSourceNames();
+        m_dataSource->setListData(ql, qn);
     }
     ReportRectEntity::mousePressEvent(event);
 }

@@ -99,7 +99,10 @@ public:
 
     //!Return a list of data sources possible for advanced controls
     virtual QStringList dataSources() const {return QStringList();}
-    
+    //!Return a list of data source names possible for advanced controls.
+    //!Returns dataSources() by default
+    virtual QStringList dataSourceNames() const { return dataSources(); }
+
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
     //!Owner of the returned pointer is the caller
