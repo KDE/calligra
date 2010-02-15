@@ -51,7 +51,7 @@ void ReportEntityImage::init(QGraphicsScene * scene)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 
-    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
 }
 
@@ -165,6 +165,6 @@ void ReportEntityImage::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
 
 void ReportEntityImage::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     ReportRectEntity::mousePressEvent(event);
 }

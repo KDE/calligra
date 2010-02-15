@@ -232,7 +232,11 @@ void SectionEditor::init(ReportDesigner * rw)
 
     if (m_reportSectionDetail) {
         for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); i++) {
-            lbGroups->insertItem(m_reportSectionDetail->groupSection(i)->column());
+            QStringList names = rw->fieldNames();
+            QStringList keys = rw->fieldKeys();
+            int idx = keys.indexOf( m_reportSectionDetail->groupSection(i)->column() );
+            QString column = names.value( idx );
+            lbGroups->insertItem(column);
         }
     }
 }
@@ -268,8 +272,12 @@ void SectionEditor::btnEdit_clicked()
         DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
 
         dgsd->cbColumn->clear();
-        dgsd->cbColumn->insertItems(0, m_reportDesigner->fieldList());
-        dgsd->cbColumn->setCurrentIndex(m_reportDesigner->fieldList().indexOf(rsdg->column()));
+        QStringList keys = m_reportDesigner->fieldKeys();
+        QStringList names = m_reportDesigner->fieldNames();
+        for (int i = 0; i < keys.count(); ++i) {
+            dgsd->cbColumn->insertItem( i, names.value(i), keys.at(i));
+        }
+        dgsd->cbColumn->setCurrentIndex(keys.indexOf(rsdg->column()));
 
         dgsd->cbSort->clear();
         dgsd->cbSort->addItem(i18n("Ascending"), "ascending");
@@ -289,7 +297,7 @@ void SectionEditor::btnEdit_clicked()
         bool exitLoop = false;
         while (!exitLoop) {
             if (dgsd->exec() == QDialog::Accepted) {
-                QString column = dgsd->cbColumn->currentText();
+                QString column = dgsd->cbColumn->itemData(dgsd->cbColumn->currentIndex()).toString();
                 bool showgh = dgsd->cbHead->isChecked();
                 bool showgf = dgsd->cbFoot->isChecked();
                 bool breakafterfoot = dgsd->breakAfterFooter->isChecked();
@@ -299,8 +307,7 @@ void SectionEditor::btnEdit_clicked()
                                          i18n("Unable to add a new group because its name would not be unique"));
                 } else {
 
-                    lbGroups->changeItem(column, idx);
-
+                    lbGroups->changeItem(dgsd->cbColumn->currentText(), idx);
                     rsdg->setColumn(column);
                     rsdg->setGroupHeaderVisible(showgh);
                     rsdg->setGroupFooterVisible(showgf);

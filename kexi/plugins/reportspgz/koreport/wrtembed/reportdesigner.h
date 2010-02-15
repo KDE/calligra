@@ -90,9 +90,13 @@ public:
     bool isModified() const;
 
     /**
-    \return a list of fields in the selected query
+    \return a list of field names in the selected query
     */
-    QStringList fieldList() const;
+    QStringList fieldNames() const;
+    /**
+    \return a list of field keys in the selected query
+    */
+    QStringList fieldKeys() const;
 
     /**
     @brief Calculate the width of the page in pixels given the paper size, orientation, dpi and margin

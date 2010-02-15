@@ -47,7 +47,7 @@ void ReportEntityText::init(QGraphicsScene * scene)
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
-    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
 }
 
@@ -149,7 +149,7 @@ void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     ReportRectEntity::mousePressEvent(event);
 }
 

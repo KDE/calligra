@@ -17,7 +17,7 @@
 #ifndef __KOREPORTDATA_H__
 #define __KOREPORTDATA_H__
 
-#include <kexidb/utils.h>
+#include <QStringList>
 
 /**
 
@@ -71,7 +71,10 @@ public:
 
     //!Return the list of field names
     virtual QStringList fieldNames() const = 0;
-
+    
+    //!Return the list of field keys. Returns fieldNames() by default
+    virtual QStringList fieldKeys() const { return fieldNames(); }
+    
     //!Return the value of the field at the given position for the current record
     virtual QVariant value(unsigned int) const = 0;
 

@@ -171,6 +171,6 @@ void ReportEntityBarcode::slotPropertyChanged(KoProperty::Set &s, KoProperty::Pr
 
 void ReportEntityBarcode::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     ReportRectEntity::mousePressEvent(event);
 }

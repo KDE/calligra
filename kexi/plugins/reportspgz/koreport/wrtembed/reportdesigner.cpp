@@ -41,6 +41,8 @@
 #include <QGridLayout>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
+#include <QMessageBox>
+
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
@@ -589,12 +591,22 @@ void ReportDesigner::setModified(bool mod)
     }
 }
 
-QStringList ReportDesigner::fieldList() const
+QStringList ReportDesigner::fieldNames() const
 {
     QStringList qs;
     qs << "";
     if (m_kordata)
         qs << m_kordata->fieldNames();
+
+    return qs;
+}
+
+QStringList ReportDesigner::fieldKeys() const
+{
+    QStringList qs;
+    qs << "";
+    if (m_kordata)
+        qs << m_kordata->fieldKeys();
 
     return qs;
 }
