@@ -105,6 +105,11 @@ public:
     ~CellStorage();
 
     /**
+     * \return the sheet this CellStorage is for.
+     */
+    Sheet* sheet() const;
+    
+    /**
      * Removes all data at \p col , \p row .
      */
     void take(int col, int row);

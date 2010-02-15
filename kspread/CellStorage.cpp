@@ -146,6 +146,11 @@ CellStorage::~CellStorage()
     delete d;
 }
 
+Sheet* CellStorage::sheet() const
+{
+    return d->sheet;
+}
+
 void CellStorage::take(int col, int row)
 {
     Formula oldFormula;
