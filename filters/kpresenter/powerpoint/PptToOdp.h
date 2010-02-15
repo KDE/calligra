@@ -657,6 +657,8 @@ private:
 
     const PPT::SlideListWithTextSubContainerOrAtom* currentSlideTexts;
 
+    const PPT::MasterOrSlideContainer* currentMaster;
+
     bool parse(POLE::Storage& storage);
 
     /**
@@ -735,6 +737,8 @@ private:
 
     QMap<const void*, QString> presentationPageLayouts;
     QMap<const void*, QString> drawingPageStyles;
+    QMap<const PPT::MasterOrSlideContainer*, QMap<int, QString> >
+            masterGraphicStyles;
     QMap<const PPT::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
 

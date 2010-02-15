@@ -915,7 +915,6 @@ public:
     int wanted;
     const PPT::OfficeArtSpContainer* sp;
     PlaceholderFinder(int w) :wanted(w), sp(0) {}
-
     void handle(const PPT::OfficeArtSpContainer& o) {
         if (o.clientTextbox) {
             foreach (const TextClientDataSubContainerOrAtom& a, o.clientTextbox->rgChildRec) {
@@ -970,7 +969,8 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
             }
             const QString name = "M" + QString::number(n) + "_"
                                      + QString::number(texttype);
-            styles.lookup(style, name + "g", KoGenStyles::DontForceNumbering);
+            masterGraphicStyles[m][texttype] = styles.lookup(style, name + "g",
+                    KoGenStyles::DontForceNumbering);
             if (textstyle && textstyle->lstLvl1) {
                 // text family
                 KoGenStyle tstyle(KoGenStyle::StyleTextAuto, "text");
@@ -1141,6 +1141,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         master.addAttribute("style:page-layout-name", slidePageLayoutName);
         master.addAttribute("draw:style-name", drawingPageStyles[m]);
         currentSlideTexts = 0;
+        currentMaster = 0;
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 drawing->OfficeArtDg.groupShape.rgfb) {
             QBuffer buffer;
@@ -1160,6 +1161,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         master.addAttribute("draw:style-name",
                             drawingPageStyles[p->notesMaster]);
         currentSlideTexts = 0;
+        currentMaster = 0;
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
             QBuffer buffer;
@@ -2010,6 +2012,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     }
 
     currentSlideTexts = &p->documentContainer->slideList->rgChildRec[slideNo];
+    currentMaster = master;
 
     Writer out(xmlWriter);
     foreach(const OfficeArtSpgrContainerFileBlock& co,
@@ -2941,10 +2944,19 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
 
     KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
     style.setAutoStyleInStylesDotXml(stylesxml);
-    /*if (currentMaster) {
-        const QString parent =
-        style.setParentName("M0_0g"); // TODO find proper parent name
-    }*/
+    if (currentMaster && o.clientTextbox) {
+        QString parent;
+        foreach (const TextClientDataSubContainerOrAtom& a, o.clientTextbox->rgChildRec) {
+            const TextContainer* tc = a.anon.get<TextContainer>();
+            if (tc) {
+                parent = masterGraphicStyles[currentMaster][tc->textHeaderAtom.textType];
+                break;
+            }
+        }
+        if (!parent.isEmpty()) {
+            style.setParentName(parent);
+        }
+    }
     defineGraphicProperties(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }
