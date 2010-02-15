@@ -242,6 +242,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
     if (documentContainer->slideList) {
         size = documentContainer->slideList->rgChildRec.size();
         slides.resize(size);
+        notes.resize(size);
         for (int i = 0; i < size;++i) {
             persistId = documentContainer->slideList->rgChildRec[i].slidePersistAtom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
@@ -259,7 +260,6 @@ ParsedPresentation::parse(POLE::Storage& storage)
 // Part 7: Identify the notes slide persist object
     if (documentContainer->notesList) {
         size = documentContainer->notesList->rgNotesPersistAtom.size();
-        notes.resize(slides.size());
         for (int i = 0; i < size; ++i) {
             const NotesPersistAtom& atom
                     = documentContainer->notesList->rgNotesPersistAtom[i];

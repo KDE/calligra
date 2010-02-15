@@ -2021,7 +2021,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     }
 
     // draw the notes
-    const NotesContainer* nc = (p->notes.size() > slideNo) ?p->notes[slideNo]:0;
+    const NotesContainer* nc = p->notes[slideNo];
     if (nc) {
         currentSlideTexts = 0;
         xmlWriter.startElement("presentation:notes");

@@ -72,8 +72,9 @@ template <typename C>
 void collectGlobalObjects(C& collector, const PPT::OfficeArtDgContainer& dg)
 {
     collectGlobalObjects(collector, dg.groupShape);
-    if (dg.shape)
+    if (dg.shape) {
         collectGlobalObjects(collector, *dg.shape);
+    }
     foreach(const PPT::OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes) {
         collectGlobalObjects(collector, o);
     }
@@ -112,7 +113,9 @@ void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
     }
     // get objects from notes
     foreach(const PPT::NotesContainer* notes, p.notes) {
-        collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
+        if (notes) {
+            collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
+        }
     }
 }
 /**
