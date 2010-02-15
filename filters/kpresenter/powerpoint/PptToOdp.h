@@ -194,9 +194,6 @@ private:
     /** define automatic styles for text, paragraphs, graphic and presentation
       families
       */
-    void defineMostAutomaticStyles(KoGenStyles& styles);
-    void defineMasterAutomaticStyles(KoGenStyles& styles,
-                                     const PPT::TextMasterStyleAtom& style);
     void defineMasterAutomaticStyles(KoGenStyles& styles);
     void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
 
@@ -223,6 +220,8 @@ private:
     template <typename T>
     void defineGraphicProperties(KoGenStyle& style, T& o,
                                  const PPT::TextMasterStyleAtom* listStyles = 0);
+    void defineGraphicPropertiesListStyles(KoGenStyle& style,
+                                           const PPT::TextMasterStyleAtom& listStyles);
     /* Extract data into the style element style:list */
     void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels,
                          const PPT::TextMasterStyle9Atom* levels9 = 0,

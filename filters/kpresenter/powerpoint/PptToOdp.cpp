@@ -883,60 +883,80 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     style.addChildElement(elementName, elementContents);
 }
 
-void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles,
-                                           const TextMasterStyleAtom& style)
-{
-
+template<class O>
+void handleOfficeArtContainer(O& handler, const OfficeArtSpgrContainerFileBlock& c) {
+    const OfficeArtSpContainer* a = c.anon.get<OfficeArtSpContainer>();
+    const OfficeArtSpgrContainer* b= c.anon.get<OfficeArtSpgrContainer>();
+    if (a) {
+        handler.handle(*a);
+    } else {
+        foreach (const OfficeArtSpgrContainerFileBlock& fb, b->rgfb) {
+            handleOfficeArtContainer(handler, fb);
+        }
+    }
 }
+template<class O>
+void handleOfficeArtContainer(O& handler, const PPT::OfficeArtDgContainer& c) {
+    if (c.shape) {
+        handler.handle(*c.shape);
+    }
+    foreach (const OfficeArtSpgrContainerFileBlock& fb, c.groupShape.rgfb) {
+        handleOfficeArtContainer(handler, fb);
+    }
+}
+
+class PlaceholderFinder {
+public:
+    int wanted;
+    const PPT::OfficeArtSpContainer* sp;
+    PlaceholderFinder(int w) :wanted(w), sp(0) {}
+
+    void handle(const PPT::OfficeArtSpContainer& o) {
+        if (o.clientData && o.clientData->placeholderAtom
+                && o.clientData->placeholderAtom->placementId == wanted) {
+            sp = &o;
+        }
+    }
+
+};
 
 void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
 {
+    int n = 0;
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
-        const TextPFException* pf = 0;
-        const TextPFException9* pf9 = 0;
-        const TextCFException* cf = 0;
-        const TextCFException9* cf9 = 0;
-        const TextCFException10* cf10 = 0;
-        const TextSIException* si;
-
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-        const DrawingContainer* drawing = 0;
-        if (sc) {
-            drawing = &sc->drawing;
-        } else if (mm) {
-            foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
-                KoGenStyle style(KoGenStyle::StyleGraphicAuto);
-                defineGraphicProperties(style, *mm->drawing.OfficeArtDg.shape,
-                                        &ma);
+
+        // look for a style for each of the values of TextEnumType
+        for (int texttype = 0; texttype <= 8; ++texttype) {
+            // look for placeholder and a TextMasterStyleAtom
+            const TextMasterStyleAtom* textstyle = 0;
+            PlaceholderFinder finder(texttype);
+            if (sc) {
+                handleOfficeArtContainer(finder, sc->drawing.OfficeArtDg);
+            } else if (mm) {
+                handleOfficeArtContainer(finder, mm->drawing.OfficeArtDg);
+                foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
+                    if (ma.rh.recInstance == texttype) {
+                        textstyle = &ma;
+                    }
+                }
             }
-        }
-
-        KoGenStyle style(KoGenStyle::StyleTextAuto);
-        defineTextProperties(style, cf, cf9, cf10, si);
-    }
-}
-/*
-void PptToOdp::defineMostAutomaticStyles(KoGenStyles& styles)
-{
-    foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
-        const SlideContainer* sc = m->anon.get<SlideContainer>();
-        const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-        const DrawingContainer* drawing = 0;
-        if (sc) {
-            drawing = &sc->drawing;
-        } else if (mm) {
-            drawing = &mm->drawing;
-        }
-
-        currentSlideTexts = 0;
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                drawing->OfficeArtDg.groupShape.rgfb) {
-            processObjectForStyle(co, styles, true);
+            KoGenStyle style(KoGenStyle::StyleGraphicAuto);
+            style.setAutoStyleInStylesDotXml(true);
+            if (finder.sp) {
+                defineGraphicProperties(style, *finder.sp, textstyle);
+            } else if (textstyle) {
+                defineGraphicPropertiesListStyles(style, *textstyle);
+            } else {
+                continue;
+            }
+            QString name = styles.lookup(style,
+                    "M" + QString::number(n) + "_" + QString::number(texttype),
+                    KoGenStyles::DontForceNumbering);
         }
     }
 }
-*/
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     // define for master for use in <master-page style:name="...">
@@ -2869,17 +2889,21 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
 
     // define embedded text:list-style element
     if (listStyles) {
-        KoGenStyle list(KoGenStyle::StyleList);
-        defineListStyle(list, *listStyles);
-        KoGenStyles styles;
-        // serialize the text:list-style element into the properties
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        KoXmlWriter xmlWriter(&buffer);
-        list.writeStyle(&xmlWriter, styles, "text:list-style", "someName", "", true, false);
-        QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-        style.addChildElement("text:list-style", elementContents);
+        defineGraphicPropertiesListStyles(style, *listStyles);
     }
+}
+void PptToOdp::defineGraphicPropertiesListStyles(KoGenStyle& style, const TextMasterStyleAtom& listStyles)
+{
+    KoGenStyle list(KoGenStyle::StyleList);
+    defineListStyle(list, listStyles);
+    KoGenStyles styles;
+    // serialize the text:list-style element into the properties
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);
+    list.writeStyle(&xmlWriter, styles, "text:list-style", "someName", "", true, false);
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement("text:list-style", elementContents);
 }
 void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
 {
