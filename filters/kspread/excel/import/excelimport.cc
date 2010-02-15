@@ -64,6 +64,8 @@ inline QString string(const Swinder::UString& str)
 }
 
 namespace Swinder {
+
+// qHash function to support hashing by Swinder::FormatFont instances.
 static inline uint qHash(const Swinder::FormatFont& font)
 {
     // TODO: make this a better hash
@@ -282,6 +284,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     return KoFilter::OK;
 }
 
+// Writes the spreadsheet content into the content.xml
 bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
 {
     KoXmlWriter* bodyWriter = store->bodyWriter();
@@ -324,6 +327,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     return store->closeContentWriter();
 }
 
+// Writes the styles.xml
 bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* manifestWriter)
 {
     if (!store->store()->open("styles.xml"))
@@ -331,7 +335,6 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* man
     KoStoreDevice dev(store->store());
     KoXmlWriter* stylesWriter = new KoXmlWriter(&dev);
 
-    // FIXME this is dummy default, replace if necessary
     stylesWriter->startDocument("office:document-styles");
     stylesWriter->startElement("office:document-styles");
     stylesWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
@@ -342,33 +345,6 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* man
     stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
     stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     stylesWriter->addAttribute("office:version", "1.0");
-#if 0
-    stylesWriter->startElement("office:styles");
-    stylesWriter->startElement("style:default-style");
-    stylesWriter->addAttribute("style:family", "table-cell");
-    stylesWriter->startElement("style:table-cell-properties");
-    stylesWriter->addAttribute("style:decimal-places", "2");
-    stylesWriter->endElement(); // style:table-cell-properties
-    stylesWriter->startElement("style:paragraph-properties");
-    stylesWriter->addAttribute("style:tab-stop-distance", "0.5in");
-    stylesWriter->endElement(); // style:paragraph-properties
-    stylesWriter->startElement("style:text-properties");
-    stylesWriter->addAttribute("style:font-name", "Albany AMT");
-    stylesWriter->addAttribute("fo:language", "en");
-    stylesWriter->addAttribute("fo:country", "US");
-    stylesWriter->addAttribute("style:font-name-asian", "Albany AMT1");
-    stylesWriter->addAttribute("style:country-asian", "none");
-    stylesWriter->addAttribute("style:font-name-complex", "Lucidasans");
-    stylesWriter->addAttribute("style:language-complex", "none");
-    stylesWriter->addAttribute("style:country-complex", "none");
-    stylesWriter->endElement(); // style:text-properties
-    stylesWriter->endElement(); // style:default-style
-    stylesWriter->startElement("style:style");
-    stylesWriter->addAttribute("style:name", "Default");
-    stylesWriter->addAttribute("style:family", "table-cell");
-    stylesWriter->endElement(); // style:style
-    stylesWriter->endElement(); // office:styles
-#endif
 
     mainStyles->saveOdfMasterStyles(stylesWriter);
     mainStyles->saveOdfDocumentStyles(stylesWriter); // office:style
@@ -378,10 +354,10 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* man
     stylesWriter->endDocument();
 
     delete stylesWriter;
-
     return store->store()->close();
 }
 
+// Writes meta-informations into the meta.xml
 bool ExcelImport::Private::createMeta(KoOdfWriteStore* store)
 {
     if (!store->store()->open("meta.xml"))
@@ -455,6 +431,7 @@ bool ExcelImport::Private::createMeta(KoOdfWriteStore* store)
     return store->store()->close();
 }
 
+// Writes configuration-settings into the settings.xml
 bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
 {
     if (!store->store()->open("settings.xml"))
@@ -511,6 +488,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
     return store->store()->close();
 }
 
+// Writes the manifest into the manifest.xml
 bool ExcelImport::Private::createManifest(KoOdfWriteStore* store, KoXmlWriter* manifestWriter)
 {
     manifestWriter->addManifestEntry("meta.xml", "text/xml");
@@ -520,6 +498,7 @@ bool ExcelImport::Private::createManifest(KoOdfWriteStore* store, KoXmlWriter* m
     return store->closeManifestWriter();
 }
 
+// Processes the workbook content. The workbook is the top-level element for content.
 void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWriter* xmlWriter)
 {
     if (!workbook) return;
@@ -553,6 +532,7 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
     xmlWriter->endElement();  // office:spreadsheet
 }
 
+// Processes the workbook styles. The workbook is the top-level element for content.
 void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWriter* xmlWriter)
 {
     if (!workbook) return;
@@ -613,6 +593,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     }
 }
 
+// Processes a sheet.
 void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWriter)
 {
     if (!sheet) return;
@@ -680,6 +661,7 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
     xmlWriter->endElement();  // table:table
 }
 
+// Processes styles for a sheet.
 void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter)
 {
     if (!sheet) return;
@@ -723,6 +705,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     }
 }
 
+// Processes headers and footers for a sheet.
 void ExcelImport::Private::processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* xmlWriter )
 {
     if ( !sheet ) return;
@@ -777,6 +760,7 @@ void ExcelImport::Private::processSheetForHeaderFooter ( Sheet* sheet, KoXmlWrit
     xmlWriter->endElement();
 }
 
+// Processes the styles of a headers and footers for a sheet.
 void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter)
 {
     QString content;
@@ -835,9 +819,9 @@ void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* 
         else
             skipUnsupported = false;
     }
-
 }
 
+// Processes a column in a sheet.
 void ExcelImport::Private::processColumnForBody(Column* column, int repeat, KoXmlWriter* xmlWriter)
 {
     if (!column) return;
@@ -853,6 +837,7 @@ void ExcelImport::Private::processColumnForBody(Column* column, int repeat, KoXm
     xmlWriter->endElement();  // table:table-column
 }
 
+// Processes the style of a column in a sheet.
 void ExcelImport::Private::processColumnForStyle(Column* column, int /*repeat*/, KoXmlWriter* xmlWriter)
 {
     if (!column) return;
@@ -870,6 +855,7 @@ void ExcelImport::Private::processColumnForStyle(Column* column, int /*repeat*/,
     colCellStyles.append(cellStyleName);
 }
 
+// Processes a row in a sheet.
 void ExcelImport::Private::processRowForBody(Row* row, int /*repeat*/, KoXmlWriter* xmlWriter)
 {
     if (!xmlWriter) return;
@@ -904,6 +890,7 @@ void ExcelImport::Private::processRowForBody(Row* row, int /*repeat*/, KoXmlWrit
     xmlWriter->endElement();  // table:table-row
 }
 
+// Processes the style of a row in a sheet.
 void ExcelImport::Private::processRowForStyle(Row* row, int repeat, KoXmlWriter* xmlWriter)
 {
     if (!row) return;
@@ -1045,6 +1032,7 @@ QString extractLocale(QString &time)
     return locale;
 }
 
+// Checks if the as argument passed formatstring defines a date-format or not.
 static bool isDateFormat(const Value &value, const QString& valueFormat)
 {
     if (value.type() != Value::Float)
@@ -1219,6 +1207,7 @@ QString currencyValue(const QString &value)
     return QString();
 }
 
+// Processes a cell within a sheet.
 void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter)
 {
     if (!cell) return;
@@ -1395,6 +1384,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, KoXmlWriter* xmlWriter
     xmlWriter->endElement(); //  table:[covered-]table-cell
 }
 
+// Processes style for a cell within a sheet.
 void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter)
 {
     if (!cell) return;
@@ -1428,6 +1418,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
+// Processes styles for a cell within a sheet.
 QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
 {
     // handle data format, e.g. number style
@@ -1478,6 +1469,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
     return styleName;
 }
 
+// Processes styles for a row within a sheet.
 QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, int rowHeight)
 {
     QString refName;
@@ -1571,6 +1563,7 @@ void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle&
     style.addProperty("fo:color", convertColor(font.color()), KoGenStyle::TextType);
 }
 
+// Processes a formatting.
 void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
 {
     if (!format) return;
