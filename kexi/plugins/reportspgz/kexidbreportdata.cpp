@@ -40,7 +40,7 @@ void KexiDBReportData::setSorting ( KoReportData::SortList sl )
         
         for ( unsigned int i = 0; i < sl.count(); ++i )
         {
-            order.appendField(*m_schema, sl[i].field, sl[i].order == KoReportData::Sort::Ascending);
+            order.appendField(*m_schema, sl[i].field, sl[i].order == Qt::AscendingOrder);
         }
         m_schema->setOrderByColumnList(order);
     }

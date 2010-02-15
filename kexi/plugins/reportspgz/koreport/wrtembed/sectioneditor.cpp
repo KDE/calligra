@@ -283,7 +283,7 @@ void SectionEditor::btnEdit_clicked()
         dgsd->cbSort->addItem(i18n("Ascending"), "ascending");
         dgsd->cbSort->addItem(i18n("Descending"), "descending");
 
-        if (rsdg->sort() == ReportSectionDetailGroup::Ascending) {
+        if (rsdg->sort() == Qt::AscendingOrder) {
             dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData("ascending"));
         }
         else {
@@ -317,10 +317,10 @@ void SectionEditor::btnEdit_clicked()
                         rsdg->setPageBreak(ReportSectionDetailGroup::BreakNone);
 
                     if (dgsd->cbSort->itemData(dgsd->cbSort->currentItem()).toString() == "ascending") {
-                        rsdg->setSort(ReportSectionDetailGroup::Ascending);
+                        rsdg->setSort(Qt::AscendingOrder);
                     }
                     else {
-                        rsdg->setSort(ReportSectionDetailGroup::Descending);
+                        rsdg->setSort(Qt::DescendingOrder);
                     }
                     exitLoop = true;
                 }

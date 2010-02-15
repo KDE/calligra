@@ -44,12 +44,6 @@ public:
         BreakBeforeGroupHeader = 2
     };
 
-    enum Sort {
-        Ascending = 1,
-        Descending
-    };
-    
-
     void setColumn(const QString &);
     QString column() const;
 
@@ -62,8 +56,8 @@ public:
     void setPageBreak(PageBreak);
     PageBreak  pageBreak() const;
 
-    void setSort(Sort);
-    Sort sort();
+    void setSort(Qt::SortOrder);
+    Qt::SortOrder sort();
 
     ReportSection * groupHeader() const;
     ReportSection * groupFooter() const;
@@ -80,7 +74,7 @@ protected:
     ReportSectionDetail * m_reportSectionDetail;
 
     PageBreak m_pageBreak;
-    Sort m_sort;
+    Qt::SortOrder m_sort;
 };
 
 

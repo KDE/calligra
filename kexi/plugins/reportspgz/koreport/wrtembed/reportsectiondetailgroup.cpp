@@ -35,7 +35,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
     Q_UNUSED(name);
 
     m_pageBreak = BreakNone;
-    m_sort = Ascending;
+    m_sort = Qt::AscendingOrder;
     ReportDesigner * rd = 0;
     m_reportSectionDetail = rsd;
     if (m_reportSectionDetail) {
@@ -70,7 +70,7 @@ void ReportSectionDetailGroup::buildXML(QDomDocument & doc, QDomElement & sectio
         grp.setAttribute("report:group-page-break", "before-header");
     }
 
-    if (m_sort == ReportSectionDetailGroup::Ascending) {
+    if (m_sort == Qt::AscendingOrder) {
         grp.setAttribute("report:group-sort", "ascending");
     }
     else {
@@ -110,10 +110,10 @@ void ReportSectionDetailGroup::initFromXML( const QDomElement &element )
     }
     
     if (element.attribute("report:group-sort", "ascending") == "ascending") {
-        setSort(ReportSectionDetailGroup::Ascending);
+        setSort(Qt::AscendingOrder);
     }
     else {
-        setSort(ReportSectionDetailGroup::Descending);
+        setSort(Qt::DescendingOrder);
     }
     
     for ( QDomElement e = element.firstChildElement( "report:section" ); ! e.isNull(); e = e.nextSiblingElement( "report:section" ) ) {
@@ -153,12 +153,12 @@ void ReportSectionDetailGroup::setPageBreak(ReportSectionDetailGroup::PageBreak 
     m_pageBreak = pb;
 }
 
-void ReportSectionDetailGroup::setSort(ReportSectionDetailGroup::Sort s)
+void ReportSectionDetailGroup::setSort(Qt::SortOrder s)
 {
     m_sort = s;
 }
 
-ReportSectionDetailGroup::Sort ReportSectionDetailGroup::sort()
+Qt::SortOrder ReportSectionDetailGroup::sort()
 {
     return m_sort;
 }

@@ -31,13 +31,8 @@ public:
     class Sort
     {
         public:
-        enum Order {
-            Ascending = 1,
-            Descending
-        };
-
         QString field;
-        Order order;
+        Qt::SortOrder order;
         //bool group; //probably not required?
     };
     typedef QList<Sort> SortList;

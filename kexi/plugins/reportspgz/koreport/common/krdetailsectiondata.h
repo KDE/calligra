@@ -69,15 +69,10 @@ public:
         BreakBeforeGroupHeader = 2
     };
 
-    enum Sort {
-        Ascending = 1,
-        Descending
-    };
-    
     //QString name;
     QString m_column;
     PageBreak m_pagebreak;
-    Sort m_sort;
+    Qt::SortOrder m_sort;
 
     KRSectionData *m_groupHeader;
     KRSectionData *m_groupFooter;
