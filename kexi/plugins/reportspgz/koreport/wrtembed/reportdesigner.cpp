@@ -594,7 +594,7 @@ void ReportDesigner::setModified(bool mod)
 QStringList ReportDesigner::fieldNames() const
 {
     QStringList qs;
-    qs << "";
+    qs << QString();
     if (m_kordata)
         qs << m_kordata->fieldNames();
 
@@ -604,7 +604,7 @@ QStringList ReportDesigner::fieldNames() const
 QStringList ReportDesigner::fieldKeys() const
 {
     QStringList qs;
-    qs << "";
+    qs << QString();
     if (m_kordata)
         qs << m_kordata->fieldKeys();
 
