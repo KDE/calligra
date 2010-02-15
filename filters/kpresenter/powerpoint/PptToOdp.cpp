@@ -538,7 +538,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // fo:font-variant: "normal" or "small-caps"
     // fo:font-weight: "100", "200", "300", "400", "500", "600", "700", "800", "900", "bold" or "normal"
     if (cf && cf->masks.bold && cf->fontStyle) {
-        style.addProperty("fo:font-style",
+        style.addProperty("fo:font-weight",
                           cf->fontStyle->bold ?"bold" :"normal", text);
     }
     // fo:hyphenate
@@ -803,6 +803,11 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             out.startElement("text:list-level-style-bullet");
             if (pf.masks.bulletChar) {
                 out.addAttribute("text:bullet-char", QChar(pf.bulletChar));
+            } else {
+                // the character from the parent should be specified here,
+                // because text:list-level-style-bullet must have a bullet
+                const char bullet[4] = {0xe2, 0x97, 0x8f, 0}; //  "●";
+                out.addAttribute("text:bullet-char", QString::fromUtf8(bullet));
             }
             if (pf.masks.bulletSize && pf.bulletFlags->fBulletHasSize) {
                 if (pf.bulletSize >= 25 && pf.bulletSize <= 400) {
@@ -912,12 +917,19 @@ public:
     PlaceholderFinder(int w) :wanted(w), sp(0) {}
 
     void handle(const PPT::OfficeArtSpContainer& o) {
-        if (o.clientData && o.clientData->placeholderAtom
-                && o.clientData->placeholderAtom->placementId == wanted) {
-            sp = &o;
+        if (o.clientTextbox) {
+            foreach (const TextClientDataSubContainerOrAtom& a, o.clientTextbox->rgChildRec) {
+                const TextContainer* tc = a.anon.get<TextContainer>();
+                if (tc && tc->textHeaderAtom.textType == wanted) {
+                    if (sp) {
+                        qDebug() << "Already found a placeholder with the right type " << wanted;
+                    } else {
+                        sp = &o;
+                    }
+                }
+            }
         }
     }
-
 };
 
 void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
@@ -942,7 +954,8 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                     }
                 }
             }
-            KoGenStyle style(KoGenStyle::StyleGraphicAuto);
+            // graphic family
+            KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
             style.setAutoStyleInStylesDotXml(true);
             if (finder.sp) {
                 defineGraphicProperties(style, *finder.sp, textstyle);
@@ -951,9 +964,26 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
             } else {
                 continue;
             }
-            QString name = styles.lookup(style,
-                    "M" + QString::number(n) + "_" + QString::number(texttype),
-                    KoGenStyles::DontForceNumbering);
+            if (textstyle && textstyle->lstLvl1) {
+                defineParagraphProperties(style, &textstyle->lstLvl1->pf, 0);
+                defineTextProperties(style, &textstyle->lstLvl1->cf, 0, 0, 0);
+            }
+            const QString name = "M" + QString::number(n) + "_"
+                                     + QString::number(texttype);
+            styles.lookup(style, name + "g", KoGenStyles::DontForceNumbering);
+            if (textstyle && textstyle->lstLvl1) {
+                // text family
+                KoGenStyle tstyle(KoGenStyle::StyleTextAuto, "text");
+                tstyle.setAutoStyleInStylesDotXml(true);
+                defineTextProperties(tstyle, &textstyle->lstLvl1->cf, 0, 0, 0);
+                styles.lookup(tstyle, name + "t", KoGenStyles::DontForceNumbering);
+                // paragraph family
+                KoGenStyle pstyle(KoGenStyle::StyleAuto, "paragraph");
+                pstyle.setAutoStyleInStylesDotXml(true);
+                defineParagraphProperties(pstyle, &textstyle->lstLvl1->pf, 0);
+                defineTextProperties(pstyle, &textstyle->lstLvl1->cf, 0, 0, 0);
+                styles.lookup(pstyle, name + "p", KoGenStyles::DontForceNumbering);
+            }
         }
     }
 }
