@@ -2021,7 +2021,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     }
 
     // draw the notes
-    const NotesContainer* nc = p->notes[slideNo];
+    const NotesContainer* nc = (p->notes.size() > slideNo) ?p->notes[slideNo]:0;
     if (nc) {
         currentSlideTexts = 0;
         xmlWriter.startElement("presentation:notes");
@@ -2937,9 +2937,13 @@ void PptToOdp::defineGraphicPropertiesListStyles(KoGenStyle& style, const TextMa
 }
 void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
 {
+
     KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
     style.setAutoStyleInStylesDotXml(stylesxml);
-    style.setParentName("pptDefaults"); // TODO find proper parent name
+    /*if (currentMaster) {
+        const QString parent =
+        style.setParentName("M0_0g"); // TODO find proper parent name
+    }*/
     defineGraphicProperties(style, o);
     setGraphicStyleName(o, styles.lookup(style));
 }
