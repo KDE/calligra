@@ -1034,6 +1034,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 
     // define for notes for use in <presentation:notes style:name="...">
     foreach (const PPT::NotesContainer* nc, p->notes) {
+        if (!nc) continue;
         const HeadersFootersAtom* hf = 0;
         if (nc->perSlideHFContainer) {
             hf = &nc->perSlideHFContainer->hfAtom;

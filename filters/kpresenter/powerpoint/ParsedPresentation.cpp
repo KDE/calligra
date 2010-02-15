@@ -243,6 +243,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
         size = documentContainer->slideList->rgChildRec.size();
         slides.resize(size);
         notes.resize(size);
+        notes.fill(0);
         for (int i = 0; i < size;++i) {
             persistId = documentContainer->slideList->rgChildRec[i].slidePersistAtom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
