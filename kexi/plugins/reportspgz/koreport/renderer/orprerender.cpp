@@ -223,35 +223,35 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
             QStringList keys;
             QStringList keyValues;
             bool status = false;
-            int i = 0, pos = 0, cnt = 0;
+            QList<int> shownGroups;
             ORDetailGroupSectionData * grp = 0;
 
-            m_kodata->moveFirst();
+            status = m_kodata->moveFirst();
             m_recordCount = m_kodata->recordCount();
 
             kDebug() << "Record Count:" << m_recordCount;
 
-            for (i = 0; i < (int) detailData.m_groupList.count(); ++i) {
-                cnt++;
+            for (int i = 0; i < (int) detailData.m_groupList.count(); ++i) {
                 grp = detailData.m_groupList[i];
-
                 //If the group has a header or footer, then emit a change of group value
                 if(grp->m_groupFooter || grp->m_groupHeader) {
+                    // we get here only if group is *shown*
+                    shownGroups << i;
                     keys.append(grp->m_column);
-                    if (!keys[i].isEmpty())
-                        keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys[i])).toString());
+                    if (!keys.last().isEmpty())
+                        keyValues.append(m_kodata->value(m_kodata->fieldNumber(keys.last())).toString());
                     else
                         keyValues.append(QString());
 
                     //Tell interested parties we're about to render a header
                     kDebug() << "EMIT1";
-                    emit(enteredGroup(keys[i], keyValues[i]));
+                    emit(enteredGroup(keys.last(), keyValues.last()));
                 }
                 if (grp->m_groupHeader)
                     renderSection(*(grp->m_groupHeader));
             }
 
-            do {
+            while (status) {
                 long l = m_kodata->at();
 
                 kDebug() << "At:" << l << "Y:" << m_yOffset;
@@ -275,14 +275,13 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
                 if (status == true && keys.count() > 0) {
                     // check to see where it is we need to start
-                    pos = -1; // if it's still -1 by the time we are done then no keyValues changed
-                    for (i = 0; i < keys.count(); ++i) {
+                    int pos = -1; // if it's still -1 by the time we are done then no keyValues changed
+                    for (int i = 0; i < keys.count(); ++i) {
                         if (keyValues[i] != m_kodata->value(m_kodata->fieldNumber(keys[i])).toString()) {
                             pos = i;
                             break;
                         }
                     }
-
                     // don't bother if nothing has changed
                     if (pos != -1) {
                         // roll back the query and go ahead if all is good
@@ -292,11 +291,11 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                             // any changes made in this for loop need to be duplicated
                             // below where the footers are finished.
                             bool do_break = false;
-                            for (i = cnt - 1; i >= pos; i--) {
+                            for (int i = shownGroups.count() - 1; i >= 0; i--) {
                                 if (do_break)
                                     createNewPage();
                                 do_break = false;
-                                grp = detailData.m_groupList[i];
+                                grp = detailData.m_groupList[shownGroups.at(i)];
 
                                 if (grp->m_groupFooter) {
                                     if (renderSectionSize(*(grp->m_groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
@@ -313,8 +312,8 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                             if (do_break)
                                 createNewPage();
                             if (status == true) {
-                                for (i = pos; i < cnt; ++i) {
-                                    grp = detailData.m_groupList[i];
+                                for (int i = 0; i < shownGroups.count(); ++i) {
+                                    grp = detailData.m_groupList[shownGroups.at(i)];
 
                                     if (grp->m_groupHeader) {
                                         if (renderSectionSize(*(grp->m_groupHeader)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight) {
@@ -328,7 +327,6 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
                                         //Tell interested parties thak key values changed
                                         kDebug() << "EMIT2";
-                                        emit(enteredGroup(keys[i], keyValues[i]));
 
                                         renderSection(*(grp->m_groupHeader));
                                     }
@@ -339,13 +337,13 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                         }
                     }
                 }
-            } while (status == true);
+            }
 
             if (keys.size() > 0 && m_kodata->movePrevious()) {
                 // finish footers
                 // duplicated changes from above here
-                for (i = cnt - 1; i >= 0; i--) {
-                    grp = detailData.m_groupList[i];
+                for (int i = shownGroups.count() - 1; i >= 0; i--) {
+                    grp = detailData.m_groupList[shownGroups.at(i)];
 
                     if (grp->m_groupFooter) {
                         if (renderSectionSize(*(grp->m_groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
