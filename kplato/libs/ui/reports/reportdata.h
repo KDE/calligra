@@ -75,6 +75,8 @@ public:
 
     //!Return the list of field names
     virtual QStringList fieldNames() const;
+    //!Return the list of field keys
+    virtual QStringList fieldKeys() const;
 
     //!Return the value of the field at the given position for the current record
     virtual QVariant value(unsigned int) const;
@@ -92,6 +94,8 @@ public:
 
     //!Return a list of data sources possible for advanced controls
     virtual QStringList dataSources() const;
+    //!Return a list of data source names possible for advanced controls
+    virtual QStringList dataSourceNames() const;
 
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier

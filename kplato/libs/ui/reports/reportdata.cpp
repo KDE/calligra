@@ -62,9 +62,10 @@ QString ReportData::sourceName() const {
 
 unsigned int ReportData::fieldNumber ( const QString &fld ) const
 {
-    //qDebug()<<"ReportData::fieldNumber:"<<fld;
-    QStringList names = fieldNames();
-    return names.indexOf( fld );
+    QStringList names = fieldKeys();
+    int idx = names.indexOf( fld );
+    //qDebug()<<"ReportData::fieldNumber:"<<fld<<idx;
+    return idx;
 }
 
 QStringList ReportData::fieldNames() const
@@ -76,6 +77,17 @@ QStringList ReportData::fieldNames() const
     }
     //qDebug()<<"ReportData::fieldNames:"<<recordCount()<<names;
     return names;
+}
+
+QStringList ReportData::fieldKeys() const
+{
+    QStringList keys;
+    int count = m_model.columnCount();
+    for ( int i = 0; i < count; ++i ) {
+        keys << m_model.headerData( i, Qt::Horizontal, Role::ColumnTag ).toString();
+    }
+    //qDebug()<<"ReportData::fieldNames:"<<recordCount()<<names;
+    return keys;
 }
 
 QVariant ReportData::value ( unsigned int i ) const {
@@ -156,6 +168,12 @@ QStringList ReportData::dataSources() const
     return QStringList() << "costbreakdown";
 }
 
+QStringList ReportData::dataSourceNames() const
+{
+    //TODO
+    return QStringList() << i18n( "Cost Breakdown" );
+}
+
 void ReportData::setSorting( SortList lst )
 {
     //FIXME the actual sorting should prob be in open(), but I don't think it matters for now
@@ -166,11 +184,10 @@ void ReportData::setSorting( SortList lst )
     QAbstractItemModel *source_model = m_model.sourceModel();
 
     foreach ( const Sort &sort, lst ) {
-        Qt::SortOrder order = sort.order == Sort::Ascending ? Qt::AscendingOrder : Qt::DescendingOrder;
         int col = fieldNumber( sort.field );
         sf = new QSortFilterProxyModel( &m_model );
         sf->setSourceModel( source_model );
-        sf->sort( col, order );
+        sf->sort( col, sort.order );
         source_model = sf;
     }
     m_model.setSourceModel( sf );
