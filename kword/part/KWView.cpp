@@ -128,11 +128,13 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 
-    if (shell())
-    {
+    if (shell()) {
         KWStatisticsDockerFactory statisticsFactory(this);
         KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(shell()->createDockWidget(&statisticsFactory));
         if (docker && docker->view() != this) docker->setView(this);
+
+        KWRdfDockerFactory factory(this);
+        shell()->createDockWidget(&factory);
     }
 
     if (statusBar())

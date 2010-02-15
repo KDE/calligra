@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +28,6 @@
 
 class QTimer;
 class QTextDocument;
-class KWView;
 class KoSelection;
 class KWDocument;
 
@@ -43,7 +43,7 @@ class KWRdfDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 
 public:
-    explicit KWRdfDocker(KWView *parent);
+    explicit KWRdfDocker(KWDocument *document);
     ~KWRdfDocker();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -53,15 +53,12 @@ private slots:
     void updateDataForced();
     void updateData();
     void setAutoUpdate(int);
-    void selectionChanged();
     void showSemanticViewContextMenu(const QPoint &);
     void semanticObjectAdded(RdfSemanticItem *item);
     void semanticObjectUpdated(RdfSemanticItem *item);
-
+    void resourceChanged(int key, const QVariant &value);
 
 private:
-
-    // KWView *m_view;
     KoCanvasBase *m_canvas;
     int m_lastCursorPosition;
     bool m_autoUpdate;
@@ -71,7 +68,6 @@ private:
     QTextDocument *m_textDocument;
     RdfSemanticTree m_rdfSemanticTree;
 
-    QWidget *m_widget;
     Ui::KWRdfDocker widgetDocker;
 };
 #endif

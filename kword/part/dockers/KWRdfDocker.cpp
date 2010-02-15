@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,29 +19,17 @@
  */
 
 #include "KWRdfDocker.h"
-#include "KWRdfDockerTree.h"
 
-#include "KWView.h"
 #include "KWCanvas.h"
 #include "KWord.h"
 #include "KWDocument.h"
 #include "frames/KWFrame.h"
-#include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 
-#include <rdf/KoDocumentRdf.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
-#include <KoToolManager.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
-#include <KoInlineObject.h>
-#include <KoShapeContainer.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoBookmark.h>
-#include <KoTextMeta.h>
-#include <KoTextInlineRdf.h>
-#include <KoTextRdfCore.h>
+#include <KoSelection.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -49,31 +38,21 @@
 #include <QTextDocument>
 #include <KMenu>
 
-KWRdfDocker::KWRdfDocker(KWView *parent)
-    : QDockWidget(parent),
+KWRdfDocker::KWRdfDocker(KWDocument *document)
+    : m_canvas(0),
     m_lastCursorPosition(-1),
     m_autoUpdate(false),
-    m_document(0),
-    m_selection(0),
-    m_timer(0),
+    m_document(document),
+    m_timer(new QTimer(this)),
     m_textDocument(0)
 {
     setWindowTitle(i18n("RDF"));
-    m_canvas = parent->kwcanvas();
-    m_document = parent->kwdocument();
-    m_widget = new QWidget();
-    m_selection = m_canvas->shapeManager()->selection();
-    m_autoUpdate = false;
-    m_timer = new QTimer(m_widget);
     m_timer->setInterval(300);
-    m_timer->setSingleShot(false);
+    m_timer->setSingleShot(true);
 
-    widgetDocker.setupUi(m_widget);
+    QWidget *widget = new QWidget();
+    widgetDocker.setupUi(widget);
     widgetDocker.refresh->setIcon(KIcon("view-refresh"));
-    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateDataForced()));
-    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
-    connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     // Semantic view
     if (QTreeWidget *v = widgetDocker.semanticView) {
         m_rdfSemanticTree = RdfSemanticTree::createTree(v);
@@ -85,7 +64,7 @@ KWRdfDocker::KWRdfDocker(KWView *parent)
         if (m_document) {
             widgetDocker.semanticView->setDocumentRdf(m_document->documentRdf());
         }
-        widgetDocker.semanticView->setCanvas(m_canvas);
+        widgetDocker.semanticView->setCanvas(0); // TODO can this be removed?
     }
     if (m_document) {
         connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(RdfSemanticItem*)),
@@ -93,25 +72,25 @@ KWRdfDocker::KWRdfDocker(KWView *parent)
         connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(RdfSemanticItem*)),
                 this, SLOT(semanticObjectUpdated(RdfSemanticItem*)));
     }
-    setWidget(m_widget);
-    widgetDocker.autoRefresh->setChecked(m_autoUpdate);
+    setWidget(widget);
+
+    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateDataForced()));
+    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
 }
 
 KWRdfDocker::~KWRdfDocker()
 {
 }
 
-KoCanvasBase *KWRdfDocker::canvas()
-{
-    return m_canvas;
-}
-
 void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 {
     kDebug(30015) << "canvas:" << canvas;
     m_canvas = canvas;
-    m_selection = m_canvas->shapeManager()->selection();
     widgetDocker.semanticView->setCanvas(m_canvas);
+
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
+            this, SLOT(resourceChanged(int,const QVariant&)));
 }
 
 void KWRdfDocker::semanticObjectAdded(RdfSemanticItem *item)
@@ -161,6 +140,7 @@ void KWRdfDocker::updateData()
     if (!m_document || !m_canvas)
         return;
     kDebug(30015) << "updating docker...";
+    // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
     KoTextEditor *handler = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
     KoDocumentRdf *rdf = m_document->documentRdf();
     if (handler && rdf) {
@@ -192,40 +172,18 @@ void KWRdfDocker::setAutoUpdate(int state)
         KoDocumentRdf::ensureTextTool();
         m_autoUpdate = true;
         m_timer->start();
-        connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
-                this, SLOT(updateData()));
     } else {
         m_autoUpdate = false;
         m_timer->stop();
-        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
-                this, SLOT(updateData()));
     }
     widgetDocker.refresh->setVisible(!m_autoUpdate);
 }
 
-void KWRdfDocker::selectionChanged()
+void KWRdfDocker::resourceChanged(int key, const QVariant &value)
 {
-    if (m_textDocument) {
-        disconnect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
-                this, SLOT(updateData()));
-    }
-    if (m_selection->count() != 1) {
-        return;
-    }
-    KoShape *shape = m_selection->firstSelectedShape();
-    if (!shape) {
-        return;
-    }
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (!frame) {
-        return;
-    }
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-    if (fs) {
-        m_textDocument = fs->document();
-        if (m_autoUpdate) {
-            connect(m_textDocument, SIGNAL(cursorPositionChanged(const QTextCursor&)),
-                    this, SLOT(updateData()));
-        }
+    if (key == KoText::CurrentTextDocument) {
+        m_textDocument = static_cast<QTextDocument*>(value.value<void*>());
+    } else if (key == KoText::CurrentTextPosition) {
+        updateData();
     }
 }
