@@ -1297,8 +1297,6 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
 
 bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
 {
-    kDebug(36003) << "*** Loading cell properties ***** at" << name();
-
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOdfCellText(element, tableContext);
 
@@ -1307,7 +1305,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     //
     bool isFormula = false;
     if (element.hasAttributeNS(KoXmlNS::table, "formula")) {
-        kDebug(36003) << " formula :" << element.attributeNS(KoXmlNS::table, "formula", QString());
+        kDebug(36003) << "cell:" << name() << "formula :" << element.attributeNS(KoXmlNS::table, "formula", QString());
         isFormula = true;
         QString oasisFormula(element.attributeNS(KoXmlNS::table, "formula", QString()));
         // each spreadsheet application likes to safe formulas with a different namespace
@@ -1331,7 +1329,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     //
     if (element.hasAttributeNS(KoXmlNS::table, "validation-name")) {
         const QString validationName = element.attributeNS(KoXmlNS::table, "validation-name", QString());
-        kDebug(36003) << " validation-name:" << validationName;
+        kDebug(36003) << "cell:" << name() << "validation-name:" << validationName;
         Validity validity;
         validity.loadOdfValidation(this, validationName, tableContext);
         if (!validity.isEmpty())
@@ -1343,7 +1341,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     //
     if (element.hasAttributeNS(KoXmlNS::office, "value-type")) {
         const QString valuetype = element.attributeNS(KoXmlNS::office, "value-type", QString());
-        kDebug(36003) << "  value-type:" << valuetype;
+        kDebug(36003) << "cell:" << name() << "value-type:" << valuetype;
         if (valuetype == "boolean") {
             const QString val = element.attributeNS(KoXmlNS::office, "boolean-value", QString()).toLower();
             if ((val == "true") || (val == "false"))
@@ -1402,29 +1400,21 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             }
         } else if (valuetype == "date") {
             QString value = element.attributeNS(KoXmlNS::office, "date-value", QString());
-            kDebug(36003) << "Type: date, value:" << value;
 
             // "1980-10-15"
             int year = 0, month = 0, day = 0;
             bool ok = false;
 
             int p1 = value.indexOf('-');
-            if (p1 > 0)
+            if (p1 > 0) {
                 year  = value.left(p1).toInt(&ok);
-
-            kDebug(36003) << "year:" << value.left(p1);
-
-            int p2 = value.indexOf('-', ++p1);
-
-            if (ok)
-                month = value.mid(p1, p2 - p1).toInt(&ok);
-
-            kDebug(36003) << "month:" << value.mid(p1, p2 - p1);
-
-            if (ok)
-                day = value.right(value.length() - p2 - 1).toInt(&ok);
-
-            kDebug(36003) << "day:" << value.right(value.length() - p2 - 1);
+                if (ok) {
+                    int p2 = value.indexOf('-', ++p1);
+                    month = value.mid(p1, p2 - p1).toInt(&ok);
+                    if (ok)
+                        day = value.right(value.length() - p2 - 1).toInt(&ok);
+                }
+            }
 
             if (ok) {
                 setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
@@ -1435,11 +1425,11 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                 s.setFormatType(Format::ShortDate);
                 setStyle(s);
 #endif
-                kDebug(36003) << "Set QDate:" << year << " -" << month << " -" << day;
+                kDebug(36003) << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
             }
         } else if (valuetype == "time") {
             QString value = element.attributeNS(KoXmlNS::office, "time-value", QString());
-            kDebug(36003) << "Type: time:" << value;
+
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
             int l = value.length();
@@ -1457,14 +1447,11 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                     seconds = num.toInt(&ok);
                 else
                     continue;
-
-                kDebug(36003) << "Num:" << num;
-
+                //kDebug(36003) << "Num:" << num;
                 num.clear();
                 if (!ok)
                     break;
             }
-            kDebug(36003) << "Hours:" << hours << "," << minutes << "," << seconds;
 
             if (ok) {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
@@ -1476,6 +1463,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                 style.setFormatType(Format::Time);
                 setStyle(style);
 #endif
+                kDebug(36003) << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
             }
         } else if (valuetype == "string") {
             if (element.hasAttributeNS(KoXmlNS::office, "string-value")) {
@@ -1492,12 +1480,12 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             setStyle(style);
 #endif
         } else {
-            kDebug(36003) << "  Unknown type. Parsing user input.";
+            kDebug(36003) << "cell:" << name() << "  Unknown type. Parsing user input.";
             // Set the value by parsing the user input.
             parseUserInput(userInput());
         }
     } else { // no value-type attribute
-        kDebug(36003) << "  No value type specified. Parsing user input.";
+        kDebug(36003) << "cell:" << name() << "  No value type specified. Parsing user input.";
         // Set the value by parsing the user input.
         parseUserInput(userInput());
     }
