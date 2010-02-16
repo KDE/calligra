@@ -431,6 +431,9 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
 {
     // write style <style:default-style style:family="drawing-page">
     KoGenStyle style(KoGenStyle::StyleDrawingPage, "drawing-page");
+    const KoGenStyle::PropertyType dpt = KoGenStyle::DrawingPageType;
+    style.addProperty("draw:background-size", "border", dpt);
+    style.addProperty("draw:fill", "none", dpt);
     style.setDefaultStyle(true);
     const PPT::SlideHeadersFootersContainer* hf = getSlideHF();
     defineDrawingPageStyle(style, (hf) ?&hf->hfAtom :0);
@@ -1005,7 +1008,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
             hf = &mm->perSlideHeadersFootersContainer->hfAtom;
         }
         defineDrawingPageStyle(dp, hf);
-        drawingPageStyles[m] = styles.lookup(dp, "dp");
+        drawingPageStyles[m] = styles.lookup(dp, "Mdp");
     }
     QString notesMasterPageStyle;
     if (p->notesMaster) {
@@ -1018,7 +1021,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(true);
         defineDrawingPageStyle(dp, hf);
-        notesMasterPageStyle = styles.lookup(dp, "dp");
+        notesMasterPageStyle = styles.lookup(dp, "Mdp");
         drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
 
