@@ -1870,12 +1870,19 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
     if (!style.isEmpty()) {
         out.xml.addAttribute("draw:style-name", style);
     } else {
-        style = presentationStyleNames.value(&o);
+        style = getPresentationStyleName(o);
         if (!style.isEmpty()) {
                 out.xml.addAttribute("presentation:style-name", style);
         }
     }
-    out.xml.addAttribute("draw:layer", "layout");
+    if (p) {
+        if (p->placementId >= 1 && p->placementId <= 6) {
+            out.xml.addAttribute("presentation:placeholder", "true");
+        } else if (p->placementId >= 0xB) {
+            out.xml.addAttribute("presentation:user-transformed", "true");
+        }
+    }
+    //out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
     out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
@@ -2775,14 +2782,6 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
 
         processTextExceptionsForStyle(cf, pf, styles, tc);
     }
-
-    // set the presentation style
-    QString styleName;
-    KoGenStyle kostyle(KoGenStyle::StylePresentationAuto, "presentation");
-    kostyle.setAutoStyleInStylesDotXml(master);
-    defineGraphicProperties(kostyle, o);
-    styleName = styles.lookup(kostyle);
-    setPresentationStyleName(o, styleName);
 }
 namespace
 {
@@ -2843,8 +2842,9 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
     // draw:end-line-spacing-vertical
     // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
     const FillBlip* fb = get<FillBlip>(o);
+    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
     const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
-    if (fb) {
+    if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill", "bitmap", gt);
     } else if (fs && fs->fUseFilled) {
         style.addProperty("draw:fill", fs->fFilled ? "solid" : "none", gt);
@@ -2859,7 +2859,7 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
-    if (fb) {
+    if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill-image-name",
                           "fillImage" + QString::number(fb->fillBlip), gt);
     }
