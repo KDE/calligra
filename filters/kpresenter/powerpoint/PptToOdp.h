@@ -801,6 +801,11 @@ private:
     * @param QString notes text to displayed.
     */
     void insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text);
+
+    /**
+    * @brief set the width, height rotation and starting point for the given container
+    */
+    void set2dGeometry(const PPT::OfficeArtSpContainer& o, Writer& out);
 };
 
 

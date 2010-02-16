@@ -1,5 +1,10 @@
 #include "PptToOdp.h"
+
 #include <KoXmlWriter.h>
+#include <kdebug.h>
+
+#include <QMatrix>
+
 #include <cmath>
 
 using namespace PPT;
@@ -218,39 +223,20 @@ void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:ellipse");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.endElement(); // draw:ellipse
 }
 
 void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
-    static const QString rotate("rotate (%1) translate (%2mm %3mm)");
     out.xml.startElement("draw:rect");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    const Rotation* rotation = get<Rotation>(o);
-    if (rotation) {
-        qreal rotAngle = toQReal(rotation->rotation);
-        qreal xMid = (rect.left() + 0.5 * rect.width());
-        qreal yMid = (rect.top() + 0.5 * rect.height());
-        qreal xVec = rect.left() - xMid;
-        qreal yVec = yMid - rect.top();
-
-        qreal xNew = xVec * cos(rotAngle) - yVec * sin(rotAngle);
-        qreal yNew = xVec * sin(rotAngle) + yVec * cos(rotAngle);
-        QString rot = rotate.arg(rotAngle).arg(xNew + xMid).arg(yMid - yNew);
-        out.xml.addAttribute("draw:transform", rot);
-    } else {
-        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
-    }
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.endElement(); // draw:rect
 }
 
@@ -259,47 +245,9 @@ void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-
-    const Rotation* rotation = get<Rotation>(o);
-    if (rotation) {
-        qreal rotAngle = toQReal(rotation->rotation);
-        if (rotAngle > 0.785399) { // > 45 deg
-            out.xml.addAttribute("svg:width", out.vLength(rect.height()));
-            out.xml.addAttribute("svg:height", out.hLength(rect.width()));
-            double xMid = (rect.x() - 0.5 * rect.height());
-            double yMid = (rect.y() + 0.5 * rect.width());
-            double xVec = rect.x() - xMid;
-            double yVec =  rect.y() - yMid;
-
-            double xNew = xVec * cos(rotAngle) - yVec * sin(rotAngle);
-            double yNew = xVec * sin(rotAngle) + yVec * cos(rotAngle);
-            QString rot = QString("rotate (%1) translate (%2mm %3mm)").arg(rotAngle).arg(xNew + xMid).arg(yMid + yNew);
-            out.xml.addAttribute("draw:transform", rot);
-        } else {
-            out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-            out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-            double xMid = (rect.x() + 0.5 * rect.width());
-            double yMid = (rect.y() + 0.5 * rect.height());
-            double xVec = rect.x() - xMid;
-            double yVec = yMid - rect.y();
-
-            double xNew = xVec * cos(rotAngle) - yVec * sin(rotAngle);
-            double yNew = xVec * sin(rotAngle) + yVec * cos(rotAngle);
-            QString rot = QString("rotate (%1) translate (%2mm %3mm)").arg(rotAngle).arg(xNew + xMid).arg(yMid - yNew);
-            out.xml.addAttribute("draw:transform", rot);
-        }
-
-
-    } else {
-        out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-        out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
-    }
-// out.xml.addAttribute( "svg:x", out.hOffset(rect.x()) );
-// out.xml.addAttribute( "svg:y", out.vOffset(rect.y()) );
-
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "round-rectangle");
     out.xml.startElement("draw:equation");
@@ -331,10 +279,9 @@ void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
+    set2dGeometry(o, out);
+    out.xml.addAttribute("draw:layer", "layout");
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -354,7 +301,6 @@ void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "diamond");
     out.xml.endElement();
-    out.xml.addAttribute("draw:layer", "layout");
     out.xml.endElement();
 }
 
@@ -364,11 +310,9 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     /* draw IsocelesTriangle or RightTriangle */
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -401,14 +345,6 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     }
     if (o.shapeProp.fFlipH) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
-    const Rotation* rotation = get<Rotation>(o);
-    if (rotation) { // draw:transform="rotate (1.5707963267946) translate (6.985cm 14.181cm)"
-        double rotAngle = toQReal(rotation->rotation);
-        double xMid = (rect.x() + 0.5 * rect.width());
-        double yMid = (rect.y() + 0.5 * rect.height());
-        QString rot = QString("rotate (%1) translate (%2cm %3cm)").arg(rotAngle).arg(xMid).arg(yMid);
-        out.xml.addAttribute("draw:transform", rot);
     }
     if (o.shapeProp.rh.recInstance == msosptRightTriangle) {
         out.xml.addAttribute("draw:type", "right-triangle");
@@ -462,11 +398,8 @@ void PptToOdp::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
 
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
@@ -534,11 +467,9 @@ void PptToOdp::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 6.25);
     out.xml.addAttribute("svg:y", 0);
@@ -641,11 +572,9 @@ void PptToOdp::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -698,11 +627,9 @@ void PptToOdp::processOctagon(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -771,11 +698,9 @@ void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:enhanced-geometry");
 
     if (o.shapeProp.rh.recInstance == msosptLeftArrow) {
@@ -873,11 +798,9 @@ void PptToOdp::processSmiley(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 0);
@@ -931,11 +854,9 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:glue-point");
     out.xml.addAttribute("svg:x", 5);
     out.xml.addAttribute("svg:y", 1);
@@ -964,11 +885,8 @@ void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     out.xml.startElement("draw:path");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
     out.xml.endElement(); // path
 }
 
@@ -981,7 +899,6 @@ QString PptToOdp::getPicturePath(int pib) const
 
 void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     QString url;
     const Pib* pib = get<Pib>(o);
     if (pib) {
@@ -990,11 +907,9 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     //Ima drawObject->getIntProperty("pib"));
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
-    out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-    out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
@@ -1047,5 +962,43 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
     } else {
         Q_ASSERT(o.shapeProp.rh.recInstance);
         qDebug() << "cannot handle object of type " << o.shapeProp.rh.recInstance;
+    }
+}
+
+void PptToOdp::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
+{
+    const QRect rect = getRect(o);
+
+    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
+    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
+ 
+    const Rotation* rotation = get<Rotation>(o);
+    if (rotation) {
+        //FIXME: I get wrong angle values, aren't they in radians?
+        //FIXME: check weather how the degrees are measured (might need a to multiply by -1)
+        qreal rotationAngle = toQReal(rotation->rotation);
+
+        QMatrix matrix(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle), 0, 0);
+
+        QPointF figureCenter(rect.width()/2.0, rect.height()/2.0);
+
+        QPointF origenInDocument( rect.x(), rect.y() );
+
+        qreal rotX = 0.0;
+        qreal rotY = 0.0;
+
+        matrix.map( figureCenter.x(), figureCenter.y(), &rotX, &rotY);
+
+        QPointF rotatedCenterPoint( rotX, rotY );
+
+        QPointF translatedPoint( figureCenter - rotatedCenterPoint + origenInDocument );
+
+        static const QString transformString("rotate(%1) translate(%2 %3)");
+
+        out.xml.addAttribute("draw:transform", transformString.arg(rotationAngle).arg( out.hOffset(translatedPoint.x())).arg(out.vOffset(translatedPoint.y())));
+    }
+    else {
+        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
+        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
     }
 }
