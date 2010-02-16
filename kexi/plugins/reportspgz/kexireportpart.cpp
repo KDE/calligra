@@ -174,6 +174,8 @@ void KexiReportPart::slotActionTriggered()
 
     if (designView) {
         KexiReportDesignView *dv = dynamic_cast<KexiReportDesignView*>(designView);
+        if (!dv)
+            return;
         dv->triggerAction(senderName);
     }
 }
