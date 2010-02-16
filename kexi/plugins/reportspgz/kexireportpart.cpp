@@ -153,7 +153,8 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
     if (!d->ksrc)
         d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
-    tab->addTab(d->ksrc, i18n("Source"));
+    tab->addTab(d->ksrc, KIcon("server-database"), QString());
+    tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
 }
 
 void KexiReportPart::slotActionTriggered()
