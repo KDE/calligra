@@ -1866,15 +1866,13 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
     const QRect& rect = getRect(o);
 
     out.xml.startElement("draw:frame");
-    QString style = graphicStyleNames.value(&o);
+    QString style = getGraphicStyleName(o);
     if (!style.isEmpty()) {
-        out.xml.addAttribute("draw:style-name",
-                             getGraphicStyleName(o));
+        out.xml.addAttribute("draw:style-name", style);
     } else {
         style = presentationStyleNames.value(&o);
         if (!style.isEmpty()) {
-                out.xml.addAttribute("presentation:style-name",
-                                     getGraphicStyleName(o));
+                out.xml.addAttribute("presentation:style-name", style);
         }
     }
     out.xml.addAttribute("draw:layer", "layout");
@@ -2780,11 +2778,11 @@ void PptToOdp::processTextObjectForStyle(const PPT::OfficeArtSpContainer& o,
 
     // set the presentation style
     QString styleName;
-    KoGenStyle kostyle(KoGenStyle::StyleGraphicAuto, "presentation");
+    KoGenStyle kostyle(KoGenStyle::StylePresentationAuto, "presentation");
     kostyle.setAutoStyleInStylesDotXml(master);
     defineGraphicProperties(kostyle, o);
     styleName = styles.lookup(kostyle);
-    setGraphicStyleName(o, styleName);
+    setPresentationStyleName(o, styleName);
 }
 namespace
 {
@@ -3071,8 +3069,15 @@ void PptToOdp::defineGraphicPropertiesListStyles(KoGenStyle& style, const TextMa
 }
 void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
 {
-
-    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
+    // if this object has a placeholder type, it defines a presentation style,
+    // otherwise, it defines a graphic style
+    KoGenStyle::Type type = KoGenStyle::StyleGraphicAuto;
+    const char* familyName = "graphic";
+    if (o.clientData && o.clientData->placeholderAtom) {
+        type = KoGenStyle::StylePresentationAuto;
+        familyName = "presentation";
+    }
+    KoGenStyle style(type, familyName);
     style.setAutoStyleInStylesDotXml(stylesxml);
     if (currentMaster && o.clientTextbox) {
         QString parent;
@@ -3088,7 +3093,11 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
         }
     }
     defineGraphicProperties(style, o);
-    setGraphicStyleName(o, styles.lookup(style));
+    if (o.clientData && o.clientData->placeholderAtom) {
+        setPresentationStyleName(o, styles.lookup(style));
+    } else {
+        setGraphicStyleName(o, styles.lookup(style));
+    }
 }
 
 void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)

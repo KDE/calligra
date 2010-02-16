@@ -671,13 +671,26 @@ private:
                ? p->documentContainer->slideHF.data()
                : p->documentContainer->slideHF2.data();
     }
+    /**
+      * Set the name of the style associated with this object.
+      **/
     void setGraphicStyleName(const PPT::OfficeArtSpContainer& o, const QString& name) {
         graphicStyleNames[&o] = name;
     }
-
     /**
-      *Return the name of the style associated with this object.
-      * If no style is present, create one.
+      * Return the name of the style associated with this object.
+      **/
+    QString getPresentationStyleName(const PPT::OfficeArtSpContainer& o) const {
+        return presentationStyleNames[&o];
+    }
+    /**
+      * Set the name of the style associated with this object.
+      **/
+    void setPresentationStyleName(const PPT::OfficeArtSpContainer& o, const QString& name) {
+        presentationStyleNames[&o] = name;
+    }
+    /**
+      * Return the name of the style associated with this object.
       **/
     QString getGraphicStyleName(const PPT::OfficeArtSpContainer& o) const {
         return graphicStyleNames[&o];
