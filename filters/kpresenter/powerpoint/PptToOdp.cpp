@@ -714,7 +714,6 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style,
     // presentation:background-visible
     // presentation:display-date-time
     if (hf) {
-        qDebug() << hf->fHasDate;
         style.addProperty("presentation:display-date-time",
                           hf->fHasDate, dp);
     }
@@ -959,6 +958,7 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                     }
                 }
             }
+
             // graphic family
             KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
             style.setAutoStyleInStylesDotXml(true);
@@ -977,6 +977,11 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                                      + QString::number(texttype);
             masterGraphicStyles[m][texttype] = styles.lookup(style, name + "g",
                     KoGenStyles::DontForceNumbering);
+
+            if (finder.sp) {
+                processObjectForStyle(*finder.sp, styles, true);
+            }
+
             if (textstyle && textstyle->lstLvl1) {
                 // text family
                 KoGenStyle tstyle(KoGenStyle::StyleTextAuto, "text");
@@ -1121,6 +1126,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the automatic styles
      */
+    currentSlideTexts = 0;
+    currentMaster = 0;
     defineMasterAutomaticStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
 
@@ -1137,6 +1144,22 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the style:master-pages
      */
+    QBuffer notesBuffer;
+    if (p->notesMaster) { // draw the notes master
+        notesBuffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&notesBuffer);
+        Writer out(writer);
+
+        writer.startElement("presentation:notes");
+        writer.addAttribute("style:page-layout-name", notesPageLayoutName);
+        writer.addAttribute("draw:style-name",
+                            drawingPageStyles[p->notesMaster]);
+        foreach(const OfficeArtSpgrContainerFileBlock& co,
+                p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
+            processObjectForBody(co, out);
+        }
+        writer.endElement();
+    }
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
@@ -1150,8 +1173,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoGenStyle master(KoGenStyle::StyleMaster);
         master.addAttribute("style:page-layout-name", slidePageLayoutName);
         master.addAttribute("draw:style-name", drawingPageStyles[m]);
-        currentSlideTexts = 0;
-        currentMaster = 0;
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 drawing->OfficeArtDg.groupShape.rgfb) {
             QBuffer buffer;
@@ -1163,27 +1184,12 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
                                    QString::fromUtf8(buffer.buffer(),
                                                      buffer.buffer().size()));
         }
-        masterNames[m] = styles.lookup(master, "M");
-    }
-    if (p->notesMaster) {
-        KoGenStyle master(KoGenStyle::StyleMaster);
-        master.addAttribute("style:page-layout-name", notesPageLayoutName);
-        master.addAttribute("draw:style-name",
-                            drawingPageStyles[p->notesMaster]);
-        currentSlideTexts = 0;
-        currentMaster = 0;
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
-            QBuffer buffer;
-            buffer.open(QIODevice::WriteOnly);
-            KoXmlWriter writer(&buffer);
-            Writer out(writer);
-            processObjectForBody(co, out);
-            master.addChildElement("draw:frame",
-                                   QString::fromUtf8(buffer.buffer(),
-                                                     buffer.buffer().size()));
+        if (notesBuffer.buffer().size()) {
+            master.addChildElement("presentation:notes",
+                                   QString::fromUtf8(notesBuffer.buffer(),
+                                                     notesBuffer.buffer().size()));
         }
-        notesMasterName = styles.lookup(master, "M");
+        masterNames[m] = styles.lookup(master, "M");
     }
 
     // Creating dateTime class object
@@ -3067,10 +3073,11 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
         }
     }
     defineGraphicProperties(style, o);
+    const QString n = styles.lookup(style);
     if (o.clientData && o.clientData->placeholderAtom) {
-        setPresentationStyleName(o, styles.lookup(style));
+        setPresentationStyleName(o, n);
     } else {
-        setGraphicStyleName(o, styles.lookup(style));
+        setGraphicStyleName(o, n);
     }
 }
 
