@@ -176,7 +176,7 @@ void KexiFormPart::initInstanceActions()
 // KFormDesigner::CreateLayoutCommand
 
     KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
-                                         "", KShortcut(), "formpart_layout_menu", "KActionMenu");
+                                         QString(), KShortcut(), "formpart_layout_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
 
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"),
@@ -205,7 +205,7 @@ void KexiFormPart::initInstanceActions()
                        KShortcut(), "formpart_format_lower");
 
 #ifndef KEXI_NO_UNFINISHED
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), "",
+    action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), QString(),
                                 KShortcut(), "other_widgets_menu", "KActionMenu");
 #endif
 
@@ -484,10 +484,10 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     KexiProject *prj = KexiMainWindowIface::global()->project();
     d->dataSourcePage->setProject(prj);
 
-    tab->addTab(d->dataSourcePage, KIcon("server-database"), "");
+    tab->addTab(d->dataSourcePage, KIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
-    tab->addTab(d->objectTreeView, KIcon("widgets"), "");
+    tab->addTab(d->objectTreeView, KIcon("widgets"), QString());
     tab->setTabToolTip(tab->indexOf(d->objectTreeView), i18n("Widgets"));
 }
 

@@ -240,7 +240,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         QStringList formActions;
         formActions
             << "edit_pointer"
-            << "" //sep
+            << QString() //sep
             << "library_widget_KexiDBAutoField"
             << "library_widget_KexiDBLabel"
             << "library_widget_KexiPictureLabel"
@@ -256,7 +256,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_QGroupBox"
             << "library_widget_KFDTabWidget"
             << "library_widget_Spring"
-            << "" //sep
+            << QString() //sep
 #ifdef KEXI_DEBUG_GUI
             << "show_form_ui"
 #endif

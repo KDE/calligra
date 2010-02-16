@@ -199,7 +199,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         foreach(KexiFormDataItemInterface *item, m_dataItems) {
             KexiDB::QueryColumnInfo* ci = query->columnInfo(item->dataSource());
             int index = ci ? columnsOrder[ ci ] : -1;
-            kDebug() << "query->columnsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index
+            kDebug() << "query->columnsOrder()[ " << (ci ? ci->field->name() : QString()) << " ] = " << index
                 << " (dataSource: " << item->dataSource() << ", name="
                 << dynamic_cast<QObject*>(item)->objectName() << ")";
             if (index != -1 && !m_fieldNumbersForDataItems[ item ])
