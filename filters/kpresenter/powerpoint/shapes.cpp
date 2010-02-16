@@ -213,15 +213,6 @@ enum {
     msosptNil = 0x0FFF
 };
 
-/**
- * Convert FixedPoint to a qreal
- */
-qreal
-toFloat(const FixedPoint& f)
-{
-    return f.integral + f.fractional / 65536.0;
-}
-
 void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
@@ -245,7 +236,7 @@ void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
-        qreal rotAngle = toFloat(rotation->rotation);
+        qreal rotAngle = toQReal(rotation->rotation);
         qreal xMid = (rect.left() + 0.5 * rect.width());
         qreal yMid = (rect.top() + 0.5 * rect.height());
         qreal xVec = rect.left() - xMid;
@@ -271,7 +262,7 @@ void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
 
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
-        qreal rotAngle = toFloat(rotation->rotation);
+        qreal rotAngle = toQReal(rotation->rotation);
         if (rotAngle > 0.785399) { // > 45 deg
             out.xml.addAttribute("svg:width", out.vLength(rect.height()));
             out.xml.addAttribute("svg:height", out.hLength(rect.width()));
@@ -413,7 +404,7 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     }
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) { // draw:transform="rotate (1.5707963267946) translate (6.985cm 14.181cm)"
-        double rotAngle = toFloat(rotation->rotation);
+        double rotAngle = toQReal(rotation->rotation);
         double xMid = (rect.x() + 0.5 * rect.width());
         double yMid = (rect.y() + 0.5 * rect.height());
         QString rot = QString("rotate (%1) translate (%2cm %3cm)").arg(rotAngle).arg(xMid).arg(yMid);

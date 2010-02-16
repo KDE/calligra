@@ -866,4 +866,12 @@ get(const PPT::OfficeArtDggContainer& o)
     return a;
 }
 
+/**
+ * Convert FixedPoint to a qreal
+ */
+inline qreal toQReal(const PPT::FixedPoint& f)
+{
+    return f.integral + f.fractional / 65536.0;
+}
+
 #endif // POWERPOINTIMPORT_H
