@@ -2007,14 +2007,15 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     if (!headerFooterAtom && getSlideHF()) {
         headerFooterAtom = &getSlideHF()->hfAtom;
     }
-    if (headerFooterAtom && headerFooterAtom->fHasDate) {
-        xmlWriter.addAttribute("presentation:use-date-time-name", usedDateTimeDeclaration[slideNo]);
+    if (!usedDateTimeDeclaration.value(slideNo).isEmpty()) {
+        xmlWriter.addAttribute("presentation:use-date-time-name",
+                               usedDateTimeDeclaration[slideNo]);
     }
-    if (headerFooterAtom && headerFooterAtom->fHasHeader) {
+    if (!usedHeaderDeclaration.value(slideNo).isEmpty()) {
         if(usedHeaderDeclaration[slideNo] != "")
             xmlWriter.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
     }
-    if (headerFooterAtom && headerFooterAtom->fHasFooter) {
+    if (!usedFooterDeclaration.value(slideNo).isEmpty()) {
         if(usedFooterDeclaration[slideNo] != "")
             xmlWriter.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
