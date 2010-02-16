@@ -32,6 +32,9 @@ set(karbonfiltereffects_PART_SRCS
     MorphologyEffect.cpp
     MorphologyEffectFactory.cpp
     MorphologyEffectConfigWidget.cpp
+    ConvolveMatrixEffect.cpp
+    ConvolveMatrixEffectFactory.cpp
+    ConvolveMatrixEffectConfigWidget.cpp
     )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})

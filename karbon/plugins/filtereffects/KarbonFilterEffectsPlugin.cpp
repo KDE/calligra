@@ -28,6 +28,7 @@
 #include "ComponentTransferEffectFactory.h"
 #include "ImageEffectFactory.h"
 #include "MorphologyEffectFactory.h"
+#include "ConvolveMatrixEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
@@ -49,6 +50,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QLis
     KoFilterEffectRegistry::instance()->add(new ComponentTransferEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ImageEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"
