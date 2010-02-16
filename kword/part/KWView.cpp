@@ -133,8 +133,10 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(shell()->createDockWidget(&statisticsFactory));
         if (docker && docker->view() != this) docker->setView(this);
 
+#ifdef SHOULD_BUILD_RDF
         KWRdfDockerFactory factory(this);
         shell()->createDockWidget(&factory);
+#endif
     }
 
     if (statusBar())
