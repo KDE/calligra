@@ -19,6 +19,8 @@
 
 #include "kptflatproxymodel.h"
 
+#include "kptglobal.h"
+
 #include <KLocale>
 
 #include <QModelIndex>
@@ -221,9 +223,13 @@ QVariant FlatProxyModel::data(const QModelIndex &index, int role) const
     if ( col < 0 ) {
         r = sourceModel()->data(source_index, role);
     } else if ( col == 0 ) {
-        source_index = source_index.parent();
-        if ( source_index.isValid() ) {
-            r = sourceModel()->data(source_index, role);
+        if ( role == Role::ColumnTag ) {
+            r = headerData( col, Qt::Horizontal, role );
+        } else {
+            source_index = source_index.parent();
+            if ( source_index.isValid() ) {
+                r = sourceModel()->data(source_index, role);
+            }
         }
     }
     //kDebug()<<index<<r;
@@ -252,7 +258,7 @@ QVariant FlatProxyModel::headerData(int section, Qt::Orientation orientation, in
         return sourceModel()->headerData(section, orientation, role);
     }
     if ( sec == 0 ) {
-        return i18n( "Parent" );
+        return role == Role::ColumnTag ? "Parent" : i18n( "Parent" );
     }
     return QVariant();
 }
