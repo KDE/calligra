@@ -83,7 +83,7 @@ bool KRUtils::readFontAttributes(const QDomElement& el, QFont& font)
     else if (fontWeight == "normal") {
         weight = QFont::Normal;
     }
-    else {
+    else if (!fontWeight.isEmpty()) {
         // Remember : Qt and CSS/XSL doesn't have the same scale. It's 100-900 instead of Qt's 0-100
         // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
         int boldness = fontWeight.toInt(&ok);
