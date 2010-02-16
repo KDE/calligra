@@ -27,7 +27,7 @@
 
 class KoFilterEffectLoadingContext;
 
-/// A flood fill effect
+/// A morphology filter effect
 class MorphologyEffect : public KoFilterEffect
 {
 public:
