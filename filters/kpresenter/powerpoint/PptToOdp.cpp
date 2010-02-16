@@ -994,7 +994,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     // define for master for use in <master-page style:name="...">
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
-        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(true);
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
@@ -1005,8 +1005,9 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
             hf = &mm->perSlideHeadersFootersContainer->hfAtom;
         }
         defineDrawingPageStyle(dp, hf);
-        drawingPageStyles[m] = styles.lookup(dp);
+        drawingPageStyles[m] = styles.lookup(dp, "dp");
     }
+    QString notesMasterPageStyle;
     if (p->notesMaster) {
         const HeadersFootersAtom* hf = 0;
         if (p->notesMaster->perSlideHFContainer) {
@@ -1014,10 +1015,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         } else if (p->notesMaster->perSlideHFContainer2) {
             hf = &p->notesMaster->perSlideHFContainer2->hfAtom;
         }
-        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
-        dp.setAutoStyleInStylesDotXml(false);
+        KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
+        dp.setAutoStyleInStylesDotXml(true);
         defineDrawingPageStyle(dp, hf);
-        drawingPageStyles[p->notesMaster] = styles.lookup(dp);
+        notesMasterPageStyle = styles.lookup(dp, "dp");
+        drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
 
     // define for handouts for use in <style:handout-master style:name="...">
@@ -1025,14 +1027,15 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 
     // define for slides for use in <draw:page style:name="...">
     foreach (const PPT::SlideContainer* sc, p->slides) {
-        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
+        // TODO derive from master page style
         const HeadersFootersAtom* hf = 0;
         if (sc->perSlideHFContainer) {
             hf = &sc->perSlideHFContainer->hfAtom;
         }
         defineDrawingPageStyle(dp, hf);
-        drawingPageStyles[sc] = styles.lookup(dp);
+        drawingPageStyles[sc] = styles.lookup(dp, "dp");
     }
 
     // define for notes for use in <presentation:notes style:name="...">
@@ -1044,10 +1047,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         } else if (nc->perSlideHFContainer2) {
             hf = &nc->perSlideHFContainer2->hfAtom;
         }
-        KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+        KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
+        dp.setParentName(notesMasterPageStyle);
         defineDrawingPageStyle(dp, hf);
-        drawingPageStyles[nc] = styles.lookup(dp);
+        drawingPageStyles[nc] = styles.lookup(dp, "dp");
     }
 }
 
@@ -1266,7 +1270,6 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("office:version", "1.0");
 
     // office:automatic-styles
-    processContentStyles(styles);
 
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForStyle(c, styles);
@@ -1293,38 +1296,6 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     return contentData;
 }
 
-void PptToOdp::processContentStyles(KoGenStyles &styles)
-{
-    KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
-    dp.addProperty("presentation:background-objects-visible", "true");
-
-    if (getSlideHF() && getSlideHF()->hfAtom.fHasSlideNumber)
-        dp.addProperty("presentation:display-page-number", "true");
-    else
-        dp.addProperty("presentation:display-page-number", "false");
-
-    if (getSlideHF() && getSlideHF()->hfAtom.fHasDate)
-        dp.addProperty("presentation:display-date-time" , "true");
-    else
-        dp.addProperty("presentation:display-date-time" , "false");
-
-    if (getSlideHF() && getSlideHF()->hfAtom.fHasHeader)
-        dp.addProperty("presentation:display-header", "true");
-    else
-        dp.addProperty("presentation:display-header", "false");
-
-    if (getSlideHF() && getSlideHF()->hfAtom.fHasFooter)
-        dp.addProperty("presentation:display-footer", "true");
-    else
-        dp.addProperty("presentation:display-footer", "false");
-
-
-    styles.lookup(dp, "dp");
-
-    declarationStyleName = styles.lookup(dp);
-}
-
-
 void PptToOdp::writeTextSpan(KoXmlWriter& xmlWriter,
                                      const QString &text)
 {
@@ -1334,7 +1305,6 @@ void PptToOdp::writeTextSpan(KoXmlWriter& xmlWriter,
                        //be here, so we'll remove them just to be safe
     xmlWriter.addTextSpan(copy);
 }
-
 
 
 PptToOdp::HyperlinkRange PptToOdp::findNextHyperlinkStart(const PPT::TextContainer& text,

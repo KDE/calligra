@@ -248,13 +248,6 @@ private:
     void processTextForBody(const PPT::TextContainer& tc, Writer& out);
     void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
-    /**
-    * @brief Write styles (KoGenStyle& style) meant for the whole presentation
-    * @param KoGenStyle& style To represent the style
-    * @param Slide master - master slide
-    */
-    void processContentStyles(KoGenStyles &styles);
-
      /**
      * @brief Write declaration in the content body presentation
      * @param xmlWriter XML writer to write
