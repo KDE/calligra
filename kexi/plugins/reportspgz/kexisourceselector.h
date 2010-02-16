@@ -30,6 +30,8 @@
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
 
+//! @todo rename to KexiReportDataSourcePage
+//! @todo use KexiPropertyPaneViewBase
 class KexiSourceSelector : public QWidget
 {
     Q_OBJECT
