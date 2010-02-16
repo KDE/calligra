@@ -489,9 +489,12 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
 }
 
 void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
-    style.addProperty("svg:stroke-width",
-                          QString("%1pt").arg(0x2535 / 12700.f),
-                          KoGenStyle::GraphicType);
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    style.addProperty("svg:stroke-width", "0pt", gt);
+    style.addProperty("draw:auto-grow-height", false, gt);
+    style.addProperty("draw:stroke", "none", gt);
+    style.addProperty("draw:fill", "none", gt);
+    style.addProperty("draw:fill-color", "#99ccff", gt);
     const OfficeArtDggContainer& drawingGroup
         = p->documentContainer->drawingGroup.OfficeArtDgg;
     const TextMasterStyleAtom& textMasterStyle
@@ -2797,131 +2800,258 @@ const char* arrowHeads[6] = {
 template <typename T>
 void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMasterStyleAtom* listStyles)
 {
-    // TODO: change this function so it goes through the attributes
-    // of ODF style:graphic-properties instead of going through
-    // the properties found in ppt
-
-
-    /** 2.3.8 Line Style **/
-    // 2.3.8.1 lineColor
-    const LineColor* lc = get<LineColor>(o);
-    if (lc) {
-        style.addProperty("svg:stroke-color", toQColor(lc->lineColor).name(),
-                          KoGenStyle::GraphicType);
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    // dr3d:ambient-color
+    // dr3d:back-scale
+    // dr3d:backface-culling
+    // dr3d:close-back
+    // dr3d:close-front
+    // dr3d:depth
+    // dr3d:diffuse-color
+    // dr3d:edge-rounding
+    // dr3d:edge-rounding-mode
+    // dr3d:emissive-color
+    // dr3d:end-angle
+    // dr3d:horizontal-segments
+    // dr3d:lighting-mode
+    // dr3d:normals-direction
+    // dr3d:normals-kind
+    // dr3d:shadow
+    // dr3d:shininess
+    // dr3d:specular-color
+    // dr3d:texture-filter
+    // dr3d:texture-generation-mode-x
+    // dr3d:texture-generation-mode-y
+    // dr3d:texture-kind
+    // dr3d:texture-mode
+    // dr3d:vertical-segments
+    // draw:auto-grow-height
+    // draw:auto-grow-width
+    // draw:blue
+    // draw:caption-angle
+    // draw:caption-angle-type
+    // draw:caption-escape
+    // draw:caption-escape-direction
+    // draw:caption-fit-line-length
+    // draw:caption-gap
+    // draw:caption-line-length
+    // draw:caption-type
+    // draw:color-inversion
+    // draw:color-mode
+    // draw:contrast
+    // draw:decimal-places
+    // draw:end-guide
+    // draw:end-line-spacing-horizontal
+    // draw:end-line-spacing-vertical
+    // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
+    const FillBlip* fb = get<FillBlip>(o);
+    const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
+    if (fb) {
+        style.addProperty("draw:fill", "bitmap", gt);
+    } else if (fs && fs->fUseFilled) {
+        style.addProperty("draw:fill", fs->fFilled ? "solid" : "none", gt);
     }
-    // 2.3.8.2 lineOpacity
-    const LineOpacity* lo = get<LineOpacity>(o);
-    if (lo) {
-        style.addProperty("svg:stroke-opacity", lo->lineOpacity / 0x10000f);
+    // draw:fill-color
+    const FillColor* fc = get<FillColor>(o);
+    if (fc) {
+        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(), gt);
     }
-    // 2.3.8.5 lineType
-    // solid, pattern or texture
-    // 2.3.8.14 lineWidth
+    // draw:fill-gradient-name
+    // draw:fill-hatch-name
+    // draw:fill-hatch-solid
+    // draw:fill-image-height
+    // draw:fill-image-name
+    if (fb) {
+        style.addProperty("draw:fill-image-name",
+                          "fillImage" + QString::number(fb->fillBlip), gt);
+    }
+    // draw:fill-image-ref-point
+    // draw:fill-image-ref-point-x
+    // draw:fill-image-ref-point-y
+    // draw:fill-image-width
+    // draw:fit-to-contour
+    // draw:fit-to-size
+    // draw:frame-display-border
+    // draw:frame-display-scrollbar
+    // draw:frame-margin-horizontal
+    // draw:frame-margin-vertical
+    // draw:gamma
+    // draw:gradient-step-count
+    // draw:green
+    // draw:guide-distance
+    // draw:guide-overhang
+    // draw:image-opacity
+    // draw:line-distance
+    // draw:luminance
+    // draw:marker-end
+    const LineEndArrowhead* lea = get<LineEndArrowhead>(o);
+    if (lea && lea->lineEndArrowhead > 0 && lea->lineEndArrowhead < 6) {
+        style.addProperty("draw:marker-end",
+                          arrowHeads[lea->lineEndArrowhead], gt);
+    }
+    // draw:marker-end-center
+    // draw:marker-end-width
     const LineWidth* lw = get<LineWidth>(o);
-    if (lw) {
-        style.addProperty("svg:stroke-width",
-                          QString("%1pt").arg(lw->lineWidth / 12700.f),
-                          KoGenStyle::GraphicType);
+    const LineEndArrowWidth* lew = get<LineEndArrowWidth>(o);
+    if (lw && lew) {
+        style.addProperty("draw:marker-end-width", QString("%1cm").arg(lw->lineWidth*lew->lineEndArrowWidth), gt);
     }
-    // 2.3.8.16 lineStyle
-    // single, double, tiple etc line
-    // 2.3.8.17 lineDashing
+    // draw:marker-start
+    const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);
+    if (lsa && lsa->lineStartArrowhead > 0 && lsa->lineStartArrowhead < 6) {
+        style.addProperty("draw:marker-start",
+                          arrowHeads[lsa->lineStartArrowhead], gt);
+    }
+    // draw:marker-start-center
+    // draw:marker-start-width
+    const LineStartArrowWidth* lsw = get<LineStartArrowWidth>(o);
+    if (lw && lsw) {
+        style.addProperty("draw:marker-start-width", QString("%1cm").arg(
+                              lw->lineWidth*lsw->lineStartArrowWidth), gt);
+    }
+    // draw:measure-align
+    // draw:measure-vertical-align
+    // draw:ole-draw-aspect
+    // draw:opacity
+    // draw:opacity-name
+    // draw:parallel
+    // draw:placing
+    // draw:red
+    // draw:secondary-fill-color
+    // draw:shadow
+    // draw:shadow-color
+    // draw:shadow-offset-x
+    const ShadowOffsetX* sox =  get<ShadowOffsetX>(o);
+    if (sox) {
+        style.addProperty("draw:shadow-offset-x", QString("%1cm").arg(sox->shadowOffsetX), gt);
+    }
+    // draw:shadow-offset-y
+    const ShadowOffsetY* soy =  get<ShadowOffsetY>(o);
+    if (soy) {
+        style.addProperty("draw:shadow-offset-y", QString("%1cm").arg(soy->shadowOffsetY), gt);
+    }
+    // draw:shadow-opacity
+    const ShadowOpacity* so = get<ShadowOpacity>(o);
+    if (so) {
+        float opacity = so->shadowOpacity.integral + so->shadowOpacity.fractional / 65535.0;
+        style.addProperty("draw:shadow-opacity", QString("%1%").arg(opacity), gt);
+    }
+    // draw:show-unit
+    // draw:start-guide
+    // draw:start-line-spacing-horizontal
+    // draw:start-line-spacing-vertical
+    // draw:stroke ('dash', 'none' or 'solid')
     const LineDashing* ld = get<LineDashing>(o);
-
-    // This is not nearly complete. left, right, top and bottom lines not yes
-    // supported.
     // for now, go by the assumption that there is only a line
     // when fUsefLine and fLine are true
     const LineStyleBooleanProperties* bp = get<LineStyleBooleanProperties>(o);
     if (bp && bp->fUsefLine && bp->fLine) {
-        if (bp->fNoLineDrawDash) {
-            style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
-        } else if (ld) {
+        if (ld && !(bp->fUseNoLineDrawDash && bp->fNoLineDrawDash)) {
             if (ld->lineDashing == 0 || ld->lineDashing >= 11) { // solid
-                style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+                style.addProperty("draw:stroke", "solid", gt);
             } else {
-                style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-                style.addProperty("draw:stroke-dash", dashses[ld->lineDashing],
-                                  KoGenStyle::GraphicType);
+                style.addProperty("draw:stroke", "dash", gt);
             }
         } else {
-            // default style is a solid line, this must be set explicitly as long
-            // as kpresenter takes draw:stroke="none" as default
-            style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
+            style.addProperty("draw:stroke", "solid", gt);
         }
     }
-    style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-
-
-    const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);
-    if (lsa && lsa->lineStartArrowhead > 0 && lsa->lineStartArrowhead < 6) {
-        style.addProperty("draw:marker-start",
-                          arrowHeads[lsa->lineStartArrowhead], KoGenStyle::GraphicType);
+    // draw:stroke-dash from 2.3.8.17 lineDashing
+    if (ld && ld->lineDashing > 0 && ld->lineDashing < 11) {
+        style.addProperty("draw:stroke-dash", dashses[ld->lineDashing], gt);
     }
-
-    const LineEndArrowhead* lea = get<LineEndArrowhead>(o);
-    if (lea && lea->lineEndArrowhead > 0 && lea->lineEndArrowhead < 6) {
-        style.addProperty("draw:marker-end",
-                          arrowHeads[lea->lineEndArrowhead], KoGenStyle::GraphicType);
+    // draw:stroke-dash-names
+    // draw:stroke-linejoin
+    // draw:symbol-color
+    // draw:textarea-horizontal-align
+    // draw:textarea-vertical-align
+    // draw:tile-repeat-offset
+    // draw:unit
+    // draw:visible-area-height
+    // draw:visible-area-left
+    // draw:visible-area-top
+    // draw:visible-area-width
+    // draw:wrap-influence-on-position
+    // fo:background-color
+    // fo:border
+    // fo:border-bottom
+    // fo:border-left
+    // fo:border-right
+    // fo:border-top
+    // fo:clip
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
+    // fo:max-height
+    // fo:max-width
+    // fo:min-height
+    // fo:min-width
+    // fo:padding
+    // fo:padding-bottom
+    // fo:padding-left
+    // fo:padding-right
+    // fo:padding-top
+    // fo:wrap-option
+    // style:border-line-width
+    // style:border-line-width-bottom
+    // style:border-line-width-left
+    // style:border-line-width-right
+    // style:border-line-width-top
+    // style:editable
+    // style:flow-with-text
+    // style:horizontal-pos
+    // style:horizontal-rel
+    // style:mirror
+    // style:number-wrapped-paragraphs
+    // style:overflow-behavior
+    // style:print-content
+    // style:protect
+    // style:rel-height
+    // style:rel-width
+    // style:repeat
+    // style:run-through
+    // style:shadow
+    // style:vertical-pos
+    // style:vertical-rel
+    // style:wrap
+    // style:wrap-contour
+    // style:wrap-contour-mode
+    // style:wrap-dynamic-treshold
+    // svg:fill-rule
+    // svg:height
+    // svg:stroke-color from 2.3.8.1 lineColor
+    const LineColor* lc = get<LineColor>(o);
+    if (lc) {
+        style.addProperty("svg:stroke-color", toQColor(lc->lineColor).name(),
+                          gt);
     }
-
-    const LineStartArrowWidth* lsw = get<LineStartArrowWidth>(o);
-    if (lw && lsw) {
-        style.addProperty("draw:marker-start-width", QString("%1cm").arg(
-                              lw->lineWidth*lsw->lineStartArrowWidth), KoGenStyle::GraphicType);
+    // svg:stroke-opacity from 2.3.8.2 lineOpacity
+    const LineOpacity* lo = get<LineOpacity>(o);
+    if (lo) {
+        style.addProperty("svg:stroke-opacity", lo->lineOpacity / 0x10000f, gt);
     }
-
-    const LineEndArrowWidth* lew = get<LineEndArrowWidth>(o);
-    if (lw && lew) {
-        style.addProperty("draw:marker-end-width", QString("%1cm").arg(lw->lineWidth*lew->lineEndArrowWidth), KoGenStyle::GraphicType);
+    // svg:stroke-width from 2.3.8.14 lineWidth
+    if (lw) {
+        style.addProperty("svg:stroke-width",
+                          QString("%1pt").arg(lw->lineWidth / 12700.f), gt);
     }
+    // svg:width
+    // svg:x
+    // svg:y
+    // text:anchor-page-number
+    // text:anchor-type
+    // text:animation
+    // text:animation-delay
+    // text:animation-direction
+    // text:animation-repeat
+    // text:animation-start-inside
+    // text:animation-steps
+    // text:animation-stop-inside
 
-    const FillBlip* fb = get<FillBlip>(o);
-    const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
-    if (fb) {
-        style.addProperty("draw:fill", "bitmap");
-        style.addProperty("draw:fill-image-name",
-                          "fillImage" + QString::number(fb->fillBlip));
-    } else if (fs && fs->fUseFilled) {
-        style.addProperty("draw:fill", fs->fFilled ? "solid" : "none",
-                          KoGenStyle::GraphicType);
-    }
-    const FillColor* fc = get<FillColor>(o);
-    if (fc) {
-        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(),
-                          KoGenStyle::GraphicType);
-    } else {
-        style.addProperty("draw:fill-color", "#99ccff",
-                          KoGenStyle::GraphicType);
-    }
 
-#if 0
-    if (drawObject->hasProperty("draw:shadow-color")) {
-        elementWriter.addAttribute("draw:shadow", "visible");
-        Color shadowColor = drawObject->getColorProperty("draw:shadow-color");
-        style.addProperty("draw:shadow-color", hexname(shadowColor), KoGenStyle::GraphicType);
-    } else {
-        style.addProperty("draw:shadow", "hidden", KoGenStyle::GraphicType);
-    }
-#endif
-
-    const ShadowOpacity* so = get<ShadowOpacity>(o);
-    if (so) {
-        float opacity = so->shadowOpacity.integral + so->shadowOpacity.fractional / 65535.0;
-        style.addProperty("draw:shadow-opacity", QString("%1%").arg(opacity), KoGenStyle::GraphicType);
-    }
-
-    const ShadowOffsetX* sox =  get<ShadowOffsetX>(o);
-    if (sox) {
-        style.addProperty("draw:shadow-offset-x", QString("%1cm").arg(sox->shadowOffsetX), KoGenStyle::GraphicType);
-    }
-
-    const ShadowOffsetY* soy =  get<ShadowOffsetY>(o);
-    if (soy) {
-        style.addProperty("draw:shadow-offset-y", QString("%1cm").arg(soy->shadowOffsetY), KoGenStyle::GraphicType);
-    }
-
-    // define embedded text:list-style element
+    /* define embedded text:list-style element */
     if (listStyles) {
         defineGraphicPropertiesListStyles(style, *listStyles);
     }
