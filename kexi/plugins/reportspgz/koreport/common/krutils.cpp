@@ -172,7 +172,8 @@ void KRUtils::writeFontAttributes(QDomElement& el, const QFont &font)
         el.setAttribute("fo:font-weight", "200");
     }
     else if (font.weight() == QFont::Normal) {
-        el.setAttribute("fo:font-weight", "normal"); // 400
+        // Default
+        //el.setAttribute("fo:font-weight", "normal"); // 400
     }
     else if (font.weight() == QFont::DemiBold) {
         el.setAttribute("fo:font-weight", "600");
