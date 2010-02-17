@@ -85,6 +85,9 @@ public:
      * doesn't consume additional memory.
      */
     Value& operator= (const Value& _value);
+    
+    bool operator==(const Value &other) const;
+    bool operator!=(const Value &other) const;
 
     /**
      * Assigns from another value. Same as above.

@@ -69,6 +69,9 @@ public:
     bool isCovered() const;
     void setCovered(bool covered);
 
+    int columnRepeat() const;
+    void setColumnRepeat(int repeat);
+    
     bool hasHyperlink() const;
     UString hyperlinkDisplayName() const;
     UString hyperlinkLocation() const;
@@ -82,6 +85,9 @@ public:
     std::vector<Picture*> pictures() const;
     void setPictures(std::vector<Picture*>);
     void addPicture(Picture*);
+    
+    bool operator==(const Cell &other) const;
+    bool operator!=(const Cell &other) const;
 
 private:
     // no copy or assign

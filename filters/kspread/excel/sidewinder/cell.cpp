@@ -18,7 +18,7 @@
 */
 
 #include "cell.h"
-
+#include "excel.h"
 #include "ustring.h"
 #include "format.h"
 #include "value.h"
@@ -40,6 +40,7 @@ public:
     unsigned columnSpan;
     unsigned rowSpan;
     bool covered;
+    int columnRepeat;
     bool hasHyperlink;
     UString hyperlinkDisplayName;
     UString hyperlinkLocation;
@@ -62,6 +63,7 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
     d->columnSpan = 1;
     d->rowSpan    = 1;
     d->covered    = false;
+    d->columnRepeat = 1;
     d->hasHyperlink = false;
 }
 
@@ -178,6 +180,16 @@ void Cell::setCovered(bool covered)
     d->covered = covered;
 }
 
+int Cell::columnRepeat() const
+{
+    return d->columnRepeat;
+}
+
+void Cell::setColumnRepeat(int repeat)
+{
+    d->columnRepeat = repeat;
+}
+    
 bool Cell::hasHyperlink() const
 {
     return d->hasHyperlink;
@@ -237,4 +249,42 @@ void Cell::setPictures(std::vector<Picture*> pics)
 void Cell::addPicture(Picture* picture)
 {
     d->pictures.push_back(picture);
+}
+
+bool Cell::operator==(const Cell &other) const
+{
+    if (value() != other.value()) return false;
+    if (formula() != other.formula()) return false;
+    if (format() != other.format()) return false;
+    if (columnSpan() != other.columnSpan()) return false;
+    if (rowSpan() != other.rowSpan()) return false;
+    if (isCovered() != other.isCovered()) return false;
+    if (hasHyperlink() != other.hasHyperlink()) return false;
+    if (hasHyperlink() && ( hyperlinkDisplayName() != other.hyperlinkDisplayName() ||
+                           other.hyperlinkLocation() != other.hyperlinkLocation() ||
+                           hyperlinkTargetFrameName() != other.hyperlinkTargetFrameName() ) ) return false;
+    if (note() != other.note()) return false;
+    if (note() != other.note()) return false;
+    if (pictures().size() != other.pictures().size()) return false;
+    for(int i = pictures().size() - 1; i >= 0; --i) {
+        Picture* p1 = pictures()[i];
+        Picture* p2 = other.pictures()[i];
+        if(p1->m_id != p2->m_id) return false;
+        if(p1->m_filename != p2->m_filename) return false;
+        if(p1->m_colL != p2->m_colL) return false;
+        if(p1->m_dxL != p2->m_dxL) return false;
+        if(p1->m_rwT != p2->m_rwT) return false;
+        if(p1->m_dyT != p2->m_dyT) return false;
+        if(p1->m_colR != p2->m_colR) return false;
+        if(p1->m_dxR != p2->m_dxR) return false;
+        if(p1->m_rwB != p2->m_rwB) return false;
+        if(p1->m_dyB != p2->m_dyB) return false;
+    }
+
+    return true;
+}
+
+bool Cell::operator!=(const Cell &other) const
+{
+    return ! (*this == other);
 }

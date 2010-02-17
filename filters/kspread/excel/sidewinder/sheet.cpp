@@ -36,11 +36,11 @@ public:
     UString name;
 
     // hash to store cell, FIXME replace with quad-tree
-    std::map<unsigned, Cell*> cells;
+    QHash<unsigned, Cell*> cells;
     unsigned maxRow;
     unsigned maxColumn;
-    std::map<unsigned, Column*> columns;
-    std::map<unsigned, Row*> rows;
+    QHash<unsigned, Column*> columns;
+    QHash<unsigned, Row*> rows;
 
     bool visible;
     bool protect;
@@ -122,19 +122,11 @@ void Sheet::setAutoCalc(bool a)
 void Sheet::clear()
 {
     // delete all cells
-    std::map<unsigned, Cell*>::iterator cell_it;
-    for (cell_it = d->cells.begin(); cell_it != d->cells.end(); ++cell_it)
-        delete cell_it->second;
-
+    qDeleteAll(d->cells);
     // delete all columns
-    std::map<unsigned, Column*>::iterator col_it;
-    for (col_it = d->columns.begin(); col_it != d->columns.end(); ++col_it)
-        delete col_it->second;
-
+    qDeleteAll(d->columns);
     // delete all rows
-    std::map<unsigned, Row*>::iterator row_it;
-    for (row_it = d->rows.begin(); row_it != d->rows.end(); ++row_it)
-        delete row_it->second;
+    qDeleteAll(d->rows);
 }
 
 UString Sheet::name() const
@@ -482,6 +474,18 @@ void Column::setVisible(bool b)
     d->visible = b;
 }
 
+bool Column::operator==(const Column &other) const
+{
+    return width() == other.width() &&
+           visible() == other.visible() &&
+           format() == other.format();
+}
+
+bool Column::operator!=(const Column &other) const
+{
+    return ! (*this == other);
+}
+
 class Row::Private
 {
 public:
@@ -544,4 +548,16 @@ bool Row::visible() const
 void Row::setVisible(bool b)
 {
     d->visible = b;
+}
+
+bool Row::operator==(const Row &other) const
+{
+    return height() == other.height() &&
+           visible() == other.visible() &&
+           format() == other.format();
+}
+
+bool Row::operator!=(const Row &other) const
+{
+    return ! (*this == other);
 }

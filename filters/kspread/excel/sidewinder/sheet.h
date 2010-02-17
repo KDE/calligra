@@ -38,7 +38,6 @@ class Sheet
 public:
 
     explicit Sheet(Workbook* workbook);
-
     virtual ~Sheet();
 
     // get workbook that owns this sheet
@@ -174,26 +173,24 @@ class Column
 public:
 
     Column(Sheet* sheet, unsigned index);
-
     virtual ~Column();
 
     Sheet* sheet() const;
-
     unsigned index() const;
 
     // width of column, in pt
     double width() const;
-
     // set the width of column, in pt
     void setWidth(double w);
 
     const Format& format() const;
-
     void setFormat(const Format& f);
 
     bool visible() const;
-
     void setVisible(bool v);
+    
+    bool operator==(const Column &other) const;
+    bool operator!=(const Column &other) const;
 
 private:
     // no copy or assign
@@ -209,26 +206,24 @@ class Row
 public:
 
     Row(Sheet* sheet, unsigned index);
-
     virtual ~Row();
 
     Sheet* sheet() const;
-
     unsigned index() const;
 
     // height of row, in pt
     double height() const;
-
     // set the height of row, in pt
     void setHeight(double w);
 
     const Format& format() const;
-
     void setFormat(const Format& f);
 
     bool visible() const;
-
     void setVisible(bool v);
+    
+    bool operator==(const Row &other) const;
+    bool operator!=(const Row &other) const;
 
 private:
     // no copy or assign

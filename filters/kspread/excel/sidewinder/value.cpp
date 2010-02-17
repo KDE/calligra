@@ -132,6 +132,16 @@ Value& Value::operator=(const Value & _value)
     return assign(_value);
 }
 
+bool Value::operator==(const Value &other) const
+{
+    return type() == other.type() && asString() == other.asString();
+}
+
+bool Value::operator!=(const Value &other) const
+{
+    return ! (*this == other);
+}
+    
 // create a boolean value
 Value::Value(bool b)
 {
