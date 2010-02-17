@@ -114,7 +114,8 @@ public slots:
     
 protected:
     void updateActionsEnabled( bool on );
-    int selectedNodeCount() const;
+    int selectedRowCount() const;
+    QModelIndexList selectedRows() const;
 
 protected slots:
     virtual void slotOptions();

@@ -187,19 +187,30 @@ void TaskEditor::slotSelectionChanged( const QModelIndexList list)
     slotEnableActions();
 }
 
-int TaskEditor::selectedNodeCount() const
+QModelIndexList TaskEditor::selectedRows() const
 {
-    QItemSelectionModel* sm = m_view->selectionModel();
-    return sm->selectedRows().count();
+#if 0
+// Qt bug? 
+    return m_view->selectionModel()->selectedRows();
+#else
+    QModelIndexList lst;
+    foreach ( QModelIndex i, m_view->selectionModel()->selectedIndexes() ) {
+        if ( i.column() == 0 ) {
+            lst << i;
+        }
+    }
+    return lst;
+#endif
+}
+
+int TaskEditor::selectedRowCount() const
+{
+    return selectedRows().count();
 }
 
 QList<Node*> TaskEditor::selectedNodes() const {
     QList<Node*> lst;
-    QItemSelectionModel* sm = m_view->selectionModel();
-    if ( sm == 0 ) {
-        return lst;
-    }
-    foreach ( const QModelIndex &i, sm->selectedRows() ) {
+    foreach ( const QModelIndex &i, selectedRows() ) {
         Node * n = m_view->baseModel()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
@@ -272,16 +283,17 @@ void TaskEditor::slotEnableActions()
 void TaskEditor::updateActionsEnabled( bool on )
 {
     Project *p = m_view->project();
+    int selCount = selectedRowCount();
+    Node *n = selectedNode(); // 0 if not task or milestone
+    bool o = ( on && p && selCount <= 1 );
+    menuAddTask->setEnabled( o && n != p );
+    actionAddTask->setEnabled( o && n != p );
+    actionAddMilestone->setEnabled( o && n != p );
     
-    bool o = ( on && p && selectedNodeCount() <= 1 );
-    menuAddTask->setEnabled( o );
-    actionAddTask->setEnabled( o );
-    actionAddMilestone->setEnabled( o );
+    int projSelected = selCount == 1 && n == 0;
+    actionDeleteTask->setEnabled( on && p && ! projSelected && selCount > 0 );
     
-    actionDeleteTask->setEnabled( on && p && selectedNodeCount() > 0 );
-    
-    o = ( on && p && selectedNodeCount() == 1 );
-    Node *n = selectedNode();
+    o = ( on && p && selCount == 1 );
     
     menuAddSubTask->setEnabled( o );
     actionAddSubtask->setEnabled( o );
@@ -384,18 +396,21 @@ void TaskEditor::slotOptions()
 void TaskEditor::slotAddTask()
 {
     kDebug();
-    if ( selectedNodeCount() == 0 ) {
-        // insert under main project
+    if ( selectedRowCount() == 0 || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
+        qDebug()<<"None selected or only project selected: insert under main project";
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(),  m_view->project() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
         Q_ASSERT( idx.isValid() );
+        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
     Node *sib = selectedNode();
     if ( sib == 0 ) {
+        qDebug()<<"No sibling selected, so abort";
         return;
     }
+    qDebug()<<"Insert after sibling"<<sib->name();
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), sib->parentNode() );
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
@@ -405,12 +420,13 @@ void TaskEditor::slotAddTask()
 void TaskEditor::slotAddMilestone()
 {
     kDebug();
-    if ( selectedNodeCount() == 0 ) {
-        // insert under main project
+    if ( selectedRowCount() == 0  || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
+        // None selected or only project selected: insert under main project
         Task *t = m_view->project()->createTask( m_view->project() );
         t->estimate()->clear();
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
         Q_ASSERT( idx.isValid() );
+        m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
         return;
     }
@@ -422,6 +438,7 @@ void TaskEditor::slotAddMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
+    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
@@ -429,6 +446,10 @@ void TaskEditor::slotAddSubMilestone()
 {
     kDebug();
     Node *parent = selectedNode();
+    if ( parent == 0 && selectedRowCount() == 1 ) {
+        // project selected
+        parent = m_view->project();
+    }
     if ( parent == 0 ) {
         return;
     }
@@ -444,6 +465,10 @@ void TaskEditor::slotAddSubtask()
 {
     kDebug();
     Node *parent = selectedNode();
+    if ( parent == 0 && selectedRowCount() == 1 ) {
+        // project selected
+        parent = m_view->project();
+    }
     if ( parent == 0 ) {
         return;
     }
