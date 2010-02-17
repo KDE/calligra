@@ -75,7 +75,7 @@ bool KRUtils::readFontAttributes(const QDomElement& el, QFont& font)
     font.setCapitalization(cap);
 
     // weight
-    const QByteArray fontWeight(el.attribute("fo:font-weight").toLatin1());
+    const QByteArray fontWeight(el.attribute("fo:font-weight", "normal").toLatin1());
     int weight = -1;
     if (fontWeight == "bold") {
         weight = QFont::Bold;
@@ -166,18 +166,26 @@ void KRUtils::writeFontAttributes(QDomElement& el, const QFont &font)
         break;
     }
 
-    // weight, default is "normal"
-    if (font.bold()) {
-        if (font.weight() == QFont::Bold) {
-            el.setAttribute("fo:font-weight", "bold");
-        }
-        else {
-            // Remember : Qt and CSS/XSL doesn't have the same scale. It's 100-900 instead of Qt's 0-100
-            // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
-            el.setAttribute("fo:font-weight", qBound(10, font.weight(), 90) * 10);
-        }
+    // Remember : Qt and CSS/XSL doesn't have the same scale. It's 100-900 instead of Qt's 0-100
+    // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
+    if (font.weight() == QFont::Light) {
+        el.setAttribute("fo:font-weight", "200");
     }
-
+    else if (font.weight() == QFont::Normal) {
+        el.setAttribute("fo:font-weight", "normal"); // 400
+    }
+    else if (font.weight() == QFont::DemiBold) {
+        el.setAttribute("fo:font-weight", "600");
+    }
+    else if (font.weight() == QFont::Bold) {
+        el.setAttribute("fo:font-weight", "bold"); // 700
+    }
+    else if (font.weight() == QFont::Black) {
+        el.setAttribute("fo:font-weight", "900");
+    }
+    else {
+        el.setAttribute("fo:font-weight", qBound(10, font.weight(), 90) * 10);
+    }
     // italic, default is "normal"
     if (font.italic()) {
         el.setAttribute("fo:font-style", "italic");
