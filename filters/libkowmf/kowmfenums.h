@@ -26,7 +26,7 @@
 //                             Enums
 
 
-// MS-WMF 2.1.1.2 Binary RasterOpe ration Enumeration
+// MS-WMF 2.1.1.2 Binary RasterOperation Enumeration
 
 typedef enum {
     R2_BLACK       = 0x0001,
@@ -45,7 +45,7 @@ typedef enum {
     R2_MERGEPENNOT = 0x000E,
     R2_MERGEPEN    = 0x000F,
     R2_WHITE       = 0x0010
-} BinaryRasterOperation;
+} WmfBinaryRasterOperation;
 
 
 // MS-WMF 2.1.1.3 BitCount Enumeration
@@ -61,10 +61,10 @@ typedef enum {
     BI_BITCOUNT_4 = 0x0010,
     BI_BITCOUNT_5 = 0x0018,
     BI_BITCOUNT_6 = 0x0020
-} BitCount;
+} WmfBitCount;
 
 
-// MS-WMF 2.1.1.4 BrushSty le Enumeration
+// MS-WMF 2.1.1.4 BrushStyle Enumeration
 //
 // The BrushStyle Enumeration specifies the different possible brush
 // types that can be used in graphics operations. For more
@@ -81,7 +81,7 @@ typedef enum {
     BS_PATTERN8X8    = 0x0007,
     BS_DIBPATTERN8X8 = 0x0008,
     BS_MONOPATTERN   = 0x0009
-} BrushStyle;
+} WmfBrushStyle;
 
 
 // MS-WMF 2.1.1.5 CharacterSet Enumeration
@@ -109,7 +109,7 @@ typedef enum {
     THAI_CHARSET        = 0x000000DE,
     EASTEUROPE_CHARSET  = 0x000000EE,
     OEM_CHARSET         = 0x000000FF
-} CharacterSet;
+} WmfCharacterSet;
 
 
 // MS-WMF 2.1.1.6 ColorUsage Enumeration
@@ -121,7 +121,7 @@ typedef enum {
     DIB_RGB_COLORS  = 0x0000,
     DIB_PAL_COLORS  = 0x0001,
     DIB_PAL_INDICES = 0x0002
-} ColorUsage;
+} WmfColorUsage;
 
 
 // MS-WMF 2.1.1.7 Compression Enumeration
@@ -139,7 +139,7 @@ typedef enum {
     BI_CMYK      = 0x000B,
     BI_CMYKRLE8  = 0x000C,
     BI_CMYKRLE4  = 0x000D
-} Compression;
+} WmfCompression;
 
 
 // MS-WMF 2.1.1.8 FamilyFont Enumeration
@@ -155,7 +155,7 @@ typedef enum {
     FF_MODERN     = 0x03,
     FF_SCRIPT     = 0x04,
     FF_DECORATIVE = 0x05
-} FamilyFont;
+} WmfFamilyFont;
 
 
 // MS-WMF 2.1.1.9 FloodFill Enumeration
@@ -166,7 +166,7 @@ typedef enum {
 typedef enum {
     FLOODFILLBORDER  = 0x0000,
     FLOODFILLSURFACE = 0x0001
-} FloodFill;
+} WmfFloodFill;
 
 // MS-WMF 2.1.1.10 FontQuality Enumeration
 //
@@ -181,7 +181,7 @@ typedef enum {
     NONANTIALIASED_QUALITY = 0x03,
     ANTIALIASED_QUALITY    = 0x04,
     CLEARTYPE_QUALITY      = 0x05
-} FontQuality;
+} WmfFontQuality;
 
 
 // MS-WMF 2.1.1.11 GamutMappingInte nt Enumeration
@@ -194,7 +194,7 @@ typedef enum {
     LCS_GM_BUSINESS         = 0x00000001,
     LCS_GM_GRAPHICS         = 0x00000002,
     LCS_GM_IMAGES           = 0x00000004
-} GamutMappingIntent;
+} WmfGamutMappingIntent;
 
 
 // MS-WMF 2.1.1.12 HatchStyle Enumeration
@@ -208,7 +208,7 @@ typedef enum {
     HS_BDIAGONAL  = 0x0003,
     HS_CROSS      = 0x0004,
     HS_DIAGCROSS  = 0x0005
-} HatchStyle;
+} WmfHatchStyle;
 
 
 // MS-WMF 2.1.1.13 Layout Enumeration
@@ -220,7 +220,7 @@ typedef enum {
     LAYOUT_LTR = 0x0000,
     LAYOUT_RTL = 0x0001,
     LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
-} Layout;
+} WmfLayout;
 
 
 // MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
@@ -231,7 +231,7 @@ typedef enum {
     LCS_CALIBRATED_RGB      = 0x00000000,
     LCS_sRGB                = 0x73524742,
     LCS_WINDOWS_COLOR_SPACE = 0x57696E20
-} LogicalColorSpace;
+} WmfLogicalColorSpace;
 
 
 // MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
@@ -244,7 +244,7 @@ typedef enum {
 typedef enum {
     LCS_PROFILE_LINKED   = 0x4C494E4B,
     LCS_PROFILE_EMBEDDED = 0x4D424544
-} LogicalColorSpaceV5;
+} WmfLogicalColorSpaceV5;
 
 
 // MS-WMF 2.1.1.16 MapMode Enumeration
@@ -264,7 +264,7 @@ typedef enum {
     MM_TWIPS       = 0x0006,
     MM_ISOTROPIC   = 0x0007,
     MM_ANISOTROPIC = 0x0008
-} MapMode;
+} WmfMapMode;
 
 
 // MS-WMF 2.1.1.18 Metafile Type Enumeration
@@ -274,7 +274,7 @@ typedef enum {
 typedef enum {
     MEMORYMETAFILE = 0x0001,
     DISKMETAFILE   = 0x0002
-} MetafileType;
+} WmfMetafileType;
 
 
 // MS-WMF 2.1.1.19 MetafileVersion Enumeration
@@ -285,7 +285,7 @@ typedef enum {
 typedef enum {
     METAVERSION100 = 0x0100,
     METAVERSION300 = 0x0300
-} MetafileVersion;
+} WmfMetafileVersion;
 
 
 // MS-WMF 2.1.1.20 MixMode Enumeration
@@ -296,7 +296,7 @@ typedef enum {
 typedef enum {
     TRANSPARENT = 0x0001,
     OPAQUE      = 0x0002
-} MixMode;
+} WmfMixMode;
 
 
 // MS-WMF 2.1.1.21 OutPrecision Enumeration
@@ -317,7 +317,7 @@ typedef enum {
     OUT_OUTLINE_PRECIS        = 0x00000008,
     OUT_SCREEN_OUTLINE_PRECIS = 0x00000009,
     OUT_PS_ONLY_PRECIS        = 0x0000000A
-} OutPrecision;
+} WmfOutPrecision;
 
 
 // MS-WMF 2.1.1.22 PaletteEntryFlag Enumeration
@@ -328,7 +328,7 @@ typedef enum {
     PC_RESERVED   = 0x01,
     PC_EXPLICIT   = 0x02,
     PC_NOCOLLAPSE = 0x04
-} PaletteEntryFlag;
+} WmfPaletteEntryFlag;
 
 
 // MS-WMF 2.1.1.23 Pe nStyle Enumeration
@@ -356,7 +356,7 @@ typedef enum {
     PS_ENDCAP_FLAT   = 0x0200,
     PS_JOIN_BEVEL    = 0x1000,
     PS_JOIN_MITER    = 0x2000
-} PenStyle;
+} WmfPenStyle;
 
 
 // MS-WMF 2.1.1.24 PitchFont Enumeration
@@ -370,7 +370,7 @@ typedef enum {
     DEFAULT_PITCH  = 0,
     FIXED_PITCH    = 1,
     VARIABLE_PITCH = 2
-} PitchFont;
+} WmfPitchFont;
 
 
 // MS-WMF 2.1.1.25 PolyFillMode Enumeration
@@ -381,7 +381,7 @@ typedef enum {
 typedef enum {
     ALTERNATE = 0x0001,
     WINDING   = 0x0002
-} PolyFillMode;
+} WmfPolyFillMode;
 
 
 // MS-WMF 2.1.1.29 StretchMode Enumeration
@@ -395,7 +395,7 @@ typedef enum {
     WHITEONBLACK = 0x0002,
     COLORONCOLOR = 0x0003,
     HALFTONE     = 0x0004
-} StretchMode;
+} WmfStretchMode;
 
 
 // MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration
@@ -662,7 +662,7 @@ typedef enum {
     PSDNOO = 0xFD,
     DPSOO = 0xFE,
     WHITENESS = 0xFF
-} TernaryRasterOperation;
+} WmfTernaryRasterOperation;
 
 
 // ----------------------------------------------------------------

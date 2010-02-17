@@ -21,11 +21,12 @@
 #ifndef _KOWMFREADPRIVATE_H_
 #define _KOWMFREADPRIVATE_H_
 
-#include "kowmfstruct.h"
-#include "kowmfstack.h"
-
 #include <QtGui/QColor>
 #include <QtCore/QRect>
+
+#include "kowmfenums.h"
+#include "kowmfstruct.h"
+#include "kowmfstack.h"
 
 class KoWmfRead;
 class QBuffer;
@@ -39,14 +40,6 @@ class QPolygon;
 class KoWmfReadPrivate
 {
 public:
-    // Taken from the WMF spec.
-    // FIXME: Use the ones in kowmfenums.h instead.
-    typedef enum {
-        LAYOUT_LTR = 0x0000,
-        LAYOUT_RTL = 0x0001,
-        LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
-    } Layout;
-
     KoWmfReadPrivate();
     virtual ~KoWmfReadPrivate();
 
@@ -243,11 +236,11 @@ private:
     qint16   mWindowHeight;
 
     // Current state of the drawing
-    Layout   mLayout;
-    QColor   mTextColor;
-    quint16  mTextAlign;
-    int      mTextRotation;
-    bool     mWinding;
+    WmfLayout   mLayout;
+    QColor      mTextColor;
+    quint16     mTextAlign;
+    int         mTextRotation;
+    bool        mWinding;
 
     // Memory allocation for WMF file
     QBuffer*  mBuffer;

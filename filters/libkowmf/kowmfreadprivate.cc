@@ -1165,7 +1165,7 @@ void KoWmfReadPrivate::setLayout(quint32, QDataStream &stream)
 
     // negative value allowed for width and height
     stream >> layout >> reserved;
-    mLayout = (Layout)layout;
+    mLayout = (WmfLayout)layout;
 
     kDebug(31000) << "setLayout: layout=" << layout;
 }

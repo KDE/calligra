@@ -110,18 +110,6 @@ bool KoWmfPaint::begin()
 
 bool KoWmfPaint::end()
 {
-    // FIXME: Remove
-    if (mRelativeCoord) {
-        QRect rec = boundingRect();
-
-        // Draw 2 invisible points
-        // because QPicture::setBoundingRect() doesn't give expected result (QT3.1.2)
-        // setBoundingRect( boundingRect() );
-//        mPainter->setPen( Qt::NoPen );
-//        mPainter->drawPoint( rec.left(), rec.top() );
-//        mPainter->drawPoint( rec.right(), rec.bottom() );
-    }
-
     bool ret = true;
     if (mIsInternalPainter)
         ret = mPainter->end();
