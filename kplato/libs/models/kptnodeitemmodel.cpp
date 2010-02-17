@@ -2335,6 +2335,9 @@ QModelIndex NodeItemModel::index( const Node *node ) const
         //kDebug()<<par<<"-->"<<node;
         return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
     }
+    if ( m_projectshown && node == m_project ) {
+        return createIndex( 0, 0, m_project );
+    }
     //kDebug()<<node;
     return QModelIndex();
 }
