@@ -19,7 +19,6 @@
 #ifndef KEXIREPORTVIEW_H
 #define KEXIREPORTVIEW_H
 
-#include <kexi_export.h>
 #include <core/KexiView.h>
 #include <kexidb/connection.h>
 #include <qdom.h>

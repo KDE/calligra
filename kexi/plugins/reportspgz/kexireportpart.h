@@ -19,8 +19,6 @@
 #ifndef _KEXIREPORTPART_H_
 #define _KEXIREPORTPART_H_
 
-
-#include <kexi_export.h>
 #include <core/kexipart.h>
 #include <core/KexiWindowData.h>
 
