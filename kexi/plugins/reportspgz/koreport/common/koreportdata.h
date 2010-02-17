@@ -17,20 +17,21 @@
 #ifndef __KOREPORTDATA_H__
 #define __KOREPORTDATA_H__
 
+#include "koreport_export.h"
 #include <QStringList>
 
 /**
 
 */
-class KoReportData
+class KOREPORT_EXPORT KoReportData
 {
 
 public:
-    virtual ~KoReportData() {};
+    virtual ~KoReportData() {}
 
-    class Sort
+    class KOREPORT_EXPORT Sort
     {
-        public:
+    public:
         QString field;
         Qt::SortOrder order;
         //bool group; //probably not required?
@@ -78,7 +79,7 @@ public:
 
     //!Return the name of this source
     virtual QString sourceName() const {return QString();}
-    
+
     //!Sets the sorting for the data
     //!Should be called before open() so that the data source can be edited accordingly
     //!Default impl does nothing
@@ -87,18 +88,20 @@ public:
 
     //!Utility Functions
     //!TODO These are probably eligable to be moved into a new class
-    
+
     //!Allow the reportdata implementation to return a list of possible scripts for a given language
-    virtual QStringList scriptList(const QString& language) const {return QStringList();}
-    
+    virtual QStringList scriptList(const QString& language) const {
+        Q_UNUSED(language); return QStringList();
+    }
+
     //!Allow the reportdata implementation to return some script code based on a specific script name
     //!and a language, as set in the report
-    virtual QString scriptCode(const QString& script, const QString& language) const {return QString();}
-
-
+    virtual QString scriptCode(const QString& script, const QString& language) const {
+        Q_UNUSED(script); Q_UNUSED(language); return QString();
+    }
 
     //!Return a list of data sources possible for advanced controls
-    virtual QStringList dataSources() const {return QStringList();}
+    virtual QStringList dataSources() const { return QStringList(); }
     //!Return a list of data source names possible for advanced controls.
     //!Returns dataSources() by default
     virtual QStringList dataSourceNames() const { return dataSources(); }
@@ -106,12 +109,9 @@ public:
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
     //!Owner of the returned pointer is the caller
-    virtual KoReportData* data(const QString &source){return 0;}
-
+    virtual KoReportData* data(const QString &source) {
+        Q_UNUSED(source); return 0;
+    }
 };
 
-
-
-
 #endif
-
