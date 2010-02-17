@@ -21,49 +21,69 @@
 #include "ConvolveMatrixEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KNumInput>
 #include <KLocale>
+#include <KComboBox>
 
 #include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
 #include <QtGui/QLabel>
-#include <QtGui/QRadioButton>
-#include <QtGui/QButtonGroup>
+#include <QtGui/QDoubleSpinBox>
+#include <QtGui/QPushButton>
+#include <QtGui/QCheckBox>
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
 {
     QGridLayout * g = new QGridLayout(this);
 
-    m_edgeMode = new QButtonGroup(this);
-    QHBoxLayout * buttons = new QHBoxLayout();
-    QRadioButton * duplicate = new QRadioButton(i18n("Duplicate"), this);
-    QRadioButton * wrap = new QRadioButton(i18n("Wrap"), this);
-    QRadioButton * none = new QRadioButton(i18n("None"), this);
-    m_edgeMode->addButton(duplicate, ConvolveMatrixEffect::Duplicate);
-    m_edgeMode->addButton(wrap, ConvolveMatrixEffect::Wrap);
-    m_edgeMode->addButton(none, ConvolveMatrixEffect::None);
+    m_edgeMode = new KComboBox(this);
+    m_edgeMode->addItem(i18n("Duplicate"));
+    m_edgeMode->addItem(i18n("Wrap"));
+    m_edgeMode->addItem(i18n("None"));
     g->addWidget(new QLabel(i18n("Edge mode:"), this), 0, 0);
-    buttons->addWidget(duplicate);
-    buttons->addWidget(wrap);
-    buttons->addWidget(none);
-    g->addLayout(buttons, 0, 1);
+    g->addWidget(m_edgeMode, 0, 1, 1, 3);
 
+    m_orderX = new QSpinBox(this);
+    m_orderX->setRange(1, 30);
+    m_orderY = new QSpinBox(this);
+    m_orderY->setRange(1, 30);
     g->addWidget(new QLabel(i18n("Kernel size:"), this), 1, 0);
-    QHBoxLayout * order = new QHBoxLayout();
-    m_orderX = new KIntNumInput(this);
-    m_orderX->setRange(1, 100, 1, false);
-    m_orderY = new KIntNumInput(this);
-    m_orderY->setRange(1, 100, 1, false);
-    order->addWidget(m_orderX);
-    order->addWidget(new QLabel("X", this));
-    order->addWidget(m_orderY);
-    g->addLayout(order, 1, 1);
+    g->addWidget(m_orderX, 1, 1);
+    g->addWidget(new QLabel("X", this), 1, 2, Qt::AlignHCenter);
+    g->addWidget(m_orderY, 1, 3);
+
+    m_targetX = new QSpinBox(this);
+    m_targetX->setRange(0, 30);
+    m_targetY = new QSpinBox(this);
+    m_targetY->setRange(0, 30);
+    g->addWidget(new QLabel(i18n("Target point:"), this), 2, 0);
+    g->addWidget(m_targetX, 2, 1);
+    g->addWidget(new QLabel("X", this), 2, 2, Qt::AlignHCenter);
+    g->addWidget(m_targetY, 2, 3);
+
+    m_divisor = new QDoubleSpinBox(this);
+    m_bias = new QDoubleSpinBox(this);
+    g->addWidget(new QLabel(i18n("Divisor:"), this), 3, 0);
+    g->addWidget(m_divisor, 3, 1);
+    g->addWidget(new QLabel(i18n("Bias:"), this), 3, 2);
+    g->addWidget(m_bias, 3, 3);
+
+    m_preserveAlpha = new QCheckBox(i18n("Preserve alpha"), this);
+    g->addWidget(m_preserveAlpha, 4, 1, 1, 3);
+
+    QPushButton * kernelButton = new QPushButton(i18n("Edit kernel"), this);
+    g->addWidget(kernelButton, 5, 0, 1, 4);
+
     setLayout(g);
 
-    connect(m_edgeMode, SIGNAL(buttonClicked(int)), this, SLOT(edgeModeChanged(int)));
-    connect(m_orderX, SIGNAL(valueChanged(int)), this, SLOT(orderXChanged(int)));
-    connect(m_orderY, SIGNAL(valueChanged(int)), this, SLOT(orderYChanged(int)));
+    connect(m_edgeMode, SIGNAL(currentIndexChanged(int)), this, SLOT(edgeModeChanged(int)));
+    connect(m_orderX, SIGNAL(valueChanged(int)), this, SLOT(orderChanged(int)));
+    connect(m_orderY, SIGNAL(valueChanged(int)), this, SLOT(orderChanged(int)));
+    connect(m_targetX, SIGNAL(valueChanged(int)), this, SLOT(targetChanged(int)));
+    connect(m_targetY, SIGNAL(valueChanged(int)), this, SLOT(targetChanged(int)));
+    connect(m_divisor, SIGNAL(valueChanged(double)), this, SLOT(divisorChanged(double)));
+    connect(m_bias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged(double)));
+    connect(kernelButton, SIGNAL(clicked(bool)), this, SLOT(editKernel()));
+    connect(m_preserveAlpha, SIGNAL(toggled(bool)), this, SLOT(preserveAlphaChanged(bool)));
 }
 
 bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
@@ -73,7 +93,7 @@ bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterE
         return false;
 
     m_edgeMode->blockSignals(true);
-    m_edgeMode->button(m_effect->edgeMode())->setChecked(true);
+    m_edgeMode->setCurrentIndex(m_effect->edgeMode());
     m_edgeMode->blockSignals(false);
     m_orderX->blockSignals(true);
     m_orderX->setValue(m_effect->order().x());
@@ -81,6 +101,23 @@ bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterE
     m_orderY->blockSignals(true);
     m_orderY->setValue(m_effect->order().y());
     m_orderY->blockSignals(false);
+    m_targetX->blockSignals(true);
+    m_targetX->setMaximum(m_orderX->value());
+    m_targetX->setValue(m_effect->target().x()+1);
+    m_targetX->blockSignals(false);
+    m_targetY->blockSignals(true);
+    m_targetY->setMaximum(m_orderY->value());
+    m_targetY->setValue(m_effect->target().y()+1);
+    m_targetY->blockSignals(false);
+    m_divisor->blockSignals(true);
+    m_divisor->setValue(m_effect->divisor());
+    m_divisor->blockSignals(false);
+    m_bias->blockSignals(true);
+    m_bias->setValue(m_effect->bias());
+    m_bias->blockSignals(false);
+    m_preserveAlpha->blockSignals(true);
+    m_preserveAlpha->setChecked(m_effect->isPreserveAlphaEnabled());
+    m_preserveAlpha->blockSignals(false);
 
     return true;
 }
@@ -104,28 +141,69 @@ void ConvolveMatrixEffectConfigWidget::edgeModeChanged(int id)
     emit filterChanged();
 }
 
-void ConvolveMatrixEffectConfigWidget::orderXChanged(int x)
+void ConvolveMatrixEffectConfigWidget::orderChanged(int)
 {
     if (!m_effect)
         return;
 
-    QPoint order = m_effect->order();
-    if (order.x() != x)
-        m_effect->setOrder(QPoint(x, order.y()));
+    QPoint newOrder(m_orderX->value(), m_orderY->value());
+    QPoint oldOrder = m_effect->order();
+    if (newOrder != oldOrder) {
+        m_effect->setOrder(newOrder);
+        emit filterChanged();
+    }
 
+    m_targetX->setMaximum(newOrder.x());
+    m_targetY->setMaximum(newOrder.y());
+}
+
+void ConvolveMatrixEffectConfigWidget::targetChanged(int)
+{
+    if (!m_effect)
+        return;
+
+    QPoint newTarget(m_targetX->value()-1, m_targetY->value()-1);
+    QPoint oldTarget = m_effect->target();
+    if (newTarget != oldTarget) {
+        m_effect->setTarget(newTarget);
+        emit filterChanged();
+    }
+}
+
+void ConvolveMatrixEffectConfigWidget::divisorChanged(double divisor)
+{
+    if (!m_effect)
+        return;
+
+    if (divisor != m_effect->divisor()) {
+        m_effect->setDivisor(divisor);
+        emit filterChanged();
+    }
+}
+
+void ConvolveMatrixEffectConfigWidget::biasChanged(double bias)
+{
+    if (!m_effect)
+        return;
+
+    if (bias != m_effect->bias()) {
+        m_effect->setBias(bias);
+        emit filterChanged();
+    }
+}
+
+void ConvolveMatrixEffectConfigWidget::preserveAlphaChanged(bool checked)
+{
+    if (!m_effect)
+        return;
+
+    m_effect->enablePreserveAlpha(checked);
     emit filterChanged();
 }
 
-void ConvolveMatrixEffectConfigWidget::orderYChanged(int y)
+void ConvolveMatrixEffectConfigWidget::editKernel()
 {
-    if (!m_effect)
-        return;
-
-    QPoint order = m_effect->order();
-    if (order.y() != y)
-        m_effect->setOrder(QPoint(order.x(), y));
-
-    emit filterChanged();
+    // TODO
 }
 
 #include "ConvolveMatrixEffectConfigWidget.moc"

@@ -22,10 +22,13 @@
 
 #include "KoFilterEffectConfigWidgetBase.h"
 
+class QDoubleSpinBox;
 class KoFilterEffect;
 class ConvolveMatrixEffect;
 class KIntNumInput;
-class QButtonGroup;
+class KComboBox;
+class QSpinBox;
+class QCheckBox;
 
 class ConvolveMatrixEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -37,14 +40,23 @@ public:
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
 
 private slots:
-    void orderXChanged(int x);
-    void orderYChanged(int y);
+    void orderChanged(int value);
+    void targetChanged(int value);
+    void divisorChanged(double divisor);
+    void biasChanged(double bias);
     void edgeModeChanged(int mode);
+    void preserveAlphaChanged(bool checked);
+    void editKernel();
 private:
     ConvolveMatrixEffect * m_effect;
-    QButtonGroup *m_edgeMode;
-    KIntNumInput *m_orderX;
-    KIntNumInput *m_orderY;
+    KComboBox * m_edgeMode;
+    QSpinBox *m_orderX;
+    QSpinBox *m_orderY;
+    QSpinBox *m_targetX;
+    QSpinBox *m_targetY;
+    QDoubleSpinBox *m_divisor;
+    QDoubleSpinBox *m_bias;
+    QCheckBox *m_preserveAlpha;
 };
 
 #endif // CONVOLVEMATRIXEFFECTCONFIGWIDGET_H
