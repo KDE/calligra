@@ -123,10 +123,13 @@ void Sheet::clear()
 {
     // delete all cells
     qDeleteAll(d->cells);
+    d->cells.clear();
     // delete all columns
     qDeleteAll(d->columns);
+    d->columns.clear();
     // delete all rows
     qDeleteAll(d->rows);
+    d->rows.clear();
 }
 
 UString Sheet::name() const
