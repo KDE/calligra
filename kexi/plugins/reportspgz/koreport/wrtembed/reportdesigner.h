@@ -52,8 +52,6 @@ class ReportSceneView;
 class ReportWriterSectionData;
 class KexiView;
 
-const QString ns("http://kexi-project.org/report/2.0");
-
 //
 // Class ReportDesigner
 //     The ReportDesigner is the main widget for designing a report

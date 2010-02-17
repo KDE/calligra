@@ -52,6 +52,9 @@
 #include <kdebug.h>
 #include <kross/core/manager.h>
 
+//! Also add public method for runtime?
+const char* ns = "http://kexi-project.org/report/2.0";
+
 //
 // define and implement the ReportWriterSectionData class
 // a simple class to hold/hide data in the ReportHandler class
