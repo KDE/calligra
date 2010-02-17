@@ -87,20 +87,14 @@ void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int st
     reset();
 }
 
-void FlatProxyModel::sourceRowsAboutToBeRemoved(
-    const QModelIndex &source_parent, int start, int end)
+void FlatProxyModel::sourceRowsAboutToBeRemoved( const QModelIndex &source_parent, int start, int end )
 {
 }
 
-void FlatProxyModel::sourceRowsRemoved(
-    const QModelIndex &source_parent, int start, int end)
+void FlatProxyModel::sourceRowsRemoved( const QModelIndex &source_parent, int start, int end )
 {
-    QList<QPersistentModelIndex> list = m_sourceIndexMap.values( QPersistentModelIndex( source_parent ) );
-    int pstart = m_sourceIndexList.indexOf( list.at( start ) );
-    int pend = m_sourceIndexList.indexOf( list.at( end ) );
-    beginRemoveRows( QModelIndex(), pstart, pend );
     initiateMaps();
-    endRemoveRows();
+    reset();
 }
 
 void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
