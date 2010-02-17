@@ -1315,7 +1315,6 @@ void PptToOdp::writeTextSpan(KoXmlWriter& xmlWriter,
     xmlWriter.addTextSpan(copy);
 }
 
-
 PptToOdp::HyperlinkRange PptToOdp::findNextHyperlinkStart(const PPT::TextContainer& text,
                                                           const int currentPos)
 {
@@ -1754,6 +1753,153 @@ getPosition(const TextContainerMeta& m)
     return -1;
 }
 
+int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
+                              const QString& text, const int start,
+                              int end) {
+    // find all components that start at position start
+
+    // get the right character run
+    const QList<TextCFRun> &cfs = tc.style->rgTextCFRun;
+    int i = 0;
+    int cfend = 0;
+    while (i < cfs.size()) {
+        cfend += cfs[i].count;
+        if (cfend > start) {
+            break;
+        }
+        i++;
+    }
+    if (i >= cfs.size()) {
+        qDebug() << "No proper character range for '"
+                << QString(text).replace('\r', '\n') << "' start: " << start
+                << " cfs.size() " << cfs.size() << " " << ((cfs.size()) ?cfs[cfs.size()-1].count :-1);
+        return -1;
+    }
+    const TextCFRun& cf = cfs[i];
+
+    // get the right special info run
+    const QList<TextSIRun>* tsi = 0;
+    if (tc.specialinfo) tsi = &tc.specialinfo->rgSIRun;
+    if (tc.specialinfo2) tsi = &tc.specialinfo2->rgSIRun;
+    const TextSIRun* si = 0;
+    int siend = 0;
+    i = 0;
+    if (tsi) {
+        while (i < tsi->size()) {
+            si = &(*tsi)[i];
+            siend += si->count;
+            if (siend > start) {
+                break;
+            }
+            i++;
+        }
+        if (i >= tsi->size()) {
+            si = 0;
+        }
+    }
+
+    // find a meta character
+    const TextContainerMeta* meta = 0;
+    for (i = 0; i<tc.meta.size(); ++i) {
+        const TextContainerMeta& m = tc.meta[i];
+        const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
+        const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
+        const GenericDateMCAtom* c = m.meta.get<GenericDateMCAtom>();
+        const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
+        const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
+        const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
+        int p = -1;
+        if (a && a->position == start) meta = &m;
+        if (b && b->position == start) meta = &m;
+        if (c && c->position == start) meta = &m;
+        if (d && d->position == start) meta = &m;
+        if (e && e->position == start) meta = &m;
+        if (f && f->position == start) meta = &m;
+    }
+
+    // find the right bookmark
+    const TextBookmarkAtom* bookmark = 0;
+    for (i = 0; i<tc.bookmark.size(); ++i) {
+        if (tc.bookmark[i].begin < start && tc.bookmark[i].end >= start) {
+            bookmark = &tc.bookmark[i];
+        }
+    }
+
+    // find the interactive atom
+    const MouseClickTextInteractiveInfoAtom* mouseclick = 0;
+    const MouseOverTextInteractiveInfoAtom* mouseover = 0;
+    for (i = 0; i<tc.interactive.size(); ++i) {
+        const TextContainerInteractiveInfo& ti = tc.interactive[i];
+        const MouseClickTextInteractiveInfoAtom* a =
+                ti.interactive.get<MouseClickTextInteractiveInfoAtom>();
+        const MouseOverTextInteractiveInfoAtom* b =
+                ti.interactive.get<MouseOverTextInteractiveInfoAtom>();
+        if (a && a->range.begin >= start && a->range.end < start) {
+            mouseclick = a;
+        }
+        if (b && b->range.begin >= start && b->range.end < start) {
+            mouseover = b;
+        }
+    }
+
+    // determine the end of the range
+    if (si && siend < end) {
+        end = siend;
+    }
+    if (meta) {
+        end = start + 1; // meta is always one character
+    }
+    if (bookmark && bookmark->end < end) {
+        end = bookmark->end;
+    }
+    if (mouseclick && mouseclick->range.end < end) {
+        end = mouseclick->range.end;
+    }
+    if (mouseover && mouseover->range.end < end) {
+        end = mouseover->range.end;
+    }
+
+    //out.xml.startElement("text:span");
+
+    if (meta) {
+        // TODO: output meta object
+    } else {
+        int len = end - start;
+        if (text[end-1] == '\r' || text[end-1] == '\v') {
+            len--;
+        }
+        const QString txt
+                = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
+        //out.xml.addTextNode(txt);
+    }
+
+    //out.xml.endElement();
+
+    return end;
+}
+
+int PptToOdp::processTextLine(const PPT::TextContainer& tc, Writer& out,
+                              const QString& text,
+                              int start, int end) {
+    int pos = start;
+    while (pos < end) {
+        // start a span
+        // out.xml.startElement("text:span");
+        // out.xml.endElement();
+        int r = processFragment(tc, out, text, pos, end);
+        if (r <= pos) {
+            // some error
+            qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
+            return -2;
+        }
+        pos = r;
+        if (pos == end) {
+            return 0;
+        }
+    }
+    return (pos == end) ?0 :-pos;
+}
+
 void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
 {
     /* Text in a textcontainer is divided into sections.
@@ -1762,18 +1908,53 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
        - character (TextCFRun) 1-n characters
        - variables (TextContainerMeta) 1 character
        - spelling and language (TextSIRun) 1-n characters
-       - indentation (MasterTextPropRun) 1-n characters
+       - links (TextContainerInteractiveInfo) 1-n characters
+       - indentation (MasterTextPropRun) 1-n characters (ignored)
 
        Variables are the smallest level, they should be replaced by special
        xml elements.
-       TextCFRun is probably the next smallest section. We make the assumption
-       that ranges from all other levels contain complete TextCFRun ranges.
-       Another assumption is that each line is a separate TextPFRun.
+
+       TextPFRuns correspond to text:list-item and text:p.
+       MasterTextPropRun also corresponds to text:list-items too.
+       TextCFRuns correspond to text:span elements as do
     */
 
     QString text = getText(tc);
-
     const StyleTextPropAtom *style = tc.style.data();
+    if (!style) {
+        if (!tc.master) {
+            //out.xml.addTextNode(text);
+            //qDebug() << "No StyleTextPropAtom for '" << QString(text).replace('\r', '\n') << "'";
+        }
+        return;
+    }
+
+    int pfpos = 0;
+    int pfend = 0;
+    for (int i = 0; i < style->rgTextPFRun.size(); ++i) {
+        const TextPFRun& pf = style->rgTextPFRun[i];
+        pfend = pfpos + pf.count;
+        if (pfend > text.size() + 1) {
+            qDebug() << "TextPFRun extends too far (" << pfend << ") for '"
+                    << QString(text).replace('\r', '\n') << "'";
+            return;
+        }
+        // open paragraph of list:text
+        // startElement ...
+
+        if (pfend > text.size()) {
+            pfend = text.size();
+        }
+        int r = processTextLine(tc, out, text, pfpos, pfend);
+        if (r < 0) {
+            qDebug() << "TextCFRuns extends too far (" << pfend << ") for '"
+                    << QString(text).replace('\r', '\n') << "' " << r;
+            return;
+        }
+
+        pfpos = pfend;
+    }
+
     if (style  && style->rgTextPFRun.size()) {
         //Paragraph formatting that applies to substring
         QStack<QString> levels;
