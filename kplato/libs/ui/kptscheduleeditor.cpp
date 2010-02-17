@@ -196,16 +196,22 @@ void ScheduleEditor::updateActionsEnabled( const QModelIndex &index )
 
 void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
 {
-    actionAddSchedule->setEnabled( isReadWrite() );
-
+    if ( sm == 0 || sm->parentManager() == 0 ) {
+        actionAddSchedule->setEnabled( isReadWrite() );
+    } else if ( sm && sm->parentManager() && sm->parentManager()->isScheduled() ) {
+        actionAddSchedule->setEnabled( isReadWrite() );
+    } else {
+        actionAddSchedule->setEnabled( false );
+    }
+    
     bool on = isReadWrite() && sm != 0;
-    actionAddSubSchedule->setEnabled( on );
     
     actionBaselineSchedule->setIcon( KIcon( ( sm && sm->isBaselined() ? "view-time-schedule-baselined-remove" : "view-time-schedule-baselined-add" ) ) );
     if ( on && ( sm->isBaselined() || sm->isChildBaselined() ) ) {
         actionBaselineSchedule->setEnabled( sm->isBaselined() );
         actionCalculateSchedule->setEnabled( false );
         actionDeleteSelection->setEnabled( false );
+        actionAddSubSchedule->setEnabled( on );
     } else {
         actionBaselineSchedule->setEnabled( on && sm->isScheduled() && ! m_view->project()->isBaselined() );
         actionDeleteSelection->setEnabled( on && ! sm->scheduling() );
@@ -218,7 +224,12 @@ void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
                 }
             }
         }
-        actionCalculateSchedule->setEnabled( on && ! scheduling );
+        on = on && ! scheduling;
+        if ( on && sm->parentManager() ) {
+            on = on && sm->parentManager()->isScheduled();
+        }
+        actionCalculateSchedule->setEnabled( on );
+        actionAddSubSchedule->setEnabled( on && sm->isScheduled() );
     }
 }
 
