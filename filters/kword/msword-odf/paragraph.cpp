@@ -601,5 +601,14 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:font-relief", "engraved", KoGenStyle::TextType);
     }
 
+    //fShadow = text has shadow if 1
+    //fImprint = text engraved if 1
+    if (!refChp || refChp->fOutline != chp->fOutline) {
+        if (chp->fOutline)
+            style->addProperty("style:text-outline", "true", KoGenStyle::TextType);
+        else
+            style->addProperty("style:text-outline", "false", KoGenStyle::TextType);
+    }
+
 }
 
