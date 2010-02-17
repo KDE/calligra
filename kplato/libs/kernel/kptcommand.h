@@ -543,7 +543,6 @@ class KPLATOKERNEL_EXPORT NodeMoveCmd : public NamedCommand
 {
 public:
     NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
-    ~NodeMoveCmd();
     void execute();
     void unexecute();
 
@@ -555,7 +554,7 @@ private:
     int m_newpos;
     int m_oldpos;
     bool m_moved;
-    MacroCommand *m_cmd;
+    MacroCommand m_cmd;
 };
 
 class KPLATOKERNEL_EXPORT AddRelationCmd : public NamedCommand

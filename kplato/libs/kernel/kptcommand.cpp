@@ -1075,44 +1075,35 @@ NodeMoveCmd::NodeMoveCmd( Project *project, Node *node, Node *newParent, int new
     m_node( node ),
     m_newparent( newParent ),
     m_newpos( newPos ),
-    m_moved( false ),
-    m_cmd( 0 )
+    m_moved( false )
 {
     m_oldparent = node->parentNode();
     Q_ASSERT( m_oldparent );
     m_oldpos = m_oldparent->indexOf( node );
-    
-    // Summarytasks can't have resources, so remove resource requests from the new parent
-    foreach ( ResourceGroupRequest *r, newParent->requests().requests() ) {
-        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
-        m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
-    }
-    // TODO appointments ??
-}
-NodeMoveCmd::~NodeMoveCmd()
-{
-    delete m_cmd;
 }
 void NodeMoveCmd::execute()
 {
     if ( m_project ) {
         m_moved = m_project->moveTask( m_node, m_newparent, m_newpos );
-        if ( m_moved && m_cmd ) {
-            m_cmd->execute();
+        if ( m_moved ) {
+            if ( m_cmd.isEmpty() ) {
+                // Summarytasks can't have resources, so remove resource requests from the new parent
+                foreach ( ResourceGroupRequest *r, m_newparent->requests().requests() ) {
+                    m_cmd.addCommand( new RemoveResourceGroupRequestCmd( r ) );
+                }
+                // TODO appointments ??
+            }
+            m_cmd.execute();
         }
     }
-
 }
 void NodeMoveCmd::unexecute()
 {
     if ( m_project && m_moved ) {
         m_moved = m_project->moveTask( m_node, m_oldparent, m_oldpos );
-        if ( m_moved && m_cmd ) {
-            m_cmd->unexecute();
-        }
+        m_cmd.unexecute();
     }
     m_moved = false;
-
 }
 
 AddRelationCmd::AddRelationCmd( Project &project, Relation *rel, const QString& name )
