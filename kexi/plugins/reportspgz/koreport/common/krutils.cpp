@@ -86,6 +86,7 @@ bool KRUtils::readFontAttributes(const QDomElement& el, QFont& font)
     else if (!fontWeight.isEmpty()) {
         // Remember : Qt and CSS/XSL doesn't have the same scale. It's 100-900 instead of Qt's 0-100
         // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
+        // and http://www.w3.org/TR/CSS2/fonts.html#font-boldness
         int boldness = fontWeight.toInt(&ok);
         if (ok)
             weight = (boldness - 100) / 8; // 0..100
@@ -168,6 +169,7 @@ void KRUtils::writeFontAttributes(QDomElement& el, const QFont &font)
 
     // Remember : Qt and CSS/XSL doesn't have the same scale. It's 100-900 instead of Qt's 0-100
     // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
+    // and http://www.w3.org/TR/CSS2/fonts.html#font-boldness
     if (font.weight() == QFont::Light) {
         el.setAttribute("fo:font-weight", "200");
     }
