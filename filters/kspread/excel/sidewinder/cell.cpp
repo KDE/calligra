@@ -264,7 +264,6 @@ bool Cell::operator==(const Cell &other) const
                             hyperlinkLocation() != other.hyperlinkLocation() ||
                             hyperlinkTargetFrameName() != other.hyperlinkTargetFrameName() ) ) return false;
     if (note() != other.note()) return false;
-    if (note() != other.note()) return false;
     if (pictures().size() != other.pictures().size()) return false;
     for(int i = pictures().size() - 1; i >= 0; --i) {
         Picture* p1 = pictures()[i];
