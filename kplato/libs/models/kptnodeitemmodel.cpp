@@ -3143,7 +3143,9 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
             if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
-            cmd->addCommand( new NodeMoveCmd( m_project, n, par, row + offset ) );
+            // append nodes if dropped *on* another node, insert if dropped *after*
+            int pos = row == -1 ? -1 : row + offset;
+            cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
             offset++;
         }
         if ( cmd ) {
@@ -4353,7 +4355,9 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
             if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
-            cmd->addCommand( new NodeMoveCmd( m_project, n, par, row + offset ) );
+            // append nodes if dropped *on* another node, insert if dropped *after*
+            int pos = row == -1 ? -1 : row + offset;
+            cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
             offset++;
         }
         if ( cmd ) {

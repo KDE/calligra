@@ -1079,11 +1079,11 @@ NodeMoveCmd::NodeMoveCmd( Project *project, Node *node, Node *newParent, int new
 {
     m_oldparent = node->parentNode();
     Q_ASSERT( m_oldparent );
-    m_oldpos = m_oldparent->indexOf( node );
 }
 void NodeMoveCmd::execute()
 {
     if ( m_project ) {
+        m_oldpos = m_oldparent->indexOf( m_node );
         m_moved = m_project->moveTask( m_node, m_newparent, m_newpos );
         if ( m_moved ) {
             if ( m_cmd.isEmpty() ) {
