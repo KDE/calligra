@@ -261,8 +261,8 @@ bool Cell::operator==(const Cell &other) const
     if (isCovered() != other.isCovered()) return false;
     if (hasHyperlink() != other.hasHyperlink()) return false;
     if (hasHyperlink() && ( hyperlinkDisplayName() != other.hyperlinkDisplayName() ||
-                           other.hyperlinkLocation() != other.hyperlinkLocation() ||
-                           hyperlinkTargetFrameName() != other.hyperlinkTargetFrameName() ) ) return false;
+                            hyperlinkLocation() != other.hyperlinkLocation() ||
+                            hyperlinkTargetFrameName() != other.hyperlinkTargetFrameName() ) ) return false;
     if (note() != other.note()) return false;
     if (note() != other.note()) return false;
     if (pictures().size() != other.pictures().size()) return false;
