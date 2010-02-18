@@ -195,6 +195,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
         mainFs->setAllowLayout(false);
+        mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
     }
