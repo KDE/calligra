@@ -39,6 +39,7 @@ public:
     QHash<unsigned, Cell*> cells;
     unsigned maxRow;
     unsigned maxColumn;
+    QHash<unsigned, unsigned> maxCellsInRow;
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
 
@@ -78,24 +79,7 @@ Sheet::Sheet(Workbook* wb)
 {
     d = new Sheet::Private();
     d->workbook = wb;
-    d->name = "Sheet"; // FIXME better name ?
-    d->maxRow = 0;
-    d->maxColumn = 0;
-    d->visible      = true;
-    d->protect      = false;
-    d->leftMargin   = 54;  // 0.75 inch
-    d->rightMargin  = 54;  // 0.75 inch
-    d->topMargin    = 72;  // 1 inch
-    d->bottomMargin = 72;  // 1 inch
-    d->autoCalc = true;
-    d->defaultRowHeight = -1;
-    d->defaultColWidth = -1;
-    d->zoomLevel = 1.0; // 100%
-    d->showGrid = true;
-    d->showZeroValues = true;
-    d->firstVisibleCell = QPoint(0,0); // A1
-    d->isPageBreakViewEnabled = false;
-    d->passwd = 0; // password protection disabled
+    clear();
 }
 
 Sheet::~Sheet()
@@ -130,6 +114,26 @@ void Sheet::clear()
     // delete all rows
     qDeleteAll(d->rows);
     d->rows.clear();
+    
+    d->name = "Sheet"; // FIXME better name ?
+    d->maxRow = 0;
+    d->maxColumn = 0;
+    d->maxCellsInRow.clear();
+    d->visible      = true;
+    d->protect      = false;
+    d->leftMargin   = 54;  // 0.75 inch
+    d->rightMargin  = 54;  // 0.75 inch
+    d->topMargin    = 72;  // 1 inch
+    d->bottomMargin = 72;  // 1 inch
+    d->autoCalc = true;
+    d->defaultRowHeight = -1;
+    d->defaultColWidth = -1;
+    d->zoomLevel = 1.0; // 100%
+    d->showGrid = true;
+    d->showZeroValues = true;
+    d->firstVisibleCell = QPoint(0,0); // A1
+    d->isPageBreakViewEnabled = false;
+    d->passwd = 0; // password protection disabled
 }
 
 UString Sheet::name() const
@@ -158,6 +162,9 @@ Cell* Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
 
         if (rowIndex > d->maxRow) d->maxRow = rowIndex;
         if (columnIndex > d->maxColumn) d->maxColumn = columnIndex;
+        
+        if(!d->maxCellsInRow.contains(rowIndex) || columnIndex > d->maxCellsInRow[rowIndex])
+            d->maxCellsInRow[rowIndex] = columnIndex;
     }
 
     return c;
@@ -211,6 +218,13 @@ void Sheet::setMaxColumn(unsigned column)
 {
     if (column > d->maxColumn)
         d->maxColumn = column;
+}
+
+unsigned Sheet::maxCellsInRow(int rowIndex) const
+{
+    if(d->maxCellsInRow.contains(rowIndex))
+        return d->maxCellsInRow[rowIndex];
+    return 0;
 }
 
 bool Sheet::visible() const

@@ -136,6 +136,9 @@ public:
     void setMaxRow(unsigned row);
     void setMaxColumn(unsigned column);
 
+    // returns the maximal number of cells within a row
+    unsigned maxCellsInRow(int rowIndex) const;
+
     long defaultRowHeight() const;
     void setDefaultRowHeight(long);
     long defaultColWidth() const;
