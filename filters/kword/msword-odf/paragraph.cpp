@@ -601,8 +601,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:font-relief", "engraved", KoGenStyle::TextType);
     }
 
-    //fShadow = text has shadow if 1
-    //fImprint = text engraved if 1
+    //fOutline = text is outline if 1
     if (!refChp || refChp->fOutline != chp->fOutline) {
         if (chp->fOutline)
             style->addProperty("style:text-outline", "true", KoGenStyle::TextType);
@@ -610,5 +609,11 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:text-outline", "false", KoGenStyle::TextType);
     }
 
+
+    //fOutline = text is outline if 1
+    if (!refChp || refChp->dxaSpace != chp->dxaSpace) {//TODO where do Ms word store letterspacing
+        double value =  chp->dxaSpace / 20.0; // twips -> pt
+        style->addPropertyPt("fo:letter-spacing", value, KoGenStyle::TextType);
+    }
 }
 
