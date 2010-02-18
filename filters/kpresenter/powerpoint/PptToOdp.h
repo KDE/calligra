@@ -341,7 +341,7 @@ private:
       * @return QPair where first element is hyperlink's target, second is
       * user readable name. If both are empty, hyperlink is not found
       */
-    QPair<QString, QString> findHyperlink(const unsigned int id);
+    QPair<QString, QString> findHyperlink(const qint32 id);
 
      /**
       * @brief Find the next hyperlink range that starts after current position

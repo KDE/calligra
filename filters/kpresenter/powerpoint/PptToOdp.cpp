@@ -1389,25 +1389,26 @@ QString PptToOdp::utf16ToString(const QVector<quint16> &data)
     return QString::fromUtf16(data.data(), data.size());
 }
 
-QPair<QString, QString> PptToOdp::findHyperlink(const unsigned int id)
+QPair<QString, QString> PptToOdp::findHyperlink(const qint32 id)
 {
-    foreach(ExObjListSubContainer container,p->documentContainer->exObjList->rgChildRec) {
-        //Search all ExHyperlinkContainers for specified id
-        if (container.anon.is<ExHyperlinkContainer>()) {
-            ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
-            if (hyperlink &&
-                hyperlink->exHyperlinkAtom.exHyperLinkId == id &&
-                hyperlink->targetAtom &&
-                hyperlink->friendlyNameAtom) {
-                //TODO currently location is ignored. Location referes to
-                //position within a file
-                return qMakePair(utf16ToString(hyperlink->targetAtom->target),
-                                 utf16ToString(hyperlink->friendlyNameAtom->friendlyName));
+    QString friendly;
+    QString target;
+    foreach(ExObjListSubContainer container,
+            p->documentContainer->exObjList->rgChildRec) {
+        // Search all ExHyperlinkContainers for specified id
+        ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
+        if (hyperlink && hyperlink->exHyperlinkAtom.exHyperLinkId == id) {
+            if (hyperlink->friendlyNameAtom) {
+                friendly = utf16ToString(hyperlink->friendlyNameAtom->friendlyName);
             }
+            if (hyperlink->targetAtom) {
+                target = utf16ToString(hyperlink->targetAtom->target);
+            }
+            // TODO currently location is ignored. Location referes to
+            // position within a file
         }
     }
-
-    return qMakePair(QString(""),QString(""));
+    return qMakePair(friendly, target);
 }
 
 
@@ -1860,10 +1861,10 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
                 ti.interactive.get<MouseClickTextInfo>();
         const MouseOverTextInfo* b =
                 ti.interactive.get<MouseOverTextInfo>();
-        if (a && a->text.range.begin >= start && a->text.range.end < start) {
+        if (a && start >= a->text.range.begin && start < a->text.range.end) {
             mouseclick = a;
         }
-        if (b && b->text.range.begin >= start && b->text.range.end < start) {
+        if (b && start >= b->text.range.begin && start < b->text.range.end) {
             mouseover = b;
         }
     }
@@ -1885,7 +1886,27 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
         end = mouseover->text.range.end;
     }
 
-    out.xml.startElement("text:span");
+    if (mouseclick) {
+        out.xml.startElement("text:a");
+        QPair<QString, QString> link = findHyperlink(
+                mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+        if (!link.second.isEmpty()) { // target
+            out.xml.addAttribute("xlink:href", link.second);
+        } else if (!link.first.isEmpty()) {
+            out.xml.addAttribute("xlink:href", link.first);
+        }
+    } else if (mouseover) {
+        out.xml.startElement("text:a");
+        QPair<QString, QString> link = findHyperlink(
+                mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+        if (!link.second.isEmpty()) { // target
+            out.xml.addAttribute("xlink:href", link.second);
+        } else if (!link.first.isEmpty()) {
+            out.xml.addAttribute("xlink:href", link.first);
+        }
+    } else {
+        out.xml.startElement("text:span");
+    }
 
     if (meta) {
         getMeta(*meta, out.xml);
