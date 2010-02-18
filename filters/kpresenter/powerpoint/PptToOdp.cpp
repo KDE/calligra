@@ -1802,19 +1802,19 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
                 << " cfs.size() " << cfs.size() << " " << ((cfs.size()) ?cfs[cfs.size()-1].count :-1);
         return -1;
     }
-    const TextCFRun& cf = cfs[i];
+    const TextCFException& cf = cfs[i].cf;
 
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
     if (tc.specialinfo) tsi = &tc.specialinfo->rgSIRun;
     if (tc.specialinfo2) tsi = &tc.specialinfo2->rgSIRun;
-    const TextSIRun* si = 0;
+    const TextSIException* si = 0;
     int siend = 0;
     i = 0;
     if (tsi) {
         while (i < tsi->size()) {
-            si = &(*tsi)[i];
-            siend += si->count;
+            si = &(*tsi)[i].si;
+            siend += (*tsi)[i].count;
             if (siend > start) {
                 break;
             }
@@ -1907,6 +1907,10 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
     } else {
         out.xml.startElement("text:span");
     }
+    KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+    defineTextProperties(style, &cf, 0, 0, si);
+    out.xml.addAttribute("text:style-name", out.styles.lookup(style, ""));
 
     if (meta) {
         getMeta(*meta, out.xml);
