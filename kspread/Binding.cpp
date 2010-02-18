@@ -192,7 +192,7 @@ void BindingModel::emitDataChanged(const QRect& rect)
 {
     const QPoint tl = rect.topLeft();
     const QPoint br = rect.bottomRight();
-    kDebug() << "emit QAbstractItemModel::dataChanged(" << index(tl.y(), tl.x()) << ", " << index(br.y(), br.x()) << ");";
+    //kDebug(36005) << "emit QAbstractItemModel::dataChanged" << QString("%1:%2").arg(tl).arg(br);
     emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
 }
 

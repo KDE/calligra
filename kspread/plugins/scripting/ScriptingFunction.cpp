@@ -61,7 +61,7 @@ public:
         kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
 
         KSpread::FunctionDescription *description = KSpread::FunctionRepository::self()->functionInfo(funcimpl->name());
-        kDebug() << "0 ==================> name=" << description->name() << " type=" << description->type();
+        kDebug(36005) << "name=" << description->name() << " type=" << description->type();
 
         QVariantList list;
         for (int i = 0; i < args.size(); ++i) {

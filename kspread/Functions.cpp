@@ -191,14 +191,14 @@ FunctionRepository* FunctionRepository::self()
 {
     if (!s_singleton->instance.d->initialized) {
         s_singleton->instance.d->initialized = true;
-        kDebug() << "Creating function repository ...";
 
         // register all existing functions
         FunctionModuleRegistry::instance()->registerFunctions();
 
-        kDebug() << s_singleton->instance.d->functions.count() << " functions registered.";
-
 #ifndef NDEBUG
+        kDebug(36005) << "functions registered:" << s_singleton->instance.d->functions.count()
+                      << "descriptions loaded:" << s_singleton->instance.d->descriptions.count();
+
         // Verify, that every function has a description.
         QStringList missingDescriptions;
         typedef QHash<QString, Function*> Functions;
@@ -208,14 +208,12 @@ FunctionRepository* FunctionRepository::self()
                 missingDescriptions << it.key();
         }
         if (missingDescriptions.count() > 0) {
-            kDebug() << "No function descriptions found for:";
+            kDebug(36005) << "No function descriptions found for:";
             foreach(const QString& missingDescription, missingDescriptions) {
-                kDebug() << "\t" << missingDescription;
+                kDebug(36005) << "\t" << missingDescription;
             }
         }
 #endif
-        kDebug() << s_singleton->instance.d->descriptions.count() << " descriptions loaded.";
-        kDebug() << "Function repository ready.";
     }
     return &s_singleton->instance;
 }
@@ -331,7 +329,7 @@ void FunctionRepository::loadFunctionDescriptions(const QString& filename)
                     if (d->functions.contains(desc->name()))
                         d->descriptions.insert(desc->name(), desc);
                     else {
-                        kDebug() << "Description for unknown function" << desc->name() << " found.";
+                        kDebug(36005) << "Description for unknown function" << desc->name() << " found.";
                         delete desc;
                     }
                 }

@@ -2180,7 +2180,6 @@ QString Sheet::getPart(const KoXmlNode & part)
     KoXmlElement e = KoXml::namedItemNS(part, KoXmlNS::text, "p");
     while (!e.isNull()) {
         QString text = e.text();
-        kDebug() << "PART:" << text;
 
         KoXmlElement macro = KoXml::namedItemNS(e, KoXmlNS::text, "time");
         if (!macro.isNull())
