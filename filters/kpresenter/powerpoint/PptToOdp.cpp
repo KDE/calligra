@@ -1597,9 +1597,10 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
     }
 }
 
-int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
+int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
                               const QString& text, const int start,
-                              int end) {
+                              int end)
+{
     // find all components that start at position start
 
     // get the right character run
@@ -1751,12 +1752,12 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
     return end;
 }
 
-int PptToOdp::processTextLine(const PPT::TextContainer& tc, Writer& out,
-                              const QString& text,
-                              int start, int end) {
+int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
+                              const QString& text, int start, int end)
+{
     int pos = start;
     while (pos < end) {
-        int r = processFragment(tc, out, text, pos, end);
+        int r = processTextSpan(tc, out, text, pos, end);
         if (r <= pos) {
             // some error
             qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
@@ -1768,6 +1769,61 @@ int PptToOdp::processTextLine(const PPT::TextContainer& tc, Writer& out,
         }
     }
     return (pos == end) ?0 :-pos;
+}
+
+int PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
+                              const TextPFRun& pf,
+                              const QString& text, int start, int end,
+                              QStack<QString>& levels)
+{
+    quint16 paragraphIndent = pf.indentLevel;
+    //[MS-PPT].pdf says the itendation level can be 4 at most
+    if (paragraphIndent > 4) paragraphIndent = 4;
+    bool isParagraph = paragraphIndent == 0 && !pf.pf.masks.bulletChar
+                       && pf.pf.bulletChar == 0;
+    if (isParagraph) {
+        out.xml.startElement("text:p");
+    } else {
+        out.xml.startElement("");
+    }
+    int r = processTextSpan(tc, out, text, start, end);
+    out.xml.endElement();
+}
+
+void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
+                              const QString& text, int start, int end,
+                              QStack<QString>& levels)
+{
+    // find the textpfexception that belongs to this line
+    const TextPFRun* pf = 0;
+    if (tc.style) {
+        const QList<TextPFRun> &pfs = tc.style->rgTextPFRun;
+        int i = 0;
+        int pfend = 0;
+        while (i < pfs.size()) {
+            pfend += pfs[i].count;
+            if (pfend > start) {
+                pf = &pfs[i];
+                break;
+            }
+            i++;
+        }
+    }
+    if (pf == 0) {
+        // perhaps this should be a list under some circumstances
+        out.xml.startElement("text:p");
+        out.xml.addTextNode(text.mid(start, end-start));
+        out.xml.endElement();
+        return;
+    }
+
+    out.xml.startElement("text:p");
+    KoGenStyle style(KoGenStyle::StyleAuto, "paragraph");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+    defineParagraphProperties(style, &pf->pf, 0);
+    out.xml.addAttribute("text:style-name", out.styles.lookup(style, ""));
+    processTextSpans(tc, out, text, start, end);
+    out.xml.endElement();
 }
 
 void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
@@ -1789,7 +1845,26 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
        TextCFRuns correspond to text:span elements as do
     */
 
-    QString text = getText(tc);
+    const QString text = getText(tc);
+
+    // loop over all the '\r' delimited lines
+    // Paragraph formatting that applies to substring
+    QStack<QString> levels;
+    levels.reserve(5);
+    int pos = 0;
+    while (pos < text.length()) {
+        int end = text.indexOf('\r', pos);
+        if (end == -1) end = text.size();
+
+        processTextLine(out, tc, text, pos, end, levels);
+
+        pos = end + 1;
+    }
+    // close all open text:list elements
+    writeTextObjectDeIndent(out.xml, 0, levels);
+
+    return;
+
     const StyleTextPropAtom *style = tc.style.data();
     if (!style) {
         if (!tc.master) {
@@ -1802,31 +1877,26 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
     }
 
     int pfpos = 0;
-    int pfend = 0;
-    for (int i = 0; i < style->rgTextPFRun.size(); ++i) {
-        const TextPFRun& pf = style->rgTextPFRun[i];
-        pfend = pfpos + pf.count;
+    foreach(const TextPFRun& pf, style->rgTextPFRun) {
+        int pfend = pfpos + pf.count;
         if (pfend > text.size() + 1) {
             qDebug() << "TextPFRun extends too far (" << pfend << ") for '"
                     << QString(text).replace('\r', '\n') << "'";
-            return;
+            break;
         }
-        // open paragraph of list:text
-        out.xml.startElement("text:p");
-
         if (pfend > text.size()) {
             pfend = text.size();
         }
-        int r = processTextLine(tc, out, text, pfpos, pfend);
-        out.xml.endElement();
+        int r = processTextLine(out, tc, pf, text, pfpos, pfend, levels);
         if (r < 0) {
             qDebug() << "TextCFRuns extends too far (" << pfend << ") for '"
                     << QString(text).replace('\r', '\n') << "' " << r;
-            return;
+            break;
         }
-
         pfpos = pfend;
     }
+    // close all open text:list elements
+    writeTextObjectDeIndent(out.xml, 0, levels);
 
     return;
 
@@ -1848,7 +1918,7 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
         //There seems to be an extra carriage return at the end. We'll remove the last
         // carriage return so we don't end up with a single empty line in the end
         if (text.endsWith("\r")) {
-            text = text.left(text.length() - 1);
+            //text = text.left(text.length() - 1);
         }
 
         //Lines are separated by \r, so we'll split the text to lines

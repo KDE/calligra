@@ -220,10 +220,18 @@ private:
     void processTextForBody(const PPT::TextContainer& tc, Writer& out);
     void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
-    int processFragment(const PPT::TextContainer& tc, Writer& out,
+    int processTextSpan(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, const int start, int end);
-    int processTextLine(const PPT::TextContainer& tc, Writer& out,
+    int processTextSpans(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
+
+    int processTextLine(Writer& out, const PPT::TextContainer& tc,
+                        const PPT::TextPFRun& pf, const QString& text,
+                        int start, int end, QStack<QString>& levels);
+
+    void processTextLine(Writer& out, const PPT::TextContainer& tc,
+                        const QString& text,
+                        int start, int end, QStack<QString>& levels);
 
      /**
      * @brief Write declaration in the content body presentation
