@@ -1852,18 +1852,18 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
     }
 
     // find the interactive atom
-    const MouseClickTextInteractiveInfoAtom* mouseclick = 0;
-    const MouseOverTextInteractiveInfoAtom* mouseover = 0;
+    const MouseClickTextInfo* mouseclick = 0;
+    const MouseOverTextInfo* mouseover = 0;
     for (i = 0; i<tc.interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc.interactive[i];
-        const MouseClickTextInteractiveInfoAtom* a =
-                ti.interactive.get<MouseClickTextInteractiveInfoAtom>();
-        const MouseOverTextInteractiveInfoAtom* b =
-                ti.interactive.get<MouseOverTextInteractiveInfoAtom>();
-        if (a && a->range.begin >= start && a->range.end < start) {
+        const MouseClickTextInfo* a =
+                ti.interactive.get<MouseClickTextInfo>();
+        const MouseOverTextInfo* b =
+                ti.interactive.get<MouseOverTextInfo>();
+        if (a && a->text.range.begin >= start && a->text.range.end < start) {
             mouseclick = a;
         }
-        if (b && b->range.begin >= start && b->range.end < start) {
+        if (b && b->text.range.begin >= start && b->text.range.end < start) {
             mouseover = b;
         }
     }
@@ -1878,11 +1878,11 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
     if (bookmark && bookmark->end < end) {
         end = bookmark->end;
     }
-    if (mouseclick && mouseclick->range.end < end) {
-        end = mouseclick->range.end;
+    if (mouseclick && mouseclick->text.range.end < end) {
+        end = mouseclick->text.range.end;
     }
-    if (mouseover && mouseover->range.end < end) {
-        end = mouseover->range.end;
+    if (mouseover && mouseover->text.range.end < end) {
+        end = mouseover->text.range.end;
     }
 
     out.xml.startElement("text:span");

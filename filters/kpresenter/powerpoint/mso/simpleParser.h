@@ -698,8 +698,10 @@ class SlideListWithTextSubContainerOrAtom;
 void parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListWithTextSubContainerOrAtom& _s);
 class TextContainer;
 void parseTextContainer(LEInputStream& in, TextContainer& _s);
-class TextContainerInteractiveInfo;
-void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
+class MouseClickTextInfo;
+void parseMouseClickTextInfo(LEInputStream& in, MouseClickTextInfo& _s);
+class MouseOverTextInfo;
+void parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s);
 class TextClientDataSubContainerOrAtom;
 void parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s);
 class TextPFRun;
@@ -748,6 +750,8 @@ class StyleTextProp9Atom;
 void parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s);
 class TextMasterStyle10Atom;
 void parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s);
+class TextContainerInteractiveInfo;
+void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
 class DocumentTextInfoContainer;
 void parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s);
 class SlideProgTagsSubContainerOrAtom;
@@ -3977,21 +3981,17 @@ public:
     QSharedPointer<TextSpecialInfoAtom> specialinfo2;
     TextContainer(void* /*dummy*/ = 0) {}
 };
-class TextContainerInteractiveInfo : public StreamOffset {
+class MouseClickTextInfo : public StreamOffset {
 public:
-    class choice1543770607 : public QSharedPointer<StreamOffset> {
-    public:
-        choice1543770607() {}
-        explicit choice1543770607(MouseClickInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1543770607(MouseOverInteractiveInfoContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1543770607(MouseClickTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1543770607(MouseOverTextInteractiveInfoAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice1543770607 interactive;
-    TextContainerInteractiveInfo(void* /*dummy*/ = 0) {}
+    MouseClickInteractiveInfoContainer interactive;
+    MouseClickTextInteractiveInfoAtom text;
+    MouseClickTextInfo(void* /*dummy*/ = 0) {}
+};
+class MouseOverTextInfo : public StreamOffset {
+public:
+    MouseOverInteractiveInfoContainer interactive;
+    MouseOverTextInteractiveInfoAtom text;
+    MouseOverTextInfo(void* /*dummy*/ = 0) {}
 };
 class TextClientDataSubContainerOrAtom : public StreamOffset {
 public:
@@ -4309,6 +4309,20 @@ public:
     quint16 lstLvl5level;
     QSharedPointer<TextMasterStyle10Level> lstLvl5;
     TextMasterStyle10Atom(void* /*dummy*/ = 0) {}
+};
+class TextContainerInteractiveInfo : public StreamOffset {
+public:
+    class choice3752530176 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3752530176() {}
+        explicit choice3752530176(MouseClickTextInfo* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3752530176(MouseOverTextInfo* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3752530176 interactive;
+    TextContainerInteractiveInfo(void* /*dummy*/ = 0) {}
 };
 class DocumentTextInfoContainer : public StreamOffset {
 public:

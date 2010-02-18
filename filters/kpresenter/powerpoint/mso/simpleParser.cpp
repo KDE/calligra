@@ -8259,26 +8259,15 @@ void PPT::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         }
     }
 }
-void PPT::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s) {
+void PPT::parseMouseClickTextInfo(LEInputStream& in, MouseClickTextInfo& _s) {
     _s.streamOffset = in.getPosition();
-    LEInputStream::Mark _m;
-    _m = in.setMark();
-    RecordHeader _choice(&_s);
-    parseRecordHeader(in, _choice);
-    in.rewind(_m);
-    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFF2)) {
-        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseClickInteractiveInfoContainer(&_s));
-        parseMouseClickInteractiveInfoContainer(in, *(MouseClickInteractiveInfoContainer*)_s.interactive.data());
-    } else if ((_choice.recVer == 0xF)&&(_choice.recInstance == 1)&&(_choice.recType == 0xFF2)) {
-        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseOverInteractiveInfoContainer(&_s));
-        parseMouseOverInteractiveInfoContainer(in, *(MouseOverInteractiveInfoContainer*)_s.interactive.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xFDF)&&(_choice.recLen == 8)) {
-        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseClickTextInteractiveInfoAtom(&_s));
-        parseMouseClickTextInteractiveInfoAtom(in, *(MouseClickTextInteractiveInfoAtom*)_s.interactive.data());
-    } else {
-        _s.interactive = TextContainerInteractiveInfo::choice1543770607(new MouseOverTextInteractiveInfoAtom(&_s));
-        parseMouseOverTextInteractiveInfoAtom(in, *(MouseOverTextInteractiveInfoAtom*)_s.interactive.data());
-    }
+    parseMouseClickInteractiveInfoContainer(in, _s.interactive);
+    parseMouseClickTextInteractiveInfoAtom(in, _s.text);
+}
+void PPT::parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s) {
+    _s.streamOffset = in.getPosition();
+    parseMouseOverInteractiveInfoContainer(in, _s.interactive);
+    parseMouseOverTextInteractiveInfoAtom(in, _s.text);
 }
 void PPT::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -9322,6 +9311,21 @@ void PPT::parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _
     if (_s.cLevels>4) {
         _s.lstLvl5 = QSharedPointer<TextMasterStyle10Level>(new TextMasterStyle10Level(&_s));
         parseTextMasterStyle10Level(in, *_s.lstLvl5.data());
+    }
+}
+void PPT::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    _m = in.setMark();
+    RecordHeader _choice(&_s);
+    parseRecordHeader(in, _choice);
+    in.rewind(_m);
+    if ((_choice.recInstance == 0)) {
+        _s.interactive = TextContainerInteractiveInfo::choice3752530176(new MouseClickTextInfo(&_s));
+        parseMouseClickTextInfo(in, *(MouseClickTextInfo*)_s.interactive.data());
+    } else {
+        _s.interactive = TextContainerInteractiveInfo::choice3752530176(new MouseOverTextInfo(&_s));
+        parseMouseOverTextInfo(in, *(MouseOverTextInfo*)_s.interactive.data());
     }
 }
 void PPT::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s) {
