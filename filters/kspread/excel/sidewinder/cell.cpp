@@ -259,6 +259,7 @@ bool Cell::operator==(const Cell &other) const
     if (columnSpan() != other.columnSpan()) return false;
     if (rowSpan() != other.rowSpan()) return false;
     if (isCovered() != other.isCovered()) return false;
+    if (columnRepeat() != other.columnRepeat()) return false;
     if (hasHyperlink() != other.hasHyperlink()) return false;
     if (hasHyperlink() && ( hyperlinkDisplayName() != other.hyperlinkDisplayName() ||
                             hyperlinkLocation() != other.hyperlinkLocation() ||
