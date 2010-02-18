@@ -40,38 +40,54 @@ public:
     Cell(Sheet* sheet, unsigned column, unsigned row);
     virtual ~Cell();
 
+    // Returns the sheet this cell is located in.
     Sheet* sheet();
 
+    // Returns the column this cell is in.
     unsigned column() const;
+    // Returns the row this cell is in.
     unsigned row() const;
 
+    // Returns the name this cell is in. This could be for example
+    // the name D3 for a cell that is in column 4 and row 3.
     UString name() const;
     static UString name(unsigned column, unsigned row);
 
+    // Retuns the column label. As example the column 4 has the label D.
     UString columnLabel() const;
     static UString columnLabel(unsigned column);
 
+    // Retuns the value this cell has.
     Value value() const;
     void setValue(const Value& value);
 
+    // Returns the formula of this cell. May an empty string if this cell has no formula.
     UString formula() const;
     void setFormula(const UString& formula);
 
+    // Returns the format of this cell.
     Format format() const;
     void setFormat(const Format& format);
 
+    // Returns the optional column span.
     unsigned columnSpan() const;
     void setColumnSpan(unsigned span);
 
+    // Returns the optional row span.
     unsigned rowSpan() const;
     void setRowSpan(unsigned span);
 
+    // Returns if this cell does cover the optional spans.
     bool isCovered() const;
     void setCovered(bool covered);
 
+    // Returns the cell-repeat number. The cell-repeat defines how often this cell will be
+    // repeated. Per default this will return 1 what means it will only repeat its own cell.
+    // If the is bigger then the defined number of following cells will be ignored/covered.
     int columnRepeat() const;
     void setColumnRepeat(int repeat);
     
+    // Defines if this cell has a hyperlink.
     bool hasHyperlink() const;
     UString hyperlinkDisplayName() const;
     UString hyperlinkLocation() const;
@@ -79,9 +95,11 @@ public:
     void removeHyperlink();
     void setHyperlink(const UString& displayName, const UString& location, const UString& targetFrameName);
 
+    // Returns the optional note/comment/annotation of this cell.
     UString note() const;
     void setNote(const UString &n);
     
+    // Defines a list of pictures anchored to this cell.
     std::vector<Picture*> pictures() const;
     void setPictures(std::vector<Picture*>);
     void addPicture(Picture*);
@@ -96,7 +114,6 @@ private:
 
     class Private;
     Private* d;
-
 };
 
 } // namespace Swinder
