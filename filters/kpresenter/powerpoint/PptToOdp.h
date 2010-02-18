@@ -332,51 +332,6 @@ private:
                                  QStack<QString>& levels);
 
     /**
-    * @brief Write text all text within specified paragraph
-    *
-    * @param xmlWriter XML writer to write with
-    * @param pf Text paragraph exception to define style for the text paragraph
-    * @param textObject text object whose contents to write
-    * @param textPos position of current paragraph within all the text in
-    * textObject
-    * @param levels   stack of current list levels by name
-    */
-    void writeTextPFException(KoXmlWriter& xmlWriter,
-                              const PPT::TextPFRun *pf,
-                              const PPT::TextContainer& text,
-                              const QString& intext,
-                              const unsigned int textPos,
-                              QStack<QString>& levels);
-
-    /**
-    * @brief write part of a line (bound by the same text character exception)
-    * @param xmlWriter XML writer to write with
-    * @param cf character exception that applies to text we are about to write
-    * @param pf paragraph exception that applies to text we are about to write
-    * @param textPosition starting index of the text line within all text
-    * in the same text bytes/chars struct
-    * @param textLength length of text in characters
-    */
-    void writeTextCFException(KoXmlWriter& xmlWriter,
-                              const PPT::TextCFException *cf,
-                              const PPT::TextPFException *pf,
-                              const PPT::TextContainer& tc,
-                              const unsigned int textPosition,
-                              const unsigned int textLength);
-
-    /**
-    * @brief Parse all styles from given PPT::TextCFRun and PPT::TextPFRun pair
-    * @param cf PPT::TextCFRun that provides character style
-    * @param pf PPT::TextPFRun that provides paragraph style
-    * @param styles KoGenStyles to store styles to
-    * @param textObject TextObject to cache style names to
-    */
-    void processTextExceptionsForStyle(const PPT::TextCFRun *cf,
-                                       const PPT::TextPFRun *pf,
-                                       KoGenStyles &styles,
-                                       const PPT::TextContainer& tc);
-
-    /**
     * @brief Helper method to find specified TextParagraphException from
     * MainMasterContainer
     * @param text type of the text whose style to get. See TextTypeEnum in
@@ -569,8 +524,6 @@ private:
     QMap<QByteArray, QString> pictureNames;
     DateTimeFormat dateTime;
     QString declarationStyleName;
-    typedef QPair<const PPT::TextCFException*, const PPT::TextPFException*> StyleKey;
-    QMap<StyleKey, StyleName> textStyles;
 
     /**
       * name for to use in the style:page-layout-name attribute for master
@@ -601,25 +554,6 @@ private:
         return (p->documentContainer->slideHF)
                ? p->documentContainer->slideHF.data()
                : p->documentContainer->slideHF2.data();
-    }
-    void addStyleNames(const PPT::TextCFException *cf, const PPT::TextPFException *pf,
-                       const QString& text, const QString& paragraph, const QString& list) {
-        textStyles[StyleKey(cf, pf)] = StyleName(text, paragraph, list);
-    }
-
-    /**
-      *Return the name of the style associated with these objects.
-      * If no style is present, create one.
-      **/
-    QString getListStyleName(const PPT::TextCFException *cf, const PPT::TextPFException *pf) {
-        return textStyles.value(StyleKey(cf, pf)).list;
-    }
-    /**
-      *Return the name of the style associated with these objects.
-      * If no style is present, create one.
-      **/
-    QString getParagraphStyleName(const PPT::TextCFException *cf, const PPT::TextPFException *pf) {
-        return textStyles.value(StyleKey(cf, pf)).paragraph;
     }
 
     /**
