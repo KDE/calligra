@@ -31,6 +31,13 @@
 #include <QBuffer>
 #include <QColor>
 
+KWPageStylePrivate::~KWPageStylePrivate()
+{
+    if (background && !background->deref()) {
+        delete background;
+    }
+}
+
 void KWPageStylePrivate::clear()
 {
     // defaults
@@ -50,6 +57,9 @@ void KWPageStylePrivate::clear()
     pageLayout = KoPageLayout::standardLayout();
     direction = KoText::AutoDirection;
 
+    if (background && !background->deref()) {
+        delete background;
+    }
     background = 0;
 }
 
@@ -79,12 +89,14 @@ bool KWPageStyle::isValid() const
 KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 {
     d = ps.d;
+    if (d->background) {
+        d->background->ref();
+    }
     return *this;
 }
 
 KWPageStyle::~KWPageStyle()
 {
-    delete d->background;
 }
 
 void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
@@ -336,12 +348,12 @@ void KWPageStyle::loadOdf(const KoXmlElement &style)
     if (!backgroundColor.isNull()) {
 
         if (backgroundColor == "transparent") {
-            d->background = new KoColorBackground(Qt::black, Qt::NoBrush);
+            d->background = 0;
         }
         else {
             d->background = new KoColorBackground(QColor(backgroundColor));
+            d->background->ref();
         }
-
     }
 }
 

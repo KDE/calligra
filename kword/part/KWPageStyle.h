@@ -180,6 +180,7 @@ public:
 
     /// Get the background.
     KoShapeBackground *background() const;
+
     /// set the background/
     void setBackground(KoShapeBackground *background);
 

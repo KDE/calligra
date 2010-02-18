@@ -26,8 +26,8 @@
 class KWPageStylePrivate : public QSharedData
 {
 public:
-    KWPageStylePrivate() { clear(); }
-
+    KWPageStylePrivate() : background(0) { clear(); }
+    ~KWPageStylePrivate();
     void clear();
 
     KoColumns columns;
