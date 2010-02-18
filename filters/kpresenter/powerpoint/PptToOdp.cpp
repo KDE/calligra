@@ -1811,19 +1811,67 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     }
     if (pf == 0) {
         // perhaps this should be a list under some circumstances
-        out.xml.startElement("text:p");
+        if (levels.size()) { // context is a list
+            out.xml.startElement("text:list-item");
+        } else {
+            out.xml.startElement("text:p");
+        }
         out.xml.addTextNode(text.mid(start, end-start));
         out.xml.endElement();
         return;
     }
 
+    quint16 paragraphIndent = pf->indentLevel;
+    // [MS-PPT].pdf says the indentation level can be 4 at most
+    if (paragraphIndent > 4) paragraphIndent = 4;
+    qint16 bullet = 0;
+    // Check if this paragraph has a bullet
+    if (pf->pf.masks.bulletChar) {
+        bullet = pf->pf.bulletChar;
+    } else {
+        // If text paragraph exception doesn't have a definition on bullet
+        // then we'll have to check master style with our indentation level
+        const TextPFException *masterPF
+                = masterTextPFException(tc.textHeaderAtom.textType,
+                                        pf->indentLevel);
+        if (masterPF && masterPF->masks.bulletChar) {
+            bullet = masterPF->bulletChar;
+        }
+    }
+    QString listStyle;
+    bool islist = bullet || paragraphIndent > 0;
+    if (islist) {
+        listStyle = "";
+    }
+    // remove levels until the top level is the right indentation
+    if ((quint16)levels.size() > paragraphIndent
+            && levels[paragraphIndent] == listStyle) {
+        writeTextObjectDeIndent(out.xml, paragraphIndent + 2, levels);
+    } else {
+        writeTextObjectDeIndent(out.xml, paragraphIndent + 1, levels);
+    }
+    // add styleless levels up to the current level of indentation
+    while ((quint16)levels.size() < paragraphIndent) {
+        addListElement(out.xml, levels, "");
+    }
+    // at this point, levels.size() == paragraphIndent
+    if (levels.size() == 0 || listStyle != levels.top()) {
+        addListElement(out.xml, levels, listStyle);
+    }
+    bool listItem = levels.size() > 1 || !levels.top().isNull();
+    if (listItem) {
+            out.xml.startElement("text:list-item");
+    }
     out.xml.startElement("text:p");
     KoGenStyle style(KoGenStyle::StyleAuto, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, &pf->pf, 0);
     out.xml.addAttribute("text:style-name", out.styles.lookup(style, ""));
     processTextSpans(tc, out, text, start, end);
-    out.xml.endElement();
+    out.xml.endElement(); // text:p
+    if (listItem) {
+        out.xml.endElement(); // text:list-item
+    }
 }
 
 void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
