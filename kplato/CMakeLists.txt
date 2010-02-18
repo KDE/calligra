@@ -17,6 +17,8 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kdgantt
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
+
+#    ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
 )
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)

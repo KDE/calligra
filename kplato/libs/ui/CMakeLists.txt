@@ -10,13 +10,13 @@ include_directories(
     ${CMAKE_BINARY_DIR}/kdgantt
 
     ${KOODF_INCLUDES} 
-    ${CMAKE_SOURCE_DIR}/kexi
-    ${CMAKE_SOURCE_DIR}/kexi/koproperty
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/wrtembed
-    ${KOPROPERTIES_INCLUDES}
+#     ${CMAKE_SOURCE_DIR}/kexi
+#     ${CMAKE_SOURCE_DIR}/kexi/koproperty
+#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/
+#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
+#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/renderer
+#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/wrtembed
+#     ${KOPROPERTIES_INCLUDES}
 
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
@@ -31,6 +31,7 @@ set(kplatoui_LIB_SRCS
 #     reports/reportdata.cpp
 #     reports/reportpage.cpp
 #     reports/reportsourceeditor.cpp
+#     reports/reportscripts.cpp
 
     plotting/kplotaxis.cpp
     plotting/kplotwidget.cpp

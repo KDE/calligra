@@ -110,6 +110,7 @@
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 //#include "reports/reportview.h"
+//#include "reports/reportdata.h"
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -1243,48 +1244,12 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
         i->setToolTip( 0, tip );
     }
 
-    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
-    
-    QSortFilterProxyModel *sf = new QSortFilterProxyModel( this );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    FlatProxyModel *fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    ItemModelBase *m = new GeneralNodeItemModel( fm );
-    m->setProject( &getProject() );
-    fm->setSourceModel( m );
-    v->insertDataModel( "tasks", sf );
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    
-    sf = new QSortFilterProxyModel( this );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new TaskStatusItemModel( fm );
-    m->setProject( &getProject() );
-    fm->setSourceModel( m );
-    v->insertDataModel( "taskstatus", sf );
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-
-    fm = new FlatProxyModel( this );
-    m = new ResourceAppointmentsRowModel( fm );
-    m->setProject( &getProject() );
-    fm->setSourceModel( m );
-    v->insertDataModel( "resourceassignments", fm );
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-
-    fm = new FlatProxyModel( this );
-    m = new ResourceItemModel( fm );
-    m->setProject( &getProject() );
-    fm->setSourceModel( m );
-    v->insertDataModel( "resourcesandgroups", fm );
-
     v->setProject( &getProject() );
+    v->createDefaultReportModels();
+    
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    qDebug()<<"View::createReportView:"<<currentScheduleManager();
+    emit currentScheduleManagerChanged( currentScheduleManager() );
     
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     v->updateReadWrite( m_readWrite );
@@ -1551,6 +1516,10 @@ void View::slotProjectCalculated( ScheduleManager *sm )
 void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
 {
     if ( project == 0 || sm == 0 ) {
+        return;
+    }
+    if ( sm->parentManager() && ! sm->parentManager()->isScheduled() ) {
+        // the parent must be scheduled
         return;
     }
     if ( m_progressBarTimer.isActive() ) {
