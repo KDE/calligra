@@ -112,18 +112,22 @@ PptToOdp::getRect(const OfficeArtSpContainer &o)
     }
     return QRect(0, 0, 1, 1);
 }
-PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter) : xOffset(0),
+PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
+                         bool stylexml)
+      : xOffset(0),
         yOffset(0),
         scaleX(25.4 / 576),
         scaleY(25.4 / 576),
-        xml(xmlWriter)
+        xml(xmlWriter),
+        styles(kostyles),
+        stylesxml(stylexml)
 {
 }
 
 PptToOdp::Writer
 PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 {
-    Writer w(xml);
+    Writer w(xml, styles);
     w.xOffset = xOffset + oldCoords.x() * scaleX;
     w.yOffset = yOffset + oldCoords.y() * scaleY;
     w.scaleX = scaleX * oldCoords.width() / newCoords.width();
@@ -979,7 +983,7 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                     KoGenStyles::DontForceNumbering);
 
             if (finder.sp) {
-                processObjectForStyle(*finder.sp, styles, true);
+                // processObjectForStyle(*finder.sp, styles, true);
             }
 
             if (textstyle && textstyle->lstLvl1) {
@@ -1148,7 +1152,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     if (p->notesMaster) { // draw the notes master
         notesBuffer.open(QIODevice::WriteOnly);
         KoXmlWriter writer(&notesBuffer);
-        Writer out(writer);
+        Writer out(writer, styles, true);
 
         writer.startElement("presentation:notes");
         writer.addAttribute("style:page-layout-name", notesPageLayoutName);
@@ -1178,7 +1182,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
             KoXmlWriter writer(&buffer);
-            Writer out(writer);
+            Writer out(writer, styles, true);
             processObjectForBody(co, out);
             master.addChildElement("draw:frame",
                                    QString::fromUtf8(buffer.buffer(),
@@ -1260,9 +1264,22 @@ void PptToOdp::addFrame(KoGenStyle& style, Writer& out, const char* presentation
 
 QByteArray PptToOdp::createContent(KoGenStyles& styles)
 {
+    QByteArray presentationData;
+    QBuffer presentationBuffer(&presentationData);
+    {
+    presentationBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter presentationWriter(&presentationBuffer);
+
+    processDeclaration(&presentationWriter);
+
+    Writer out(presentationWriter, styles);
+    for (int c = 0; c < p->slides.size(); c++) {
+        processSlideForBody(c, out);
+    }
+}
+
     QByteArray contentData;
     QBuffer contentBuffer(&contentData);
-
     contentBuffer.open(QIODevice::WriteOnly);
     KoXmlWriter contentWriter(&contentBuffer);
 
@@ -1279,22 +1296,13 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("office:version", "1.0");
 
     // office:automatic-styles
-
-    for (int c = 0; c < p->slides.size(); c++) {
-        processSlideForStyle(c, styles);
-    }
-
     styles.saveOdfAutomaticStyles(&contentWriter, false);
 
     // office:body
     contentWriter.startElement("office:body");
     contentWriter.startElement("office:presentation");
 
-    processDeclaration(&contentWriter);
-
-    for (int c = 0; c < p->slides.size(); c++) {
-        processSlideForBody(c, contentWriter);
-    }
+    contentWriter.addCompleteElement(&presentationBuffer);
 
     contentWriter.endElement();  // office:presentation
 
@@ -2046,15 +2054,7 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
     const QRect& rect = getRect(o);
 
     out.xml.startElement("draw:frame");
-    QString style = getGraphicStyleName(o);
-    if (!style.isEmpty()) {
-        out.xml.addAttribute("draw:style-name", style);
-    } else {
-        style = getPresentationStyleName(o);
-        if (!style.isEmpty()) {
-                out.xml.addAttribute("presentation:style-name", style);
-        }
-    }
+    addGraphicStyleToDrawElement(out, o);
     if (p) {
         if (p->placementId >= 1 && p->placementId <= 6) {
             out.xml.addAttribute("presentation:placeholder", "true");
@@ -2129,7 +2129,7 @@ void PptToOdp::processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& 
     }
 }
 
-void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
+void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 {
     const SlideContainer* slide = p->slides[slideNo];
     const MasterOrSlideContainer* master = p->getMaster(slide);
@@ -2160,15 +2160,15 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     nameStr.remove('\r');
     nameStr.remove('\v');
 
-    xmlWriter.startElement("draw:page");
+    out.xml.startElement("draw:page");
     QString value = masterNames.value(master);
     if (!value.isEmpty()) {
-        xmlWriter.addAttribute("draw:master-page-name", value);
+        out.xml.addAttribute("draw:master-page-name", value);
     }
-    xmlWriter.addAttribute("draw:name", nameStr);
+    out.xml.addAttribute("draw:name", nameStr);
     value = drawingPageStyles[slide];
     if (!value.isEmpty()) {
-        xmlWriter.addAttribute("draw:style-name", value);
+        out.xml.addAttribute("draw:style-name", value);
     }
     //xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
 
@@ -2188,22 +2188,21 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
         headerFooterAtom = &getSlideHF()->hfAtom;
     }
     if (!usedDateTimeDeclaration.value(slideNo).isEmpty()) {
-        xmlWriter.addAttribute("presentation:use-date-time-name",
+        out.xml.addAttribute("presentation:use-date-time-name",
                                usedDateTimeDeclaration[slideNo]);
     }
     if (!usedHeaderDeclaration.value(slideNo).isEmpty()) {
         if(usedHeaderDeclaration[slideNo] != "")
-            xmlWriter.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
+            out.xml.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
     }
     if (!usedFooterDeclaration.value(slideNo).isEmpty()) {
         if(usedFooterDeclaration[slideNo] != "")
-            xmlWriter.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
+            out.xml.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
 
     currentSlideTexts = &p->documentContainer->slideList->rgChildRec[slideNo];
     currentMaster = master;
 
-    Writer out(xmlWriter);
     foreach(const OfficeArtSpgrContainerFileBlock& co,
             slide->drawing.OfficeArtDg.groupShape.rgfb) {
         processObjectForBody(co, out);
@@ -2217,55 +2216,21 @@ void PptToOdp::processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter)
     const NotesContainer* nc = p->notes[slideNo];
     if (nc) {
         currentSlideTexts = 0;
-        xmlWriter.startElement("presentation:notes");
+        out.xml.startElement("presentation:notes");
         value = drawingPageStyles[nc];
         if (!value.isEmpty()) {
-            xmlWriter.addAttribute("draw:style-name", value);
+            out.xml.addAttribute("draw:style-name", value);
         }
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 nc->drawing.OfficeArtDg.groupShape.rgfb) {
             processObjectForBody(co, out);
         }
-        xmlWriter.endElement();
+        out.xml.endElement();
     }
 
-    xmlWriter.endElement(); // draw:page
+    out.xml.endElement(); // draw:page
 }
 
-void PptToOdp::processSlideForStyle(int slideNo, KoGenStyles &styles)
-{
-    const SlideContainer* slide = p->slides[slideNo];
-    processObjectForStyle(slide->drawing.OfficeArtDg.groupShape, styles, false);
-    if (slide->drawing.OfficeArtDg.shape) {
-        processObjectForStyle(*slide->drawing.OfficeArtDg.shape, styles, false);
-    }
-}
-void PptToOdp::processObjectForStyle(const OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles, bool stylesxml)
-{
-    if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processObjectForStyle(*of.anon.get<OfficeArtSpgrContainer>(), styles, stylesxml);
-    } else { // OfficeArtSpContainer
-        processObjectForStyle(*of.anon.get<OfficeArtSpContainer>(), styles, stylesxml);
-    }
-}
-void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles, bool stylesxml)
-{
-    foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
-        processObjectForStyle(co, styles, stylesxml);
-    }
-}
-void PptToOdp::processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
-{
-    // text is process separately until drawing objects support it
-    if (o.clientTextbox) {
-        foreach(const TextClientDataSubContainerOrAtom& tc, o.clientTextbox->rgChildRec) {
-            if (tc.anon.is<TextContainer>()) {
-                processTextObjectForStyle(o, *tc.anon.get<TextContainer>(), styles, stylesxml);
-            }
-        }
-    }
-    processDrawingObjectForStyle(o, styles, stylesxml);
-}
 QString PptToOdp::paraSpacingToCm(int value) const
 {
     if (value < 0) {
@@ -3248,8 +3213,8 @@ void PptToOdp::defineGraphicPropertiesListStyles(KoGenStyle& style, const TextMa
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     style.addChildElement("text:list-style", elementContents);
 }
-void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml)
-{
+void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
+                                                 const OfficeArtSpContainer& o) {
     // if this object has a placeholder type, it defines a presentation style,
     // otherwise, it defines a graphic style
     KoGenStyle::Type type = KoGenStyle::StyleGraphicAuto;
@@ -3259,7 +3224,7 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
         familyName = "presentation";
     }
     KoGenStyle style(type, familyName);
-    style.setAutoStyleInStylesDotXml(stylesxml);
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
     if (currentMaster && o.clientTextbox) {
         QString parent;
         foreach (const TextClientDataSubContainerOrAtom& a, o.clientTextbox->rgChildRec) {
@@ -3274,11 +3239,11 @@ void PptToOdp::processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, 
         }
     }
     defineGraphicProperties(style, o);
-    const QString n = styles.lookup(style);
+    const QString styleName = out.styles.lookup(style);
     if (o.clientData && o.clientData->placeholderAtom) {
-        setPresentationStyleName(o, n);
+        out.xml.addAttribute("presentation:style-name", styleName);
     } else {
-        setGraphicStyleName(o, n);
+        out.xml.addAttribute("draw:style-name", styleName);
     }
 }
 

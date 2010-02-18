@@ -107,13 +107,22 @@ private:
          * Xml writer that writes into content.xml.
          */
         KoXmlWriter& xml;
+        /**
+         * Styles for the document that is being created.
+         **/
+        KoGenStyles& styles;
+        /**
+         * Tells if the current output is for styles.xml or content.xml
+         **/
+        bool stylesxml;
 
         /**
          * Construct a new Writer.
          *
          * @param xmlWriter The xml writer that writes content.xml
          */
-        Writer(KoXmlWriter& xmlWriter);
+        Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
+               bool stylexml = false);
         /**
          * Create a new writer with a new coordinate system.
          *
@@ -231,16 +240,12 @@ private:
                          const PPT::TextMasterStyle9Level* level9 = 0,
                          const PPT::TextMasterStyle10Level* level10 = 0);
 
-    void processSlideForStyle(int slideNo, KoGenStyles &styles);
-    void processObjectForStyle(const PPT::OfficeArtSpgrContainerFileBlock& of, KoGenStyles &styles, bool stylesxml);
-    void processObjectForStyle(const PPT::OfficeArtSpgrContainer& o, KoGenStyles &styles, bool stylesxml);
-    void processObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml);
-    void processDrawingObjectForStyle(const PPT::OfficeArtSpContainer& o, KoGenStyles &styles, bool stylesxml);
     void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles, bool stylesxml);
 
+    void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);
-    void processSlideForBody(unsigned slideNo, KoXmlWriter& xmlWriter);
+    void processSlideForBody(unsigned slideNo, Writer& out);
     void processObjectForBody(const PPT::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer& out);
     void processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
@@ -636,8 +641,6 @@ private:
     QString declarationStyleName;
     typedef QPair<const PPT::TextCFException*, const PPT::TextPFException*> StyleKey;
     QMap<StyleKey, StyleName> textStyles;
-    QMap<const PPT::OfficeArtSpContainer*, QString> graphicStyleNames;
-    QMap<const PPT::OfficeArtSpContainer*, QString> presentationStyleNames;
 
     /**
       * name for to use in the style:page-layout-name attribute for master
@@ -668,30 +671,6 @@ private:
         return (p->documentContainer->slideHF)
                ? p->documentContainer->slideHF.data()
                : p->documentContainer->slideHF2.data();
-    }
-    /**
-      * Set the name of the style associated with this object.
-      **/
-    void setGraphicStyleName(const PPT::OfficeArtSpContainer& o, const QString& name) {
-        graphicStyleNames[&o] = name;
-    }
-    /**
-      * Return the name of the style associated with this object.
-      **/
-    QString getPresentationStyleName(const PPT::OfficeArtSpContainer& o) const {
-        return presentationStyleNames[&o];
-    }
-    /**
-      * Set the name of the style associated with this object.
-      **/
-    void setPresentationStyleName(const PPT::OfficeArtSpContainer& o, const QString& name) {
-        presentationStyleNames[&o] = name;
-    }
-    /**
-      * Return the name of the style associated with this object.
-      **/
-    QString getGraphicStyleName(const PPT::OfficeArtSpContainer& o) const {
-        return graphicStyleNames[&o];
     }
     void addStyleNames(const PPT::TextCFException *cf, const PPT::TextPFException *pf,
                        const QString& text, const QString& paragraph, const QString& list) {

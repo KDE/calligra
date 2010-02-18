@@ -222,10 +222,9 @@ void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:ellipse");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
-
     out.xml.endElement(); // draw:ellipse
 }
 
@@ -233,7 +232,7 @@ void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:rect");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -244,7 +243,7 @@ void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -278,7 +277,7 @@ void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     set2dGeometry(o, out);
     out.xml.addAttribute("draw:layer", "layout");
 
@@ -309,7 +308,7 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     const QRect rect = getRect(o);
     /* draw IsocelesTriangle or RightTriangle */
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -397,7 +396,7 @@ void PptToOdp::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -466,7 +465,7 @@ void PptToOdp::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -571,7 +570,7 @@ void PptToOdp::processHexagon(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -626,7 +625,7 @@ void PptToOdp::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -697,7 +696,7 @@ void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -783,7 +782,7 @@ void PptToOdp::processLine(const OfficeArtSpContainer& o, Writer& out)
     }
 
     out.xml.startElement("draw:line");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("svg:y1", y1Str);
     out.xml.addAttribute("svg:y2", y2Str);
     out.xml.addAttribute("svg:x1", x1Str);
@@ -797,7 +796,7 @@ void PptToOdp::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -853,7 +852,7 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
@@ -884,7 +883,7 @@ void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:path");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
     out.xml.endElement(); // path
@@ -906,7 +905,7 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     }
     //Ima drawObject->getIntProperty("pib"));
     out.xml.startElement("draw:frame");
-    out.xml.addAttribute("draw:style-name", getGraphicStyleName(o));
+    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 
