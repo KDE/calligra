@@ -155,37 +155,6 @@ private:
         QString hOffset(qreal offset);
     };
 
-    /**
-      * @brief Simple pre parsed hyperlink range.
-      *
-      * PPT file format describes hyperlinks with 3 structures:
-      * 1) Range of text the hyperlink replaces
-      * 2) Hyperlink action
-      * 3) Hyperlink location and name
-      *
-      * This struct contains structures 1 and 2 to simplify applying hyperlinks.
-      */
-    typedef struct {
-        /**
-          * @brief Start index of text that is to be replaced with hyperlink's
-          * user readable name
-          *
-          */
-        int start;
-
-        /**
-          * @brief End index of text that is to be replaced with hyperlink's
-          * user readable name
-          *
-          */
-        int end;
-
-        /**
-          * @brief ID of the hyperlink we want to this specific range
-          */
-        int id;
-    }HyperlinkRange;
-
     void createMainStyles(KoGenStyles& styles);
     void defineDefaultTextStyle(KoGenStyles& styles);
     void defineDefaultParagraphStyle(KoGenStyles& styles);
@@ -239,8 +208,6 @@ private:
                          const PPT::TextMasterStyleLevel& level,
                          const PPT::TextMasterStyle9Level* level9 = 0,
                          const PPT::TextMasterStyle10Level* level10 = 0);
-
-    void processTextObjectForStyle(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, KoGenStyles &styles, bool stylesxml);
 
     void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);
 
@@ -341,36 +308,7 @@ private:
       * @return QPair where first element is hyperlink's target, second is
       * user readable name. If both are empty, hyperlink is not found
       */
-    QPair<QString, QString> findHyperlink(const qint32 id);
-
-     /**
-      * @brief Find the next hyperlink range that starts after current position
-      * @param text TextContainer to search hyperlinks from
-      * @param currentPos current position on the text
-      * @return Range for next hyperlink, or a invalid range (where values are
-      * negative) if none found.
-      */
-    HyperlinkRange findNextHyperlinkStart(const PPT::TextContainer& text,
-                                          const int currentPos);
-
-    /**
-      * @brief Write a text span and replace vertical tabs and carriage returns.
-      * @param xmlWriter writer to write with
-      * @param text text to write
-      */
-    void writeTextSpan(KoXmlWriter& xmlWriter, const QString &text);
-
-    /**
-      * @brief Write a text span while replacing text with possible hyperlinks
-      * @param text TextContainer to write
-      * @param xmlWriter XML writer to write with
-      * @param start Starting index of the textObject's text that is written
-      * @param end Ending index of the textObject's text that is written
-      */
-    void writeTextSpanWithHyperlinks(KoXmlWriter& xmlWriter,
-                                     const PPT::TextContainer& text,
-                                     const int start,
-                                     const int end);
+    QPair<QString, QString> findHyperlink(const quint32 id);
 
     /**
     * @brief Write text deindentations the specified amount. Actually it just
@@ -401,22 +339,6 @@ private:
                               const QString& intext,
                               const unsigned int textPos,
                               QStack<QString>& levels);
-
-    /**
-    * @brief Write specified line within specified paragraph with xmlWriter
-    * @param xmlWriter XML writer to write with
-    * @param pf Text paragraph exception to define paragraph style for the line
-    * @param textObject text object whose contents to write
-    * @param text Line to write
-    * @param linePosition what is the index of the whole text (within textObject)
-    * that this line starts from
-    */
-    void writeTextLine(KoXmlWriter& xmlWriter,
-                       const PPT::StyleTextPropAtom& style,
-                       const PPT::TextPFException* pf,
-                       const PPT::TextContainer& tc,
-                       const QString& text,
-                       const unsigned int linePosition);
 
     /**
     * @brief write part of a line (bound by the same text character exception)
@@ -677,13 +599,6 @@ private:
         textStyles[StyleKey(cf, pf)] = StyleName(text, paragraph, list);
     }
 
-    /**
-      *Return the name of the style associated with these objects.
-      * If no style is present, create one.
-      **/
-    QString getTextStyleName(const PPT::TextCFException *cf, const PPT::TextPFException *pf) {
-        return textStyles.value(StyleKey(cf, pf)).text;
-    }
     /**
       *Return the name of the style associated with these objects.
       * If no style is present, create one.
