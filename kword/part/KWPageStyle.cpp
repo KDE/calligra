@@ -25,9 +25,11 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <KoColorBackground.h>
 
 #include <kdebug.h>
 #include <QBuffer>
+#include <QColor>
 
 void KWPageStylePrivate::clear()
 {
@@ -47,6 +49,8 @@ void KWPageStylePrivate::clear()
     columns.columnSpacing = 17; // ~ 6mm
     pageLayout = KoPageLayout::standardLayout();
     direction = KoText::AutoDirection;
+
+    background = 0;
 }
 
 ///////////
@@ -80,6 +84,7 @@ KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 
 KWPageStyle::~KWPageStyle()
 {
+    delete d->background;
 }
 
 void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
@@ -222,6 +227,16 @@ QString KWPageStyle::name() const
     return d->name;
 }
 
+KoShapeBackground *KWPageStyle::background() const
+{
+    return d->background;
+}
+
+void KWPageStyle::setBackground(KoShapeBackground *background)
+{
+    d->background = background;
+}
+
 KoGenStyle KWPageStyle::saveOdf() const
 {
     KoGenStyle pageLayout = d->pageLayout.saveOdf();
@@ -314,6 +329,19 @@ void KWPageStyle::loadOdf(const KoXmlElement &style)
         if (! hfprops.isNull())
             d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
         // TODO there are quite some more properties we want to at least preserve between load and save
+    }
+
+    // Load background color
+    QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString::null);
+    if (!backgroundColor.isNull()) {
+
+        if (backgroundColor == "transparent") {
+            d->background = new KoColorBackground(Qt::black, Qt::NoBrush);
+        }
+        else {
+            d->background = new KoColorBackground(QColor(backgroundColor));
+        }
+
     }
 }
 

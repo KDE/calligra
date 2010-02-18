@@ -30,6 +30,7 @@
 #include <QSharedDataPointer>
 
 class KWPageStylePrivate;
+class KoShapeBackground;
 
 /**
  * A page style represents a set of all the properties that change the layout and size
@@ -176,6 +177,11 @@ public:
 
     KoText::Direction direction() const;
     void setDirection(KoText::Direction direction);
+
+    /// Get the background.
+    KoShapeBackground *background() const;
+    /// set the background/
+    void setBackground(KoShapeBackground *background);
 
     /**
      * Save this page style to ODF.
