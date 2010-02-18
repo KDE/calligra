@@ -161,6 +161,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             }
         }
     }
+    if (frame->shape() && m_pageStyle.isValid()) {
+        frame->shape()->setBackground(m_pageStyle.background());
+    }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 }
 
@@ -285,6 +288,13 @@ bool KWTextFrameSet::allowLayout() const
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     m_pageStyle = style;
+    if (style.isValid()) {
+        foreach(KWFrame* frame, m_frames) {
+            if (frame->shape()) {
+                frame->shape()->setBackground(style.background());
+            }
+        }
+    }
 }
 
 KWPageStyle KWTextFrameSet::pageStyle() const
