@@ -1735,22 +1735,40 @@ getPresentationClass(const PlaceholderAtom* p)
     default: return 0;
     }
 }
-qint32
-getPosition(const TextContainerMeta& m)
+void
+getMeta(const TextContainerMeta& m, KoXmlWriter& out)
 {
-    if (m.meta.is<SlideNumberMCAtom>())
-        return m.meta.get<SlideNumberMCAtom>()->position;
-    if (m.meta.is<DateTimeMCAtom>())
-        return m.meta.get<DateTimeMCAtom>()->position;
-    if (m.meta.is<GenericDateMCAtom>())
-        return m.meta.get<GenericDateMCAtom>()->position;
-    if (m.meta.is<HeaderMCAtom>())
-        return m.meta.get<HeaderMCAtom>()->position;
-    if (m.meta.is<FooterMCAtom>())
-        return m.meta.get<FooterMCAtom>()->position;
-    if (m.meta.is<RTFDateTimeMCAtom>())
-        return m.meta.get<RTFDateTimeMCAtom>()->position;
-    return -1;
+    const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
+    const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
+    const GenericDateMCAtom* c = m.meta.get<GenericDateMCAtom>();
+    const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
+    const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
+    const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
+    if (a) {
+        out.startElement("text:page-number");
+        out.endElement();
+    }
+    if (b) {
+        // TODO: datetime format
+        out.startElement("text:time");
+        out.endElement();
+    }
+    if (c) {
+        // TODO: datetime format
+        out.startElement("text:date");
+        out.endElement();
+    }
+    if (d) {
+        out.startElement("presentation:header");
+        out.endElement();
+    }
+    if (e) {
+        out.startElement("presentation:footer");
+        out.endElement();
+    }
+    if (f) {
+        // TODO
+    }
 }
 
 int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
@@ -1859,10 +1877,10 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
         end = mouseover->range.end;
     }
 
-    //out.xml.startElement("text:span");
+    out.xml.startElement("text:span");
 
     if (meta) {
-        // TODO: output meta object
+        getMeta(*meta, out.xml);
     } else {
         int len = end - start;
         if (text[end-1] == '\r' || text[end-1] == '\v') {
@@ -1870,10 +1888,10 @@ int PptToOdp::processFragment(const PPT::TextContainer& tc, Writer& out,
         }
         const QString txt
                 = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
-        //out.xml.addTextNode(txt);
+        out.xml.addTextNode(txt);
     }
 
-    //out.xml.endElement();
+    out.xml.endElement();
 
     return end;
 }
@@ -1883,9 +1901,6 @@ int PptToOdp::processTextLine(const PPT::TextContainer& tc, Writer& out,
                               int start, int end) {
     int pos = start;
     while (pos < end) {
-        // start a span
-        // out.xml.startElement("text:span");
-        // out.xml.endElement();
         int r = processFragment(tc, out, text, pos, end);
         if (r <= pos) {
             // some error
@@ -1923,7 +1938,9 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
     const StyleTextPropAtom *style = tc.style.data();
     if (!style) {
         if (!tc.master) {
-            //out.xml.addTextNode(text);
+            out.xml.startElement("text:p");
+            out.xml.addTextNode(text);
+            out.xml.endElement();
             //qDebug() << "No StyleTextPropAtom for '" << QString(text).replace('\r', '\n') << "'";
         }
         return;
@@ -1940,12 +1957,13 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
             return;
         }
         // open paragraph of list:text
-        // startElement ...
+        out.xml.startElement("text:p");
 
         if (pfend > text.size()) {
             pfend = text.size();
         }
         int r = processTextLine(tc, out, text, pfpos, pfend);
+        out.xml.endElement();
         if (r < 0) {
             qDebug() << "TextCFRuns extends too far (" << pfend << ") for '"
                     << QString(text).replace('\r', '\n') << "' " << r;
@@ -1954,6 +1972,8 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
 
         pfpos = pfend;
     }
+
+    return;
 
     if (style  && style->rgTextPFRun.size()) {
         //Paragraph formatting that applies to substring
