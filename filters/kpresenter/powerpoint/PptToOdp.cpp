@@ -35,8 +35,22 @@ using namespace PPT;
 
 namespace
 {
-static const QString mm("%1mm");
-
+    QString mm(double v) {
+        static const QString mm("%1mm");
+        return mm.arg(v, 0, 'f');
+    }
+    QString cm(double v) {
+        static const QString cm("%1cm");
+        return cm.arg(v, 0, 'f');
+    }
+    QString pt(double v) {
+        static const QString pt("%1pt");
+        return pt.arg(v, 0, 'f');
+    }
+    QString percent(double v) {
+        static const QString percent("%1%");
+        return percent.arg(v, 0, 'f');
+    }
 
 /**
  * Return the bounding rectangle for this object.
@@ -137,22 +151,22 @@ PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) co
 }
 QString PptToOdp::Writer::vLength(qreal length)
 {
-    return mm.arg(length*scaleY);
+    return mm(length*scaleY);
 }
 
 QString PptToOdp::Writer::hLength(qreal length)
 {
-    return mm.arg(length*scaleX);
+    return mm(length*scaleX);
 }
 
 QString PptToOdp::Writer::vOffset(qreal offset)
 {
-    return mm.arg(yOffset + offset*scaleY);
+    return mm(yOffset + offset*scaleY);
 }
 
 QString PptToOdp::Writer::hOffset(qreal offset)
 {
-    return mm.arg(xOffset + offset*scaleX);
+    return mm(xOffset + offset*scaleX);
 }
 
 PptToOdp::PptToOdp() : p(0)
@@ -305,8 +319,8 @@ definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
     // x and y are given in master units (1/576 inches)
     double sizeX = size.x * (25.4 / (double)576);
     double sizeY = size.y * (25.4 / (double)576);
-    QString pageWidth = QString("%1mm").arg(sizeX);
-    QString pageHeight = QString("%1mm").arg(sizeY);
+    QString pageWidth = mm(sizeX);
+    QString pageHeight = mm(sizeY);
 
     KoGenStyle pl(KoGenStyle::StylePageLayout);
     pl.setAutoStyleInStylesDotXml(true);
@@ -573,7 +587,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     // fo:font-size
     if (cf && cf->masks.size) {
-        style.addProperty("fo:font-size", QString("%1pt").arg(cf->fontSize),
+        style.addProperty("fo:font-size", pt(cf->fontSize),
                           text);
     }
     // fo:font-style: "italic", "normal" or "oblique
@@ -880,7 +894,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                                      QString("%1%").arg(pf.bulletSize));
                 } else if (pf.bulletSize >= -4000 && pf.bulletSize <= -1) {
                     out.addAttribute("text:bullet-relative-size",
-                                     QString("%1pt").arg(pf.bulletSize));
+                                     percent(pf.bulletSize));
                 }
             }
         } else {
@@ -2067,7 +2081,7 @@ QString PptToOdp::pptMasterUnitToCm(unsigned int value) const
     qreal result = value;
     result *= 2.54;
     result /= 576;
-    return QString("%1cm").arg(result);
+    return cm(result);
 }
 
 QString PptToOdp::textAlignmentToString(unsigned int value) const
@@ -2407,7 +2421,7 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     const LineWidth* lw = get<LineWidth>(o);
     const LineEndArrowWidth* lew = get<LineEndArrowWidth>(o);
     if (lw && lew) {
-        style.addProperty("draw:marker-end-width", QString("%1cm").arg(lw->lineWidth*lew->lineEndArrowWidth), gt);
+        style.addProperty("draw:marker-end-width", cm(lw->lineWidth*lew->lineEndArrowWidth), gt);
     }
     // draw:marker-start
     const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);
@@ -2419,8 +2433,8 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:marker-start-width
     const LineStartArrowWidth* lsw = get<LineStartArrowWidth>(o);
     if (lw && lsw) {
-        style.addProperty("draw:marker-start-width", QString("%1cm").arg(
-                              lw->lineWidth*lsw->lineStartArrowWidth), gt);
+        style.addProperty("draw:marker-start-width",
+                          cm(lw->lineWidth*lsw->lineStartArrowWidth), gt);
     }
     // draw:measure-align
     // draw:measure-vertical-align
@@ -2436,19 +2450,18 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:shadow-offset-x
     const ShadowOffsetX* sox =  get<ShadowOffsetX>(o);
     if (sox) {
-        style.addProperty("draw:shadow-offset-x", QString("%1cm").arg(sox->shadowOffsetX), gt);
+        style.addProperty("draw:shadow-offset-x", cm(sox->shadowOffsetX), gt);
     }
     // draw:shadow-offset-y
     const ShadowOffsetY* soy =  get<ShadowOffsetY>(o);
     if (soy) {
-        style.addProperty("draw:shadow-offset-y", QString("%1cm").arg(soy->shadowOffsetY), gt);
+        style.addProperty("draw:shadow-offset-y", cm(soy->shadowOffsetY), gt);
     }
     // draw:shadow-opacity
     const ShadowOpacity* so = get<ShadowOpacity>(o);
     if (so) {
         float opacity = toQReal(so->shadowOpacity);
-        style.addProperty("draw:shadow-opacity",
-                          QString("%1%").arg(opacity, 0, 'f'), gt);
+        style.addProperty("draw:shadow-opacity", percent(opacity), gt);
     }
     // draw:show-unit
     // draw:start-guide
@@ -2549,7 +2562,7 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // svg:stroke-width from 2.3.8.14 lineWidth
     if (lw) {
         style.addProperty("svg:stroke-width",
-                          QString("%1pt").arg(lw->lineWidth / 12700.f), gt);
+                          pt(lw->lineWidth / 12700.f), gt);
     }
     // svg:width
     // svg:x
