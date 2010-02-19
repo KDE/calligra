@@ -27,6 +27,7 @@
 #include "frames/KWTextFrameSet.h"
 
 #include <KoTextEditor.h>
+#include <KoShapeController.h>
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -38,11 +39,11 @@
 #include <QTextDocument>
 #include <KMenu>
 
-KWRdfDocker::KWRdfDocker(KWDocument *document)
+KWRdfDocker::KWRdfDocker()
     : m_canvas(0),
     m_lastCursorPosition(-1),
     m_autoUpdate(false),
-    m_document(document),
+    m_document(0),
     m_timer(new QTimer(this)),
     m_textDocument(0)
 {
@@ -54,24 +55,11 @@ KWRdfDocker::KWRdfDocker(KWDocument *document)
     widgetDocker.setupUi(widget);
     widgetDocker.refresh->setIcon(KIcon("view-refresh"));
     // Semantic view
-    if (QTreeWidget *v = widgetDocker.semanticView) {
-        m_rdfSemanticTree = RdfSemanticTree::createTree(v);
+    m_rdfSemanticTree = RdfSemanticTree::createTree(widgetDocker.semanticView);
 
-        v->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(v, SIGNAL(customContextMenuRequested(const QPoint &)),
-                this, SLOT(showSemanticViewContextMenu(const QPoint &)));
-
-        if (m_document) {
-            widgetDocker.semanticView->setDocumentRdf(m_document->documentRdf());
-        }
-        widgetDocker.semanticView->setCanvas(0); // TODO can this be removed?
-    }
-    if (m_document) {
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(RdfSemanticItem*)),
-                this, SLOT(semanticObjectAdded(RdfSemanticItem*)));
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(RdfSemanticItem*)),
-                this, SLOT(semanticObjectUpdated(RdfSemanticItem*)));
-    }
+    widgetDocker.semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(showSemanticViewContextMenu(const QPoint &)));
     setWidget(widget);
 
     connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateDataForced()));
@@ -87,6 +75,15 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 {
     //kDebug(30015) << "canvas:" << canvas;
     m_canvas = canvas;
+    KWDocument *newDoc = dynamic_cast<KWDocument*>(m_canvas->shapeController()->resourceManager()->odfDocument());
+    if (newDoc != m_document) {
+        m_document = newDoc;
+        widgetDocker.semanticView->setDocumentRdf(m_document->documentRdf());
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(RdfSemanticItem*)),
+                this, SLOT(semanticObjectAdded(RdfSemanticItem*)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(RdfSemanticItem*)),
+                this, SLOT(semanticObjectUpdated(RdfSemanticItem*)));
+    }
     widgetDocker.semanticView->setCanvas(m_canvas);
 
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),

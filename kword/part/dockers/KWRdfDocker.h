@@ -43,7 +43,7 @@ class KWRdfDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 
 public:
-    explicit KWRdfDocker(KWDocument *document);
+    explicit KWRdfDocker();
     ~KWRdfDocker();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);

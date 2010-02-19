@@ -35,7 +35,7 @@ QString KWRdfDockerFactory::id() const
 
 QDockWidget* KWRdfDockerFactory::createDockWidget()
 {
-    KWRdfDocker *widget = new KWRdfDocker(m_view->kwdocument());
+    KWRdfDocker *widget = new KWRdfDocker();
     widget->setObjectName(id());
 
     return widget;
