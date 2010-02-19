@@ -31,7 +31,6 @@
 
 #include <QtCore/QBuffer>
 
-
 using namespace PPT;
 
 namespace
@@ -271,6 +270,8 @@ KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
     return KoFilter::OK;
 }
 
+namespace
+{
 void
 addElement(KoGenStyle& style, const char* name,
            const QMap<const char*, QString>& m,
@@ -338,6 +339,36 @@ getPP(const DocumentContainer* dc) {
         }
     }
     return 0;
+}
+const char* dashses[11] = {
+    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
+    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
+};
+const char* arrowHeads[6] = {
+    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+};
+const char* getFillType(quint32 fillType)
+{
+    switch (fillType) {
+    case 2: // msofillTexture
+    case 3: // msofillPicture
+        return "bitmap";
+    case 4: // msofillShade
+    case 5: // msofillShadeCenter
+    case 6: // msofillShadeShape
+    case 7: // msofillShadeScale
+    case 8: // msofillShadeTitle
+        return "gradient";
+    case 1: // msofillPattern
+        return "hatch";
+    case 9: // msofillBackground
+        return "none";
+    case 0: // msofillSolid
+    default:
+        return "solid";
+    }
+}
 }
 
 void PptToOdp::defineDefaultTextStyle(KoGenStyles& styles)
@@ -438,9 +469,14 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
     const KoGenStyle::PropertyType dpt = KoGenStyle::DrawingPageType;
     style.addProperty("draw:background-size", "border", dpt);
     style.addProperty("draw:fill", "none", dpt);
+    style.addProperty("style:repeat", "stretch", dpt);
     style.setDefaultStyle(true);
+    const OfficeArtDggContainer* drawingGroup = 0;
+    if (p->documentContainer) {
+        drawingGroup = &p->documentContainer->drawingGroup.OfficeArtDgg;
+    }
     const PPT::SlideHeadersFootersContainer* hf = getSlideHF();
-    defineDrawingPageStyle(style, (hf) ?&hf->hfAtom :0);
+    defineDrawingPageStyle(style, drawingGroup, (hf) ?&hf->hfAtom :0);
     styles.lookup(style, "");
 }
 
@@ -693,22 +729,42 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // text:number-lines
 }
 
-void PptToOdp::defineDrawingPageStyle(KoGenStyle& style,
+template <typename T>
+void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
                                       const HeadersFootersAtom* hf)
 {
     const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
-    // draw:background-size
+    // draw:background-size ("border", or "full")
+    const FillStyleBooleanProperties* fs
+            = (o) ?get<FillStyleBooleanProperties>(*o) :0;
+    if (fs) {
+        style.addProperty("draw:background-size",
+                          (fs->fUseFillUseRext && fs->fillUseRect)
+                          ?"border" :"full", dp);
+    }
+    // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
+    const FillType* fillType = (o) ?get<FillType>(*o) :0;
+    if (fs && fs->fUseFilled && !fs->fFilled) {
+        style.addProperty("draw:fill", "none", dp);
+    } else if (fillType) {
+        style.addProperty("draw:fill", getFillType(fillType->fillType), dp);
+    }
     // draw:fill-color
     // draw:fill-gradient-name
     // draw:fill-hatch-name
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
+    const FillBlip* fb = (o) ?get<FillBlip>(*o) :0;
+    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
+    if (!fillImagePath.isEmpty()) {
+        style.addProperty("draw:fill-image-name",
+                          "fillImage" + QString::number(fb->fillBlip), dp);
+    }
     // draw:fill-image-ref-point-x
     // draw:fill-image-ref-point-y
     // draw:fill-image-ref-point
     // draw:fill-image-width
-    // draw:fill
     // draw:gradient-step-count
     // draw:opacity-name
     // draw:opacity
@@ -1020,12 +1076,23 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
         const HeadersFootersAtom* hf = 0;
-        if (sc && sc->perSlideHFContainer) {
-            hf = &sc->perSlideHFContainer->hfAtom;
-        } else if (mm && mm->perSlideHeadersFootersContainer) {
-            hf = &mm->perSlideHeadersFootersContainer->hfAtom;
+        const OfficeArtSpContainer* scp = 0;
+        if (sc) {
+            if (sc->perSlideHFContainer) {
+                hf = &sc->perSlideHFContainer->hfAtom;
+            }
+            if (sc->drawing.OfficeArtDg.shape) {
+                scp = sc->drawing.OfficeArtDg.shape.data();
+            }
+        } else if (mm) {
+            if (mm->perSlideHeadersFootersContainer) {
+                hf = &mm->perSlideHeadersFootersContainer->hfAtom;
+            }
+            if (mm->drawing.OfficeArtDg.shape) {
+                scp = mm->drawing.OfficeArtDg.shape.data();
+            }
         }
-        defineDrawingPageStyle(dp, hf);
+        defineDrawingPageStyle(dp, scp, hf);
         drawingPageStyles[m] = styles.lookup(dp, "Mdp");
     }
     QString notesMasterPageStyle;
@@ -1038,7 +1105,8 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         }
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(true);
-        defineDrawingPageStyle(dp, hf);
+        defineDrawingPageStyle(dp,
+                p->notesMaster->drawing.OfficeArtDg.shape.data(), hf);
         notesMasterPageStyle = styles.lookup(dp, "Mdp");
         drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
@@ -1055,7 +1123,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         if (sc->perSlideHFContainer) {
             hf = &sc->perSlideHFContainer->hfAtom;
         }
-        defineDrawingPageStyle(dp, hf);
+        defineDrawingPageStyle(dp, sc->drawing.OfficeArtDg.shape.data(),  hf);
         drawingPageStyles[sc] = styles.lookup(dp, "dp");
     }
 
@@ -1071,7 +1139,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
         dp.setParentName(notesMasterPageStyle);
-        defineDrawingPageStyle(dp, hf);
+        defineDrawingPageStyle(dp, nc->drawing.OfficeArtDg.shape.data(), hf);
         drawingPageStyles[nc] = styles.lookup(dp, "dp");
     }
 }
@@ -1187,17 +1255,16 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         master.addAttribute("style:page-layout-name", slidePageLayoutName);
         master.addAttribute("draw:style-name", drawingPageStyles[m]);
         currentMaster = m;
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+        Writer out(writer, styles, true);
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 drawing->OfficeArtDg.groupShape.rgfb) {
-            QBuffer buffer;
-            buffer.open(QIODevice::WriteOnly);
-            KoXmlWriter writer(&buffer);
-            Writer out(writer, styles, true);
             processObjectForBody(co, out);
-            master.addChildElement("draw:frame",
-                                   QString::fromUtf8(buffer.buffer(),
-                                                     buffer.buffer().size()));
         }
+        master.addChildElement("", QString::fromUtf8(buffer.buffer(),
+                                                     buffer.buffer().size()));
         if (notesBuffer.buffer().size()) {
             master.addChildElement("presentation:notes",
                                    QString::fromUtf8(notesBuffer.buffer(),
@@ -1274,9 +1341,7 @@ void PptToOdp::addFrame(KoGenStyle& style, Writer& out, const char* presentation
 
 QByteArray PptToOdp::createContent(KoGenStyles& styles)
 {
-    QByteArray presentationData;
-    QBuffer presentationBuffer(&presentationData);
-    {
+    QBuffer presentationBuffer;
     presentationBuffer.open(QIODevice::WriteOnly);
     KoXmlWriter presentationWriter(&presentationBuffer);
 
@@ -1286,7 +1351,6 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForBody(c, out);
     }
-}
 
     QByteArray contentData;
     QBuffer contentBuffer(&contentData);
@@ -1674,7 +1738,7 @@ int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
     return (pos == end) ?0 :-pos;
 }
 
-int PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
+void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
                               const TextPFRun& pf,
                               const QString& text, int start, int end,
                               QStack<QString>& levels)
@@ -2259,19 +2323,9 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
         break;
     }
 }
-namespace
-{
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
-const char* arrowHeads[6] = {
-    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-};
-}
 template <typename T>
-void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMasterStyleAtom* listStyles)
+void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
+                                       const TextMasterStyleAtom* listStyles)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     // dr3d:ambient-color
@@ -2317,13 +2371,12 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
     // draw:end-line-spacing-horizontal
     // draw:end-line-spacing-vertical
     // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    const FillBlip* fb = get<FillBlip>(o);
-    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
     const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
-    if (!fillImagePath.isEmpty()) {
-        style.addProperty("draw:fill", "bitmap", gt);
-    } else if (fs && fs->fUseFilled) {
-        style.addProperty("draw:fill", fs->fFilled ? "solid" : "none", gt);
+    const FillType* fillType = get<FillType>(o);
+    if (fs && fs->fUseFilled && !fs->fFilled) {
+        style.addProperty("draw:fill", "none", gt);
+    } else if (fillType) {
+        style.addProperty("draw:fill", getFillType(fillType->fillType), gt);
     }
     // draw:fill-color
     const FillColor* fc = get<FillColor>(o);
@@ -2335,6 +2388,8 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, T& o, const TextMaster
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
+    const FillBlip* fb = get<FillBlip>(o);
+    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
     if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill-image-name",
                           "fillImage" + QString::number(fb->fillBlip), gt);

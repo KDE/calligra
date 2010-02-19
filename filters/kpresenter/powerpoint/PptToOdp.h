@@ -191,12 +191,13 @@ private:
                                    const PPT::TextPFException* pf,
                                    const PPT::TextPFException9* pf9);
     /* Extract data into the style */
-    void defineDrawingPageStyle(KoGenStyle& style,
+    template <typename T>
+    void defineDrawingPageStyle(KoGenStyle& style, const T* o,
                                 const PPT::HeadersFootersAtom* hf);
 
     /* Extract data into the style */
     template <typename T>
-    void defineGraphicProperties(KoGenStyle& style, T& o,
+    void defineGraphicProperties(KoGenStyle& style, const T& o,
                                  const PPT::TextMasterStyleAtom* listStyles = 0);
     void defineGraphicPropertiesListStyles(KoGenStyle& style,
                                            const PPT::TextMasterStyleAtom& listStyles);
@@ -225,7 +226,7 @@ private:
     int processTextSpans(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
 
-    int processTextLine(Writer& out, const PPT::TextContainer& tc,
+    void processTextLine(Writer& out, const PPT::TextContainer& tc,
                         const PPT::TextPFRun& pf, const QString& text,
                         int start, int end, QStack<QString>& levels);
 
@@ -569,6 +570,7 @@ private:
                 return b->rgfb[pib].anon.get<PPT::OfficeArtFBSE>()->rgbUid;
             }
         }
+        qDebug() << "Could not find image for pib " << pib;
         return QByteArray();
     }
     const PPT::FontEntityAtom*
