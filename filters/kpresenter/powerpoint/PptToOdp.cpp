@@ -1860,6 +1860,7 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
        TextCFRuns correspond to text:span elements as do
     */
 
+    static const QRegExp lineend("[\v\r]");
     const QString text = getText(tc);
 
     // loop over all the '\r' delimited lines
@@ -1868,7 +1869,7 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
     levels.reserve(5);
     int pos = 0;
     while (pos < text.length()) {
-        int end = text.indexOf('\r', pos);
+        int end = text.indexOf(lineend, pos);
         if (end == -1) end = text.size();
 
         processTextLine(out, tc, text, pos, end, levels);
