@@ -112,21 +112,21 @@ PptToOdp::getRect(const OfficeArtSpContainer &o)
     return QRect(0, 0, 1, 1);
 }
 PptToOdp::Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-                         bool stylexml)
+                         bool stylesxml_)
       : xOffset(0),
         yOffset(0),
         scaleX(25.4 / 576),
         scaleY(25.4 / 576),
         xml(xmlWriter),
         styles(kostyles),
-        stylesxml(stylexml)
+        stylesxml(stylesxml_)
 {
 }
 
 PptToOdp::Writer
 PptToOdp::Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
 {
-    Writer w(xml, styles);
+    Writer w(xml, styles, stylesxml);
     w.xOffset = xOffset + oldCoords.x() * scaleX;
     w.yOffset = yOffset + oldCoords.y() * scaleY;
     w.scaleX = scaleX * oldCoords.width() / newCoords.width();
@@ -1791,19 +1791,22 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     quint16 paragraphIndent = pf->indentLevel;
     // [MS-PPT].pdf says the indentation level can be 4 at most
     if (paragraphIndent > 4) paragraphIndent = 4;
+    bool hasBullet = pf->pf.masks.hasBullet && pf->pf.bulletFlags->fHasBullet;
     qint16 bullet = 0;
     // Check if this paragraph has a bullet
-    if (pf->pf.masks.bulletChar) {
+    if (hasBullet && pf->pf.masks.bulletChar) {
         bullet = pf->pf.bulletChar;
     } else {
         // If text paragraph exception doesn't have a definition on bullet
         // then we'll have to check master style with our indentation level
+        /* not sure this is correct, investigate if inheritance does not work
         const TextPFException *masterPF
                 = masterTextPFException(tc.textHeaderAtom.textType,
                                         pf->indentLevel);
         if (masterPF && masterPF->masks.bulletChar) {
             bullet = masterPF->bulletChar;
         }
+        */
     }
     QString listStyle;
     bool islist = bullet || paragraphIndent > 0;
