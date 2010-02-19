@@ -67,30 +67,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
     MSOOXML::Utils::XmlWriteBuffer linkBuf;
     body = linkBuf.setWriter(body);
 
-    if (isStartElement()) {
-        if (attributes().hasAttribute("r:id")) {
-            QString id(attributes().value("r:id").toString());
-            link_target = m_context->relationships->linkTarget(id);
-            kDebug() << "link_target = " << link_target;
-        }
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(id)
+    if (id.isEmpty()) {
+        link_target.clear();
+    }
+    else {
+        link_target = m_context->relationships->linkTarget(id);
+    }
+    kDebug() << "link_target:" << link_target;
 
-        while (!atEnd()) {
-            readNext();
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
             ELSE_TRY_READ_IF(r)
-            BREAK_IF_END_OF(CURRENT_EL);
+            //! @todo add ELSE_WRONG_FORMAT
         }
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 
-    if (isEndElement()) {
-        body = linkBuf.originalWriter();
-        body->startElement("text:a");
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
-        (void)linkBuf.releaseWriter();
-        body->endElement(); // text:a
-    }
+    body = linkBuf.originalWriter();
+    body->startElement("text:a");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+    (void)linkBuf.releaseWriter();
+    body->endElement(); // text:a
 
     READ_EPILOGUE
 }

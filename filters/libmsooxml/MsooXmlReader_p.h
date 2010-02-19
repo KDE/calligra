@@ -111,25 +111,42 @@
 #define QUALIFIED_NAME_IS(name) \
     (/*aaaa(STRINGIFY(name)) &&*/ qualifiedName() == QLatin1String(QUALIFIED_NAME(name)))
 
-#define TRY_READ_IF(name) \
+#define TRY_READ_IF_INTERNAL(name) \
     if (QUALIFIED_NAME_IS(name)) { \
         kDebug() << "TRY_READ_IF " STRINGIFY(name) " started"; \
         TRY_READ(name); \
         kDebug() << "TRY_READ_IF " STRINGIFY(name) " finished"; \
     }
 
-#define ELSE_TRY_READ_IF(name) \
-    else TRY_READ_IF(name)
+//! Tries to read element @a name by entering into read_{name} function.
+//! Must be enclosed within if (isStartElement()), otherwise error will be returned.
+#define TRY_READ_IF(name) \
+    if (!isStartElement()) { /* sanity check */ \
+        raiseError(i18n("Start element expected, found %1", QLatin1String(STRINGIFY(name)))); \
+        return KoFilter::WrongFormat; \
+    } \
+    TRY_READ_IF_INTERNAL(name)
 
-#define TRY_READ_IF_NS(ns, name) \
+#define ELSE_TRY_READ_IF(name) \
+    else TRY_READ_IF_INTERNAL(name)
+
+#define TRY_READ_IF_NS_INTERNAL(ns, name) \
     if (qualifiedName() == QLatin1String(JOIN(STRINGIFY(ns) ":", name))) { \
         kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " started"; \
         TRY_READ(name); \
         kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " finished"; \
     }
 
+//! Like TRY_READ_IF() but namespace for explicit namespace @a ns.
+#define TRY_READ_IF_NS(ns, name) \
+    if (!isStartElement()) { /* sanity check */ \
+        raiseError(i18n("Start element expected, found %1", QLatin1String(JOIN(STRINGIFY(ns) ":", name)))); \
+        return KoFilter::WrongFormat; \
+    } \
+    else TRY_READ_IF_NS_INTERNAL(ns, name)
+
 #define ELSE_TRY_READ_IF_NS(ns, name) \
-    else TRY_READ_IF_NS(ns, name)
+    else TRY_READ_IF_NS_INTERNAL(ns, name)
 
 #define ELSE_WRONG_FORMAT \
     else { \

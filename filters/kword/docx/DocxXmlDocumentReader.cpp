@@ -531,9 +531,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
 //! @todo    TRY_READ_ATTR(dyaOrig)?
     while (!atEnd()) {
         readNext();
-//! @todo support VML here
-        TRY_READ_IF_NS(o, OLEObject)
-//! @todo add ELSE_WRONG_FORMAT
+        if (isStartElement()) {
+            //! @todo support VML here
+            TRY_READ_IF_NS(o, OLEObject)
+            //! @todo add ELSE_WRONG_FORMAT
+        }
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
