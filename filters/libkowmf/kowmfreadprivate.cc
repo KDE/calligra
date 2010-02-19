@@ -1055,14 +1055,17 @@ void KoWmfReadPrivate::createPenIndirect(quint32, QDataStream& stream)
 
 void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
 {
-    qint16  pointSize, rotation;
+    qint16  height;             // Height of the character cell
+    qint16  width;              // Average width (not used)
+    qint16  rotation;           // The rotation of the text in 1/10th degrees
+    qint16  orientation;        // The rotation of each character
     quint16 weight, property, fixedPitch, arg;
 
     KoWmfFontHandle* handle = new KoWmfFontHandle;
 
     if (addHandle(handle)) {
-        stream >> pointSize >> arg;
-        stream >> rotation >> arg;
+        stream >> height >> width;
+        stream >> rotation >> orientation;
         stream >> weight >> property >> arg >> arg;
         stream >> fixedPitch;
 
@@ -1070,12 +1073,27 @@ void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
         // TODO: memorisation of rotation in object Font
         mTextRotation = -rotation / 10;
         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
-        // TODO: investigation why some test case need -2
-        // size of font in logical point
-        handle->font.setPointSize(qAbs(pointSize) - 2);
-        handle->font.setWeight((weight >> 3));
+
+        // A negative width means to use device units.  This is irrelevant for us here.
+        height = qAbs(height);
+        // FIXME: For some reason this value needs to be multiplied by
+        //        a factor.  0.6 seems to give a good result, but why??
+        handle->font.setPointSize(height * 6 / 10);
+        if (weight == 0)
+            weight = QFont::Normal;
+        else {
+            // Linear transform between MS weights to Qt weights
+            // MS: 400=normal, 700=bold
+            // Qt: 50=normal, 75=bold
+            // This makes the line cross x=0 at y=50/3.  (x=MS weight, y=Qt weight)
+            //
+            // FIXME: Is this a linear relationship?
+            weight = (50 + 3 * ((weight * (75-50))/(700-400))) / 3;
+        }
+        handle->font.setWeight(weight);
         handle->font.setItalic((property & 0x01));
         handle->font.setUnderline((property & 0x100));
+        // TODO: Strikethrough
 
         // font name
         int    maxChar = (size - 12) * 2;
