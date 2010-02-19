@@ -52,8 +52,16 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
 
-static const int minimumColumnCount = 1024;
-static const int minimumRowCount = 32768;
+// The minimal number of rows and columns. This is used to fill remaming rows and columns with the
+// default style what is needed cause Excel does always define the default for all rows and columns
+// while ODF does only for those that are explicit defined.
+static const uint minimumColumnCount = 1024;
+static const uint minimumRowCount = 32768;
+
+// The maximal number of rows and columns. This allows us to cut rows and columns away that would
+// not be handled by the consumer application anyway cause they reached the applications limited.
+static const uint maximalColumnCount = 32768;
+static const uint maximalRowCount = 32768; //65536
 
 // UString -> QConstString conversion. Use  to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
@@ -614,28 +622,30 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
        //xmlWriter->addAttribute("table:protection-key", uint(sheet->password()));
     }
 
-    for (unsigned i = 0; i <= sheet->maxColumn(); ++i) {
+    const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
+    for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForBody(sheet, i, xmlWriter);
     }
 
     // in odf default-cell-style's only apply to cells/rows/columns that are present in the file while in Excel
     // row/column styles should apply to all cells in that row/column. So, try to fake that behavior by writting
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
-    if (sheet->maxColumn() < minimumColumnCount-1) {
+    if (columnCount < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
-        xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - sheet->maxColumn());
+        xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - columnCount);
         xmlWriter->endElement();
     }
 
     // add rows
-    for (unsigned i = 0; i <= sheet->maxRow();) {
+    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
+    for (unsigned i = 0; i <= rowCount;) {
         i += processRowForBody(sheet, i, xmlWriter);
     }
 
     // same we did above with columns is also needed for rows.
-    if(sheet->maxRow() < minimumRowCount-1) {
+    if(rowCount < minimumRowCount-1) {
         xmlWriter->startElement("table:table-row");
-        xmlWriter->addAttribute("table:number-rows-repeated", minimumRowCount - 1 - sheet->maxRow());
+        xmlWriter->addAttribute("table:number-rows-repeated", minimumRowCount - 1 - rowCount);
         xmlWriter->endElement();
     }
 
@@ -657,11 +667,13 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     QString styleName = styles->lookup(style, "ta");
     sheetStyles.append(styleName);
 
-    for (unsigned i = 0; i <= sheet->maxColumn(); ++i) {
+    const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
+    for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForStyle(sheet, i, xmlWriter);
     }
 
-    for (unsigned i = 0; i <= sheet->maxRow();) {
+    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
+    for (unsigned i = 0; i <= rowCount;) {
         i += processRowForStyle(sheet, i, xmlWriter);
     }
 }
@@ -889,7 +901,8 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
     int lastCol = row->sheet()->maxCellsInRow(rowIndex);
 
     // find repeating rows by forward searching
-    for (unsigned i = rowIndex + 1; i <= sheet->maxRow(); ++i) {
+    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
+    for (unsigned i = rowIndex + 1; i <= rowCount; ++i) {
         Row *nextRow = sheet->row(i, false);
         if(!nextRow) break;
         if (*row != *nextRow) break; // do the rows have the same properties?
