@@ -645,21 +645,42 @@ void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
     if (!record) return;
     if (!d->sheet) return;
 
-    unsigned firstColumn = record->firstColumn();
-    unsigned lastColumn = record->lastColumn();
-    unsigned row = record->row();
+    const int firstColumn = record->firstColumn();
+    const int lastColumn = record->lastColumn();
+    const int row = record->row();
 
-    for (unsigned column = firstColumn; column <= lastColumn; column++) {
+    Cell *prevCell = 0;
+    int repeat = 1;
+    int column = lastColumn;
+
+    while(column >= firstColumn) {
         Cell* cell = d->sheet->cell(column, row, true);
-        if (cell) {
-            unsigned i = column - firstColumn;
-            Value value;
-            if (record->isInteger(i))
-                value.setValue(record->asInteger(i));
-            else
-                value.setValue(record->asFloat(i));
-            cell->setValue(value);
-            cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
+        const int i = column - firstColumn;
+        Value value;
+        if (record->isInteger(i))
+            value.setValue(record->asInteger(i));
+        else
+            value.setValue(record->asFloat(i));
+        cell->setValue(value);
+        cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
+        
+        if(prevCell) {
+            if(*prevCell == *cell) {
+                ++repeat;
+            } else {
+                if(repeat > 1) {
+                    prevCell->setColumnRepeat(repeat);
+                    repeat = 1;
+                }
+            }
+        }
+        prevCell = cell;
+        --column;
+        if(column < firstColumn) {
+            if(repeat > 1) {
+                prevCell->setColumnRepeat(repeat);
+            }
+            break;
         }
     }
 }
