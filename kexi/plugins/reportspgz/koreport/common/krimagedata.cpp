@@ -116,11 +116,9 @@ void KRImageData::createProperties()
 
     m_staticImage = new KoProperty::Property("static-image", QPixmap(), "Static Image", "Static Image");
 
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_resizeMode);
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_staticImage);
 }
 
@@ -130,7 +128,7 @@ void KRImageData::setColumn(QString c)
     m_controlSource->setValue(c);
 }
 
-QString KRImageData::column()
+QString KRImageData::controlSource()
 {
     return m_controlSource->value().toString();
 }

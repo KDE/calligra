@@ -29,7 +29,7 @@ class ReportEntityChart : public QObject, public ReportRectEntity, public KRChar
 {
     Q_OBJECT
 public:
-    ReportEntityChart(ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityChart(ReportDesigner *, QGraphicsScene* scene, QPointF pos);
     ReportEntityChart(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
 
     virtual ~ReportEntityChart();

@@ -108,12 +108,10 @@ void KRFieldData::createProperties()
     _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), "Use Sub Total", "Use Sub Total");
     _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), "Track Total Format", "Track Total Format");
 #endif
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_font);
     m_set->addProperty(m_backgroundColor);
     m_set->addProperty(m_foregroundColor);

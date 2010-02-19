@@ -104,12 +104,10 @@ void KRLabelData::createProperties()
     m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
 
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_text);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_font);
     m_set->addProperty(m_backgroundColor);
     m_set->addProperty(m_foregroundColor);
@@ -117,13 +115,6 @@ void KRLabelData::createProperties()
     m_set->addProperty(m_lineWeight);
     m_set->addProperty(m_lineColor);
     m_set->addProperty(m_lineStyle);
-}
-
-QRectF KRLabelData::_rect()
-{
-    QRectF r;
-    r.setRect(m_pos.toScene().x(), m_pos.toScene().y(), m_size.toScene().width(), m_size.toScene().height());
-    return r;
 }
 
 Qt::Alignment KRLabelData::textFlags() const

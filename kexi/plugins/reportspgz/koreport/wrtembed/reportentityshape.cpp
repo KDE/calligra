@@ -48,7 +48,7 @@ void ReportEntityShape::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene)
+ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene, QPointF pos)
         : ReportRectEntity(d)
 {
     init(scene);

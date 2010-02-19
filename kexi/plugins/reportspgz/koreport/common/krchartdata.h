@@ -68,7 +68,7 @@ public:
     QStringList masterFields();
 
 protected:
-    KRSize m_size;
+
     KoProperty::Property * m_dataSource;
     KoProperty::Property * m_font;
     KoProperty::Property * m_chartType;

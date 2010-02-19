@@ -36,7 +36,7 @@ class ReportEntityLine : public QObject, public KRLineData, public QGraphicsLine
 {
     Q_OBJECT
 public:
-    ReportEntityLine(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityLine(ReportDesigner *, QGraphicsScene * scene, QPointF pos);
     ReportEntityLine(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);

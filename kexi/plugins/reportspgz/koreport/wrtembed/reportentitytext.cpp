@@ -51,7 +51,7 @@ void ReportEntityText::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 
-ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene)
+ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, QPointF pos)
         : ReportRectEntity(rw)
 {
     init(scene);

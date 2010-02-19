@@ -33,7 +33,7 @@ class ReportEntityImage : public QObject, public KRImageData, public ReportRectE
 {
     Q_OBJECT
 public:
-    ReportEntityImage(ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityImage(ReportDesigner *, QGraphicsScene* scene, QPointF pos);
     ReportEntityImage(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
 
     virtual ~ReportEntityImage();

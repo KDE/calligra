@@ -56,11 +56,10 @@ public:
     QString mode();
     bool isInline();
     QString inlineImageData();
-    QString column();
+    QString controlSource();
 
 protected:
-    QRect _rect();
-    KRSize m_size;
+
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;

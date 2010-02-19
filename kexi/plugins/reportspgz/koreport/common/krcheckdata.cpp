@@ -80,11 +80,9 @@ void KRCheckData::createProperties()
     m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
     m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
 
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_checkStyle);
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_foregroundColor);
     m_set->addProperty(m_lineWeight);
     m_set->addProperty(m_lineColor);

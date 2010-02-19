@@ -48,9 +48,7 @@ public:
     QString controlSource()const;
 
 protected:
-    QRectF _rect();
 
-    KRSize m_size;
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_checkStyle;
     KoProperty::Property* m_foregroundColor;

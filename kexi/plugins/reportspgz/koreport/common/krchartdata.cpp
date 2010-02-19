@@ -134,11 +134,8 @@ void KRChartData::createProperties()
     m_linkMaster = new KoProperty::Property("link-master", "", "Link Master", i18n("Fields from master data source"));
     m_linkChild = new KoProperty::Property("link-child", "", "Link Child", i18n("Fields from child data source"));
 
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_dataSource);
-
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_chartType);
     m_set->addProperty(m_chartSubType);
     m_set->addProperty(m_font);

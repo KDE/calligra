@@ -43,7 +43,7 @@ public:
     virtual KRBarcodeData * toBarcode();
     virtual int type() const;
 
-    QString column();
+    QString controlSource();
     int alignment();
     void setAlignment(int);
     int maxLength();
@@ -52,8 +52,6 @@ public:
     void setFormat(const QString&);
 
 protected:
-    QRect _rect();
-    KRSize m_size;
 
     KoProperty::Property * m_controlSource;
     KoProperty::Property * m_horizontalAlignment;

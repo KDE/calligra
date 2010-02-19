@@ -870,44 +870,41 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
     e->accept();
     QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
+        QPointF pos(e->x(), e->y());
         switch (m_sectionData->mouseAction) {
         case ReportWriterSectionData::MA_Insert:
             switch (m_sectionData->insertItem) {
             case KRObjectData::EntityLabel :
-                item = new ReportEntityLabel(v->designer(), v->scene());
+                item = new ReportEntityLabel(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityField :
-                item = new ReportEntityField(v->designer(), v->scene());
+                item = new ReportEntityField(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityText :
-                item = new ReportEntityText(v->designer(), v->scene());
+                item = new ReportEntityText(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityBarcode :
-                item = new ReportEntityBarcode(v->designer(), v->scene());
+                item = new ReportEntityBarcode(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityImage :
-                item = new ReportEntityImage(v->designer(), v->scene());
+                item = new ReportEntityImage(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityLine :
-                item = new ReportEntityLine(v->designer(), v->scene());
-                dynamic_cast<ReportEntityLine*>(item)->setLineScene(QLineF(QPointF(e->x(), e->y()), QPointF(e->x() + 20, e->y())));
+                item = new ReportEntityLine(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityChart :
-                item = new ReportEntityChart(v->designer(), v->scene());
+                item = new ReportEntityChart(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityShape :
-                item = new ReportEntityShape(v->designer(), v->scene());
+                item = new ReportEntityShape(v->designer(), v->scene(), pos);
                 break;
             case KRObjectData::EntityCheck :
-                item = new ReportEntityCheck(v->designer(), v->scene());
+                item = new ReportEntityCheck(v->designer(), v->scene(), pos);
                 break;
             default:
                 kDebug() << "attempted to insert an unknown item";;
             }
             if (item) {
-                if (m_sectionData->insertItem != KRObjectData::EntityLine)
-                    item->setPos(e->x(), e->y());
-
                 item->setVisible(true);
                 if (v && v->designer())
                     v->designer()->setModified(true);
@@ -1005,8 +1002,8 @@ void ReportDesigner::slotEditCut()
         QGraphicsItem * item = activeScene()->selectedItems().first();
         if (item) {
             if (item->type() == KRObjectData::EntityLine) {
-                m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-                m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
+//                m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
+//                m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
             } else {
                 m_sectionData->copy_x_pos = (int) item->x();
                 m_sectionData->copy_y_pos = (int) item->y();
@@ -1040,8 +1037,8 @@ void ReportDesigner::slotEditCopy()
     if (item) {
         m_sectionData->copy_list.clear();
         if (item->type() == KRObjectData::EntityLine) {
-            m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-            m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
+//            m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
+//            m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
         } else {
             m_sectionData->copy_x_pos = (int) item->x();
             m_sectionData->copy_y_pos = (int) item->y();

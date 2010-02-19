@@ -34,7 +34,7 @@ class ReportEntityField : public QObject, public ReportRectEntity, public KRFiel
     Q_OBJECT
 public:
     //Used when creating new basic field
-    ReportEntityField(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityField(ReportDesigner *, QGraphicsScene * scene, QPointF pos);
     //Used when loading from file
     ReportEntityField(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
     virtual ~ReportEntityField();

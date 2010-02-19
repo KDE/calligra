@@ -49,7 +49,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
 }
 
-ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)
+ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene, QPointF pos)
         : ReportRectEntity(rd)
 {
     init(scene, rd);

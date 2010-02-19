@@ -59,10 +59,11 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     setZValue(Z);
 }
 
-ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene)
+ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene, QPointF pos)
         : ReportEntity(d)
 {
     init(scene, d);
+    setLineScene(QLineF(pos, QPointF(20,20)+pos));
 
     m_name->setValue(m_reportDesigner->suggestEntityName("line"));
 }
@@ -187,8 +188,6 @@ void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     if (x > scene()->width()) x = scene()->width();
     if (y > scene()->height()) y = scene()->height();
 
-    kDebug() << m_grabAction;
-    
     switch (m_grabAction) {
     case 1:
 	m_start.setScenePos(QPointF(x,y));

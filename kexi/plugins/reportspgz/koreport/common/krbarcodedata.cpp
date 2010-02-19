@@ -103,7 +103,6 @@ void KRBarcodeData::createProperties()
 
     QStringList keys, strings;
 
-    //_query = new KoProperty::Property ( "Query", QString(), "Query", "Query" );
     m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
 
     keys << "left" << "center" << "right";
@@ -118,12 +117,10 @@ void KRBarcodeData::createProperties()
 
     m_maxLength = new KoProperty::Property("barcode-max-length", 5, "Max Length", "Maximum Barode Length");
 
-    m_set->addProperty(m_name);
+    addDefaultProperties();
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_format);
     m_set->addProperty(m_horizontalAlignment);
-    m_set->addProperty(m_pos.property());
-    m_set->addProperty(m_size.property());
     m_set->addProperty(m_maxLength);
 }
 
@@ -145,7 +142,7 @@ int KRBarcodeData::alignment()
         return 0;
 }
 
-QString KRBarcodeData::column()
+QString KRBarcodeData::controlSource()
 {
     return m_controlSource->value().toString();
 }

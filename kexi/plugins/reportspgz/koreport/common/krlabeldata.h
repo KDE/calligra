@@ -53,9 +53,7 @@ public:
     KRLineStyleData lineStyle();
 
 protected:
-    QRectF _rect();
 
-    KRSize m_size;
     KoProperty::Property *m_text;
     KoProperty::Property *m_horizontalAlignment;
     KoProperty::Property *m_verticalAlignment;

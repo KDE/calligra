@@ -29,7 +29,7 @@ class ReportEntityCheck : public QObject, public ReportRectEntity, public KRChec
 {
     Q_OBJECT
 public:
-    ReportEntityCheck(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityCheck(ReportDesigner *, QGraphicsScene * scene, QPointF pos);
     ReportEntityCheck(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
     virtual ~ReportEntityCheck();

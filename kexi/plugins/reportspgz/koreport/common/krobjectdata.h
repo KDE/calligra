@@ -22,6 +22,7 @@
 #include <QFont>
 #include <QColor>
 #include "krpos.h"
+#include "krsize.h"
 
 class KRSize;
 class KRLineData;
@@ -114,8 +115,11 @@ protected:
     KoProperty::Set *m_set;
     KoProperty::Property *m_name;
     KRPos m_pos;
-
+    KRSize m_size;
+    
     QString m_oldName;
+
+    void addDefaultProperties();
 
     static bool parseReportRect(const QDomElement &, KRPos *pos, KRSize *siz);
     static bool parseReportTextStyleData(const QDomElement &, KRTextStyleData &);

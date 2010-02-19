@@ -50,7 +50,7 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 // methods (constructors)
-ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* scene)
+ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* scene, QPointF pos)
         : ReportRectEntity(rw)
 {
     init(scene);

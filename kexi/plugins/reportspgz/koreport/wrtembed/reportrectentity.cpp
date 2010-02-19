@@ -129,36 +129,36 @@ void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     switch (m_grabAction) {
     case 1:
-        if (sceneRect().y() - p.y() + rect().height() > 0 && sceneRect().x() - p.x() + rect().width() > 0)
+        if (sceneRect().y() - p.y() + rect().height() > 0 && sceneRect().x() - p.x() + rect().width() >= 0)
             setSceneRect(QPointF(p.x(), p.y()), QSizeF(sceneRect().x() - p.x() + rect().width(), sceneRect().y() - p.y() + rect().height()));
         break;
     case 2:
-        if (sceneRect().y() - p.y() + rect().height() > 0)
+        if (sceneRect().y() - p.y() + rect().height() >= 0)
             setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(rect().width(), sceneRect().y() - p.y() + rect().height()));
         break;
     case 3:
-        if (sceneRect().y() - p.y() + rect().height() > 0 && w > 0)
+        if (sceneRect().y() - p.y() + rect().height() >= 0 && w >= 0)
             setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(w, sceneRect().y() - p.y() + rect().height()));
         break;
     case 4:
-        if (w > 0)
+        if (w >= 0)
             setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w, (rect().height())));
         break;
     case 5:
-        if (h > 0 && w > 0)
+        if (h >= 0 && w >= 0)
             setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w, h));
         break;
     case 6:
-        if (h > 0)
+        if (h >= 0)
             setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF((rect().width()), h));
         break;
     case 7:
-        if (sceneRect().x() - p.x() + rect().width() > 0 && h > 0)
+        if (sceneRect().x() - p.x() + rect().width() >= 0 && h >= 0)
             setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), h));
         break;
         break;
     case 8:
-        if (sceneRect().x() - p.x() + rect().width() > 0)
+        if (sceneRect().x() - p.x() + rect().width() >= 0)
             setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), rect().height()));
         break;
     default:

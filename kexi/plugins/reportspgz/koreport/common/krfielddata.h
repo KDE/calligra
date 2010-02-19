@@ -59,8 +59,6 @@ public:
     KRTextStyleData textStyle();
 protected:
 
-    QRect m_rect;
-    KRSize m_size;
     KoProperty::Property * m_controlSource;
     KoProperty::Property * m_horizontalAlignment;
     KoProperty::Property * m_verticalAlignment;

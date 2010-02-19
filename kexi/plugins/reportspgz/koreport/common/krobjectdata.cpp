@@ -20,6 +20,7 @@
 #include "krpos.h"
 #include "krsize.h"
 #include "krutils.h"
+#include <koproperty/Set.h>
 
 KRObjectData::KRObjectData()
 {
@@ -29,6 +30,13 @@ KRObjectData::KRObjectData()
 }
 
 KRObjectData::~KRObjectData() { }
+
+void KRObjectData::addDefaultProperties()
+{
+    m_set->addProperty(m_name);
+    m_set->addProperty(m_pos.property());
+    m_set->addProperty(m_size.property());
+}
 
 KRLineData * KRObjectData::toLine()
 {

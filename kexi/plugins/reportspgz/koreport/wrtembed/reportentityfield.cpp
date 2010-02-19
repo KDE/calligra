@@ -46,7 +46,7 @@ void ReportEntityField::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene)
+ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene, QPointF pos)
         : ReportRectEntity(rw)
 {
     init(scene);
