@@ -551,7 +551,7 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
     style.addProperty("draw:auto-grow-height", false, gt);
     style.addProperty("draw:stroke", "none", gt);
     style.addProperty("draw:fill", "none", gt);
-    style.addProperty("draw:fill-color", "#99ccff", gt);
+    style.addProperty("draw:fill-color", "#ffffff", gt);
     const OfficeArtDggContainer& drawingGroup
         = p->documentContainer->drawingGroup.OfficeArtDgg;
     const TextMasterStyleAtom& textMasterStyle
@@ -764,6 +764,12 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
         style.addProperty("draw:fill", getFillType(fillType->fillType), dp);
     }
     // draw:fill-color
+    const FillColor* fc = get<FillColor>(o);
+    if (fc && fillType && fillType->fillType == 0) {
+        // only set the color if the fill type is 'solid' because OOo ignores
+        // fill='non' if the color is set
+        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(), dp);
+    }
     // draw:fill-gradient-name
     // draw:fill-hatch-name
     // draw:fill-hatch-solid
@@ -2386,7 +2392,9 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     }
     // draw:fill-color
     const FillColor* fc = get<FillColor>(o);
-    if (fc) {
+    if (fc && fillType && fillType->fillType == 0) {
+        // only set the color if the fill type is 'solid' because OOo ignores
+        // fill='non' if the color is set
         style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(), gt);
     }
     // draw:fill-gradient-name
@@ -2488,7 +2496,13 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
                 style.addProperty("draw:stroke", "dash", gt);
             }
         } else {
-            style.addProperty("draw:stroke", "solid", gt);
+            // OOo interprets solid line with with 0 as hairline, so if
+            // width == 0, stroke *must* be none
+            if (lw && lw->lineWidth > 0) {
+                style.addProperty("draw:stroke", "solid", gt);
+            } else {
+                style.addProperty("draw:stroke", "none", gt);
+            }
         }
     }
     // draw:stroke-dash from 2.3.8.17 lineDashing
