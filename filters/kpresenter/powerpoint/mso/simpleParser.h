@@ -2111,8 +2111,8 @@ public:
 };
 class FixedPoint : public StreamOffset {
 public:
-    qint16 integral;
     quint16 fractional;
+    qint16 integral;
     FixedPoint(void* /*dummy*/ = 0) {}
 };
 class OfficeArtCOLORREF : public StreamOffset {

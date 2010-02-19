@@ -3663,8 +3663,8 @@ void PPT::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _
 }
 void PPT::parseFixedPoint(LEInputStream& in, FixedPoint& _s) {
     _s.streamOffset = in.getPosition();
-    _s.integral = in.readint16();
     _s.fractional = in.readuint16();
+    _s.integral = in.readint16();
 }
 void PPT::parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s) {
     _s.streamOffset = in.getPosition();
