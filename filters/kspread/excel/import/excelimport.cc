@@ -134,6 +134,8 @@ public:
     QString subScriptStyle, superScriptStyle;
     
     QHash<int,int> rowsRepeated;
+    int rowsCountTotal, rowsCountDone;
+    void addProgress(int addValue);
 
     bool createStyles(KoOdfWriteStore* store, KoXmlWriter* manifestWriter);
     bool createContent(KoOdfWriteStore* store);
@@ -208,12 +210,15 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
+    emit sigProgress(0);
+
     // Tell KoStore not to touch the file names
     storeout->disallowNameExpansion();
 
     // open inputFile
     StoreImpl *storeimpl = new StoreImpl(storeout);
     d->workbook = new Swinder::Workbook(storeimpl);
+    connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
         d->workbook = 0;
@@ -225,6 +230,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->workbook = 0;
         return KoFilter::PasswordProtected;
     }
+
+    emit sigProgress(-1);
+    emit sigProgress(0);
 
     d->styles = new KoGenStyles();
     d->mainStyles = new KoGenStyles();
@@ -290,7 +298,16 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->colCellStyles.clear();
     d->sheetStyles.clear();
 
+    emit sigProgress(100);
     return KoFilter::OK;
+}
+
+// Updates the displayed progress information
+void ExcelImport::Private::addProgress(int addValue)
+{
+    rowsCountDone += addValue;
+    const int progress = int(rowsCountDone / double(rowsCountTotal) * 100.0 + 0.5);
+    workbook->emitProgress(progress);
 }
 
 // Writes the spreadsheet content into the content.xml
@@ -516,6 +533,14 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     xmlWriter->startElement("office:spreadsheet");
 
+    // count the number of rows in total to provide a good progress value
+    rowsCountTotal = rowsCountDone = 0;
+    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+        Sheet* sheet = workbook->sheet(i);
+        rowsCountTotal += qMin(maximalRowCount, sheet->maxRow()) * 2; // double cause we will count them 2 times, once for styles and once for content
+    }
+    
+    // now start the whole work
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForBody(sheet, xmlWriter);
@@ -881,9 +906,9 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
             ++i;
         }
     }
-
-    xmlWriter->endElement();  // table:table-row
     
+    xmlWriter->endElement();  // table:table-row
+    addProgress(repeat);
     return repeat;
 }
 
@@ -934,7 +959,8 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
         } else
             ++i;
     }
-    
+
+    addProgress(repeat);
     return repeat;
 }
 

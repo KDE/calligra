@@ -23,6 +23,7 @@
 
 #include "ustring.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <string>
 #include <map>
@@ -43,8 +44,9 @@ public:
 
 class Sheet;
 
-class Workbook
+class Workbook : public QObject
 {
+    Q_OBJECT
 public:
 
     /**
@@ -123,6 +125,11 @@ public:
 
     unsigned long password() const;
     void setPassword(unsigned long hash);
+
+    void emitProgress(int value);
+    
+signals:
+    void sigProgress(int value);
 
 private:
     // no copy or assign

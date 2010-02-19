@@ -2992,7 +2992,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     d->handlerStack.clear();
 
     while (stream->tell() < stream_size) {
-
+        const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
+        workbook->emitProgress(percent);
+        
         // this is set by FILEPASS record
         // subsequent records will need to be decrypted
         // since we do not support it yet, we have to bail out

@@ -148,3 +148,8 @@ void Workbook::setPassword(unsigned long hash)
 {
     d->passwd = hash;
 }
+
+void Workbook::emitProgress(int value)
+{
+    emit sigProgress(value);
+}
