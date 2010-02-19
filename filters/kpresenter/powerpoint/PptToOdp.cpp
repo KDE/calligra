@@ -2447,7 +2447,8 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     const ShadowOpacity* so = get<ShadowOpacity>(o);
     if (so) {
         float opacity = toQReal(so->shadowOpacity);
-        style.addProperty("draw:shadow-opacity", QString("%1%").arg(opacity), gt);
+        style.addProperty("draw:shadow-opacity",
+                          QString("%1%").arg(opacity, 0, 'f'), gt);
     }
     // draw:show-unit
     // draw:start-guide
