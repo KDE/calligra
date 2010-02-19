@@ -49,7 +49,6 @@ void ReportEntityImage::init(QGraphicsScene * scene)
             this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
-    setSceneRect(m_pos.toScene(), m_size.toScene());
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
@@ -58,9 +57,9 @@ void ReportEntityImage::init(QGraphicsScene * scene)
 ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene, QPointF pos)
         : ReportRectEntity(rw)
 {
-    m_size.setSceneSize(QSizeF(100, 100));
     init(scene);
-
+    m_size.setSceneSize(QSizeF(100, 100));
+    m_pos.setScenePos(pos);
     m_name->setValue(m_reportDesigner->suggestEntityName("image"));
 }
 
@@ -68,6 +67,7 @@ ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QG
         : KRImageData(element), ReportRectEntity(rw)
 {
     init(scene);
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityImage* ReportEntityImage::clone()
@@ -139,15 +139,6 @@ void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityImage::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << s.typeName() << ":" << p.name() << ":" << p.value();
-
-    //Handle Position
-    if (p.name() == "Position") {
-        m_pos.setUnitPos(p.value().toPointF(), false);
-    }
-    if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF(), false);
-    }
     if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -157,10 +148,8 @@ void ReportEntityImage::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
         }
     }
 
+    ReportRectEntity::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
-
-    if (scene()) scene()->update();
-
 }
 
 void ReportEntityImage::mousePressEvent(QGraphicsSceneMouseEvent * event)

@@ -58,6 +58,7 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    void propertyChanged(KoProperty::Set &s, KoProperty::Property &p);
 private:
     int grabHandle(QPointF);
     int m_grabAction;

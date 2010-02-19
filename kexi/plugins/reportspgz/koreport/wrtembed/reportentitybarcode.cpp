@@ -56,7 +56,7 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
     init(scene);
     m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
     setSceneRect(m_pos.toScene(), m_size.toScene());
-
+    m_pos.setScenePos(pos);
     m_name->setValue(m_reportDesigner->suggestEntityName("barcode"));
 }
 
@@ -147,13 +147,7 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityBarcode::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << s.typeName() << ":" << p.name();
-
-    if (p.name() == "Position") {
-        m_pos.setUnitPos(p.value().toPointF(), false);
-    } else if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF(), false);
-    } else if (p.name() == "Name") {
+    if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
             p.setValue(m_oldName);
@@ -162,11 +156,8 @@ void ReportEntityBarcode::slotPropertyChanged(KoProperty::Set &s, KoProperty::Pr
         }
     }
 
-    setSceneRect(m_pos.toScene(), m_size.toScene(), false);
-
+    ReportRectEntity::propertyChanged(s, p);   
     if (m_reportDesigner) m_reportDesigner->setModified(true);
-
-    if (scene()) scene()->update();
 }
 
 void ReportEntityBarcode::mousePressEvent(QGraphicsSceneMouseEvent * event)

@@ -40,8 +40,6 @@ ReportRectEntity::ReportRectEntity(ReportDesigner *r)
 
     setAcceptsHoverEvents(true);
 
-    kDebug() << QT_VERSION;
-
 #if QT_VERSION >= 0x040600
     setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
 #else
@@ -276,7 +274,7 @@ int ReportRectEntity::grabHandle(QPointF pos)
 
 QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    //kDebug() << change;
+    kDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
 
@@ -314,3 +312,13 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
     return QGraphicsItem::itemChange(change, value);
 }
 
+void ReportRectEntity::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+{
+    if (p.name() == "Position") {
+        m_ppos->setUnitPos(p.value().toPointF(), false);
+    } else if (p.name() == "Size") {
+        m_psize->setUnitSize(p.value().toSizeF(), false);
+    }
+
+    setSceneRect(m_ppos->toScene(), m_psize->toScene(), false);
+}

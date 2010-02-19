@@ -56,7 +56,7 @@ ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, 
 {
     init(scene);
     setSceneRect(getTextRect());
-
+    m_pos.setScenePos(pos);
     m_name->setValue(m_reportDesigner->suggestEntityName("text"));
 }
 

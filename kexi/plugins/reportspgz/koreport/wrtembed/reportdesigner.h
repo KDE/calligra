@@ -138,7 +138,7 @@ public slots:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
-    void slotEditPaste(QGraphicsScene *, const QPointF &);
+    void slotEditPaste(QGraphicsScene *);
 
     void slotItem(KRObjectData::EntityTypes);
     void slotItem(const QString&);
@@ -149,7 +149,6 @@ public slots:
     void slotLowerSelected();
 
 protected:
-    virtual void closeEvent(QCloseEvent * e);
 
     ReportSection *m_reportHeader;
     ReportSection *m_pageHeaderFirst;

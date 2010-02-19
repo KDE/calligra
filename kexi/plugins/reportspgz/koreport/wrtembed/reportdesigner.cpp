@@ -95,9 +95,6 @@ public:
     MouseAction mouseAction;
     KRObjectData::EntityTypes insertItem;
 
-    // copy data
-    int copy_x_pos;        // the base x position of the copy (typically the first items original pos)
-    int copy_y_pos;        // the base y position of the copy (typically the first items original pos)
     QList<ReportEntity*> copy_list;
     QList<ReportEntity*> cut_list;
 };
@@ -129,8 +126,6 @@ void ReportDesigner::init()
 
     m_sectionData = new ReportWriterSectionData();
     createProperties();
-
-    //setSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
     m_reportHeader = m_reportFooter = 0;
     m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = 0;
@@ -234,7 +229,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
                     //TODO
                 }
 
-		m_rightMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-right", "1.0cm")));
+                m_rightMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-right", "1.0cm")));
                 m_leftMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-left", "1.0cm")));
                 m_topMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-top", "1.0cm")));
                 m_bottomMargin->setValue(KoUnit::parseValue(it.toElement().attribute("fo:margin-bottom", "1.0cm")));
@@ -349,28 +344,6 @@ QDomElement ReportDesigner::document() const
 
     content.appendChild(body);
     return content;
-}
-
-void ReportDesigner::closeEvent(QCloseEvent * e)
-{
-    if (m_modified != false) {
-        switch (QMessageBox::information(this, i18n("Report Writer"), i18n("The document '%1' contains unsaved changes.\nDo you want to save the changes before closing?" , windowTitle()), i18n("Save"), i18n("Discard"), i18n("Cancel"), 0, 2)) {
-        case 0:
-            // save the doc...
-            // if we get a not save result we'll bail so the
-            // user doesn't loose any work.
-//    if ( !saveToDb() ) return;
-        case 1:
-            // all we have to do is just accept the close event
-            break;
-        case 2:
-            return;
-        default:
-            qDebug("Encountered a problem in the close event handler....");
-            // should we just go ahead and close??? or should we not close???
-        }
-    }
-    e->accept();
 }
 
 void ReportDesigner::slotSectionEditor()
@@ -859,7 +832,7 @@ void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCont
         else if (ret == popCopy)
             slotEditCopy();
         else if (ret == popPaste)
-            slotEditPaste(s, e->scenePos());
+            slotEditPaste(s);
         else if (ret == popDelete)
             slotEditDelete();
     }
@@ -1001,14 +974,6 @@ void ReportDesigner::slotEditCut()
 
         QGraphicsItem * item = activeScene()->selectedItems().first();
         if (item) {
-            if (item->type() == KRObjectData::EntityLine) {
-//                m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-//                m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
-            } else {
-                m_sectionData->copy_x_pos = (int) item->x();
-                m_sectionData->copy_y_pos = (int) item->y();
-            }
-
             m_sectionData->copy_list.clear();
 
             for (int i = 0; i < activeScene()->selectedItems().count(); i++) {
@@ -1036,13 +1001,6 @@ void ReportDesigner::slotEditCopy()
     QGraphicsItem * item = activeScene()->selectedItems().first();
     if (item) {
         m_sectionData->copy_list.clear();
-        if (item->type() == KRObjectData::EntityLine) {
-//            m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-//            m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
-        } else {
-            m_sectionData->copy_x_pos = (int) item->x();
-            m_sectionData->copy_y_pos = (int) item->y();
-        }
 
         for (int i = 0; i < activeScene()->selectedItems().count(); i++) {
             m_sectionData->copy_list.append(dynamic_cast<ReportEntity*>(activeScene()->selectedItems()[i]));
@@ -1054,23 +1012,21 @@ void ReportDesigner::slotEditCopy()
 
 void ReportDesigner::slotEditPaste()
 {
-    // call the editPaste function passing it a reportsection and point
-    //  that make sense as defaults (same canvas / slightly offset pos of orig copy)
-    QPoint p;
-    p.setX(m_sectionData->copy_x_pos + m_sectionData->selected_x_offset);
-    p.setY(m_sectionData->copy_y_pos + m_sectionData->selected_x_offset);
-    slotEditPaste(activeScene(), p);
+    // call the editPaste function passing it a reportsection
+    slotEditPaste(activeScene());
 }
 
-void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
+void ReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
-    Q_UNUSED(pos);
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
         QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
+        //!TODO this code sucks :)
+        //!The setPos calls only work AFTER the name has been set ?!?!?
+        
         for (int i = 0; i < m_sectionData->copy_list.count(); i++) {
             pasted_ent = 0;
             int type = dynamic_cast<KRObjectData*>(m_sectionData->copy_list[i])->type();
@@ -1083,27 +1039,33 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityField) {
                 ReportEntityField * ent = dynamic_cast<ReportEntityField*>(m_sectionData->copy_list[i])->clone();
-                ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("field"));
+                ent->setPos(ent->pos() + o);
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityText) {
                 ReportEntityText * ent = dynamic_cast<ReportEntityText*>(m_sectionData->copy_list[i])->clone();
-                ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("text"));
+                ent->setPos(ent->pos() + o);
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityLine) {
                 ReportEntityLine * ent = dynamic_cast<ReportEntityLine*>(m_sectionData->copy_list[i])->clone();
                 ent->setEntityName(suggestEntityName("line"));
+                ent->setLineScene(QLineF(ent->line().p1() + o, ent->line().p2() + o));
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityBarcode) {
                 ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*>(m_sectionData->copy_list[i])->clone();
-                ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("barcode"));
+                ent->setPos(ent->pos() + o);
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityImage) {
                 ReportEntityImage * ent = dynamic_cast<ReportEntityImage*>(m_sectionData->copy_list[i])->clone();
-                ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("image"));
+                ent->setPos(ent->pos() + o);
+                pasted_ent = ent;
+            } else if (type == KRObjectData::EntityCheck) {
+                ReportEntityCheck * ent = dynamic_cast<ReportEntityCheck*>(m_sectionData->copy_list[i])->clone();
+                ent->setEntityName(suggestEntityName("check"));
+                ent->setPos(ent->pos() + o);
                 pasted_ent = ent;
             }
             //TODO add graph
@@ -1128,6 +1090,7 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
         }
         m_sectionData->selected_x_offset += 10;
         m_sectionData->selected_y_offset += 10;
+        
     }
 }
 void ReportDesigner::slotRaiseSelected()

@@ -202,6 +202,7 @@ protected:
     OROPage * m_page;
     int m_type;
     QPointF m_position;
+    QSizeF m_size;
 };
 
 //
