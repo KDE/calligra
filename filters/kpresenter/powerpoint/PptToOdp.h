@@ -225,11 +225,6 @@ private:
                         const QString& text, const int start, int end);
     int processTextSpans(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
-
-    void processTextLine(Writer& out, const PPT::TextContainer& tc,
-                        const PPT::TextPFRun& pf, const QString& text,
-                        int start, int end, QStack<QString>& levels);
-
     void processTextLine(Writer& out, const PPT::TextContainer& tc,
                         const QString& text,
                         int start, int end, QStack<QString>& levels);

@@ -667,7 +667,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
 
 void PptToOdp::defineParagraphProperties(KoGenStyle& style,
                                          const TextPFException* pf,
-                                         const TextPFException9* pf9) {
+                                         const TextPFException9* /*pf9*/) {
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
     // fo:border
@@ -1620,7 +1620,6 @@ int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
         const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
         const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
         const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
-        int p = -1;
         if (a && a->position == start) meta = &m;
         if (b && b->position == start) meta = &m;
         if (c && c->position == start) meta = &m;
@@ -1736,25 +1735,6 @@ int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
         }
     }
     return (pos == end) ?0 :-pos;
-}
-
-void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
-                              const TextPFRun& pf,
-                              const QString& text, int start, int end,
-                              QStack<QString>& levels)
-{
-    quint16 paragraphIndent = pf.indentLevel;
-    //[MS-PPT].pdf says the itendation level can be 4 at most
-    if (paragraphIndent > 4) paragraphIndent = 4;
-    bool isParagraph = paragraphIndent == 0 && !pf.pf.masks.bulletChar
-                       && pf.pf.bulletChar == 0;
-    if (isParagraph) {
-        out.xml.startElement("text:p");
-    } else {
-        out.xml.startElement("");
-    }
-    int r = processTextSpan(tc, out, text, start, end);
-    out.xml.endElement();
 }
 
 void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
