@@ -25,7 +25,7 @@
  * Report global objects belonging to global options to the collector.
  */
 template <typename C, typename T>
-        void collectGlobalObjects(C& collector, const PPT::DrawingGroupContainer& c,
+void collectGlobalObjects(C& collector, const PPT::DrawingGroupContainer& c,
                           const T& fopt)
 {
     foreach(const PPT::OfficeArtFOPTEChoice& f, fopt.fopt) {

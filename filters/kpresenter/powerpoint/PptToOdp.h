@@ -706,6 +706,19 @@ get(const PPT::OfficeArtDggContainer& o)
     if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
     return a;
 }
+/**
+ * Retrieve an option from a container
+ *
+ * Look in all option containers in @p o for an option of type A.
+ * @param o OfficeArtDggContainer instance which contains options.
+ * @return pointer to the option of type A or 0 if there is none.
+ */
+template <typename A, typename T>
+const A*
+get(const T* o)
+{
+    return (o) ?get<A>(*o) :0;
+}
 
 /**
  * Convert FixedPoint to a qreal

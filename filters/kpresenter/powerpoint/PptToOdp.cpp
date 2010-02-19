@@ -736,14 +736,14 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
     const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
     // draw:background-size ("border", or "full")
     const FillStyleBooleanProperties* fs
-            = (o) ?get<FillStyleBooleanProperties>(*o) :0;
+            = get<FillStyleBooleanProperties>(o);
     if (fs) {
         style.addProperty("draw:background-size",
                           (fs->fUseFillUseRext && fs->fillUseRect)
                           ?"border" :"full", dp);
     }
     // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    const FillType* fillType = (o) ?get<FillType>(*o) :0;
+    const FillType* fillType = get<FillType>(o);
     if (fs && fs->fUseFilled && !fs->fFilled) {
         style.addProperty("draw:fill", "none", dp);
     } else if (fillType) {
@@ -755,7 +755,7 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
-    const FillBlip* fb = (o) ?get<FillBlip>(*o) :0;
+    const FillBlip* fb = get<FillBlip>(o);
     const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
     if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill-image-name",
