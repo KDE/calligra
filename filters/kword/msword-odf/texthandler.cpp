@@ -71,6 +71,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_index(0)
     , m_currentTable(0)
     , m_paragraph(0)
+    , m_insideField(false)
     , m_fieldAfterSeparator(false)
     , m_fieldType(0)
     , m_insideFootnote(false)
