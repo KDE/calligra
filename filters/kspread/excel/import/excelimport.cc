@@ -873,7 +873,7 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(cell, repeat, xmlWriter);
-            i += repeat;
+            i += cell->columnRepeat() * repeat;
         } else {
             // empty cell
             xmlWriter->startElement("table:table-cell");
@@ -926,10 +926,13 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
     QString cellStyleName = processRowFormat(&format, "auto", repeat, row->height());
     rowStyles.append(cellStyleName);
 
-    for (int i = 0; i <= lastCol; i++) {
+    for (int i = 0; i <= lastCol;) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
-        if (cell)
+        if (cell) {
             processCellForStyle(cell, xmlWriter);
+            i += cell->columnRepeat() * repeat;
+        } else
+            ++i;
     }
     
     return repeat;
@@ -1242,7 +1245,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, int rowsRepeat, KoXmlW
 
     Q_ASSERT(cellFormatIndex < cellStyles.count());
     xmlWriter->addAttribute("table:style-name", cellStyles[cellFormatIndex]);
-    cellFormatIndex += cell->columnRepeat() * rowsRepeat;
+    cellFormatIndex++;
 
     if (cell->columnSpan() > 1)
         xmlWriter->addAttribute("table:number-columns-spanned", cell->columnSpan());
