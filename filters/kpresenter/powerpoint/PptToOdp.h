@@ -210,6 +210,8 @@ private:
                          const PPT::TextMasterStyle9Level* level9 = 0,
                          const PPT::TextMasterStyle10Level* level10 = 0);
 
+    quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
+                        const PPT::OfficeArtClientData* clientData) const;
     void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);

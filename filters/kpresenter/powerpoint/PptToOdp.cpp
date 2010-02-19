@@ -1025,16 +1025,14 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
 }
 void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
 {
-    int n = 0;
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
+        currentMaster = m;
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
 
         // look for a style for each of the values of TextEnumType
         for (quint16 texttype = 0; texttype <= 8; ++texttype) {
-            // look for placeholder and a TextMasterStyleAtom
-            const TextMasterStyleAtom* textstyle
-                    = getTextMasterStyleAtom(m, texttype);
+            // look for placeholder with the right texttype
             PlaceholderFinder finder(texttype);
             if (sc) {
                 handleOfficeArtContainer(finder, sc->drawing.OfficeArtDg);
@@ -1042,29 +1040,38 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                 handleOfficeArtContainer(finder, mm->drawing.OfficeArtDg);
             }
 
+/*
+            const QString name = "M" + QString::number(n) + "_"
+                                     + QString::number(texttype);
+            const TextMasterStyleAtom* textstyle
+                    = getTextMasterStyleAtom(m, texttype);
             // graphic family
-            KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
+            KoGenStyle style(KoGenStyle::StylePresentationAuto, "presentation");
             style.setAutoStyleInStylesDotXml(true);
             if (finder.sp) {
                 defineGraphicProperties(style, *finder.sp, textstyle);
             } else if (textstyle) {
                 defineGraphicPropertiesListStyles(style, *textstyle);
             } else {
+                qDebug() << "No master style for text type " << texttype;
                 continue;
             }
             if (textstyle && textstyle->lstLvl1) {
                 defineParagraphProperties(style, &textstyle->lstLvl1->pf, 0);
                 defineTextProperties(style, &textstyle->lstLvl1->cf, 0, 0, 0);
             }
-            const QString name = "M" + QString::number(n) + "_"
-                                     + QString::number(texttype);
-            masterGraphicStyles[m][texttype] = styles.lookup(style, name + "g",
+            masterGraphicStyles[m][texttype] = styles.lookup(style, name + "p",
                     KoGenStyles::DontForceNumbering);
+*/
 
             if (finder.sp) {
-                // processObjectForStyle(*finder.sp, styles, true);
+                QBuffer buffer;
+                KoXmlWriter dummy(&buffer);
+                Writer w(dummy, styles, true);
+                addGraphicStyleToDrawElement(w, *finder.sp);
             }
 
+/*
             if (textstyle && textstyle->lstLvl1) {
                 // text family
                 KoGenStyle tstyle(KoGenStyle::StyleTextAuto, "text");
@@ -1078,6 +1085,7 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
                 defineTextProperties(pstyle, &textstyle->lstLvl1->cf, 0, 0, 0);
                 styles.lookup(pstyle, name + "p", KoGenStyles::DontForceNumbering);
             }
+*/
         }
     }
 }
@@ -1222,7 +1230,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
       Define the automatic styles
      */
     currentSlideTexts = 0;
-    // defineMasterAutomaticStyles(styles);
+    defineMasterAutomaticStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
 
     /*
@@ -2596,10 +2604,17 @@ void PptToOdp::defineGraphicPropertiesListStyles(KoGenStyle& style, const TextMa
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     style.addChildElement("text:list-style", elementContents);
 }
-quint32
-getTextType(const OfficeArtClientTextBox* clientTextbox)
+quint32 PptToOdp::getTextType(const OfficeArtClientTextBox* clientTextbox,
+            const OfficeArtClientData* clientData) const
 {
     quint32 textType = 99; // 99 means it is undefined here
+    if (clientData && clientData->placeholderAtom && currentSlideTexts) {
+        const PlaceholderAtom* p = clientData->placeholderAtom.data();
+        if (p->position >= 0 && p->position < currentSlideTexts->atoms.size()) {
+            const TextContainer& tc = currentSlideTexts->atoms[p->position];
+            return tc.textHeaderAtom.textType;
+        }
+    }
     if (clientTextbox) {
         // find the text type
         foreach (const TextClientDataSubContainerOrAtom& a, clientTextbox->rgChildRec) {
@@ -2611,9 +2626,22 @@ getTextType(const OfficeArtClientTextBox* clientTextbox)
     }
     return textType;
 }
+QString getMasterGraphicStyle(const QMap<int, QString>& map, int texttype) {
+    if (map.contains(texttype)) {
+        return map[texttype];
+    }
+    // fallback for titles
+    if (texttype == 0 || texttype == 6) {
+        if (map.contains(0)) return map[0];
+        if (map.contains(6)) return map[6];
+    }
+    // return any style we might have
+    return (map.size()) ?map.begin().value() :QString();
+}
 
 void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
-                                            const OfficeArtSpContainer& o) {
+                                            const OfficeArtSpContainer& o)
+{
     // if this object has a placeholder type, it defines a presentation style,
     // otherwise, it defines a graphic style
     KoGenStyle::Type type = KoGenStyle::StyleGraphicAuto;
@@ -2625,12 +2653,13 @@ void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
     KoGenStyle style(type, familyName);
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    quint32 textType = getTextType(o.clientTextbox.data());
+    quint32 textType = getTextType(o.clientTextbox.data(), o.clientData.data());
     QString parent;
     // for new we only set parent styles on presentation styled elements
-    if (textType != 99 && !out.stylesxml && currentMaster
+    if (currentMaster
             && type == KoGenStyle::StylePresentationAuto) {
-        parent = masterGraphicStyles[currentMaster][textType];
+        parent = getMasterGraphicStyle(masterGraphicStyles[currentMaster],
+                                       textType);
     }
     if (!parent.isEmpty()) {
         style.setParentName(parent);
@@ -2640,6 +2669,10 @@ void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
         listStyle = getTextMasterStyleAtom(currentMaster, textType);
     }
     defineGraphicProperties(style, o, listStyle);
+    if (listStyle && listStyle->lstLvl1) {
+        defineParagraphProperties(style, &listStyle->lstLvl1->pf, 0);
+        defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
+    }
     const QString styleName = out.styles.lookup(style);
     if (o.clientData && o.clientData->placeholderAtom) {
         out.xml.addAttribute("presentation:style-name", styleName);
