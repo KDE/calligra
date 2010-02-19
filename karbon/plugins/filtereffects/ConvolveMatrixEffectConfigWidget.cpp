@@ -23,12 +23,87 @@
 
 #include <KLocale>
 #include <KComboBox>
+#include <KDialog>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QDoubleSpinBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QCheckBox>
+#include <QtGui/QTableView>
+#include <QtGui/QHeaderView>
+
+class MatrixDataModel : public QAbstractTableModel
+{
+public:
+    MatrixDataModel(QObject *parent = 0)
+    : QAbstractTableModel(parent)
+    , m_rows(0), m_cols(0)
+    {
+    }
+
+    void setMatrix(const QVector<qreal> &matrix, int rows, int cols)
+    {
+        m_matrix = matrix;
+        m_rows = rows;
+        m_cols = cols;
+        Q_ASSERT(m_rows);
+        Q_ASSERT(m_cols);
+        Q_ASSERT(m_matrix.count() == m_rows*m_cols);
+        reset();
+    }
+
+    QVector<qreal> matrix() const
+    {
+        return m_matrix;
+    }
+
+    int rowCount ( const QModelIndex & /*parent*/ ) const
+    {
+        return m_rows;
+    }
+
+    int columnCount ( const QModelIndex & /*parent*/ ) const
+    {
+        return m_cols;
+    }
+
+    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const
+    {
+        int element = index.row() * m_cols + index.column();
+        switch(role) {
+            case Qt::DisplayRole:
+            case Qt::EditRole:
+                return QVariant(QString("%1").arg(m_matrix[element], 2));
+                break;
+            default:
+                return QVariant();
+        }
+    }
+
+    bool setData ( const QModelIndex & index, const QVariant & value, int /*role*/ )
+    {
+        int element = index.row() * m_cols + index.column();
+        bool valid = false;
+        qreal elementValue = value.toDouble(&valid);
+        if (!valid)
+            return false;
+        m_matrix[element] = elementValue;
+        emit dataChanged(index, index);
+        return true;
+    }
+
+    Qt::ItemFlags flags ( const QModelIndex & /*index*/ ) const
+    {
+        return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable;
+    }
+
+private:
+    QVector<qreal> m_matrix;
+    int m_rows;
+    int m_cols;
+};
+
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -84,6 +159,8 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     connect(m_bias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged(double)));
     connect(kernelButton, SIGNAL(clicked(bool)), this, SLOT(editKernel()));
     connect(m_preserveAlpha, SIGNAL(toggled(bool)), this, SLOT(preserveAlphaChanged(bool)));
+
+    m_matrixModel = new MatrixDataModel(this);
 }
 
 bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
@@ -203,7 +280,39 @@ void ConvolveMatrixEffectConfigWidget::preserveAlphaChanged(bool checked)
 
 void ConvolveMatrixEffectConfigWidget::editKernel()
 {
-    // TODO
+    if (!m_effect)
+        return;
+
+    QVector<qreal> oldKernel = m_effect->kernel();
+    QPoint kernelSize = m_effect->order();
+    m_matrixModel->setMatrix(oldKernel, kernelSize.y(), kernelSize.x());
+    connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
+
+    KDialog dlg(this);
+    QTableView * table = new QTableView(&dlg);
+    table->setModel(m_matrixModel);
+    table->horizontalHeader()->hide();
+    table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    table->verticalHeader()->hide();
+    table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    dlg.setMainWidget(table);
+    if (dlg.exec() == KDialog::Accepted) {
+        m_effect->setKernel(m_matrixModel->matrix());
+        emit filterChanged();
+    } else {
+        m_effect->setKernel(oldKernel);
+    }
+
+    disconnect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
+}
+
+void ConvolveMatrixEffectConfigWidget::kernelChanged()
+{
+    if (!m_effect)
+        return;
+
+    m_effect->setKernel(m_matrixModel->matrix());
+    emit filterChanged();
 }
 
 #include "ConvolveMatrixEffectConfigWidget.moc"

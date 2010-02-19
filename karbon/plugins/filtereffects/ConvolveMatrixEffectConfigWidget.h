@@ -29,6 +29,7 @@ class KIntNumInput;
 class KComboBox;
 class QSpinBox;
 class QCheckBox;
+class MatrixDataModel;
 
 class ConvolveMatrixEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -47,6 +48,7 @@ private slots:
     void edgeModeChanged(int mode);
     void preserveAlphaChanged(bool checked);
     void editKernel();
+    void kernelChanged();
 private:
     ConvolveMatrixEffect * m_effect;
     KComboBox * m_edgeMode;
@@ -57,6 +59,7 @@ private:
     QDoubleSpinBox *m_divisor;
     QDoubleSpinBox *m_bias;
     QCheckBox *m_preserveAlpha;
+    MatrixDataModel * m_matrixModel;
 };
 
 #endif // CONVOLVEMATRIXEFFECTCONFIGWIDGET_H
