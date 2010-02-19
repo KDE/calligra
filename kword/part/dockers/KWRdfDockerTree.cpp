@@ -40,7 +40,7 @@ KWRdfDockerTree::KWRdfDockerTree(QWidget *parent)
         m_rdf(0),
         m_canvas(0)
 {
-    kDebug(30015) << "KWRdfDockerTree()";
+    //kDebug(30015) << "KWRdfDockerTree()";
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
@@ -58,22 +58,22 @@ void KWRdfDockerTree::setCanvas(KoCanvasBase *canvas)
 
 void KWRdfDockerTree::dragEnterEvent(QDragEnterEvent *event)
 {
-    kDebug(30015) << "dragEnterEvent() mime format:" << event->mimeData()->formats();
+    //kDebug(30015) << "dragEnterEvent() mime format:" << event->mimeData()->formats();
     if (event->mimeData()->hasFormat("text/calendar")) {
-        kDebug(30015) << "accepting...";
+        //kDebug(30015) << "accepting...";
         event->accept();
     } else if (event->mimeData()->hasFormat("text/x-vcard")) {
-        kDebug(30015) << "accepting...";
+        //kDebug(30015) << "accepting...";
         event->accept();
     } else if (event->mimeData()->hasFormat("text/uri-list")) {
-        kDebug(30015) << "accepting...URI list";
+        //kDebug(30015) << "accepting...URI list";
         event->accept();
     }
 }
 
 void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
 {
-    kDebug(30015) << "accepting...";
+    //kDebug(30015) << "accepting...";
     e->accept();
 }
 
@@ -87,28 +87,28 @@ KoTextEditor* KWRdfDockerTree::editor()
 bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         const QMimeData *data, Qt::DropAction action)
 {
-    kDebug(30015) << "KWRdfDockerTree::dropMimeData() mime format:" << data->formats();
+    //kDebug(30015) << "KWRdfDockerTree::dropMimeData() mime format:" << data->formats();
 
     if (data->hasFormat("text/directory")) {
         QByteArray ba = data->data("text/directory");
-        kDebug(30015) << "text/directory:" << ba;
+        //kDebug(30015) << "text/directory:" << ba;
     } else if (data->hasFormat("text/calendar")) {
         QByteArray ba = data->data("text/calendar");
-        kDebug(30015) << "data:" << ba;
+        //kDebug(30015) << "data:" << ba;
         RdfSemanticItem *semObj = RdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/x-vcard")) {
         QByteArray ba = data->data("text/x-vcard");
-        kDebug(30015) << "data:" << ba;
+        //kDebug(30015) << "data:" << ba;
         RdfSemanticItem* semObj = RdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/uri-list")) {
         QByteArray urilist = data->data("text/uri-list");
-        kDebug(30015) << "uri-list:" << urilist;
+        //kDebug(30015) << "uri-list:" << urilist;
         QTextStream ss(&urilist, QIODevice::ReadOnly);
         while (!ss.atEnd()) {
             QString fileName = ss.readLine();
-            kDebug(30015) << "fileName:" << fileName;
+            //kDebug(30015) << "fileName:" << fileName;
             if (fileName.startsWith("file:")) {
                 fileName = fileName.mid(strlen("file:"));
             }
@@ -117,7 +117,7 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             QByteArray ba = f.readAll();
             // Try to work out what ba contains....
             QString mt =  KMimeType::findByContent(ba)->name();
-            kDebug(30015) << "MIME Type:" << mt;
+            //kDebug(30015) << "MIME Type:" << mt;
             // BEGIN:VCARD
             if (mt == "text/directory") {
                 RdfSemanticItem* semObj = RdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
@@ -146,13 +146,13 @@ void KWRdfDockerTree::mouseMoveEvent(QMouseEvent *event)
 
 QStringList KWRdfDockerTree::mimeTypes() const
 {
-    kDebug(30015) << "default mt:" << QTreeWidget::mimeTypes();
+    //kDebug(30015) << "default mt:" << QTreeWidget::mimeTypes();
     return QStringList();
 }
 
 QMimeData *KWRdfDockerTree::mimeData(QList<QTreeWidgetItem *> items) const
 {
-    kDebug(30015) << "getting mime data, itemlist.sz:" << items.size();
+    //kDebug(30015) << "getting mime data, itemlist.sz:" << items.size();
     QByteArray ba;
     QMimeData *md = new QMimeData;
     md->setData("foo/bar", ba);
