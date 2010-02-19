@@ -21,9 +21,8 @@
 #define KWANCHORSTRATEGY_H
 
 #include <KoTextDocumentLayout.h>
+#include <KoTextAnchor.h>
 
-
-class KoTextAnchor;
 class KWAnchorStrategy;
 class KWFrame;
 
@@ -81,6 +80,10 @@ private:
     qreal m_currentLineY;
     int m_pass;
     int m_lastknownPosInDoc;
+
+    QPointF m_lastOffset;
+    KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;
+    KoTextAnchor::AnchorHorizontal m_lastHorizontalAnchorAlignment;
 };
 
 #endif
