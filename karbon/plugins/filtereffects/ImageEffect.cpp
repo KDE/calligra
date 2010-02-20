@@ -64,7 +64,7 @@ bool ImageEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingC
         return false;
 
     QString href = element.attribute("xlink:href");
-    if (href.startsWith("data:")) {
+    if (href.startsWith(QLatin1String("data:"))) {
         int start = href.indexOf("base64,");
         if (start <= 0 || !m_image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
             return false;
