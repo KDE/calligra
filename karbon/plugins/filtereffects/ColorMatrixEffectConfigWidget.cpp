@@ -20,6 +20,7 @@
 #include "ColorMatrixEffectConfigWidget.h"
 #include "ColorMatrixEffect.h"
 #include "KoFilterEffect.h"
+#include "MatrixDataModel.h"
 
 #include <KNumInput>
 #include <KComboBox>
@@ -28,6 +29,8 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QTableView>
+#include <QtGui/QHeaderView>
 
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -45,19 +48,14 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     m_stack->setContentsMargins(0, 0, 0, 0);
     g->addWidget(m_stack, 1, 0);
 
-    QWidget * matrixWidget = new QWidget(m_stack);
-    QGridLayout * matrixLayout = new QGridLayout(matrixWidget);
-    const int colCount = ColorMatrixEffect::colorMatrixColumnCount();
-    for (int i = 0; i < ColorMatrixEffect::colorMatrixSize(); ++i) {
-        m_matrix.append(new KDoubleNumInput(matrixWidget));
-        m_matrix[i]->setMinimumWidth(40);
-        m_matrix[i]->setValue(i / colCount == i % colCount ? 1.0 : 0.0);
-        matrixLayout->addWidget(m_matrix[i], i / colCount, i % colCount);
-        connect(m_matrix[i], SIGNAL(valueChanged(double)), this, SLOT(matrixChanged()));
-    }
-    matrixWidget->setLayout(matrixLayout);
-    matrixLayout->setSpacing(2);
-    matrixLayout->setContentsMargins(0, 0, 0, 0);
+    m_matrixModel = new MatrixDataModel(this);
+
+    QTableView * matrixWidget = new QTableView(m_stack);
+    matrixWidget->setModel(m_matrixModel);
+    matrixWidget->horizontalHeader()->hide();
+    matrixWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    matrixWidget->verticalHeader()->hide();
+    matrixWidget->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     m_stack->addWidget(matrixWidget);
 
     QWidget * saturateWidget = new QWidget(m_stack);
@@ -89,6 +87,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     connect(m_type, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
     connect(m_saturate, SIGNAL(valueChanged(double)), this, SLOT(saturateChanged(double)));
     connect(m_hueRotate, SIGNAL(valueChanged(double)), this, SLOT(hueRotateChanged(double)));
+    connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(matrixChanged()));
 }
 
 bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
@@ -102,11 +101,7 @@ bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffe
     switch (m_effect->type()) {
     case ColorMatrixEffect::Matrix:
         m_type->setCurrentIndex(0);
-        for (int i = 0; i < ColorMatrixEffect::colorMatrixSize(); ++i) {
-            m_matrix[i]->blockSignals(true);
-            m_matrix[i]->setValue(m_effect->colorMatrix()[i]);
-            m_matrix[i]->blockSignals(false);
-        }
+        m_matrixModel->setMatrix(m_effect->colorMatrix(), m_effect->colorMatrixRowCount(), m_effect->colorMatrixColumnCount());
         break;
     case ColorMatrixEffect::Saturate:
         m_type->setCurrentIndex(1);
@@ -136,11 +131,7 @@ void ColorMatrixEffectConfigWidget::matrixChanged()
     if (!m_effect)
         return;
 
-    QVector<qreal> m = m_effect->colorMatrix();
-    for (int i = 0; i < m.count(); ++i) {
-        m[i] = m_matrix[i]->value();
-    }
-    m_effect->setColorMatrix(m);
+    m_effect->setColorMatrix(m_matrixModel->matrix());
     emit filterChanged();
 }
 
@@ -168,11 +159,7 @@ void ColorMatrixEffectConfigWidget::typeChanged(int index)
         return;
 
     if (index == ColorMatrixEffect::Matrix) {
-        QVector<qreal> m(ColorMatrixEffect::colorMatrixSize());
-        for (int i = 0; i < m.count(); ++i) {
-            m[i] = m_matrix[i]->value();
-        }
-        m_effect->setColorMatrix(m);
+        m_effect->setColorMatrix(m_matrixModel->matrix());
     } else if (index == ColorMatrixEffect::Saturate) {
         m_effect->setSaturate(m_saturate->value());
     } else if (index == ColorMatrixEffect::HueRotate) {

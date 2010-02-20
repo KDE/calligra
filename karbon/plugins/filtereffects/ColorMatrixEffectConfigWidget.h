@@ -24,9 +24,10 @@
 
 class ColorMatrixEffect;
 class KoFilterEffect;
-class KDoubleNumInput;
 class KComboBox;
 class QStackedWidget;
+class KDoubleNumInput;
+class MatrixDataModel;
 
 class ColorMatrixEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -45,7 +46,7 @@ private slots:
 private:
     KComboBox * m_type;
     ColorMatrixEffect * m_effect;
-    QList<KDoubleNumInput*> m_matrix;
+    MatrixDataModel * m_matrixModel;
     QStackedWidget * m_stack;
     KDoubleNumInput * m_saturate;
     KDoubleNumInput * m_hueRotate;
