@@ -316,7 +316,7 @@ void SectionEditor::btnEdit_clicked()
                     else
                         rsdg->setPageBreak(ReportSectionDetailGroup::BreakNone);
 
-                    if (dgsd->cbSort->itemData(dgsd->cbSort->currentItem()).toString() == "ascending") {
+                    if (dgsd->cbSort->itemData(dgsd->cbSort->currentIndex()).toString() == "ascending") {
                         rsdg->setSort(Qt::AscendingOrder);
                     }
                     else {
