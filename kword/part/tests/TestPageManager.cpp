@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005,2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005,2008,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 
 #include <KWPageManager.h>
 #include <KWPage.h>
+#include <KoColorBackground.h>
 
 #include <kdebug.h>
 
@@ -637,6 +638,32 @@ void TestPageManager::testPageOffset()
     layout.height = 400;
     page.pageStyle().setPageLayout(layout);
     QCOMPARE(page.offsetInDocument(), (qreal) 400 * 49);
+}
+
+void TestPageManager::testBackgroundRefCount()
+{
+    KWPageStyle ps1("test");
+    QVERIFY(ps1.background() == 0);
+    KoColorBackground *background = new KoColorBackground(QColor(Qt::red));
+    QVERIFY(background->ref());
+    QCOMPARE(background->useCount(), 1);
+
+    ps1.setBackground(background);
+    QCOMPARE(background->useCount(), 2);
+
+    {
+        KWPageStyle ps2("test2");
+        QCOMPARE(background->useCount(), 2);
+        ps2 = ps1;
+        QCOMPARE(background->useCount(), 2);
+    }
+    QCOMPARE(background->useCount(), 2);
+
+    ps1 = ps1;
+    QCOMPARE(background->useCount(), 2);
+    ps1.setBackground(0);
+    QCOMPARE(background->useCount(), 1);
+    delete background;
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)

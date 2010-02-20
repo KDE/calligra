@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
@@ -89,9 +89,6 @@ bool KWPageStyle::isValid() const
 KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 {
     d = ps.d;
-    if (d && d->background) {
-        d->background->ref();
-    }
     return *this;
 }
 
@@ -246,7 +243,13 @@ KoShapeBackground *KWPageStyle::background() const
 
 void KWPageStyle::setBackground(KoShapeBackground *background)
 {
+    if (d->background) {
+        if (!d->background->deref())
+            delete d->background;
+    }
     d->background = background;
+    if (d->background)
+        d->background->ref();
 }
 
 KoGenStyle KWPageStyle::saveOdf() const
