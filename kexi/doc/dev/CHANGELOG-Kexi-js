@@ -66,6 +66,18 @@ KexiDB
 *edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-02-20
+Reports
+*add constness
+*replace boolean attribute with enums in KRPos and KRSize
+*remove warnings
+*add missing translation to properties
+
+2010-02-16
+Reports
+*fixed crash when clicking report tools but report window is not the current one
+*harmonize the look and name of data source tab with form designer
+
 2010-02-12
 Reports
 *Font properties are saved to ODF-like attributes instead of single qtFont value
