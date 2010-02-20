@@ -5,9 +5,9 @@ include_directories( ${KOMAIN_INCLUDES}
  
 ${KOODF_INCLUDES}
 ${CMAKE_SOURCE_DIR}/kexi/koproperty
-${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/
-${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
-${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/renderer
+${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/
+${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
+${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
 ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
 ${KDE4_INCLUDES} )
 
@@ -81,6 +81,10 @@ set(koreport_LIB_SRCS
 	wrtembed/codeeanpaint.cpp
 	wrtembed/code128paint.cpp
 	)
+
+if (SHOULD_BUILD_KWORD)
+  add_definitions(-DHAVE_KWORD)
+endif (SHOULD_BUILD_KWORD)
 
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)

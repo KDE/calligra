@@ -57,7 +57,7 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");
     QList<QAction*> al;
-    KAction *sep = new KAction("", this);
+    KAction *sep = new KAction(QString(), this);
     sep->setSeparator(true);
 
     al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_sectionEdit << sep << m_itemLowerAction << m_itemRaiseAction;
@@ -118,14 +118,13 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     QString src  = doc.toString();
     kDebug() << src;
 
-    if (storeDataBlock(src, "pgzreport_layout")) {
+    if (storeDataBlock(src, "layout")) {
         kDebug() << "Saved OK";
         setDirty(false);
         return true;
-    } else {
-        kDebug() << "NOT Saved OK";
     }
 
+    kDebug() << "NOT Saved OK";
     return false;
 }
 
@@ -134,12 +133,9 @@ tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontSto
     kDebug() << mode;
     dontStore = true;
     if (m_reportDesigner && mode == Kexi::DataViewMode) {
-	kDebug() << "Saving temp data";
-	
+        kDebug() << "Saving temp data";
         tempData()->reportDefinition = m_reportDesigner->document();
-	
-	kDebug() << m_reportDesigner->document().toDocument().toString();
-	
+        kDebug() << m_reportDesigner->document().toDocument().toString();
         tempData()->reportSchemaChangedInPreviousView = true;
     }
     return true;

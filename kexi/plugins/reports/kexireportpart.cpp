@@ -99,26 +99,31 @@ QString KexiReportPart::loadReport(const QString& name)
     //_internal->_reportName = pReportName;
 
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    if (!win || !win->project() || !win->project()->dbConnection()) {
-        kDebug() << "failed sanity check";
+    KexiDB::Connection *conn;
+    if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {
+        kDebug() << "failed sanity check: !win || !win->project() || !((conn = win->project()->dbConnection()))";
         return QString();
     }
     QString src, did;
     KexiDB::SchemaData sd;
 
-    if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
+    if (conn->loadObjectSchemaData(win->project()->idForClass("org.kexi-project.report"), name, sd) != true
+        && conn->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true /* compat. */)
+    {
         kWarning() << "failed to load schema data";
         return QString();
     }
 
     kDebug() << "***Object ID:" << sd.id();
 
-    if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
+    if (   win->project()->dbConnection()->loadDataBlock(sd.id(), src, "layout") == true
+        || win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true /* compat */)
+    {
         return src;
-    } else {
-        kWarning() << "Unable to load document";
-        return QString();
     }
+
+    kWarning() << "Unable to load document";
+    return QString();
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)

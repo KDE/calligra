@@ -68,13 +68,13 @@ KexiReportView::KexiReportView(QWidget *parent)
     QList<QAction*> viewActions;
     QAction* a;
     viewActions << (a = new KAction(KIcon("printer"), i18n("Print"), this));
-    a->setObjectName("pgzkexirpt_print_report");
+    a->setObjectName("print_report");
     a->setToolTip(i18n("Print Report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
     viewActions << (a = new KAction(KIcon("kword"), i18n("Open in KWord"), this));
-    a->setObjectName("pgzkexirpt_open_kword");
+    a->setObjectName("open_in_kword");
     a->setToolTip(i18n("Open the report in KWord"));
     a->setWhatsThis(i18n("Opens the current report in KWord."));
     a->setEnabled(false);
@@ -82,17 +82,17 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 #ifdef HAVE_KSPREAD
     viewActions << (a = new KAction(KIcon("kspread"), i18n("Open in KSpread"), this));
-    a->setObjectName("pgzkexirpt_open_kspread");
+    a->setObjectName("open_in_kspread");
     a->setToolTip(i18n("Open the report in KSpread"));
     a->setWhatsThis(i18n("Opens the current report in KSpread."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
 #endif
 
-    viewActions << (a = new KAction(KIcon("text-html"), i18n("Export to HTML"), this));
-    a->setObjectName("pgzkexirpt_export_html");
-    a->setToolTip(i18n("Export the report to HTML"));
-    a->setWhatsThis(i18n("Exports the report to a HTML file."));
+    viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
+    a->setObjectName("export_as_web_page");
+    a->setToolTip(i18n("Export the report as web page"));
+    a->setWhatsThis(i18n("Exports the report to a web page file."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportHTML()));
 
@@ -186,25 +186,30 @@ void KexiReportView::slotRenderKSpread()
 
 void KexiReportView::slotExportHTML()
 {
-    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
+    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
     if (!saveUrl.isValid()) {
-        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Saved"));
+        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Exported"));
         return;
     }
     if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
-        int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+        int wantSave = KMessageBox::warningContinueCancel(this,
+            i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()),
+            i18n("Warning"), KGuiItem(i18n("Overwrite")));
         if (wantSave != KMessageBox::Continue) {
             return;
         }
     }
 
-    bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
+    bool css = (KMessageBox::questionYesNo(this,
+        i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
+             "or export using a Table which outputs a much simpler format."), i18n("Export Style"),
+             KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
     KRHtmlRender hr;
     if (!hr.render(m_reportDocument, saveUrl, css)) {
-        KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n("Saving failed"));
+        KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n("Exporting failed"));
     } else {
-        KMessageBox::information(this, i18n("Report saved to %1", saveUrl.prettyUrl()) , i18n("Saved OK"));
+        KMessageBox::information(this, i18n("Report exported to %1", saveUrl.prettyUrl()) , i18n("Exporting Succeeded"));
     }
 }
 

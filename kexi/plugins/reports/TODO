@@ -1,4 +1,3 @@
-Add plugins for koproperty for QPointF and QSizeF
 Properly sync size/pos properties between the editor and the item
 Make report entities (label/field etc) plugins, so its easier to add new ones ?
 Maybe use flakes, or create a report 'shape' that can be embedded elsewhere

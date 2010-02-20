@@ -20,4 +20,4 @@
 
 #include <KPluginFactory>
 
-K_EXPORT_KEXI_PLUGIN(KexiReportPart, pgzkexireportpart2)
+K_EXPORT_KEXI_PLUGIN(KexiReportPart, report)
