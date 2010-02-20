@@ -89,7 +89,7 @@ bool KWPageStyle::isValid() const
 KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 {
     d = ps.d;
-    if (d->background) {
+    if (d && d->background) {
         d->background->ref();
     }
     return *this;
