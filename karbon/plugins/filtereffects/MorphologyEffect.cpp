@@ -87,7 +87,6 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
     const int maxX = qMin(w-rx, roi.right());
     const int minY = qMax(ry, roi.top());
     const int maxY = qMin(h-ry, roi.bottom());
-    const int maxPixel = w*h;
     const int defValue = m_operator == Erode ? 255 : 0;
 
     uchar * d = 0;

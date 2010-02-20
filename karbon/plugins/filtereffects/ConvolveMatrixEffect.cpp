@@ -233,7 +233,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
     return result;
 }
 
-bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
+bool ConvolveMatrixEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &/*context*/)
 {
     if (element.tagName() != id())
         return false;
