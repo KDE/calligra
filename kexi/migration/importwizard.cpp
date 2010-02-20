@@ -745,7 +745,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
             KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
             conn_data->setFileName(m_srcConn->selectedFileName());
             md->source = conn_data;
-            md->sourceName = "";
+            md->sourceName.clear();
         } else {
             if (m_predefinedConnectionData)
                 md->source = m_predefinedConnectionData;
@@ -778,7 +778,7 @@ tristate ImportWizard::import()
     if (sourceDriver && !result.error()) {
         if (!m_sourceDBEncoding.isEmpty()) {
             sourceDriver->setPropertyValue("source_database_nonunicode_encoding",
-                                           QVariant(m_sourceDBEncoding.toUpper().replace(' ', "")) // "CP1250", not "cp 1250"
+                                           QVariant(m_sourceDBEncoding.toUpper().replace(' ', QString())) // "CP1250", not "cp 1250"
                                           );
         }
 

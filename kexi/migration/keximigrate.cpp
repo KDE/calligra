@@ -202,7 +202,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 result->setStatus(
                     i18n(
                         "Could not import project from data source \"%1\". Error reading table \"%2\".",
-                        m_migrateData->source->serverInfoString(), tableCaption), "");
+                        m_migrateData->source->serverInfoString(), tableCaption), QString());
             return false;
         }
         //yeah, got a table

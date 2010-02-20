@@ -449,7 +449,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
             KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
             conn_data->setFileName(m_srcConnSel->selectedFileName());
             md->source = conn_data;
-            md->sourceName = "";
+            md->sourceName.clear();
         } else {
             md->source = m_srcConnSel->selectedConnectionData();
             //md->sourceName = m_srcDBName->selectedProjectData()->databaseName();
