@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2009-2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
