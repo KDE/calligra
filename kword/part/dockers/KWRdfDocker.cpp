@@ -134,7 +134,7 @@ void KWRdfDocker::updateDataForced()
 void KWRdfDocker::updateData()
 {
     //kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
-    if (!m_document || !m_canvas)
+    if (!m_document || !m_canvas || !isVisible())
         return;
     //kDebug(30015) << "updating docker...";
     // TODO try to get rid of 'handler' here by remembering the position in the resourceChanged()
