@@ -35,6 +35,7 @@ set(karbonfiltereffects_PART_SRCS
     ConvolveMatrixEffect.cpp
     ConvolveMatrixEffectFactory.cpp
     ConvolveMatrixEffectConfigWidget.cpp
+    MatrixDataModel.cpp
     )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})

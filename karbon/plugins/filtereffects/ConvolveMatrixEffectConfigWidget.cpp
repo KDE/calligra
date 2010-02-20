@@ -20,6 +20,7 @@
 #include "ConvolveMatrixEffectConfigWidget.h"
 #include "ConvolveMatrixEffect.h"
 #include "KoFilterEffect.h"
+#include "MatrixDataModel.h"
 
 #include <KLocale>
 #include <KComboBox>
@@ -32,78 +33,6 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QTableView>
 #include <QtGui/QHeaderView>
-
-class MatrixDataModel : public QAbstractTableModel
-{
-public:
-    MatrixDataModel(QObject *parent = 0)
-    : QAbstractTableModel(parent)
-    , m_rows(0), m_cols(0)
-    {
-    }
-
-    void setMatrix(const QVector<qreal> &matrix, int rows, int cols)
-    {
-        m_matrix = matrix;
-        m_rows = rows;
-        m_cols = cols;
-        Q_ASSERT(m_rows);
-        Q_ASSERT(m_cols);
-        Q_ASSERT(m_matrix.count() == m_rows*m_cols);
-        reset();
-    }
-
-    QVector<qreal> matrix() const
-    {
-        return m_matrix;
-    }
-
-    int rowCount ( const QModelIndex & /*parent*/ ) const
-    {
-        return m_rows;
-    }
-
-    int columnCount ( const QModelIndex & /*parent*/ ) const
-    {
-        return m_cols;
-    }
-
-    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const
-    {
-        int element = index.row() * m_cols + index.column();
-        switch(role) {
-            case Qt::DisplayRole:
-            case Qt::EditRole:
-                return QVariant(QString("%1").arg(m_matrix[element], 2));
-                break;
-            default:
-                return QVariant();
-        }
-    }
-
-    bool setData ( const QModelIndex & index, const QVariant & value, int /*role*/ )
-    {
-        int element = index.row() * m_cols + index.column();
-        bool valid = false;
-        qreal elementValue = value.toDouble(&valid);
-        if (!valid)
-            return false;
-        m_matrix[element] = elementValue;
-        emit dataChanged(index, index);
-        return true;
-    }
-
-    Qt::ItemFlags flags ( const QModelIndex & /*index*/ ) const
-    {
-        return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable;
-    }
-
-private:
-    QVector<qreal> m_matrix;
-    int m_rows;
-    int m_cols;
-};
-
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
