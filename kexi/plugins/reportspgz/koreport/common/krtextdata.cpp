@@ -141,7 +141,7 @@ void KRTextData::createProperties()
 
 }
 
-QString KRTextData::column() const
+QString KRTextData::controlSource() const
 {
     return m_controlSource->value().toString();
 }

@@ -51,7 +51,7 @@ public:
     void setBottomPadding(qreal bp);
     qreal bottomPadding() const;
 
-    QString column() const;
+    QString controlSource() const;
     KRTextStyleData textStyle();
     KRLineStyleData lineStyle();
 

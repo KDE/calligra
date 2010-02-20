@@ -59,7 +59,7 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     setZValue(Z);
 }
 
-ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene, QPointF pos)
+ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene, const QPointF &pos)
         : ReportEntity(d)
 {
     init(scene, d);

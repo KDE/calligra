@@ -125,4 +125,7 @@ void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, K
     entity.appendChild(element);
 }
 
-
+QString ReportEntity::dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName)
+{
+    return i18nc("<data-source>: <object>", "%1: %2", dataSource, objectTypeName);
+}

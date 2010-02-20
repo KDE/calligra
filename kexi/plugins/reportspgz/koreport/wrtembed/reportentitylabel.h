@@ -32,7 +32,7 @@ class ReportEntityLabel : public QObject, public ReportRectEntity, public KRLabe
 {
     Q_OBJECT
 public:
-    ReportEntityLabel(ReportDesigner *, QGraphicsScene * scene, QPointF pos);
+    ReportEntityLabel(ReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
     ReportEntityLabel(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
     virtual ~ReportEntityLabel();
 

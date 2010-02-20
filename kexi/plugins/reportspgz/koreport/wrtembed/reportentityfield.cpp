@@ -47,7 +47,7 @@ void ReportEntityField::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene, QPointF pos)
+ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -79,7 +79,7 @@ ReportEntityField::~ReportEntityField()
 
 QRect ReportEntityField::getTextRect()
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), m_controlSource->value().toString() + QObject::tr(": field")/* + QObject::tr((m_trackTotal->value().toBool() ? " field total" : " field"))*/);
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(controlSource(), "field"));
 }
 
 
@@ -102,7 +102,7 @@ void ReportEntityField::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
-    painter->drawText(rect(), textFlags(), m_controlSource->value().toString() + QObject::tr(":field")/* + QObject::tr((m_trackTotal->value().toBool() ? " field total" : " field"))*/);
+    painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(controlSource(), "field"));
 
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {

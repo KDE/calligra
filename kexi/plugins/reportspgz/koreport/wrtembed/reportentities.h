@@ -74,7 +74,7 @@ public:
 protected:
     ReportEntity(ReportDesigner*);
     ReportDesigner* m_reportDesigner;
-
+    QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName);
 private:
     static bool m_readDefaultFont;
     static QFont m_defaultFont;

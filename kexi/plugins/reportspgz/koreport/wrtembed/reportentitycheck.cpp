@@ -46,7 +46,7 @@ void ReportEntityCheck::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene, QPointF pos)
+ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(d)
 {
     init(scene);

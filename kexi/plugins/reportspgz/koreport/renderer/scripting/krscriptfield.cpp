@@ -36,7 +36,7 @@ QString Field::source()
 
 void Field::setSource(const QString& s)
 {
-    m_field->setColumn(s);
+    m_field->setControlSource(s);
 }
 
 int Field::horizontalAlignment()

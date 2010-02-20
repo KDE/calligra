@@ -47,7 +47,7 @@ void ReportEntityLabel::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene, QPointF pos)
+ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(d)
 {
     init(scene);

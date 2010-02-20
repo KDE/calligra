@@ -50,7 +50,7 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 // methods (constructors)
-ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* scene, QPointF pos)
+ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -84,7 +84,7 @@ ReportEntityBarcode::~ReportEntityBarcode()
 QRect ReportEntityBarcode::getTextRect()
 {
     QFont fnt = QFont();
-    return QFontMetrics(fnt).boundingRect(int (x()), int (y()), 0, 0, 0, m_controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
+    return QFontMetrics(fnt).boundingRect(int (x()), int (y()), 0, 0, 0, dataSourceAndObjectTypeName(controlSource(), "barcode"));
 }
 
 void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -120,7 +120,7 @@ void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsIte
         renderCodeEAN8(rect().toRect(), "1234567", alignment(), painter);
 
     painter->setPen(Qt::black);
-    painter->drawText(rect(), 0, m_controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(controlSource(), "barcode"));
 
     // restore an values before we started just in case
     painter->setPen(p);

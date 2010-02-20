@@ -164,7 +164,7 @@ QString KRFieldData::controlSource() const
     return m_controlSource->value().toString();
 }
 
-void KRFieldData::setColumn(const QString& t)
+void KRFieldData::setControlSource(const QString& t)
 {
     if (m_controlSource->value() != t) {
         m_controlSource->setValue(t);

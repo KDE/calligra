@@ -35,7 +35,7 @@ class ReportEntityShape : public QObject, public ReportRectEntity, public KRShap
 {
     Q_OBJECT
 public:
-    ReportEntityShape(ReportDesigner *, QGraphicsScene * scene, QPointF pos);
+    ReportEntityShape(ReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
     ReportEntityShape(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
     virtual ~ReportEntityShape();
 

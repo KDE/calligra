@@ -54,7 +54,7 @@ void ReportEntityImage::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 
-ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene, QPointF pos)
+ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -101,7 +101,7 @@ void ReportEntityImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*
         }
         painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
     } else {
-        painter->drawText(rect(), 0, controlSource() + QObject::tr(":") + QObject::tr(" image"));
+        painter->drawText(rect(), 0, dataSourceAndObjectTypeName(controlSource(), "image"));
     }
 
     //Draw a border so user knows the object edge

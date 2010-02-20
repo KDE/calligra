@@ -51,7 +51,7 @@ void ReportEntityText::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 
-ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, QPointF pos)
+ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -82,7 +82,7 @@ ReportEntityText::~ReportEntityText()
 
 QRect ReportEntityText::getTextRect()
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), dataSourceAndObjectTypeName(controlSource(), "textarea"));
 }
 
 void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -103,7 +103,7 @@ void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
-    painter->drawText(rect(), textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
+    painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(controlSource(), "textarea"));
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(QColor(224, 224, 224)));

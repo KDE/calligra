@@ -48,7 +48,7 @@ public:
         return m_font->value().value<QFont>();
     }
 
-    void setColumn(const QString&);
+    void setControlSource(const QString&);
     void setTrackTotal(bool);
     void setTrackTotalFormat(const QString &, bool = false);
     void setUseSubTotal(bool);

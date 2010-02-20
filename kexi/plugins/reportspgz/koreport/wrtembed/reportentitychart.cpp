@@ -49,7 +49,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
 }
 
-ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene, QPointF pos)
+ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rd)
 {
     init(scene, rd);
@@ -93,7 +93,7 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     painter->setBackground(bg);
     painter->setPen(Qt::black);
-    painter->drawText(rect(), 0, m_dataSource->value().toString() + QObject::tr(":") + QObject::tr("chart"));
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(m_dataSource->value().toString(), "chart"));
     painter->setPen(QPen(QColor(224, 224, 224)));
     painter->drawRect(rect());
     painter->setBackgroundMode(Qt::TransparentMode);

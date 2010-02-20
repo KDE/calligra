@@ -35,7 +35,7 @@ Text::~Text()
 
 QString Text::source()
 {
-    return m_text->column();
+    return m_text->controlSource();
 }
 
 void Text::setSource(const QString& s)
