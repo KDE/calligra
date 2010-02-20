@@ -121,7 +121,7 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
             int j = 0;
 //   char *q=++p;
             ++i;
-            line = "";
+            line.clear();
             for (;i<buflen && *p >= '0' && *p <= '9'; j++, i++, p++)
                 line += *p;
             --i; --p;
@@ -230,7 +230,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
         int idx;
         bool name_required = true;
         if (action_name == "new") {
-            obj_name = "";
+            obj_name.clear();
             stripQuotes(item, type_name);
             name_required = false;
         } else {//open, design, text...

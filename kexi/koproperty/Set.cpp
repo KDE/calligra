@@ -62,7 +62,7 @@ public:
         if (p)
             return *p;
         Set_nonConstNull.setName(0); //to ensure returned property is null
-        kWarning() << "PROPERTY \"" << name << "\" NOT FOUND";
+        kWarning() << "PROPERTY" << name << "NOT FOUND";
         return Set_nonConstNull;
     }
 

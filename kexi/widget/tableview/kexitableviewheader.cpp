@@ -110,14 +110,14 @@ void KexiTableViewHeader::styleChanged()
 
 int KexiTableViewHeader::addLabel(const QString & s, int size)
 {
-    m_toolTips += "";
+    //m_toolTips += "";
     slotSizeChange(0, 0, 0);//refresh
     return Q3Header::addLabel(s, size);
 }
 
 int KexiTableViewHeader::addLabel(const QIcon & icon, const QString & s, int size)
 {
-    m_toolTips += "";
+    //m_toolTips += "";
     slotSizeChange(0, 0, 0);//refresh
     return Q3Header::addLabel(icon, s, size);
 }

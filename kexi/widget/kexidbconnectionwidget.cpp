@@ -99,7 +99,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     d->btnTestConnection = new KPushButton(
 // @todo add Test Connection icon
-        KGuiItem(i18n("&Test Connection"), "",
+        KGuiItem(i18n("&Test Connection"), QString(),
                  i18n("Test database connection"),
                  i18n("Tests database connection. "
                       "You can ensure that valid connection information is provided.")),

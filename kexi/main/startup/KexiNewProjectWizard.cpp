@@ -309,7 +309,7 @@ void KexiNewProjectWizard::next()
     if (currentPage() == m_db_title) { //pg 2
         if (m_db_title->le_caption->text().trimmed().isEmpty()) {
             KMessageBox::information(this, i18n("Enter project caption."));
-            m_db_title->le_caption->setText("");
+            m_db_title->le_caption->setText(QString());
             m_db_title->le_caption->setFocus();
             return;
         }
@@ -354,7 +354,7 @@ void KexiNewProjectWizard::accept()
         QString dbname = m_server_db_name->le_dbname->text().trimmed();
         if (dbname.isEmpty()) {
             KMessageBox::information(this, i18n("Enter project's database name."));
-            m_server_db_name->le_dbname->setText("");
+            m_server_db_name->le_dbname->setText(QString());
             m_server_db_name->le_dbname->setFocus();
             return;
         }

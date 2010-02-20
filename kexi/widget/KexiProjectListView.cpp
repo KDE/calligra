@@ -101,7 +101,7 @@ KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
     slotSettingsChanged(0);
 
     m_list->header()->hide();
-    m_list->addColumn("");
+    m_list->addColumn(QString());
     m_list->setShowToolTips(true);
     m_list->setSorting(0);
     m_list->sort();

@@ -74,7 +74,7 @@ TestWindow::TestWindow()
         m_set.addProperty(new Property("Bool", QVariant(true), "Bool"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="3-State") {
-        m_set.addProperty(p = new Property("3-State", QVariant(), "3 States", "", Bool), group);
+        m_set.addProperty(p = new Property("3-State", QVariant(), "3 States", QString(), Bool), group);
         p->setOption("3State", true);
     }
     if (singleProperty.isEmpty() || singleProperty=="Date") {
@@ -153,7 +153,7 @@ TestWindow::TestWindow()
         m_set.addProperty(new Property("Cursor", QCursor(Qt::WaitCursor), "Cursor"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="LineStyle") {
-        m_set.addProperty(new Property("LineStyle", 3, "Line Style", "", LineStyle), group);
+        m_set.addProperty(new Property("LineStyle", 3, "Line Style", QString(), LineStyle), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="SizePolicy") {
         QSizePolicy sp(sizePolicy());

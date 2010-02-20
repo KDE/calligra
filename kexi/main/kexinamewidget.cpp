@@ -173,7 +173,7 @@ void KexiNameWidget::setNameText(const QString& name)
 void KexiNameWidget::setMessageText(const QString& msg)
 {
     if (msg.trimmed().isEmpty()) {
-        lbl_message->setText("");
+        lbl_message->setText(QString());
         lbl_message->hide();
     } else {
         lbl_message->setText(msg.trimmed() + "<br>");

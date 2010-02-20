@@ -701,8 +701,8 @@ Property::addChild(Property *prop)
 //        prop->setSortingKey(d->children->count());
         prop->d->parent = this;
     } else {
-        kWarning() << "property \"" << name()
-                << "\": child property \"" << prop->name() << "\" already added";
+        kWarning() << "property" << name()
+                << ": child property" << prop->name() << "already added";
         return;
     }
 }

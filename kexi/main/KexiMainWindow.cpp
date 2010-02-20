@@ -2288,7 +2288,7 @@ void KexiMainWindow::updateAppCaption()
 {
 //! @todo allow to set custom "static" app caption
 
-    d->appCaptionPrefix = "";
+    d->appCaptionPrefix.clear();
     if (d->prj && d->prj->data()) {//add project name
         d->appCaptionPrefix = d->prj->data()->caption();
         if (d->appCaptionPrefix.isEmpty())

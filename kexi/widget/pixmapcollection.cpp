@@ -399,7 +399,7 @@ PixmapCollectionChooser::pixmap()
 QString
 PixmapCollectionChooser::pixmapName()
 {
-    return m_iconView->currentItem() ? m_iconView->currentItem()->text() : QString("");
+    return m_iconView->currentItem() ? m_iconView->currentItem()->text() : QString();
 }
 
 QPixmap

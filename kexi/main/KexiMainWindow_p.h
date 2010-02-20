@@ -573,7 +573,7 @@ public:
         wasAutoOpen = false;
         windowExistedBeforeCloseProject = false;
 #ifndef KEXI_SHOW_UNIMPLEMENTED
-        dummy_action = new KActionMenu("", wnd);
+        dummy_action = new KActionMenu(QString(), wnd);
 #endif
         maximizeFirstOpenedChildFrm = false;
 #ifdef HAVE_KNEWSTUFF

@@ -150,7 +150,7 @@ public:
      \a acceptButtonGuiItem allows to override default "Open" button's appearance. */
     KexiDBConnectionDialog(QWidget* parent, const KexiProjectData& data,
                            const QString& shortcutFileName = QString(),
-                           const KGuiItem& acceptButtonGuiItem = KGuiItem(""));
+                           const KGuiItem& acceptButtonGuiItem = KGuiItem());
 
     /*! Creates a new connection dialog for connection data \a data.
      Only connection data is visible: database name and and title fields are hidden.
@@ -160,7 +160,7 @@ public:
      See above constructor for more details. */
     KexiDBConnectionDialog(QWidget* parent, const KexiDB::ConnectionData& data,
                            const QString& shortcutFileName = QString(),
-                           const KGuiItem& acceptButtonGuiItem = KGuiItem(""));
+                           const KGuiItem& acceptButtonGuiItem = KGuiItem());
 
     ~KexiDBConnectionDialog();
 
