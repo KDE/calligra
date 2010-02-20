@@ -53,8 +53,8 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     if (s)
         s->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set, KoProperty::Property)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set, KoProperty::Property)));
 
     setZValue(Z);
 }
@@ -136,13 +136,16 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s);
-    
+
     if (p.name() == "Start" || p.name() == "End") {
-	if (p.name() == "Start") m_start.setUnitPos(p.value().toPointF(), false);
-	if (p.name() == "End") m_end.setUnitPos(p.value().toPointF(), false);
-	
-        setLine ( m_start.toScene().x(), m_start.toScene().y(), m_end.toScene().x(), m_end.toScene().y() );
-    } else if (p.name() == "Name") {
+        if (p.name() == "Start")
+            m_start.setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
+        if (p.name() == "End")
+            m_end.setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
+
+        setLine(m_start.toScene().x(), m_start.toScene().y(), m_end.toScene().x(), m_end.toScene().y());
+    }
+    else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
             p.setValue(m_oldName);
@@ -150,7 +153,8 @@ void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prope
             m_oldName = p.value().toString();
         }
     }
-    if (m_reportDesigner) m_reportDesigner->setModified(true);
+    if (m_reportDesigner)
+        m_reportDesigner->setModified(true);
 }
 
 void ReportEntityLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
@@ -254,6 +258,6 @@ void ReportEntityLine::setUnit(KoUnit u)
 
 void ReportEntityLine::setLineScene(QLineF l)
 {
-    m_start.setScenePos(l.p1(), false);
+    m_start.setScenePos(l.p1(), KRPos::DontUpdateProperty);
     m_end.setScenePos(l.p2());
 }

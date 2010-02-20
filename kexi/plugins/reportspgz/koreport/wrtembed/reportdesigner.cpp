@@ -49,11 +49,19 @@
 #include <KoDpi.h>
 #include <KoPageFormat.h>
 #include <kaction.h>
-#include <kdebug.h>
+#include <KLocale>
+#include <KDebug>
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
 const char* ns = "http://kexi-project.org/report/2.0";
+
+static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
+{
+    QDomElement e = d->createElement("report:" + p->name().toLower());
+    e.appendChild(d->createTextNode(p->value().toString()));
+    return e;
+}
 
 //
 // define and implement the ReportWriterSectionData class
@@ -168,8 +176,8 @@ void ReportDesigner::init()
     connect(d->pageButton, SIGNAL(released()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*m_set);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set, KoProperty::Property)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set, KoProperty::Property)));
 
     changeSet(m_set);
 }
@@ -286,14 +294,14 @@ QDomElement ReportDesigner::document() const
     content.appendChild(propertyToElement(&doc, m_title));
 
     QDomElement scr = propertyToElement(&doc, m_script);
-    addPropertyAsAttribute(&scr, m_interpreter);
+    ReportEntity::addPropertyAsAttribute(&scr, m_interpreter);
     content.appendChild(scr);
 
     QDomElement grd = doc.createElement("report:grid");
-    addPropertyAsAttribute(&grd, m_showGrid);
-    addPropertyAsAttribute(&grd, m_gridDivisions);
-    addPropertyAsAttribute(&grd, m_gridSnap);
-    addPropertyAsAttribute(&grd, m_unit);
+    ReportEntity::addPropertyAsAttribute(&grd, m_showGrid);
+    ReportEntity::addPropertyAsAttribute(&grd, m_gridDivisions);
+    ReportEntity::addPropertyAsAttribute(&grd, m_gridSnap);
+    ReportEntity::addPropertyAsAttribute(&grd, m_unit);
     content.appendChild(grd);
 
     // pageOptions
@@ -310,12 +318,12 @@ QDomElement ReportDesigner::document() const
         pagestyle.setAttribute("report:page-label-type", m_labelType->value().toString());
     } else {
         pagestyle.appendChild(doc.createTextNode("predefined"));
-	addPropertyAsAttribute(&pagestyle, m_pageSize);
+	ReportEntity::addPropertyAsAttribute(&pagestyle, m_pageSize);
         //pagestyle.setAttribute("report:page-size", m_pageSize->value().toString());
     }
 
     // -- orientation
-    addPropertyAsAttribute(&pagestyle, m_orientation);
+    ReportEntity::addPropertyAsAttribute(&pagestyle, m_orientation);
 
     // -- margins
     pagestyle.setAttribute("fo:margin-top", KoUnit::unit(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
@@ -592,19 +600,19 @@ void ReportDesigner::createProperties()
     QStringList keys, strings;
     m_set = new KoProperty::Set(0, "Report");
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set, KoProperty::Property)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set, KoProperty::Property)));
 
-    m_title = new KoProperty::Property("Title", "Report", "Title", "Report Title");
+    m_title = new KoProperty::Property("Title", "Report", i18n("Title"), i18n("Report Title"));
 
     keys.clear();
     keys = pageFormats();
-    m_pageSize = new KoProperty::Property("page-size", keys, keys, "A4", "Page Size");
+    m_pageSize = new KoProperty::Property("page-size", keys, keys, "A4", i18n("Page Size"));
 
     keys.clear(); strings.clear();
     keys << "portrait" << "landscape";
     strings << i18n("Portrait") << i18n("Landscape");
-    m_orientation = new KoProperty::Property("print-orientation", keys, strings, "portrait", "Page Orientation");
+    m_orientation = new KoProperty::Property("print-orientation", keys, strings, "portrait", i18n("Page Orientation"));
 
     keys.clear(); strings.clear();
 
@@ -615,25 +623,29 @@ void ReportDesigner::createProperties()
         keys << unit;
     }
 
-    m_unit = new KoProperty::Property("page-unit", keys, strings, "cm", "Page Unit");
+    m_unit = new KoProperty::Property("page-unit", keys, strings, "cm", i18n("Page Unit"));
 
-    m_showGrid = new KoProperty::Property("grid-visible", true, "Show Grid", "Show Grid");
-    m_gridSnap = new KoProperty::Property("grid-snap", true, "Grid Snap", "Grid Snap");
-    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, "Grid Divisions", "Grid Divisions");
+    m_showGrid = new KoProperty::Property("grid-visible", true, i18n("Show Grid"), i18n("Show Grid"));
+    m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Grid Snap"), i18n("Grid Snap"));
+    m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"), i18n("Grid Divisions"));
 
-    m_leftMargin = new KoProperty::Property("margin-left", KoUnit::unit("cm").fromUserValue(1.0), "Left Margin", "Left Margin", KoProperty::Double);
-    m_rightMargin = new KoProperty::Property("margin-right", KoUnit::unit("cm").fromUserValue(1.0), "Right Margin", "Right Margin", KoProperty::Double);
-    m_topMargin = new KoProperty::Property("margin-top", KoUnit::unit("cm").fromUserValue(1.0), "Top Margin", "Top Margin", KoProperty::Double);
-    m_bottomMargin = new KoProperty::Property("margin-bottom", KoUnit::unit("cm").fromUserValue(1.0), "Bottom Margin", "Bottom Margin", KoProperty::Double);
+    m_leftMargin = new KoProperty::Property("margin-left", KoUnit::unit("cm").fromUserValue(1.0),
+        i18n("Left Margin"), i18n("Left Margin"), KoProperty::Double);
+    m_rightMargin = new KoProperty::Property("margin-right", KoUnit::unit("cm").fromUserValue(1.0),
+        i18n("Right Margin"), i18n("Right Margin"), KoProperty::Double);
+    m_topMargin = new KoProperty::Property("margin-top", KoUnit::unit("cm").fromUserValue(1.0),
+        i18n("Top Margin"), i18n("Top Margin"), KoProperty::Double);
+    m_bottomMargin = new KoProperty::Property("margin-bottom", KoUnit::unit("cm").fromUserValue(1.0),
+        i18n("Bottom Margin"), i18n("Bottom Margin"), KoProperty::Double);
     m_leftMargin->setOption("unit", "cm");
     m_rightMargin->setOption("unit", "cm");
     m_topMargin->setOption("unit", "cm");
     m_bottomMargin->setOption("unit", "cm");
 
     keys = Kross::Manager::self().interpreters();
-    m_interpreter = new KoProperty::Property("script-interpreter", keys, keys, keys[0], "Script Interpreter");
+    m_interpreter = new KoProperty::Property("script-interpreter", keys, keys, keys[0], i18n("Script Interpreter"));
 
-    m_script = new KoProperty::Property("script", keys, keys, "", "Object Script");
+    m_script = new KoProperty::Property("script", keys, keys, QString(), i18n("Object Script"));
 
     m_set->addProperty(m_title);
     m_set->addProperty(m_pageSize);

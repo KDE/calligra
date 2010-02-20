@@ -129,3 +129,22 @@ QString ReportEntity::dataSourceAndObjectTypeName(const QString& dataSource, con
 {
     return i18nc("<data-source>: <object>", "%1: %2", dataSource, objectTypeName);
 }
+
+// static
+void ReportEntity::addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
+{
+    switch (p->value().type()) {
+    case QVariant::Int :
+        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+        break;
+    case QVariant::Double:
+        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toDouble());
+        break;
+    case QVariant::Bool:
+        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+        break;
+    default:
+        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toString());
+        break;
+    }
+}

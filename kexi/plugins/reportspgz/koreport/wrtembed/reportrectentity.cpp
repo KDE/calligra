@@ -77,20 +77,20 @@ QRectF ReportRectEntity::pointRect()
         return QRectF(0, 0, 0, 0);
 }
 
-void ReportRectEntity::setSceneRect(QPointF p, QSizeF s, bool update_property)
+void ReportRectEntity::setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update)
 {
-    setSceneRect(QRectF(p, s), update_property);
+    setSceneRect(QRectF(topLeft, size), update);
 }
 
-void ReportRectEntity::setSceneRect(QRectF r, bool update_property)
+void ReportRectEntity::setSceneRect(const QRectF& rect, UpdatePropertyFlag update)
 {
-    QGraphicsRectItem::setPos(r.x(), r.y());
-    setRect(0, 0, r.width(), r.height());
-    if (update_property) {
-	m_ppos->setScenePos(QPointF(r.x(), r.y()));
-	m_psize->setSceneSize(QSizeF(r.width(), r.height()));
+    QGraphicsRectItem::setPos(rect.x(), rect.y());
+    setRect(0, 0, rect.width(), rect.height());
+    if (update == UpdateProperty) {
+        m_ppos->setScenePos(QPointF(rect.x(), rect.y()));
+        m_psize->setSceneSize(QSizeF(rect.width(), rect.height()));
     }
-    update();
+    this->update();
 }
 
 void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
@@ -312,13 +312,13 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
     return QGraphicsItem::itemChange(change, value);
 }
 
-void ReportRectEntity::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportRectEntity::propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p)
 {
     if (p.name() == "Position") {
-        m_ppos->setUnitPos(p.value().toPointF(), false);
+        m_ppos->setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_psize->setUnitSize(p.value().toSizeF(), false);
+        m_psize->setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
     }
 
-    setSceneRect(m_ppos->toScene(), m_psize->toScene(), false);
+    setSceneRect(m_ppos->toScene(), m_psize->toScene(), DontUpdateProperty);
 }

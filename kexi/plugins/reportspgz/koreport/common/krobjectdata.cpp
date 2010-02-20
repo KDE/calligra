@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krobjectdata.h"
-#include <kdebug.h>
+#include <KLocale>
 #include "krpos.h"
 #include "krsize.h"
 #include "krutils.h"
@@ -25,7 +25,7 @@
 KRObjectData::KRObjectData()
 {
     Z = 0;
-    m_name = new KoProperty::Property("Name", "", "Name", "Object Name");
+    m_name = new KoProperty::Property("Name", QString(), i18n("Name"), i18n("Object Name"));
     m_name->setAutoSync(0);
 }
 

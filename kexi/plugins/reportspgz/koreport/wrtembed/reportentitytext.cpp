@@ -42,8 +42,8 @@ void ReportEntityText::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set, KoProperty::Property)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set, KoProperty::Property)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
@@ -159,9 +159,9 @@ void ReportEntityText::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prope
     Q_UNUSED(s);
 
     if (p.name() == "Position") {
-        m_pos.setUnitPos(p.value().toPointF(), false);
+        m_pos.setUnitPos(p.value().toPointF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Size") {
-        m_size.setUnitSize(p.value().toSizeF(), false);
+        m_size.setUnitSize(p.value().toSizeF(), KRPos::DontUpdateProperty);
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -171,7 +171,9 @@ void ReportEntityText::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prope
         }
     }
 
-    setSceneRect(m_pos.toScene(), m_size.toScene(), false);
-    if (m_reportDesigner)m_reportDesigner->setModified(true);
-    if (scene())scene()->update();
+    setSceneRect(m_pos.toScene(), m_size.toScene(), DontUpdateProperty);
+    if (m_reportDesigner)
+        m_reportDesigner->setModified(true);
+    if (scene())
+        scene()->update();
 }

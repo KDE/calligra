@@ -63,9 +63,9 @@ void KRLineData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Line");
 
-    m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
-    m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
-    m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
+    m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
+    m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
     m_start.setName("Start");
     m_end.setName("End");
 

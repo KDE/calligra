@@ -103,19 +103,19 @@ void KRBarcodeData::createProperties()
 
     QStringList keys, strings;
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    m_horizontalAlignment = new KoProperty::Property("horizontal-align", keys, strings, "left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("horizontal-align", keys, strings, "left", i18n("Horizontal Alignment"));
 
     keys.clear();
     strings.clear();
     keys << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
     strings << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
-    m_format = new KoProperty::Property("barcode-format", keys, strings, "3of9", "Barcode Format");
+    m_format = new KoProperty::Property("barcode-format", keys, strings, "3of9", i18n("Barcode Format"));
 
-    m_maxLength = new KoProperty::Property("barcode-max-length", 5, "Max Length", "Maximum Barode Length");
+    m_maxLength = new KoProperty::Property("barcode-max-length", 5, i18n("Max Length"), i18n("Maximum Barode Length"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);

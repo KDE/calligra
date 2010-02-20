@@ -17,13 +17,13 @@
  */
 
 #include "krsize.h"
-#include <kdebug.h>
+#include <KLocale>
 #include <KoDpi.h>
 
 KRSize::KRSize(const KoUnit& unit)
 {
     m_unit = unit;
-    m_property = new KoProperty::Property("Size", toScene(), "Size", "Size");
+    m_property = new KoProperty::Property("Size", toScene(), i18n("Size"));
 }
 
 

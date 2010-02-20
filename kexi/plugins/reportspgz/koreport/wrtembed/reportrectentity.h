@@ -46,8 +46,13 @@ protected:
     int m_dpiX;
     int m_dpiY;
 
-    void setSceneRect(QPointF, QSizeF, bool update_property = true);
-    void setSceneRect(QRectF, bool update_property = true);
+    enum UpdatePropertyFlag {
+        UpdateProperty,
+        DontUpdateProperty
+    };
+
+    void setSceneRect(const QPointF& topLeft, const QSizeF& size, UpdatePropertyFlag update = UpdateProperty);
+    void setSceneRect(const QRectF& rect, UpdatePropertyFlag update = UpdateProperty);
 
     void drawHandles(QPainter*);
     QRectF pointRect();
@@ -58,7 +63,7 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    void propertyChanged(KoProperty::Set &s, KoProperty::Property &p);
+    void propertyChanged(const KoProperty::Set &s, const KoProperty::Property &p);
 private:
     int grabHandle(QPointF);
     int m_grabAction;

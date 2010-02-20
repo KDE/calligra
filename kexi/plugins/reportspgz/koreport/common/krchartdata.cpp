@@ -17,6 +17,8 @@
  */
 #include "krchartdata.h"
 #include <KoGlobal.h>
+#include <KLocale>
+#include <KDebug>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
@@ -38,7 +40,6 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <QMotifStyle>
-#include <kdebug.h>
 
 #include <KDChartChart>
 #include <KDChartBackgroundAttributes>
@@ -95,16 +96,16 @@ void KRChartData::createProperties()
     QList<QVariant> keys;
     QStringList stringkeys;
 
-    m_dataSource = new KoProperty::Property("data-source", QStringList(), QStringList(), "", "Data Source");
+    m_dataSource = new KoProperty::Property("data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     m_dataSource->setOption("extraValueAllowed", "true");
 
-    m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), "Font", "Field Font");
+    m_font = new KoProperty::Property("Font", KGlobalSettings::generalFont(), i18n("Font"), i18n("Field Font"));
 
     keys << 1 << 2 << 3 << 4 << 5;
     strings << i18n("Bar") << i18n("Line") << i18n("Pie") << i18n("Ring") << i18n("Polar");
     KoProperty::Property::ListData *typeData = new KoProperty::Property::ListData(keys, strings);
-    m_chartType = new KoProperty::Property("chart-type", typeData, 1, "Chart Type");
+    m_chartType = new KoProperty::Property("chart-type", typeData, 1, i18n("Chart Type"));
 
     keys.clear();
     strings.clear();
@@ -113,7 +114,7 @@ void KRChartData::createProperties()
 
     KoProperty::Property::ListData *subData = new KoProperty::Property::ListData(keys, strings);
 
-    m_chartSubType = new KoProperty::Property("chart-sub-type", subData, 0, "Chart Sub Type");
+    m_chartSubType = new KoProperty::Property("chart-sub-type", subData, 0, i18n("Chart Sub Type"));
 
     keys.clear();
     strings.clear();
@@ -121,18 +122,22 @@ void KRChartData::createProperties()
     strings << i18n("Default") << i18n("Rainbow") << i18n("Subdued");
     m_colorScheme = new KoProperty::Property("chart-color-scheme", stringkeys, strings, "default", i18n("Color Scheme"));
 
-    m_threeD = new KoProperty::Property("three-dimensions", false, "3D", "3D");
-    m_aa = new KoProperty::Property("antialiased", false, "Antialiased", "Antialiased");
+    m_threeD = new KoProperty::Property("three-dimensions", QVariant(false),
+        i18nc("Three dimensions", "3D"));
+    m_aa = new KoProperty::Property("antialiased", QVariant(false), i18n("Antialiased"));
 
-    m_xTitle = new KoProperty::Property("title-x-axis", "", "X Axis Title", "X Axis Title");
-    m_yTitle = new KoProperty::Property("title-y-axis", "", "Y Axis Title", "Y Axis Title");
+    m_xTitle = new KoProperty::Property("title-x-axis", QString(), i18n("X Axis Title"), i18n("X Axis Title"));
+    m_yTitle = new KoProperty::Property("title-y-axis", QString(), i18n("Y Axis Title"), i18n("Y Axis Title"));
 
-    m_displayLegend = new KoProperty::Property("display-legend", true, "Display Legend", "Display Legend");
+    m_displayLegend = new KoProperty::Property("display-legend", true, i18n("Display Legend"), i18n("Display Legend"));
 
-    m_backgroundColor = new KoProperty::Property("background-color", Qt::white, "Background Color", "Background Color");
+    m_backgroundColor = new KoProperty::Property("background-color", Qt::white,
+        i18n("Background Color"), i18n("Background Color"));
 
-    m_linkMaster = new KoProperty::Property("link-master", "", "Link Master", i18n("Fields from master data source"));
-    m_linkChild = new KoProperty::Property("link-child", "", "Link Child", i18n("Fields from child data source"));
+    m_linkMaster = new KoProperty::Property("link-master", QString(), i18n("Link Master"),
+        i18n("Fields from master data source"));
+    m_linkChild = new KoProperty::Property("link-child", QString(), i18n("Link Child"),
+        i18n("Fields from child data source"));
 
     addDefaultProperties();
     m_set->addProperty(m_dataSource);
@@ -229,7 +234,7 @@ void KRChartData::populateData()
                 setColorScheme(m_colorScheme->value().toString());
                 setBackgroundColor(m_backgroundColor->value().value<QColor>());
                 curs->moveFirst();
-                bool status = true;
+                //bool status = true;
                 do {
                     labels << curs->value(0).toString();
                     for (int i = 1; i <= cols; ++i) {

@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,19 +28,24 @@
 class KRPos
 {
 public:
-    KRPos(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
+    enum UpdatePropertyFlag {
+        UpdateProperty,
+        DontUpdateProperty
+    };
+
+    explicit KRPos(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
 
     ~KRPos();
-    QPointF toUnit();
-    QPointF toPoint();
-    QPointF toScene();
-    void setScenePos(const QPointF&, bool = true);
-    void setUnitPos(const QPointF&, bool = true);
-    void setPointPos(const QPointF&, bool = true);
-    void setUnit(KoUnit);
-    void setName(const QString&);
-    KoUnit unit() { return m_unit;} 
-    
+    QPointF toUnit() const;
+    QPointF toPoint() const;
+    QPointF toScene() const;
+    void setScenePos(const QPointF&, UpdatePropertyFlag update = UpdateProperty);
+    void setUnitPos(const QPointF&, UpdatePropertyFlag update = UpdateProperty);
+    void setPointPos(const QPointF&, UpdatePropertyFlag update = UpdateProperty);
+    void setUnit(const KoUnit& unit);
+    void setName(const QString& name);
+    KoUnit unit() const { return m_unit; }
+
     KoProperty::Property* property() {
         return m_property;
     }

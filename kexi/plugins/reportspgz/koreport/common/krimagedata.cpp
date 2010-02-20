@@ -107,14 +107,14 @@ void KRImageData::createProperties()
 {
     m_set = new KoProperty::Set(0, "Image");
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
 
     QStringList keys, strings;
     keys << "clip" << "stretch";
     strings << i18n("Clip") << i18n("Stretch");
-    m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", "Resize Mode");
+    m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
 
-    m_staticImage = new KoProperty::Property("static-image", QPixmap(), "Static Image", "Static Image");
+    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);

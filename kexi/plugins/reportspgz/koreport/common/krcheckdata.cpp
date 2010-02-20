@@ -69,16 +69,16 @@ void KRCheckData::createProperties()
 
     keys << "Cross" << "Tick" << "Dot";
     strings << i18n("Cross") << i18n("Tick") << i18n("Dot");
-    m_checkStyle = new KoProperty::Property("check-style", keys, strings, "Cross", "Check Style");
+    m_checkStyle = new KoProperty::Property("check-style", keys, strings, "Cross", i18n("Style"));
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
     m_controlSource->setOption("extraValueAllowed", "true");
 
-    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, "Foreground Color", "Foreground Color");
+    m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
 
-    m_lineWeight = new KoProperty::Property("line-weight", 1, "Line Weight", "Line Weight");
-    m_lineColor = new KoProperty::Property("line-color", Qt::black, "Line Color", "Line Color");
-    m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_lineWeight = new KoProperty::Property("line-weight", 1, i18n("Line Weight"));
+    m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
+    m_lineStyle = new KoProperty::Property("line-style", Qt::SolidLine, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);

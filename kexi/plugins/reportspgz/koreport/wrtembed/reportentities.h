@@ -71,6 +71,8 @@ public:
     }
     virtual ~ReportEntity() {};
 
+    static void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p);
+
 protected:
     ReportEntity(ReportDesigner*);
     ReportDesigner* m_reportDesigner;
