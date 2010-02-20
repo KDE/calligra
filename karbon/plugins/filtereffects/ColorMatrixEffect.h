@@ -23,7 +23,6 @@
 #include "KoFilterEffect.h"
 
 #define ColorMatrixEffectId "feColorMatrix"
-#define ColorMatrixElements 20
 
 /// A color matrix effect
 class ColorMatrixEffect : public KoFilterEffect
@@ -41,10 +40,19 @@ public:
     /// Returns the type of the color matrix
     Type type() const;
 
-    const qreal * colorMatrix() const;
+    /// Returns the size of the color matrix
+    static int colorMatrixSize();
+
+    /// Returns the row count of the color matrix
+    static int colorMatrixRowCount();
+
+    /// Returns the column count of the color matrix
+    static int colorMatrixColumnCount();
+
+    QVector<qreal> colorMatrix() const;
 
     /// Sets a color matrix and changes type to Matrix
-    void setColorMatrix(qreal *colorMatrix);
+    void setColorMatrix(const QVector<qreal> &matrix);
 
     /// Sets a saturate value and changes type to Saturate
     void setSaturate(qreal value);
@@ -73,7 +81,7 @@ private:
     void setIdentity();
 
     Type m_type;        ///< the color matrix type
-    qreal m_matrix[ColorMatrixElements]; ///< the color matrix to apply
+    QVector<qreal> m_matrix; ///< the color matrix to apply
     qreal m_value;      ///< the value (saturate or hueRotate)
 };
 

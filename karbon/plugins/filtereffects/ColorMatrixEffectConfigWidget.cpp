@@ -47,11 +47,12 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
 
     QWidget * matrixWidget = new QWidget(m_stack);
     QGridLayout * matrixLayout = new QGridLayout(matrixWidget);
-    for (int i = 0; i < ColorMatrixElements; ++i) {
+    const int colCount = ColorMatrixEffect::colorMatrixColumnCount();
+    for (int i = 0; i < ColorMatrixEffect::colorMatrixSize(); ++i) {
         m_matrix.append(new KDoubleNumInput(matrixWidget));
         m_matrix[i]->setMinimumWidth(40);
-        m_matrix[i]->setValue(i / 5 == i % 5 ? 1.0 : 0.0);
-        matrixLayout->addWidget(m_matrix[i], i / 5, i % 5);
+        m_matrix[i]->setValue(i / colCount == i % colCount ? 1.0 : 0.0);
+        matrixLayout->addWidget(m_matrix[i], i / colCount, i % colCount);
         connect(m_matrix[i], SIGNAL(valueChanged(double)), this, SLOT(matrixChanged()));
     }
     matrixWidget->setLayout(matrixLayout);
@@ -101,7 +102,7 @@ bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffe
     switch (m_effect->type()) {
     case ColorMatrixEffect::Matrix:
         m_type->setCurrentIndex(0);
-        for (int i = 0; i < ColorMatrixElements; ++i) {
+        for (int i = 0; i < ColorMatrixEffect::colorMatrixSize(); ++i) {
             m_matrix[i]->blockSignals(true);
             m_matrix[i]->setValue(m_effect->colorMatrix()[i]);
             m_matrix[i]->blockSignals(false);
@@ -135,10 +136,8 @@ void ColorMatrixEffectConfigWidget::matrixChanged()
     if (!m_effect)
         return;
 
-    qreal m[ColorMatrixElements];
-    memcpy(m, m_effect->colorMatrix(), ColorMatrixElements*sizeof(qreal));
-
-    for (int i = 0; i < ColorMatrixElements; ++i) {
+    QVector<qreal> m = m_effect->colorMatrix();
+    for (int i = 0; i < m.count(); ++i) {
         m[i] = m_matrix[i]->value();
     }
     m_effect->setColorMatrix(m);
@@ -169,8 +168,8 @@ void ColorMatrixEffectConfigWidget::typeChanged(int index)
         return;
 
     if (index == ColorMatrixEffect::Matrix) {
-        qreal m[ColorMatrixElements];
-        for (int i = 0; i < ColorMatrixElements; ++i) {
+        QVector<qreal> m(ColorMatrixEffect::colorMatrixSize());
+        for (int i = 0; i < m.count(); ++i) {
             m[i] = m_matrix[i]->value();
         }
         m_effect->setColorMatrix(m);
