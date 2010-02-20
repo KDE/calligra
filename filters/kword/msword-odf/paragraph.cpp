@@ -610,10 +610,11 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
 
-    //fOutline = text is outline if 1
-    if (!refChp || refChp->dxaSpace != chp->dxaSpace) {//TODO where do Ms word store letterspacing
+    //dxaSpace = letterspacing in twips
+    if (!refChp || refChp->dxaSpace != chp->dxaSpace) {
         double value =  chp->dxaSpace / 20.0; // twips -> pt
         style->addPropertyPt("fo:letter-spacing", value, KoGenStyle::TextType);
     }
+    //pctCharwidth = pct stretch doesn't seem to have an ODF ccounterpart but Qt could support it
 }
 

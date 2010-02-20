@@ -122,6 +122,8 @@ namespace wvWare
         bool isWord6() const;  // ###### Do we want to have that?
         UString text() const;
         U8 followingChar() const;
+        U16 space() const;
+        U16 indent() const;
 
         void applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const;
         void applyGrpprlChpx( Word97::CHP* chp, const Style* style, const StyleSheet* styleSheet ) const;
@@ -376,6 +378,16 @@ U8 ListLevel::followingChar() const
     return m_lvlf.ixchFollow;
 }
 
+U16 ListLevel::space() const
+{
+    return m_lvlf.dxaSpace;
+}
+
+U16 ListLevel::indent() const
+{
+    return m_lvlf.dxaIndent;
+}
+
 void ListLevel::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
@@ -621,6 +633,8 @@ ListInfo::ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider ) :
         m_isWord6 = level->isWord6();
         m_text = listInfoProvider.text();
         m_followingChar = level->followingChar();
+        m_space = level->space();
+        m_indent = level->indent();
     }
     else
         wvlog << "Bug: The ListLevel is 0!!" << std::endl;

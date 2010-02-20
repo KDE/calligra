@@ -937,8 +937,8 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 kWarning(30513) << "Bullet with more than one character, not supported";
 
             listStyleWriter.startElement("style:list-level-properties");
-            //TODO this is just hardcoded for now
-            listStyleWriter.addAttribute("text:min-label-width", "0.25in");
+            if (listInfo->space())
+                listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
             listStyleWriter.endElement(); //style:list-level-properties
             //close element
             listStyleWriter.endElement(); //text:list-level-style-bullet
@@ -959,9 +959,10 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             // Now we need to parse the text, to try and convert msword's powerful list template stuff
             QString prefix, suffix;
             bool depthFound = false;
+            bool anyLevelFound = false;
             int displayLevels = 1;
             // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
-            // But "Section <0>)" has both prefix and suffix.
+            // But "Section <0>.<1>)" has both prefix and suffix.
             // The common case is <0>.<1>.<2> (display-levels=3)
             //loop through all of text
             //this just sets depthFound & displayLevels & the suffix & prefix
@@ -974,13 +975,13 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                             kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text...";
                         else
                             depthFound = true;
-                        suffix.clear();
+                        suffix.clear(); // really should never do anthing so why is it here??
                     } else {
                         Q_ASSERT(ch < pap.ilvl);   // Can't see how level 1 would have a <0> in it...
                         if (ch < pap.ilvl)
                             ++displayLevels; // we found a 'parent level', to be displayed
-                        prefix.clear(); // get rid of previous prefixes
                     }
+                    anyLevelFound = true;
                 }
                 //if it's not a number < 10
                 else {
@@ -988,7 +989,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                     if (depthFound)
                         suffix += QChar(ch);
                     //or add it to prefix if we haven't
-                    else
+                    else if (!anyLevelFound)
                         prefix += QChar(ch);
                 }
             }
@@ -1011,13 +1012,12 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 if (nfc == 5 && suffix.isEmpty())
                     suffix = '.';
                 kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
-                //counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
                 listStyleWriter.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
-                //counterElement.setAttribute( "lefttext", prefix );
                 listStyleWriter.addAttribute("style:num-prefix", prefix);
-                //counterElement.setAttribute( "righttext", suffix );
                 listStyleWriter.addAttribute("style:num-suffix", suffix);
-                //counterElement.setAttribute( "display-levels", displayLevels );
+                if (displayLevels > 1) {
+                    listStyleWriter.addAttribute("text:display-levels", displayLevels);
+                }
                 kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
                 m_listSuffixes[ depth ] = suffix;
             } else {
@@ -1031,14 +1031,29 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 //counterElement.setAttribute( "restart", "true" );
             }
 
-            //listInfo->alignment() is not supported in KWord
             //listInfo->isLegal() hmm
             //listInfo->notRestarted() [by higher level of lists] not supported
             //listInfo->followingchar() ignored, it's always a space in KWord currently
             //*************************************
             listStyleWriter.startElement("style:list-level-properties");
-            //TODO this is just hardcoded for now
-            listStyleWriter.addAttribute("text:min-label-width", "0.25in");
+            switch (listInfo->alignment()) {
+            case 1:
+                listStyleWriter.addAttribute("fo:text-align", "center");
+                break;
+            case 2:
+                listStyleWriter.addAttribute("fo:text-align", "end");
+                break;
+            case 3:
+                listStyleWriter.addAttribute("fo:text-align", "justify");
+                break;
+            default:
+                break;
+            }
+
+            if (listInfo->space())
+                listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+            if (listInfo->indent())
+                listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
             listStyleWriter.endElement(); //style:list-level-properties
             //close element
             listStyleWriter.endElement(); //text:list-level-style-number

@@ -150,6 +150,16 @@ namespace wvWare
         S32 lsid() const { return m_lsid; }
 
         /**
+         * The space after the label.
+         */
+        U16 space() const { return m_space; }
+
+        /**
+         * The indent before the label.
+         */
+        U16 indent() const { return m_indent; }
+
+        /**
          * Debugging...
          */
         void dump() const;
@@ -170,6 +180,8 @@ namespace wvWare
         ListText m_text;
         U8 m_followingChar;
         S32 m_lsid;
+        U16 m_space;
+        U16 m_indent;
     };
 
 
