@@ -87,12 +87,6 @@ bool Manager::lookup()
         {
             continue;
         }
-//</TEMP>
-//! @todo <TEMP>
-        if (partClass == "uk.co.piggz.report") {
-            partClass = "org.kexi-project.report";
-        }
-//        </TEMP>
         const int idx = sl_order.indexOf(partClass);
         if (idx != -1) {
             ordered[idx] = ptr;

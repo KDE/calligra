@@ -1085,12 +1085,15 @@ bool KexiProject::checkProject(const QString& singlePartClass)
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         QString partMime( cursor->value(2).toString() );
         QString partClass( cursor->value(3).toString() );
-        if (partClass.startsWith("http://")) {
+        if (partClass.startsWith(QLatin1String("http://"))) {
             // for compatibility with Kexi 1.x
             // part mime was used at the time
-            partClass = QString::fromLatin1("org.kexi-project.")
+            partClass = QLatin1String("org.kexi-project.")
                 + QString(partMime).replace("kexi/", QString());
         }
+        // compatibility:
+        if (partClass == QLatin1String("uk.co.piggz.report"))
+            partClass = QLatin1String("org.kexi-project.report");
         KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
         if (info) {
 //            i->setProjectPartID(cursor->value(0).toInt());
