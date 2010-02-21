@@ -43,11 +43,11 @@ QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
     return defaultBackground;
 }
 
-void KPrTextBlockPaintStrategy::modifyPainter(QPainter *painter)
+void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
 {
 }
 
-bool KPrTextBlockPaintStrategy::visible()
+bool KPrTextBlockPaintStrategy::isVisible()
 {
     if (m_animationCache) {
         return m_animationCache->value(m_textBlockData, "visibility", true).toBool();
