@@ -32,18 +32,15 @@ KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
     getSchema();
 }
 
-void KexiDBReportData::setSorting ( KoReportData::SortList sl )
+void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
 {
-    if ( sl.count() > 0 )
-    {
-        KexiDB::OrderByColumnList order;
-        
-        for ( unsigned int i = 0; i < sl.count(); ++i )
-        {
-            order.appendField(*m_schema, sl[i].field, sl[i].order == Qt::AscendingOrder);
-        }
-        m_schema->setOrderByColumnList(order);
+    if (sorting.isEmpty())
+        return;
+    KexiDB::OrderByColumnList order;
+    for (int i = 0; i < sorting.count(); i++) {
+        order.appendField(*m_schema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
     }
+    m_schema->setOrderByColumnList(order);
 }
 
 KexiDBReportData::~KexiDBReportData()

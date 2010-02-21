@@ -87,10 +87,10 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
                 }
             }
             m_groupList.append(dgsd);
-            KoReportData::Sort s;
+            KoReportData::SortedField s;
             s.field = dgsd->m_column;
             s.order = dgsd->m_sort;
-            m_sortList.append(s);
+            m_sortedFields.append(s);
 	    
         } else if (elemThis.tagName() == "report:section" && elemThis.attribute("report:section-type") == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);

@@ -42,13 +42,13 @@ private:
     bool getSchema();
 
 public:
-    KexiDBReportData(const QString &, KexiDB::Connection *conn);
+    KexiDBReportData(const QString &qstrSQL, KexiDB::Connection *conn);
     virtual ~KexiDBReportData();
 
     //virtual void* connection() const;
 
     virtual QStringList fieldNames() const;
-    virtual void setSorting(KoReportData::SortList);
+    virtual void setSorting(const QList<SortedField>& sorting);
 
     virtual QString sourceName() const;
     virtual unsigned int fieldNumber(const QString &field) const;

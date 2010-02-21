@@ -44,7 +44,7 @@ public:
 
     QString m_name;
     int m_pageBreak;
-    KoReportData::SortList m_sortList;
+    QList<KoReportData::SortedField> m_sortedFields;
 
     KRSectionData * m_detailSection;
 

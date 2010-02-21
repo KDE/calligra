@@ -911,7 +911,7 @@ ORODocument* ORPreRender::generate()
     kDebug() << "Page Size:" << d->m_maxWidth << d->m_maxHeight;
 
     d->m_document->setPageOptions(rpo);
-    d->m_kodata->setSorting(d->m_reportData->m_detailSection->m_sortList);
+    d->m_kodata->setSorting(d->m_reportData->m_detailSection->m_sortedFields);
     d->m_kodata->open();
     d->initEngine();
 

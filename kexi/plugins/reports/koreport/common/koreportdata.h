@@ -29,14 +29,16 @@ class KOREPORT_EXPORT KoReportData
 public:
     virtual ~KoReportData() {}
 
-    class KOREPORT_EXPORT Sort
+    //! Describes sorting for single field
+    /*! By default the order is ascending. */
+    class KOREPORT_EXPORT SortedField
     {
     public:
+        SortedField() : order(Qt::AscendingOrder) {}
         QString field;
         Qt::SortOrder order;
         //bool group; //probably not required?
     };
-    typedef QList<Sort> SortList;
 
     //!Open the dataset
     virtual bool open() = 0;
@@ -83,8 +85,7 @@ public:
     //!Sets the sorting for the data
     //!Should be called before open() so that the data source can be edited accordingly
     //!Default impl does nothing
-    virtual void setSorting(SortList) {}
-
+    virtual void setSorting(const QList<SortedField>& sorting) { Q_UNUSED(sorting); }
 
     //!Utility Functions
     //!TODO These are probably eligable to be moved into a new class
