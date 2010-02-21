@@ -72,6 +72,8 @@ Reports
 *replace boolean attribute with enums in KRPos and KRSize
 *remove warnings
 *add missing translation to properties
+*'''old 1.x reports code removed'''
+*make projects created when "uk.co.piggz.report" class was used still work and use the new class name
 
 2010-02-16
 Reports
@@ -86,6 +88,7 @@ Reports
 Forms
 *fixed disappearing properties of renamed widgets (regression in 2.x)
 *update header of the data source pane when widget is renamed
+*renamed reportspgz to reports, it's now official reports implementation in Kexi
 
 2010-01-30
 *KexiDB
