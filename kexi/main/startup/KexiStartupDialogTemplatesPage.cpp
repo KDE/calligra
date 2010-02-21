@@ -71,7 +71,7 @@ public:
     }
 
     KexiProjectData::AutoOpenObjects dummyAutoOpenObject;
-    bool popuplated : 1;
+    bool popuplated;
 };
 
 //-----------------------

@@ -139,7 +139,7 @@ public:
     KexiProjectSelectorWidget* prj_selector;
 
     //! true if the dialog contain single page, not tabs
-    bool singlePage : 1;
+    bool singlePage;
 };
 
 static QString captionForDialogType(int type)

@@ -65,7 +65,7 @@ protected:
     int m_objectId;
     KexiSimplePrintingSettings m_settings;
     KexiSimplePrintPreviewWindow *m_previewWindow;
-    bool m_printPreviewNeedsReloading : 1;
+    bool m_printPreviewNeedsReloading;
 };
 
 //! @short A window for displaying settings for simple printing.
@@ -110,7 +110,7 @@ protected:
     KexiPart::Item *m_item;
 //  KexiSimplePrintingCommand *m_command;
     QString m_origCaptionLabelText;
-    bool m_printPreviewNeedsReloading : 1;
+    bool m_printPreviewNeedsReloading;
 
 };
 

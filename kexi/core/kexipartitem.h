@@ -114,7 +114,7 @@ private:
     QString m_caption;
     QString m_desc;
     int m_id;
-    bool m_neverSaved : 1;
+    bool m_neverSaved;
 
     class Private;
     Private * const d;

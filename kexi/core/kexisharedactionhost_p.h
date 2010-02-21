@@ -37,7 +37,7 @@ public:
         plugged = false;
     }
 //  KAction *kaction;
-    bool plugged : 1;
+    bool plugged;
 };
 
 //! @internal

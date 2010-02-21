@@ -90,7 +90,7 @@ public:
     }
 
     KexiDBPasswordDialog* passwordDialog;
-//  bool showConnectionDetailsExecuted : 1;
+//  bool showConnectionDetailsExecuted;
     KexiDBShortcutFile *shortcutFile;
     KexiDBConnShortcutFile *connShortcutFile;
     KexiDBConnectionDialog *connDialog;

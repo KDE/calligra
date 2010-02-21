@@ -319,7 +319,7 @@ protected:
 
         Q3PtrList<KexiView> m_children;
 
-        bool m_dirty : 1; */
+        bool m_dirty; */
 
     //! Sets properties in the Property Editor to be sorted if @a set is true.
     void setSortedProperties(bool set);

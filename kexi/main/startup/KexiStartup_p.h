@@ -51,8 +51,8 @@ protected:
     KProgressDialog* m_dlg;
 
     struct stat m_st;
-    bool m_restoreStat : 1;
-    bool m_run : 1;
+    bool m_restoreStat;
+    bool m_run;
 
     tristate result;
 };

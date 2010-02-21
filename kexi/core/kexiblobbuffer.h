@@ -226,7 +226,7 @@ private:
         uint refs;
         Id_t id;
         Id_t folderId;
-    bool stored : 1;
+        bool stored;
         QString prettyURL; //!< helper
     private:
         QByteArray *m_data;

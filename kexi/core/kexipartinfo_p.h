@@ -45,10 +45,10 @@ public:
 #if 0 //moved as internal to KexiProject
     int projectPartID;
 #endif
-    bool broken : 1;
-    bool isVisibleInNavigator : 1;
-    bool idStoredInPartDatabase : 1;
-    bool isPropertyEditorAlwaysVisibleInDesignMode : 1;
+    bool broken;
+    bool isVisibleInNavigator;
+    bool idStoredInPartDatabase;
+    bool isPropertyEditorAlwaysVisibleInDesignMode;
 };
 }
 

@@ -105,7 +105,7 @@ public:
     int versionMajor;
     int versionMinor;
     int privateIDCounter; //!< counter: ID for private "document" like Relations window
-    bool itemsRetrieved : 1;
+    bool itemsRetrieved;
 };
 
 //---------------------------

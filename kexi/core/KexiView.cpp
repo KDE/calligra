@@ -161,12 +161,12 @@ public:
     QList<QAction*> viewActions;
     QHash<QByteArray, QAction*> viewActionsHash;
 
-    bool isDirty : 1;
-    
+    bool isDirty;
+
     //! Used in slotSwitchToViewModeInternal() to disabling it
-    bool slotSwitchToViewModeInternalEnabled : 1;
-    
-    bool sortedProperties : 1;
+    bool slotSwitchToViewModeInternalEnabled;
+
+    bool sortedProperties;
 
     //! Used in slotSwitchToViewModeInternal() to disabling d->window->switchToViewModeInternal(mode) call.
     //! Needed because there is another slotSwitchToViewModeInternal() calls if d->window->switchToViewModeInternal(mode)

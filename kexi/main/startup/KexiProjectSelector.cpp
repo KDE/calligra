@@ -46,9 +46,9 @@ public:
         selectable = true;
     }
     QPixmap fileicon, dbicon;
-    bool showProjectNameColumn : 1;
-    bool showConnectionColumns : 1;
-    bool selectable : 1;
+    bool showProjectNameColumn;
+    bool showConnectionColumns;
+    bool selectable;
 };
 
 /*================================================================*/

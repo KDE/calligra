@@ -71,13 +71,13 @@ public:
         SearchDirection searchDirection;
 
         //! True for searching is case-sensitive (false by default)
-    bool caseSensitive : 1;
+    bool caseSensitive;
 
         //! True for searching for whole words only (false by default)
-    bool wholeWordsOnly : 1;
+    bool wholeWordsOnly;
 
         //! True if question should be displayed before every replacement made (true by default)
-    bool promptOnReplace : 1;
+    bool promptOnReplace;
     };
 
     /*! Sets up data for find/replace dialog, based on view's data model.

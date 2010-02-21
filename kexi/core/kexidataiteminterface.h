@@ -262,9 +262,9 @@ protected:
 
     /*! @see parentDataItemInterface() */
     KexiDataItemInterface* m_parentDataItemInterface;
-    bool m_hasFocusableWidget : 1;
-    bool m_disable_signalValueChanged : 1;
-    bool m_acceptEditorAfterDeleteContents : 1;
+    bool m_hasFocusableWidget;
+    bool m_disable_signalValueChanged;
+    bool m_acceptEditorAfterDeleteContents;
 };
 
 #endif

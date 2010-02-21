@@ -48,7 +48,7 @@ public:
             : isDatabaseShortcut(true) {
     }
     QString fileName;
-    bool isDatabaseShortcut : 1;
+    bool isDatabaseShortcut;
 };
 
 KexiDBShortcutFile::KexiDBShortcutFile(const QString& fileName)

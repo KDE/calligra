@@ -52,7 +52,7 @@ protected slots:
 
 protected:
     KexiDB::ConnectionData *m_cdata;
-    bool m_showConnectionDetailsRequested : 1;
+    bool m_showConnectionDetailsRequested;
 };
 
 /*! Handles startup actions for Kexi application.

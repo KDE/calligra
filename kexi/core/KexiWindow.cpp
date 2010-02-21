@@ -118,9 +118,9 @@ public:
     KexiSmallToolButton* saveDesignButton;
     KexiToolBarSeparator* saveDesignButtonSeparator;
 
-    bool isRegistered : 1;
-    bool dirtyChangedEnabled : 1; //!< used in setDirty(), affects dirtyChanged()
-    bool switchToViewModeEnabled : 1; //!< used internally switchToViewMode() to avoid infinite loop
+    bool isRegistered;
+    bool dirtyChangedEnabled; //!< used in setDirty(), affects dirtyChanged()
+    bool switchToViewModeEnabled; //!< used internally switchToViewMode() to avoid infinite loop
 
 protected:
     QHash<int, int> indicesForViews;

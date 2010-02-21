@@ -42,7 +42,7 @@ public:
     }
     int categories;
     QSet<int> *supportedObjectTypes;
-    bool allObjectTypesAreSupported : 1;
+    bool allObjectTypesAreSupported;
 };
 
 K_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)

@@ -1039,16 +1039,14 @@ public:
 
 //moved  int privateIDCounter; //!< counter: ID for private "document" like Relations window
 
-//2.0: unused bool block_KMdiMainFrm_eventFilter : 1;
-
     //! Set to true only in destructor, used by closeWindow() to know if
     //! user can cancel window closing. If true user even doesn't see any messages
     //! before closing a window. This is for extremely sanity... and shouldn't be even needed.
-    bool forceWindowClosing : 1;
+    bool forceWindowClosing;
 
     //! Indicates that we're inside closeWindow() method - to avoid inf. recursion
     //! on window removing
-    bool insideCloseWindow : 1;
+    bool insideCloseWindow;
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     //! Used in executeActionWhenPendingJobsAreFinished().
@@ -1087,27 +1085,27 @@ public:
 
     //! Used in several places to show info dialog at startup (only once per session)
     //! before displaying other stuff
-    bool showImportantInfoOnStartup : 1;
+    bool showImportantInfoOnStartup;
 
 //  //! Used sometimes to block showErrorMessage()
-//  bool disableErrorMessages : 1;
+//  bool disableErrorMessages;
 
     //! Indicates if project is started in User Mode
-    bool userMode : 1;
+    bool userMode;
 
     //! Indicates if project navigator should be visible
-    bool isProjectNavigatorVisible : 1;
+    bool isProjectNavigatorVisible;
 
     //! Used on opening 1st child window
-    bool maximizeFirstOpenedChildFrm : 1;
+    bool maximizeFirstOpenedChildFrm;
 
     //! Set in restoreSettings() and used in initNavigator()
     //! to customize navigator visibility on startup
-    bool forceShowProjectNavigatorOnCreation : 1;
-    bool forceHideProjectNavigatorOnCreation : 1;
+    bool forceShowProjectNavigatorOnCreation;
+    bool forceHideProjectNavigatorOnCreation;
 
-    bool navWasVisibleBeforeProjectClosing : 1;
-    bool saveSettingsForShowProjectNavigator : 1;
+    bool navWasVisibleBeforeProjectClosing;
+    bool saveSettingsForShowProjectNavigator;
 #ifdef HAVE_KNEWSTUFF
     KexiNewStuff  *newStuff;
 #endif
