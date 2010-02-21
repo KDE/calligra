@@ -1045,53 +1045,36 @@ void PptToOdp::defineMasterAutomaticStyles(KoGenStyles& styles)
             } else if (mm) {
                 handleOfficeArtContainer(finder, mm->drawing.OfficeArtDg);
             }
-
-/*
-            const QString name = "M" + QString::number(n) + "_"
-                                     + QString::number(texttype);
-            const TextMasterStyleAtom* textstyle
-                    = getTextMasterStyleAtom(m, texttype);
-            // graphic family
-            KoGenStyle style(KoGenStyle::StylePresentationAuto, "presentation");
-            style.setAutoStyleInStylesDotXml(true);
-            if (finder.sp) {
-                defineGraphicProperties(style, *finder.sp, textstyle);
-            } else if (textstyle) {
-                defineGraphicPropertiesListStyles(style, *textstyle);
-            } else {
-                qDebug() << "No master style for text type " << texttype;
-                continue;
-            }
-            if (textstyle && textstyle->lstLvl1) {
-                defineParagraphProperties(style, &textstyle->lstLvl1->pf, 0);
-                defineTextProperties(style, &textstyle->lstLvl1->cf, 0, 0, 0);
-            }
-            masterGraphicStyles[m][texttype] = styles.lookup(style, name + "p",
-                    KoGenStyles::DontForceNumbering);
-*/
-
             if (finder.sp) {
                 QBuffer buffer;
                 KoXmlWriter dummy(&buffer);
                 Writer w(dummy, styles, true);
                 addGraphicStyleToDrawElement(w, *finder.sp);
             }
-
-/*
-            if (textstyle && textstyle->lstLvl1) {
-                // text family
-                KoGenStyle tstyle(KoGenStyle::StyleTextAuto, "text");
-                tstyle.setAutoStyleInStylesDotXml(true);
-                defineTextProperties(tstyle, &textstyle->lstLvl1->cf, 0, 0, 0);
-                styles.lookup(tstyle, name + "t", KoGenStyles::DontForceNumbering);
-                // paragraph family
-                KoGenStyle pstyle(KoGenStyle::StyleAuto, "paragraph");
-                pstyle.setAutoStyleInStylesDotXml(true);
-                defineParagraphProperties(pstyle, &textstyle->lstLvl1->pf, 0);
-                defineTextProperties(pstyle, &textstyle->lstLvl1->cf, 0, 0, 0);
-                styles.lookup(pstyle, name + "p", KoGenStyles::DontForceNumbering);
-            }
-*/
+        }
+        // if no style for Tx_TYPE_CENTERTITLE (6) has been defined yet,
+        // derive it from Tx_TYPE_TITLE (0)
+        if (!masterPresentationStyles[m].contains(6)
+                && masterPresentationStyles[m].contains(0)) {
+            KoGenStyle style(KoGenStyle::StylePresentation, "presentation");
+            style.setParentName(masterPresentationStyles[m][0]);
+            style.addProperty("fo:text-align", "center",
+                              KoGenStyle::ParagraphType);
+            style.addProperty("style:vertical-align", "middle",
+                              KoGenStyle::ParagraphType);
+            masterPresentationStyles[m][6] = styles.lookup(style, "");
+        }
+        // if no style for Tx_TYPE_CENTERBODY (5) has been defined yet,
+        // derive it from Tx_TYPE_BODY (1)
+        if (!masterPresentationStyles[m].contains(5)
+                && masterPresentationStyles[m].contains(1)) {
+            KoGenStyle style(KoGenStyle::StylePresentation, "presentation");
+            style.setParentName(masterPresentationStyles[m][1]);
+            style.addProperty("fo:text-align", "center",
+                              KoGenStyle::ParagraphType);
+            style.addProperty("style:vertical-align", "middle",
+                              KoGenStyle::ParagraphType);
+            masterPresentationStyles[m][5] = styles.lookup(style, "");
         }
     }
 }
