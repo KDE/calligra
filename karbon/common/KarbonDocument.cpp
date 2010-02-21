@@ -365,7 +365,7 @@ void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
     if (! sharedData)
         return;
 
-    sharedData->loadOdfStyles(context.odfLoadingContext(), styleManager);
+    sharedData->loadOdfStyles(context, styleManager);
     context.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 }
 

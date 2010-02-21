@@ -514,7 +514,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     KoShapeLoadingContext shapeContext(odfContext, 0); // TODO find a proper documentResourceManager somewhere.
     tableContext.shapeContext = &shapeContext;
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    sharedData->loadOdfStyles(odfContext, textStyleManager());
+    sharedData->loadOdfStyles(shapeContext, textStyleManager());
     textStyleManager()->defaultParagraphStyle()->characterStyle()->removeHardCodedDefaults();
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
