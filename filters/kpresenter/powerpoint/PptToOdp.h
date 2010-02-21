@@ -213,6 +213,7 @@ private:
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
                         const PPT::OfficeArtClientData* clientData) const;
     void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);
+    void addPresentationStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);
     void processSlideForBody(unsigned slideNo, Writer& out);
@@ -583,8 +584,10 @@ private:
 
     QMap<const void*, QString> presentationPageLayouts;
     QMap<const void*, QString> drawingPageStyles;
-    QMap<const PPT::MasterOrSlideContainer*, QMap<int, QString> >
-            masterGraphicStyles;
+    typedef QMap<const PPT::MasterOrSlideContainer*, QMap<int, QString> >
+            MasterStyles;
+    MasterStyles masterGraphicStyles;
+    MasterStyles masterPresentationStyles;
     QMap<const PPT::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
 
