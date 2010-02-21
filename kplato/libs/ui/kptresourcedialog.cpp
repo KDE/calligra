@@ -66,6 +66,8 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
     connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
     
     connect( useRequired, SIGNAL( stateChanged( int ) ), SLOT( slotUseRequiredChanged( int ) ) );
+
+    connect(account, SIGNAL(activated(int)), SLOT(slotChanged()));
 }
 
 
@@ -203,10 +205,18 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     }
     dia->setCurrentIndexes( sm->selectedRows() );
 
+    QStringList lst;
+    lst << i18n( "None" ) << m_project.accounts().costElements();
+    dia->account->addItems( lst );
+    if ( resource->account() ) {
+        dia->account->setCurrentIndex( lst.indexOf( resource->account()->name() ) );
+    }
+    
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
     connect(dia->required, SIGNAL(changed()), SLOT(enableButtonOk()));
+    connect(dia->account, SIGNAL(currentIndexChanged(const QString&)), SLOT(slotAccountChanged(const QString&)));
 }
 
 
@@ -254,6 +264,11 @@ void ResourceDialog::slotOk() {
 
 void ResourceDialog::slotCalendarChanged(int /*cal*/) {
 
+}
+
+void ResourceDialog::slotAccountChanged( const QString &name  )
+{
+    m_resource.setAccount( m_project.accounts().findAccount( name ) );
 }
 
 MacroCommand *ResourceDialog::buildCommand() {
@@ -311,6 +326,10 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
     if (resource.requiredResources() != original->requiredResources()) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredResources()));
+    }
+    if (resource.account() != original->account()) {
+        if (!m) m = new MacroCommand(n);
+        m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
     }
     return m;
 }

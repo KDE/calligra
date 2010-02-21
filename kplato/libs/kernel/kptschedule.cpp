@@ -489,6 +489,21 @@ EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate 
     return ec;
 }
 
+EffortCostMap Schedule::plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end ) const
+{
+    //kDebug()<<m_name<<m_appointments;
+    EffortCostMap ec;
+    QListIterator<Appointment*> it( m_appointments );
+    while ( it.hasNext() ) {
+        it.next();
+        if ( (*it)->resource() && (*it)->resource()->resource() == resource ) {
+            ec += (*it)->plannedPrDay( start, end );
+            break;
+        }
+    }
+    return ec;
+}
+
 Duration Schedule::plannedEffort() const
 {
     //kDebug();

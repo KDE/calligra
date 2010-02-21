@@ -60,7 +60,6 @@ protected slots:
     void slotAvailableUntilChanged(const QDateTime& dt);
     
     void slotUseRequiredChanged( int state );
-
 private:
     QList<QPersistentModelIndex> m_currentIndexes;
 };
@@ -83,6 +82,7 @@ protected slots:
     void slotOk();
     void slotCalendarChanged(int);
     void slotButtonClicked(int button);
+    void slotAccountChanged( const QString &name );
 
 private:
     Project &m_project;

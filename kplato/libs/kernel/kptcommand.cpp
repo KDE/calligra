@@ -1625,6 +1625,9 @@ RemoveResourceCmd::RemoveResourceCmd( ResourceGroup *group, Resource *resource, 
             }
         }
     }
+    if ( resource->account() ) {
+        m_cmd.addCommand( new ResourceModifyAccountCmd( *resource, resource->account(), 0 ) );
+    }
 }
 RemoveResourceCmd::~RemoveResourceCmd()
 {
@@ -1645,6 +1648,7 @@ void RemoveResourceCmd::execute()
         //kDebug()<<"detached:"<<a;
     }*/
     AddResourceCmd::unexecute();
+    m_cmd.execute();
     setSchScheduled( false );
 }
 void RemoveResourceCmd::unexecute()
@@ -1657,6 +1661,7 @@ void RemoveResourceCmd::unexecute()
         r->parent() ->addResourceRequest( r );
         //kDebug()<<"Add request for"<<r->resource()->name();
     }
+    m_cmd.unexecute();
     AddResourceCmd::execute();
     setSchScheduled();
 }
@@ -2653,6 +2658,34 @@ void ModifyDefaultAccountCmd::unexecute()
     //kDebug();
     m_accounts.setDefaultAccount( m_oldvalue );
 
+}
+
+ResourceModifyAccountCmd::ResourceModifyAccountCmd( Resource &resource,  Account *oldvalue, Account *newvalue, const QString& name )
+    : NamedCommand( name ),
+    m_resource( resource )
+{
+    m_oldvalue = oldvalue;
+    m_newvalue = newvalue;
+}
+void ResourceModifyAccountCmd::execute()
+{
+    //kDebug();
+    if ( m_oldvalue ) {
+        m_oldvalue->removeRunning( m_resource );
+    }
+    if ( m_newvalue ) {
+        m_newvalue->addRunning( m_resource );
+    }
+}
+void ResourceModifyAccountCmd::unexecute()
+{
+    //kDebug();
+    if ( m_newvalue ) {
+        m_newvalue->removeRunning( m_resource );
+    }
+    if ( m_oldvalue ) {
+        m_oldvalue->addRunning( m_resource );
+    }
 }
 
 ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const QString& name )

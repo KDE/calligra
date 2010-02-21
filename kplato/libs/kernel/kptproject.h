@@ -197,6 +197,7 @@ public:
     QList<Resource*> resourceList() const { return resourceIdDict.values(); }
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
 
     /// Returns the total planned effort for this project (or subproject)
     virtual Duration plannedEffort( long id = -1 ) const;
@@ -246,7 +247,9 @@ public:
     virtual EffortCost actualCostTo( const QDate &date ) const;
     
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
-    
+
+    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = -1 ) const;
+
     double effortPerformanceIndex( const QDate &date, long id ) const;
     
     double schedulePerformanceIndex( const QDate &date, long id ) const;

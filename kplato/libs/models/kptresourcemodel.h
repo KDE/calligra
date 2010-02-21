@@ -56,7 +56,8 @@ public:
         ResourceAvailableFrom,
         ResourceAvailableUntil,
         ResourceNormalRate,
-        ResourceOvertimeRate
+        ResourceOvertimeRate,
+        ResourceAccount
     };
     
     const QMetaEnum columnMap() const;
@@ -76,6 +77,7 @@ public:
     QVariant availableUntil( const Resource *res, int role ) const;
     QVariant normalRate( const Resource *res, int role ) const;
     QVariant overtimeRate( const Resource *res, int role ) const;
+    QVariant account( const Resource *res, int role ) const;
     
     QVariant name( const ResourceGroup *res, int role ) const;
     QVariant type( const ResourceGroup *res, int role ) const;
@@ -157,6 +159,7 @@ protected:
     bool setAvailableUntil( Resource *res, const QVariant &value, int role );
     bool setNormalRate( Resource *res, const QVariant &value, int role );
     bool setOvertimeRate( Resource *res, const QVariant &value, int role );
+    bool setAccount( Resource *res, const QVariant &value, int role );
 
     QList<Resource*> resourceList( QDataStream &stream );
     

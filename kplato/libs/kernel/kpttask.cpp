@@ -517,6 +517,23 @@ EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end,
     return EffortCostMap();
 }
 
+EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const {
+    //kDebug()<<m_name;
+    if ( type() == Node::Type_Summarytask ) {
+        EffortCostMap ec;
+        QListIterator<Node*> it( childNodeIterator() );
+        while ( it.hasNext() ) {
+            ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id );
+        }
+        return ec;
+    }
+    Schedule *s = schedule( id );
+    if ( s ) {
+        return s->plannedEffortCostPrDay(resource, start, end);
+    }
+    return EffortCostMap();
+}
+
 EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
     //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
@@ -536,6 +553,24 @@ EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, 
     return EffortCostMap();
 }
 
+EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const {
+    //kDebug()<<m_name;
+    if ( type() == Node::Type_Summarytask ) {
+        EffortCostMap ec;
+        QListIterator<Node*> it( childNodeIterator() );
+        while ( it.hasNext() ) {
+            ec += it.next() ->actualEffortCostPrDay( resource, start, end, id );
+        }
+        return ec;
+    }
+    switch ( completion().entrymode() ) {
+        case Completion::FollowPlan:
+            return plannedEffortCostPrDay( resource, start, end, id );
+        default:
+            return completion().effortCostPrDay( resource, start, end );
+    }
+    return EffortCostMap();
+}
 
 // Returns the total planned effort for this task (or subtasks) 
 Duration Task::plannedEffort( long id ) const {
@@ -2958,6 +2993,33 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, 
     return ec;
 }
 
+EffortCostMap Completion::effortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const
+{
+    //kDebug()<<m_node->name()<<start<<end;
+    EffortCostMap ec;
+    if ( ! isStarted() ) {
+        return ec;
+    }
+    switch ( m_entrymode ) {
+        case FollowPlan:
+            break;
+        case EnterCompleted:
+        case EnterEffortPerTask: {
+            //TODO but what todo?
+            break;
+        }
+        case EnterEffortPerResource: {
+            QDate st = start.isValid() ? start : m_startTime.date();
+            QDate et = end.isValid() ? end : m_finishTime.date();
+            for ( QDate d = st; d <= et; d = d.addDays( 1 ) ) {
+                ec.add( d, actualEffort( resource, d ), actualCost( resource, d ) );
+            }
+            break;
+        }
+    }
+    return ec;
+}
+
 void Completion::addUsedEffort( const Resource *resource, Completion::UsedEffort *value )
 {
     UsedEffort *v = value == 0 ? new UsedEffort() : value;
@@ -2999,6 +3061,22 @@ double Completion::actualCost( const QDate &date ) const
     return c;
 }
 
+double Completion::actualCost( const Resource *resource ) const
+{
+    UsedEffort *ue = usedEffort( resource );
+    if ( ue == 0 ) {
+        return 0.0;
+    }
+    double c = 0.0;
+    double nc = resource->normalRate();
+    double oc = resource->overtimeRate();
+    foreach ( UsedEffort::ActualEffort *a, ue->actualEffortMap() ) {
+        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
+        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    }
+    return c;
+}
+
 double Completion::actualCost() const
 {
     double c = 0.0;
@@ -3008,15 +3086,18 @@ double Completion::actualCost() const
     return c;
 }
 
-double Completion::actualCost( const Resource *resource ) const
+double Completion::actualCost( const Resource *resource, const QDate &date ) const
 {
-    double c = 0.0;
-    double nc = resource->normalRate();
-    double oc = resource->overtimeRate();
-    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap() ) {
-        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
-        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    UsedEffort *ue = usedEffort( resource );
+    if ( ue == 0 ) {
+        return 0.0;
     }
+    UsedEffort::ActualEffort *a = ue->actualEffortMap().value( date );
+    if ( a == 0 ) {
+        return 0.0;
+    }
+    double c = a->normalEffort().toDouble( Duration::Unit_h ) * resource->normalRate();
+    c += a->overtimeEffort().toDouble( Duration::Unit_h ) * resource->overtimeRate();
     return c;
 }
 

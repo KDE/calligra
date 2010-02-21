@@ -392,6 +392,20 @@
         </property>
        </spacer>
       </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="KComboBox" name="account">
+        <property name="autoCompletion">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Account:</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -412,6 +426,11 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>KPlato::TreeComboBox</class>
    <extends>QComboBox</extends>

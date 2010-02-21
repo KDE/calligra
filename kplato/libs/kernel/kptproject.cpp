@@ -1575,6 +1575,17 @@ EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate 
     return ec;
 }
 
+EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id ) const
+{
+    //kDebug()<<start<<end<<id;
+    EffortCostMap ec;
+    QListIterator<Node*> it( childNodeIterator() );
+    while ( it.hasNext() ) {
+        ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id );
+    }
+    return ec;
+}
+
 EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &end, long id ) const
 {
     //kDebug()<<start<<end<<id;
@@ -1582,6 +1593,17 @@ EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
         ec += it.next() ->actualEffortCostPrDay( start, end, id );
+    }
+    return ec;
+}
+
+EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id ) const
+{
+    //kDebug()<<start<<end<<id;
+    EffortCostMap ec;
+    QListIterator<Node*> it( childNodeIterator() );
+    while ( it.hasNext() ) {
+        ec += it.next() ->actualEffortCostPrDay( resource, start, end, id );
     }
     return ec;
 }

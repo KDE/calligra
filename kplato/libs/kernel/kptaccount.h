@@ -30,6 +30,7 @@
 #include "kptglobal.h"
 #include "kpteffortcostmap.h"
 #include "kptnode.h"
+#include "kptresource.h"
 
 #include <kdebug.h>
 
@@ -107,18 +108,25 @@ public:
     
     class CostPlace {
     public:
+        /// Create an empty cost place
         CostPlace() 
-            : m_account(0), m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
+            : m_account(0), m_objectId(), m_node(0), m_resource(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
+        /// Create an empty cost place for account @p acc
         CostPlace(Account *acc) 
-            : m_account(acc), m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
+            : m_account(acc), m_objectId(), m_node(0), m_resource(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
+        /// Create a cost place for a task
         CostPlace(Account *acc, Node *node, bool running=false, bool strtup=false, bool shutdown=false);
-        
+
+        /// Create a cost place for a resource
+        CostPlace(Account *acc, Resource *resource, bool running=false);
+
         CostPlace(CostPlace *cp) {
             m_account = cp->m_account;
-            m_nodeId = cp->m_nodeId;
+            m_objectId = cp->m_objectId;
             m_node = cp->m_node;
+            m_resource = cp->m_resource;
             m_running = cp->m_running;
             m_startup = cp->m_startup;
             m_shutdown = cp->m_shutdown;
@@ -127,6 +135,7 @@ public:
         
         bool isEmpty() { return !(m_running || m_startup || m_shutdown); }
         Node *node() const { return m_node; }
+        Resource *resource() const { return m_resource; }
         
         bool running() const { return m_running; }
         void setRunning(bool on );
@@ -140,8 +149,9 @@ public:
     
     private:
         Account *m_account;
-        QString m_nodeId;
+        QString m_objectId;
         Node *m_node;
+        Resource *m_resource;
         bool m_running;
         bool m_startup;
         bool m_shutdown;
@@ -150,6 +160,12 @@ public:
     void append(CostPlace *cp) { m_costPlaces.append(cp); }
     const QList<CostPlace*> &costPlaces() const {return m_costPlaces; }
     Account::CostPlace *findCostPlace(const Node &node) const;
+    
+    Account::CostPlace *findCostPlace(const Resource &resource) const;
+    CostPlace *findRunning(const Resource &resource) const;
+    void removeRunning(const Resource &resource);
+    void addRunning(Resource &resource);
+
     CostPlace *findRunning(const Node &node) const;
     void removeRunning(const Node &node);
     void addRunning(Node &node);
@@ -167,6 +183,10 @@ public:
     EffortCostMap actualCost(long id = BASELINESCHEDULE);
     EffortCostMap actualCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
     
+protected:
+    EffortCostMap plannedCost(const CostPlace &cp, const QDate &start, const QDate &end, long id ) const;
+    EffortCostMap actualCost(const Account::CostPlace &cp, const QDate &start, const QDate &end, long id);
+
 private:
     QString m_name;
     QString m_description;
@@ -216,6 +236,8 @@ public:
     int accountCount() const { return m_accountList.count(); }
     Account *accountAt( int index ) const { return m_accountList.value( index ); }
     
+    Account *findRunningAccount(const Resource &resource) const;
+
     Account *findRunningAccount(const Node &node) const;
     Account *findStartupAccount(const Node &node) const;
     Account *findShutdownAccount(const Node &node) const;

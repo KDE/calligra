@@ -193,10 +193,12 @@ public:
     
     /// Returns the total actual cost
     double actualCost() const;
+    /// Returns the actual cost for @p resource
+    double actualCost( const Resource *resource ) const;
     /// Returns the actual cost on @p date
     double actualCost( const QDate &date ) const;
-    /// Returns the total actual cost for @p resource
-    double actualCost( const Resource *resource ) const;
+    /// Returns the total actual cost for @p resource on @p date
+    double actualCost( const Resource *resource, const QDate &date ) const;
     /// Returns the total actual effort and cost upto and including @p date
     EffortCost actualCostTo( const QDate &date ) const;
     
@@ -222,7 +224,9 @@ public:
     QStringList entrymodeList() const;
     
     EffortCostMap effortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const;
-    
+    /// Returns the actual effort and cost pr day used by @p resource
+    EffortCostMap effortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
+
 protected:
     void copy( const Completion &copy);
     double averageCostPrHour( const QDate &date, long id ) const;
@@ -404,6 +408,11 @@ public:
      * for the interval start, end inclusive
      */
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
+    /**
+     * Returns a list of planned effort and cost for the @p resource
+     * for the interval @p start, @p end inclusive, useing schedule with identity @p id
+     */
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
     
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE ) const;
@@ -442,7 +451,9 @@ public:
      * for the interval start, end inclusive
      */
     virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
-    
+    /// Returns the actual effort and cost pr day used by @p resource
+    virtual EffortCostMap actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
+
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 

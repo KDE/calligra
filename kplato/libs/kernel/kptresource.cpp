@@ -19,6 +19,7 @@
 */
 
 #include "kptresource.h"
+#include "kptaccount.h"
 #include "kptappointment.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -317,6 +318,7 @@ Resource::Resource()
     cost.normalRate = 100;
     cost.overtimeRate = 200;
     cost.fixed = 0;
+    cost.account = 0;
     m_calendar = 0;
     m_currentSchedule = 0;
     //kDebug()<<"("<<this<<")";
@@ -342,6 +344,9 @@ Resource::~Resource() {
         delete m_schedules.take(key);
     }
     clearExternalAppointments();
+    if (cost.account) {
+        cost.account->removeRunning(*this);
+    }
 }
 
 void Resource::removeRequests() {
@@ -373,7 +378,7 @@ void Resource::copy(Resource *resource) {
 
     cost.normalRate = resource->normalRate();
     cost.overtimeRate = resource->overtimeRate();
-    
+    cost.account = resource->account();
     m_calendar = resource->m_calendar;
 
     // hmmmm
@@ -473,6 +478,7 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     cost.normalRate = locale->readMoney(element.attribute("normal-rate"));
     //qDebug()<<"load cost:"<<locale->currencySymbol()<<locale->decimalSymbol()<<element.attribute("normal-rate")<<cost.normalRate;
     cost.overtimeRate = locale->readMoney(element.attribute("overtime-rate"));
+    cost.account = status.project().accounts().findAccount(element.attribute("account"));
     
     KoXmlElement e;
     KoXmlElement parent = element.namedItem( "required-resources" ).toElement();
@@ -521,6 +527,12 @@ void Resource::resolveRequiredResources( Project &project )
     m_requiredIds.clear();
 }
 
+void Resource::setAccount( Account *account )
+{
+    cost.account = account;
+    changed();
+}
+
 void Resource::save(QDomElement &element) const {
     //kDebug();
     QDomElement me = element.ownerDocument().createElement("resource");
@@ -538,6 +550,9 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
     me.setAttribute("normal-rate", m_project->locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", m_project->locale()->formatMoney(cost.overtimeRate));
+    if ( cost.account ) {
+        me.setAttribute("account", cost.account->name());
+    }
     
     if ( ! m_required.isEmpty() ) {
         QDomElement e = me.ownerDocument().createElement("required-resources");
@@ -1029,7 +1044,19 @@ Appointment Resource::appointmentIntervals() const {
     return a;
 }
 
-Duration Resource::plannedEffort(const QDate &date) const {
+EffortCostMap Resource::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id)
+{
+    EffortCostMap ec;
+    Schedule *s = findSchedule( id );
+    if ( s == 0 ) {
+        return ec;
+    }
+    ec = s->plannedEffortCostPrDay(start, end);
+    return ec;
+}
+
+Duration Resource::plannedEffort(const QDate &date) const
+{
     return m_currentSchedule ? m_currentSchedule->plannedEffort(date) : Duration::zeroDuration;
 }
 

@@ -44,6 +44,7 @@ class QTime;
 namespace KPlato
 {
 
+class Account;
 class Risk;
 class Effort;
 class Appointment;
@@ -390,6 +391,8 @@ public:
 
     Appointment appointmentIntervals( long id ) const;
     Appointment appointmentIntervals() const;
+    
+    EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id);
     Duration plannedEffort( const QDate &date ) const;
 
     void setCurrentSchedulePtr( Schedule *schedule ) { m_currentSchedule = schedule; }
@@ -444,6 +447,11 @@ public:
     /// to translate resource ids to resources
     void resolveRequiredResources( Project &project );
 
+    /// Return the account
+    Account *account() const { return cost.account; }
+    /// Set the @p account
+    void setAccount( Account *account );
+
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
     void externalAppointmentAdded( Resource*, Appointment* );
@@ -477,6 +485,7 @@ private:
         double normalRate;
         double overtimeRate;
         double fixed ;
+        Account *account;
     }
     cost;
     

@@ -307,6 +307,35 @@ QVariant ResourceModel::overtimeRate( const Resource *res, int role ) const
     return QVariant();
 }
 
+QVariant ResourceModel::account( const Resource *resource, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            Account *a = resource->account();
+            return a == 0 ? i18n( "None" ) : a->name();
+        }
+        case Qt::ToolTipRole: {
+            Account *a = resource->account();
+            return i18n( "Account: %1", (a == 0 ? i18n( "None" ) : a->name() ) );
+        }
+        case Role::EnumListValue:
+        case Qt::EditRole: {
+            Account *a = resource->account();
+            return a == 0 ? 0 : ( m_project->accounts().costElements().indexOf( a->name() ) + 1 );
+        }
+        case Role::EnumList: {
+            QStringList lst;
+            lst << i18n("None");
+            lst += m_project->accounts().costElements();
+            return lst;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant ResourceModel::data( const Resource *resource, int property, int role ) const
 {
     QVariant result;
@@ -324,6 +353,7 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
         case ResourceAvailableUntil: result = availableUntil( resource, role ); break;
         case ResourceNormalRate: result = normalRate( resource, role ); break;
         case ResourceOvertimeRate: result = overtimeRate( resource, role ); break;
+        case ResourceAccount: result = account( resource, role ); break;
         default:
             kDebug()<<"data: invalid display value: property="<<property;
             break;
@@ -369,6 +399,7 @@ QVariant ResourceModel::headerData( int section, int role )
             case ResourceAvailableUntil: return i18n( "Available Until" );
             case ResourceNormalRate: return i18n( "Normal Rate" );
             case ResourceOvertimeRate: return i18n( "Overtime Rate" );
+            case ResourceAccount: return i18n( "Account" );
             default: return QVariant();
         }
     } else if ( role == Qt::TextAlignmentRole ) {
@@ -852,6 +883,23 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
     return false;
 }
 
+bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            QStringList lst = m_model.account( res, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = res->account();
+            if ( old != a ) {
+                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18n( "Modify Resource Account" ) ) );
+                return true;
+            }
+    }
+    return false;
+}
 
 QVariant ResourceItemModel::notUsed( const ResourceGroup *, int role ) const
 {
@@ -917,6 +965,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
             case ResourceModel::ResourceAvailableUntil: return setAvailableUntil( r, value, role );
             case ResourceModel::ResourceNormalRate: return setNormalRate( r, value, role );
             case ResourceModel::ResourceOvertimeRate: return setOvertimeRate( r, value, role );
+            case ResourceModel::ResourceAccount: return setAccount( r, value, role );
             default:
                 qWarning("data: invalid display value column %d", index.column());
                 return false;
@@ -961,6 +1010,7 @@ QAbstractItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *pare
     switch ( col ) {
         case ResourceModel::ResourceType: return new EnumDelegate( parent );
         case ResourceModel::ResourceCalendar: return new EnumDelegate( parent );
+        case ResourceModel::ResourceAccount: return new EnumDelegate( parent );
         default: break;
     }
     return 0;

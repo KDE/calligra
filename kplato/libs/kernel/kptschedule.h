@@ -150,7 +150,8 @@ public:
     
     virtual EffortCostMap bcwsPrDay() const;
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
-
+    virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end ) const;
+    
     /// Returns the total planned effort for this schedule
     virtual Duration plannedEffort() const;
     /// Returns the total planned effort for this schedule on date

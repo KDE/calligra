@@ -280,7 +280,8 @@ public:
     virtual bool effortMetError( long /*id*/ = CURRENTSCHEDULE ) const { return false; }
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
-        
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
+
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date
@@ -295,6 +296,8 @@ public:
     /// Returns the total actual effort for this task (or subtasks) up to and including date
     virtual Duration actualEffortTo(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
     virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
+    /// Returns the actual effort and cost pr day used by @p resource
+    virtual EffortCostMap actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
     
     /**
      * Planned cost is the sum total of all resources and other costs
