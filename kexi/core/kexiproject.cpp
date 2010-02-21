@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,9 +77,14 @@ public:
         unstoredItems.clear();
     }
 
-    void saveClassId(const QString& partClass, int id)
+    //! Used by saveClassId()
+    enum ClassNameStatus { AlteredClassName, OriginalClassName };
+
+    void saveClassId(const QString& partClass, int id, ClassNameStatus classNameStatus = OriginalClassName)
     {
-        classIds.insert(partClass, id);
+        if (classNameStatus == OriginalClassName) {
+            classIds.insert(partClass, id);
+        }
         classNames.insert(id, partClass);
     }
 
@@ -1092,14 +1097,20 @@ bool KexiProject::checkProject(const QString& singlePartClass)
                 + QString(partMime).replace("kexi/", QString());
         }
         // compatibility:
-        if (partClass == QLatin1String("uk.co.piggz.report"))
+        Private::ClassNameStatus classNameStatus = Private::OriginalClassName;
+        if (partClass == QLatin1String("uk.co.piggz.report")) {
             partClass = QLatin1String("org.kexi-project.report");
+            classNameStatus = Private::AlteredClassName;
+        }
         KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
-        if (info) {
-//            i->setProjectPartID(cursor->value(0).toInt());
-            d->saveClassId(partClass, cursor->value(0).toInt());
+        bool ok;
+        const int classId = cursor->value(0).toInt(&ok);
+        if (!ok || classId <= 0) {
+            kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+        }
+        if (info && ok && classId > 0) {
+            d->saveClassId(partClass, classId, classNameStatus);
             saved = true;
-//            i->setIdStoredInPartDatabase(true);
         }
         else {
             KexiPart::MissingPart m;
