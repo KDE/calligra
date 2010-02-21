@@ -34,7 +34,7 @@
 SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
-  setWindowTitle("Dumps");
+  setWindowTitle("Whiteboards");
 
   m_wdgSectionsBox.setupUi(mainWidget);
   
