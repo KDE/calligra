@@ -50,7 +50,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Create a new mask or layer</string>
+        <string>Create a new whiteboard</string>
        </property>
        <property name="text">
         <string/>
@@ -78,13 +78,10 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Duplicate layer or mask</string>
-       </property>
-       <property name="statusTip">
-        <string>Duplicate layer or mask</string>
+        <string>Duplicate whiteboard</string>
        </property>
        <property name="whatsThis">
-        <string>Duplicate the currently selected layer or mask</string>
+        <string>Duplicate the currently selected whiteboard</string>
        </property>
        <property name="text">
         <string/>
@@ -109,7 +106,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Move layer or mask down</string>
+        <string>Move whiteboard down</string>
        </property>
        <property name="text">
         <string/>
@@ -134,7 +131,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Move layer or mask up</string>
+        <string>Move whiteboard up</string>
        </property>
        <property name="text">
         <string/>
@@ -175,7 +172,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Delete the layer or mask</string>
+        <string>Delete the whiteboard</string>
        </property>
        <property name="text">
         <string/>
