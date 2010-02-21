@@ -493,11 +493,9 @@ EffortCostMap Schedule::plannedEffortCostPrDay( const Resource *resource, const 
 {
     //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        it.next();
-        if ( (*it)->resource() && (*it)->resource()->resource() == resource ) {
-            ec += (*it)->plannedPrDay( start, end );
+    foreach ( Appointment *a, m_appointments ) {
+        if ( a->resource() && a->resource()->resource() == resource ) {
+            ec += a->plannedPrDay( start, end );
             break;
         }
     }
