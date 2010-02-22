@@ -40,6 +40,7 @@ bool KPrAnimSeq::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             m_animations.append(animation);
         }
     }
+    return true;
 }
 
 void KPrAnimSeq::saveOdf(KoShapeSavingContext &context) const

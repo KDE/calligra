@@ -65,4 +65,5 @@ KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElemen
         else {
         }
     }
+    return animation;
 }

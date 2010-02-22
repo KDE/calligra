@@ -31,6 +31,7 @@ KPrAnimateTransform::~KPrAnimateTransform()
 
 bool KPrAnimateTransform::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    return true;
 }
 
 void KPrAnimateTransform::saveOdf(KoShapeSavingContext &context) const
