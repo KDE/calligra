@@ -1204,7 +1204,7 @@ bool TC::read(OLEStreamReader *stream, bool preservePos) {
     brcLeft.read(stream, false);
     brcBottom.read(stream, false);
     brcRight.read(stream, false);
-    
+
     if(preservePos)
         stream->pop();
     return true;
@@ -6860,6 +6860,7 @@ void PAP::clear() {
     shd.clear();
     dcs.clear();
     lvl=9;
+    fBiDi = 0;
     fNumRMIns=0;
     anld.clear();
     fPropRMark=0;
