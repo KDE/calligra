@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRRENDERER_H
-#define KRRENDERER_H
+#ifndef KORENDERERBASE_H
+#define KORENDERERBASE_H
 #include "koreport_export.h"
 #include <KUrl>
 
@@ -26,31 +26,37 @@ class QPainter;
 class QPrinter;
 class ORODocument;
 
+//! Context for executing rendering.
 class KOREPORT_EXPORT KoReportRendererContext
 {
     public:
         KoReportRendererContext();
-        KUrl saveFileName;
+        KUrl destinationUrl;
         QPainter *painter;
         QPrinter *printer;
 };
 
-class KOREPORT_EXPORT KRRenderer
+//! Base class for report renderers.
+class KOREPORT_EXPORT KoReportRendererBase
 {
     public:
-        KRRenderer();
-        //!Render the page of the given document within the given context.
-        //!If page = 0, render the entire document
-        virtual bool render(KoReportRendererContext, ORODocument *, int page = -1) = 0;
-
+        KoReportRendererBase();
+        
+        virtual ~KoReportRendererBase();
+        
+        //! Render the page of the given document within the given context.
+        //! If page == -1, renders the entire document.
+        virtual bool render(const KoReportRendererContext& context, ORODocument *document, int page = -1) = 0;
 };
 
+//! Factory for creating renderers
+//! @todo make it use plugins
 class KOREPORT_EXPORT KoReportRendererFactory
 {
     public:
-        static KRRenderer* createInstance(const QString &className);
+        KoReportRendererFactory();
+
+        KoReportRendererBase* createInstance(const QString& key);
 };
 
-
-
-#endif // KRRENDERER_H
+#endif // KORENDERERBASE_H

@@ -17,23 +17,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "krrenderer.h"
+#include "KoReportRendererBase.h"
 #include "krscreenrender.h"
 
 KoReportRendererContext::KoReportRendererContext()
+ : painter(0), printer(0)
 {
-    painter = 0;
-    printer = 0;
 }
 
-KRRenderer* KoReportRendererFactory::createInstance(const QString& className)
+KoReportRendererBase::KoReportRendererBase()
 {
-    if (className.toLower() == "screen") {
+}
+
+KoReportRendererBase::~KoReportRendererBase()
+{
+}
+
+KoReportRendererFactory::KoReportRendererFactory()
+{
+}
+
+KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key)
+{
+    if (key.toLower() == QLatin1String("screen")) {
         return new KRScreenRender();
     }
-}
-
-KRRenderer::KRRenderer()
-{
-
+    return 0;
 }

@@ -27,30 +27,29 @@
 
 #include <renderobjects.h>
 #include <QPainter>
-#include <krrenderer.h>
 
-KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
+KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *document)
         : QWidget(parent)
 {
     setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
-    m_reportDocument = r;
+    m_reportDocument = document;
     m_page = 1;
     int pageWidth = 0;
     int pageHeight = 0;
 
     if (m_reportDocument) {
-        QString pageSize = r->pageOptions().getPageSize();
+        QString pageSize = m_reportDocument->pageOptions().getPageSize();
 
 
         if (pageSize == "Custom") {
             // if this is custom sized sheet of paper we will just use those values
-            pageWidth = (int)(r->pageOptions().getCustomWidth());
-            pageHeight = (int)(r->pageOptions().getCustomHeight());
+            pageWidth = (int)(m_reportDocument->pageOptions().getCustomWidth());
+            pageHeight = (int)(m_reportDocument->pageOptions().getCustomHeight());
         } else {
             // lookup the correct size information for the specified size paper
-            pageWidth = r->pageOptions().widthPx();
-            pageHeight = r->pageOptions().heightPx();
+            pageWidth = m_reportDocument->pageOptions().widthPx();
+            pageHeight = m_reportDocument->pageOptions().heightPx();
         }
     }
 
@@ -60,7 +59,16 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
     m_repaint = true;
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
+
+    m_renderer = m_factory.createInstance("screen");
+
     renderPage(1);
+}
+
+KexiReportPage::~KexiReportPage()
+{
+    delete m_renderer;
+    m_renderer = 0;
 }
 
 void KexiReportPage::paintEvent(QPaintEvent*)
@@ -69,26 +77,20 @@ void KexiReportPage::paintEvent(QPaintEvent*)
     painter.drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
-void KexiReportPage::renderPage(int p)
+void KexiReportPage::renderPage(int page)
 {
-    kDebug() << "KexiReportPage::renderPage " << p;
-    m_page = p;
+    kDebug() << page;
+//js: is m_page needed?
+    m_page = page;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
     if (m_reportDocument) {
         KoReportRendererContext cxt;
         cxt.painter = &qp;
-        KRRenderer *sr = KoReportRendererFactory::createInstance("screen");
-        sr->render(cxt, m_reportDocument, p-1);
+        m_renderer->render(cxt, m_reportDocument, m_page - 1);
     }
     m_repaint = true;
     repaint();
 }
 
-KexiReportPage::~KexiReportPage()
-{
-}
-
-
 #include "kexireportpage.moc"
-

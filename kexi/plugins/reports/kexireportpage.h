@@ -19,6 +19,7 @@
 #define KEXIREPORTPAGE_H
 
 #include <qwidget.h>
+#include <KoReportRendererBase.h>
 
 class QPixmap;
 class ORODocument;
@@ -30,11 +31,11 @@ class KexiReportPage : public QWidget
 {
     Q_OBJECT
 public:
-    KexiReportPage(QWidget *parent, ORODocument *r);
+    KexiReportPage(QWidget *parent, ORODocument *document);
 
     ~KexiReportPage();
 
-    void renderPage(int);
+    void renderPage(int page);
 
 public slots:
     virtual void paintEvent(QPaintEvent*);
@@ -44,7 +45,8 @@ private:
     int m_page;
     bool m_repaint;
     QPixmap *m_pixmap;
+    KoReportRendererFactory m_factory;
+    KoReportRendererBase *m_renderer;
 };
 
 #endif
-

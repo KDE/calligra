@@ -21,11 +21,11 @@
 
 #include <QPainter>
 #include "koreport_export.h"
-#include "krrenderer.h"
+#include "KoReportRendererBase.h"
 
 class ORODocument;
 
-class KRScreenRender : public KRRenderer
+class KRScreenRender : public KoReportRendererBase
 {
 public:
     KRScreenRender();
@@ -36,13 +36,10 @@ public:
     //    return m_painter;
     //}
 
-    virtual bool render(KoReportRendererContext, ORODocument *, int);
+    virtual bool render(const KoReportRendererContext& context, ORODocument *document, int page);
 
 protected:
     //QPainter* m_painter;
 };
 
 #endif // __ORPRINTRENDER_H__
-
-
-
