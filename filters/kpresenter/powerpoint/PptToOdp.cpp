@@ -932,7 +932,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             processTextAutoNumberScheme(p.pf9->bulletAutoNumberScheme->scheme,
                                         numFormat, numSuffix, numPrefix);
         }
-        if (i.pf && i.pf->masks.hasBullet) {
+        if (i.pf && i.pf->bulletFlags) {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             if (i.pf->masks.bulletChar) {
@@ -950,6 +950,14 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                 } else if (i.pf->bulletSize >= -4000 && i.pf->bulletSize <= -1){
                     out.addAttribute("text:bullet-relative-size",
                                      pt(i.pf->bulletSize));
+                }
+            } else if (p.pf->masks.bulletSize && p.pf->bulletFlags->fBulletHasSize) {
+                if (p.pf->bulletSize >= 25 && p.pf->bulletSize <= 400) {
+                    out.addAttribute("text:bullet-relative-size",
+                                     percent(i.pf->bulletSize));
+                } else if (p.pf->bulletSize >= -4000 && p.pf->bulletSize <= -1){
+                    out.addAttribute("text:bullet-relative-size",
+                                     pt(p.pf->bulletSize));
                 }
             }
         } else {
@@ -1089,6 +1097,23 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
         }
     }
     return textstyle;
+}
+const TextMasterStyleLevel *
+getTextMasterStyleLevel(quint16 type, quint16 level, const MasterOrSlideContainer* m)
+{
+    const TextMasterStyleAtom* masterStyle = getTextMasterStyleAtom(m, type);
+    if (!masterStyle) {
+        return 0;
+    }
+    const TextMasterStyleLevel *l = 0;
+    switch (level) {
+    case 0: if (masterStyle->lstLvl1) l = masterStyle->lstLvl1.data();break;
+    case 1: if (masterStyle->lstLvl2) l = masterStyle->lstLvl2.data();break;
+    case 2: if (masterStyle->lstLvl3) l = masterStyle->lstLvl3.data();break;
+    case 3: if (masterStyle->lstLvl4) l = masterStyle->lstLvl4.data();break;
+    case 4: if (masterStyle->lstLvl5) l = masterStyle->lstLvl5.data();break;
+    }
+    return l;
 }
 void PptToOdp::defineMasterStyles(KoGenStyles& styles)
 {
@@ -1815,31 +1840,16 @@ int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
     return (pos == end) ?0 :-pos;
 }
 
-QString PptToOdp::defineAutoListStyle(Writer& out, int textType,
-        int paragraphIndent, const TextPFException* pf)
+QString PptToOdp::defineAutoListStyle(Writer& out, int paragraphIndent,
+                   const TextPFException* pf, const TextMasterStyleLevel* level)
 {
     KoGenStyle list(KoGenStyle::StyleListAuto);
     ListStyleInput info;
     info.pf = pf;
-    ListStyleInput parent;
-    const TextMasterStyleAtom* listStyle
-        = getTextMasterStyleAtom(currentMaster, textType);
-    const TextMasterStyleLevel* level = 0;
-    if (!listStyle && p->documentContainer) {
-        listStyle = &p->documentContainer->documentTextInfo.textMasterStyleAtom;
-    }
-    if (listStyle) {
-        if (paragraphIndent == 0) level = listStyle->lstLvl1.data();
-        if (paragraphIndent == 1) level = listStyle->lstLvl2.data();
-        if (paragraphIndent == 2) level = listStyle->lstLvl3.data();
-        if (paragraphIndent == 3) level = listStyle->lstLvl4.data();
-        if (paragraphIndent == 4) level = listStyle->lstLvl5.data();
-    } else {
-        qDebug() << "no style for " << textType;
-    }
     defineListStyle(list, paragraphIndent + 1, info, level);
     return out.styles.lookup(list);
 }
+
 void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
                               const QString& text, int start, int end,
                               QStack<QString>& levels)
@@ -1874,12 +1884,19 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     quint16 paragraphIndent = pf->indentLevel;
     // [MS-PPT].pdf says the indentation level can be 4 at most
     if (paragraphIndent > 4) paragraphIndent = 4;
-    bool hasBullet = pf->pf.masks.hasBullet && pf->pf.bulletFlags->fHasBullet;
+    // get the parent style for this indent level
+    quint32 textType = tc.textHeaderAtom.textType;
+    const TextMasterStyleLevel* level = getTextMasterStyleLevel(textType,
+                                                paragraphIndent, currentMaster);
+    // check if this line has a bullet or not, take the master setting into
+    // account
+    bool hasBullet = (pf->pf.masks.hasBullet && pf->pf.bulletFlags->fHasBullet)
+                     || (level && level->pf.masks.hasBullet
+                         && level->pf.bulletFlags->fHasBullet);
     bool islist = hasBullet || paragraphIndent > 0;
-
     if (islist) {
-        QString listStyle = defineAutoListStyle(out, tc.textHeaderAtom.textType,
-                paragraphIndent, &pf->pf);
+        QString listStyle = defineAutoListStyle(out, paragraphIndent, &pf->pf,
+                                                level);
         // remove levels until the top level is the right indentation
         if ((quint16)levels.size() > paragraphIndent
                 && levels[paragraphIndent] == listStyle) {
@@ -2264,25 +2281,6 @@ QColor PptToOdp::toQColor(const OfficeArtCOLORREF& c)
         return QColor(cs.red, cs.green, cs.blue);
     }
     return QColor(c.red, c.green, c.blue);
-}
-
-const TextMasterStyleLevel *
-getTextMasterStyleLevel(quint16 type, quint16 level, const MasterOrSlideContainer* m)
-{
-    const TextMasterStyleAtom* masterStyle
-            = getTextMasterStyleAtom(m, type);
-    if (!masterStyle) {
-        return 0;
-    }
-    const TextMasterStyleLevel *l = 0;
-    switch (level) {
-    case 0: if (masterStyle->lstLvl1) l = masterStyle->lstLvl1.data();break;
-    case 1: if (masterStyle->lstLvl2) l = masterStyle->lstLvl2.data();break;
-    case 2: if (masterStyle->lstLvl3) l = masterStyle->lstLvl3.data();break;
-    case 3: if (masterStyle->lstLvl4) l = masterStyle->lstLvl4.data();break;
-    case 4: if (masterStyle->lstLvl5) l = masterStyle->lstLvl5.data();break;
-    }
-    return l;
 }
 
 const TextPFException *PptToOdp::masterTextPFException(quint16 type, quint16 level)
