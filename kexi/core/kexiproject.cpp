@@ -77,14 +77,9 @@ public:
         unstoredItems.clear();
     }
 
-    //! Used by saveClassId()
-    enum ClassNameStatus { AlteredClassName, OriginalClassName };
-
-    void saveClassId(const QString& partClass, int id, ClassNameStatus classNameStatus = OriginalClassName)
+    void saveClassId(const QString& partClass, int id, const QString& originalPartClass = QString())
     {
-        if (classNameStatus == OriginalClassName) {
-            classIds.insert(partClass, id);
-        }
+        classIds.insert(originalPartClass.isEmpty() ? partClass : originalPartClass, id);
         classNames.insert(id, partClass);
     }
 
@@ -1088,7 +1083,7 @@ bool KexiProject::checkProject(const QString& singlePartClass)
 
     bool saved = false;
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        QString partMime( cursor->value(2).toString() );
+        const QString partMime( cursor->value(2).toString() );
         QString partClass( cursor->value(3).toString() );
         if (partClass.startsWith(QLatin1String("http://"))) {
             // for compatibility with Kexi 1.x
@@ -1096,11 +1091,10 @@ bool KexiProject::checkProject(const QString& singlePartClass)
             partClass = QLatin1String("org.kexi-project.")
                 + QString(partMime).replace("kexi/", QString());
         }
-        // compatibility:
-        Private::ClassNameStatus classNameStatus = Private::OriginalClassName;
-        if (partClass == QLatin1String("uk.co.piggz.report")) {
+        QString originalPartClass;
+        if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
+            originalPartClass = partClass;
             partClass = QLatin1String("org.kexi-project.report");
-            classNameStatus = Private::AlteredClassName;
         }
         KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
         bool ok;
@@ -1109,7 +1103,7 @@ bool KexiProject::checkProject(const QString& singlePartClass)
             kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
         }
         if (info && ok && classId > 0) {
-            d->saveClassId(partClass, classId, classNameStatus);
+            d->saveClassId(partClass, classId, originalPartClass);
             saved = true;
         }
         else {
