@@ -172,7 +172,7 @@ private:
     /** define automatic styles for text, paragraphs, graphic and presentation
       families
       */
-    void defineMasterAutomaticStyles(KoGenStyles& styles);
+    void defineMasterStyles(KoGenStyles& styles);
     void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
 
     // we assume that these functions are the same for all style families
@@ -198,7 +198,7 @@ private:
     /* Extract data into the style */
     template <typename T>
     void defineGraphicProperties(KoGenStyle& style, const T& o,
-                                 const PPT::TextMasterStyleAtom* listStyles = 0);
+                                 const QString& listStyle = QString());
     void defineGraphicPropertiesListStyles(KoGenStyle& style,
                                            const PPT::TextMasterStyleAtom& listStyles);
     /* Extract data into the style element style:list */
@@ -209,6 +209,12 @@ private:
                          const PPT::TextMasterStyleLevel& level,
                          const PPT::TextMasterStyle9Level* level9 = 0,
                          const PPT::TextMasterStyle10Level* level10 = 0);
+    void defineListStyle(KoGenStyle& style, quint8 depth,
+                               const PPT::TextPFException& pf,
+                               const PPT::TextPFException9* pf9,
+                               const PPT::TextCFException* cf,
+                               const PPT::TextCFException9* cf9,
+                               const PPT::TextCFException10* cf10);
 
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
                         const PPT::OfficeArtClientData* clientData) const;
