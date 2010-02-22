@@ -1840,11 +1840,13 @@ int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
 }
 
 QString PptToOdp::defineAutoListStyle(Writer& out, int paragraphIndent,
-                   const TextPFException* pf, const TextMasterStyleLevel* level)
+                   const TextPFException* pf, const TextPFException9* pf9,
+                   const TextMasterStyleLevel* level)
 {
     KoGenStyle list(KoGenStyle::StyleListAuto);
     ListStyleInput info;
     info.pf = pf;
+    info.pf9 = pf9;
     defineListStyle(list, paragraphIndent + 1, info, level);
     return out.styles.lookup(list);
 }
@@ -1898,7 +1900,7 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     bool islist = hasBullet || paragraphIndent > 0;
     if (islist) {
         QString listStyle = defineAutoListStyle(out, paragraphIndent, &pf->pf,
-                                                level);
+                                                0, level);
         // remove levels until the top level is the right indentation
         if ((quint16)levels.size() > paragraphIndent
                 && levels[paragraphIndent] == listStyle) {

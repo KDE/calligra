@@ -233,6 +233,7 @@ private:
 
     QString defineAutoListStyle(Writer& out, int paragraphIndent,
                                 const PPT::TextPFException* pf,
+                                const PPT::TextPFException9* pf9,
                                 const PPT::TextMasterStyleLevel* level);
 
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
