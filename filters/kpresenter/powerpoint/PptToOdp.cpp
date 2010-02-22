@@ -1889,9 +1889,12 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
                                                 paragraphIndent, currentMaster);
     // check if this line has a bullet or not, take the master setting into
     // account
-    bool hasBullet = (pf->pf.masks.hasBullet && pf->pf.bulletFlags->fHasBullet)
-                     || (level && level->pf.masks.hasBullet
-                         && level->pf.bulletFlags->fHasBullet);
+    bool hasBullet = false;
+    if (pf->pf.masks.hasBullet) {
+        hasBullet = pf->pf.bulletFlags->fHasBullet;
+    } else if (level && level->pf.masks.hasBullet) {
+        hasBullet = level->pf.bulletFlags->fHasBullet;
+    }
     bool islist = hasBullet || paragraphIndent > 0;
     if (islist) {
         QString listStyle = defineAutoListStyle(out, paragraphIndent, &pf->pf,
