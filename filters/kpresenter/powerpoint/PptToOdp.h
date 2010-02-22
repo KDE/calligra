@@ -199,8 +199,7 @@ private:
     template <typename T>
     void defineGraphicProperties(KoGenStyle& style, const T& o,
                                  const QString& listStyle = QString());
-    void defineGraphicPropertiesListStyles(KoGenStyle& style,
-                                           const PPT::TextMasterStyleAtom& listStyles);
+
     /**
      * Structure that influences all information that affects the style of a
      * text:style.

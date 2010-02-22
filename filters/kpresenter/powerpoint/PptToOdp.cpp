@@ -924,7 +924,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", "TODO");
     } else {
-        QString numFormat, numSuffix, numPrefix;
+        QString numFormat("1"), numSuffix, numPrefix;
         if (i.pf9 && i.pf9->bulletAutoNumberScheme) {
             processTextAutoNumberScheme(i.pf9->bulletAutoNumberScheme->scheme,
                                         numFormat, numSuffix, numPrefix);
@@ -932,17 +932,16 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             processTextAutoNumberScheme(p.pf9->bulletAutoNumberScheme->scheme,
                                         numFormat, numSuffix, numPrefix);
         }
-        if (i.pf && i.pf->bulletFlags) {
+        // if there is a bulletChar in the current pf, then this is a bullet
+        // list, otherwise, it is a numbered list
+        QChar bulletChar;
+        if (i.pf->masks.bulletChar) {
+            bulletChar = getBulletChar(*i.pf);
+        }
+        if (!bulletChar.isNull()) {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
-            if (i.pf->masks.bulletChar) {
-                QChar bulletChar = getBulletChar(*i.pf);
-                out.addAttribute("text:bullet-char", bulletChar);
-            } else {
-                // the character from the parent should be specified here,
-                // because text:list-level-style-bullet must have a bullet
-                out.addAttribute("text:bullet-char", QChar(0x25cf)); //  "●"
-            }
+            out.addAttribute("text:bullet-char", bulletChar);
             if (i.pf->masks.bulletSize && i.pf->bulletFlags->fBulletHasSize) {
                 if (i.pf->bulletSize >= 25 && i.pf->bulletSize <= 400) {
                     out.addAttribute("text:bullet-relative-size",
