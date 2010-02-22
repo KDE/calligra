@@ -86,6 +86,8 @@ class OutlineTextProps9Container;
 void parseOutlineTextProps9Container(LEInputStream& in, OutlineTextProps9Container& _s);
 class OutlineTextPropsHeaderExAtom;
 void parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsHeaderExAtom& _s);
+class StyleTextProp9Atom;
+void parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s);
 class FontCollection10Container;
 void parseFontCollection10Container(LEInputStream& in, FontCollection10Container& _s);
 class GridSpacing10Atom;
@@ -232,8 +234,22 @@ class SlideProgTagsContainer;
 void parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer& _s);
 class PP9SlideBinaryTagExtension;
 void parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s);
-class PP10SlideBinaryTagExtension;
-void parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s);
+class Comment10Container;
+void parseComment10Container(LEInputStream& in, Comment10Container& _s);
+class Comment10Atom;
+void parseComment10Atom(LEInputStream& in, Comment10Atom& _s);
+class LinkedSlide10Atom;
+void parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s);
+class LinkedShape10Atom;
+void parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s);
+class SlideFlags10Atom;
+void parseSlideFlags10Atom(LEInputStream& in, SlideFlags10Atom& _s);
+class HashCode10Atom;
+void parseHashCode10Atom(LEInputStream& in, HashCode10Atom& _s);
+class ExtTimeNodeContainer;
+void parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s);
+class BuildListContainer;
+void parseBuildListContainer(LEInputStream& in, BuildListContainer& _s);
 class PP12SlideBinaryTagExtension;
 void parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s);
 class TagNameAtom;
@@ -384,8 +400,12 @@ class RecolorInfoAtom;
 void parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s);
 class OutlineTextRefAtom;
 void parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s);
-class ShapeProgsTagContainer;
-void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
+class PP9ShapeBinaryTagExtension;
+void parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s);
+class PP10ShapeBinaryTagExtension;
+void parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTagExtension& _s);
+class PP11ShapeBinaryTagExtension;
+void parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTagExtension& _s);
 class RoundTripNewPlaceHolderId12Atom;
 void parseRoundTripNewPlaceHolderId12Atom(LEInputStream& in, RoundTripNewPlaceHolderId12Atom& _s);
 class RoundTripShapeId12Atom;
@@ -490,6 +510,8 @@ class TextDefaults9Atom;
 void parseTextDefaults9Atom(LEInputStream& in, TextDefaults9Atom& _s);
 class Kinsoku9Container;
 void parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s);
+class OutlineTextProps9Entry;
+void parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s);
 class TextCFException10;
 void parseTextCFException10(LEInputStream& in, TextCFException10& _s);
 class TextDefaults10Atom;
@@ -528,8 +550,8 @@ class TextMasterStyleLevel;
 void parseTextMasterStyleLevel(LEInputStream& in, TextMasterStyleLevel& _s);
 class DocumentAtom;
 void parseDocumentAtom(LEInputStream& in, DocumentAtom& _s);
-class SlideProgBinaryTagSubContainerOrAtom;
-void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s);
+class SlideTime10Atom;
+void parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s);
 class ProgStringTagContainer;
 void parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s);
 class NotesAtom;
@@ -654,8 +676,8 @@ class MouseClickInteractiveInfoContainer;
 void parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s);
 class MouseOverInteractiveInfoContainer;
 void parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s);
-class ShapeClientRoundtripDataSubcontainerOrAtom;
-void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
+class ShapeProgBinaryTagsSubContainerOrAtom;
+void parseShapeProgBinaryTagsSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagsSubContainerOrAtom& _s);
 class TextRulerAtom;
 void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
 class OfficeArtFOPTE;
@@ -720,8 +742,8 @@ class TextSIExceptionAtom;
 void parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s);
 class TextMasterStyleAtom;
 void parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s);
-class SlideProgBinaryTagContainer;
-void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
+class PP10SlideBinaryTagExtension;
+void parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s);
 class ExObjListSubContainer;
 void parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _s);
 class OfficeArtDggContainer;
@@ -730,6 +752,8 @@ class OfficeArtFOPTEChoice;
 void parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s);
 class OfficeArtClientData;
 void parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s);
+class ShapeProgBinaryTagsContainer;
+void parseShapeProgBinaryTagsContainer(LEInputStream& in, ShapeProgBinaryTagsContainer& _s);
 class WordDocument;
 void parseWordDocument(LEInputStream& in, WordDocument& _s);
 class Table;
@@ -746,36 +770,42 @@ class TextMasterStyle9Atom;
 void parseTextMasterStyle9Atom(LEInputStream& in, TextMasterStyle9Atom& _s);
 class BlipEntityAtom;
 void parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s);
-class StyleTextProp9Atom;
-void parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s);
 class TextMasterStyle10Atom;
 void parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s);
 class TextContainerInteractiveInfo;
 void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
 class DocumentTextInfoContainer;
 void parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s);
-class SlideProgTagsSubContainerOrAtom;
-void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
+class SlideProgBinaryTagSubContainerOrAtom;
+void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s);
 class DrawingGroupContainer;
 void parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s);
 class OfficeArtSpContainer;
 void parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s);
+class ShapeProgTagsSubContainerOrAtom;
+void parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s);
 class DocumentContainer;
 void parseDocumentContainer(LEInputStream& in, DocumentContainer& _s);
 class DocInfoListSubContainerOrAtom;
 void parseDocInfoListSubContainerOrAtom(LEInputStream& in, DocInfoListSubContainerOrAtom& _s);
 class PP9DocBinaryTagExtension;
 void parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtension& _s);
-class OutlineTextProps9Entry;
-void parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s);
+class SlideProgBinaryTagContainer;
+void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
 class OfficeArtDgContainer;
 void parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s);
 class OfficeArtSpgrContainerFileBlock;
 void parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s);
+class ShapeProgsTagContainer;
+void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
 class DocProgBinaryTagSubContainerOrAtom;
 void parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBinaryTagSubContainerOrAtom& _s);
+class SlideProgTagsSubContainerOrAtom;
+void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
 class DrawingContainer;
 void parseDrawingContainer(LEInputStream& in, DrawingContainer& _s);
+class ShapeClientRoundtripDataSubcontainerOrAtom;
+void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
 class DocProgBinaryTagContainer;
 void parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s);
 class MainMasterContainer;
@@ -1093,6 +1123,12 @@ public:
     RecordHeader rh;
     QByteArray todo;
     OutlineTextPropsHeaderExAtom(void* /*dummy*/ = 0) {}
+};
+class StyleTextProp9Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    QList<StyleTextProp9> rgStyleTextProp9;
+    StyleTextProp9Atom(void* /*dummy*/ = 0) {}
 };
 class FontCollection10Container : public StreamOffset {
 public:
@@ -1651,13 +1687,58 @@ public:
     QList<TextMasterStyle9Atom> rgTextMasterStyleAtom;
     PP9SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
-class PP10SlideBinaryTagExtension : public StreamOffset {
+class Comment10Container : public StreamOffset {
 public:
     RecordHeader rh;
-    QVector<quint16> tagName;
-    RecordHeader rhData;
     QByteArray todo;
-    PP10SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+    Comment10Container(void* /*dummy*/ = 0) {}
+};
+class Comment10Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    QByteArray todo;
+    Comment10Atom(void* /*dummy*/ = 0) {}
+};
+class LinkedSlide10Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    quint32 linkedSlideIdRef;
+    qint32 clinkedShapes;
+    LinkedSlide10Atom(void* /*dummy*/ = 0) {}
+};
+class LinkedShape10Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    quint32 shapeIdRef;
+    quint32 linkedShapeIdRef;
+    LinkedShape10Atom(void* /*dummy*/ = 0) {}
+};
+class SlideFlags10Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    bool fPreserveMaster;
+    bool fOverrideMasterAnimatino;
+    quint16 unuseda;
+    quint16 unusedb;
+    SlideFlags10Atom(void* /*dummy*/ = 0) {}
+};
+class HashCode10Atom : public StreamOffset {
+public:
+    RecordHeader rh;
+    quint32 hash;
+    HashCode10Atom(void* /*dummy*/ = 0) {}
+};
+class ExtTimeNodeContainer : public StreamOffset {
+public:
+    RecordHeader rh;
+    QByteArray todo;
+    ExtTimeNodeContainer(void* /*dummy*/ = 0) {}
+};
+class BuildListContainer : public StreamOffset {
+public:
+    RecordHeader rh;
+    QByteArray todo;
+    BuildListContainer(void* /*dummy*/ = 0) {}
 };
 class PP12SlideBinaryTagExtension : public StreamOffset {
 public:
@@ -2237,11 +2318,29 @@ public:
     qint32 index;
     OutlineTextRefAtom(void* /*dummy*/ = 0) {}
 };
-class ShapeProgsTagContainer : public StreamOffset {
+class PP9ShapeBinaryTagExtension : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    StyleTextProp9Atom styleTextProp9Atom;
+    PP9ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
+};
+class PP10ShapeBinaryTagExtension : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
     QByteArray todo;
-    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
+    PP10ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
+};
+class PP11ShapeBinaryTagExtension : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    QByteArray todo;
+    PP11ShapeBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
 class RoundTripNewPlaceHolderId12Atom : public StreamOffset {
 public:
@@ -2936,6 +3035,12 @@ public:
     QSharedPointer<KinsokuFollowingAtom> kinsokuFollowingAtom;
     Kinsoku9Container(void* /*dummy*/ = 0) {}
 };
+class OutlineTextProps9Entry : public StreamOffset {
+public:
+    OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
+    StyleTextProp9Atom styleTextProp9Atom;
+    OutlineTextProps9Entry(void* /*dummy*/ = 0) {}
+};
 class TextCFException10 : public StreamOffset {
 public:
     bool _has_newEAFontRef;
@@ -3214,21 +3319,11 @@ public:
     quint8 fShowComments;
     DocumentAtom(void* /*dummy*/ = 0) {}
 };
-class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset {
+class SlideTime10Atom : public StreamOffset {
 public:
-    class choice2884387559 : public QSharedPointer<StreamOffset> {
-    public:
-        choice2884387559() {}
-        explicit choice2884387559(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice2884387559 anon;
-    SlideProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    RecordHeader rh;
+    FILETIME fileTime;
+    SlideTime10Atom(void* /*dummy*/ = 0) {}
 };
 class ProgStringTagContainer : public StreamOffset {
 public:
@@ -3757,22 +3852,21 @@ public:
     QSharedPointer<MacroNameAtom> macroNameAtom;
     MouseOverInteractiveInfoContainer(void* /*dummy*/ = 0) {}
 };
-class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+class ShapeProgBinaryTagsSubContainerOrAtom : public StreamOffset {
 public:
-    class choice3146562028 : public QSharedPointer<StreamOffset> {
+    class choice2754406405 : public QSharedPointer<StreamOffset> {
     public:
-        choice3146562028() {}
-        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2754406405() {}
+        explicit choice2754406405(PP9ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2754406405(PP10ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2754406405(PP11ShapeBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2754406405(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice3146562028 anon;
-    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
+    choice2754406405 anon;
+    ShapeProgBinaryTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class TextRulerAtom : public StreamOffset {
 public:
@@ -4073,11 +4167,21 @@ public:
     QSharedPointer<TextMasterStyleLevel> lstLvl5;
     TextMasterStyleAtom(void* /*dummy*/ = 0) {}
 };
-class SlideProgBinaryTagContainer : public StreamOffset {
+class PP10SlideBinaryTagExtension : public StreamOffset {
 public:
     RecordHeader rh;
-    SlideProgBinaryTagSubContainerOrAtom rec;
-    SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    QList<TextMasterStyle10Atom> rgTextMasterStyleAtom;
+    QList<Comment10Container> rgComment10Container;
+    QSharedPointer<LinkedSlide10Atom> linkedSlideAtom;
+    QList<LinkedShape10Atom> rgLinkedShape10Atom;
+    QSharedPointer<SlideFlags10Atom> slideFlagsAtom;
+    QSharedPointer<SlideTime10Atom> slideTimeAtom;
+    QSharedPointer<HashCode10Atom> hashCodeAtom;
+    QSharedPointer<ExtTimeNodeContainer> extTimeNodeContainer;
+    QSharedPointer<BuildListContainer> buildListContainer;
+    PP10SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
 class ExObjListSubContainer : public StreamOffset {
 public:
@@ -4194,6 +4298,12 @@ public:
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
     OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
+class ShapeProgBinaryTagsContainer : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    ShapeProgBinaryTagsSubContainerOrAtom rgChildRec;
+    ShapeProgBinaryTagsContainer(void* /*dummy*/ = 0) {}
+};
 class WordDocument : public StreamOffset {
 public:
     Fib fib;
@@ -4283,12 +4393,6 @@ public:
     OfficeArtBStoreContainerFileBlock blip;
     BlipEntityAtom(void* /*dummy*/ = 0) {}
 };
-class StyleTextProp9Atom : public StreamOffset {
-public:
-    RecordHeader rh;
-    StyleTextProp9 rgStyleTextProp9;
-    StyleTextProp9Atom(void* /*dummy*/ = 0) {}
-};
 class TextMasterStyle10Atom : public StreamOffset {
 public:
     bool _has_lstLvl1level;
@@ -4337,19 +4441,21 @@ public:
     QSharedPointer<TextMasterStyleAtom> textMasterStyleAtom2;
     DocumentTextInfoContainer(void* /*dummy*/ = 0) {}
 };
-class SlideProgTagsSubContainerOrAtom : public StreamOffset {
+class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset {
 public:
-    class choice310259039 : public QSharedPointer<StreamOffset> {
+    class choice2884387559 : public QSharedPointer<StreamOffset> {
     public:
-        choice310259039() {}
-        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2884387559() {}
+        explicit choice2884387559(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2884387559(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice310259039 anon;
-    SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    choice2884387559 anon;
+    SlideProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DrawingGroupContainer : public StreamOffset {
 public:
@@ -4373,6 +4479,20 @@ public:
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
     OfficeArtSpContainer(void* /*dummy*/ = 0) {}
+};
+class ShapeProgTagsSubContainerOrAtom : public StreamOffset {
+public:
+    class choice4099235087 : public QSharedPointer<StreamOffset> {
+    public:
+        choice4099235087() {}
+        explicit choice4099235087(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4099235087(ShapeProgBinaryTagsContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice4099235087 anon;
+    ShapeProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DocumentContainer : public StreamOffset {
 public:
@@ -4442,11 +4562,11 @@ public:
     OutlineTextProps9Container outlineTextPropsContainer;
     PP9DocBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
-class OutlineTextProps9Entry : public StreamOffset {
+class SlideProgBinaryTagContainer : public StreamOffset {
 public:
-    OutlineTextPropsHeaderExAtom outlineTextHeaderAtom;
-    StyleTextProp9Atom styleTextProp9Atom;
-    OutlineTextProps9Entry(void* /*dummy*/ = 0) {}
+    RecordHeader rh;
+    SlideProgBinaryTagSubContainerOrAtom rec;
+    SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
 };
 class OfficeArtDgContainer : public StreamOffset {
 public:
@@ -4473,6 +4593,12 @@ public:
     choice3415770141 anon;
     OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
 };
+class ShapeProgsTagContainer : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    ShapeProgTagsSubContainerOrAtom rgChildRec;
+    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
+};
 class DocProgBinaryTagSubContainerOrAtom : public StreamOffset {
 public:
     class choice214961565 : public QSharedPointer<StreamOffset> {
@@ -4490,11 +4616,42 @@ public:
     choice214961565 anon;
     DocProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
+class SlideProgTagsSubContainerOrAtom : public StreamOffset {
+public:
+    class choice310259039 : public QSharedPointer<StreamOffset> {
+    public:
+        choice310259039() {}
+        explicit choice310259039(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice310259039(SlideProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice310259039 anon;
+    SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+};
 class DrawingContainer : public StreamOffset {
 public:
     RecordHeader rh;
     OfficeArtDgContainer OfficeArtDg;
     DrawingContainer(void* /*dummy*/ = 0) {}
+};
+class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+public:
+    class choice3146562028 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3146562028() {}
+        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3146562028 anon;
+    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DocProgBinaryTagContainer : public StreamOffset {
 public:

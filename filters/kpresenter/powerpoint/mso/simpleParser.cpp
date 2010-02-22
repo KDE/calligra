@@ -925,6 +925,28 @@ void PPT::parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsH
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
+void PPT::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _atend;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFAC)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFAC");
+    }
+    int _startPos = in.getPosition();
+    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    while (!_atend) {
+        _s.rgStyleTextProp9.append(StyleTextProp9(&_s));
+        parseStyleTextProp9(in, _s.rgStyleTextProp9.last());
+        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    }
+}
 void PPT::parseFontCollection10Container(LEInputStream& in, FontCollection10Container& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
@@ -2423,7 +2445,25 @@ void PPT::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagEx
         }
     }
 }
-void PPT::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s) {
+void PPT::parseComment10Container(LEInputStream& in, Comment10Container& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2EE0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE0");
+    }
+    _c = _s.rh.recLen;
+    _s.todo.resize(_c);
+    in.readBytes(_s.todo);
+}
+void PPT::parseComment10Atom(LEInputStream& in, Comment10Atom& _s) {
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2434,28 +2474,122 @@ void PPT::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0xFBA)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
+    if (!(_s.rh.recType == 0x2EE1)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE1");
     }
-    if (!(_s.rh.recLen == 0x10)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
+    if (!(_s.rh.recLen == 0x1C)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x1C");
     }
-    _c = 8;
-    _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
-        _s.tagName[_i] = in.readuint16();
+    _c = _s.rh.recLen;
+    _s.todo.resize(_c);
+    in.readBytes(_s.todo);
+}
+void PPT::parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    parseRecordHeader(in, _s.rhData);
-    if (!(_s.rhData.recVer == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rhData.recInstance == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    if (!(_s.rh.recType == 0x2EE6)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE6");
     }
-    if (!(_s.rhData.recType == 0x138B)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    if (!(_s.rh.recLen == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
     }
-    _c = _s.rhData.recLen;
+    _s.linkedSlideIdRef = in.readuint32();
+    _s.clinkedShapes = in.readint32();
+}
+void PPT::parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2EE7)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE7");
+    }
+    if (!(_s.rh.recLen == 8)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
+    }
+    _s.shapeIdRef = in.readuint32();
+    _s.linkedShapeIdRef = in.readuint32();
+}
+void PPT::parseSlideFlags10Atom(LEInputStream& in, SlideFlags10Atom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2EEA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EEA");
+    }
+    if (!(_s.rh.recLen == 4)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
+    }
+    _s.fPreserveMaster = in.readbit();
+    _s.fOverrideMasterAnimatino = in.readbit();
+    _s.unuseda = in.readuint14();
+    _s.unusedb = in.readuint16();
+}
+void PPT::parseHashCode10Atom(LEInputStream& in, HashCode10Atom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2B00)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2B00");
+    }
+    if (!(_s.rh.recLen == 4)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
+    }
+    _s.hash = in.readuint32();
+}
+void PPT::parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 1)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 1");
+    }
+    if (!(_s.rh.recType == 0xF144)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF144");
+    }
+    _c = _s.rh.recLen;
+    _s.todo.resize(_c);
+    in.readBytes(_s.todo);
+}
+void PPT::parseBuildListContainer(LEInputStream& in, BuildListContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2B02)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2B02");
+    }
+    _c = _s.rh.recLen;
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
@@ -3951,21 +4085,109 @@ void PPT::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.index)>=0");
     }
 }
-void PPT::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
+void PPT::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s) {
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     parseOfficeArtRecordHeader(in, _s.rh);
-    if (!(_s.rh.recVer == 0xF)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2");
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x1388)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
+    if (!(_s.rh.recType == 0xFBA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    _c = _s.rh.recLen;
+    if (!(_s.rh.recLen == 0xE)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0xE");
+    }
+    _c = 7;
+    _s.tagName.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.tagName[_i] = in.readuint16();
+    }
+    parseRecordHeader(in, _s.rhData);
+    if (!(_s.rhData.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    }
+    if (!(_s.rhData.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    }
+    if (!(_s.rhData.recType == 0x138B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    }
+    parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
+}
+void PPT::parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTagExtension& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseOfficeArtRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFBA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
+    }
+    if (!(_s.rh.recLen == 0x10)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
+    }
+    _c = 8;
+    _s.tagName.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.tagName[_i] = in.readuint16();
+    }
+    parseRecordHeader(in, _s.rhData);
+    if (!(_s.rhData.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    }
+    if (!(_s.rhData.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    }
+    if (!(_s.rhData.recType == 0x138B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    }
+    _c = _s.rhData.recLen;
+    _s.todo.resize(_c);
+    in.readBytes(_s.todo);
+}
+void PPT::parsePP11ShapeBinaryTagExtension(LEInputStream& in, PP11ShapeBinaryTagExtension& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseOfficeArtRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFBA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
+    }
+    if (!(_s.rh.recLen == 0x10)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
+    }
+    _c = 8;
+    _s.tagName.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.tagName[_i] = in.readuint16();
+    }
+    parseRecordHeader(in, _s.rhData);
+    if (!(_s.rhData.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    }
+    if (!(_s.rhData.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    }
+    if (!(_s.rhData.recType == 0x138B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    }
+    _c = _s.rhData.recLen;
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
@@ -5247,6 +5469,11 @@ void PPT::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
         parseKinsokuFollowingAtom(in, *_s.kinsokuFollowingAtom.data());
     }
 }
+void PPT::parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
+    parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
+}
 void PPT::parseTextCFException10(LEInputStream& in, TextCFException10& _s) {
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
@@ -5984,31 +6211,22 @@ void PPT::parseDocumentAtom(LEInputStream& in, DocumentAtom& _s) {
     _s.fRightToLeft = in.readuint8();
     _s.fShowComments = in.readuint8();
 }
-void PPT::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s) {
+void PPT::parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s) {
     _s.streamOffset = in.getPosition();
-    LEInputStream::Mark _m;
-    _m = in.setMark();
-    try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP9SlideBinaryTagExtension(&_s));
-        parsePP9SlideBinaryTagExtension(in, *(PP9SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException _x) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP10SlideBinaryTagExtension(&_s));
-        parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException _xx) {
-        _s.anon.clear();
-        in.rewind(_m);
-    try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP12SlideBinaryTagExtension(&_s));
-        parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension*)_s.anon.data());
-    } catch (IncorrectValueException _xxx) {
-        _s.anon.clear();
-        in.rewind(_m);
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new UnknownBinaryTag(&_s));
-        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
-    }}}
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x2EEB)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EEB");
+    }
+    if (!(_s.rh.recLen == 8)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
+    }
+    parseFILETIME(in, _s.fileTime);
 }
 void PPT::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -7392,29 +7610,31 @@ void PPT::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInt
         parseMacroNameAtom(in, *_s.macroNameAtom.data());
     }
 }
-void PPT::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
+void PPT::parseShapeProgBinaryTagsSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagsSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
-    OfficeArtRecordHeader _choice(&_s);
-    parseOfficeArtRecordHeader(in, _choice);
-    in.rewind(_m);
-    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2)&&(_choice.recType == 0x1388)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new ShapeProgsTagContainer(&_s));
-        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xBDD)&&(_choice.recLen == 1)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripNewPlaceHolderId12Atom(&_s));
-        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x41F)&&(_choice.recLen == 4)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeId12Atom(&_s));
-        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x420)&&(_choice.recLen == 1)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripHFPlaceholder12Atom(&_s));
-        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom*)_s.anon.data());
-    } else {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeCheckSumForCustomLayouts12Atom(&_s));
-        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom*)_s.anon.data());
-    }
+    try {
+        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP9ShapeBinaryTagExtension(&_s));
+        parsePP9ShapeBinaryTagExtension(in, *(PP9ShapeBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _x) {
+        _s.anon.clear();
+        in.rewind(_m);
+    try {
+        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP10ShapeBinaryTagExtension(&_s));
+        parsePP10ShapeBinaryTagExtension(in, *(PP10ShapeBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _xx) {
+        _s.anon.clear();
+        in.rewind(_m);
+    try {
+        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP11ShapeBinaryTagExtension(&_s));
+        parsePP11ShapeBinaryTagExtension(in, *(PP11ShapeBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _xxx) {
+        _s.anon.clear();
+        in.rewind(_m);
+        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new UnknownBinaryTag(&_s));
+        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
+    }}}
 }
 void PPT::parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -8486,19 +8706,208 @@ void PPT::parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s) {
         parseTextMasterStyleLevel(in, *_s.lstLvl5.data());
     }
 }
-void PPT::parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s) {
+void PPT::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s) {
     _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    bool _possiblyPresent;
+    bool _atend;
     parseRecordHeader(in, _s.rh);
-    if (!(_s.rh.recVer == 0xF)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x138A)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x138A");
+    if (!(_s.rh.recType == 0xFBA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    parseSlideProgBinaryTagSubContainerOrAtom(in, _s.rec);
+    if (!(_s.rh.recLen == 0x10)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
+    }
+    _c = 8;
+    _s.tagName.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.tagName[_i] = in.readuint16();
+    }
+    parseRecordHeader(in, _s.rhData);
+    if (!(_s.rhData.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    }
+    if (!(_s.rhData.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    }
+    if (!(_s.rhData.recType == 0x138B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    }
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.rgTextMasterStyleAtom.append(TextMasterStyle10Atom(&_s));
+            parseTextMasterStyle10Atom(in, _s.rgTextMasterStyleAtom.last());
+        } catch(IncorrectValueException _e) {
+            _s.rgTextMasterStyleAtom.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.rgTextMasterStyleAtom.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
+    }
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.rgComment10Container.append(Comment10Container(&_s));
+            parseComment10Container(in, _s.rgComment10Container.last());
+        } catch(IncorrectValueException _e) {
+            _s.rgComment10Container.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.rgComment10Container.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE6)&&(_optionCheck.recLen == 0);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.linkedSlideAtom = QSharedPointer<LinkedSlide10Atom>(new LinkedSlide10Atom(&_s));
+            parseLinkedSlide10Atom(in, *_s.linkedSlideAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.linkedSlideAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.linkedSlideAtom.clear();
+            in.rewind(_m);
+        }
+    }
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.rgLinkedShape10Atom.append(LinkedShape10Atom(&_s));
+            parseLinkedShape10Atom(in, _s.rgLinkedShape10Atom.last());
+        } catch(IncorrectValueException _e) {
+            _s.rgLinkedShape10Atom.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.rgLinkedShape10Atom.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EEA)&&(_optionCheck.recLen == 4);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.slideFlagsAtom = QSharedPointer<SlideFlags10Atom>(new SlideFlags10Atom(&_s));
+            parseSlideFlags10Atom(in, *_s.slideFlagsAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.slideFlagsAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.slideFlagsAtom.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EEB)&&(_optionCheck.recLen == 8);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.slideTimeAtom = QSharedPointer<SlideTime10Atom>(new SlideTime10Atom(&_s));
+            parseSlideTime10Atom(in, *_s.slideTimeAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.slideTimeAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.slideTimeAtom.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2B00)&&(_optionCheck.recLen == 4);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.hashCodeAtom = QSharedPointer<HashCode10Atom>(new HashCode10Atom(&_s));
+            parseHashCode10Atom(in, *_s.hashCodeAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.hashCodeAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.hashCodeAtom.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 1)&&(_optionCheck.recType == 0xF144);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.extTimeNodeContainer = QSharedPointer<ExtTimeNodeContainer>(new ExtTimeNodeContainer(&_s));
+            parseExtTimeNodeContainer(in, *_s.extTimeNodeContainer.data());
+        } catch(IncorrectValueException _e) {
+            _s.extTimeNodeContainer.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.extTimeNodeContainer.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2B02);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.buildListContainer = QSharedPointer<BuildListContainer>(new BuildListContainer(&_s));
+            parseBuildListContainer(in, *_s.buildListContainer.data());
+        } catch(IncorrectValueException _e) {
+            _s.buildListContainer.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.buildListContainer.clear();
+            in.rewind(_m);
+        }
+    }
 }
 void PPT::parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -9067,6 +9476,20 @@ void PPT::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
         }
     }
 }
+void PPT::parseShapeProgBinaryTagsContainer(LEInputStream& in, ShapeProgBinaryTagsContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x138A)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x138A");
+    }
+    parseShapeProgBinaryTagsSubContainerOrAtom(in, _s.rgChildRec);
+}
 void PPT::parseWordDocument(LEInputStream& in, WordDocument& _s) {
     _s.streamOffset = in.getPosition();
     parseFib(in, _s.fib);
@@ -9241,20 +9664,6 @@ void PPT::parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s) {
     }
     _s.unused = in.readbit();
     parseOfficeArtBStoreContainerFileBlock(in, _s.blip);
-}
-void PPT::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
-    _s.streamOffset = in.getPosition();
-    parseRecordHeader(in, _s.rh);
-    if (!(_s.rh.recVer == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
-    }
-    if (!(_s.rh.recInstance == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
-    }
-    if (!(_s.rh.recType == 0xFAC)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFAC");
-    }
-    parseStyleTextProp9(in, _s.rgStyleTextProp9);
 }
 void PPT::parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s) {
     _s.streamOffset = in.getPosition();
@@ -9465,20 +9874,31 @@ void PPT::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
         }
     }
 }
-void PPT::parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s) {
+void PPT::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
-    RecordHeader _choice(&_s);
-    parseRecordHeader(in, _choice);
-    in.rewind(_m);
-    if ((_choice.recInstance == 0)&&(_choice.recType == 0x1389)) {
-        _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new ProgStringTagContainer(&_s));
-        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
-    } else {
-        _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new SlideProgBinaryTagContainer(&_s));
-        parseSlideProgBinaryTagContainer(in, *(SlideProgBinaryTagContainer*)_s.anon.data());
-    }
+    try {
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP9SlideBinaryTagExtension(&_s));
+        parsePP9SlideBinaryTagExtension(in, *(PP9SlideBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _x) {
+        _s.anon.clear();
+        in.rewind(_m);
+    try {
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP10SlideBinaryTagExtension(&_s));
+        parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _xx) {
+        _s.anon.clear();
+        in.rewind(_m);
+    try {
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP12SlideBinaryTagExtension(&_s));
+        parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension*)_s.anon.data());
+    } catch (IncorrectValueException _xxx) {
+        _s.anon.clear();
+        in.rewind(_m);
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new UnknownBinaryTag(&_s));
+        parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
+    }}}
 }
 void PPT::parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -9728,6 +10148,21 @@ void PPT::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
             _s.shapeTertiaryOptions2.clear();
             in.rewind(_m);
         }
+    }
+}
+void PPT::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    _m = in.setMark();
+    OfficeArtRecordHeader _choice(&_s);
+    parseOfficeArtRecordHeader(in, _choice);
+    in.rewind(_m);
+    if ((_choice.recInstance == 0)&&(_choice.recType == 0x1389)) {
+        _s.anon = ShapeProgTagsSubContainerOrAtom::choice4099235087(new ProgStringTagContainer(&_s));
+        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
+    } else {
+        _s.anon = ShapeProgTagsSubContainerOrAtom::choice4099235087(new ShapeProgBinaryTagsContainer(&_s));
+        parseShapeProgBinaryTagsContainer(in, *(ShapeProgBinaryTagsContainer*)_s.anon.data());
     }
 }
 void PPT::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
@@ -10266,10 +10701,19 @@ void PPT::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     parseBroadcastDocInfo9Container(in, _s.rgBroadcastDocInfo9);
     parseOutlineTextProps9Container(in, _s.outlineTextPropsContainer);
 }
-void PPT::parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s) {
+void PPT::parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s) {
     _s.streamOffset = in.getPosition();
-    parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
-    parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0x138A)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x138A");
+    }
+    parseSlideProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
 void PPT::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -10380,6 +10824,20 @@ void PPT::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrC
         parseOfficeArtSpgrContainer(in, *(OfficeArtSpgrContainer*)_s.anon.data());
     }
 }
+void PPT::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2");
+    }
+    if (!(_s.rh.recType == 0x1388)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
+    }
+    parseShapeProgTagsSubContainerOrAtom(in, _s.rgChildRec);
+}
 void PPT::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBinaryTagSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
@@ -10412,6 +10870,21 @@ void PPT::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBina
         parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
     }}}}
 }
+void PPT::parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    _m = in.setMark();
+    RecordHeader _choice(&_s);
+    parseRecordHeader(in, _choice);
+    in.rewind(_m);
+    if ((_choice.recInstance == 0)&&(_choice.recType == 0x1389)) {
+        _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new ProgStringTagContainer(&_s));
+        parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
+    } else {
+        _s.anon = SlideProgTagsSubContainerOrAtom::choice310259039(new SlideProgBinaryTagContainer(&_s));
+        parseSlideProgBinaryTagContainer(in, *(SlideProgBinaryTagContainer*)_s.anon.data());
+    }
+}
 void PPT::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
@@ -10425,6 +10898,30 @@ void PPT::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x040C");
     }
     parseOfficeArtDgContainer(in, _s.OfficeArtDg);
+}
+void PPT::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    _m = in.setMark();
+    OfficeArtRecordHeader _choice(&_s);
+    parseOfficeArtRecordHeader(in, _choice);
+    in.rewind(_m);
+    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2)&&(_choice.recType == 0x1388)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new ShapeProgsTagContainer(&_s));
+        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xBDD)&&(_choice.recLen == 1)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripNewPlaceHolderId12Atom(&_s));
+        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x41F)&&(_choice.recLen == 4)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeId12Atom(&_s));
+        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x420)&&(_choice.recLen == 1)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripHFPlaceholder12Atom(&_s));
+        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom*)_s.anon.data());
+    } else {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeCheckSumForCustomLayouts12Atom(&_s));
+        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom*)_s.anon.data());
+    }
 }
 void PPT::parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s) {
     _s.streamOffset = in.getPosition();
