@@ -41,6 +41,7 @@ set(koreport_LIB_SRCS
 	renderer/orprerender.cpp
 	renderer/krscreenrender.cpp
 	renderer/krhtmlrender.cpp
+    renderer/krrenderer.cpp
 
 	renderer/scripting/krscripthandler.cpp
 	renderer/scripting/krscriptconstants.cpp

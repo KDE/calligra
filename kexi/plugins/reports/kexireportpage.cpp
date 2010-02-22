@@ -27,7 +27,7 @@
 
 #include <renderobjects.h>
 #include <QPainter>
-#include <krscreenrender.h>
+#include <krrenderer.h>
 
 KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
         : QWidget(parent)
@@ -76,9 +76,10 @@ void KexiReportPage::renderPage(int p)
     m_pixmap->fill();
     QPainter qp(m_pixmap);
     if (m_reportDocument) {
-        KRScreenRender sr;
-        sr.setPainter(&qp);
-        sr.render(m_reportDocument, p - 1);
+        KoReportRendererContext cxt;
+        cxt.painter = &qp;
+        KRRenderer *sr = KoReportRendererFactory::createInstance("screen");
+        sr->render(cxt, m_reportDocument, p-1);
     }
     m_repaint = true;
     repaint();

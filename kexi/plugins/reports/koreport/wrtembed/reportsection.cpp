@@ -259,6 +259,8 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
 {
     Q_UNUSED(s)
 
+    kDebug() << p.name();
+    
     //Handle Background Color
     if (p.name() == "background-color") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());

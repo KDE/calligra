@@ -21,24 +21,25 @@
 
 #include <QPainter>
 #include "koreport_export.h"
+#include "krrenderer.h"
 
 class ORODocument;
 
-class KOREPORT_EXPORT KRScreenRender
+class KRScreenRender : public KRRenderer
 {
 public:
     KRScreenRender();
     virtual ~KRScreenRender();
 
-    void setPainter(QPainter *);
-    QPainter * painter() {
-        return m_painter;
-    }
+    //void setPainter(QPainter *);
+    //QPainter * painter() {
+    //    return m_painter;
+    //}
 
-    bool render(ORODocument *, int);
+    virtual bool render(KoReportRendererContext, ORODocument *, int);
 
 protected:
-    QPainter* m_painter;
+    //QPainter* m_painter;
 };
 
 #endif // __ORPRINTRENDER_H__
