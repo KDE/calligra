@@ -45,10 +45,11 @@ bool KPrMasterPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
 #ifndef NWORKAROUND_ODF_BUGS
     KoOdfWorkaround::setFixPresentationPlaceholder(true, context);
 #endif
-    KoPAPageBase::loadOdf(element, context);
+    bool retval = KoPAPageBase::loadOdf(element, context);
 #ifndef NWORKAROUND_ODF_BUGS
     KoOdfWorkaround::setFixPresentationPlaceholder(false, context);
 #endif
+    return retval;
 }
 
 void KPrMasterPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext )
