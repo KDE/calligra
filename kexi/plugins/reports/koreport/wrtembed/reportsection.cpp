@@ -80,8 +80,8 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     Q_UNUSED(name)
 
     m_sectionData = new KRSectionData();
-    connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set, KoProperty::Property)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set, KoProperty::Property)));
+    connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
     int dpiY = KoDpi::dpiY();
 
     m_reportDesigner = rptdes;
@@ -107,9 +107,10 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
 
     m_resizeBar = new ReportResizeBar(this);
 
-    QObject::connect(m_resizeBar, SIGNAL(barDragged(int)), this, SLOT(slotResizeBarDragged(int)));
-    QObject::connect(m_reportDesigner, SIGNAL(pagePropertyChanged(KoProperty::Set &)), this, SLOT(slotPageOptionsChanged(KoProperty::Set &)));
-    QObject::connect(m_scene, SIGNAL(clicked()), this, (SLOT(slotSceneClicked())));
+    connect(m_resizeBar, SIGNAL(barDragged(int)), this, SLOT(slotResizeBarDragged(int)));
+    connect(m_reportDesigner, SIGNAL(pagePropertyChanged(KoProperty::Set&)),
+        this, SLOT(slotPageOptionsChanged(KoProperty::Set&)));
+    connect(m_scene, SIGNAL(clicked()), this, (SLOT(slotSceneClicked())));
 
     glayout->addWidget(m_title, 0, 0, 1, 2);
     glayout->addWidget(m_sectionRuler, 1, 0);
