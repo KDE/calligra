@@ -28,7 +28,7 @@ class KoTextBlockData;
 /**
  * This class is used to control aspects of textblock painting
  */
-class KOTEXT_EXPORT KPrTextBlockPaintStrategy : public KoTextBlockPaintStrategyBase
+class KPrTextBlockPaintStrategy : public KoTextBlockPaintStrategyBase
 {
 public:
     KPrTextBlockPaintStrategy(KoTextBlockData *blockData);
