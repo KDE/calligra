@@ -959,7 +959,6 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
         qDebug() << "what's my name!' " << o.shapeProp.rh.recInstance;
         //processTextObjectForBody(o, , out);
     } else {
-        Q_ASSERT(o.shapeProp.rh.recInstance);
         qDebug() << "cannot handle object of type " << o.shapeProp.rh.recInstance;
     }
 }

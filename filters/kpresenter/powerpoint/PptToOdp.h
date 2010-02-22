@@ -201,20 +201,39 @@ private:
                                  const QString& listStyle = QString());
     void defineGraphicPropertiesListStyles(KoGenStyle& style,
                                            const PPT::TextMasterStyleAtom& listStyles);
+    /**
+     * Structure that influences all information that affects the style of a
+     * text:style.
+     * This is a convenience container for passing this information.
+     **/
+    class ListStyleInput {
+    public:
+        const PPT::TextPFException* pf;
+        const PPT::TextPFException9* pf9;
+        const PPT::TextCFException* cf;
+        const PPT::TextCFException9* cf9;
+        const PPT::TextCFException10* cf10;
+        const PPT::TextSIException* si;
+
+        ListStyleInput() :pf(0), pf9(0), cf(0), cf9(0), cf10(0), si(0) {}
+    };
     /* Extract data into the style element style:list */
-    void defineListStyle(KoGenStyle& style, const PPT::TextMasterStyleAtom& levels,
+    void defineListStyle(KoGenStyle& style,
+                         const PPT::TextMasterStyleAtom& levels,
                          const PPT::TextMasterStyle9Atom* levels9 = 0,
                          const PPT::TextMasterStyle10Atom* levels10 = 0);
     void defineListStyle(KoGenStyle& style, quint8 depth,
-                         const PPT::TextMasterStyleLevel& level,
+                         ListStyleInput input,
+                         const PPT::TextMasterStyleLevel* level = 0,
                          const PPT::TextMasterStyle9Level* level9 = 0,
                          const PPT::TextMasterStyle10Level* level10 = 0);
+
     void defineListStyle(KoGenStyle& style, quint8 depth,
-                               const PPT::TextPFException& pf,
-                               const PPT::TextPFException9* pf9,
-                               const PPT::TextCFException* cf,
-                               const PPT::TextCFException9* cf9,
-                               const PPT::TextCFException10* cf10);
+                         const ListStyleInput& info,
+                         const ListStyleInput& parent);
+
+    QString defineAutoListStyle(Writer& out, int textType,
+        int paragraphIndent, const PPT::TextPFException* pf);
 
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
                         const PPT::OfficeArtClientData* clientData) const;
