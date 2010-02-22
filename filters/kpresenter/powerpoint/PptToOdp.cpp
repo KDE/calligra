@@ -518,8 +518,8 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
                 p->documentContainer);
         const PP10DocBinaryTagExtension* pp10 = getPP<PP10DocBinaryTagExtension>(
                 p->documentContainer);
-        if (pp9) {
-            cf9 = &pp9->textDefaultsAtom.cf9;
+        if (pp9 && pp9->textDefaultsAtom) {
+            cf9 = &pp9->textDefaultsAtom->cf9;
         }
         if (pp10 && pp10->textDefaultsAtom) {
             cf10 = &pp10->textDefaultsAtom->cf10;
@@ -538,8 +538,8 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
         }
         const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
                 p->documentContainer);
-        if (pp9) {
-            pf9 = &pp9->textDefaultsAtom.pf9;
+        if (pp9 && pp9->textDefaultsAtom) {
+            pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
     defineParagraphProperties(style, pf, pf9);
