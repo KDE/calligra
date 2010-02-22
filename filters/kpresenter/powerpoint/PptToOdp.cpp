@@ -2685,6 +2685,7 @@ quint32 PptToOdp::getTextType(const OfficeArtClientTextBox* clientTextbox,
     }
     return 99; // 99 means it is undefined here
 }
+
 QString getMasterStyle(const QMap<int, QString>& map, int texttype) {
     if (map.contains(texttype)) {
         return map[texttype];
@@ -2693,15 +2694,16 @@ QString getMasterStyle(const QMap<int, QString>& map, int texttype) {
     if (texttype == 0 || texttype == 6) {
         if (map.contains(0)) return map[0]; // Tx_TYPE_TITLE
         if (map.contains(6)) return map[6]; // Tx_TYPE_CENTERTITLE
-    } else { // fallback for body 
+        return QString();
+    } else { // fallback for body
         if (map.contains(1)) return map[1]; // Tx_TYPE_BODY
         if (map.contains(5)) return map[5]; // Tx_TYPE_CENTERBODY
         if (map.contains(7)) return map[7]; // Tx_TYPE_HALFBODY
         if (map.contains(8)) return map[8]; // Tx_TYPE_QUARTERBODY
         if (map.contains(4)) return map[4]; // Tx_TYPE_OTHER
+        return QString();
     }
-    // return any style we might have
-    return (map.size()) ?map.begin().value() :QString();
+    return QString();
 }
 
 void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
