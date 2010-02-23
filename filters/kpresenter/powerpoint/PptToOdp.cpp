@@ -96,7 +96,8 @@ QString getText(const TextContainer& tc, int start, int count)
 
 template<class T>
 const T*
-getPP(const DocumentContainer* dc) {
+getPP(const DocumentContainer* dc)
+{
     if (dc == 0 || dc->docInfoList == 0) return 0;
     foreach (const DocInfoListSubContainerOrAtom& a, dc->docInfoList->rgChildRec) {
         const DocProgTagsContainer* d = a.anon.get<DocProgTagsContainer>();
@@ -107,6 +108,27 @@ getPP(const DocumentContainer* dc) {
                 if (c) {
                     const T* t = c->rec.anon.get<T>();
                     if (t) return t;
+                }
+            }
+        }
+    }
+    return 0;
+}
+template<class T>
+const T*
+getPP(const PPT::OfficeArtClientData& o)
+{
+    foreach (const ShapeClientRoundtripDataSubcontainerOrAtom& s, o.rgShapeClientRoundtripData) {
+        const ShapeProgsTagContainer* p = s.anon.get<ShapeProgsTagContainer>();
+        if (p) {
+            const ShapeProgBinaryTagsContainer* a = p->rgChildRec.anon.get<ShapeProgBinaryTagsContainer>();
+            if (a) {
+                const ShapeProgBinaryTagsContainer* sp = a->rgChildRec.anon.get<ShapeProgBinaryTagsContainer>();
+                if (sp) {
+                    const T* pp = sp->rgChildRec.anon.get<T>();
+                    if (pp) {
+                        return pp;
+                    }
                 }
             }
         }
@@ -200,10 +222,10 @@ createPictures(POLE::Storage& storage, KoStore* store, KoXmlWriter* manifest)
     delete stream;
     return fileNames;
 }
-QMap<quint8, QString>
+QMap<quint16, QString>
 createBulletPictures(const PP9DocBinaryTagExtension* pp9, KoStore* store, KoXmlWriter* manifest)
 {
-    QMap<quint8, QString> ids;
+    QMap<quint16, QString> ids;
     if (!pp9 || !pp9->blipCollectionContainer) {
         return ids;
     }
@@ -278,7 +300,7 @@ KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
     pictureNames = createPictures(storage,
                                   storeout, manifest);
     // read pictures from the PowerPoint Document structures
-    createBulletPictures(getPP<PP9DocBinaryTagExtension>(
+    bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
     storeout->leaveDirectory();
 
@@ -899,7 +921,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     if (i.pf9 && i.pf9->masks.bulletBlip) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
-        out.addAttribute("xlink:href", "TODO");
+        out.addAttribute("xlink:href",
+                         bulletPictureNames.value(i.pf9->bulletBlipRef));
     } else {
         QString numFormat("1"), numSuffix, numPrefix;
         if (i.pf9 && i.pf9->bulletAutoNumberScheme) {
@@ -1090,6 +1113,18 @@ getTextMasterStyleLevel(quint16 type, quint16 level, const MasterOrSlideContaine
     case 4: if (masterStyle->lstLvl5) l = masterStyle->lstLvl5.data();break;
     }
     return l;
+}
+const TextMasterStyle9Atom*
+getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const TextMasterStyle9Atom* textstyle = 0;
+    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
 }
 void PptToOdp::defineMasterStyles(KoGenStyles& styles)
 {
@@ -1642,17 +1677,12 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
         // TODO
     }
 }
-
-int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
-                              const QString& text, const int start,
-                              int end)
+const TextCFException*
+getTextCFException(const PPT::TextContainer& tc, const int start, int& cfend)
 {
-    // find all components that start at position start
-
-    // get the right character run
+    if (!tc.style) return 0;
     const QList<TextCFRun> &cfs = tc.style->rgTextCFRun;
     int i = 0;
-    int cfend = 0;
     while (i < cfs.size()) {
         cfend += cfs[i].count;
         if (cfend > start) {
@@ -1661,12 +1691,24 @@ int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
         i++;
     }
     if (i >= cfs.size()) {
+        return 0;
+    }
+    return &cfs[i].cf;
+}
+
+int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
+                              const QString& text, const int start,
+                              int end)
+{
+    // find all components that start at position start
+    // get the right character run
+    int cfend = 0;
+    const TextCFException* cf = getTextCFException(tc, start, cfend);
+    if (!cf) {
         qDebug() << "No proper character range for '"
-                << QString(text).replace('\r', '\n') << "' start: " << start
-                << " cfs.size() " << cfs.size() << " " << ((cfs.size()) ?cfs[cfs.size()-1].count :-1);
+                << QString(text).replace('\r', '\n') << "' start: " << start;
         return -1;
     }
-    const TextCFException& cf = cfs[i].cf;
 
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
@@ -1674,7 +1716,7 @@ int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
     if (tc.specialinfo2) tsi = &tc.specialinfo2->rgSIRun;
     const TextSIException* si = 0;
     int siend = 0;
-    i = 0;
+    int i = 0;
     if (tsi) {
         while (i < tsi->size()) {
             si = &(*tsi)[i].si;
@@ -1777,7 +1819,7 @@ int PptToOdp::processTextSpan(const PPT::TextContainer& tc, Writer& out,
     }
     KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineTextProperties(style, &cf, 0, 0, si);
+    defineTextProperties(style, cf, 0, 0, si);
     out.xml.addAttribute("text:style-name", out.styles.lookup(style));
 
     if (meta) {
@@ -1815,7 +1857,38 @@ int PptToOdp::processTextSpans(const PPT::TextContainer& tc, Writer& out,
     }
     return (pos == end) ?0 :-pos;
 }
-
+const PPT::StyleTextProp9*
+PptToOdp::getStyleTextProp9(quint32 slideIdRef, quint32 textType, quint8 pp9rt)
+{
+    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
+            p->documentContainer);
+    if (pp9) {
+        if (pp9->outlineTextPropsContainer) {
+            foreach (const OutlineTextProps9Entry& o,
+                     pp9->outlineTextPropsContainer->rgOutlineTextProps9Entry) {
+                if (o.outlineTextHeaderAtom.slideIdRef == slideIdRef
+                        && o.outlineTextHeaderAtom.txType == textType) {
+                    // we assume that pp9rt is the index in this array
+                    if (o.styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
+                        return &o.styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+const PPT::StyleTextProp9*
+getStyleTextProp9(const PPT::OfficeArtSpContainer& o, quint8 pp9rt)
+{
+    if (!o.clientData) return 0;
+    const PP9ShapeBinaryTagExtension* p = getPP<PP9ShapeBinaryTagExtension>(
+            *o.clientData);
+    if (p && p->styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
+        return &p->styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+    }
+    return 0;
+}
 QString PptToOdp::defineAutoListStyle(Writer& out, int paragraphIndent,
                    const TextPFException* pf, const TextPFException9* pf9,
                    const TextMasterStyleLevel* level)
@@ -1824,13 +1897,19 @@ QString PptToOdp::defineAutoListStyle(Writer& out, int paragraphIndent,
     ListStyleInput info;
     info.pf = pf;
     info.pf9 = pf9;
-    defineListStyle(list, paragraphIndent + 1, info, level);
+    ListStyleInput parent;
+    if (level) {
+        parent.pf = &level->pf;
+        parent.cf = &level->cf;
+    }
+    defineListStyle(list, paragraphIndent + 1, info, parent);
     return out.styles.lookup(list);
 }
 
-void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
-                              const QString& text, int start, int end,
-                              QStack<QString>& levels)
+void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
+                               const PPT::TextContainer& tc,
+                               const QString& text, int start, int end,
+                               QStack<QString>& levels)
 {
     // find the textpfexception that belongs to this line
     const TextPFRun* pf = 0;
@@ -1858,12 +1937,27 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
         out.xml.endElement();
         return;
     }
+    // to find the pf9, the cf has to be obtained which contains a pp9rt
+    quint8 pp9rt = 0;
+    int cfend = 0;
+    const TextCFException* cf = getTextCFException(tc, start, cfend);
+    if (cf && cf->fontStyle) {
+        pp9rt = cf->fontStyle->pp9rt;
+    }
+    quint32 textType = tc.textHeaderAtom.textType;
+    const StyleTextProp9* stp9 = ::getStyleTextProp9(o, pp9rt);
+    if (!stp9) {
+         stp9 = getStyleTextProp9(256, textType, pp9rt);
+    }
+    const TextPFException9* pf9 = 0;
+    if (stp9) {
+        pf9 = &stp9->pf9;
+    }
 
     quint16 paragraphIndent = pf->indentLevel;
     // [MS-PPT].pdf says the indentation level can be 4 at most
     if (paragraphIndent > 4) paragraphIndent = 4;
     // get the parent style for this indent level
-    quint32 textType = tc.textHeaderAtom.textType;
     const TextMasterStyleLevel* level = getTextMasterStyleLevel(textType,
                                                 paragraphIndent, currentMaster);
     // check if this line has a bullet or not, take the master setting into
@@ -1876,8 +1970,8 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     }
     bool islist = hasBullet || paragraphIndent > 0;
     if (islist) {
-        QString listStyle = defineAutoListStyle(out, paragraphIndent, &pf->pf,
-                                                0, level);
+        QString listStyle = defineAutoListStyle(out, paragraphIndent,
+                                                &pf->pf, pf9, level);
         // remove levels until the top level is the right indentation
         if ((quint16)levels.size() > paragraphIndent
                 && levels[paragraphIndent] == listStyle) {
@@ -1911,7 +2005,8 @@ void PptToOdp::processTextLine(Writer& out, const PPT::TextContainer& tc,
     }
 }
 
-void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
+void PptToOdp::processTextForBody(const OfficeArtSpContainer& o,
+                                  const PPT::TextContainer& tc, Writer& out)
 {
     /* Text in a textcontainer is divided into sections.
        The sections occur on different levels:
@@ -1942,7 +2037,7 @@ void PptToOdp::processTextForBody(const PPT::TextContainer& tc, Writer& out)
         int end = text.indexOf(lineend, pos);
         if (end == -1) end = text.size();
 
-        processTextLine(out, tc, text, pos, end, levels);
+        processTextLine(out, o, tc, text, pos, end, levels);
 
         pos = end + 1;
     }
@@ -1970,6 +2065,7 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
             out.xml.addAttribute("presentation:user-transformed", "true");
         }
     }
+
     //out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));
@@ -1979,7 +2075,7 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
         out.xml.addAttribute("presentation:class", classStr);
     }
     out.xml.startElement("draw:text-box");
-    processTextForBody(tc, out);
+    processTextForBody(o, tc, out);
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }

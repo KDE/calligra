@@ -231,6 +231,8 @@ private:
                          const ListStyleInput& info,
                          const ListStyleInput& parent);
 
+    const PPT::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
+                                                quint32 textType, quint8 pp9rt);
     QString defineAutoListStyle(Writer& out, int paragraphIndent,
                                 const PPT::TextPFException* pf,
                                 const PPT::TextPFException9* pf9,
@@ -247,15 +249,16 @@ private:
     void processObjectForBody(const PPT::OfficeArtSpgrContainer& o, Writer& out);
     void processObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
     void processDrawingObjectForBody(const PPT::OfficeArtSpContainer& o, Writer& out);
-    void processTextForBody(const PPT::TextContainer& tc, Writer& out);
+    void processTextForBody(const PPT::OfficeArtSpContainer& o,
+                            const PPT::TextContainer& tc, Writer& out);
     void processTextObjectForBody(const PPT::OfficeArtSpContainer& o, const PPT::TextContainer& tc, Writer& out);
 
     int processTextSpan(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, const int start, int end);
     int processTextSpans(const PPT::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
-    void processTextLine(Writer& out, const PPT::TextContainer& tc,
-                        const QString& text,
+    void processTextLine(Writer& out, const PPT::OfficeArtSpContainer& o,
+                         const PPT::TextContainer& tc, const QString& text,
                         int start, int end, QStack<QString>& levels);
 
      /**
@@ -547,6 +550,7 @@ private:
     };
 
     QMap<QByteArray, QString> pictureNames;
+    QMap<quint16, QString> bulletPictureNames;
     DateTimeFormat dateTime;
     QString declarationStyleName;
 
@@ -560,7 +564,6 @@ private:
       * and handout slides (presentation:notes and style:handout-master)
       */
     QString notesPageLayoutName;
-
 
     const ParsedPresentation* p;
 
