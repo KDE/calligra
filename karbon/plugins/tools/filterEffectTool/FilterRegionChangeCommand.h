@@ -30,6 +30,13 @@ class KoFilterEffect;
 class FilterRegionChangeCommand : public QUndoCommand
 {
 public:
+    /**
+     * Creates new command to change filter region of a filter effect
+     * @param effect the effect to change the filter region of
+     * @param filterRegion the new filter region to set
+     * @param shape the shape the filter effect is applied to
+     * @param parent the parent undo command
+     */
     explicit FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape = 0, QUndoCommand *parent = 0);
 
     /// redo the command
@@ -38,10 +45,10 @@ public:
     virtual void undo();
 
 private:
-    KoFilterEffect * m_effect;
-    QRectF m_oldRegion;
-    QRectF m_newRegion;
-    KoShape * m_shape;
+    KoFilterEffect * m_effect; ///< the filter effect we are working on
+    QRectF m_oldRegion; ///< the old filter region
+    QRectF m_newRegion; ///< the new filter region
+    KoShape * m_shape;  ///< the shape the effect is applied to, might be zero
 };
 
 #endif // FILTERREGIONCHANGECOMMAND_H
