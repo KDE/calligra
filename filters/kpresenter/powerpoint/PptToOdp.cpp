@@ -1946,8 +1946,9 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     }
     quint32 textType = tc.textHeaderAtom.textType;
     const StyleTextProp9* stp9 = ::getStyleTextProp9(o, pp9rt);
-    if (!stp9) {
-         stp9 = getStyleTextProp9(256, textType, pp9rt);
+    if (!stp9 && currentSlideTexts) {
+         stp9 = getStyleTextProp9(currentSlideTexts->slidePersistAtom.slideId.slideId,
+                                  textType, pp9rt);
     }
     const TextPFException9* pf9 = 0;
     if (stp9) {
