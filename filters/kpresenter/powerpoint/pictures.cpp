@@ -38,7 +38,6 @@ static inline quint32 readU32(const void* p)
     return ptr[0] + (ptr[1] << 8) + (ptr[2] << 16) + (ptr[3] << 24);
 }
 
-}
 void
 saveStream(POLE::Stream& stream, quint32 size, KoStore* out)
 {
@@ -100,7 +99,8 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
     return false; // the stream was incomplete
 }
 const char*
-getMimetype(quint16 type) {
+getMimetype(quint16 type)
+{
     switch (type) {
     case 0xF01A: return "application/octet-stream";
     case 0xF01B: return "application/octet-stream";
@@ -114,7 +114,8 @@ getMimetype(quint16 type) {
     return "";
 }
 const char*
-getSuffix(quint16 type) {
+getSuffix(quint16 type)
+{
     switch (type) {
     case 0xF01A: return ".emf";
     case 0xF01B: return ".wmf";
@@ -127,7 +128,49 @@ getSuffix(quint16 type) {
     }
     return "";
 }
-
+template<class T>
+void
+savePicture(PictureReference& ref, const T* a, KoStore* out, bool compressed)
+{
+    if (!a) return;
+    ref.uid = a->rgbUid1 + a->rgbUid2;
+    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+    if (!out->open(ref.name.toLocal8Bit())) {
+        ref.name.clear();
+        ref.uid.clear();
+        return; // empty name reports an error
+    }
+    if (compressed) {
+        // TODO
+    } else {
+        out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
+    }
+    ref.mimetype = getMimetype(a->rh.recType);
+    out->close();
+}
+template<class T>
+void
+savePicture(PictureReference& ref, const T* a, KoStore* store)
+{
+    if (!a) return;
+    bool compressed = a->metafileHeader.compression == 0;
+    savePicture(ref, a, store, compressed);
+}
+PictureReference
+savePicture(const PPT::OfficeArtBlip& a, KoStore* store)
+{
+    PictureReference ref;
+    // only one of these calls will actually save a picture
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipEMF>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipWMF>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPICT>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipJPEG>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPNG>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipDIB>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipTIFF>(), store, false);
+    return ref;
+}
+}
 PictureReference
 savePicture(POLE::Stream& stream, KoStore* out)
 {
@@ -196,48 +239,6 @@ savePicture(POLE::Stream& stream, KoStore* out)
     stream.seek(next);
     out->close();
 
-    return ref;
-}
-template<class T>
-void
-savePicture(PictureReference& ref, const T* a, KoStore* out, bool compressed)
-{
-    if (!a) return;
-    ref.uid = a->rgbUid1 + a->rgbUid2;
-    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
-    if (!out->open(ref.name.toLocal8Bit())) {
-        ref.name.clear();
-        ref.uid.clear();
-        return; // empty name reports an error
-    }
-    if (compressed) {
-        // TODO
-    } else {
-        out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
-    }
-    ref.mimetype = getMimetype(a->rh.recType);
-    out->close();
-}
-template<class T>
-void
-savePicture(PictureReference& ref, const T* a, KoStore* store)
-{
-    if (!a) return;
-    bool compressed = a->metafileHeader.compression == 0;
-    savePicture(ref, a, store, compressed);
-}
-PictureReference
-savePicture(const PPT::OfficeArtBlip& a, KoStore* store)
-{
-    PictureReference ref;
-    // only one of these calls will actually save a picture
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipEMF>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipWMF>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPICT>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipJPEG>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPNG>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipDIB>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipTIFF>(), store, false);
     return ref;
 }
 PictureReference
