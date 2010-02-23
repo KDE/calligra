@@ -35,8 +35,10 @@ void FilterRegionChangeCommand::redo()
 
     m_effect->setFilterRect(m_newRegion);
 
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+        m_shape->notifyChanged();
+    }
 
     QUndoCommand::redo();
 }
@@ -48,8 +50,10 @@ void FilterRegionChangeCommand::undo()
 
     m_effect->setFilterRect(m_oldRegion);
 
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+        m_shape->notifyChanged();
+    }
 
     QUndoCommand::undo();
 }

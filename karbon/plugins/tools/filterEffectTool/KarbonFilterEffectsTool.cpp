@@ -34,10 +34,10 @@
 #include "FilterResourceServerProvider.h"
 #include "FilterStackSetCommand.h"
 #include "FilterRegionChangeCommand.h"
+#include "FilterRegionEditStrategy.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
 #include <KoPointerEvent.h>
-#include <KoInteractionStrategy.h>
 
 #include <KComboBox>
 #include <KLocale>
@@ -50,97 +50,6 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QLabel>
-
-enum EditMode {
-    None,
-    MoveAll,
-    MoveLeft,
-    MoveRight,
-    MoveTop,
-    MoveBottom
-};
-
-class FilterRectEditStrategy : public KoInteractionStrategy
-{
-public:
-    FilterRectEditStrategy(KoToolBase* parent, KoShape * shape, KoFilterEffect *effect, EditMode mode)
-        : KoInteractionStrategy(parent), m_effect(effect), m_shape(shape), m_editMode(mode)
-    {
-        Q_ASSERT(m_effect);
-        Q_ASSERT(m_shape);
-        // get the size rect of the shape
-        m_sizeRect = QRectF(QPointF(), m_shape->size());
-        // get the filter rectangle in shape coordinates
-        m_filterRect = m_effect->filterRectForBoundingRect(m_sizeRect);
-    }
-
-    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
-    {
-        QPointF shapePoint = m_shape->documentToShape(mouseLocation);
-        if (m_lastPosition.isNull()) {
-            m_lastPosition = shapePoint;
-        }
-        QPointF delta = shapePoint-m_lastPosition;
-        if( delta.isNull())
-            return;
-
-        switch(m_editMode) {
-            case MoveAll:
-                m_filterRect.translate(delta.x(), delta.y());
-                break;
-            case MoveLeft:
-                m_filterRect.setLeft(m_filterRect.left()+delta.x());
-                break;
-            case MoveRight:
-                m_filterRect.setRight(m_filterRect.right()+delta.x());
-                break;
-            case MoveTop:
-                m_filterRect.setTop(m_filterRect.top()+delta.y());
-                break;
-            case MoveBottom:
-                m_filterRect.setBottom(m_filterRect.bottom()+delta.y());
-                break;
-            default:
-                // nothing to do here
-                return;
-        }
-        tool()->repaintDecorations();
-        m_lastPosition = shapePoint;
-    }
-
-    virtual QUndoCommand *createCommand()
-    {
-        return 0;
-    }
-
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers)
-    {
-        qreal x = m_filterRect.left() / m_sizeRect.width();
-        qreal y = m_filterRect.top() / m_sizeRect.height();
-        qreal w = m_filterRect.width() / m_sizeRect.width();
-        qreal h = m_filterRect.height() / m_sizeRect.height();
-        m_effect->setFilterRect(QRectF(x,y,w,h));
-        KarbonFilterEffectsTool * filterTool = dynamic_cast<KarbonFilterEffectsTool*>(tool());
-        if (filterTool)
-            filterTool->regionChanged();
-    }
-
-    virtual void paint(QPainter &painter, const KoViewConverter &converter)
-    {
-        // paint the filter subregion rect
-        painter.setBrush(Qt::NoBrush);
-        painter.setPen(Qt::red);
-        painter.drawRect(m_filterRect);
-    }
-
-private:
-    KoFilterEffect * m_effect;
-    KoShape * m_shape;
-    QRectF m_sizeRect;
-    QRectF m_filterRect;
-    EditMode m_editMode;
-    QPointF m_lastPosition;
-};
 
 class KarbonFilterEffectsTool::Private
 {
@@ -290,6 +199,8 @@ KarbonFilterEffectsTool::KarbonFilterEffectsTool(KoCanvasBase *canvas)
 {
     connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
+    connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+            this, SLOT(selectionChanged()));
 }
 
 KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
@@ -382,7 +293,7 @@ KoInteractionStrategy *KarbonFilterEffectsTool::createStrategy(KoPointerEvent *e
     if (mode == None)
         return 0;
 
-    return new FilterRectEditStrategy(this, d->currentShape, d->currentEffect, mode);
+    return new FilterRegionEditStrategy(this, d->currentShape, d->currentEffect, mode);
 }
 
 void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
@@ -486,14 +397,6 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     QRectF region = d->currentEffect->filterRect();
     region.setHeight(height / 100.0);
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
-}
-
-void KarbonFilterEffectsTool::regionChanged()
-{
-    if (!d->currentEffect)
-        return;
-
-    d->updateFilterRegion();
 }
 
 QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()

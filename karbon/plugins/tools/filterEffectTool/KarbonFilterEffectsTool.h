@@ -29,6 +29,15 @@ class KarbonFilterEffectsTool : public KoInteractionTool
 {
     Q_OBJECT
 public:
+    enum EditMode {
+        None,
+        MoveAll,
+        MoveLeft,
+        MoveRight,
+        MoveTop,
+        MoveBottom
+    };
+
     explicit KarbonFilterEffectsTool(KoCanvasBase *canvas);
     virtual ~KarbonFilterEffectsTool();
 
@@ -41,9 +50,6 @@ public:
 
     /// reimplemented from KoToolBase
     virtual void activate(bool temporary = false);
-
-public slots:
-    void regionChanged();
 
 protected:
     /// reimplemented from KoToolBase
