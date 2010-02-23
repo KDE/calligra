@@ -20,11 +20,12 @@
 #ifndef KARBONFILTEREFFECTSTOOL_H
 #define KARBONFILTEREFFECTSTOOL_H
 
-#include "KoToolBase.h"
+#include "KoInteractionTool.h"
 
 class KoResource;
+class KoInteractionStrategy;
 
-class KarbonFilterEffectsTool : public KoToolBase
+class KarbonFilterEffectsTool : public KoInteractionTool
 {
     Q_OBJECT
 public:
@@ -36,19 +37,19 @@ public:
     /// reimplemented from KoToolBase
     virtual void repaintDecorations();
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent *event);
-    /// reimplemented from KoToolBase
     virtual void mouseMoveEvent(KoPointerEvent *event);
-    /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
     /// reimplemented from KoToolBase
     virtual void activate(bool temporary = false);
 
+public slots:
+    void regionChanged();
+
 protected:
     /// reimplemented from KoToolBase
     virtual QMap<QString, QWidget *> createOptionWidgets();
-
+    /// reimplemented from KoToolBase
+    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 private slots:
     void editFilter();
     void filterChanged();
