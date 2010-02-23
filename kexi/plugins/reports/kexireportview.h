@@ -23,6 +23,7 @@
 #include <kexidb/connection.h>
 #include <qdom.h>
 #include "kexireportpart.h"
+#include "KoReportRendererBase.h"
 
 class ORPreRender;
 class ORODocument;
@@ -60,6 +61,7 @@ private:
 
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
+    KoReportRendererFactory m_factory;
     
 private slots:
     void nextPage();

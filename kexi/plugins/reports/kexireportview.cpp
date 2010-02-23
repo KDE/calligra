@@ -17,28 +17,30 @@
  */
 
 #include "kexireportview.h"
-#include <qlabel.h>
-#include <QBoxLayout>
-#include <QScrollArea>
-#include <qlayout.h>
-#include <kdebug.h>
-#include <qprinter.h>
-#include <core/KexiMainWindowIface.h>
 #include "kexireportpage.h"
-#include <orprerender.h>
-#include <renderobjects.h>
-#include <QPainter>
-#include <QPrintDialog>
-#include <widget/utils/kexirecordnavigator.h>
-#include <core/KexiWindow.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
-#include "../scripting/kexiscripting/kexiscriptadaptor.h"
-#include "krscriptfunctions.h"
 
-#include <krhtmlrender.h>
+#include <QLabel>
+#include <QBoxLayout>
+#include <QScrollArea>
+#include <QLayout>
+#include <QPainter>
+#include <QPrintDialog>
+#include <QPrinter>
+
+#include <kdebug.h>
+#include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
+
+#include <renderobjects.h>
+#include <orprerender.h>
+
+#include <widget/utils/kexirecordnavigator.h>
+#include <core/KexiWindow.h>
+#include <core/KexiMainWindowIface.h>
+#include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent)
@@ -147,9 +149,8 @@ void KexiReportView::slotPrintReport()
     QPrinter printer;
     QPainter painter;
     KoReportRendererBase *renderer;
-    KoReportRendererFactory factory;
 
-    renderer = factory.createInstance("print");
+    renderer = m_factory.createInstance("print");
     QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, this);
     if (dialog->exec() == QDialog::Accepted) {
         KoReportRendererContext cxt;
@@ -166,10 +167,9 @@ void KexiReportView::slotRenderKSpread()
 {
 #ifdef HAVE_KSPREAD
     KoReportRendererBase *renderer;
-    KoReportRendererFactory factory;
     KoReportRendererContext cxt;
 
-    renderer = factory.createInstance("kspread");
+    renderer = m_factory.createInstance("kspread");
     
     cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
     if (!cxt.destinationUrl.isValid()) {
@@ -191,14 +191,17 @@ void KexiReportView::slotRenderKSpread()
 
 void KexiReportView::slotExportHTML()
 {
-    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
-    if (!saveUrl.isValid()) {
+    KoReportRendererContext cxt;
+    KoReportRendererBase *renderer;
+    
+    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
+    if (!cxt.destinationUrl.isValid()) {
         KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Exported"));
         return;
     }
-    if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
+    if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
         int wantSave = KMessageBox::warningContinueCancel(this,
-            i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()),
+            i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()),
             i18n("Warning"), KGuiItem(i18n("Overwrite")));
         if (wantSave != KMessageBox::Continue) {
             return;
@@ -210,11 +213,17 @@ void KexiReportView::slotExportHTML()
              "or export using a Table which outputs a much simpler format."), i18n("Export Style"),
              KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
-    KRHtmlRender hr;
-    if (!hr.render(m_reportDocument, saveUrl, css)) {
-        KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n("Exporting failed"));
+    if (css){
+        renderer = m_factory.createInstance("htmlcss");
+    }
+    else {
+        renderer = m_factory.createInstance("htmltable");
+    }
+    
+    if (!renderer->render(cxt, m_reportDocument)) {
+        KMessageBox::error(this, i18n("Exporting report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Exporting failed"));
     } else {
-        KMessageBox::information(this, i18n("Report exported to %1", saveUrl.prettyUrl()) , i18n("Exporting Succeeded"));
+        KMessageBox::information(this, i18n("Report exported to %1", cxt.destinationUrl.prettyUrl()) , i18n("Exporting Succeeded"));
     }
 }
 

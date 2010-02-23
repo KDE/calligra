@@ -21,6 +21,8 @@
 #include "KoReportScreenRenderer.h"
 #include "KoReportPrintRenderer.h"
 #include "KoReportKSpreadRenderer.h"
+#include "KoReportHTMLTableRenderer.h"
+#include "KoReportHTMLCSSRenderer.h"
 
 KoReportRendererContext::KoReportRendererContext()
  : painter(0), printer(0)
@@ -49,6 +51,12 @@ KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key
     }
     if (key.toLower() == QLatin1String("kspread")) {
         return new KoReportKSpreadRenderer();
+    }
+    if (key.toLower() == QLatin1String("htmltable")) {
+        return new KoReportHTMLTableRenderer();
+    }
+    if (key.toLower() == QLatin1String("htmlcss")) {
+        return new KoReportHTMLCSSRenderer();
     }
     return 0;
 }

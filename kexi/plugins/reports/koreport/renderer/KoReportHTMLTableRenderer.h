@@ -16,36 +16,26 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __KRHTMLRENDER_H__
-#define __KRHTMLERENDER_H__
+#ifndef __KRHTMLTABLERENDER_H__
+#define __KRHTMLTABLERENDER_H__
 
-#include <QDomDocument>
-#include <QRectF>
-#include <QString>
-#include <QFont>
-
-#include <kurl.h>
-#include "koreport_export.h"
+#include "KoReportRendererBase.h"
 
 class ORODocument;
-//namespace KexiDB
-//{
-//class Connection;
-//}
+
 //
 // KRHtmlRender
 //
-class KOREPORT_EXPORT KRHtmlRender
+class KoReportHTMLTableRenderer : public KoReportRendererBase
 {
 public:
-    KRHtmlRender();
+    KoReportHTMLTableRenderer();
 
-    virtual ~KRHtmlRender();
+    virtual ~KoReportHTMLTableRenderer();
 
-    bool render(ORODocument * document, const KUrl& toUrl,  bool css = true);
+    virtual bool render(const KoReportRendererContext&, ORODocument *document, int page = -1);
 
 private:
-    QString renderCSS(ORODocument*);
     QString renderTable(ORODocument*);
 
     //! This is the directory name that will go inside the HTML files

@@ -40,7 +40,8 @@ set(koreport_LIB_SRCS
 	renderer/KoReportPrintRenderer.cpp
 	renderer/orprerender.cpp
 	renderer/KoReportScreenRenderer.cpp
-	renderer/krhtmlrender.cpp
+	renderer/KoReportHTMLTableRenderer.cpp
+    renderer/KoReportHTMLCSSRenderer.cpp
     renderer/KoReportRendererBase.cpp
 
 	renderer/scripting/krscripthandler.cpp
