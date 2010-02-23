@@ -952,65 +952,80 @@ void DataSet::blockSignals( bool block )
     d->blockSignals = block;
 }
 
+bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, QPen& pen)
+{
+    if ( ! n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+        return false;
+
+    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.clear();
+    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+    //styleStack.setTypeProperties( "chart" );
+    // FIXME: Load Pie explode factors
+    //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
+    //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
+
+    bool brushLoaded = false;                                                                                                                                                 
+    bool penLoaded = false; 
+
+    styleStack.setTypeProperties( "graphic" );
+
+    if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
+        QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+        if( stroke == "solid" || stroke == "dash" ) {
+            pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
+            penLoaded = true;
+        }
+    }
+
+    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+        QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+        if ( fill == "solid" || fill == "hatch" ) {
+            brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
+            brushLoaded = true;
+        } else if ( fill == "gradient" ) {
+            brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
+            brushLoaded = true;
+        } else if ( fill == "bitmap" ) {
+            brush = Surface::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
+            brushLoaded = true;
+        }
+    }
+    
+    
+#ifndef NWORKAROUND_ODF_BUGS
+    if( ! penLoaded) {
+        QColor fixedColor = KoOdfWorkaround::fixMissingStrokeColor( n, context );
+        if ( fixedColor.isValid() )
+            pen = fixedColor;
+    }
+    if( ! brushLoaded) {
+        QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
+        if ( fixedColor.isValid() )
+            brush = fixedColor;
+    }
+#endif
+
+    return true;
+}
+
 bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
 
-    bool brushLoaded = false;
-    bool penLoaded = false;
-
-    if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        styleStack.clear();
-        odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
-
-        //styleStack.setTypeProperties( "chart" );
-
-        // FIXME: Load Pie explode factors
-        //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
-        //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-
-        styleStack.setTypeProperties( "graphic" );
-
-        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
-            QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-            if( stroke == "solid" || stroke == "dash" ) {
-                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
-                penLoaded = true;
-                setPen( pen );
-            }
-        }
-
-        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-            QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-            QBrush brush;
-            if ( fill == "solid" || fill == "hatch" ) {
-                brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
-            } else if ( fill == "gradient" ) {
-                brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
-            } else if ( fill == "bitmap" ) {
-                brushLoaded = true;
-                brush = Surface::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
-            }
+    {
+        QBrush brush(Qt::NoBrush);
+        QPen pen(Qt::NoPen);
+        loadBrushAndPen(context, n, brush, pen);
+        if(pen.style() != Qt::NoPen)
+            setPen( pen );
+        if(brush.style() != Qt::NoBrush)
             setBrush( brush );
-        }
     }
-
-#ifndef NWORKAROUND_ODF_BUGS
-    if ( !brushLoaded ) {
-        QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
-        if ( fixedColor.isValid() )
-            setBrush( fixedColor );
-    }
-    if ( !penLoaded ) {
-        QColor fixedColor = KoOdfWorkaround::fixMissingStrokeColor( n, context );
-        if ( fixedColor.isValid() )
-            setPen( fixedColor );
-    }
-#endif
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
@@ -1021,12 +1036,23 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         setLabelDataRegionString( region );
     }
 
+    // load data points
     KoXmlElement m;
+    int loadedDataPointCount = 0;
     forEachElement ( m, n ) {
         if ( m.namespaceURI() != KoXmlNS::chart )
             continue;
-        // FIXME: Load data points
+        if ( m.localName() != "data-point" )
+            continue;
+        QBrush brush(Qt::NoBrush);
+        QPen pen(Qt::NoPen);
+        loadBrushAndPen(context, m, brush, pen);
+        if(pen.style() != Qt::NoPen)
+            setPen( loadedDataPointCount, pen );
+        if(brush.style() != Qt::NoBrush)
+            setBrush( loadedDataPointCount, brush );
+        ++loadedDataPointCount;
     }
-
+    
     return true;
 }
