@@ -157,6 +157,8 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
         return value;
     case Table: {
         qreal valueCount = d.tableValues.count() - 1;
+        if (valueCount < 0.0)
+            return value;
         qreal k1 = static_cast<int>(value * valueCount);
         qreal k2 = qMin(k1 + 1, valueCount);
         qreal vk1 = d.tableValues[k1];
@@ -165,6 +167,8 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
     }
     case Discrete: {
         qreal valueCount = d.tableValues.count() - 1;
+        if (valueCount < 0.0)
+            return value;
         return d.tableValues[static_cast<int>(value*valueCount)];
     }
     case Linear:
