@@ -102,7 +102,7 @@ private:
     static int RTTI;
     KoReportData *m_reportData;
 
-    friend class ORPreRenderPrivate;
+    friend class KoReportPreRendererPrivate;
     friend class Scripting::Chart;
 
     //KexiDB::Cursor *dataSet();

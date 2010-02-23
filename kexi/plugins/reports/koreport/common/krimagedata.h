@@ -67,7 +67,7 @@ protected:
 private:
     static int RTTI;
     virtual void createProperties();
-    friend class ORPreRenderPrivate;
+    friend class KoReportPreRendererPrivate;
     friend class Scripting::Image;
 };
 

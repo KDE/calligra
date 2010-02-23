@@ -27,7 +27,7 @@
 #include "koreport_export.h"
 #include "scripting/krscripthandler.h"
 
-class ORPreRenderPrivate;
+class KoReportPreRendererPrivate;
 class ParameterList;
 class ORODocument;
 class KoReportData;
@@ -41,12 +41,12 @@ class Connection;
 // This class takes a report definition and prerenders the result to
 // an ORODocument that can be used to pass to any number of renderers.
 //
-class KOREPORT_EXPORT ORPreRender
+class KOREPORT_EXPORT KoReportPreRenderer
 {
 public:
-    ORPreRender(const QDomElement&);
+    KoReportPreRenderer(const QDomElement&);
 
-    virtual ~ORPreRender();
+    virtual ~KoReportPreRenderer();
 
     void setSourceData(KoReportData*);
     void registerScriptObject(QObject*, const QString&);
@@ -63,7 +63,7 @@ public:
 protected:
 
 private:
-    ORPreRenderPrivate* d;
+    KoReportPreRendererPrivate* d;
     bool setDom(const QDomElement &);
     QMap<QString, QObject*> m_scriptObjects;
 };

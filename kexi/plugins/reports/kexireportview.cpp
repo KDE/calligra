@@ -35,7 +35,7 @@
 #include <kio/netaccess.h>
 
 #include <renderobjects.h>
-#include <orprerender.h>
+#include <KoReportPreRenderer.h>
 
 #include <widget/utils/kexirecordnavigator.h>
 #include <core/KexiWindow.h>
@@ -246,7 +246,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
 	kDebug() << tempData()->reportDefinition.tagName();
 	
-        m_preRenderer = new ORPreRender(tempData()->reportDefinition);
+        m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {

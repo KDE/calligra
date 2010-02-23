@@ -38,7 +38,7 @@ set(koreport_LIB_SRCS
 	renderer/ext3of9.cpp
 	renderer/renderobjects.cpp
 	renderer/KoReportPrintRenderer.cpp
-	renderer/orprerender.cpp
+	renderer/KoReportPreRenderer.cpp
 	renderer/KoReportScreenRenderer.cpp
 	renderer/KoReportHTMLTableRenderer.cpp
     renderer/KoReportHTMLCSSRenderer.cpp

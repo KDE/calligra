@@ -54,6 +54,6 @@ private:
     static int RTTI;
 
     friend class Scripting::Shape;
-    friend class ORPreRenderPrivate;
+    friend class KoReportPreRendererPrivate;
 };
 #endif

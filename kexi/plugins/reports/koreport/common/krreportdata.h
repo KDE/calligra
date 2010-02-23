@@ -128,8 +128,8 @@ private:
     bool m_valid;
     void init();
 
-    friend class ORPreRenderPrivate;
-    friend class ORPreRender;
+    friend class KoReportPreRendererPrivate;
+    friend class KoReportPreRenderer;
     friend class KRScriptHandler;
     friend class Scripting::Report;
 };

@@ -61,7 +61,7 @@ private:
     static int RTTI;
 
     friend class Scripting::Check;
-    friend class ORPreRenderPrivate;
+    friend class KoReportPreRendererPrivate;
 };
 
 #endif // KRCHECKDATA_H

@@ -70,6 +70,6 @@ private:
     static int RTTI;
 
     friend class Scripting::Label;
-    friend class ORPreRenderPrivate;
+    friend class KoReportPreRendererPrivate;
 };
 #endif

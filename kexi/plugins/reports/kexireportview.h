@@ -25,7 +25,7 @@
 #include "kexireportpart.h"
 #include "KoReportRendererBase.h"
 
-class ORPreRender;
+class KoReportPreRenderer;
 class ORODocument;
 class QScrollArea;
 class KexiReportPage;
@@ -49,7 +49,7 @@ public:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
 private:
-    ORPreRender *m_preRenderer;
+    KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
     KexiReportPage *m_reportWidget;

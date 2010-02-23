@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "orprerender.h"
+#include "KoReportPreRenderer.h"
 #include "renderobjects.h"
 #include "koreportdata.h"
 #include "barcodes.h"
@@ -54,18 +54,18 @@
 #include <KDChartChart>
 
 //
-// ORPreRenderPrivate
+// KoReportPreRendererPrivate
 // This class is the private class that houses all the internal
 // variables so we can provide a cleaner interface to the user
 // without presenting to them things that they don't need to see
 // and may change over time.
 //
-class ORPreRenderPrivate : public QObject
+class KoReportPreRendererPrivate : public QObject
 {
     Q_OBJECT
 public:
-    ORPreRenderPrivate();
-    virtual ~ORPreRenderPrivate();
+    KoReportPreRendererPrivate();
+    virtual ~KoReportPreRendererPrivate();
 
     bool m_valid;
 
@@ -106,7 +106,7 @@ signals:
     void renderingSection(KRSectionData*, OROPage*, QPointF);
 };
 
-ORPreRenderPrivate::ORPreRenderPrivate()
+KoReportPreRendererPrivate::KoReportPreRendererPrivate()
 {
     m_valid = false;
     m_reportData = 0;
@@ -121,7 +121,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
     m_conn = 0;
 }
 
-ORPreRenderPrivate::~ORPreRenderPrivate()
+KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
 {
     if (m_reportData) {
         delete m_reportData;
@@ -131,7 +131,7 @@ ORPreRenderPrivate::~ORPreRenderPrivate()
     m_postProcText.clear();
 }
 
-void ORPreRenderPrivate::createNewPage()
+void KoReportPreRendererPrivate::createNewPage()
 {
     if (m_pageCounter > 0)
         finishCurPage();
@@ -162,7 +162,7 @@ void ORPreRenderPrivate::createNewPage()
         renderSection(*(m_reportData->m_pageHeaderAny));
 }
 
-qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
+qreal KoReportPreRendererPrivate::finishCurPageSize(bool lastPage)
 {
     qreal retval = 0.0;
 
@@ -181,7 +181,7 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
     return retval;
 }
 
-qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
+qreal KoReportPreRendererPrivate::finishCurPage(bool lastPage)
 {
 
     qreal offset = m_maxHeight - m_bottomMargin;
@@ -214,7 +214,7 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
     return retval;
 }
 
-void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
+void KoReportPreRendererPrivate::renderDetailSection(KRDetailSectionData & detailData)
 {
     kDebug();
 
@@ -359,7 +359,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
     }
 }
 
-qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
+qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectionData)
 {
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
 
@@ -434,7 +434,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
     return intHeight;
 }
 
-qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
+qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionData)
 {
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
     kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count();
@@ -809,7 +809,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
     return intHeight;
 }
 
-void ORPreRenderPrivate::initEngine()
+void KoReportPreRendererPrivate::initEngine()
 {
     m_scriptHandler = new KRScriptHandler(m_kodata, m_reportData);
 
@@ -824,22 +824,22 @@ void ORPreRenderPrivate::initEngine()
 // ORPreRender
 //
 
-ORPreRender::ORPreRender(const QDomElement & pDocument)
+KoReportPreRenderer::KoReportPreRenderer(const QDomElement & pDocument)
 {
-    d = new ORPreRenderPrivate();
+    d = new KoReportPreRendererPrivate();
     setDom(pDocument);
 }
 
-ORPreRender::~ORPreRender()
+KoReportPreRenderer::~KoReportPreRenderer()
 {
 }
 
-void ORPreRender::setName(const QString &n)
+void KoReportPreRenderer::setName(const QString &n)
 {
     d->m_reportData->setName(n);
 }
 
-ORODocument* ORPreRender::generate()
+ORODocument* KoReportPreRenderer::generate()
 {
     kDebug();
     if (d == 0 || !d->m_valid || d->m_reportData == 0)
@@ -1033,7 +1033,7 @@ ORODocument* ORPreRender::generate()
     return pDoc;
 }
 
-void ORPreRender::setSourceData(KoReportData *data)
+void KoReportPreRenderer::setSourceData(KoReportData *data)
 {
     if (d && data) {
         d->m_kodata = data;
@@ -1041,7 +1041,7 @@ void ORPreRender::setSourceData(KoReportData *data)
     }
 }
 
-bool ORPreRender::setDom(const QDomElement &docReport)
+bool KoReportPreRenderer::setDom(const QDomElement &docReport)
 {
     if (d) {
         if (d->m_reportData)
@@ -1059,14 +1059,14 @@ bool ORPreRender::setDom(const QDomElement &docReport)
     return isValid();
 }
 
-bool ORPreRender::isValid() const
+bool KoReportPreRenderer::isValid() const
 {
     if (d && d->m_valid)
         return true;
     return false;
 }
 
-void ORPreRender::registerScriptObject(QObject* obj, const QString& name)
+void KoReportPreRenderer::registerScriptObject(QObject* obj, const QString& name)
 {
     kDebug() << name;
     m_scriptObjects[name] = obj;
