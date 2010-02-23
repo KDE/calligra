@@ -908,7 +908,21 @@ getBulletChar(const TextPFException& pf) {
     }
     return QChar(0x25cf); //  "●"
 }
-
+QString
+bulletSizeToSizeString(const PPT::TextPFException* pf)
+{
+    //qDebug() << "pf :... " << pf->masks.bulletSize;
+    if (pf && pf->masks.bulletSize && pf->bulletFlags->fBulletHasSize) {
+        qint16 size = pf->bulletSize;
+        qDebug() << size;
+        if (size >= 25 && size <= 400) {
+            return percent(size);
+        } else if (size >= -4000 && size <= -1) {
+            return pt(size);
+        }
+    }
+    return QString();
+}
 void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                                const ListStyleInput& i,
                                const ListStyleInput& p)
@@ -917,12 +931,28 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter out(&buffer);
 
+    QString bulletSize = bulletSizeToSizeString(i.pf);
+    if (bulletSize.isNull()) {
+        bulletSize = bulletSizeToSizeString(p.pf);
+    }
+
     QString elementName;
-    if (i.pf9 && i.pf9->masks.bulletBlip) {
+    bool imageBullet = i.pf9 && i.pf9->masks.bulletBlip;
+    if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
                          bulletPictureNames.value(i.pf9->bulletBlipRef));
+        if (bulletSize.isNull()) {
+            if (i.cf && i.cf->masks.size) {
+                bulletSize = pt(i.cf->fontSize);
+            } else if (p.cf && p.cf->masks.size) {
+                bulletSize = pt(p.cf->fontSize);
+            }
+        }
+        if (bulletSize.isNull()) {
+            bulletSize = "20pt"; // fallback value
+        }
     } else {
         QString numFormat("1"), numSuffix, numPrefix;
         if (i.pf9 && i.pf9->bulletAutoNumberScheme) {
@@ -942,22 +972,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", bulletChar);
-            if (i.pf->masks.bulletSize && i.pf->bulletFlags->fBulletHasSize) {
-                if (i.pf->bulletSize >= 25 && i.pf->bulletSize <= 400) {
-                    out.addAttribute("text:bullet-relative-size",
-                                     percent(i.pf->bulletSize));
-                } else if (i.pf->bulletSize >= -4000 && i.pf->bulletSize <= -1){
-                    out.addAttribute("text:bullet-relative-size",
-                                     pt(i.pf->bulletSize));
-                }
-            } else if (p.pf->masks.bulletSize && p.pf->bulletFlags->fBulletHasSize) {
-                if (p.pf->bulletSize >= 25 && p.pf->bulletSize <= 400) {
-                    out.addAttribute("text:bullet-relative-size",
-                                     percent(i.pf->bulletSize));
-                } else if (p.pf->bulletSize >= -4000 && p.pf->bulletSize <= -1){
-                    out.addAttribute("text:bullet-relative-size",
-                                     pt(p.pf->bulletSize));
-                }
+            if (!bulletSize.isNull()) {
+                out.addAttribute("text:bullet-relative-size", bulletSize);
             }
         } else {
             elementName = "text:list-level-style-number";
@@ -983,14 +999,29 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     bool hasIndent = i.pf && i.pf->masks.indent;// && depth - 1 == pf.indent;
     out.startElement("style:list-level-properties");
     // fo:height
+    if (!bulletSize.isNull()) {
+        out.addAttribute("fo:height", bulletSize);
+    }
     // fo:text-align
     // fo:width
+    if (!bulletSize.isNull()) {
+        out.addAttribute("fo:width", bulletSize);
+    }
     // style:font-name
     // style:vertical-pos
+    if (imageBullet) {
+        out.addAttribute("style:vertical-pos", "middle");
+    }
     // style:vertical-rel
+    if (imageBullet) {
+        out.addAttribute("style:vertical-rel", "line");
+    }
     // svg:y
     // text:min-label-distance
     // text:min-label-width
+    if (!bulletSize.isNull()) {
+        out.addAttribute("text:min-label-width", bulletSize);
+    }
     // text:space-before
     int spacebefore = 0;
     if (i.pf && i.pf->masks.spaceBefore) {
@@ -1009,31 +1040,31 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     }
     out.endElement(); // style:list-level-properties
 
-    KoGenStyle ls(KoGenStyle::StyleText);
-    defineTextProperties(ls, p.cf, p.cf9, p.cf10, p.si);
-    defineTextProperties(ls, i.cf, i.cf9, i.cf10, i.si);
+    if (!imageBullet) {
+        KoGenStyle ls(KoGenStyle::StyleText);
+        defineTextProperties(ls, p.cf, p.cf9, p.cf10, p.si);
+        defineTextProperties(ls, i.cf, i.cf9, i.cf10, i.si);
 
-    // override some properties with information from the paragraph
-
-    if (hasIndent && i.pf && i.pf->masks.bulletFont) {
-        const PPT::FontEntityAtom* font = getFont(i.pf->bulletFontRef);
-        if (font) {
-            ls.addProperty("fo:font-family",
+        // override some properties with information from the paragraph
+        if (hasIndent && i.pf && i.pf->masks.bulletFont) {
+            const PPT::FontEntityAtom* font = getFont(i.pf->bulletFontRef);
+            if (font) {
+                ls.addProperty("fo:font-family",
                            QString::fromUtf16(font->lfFaceName.data(),
                                               font->lfFaceName.size()),
                            KoGenStyle::TextType);
+            }
         }
-    }
-    if (hasIndent && i.pf && i.pf->masks.bulletColor) {
-        const QColor color = toQColor(*i.pf->bulletColor);
-        if (color.isValid()) {
-            ls.addProperty("fo:color", color.name(), KoGenStyle::TextType);
+        if (hasIndent && i.pf && i.pf->masks.bulletColor) {
+            const QColor color = toQColor(*i.pf->bulletColor);
+            if (color.isValid()) {
+                ls.addProperty("fo:color", color.name(), KoGenStyle::TextType);
+            }
         }
+        // maybe fo:font-size should be set from pf.bulletSize
+
+        ls.writeStyleProperties(&out, KoGenStyle::TextType);
     }
-    // maybe fo:font-size should be set from pf.bulletSize
-
-    ls.writeStyleProperties(&out, KoGenStyle::TextType);
-
     out.endElement();  // text:list-level-style-*
     // serialize the text:list-style element into the properties
     QString elementContents = QString::fromUtf8(buffer.buffer(),
