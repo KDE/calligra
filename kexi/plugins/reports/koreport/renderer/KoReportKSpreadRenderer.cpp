@@ -23,6 +23,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
+#include "renderobjects.h"
 
 KoReportKSpreadRenderer::KoReportKSpreadRenderer()
 {

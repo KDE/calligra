@@ -20,7 +20,6 @@
 #define __ORPRINTRENDER_H__
 
 #include "KoReportRendererBase.h"
-#include "koreport_export.h"
 
 class ORODocument;
 

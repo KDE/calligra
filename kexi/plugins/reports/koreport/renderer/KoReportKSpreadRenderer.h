@@ -18,10 +18,7 @@
 #ifndef KRKSPREADRENDERER_H
 #define KRKSPREADRENDERER_H
 
-#include "renderobjects.h"
-#include "koreport_export.h"
 #include "KoReportRendererBase.h"
-#include <kurl.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
