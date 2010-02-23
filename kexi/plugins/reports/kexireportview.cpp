@@ -36,11 +36,6 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 #include "krscriptfunctions.h"
 
-#ifdef HAVE_KSPREAD
-#include <krkspreadrender.h>
-#endif
-
-
 #include <krhtmlrender.h>
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
@@ -72,18 +67,20 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
+#if 0
     viewActions << (a = new KAction(KIcon("kword"), i18n("Open in KWord"), this));
     a->setObjectName("open_in_kword");
     a->setToolTip(i18n("Open the report in KWord"));
     a->setWhatsThis(i18n("Opens the current report in KWord."));
     a->setEnabled(false);
 //! @todo connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
+#endif
 
 #ifdef HAVE_KSPREAD
-    viewActions << (a = new KAction(KIcon("kspread"), i18n("Open in KSpread"), this));
-    a->setObjectName("open_in_kspread");
-    a->setToolTip(i18n("Open the report in KSpread"));
-    a->setWhatsThis(i18n("Opens the current report in KSpread."));
+    viewActions << (a = new KAction(KIcon("kspread"), i18n("Save to KSpread"), this));
+    a->setObjectName("save_to_kspread");
+    a->setToolTip(i18n("Save the report to a KSpread document"));
+    a->setWhatsThis(i18n("Saves the current report to a KSpread document."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
 #endif
@@ -168,21 +165,26 @@ void KexiReportView::slotPrintReport()
 void KexiReportView::slotRenderKSpread()
 {
 #ifdef HAVE_KSPREAD
-    KRKSpreadRender ks;
-    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
-    if (!saveUrl.isValid()) {
+    KoReportRendererBase *renderer;
+    KoReportRendererFactory factory;
+    KoReportRendererContext cxt;
+
+    renderer = factory.createInstance("kspread");
+    
+    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
+    if (!cxt.destinationUrl.isValid()) {
         KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
         return;
     }
 
-    if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
-        int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+    if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
+        int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
         if (wantSave != KMessageBox::Continue) {
             return;
         }
     }
-    if (!ks.render(m_reportDocument, saveUrl)) {
-        KMessageBox::error(this, i18n("Failed to open %1 in KSpread", saveUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
+    if (!renderer->render(cxt, m_reportDocument)) {
+        KMessageBox::error(this, i18n("Failed to open %1 in KSpread", cxt.destinationUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
     }
 #endif
 }

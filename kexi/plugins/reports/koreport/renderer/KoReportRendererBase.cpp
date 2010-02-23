@@ -20,6 +20,7 @@
 #include "KoReportRendererBase.h"
 #include "KoReportScreenRenderer.h"
 #include "KoReportPrintRenderer.h"
+#include "KoReportKSpreadRenderer.h"
 
 KoReportRendererContext::KoReportRendererContext()
  : painter(0), printer(0)
@@ -45,6 +46,9 @@ KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key
     }
     if (key.toLower() == QLatin1String("print")) {
         return new KoReportPrintRenderer();
+    }
+    if (key.toLower() == QLatin1String("kspread")) {
+        return new KoReportKSpreadRenderer();
     }
     return 0;
 }

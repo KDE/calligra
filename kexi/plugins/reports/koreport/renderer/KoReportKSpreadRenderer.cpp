@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "krkspreadrender.h"
+#include "KoReportKSpreadRenderer.h"
 #include <kspread/part/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
@@ -24,16 +24,16 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
 
-KRKSpreadRender::KRKSpreadRender()
+KoReportKSpreadRenderer::KoReportKSpreadRenderer()
 {
 }
 
 
-KRKSpreadRender::~KRKSpreadRender()
+KoReportKSpreadRenderer::~KoReportKSpreadRenderer()
 {
 }
 
-bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
+bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORODocument* document, int page)
 {
     KSpread::Doc *ksdoc = new KSpread::Doc();
 
@@ -102,7 +102,7 @@ bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
     }
 
     bool status;
-    if (ksdoc->exportDocument(toUrl))
+    if (ksdoc->exportDocument(context.destinationUrl))
         status = true;
     else
         status = false;

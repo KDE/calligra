@@ -89,7 +89,7 @@ endif (SHOULD_BUILD_KWORD)
 
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)
-  set(koreport_LIB_SRCS ${koreport_LIB_SRCS} renderer/krkspreadrender.cpp)
+  set(koreport_LIB_SRCS ${koreport_LIB_SRCS} renderer/KoReportKSpreadRenderer.cpp)
 endif (SHOULD_BUILD_KSPREAD)
 
 kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembed/sectioneditor.ui )

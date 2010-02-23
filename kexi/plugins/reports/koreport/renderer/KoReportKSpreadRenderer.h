@@ -20,19 +20,19 @@
 
 #include "renderobjects.h"
 #include "koreport_export.h"
+#include "KoReportRendererBase.h"
 #include <kurl.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KOREPORT_EXPORT KRKSpreadRender
+class KoReportKSpreadRenderer : public KoReportRendererBase
 {
 public:
-    KRKSpreadRender();
+    KoReportKSpreadRenderer();
+    ~KoReportKSpreadRenderer();
 
-    ~KRKSpreadRender();
-
-    bool render(ORODocument *, const KUrl&);
+    virtual bool render(const KoReportRendererContext&, ORODocument*, int page = -1);
 
 private:
 
