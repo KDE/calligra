@@ -94,17 +94,22 @@ QString getText(const TextContainer& tc, int start, int count)
     return getText(tc).mid(start,count);
 }
 
-/**
- * Return the placementId of the PlaceHolderAtom
- **/
-quint8 getPlacementId(const OfficeArtSpContainer &o) {
-    if (o.clientData) {
-        const OfficeArtClientData & d = *o.clientData;
-        if (d.placeholderAtom) {
-            const PlaceholderAtom &h = *d.placeholderAtom;
-            return h.placementId;
+template<class T>
+const T*
+getPP(const DocumentContainer* dc) {
+    if (dc == 0 || dc->docInfoList == 0) return 0;
+    foreach (const DocInfoListSubContainerOrAtom& a, dc->docInfoList->rgChildRec) {
+        const DocProgTagsContainer* d = a.anon.get<DocProgTagsContainer>();
+        if (d) {
+            foreach (const DocProgTagsSubContainerOrAtom& da, d->rgChildRec) {
+                const DocProgBinaryTagContainer* c
+                        = da.anon.get<DocProgBinaryTagContainer>();
+                if (c) {
+                    const T* t = c->rec.anon.get<T>();
+                    if (t) return t;
+                }
+            }
         }
-        return 0;
     }
     return 0;
 }
@@ -195,6 +200,21 @@ createPictures(POLE::Storage& storage, KoStore* store, KoXmlWriter* manifest)
     delete stream;
     return fileNames;
 }
+QMap<quint8, QString>
+createBulletPictures(const PP9DocBinaryTagExtension* pp9, KoStore* store, KoXmlWriter* manifest)
+{
+    QMap<quint8, QString> ids;
+    if (!pp9 || !pp9->blipCollectionContainer) {
+        return ids;
+    }
+    foreach (const BlipEntityAtom& a, pp9->blipCollectionContainer->rgBlipEntityAtom) {
+        PictureReference ref = savePicture(a.blip, store);
+        if (ref.name.length() == 0) continue;
+        ids[a.rh.recInstance] = "Pictures/" + ref.name;
+        manifest->addManifestEntry(ids[a.rh.recInstance], ref.mimetype);
+    }
+    return ids;
+}
 bool
 PptToOdp::parse(POLE::Storage& storage)
 {
@@ -257,6 +277,9 @@ KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
     storeout->enterDirectory("Pictures");
     pictureNames = createPictures(storage,
                                   storeout, manifest);
+    // read pictures from the PowerPoint Document structures
+    createBulletPictures(getPP<PP9DocBinaryTagExtension>(
+            p->documentContainer), storeout, manifest);
     storeout->leaveDirectory();
 
     KoGenStyles styles;
@@ -286,33 +309,6 @@ KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
 
 namespace
 {
-void
-addElement(KoGenStyle& style, const char* name,
-           const QMap<const char*, QString>& m,
-           const QMap<const char*, QString>& mtext)
-{
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter elementWriter(&buffer);
-    elementWriter.startElement(name);
-    QMapIterator<const char*, QString> i(m);
-    while (i.hasNext()) {
-        i.next();
-        elementWriter.addAttribute(i.key(), i.value());
-    }
-    if (mtext.size()) {
-        elementWriter.startElement("style:text-properties");
-        QMapIterator<const char*, QString> j(mtext);
-        while (j.hasNext()) {
-            j.next();
-            elementWriter.addAttribute(j.key(), j.value());
-        }
-        elementWriter.endElement();
-    }
-    elementWriter.endElement();
-    style.addChildElement(name,
-                          QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
-}
 
 QString
 definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
@@ -335,25 +331,6 @@ definePageLayout(KoGenStyles& styles, const PPT::PointStruct& size) {
     return styles.lookup(pl, "pm");
 }
 
-template<class T>
-const T*
-getPP(const DocumentContainer* dc) {
-    if (dc == 0 || dc->docInfoList == 0) return 0;
-    foreach (const DocInfoListSubContainerOrAtom& a, dc->docInfoList->rgChildRec) {
-        const DocProgTagsContainer* d = a.anon.get<DocProgTagsContainer>();
-        if (d) {
-            foreach (const DocProgTagsSubContainerOrAtom& da, d->rgChildRec) {
-                const DocProgBinaryTagContainer* c
-                        = da.anon.get<DocProgBinaryTagContainer>();
-                if (c) {
-                    const T* t = c->rec.anon.get<T>();
-                    if (t) return t;
-                }
-            }
-        }
-    }
-    return 0;
-}
 const char* dashses[11] = {
     "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
     "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"

@@ -99,6 +99,35 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
     inflateEnd(&zstream);
     return false; // the stream was incomplete
 }
+const char*
+getMimetype(quint16 type) {
+    switch (type) {
+    case 0xF01A: return "application/octet-stream";
+    case 0xF01B: return "application/octet-stream";
+    case 0xF01C: return "image/pict";
+    case 0xF01D: return "image/jpeg";
+    case 0xF01E: return "image/png";
+    case 0xF01F: return "application/octet-stream";
+    case 0xF029: return "image/tiff";
+    case 0xF02A: return "image/jpeg";
+    }
+    return "";
+}
+const char*
+getSuffix(quint16 type) {
+    switch (type) {
+    case 0xF01A: return ".emf";
+    case 0xF01B: return ".wmf";
+    case 0xF01C: return ".pict";
+    case 0xF01D: return ".jpg";
+    case 0xF01E: return ".png";
+    case 0xF01F: return ".dib";
+    case 0xF029: return ".tiff";
+    case 0xF02A: return ".jpg";
+    }
+    return "";
+}
+
 PictureReference
 savePicture(POLE::Stream& stream, KoStore* out)
 {
@@ -128,51 +157,19 @@ savePicture(POLE::Stream& stream, KoStore* out)
     // Image data is stored raw in the Pictures stream
     // The offset to the data differs per image type.
     quint16 offset;
-    const char* namesuffix;
     switch (type) {
-    case 0xF01A:
-        offset = (instance == 0x3D4) ? 50 : 66;
-        namesuffix = ".emf";
-        ref.mimetype = "application/octet-stream";
-        break;
-    case 0xF01B:
-        offset = (instance == 0x216) ? 50 : 66;
-        namesuffix = ".wmf";
-        ref.mimetype = "application/octet-stream";
-        break;
-    case 0xF01C:
-        offset = (instance == 0x542) ? 50 : 66;
-        namesuffix = ".pict";
-        ref.mimetype = "image/pict";
-        break;
-    case 0xF01D:
-        offset = (instance == 0x46A) ? 17 : 33;
-        namesuffix = ".jpg";
-        ref.mimetype = "image/jpeg";
-        break;
-    case 0xF01E:
-        offset = (instance == 0x6E0) ? 17 : 33;
-        namesuffix = ".png";
-        ref.mimetype = "image/png";
-        break;
-    case 0xF01F:
-        offset = (instance == 0x7A8) ? 17 : 33;
-        namesuffix = ".dib";
-        ref.mimetype = "application/octet-stream";
-        break;
-    case 0xF029:
-        offset = (instance == 0x6E4) ? 17 : 33;
-        namesuffix = ".tiff";
-        ref.mimetype = "image/tiff";
-        break;
-    case 0xF02A:
-        offset = (instance == 0x46A) ? 17 : 33;
-        namesuffix = ".jpg";
-        ref.mimetype = "image/jpeg";
-        break;
-    default:
-        return ref;
+    case 0xF01A: offset = (instance == 0x3D4) ? 50 : 66; break;
+    case 0xF01B: offset = (instance == 0x216) ? 50 : 66; break;
+    case 0xF01C: offset = (instance == 0x542) ? 50 : 66; break;
+    case 0xF01D: offset = (instance == 0x46A) ? 17 : 33; break;
+    case 0xF01E: offset = (instance == 0x6E0) ? 17 : 33; break;
+    case 0xF01F: offset = (instance == 0x7A8) ? 17 : 33; break;
+    case 0xF029: offset = (instance == 0x6E4) ? 17 : 33; break;
+    case 0xF02A: offset = (instance == 0x46A) ? 17 : 33; break;
+    default: return ref;
     }
+    const char* namesuffix = getSuffix(type);
+    ref.mimetype = getMimetype(type);
 
     // skip offset
     if (offset != 0 && stream.read(buffer, offset) != offset) return ref;
@@ -200,4 +197,59 @@ savePicture(POLE::Stream& stream, KoStore* out)
     out->close();
 
     return ref;
+}
+template<class T>
+void
+savePicture(PictureReference& ref, const T* a, KoStore* out, bool compressed)
+{
+    if (!a) return;
+    ref.uid = a->rgbUid1 + a->rgbUid2;
+    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+    if (!out->open(ref.name.toLocal8Bit())) {
+        ref.name.clear();
+        ref.uid.clear();
+        return; // empty name reports an error
+    }
+    if (compressed) {
+        // TODO
+    } else {
+        out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
+    }
+    ref.mimetype = getMimetype(a->rh.recType);
+    out->close();
+}
+template<class T>
+void
+savePicture(PictureReference& ref, const T* a, KoStore* store)
+{
+    if (!a) return;
+    bool compressed = a->metafileHeader.compression == 0;
+    savePicture(ref, a, store, compressed);
+}
+PictureReference
+savePicture(const PPT::OfficeArtBlip& a, KoStore* store)
+{
+    PictureReference ref;
+    // only one of these calls will actually save a picture
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipEMF>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipWMF>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPICT>(), store);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipJPEG>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPNG>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipDIB>(), store, false);
+    savePicture(ref, a.anon.get<PPT::OfficeArtBlipTIFF>(), store, false);
+    return ref;
+}
+PictureReference
+savePicture(const PPT::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
+{
+    const PPT::OfficeArtBlip* blip = a.anon.get<PPT::OfficeArtBlip>();
+    const PPT::OfficeArtFBSE* fbse = a.anon.get<PPT::OfficeArtFBSE>();
+    if (blip) {
+        return savePicture(*blip, store);
+    }
+    if (fbse && fbse->embeddedBlip) {
+        return savePicture(*fbse->embeddedBlip, store);
+    }
+    return PictureReference();
 }
