@@ -19,6 +19,7 @@
 
 #include "KoReportRendererBase.h"
 #include "krscreenrender.h"
+#include "orprintrender.h"
 
 KoReportRendererContext::KoReportRendererContext()
  : painter(0), printer(0)
@@ -40,7 +41,10 @@ KoReportRendererFactory::KoReportRendererFactory()
 KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key)
 {
     if (key.toLower() == QLatin1String("screen")) {
-        return new KRScreenRender();
+        return new KoReportScreenRenderer();
+    }
+    if (key.toLower() == QLatin1String("print")) {
+        return new KoReportPrintRenderer();
     }
     return 0;
 }

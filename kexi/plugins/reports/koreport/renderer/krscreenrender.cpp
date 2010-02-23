@@ -23,12 +23,12 @@
 #include <kdebug.h>
 #include <KoUnit.h>
 
-KRScreenRender::KRScreenRender()
+KoReportScreenRenderer::KoReportScreenRenderer()
 {
 
 }
 
-KRScreenRender::~KRScreenRender()
+KoReportScreenRenderer::~KoReportScreenRenderer()
 {
 }
 
@@ -37,7 +37,7 @@ KRScreenRender::~KRScreenRender()
 //    context.painter = pPainter;
 //}
 
-bool KRScreenRender::render(const KoReportRendererContext& context, ORODocument *document, int page)
+bool KoReportScreenRenderer::render(const KoReportRendererContext& context, ORODocument *document, int page)
 {
     if (!document)
         return false;

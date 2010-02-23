@@ -149,17 +149,21 @@ void KexiReportView::lastPage()
 void KexiReportView::slotPrintReport()
 {
     QPrinter printer;
-    ORPrintRender pr;
+    QPainter painter;
+    KoReportRendererBase *renderer;
+    KoReportRendererFactory factory;
 
-    // do some printer initialization
-    pr.setPrinter(&printer);
-    pr.setupPrinter(m_reportDocument, &printer);
-
+    renderer = factory.createInstance("print");
     QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, this);
     if (dialog->exec() == QDialog::Accepted) {
-        pr.render(m_reportDocument);
+        KoReportRendererContext cxt;
+        cxt.printer = &printer;
+        cxt.painter = &painter;
+    
+        renderer->render(cxt, m_reportDocument);
     }
     delete dialog;
+    delete renderer;
 }
 
 void KexiReportView::slotRenderKSpread()

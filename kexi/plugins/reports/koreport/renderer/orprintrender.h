@@ -19,34 +19,20 @@
 #ifndef __ORPRINTRENDER_H__
 #define __ORPRINTRENDER_H__
 
-#include <QPrinter>
-#include <QPainter>
+#include "KoReportRendererBase.h"
 #include "koreport_export.h"
 
 class ORODocument;
 
-class KOREPORT_EXPORT ORPrintRender
+class KoReportPrintRenderer : public KoReportRendererBase
 {
-public:
-    ORPrintRender();
-    virtual ~ORPrintRender();
+    public:
+        KoReportPrintRenderer();
+        virtual ~KoReportPrintRenderer();
+        virtual bool render(const KoReportRendererContext&, ORODocument*, int page = -1);
 
-    void setPrinter(QPrinter *);
-    QPrinter * printer() {
-        return m_printer;
-    }
-
-    void setPainter(QPainter *);
-    QPainter * painter() {
-        return m_painter;
-    }
-
-    bool setupPrinter(ORODocument *, QPrinter *);
-    bool render(ORODocument *);
-
-protected:
-    QPrinter* m_printer;
-    QPainter* m_painter;
+    private:
+        bool setupPrinter(ORODocument *, QPrinter *);
 };
 
 #endif // __ORPRINTRENDER_H__

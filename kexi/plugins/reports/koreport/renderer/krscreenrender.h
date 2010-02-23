@@ -25,11 +25,11 @@
 
 class ORODocument;
 
-class KRScreenRender : public KoReportRendererBase
+class KoReportScreenRenderer : public KoReportRendererBase
 {
 public:
-    KRScreenRender();
-    virtual ~KRScreenRender();
+    KoReportScreenRenderer();
+    virtual ~KoReportScreenRenderer();
 
     //void setPainter(QPainter *);
     //QPainter * painter() {
