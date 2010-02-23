@@ -121,11 +121,24 @@ getPP(const PPT::OfficeArtClientData& o)
     foreach (const ShapeClientRoundtripDataSubcontainerOrAtom& s, o.rgShapeClientRoundtripData) {
         const ShapeProgsTagContainer* p = s.anon.get<ShapeProgsTagContainer>();
         if (p) {
-            const ShapeProgBinaryTagsContainer* a = p->rgChildRec.anon.get<ShapeProgBinaryTagsContainer>();
-            if (a) {
-                const ShapeProgBinaryTagsContainer* sp = a->rgChildRec.anon.get<ShapeProgBinaryTagsContainer>();
-                if (sp) {
-                    const T* pp = sp->rgChildRec.anon.get<T>();
+            foreach (const ShapeProgTagsSubContainerOrAtom& s, p->rgChildRec) {
+                const ShapeProgBinaryTagContainer* a = s.anon.get<ShapeProgBinaryTagContainer>();
+                if (a) {
+                    const T* pp = a->rec.anon.get<T>();
+                    if (pp) {
+                        return pp;
+                    }
+                }
+            }
+        }
+    }
+    foreach (const ShapeClientRoundtripDataSubcontainerOrAtom& s, o.rgShapeClientRoundtripData0) {
+        const ShapeProgsTagContainer* p = s.anon.get<ShapeProgsTagContainer>();
+        if (p) {
+            foreach (const ShapeProgTagsSubContainerOrAtom& s, p->rgChildRec) {
+                const ShapeProgBinaryTagContainer* a = s.anon.get<ShapeProgBinaryTagContainer>();
+                if (a) {
+                    const T* pp = a->rec.anon.get<T>();
                     if (pp) {
                         return pp;
                     }
@@ -695,6 +708,10 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:line-height
     // fo:margin
     // fo:margin-bottom
+    if (pf && pf->masks.spaceAfter) {
+        style.addProperty("fo:margin-bottom",
+                paraSpacingToCm(pf->spaceAfter), para);
+    }
     // fo:margin-left
     if (pf && pf->masks.leftMargin) {
         style.addProperty("fo:margin-left", pptMasterUnitToCm(pf->leftMargin),
@@ -702,6 +719,10 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     }
     // fo:margin-right
     // fo:margin-top
+    if (pf && pf->masks.spaceBefore) {
+        style.addProperty("fo:margin-top",
+                paraSpacingToCm(pf->spaceBefore), para);
+    }
     // fo:orphans
     // fo:padding
     // fo:padding-bottom
@@ -911,10 +932,8 @@ getBulletChar(const TextPFException& pf) {
 QString
 bulletSizeToSizeString(const PPT::TextPFException* pf)
 {
-    //qDebug() << "pf :... " << pf->masks.bulletSize;
     if (pf && pf->masks.bulletSize && pf->bulletFlags->fBulletHasSize) {
         qint16 size = pf->bulletSize;
-        qDebug() << size;
         if (size >= 25 && size <= 400) {
             return percent(size);
         } else if (size >= -4000 && size <= -1) {
@@ -943,14 +962,14 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
                          bulletPictureNames.value(i.pf9->bulletBlipRef));
-        if (bulletSize.isNull()) {
+        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
             if (i.cf && i.cf->masks.size) {
                 bulletSize = pt(i.cf->fontSize);
             } else if (p.cf && p.cf->masks.size) {
                 bulletSize = pt(p.cf->fontSize);
             }
         }
-        if (bulletSize.isNull()) {
+        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
             bulletSize = "20pt"; // fallback value
         }
     } else {
@@ -999,12 +1018,12 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     bool hasIndent = i.pf && i.pf->masks.indent;// && depth - 1 == pf.indent;
     out.startElement("style:list-level-properties");
     // fo:height
-    if (!bulletSize.isNull()) {
+    if (imageBullet && !bulletSize.isNull()) {
         out.addAttribute("fo:height", bulletSize);
     }
     // fo:text-align
     // fo:width
-    if (!bulletSize.isNull()) {
+    if (imageBullet && !bulletSize.isNull()) {
         out.addAttribute("fo:width", bulletSize);
     }
     // style:font-name
@@ -1019,7 +1038,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     // svg:y
     // text:min-label-distance
     // text:min-label-width
-    if (!bulletSize.isNull()) {
+    if (imageBullet && !bulletSize.isNull()) {
         out.addAttribute("text:min-label-width", bulletSize);
     }
     // text:space-before

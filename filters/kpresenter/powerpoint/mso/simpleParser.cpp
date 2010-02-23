@@ -4082,6 +4082,37 @@ void PPT::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "((qint32)_s.index)>=0");
     }
 }
+void PPT::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _atend;
+    parseOfficeArtRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0xF)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
+    }
+    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2");
+    }
+    if (!(_s.rh.recType == 0x1388)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
+    }
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.rgChildRec.append(ShapeProgTagsSubContainerOrAtom(&_s));
+            parseShapeProgTagsSubContainerOrAtom(in, _s.rgChildRec.last());
+        } catch(IncorrectValueException _e) {
+            _s.rgChildRec.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.rgChildRec.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
+    }
+}
 void PPT::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s) {
     _s.streamOffset = in.getPosition();
     int _c;
@@ -7607,29 +7638,53 @@ void PPT::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInt
         parseMacroNameAtom(in, *_s.macroNameAtom.data());
     }
 }
-void PPT::parseShapeProgBinaryTagsSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagsSubContainerOrAtom& _s) {
+void PPT::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    _m = in.setMark();
+    OfficeArtRecordHeader _choice(&_s);
+    parseOfficeArtRecordHeader(in, _choice);
+    in.rewind(_m);
+    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2)&&(_choice.recType == 0x1388)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new ShapeProgsTagContainer(&_s));
+        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xBDD)&&(_choice.recLen == 1)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripNewPlaceHolderId12Atom(&_s));
+        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x41F)&&(_choice.recLen == 4)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeId12Atom(&_s));
+        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom*)_s.anon.data());
+    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x420)&&(_choice.recLen == 1)) {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripHFPlaceholder12Atom(&_s));
+        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom*)_s.anon.data());
+    } else {
+        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeCheckSumForCustomLayouts12Atom(&_s));
+        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom*)_s.anon.data());
+    }
+}
+void PPT::parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
-        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP9ShapeBinaryTagExtension(&_s));
+        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP9ShapeBinaryTagExtension(&_s));
         parsePP9ShapeBinaryTagExtension(in, *(PP9ShapeBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _x) {
         _s.anon.clear();
         in.rewind(_m);
     try {
-        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP10ShapeBinaryTagExtension(&_s));
+        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP10ShapeBinaryTagExtension(&_s));
         parsePP10ShapeBinaryTagExtension(in, *(PP10ShapeBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _xx) {
         _s.anon.clear();
         in.rewind(_m);
     try {
-        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new PP11ShapeBinaryTagExtension(&_s));
+        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new PP11ShapeBinaryTagExtension(&_s));
         parsePP11ShapeBinaryTagExtension(in, *(PP11ShapeBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _xxx) {
         _s.anon.clear();
         in.rewind(_m);
-        _s.anon = ShapeProgBinaryTagsSubContainerOrAtom::choice2754406405(new UnknownBinaryTag(&_s));
+        _s.anon = ShapeProgBinaryTagSubContainerOrAtom::choice2754406405(new UnknownBinaryTag(&_s));
         parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
     }}}
 }
@@ -9734,7 +9789,7 @@ void PPT::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
         }
     }
 }
-void PPT::parseShapeProgBinaryTagsContainer(LEInputStream& in, ShapeProgBinaryTagsContainer& _s) {
+void PPT::parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -9746,7 +9801,7 @@ void PPT::parseShapeProgBinaryTagsContainer(LEInputStream& in, ShapeProgBinaryTa
     if (!(_s.rh.recType == 0x138A)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x138A");
     }
-    parseShapeProgBinaryTagsSubContainerOrAtom(in, _s.rgChildRec);
+    parseShapeProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
 void PPT::parseWordDocument(LEInputStream& in, WordDocument& _s) {
     _s.streamOffset = in.getPosition();
@@ -10448,11 +10503,11 @@ void PPT::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsS
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
     if ((_choice.recInstance == 0)&&(_choice.recType == 0x1389)) {
-        _s.anon = ShapeProgTagsSubContainerOrAtom::choice4099235087(new ProgStringTagContainer(&_s));
+        _s.anon = ShapeProgTagsSubContainerOrAtom::choice42781012(new ProgStringTagContainer(&_s));
         parseProgStringTagContainer(in, *(ProgStringTagContainer*)_s.anon.data());
     } else {
-        _s.anon = ShapeProgTagsSubContainerOrAtom::choice4099235087(new ShapeProgBinaryTagsContainer(&_s));
-        parseShapeProgBinaryTagsContainer(in, *(ShapeProgBinaryTagsContainer*)_s.anon.data());
+        _s.anon = ShapeProgTagsSubContainerOrAtom::choice42781012(new ShapeProgBinaryTagContainer(&_s));
+        parseShapeProgBinaryTagContainer(in, *(ShapeProgBinaryTagContainer*)_s.anon.data());
     }
 }
 void PPT::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
@@ -11027,20 +11082,6 @@ void PPT::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrC
         parseOfficeArtSpgrContainer(in, *(OfficeArtSpgrContainer*)_s.anon.data());
     }
 }
-void PPT::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtRecordHeader(in, _s.rh);
-    if (!(_s.rh.recVer == 0xF)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
-    }
-    if (!(_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0 || _s.rh.recInstance == 1 || _s.rh.recInstance == 2");
-    }
-    if (!(_s.rh.recType == 0x1388)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
-    }
-    parseShapeProgTagsSubContainerOrAtom(in, _s.rgChildRec);
-}
 void PPT::parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
@@ -11084,30 +11125,6 @@ void PPT::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x040C");
     }
     parseOfficeArtDgContainer(in, _s.OfficeArtDg);
-}
-void PPT::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
-    _s.streamOffset = in.getPosition();
-    LEInputStream::Mark _m;
-    _m = in.setMark();
-    OfficeArtRecordHeader _choice(&_s);
-    parseOfficeArtRecordHeader(in, _choice);
-    in.rewind(_m);
-    if ((_choice.recVer == 0xF)&&(_choice.recInstance == 0 || _choice.recInstance == 1 || _choice.recInstance == 2)&&(_choice.recType == 0x1388)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new ShapeProgsTagContainer(&_s));
-        parseShapeProgsTagContainer(in, *(ShapeProgsTagContainer*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0xBDD)&&(_choice.recLen == 1)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripNewPlaceHolderId12Atom(&_s));
-        parseRoundTripNewPlaceHolderId12Atom(in, *(RoundTripNewPlaceHolderId12Atom*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x41F)&&(_choice.recLen == 4)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeId12Atom(&_s));
-        parseRoundTripShapeId12Atom(in, *(RoundTripShapeId12Atom*)_s.anon.data());
-    } else if ((_choice.recVer == 0)&&(_choice.recInstance == 0)&&(_choice.recType == 0x420)&&(_choice.recLen == 1)) {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripHFPlaceholder12Atom(&_s));
-        parseRoundTripHFPlaceholder12Atom(in, *(RoundTripHFPlaceholder12Atom*)_s.anon.data());
-    } else {
-        _s.anon = ShapeClientRoundtripDataSubcontainerOrAtom::choice3146562028(new RoundTripShapeCheckSumForCustomLayouts12Atom(&_s));
-        parseRoundTripShapeCheckSumForCustomLayouts12Atom(in, *(RoundTripShapeCheckSumForCustomLayouts12Atom*)_s.anon.data());
-    }
 }
 void PPT::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     _s.streamOffset = in.getPosition();

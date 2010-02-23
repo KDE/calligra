@@ -400,6 +400,8 @@ class RecolorInfoAtom;
 void parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s);
 class OutlineTextRefAtom;
 void parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s);
+class ShapeProgsTagContainer;
+void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
 class PP9ShapeBinaryTagExtension;
 void parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s);
 class PP10ShapeBinaryTagExtension;
@@ -676,8 +678,10 @@ class MouseClickInteractiveInfoContainer;
 void parseMouseClickInteractiveInfoContainer(LEInputStream& in, MouseClickInteractiveInfoContainer& _s);
 class MouseOverInteractiveInfoContainer;
 void parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInteractiveInfoContainer& _s);
-class ShapeProgBinaryTagsSubContainerOrAtom;
-void parseShapeProgBinaryTagsSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagsSubContainerOrAtom& _s);
+class ShapeClientRoundtripDataSubcontainerOrAtom;
+void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
+class ShapeProgBinaryTagSubContainerOrAtom;
+void parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s);
 class TextRulerAtom;
 void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
 class OfficeArtFOPTE;
@@ -754,8 +758,8 @@ class OfficeArtFOPTEChoice;
 void parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s);
 class OfficeArtClientData;
 void parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s);
-class ShapeProgBinaryTagsContainer;
-void parseShapeProgBinaryTagsContainer(LEInputStream& in, ShapeProgBinaryTagsContainer& _s);
+class ShapeProgBinaryTagContainer;
+void parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s);
 class WordDocument;
 void parseWordDocument(LEInputStream& in, WordDocument& _s);
 class Table;
@@ -800,16 +804,12 @@ class OfficeArtDgContainer;
 void parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s);
 class OfficeArtSpgrContainerFileBlock;
 void parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s);
-class ShapeProgsTagContainer;
-void parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s);
 class DocProgTagsSubContainerOrAtom;
 void parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s);
 class SlideProgTagsSubContainerOrAtom;
 void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
 class DrawingContainer;
 void parseDrawingContainer(LEInputStream& in, DrawingContainer& _s);
-class ShapeClientRoundtripDataSubcontainerOrAtom;
-void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
 class MainMasterContainer;
 void parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s);
 class SlideContainer;
@@ -2318,6 +2318,12 @@ public:
     OfficeArtRecordHeader rh;
     qint32 index;
     OutlineTextRefAtom(void* /*dummy*/ = 0) {}
+};
+class ShapeProgsTagContainer : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QList<ShapeProgTagsSubContainerOrAtom> rgChildRec;
+    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
 };
 class PP9ShapeBinaryTagExtension : public StreamOffset {
 public:
@@ -3853,7 +3859,24 @@ public:
     QSharedPointer<MacroNameAtom> macroNameAtom;
     MouseOverInteractiveInfoContainer(void* /*dummy*/ = 0) {}
 };
-class ShapeProgBinaryTagsSubContainerOrAtom : public StreamOffset {
+class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
+public:
+    class choice3146562028 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3146562028() {}
+        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3146562028 anon;
+    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
+};
+class ShapeProgBinaryTagSubContainerOrAtom : public StreamOffset {
 public:
     class choice2754406405 : public QSharedPointer<StreamOffset> {
     public:
@@ -3867,7 +3890,7 @@ public:
         template <typename T> bool is() const { return get<T>(); }
     };
     choice2754406405 anon;
-    ShapeProgBinaryTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+    ShapeProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class TextRulerAtom : public StreamOffset {
 public:
@@ -4318,11 +4341,11 @@ public:
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
     OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
-class ShapeProgBinaryTagsContainer : public StreamOffset {
+class ShapeProgBinaryTagContainer : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    ShapeProgBinaryTagsSubContainerOrAtom rgChildRec;
-    ShapeProgBinaryTagsContainer(void* /*dummy*/ = 0) {}
+    ShapeProgBinaryTagSubContainerOrAtom rec;
+    ShapeProgBinaryTagContainer(void* /*dummy*/ = 0) {}
 };
 class WordDocument : public StreamOffset {
 public:
@@ -4519,16 +4542,16 @@ public:
 };
 class ShapeProgTagsSubContainerOrAtom : public StreamOffset {
 public:
-    class choice4099235087 : public QSharedPointer<StreamOffset> {
+    class choice42781012 : public QSharedPointer<StreamOffset> {
     public:
-        choice4099235087() {}
-        explicit choice4099235087(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4099235087(ShapeProgBinaryTagsContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice42781012() {}
+        explicit choice42781012(ProgStringTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice42781012(ShapeProgBinaryTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice4099235087 anon;
+    choice42781012 anon;
     ShapeProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DocumentContainer : public StreamOffset {
@@ -4617,12 +4640,6 @@ public:
     choice3415770141 anon;
     OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
 };
-class ShapeProgsTagContainer : public StreamOffset {
-public:
-    OfficeArtRecordHeader rh;
-    ShapeProgTagsSubContainerOrAtom rgChildRec;
-    ShapeProgsTagContainer(void* /*dummy*/ = 0) {}
-};
 class DocProgTagsSubContainerOrAtom : public StreamOffset {
 public:
     class choice61655436 : public QSharedPointer<StreamOffset> {
@@ -4656,23 +4673,6 @@ public:
     RecordHeader rh;
     OfficeArtDgContainer OfficeArtDg;
     DrawingContainer(void* /*dummy*/ = 0) {}
-};
-class ShapeClientRoundtripDataSubcontainerOrAtom : public StreamOffset {
-public:
-    class choice3146562028 : public QSharedPointer<StreamOffset> {
-    public:
-        choice3146562028() {}
-        explicit choice3146562028(ShapeProgsTagContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripNewPlaceHolderId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeId12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripHFPlaceholder12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3146562028(RoundTripShapeCheckSumForCustomLayouts12Atom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice3146562028 anon;
-    ShapeClientRoundtripDataSubcontainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class MainMasterContainer : public StreamOffset {
 public:
