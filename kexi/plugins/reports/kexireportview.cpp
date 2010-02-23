@@ -26,7 +26,6 @@
 #include <core/KexiMainWindowIface.h>
 #include "kexireportpage.h"
 #include <orprerender.h>
-#include <orprintrender.h>
 #include <renderobjects.h>
 #include <QPainter>
 #include <QPrintDialog>

@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "orprintrender.h"
+#include "KoReportPrintRenderer.h"
 #include "renderobjects.h"
 #include <KoPageFormat.h>
 #include <kdebug.h>

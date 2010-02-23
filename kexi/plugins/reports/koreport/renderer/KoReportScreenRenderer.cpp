@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "krscreenrender.h"
+#include "KoReportScreenRenderer.h"
 #include "renderobjects.h"
 #include <KoPageFormat.h>
 #include <kdebug.h>

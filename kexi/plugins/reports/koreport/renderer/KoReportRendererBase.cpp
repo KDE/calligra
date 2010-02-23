@@ -18,8 +18,8 @@
 */
 
 #include "KoReportRendererBase.h"
-#include "krscreenrender.h"
-#include "orprintrender.h"
+#include "KoReportScreenRenderer.h"
+#include "KoReportPrintRenderer.h"
 
 KoReportRendererContext::KoReportRendererContext()
  : painter(0), printer(0)

@@ -37,9 +37,9 @@ set(koreport_LIB_SRCS
 	renderer/codeean.cpp
 	renderer/ext3of9.cpp
 	renderer/renderobjects.cpp
-	renderer/orprintrender.cpp
+	renderer/KoReportPrintRenderer.cpp
 	renderer/orprerender.cpp
-	renderer/krscreenrender.cpp
+	renderer/KoReportScreenRenderer.cpp
 	renderer/krhtmlrender.cpp
     renderer/KoReportRendererBase.cpp
 
