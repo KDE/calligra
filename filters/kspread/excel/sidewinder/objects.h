@@ -150,6 +150,13 @@ private:
     UString m_note;
 };
 
+class ChartObject : public Object
+{
+public:
+    ChartObject(unsigned long id) : Object(Chart, id) {}
+    virtual ~ChartObject() {}
+};
+
 } // namespace Swinder
 
 #endif // SWINDER_OBJECTS_H

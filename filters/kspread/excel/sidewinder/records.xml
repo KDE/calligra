@@ -325,7 +325,6 @@
   <computedField name="value" ctype="Value" value="Value(ustring())" />
 </record>
 
-
 <record name="Note" id="0x1C">
   <field name="row"     type="unsigned" size="16" />
   <field name="column"  type="unsigned" size="16" />
@@ -389,6 +388,9 @@
   <field name="numCopies"               type="unsigned" size="16" />
 </record>
 
+<record name="CrtLine" id="0x101c"/>
+<record name="Units" id="0x1001"/>
+
 <!-- TODO all records following are missing the handle in there streams -->
 <record name="PrintSize" id="0x0033">
   <field name="printSize" type="unsigned" size="16">
@@ -397,10 +399,6 @@
     <enum name="FillPageProportionally" value="2" />
     <enum name="SizeFromChartRecord"    value="3" />
   </field>
-</record>
-
-<record name="Units" id="0x1001">
-  <field name="reserved" size="16" />
 </record>
 
 <record name="Chart" id="0x1002">
@@ -439,7 +437,16 @@
 <record name="AreaFormat" id="0x100a">
 </record>
 
+<record name="Pie" id="0x1019">
+  <field name="anStart" type="unsigned" size="16" />
+  <field name="pcDonut" type="unsigned" size="16" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="fShowLdrLines" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="14" />
+</record>
+
 <record name="PieFormat" id="0x100b">
+  <field name="pcExplode" type="signed" size="16" />
 </record>
 
 <record name="AttachedLabel" id="0x100c">
@@ -460,21 +467,10 @@
 <record name="Line" id="0x1018">
 </record>
 
-<record name="Pie" id="0x1019">
-  <field name="anStart" type="unsigned" size="16" />
-  <field name="pcDonut" type="unsigned" size="16" />
-  <field name="fHasShadow" type="bool" size="1" />
-  <field name="fShowLdrLines" type="bool" size="1" />
-  <field name="reserved" type="unsigned" size="14" />
-</record>
-
 <record name="Area" id="0x101a">
 </record>
 
 <record name="Scatter" id="0x101b">
-</record>
-
-<record name="CrtLine" id="0x101c">
 </record>
 
 <record name="Axis" id="0x101d">
@@ -492,8 +488,7 @@
 <record name="AxisLine" id="0x1021">
 </record>
 
-<record name="CrtLink" id="0x1022">
-</record>
+<record name="CrtLink" id="0x1022"/>
 
 <record name="DefaultText" id="0x1024">
   <field name="identifier" type="unsigned" size="16" />

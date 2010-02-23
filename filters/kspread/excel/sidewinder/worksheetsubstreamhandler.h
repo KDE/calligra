@@ -76,6 +76,7 @@ class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 public:
     WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals);
     virtual ~WorksheetSubStreamHandler();
+    Sheet* sheet() const;
 
     virtual void handleRecord(Record* record);
     

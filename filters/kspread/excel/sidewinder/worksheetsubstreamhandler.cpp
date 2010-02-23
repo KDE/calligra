@@ -214,6 +214,11 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
     delete d;
 }
 
+Sheet* WorksheetSubStreamHandler::sheet() const
+{
+    return d->sheet;
+}
+
 const std::vector<UString>& WorksheetSubStreamHandler::externSheets() const
 {
     return d->globals->externSheets();

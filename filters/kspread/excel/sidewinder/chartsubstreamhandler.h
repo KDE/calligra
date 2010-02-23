@@ -37,20 +37,59 @@ namespace Swinder
 
 class GlobalsSubStreamHandler;
 
-class Chart
+struct DataPoint
 {
-public:
+    DataPoint() {}
+    virtual ~DataPoint() {}
+};
+
+struct PieFormat : public DataPoint
+{
+    int pcExplode; // from PieFormat
+    PieFormat(int pcExplode) : DataPoint(), pcExplode(pcExplode) {}
+};
+
+struct ChartImpl
+{
+    ChartImpl() {}
+    virtual ~ChartImpl() {}
+};
+
+struct PieImpl : public ChartImpl
+{
+    int anStart, pcDonut;
+    PieImpl(int anStart, int pcDonut) : ChartImpl(), anStart(anStart), pcDonut(pcDonut) {}
+};
+
+struct Chart
+{
     int x, y, width, height;
     //int marginLeft, marginTop, marginRight, MarginBottom;
     uint dataTypeX, dataTypeY, countXValues, countYValues, bubbleSizeDataType, countBubbleSizeValues;
-    explicit Chart() : x(-1), y(-1), width(-1), height(-1) {}
+    QList<DataPoint*> dataset;
+    ChartImpl *impl;
+    explicit Chart() : x(-1), y(-1), width(-1), height(-1), impl(0) {}
 };
 
+// The chart substream can be either embedded into a worksheet or define an own sheet.
 class ChartSubStreamHandler : public SubStreamHandler
 {
 public:
-    explicit ChartSubStreamHandler(const GlobalsSubStreamHandler* globals) : SubStreamHandler(), m_chart(new Chart()) {}
-    virtual ~ChartSubStreamHandler() {}
+    ChartSubStreamHandler(const GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler) : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(new Chart()), m_sheet(0) {
+        if(WorksheetSubStreamHandler* worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(parentHandler)) {
+            m_sheet = worksheetHandler->sheet();
+        } else {
+            std::cerr << "ChartSubStreamHandler: Chart is not embedded into a worksheet. This is not handled yet." << std::endl;
+            //TODO
+        }
+    }
+    virtual ~ChartSubStreamHandler() {
+        if(m_sheet) {
+            //m_sheet->cell
+            //m_sheet->addChart(m_chart);
+        }
+    }
+    //Chart *chart() const { return m_chart; }
 
     virtual void handleRecord(Record* record) {
         if (!record) return;
@@ -128,20 +167,28 @@ public:
             handlePie(static_cast<PieRecord*>(record));
         else if (type == SIIndexRecord::id)
             handleSIIndex(static_cast<SIIndexRecord*>(record));
+        else if (type == MsoDrawingRecord::id)
+            handleMsoDrawing(static_cast<MsoDrawingRecord*>(record));
         else if (type == CrtLinkRecord::id)
             {} // written but unused record
+        else if (type == UnitsRecord::id)
+            {} // written but must be ignored
         else {
             std::cout << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
         }
     }
 
 private:
-    Chart *m_chart;
+    const GlobalsSubStreamHandler* m_globals;
+    SubStreamHandler* m_parentHandler;
+    Chart* m_chart;
+    Sheet* m_sheet;
+    
     void handleBOF(BOFRecord*) {
-        std::cout << "ChartSubStreamHandler BOFRecord" << std::endl;
+        //std::cout << "ChartSubStreamHandler BOFRecord" << std::endl;
     }
     void handleEOF(EOFRecord *) {
-        std::cout << "ChartSubStreamHandler EOFRecord" << std::endl;
+        //std::cout << "ChartSubStreamHandler EOFRecord" << std::endl;
     }
     void handleFooter(FooterRecord *) {
     }
@@ -155,19 +202,23 @@ private:
     }
     void handleZoomLevel(ZoomLevelRecord *) {
     }
-    void handleDimension(DimensionRecord *) {
+    void handleDimension(DimensionRecord *record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleDimension firstRow=" << record->firstRow() << " lastRowPlus1=" << record->lastRowPlus1() << " firstColumn=" << record->firstColumn() << " lastColumnPlus1=" << record->lastColumnPlus1() << " lastRow=" << record->lastRow() << " lastColumn=" << record->lastColumn() << std::endl;
     }
     void handleChart(ChartRecord *record) {
         if(!record) return;
-        std::cout << "ChartSubStreamHandler ChartRecord" << std::endl;
+        std::cout << "ChartSubStreamHandler::handleChart x=" << record->x() << " y=" << record->y() << " width=" << record->width() << " height=" << record->height() <<  std::endl;
         m_chart->x = record->x();
         m_chart->y = record->y();
         m_chart->width = record->width();
         m_chart->height = record->height();
     }
     void handleBegin(BeginRecord *) { // secifies the begin of a collection of records
+        //std::cout << "ChartSubStreamHandler::handleBegin" << std::endl;
     }
     void handleEnd(EndRecord *) { // sepcified the end of a collection of records
+        //std::cout << "ChartSubStreamHandler::handleEnd" << std::endl;
     }
     void handleFrame(FrameRecord *record) {
         if(!record) return;
@@ -183,7 +234,6 @@ private:
     void handleSeries(SeriesRecord *record) { // series, trendline or errorchars
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handleSeries dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
-            
         m_chart->dataTypeX = record->dataTypeX();
         m_chart->dataTypeY = record->dataTypeY();
         m_chart->countXValues = record->countXValues();
@@ -215,8 +265,10 @@ private:
     void handleAreaFormat(AreaFormatRecord *) {
         //TODO
     }
-    void handlePieFormat(PieFormatRecord *) {
-        //TODO
+    void handlePieFormat(PieFormatRecord *record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handlePieFormat pcExplode="<<record->pcExplode()<<std::endl;
+        m_chart->dataset << new PieFormat(record->pcExplode());
     }
     void handleMarkerFormat(MarkerFormatRecord *) {
         //TODO
@@ -267,11 +319,16 @@ private:
     void handlePie(PieRecord *record) { // specifies that the chartgroup is a pie chart
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handlePie anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
-        //TODO
+        m_chart->impl = new PieImpl(record->anStart(), record->pcDonut());
     }
     void handleSIIndex(SIIndexRecord *record) { // type of data contained in the Number records following
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handleSIIndex numIndex=" << record->numIndex() << std::endl;
+        //TODO
+    }
+    void handleMsoDrawing(MsoDrawingRecord* record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleMsoDrawing" << std::endl;
         //TODO
     }
 

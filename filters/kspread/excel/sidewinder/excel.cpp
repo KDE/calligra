@@ -1539,7 +1539,10 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     }
     break;
 
-    case Object::Chart: printf("ObjRecord::setData Chart\n"); break;
+    case Object::Chart:
+        std::cout << "ObjRecord::setData chart id=" << id << std::endl;
+        m_object = new ChartObject(id);
+        break;
     case Object::Rectangle: printf("ObjRecord::setData Rectangle\n"); break;
     case Object::Line: printf("ObjRecord::setData Line\n"); break;
     case Object::Oval: printf("ObjRecord::setData Oval\n"); break;
@@ -1756,6 +1759,9 @@ const char* DrawingObject::propertyName(DrawingObject::Property p)
         case DrawingObject::shadowCrMod: return "shadowCrMod"; break;
         case DrawingObject::shadowStyleBooleanProperties: return "shadowStyleBooleanProperties"; break;
         case DrawingObject::groupShapeBooleanProperties: return "groupShapeBooleanProperties"; break;
+        case 0x7f: return "pictureContrast"; break;
+        case 0x00bf: return "TextBooleanProperties"; break;
+        case 0x0380: return "wzName"; break;
     }
     return "Unknown";
 }
@@ -3149,7 +3155,8 @@ void ExcelReader::handleBOF(BOFRecord* record)
         if (sheet) d->activeSheet = sheet;
         d->handlerStack.push_back(new WorksheetSubStreamHandler(sheet, d->globals));
     } else if (record->type() == BOFRecord::Chart) {
-        d->handlerStack.push_back(new ChartSubStreamHandler(d->globals));
+        SubStreamHandler* parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
+        d->handlerStack.push_back(new ChartSubStreamHandler(d->globals, parentHandler));
     } else {
         std::cout << "ExcelReader::handleBOF Unhandled type=" << record->type() << std::endl;
     }
