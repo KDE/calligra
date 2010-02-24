@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Julia Sanchez-Simon <hithwen@gmail.com>
-   Copyright (C) 2008 Miguel Angel Aragüez-Rey
+   Copyright (C) 2008 Miguel Angel Aragüez-Rey <fizban87@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

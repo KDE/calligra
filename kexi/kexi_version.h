@@ -2,7 +2,9 @@
    Copyright (c) 2003-2009 Kexi Team <kexi@kde.org>
 
    Version information based on kofficeversion.h,
-   Copyright (c) 2003 KOffice Team
+   Copyright (c) 2003 David Faure <faure@kde.org>
+   Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
+   Copyright (c) 2004 Nicolas Goutte <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
