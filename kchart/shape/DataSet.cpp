@@ -974,10 +974,8 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
 
     if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
         QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-        if( stroke == "solid" || stroke == "dash" ) {
-            pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
-            penLoaded = true;
-        }
+        pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
+        penLoaded = true;
     }
 
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
@@ -993,7 +991,6 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
             brushLoaded = true;
         }
     }
-    
     
 #ifndef NWORKAROUND_ODF_BUGS
     if( ! penLoaded) {
