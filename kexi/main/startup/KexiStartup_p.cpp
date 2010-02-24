@@ -23,6 +23,7 @@
 #include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kde_file.h>
 
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -59,7 +60,7 @@ tristate SQLite2ToSQLite3Migration::run()
         fi = QFileInfo(m_filePath);
     }
     //remember permissions of m_filePath
-    m_restoreStat = (0 == stat(QFile::encodeName(m_filePath), &m_st));
+    m_restoreStat = (0 == KDE_stat(QFile::encodeName(m_filePath), &m_st));
 
     m_process = new KProcess(this, "process");
     *m_process << ksqlite2to3_app << m_filePath;
