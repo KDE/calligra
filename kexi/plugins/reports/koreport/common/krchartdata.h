@@ -24,7 +24,7 @@
 #include "krsize.h"
 #include "krpos.h"
 #include <KDChartWidget>
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>

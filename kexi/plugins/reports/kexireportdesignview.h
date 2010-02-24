@@ -24,7 +24,7 @@
 #include <koproperty/Set.h>
 #include <kexireportpart.h>
 #include "koreport/wrtembed/KoReportDesigner.h"
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 class QScrollArea;
 class KexiSourceSelector;

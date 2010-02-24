@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <krobjectdata.h>
 #include "koreport_export.h"
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 class ReportGridOptions;
 class QDomDocument;

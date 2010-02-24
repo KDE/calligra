@@ -25,7 +25,7 @@
 #include <kexidb/utils.h>
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 class KexiMigrateReportData : public KoReportData
 {

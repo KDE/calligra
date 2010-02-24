@@ -23,7 +23,7 @@
 #include <core/KexiWindowData.h>
 
 #include <QDomDocument>
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 /**
  * @short Application Main Window

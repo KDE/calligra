@@ -25,7 +25,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 /**
 

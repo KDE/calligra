@@ -24,7 +24,7 @@
 #include <kross/core/action.h>
 #include "krscriptconstants.h"
 #include <kdeversion.h>
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 class KRScriptFunctions;
 class KRScriptDebug;

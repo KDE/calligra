@@ -19,7 +19,7 @@
 
 #include "KoReportPreRenderer.h"
 #include "renderobjects.h"
-#include "koreportdata.h"
+#include "KoReportData.h"
 #include "barcodes.h"
 #include <kdeversion.h>
 
