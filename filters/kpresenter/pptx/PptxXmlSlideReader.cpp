@@ -96,6 +96,8 @@ public:
 #endif
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
+    //!< set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
+    QColor m_currentColor;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -590,6 +592,55 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
 
+//!Solid Fill
+//! DrawingML ECMA-376 20.1.8.54, p. 3234.
+/*!
+This element especifies a solid color fill.
+ Parents:
+    - bg (§21.4.3.1)
+    - bgFillStyleLst (§20.1.4.1.7)
+    - bgPr (§19.3.1.2)
+    - defRPr (§21.1.2.3.2)
+    - endParaRPr (§21.1.2.2.3)
+    - fill (§20.1.8.28)
+    - fill (§20.1.4.2.9)
+    - fillOverlay (§20.1.8.29)
+    - fillStyleLst (§20.1.4.1.13)
+    - grpSpPr (§21.3.2.14)
+    - grpSpPr (§20.1.2.2.22)
+    - grpSpPr (§20.5.2.18)
+    - grpSpPr (§19.3.1.23)
+    - ln (§20.1.2.2.24)
+    - lnB (§21.1.3.5)
+    - lnBlToTr (§21.1.3.6)
+    - lnL (§21.1.3.7)
+    - lnR (§21.1.3.8)
+    - lnT (§21.1.3.9)
+    - lnTlToBr (§21.1.3.10)
+    - rPr (§21.1.2.3.9)
+    - spPr (§21.2.2.197)
+    - spPr (§21.3.2.23)
+    - spPr (§21.4.3.7)
+    - spPr (§20.1.2.2.35)
+    - spPr (§20.2.2.6)
+    - spPr (§20.5.2.30)
+    - spPr (§19.3.1.44)
+    - tblPr (§21.1.3.15)
+    - tcPr (§21.1.3.17)
+    - uFill (§21.1.2.3.12)
+    - uLn (§21.1.2.3.14)
+
+ Child elements:
+    - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+    - prstClr (Preset Color) §20.1.2.3.22
+    - schemeClr (Scheme Color) §20.1.2.3.29
+    - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+    - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+    - sysClr (System Color) §20.1.2.3.33
+
+ Attributes:
+    None.
+*/
 #undef CURRENT_EL
 #define CURRENT_EL solidFill
 //! CASE #P121
@@ -601,7 +652,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_solidFill()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
+            //scheme color
             TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            //TODO hslClr hue, saturation, luminecence color
+            //TODO prstClr preset color
+            //TODO scrgbClr rgb percentage
+            //TODO srgbClr rgb hexadecimal
+            //TODO stsClr system color
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -697,6 +755,195 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_lumOff()
         return KoFilter::WrongFormat;
 
     readNext();
+    READ_EPILOGUE
+}
+
+//! Outline
+//! DrawingML ECMA-376, 20.1.2.2.24, p. 3048.
+/*! This element specifies an outline style that can be applied to a 
+    number of different objects such as shapes and text. 
+
+ Child elements:
+    - bevel (Line Join Bevel) §20.1.8.9
+    - custDash (Custom Dash) §20.1.8.21
+    - extLst (Extension List) §20.1.2.2.15
+    - gradFill (Gradient Fill) §20.1.8.33
+    - headEnd (Line Head/End Style) §20.1.8.38
+    - miter (Miter Line Join) §20.1.8.43
+    - noFill (No Fill) §20.1.8.44
+    - pattFill (Pattern Fill) §20.1.8.47
+    - prstDash (Preset Dash) §20.1.8.48
+    - round (Round Line Join) §20.1.8.52
+    - solidFill (Solid Fill) §20.1.8.54
+    - tailEnd (Tail line end style) §20.1.8.57
+
+ Attributes:
+    - algn
+    - cap
+    - cmpd
+    - w
+*/
+#undef CURRENT_EL
+#define CURRENT_EL ln
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    //align
+    TRY_READ_ATTR(algn)
+    //center
+    if (algn.isEmpty() || algn == "ctr") {
+    }
+    //inset
+    else if(algn == "in") {
+    }
+
+    //line ending cap
+    TRY_READ_ATTR(cap)
+    //flat
+    if (cap.isEmpty() || cap == "sq") {
+    }
+    //round
+    else if (cap == "rnd") {
+    }
+    //square
+    else if (cap == "flat") {
+    }
+
+    //compound line type
+    TRY_READ_ATTR(cmpd)
+    //double lines
+    if( cmpd.isEmpty() || cmpd == "sng" ) {
+    }
+    //single line
+    else if (cmpd == "dbl") {
+    }
+    //thick thin double lines
+    else if (cmpd == "thickThin") {
+    }
+    //thin thick double lines
+    else if (cmpd == "thinThick") {
+    }
+    //thin thick thin triple lines
+    else if (cmpd == "tri") {
+    }
+
+    TRY_READ_ATTR(w) //width
+    if(w.isEmpty()) {
+        w = "0";
+    }
+    int wInt = w.toInt();
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        if( isStartElement() ) {
+            //Line join bevel
+            if(qualifiedName() == QLatin1String("a:bevel")) {
+//                 TRY_READ()
+            }
+            //custom dash
+            else if(qualifiedName() == QLatin1String("a:custDash")) {
+            }
+            //extension list
+            else if(qualifiedName() == QLatin1String("a:extLst")) {
+            }
+            //gradient fill
+            else if(qualifiedName() == QLatin1String("a:gradFill")) {
+            }
+            //line head/end style
+            else if(qualifiedName() == QLatin1String("a:headEnd")) {
+            }
+            //miter line join
+            else if(qualifiedName() == QLatin1String("a:miter")) {
+            }
+            //no fill
+            else if(qualifiedName() == QLatin1String("a:noFill")) {
+            }
+            //pattern fill
+            else if(qualifiedName() == QLatin1String("a:pattFill")) {
+            }
+            //preset dash
+            else if(qualifiedName() == QLatin1String("a:prstDash")) {
+            }
+            //round line join
+            else if(qualifiedName() == QLatin1String("a:round")) {
+            }
+            //solid fill
+            else if(qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+            }
+            //tail line end style
+            else if(qualifiedName() == QLatin1String("a:tailEnd")) {
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+//! RGB Color Model - Percentage Variant
+//! DrawingML ECMA-376 20.1.2.3.30, p. 3074.
+/*!
+This element especifies a solid color fill.
+
+ Child elements:
+    - alpha (Alpha) §20.1.2.3.1
+    - alphaMod (Alpha Modulation) §20.1.2.3.2
+    - alphaOff (Alpha Offset) §20.1.2.3.3
+    - blue (Blue) §20.1.2.3.4
+    - blueMod (Blue Modification) §20.1.2.3.5
+    - blueOff (Blue Offset) §20.1.2.3.6
+    - comp (Complement) §20.1.2.3.7
+    - gamma (Gamma) §20.1.2.3.8
+    - gray (Gray) §20.1.2.3.9
+    - green (Green) §20.1.2.3.10
+    - greenMod (Green Modification) §20.1.2.3.11
+    - greenOff (Green Offset) §20.1.2.3.12
+    - hue (Hue) §20.1.2.3.14
+    - hueMod (Hue Modulate) §20.1.2.3.15
+    - hueOff (Hue Offset) §20.1.2.3.16
+    - inv (Inverse) §20.1.2.3.17
+    - invGamma (Inverse Gamma) §20.1.2.3.18
+    - lum (Luminance) §20.1.2.3.19
+    - lumMod (Luminance Modulation) §20.1.2.3.20
+    - lumOff (Luminance Offset) §20.1.2.3.21
+    - red (Red) §20.1.2.3.23
+    - redMod (Red Modulation) §20.1.2.3.24
+    - redOff (Red Offset) §20.1.2.3.25
+
+ Attributes:
+    - [done] b (blue)
+    - [done] g (green)
+    - [done] r (red)
+*/
+#undef CURRENT_EL
+#define CURRENT_EL scrgbClr
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(r)
+    READ_ATTR_WITHOUT_NS(g)
+    READ_ATTR_WITHOUT_NS(b)
+
+    bool okR;
+    bool okG;
+    bool okB;
+
+    d->m_currentColor = QColor::fromRgbF(qreal(MSOOXML::Utils::ST_Percentage_to_double(r, okR)),
+                                      qreal(MSOOXML::Utils::ST_Percentage_to_double(g, okG)),
+                                      qreal(MSOOXML::Utils::ST_Percentage_to_double(b, okB)));
+
+    //TODO: all the color transformations
+//     while (true) {
+//         BREAK_IF_END_OF(CURRENT_EL);
+//         readNext();
+//     }
+
     READ_EPILOGUE
 }
 

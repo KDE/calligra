@@ -97,6 +97,9 @@ protected:
     KoFilter::ConversionStatus read_txBody();
     KoFilter::ConversionStatus read_lumMod();
     KoFilter::ConversionStatus read_lumOff();
+    KoFilter::ConversionStatus read_ln();
+KoFilter::ConversionStatus read_scrgbClr();
+
 
     typedef KoFilter::ConversionStatus(PptxXmlSlideReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;

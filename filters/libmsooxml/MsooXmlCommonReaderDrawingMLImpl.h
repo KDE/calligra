@@ -559,6 +559,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(xfrm)
                 xfrm_read = true;
             }
+#ifdef PPTXXMLSLIDEREADER_H
+            if ( qualifiedName() == QLatin1String("a:ln") ) {
+                TRY_READ(ln)
+            }
+#endif
             else if (qualifiedName() == QLatin1String("a:noFill")) {
                 SKIP_EVERYTHING // safely skip
                 m_noFill = true;

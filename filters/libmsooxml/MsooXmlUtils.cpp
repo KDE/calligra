@@ -292,6 +292,7 @@ bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
     const QByteArray val(value.toLatin1());
     if (val.isEmpty())
         return defaultValue;
+kDebug() << val;
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 
