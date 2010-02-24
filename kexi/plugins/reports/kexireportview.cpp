@@ -253,7 +253,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 reportData = sourceData(tempData()->connectionDefinition);    
             }
             if (!reportData) {
-                reportData = new KexiDBReportData("", 0);
+                reportData = new KexiDBReportData("", KexiMainWindowIface::global()->project()->dbConnection());
             }
             m_preRenderer->setSourceData(reportData);
             
