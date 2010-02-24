@@ -156,7 +156,7 @@ void SvgParser::addGraphicContext()
     if (! m_gc.isEmpty())
         *gc = *(m_gc.top());
 
-    gc->filterId = QString(); // filters are not inherited
+    gc->filterId.clear(); // filters are not inherited
     gc->display = true; // display is not inherited
     gc->opacity = 1.0; // opacity is not inherited
 
@@ -445,7 +445,7 @@ bool SvgParser::parseColor(QColor &color, const QString &s)
     if (s.isEmpty() || s == "none")
         return false;
 
-    if (s.startsWith("rgb(")) {
+    if (s.startsWith(QLatin1String("rgb("))) {
         QString parse = s.trimmed();
         QStringList colors = parse.split(',');
         QString r = colors[0].right((colors[0].length() - 4));
@@ -754,7 +754,7 @@ bool SvgParser::parseFilter(const KoXmlElement &e, const KoXmlElement &reference
 
 bool SvgParser::parseImage(const QString &attribute, QImage &image)
 {
-    if (attribute.startsWith("data:")) {
+    if (attribute.startsWith(QLatin1String("data:"))) {
         int start = attribute.indexOf("base64,");
         if (start > 0 && image.loadFromData(QByteArray::fromBase64(attribute.mid(start + 7).toLatin1())))
             return true;
@@ -776,7 +776,7 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
     if (command == "fill") {
         if (params == "none") {
             gc->fillType = SvgGraphicsContext::None;
-        } else if (params.startsWith("url(")) {
+        } else if (params.startsWith(QLatin1String("url("))) {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
             QString key = params.mid(start, end - start);
@@ -817,7 +817,7 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
     } else if (command == "stroke") {
         if (params == "none") {
             gc->strokeType = SvgGraphicsContext::None;
-        } else if (params.startsWith("url(")) {
+        } else if (params.startsWith(QLatin1String("url("))) {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.indexOf(')', start);
             QString key = params.mid(start, end - start);
@@ -2006,7 +2006,7 @@ QString SvgParser::absoluteFilePath(const QString &href, const QString &xmlBase)
     QFileInfo pathInfo(QFileInfo(baseDir).filePath());
 
     QString relFile = href;
-    while (relFile.startsWith("../")) {
+    while (relFile.startsWith(QLatin1String("../"))) {
         relFile = relFile.mid(3);
         pathInfo.setFile(pathInfo.dir(), QString());
     }

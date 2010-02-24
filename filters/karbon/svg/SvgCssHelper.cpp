@@ -104,7 +104,7 @@ public:
     }
     virtual QString toString() const
     {
-        return "#"+m_id;
+        return '#'+m_id;
     }
     virtual int priority()
     {
@@ -114,7 +114,7 @@ private:
     QString m_id;
 };
 
-/// Attribute selector, matching existance or content of attributes
+/// Attribute selector, matching existence or content of attributes
 class AttributeSelector : public CssSelectorBase
 {
 public:
@@ -173,10 +173,10 @@ public:
     }
     virtual QString toString() const
     {
-        QString str("[");
+        QString str('[');
         str += m_attribute;
         if (m_type == Equals) {
-            str += "=";
+            str += '=';
         } else if (m_type == InList) {
             str += "~=";
         } else if (m_type == StartsWith) {
