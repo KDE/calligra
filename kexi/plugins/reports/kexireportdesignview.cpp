@@ -146,7 +146,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     Q_UNUSED(mode);
 
     if (tempData()->reportDefinition.isNull()) {
-        m_reportDesigner = new ReportDesigner(this);
+        m_reportDesigner = new KoReportDesigner(this);
     } else {
         if (m_reportDesigner) {
             m_scrollArea->takeWidget();
@@ -154,7 +154,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportDesigner = 0;
         }
 
-        m_reportDesigner = new ReportDesigner(this, tempData()->reportDefinition);
+        m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
     } 
 

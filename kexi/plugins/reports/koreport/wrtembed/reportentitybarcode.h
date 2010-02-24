@@ -34,8 +34,8 @@ class ReportEntityBarcode : public QObject, public KRBarcodeData, public ReportR
 {
     Q_OBJECT
 public:
-    ReportEntityBarcode(ReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
-    ReportEntityBarcode(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityBarcode(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
+    ReportEntityBarcode(QDomNode & element, KoReportDesigner *, QGraphicsScene* scene);
 
     virtual ~ReportEntityBarcode();
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);

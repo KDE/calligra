@@ -20,7 +20,7 @@
 
 #include "reportentities.h"
 #include "reportentitybarcode.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -50,7 +50,7 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 // methods (constructors)
-ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
+ReportEntityBarcode::ReportEntityBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -60,7 +60,7 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
     m_name->setValue(m_reportDesigner->suggestEntityName("barcode"));
 }
 
-ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
+ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KRBarcodeData(element), ReportRectEntity(rw)
 {
     init(scene);

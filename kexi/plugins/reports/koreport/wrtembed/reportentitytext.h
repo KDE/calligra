@@ -34,8 +34,8 @@ class ReportEntityText : public QObject, public KRTextData, public ReportRectEnt
 {
     Q_OBJECT
 public:
-    ReportEntityText(ReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
-    ReportEntityText(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityText(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
+    ReportEntityText(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
     virtual ~ReportEntityText();
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);

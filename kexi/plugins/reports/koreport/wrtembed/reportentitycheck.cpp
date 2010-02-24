@@ -18,7 +18,7 @@
 
 #include "reportentitycheck.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -46,7 +46,7 @@ void ReportEntityCheck::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityCheck::ReportEntityCheck(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(d)
 {
     init(scene);
@@ -56,7 +56,7 @@ ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene, 
 
 }
 
-ReportEntityCheck::ReportEntityCheck(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+ReportEntityCheck::ReportEntityCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRCheckData(element)
 {
     init(s);

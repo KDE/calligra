@@ -39,7 +39,7 @@ class QDomNode;
 class QDomDocument;
 class QDomElement;
 
-class ReportDesigner;
+class KoReportDesigner;
 class ReportSceneView;
 class QVBoxLayout;
 class ReportResizeBar;
@@ -56,7 +56,7 @@ class ReportSection : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ReportSection(ReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSection(KoReportDesigner * rptdes, const char * name = 0);
     virtual ~ReportSection();
 
     void setTitle(const QString & s);
@@ -80,7 +80,7 @@ protected:
     ReportScene * m_scene;
     ReportResizeBar * m_resizeBar;
     ReportSceneView * m_sceneView;
-    ReportDesigner* m_reportDesigner;
+    KoReportDesigner* m_reportDesigner;
     KoRuler* m_sectionRuler;
 
 private:

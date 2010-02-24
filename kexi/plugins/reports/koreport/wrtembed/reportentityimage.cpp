@@ -19,7 +19,7 @@
 
 #include "reportentityimage.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <QImageWriter>
 #include <QGraphicsScene>
@@ -54,7 +54,7 @@ void ReportEntityImage::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 
-ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
+ReportEntityImage::ReportEntityImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -63,7 +63,7 @@ ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene,
     m_name->setValue(m_reportDesigner->suggestEntityName("image"));
 }
 
-ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
+ReportEntityImage::ReportEntityImage(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KRImageData(element), ReportRectEntity(rw)
 {
     init(scene);

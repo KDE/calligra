@@ -21,7 +21,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -32,7 +32,7 @@
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
 
-void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
+void ReportEntityChart::init(QGraphicsScene* scene, KoReportDesigner *designer)
 {
     m_reportDesigner = designer;
     setPos(0, 0);
@@ -49,7 +49,7 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     connect(m_reportDesigner, SIGNAL(reportDataChanged()), this, SLOT(slotReportDataChanged()));
 }
 
-ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene, const QPointF &pos)
+ReportEntityChart::ReportEntityChart(KoReportDesigner * rd, QGraphicsScene* scene, const QPointF &pos)
         : ReportRectEntity(rd)
 {
     init(scene, rd);
@@ -59,7 +59,7 @@ ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene,
     m_name->setValue(m_reportDesigner->suggestEntityName("chart"));
 }
 
-ReportEntityChart::ReportEntityChart(QDomNode & element, ReportDesigner * rd, QGraphicsScene* scene) : ReportRectEntity(rd), KRChartData(element)
+ReportEntityChart::ReportEntityChart(QDomNode & element, KoReportDesigner * rd, QGraphicsScene* scene) : ReportRectEntity(rd), KRChartData(element)
 {
     init(scene, rd);
     populateData();

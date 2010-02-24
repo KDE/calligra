@@ -23,13 +23,13 @@
 #include <koproperty/Property.h>
 #include <koproperty/EditorView.h>
 #include <QGraphicsSceneMouseEvent>
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 #include <KoDpi.h>
 #include <kdebug.h>
 #include <krpos.h>
 #include <krsize.h>
 #include "reportscene.h"
-ReportRectEntity::ReportRectEntity(ReportDesigner *r)
+ReportRectEntity::ReportRectEntity(KoReportDesigner *r)
         : QGraphicsRectItem(), ReportEntity(r)
 {
     m_dpiX = KoDpi::dpiX();

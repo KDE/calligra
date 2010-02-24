@@ -21,16 +21,16 @@
 #define __REPORTSCENEVIEW_H__
 
 #include <QGraphicsView>
-class ReportDesigner;
+class KoReportDesigner;
 
 class ReportSceneView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    ReportSceneView(ReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0);
+    ReportSceneView(KoReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0);
     virtual ~ReportSceneView();
 
-    ReportDesigner * designer();
+    KoReportDesigner * designer();
     virtual QSize sizeHint() const;
 public slots:
     void resizeContents(QSize);
@@ -39,7 +39,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent * e);
 
 private:
-    ReportDesigner* m_reportDesigner;
+    KoReportDesigner* m_reportDesigner;
 };
 
 #endif

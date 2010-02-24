@@ -26,7 +26,7 @@
 #include <KoUnit.h>
 #include <krobjectdata.h>
 
-class ReportDesigner;
+class KoReportDesigner;
 class KRPos;
 class KRSize;
 
@@ -36,7 +36,7 @@ class KRSize;
 class ReportRectEntity : public QGraphicsRectItem, public ReportEntity
 {
 public:
-    ReportRectEntity(ReportDesigner*);
+    ReportRectEntity(KoReportDesigner*);
 
     virtual ~ReportRectEntity();
     void setUnit(KoUnit u);

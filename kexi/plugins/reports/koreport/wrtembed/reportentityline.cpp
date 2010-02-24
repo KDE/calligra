@@ -19,7 +19,7 @@
 
 #include "reportentityline.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <QPainter>
@@ -35,7 +35,7 @@
 //
 // class ReportEntityLine
 //
-void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
+void ReportEntityLine::init(QGraphicsScene* s, KoReportDesigner *r)
 {
     m_reportDesigner = r;
     setPos(0, 0);
@@ -59,7 +59,7 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     setZValue(Z);
 }
 
-ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityLine::ReportEntityLine(KoReportDesigner * d, QGraphicsScene * scene, const QPointF &pos)
         : ReportEntity(d)
 {
     init(scene, d);
@@ -68,7 +68,7 @@ ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene, c
     m_name->setValue(m_reportDesigner->suggestEntityName("line"));
 }
 
-ReportEntityLine::ReportEntityLine(QDomNode & entity, ReportDesigner * d, QGraphicsScene * scene)
+ReportEntityLine::ReportEntityLine(QDomNode & entity, KoReportDesigner * d, QGraphicsScene * scene)
         : KRLineData(entity), ReportEntity(d)
 {
     init(scene, d);

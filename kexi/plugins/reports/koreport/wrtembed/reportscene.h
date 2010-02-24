@@ -29,7 +29,7 @@
 #include <QGraphicsScene>
 #include <KoUnit.h>
 typedef QList<QGraphicsItem*> QGraphicsItemList;
-class ReportDesigner;
+class KoReportDesigner;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneMouseEvent;
 
@@ -37,9 +37,9 @@ class ReportScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    ReportScene(qreal w, qreal h, ReportDesigner*);
+    ReportScene(qreal w, qreal h, KoReportDesigner*);
     virtual ~ReportScene();
-    ReportDesigner* document() {
+    KoReportDesigner* document() {
         return m_rd;
     }
     QPointF gridPoint(const QPointF&);
@@ -64,7 +64,7 @@ private:
     qreal lowestZValue();
     qreal highestZValue();
 
-    ReportDesigner * m_rd;
+    KoReportDesigner * m_rd;
 
     KoUnit m_unit;
     int m_minorSteps;

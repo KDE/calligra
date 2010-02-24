@@ -18,7 +18,7 @@
 
 #include "reportentityshape.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <QPainter>
@@ -48,7 +48,7 @@ void ReportEntityShape::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityShape::ReportEntityShape(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(d)
 {
     init(scene);
@@ -58,7 +58,7 @@ ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene, 
 
 }
 
-ReportEntityShape::ReportEntityShape(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+ReportEntityShape::ReportEntityShape(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRShapeData(element)
 {
     init(s);

@@ -18,7 +18,7 @@
  */
 
 #include "sectioneditor.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 #include "reportsection.h"
 #include "reportsectiondetail.h"
 #include "detailgroupsectiondialog.h"
@@ -206,7 +206,7 @@ void SectionEditor::cbFootOdd_toggled(bool yes)
 }
 
 
-void SectionEditor::init(ReportDesigner * rw)
+void SectionEditor::init(KoReportDesigner * rw)
 {
     m_reportDesigner = 0;
     // set all the properties

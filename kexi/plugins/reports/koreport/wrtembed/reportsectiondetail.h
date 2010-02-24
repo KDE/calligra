@@ -21,7 +21,7 @@
 #define REPORTSECTIONDETAIL_H
 
 #include <qwidget.h>
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 class QDomNode;
 class ReportSectionDetailGroup;
@@ -32,7 +32,7 @@ class ReportSectionDetail : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ReportSectionDetail(ReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSectionDetail(KoReportDesigner * rptdes, const char * name = 0);
     virtual ~ReportSectionDetail();
 
     enum PageBreak {
@@ -48,7 +48,7 @@ public:
     void buildXML(QDomDocument & doc, QDomElement & section);
     void initFromXML(QDomNode & node);
 
-    ReportDesigner * reportDesigner() const;
+    KoReportDesigner * reportDesigner() const;
 
     int groupSectionCount() const;
     ReportSectionDetailGroup * groupSection(int i) const;
@@ -62,7 +62,7 @@ protected:
 
     QString m_name;
     ReportSection * m_detail;
-    ReportDesigner * m_reportDesigner;
+    KoReportDesigner * m_reportDesigner;
 
     QList<ReportSectionDetailGroup*> groupList;
 

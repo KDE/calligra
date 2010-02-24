@@ -18,7 +18,7 @@
  */
 
 #include "reportsection.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 #include "reportentities.h"
 #include "reportentitylabel.h"
 #include "reportentityfield.h"
@@ -74,7 +74,7 @@ static const char *arrow_xpm[] = {
 // ReportSection method implementations
 //
 
-ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
+ReportSection::ReportSection(KoReportDesigner * rptdes, const char * name)
         : QWidget(rptdes)
 {
     Q_UNUSED(name)

@@ -29,8 +29,8 @@ class ReportEntityChart : public QObject, public ReportRectEntity, public KRChar
 {
     Q_OBJECT
 public:
-    ReportEntityChart(ReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
-    ReportEntityChart(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityChart(KoReportDesigner *, QGraphicsScene* scene, const QPointF &pos);
+    ReportEntityChart(QDomNode & element, KoReportDesigner *, QGraphicsScene* scene);
 
     virtual ~ReportEntityChart();
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
@@ -41,7 +41,7 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
 private:
-    void init(QGraphicsScene*, ReportDesigner *r);
+    void init(QGraphicsScene*, KoReportDesigner *r);
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);

@@ -51,7 +51,7 @@
 //
 // ReportEntity
 //
-ReportEntity::ReportEntity(ReportDesigner* r)
+ReportEntity::ReportEntity(KoReportDesigner* r)
 {
     m_reportDesigner = r;
 }

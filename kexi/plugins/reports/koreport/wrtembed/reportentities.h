@@ -37,7 +37,7 @@ class ReportWindow;
 class QDomNode;
 class QDomDocument;
 class QDomElement;
-class ReportDesigner;
+class KoReportDesigner;
 class KRPos;
 class KRSize;
 
@@ -63,10 +63,10 @@ public:
     static void  setDefaultEntityFont(const QFont &);
 
     virtual ReportEntity* clone() = 0;
-    ReportDesigner* designer() const {
+    KoReportDesigner* designer() const {
         return m_reportDesigner;
     }
-    void setDesigner(ReportDesigner* rd) {
+    void setDesigner(KoReportDesigner* rd) {
         m_reportDesigner = rd;
     }
     virtual ~ReportEntity() {};
@@ -74,8 +74,8 @@ public:
     static void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p);
 
 protected:
-    ReportEntity(ReportDesigner*);
-    ReportDesigner* m_reportDesigner;
+    ReportEntity(KoReportDesigner*);
+    KoReportDesigner* m_reportDesigner;
     QString dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName);
 private:
     static bool m_readDefaultFont;

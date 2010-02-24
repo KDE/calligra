@@ -19,7 +19,7 @@
 
 #include "reportentitylabel.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -47,7 +47,7 @@ void ReportEntityLabel::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityLabel::ReportEntityLabel(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(d)
 {
     init(scene);
@@ -56,7 +56,7 @@ ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene, 
     m_name->setValue(m_reportDesigner->suggestEntityName("label"));
 }
 
-ReportEntityLabel::ReportEntityLabel(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+ReportEntityLabel::ReportEntityLabel(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRLabelData(element)
 {
     init(s);

@@ -23,7 +23,7 @@
 #include <QDomDocument>
 #include <koproperty/Set.h>
 #include <kexireportpart.h>
-#include "koreport/wrtembed/reportdesigner.h"
+#include "koreport/wrtembed/KoReportDesigner.h"
 #include "koreportdata.h"
 
 class QScrollArea;
@@ -45,7 +45,7 @@ public:
     void triggerAction(const QString &);
 
 private:
-    ReportDesigner *m_reportDesigner;
+    KoReportDesigner *m_reportDesigner;
     KoProperty::Set *m_propertySet;
     KexiReportPart::TempData* tempData() const;
     QScrollArea * m_scrollArea;

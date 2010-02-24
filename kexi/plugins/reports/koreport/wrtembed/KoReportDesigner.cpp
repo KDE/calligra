@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 #include "reportsection.h"
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -108,7 +108,7 @@ public:
 };
 
 //! @internal
-class ReportDesigner::Private
+class KoReportDesigner::Private
 {
 public:
     QGridLayout *grid;
@@ -119,14 +119,14 @@ public:
     ReportPropertiesButton *pageButton;
 };
 
-ReportDesigner::ReportDesigner(QWidget * parent)
+KoReportDesigner::KoReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
     m_kordata = 0;
     init();
 }
 
-void ReportDesigner::init()
+void KoReportDesigner::init()
 {
     m_modified = false;
     m_detail = 0;
@@ -182,12 +182,12 @@ void ReportDesigner::init()
     changeSet(m_set);
 }
 
-ReportDesigner::~ReportDesigner()
+KoReportDesigner::~KoReportDesigner()
 {
 }
 
 ///The loading Code
-ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(parent), d(new Private())
+KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(parent), d(new Private())
 {
     m_kordata = 0;
 
@@ -279,7 +279,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
 }
 
 ///The saving code
-QDomElement ReportDesigner::document() const
+QDomElement KoReportDesigner::document() const
 {
     QDomDocument doc;
 
@@ -354,7 +354,7 @@ QDomElement ReportDesigner::document() const
     return content;
 }
 
-void ReportDesigner::slotSectionEditor()
+void KoReportDesigner::slotSectionEditor()
 {
     QPointer<SectionEditor> se = new SectionEditor(this);
     se->init(this);
@@ -362,7 +362,7 @@ void ReportDesigner::slotSectionEditor()
     delete se;
 }
 
-void ReportDesigner::setReportData(KoReportData* kodata)
+void KoReportDesigner::setReportData(KoReportData* kodata)
 {
     kDebug();
     if (kodata) {
@@ -373,7 +373,7 @@ void ReportDesigner::setReportData(KoReportData* kodata)
     }
 }
 
-ReportSection * ReportDesigner::section(KRSectionData::Section s) const
+ReportSection * KoReportDesigner::section(KRSectionData::Section s) const
 {
     ReportSection *sec;
     switch (s) {
@@ -418,7 +418,7 @@ ReportSection * ReportDesigner::section(KRSectionData::Section s) const
     }
     return sec;
 }
-void ReportDesigner::removeSection(KRSectionData::Section s)
+void KoReportDesigner::removeSection(KRSectionData::Section s)
 {
     ReportSection* sec = section(s);
     if (sec) {
@@ -470,7 +470,7 @@ void ReportDesigner::removeSection(KRSectionData::Section s)
     }
 }
 
-void ReportDesigner::insertSection(KRSectionData::Section s)
+void KoReportDesigner::insertSection(KRSectionData::Section s)
 {
     ReportSection* sec = section(s);
     if (!sec) {
@@ -549,24 +549,24 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
     }
 }
 
-void ReportDesigner::setReportTitle(const QString & str)
+void KoReportDesigner::setReportTitle(const QString & str)
 {
     if (reportTitle() != str) {
         m_title->setValue(str);
         setModified(true);
     }
 }
-QString ReportDesigner::reportTitle() const
+QString KoReportDesigner::reportTitle() const
 {
     return m_title->value().toString();
 }
 
-bool ReportDesigner::isModified() const
+bool KoReportDesigner::isModified() const
 {
     return m_modified;
 }
 
-void ReportDesigner::setModified(bool mod)
+void KoReportDesigner::setModified(bool mod)
 {
     m_modified = mod;
 
@@ -575,7 +575,7 @@ void ReportDesigner::setModified(bool mod)
     }
 }
 
-QStringList ReportDesigner::fieldNames() const
+QStringList KoReportDesigner::fieldNames() const
 {
     QStringList qs;
     qs << QString();
@@ -585,7 +585,7 @@ QStringList ReportDesigner::fieldNames() const
     return qs;
 }
 
-QStringList ReportDesigner::fieldKeys() const
+QStringList KoReportDesigner::fieldKeys() const
 {
     QStringList qs;
     qs << QString();
@@ -595,7 +595,7 @@ QStringList ReportDesigner::fieldKeys() const
     return qs;
 }
 
-void ReportDesigner::createProperties()
+void KoReportDesigner::createProperties()
 {
     QStringList keys, strings;
     m_set = new KoProperty::Set(0, "Report");
@@ -669,7 +669,7 @@ void ReportDesigner::createProperties()
 /**
 @brief Handle property changes
 */
-void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void KoReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     setModified(true);
     emit pagePropertyChanged(s);
@@ -685,7 +685,7 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
     }
 }
 
-void ReportDesigner::slotPageButton_Pressed()
+void KoReportDesigner::slotPageButton_Pressed()
 {
     if (m_kordata) {
         QStringList sl = m_kordata->scriptList(m_interpreter->value().toString());
@@ -695,14 +695,14 @@ void ReportDesigner::slotPageButton_Pressed()
     }
 }
 
-QStringList ReportDesigner::pageFormats() const
+QStringList KoReportDesigner::pageFormats() const
 {
     QStringList lst;
     lst << "A4" << "Letter" << "Legal" << "A3" << "A5";
     return lst;
 }
 
-QSize ReportDesigner::sizeHint() const
+QSize KoReportDesigner::sizeHint() const
 {
     int w = 0;
     int h = 0;
@@ -743,7 +743,7 @@ QSize ReportDesigner::sizeHint() const
     return QSize(w, h);
 }
 
-int ReportDesigner::pageWidthPx() const
+int KoReportDesigner::pageWidthPx() const
 {
     int cw = 0;
     int ch = 0;
@@ -763,14 +763,14 @@ int ReportDesigner::pageWidthPx() const
     return width;
 }
 
-void ReportDesigner::resizeEvent(QResizeEvent * event)
+void KoReportDesigner::resizeEvent(QResizeEvent * event)
 {
     Q_UNUSED(event);
     //hruler->setRulerLength ( vboxlayout->geometry().width() );
     d->hruler->setRulerLength(pageWidthPx());
 }
 
-void ReportDesigner::setDetail(ReportSectionDetail *rsd)
+void KoReportDesigner::setDetail(ReportSectionDetail *rsd)
 {
     if (!m_detail) {
         int idx = 0;
@@ -784,7 +784,7 @@ void ReportDesigner::setDetail(ReportSectionDetail *rsd)
         d->vboxlayout->insertWidget(idx, m_detail);
     }
 }
-void ReportDesigner::deleteDetail()
+void KoReportDesigner::deleteDetail()
 {
     if (m_detail) {
         delete m_detail;
@@ -792,7 +792,7 @@ void ReportDesigner::deleteDetail()
     }
 }
 
-KoUnit ReportDesigner::pageUnit() const
+KoUnit KoReportDesigner::pageUnit() const
 {
     QString u;
     bool found;
@@ -807,7 +807,7 @@ KoUnit ReportDesigner::pageUnit() const
     return unit;
 }
 
-void ReportDesigner::setGridOptions(bool vis, int div)
+void KoReportDesigner::setGridOptions(bool vis, int div)
 {
     m_showGrid->setValue(QVariant(vis));
     m_gridDivisions->setValue(div);
@@ -816,7 +816,7 @@ void ReportDesigner::setGridOptions(bool vis, int div)
 //
 // methods for the sectionMouse*Event()
 //
-void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneContextMenuEvent * e)
+void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneContextMenuEvent * e)
 {
     QMenu pop;
     QAction *popCut = 0;
@@ -850,7 +850,7 @@ void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCont
     }
 }
 
-void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent * e)
+void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent * e)
 {
     e->accept();
     QGraphicsItem * item = 0;
@@ -907,7 +907,7 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
     }
 }
 
-unsigned int ReportDesigner::selectionCount() const
+unsigned int KoReportDesigner::selectionCount() const
 {
     if (activeScene())
         return activeScene()->selectedItems().count();
@@ -915,7 +915,7 @@ unsigned int ReportDesigner::selectionCount() const
         return 0;
 }
 
-void ReportDesigner::changeSet(KoProperty::Set *s)
+void KoReportDesigner::changeSet(KoProperty::Set *s)
 {
     //Set the checked state of the report proerties button
     if (s == m_set)
@@ -931,13 +931,13 @@ void ReportDesigner::changeSet(KoProperty::Set *s)
 // Actions
 //
 
-void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
+void KoReportDesigner::slotItem(KRObjectData::EntityTypes typ)
 {
     m_sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
     m_sectionData->insertItem = typ;
 }
 
-void ReportDesigner::slotItem(const QString &entity)
+void KoReportDesigner::slotItem(const QString &entity)
 {
     if (entity == "action-insert-label") slotItem(KRObjectData::EntityLabel);
     if (entity == "action-insert-field") slotItem(KRObjectData::EntityField);
@@ -951,7 +951,7 @@ void ReportDesigner::slotItem(const QString &entity)
 
 }
 
-void ReportDesigner::slotEditDelete()
+void KoReportDesigner::slotEditDelete()
 {
     QGraphicsItem * item = 0;
     while (selectionCount() > 0) {
@@ -976,7 +976,7 @@ void ReportDesigner::slotEditDelete()
     m_sectionData->copy_list.clear();
 }
 
-void ReportDesigner::slotEditCut()
+void KoReportDesigner::slotEditCut()
 {
     if (selectionCount() > 0) {
         //First delete any items that are curerntly in the list
@@ -1005,7 +1005,7 @@ void ReportDesigner::slotEditCut()
     }
 }
 
-void ReportDesigner::slotEditCopy()
+void KoReportDesigner::slotEditCopy()
 {
     if (selectionCount() < 1)
         return;
@@ -1022,13 +1022,13 @@ void ReportDesigner::slotEditCopy()
     }
 }
 
-void ReportDesigner::slotEditPaste()
+void KoReportDesigner::slotEditPaste()
 {
     // call the editPaste function passing it a reportsection
     slotEditPaste(activeScene());
 }
 
-void ReportDesigner::slotEditPaste(QGraphicsScene * canvas)
+void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
@@ -1105,22 +1105,22 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         
     }
 }
-void ReportDesigner::slotRaiseSelected()
+void KoReportDesigner::slotRaiseSelected()
 {
     dynamic_cast<ReportScene*>(activeScene())->raiseSelected();
 }
 
-void ReportDesigner::slotLowerSelected()
+void KoReportDesigner::slotLowerSelected()
 {
     dynamic_cast<ReportScene*>(activeScene())->lowerSelected();
 }
 
-QGraphicsScene* ReportDesigner::activeScene() const
+QGraphicsScene* KoReportDesigner::activeScene() const
 {
     return d->activeScene;
 }
 
-void ReportDesigner::setActiveScene(QGraphicsScene* a)
+void KoReportDesigner::setActiveScene(QGraphicsScene* a)
 {
     if (d->activeScene && d->activeScene != a)
         d->activeScene->clearSelection();
@@ -1130,12 +1130,12 @@ void ReportDesigner::setActiveScene(QGraphicsScene* a)
     update();
 }
 
-KoZoomHandler* ReportDesigner::zoomHandler() const
+KoZoomHandler* KoReportDesigner::zoomHandler() const
 {
     return d->zoom;
 }
 
-QString ReportDesigner::suggestEntityName(const QString &n) const
+QString KoReportDesigner::suggestEntityName(const QString &n) const
 {
     ReportSection *sec;
     int itemCount = 0;
@@ -1176,7 +1176,7 @@ QString ReportDesigner::suggestEntityName(const QString &n) const
     return n + QString::number(itemCount);
 }
 
-bool ReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) const
+bool KoReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) const
 {
     ReportSection *sec;
     bool unique = true;
@@ -1243,7 +1243,7 @@ bool ReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) 
 }
 
 //static
-QList<QAction*> ReportDesigner::actions()
+QList<QAction*> KoReportDesigner::actions()
 {
     QList<QAction*> actList;
     QAction *act;

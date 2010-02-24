@@ -27,7 +27,7 @@
 #include "reportentities.h"
 #include <krlinedata.h>
 
-class ReportDesigner;
+class KoReportDesigner;
 
 //
 // ReportEntityLine
@@ -36,8 +36,8 @@ class ReportEntityLine : public QObject, public KRLineData, public QGraphicsLine
 {
     Q_OBJECT
 public:
-    ReportEntityLine(ReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
-    ReportEntityLine(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityLine(KoReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
+    ReportEntityLine(QDomNode & element, KoReportDesigner *, QGraphicsScene * scene);
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
@@ -47,8 +47,8 @@ public:
     void setLineScene(QLineF);
     
 private:
-    ReportDesigner* m_rd;
-    void init(QGraphicsScene*, ReportDesigner *);
+    KoReportDesigner* m_rd;
+    void init(QGraphicsScene*, KoReportDesigner *);
     int grabHandle(QPointF pos);
 
     int m_grabAction;

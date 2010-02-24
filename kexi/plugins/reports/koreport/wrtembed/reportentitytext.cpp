@@ -19,7 +19,7 @@
 
 #include "reportentitytext.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -51,7 +51,7 @@ void ReportEntityText::init(QGraphicsScene * scene)
     setZValue(Z);
 }
 
-ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityText::ReportEntityText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -60,7 +60,7 @@ ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene, 
     m_name->setValue(m_reportDesigner->suggestEntityName("text"));
 }
 
-ReportEntityText::ReportEntityText(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+ReportEntityText::ReportEntityText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : KRTextData(element), ReportRectEntity(d)
 {
     init(s);

@@ -25,7 +25,7 @@
 //
 // ReportSectionDetail
 //
-ReportSectionDetail::ReportSectionDetail(ReportDesigner * rptdes, const char * name)
+ReportSectionDetail::ReportSectionDetail(KoReportDesigner * rptdes, const char * name)
         : QWidget(rptdes)
 {
     Q_UNUSED(name);
@@ -113,7 +113,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
 
 }
 
-ReportDesigner * ReportSectionDetail::reportDesigner() const
+KoReportDesigner * ReportSectionDetail::reportDesigner() const
 {
     return m_reportDesigner;
 }

@@ -21,7 +21,7 @@
 #include <qobject.h>
 #include <QDomElement>
 #include <QDomDocument>
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 #include "reportsection.h"
 #include "reportsectiondetail.h"
 #include <kdebug.h>
@@ -36,7 +36,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
 
     m_pageBreak = BreakNone;
     m_sort = Qt::AscendingOrder;
-    ReportDesigner * rd = 0;
+    KoReportDesigner * rd = 0;
     m_reportSectionDetail = rsd;
     if (m_reportSectionDetail) {
         rd = rsd->reportDesigner();

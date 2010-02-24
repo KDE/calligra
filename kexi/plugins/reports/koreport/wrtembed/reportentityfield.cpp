@@ -19,7 +19,7 @@
 
 #include "reportentityfield.h"
 #include "reportentities.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <qdom.h>
 #include <qpainter.h>
@@ -47,7 +47,7 @@ void ReportEntityField::init(QGraphicsScene * scene)
 }
 
 // methods (constructors)
-ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
+ReportEntityField::ReportEntityField(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : ReportRectEntity(rw)
 {
     init(scene);
@@ -56,7 +56,7 @@ ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene
     m_name->setValue(m_reportDesigner->suggestEntityName("field"));
 }
 
-ReportEntityField::ReportEntityField(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+ReportEntityField::ReportEntityField(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRFieldData(element)
 {
     init(s);

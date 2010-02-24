@@ -75,7 +75,7 @@ set(koreport_LIB_SRCS
 	wrtembed/reportsectiondetail.cpp
 	wrtembed/reportscene.cpp
 	wrtembed/reportsceneview.cpp
-	wrtembed/reportdesigner.cpp
+	wrtembed/KoReportDesigner.cpp
 	wrtembed/reportpropertiesbutton.cpp
 	wrtembed/sectioneditor.cpp
 	wrtembed/3of9paint.cpp

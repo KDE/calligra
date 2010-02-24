@@ -21,11 +21,11 @@
 // ReportSceneView method implementations
 //
 #include "reportsceneview.h"
-#include "reportdesigner.h"
+#include "KoReportDesigner.h"
 
 #include <kdebug.h>
 
-ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWidget * parent, const char * name)
+ReportSceneView::ReportSceneView(KoReportDesigner * rw, QGraphicsScene *scene, QWidget * parent, const char * name)
 {
     Q_UNUSED(name);
     Q_UNUSED(parent);
@@ -57,7 +57,7 @@ void ReportSceneView::resizeContents(QSize s)
     setMaximumSize(s);
 }
 
-ReportDesigner * ReportSceneView::designer()
+KoReportDesigner * ReportSceneView::designer()
 {
     return m_reportDesigner;
 }

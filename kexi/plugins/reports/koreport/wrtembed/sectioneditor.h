@@ -20,7 +20,7 @@
 #ifndef SECTIONEDITOR_H
 #define SECTIONEDITOR_H
 
-class ReportDesigner;
+class KoReportDesigner;
 class ReportSectionDetail;
 #include <QtGui/QDialog>
 
@@ -45,7 +45,7 @@ public slots:
     virtual void cbFootLast_toggled(bool yes);
     virtual void cbFootEven_toggled(bool yes);
     virtual void cbFootOdd_toggled(bool yes);
-    virtual void init(ReportDesigner * rd);
+    virtual void init(KoReportDesigner * rd);
     virtual void cbHeadAny_toggled(bool yes);
     virtual void cbFootAny_toggled(bool yes);
 
@@ -55,7 +55,7 @@ public slots:
     virtual void btnMoveUp_clicked();
     virtual void brnMoveDown_clicked();
 protected:
-    ReportDesigner * m_reportDesigner;
+    KoReportDesigner * m_reportDesigner;
     ReportSectionDetail * m_reportSectionDetail;
 
 protected slots:
