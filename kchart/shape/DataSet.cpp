@@ -952,7 +952,7 @@ void DataSet::blockSignals( bool block )
     d->blockSignals = block;
 }
 
-bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, QPen& pen)
+bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded)
 {
     if ( ! n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
         return false;
@@ -967,8 +967,8 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
     //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
 
-    bool brushLoaded = false;                                                                                                                                                 
-    bool penLoaded = false; 
+    brushLoaded = false;                                                                                                                                                 
+    penLoaded = false; 
 
     styleStack.setTypeProperties( "graphic" );
 
@@ -998,13 +998,17 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
 #ifndef NWORKAROUND_ODF_BUGS
     if( ! penLoaded) {
         QColor fixedColor = KoOdfWorkaround::fixMissingStrokeColor( n, context );
-        if ( fixedColor.isValid() )
+        if ( fixedColor.isValid() ) {
             pen = fixedColor;
+            penLoaded = true;
+        }
     }
     if( ! brushLoaded) {
         QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
-        if ( fixedColor.isValid() )
+        if ( fixedColor.isValid() ) {
             brush = fixedColor;
+            brushLoaded = true;
+        }
     }
 #endif
 
@@ -1020,10 +1024,12 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     {
         QBrush brush(Qt::NoBrush);
         QPen pen(Qt::NoPen);
-        loadBrushAndPen(context, n, brush, pen);
-        if(pen.style() != Qt::NoPen)
+        bool brushLoaded = false;
+        bool penLoaded = false;
+        loadBrushAndPen(context, n, brush, brushLoaded, pen, penLoaded);
+        if(penLoaded)
             setPen( pen );
-        if(brush.style() != Qt::NoBrush)
+        if(brushLoaded)
             setBrush( brush );
     }
 
@@ -1046,10 +1052,12 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             continue;
         QBrush brush(Qt::NoBrush);
         QPen pen(Qt::NoPen);
-        loadBrushAndPen(context, m, brush, pen);
-        if(pen.style() != Qt::NoPen)
+        bool brushLoaded = false;
+        bool penLoaded = false;
+        loadBrushAndPen(context, m, brush, brushLoaded, pen, penLoaded);
+        if(penLoaded)
             setPen( loadedDataPointCount, pen );
-        if(brush.style() != Qt::NoBrush)
+        if(brushLoaded)
             setBrush( loadedDataPointCount, brush );
         ++loadedDataPointCount;
     }
