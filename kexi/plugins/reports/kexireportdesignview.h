@@ -23,8 +23,8 @@
 #include <QDomDocument>
 #include <koproperty/Set.h>
 #include <kexireportpart.h>
-#include "koreport/wrtembed/KoReportDesigner.h"
-#include "KoReportData.h"
+#include <koreport/wrtembed/KoReportDesigner.h>
+#include <KoReportData.h>
 
 class QScrollArea;
 class KexiSourceSelector;

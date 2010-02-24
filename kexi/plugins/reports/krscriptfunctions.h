@@ -22,7 +22,7 @@
 #include <QString>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
-#include "KoReportData.h"
+#include <KoReportData.h>
 
 /**
  @author

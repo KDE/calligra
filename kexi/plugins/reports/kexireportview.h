@@ -23,7 +23,7 @@
 #include <kexidb/connection.h>
 #include <qdom.h>
 #include "kexireportpart.h"
-#include "KoReportRendererBase.h"
+#include <KoReportRendererBase.h>
 
 class KoReportPreRenderer;
 class ORODocument;
