@@ -250,9 +250,13 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                reportData = sourceData(tempData()->connectionDefinition);
-                m_preRenderer->setSourceData(reportData);
+                reportData = sourceData(tempData()->connectionDefinition);    
             }
+            if (!reportData) {
+                reportData = new KexiDBReportData("", 0);
+            }
+            m_preRenderer->setSourceData(reportData);
+            
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
 

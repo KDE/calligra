@@ -842,7 +842,7 @@ void KoReportPreRenderer::setName(const QString &n)
 ORODocument* KoReportPreRenderer::generate()
 {
     kDebug();
-    if (d == 0 || !d->m_valid || d->m_reportData == 0)
+    if (d == 0 || !d->m_valid || d->m_reportData == 0 || d->m_kodata == 0)
         return 0;
 
     // Do this check now so we don't have to undo a lot of work later if it fails
@@ -1037,7 +1037,6 @@ void KoReportPreRenderer::setSourceData(KoReportData *data)
 {
     if (d && data) {
         d->m_kodata = data;
-//!TODO        d->m_conn  = static_cast<KexiDB::Connection*>(data->connection());
     }
 }
 
