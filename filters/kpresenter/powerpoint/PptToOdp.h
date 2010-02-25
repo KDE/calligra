@@ -24,6 +24,7 @@
 #define PPTTOODP_H
 
 #include "mso/simpleParser.h"
+#include "pptstyle.h"
 #include "DateTimeFormat.h"
 #include "ParsedPresentation.h"
 
@@ -207,14 +208,14 @@ private:
      **/
     class ListStyleInput {
     public:
-        const PPT::TextPFException* pf;
+        PptTextPFRun pf;
         const PPT::TextPFException9* pf9;
         const PPT::TextCFException* cf;
         const PPT::TextCFException9* cf9;
         const PPT::TextCFException10* cf10;
         const PPT::TextSIException* si;
 
-        ListStyleInput() :pf(0), pf9(0), cf(0), cf9(0), cf10(0), si(0) {}
+        ListStyleInput() :pf9(0), cf(0), cf9(0), cf10(0), si(0) {}
     };
     /* Extract data into the style element style:list */
     void defineListStyle(KoGenStyle& style,
@@ -233,11 +234,12 @@ private:
 
     const PPT::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
                                                 quint32 textType, quint8 pp9rt);
-    QString defineAutoListStyle(Writer& out, int paragraphIndent,
-                                const PPT::TextPFException* pf,
-                                const PPT::TextPFException9* pf9,
-                                const PPT::TextMasterStyleLevel* level);
+    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf,
+                                const PPT::TextPFException9* pf9);
 
+    const PPT::TextMasterStyleLevel *
+    getTextMasterStyleLevel(quint16 type, quint16 level,
+                            const PPT::MasterOrSlideContainer* m);
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
                         const PPT::OfficeArtClientData* clientData) const;
     void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);

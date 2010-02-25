@@ -2,7 +2,7 @@ include_directories(${ZLIB_INCLUDE_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
 
-kde4_add_library(ppttoodplib STATIC PptToOdp.cpp shapes.cpp ParsedPresentation.cpp DateTimeFormat.cpp pictures.cpp pole.cpp mso/simpleParser.cpp)
+kde4_add_library(ppttoodplib STATIC PptToOdp.cpp shapes.cpp ParsedPresentation.cpp DateTimeFormat.cpp pictures.cpp pole.cpp mso/simpleParser.cpp pptstyle.cpp)
 target_link_libraries(ppttoodplib koodf ${ZLIB_LIBRARIES})
 
 kde4_add_executable(ppttoodp ppttoodpmain.cpp)
