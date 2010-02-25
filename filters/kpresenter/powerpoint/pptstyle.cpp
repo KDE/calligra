@@ -256,20 +256,20 @@ TYPE PptTextCFRun::NAME() const \
     return DEFAULT; \
 }
 
-//     TYPE             PARENT      PRE NAME           TEST              DEFAULT
-GETTER(bool,            fontStyle->, ,  bold,          masks.bold,       false)
-GETTER(bool,            fontStyle->, ,  italic,        masks.italic,     false)
-GETTER(bool,            fontStyle->, ,  underline,     masks.underline,  false)
-GETTER(bool,            fontStyle->, ,  shadow,        masks.shadow,     false)
-GETTER(bool,            fontStyle->, ,  fehint,        masks.fehint,     false)
-GETTER(bool,            fontStyle->, ,  kumi,          masks.kumi,       false)
-GETTER(bool,            fontStyle->, ,  emboss,        masks.emboss,     false)
-GETTER(quint8,          fontStyle->, ,  pp9rt,         fontStyle,            0)
-GETTER(quint16,         ,            ,  fontRef,       masks.typeface,       0)
-GETTER(quint16,         ,            ,  oldEAFontRef,  masks.oldEATypeface,  0)
-GETTER(quint16,         ,            ,  ansiFontRef,   masks.ansiTypeface,   0)
-GETTER(quint16,         ,            ,  symbolFontRef, masks.symbolTypeface, 0)
-GETTER(quint16,         ,            ,  fontSize,      masks.size,           0)
+//     TYPE             PARENT     PRE NAME           TEST              DEFAULT
+GETTER(bool,            fontStyle->,,  bold,          masks.bold,        false)
+GETTER(bool,            fontStyle->,,  italic,        masks.italic,      false)
+GETTER(bool,            fontStyle->,,  underline,     masks.underline,   false)
+GETTER(bool,            fontStyle->,,  shadow,        masks.shadow,      false)
+GETTER(bool,            fontStyle->,,  fehint,        masks.fehint,      false)
+GETTER(bool,            fontStyle->,,  kumi,          masks.kumi,        false)
+GETTER(bool,            fontStyle->,,  emboss,        masks.emboss,      false)
+GETTER(quint8,          fontStyle->,,  pp9rt,         fontStyle,             0)
+GETTER(quint16,         ,           ,  fontRef,       masks.typeface,        0)
+GETTER(quint16,         ,           ,  oldEAFontRef,  masks.oldEATypeface,   0)
+GETTER(quint16,         ,           ,  ansiFontRef,   masks.ansiTypeface,    0)
+GETTER(quint16,         ,           ,  symbolFontRef, masks.symbolTypeface,  0)
+GETTER(quint16,         ,           ,  fontSize,      masks.size,            0)
 GETTER(ColorIndexStruct,,           *, color,   masks.color, ColorIndexStruct())
-GETTER(qint16,          ,            ,  position,      masks.position,       0)
+GETTER(qint16,          ,           ,  position,      masks.position,        0)
 
