@@ -31,10 +31,9 @@ public:
         *pfs = 0;
     }
     PptTextPFRun(const PPT::MasterOrSlideContainer* m,
-                   const PPT::TextContainer& tc,
-                   quint32 start);
+                 const PPT::TextContainer& tc,
+                 quint32 start);
 
-    //quint16 indent() const { return (level_) ?level_-1 :0; }
     quint16 level() const { return level_; }
     const PPT::TextPFException* pf() const { return pfs[0]; }
 

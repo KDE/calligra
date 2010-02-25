@@ -26,6 +26,7 @@ namespace {
 const TextMasterStyleAtom*
 getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
 {
+    if (!m) return 0;
     const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
     if (!mm) return 0;
     const TextMasterStyleAtom* textstyle = 0;
@@ -40,9 +41,7 @@ const TextMasterStyleLevel *
 getTextMasterStyleLevel(const MasterOrSlideContainer* m, quint16 type, quint16 level)
 {
     const TextMasterStyleAtom* masterStyle = getTextMasterStyleAtom(m, type);
-    if (!masterStyle) {
-        return 0;
-    }
+    if (!masterStyle) return 0;
     const TextMasterStyleLevel *l = 0;
     switch (level) {
     case 0: if (masterStyle->lstLvl1) l = masterStyle->lstLvl1.data();break;
