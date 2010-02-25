@@ -69,8 +69,6 @@ public:
 
     bool m_valid;
 
-    KexiDB::Connection *m_conn;
-
     ORODocument* m_document;
     OROPage*     m_page;
     KRReportData* m_reportData;
@@ -118,7 +116,6 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
     m_pageCounter = 0;
     m_maxHeight = m_maxWidth = 0.0;
     m_kodata = 0;
-    m_conn = 0;
 }
 
 KoReportPreRendererPrivate::~KoReportPreRendererPrivate()

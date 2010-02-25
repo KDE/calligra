@@ -93,9 +93,6 @@ protected:
     void setAxis(const QString&, const QString&);
     void setBackgroundColor(const QColor&);
     void setLegend(bool, const QStringList &legends = QStringList());
-//!TODO
-//    QStringList fieldNames(const QString &);
-//    QStringList fieldNamesHackUntilImprovedParser(const QString &);
 
 private:
     virtual void createProperties();
@@ -104,8 +101,6 @@ private:
 
     friend class KoReportPreRendererPrivate;
     friend class Scripting::Chart;
-
-    //KexiDB::Cursor *dataSet();
 
     QMap<QString, QVariant> m_links; //Map of field->value for child/master links
 

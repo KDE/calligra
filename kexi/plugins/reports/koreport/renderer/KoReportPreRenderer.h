@@ -32,10 +32,6 @@ class ParameterList;
 class ORODocument;
 class KoReportData;
 
-namespace KexiDB
-{
-class Connection;
-}
 //
 // ORPreRender
 // This class takes a report definition and prerenders the result to

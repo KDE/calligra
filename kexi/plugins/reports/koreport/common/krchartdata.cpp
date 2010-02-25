@@ -31,12 +31,6 @@
 #include <KDChartLegend>
 #include <KDChartCartesianAxis>
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/field.h>
-#include <kexidb/queryschema.h>
-
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <QMotifStyle>

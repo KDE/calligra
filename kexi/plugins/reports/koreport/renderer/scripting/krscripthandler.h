@@ -19,7 +19,6 @@
 #define KRSCRIPTHANDLER_H
 #include <QObject>
 #include <QString>
-#include <kexidb/connection.h>
 #include <krsectiondata.h>
 #include <kross/core/action.h>
 #include "krscriptconstants.h"

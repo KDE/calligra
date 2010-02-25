@@ -18,8 +18,6 @@
 #include "krscripthandler.h"
 #include <kdebug.h>
 
-#include <kexiutils/tristate.h>
-
 #include <krsectiondata.h>
 #include "krscriptsection.h"
 #include "krscriptdebug.h"
