@@ -96,8 +96,6 @@ public:
 #endif
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
-    //!< set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
-    QColor m_currentColor;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -106,6 +104,7 @@ PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
         , m_currentDoubleValue(0)
         , m_currentShapeProperties(0)
         , d(new Private)
+        , m_colorType(BackgroundColor)
 {
     init();
 }
@@ -363,6 +362,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
     READ_PROLOGUE
+
+    m_colorType = BackgroundColor;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -654,10 +656,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_solidFill()
         if (isStartElement()) {
             //scheme color
             TRY_READ_IF(schemeClr)
+//             rgb percentage
             ELSE_TRY_READ_IF(scrgbClr)
             //TODO hslClr hue, saturation, luminecence color
             //TODO prstClr preset color
-            //TODO scrgbClr rgb percentage
             //TODO srgbClr rgb hexadecimal
             //TODO stsClr system color
 //! @todo add ELSE_WRONG_FORMAT
@@ -684,8 +686,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
     if (m_context->type == Slide) {
         MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
         colorItem = theme->colorScheme.value(val);
-        if (!colorItem || !colorItem->toColorItem())
-            return KoFilter::WrongFormat;
     }
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
@@ -707,10 +707,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
     }
 
     if (m_context->type == Slide) {
-        QColor col(colorItem->toColorItem()->color);
+        //Seems that if the item is not present we should default to black
+        QColor col(Qt::black);
+        if (colorItem && colorItem->toColorItem())
+            col = QColor (colorItem->toColorItem()->color);
+
         col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-        QBrush brush(col, Qt::SolidPattern);
-        KoOdfGraphicStyles::saveOdfFillStyle(m_currentPageStyle, *mainStyles, brush);
+        if(m_colorType == BackgroundColor) {
+            QBrush brush(col, Qt::SolidPattern);
+            KoOdfGraphicStyles::saveOdfFillStyle(m_currentPageStyle, *mainStyles, brush);
+        }
+        if(m_colorType == OutlineColor) {
+            m_currentPen.setColor(col);
+            KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentPageStyle, *mainStyles, m_currentPen);
+        }
     }
 
     READ_EPILOGUE
@@ -790,8 +800,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
+    m_colorType = OutlineColor;
+    m_currentPen = QPen();
+
     //align
-    TRY_READ_ATTR(algn)
+    TRY_READ_ATTR_WITHOUT_NS(algn)
     //center
     if (algn.isEmpty() || algn == "ctr") {
     }
@@ -800,19 +813,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     }
 
     //line ending cap
-    TRY_READ_ATTR(cap)
+    TRY_READ_ATTR_WITHOUT_NS(cap)
+    Qt::PenCapStyle penCap;
     //flat
     if (cap.isEmpty() || cap == "sq") {
+       penCap = Qt::SquareCap;
     }
     //round
     else if (cap == "rnd") {
+        penCap = Qt::RoundCap;
     }
     //square
     else if (cap == "flat") {
+        penCap = Qt::FlatCap;
     }
+    m_currentPen.setCapStyle(penCap);
 
+    //TODO
     //compound line type
-    TRY_READ_ATTR(cmpd)
+    TRY_READ_ATTR_WITHOUT_NS(cmpd)
     //double lines
     if( cmpd.isEmpty() || cmpd == "sng" ) {
     }
@@ -829,54 +848,53 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     else if (cmpd == "tri") {
     }
 
-    TRY_READ_ATTR(w) //width
+    TRY_READ_ATTR_WITHOUT_NS(w) //width
     if(w.isEmpty()) {
         w = "0";
     }
     int wInt = w.toInt();
+    m_currentPen.setWidth(wInt);
 
-    while (true) {
+    while (!atEnd()) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         if( isStartElement() ) {
             //Line join bevel
-            if(qualifiedName() == QLatin1String("a:bevel")) {
+//             if(qualifiedName() == QLatin1String("a:bevel")) {
 //                 TRY_READ()
-            }
-            //custom dash
-            else if(qualifiedName() == QLatin1String("a:custDash")) {
-            }
-            //extension list
-            else if(qualifiedName() == QLatin1String("a:extLst")) {
-            }
-            //gradient fill
-            else if(qualifiedName() == QLatin1String("a:gradFill")) {
-            }
-            //line head/end style
-            else if(qualifiedName() == QLatin1String("a:headEnd")) {
-            }
-            //miter line join
-            else if(qualifiedName() == QLatin1String("a:miter")) {
-            }
-            //no fill
-            else if(qualifiedName() == QLatin1String("a:noFill")) {
-            }
-            //pattern fill
-            else if(qualifiedName() == QLatin1String("a:pattFill")) {
-            }
-            //preset dash
-            else if(qualifiedName() == QLatin1String("a:prstDash")) {
-            }
-            //round line join
-            else if(qualifiedName() == QLatin1String("a:round")) {
-            }
+//             }
+//             //custom dash
+//             else if(qualifiedName() == QLatin1String("a:custDash")) {
+//             }
+//             //extension list
+//             else if(qualifiedName() == QLatin1String("a:extLst")) {
+//             }
+//             //gradient fill
+//             else if(qualifiedName() == QLatin1String("a:gradFill")) {
+//             }
+//             //line head/end style
+//             else if(qualifiedName() == QLatin1String("a:headEnd")) {
+//             }
+//             //miter line join
+//             else if(qualifiedName() == QLatin1String("a:miter")) {
+//             }
+//             //no fill
+//             else if(qualifiedName() == QLatin1String("a:noFill")) {
+//             }
+//             //pattern fill
+//             else if(qualifiedName() == QLatin1String("a:pattFill")) {
+//             }
+//             //preset dash
+//             else if(qualifiedName() == QLatin1String("a:prstDash")) {
+//             }
+//             //round line join
+//             else if(qualifiedName() == QLatin1String("a:round")) {
+//             }
             //solid fill
-            else if(qualifiedName() == QLatin1String("a:solidFill")) {
-                TRY_READ(solidFill)
-            }
+            TRY_READ_IF(solidFill)
             //tail line end style
-            else if(qualifiedName() == QLatin1String("a:tailEnd")) {
-            }
+//             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
+//             }
         }
     }
 
@@ -934,7 +952,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
     bool okG;
     bool okB;
 
-    d->m_currentColor = QColor::fromRgbF(qreal(MSOOXML::Utils::ST_Percentage_to_double(r, okR)),
+    m_currentColor = QColor::fromRgbF(qreal(MSOOXML::Utils::ST_Percentage_to_double(r, okR)),
                                       qreal(MSOOXML::Utils::ST_Percentage_to_double(g, okG)),
                                       qreal(MSOOXML::Utils::ST_Percentage_to_double(b, okB)));
 

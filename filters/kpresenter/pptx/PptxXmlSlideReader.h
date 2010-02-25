@@ -98,7 +98,7 @@ protected:
     KoFilter::ConversionStatus read_lumMod();
     KoFilter::ConversionStatus read_lumOff();
     KoFilter::ConversionStatus read_ln();
-KoFilter::ConversionStatus read_scrgbClr();
+    KoFilter::ConversionStatus read_scrgbClr();
 
 
     typedef KoFilter::ConversionStatus(PptxXmlSlideReader::*ReadMethod)();
@@ -112,12 +112,24 @@ KoFilter::ConversionStatus read_scrgbClr();
 
 private:
     void init();
+    class Private;
+    Private* const d;
+
+    //When dealing with colors there's no way to know what type of attribute 
+    //we are setting. While MSOOXML doesn't need to know the context in which a
+    //color is used, ODF does need to know this.
+    enum ColorType {
+        BackgroundColor,
+        OutlineColor
+    };
+    ColorType m_colorType;
+    // set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
+    QColor m_currentColor;
+    QPen m_currentPen;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
-    class Private;
-    Private* const d;
 };
 
 //! Context for PptxXmlSlideReader
