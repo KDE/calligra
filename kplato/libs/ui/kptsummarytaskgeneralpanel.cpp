@@ -80,7 +80,7 @@ void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
 }
 
 MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
-    MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
+    MacroCommand *cmd = new MacroCommand(i18n("Modify task"));
     bool modified = false;
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {

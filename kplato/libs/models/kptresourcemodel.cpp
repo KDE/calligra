@@ -894,7 +894,7 @@ bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = res->account();
             if ( old != a ) {
-                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18n( "Modify Resource Account" ) ) );
+                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18n( "Modify resource account" ) ) );
                 return true;
             }
     }

@@ -286,7 +286,7 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                emit executeCommand( new CalendarModifyNameCmd( a, value.toString(), i18n( "Modify Calendar Name" ) ) );
+                emit executeCommand( new CalendarModifyNameCmd( a, value.toString(), i18n( "Modify calendar name" ) ) );
                 return true;
             }
             break;
@@ -358,7 +358,7 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             if ( !tz.isValid() ) {
                 return false;
             }
-            emit executeCommand( new CalendarModifyTimeZoneCmd( a, tz, i18n( "Modify Calendar Timezone" ) ) );
+            emit executeCommand( new CalendarModifyTimeZoneCmd( a, tz, i18n( "Modify calendar timezone" ) ) );
             return true;
         }
     }
@@ -505,7 +505,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         QList<Calendar*> lst = calendarList( stream );
         foreach ( Calendar *c, lst ) {
             if ( c->parentCal() != par ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent Calendar" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent calendar" ) );
                 cmd->addCommand( new CalendarModifyParentCmd( m_project, c, par ) );
             }
         }
@@ -558,7 +558,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *parent )
 {
     //kDebug();
-    emit executeCommand( new CalendarAddCmd( m_project, calendar, parent, i18n( "Add Calendar" ) ) );
+    emit executeCommand( new CalendarAddCmd( m_project, calendar, parent, i18n( "Add calendar" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->indexOf( calendar );
@@ -581,7 +581,7 @@ void CalendarItemModel::removeCalendar( Calendar *calendar )
     if ( calendar == 0 ) {
         return;
     }
-    emit executeCommand( new CalendarRemoveCmd( m_project, calendar, i18n( "Delete Calendar" ) ) );
+    emit executeCommand( new CalendarRemoveCmd( m_project, calendar, i18n( "Delete calendar" ) ) );
 }
 
 
@@ -776,7 +776,7 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
     switch ( role ) {
         case Qt::EditRole:
             int v = value.toInt();
-            emit executeCommand( new CalendarModifyStateCmd( m_calendar, d, static_cast<CalendarDay::State>( v ), i18n( "Modify Calendar State" ) ) );
+            emit executeCommand( new CalendarModifyStateCmd( m_calendar, d, static_cast<CalendarDay::State>( v ), i18n( "Modify calendar state" ) ) );
             return true;
     }
     return false;

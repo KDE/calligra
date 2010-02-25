@@ -896,7 +896,7 @@ ReportDesignDialog::ReportDesignDialog( QWidget *parent )
     : KDialog( parent ),
     m_view( 0 )
 {
-    setCaption( i18n( "Report Designer" ) );
+    setCaption( i18nc( "@title:window", "Report Designer" ) );
     m_panel = new ReportDesignPanel( 0, 0, QDomElement(), this );
 
     setMainWidget( m_panel );
@@ -906,7 +906,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     : KDialog( parent ),
     m_view( 0 )
 {
-    setCaption( i18n( "Report Designer" ) );
+    setCaption( i18nc( "@title:window", "Report Designer" ) );
     setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
     setButtonText( KDialog::User1, i18n( "Save To View" ) );
     setButtonIcon( KDialog::User1, KIcon( "window-new" ) );
@@ -924,7 +924,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     : KDialog( parent ),
     m_view( view )
 {
-    setCaption( i18n( "Edit Report" ) );
+    setCaption( i18nc( "@title:window", "Edit Report" ) );
     setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
     setButtonText( KDialog::User1, i18n( "Save To View" ) );
     setButtonIcon( KDialog::User1, KIcon( "window" ) );
@@ -971,12 +971,12 @@ void ReportDesignDialog::slotSaveToFile()
         return;
     }
     if ( ! url.isLocalFile() ) {
-        KMessageBox::sorry( this, i18n( "Can only save to local file." ) );
+        KMessageBox::sorry( this, i18n( "Can only save to a local file." ) );
         return;
     }
     QFile file( url.toLocalFile() );
     if ( ! file.open( QIODevice::WriteOnly ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/>%1", file.fileName() ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", file.fileName() ) );
         return;
     }
     QTextStream out( &file );

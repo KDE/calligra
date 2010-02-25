@@ -2345,12 +2345,20 @@ QModelIndex NodeItemModel::index( const Node *node ) const
 bool NodeItemModel::setName( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
+        case Qt::EditRole: {
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
+            QString s = i18n( "Modify Name" );
+            switch ( node->type() ) {
+                case Node::Type_Task: s = i18n( "Modify Task Name" ); break;
+                case Node::Type_Milestone: s = i18n( "Modify Milestone Name" ); break;
+                case Node::Type_Summarytask: s = i18n( "Modify Summarytask Name" ); break;
+                case Node::Type_Project: s = i18n( "Modify Project Name" ); break;
+            }
+            emit executeCommand( new NodeModifyNameCmd( *node, value.toString(), s ) );
             return true;
+        }
     }
     return false;
 }
@@ -2358,12 +2366,20 @@ bool NodeItemModel::setName( Node *node, const QVariant &value, int role )
 bool NodeItemModel::setLeader( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
+        case Qt::EditRole: {
             if ( value.toString() == node->leader() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
+            QString s = i18n( "Modify name" );
+            switch ( node->type() ) {
+                case Node::Type_Task: s = i18n( "Modify task name" ); break;
+                case Node::Type_Milestone: s = i18n( "Modify milestone name" ); break;
+                case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
+                case Node::Type_Project: s = i18n( "Modify project name" ); break;
+            }
+            emit executeCommand( new NodeModifyLeaderCmd( *node, value.toString(), s ) );
             return true;
+        }
     }
     return false;
 }
@@ -2391,7 +2407,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Add Resource" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Add resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
@@ -2406,7 +2422,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 cmd = 0;
             }
             
-            QString c = i18n( "Modify Resource Allocations" );
+            QString c = i18n( "Modify resource allocations" );
             // Handle deleted requests
             foreach ( const QString &s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user
@@ -2626,7 +2642,7 @@ bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
                 return false;
             }
             Estimate::Risktype v = Estimate::Risktype( value.toInt() );
-            emit executeCommand( new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
+            emit executeCommand( new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify risk type" ) );
             return true;
     }
     return false;
@@ -2644,7 +2660,7 @@ bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify running account" ) ) );
             }
             return true;
     }
@@ -2664,7 +2680,7 @@ bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int ro
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify startup account" ) ) );
             }
             return true;
     }
@@ -2679,7 +2695,7 @@ bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify startup cost" ) ) );
             return true;
     }
     return false;
@@ -2697,7 +2713,7 @@ bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int r
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify shutdown account" ) ) );
             }
             return true;
     }
@@ -2712,7 +2728,7 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify shutdown cost" ) ) );
             return true;
     }
     return false;
@@ -2728,8 +2744,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         Completion &c = static_cast<Task*>( node )->completion();
         QDateTime dt = QDateTime::currentDateTime();
         QDate date = dt.date();
-        // xgettext: no-c-format
-        MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        MacroCommand *m = new MacroCommand( i18n( "Modify completion" ) );
         if ( ! c.isStarted() ) {
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
@@ -2779,7 +2794,7 @@ bool NodeItemModel::setRemainingEffort( Node *node, const QVariant &value, int r
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remaining Effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify remaining effort" ) ) );
         return true;
     }
     return false;
@@ -2792,7 +2807,7 @@ bool NodeItemModel::setActualEffort( Node *node, const QVariant &value, int role
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Actual Effort" ) ) );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify actual effort" ) ) );
         return true;
     }
     return false;
@@ -3184,7 +3199,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    emit executeCommand( new TaskAddCmd( m_project, node, after, i18n( "Add Task") ) );
+    emit executeCommand( new TaskAddCmd( m_project, node, after, i18n( "Add task") ) );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
@@ -3199,7 +3214,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
-    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add Subtask" ) ) );
+    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add sub-task" ) ) );
     reset();
     int row = -1;
     if ( node->parentNode() ) {
@@ -4029,7 +4044,7 @@ bool MilestoneItemModel::setRunningAccount( Node *node, const QVariant &value, i
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify running account" ) ) );
             }
             return true;
     }
@@ -4049,7 +4064,7 @@ bool MilestoneItemModel::setStartupAccount( Node *node, const QVariant &value, i
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify startup account" ) ) );
             }
             return true;
     }
@@ -4064,7 +4079,7 @@ bool MilestoneItemModel::setStartupCost( Node *node, const QVariant &value, int 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify startup cost" ) ) );
             return true;
     }
     return false;
@@ -4082,7 +4097,7 @@ bool MilestoneItemModel::setShutdownAccount( Node *node, const QVariant &value, 
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify shutdown account" ) ) );
             }
             return true;
     }
@@ -4097,7 +4112,7 @@ bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify shutdown cost" ) ) );
             return true;
     }
     return false;

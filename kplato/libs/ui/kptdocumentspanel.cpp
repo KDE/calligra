@@ -107,14 +107,14 @@ Document *DocumentsPanel::selectedDocument() const
 void DocumentsPanel::slotAddUrl()
 {
     KUrlRequesterDialog *dlg = new KUrlRequesterDialog( QString(), QString(), this );
-    dlg->setWindowTitle( i18n( "Attach Document" ) );
+    dlg->setWindowTitle( i18nc( "@title:window", "Attach Document" ) );
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
             kWarning()<<"Document (url) already exists: "<<dlg->selectedUrl();
-            KMessageBox::sorry( this, i18n( "Document url already attached: %1", dlg->selectedUrl().prettyUrl() ), i18n( "Cannot Attach Document" ) );
+            KMessageBox::sorry( this, i18nc( "@info", "Document is already attached:<br/><filename>%1</filename>", dlg->selectedUrl().prettyUrl() ), i18nc( "@title:window", "Cannot Attach Document" ) );
         } else {
             Document *doc = new Document( dlg->selectedUrl() );
-            //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, i18n( "Add Document" ) );
+            //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, i18n( "Add document" ) );
             //m_cmds.push( cmd );
             m_docs.addDocument( doc );
             m_state.insert( doc, Added );
@@ -132,7 +132,7 @@ void DocumentsPanel::slotChangeUrl()
         return slotAddUrl();
     }
     KUrlRequesterDialog *dlg = new KUrlRequesterDialog( doc->url().url(), QString(), this );
-    dlg->setWindowTitle( i18n( "Modify Url" ) );
+    dlg->setWindowTitle( i18nc( "@title:window", "Modify Url" ) );
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( doc->url() != dlg->selectedUrl() ) {
             if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
@@ -185,7 +185,7 @@ MacroCommand *DocumentsPanel::buildCommand()
     }
     Documents &docs = m_node.documents();
     Document *d = 0;
-    QString txt = i18n( "Modify Documents" );
+    QString txt = i18n( "Modify documents" );
     MacroCommand *m = 0;
     QMap<Document*, State>::const_iterator i = m_state.constBegin();
     for ( ; i != m_state.constEnd(); ++i) {
@@ -195,7 +195,7 @@ MacroCommand *DocumentsPanel::buildCommand()
             Q_ASSERT( d );
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug()<<"remove document "<<i.key();
-            m->addCommand( new DocumentRemoveCmd( m_node.documents(), d, i18n( "Remove Document" ) ) );
+            m->addCommand( new DocumentRemoveCmd( m_node.documents(), d, i18n( "Remove document" ) ) );
         } else if ( ( i.value() & Added ) == 0 && i.value() & Modified ) {
             d = docs.findDocument( m_orgurl[ i.key() ] );
             Q_ASSERT( d );
@@ -203,26 +203,26 @@ MacroCommand *DocumentsPanel::buildCommand()
             kDebug()<<"modify document "<<d;
             if ( i.key()->url() != d->url() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyUrlCmd( d, i.key()->url(), i18n( "Modify Document Url" ) ) );
+                m->addCommand( new DocumentModifyUrlCmd( d, i.key()->url(), i18n( "Modify document url" ) ) );
             }
             if ( i.key()->type() != d->type() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyTypeCmd( d, i.key()->type(), i18n( "Modify Document Type" ) ) );
+                m->addCommand( new DocumentModifyTypeCmd( d, i.key()->type(), i18n( "Modify document type" ) ) );
             }
             if ( i.key()->status() != d->status() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyStatusCmd( d, i.key()->status(), i18n( "Modify Document Status" ) ) );
+                m->addCommand( new DocumentModifyStatusCmd( d, i.key()->status(), i18n( "Modify document status" ) ) );
             }
             if ( i.key()->sendAs() != d->sendAs() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), i18n( "Modify Document SendAs" ) ) );
+                m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), i18n( "Modify document send control" ) ) );
             }
         } else if ( i.value() & Added ) {
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug()<<i.key()<<m_docs.documents();
             d = m_docs.takeDocument( i.key() );
             kDebug()<<"add document "<<d;
-            m->addCommand( new DocumentAddCmd( docs, d, i18n( "Add Document" ) ) );
+            m->addCommand( new DocumentAddCmd( docs, d, i18n( "Add document" ) ) );
         }
     }
     return m;

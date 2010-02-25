@@ -1539,7 +1539,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     }
     qDebug()<<"slotCalculateSchedule:"<<sm->name();
 
-    m_text = new QLabel( i18n( "%1: Calculating...", sm->name() ) );
+    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
     addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
     m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
@@ -1548,7 +1548,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     connect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT( setValue( int ) ) );
     connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, *sm, i18n( "Calculate %1", sm->name() ) );
+    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, *sm, i18nc( "@info:status 1=schedule name", "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     QApplication::restoreOverrideCursor();
     slotUpdate();
@@ -1556,7 +1556,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
 
 void View::slotCalculationFinished( Project *project, ScheduleManager *sm )
 {
-    m_text->setText( i18n( "%1: Calculating done", sm->name() ) );
+    m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculating done", sm->name() ) );
     disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
     disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
     disconnect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
@@ -1591,7 +1591,7 @@ void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
         if ( res == KMessageBox::Cancel ) {
             return;
         }
-        cmd = new ResetBaselineScheduleCmd( *sm, i18n( "Reset Baseline %1", sm->name() ) );
+        cmd = new ResetBaselineScheduleCmd( *sm, i18n( "Reset baseline %1", sm->name() ) );
     } else {
         cmd = new BaselineScheduleCmd( *sm, i18n( "Baseline %1", sm->name() ) );
     }
@@ -1604,7 +1604,7 @@ void View::slotAddScheduleManager( Project *project )
         return;
     }
     ScheduleManager *sm = project->createScheduleManager();
-    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, i18n( "Add Schedule %1", sm->name() ) );
+    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, i18n( "Add schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1613,7 +1613,7 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
     if ( project == 0 || sm == 0) {
         return;
     }
-    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete Schedule %1", sm->name() ) );
+    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1630,7 +1630,7 @@ void View::slotAddSubTask()
             QUndoCommand *m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
-            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Subtask" ) );
+            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add sub-task" ) );
             getPart() ->addCommand( cmd ); // add task to project
             delete dia;
             return ;
@@ -1651,7 +1651,7 @@ void View::slotAddTask()
             QUndoCommand * m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
-            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Task" ) );
+            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add task" ) );
             getPart() ->addCommand( cmd ); // add task to project
             delete dia;
             return ;
@@ -1674,7 +1674,7 @@ void View::slotAddMilestone()
             QUndoCommand * m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
-            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Milestone" ) );
+            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add milestone" ) );
             getPart() ->addCommand( cmd ); // add task to project
             delete dia;
             return ;
@@ -1697,7 +1697,7 @@ void View::slotAddSubMilestone()
             QUndoCommand * m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
-            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Sub-milestone" ) );
+            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add sub-milestone" ) );
             getPart() ->addCommand( cmd ); // add task to project
             delete dia;
             return ;
@@ -1999,11 +1999,11 @@ void View::slotDeleteTask( QList<Node*> lst )
         }
     }
     if ( lst.count() == 1 ) {
-        getPart()->addCommand( new NodeDeleteCmd( lst.takeFirst(), i18n( "Delete Task" ) ) );
+        getPart()->addCommand( new NodeDeleteCmd( lst.takeFirst(), i18n( "Delete task" ) ) );
         return;
     }
     int num = 0;
-    MacroCommand *cmd = new MacroCommand( i18n( "Delete Tasks" ) );
+    MacroCommand *cmd = new MacroCommand( i18np( "Delete task", "Delete tasks", lst.count() ) );
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
         if ( node == 0 || node->parentNode() == 0 ) {
@@ -2019,7 +2019,7 @@ void View::slotDeleteTask( QList<Node*> lst )
         }
         if ( del ) {
             //kDebug()<<num<<": delete:"<<node->name();
-            cmd->addCommand( new NodeDeleteCmd( node, i18n( "Delete Task" ) ) );
+            cmd->addCommand( new NodeDeleteCmd( node, i18n( "Delete task" ) ) );
             num++;
         }
     }
@@ -2043,7 +2043,7 @@ void View::slotDeleteTask( Node *node )
             return;
         }
     }
-    NodeDeleteCmd *cmd = new NodeDeleteCmd( node, i18n( "Delete Task" ) );
+    NodeDeleteCmd *cmd = new NodeDeleteCmd( node, i18n( "Delete task" ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -2062,7 +2062,7 @@ void View::slotIndentTask()
         return ;
     }
     if ( getProject().canIndentTask( node ) ) {
-        NodeIndentCmd * cmd = new NodeIndentCmd( *node, i18n( "Indent Task" ) );
+        NodeIndentCmd * cmd = new NodeIndentCmd( *node, i18n( "Indent task" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2076,7 +2076,7 @@ void View::slotUnindentTask()
         return ;
     }
     if ( getProject().canUnindentTask( node ) ) {
-        NodeUnindentCmd * cmd = new NodeUnindentCmd( *node, i18n( "Unindent Task" ) );
+        NodeUnindentCmd * cmd = new NodeUnindentCmd( *node, i18n( "Unindent task" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2098,7 +2098,7 @@ void View::slotMoveTaskUp()
         return ;
     }
     if ( getProject().canMoveTaskUp( task ) ) {
-        NodeMoveUpCmd * cmd = new NodeMoveUpCmd( *task, i18n( "Move Task Up" ) );
+        NodeMoveUpCmd * cmd = new NodeMoveUpCmd( *task, i18n( "Move task up" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2119,7 +2119,7 @@ void View::slotMoveTaskDown()
         return ;
     }
     if ( getProject().canMoveTaskDown( task ) ) {
-        NodeMoveDownCmd * cmd = new NodeMoveDownCmd( *task, i18n( "Move Task Down" ) );
+        NodeMoveDownCmd * cmd = new NodeMoveDownCmd( *task, i18n( "Move task down" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2146,7 +2146,7 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
         Relation * rel = new Relation( par, child, static_cast<Relation::Type>( linkType ) );
-        getPart() ->addCommand( new AddRelationCmd( getProject(), rel, i18n( "Add Relation" ) ) );
+        getPart() ->addCommand( new AddRelationCmd( getProject(), rel, i18n( "Add task dependency" ) ) );
     } else {
         slotAddRelation( par, child );
     }
@@ -2158,7 +2158,7 @@ void View::slotModifyRelation( Relation *rel )
     ModifyRelationDialog *dia = new ModifyRelationDialog( getProject(), rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
         if ( dia->relationIsDeleted() ) {
-            getPart() ->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete Relation" ) ) );
+            getPart() ->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete task dependency" ) ) );
         } else {
             QUndoCommand *cmd = dia->buildCommand();
             if ( cmd ) {
@@ -2201,7 +2201,7 @@ void View::slotDeleteRelation()
     }
     Relation *rel = v->currentRelation();
     if ( rel ) {
-        getPart()->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete Task Dependency" ) ) );
+        getPart()->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete task dependency" ) ) );
     }
 }
 
@@ -2246,12 +2246,12 @@ void View::slotEditResource()
 
 void View::slotDeleteResource( Resource *resource )
 {
-    getPart()->addCommand( new RemoveResourceCmd( resource->parentGroup(), resource, i18n( "Delete Resource" ) ) );
+    getPart()->addCommand( new RemoveResourceCmd( resource->parentGroup(), resource, i18n( "Delete resource" ) ) );
 }
 
 void View::slotDeleteResourceGroup( ResourceGroup *group )
 {
-    getPart()->addCommand( new RemoveResourceGroupCmd( group->project(), group, i18n( "Delete Resourcegroup" ) ) );
+    getPart()->addCommand( new RemoveResourceGroupCmd( group->project(), group, i18n( "Delete resourcegroup" ) ) );
 }
 
 void View::slotDeleteResourceObjects( QObjectList lst )
@@ -2303,7 +2303,15 @@ void View::slotDeleteResourceObjects( QObjectList lst )
         }
     }
     if ( rc || gc ) {
-        cmd = new MacroCommand( i18n( "Delete Resource Objects" ) );
+        QString s;
+        if ( rc && gc ) {
+            s = i18n( "Delete resourcegroups and resources" );
+        } else if ( rc ) {
+            s = i18np( "Delete resource", "Delete resources", lst.count() );
+        } else {
+            s = i18np( "Delete resourcegroup", "Delete resourcegroups", lst.count() );
+        }
+        cmd = new MacroCommand( s );
     }
     if ( rc )
         cmd->addCommand( rc );
@@ -2444,7 +2452,7 @@ void View::slotOpenReportFile()
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file: %1", fn ) );
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:</br><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;
@@ -2547,7 +2555,14 @@ void View::slotRenameNode( Node *node, const QString& name )
 {
     //kDebug()<<name;
     if ( node ) {
-        NodeModifyNameCmd * cmd = new NodeModifyNameCmd( *node, name, i18n( "Modify Name" ) );
+        QString s = i18n( "Modify name" );
+        switch( node->type() ) {
+            case Node::Type_Task: s = i18n( "Modify task name" ); break;
+            case Node::Type_Milestone: s = i18n( "Modify milestone mame" ); break;
+            case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
+            case Node::Type_Project: s = i18n( "Modify project name" ); break;
+        }
+        NodeModifyNameCmd * cmd = new NodeModifyNameCmd( *node, name, s );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2633,7 +2648,7 @@ void View::setLabel( ScheduleManager *sm )
         m_estlabel->setText( sm->name() );
         return;
     }
-    m_estlabel->setText( i18n( "Not scheduled" ) );
+    m_estlabel->setText( i18nc( "@info:status", "Not scheduled" ) );
 }
 
 void View::slotWorkPackageLoaded()
@@ -2656,7 +2671,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
     url.setPath( tmpfile.fileName() );
     if ( ! getPart()->saveWorkPackageUrl( url, node, activeScheduleId(), resource ) ) {
         kDebug()<<"Failed to save to file";
-        KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
+        KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br/> <filename>%1</filename>", url.url() ) );
         return;
     }
     QStringList attachURLs;
@@ -2696,7 +2711,7 @@ void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
         url.setPath( tmpfile.fileName() );
         if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
             kDebug()<<"Failed to save to file";
-            KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
+            KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
             return;
         }
         attachURLs << url.url();

@@ -35,7 +35,7 @@ namespace KPlato
 
 ViewListDocker::ViewListDocker(View *view)
 {
-    setWindowTitle(i18n("View Selector"));
+    setWindowTitle(i18nc( "@title:window", "View Selector"));
     setView(view);
 }
 
