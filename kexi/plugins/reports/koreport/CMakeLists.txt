@@ -2,14 +2,12 @@
 #project(reports)
 
 include_directories( ${KOMAIN_INCLUDES} 
- 
 ${KOODF_INCLUDES}
-${CMAKE_SOURCE_DIR}/kexi/koproperty
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
 ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
-${KDE4_INCLUDES} )
+)
 
 #build a shared library
 set(koreport_LIB_SRCS

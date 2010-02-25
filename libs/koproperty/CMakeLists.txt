@@ -35,10 +35,13 @@ set(libkopropertyeditors_SRCS
 if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
   add_definitions(-DKOPROPERTY_USE_KOLIBS)
   include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/odf
-    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${KOPROPERTY_INCLUDES}
   )
   list(APPEND libkopropertyeditors_SRCS editors/linestyleedit.cpp)
+else(KOPROPERTY_USE_KOLIBS)
+  include_directories(
+    ${KDE4_INCLUDES}
+  )
 endif(KOPROPERTY_USE_KOLIBS)
 
 ########### next target ###############
