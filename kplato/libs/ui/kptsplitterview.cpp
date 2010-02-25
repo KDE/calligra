@@ -43,7 +43,7 @@ SplitterView::SplitterView(KoDocument *doc, QWidget *parent)
     b->addWidget( m_splitter );
 }
     
-QTabWidget *SplitterView::addTabWidget(  )
+KTabWidget *SplitterView::addTabWidget(  )
 {
     KTabWidget *w = new KTabWidget( m_splitter );
     m_splitter->addWidget( w );

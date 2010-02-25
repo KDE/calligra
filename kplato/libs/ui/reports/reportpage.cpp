@@ -20,7 +20,6 @@
 
 #include "reportpage.h"
 
-#include <krscreenrender.h>
 #include <renderobjects.h>
 //#include <parsexmlutils.h>
 
@@ -44,7 +43,6 @@ ReportPage::ReportPage(QWidget *parent, ORODocument *r)
     setAttribute(Qt::WA_NoBackground);
     //qDebug() << "CREATED PAGE";
     m_reportDocument = r;
-    m_page = 1;
 
     QString pageSize = r->pageOptions().getPageSize();
     int pageWidth = 0;
@@ -63,10 +61,18 @@ ReportPage::ReportPage(QWidget *parent, ORODocument *r)
     setFixedSize(pageWidth, pageHeight);
 
     //qDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-    m_repaint = true;
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
+
+    m_renderer = m_factory.createInstance("screen");
+
     renderPage(1);
+}
+
+ReportPage::~ReportPage()
+{
+    delete m_renderer;
+    m_renderer = 0;
 }
 
 void ReportPage::paintEvent(QPaintEvent*)
@@ -79,18 +85,14 @@ void ReportPage::paintEvent(QPaintEvent*)
 void ReportPage::renderPage(int p)
 {
     //qDebug() << "ReportPage::renderPage " << p;
-    m_page = p;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
-    KRScreenRender sr;
-    sr.setPainter(&qp);
-    sr.render(m_reportDocument, p - 1);
-    m_repaint = true;
+    if (m_reportDocument) {
+        KoReportRendererContext cxt;
+        cxt.painter = &qp;
+        m_renderer->render(cxt, m_reportDocument, p - 1);
+    }
     repaint();
-}
-
-ReportPage::~ReportPage()
-{
 }
 
 } //namespace KPlato

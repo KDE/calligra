@@ -40,6 +40,7 @@
 #include <QHeaderView>
 #include <QApplication>
 #include <QClipboard>
+#include <QKeyEvent>
 
 #include <kaction.h>
 #include <kicon.h>
@@ -47,7 +48,7 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
-#include <QKeyEvent>
+#include <KTabWidget>
 
 #include <kdebug.h>
 

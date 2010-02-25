@@ -31,11 +31,11 @@
 class KoDocument;
 
 class KoReportData;
-class ORPreRender;
+class KoReportPreRenderer;
 class ORODocument;
 class ReportViewPageSelect;
 class ScriptAdaptor;
-class ReportDesigner;
+class KoReportDesigner;
 
 namespace KoProperty
 {
@@ -43,21 +43,25 @@ namespace KoProperty
     class Set;
 }
 
+class KTabWidget;
+
 class QScrollArea;
 class QDomElement;
 class QDockWidget;
-class QTabWidget;
 class QDomElement;
 
 namespace KPlato
 {
 
+class Project;
 class KPlato_ReportDesigner;
 class ReportPage;
 class ReportData;
 class ReportDesignerView;
 class ReportSourceEditor;
 class ReportNavigator;
+class ReportDesignPanel;
+class ReportSourceModel;
 
 class KPLATOUI_EXPORT Report : public SplitterView 
 {
@@ -67,20 +71,33 @@ public:
 
     QDockWidget *createPropertyDocker();
     
+    /// Loads the report document
+    virtual bool loadXML( const QDomDocument &doc );
+    /// Return the report definition document
+    QDomDocument document() const;
+    
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
     void insertDataModel( const QString &tag, QAbstractItemModel *model );
-    void createDefaultReportModels();
+    void setReportModels( const QMap<QString, QAbstractItemModel*> &map );
     
+    static QMap<QString, QAbstractItemModel*> createDefaultReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 );
+    
+signals:
+    void editReportDesign( Report *view );
+
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );
 
+protected slots:
+    void slotEditReportDesign();
+
 private:
-    QTabWidget *m_tab;
+    KTabWidget *m_tab;
     ReportDesignerView *m_designer;
 };
 
@@ -103,6 +120,9 @@ public slots:
     /// refresh display
     void refresh();
 
+signals:
+    void editReportDesign( ReportView *view );
+
 protected:
     void setupGui();
 
@@ -111,6 +131,7 @@ private slots:
     void prevPage();
     void firstPage();
     void lastPage();
+    void slotEditReport();
     void slotPrintReport();
 #if 0
     void slotRenderKSpread();
@@ -123,7 +144,7 @@ private:
     KoReportData* sourceData( QDomElement e );
 
 private:
-    ORPreRender *m_preRenderer;
+    KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
     ReportPage *m_reportWidget;
@@ -145,26 +166,31 @@ public:
 
     void setPropertyEditor( QDockWidget *docker, KoProperty::EditorView *editor, ReportSourceEditor *se );
     
-    ReportDesigner *view() const { return m_designer; }
+    KoReportDesigner *view() const { return m_designer; }
     
     QDomDocument document() const;
     
     /// Set model for the data source editor
     void setSourceModel( QAbstractItemModel *model );
     
+    void setDefaultReportModels( const QMap<QString, QAbstractItemModel*> &map );
     /// Insert a new data model @p model with id @p tag
     void insertDataModel( const QString &tag, QAbstractItemModel *model );
     /// Return the data model for @p tag
     QAbstractItemModel *dataModel( const QString &tag ) const;
     
-    void setReportDesigner( ReportDesigner *designer );
+    void setReportDesigner( KoReportDesigner *designer );
     
+    /// Loads the report document
+    virtual bool loadXML( const QDomDocument &doc );
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view.
     virtual void saveContext( QDomElement &context ) const;
 
     ReportData *createReportData( const QString &type );
+
+    static ReportSourceModel *createSourceModel( QObject *parent = 0 );
 
 signals:
     void insertItem( const QString &name );
@@ -180,6 +206,8 @@ public slots:
     
     void slotSourceChanged( const QModelIndex&, const QModelIndex& );
     
+    void createReportData( const QString &type, KoReportData *rd );
+
 protected slots:
     void slotInsertAction();
     void slotPropertySetChanged();
@@ -190,7 +218,7 @@ private:
 
 private:
     QScrollArea *m_scrollarea;
-    ReportDesigner *m_designer;
+    KoReportDesigner *m_designer;
     QDockWidget *m_propertydocker;
     KoProperty::EditorView *m_propertyeditor;
     ReportSourceEditor *m_sourceeditor;
@@ -212,6 +240,35 @@ public slots:
 protected slots:
     void slotMaxChanged( int );
     void setButtonsEnabled();
+};
+
+class KPLATOUI_EXPORT ReportDesignDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit ReportDesignDialog( QWidget *parent = 0 );
+    
+    ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, QWidget *parent = 0 );
+    
+    /// Edit the report definition in @p view
+    ReportDesignDialog( Project *project, ScheduleManager *manager, Report *view, QWidget *parent = 0 );
+
+    QDomDocument document() const;
+
+signals:
+    void createReportView( ReportDesignDialog *dlg );
+
+public slots:
+    void slotViewCreated( ViewBase *view );
+
+protected slots:
+    void slotSaveToFile();
+    void slotSaveToView();
+    virtual void slotButtonClicked(int button);
+
+private:
+    ReportDesignPanel *m_panel;
+    Report *m_view;
 };
 
 } // namespace KPlato

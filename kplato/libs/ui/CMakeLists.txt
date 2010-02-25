@@ -10,13 +10,13 @@ include_directories(
     ${CMAKE_BINARY_DIR}/kdgantt
 
     ${KOODF_INCLUDES} 
-#     ${CMAKE_SOURCE_DIR}/kexi
-#     ${CMAKE_SOURCE_DIR}/kexi/koproperty
-#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/
-#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/common
-#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/renderer
-#     ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/koreport/wrtembed
-#     ${KOPROPERTIES_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/kexi
+    ${CMAKE_SOURCE_DIR}/kexi/koproperty
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/wrtembed
+    ${KOPROPERTIES_INCLUDES}
 
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
@@ -27,11 +27,11 @@ include_directories(
 ########### KPlato private library ###############
 
 set(kplatoui_LIB_SRCS
-#     reports/reportview.cpp
-#     reports/reportdata.cpp
-#     reports/reportpage.cpp
-#     reports/reportsourceeditor.cpp
-#     reports/reportscripts.cpp
+    reports/reportview.cpp
+    reports/reportdata.cpp
+    reports/reportpage.cpp
+    reports/reportsourceeditor.cpp
+    reports/reportscripts.cpp
 
     plotting/kplotaxis.cpp
     plotting/kplotwidget.cpp
@@ -99,8 +99,8 @@ set(kplatoui_LIB_SRCS
     kptlocaleconfigmoneydialog.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
-#     reports/reportsourceeditor.ui
-#     reports/reportnavigator.ui
+    reports/reportsourceeditor.ui
+    reports/reportnavigator.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -144,9 +144,8 @@ add_definitions(-DKDGANTT_STATICLIB)
 
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 
-target_link_libraries(kplatoui ${KDE4_KABC_LIBS} komain kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
-
-#target_link_libraries(kplatoui ${KDE4_KABC_LIBS} koreport koproperty komain kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+set ( KPLATO_REPORTS_LIBS koreport koproperty )
+target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

@@ -30,7 +30,8 @@
 class KoDocument;
 
 class QSplitter;
-class QTabWidget;
+
+class KTabWidget;
 
 /// The main namespace
 namespace KPlato
@@ -87,7 +88,7 @@ public:
     virtual void getContext( Context &/*context*/ ) const {}
     
     /// Add a KTabWidget to the splitter
-    QTabWidget *addTabWidget();
+    KTabWidget *addTabWidget();
     /// Add the @p view to the splitter
     void addView( ViewBase *view );
     /// Add the @p view to the @p tab. Set the tabs label to @p label

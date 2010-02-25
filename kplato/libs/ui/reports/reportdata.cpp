@@ -20,8 +20,6 @@
 
 #include "reportdata.h"
 
-#include "reportview.h"
-
 #include <kdebug.h>
 
 #include <QSortFilterProxyModel>
@@ -29,9 +27,8 @@
 namespace KPlato
 {
 
-ReportData::ReportData( ReportDesignerView *view )
-    : m_view( view ),
-    m_row( 0 ),
+ReportData::ReportData()
+    : m_row( 0 ),
     m_project( 0 ),
     m_schedulemanager( 0 )
 {
@@ -174,7 +171,7 @@ QStringList ReportData::dataSourceNames() const
     return QStringList() << i18n( "Cost Breakdown" );
 }
 
-void ReportData::setSorting( SortList lst )
+void ReportData::setSorting(const QList<SortedField>& lst )
 {
     //FIXME the actual sorting should prob be in open(), but I don't think it matters for now
     if ( lst.isEmpty() ) {
@@ -183,7 +180,7 @@ void ReportData::setSorting( SortList lst )
     QSortFilterProxyModel *sf = 0;
     QAbstractItemModel *source_model = m_model.sourceModel();
 
-    foreach ( const Sort &sort, lst ) {
+    foreach ( const SortedField &sort, lst ) {
         int col = fieldNumber( sort.field );
         sf = new QSortFilterProxyModel( &m_model );
         sf->setSourceModel( source_model );
@@ -196,7 +193,9 @@ void ReportData::setSorting( SortList lst )
 KoReportData* ReportData::data(const QString &source)
 {
     //qDebug()<<"ReportData::data:"<<source;
-    return m_view->createReportData( source );
+    KoReportData *rd = 0;
+    emit createReportData( source, rd );
+    return rd;
 }
 
 void ReportData::setModel( QAbstractItemModel *model )
@@ -231,8 +230,8 @@ void ReportData::setScheduleManager( ScheduleManager *sm )
 
 
 //---------------------------
-ChartReportData::ChartReportData( ReportDesignerView *view )
-    : ReportData( view )
+ChartReportData::ChartReportData()
+    : ReportData()
 {
 }
 

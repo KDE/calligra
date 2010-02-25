@@ -20,6 +20,7 @@
 #define KPLATO_REPORTPAGE_H
 
 #include <qwidget.h>
+#include <KoReportRendererBase.h>
 
 class QPixmap;
 class ORODocument;
@@ -42,9 +43,9 @@ public slots:
 
 private:
     ORODocument *m_reportDocument;
-    int m_page;
-    bool m_repaint;
     QPixmap *m_pixmap;
+    KoReportRendererFactory m_factory;
+    KoReportRendererBase *m_renderer;
 };
 
 }

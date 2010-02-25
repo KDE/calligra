@@ -23,7 +23,7 @@
 
 #include "kplatoui_export.h"
 
-#include "koreportdata.h"
+#include "KoReportData.h"
 
 #include "kptitemmodelbase.h"
 #include "kptproject.h"
@@ -37,13 +37,12 @@ namespace KPlato
 {
 
 class ScheduleManager;
-class ReportDesignerView;
 
 class KPLATOUI_EXPORT ReportData : public QObject, public KoReportData
 {
     Q_OBJECT
 public:
-    explicit ReportData( ReportDesignerView *view );
+    explicit ReportData();
     virtual ~ReportData();
 
     //!Open the dataset
@@ -90,7 +89,7 @@ public:
     //!Sets the sorting for the data
     //!Should be called before open() so that the data source can be edited accordingly
     //!Default impl does nothing
-    virtual void setSorting(SortList);
+    virtual void setSorting( const QList<SortedField>& sorting );
 
     //!Return a list of data sources possible for advanced controls
     virtual QStringList dataSources() const;
@@ -115,9 +114,9 @@ public slots:
 
 signals:
     void scheduleManagerChanged( ScheduleManager *sm );
+    void createReportData( const QString &type, KoReportData *rd );
 
 protected:
-    ReportDesignerView *m_view;
     QSortFilterProxyModel m_model;
     long m_row;
     Project *m_project;
@@ -127,7 +126,7 @@ protected:
 class KPLATOUI_EXPORT ChartReportData : public ReportData
 {
 public:
-    explicit ChartReportData( ReportDesignerView *view );
+    explicit ChartReportData();
 
     //!Move to the next record
     virtual bool moveNext();

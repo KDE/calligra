@@ -52,10 +52,45 @@ void ReportSourceEditor::slotSelectFromChanged( int index )
     emit selectFromChanged( index );
 }
 
+QString ReportSourceEditor::selectFromTag( const QModelIndex &parent ) const
+{
+    qDebug()<<"ReportSourceEditor::selectFromTag:"<<parent;
+    QString tag;
+    QAbstractItemModel *m = ui_source->model();
+    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
+        QModelIndex idx = m->index( row, 0, parent );
+        tag =  idx.data( Reports::TagRole ).toString();
+        if ( tag == "select-from" ) {
+            qDebug()<<"ReportSourceEditor::selectFromTag: select-from"<<idx;
+            tag = checkedTag( idx );
+        } else {
+            // in case select-from is a child
+            tag = selectFromTag( idx );
+        }
+        if ( ! tag.isEmpty() ) {
+            qDebug()<<"ReportSourceEditor::selectFromTag: tag="<<tag;
+            break;
+        }
+    }
+    return tag;
+}
+
+QString ReportSourceEditor::checkedTag( const QModelIndex &parent ) const
+{
+    QAbstractItemModel *m = ui_source->model();
+    for ( int row = 0; row < m->rowCount( parent ); ++row ) {
+        int r = m->index( row, 1, parent ).data( Qt::CheckStateRole ).toInt();
+        if ( r == Qt::Checked ) {
+            return m->index( row, 0, parent ).data( Reports::TagRole ).toString();
+        }
+    }
+    return QString();
+}
+
 void ReportSourceEditor::setSourceData( const QDomElement &element )
 {
     qDebug()<<"ReportSourceEditor::setSourceData:"<<element.tagName();
-    if ( element.tagName() != "connection" ) {
+    if ( element.tagName() != "data-source" ) {
         return;
     }
     QAbstractItemModel *m = ui_source->model();
@@ -96,7 +131,7 @@ void ReportSourceEditor::setSourceData( const QDomElement &element, const QModel
 
 void ReportSourceEditor::sourceData( QDomElement &element ) const
 {
-    QDomElement e = element.ownerDocument().createElement( "connection" );
+    QDomElement e = element.ownerDocument().createElement( "data-source" );
     element.appendChild( e );
     QAbstractItemModel *m = ui_source->model();
     for ( int row = 0; row < m->rowCount(); ++row ) {
