@@ -64,8 +64,14 @@ Security:
 *SECURE DELETE http://sqlite.org/compile.html#secure_delete - should be also possible to disable it in the config
 KexiDB
 *edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
+Reports
+*batch mode: generates output from data and design or shows report in data mode with minimal gui; add appropriate startup options and alter main window
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-02-25
+KoProperty
+*moved to KOffice libs
+
 2010-02-20
 Reports
 *add constness
