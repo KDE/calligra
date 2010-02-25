@@ -39,6 +39,8 @@
 #include <QPrintDialog>
 #include <QProgressBar>
 #include <QSortFilterProxyModel>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -109,8 +111,8 @@
 #include "kptworkpackageconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-//#include "reports/reportview.h"
-//#include "reports/reportdata.h"
+#include "reports/reportview.h"
+#include "reports/reportdata.h"
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
@@ -240,6 +242,14 @@ View::View( Part* part, QWidget* parent )
     actionCurrencyConfig  = new KAction(KIcon( "configure" ), i18n("Define Currency..."), this);
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
+
+    actionCreateReport  = new KAction(KIcon( "document-new" ), i18n("Create Report..."), this);
+    actionCollection()->addAction( "reportdesigner_create_report", actionCreateReport );
+    connect( actionCreateReport, SIGNAL( triggered( bool ) ), SLOT( slotCreateReport() ) );
+
+    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open File..."), this);
+    actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
+    connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
     actionIntroduction  = new KAction( i18n("KPlato Introduction"), this);
@@ -582,7 +592,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18n( "View tasks performance status information" );
     } else if ( type == "Report" ) {
         vi.name = i18n( "Report" );
-        vi.tip = i18n( "View and design report" );
+        vi.tip = i18n( "View report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
     }
@@ -1224,9 +1234,7 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    return 0;
-#if 0
-    qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
+    //qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
     Report *v = new Report( getPart(), m_tab );
     QDockWidget *w = v->createPropertyDocker();
     mainWindow()->addDockWidget( Qt::LeftDockWidgetArea, w );
@@ -1245,16 +1253,15 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->createDefaultReportModels();
+    v->setReportModels( v->createDefaultReportModels( &getProject(), currentScheduleManager(), this ) );
     
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    qDebug()<<"View::createReportView:"<<currentScheduleManager();
     emit currentScheduleManagerChanged( currentScheduleManager() );
     
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL( editReportDesign( Report* ) ), SLOT( slotEditReportDesign( Report* ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
-#endif
 }
 
 Project& View::getProject() const
@@ -2379,6 +2386,12 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void View::slotViewListItemRemoved( ViewListItem *item )
 {
+    if ( m_reportActionMap.contains( item ) ) {
+        unplugActionList( "reportdesigner_edit_list" );
+        delete m_reportActionMap[ item ];
+        m_reportActionMap.remove( item );
+        plugActionList( "reportdesigner_edit_list", m_reportActionMap.values() );
+    }
     m_tab->removeWidget( item->view() );
     if ( item->type() == ViewListItem::ItemType_SubView ) {
         qDebug()<<"slotViewListItemRemoved:"<<item<<item->text(0);
@@ -2389,6 +2402,80 @@ void View::slotViewListItemRemoved( ViewListItem *item )
 void View::slotViewListItemInserted( ViewListItem *item )
 {
     m_tab->addWidget( item->view() );
+    if ( ! m_reportActionMap.contains( item ) ) {
+        unplugActionList( "reportdesigner_edit_list" );
+        KAction *a =  new KAction( this );
+        a->setText( item->text( 0 ) );
+        a->setIcon(KIcon("edit"));
+        connect(a, SIGNAL(triggered()), this, SLOT(slotEditReport()));
+        m_reportActionMap[item ] = a;
+        plugActionList( "reportdesigner_edit_list", m_reportActionMap.values() );
+    }
+}
+
+void View::slotCreateReport()
+{
+    //qDebug()<<"View::slotCreateReport:";
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), this );
+    // The ReportDesignDialog can not know how to create and insert views,
+    // so faciclitate this in the slotCreateReportView() slot.
+    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    dlg->exec();
+    delete dlg;
+}
+
+void View::slotCreateReportView(  ReportDesignDialog *dlg )
+{
+    ViewListReportsDialog *vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
+    connect( vd, SIGNAL( viewCreated( ViewBase* ) ), dlg, SLOT( slotViewCreated( ViewBase* ) ) );
+    vd->exec();
+    delete vd;
+}
+
+void View::slotOpenReportFile()
+{
+    qDebug()<<"View::slotOpenReportFile:";
+    KFileDialog *fdlg = new KFileDialog( KUrl(), QString(), this );
+
+    fdlg->exec();
+    QString fn = fdlg->selectedFile();
+    if ( fn.isEmpty() ) {
+        return;
+    }
+    QFile file( fn );
+    if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file: %1", fn ) );
+        return;
+    }
+    QDomDocument doc;
+    doc.setContent( &file );
+    QDomElement e = doc.documentElement();
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, this );
+    // The ReportDesignDialog can not know how to create and insert views,
+    // so faciclitate this in the slotCreateReportView() slot.
+    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    dlg->exec();
+    delete dlg;
+}
+
+void View::slotEditReportDesign( Report *view )
+{
+    if ( view == 0 ) {
+        return;
+    }
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
+    dlg->exec();
+    delete dlg;
+}
+
+void View::slotEditReport()
+{
+    ViewListItem *item = m_reportActionMap.key( dynamic_cast<KAction*>( sender() ) );
+    Q_ASSERT( item );
+    if ( item == 0 ) {
+        return;
+    }
+    qDebug()<<"View::slotEditReport:"<<item->text(0);
 }
 
 void View::slotCreateView()

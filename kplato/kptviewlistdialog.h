@@ -39,6 +39,8 @@ class ViewListItem;
 class AddViewPanel;
 class EditViewPanel;
 class EditCategoryPanel;
+class ViewBase;
+class AddReportsViewPanel;
 
 class ViewListDialog : public KDialog
 {
@@ -48,7 +50,10 @@ public:
 
 protected slots:
     void slotOk();
-    
+
+signals:
+    void viewCreated( ViewBase *view );
+
 private:
     AddViewPanel *m_panel;
 };
@@ -65,6 +70,7 @@ public:
 
 signals:
     void enableButtonOk( bool );
+    void viewCreated( ViewBase *view );
 
 protected slots:
     void changed();
@@ -153,6 +159,55 @@ protected slots:
 private:
     ViewListItem *m_item;
     ViewListWidget &m_viewlist;
+};
+
+//-------- Reports
+class ViewListReportsDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
+
+protected slots:
+    void slotOk();
+
+signals:
+    void viewCreated( ViewBase *view );
+
+private:
+    AddReportsViewPanel *m_panel;
+};
+
+class AddReportsViewPanel : public QWidget
+{
+    Q_OBJECT
+public:
+    AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+
+    bool ok();
+
+    Ui::AddViewPanel widget;
+
+signals:
+    void enableButtonOk( bool );
+    void viewCreated( ViewBase *view );
+
+protected slots:
+    void changed();
+    void viewtypeChanged( int idx );
+    void categoryChanged();
+    void fillAfter( ViewListItem *cat );
+
+    void viewnameChanged( const QString &text );
+    void viewtipChanged( const QString &text );
+
+private:
+    View *m_view;
+    ViewListWidget &m_viewlist;
+    QMap<QString, ViewListItem*> m_categories;
+    QStringList m_viewtypes;
+    bool m_viewnameChanged;
+    bool m_viewtipChanged;
 };
 
 

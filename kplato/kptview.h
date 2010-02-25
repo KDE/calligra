@@ -30,6 +30,7 @@
 #include <QMenu>
 #include <QDockWidget>
 #include <QTimer>
+#include <QMap>
 
 class QProgressBar;
 class QStackedWidget;
@@ -74,6 +75,9 @@ class Relation;
 class Context;
 class ViewAdaptor;
 class HtmlView;
+class Report;
+
+class ReportDesignDialog;
 
 //-------------
 class KPLATO_EXPORT View : public KoView
@@ -228,6 +232,12 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
+    void slotEditReport();
+
+    void slotEditReportDesign( Report *view );
+    void slotCreateReport();
+    void slotOpenReportFile();
+
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintSelectedDebug();
@@ -264,6 +274,8 @@ private slots:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
     void slotViewListItemInserted( ViewListItem *item );
+
+    void slotCreateReportView( ReportDesignDialog *dlg );
 
 private:
     void createViews();
@@ -318,6 +330,9 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
+    KAction *actionCreateReport;
+    KAction *actionOpenReportFile;
+
     // ------ Settings
     KAction *actionConfigure;
 
@@ -343,6 +358,7 @@ private:
     //Test
     KAction *actNoInformation;
 
+    QMap<ViewListItem*, QAction*> m_reportActionMap;
 };
 
 } //Kplato namespace
