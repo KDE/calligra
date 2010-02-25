@@ -22,7 +22,7 @@ Table Of Contents
 2. Krita
 2.1. Krita development files
 3. Debug information
-
+4. KOffice libraries
 
 1. Kexi
 =======
@@ -109,3 +109,28 @@ separately, it may be a good idea to make a package with these headers.
 For alpha and beta packages, please build with debug output enabled, but for
 production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended.
 A significant performance increase will be the result.
+
+
+4. KOffice libraries
+====================
+
+KOffice share common functionality within libraries, placed in libs/ subdirectory.
+KOffice libraries should be placed in a single package, separate from KOffice applications.
+Below is the list of the libraries.
+
+Name       Conditional compilation flag    Globally used in KOffice?   Public API
+                                                                       (headers installed)
+           (default: NO)                   (default: YES)              (default: YES)
+------------------------------------------------------------------------------------------
+
+flake
+kokross    SHOULD_BUILD_SCRIPTING                                      NO
+kopageapp
+koplugin                                                               NO
+koproperty                                 Kexi, KPlato                NO
+koreports                                  Kexi, KPlato                NO
+kotext
+main
+odf
+pigment
+widgets
