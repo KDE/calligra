@@ -10,9 +10,9 @@ include_directories(
     ${CMAKE_BINARY_DIR}/kdgantt
 
     ${KOODF_INCLUDES} 
+    ${KOPROPERTY_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kexi
-    ${CMAKE_SOURCE_DIR}/kexi/koproperty
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport
     ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
     ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
     ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/wrtembed

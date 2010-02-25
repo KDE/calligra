@@ -31,7 +31,7 @@
 #include <renderobjects.h>
 #include <KoReportHTMLCSSRenderer.h>
 #include <reportsection.h>
-#include <EditorView.h>
+#include <koproperty/EditorView.h>
 
 #include "kptglobal.h"
 #include "kptaccountsmodel.h"
