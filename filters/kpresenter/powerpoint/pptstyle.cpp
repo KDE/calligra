@@ -38,88 +38,130 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
     return textstyle;
 }
 const TextMasterStyleLevel *
-getTextMasterStyleLevel(const MasterOrSlideContainer* m, quint16 type, quint16 level)
+getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
 {
-    const TextMasterStyleAtom* masterStyle = getTextMasterStyleAtom(m, type);
-    if (!masterStyle) return 0;
+    if (!ms) return 0;
     const TextMasterStyleLevel *l = 0;
-    switch (level) {
-    case 0: if (masterStyle->lstLvl1) l = masterStyle->lstLvl1.data();break;
-    case 1: if (masterStyle->lstLvl2) l = masterStyle->lstLvl2.data();break;
-    case 2: if (masterStyle->lstLvl3) l = masterStyle->lstLvl3.data();break;
-    case 3: if (masterStyle->lstLvl4) l = masterStyle->lstLvl4.data();break;
-    case 4: if (masterStyle->lstLvl5) l = masterStyle->lstLvl5.data();break;
+    if (ms->rh.recInstance < 5) {
+        switch (level) {
+        case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
+        case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
+        case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
+        case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
+        case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+        }
+    } else {
+        if (ms->cLevels > 0 && level == ms->lstLvl1level) {
+            l =  ms->lstLvl1.data();
+        } else if (ms->cLevels > 1 && level == ms->lstLvl2level) {
+            l =  ms->lstLvl2.data();
+        } else if (ms->cLevels > 2 && level == ms->lstLvl3level) {
+            l =  ms->lstLvl3.data();
+        } else if (ms->cLevels > 3 && level == ms->lstLvl4level) {
+            l =  ms->lstLvl4.data();
+        } else if (ms->cLevels > 4 && level == ms->lstLvl5level) {
+            l =  ms->lstLvl5.data();
+        }
     }
     return l;
 }
+template <class Run>
+const Run* getRun(const QList<Run> &runs, quint32 start)
+{
+    int i = 0;
+    quint32 end = 0;
+    const Run* run = 0;
+    while (i < runs.size()) {
+        end += runs[i].count;
+        if (end > start) {
+            run = &runs[i];
+            break;
+        }
+        i++;
+    }
+    return run;
+}
 const TextPFRun* getPFRun(const TextContainer& tc, quint32 start)
 {
-    // find the textpfexception that belongs to this line
-    const TextPFRun* pf = 0;
-    if (tc.style) {
-        const QList<TextPFRun> &pfs = tc.style->rgTextPFRun;
-        int i = 0;
-        quint32 pfend = 0;
-        while (i < pfs.size()) {
-            pfend += pfs[i].count;
-            if (pfend > start) {
-                pf = &pfs[i];
-                break;
-            }
-            i++;
-        }
-    }
-    return pf;
+    return (tc.style) ?getRun<TextPFRun>(tc.style->rgTextPFRun, start) :0;
 }
-const TextPFException* getLinePF(const TextContainer& tc, quint32 start)
+const TextCFRun* getCFRun(const TextContainer& tc, quint32 start)
 {
-    // find the textpfexception that belongs to this line
-    const TextPFRun* pf = 0;
-    if (tc.style) {
-        const QList<TextPFRun> &pfs = tc.style->rgTextPFRun;
-        int i = 0;
-        quint32 pfend = 0;
-        while (i < pfs.size()) {
-            pfend += pfs[i].count;
-            if (pfend > start) {
-                pf = &pfs[i];
-                break;
-            }
-            i++;
-        }
-    }
-    return (pf) ?&pf->pf :0;
+    return (tc.style) ?getRun<TextCFRun>(tc.style->rgTextCFRun, start) :0;
 }
-
 const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
                                   const TextContainer& tc, quint16 level)
 {
     quint32 textType = tc.textHeaderAtom.textType;
-    const TextMasterStyleLevel* ms = getTextMasterStyleLevel(m, textType, level);
-    return (ms) ?&ms->pf :0;
+    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
+    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
+    return (ml) ?&ml->pf :0;
 }
-
-const TextPFException* getBaseLevelPF(const MasterOrSlideContainer* m,
+const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
                                   const TextContainer& tc, quint16 level)
 {
     quint32 textType = tc.textHeaderAtom.textType;
-    const TextMasterStyleLevel* ms = 0;
+    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
+    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
+    return (ml) ?&ml->cf :0;
+}
+const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
+                                  const TextContainer& tc, quint16 level)
+{
+    quint32 textType = tc.textHeaderAtom.textType;
+    const TextMasterStyleAtom* ms = 0;
     if (textType == 6) {
         // inherit from Tx_TYPE_TITLE
-        ms = getTextMasterStyleLevel(m, 0, level);
+        ms = getTextMasterStyleAtom(m, 0);
     } else if (textType == 4 || textType == 5 || textType == 7
                || textType == 8) {
         // inherit from Tx_TYPE_BODY
-        ms = getTextMasterStyleLevel(m, 1, level);
+        ms = getTextMasterStyleAtom(m, 1);
     }
-    return (ms) ?&ms->pf :0;
+    return getTextMasterStyleLevel(ms, level);
+}
+const TextPFException* getBaseLevelPF(const MasterOrSlideContainer* m,
+                                  const TextContainer& tc, quint16 level)
+{
+    const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
+    return (ml) ?&ml->pf :0;
+}
+const TextCFException* getBaseLevelCF(const MasterOrSlideContainer* m,
+                                  const TextContainer& tc, quint16 level)
+{
+    const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
+    return (ml) ?&ml->cf :0;
+}
+const TextMasterStyleLevel* getDefaultLevel(const PPT::DocumentContainer* d,
+                                            quint16 level)
+{
+    if (!d) return 0;
+    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(
+            &d->documentTextInfo.textMasterStyleAtom, level);
+    if (!ml) {
+        ml = getTextMasterStyleLevel(
+                d->documentTextInfo.textMasterStyleAtom2.data(), level);
+    }
+    return ml;
+}
+const TextPFException* getDefaultLevelPF(const PPT::DocumentContainer* d,
+                                         quint16 level)
+{
+    const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
+    return (ml) ?&ml->pf :0;
+}
+const TextCFException* getDefaultLevelCF(const PPT::DocumentContainer* d,
+                                         quint16 level)
+{
+    const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
+    return (ml) ?&ml->cf :0;
+}
 }
 
-}
-
-PptTextPFRun::PptTextPFRun(const MasterOrSlideContainer* m,
-                               const TextContainer& tc,
-                               quint32 start)
+PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
+                           const MasterOrSlideContainer* m,
+                           const TextContainer& tc,
+                           quint32 start)
 {
     const TextPFRun* pfrun = getPFRun(tc, start);
     quint16 level = 0;
@@ -130,26 +172,38 @@ PptTextPFRun::PptTextPFRun(const MasterOrSlideContainer* m,
     }
 
     const PPT::TextPFException** p = pfs;
-    const PPT::TextPFException* pfe = getLinePF(tc, start);
-    if (pfe) {
-        *p = pfe;
-        ++p;
-    }
+    const PPT::TextPFException* pfe = (pfrun) ?&pfrun->pf :0;
+    if (pfe) *p++ = pfe;
     pfe = getLevelPF(m, tc, level);
-    if (pfe) {
-        *p = pfe;
-        ++p;
-    }
+    if (pfe) *p++ = pfe;
     pfe = getBaseLevelPF(m, tc, level);
-    if (pfe) {
-        *p = pfe;
-        ++p;
-    }
+    if (pfe) *p++ = pfe;
+    pfe = getDefaultLevelPF(d, level);
+    if (pfe) *p++ = pfe;
     *p = 0;
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
     level_ = (fHasBullet()) ?level + 1 :0;
+}
+PptTextCFRun::PptTextCFRun(const PPT::DocumentContainer* d,
+                           const MasterOrSlideContainer* m,
+                           const TextContainer& tc,
+                           quint16 level,
+                           quint32 start)
+{
+    const TextCFRun* cfrun = getCFRun(tc, start);
+
+    const PPT::TextCFException** c = cfs;
+    const PPT::TextCFException* cfe = (cfrun) ?&cfrun->cf :0;
+    if (cfe) *c++ = cfe;
+    cfe = getLevelCF(m, tc, level);
+    if (cfe) *c++ = cfe;
+    cfe = getBaseLevelCF(m, tc, level);
+    if (cfe) *c++ = cfe;
+    cfe = getDefaultLevelCF(d, level);
+    if (cfe) *c++ = cfe;
+    *c = 0;
 }
 
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
@@ -187,4 +241,35 @@ GETTER(bool,     wrapFlags->,  ,  charWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  wordWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
+#undef GETTER
+
+#define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
+TYPE PptTextCFRun::NAME() const \
+{ \
+    const PPT::TextCFException* const * c = cfs; \
+    while (*c) { \
+        if ((*c)->TEST) { \
+            return PRE (*c)->PARENT NAME; \
+        } \
+        ++c; \
+    } \
+    return DEFAULT; \
+}
+
+//     TYPE             PARENT      PRE NAME           TEST              DEFAULT
+GETTER(bool,            fontStyle->, ,  bold,          masks.bold,       false)
+GETTER(bool,            fontStyle->, ,  italic,        masks.italic,     false)
+GETTER(bool,            fontStyle->, ,  underline,     masks.underline,  false)
+GETTER(bool,            fontStyle->, ,  shadow,        masks.shadow,     false)
+GETTER(bool,            fontStyle->, ,  fehint,        masks.fehint,     false)
+GETTER(bool,            fontStyle->, ,  kumi,          masks.kumi,       false)
+GETTER(bool,            fontStyle->, ,  emboss,        masks.emboss,     false)
+GETTER(quint8,          fontStyle->, ,  pp9rt,         fontStyle,            0)
+GETTER(quint16,         ,            ,  fontRef,       masks.typeface,       0)
+GETTER(quint16,         ,            ,  oldEAFontRef,  masks.oldEATypeface,  0)
+GETTER(quint16,         ,            ,  ansiFontRef,   masks.ansiTypeface,   0)
+GETTER(quint16,         ,            ,  symbolFontRef, masks.symbolTypeface, 0)
+GETTER(quint16,         ,            ,  fontSize,      masks.size,           0)
+GETTER(ColorIndexStruct,,           *, color,   masks.color, ColorIndexStruct())
+GETTER(qint16,          ,            ,  position,      masks.position,       0)
 

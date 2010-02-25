@@ -30,7 +30,8 @@ public:
     {
         *pfs = 0;
     }
-    PptTextPFRun(const PPT::MasterOrSlideContainer* m,
+    PptTextPFRun(const PPT::DocumentContainer* d,
+                 const PPT::MasterOrSlideContainer* m,
                  const PPT::TextContainer& tc,
                  quint32 start);
 
@@ -58,6 +59,40 @@ public:
     bool wordWrap() const;
     bool overflow() const;
     quint16 textDirection() const;
+};
+
+
+class PptTextCFRun {
+    quint16 level_;
+    const PPT::TextCFException* cfs[5];
+public:
+    PptTextCFRun() :level_(0)
+    {
+        *cfs = 0;
+    }
+    PptTextCFRun(const PPT::DocumentContainer* d,
+                 const PPT::MasterOrSlideContainer* m,
+                 const PPT::TextContainer& tc,
+                 quint16 level,
+                 quint32 start);
+
+    const PPT::TextCFException* cf() const { return cfs[0]; }
+
+    bool bold() const;
+    bool italic() const;
+    bool underline() const;
+    bool shadow() const;
+    bool fehint() const;
+    bool kumi() const;
+    bool emboss() const;
+    quint8 pp9rt() const;
+    quint16 fontRef() const;
+    quint16 oldEAFontRef() const;
+    quint16 ansiFontRef() const;
+    quint16 symbolFontRef() const;
+    quint16 fontSize() const;
+    PPT::ColorIndexStruct color() const;
+    qint16 position() const;
 };
 
 #endif

@@ -1126,7 +1126,6 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
     const TextMasterStyleAtom* textstyle = 0;
     foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
         if (ma.rh.recInstance == texttype) {
-            qDebug() << "found for " << texttype;
             textstyle = &ma;
         }
     }
@@ -1947,7 +1946,7 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
                                const QString& text, int start, int end,
                                QStack<QString>& levels)
 {
-    PptTextPFRun pf(currentMaster, tc, start);
+    PptTextPFRun pf(p->documentContainer, currentMaster, tc, start);
 
     // to find the pf9, the cf has to be obtained which contains a pp9rt
     quint8 pp9rt = 0;
@@ -1966,16 +1965,6 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     if (stp9) {
         pf9 = &stp9->pf9;
     }
-/*
-    // get the parent style for this indent level
-    const TextMasterStyleLevel* level = getTextMasterStyleLevel(textType,
-                                                paragraphIndent, currentMaster);
-    const TextMasterStyleLevel* levelDefault = getTextMasterStyleLevel(textType,
-                                                paragraphIndent, 0);
-                                                */
-    // check if this line has a bullet or not, take the master setting into
-    // account
-    //qDebug() << "pf " << pf << " " << textType << " " << level << " " << ((level)?level->streamOffset:0) << " " << QString(text).mid(start, end-start);
     bool islist = pf.level() > 0 && start < end;
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf, pf9);
