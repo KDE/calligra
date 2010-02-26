@@ -60,8 +60,8 @@ public:
         OfficeArtObject = 0x001E
     };
 
-    Object(Type t, unsigned long id): m_type(t), m_id(id), m_DrawingObject(0) {}
-    virtual ~Object() {}
+    Object(Type t, unsigned long id): m_type(t), m_id(id), m_drawingObject(0) {}
+    virtual ~Object() { delete m_drawingObject; }
 
     /// Returns the object type.
     Type type() const {
@@ -73,13 +73,13 @@ public:
     }
 
     // Each Object can have optional a DrawingObject assigned.
-    DrawingObject* drawingObject() const { return m_DrawingObject; }
-    void setDrawingObject(DrawingObject* drawing) { m_DrawingObject = drawing; }
+    DrawingObject* drawingObject() const { return m_drawingObject; }
+    void setDrawingObject(DrawingObject* drawing) { m_drawingObject = drawing; }
 
 private:
     const Type m_type;
     unsigned long m_id;
-    DrawingObject* m_DrawingObject;
+    DrawingObject* m_drawingObject;
 };
 
 /**
