@@ -683,8 +683,8 @@ View::~View()
     
     // NOTE sebsauer: first unregister the event-handler, then delete the canvas and then we are save to
     // call removeCanvasController without crashing.
-    d->canvasController->canvas()->canvasWidget()->removeEventFilter(d->canvasController);
-    delete d->canvasController->canvas();
+    //d->canvasController->canvas()->canvasWidget()->removeEventFilter(d->canvasController);
+    //delete d->canvasController->canvas();
     // NOTE sebsauer: We need to remove the canvasController right before deleting it and
     // nothing needs to be done in between cause flake does first delete the TableTool
     // on removeCanvasController and the proxytool which points to that TableTool later
