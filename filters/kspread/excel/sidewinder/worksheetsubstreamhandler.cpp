@@ -111,11 +111,13 @@ public:
 
         if (hlstmfHasMonikor) {
             if (hlstmfMonikerSavedAsStr) {  // moniker
-                // seems following code leads to a crash on readUnicodeChars...
+                //TODO: seems following code leads to a crash on readUnicodeChars...
                 //length = readU32(startHyperlinkObject);
                 //UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
                 //startHyperlinkObject += 4 + sizeReaded;
-                std::cout << "HLinkRecord: Unhandled hlstmfMonikerSavedAsStr moniker" << std::endl;
+                std::cerr << "HLinkRecord: Unhandled hlstmfMonikerSavedAsStr moniker" << std::endl;
+                setIsValid(false);
+                return;
             } else { // oleMoniker
                 const unsigned long clsid = readU32(startHyperlinkObject);
                 startHyperlinkObject += 16; // the clsid is actually 16 byte long but we only need the first 4 to differ
@@ -152,9 +154,15 @@ public:
 
         if (hlstmfHasLocationStr) {
             length = readU32(startHyperlinkObject);
-            m_location = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+            startHyperlinkObject += 4;
+            if(startHyperlinkObject+length > data+size) {
+                std::cerr << "HLinkRecord: expected location but got invalid size=" << length << std::endl;
+                setIsValid(false);
+                return;
+            }
+            m_location = readUnicodeChars(startHyperlinkObject, length, -1, 0, &sizeReaded);
             std::cout << "HLinkRecord: m_displayName=" << m_displayName << " m_targetFrameName=" << m_targetFrameName << " location=" << m_location.ascii() << std::endl;
-            startHyperlinkObject += 4 + sizeReaded;
+            startHyperlinkObject += sizeReaded;
         }
 
         // ignore (16 bytes) guid and fileTime (8 bytes)
