@@ -54,64 +54,30 @@ namespace KPlato
 {
 
 class Project;
-class KPlato_ReportDesigner;
+class ReportView;
 class ReportPage;
 class ReportData;
-class ReportDesignerView;
 class ReportSourceEditor;
 class ReportNavigator;
 class ReportDesignPanel;
 class ReportSourceModel;
 
-class KPLATOUI_EXPORT Report : public SplitterView 
-{
-    Q_OBJECT
-public:
-    Report( KoDocument *part, QWidget *parent);
-
-    QDockWidget *createPropertyDocker();
-    
-    /// Loads the report document
-    virtual bool loadXML( const QDomDocument &doc );
-    /// Return the report definition document
-    QDomDocument document() const;
-    
-    /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &context );
-    /// Save context info from this view.
-    virtual void saveContext( QDomElement &context ) const;
-
-    void insertDataModel( const QString &tag, QAbstractItemModel *model );
-    void setReportModels( const QMap<QString, QAbstractItemModel*> &map );
-    
-    static QMap<QString, QAbstractItemModel*> createDefaultReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 );
-    
-signals:
-    void editReportDesign( Report *view );
-
-public slots:
-    /// Activate/deactivate the gui (also of subviews)
-    virtual void setGuiActive( bool activate );
-
-protected slots:
-    void slotEditReportDesign();
-
-private:
-    KTabWidget *m_tab;
-    ReportDesignerView *m_designer;
-};
 
 class KPLATOUI_EXPORT ReportView : public ViewBase 
 {
     Q_OBJECT
 public:
-    ReportView( KoDocument *part, QWidget *parent, ReportDesignerView *designer = 0 );
+    ReportView( KoDocument *part, QWidget *parent );
 
 public slots:
     void setGuiActive( bool active );
     
     void renderPage( int page );
     
+    /// Return the design document
+    QDomDocument document() const;
+    /// Load the design document @p doc
+    bool loadXML( const QDomDocument &doc );
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view.
@@ -119,6 +85,11 @@ public slots:
 
     /// refresh display
     void refresh();
+
+    QMap<QString, QAbstractItemModel*> reportModels() const;
+    void setReportModels( const QMap<QString, QAbstractItemModel*> &map );
+
+    QMap<QString, QAbstractItemModel*> createReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 ) const;
 
 signals:
     void editReportDesign( ReportView *view );
@@ -139,9 +110,7 @@ private slots:
     void slotExportHTML();
 
 private:
-    QDomDocument tempData() const;
     ReportData *createReportData( const QDomElement &connection );
-    KoReportData* sourceData( QDomElement e );
 
 private:
     KoReportPreRenderer *m_preRenderer;
@@ -151,82 +120,11 @@ private:
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
-    ReportDesignerView *m_designer;
-};
-
-
-class KPLATOUI_EXPORT ReportDesignerView : public ViewBase 
-{
-    Q_OBJECT
-public:
-    ReportDesignerView( KoDocument *part, QWidget *parent);
-    ~ReportDesignerView();
-
-    void setupGui();
-
-    void setPropertyEditor( QDockWidget *docker, KoProperty::EditorView *editor, ReportSourceEditor *se );
-    
-    KoReportDesigner *view() const { return m_designer; }
-    
-    QDomDocument document() const;
-    
-    /// Set model for the data source editor
-    void setSourceModel( QAbstractItemModel *model );
-    
-    void setDefaultReportModels( const QMap<QString, QAbstractItemModel*> &map );
-    /// Insert a new data model @p model with id @p tag
-    void insertDataModel( const QString &tag, QAbstractItemModel *model );
-    /// Return the data model for @p tag
-    QAbstractItemModel *dataModel( const QString &tag ) const;
-    
-    void setReportDesigner( KoReportDesigner *designer );
-    
-    /// Loads the report document
-    virtual bool loadXML( const QDomDocument &doc );
-    /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &context );
-    /// Save context info from this view.
-    virtual void saveContext( QDomElement &context ) const;
-
-    ReportData *createReportData( const QString &type );
-
-    static ReportSourceModel *createSourceModel( QObject *parent = 0 );
-
-signals:
-    void insertItem( const QString &name );
-    void modelChanged( const QAbstractItemModel *model );
-    void dataChanged();
-    
-    void scheduleManagerChanged( ScheduleManager* );
-    
-public slots:
-    /// Activate/deactivate the gui 
-    virtual void setGuiActive( bool activate );
-    void setScheduleManager( ScheduleManager *sm );
-    
-    void slotSourceChanged( const QModelIndex&, const QModelIndex& );
-    
-    void createReportData( const QString &type, KoReportData *rd );
-
-protected slots:
-    void slotInsertAction();
-    void slotPropertySetChanged();
-    void slotSectionEditor();
-private:
-    void setChecked( const QModelIndex &idx );
-    QAbstractItemModel *sourceModel();
-
-private:
-    QScrollArea *m_scrollarea;
-    KoReportDesigner *m_designer;
-    QDockWidget *m_propertydocker;
-    KoProperty::EditorView *m_propertyeditor;
-    ReportSourceEditor *m_sourceeditor;
-    
     QMap<QString, QAbstractItemModel*> m_modelmap;
-    QDomElement m_context;
+    QDomDocument m_design;
 };
 
+//-----------------
 class KPLATOUI_EXPORT ReportNavigator : public QWidget, public Ui::ReportNavigator
 {
     Q_OBJECT
@@ -248,10 +146,10 @@ class KPLATOUI_EXPORT ReportDesignDialog : public KDialog
 public:
     explicit ReportDesignDialog( QWidget *parent = 0 );
     
-    ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, QWidget *parent = 0 );
+    ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent = 0 );
     
     /// Edit the report definition in @p view
-    ReportDesignDialog( Project *project, ScheduleManager *manager, Report *view, QWidget *parent = 0 );
+    ReportDesignDialog( Project *project, ScheduleManager *manager, ReportView *view, QWidget *parent = 0 );
 
     QDomDocument document() const;
 
@@ -268,7 +166,7 @@ protected slots:
 
 private:
     ReportDesignPanel *m_panel;
-    Report *m_view;
+    ReportView *m_view;
 };
 
 } // namespace KPlato

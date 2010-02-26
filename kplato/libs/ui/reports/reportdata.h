@@ -109,7 +109,7 @@ public:
     ScheduleManager *scheduleManager() const { return m_schedulemanager; }
     
 public slots:
-    void setProject( Project *project ) { m_project = project; }
+    void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
 signals:

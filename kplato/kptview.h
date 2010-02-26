@@ -75,7 +75,7 @@ class Relation;
 class Context;
 class ViewAdaptor;
 class HtmlView;
-class Report;
+class ReportView;
 
 class ReportDesignDialog;
 
@@ -234,7 +234,7 @@ protected slots:
 
     void slotEditReport();
 
-    void slotEditReportDesign( Report *view );
+    void slotEditReportDesign( ReportView *view );
     void slotCreateReport();
     void slotOpenReportFile();
 
