@@ -54,12 +54,10 @@ void KexiRelationDesignTool::paint ( QPainter& painter, const KoViewConverter& c
 
 }
 
-void KexiRelationDesignTool::activate ( bool temporary ) {
-    Q_UNUSED( temporary );
-    
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach ( KoShape* shape, selection->selectedShapes() )
-    {
+void KexiRelationDesignTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+{
+    Q_UNUSED(toolActivation);
+    foreach (KoShape *shape, shapes) {
         m_relationDesign = dynamic_cast<KexiRelationDesignShape*>( shape );
         if ( m_relationDesign )
             break;

@@ -510,10 +510,10 @@ KoInteractionStrategy* CellTool::createStrategy(KoPointerEvent* event)
 }
 #endif
 
-void CellTool::activate(bool temporary)
+void CellTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     canvas()->shapeManager()->selection()->deselectAll();
-    CellToolBase::activate(temporary);
+    CellToolBase::activate(toolActivation, shapes);
 }
 
 KSpread::Selection* CellTool::selection()

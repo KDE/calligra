@@ -49,7 +49,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
     /// reimplemented from KoToolBase
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
 protected:
     /// reimplemented from KoToolBase

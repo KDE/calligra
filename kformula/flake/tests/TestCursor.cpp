@@ -84,8 +84,10 @@ void TestCursor::moveCursor()
     canvas->shapeManager()->selection()->select(shape);
     QCOMPARE(canvas->shapeManager()->selection()->count(),1);
     KoFormulaTool* tool= new KoFormulaTool(canvas);
-    tool->activate();
-   FormulaEditor* editor=tool->formulaEditor();
+    QSet<KoShape*> selectedShapes;
+    selectedShapes << shape;
+    tool->activate(KoToolBase::DefaultActivation, selectedShapes);
+    FormulaEditor* editor=tool->formulaEditor();
     FormulaElement* root=editor->formulaData()->formulaElement();
     canvas->addCommand(new FormulaCommandUpdate(shape,editor->insertText("ade")));
     editor->cursor().moveTo(root->childElements()[0],1);

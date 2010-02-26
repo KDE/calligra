@@ -55,9 +55,9 @@ CalendarTool::~CalendarTool()
     delete d;
 }
 
-void CalendarTool::activate(bool temporary)
+void CalendarTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    CellTool::activate(temporary);
+    CellTool::activate(toolActivation, shapes);
 }
 
 void CalendarTool::deactivate()

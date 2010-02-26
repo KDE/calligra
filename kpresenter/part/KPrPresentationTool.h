@@ -55,7 +55,7 @@ public:
     void wheelEvent( KoPointerEvent * event );
 
 public slots:
-    void activate( bool temporary = false );
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
     void highLightPresentation();
     void drawOnPresentation();

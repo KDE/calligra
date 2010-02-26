@@ -72,12 +72,10 @@ KoFormulaTool::~KoFormulaTool()
     }
 }
 
-void KoFormulaTool::activate( bool temporary )
+void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach( KoShape* shape, selection->selectedShapes() )
-    {
+    Q_UNUSED(toolActivation);
+    foreach (KoShape *shape, shapes) {
         m_formulaShape = dynamic_cast<KoFormulaShape*>( shape );
         if( m_formulaShape )
             break;

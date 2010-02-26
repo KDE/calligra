@@ -173,7 +173,7 @@ void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KarbonPencilTool::activate(bool)
+void KarbonPencilTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     m_points.clear();
     m_close = false;

@@ -36,7 +36,7 @@ public:
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
 public slots:
-    void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 };
 
 #endif /* KPRPLACEHOLDERTOOL_H */

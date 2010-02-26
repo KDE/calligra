@@ -41,7 +41,7 @@ class KexiRelationDesignTool : public KoToolBase {
         /// reimplemented from KoToolBase
         virtual void paint ( QPainter& painter, const KoViewConverter& converter );
         /// reimplemented from KoToolBase
-        virtual void activate (bool temporary=false);
+        virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
         /// reimplemented from KoToolBase
         virtual void deactivate();
         

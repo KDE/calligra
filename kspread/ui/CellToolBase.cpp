@@ -1060,9 +1060,10 @@ void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
     editor()->handleInputMethodEvent(event);
 }
 
-void CellToolBase::activate(bool temporary)
+void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
 
     if (!d->initialized) {
         init();

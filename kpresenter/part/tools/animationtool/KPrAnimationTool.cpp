@@ -49,11 +49,12 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
 }
 
 
-void KPrAnimationTool::activate(bool temporary)
+void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
 }
 
 void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )

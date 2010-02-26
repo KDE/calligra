@@ -48,7 +48,7 @@ public:
 #endif
 
 public Q_SLOTS:
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
 protected:
 #if 0 // KSPREAD_MOUSE_STRATEGIES

@@ -136,10 +136,9 @@ Selection* TableTool::selection()
     return d->selection;
 }
 
-void TableTool::activate(bool temporary)
+void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    foreach(KoShape* shape, selection->selectedShapes()) {
+    foreach(KoShape* shape, shapes) {
         d->tableShape = dynamic_cast<TableShape*>(shape);
         if (d->tableShape)
             break;
@@ -154,7 +153,7 @@ void TableTool::activate(bool temporary)
     useCursor(Qt::ArrowCursor);
     d->tableShape->update();
 
-    CellToolBase::activate(temporary);
+    CellToolBase::activate(toolActivation, shapes);
 }
 
 void TableTool::deactivate()

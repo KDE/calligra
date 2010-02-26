@@ -183,9 +183,10 @@ void KPrPresentationTool::wheelEvent( KoPointerEvent * event )
     Q_UNUSED( event );
 }
 
-void KPrPresentationTool::activate( bool temporary )
+void KPrPresentationTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED( temporary );
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
     m_frame->setGeometry( canvas()->canvasWidget()->geometry() );
     m_presentationToolWidget->setVisible( false );
     // redirect event to tool widget

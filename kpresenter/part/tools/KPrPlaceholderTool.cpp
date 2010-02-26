@@ -61,12 +61,12 @@ void KPrPlaceholderTool::mouseReleaseEvent( KoPointerEvent *event )
     Q_UNUSED( event );
 }
 
-void KPrPlaceholderTool::activate( bool temporary )
+void KPrPlaceholderTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
+    Q_UNUSED(toolActivation);
     QList<KPrPlaceholderShape *> selectedShapes;
 
-    foreach( KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes() ) {
+    foreach (KoShape *shape, shapes) {
         if ( KPrPlaceholderShape * ps = dynamic_cast<KPrPlaceholderShape*>( shape ) ) {
             selectedShapes.append( ps );
         }

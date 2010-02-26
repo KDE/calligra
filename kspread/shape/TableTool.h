@@ -41,7 +41,7 @@ public:
     virtual Selection* selection();
 
 public Q_SLOTS:
-    virtual void activate(bool temporary = false);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
 protected:

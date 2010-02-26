@@ -311,10 +311,10 @@ void KarbonGradientTool::keyPressEvent(QKeyEvent *event)
     event->accept();
 }
 
-void KarbonGradientTool::activate(bool temporary)
+void KarbonGradientTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
-    if (! canvas()->shapeManager()->selection()->count()) {
+    Q_UNUSED(toolActivation);
+    if (shapes.isEmpty()) {
         emit done();
         return;
     }

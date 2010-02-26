@@ -198,7 +198,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
         }
     }
 
-    m_tool->activate( false );
+    m_tool->activate(KoToolBase::DefaultActivation, QSet<KoShape*>());
 
     emit activated();
     emit pageChanged( m_animationDirector->currentPage(), m_animationDirector->numStepsInPage() );

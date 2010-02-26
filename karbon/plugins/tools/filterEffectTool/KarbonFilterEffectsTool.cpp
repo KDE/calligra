@@ -250,10 +250,10 @@ void KarbonFilterEffectsTool::repaintDecorations()
     }
 }
 
-void KarbonFilterEffectsTool::activate(bool temporary)
+void KarbonFilterEffectsTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(temporary);
-    if (! canvas()->shapeManager()->selection()->count()) {
+    Q_UNUSED(toolActivation);
+    if (shapes.isEmpty()) {
         emit done();
         return;
     }
