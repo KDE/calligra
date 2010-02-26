@@ -69,181 +69,13 @@
 namespace KPlato
 {
 
-Report::Report(KoDocument *part, QWidget *parent)
-    : SplitterView(part, parent)
-{
-//    qDebug()<<"--------------- Report ------------------";
-    m_tab = addTabWidget();
-    m_designer = new ReportDesignerView( part, m_tab );
-    ReportView *v = new ReportView( part, m_tab, m_designer );
-    addView( v, m_tab, "Report" );
-    addView( m_designer, m_tab, "Design" );
-    
-    m_tab->setTabBarHidden( true );
-
-    connect( m_designer, SIGNAL( dataChanged() ), v, SLOT( refresh() ) );
-    connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign() ) );
-//    qDebug()<<"<-------------- Report -----------------<";
-}
-
-void Report::slotEditReportDesign()
-{
-    emit editReportDesign( this );
-}
-
-void Report::setGuiActive( bool active ) // virtual slot
-{
-    ViewBase *v = qobject_cast<ViewBase*>( m_tab->currentWidget() );
-    //qDebug()<<"Report::setGuiActive:"<<active<<m_activeview<<"->"<<v;
-    if ( m_activeview && m_activeview != v ) {
-        m_activeview->setGuiActive( false );
-    }
-    if ( active ) {
-        m_activeview = v;
-    }
-    if ( v ) {
-        v->setGuiActive( active );
-    }
-    SplitterView::setGuiActive( active );
-}
-
-QDockWidget *Report::createPropertyDocker()
-{
-    KTabWidget *tab = new KTabWidget();
-    ReportSourceEditor *se = new ReportSourceEditor( tab );
-    tab->addTab( se, "Source" );
-    KoProperty::EditorView *e = new KoProperty::EditorView( tab );
-    tab->addTab( e, "Properties" );
-    QDockWidget *dock = new QDockWidget( this );
-    dock->setWindowTitle( "Properties editor" );
-    dock->setWidget( tab );
-    m_designer->setPropertyEditor( dock, e, se );
-    return dock;
-}
-
-void Report::insertDataModel( const QString &tag, QAbstractItemModel *model )
-{
-    QList<ReportDesignerView*> lst = findChildren<ReportDesignerView*>();
-    foreach ( ReportDesignerView *v, lst ) {
-        v->insertDataModel( tag, model );
-    }
-}
-
-void Report::setReportModels( const QMap<QString, QAbstractItemModel*> &map )
-{
-    m_designer->setDefaultReportModels( map );
-}
-
-QMap<QString, QAbstractItemModel*> Report::createDefaultReportModels( Project *project, ScheduleManager *manager, QObject *parent )
-{
-    QMap<QString, QAbstractItemModel*> map;
-    QSortFilterProxyModel *sf = 0;
-    ItemModelBase *m = 0;
-    
-    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    FlatProxyModel *fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new GeneralNodeItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "tasks", sf );
-    
-    //QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
-    sf = new QSortFilterProxyModel( parent );
-    sf->setFilterKeyColumn( NodeModel::NodeType );
-    sf->setFilterRole( Qt::EditRole );
-    sf->setFilterRegExp( rex );
-    sf->setDynamicSortFilter( true );
-    fm = new FlatProxyModel( sf );
-    sf->setSourceModel( fm );
-    m = new TaskStatusItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "taskstatus", sf );
-
-    fm = new FlatProxyModel( parent );
-    m = new ResourceAppointmentsRowModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resourceassignments", fm );
-
-    fm = new FlatProxyModel( parent );
-    m = new ResourceItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resourcesandgroups", fm );
-
-    fm = new FlatProxyModel( parent );
-    m = new CostBreakdownItemModel( fm );
-    fm->setSourceModel( m );
-    m->setProject( project );
-    m->setScheduleManager( manager );
-//    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "costbreakdown", fm  );
-
-//     QRegExp px( QString( "^(%1)$" ).arg( (int)Node::Type_Project ) );
-//     sf = new QSortFilterProxyModel( parent );
-//     sf->setFilterKeyColumn( NodeModel::NodeType );
-//     sf->setFilterRole( Qt::EditRole );
-//     sf->setFilterRegExp( px );
-//     sf->setDynamicSortFilter( true );
-//     NodeItemModel *n = new NodeItemModel( fm );
-//     sf->setSourceModel( n );
-//     n->setShowProject( true );
-//     n->setProject( project );
-//     n->setScheduleManager( manager );
-//     connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), n, SLOT( setScheduleManager( ScheduleManager* ) ) );
-//     map.insert( "project", sf );
-
-    return map;
-}
-
-bool Report::loadXML( const QDomDocument &doc )
-{
-    return m_designer->loadXML( doc );
-}
-
-QDomDocument Report::document() const
-{
-    return m_designer->document();
-}
-
-bool Report::loadContext( const KoXmlElement &context )
-{
-    //qDebug()<<"Report::loadContext:";
-    return SplitterView::loadContext( context );
-
-}
-
-void Report::saveContext( QDomElement &context ) const
-{
-    //qDebug()<<"Report::saveContext:";
-    SplitterView::saveContext( context );
-}
-
-
-//-----------------
-ReportView::ReportView( KoDocument *part, QWidget *parent, ReportDesignerView *designer )
-    : ViewBase( part, parent ),
-    m_designer( designer )
+ReportView::ReportView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent )
 {
 //    qDebug()<<"--------------- ReportView ------------------";
 
     m_preRenderer = 0;
-    setObjectName("KPlatoReportView");
+    setObjectName("ReportView");
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setBackgroundRole(QPalette::Dark);
     m_scrollArea->viewport()->setAutoFillBackground(true);
@@ -262,10 +94,87 @@ ReportView::ReportView( KoDocument *part, QWidget *parent, ReportDesignerView *d
     
     refresh();
 
-    connect( m_designer, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), SLOT( refresh() ) );
-    
 //    qDebug()<<"<-------------- ReportView -----------------<";
 }
+
+QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *project, ScheduleManager *manager, QObject *parent ) const
+{
+    QMap<QString, QAbstractItemModel*> map;
+    QSortFilterProxyModel *sf = 0;
+    ItemModelBase *m = 0;
+    
+    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
+    sf = new QSortFilterProxyModel( parent );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    m = new GeneralNodeItemModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "tasks", sf );
+    
+    //QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
+    sf = new QSortFilterProxyModel( parent );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    m = new TaskStatusItemModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "taskstatus", sf );
+
+    fm = new FlatProxyModel( parent );
+    m = new ResourceAppointmentsRowModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "resourceassignments", fm );
+
+    fm = new FlatProxyModel( parent );
+    m = new ResourceItemModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "resourcesandgroups", fm );
+
+    fm = new FlatProxyModel( parent );
+    m = new CostBreakdownItemModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "costbreakdown", fm  );
+
+//     QRegExp px( QString( "^(%1)$" ).arg( (int)Node::Type_Project ) );
+//     sf = new QSortFilterProxyModel( parent );
+//     sf->setFilterKeyColumn( NodeModel::NodeType );
+//     sf->setFilterRole( Qt::EditRole );
+//     sf->setFilterRegExp( px );
+//     sf->setDynamicSortFilter( true );
+//     NodeItemModel *n = new NodeItemModel( fm );
+//     sf->setSourceModel( n );
+//     n->setShowProject( true );
+//     n->setProject( project );
+//     n->setScheduleManager( manager );
+////     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), n, SLOT( setScheduleManager( ScheduleManager* ) ) );
+//     map.insert( "project", sf );
+
+    return map;
+}
+
+//-----------------
 
 void ReportView::renderPage( int page )
 {
@@ -339,26 +248,41 @@ void ReportView::slotRenderKSpread()
 
 void ReportView::slotExportHTML()
 {
-/*    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
-    if (!saveUrl.isValid()) {
-        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Saved"));
+    KoReportRendererContext cxt;
+    KoReportRendererBase *renderer;
+    
+    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
+    if (!cxt.destinationUrl.isValid()) {
+        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Exported"));
         return;
     }
-    if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
-        int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+    if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
+        int wantSave = KMessageBox::warningContinueCancel(this,
+            i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()),
+            i18n("Warning"), KGuiItem(i18n("Overwrite")));
         if (wantSave != KMessageBox::Continue) {
             return;
         }
     }
 
-    bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
+    bool css = (KMessageBox::questionYesNo(this,
+        i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
+             "or export using a Table which outputs a much simpler format."), i18n("Export Style"),
+             KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
-    KRHtmlRender hr;
-    if (!hr.render(m_reportDocument, saveUrl, css)) {
-        KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n("Saving failed"));
+    KoReportRendererFactory m_factory;
+    if (css){
+        renderer = m_factory.createInstance("htmlcss");
+    }
+    else {
+        renderer = m_factory.createInstance("htmltable");
+    }
+    
+    if (!renderer->render(cxt, m_reportDocument)) {
+        KMessageBox::error(this, i18n("Exporting report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Exporting failed"));
     } else {
-        KMessageBox::information(this, i18n("Report saved to %1", saveUrl.prettyUrl()) , i18n("Saved OK"));
-    }*/
+        KMessageBox::information(this, i18n("Report exported to %1", cxt.destinationUrl.prettyUrl()) , i18n("Exporting Succeeded"));
+    }
 }
 
 void ReportView::setupGui()
@@ -412,14 +336,25 @@ void ReportView::setGuiActive( bool active ) // virtual slot
     ViewBase::setGuiActive( active );
 }
 
+QMap<QString, QAbstractItemModel*> ReportView::reportModels() const
+{
+    return m_modelmap;
+}
+
+void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map )
+{
+    qDeleteAll( m_modelmap );
+    m_modelmap = map;
+}
+
 void ReportView::refresh()
 {
 //    qDebug()<<"ReportView::refresh:"<<sender();
     delete m_preRenderer;
-    QDomElement e = tempData().documentElement();
+    QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
     if ( ! m_preRenderer->isValid()) {
-        qDebug()<<"ReportView::refresh: Invalid tempData";
+        qDebug()<<"ReportView::refresh: Invalid design document";
         return;
     }
     ReportData *rd = createReportData( e );
@@ -451,398 +386,42 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     }
     r->setProject( project() );
     r->setScheduleManager( m_schedulemanager );
-    r->setModel( m_designer->dataModel( modelname ) );
+    r->setModel( m_modelmap.value( modelname ) );
     return r;
 }
 
-QDomDocument ReportView::tempData() const
+bool ReportView::loadXML( const QDomDocument &doc )
 {
-    if ( m_designer == 0 ) {
-        return QDomDocument();
-    }
-    QDomDocument doc = m_designer->document();
-/*    qDebug()<<"ReportView::tempData:";
-    qDebug()<<doc.toString();*/
-    return doc;
-}
-
-KoReportData* ReportView::sourceData(QDomElement e)
-{
-    KoReportData *kodata;
-    kodata = 0;
-    return kodata;
+    m_design = doc;
+    refresh();
+    return true;
 }
 
 bool ReportView::loadContext( const KoXmlElement &context )
 {
-    //qDebug()<<"ReportView::loadContext:";
+    qDebug()<<"ReportView::loadContext:"<<context.tagName();
+    
+    QDomDocument doc( "context" );
+    QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
+    if ( ! e.isNull() ) {
+        m_design = QDomDocument( "context" );
+        m_design.appendChild( e );
+        qDebug()<<m_design.toString();
+    } else qDebug()<<"Invalid context xml";
+    refresh();
     return true;
 }
 
 void ReportView::saveContext( QDomElement &context ) const
 {
-    //qDebug()<<"ReportView::saveContext:";
+    qDebug()<<"ReportView::saveContext:"<<m_design.documentElement().tagName();
+    context.appendChild( m_design.documentElement().cloneNode() );
 }
 
-//---------------------------
-
-KPlato_ReportDesigner::KPlato_ReportDesigner( QWidget *parent )
-    : KoReportDesigner( parent )
+QDomDocument ReportView::document() const
 {
+    return m_design.cloneNode().toDocument();
 }
-
-//--
-ReportDesignerView::ReportDesignerView(KoDocument *part, QWidget *parent)
-    : ViewBase(part, parent),
-    m_designer( 0 ),
-    m_propertydocker( 0 ),
-    m_propertyeditor( 0 ),
-    m_sourceeditor( 0 )
-{
-//    qDebug()<<"--------------- ReportDesignerView ------------------";
-    
-    setObjectName( "KPlatoReportDesigner" );
-    m_scrollarea = new QScrollArea( this );
-    QVBoxLayout * l = new QVBoxLayout( this );
-    l->addWidget( m_scrollarea );
-    
-    setReportDesigner( new KoReportDesigner( this ) );
-    
-    setupGui();
-    
-    
-//     actionCollection()->addAction(KStandardAction::Cut,  "edit-cut", m_designer, SLOT( slotEditCut() ));
-//     actionCollection()->addAction(KStandardAction::Copy,  "edit-copy", m_designer, SLOT( slotEditCopy() ));
-//     actionCollection()->addAction(KStandardAction::Paste,  "edit-paste", m_designer, SLOT( slotEditPaste() ));
-
-//     connect(m_reportDesigner, SIGNAL(propertySetChanged()), this, SLOT(slotDesignerPropertySetChanged()));
-//     connect(m_reportDesigner, SIGNAL(dirty()), this, SLOT(setDirty()));
-
-//    qDebug()<<"<-------------- ReportDesignerView -----------------<";
-}
-
-void ReportDesignerView::setReportDesigner( KoReportDesigner *designer )
-{
-    if ( m_designer ) {
-        m_scrollarea->takeWidget();
-        delete m_designer;
-    }
-
-    m_designer = designer;
-    m_scrollarea->setWidget( m_designer );
-
-    connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
-    
-    connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
-}
-
-ReportDesignerView::~ReportDesignerView()
-{
-    qDeleteAll( m_modelmap );
-}
-
-void ReportDesignerView::setupGui()
-{
-    KActionCollection *coll = actionCollection();
-
-    QString name = "reportdesigner_add_list";
-
-    QList<QAction*> lst = KoReportDesigner::actions();
-    foreach ( QAction *a, lst ) {
-        a->setParent( this );
-        coll->addAction( a->objectName(), a );
-        connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
-        addAction( name, a );
-    }
-
-    name = "reportdesigner_edit_list";
-
-    KAction *a = new KAction( i18n( "Section Editor" ), this );
-    a->setObjectName("sectionedit");
-    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotSectionEditor()));
-    addAction( name, a );
-    
-    a = new KAction( KIcon( "arrow-up" ), i18n( "Raise" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
-    addAction( name, a );
-    a = new KAction( KIcon( "arrow-down" ), i18n( "Lower" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
-    addAction( name, a );
-
-    a = coll->addAction( KStandardAction::Clear, "edit-delete", m_designer,  SLOT( slotEditDelete() ) );
-    addAction( name, a );
-
-    //qDebug()<<"ReportDesignerView::setupGui:"<<actionList( name );
-}
-
-void ReportDesignerView::slotSectionEditor()
-{
-    //qDebug()<<"ReportDesignerView::slotSectionEditor:"<<sender();
-    m_designer->slotSectionEditor();
-}
-
-void ReportDesignerView::slotInsertAction()
-{
-    //qDebug()<<"ReportDesignerView::slotInsertAction:"<<sender();
-    emit insertItem( sender()->objectName() );
-}
-
-void ReportDesignerView::setGuiActive( bool active ) // virtual slot
-{
-    //qDebug()<<"ReportDesignerView::setGuiActive:"<<active<<m_propertydocker;
-    if ( m_propertydocker ) {
-        m_propertydocker->setVisible( active );
-    }
-    ViewBase::setGuiActive( active );
-}
-
-void ReportDesignerView::setPropertyEditor( QDockWidget *docker, KoProperty::EditorView *editor, ReportSourceEditor *se )
-{
-    m_propertydocker = docker;
-    m_propertyeditor = editor;
-    m_sourceeditor = se;
-    setSourceModel( sourceModel() );
-}
-
-QAbstractItemModel *ReportDesignerView::sourceModel()
-{
-    return createSourceModel( this );
-}
-
-//static
-ReportSourceModel *ReportDesignerView::createSourceModel( QObject *parent )
-{
-    ReportSourceModel *m = new ReportSourceModel( 3, 2, parent );
-    m->setHorizontalHeaderLabels( QStringList() << "Name" << "Value" );
-    QList<QStandardItem*> lst;
-    
-    lst << new QStandardItem( "Source type" );
-    lst.last()->setData( "source-type" );
-    lst << new QStandardItem( "Source" );
-    lst.last()->setData( "source" );
-
-    QStandardItem *item = new QStandardItem( "Select from" );
-    item->setData( "select-from" );
-    item->setEditable( false );
-    lst << item;
-
-    foreach ( QStandardItem *item, lst ) {
-        m->setItem( lst.indexOf( item ), item );
-        item->setEditable( false );
-    }
-    int row = 0;
-    item = new QStandardItem( "KPlato Project" );
-    item->setData( "KPlato Project" );
-    m->setItem( row++, 1, item );
-    item = new QStandardItem( "Internal" );
-    item->setData( "Internal" );
-    m->setItem( row++, 1, item );
-    
-    // Child items
-    QList<QStandardItem*> children;
-    children << new QStandardItem( "Tasks" ) << new QStandardItem();
-    children[ 0 ]->setData( "tasks", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( "Task status" ) << new QStandardItem();
-    children[ 0 ]->setData( "taskstatus", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( "Resourceassignements" ) << new QStandardItem();
-    children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( "Resources" ) << new QStandardItem();
-    children[ 0 ]->setData( "resources", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( "Resourcegroups" ) << new QStandardItem();
-    children[ 0 ]->setData( "resourcegroups", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    children << new QStandardItem( "Resources and Groups" ) << new QStandardItem();
-    children[ 0 ]->setData( "resourcesandgroups", Reports::TagRole );
-    children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
-    children.clear();
-
-    return m;
-}
-
-void ReportDesignerView::setSourceModel( QAbstractItemModel *model )
-{
-    m_sourceeditor->setModel( model );
-    connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-}
-
-void ReportDesignerView::setDefaultReportModels( const QMap<QString, QAbstractItemModel*> &map )
-{
-    m_modelmap = map;
-}
-
-void ReportDesignerView::insertDataModel( const QString &tag, QAbstractItemModel *model )
-{
-    m_modelmap.insert( tag, model );
-}
-
-QAbstractItemModel *ReportDesignerView::dataModel( const QString &tag ) const
-{
-    return m_modelmap.value( tag );
-}
-
-void ReportDesignerView::slotPropertySetChanged()
-{
-    //qDebug()<<"ReportDesignerView::slotPropertySetChanged:"<<m_designer->itemPropertySet();
-    if ( m_propertyeditor ) {
-        m_propertyeditor->changeSet( m_designer->itemPropertySet() );
-    }
-}
-
-void ReportDesignerView::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
-{
-    //qDebug()<<"ReportDesignerView::slotSourceChanged:"<<topLeft<<bottomRight;
-    QAbstractItemModel *m = const_cast<QAbstractItemModel*>( topLeft.model() );
-    QModelIndex parent = topLeft.parent();
-    if ( ! parent.isValid() ) {
-        return;
-    }
-    if ( parent.data( Reports::TagRole ).toString() == "select-from" )
-    {
-        if ( topLeft.data( Qt::CheckStateRole ).toInt() == Qt::Checked ) {
-            // set select-from value and tag
-            QModelIndex idx = m->index( parent.row(), 1, parent.parent() );
-            QString tag = m->index( topLeft.row(), 0, parent ).data( Reports::TagRole ).toString();
-            QString value = m->index( topLeft.row(), 0, parent ).data().toString();
-            m->setData( idx, value, Qt::EditRole );
-            m->setData( idx, tag, Reports::TagRole );
-            // update checked mark
-            setChecked( topLeft );
-            //qDebug()<<"ReportDesignerView::slotSourceChanged:"<<tag<<m_modelmap[ tag ];
-            m_designer->setReportData( createReportData( tag ) );
-        } else {
-            // set checked flag; it's not allowed to be reset by user
-            disconnect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-            m->setData( topLeft, Qt::Checked, Qt::CheckStateRole );
-            connect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-        }
-    }
-}
-
-void ReportDesignerView::setChecked( const QModelIndex &idx )
-{
-    QAbstractItemModel *m = const_cast<QAbstractItemModel*>( idx.model() );
-
-    disconnect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-    m->setData( idx, "checked", Reports::TagRole );
-    for ( int row = 0; row < idx.model()->rowCount( idx.parent() ); ++row ) {
-        QModelIndex i = m->index( row, 1, idx.parent() );
-        if ( i != idx ) {
-            m->setData( i, QVariant( (int)Qt::Unchecked ), Qt::CheckStateRole );
-            m->setData( i, "unchecked", Reports::TagRole );
-        }
-    }
-    connect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
-}
-
-QDomDocument ReportDesignerView::document() const
-{
-    QDomDocument doc( "kplatoreportdefinition" );
-    QDomElement e = doc.createElement( "kplatoreportdefinition" );
-    doc.appendChild( e );
-    if ( m_sourceeditor ) {
-        m_sourceeditor->sourceData( e );
-    } else qDebug()<<"ReportDesignerView::document: source data not available";
-    e.appendChild( m_designer->document() );
-/*    qDebug()<<"ReportDesignerView::document:";
-    qDebug()<<doc.toString();*/
-    return doc;
-}
-
-bool ReportDesignerView::loadXML( const QDomDocument &doc )
-{
-    qDebug()<<"ReportDesignerView::loadXML:";
-    QDomElement e = doc.firstChildElement( "kplatoreportdefinition" );
-    //qDebug()<<doc.toString();
-
-    if ( e.tagName() == "kplatoreportdefinition" ) {
-        setReportDesigner( new KoReportDesigner( this, e.firstChildElement( "report:content" ) ) );
-        m_sourceeditor->setSourceData( e.firstChildElement( "data-source" ) );
-        m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
-        slotPropertySetChanged();
-        emit dataChanged();
-        return true;
-    }
-    return false;
-}
-
-bool ReportDesignerView::loadContext( const KoXmlElement &context )
-{
-    qDebug()<<"ReportDesignerView::loadContext:";
-    QDomDocument doc( "Context" );
-    QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
-    qDebug()<<doc.toString();
-
-    if ( e.tagName() == "kplatoreportdefinition" ) {
-        //qDebug()<<"ReportDesignerView::loadContext: load data-source";
-        m_sourceeditor->setSourceData( e.firstChildElement( "data-source" ) );
-        setReportDesigner( new KoReportDesigner( this, e.firstChildElement( "report:content" ) ) );
-        m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
-        slotPropertySetChanged();
-        emit dataChanged();
-        return true;
-    }
-    return false;
-}
-
-void ReportDesignerView::saveContext( QDomElement &context ) const
-{
-    //qDebug()<<"ReportDesignerView::saveContext:";
-    QDomDocument doc = document();
-    //qDebug()<<doc.toString();
-    context.appendChild( doc.documentElement() );
-}
-
-void ReportDesignerView::createReportData( const QString &type, KoReportData *rd )
-{
-    rd = createReportData( type );
-}
-
-ReportData *ReportDesignerView::createReportData( const QString &type )
-{
-    //FIXME a smarter report data creator
-    ReportData *r = 0;
-    if ( type == "costbreakdown" ) {
-        r = new ChartReportData();
-    } else {
-        r = new ReportData();
-    }
-    connect( r, SIGNAL( createReportData( const QString&, KoReportData* ) ), SLOT( createReportData( const QString&, KoReportData* ) ) );
-    r->setModel( m_modelmap.value( type ) );
-    //qDebug()<<"ReportDesignerView::createReportData:"<<type<<r<<r->itemModel();
-    if ( r->itemModel() ) {
-        //qDebug()<<"ReportDesignerView::createReportData:"<<r->itemModel()->project()<<r->itemModel()->scheduleManager();
-    }
-    Q_ASSERT( r );
-    return r;
-}
-
-void ReportDesignerView::setScheduleManager( ScheduleManager *sm )
-{
-    //qDebug()<<"ReportDesignerView::setScheduleManager:"<<sm;
-    ViewBase::setScheduleManager( sm );
-    emit scheduleManagerChanged( sm );
-}
-
 
 //------------------
 ReportNavigator::ReportNavigator( QWidget *parent )
@@ -897,12 +476,12 @@ ReportDesignDialog::ReportDesignDialog( QWidget *parent )
     m_view( 0 )
 {
     setCaption( i18nc( "@title:window", "Report Designer" ) );
-    m_panel = new ReportDesignPanel( 0, 0, QDomElement(), this );
+    m_panel = new ReportDesignPanel( this );
 
     setMainWidget( m_panel );
 }
 
-ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, QWidget *parent )
+ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
     : KDialog( parent ),
     m_view( 0 )
 {
@@ -912,7 +491,8 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setButtonIcon( KDialog::User1, KIcon( "window-new" ) );
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
-    m_panel = new ReportDesignPanel( project, manager, element, this );
+    
+    m_panel = new ReportDesignPanel( project, manager, element, models, this );
 
     setMainWidget( m_panel );
     
@@ -920,7 +500,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
 
-ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, Report *view, QWidget *parent )
+ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manager, ReportView *view, QWidget *parent )
     : KDialog( parent ),
     m_view( view )
 {
@@ -931,11 +511,13 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
 
+    QMap<QString, QAbstractItemModel*> models;
     QDomElement e;
     if ( view ) {
         e = view->document().documentElement();
+        models = view->reportModels();
     }
-    m_panel = new ReportDesignPanel( project, manager, e, this );
+    m_panel = new ReportDesignPanel( project, manager, e, models, this );
 
     setMainWidget( m_panel );
     
@@ -997,7 +579,7 @@ void ReportDesignDialog::slotSaveToView()
 
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
-    m_view = dynamic_cast<Report*>( view );
+    m_view = dynamic_cast<ReportView*>( view );
     //qDebug()<<"ReportDesignDialog::slotViewCreated:"<<view;
     if ( m_view == 0 ) {
         return;
@@ -1012,12 +594,10 @@ QDomDocument ReportDesignDialog::document() const
 }
 
 //----
-ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, QWidget *parent )
+ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     : QWidget( parent ),
     m_modified( false )
 {
-    m_modelmap = Report::createDefaultReportModels( project, manager, this );
-    
     QVBoxLayout *l = new QVBoxLayout( this );
 
     KToolBar *tb = new KToolBar( this );
@@ -1030,7 +610,66 @@ ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager
     sp2->setOrientation( Qt::Vertical );
 
     m_sourceeditor = new ReportSourceEditor( sp2 );
-    ReportSourceModel *model = ReportDesignerView::createSourceModel( m_sourceeditor );
+    ReportSourceModel *model = createSourceModel( m_sourceeditor );
+    m_sourceeditor->setModel( model );
+    
+    m_propertyeditor = new KoProperty::EditorView( sp2 );
+    
+    QScrollArea *sa = new QScrollArea( sp1 );
+    m_designer = new KoReportDesigner( sa );
+    sa->setWidget( m_designer );
+
+    connect( model, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
+
+    connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
+
+    connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
+    connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
+
+    // Populate toolbar
+    tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    KAction *a = new KAction( i18n( "Section Editor" ), this );
+    a->setObjectName("sectionedit");
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
+    tb->addAction( a );
+    tb->addSeparator();
+    a = new KAction( KIcon( "arrow-up" ), i18n( "Raise" ), this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
+    tb->addAction( a );
+    a = new KAction( KIcon( "arrow-down" ), i18n( "Lower" ), this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
+    tb->addAction( a );
+
+    a = new KAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
+    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
+    tb->addAction( a );
+
+    tb->addSeparator();
+
+    foreach( QAction *a, m_designer->actions() ) {
+        a->setParent( this );
+        tb->addAction( a );
+        connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
+    }
+}
+
+ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
+    : QWidget( parent ),
+    m_modified( false )
+{
+    QVBoxLayout *l = new QVBoxLayout( this );
+
+    KToolBar *tb = new KToolBar( this );
+    l->addWidget( tb );
+
+    QSplitter *sp1 = new QSplitter( this );
+    l->addWidget( sp1 );
+
+    QSplitter *sp2 = new QSplitter( sp1 );
+    sp2->setOrientation( Qt::Vertical );
+
+    m_sourceeditor = new ReportSourceEditor( sp2 );
+    ReportSourceModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
     m_sourceeditor->setSourceData( element.firstChildElement( "data-source" ) );
     
@@ -1045,6 +684,7 @@ ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager
     }
     sa->setWidget( m_designer );
 
+    m_modelmap = models;
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
     
@@ -1146,6 +786,76 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
     Q_ASSERT( r );
     return r;
 }
+
+ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
+{
+    ReportSourceModel *m = new ReportSourceModel( 3, 2, parent );
+    m->setHorizontalHeaderLabels( QStringList() << "Name" << "Value" );
+    QList<QStandardItem*> lst;
+    
+    lst << new QStandardItem( "Source type" );
+    lst.last()->setData( "source-type" );
+    lst << new QStandardItem( "Source" );
+    lst.last()->setData( "source" );
+
+    QStandardItem *item = new QStandardItem( "Select from" );
+    item->setData( "select-from" );
+    item->setEditable( false );
+    lst << item;
+
+    foreach ( QStandardItem *item, lst ) {
+        m->setItem( lst.indexOf( item ), item );
+        item->setEditable( false );
+    }
+    int row = 0;
+    item = new QStandardItem( "KPlato Project" );
+    item->setData( "KPlato Project" );
+    m->setItem( row++, 1, item );
+    item = new QStandardItem( "Internal" );
+    item->setData( "Internal" );
+    m->setItem( row++, 1, item );
+    
+    // Child items
+    QList<QStandardItem*> children;
+    children << new QStandardItem( "Tasks" ) << new QStandardItem();
+    children[ 0 ]->setData( "tasks", Reports::TagRole );
+    children[ 1 ]->setCheckable( true );
+    lst[ 2 ]->appendRow( children );
+    children.clear();
+
+    children << new QStandardItem( "Task status" ) << new QStandardItem();
+    children[ 0 ]->setData( "taskstatus", Reports::TagRole );
+    children[ 1 ]->setCheckable( true );
+    lst[ 2 ]->appendRow( children );
+    children.clear();
+
+    children << new QStandardItem( "Resourceassignements" ) << new QStandardItem();
+    children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
+    children[ 1 ]->setCheckable( true );
+    lst[ 2 ]->appendRow( children );
+    children.clear();
+
+//     children << new QStandardItem( "Resources" ) << new QStandardItem();
+//     children[ 0 ]->setData( "resources", Reports::TagRole );
+//     children[ 1 ]->setCheckable( true );
+//     lst[ 2 ]->appendRow( children );
+//     children.clear();
+// 
+//     children << new QStandardItem( "Resourcegroups" ) << new QStandardItem();
+//     children[ 0 ]->setData( "resourcegroups", Reports::TagRole );
+//     children[ 1 ]->setCheckable( true );
+//     lst[ 2 ]->appendRow( children );
+//     children.clear();
+
+    children << new QStandardItem( "Resources and Groups" ) << new QStandardItem();
+    children[ 0 ]->setData( "resourcesandgroups", Reports::TagRole );
+    children[ 1 ]->setCheckable( true );
+    lst[ 2 ]->appendRow( children );
+    children.clear();
+
+    return m;
+}
+
 
 //-----------
 ReportSourceModel::ReportSourceModel( QObject *parent )

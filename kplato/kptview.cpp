@@ -452,7 +452,7 @@ void View::createViews()
                         v = createAccountsView( cat, tag, name, tip );
                     } else if ( type == "PerformanceStatusView" ) {
                         v = createPerformanceStatusView( cat, tag, name, tip );
-                    } else if ( type == "Report" ) {
+                    } else if ( type == "ReportView" ) {
                         v = createReportView( cat, tag, name, tip );
                     } else  {
                         kWarning()<<"Unknown viewtype: "<<type;
@@ -512,7 +512,7 @@ void View::createViews()
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
-        createReportView( cat, "Report", QString(), TIP_USE_DEFAULT_TEXT );
+        createReportView( cat, "ReportView", QString(), TIP_USE_DEFAULT_TEXT );
 
     }
 }
@@ -590,7 +590,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     } else if ( type == "PerformanceStatusView" ) {
         vi.name = i18n( "Tasks Performance Chart" );
         vi.tip = i18n( "View tasks performance status information" );
-    } else if ( type == "Report" ) {
+    } else if ( type == "ReportView" ) {
         vi.name = i18n( "Report" );
         vi.tip = i18n( "View report" );
     } else  {
@@ -1235,14 +1235,11 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     //qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
-    Report *v = new Report( getPart(), m_tab );
-    QDockWidget *w = v->createPropertyDocker();
-    mainWindow()->addDockWidget( Qt::LeftDockWidgetArea, w );
-    w->setVisible( false );
+    ReportView *v = new ReportView( getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
-    ViewInfo vi = defaultViewInfo( "Report" );
+    ViewInfo vi = defaultViewInfo( "ReportView" );
     if ( name.isEmpty() ) {
         i->setText( 0, vi.name );
     }
@@ -1253,13 +1250,13 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->setReportModels( v->createDefaultReportModels( &getProject(), currentScheduleManager(), this ) );
+    v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
     
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     emit currentScheduleManagerChanged( currentScheduleManager() );
     
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( v, SIGNAL( editReportDesign( Report* ) ), SLOT( slotEditReportDesign( Report* ) ) );
+    connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -2424,7 +2421,8 @@ void View::slotViewListItemInserted( ViewListItem *item )
 void View::slotCreateReport()
 {
     //qDebug()<<"View::slotCreateReport:";
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), this );
+    ReportView v( getPart(), 0 );
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.reportModels(), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
@@ -2458,7 +2456,8 @@ void View::slotOpenReportFile()
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, this );
+    ReportView v( getPart(), 0 );
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, v.reportModels(), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
@@ -2466,7 +2465,7 @@ void View::slotOpenReportFile()
     delete dlg;
 }
 
-void View::slotEditReportDesign( Report *view )
+void View::slotEditReportDesign( ReportView *view )
 {
     if ( view == 0 ) {
         return;
