@@ -101,7 +101,7 @@ public:
 signals:
     /**
      * Emitted when the frameset finished layout and found that there is more
-     * text then will fit in the frameset.
+     * text than will fit in the frameset.
      * Signal will be emitted only when the policy of the last frame allows it.
      */
     void moreFramesNeeded(KWTextFrameSet *fs);
