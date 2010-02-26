@@ -92,7 +92,10 @@ target_link_libraries(keximigratetest  ${KDE4_KDECORE_LIBS} keximigrate kexicore
 
 ########### install files ###############
 
-install( FILES  keximigrate.h keximigratedata.h migratemanager.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb COMPONENT Devel)
+if(FALSE) # TODO: install when we move to independent place
+    install( FILES  keximigrate.h keximigratedata.h migratemanager.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb COMPONENT Devel)
+endif(FALSE)
+
 install( FILES  keximigration_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
