@@ -18,9 +18,10 @@
  */
 
 #include "ColorMatrixEffect.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoXmlWriter.h"
-#include "KoXmlReader.h"
+#include "ColorChannelConversion.h"
+#include <KoFilterEffectRenderContext.h>
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KLocale>
 #include <QtCore/QRect>
 #include <math.h>
@@ -167,16 +168,13 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
     for (int row = roi.top(); row < roi.bottom(); ++row) {
         for (int col = roi.left(); col < roi.right(); ++col) {
             const QRgb &s = src[row*w+col];
-            sa = qAlpha(s) / 255.0;
-            sr = qRed(s) / 255.0;
-            sb = qBlue(s) / 255.0;
-            sg = qGreen(s) / 255.0;
+            sa = fromIntColor[qAlpha(s)];
+            sr = fromIntColor[qRed(s)];
+            sg = fromIntColor[qGreen(s)];
+            sb = fromIntColor[qBlue(s)];
             // the matrix is applied to non-premultiplied color values
             // so we have to convert colors by dividing by alpha value
-            if (sa == 0.0) {
-                // alpha is zero (fully transparent)
-                //sr = sb = sg = 0.0;
-            } else if (sa != 1.0) {
+            if (sa > 0.0 && sa < 1.0) {
                 sr /= sa;
                 sb /= sa;
                 sg /= sa;

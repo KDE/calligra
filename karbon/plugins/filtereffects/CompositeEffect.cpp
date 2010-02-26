@@ -18,10 +18,11 @@
  */
 
 #include "CompositeEffect.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoViewConverter.h"
-#include "KoXmlWriter.h"
-#include "KoXmlReader.h"
+#include "ColorChannelConversion.h"
+#include <KoFilterEffectRenderContext.h>
+#include <KoViewConverter.h>
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KLocale>
 #include <KDebug>
 #include <QtCore/QRect>
@@ -90,15 +91,15 @@ QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilte
                 const QRgb &s = src[pixel];
                 QRgb &d = dst[pixel];
 
-                sa = qAlpha(s) / 255.0;
-                sr = qRed(s) / 255.0;
-                sb = qBlue(s) / 255.0;
-                sg = qGreen(s) / 255.0;
+                sa = fromIntColor[qAlpha(s)];
+                sr = fromIntColor[qRed(s)];
+                sg = fromIntColor[qGreen(s)];
+                sb = fromIntColor[qBlue(s)];
 
-                da = qAlpha(d) / 255.0;
-                dr = qRed(d) / 255.0;
-                db = qBlue(d) / 255.0;
-                dg = qGreen(d) / 255.0;
+                da = fromIntColor[qAlpha(d)];
+                dr = fromIntColor[qRed(d)];
+                dg = fromIntColor[qGreen(d)];
+                db = fromIntColor[qBlue(d)];
 
                 da = m_k[0] * sa * da + m_k[1] * da + m_k[2] * sa + m_k[3];
                 dr = m_k[0] * sr * dr + m_k[1] * dr + m_k[2] * sr + m_k[3];

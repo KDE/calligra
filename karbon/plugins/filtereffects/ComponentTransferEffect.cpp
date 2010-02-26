@@ -18,9 +18,10 @@
  */
 
 #include "ComponentTransferEffect.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoXmlWriter.h"
-#include "KoXmlReader.h"
+#include "ColorChannelConversion.h"
+#include <KoFilterEffectRenderContext.h>
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KLocale>
 #include <QtCore/QRect>
 #include <math.h>
@@ -119,14 +120,14 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
     const int maxCol = roi.right();
 
     for (int row = minRow; row <= maxRow; ++row) {
-        for (int col = minCol; col < maxCol; ++col) {
+        for (int col = minCol; col <= maxCol; ++col) {
             pixel = row * w + col;
             const QRgb &s = src[pixel];
 
-            sa = qAlpha(s) / 255.0;
-            sr = qRed(s) / 255.0;
-            sb = qBlue(s) / 255.0;
-            sg = qGreen(s) / 255.0;
+            sa = fromIntColor[qAlpha(s)];
+            sr = fromIntColor[qRed(s)];
+            sg = fromIntColor[qGreen(s)];
+            sb = fromIntColor[qBlue(s)];
             // the matrix is applied to non-premultiplied color values
             // so we have to convert colors by dividing by alpha value
             if (sa > 0.0 && sa < 1.0) {
