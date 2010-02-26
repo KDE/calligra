@@ -25,6 +25,8 @@
 namespace Swinder
 {
 
+class DrawingObject;
+
 /**
  * Base class for all kind of objects.
  */
@@ -58,7 +60,7 @@ public:
         OfficeArtObject = 0x001E
     };
 
-    Object(Type t, unsigned long id): m_type(t), m_id(id) {}
+    Object(Type t, unsigned long id): m_type(t), m_id(id), m_DrawingObject(0) {}
     virtual ~Object() {}
 
     /// Returns the object type.
@@ -70,9 +72,14 @@ public:
         return m_id;
     }
 
+    // Each Object can have optional a DrawingObject assigned.
+    DrawingObject* drawingObject() const { return m_DrawingObject; }
+    void setDrawingObject(DrawingObject* drawing) { m_DrawingObject = drawing; }
+
 private:
     const Type m_type;
     unsigned long m_id;
+    DrawingObject* m_DrawingObject;
 };
 
 /**

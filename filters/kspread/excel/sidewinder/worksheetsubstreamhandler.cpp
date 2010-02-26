@@ -199,6 +199,9 @@ public:
     
     // list of textobjects as received via TxO records
     std::vector<UString> textObjects;
+
+    // The last drawing object we got.
+    DrawingObject* lastDrawingObject;
 };
 
 WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals)
@@ -209,6 +212,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastFormulaCell = 0;
     d->formulaStringCell = 0;
     d->noteCount = 0;
+    d->lastDrawingObject = 0;
 
     RecordRegistry::registerRecordClass(HLinkRecord::id, HLinkRecord::createRecord);
 }
@@ -219,6 +223,7 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
         delete (*it).second;
     //for(std::map<std::pair<unsigned, unsigned>, FormulaTokens*>::iterator it = d->sharedFormulas.begin(); it != d->sharedFormulas.end(); ++it)
     //    delete it.second.second;
+    delete d->lastDrawingObject;
     delete d;
 }
 
@@ -875,6 +880,12 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
             break;
     }
 
+    // look if there is a DrawingObject defined that is waiting for us to be picked up.
+    if(d->lastDrawingObject) {
+        record->m_object->setDrawingObject(d->lastDrawingObject); // will take over ownership
+        d->lastDrawingObject = 0;
+    }
+
     d->sharedObjects[id] = record->m_object;
 }
 
@@ -944,6 +955,14 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
         //Q_ASSERT(false);
         
         return;
+    }
+
+    //FIXME probably move that up and use it for noites and pictures too? Needs more investigation...
+    if(record->m_gotClientData) {
+        // If the DrawingObject got a OfficeArtClientData then a ObjRecord will follow that picks
+        // this DrawingObject up and uses it for future actions.
+        delete d->lastDrawingObject; // remove old DrawingObject if it was not picked up
+        d->lastDrawingObject = new DrawingObject(*record);
     }
 
     std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;

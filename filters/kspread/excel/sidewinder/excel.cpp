@@ -1742,6 +1742,23 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 // ========== DrawingObject ==========
 
+DrawingObject::DrawingObject() : m_colL(0), m_dxL(0), m_rwT(0), m_dyT(0), m_colR(0), m_dxR(0), m_rwB(0), m_dyB(0), m_gotClientData(false) {}
+DrawingObject::~DrawingObject() {}
+DrawingObject::DrawingObject(const DrawingObject& other) { *this = other; }
+
+void DrawingObject::operator=(const DrawingObject& other)
+{
+    m_properties = other.m_properties;
+    m_colL = other.m_colL;
+    m_dxL = other.m_dxL;
+    m_rwT = other.m_rwT;
+    m_dyT = other.m_dyT;
+    m_colR = other.m_colR;
+    m_dxR = other.m_dxR;
+    m_rwB = other.m_rwB;
+    m_dyB = other.m_dyB;
+    m_gotClientData = other.m_gotClientData;
+}
 
 const char* DrawingObject::propertyName(DrawingObject::Property p)
 {
@@ -1907,7 +1924,8 @@ unsigned long DrawingObject::handleObject(unsigned size, const unsigned char* da
             }
             break;
         case 0xF011: // OfficeArtClientData
-            printf("OfficeArtClientData\n");
+            //printf("OfficeArtClientData\n");
+            m_gotClientData = true;
             break;
         case 0xF11E: // OfficeArtSplitMenuColorContainer
             printf("OfficeArtSplitMenuColorContainer\n");
