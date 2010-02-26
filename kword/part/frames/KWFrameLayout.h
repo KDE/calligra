@@ -122,7 +122,7 @@ private:
 
     KoShape *createTextShape(const KWPage &page);
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
-    QList<KWFrame *> framesInPage(QRectF page);
+    QList<KWFrame *> framesInPage(const QRectF &page);
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
     bool hasFrameOn(KWTextFrameSet *fs, int pageNumber);

@@ -432,7 +432,7 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
     return true;
 }
 
-QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)
+QList<KWFrame *> KWFrameLayout::framesInPage(const QRectF &page)
 {
     // hopefully replaced with a tree
     QList<KWFrame*> answer;
