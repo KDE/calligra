@@ -237,9 +237,6 @@ private:
     QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf,
                                 const PPT::TextPFException9* pf9);
 
-    const PPT::TextMasterStyleLevel *
-    getTextMasterStyleLevel(quint16 type, quint16 level,
-                            const PPT::MasterOrSlideContainer* m);
     quint32 getTextType(const PPT::OfficeArtClientTextBox* clientTextbox,
                         const PPT::OfficeArtClientData* clientData) const;
     void addGraphicStyleToDrawElement(Writer& out, const PPT::OfficeArtSpContainer& o);

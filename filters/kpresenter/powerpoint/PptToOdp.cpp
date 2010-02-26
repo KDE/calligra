@@ -1131,40 +1131,6 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
     }
     return textstyle;
 }
-const TextMasterStyleLevel *
-PptToOdp::getTextMasterStyleLevel(quint16 type, quint16 level, const MasterOrSlideContainer* m)
-{
-    const TextMasterStyleAtom* masterStyle = getTextMasterStyleAtom(m, type);
-    if (!masterStyle) {
-        if (p->documentContainer) {
-            return 0;
-            masterStyle = &p->documentContainer->documentTextInfo.textMasterStyleAtom;
-        } else {
-            return 0;
-        }
-    }
-    const TextMasterStyleLevel *l = 0;
-    switch (level) {
-    case 0: if (masterStyle->lstLvl1) l = masterStyle->lstLvl1.data();break;
-    case 1: if (masterStyle->lstLvl2) l = masterStyle->lstLvl2.data();break;
-    case 2: if (masterStyle->lstLvl3) l = masterStyle->lstLvl3.data();break;
-    case 3: if (masterStyle->lstLvl4) l = masterStyle->lstLvl4.data();break;
-    case 4: if (masterStyle->lstLvl5) l = masterStyle->lstLvl5.data();break;
-    }
-    return l;
-}
-const TextMasterStyle9Atom*
-getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
-{
-    if (!m) return 0;
-    const TextMasterStyle9Atom* textstyle = 0;
-    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
-        }
-    }
-    return textstyle;
-}
 void PptToOdp::defineMasterStyles(KoGenStyles& styles)
 {
     foreach (const PPT::MasterOrSlideContainer* m, p->masters) {
