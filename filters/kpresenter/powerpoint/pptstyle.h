@@ -24,19 +24,18 @@
 
 class PptTextPFRun {
     quint16 level_;
-    const PPT::TextPFException* pfs[5];
+    const PPT::TextPFException* pfs[6];
 public:
-    PptTextPFRun() :level_(0)
-    {
-        *pfs = 0;
-    }
     PptTextPFRun(const PPT::DocumentContainer* d,
                  const PPT::MasterOrSlideContainer* m,
-                 const PPT::TextContainer& tc,
-                 quint32 start);
+                 quint32 textType);
+    PptTextPFRun(const PPT::DocumentContainer* d = 0,
+                 const PPT::MasterOrSlideContainer* m = 0,
+                 const PPT::TextContainer* tc = 0,
+                 quint32 start = 0);
 
     quint16 level() const { return level_; }
-    const PPT::TextPFException* pf() const { return pfs[0]; }
+    //const PPT::TextPFException* pf() const { return pfs[0]; }
 
     bool fHasBullet() const;
     bool fBulletHasFont() const;
@@ -64,7 +63,7 @@ public:
 
 class PptTextCFRun {
     quint16 level_;
-    const PPT::TextCFException* cfs[5];
+    const PPT::TextCFException* cfs[6];
 public:
     PptTextCFRun() :level_(0)
     {

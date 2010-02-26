@@ -542,18 +542,15 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
 }
 
 void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
-    const TextPFException* pf = 0;
     const TextPFException9* pf9 = 0;
     if (p->documentContainer) {
-        if (p->documentContainer->documentTextInfo.textPFDefaultsAtom) {
-            pf = &p->documentContainer->documentTextInfo.textPFDefaultsAtom->pf;
-        }
         const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
                 p->documentContainer);
         if (pp9 && pp9->textDefaultsAtom) {
             pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
+    PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, pf9);
 }
 
@@ -690,7 +687,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
 }
 
 void PptToOdp::defineParagraphProperties(KoGenStyle& style,
-                                         const TextPFException* pf,
+                                         const PptTextPFRun& pf,
                                          const TextPFException9* /*pf9*/) {
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
@@ -708,21 +705,13 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:line-height
     // fo:margin
     // fo:margin-bottom
-    if (pf && pf->masks.spaceAfter) {
-        style.addProperty("fo:margin-bottom",
-                paraSpacingToCm(pf->spaceAfter), para);
-    }
+    style.addProperty("fo:margin-bottom", pf.spaceAfter(), para);
     // fo:margin-left
-    if (pf && pf->masks.leftMargin) {
-        style.addProperty("fo:margin-left", pptMasterUnitToCm(pf->leftMargin),
+    style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()),
                 para);
-    }
     // fo:margin-right
     // fo:margin-top
-    if (pf && pf->masks.spaceBefore) {
-        style.addProperty("fo:margin-top",
-                paraSpacingToCm(pf->spaceBefore), para);
-    }
+    style.addProperty("fo:margin-top", paraSpacingToCm(pf.spaceBefore()), para);
     // fo:orphans
     // fo:padding
     // fo:padding-bottom
@@ -730,17 +719,13 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:padding-right
     // fo:padding-top
     // fo:text-align
-    if (pf && pf->masks.align) {
-        const QString align = textAlignmentToString(pf->textAlignment);
-        if (!align.isEmpty()) {
-            style.addProperty("fo:text-align", align, para);
-        }
+    const QString align = textAlignmentToString(pf.textAlignment());
+    if (!align.isEmpty()) {
+        style.addProperty("fo:text-align", align, para);
     }
     // fo:text-align-last
     // fo:text-indent
-    if (pf && pf->masks.indent) {
-        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf->indent), para);
-    }
+    style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.indent()), para);
     // fo:widows
     // style:auto-text-indent
     // style:background-transparency
@@ -1916,7 +1901,7 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
                                const QString& text, int start, int end,
                                QStack<QString>& levels)
 {
-    PptTextPFRun pf(p->documentContainer, currentMaster, tc, start);
+    PptTextPFRun pf(p->documentContainer, currentMaster, &tc, start);
 
     // to find the pf9, the cf has to be obtained which contains a pp9rt
     quint8 pp9rt = 0;
@@ -1961,7 +1946,7 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     out.xml.startElement("text:p");
     KoGenStyle style(KoGenStyle::StyleAuto, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineParagraphProperties(style, pf.pf(), 0);
+    defineParagraphProperties(style, pf, 0);
     out.xml.addAttribute("text:style-name", out.styles.lookup(style));
     processTextSpans(tc, out, text, start, end);
     out.xml.endElement(); // text:p
@@ -2771,7 +2756,8 @@ void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
     }
     defineGraphicProperties(style, o, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
-        defineParagraphProperties(style, &listStyle->lstLvl1->pf, 0);
+        PptTextPFRun pf(p->documentContainer, currentMaster, textType);
+        defineParagraphProperties(style, pf, 0);
         defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
     const QString styleName = out.styles.lookup(style);
@@ -2803,7 +2789,8 @@ void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
     }
     defineGraphicProperties(style, o, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
-        defineParagraphProperties(style, &listStyle->lstLvl1->pf, 0);
+        PptTextPFRun pf(p->documentContainer, currentMaster, textType);
+        defineParagraphProperties(style, pf, 0);
         defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
     const QString styleName = out.styles.lookup(style);

@@ -189,7 +189,7 @@ private:
 
     /* Extract data from TextPFException into the style */
     void defineParagraphProperties(KoGenStyle& style,
-                                   const PPT::TextPFException* pf,
+                                   const PptTextPFRun& pf,
                                    const PPT::TextPFException9* pf9);
     /* Extract data into the style */
     template <typename T>

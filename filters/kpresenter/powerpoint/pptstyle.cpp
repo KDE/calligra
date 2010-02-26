@@ -81,21 +81,31 @@ const Run* getRun(const QList<Run> &runs, quint32 start)
     }
     return run;
 }
-const TextPFRun* getPFRun(const TextContainer& tc, quint32 start)
+const TextPFRun* getPFRun(const TextContainer* tc, quint32 start)
 {
-    return (tc.style) ?getRun<TextPFRun>(tc.style->rgTextPFRun, start) :0;
+    if (tc && tc->style) {
+        return getRun<TextPFRun>(tc->style->rgTextPFRun, start);
+    }
+    return 0;
 }
-const TextCFRun* getCFRun(const TextContainer& tc, quint32 start)
+const TextCFRun* getCFRun(const TextContainer* tc, quint32 start)
 {
-    return (tc.style) ?getRun<TextCFRun>(tc.style->rgTextCFRun, start) :0;
+    if (tc && tc->style) {
+        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
+    }
+    return 0;
 }
 const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
-                                  const TextContainer& tc, quint16 level)
+                                  quint32 textType, quint16 level)
 {
-    quint32 textType = tc.textHeaderAtom.textType;
     const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
     const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
     return (ml) ?&ml->pf :0;
+}
+const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
+                                  const TextContainer* tc, quint16 level)
+{
+    return (tc) ?getLevelPF(m, tc->textHeaderAtom.textType, level) :0;
 }
 const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
                                   const TextContainer& tc, quint16 level)
@@ -106,9 +116,8 @@ const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
     return (ml) ?&ml->cf :0;
 }
 const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
-                                  const TextContainer& tc, quint16 level)
+                                  quint32 textType, quint16 level)
 {
-    quint32 textType = tc.textHeaderAtom.textType;
     const TextMasterStyleAtom* ms = 0;
     if (textType == 6) {
         // inherit from Tx_TYPE_TITLE
@@ -120,14 +129,19 @@ const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
     }
     return getTextMasterStyleLevel(ms, level);
 }
+const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
+                                  const TextContainer* tc, quint16 level)
+{
+    return (tc) ?getBaseLevel(m, tc->textHeaderAtom.textType, level) :0;
+}
 const TextPFException* getBaseLevelPF(const MasterOrSlideContainer* m,
-                                  const TextContainer& tc, quint16 level)
+                                  const TextContainer* tc, quint16 level)
 {
     const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
     return (ml) ?&ml->pf :0;
 }
 const TextCFException* getBaseLevelCF(const MasterOrSlideContainer* m,
-                                  const TextContainer& tc, quint16 level)
+                                  const TextContainer* tc, quint16 level)
 {
     const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
     return (ml) ?&ml->cf :0;
@@ -156,11 +170,46 @@ const TextCFException* getDefaultLevelCF(const PPT::DocumentContainer* d,
     const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
     return (ml) ?&ml->cf :0;
 }
+const TextPFException* getDefaultPF(const PPT::DocumentContainer* d)
+{
+    if (d && d->documentTextInfo.textPFDefaultsAtom) {
+        return &d->documentTextInfo.textPFDefaultsAtom->pf;
+    }
+    return 0;
+}
+const TextCFException* getDefaultCF(const PPT::DocumentContainer* d)
+{
+    if (d && d->documentTextInfo.textCFDefaultsAtom) {
+        return &d->documentTextInfo.textCFDefaultsAtom->cf;
+    }
+    return 0;
+}
+template <class Style>
+void addStyle(const Style** list, const Style* style)
+{
+    if (style) {
+        while (*list) ++list;
+        *list = style;
+        *list++;
+        *list = 0;
+    }
+}
+}
+
+PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
+             const PPT::MasterOrSlideContainer* m,
+             quint32 textType)
+{
+    level_ = 0;
+    *pfs = 0;
+    addStyle(pfs, getLevelPF(m, textType, 0));
+    addStyle(pfs, getDefaultLevelPF(d, 0));
+    addStyle(pfs, getDefaultPF(d));
 }
 
 PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
                            const MasterOrSlideContainer* m,
-                           const TextContainer& tc,
+                           const TextContainer* tc,
                            quint32 start)
 {
     const TextPFRun* pfrun = getPFRun(tc, start);
@@ -171,16 +220,12 @@ PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
         if (level > 4) level = 4;
     }
 
-    const PPT::TextPFException** p = pfs;
-    const PPT::TextPFException* pfe = (pfrun) ?&pfrun->pf :0;
-    if (pfe) *p++ = pfe;
-    pfe = getLevelPF(m, tc, level);
-    if (pfe) *p++ = pfe;
-    pfe = getBaseLevelPF(m, tc, level);
-    if (pfe) *p++ = pfe;
-    pfe = getDefaultLevelPF(d, level);
-    if (pfe) *p++ = pfe;
-    *p = 0;
+    *pfs = 0;
+    addStyle(pfs, (pfrun) ?&pfrun->pf :0);
+    addStyle(pfs, getLevelPF(m, tc, level));
+    addStyle(pfs, getBaseLevelPF(m, tc, level));
+    addStyle(pfs, getDefaultLevelPF(d, level));
+    addStyle(pfs, getDefaultPF(d));
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
@@ -192,18 +237,14 @@ PptTextCFRun::PptTextCFRun(const PPT::DocumentContainer* d,
                            quint16 level,
                            quint32 start)
 {
-    const TextCFRun* cfrun = getCFRun(tc, start);
+    const TextCFRun* cfrun = getCFRun(&tc, start);
 
-    const PPT::TextCFException** c = cfs;
-    const PPT::TextCFException* cfe = (cfrun) ?&cfrun->cf :0;
-    if (cfe) *c++ = cfe;
-    cfe = getLevelCF(m, tc, level);
-    if (cfe) *c++ = cfe;
-    cfe = getBaseLevelCF(m, tc, level);
-    if (cfe) *c++ = cfe;
-    cfe = getDefaultLevelCF(d, level);
-    if (cfe) *c++ = cfe;
-    *c = 0;
+    *cfs = 0;
+    addStyle(cfs, (cfrun) ?&cfrun->cf :0);
+    addStyle(cfs, getLevelCF(m, tc, level));
+    addStyle(cfs, getBaseLevelCF(m, &tc, level));
+    addStyle(cfs, getDefaultLevelCF(d, level));
+    addStyle(cfs, getDefaultCF(d));
 }
 
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
