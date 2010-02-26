@@ -551,7 +551,7 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
         }
     }
     PptTextPFRun pf(p->documentContainer);
-    defineParagraphProperties(style, pf, pf9);
+    defineParagraphProperties(style, pf);
 }
 
 void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
@@ -687,8 +687,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
 }
 
 void PptToOdp::defineParagraphProperties(KoGenStyle& style,
-                                         const PptTextPFRun& pf,
-                                         const TextPFException9* /*pf9*/) {
+                                         const PptTextPFRun& pf) {
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
     // fo:border
@@ -1946,7 +1945,7 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     out.xml.startElement("text:p");
     KoGenStyle style(KoGenStyle::StyleAuto, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineParagraphProperties(style, pf, 0);
+    defineParagraphProperties(style, pf);
     out.xml.addAttribute("text:style-name", out.styles.lookup(style));
     processTextSpans(tc, out, text, start, end);
     out.xml.endElement(); // text:p
@@ -2757,7 +2756,7 @@ void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
     defineGraphicProperties(style, o, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(p->documentContainer, currentMaster, textType);
-        defineParagraphProperties(style, pf, 0);
+        defineParagraphProperties(style, pf);
         defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
     const QString styleName = out.styles.lookup(style);
@@ -2790,7 +2789,7 @@ void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
     defineGraphicProperties(style, o, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(p->documentContainer, currentMaster, textType);
-        defineParagraphProperties(style, pf, 0);
+        defineParagraphProperties(style, pf);
         defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
     const QString styleName = out.styles.lookup(style);
