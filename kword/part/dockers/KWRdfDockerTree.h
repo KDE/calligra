@@ -59,11 +59,11 @@ public:
     bool dropMimeData(QTreeWidgetItem *parent, int index, const
                       QMimeData *data, Qt::DropAction action);
 
-    // for dragging
-    QStringList mimeTypes() const;
-    QMimeData* mimeData(QList<QTreeWidgetItem *> items) const;
-
 protected:
+    // for dragging
+    virtual QStringList mimeTypes() const;
+    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
+
     // for dropping
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *e);

@@ -87,6 +87,9 @@ KoTextEditor* KWRdfDockerTree::editor()
 bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         const QMimeData *data, Qt::DropAction action)
 {
+    Q_UNUSED(parent);
+    Q_UNUSED(index);
+    Q_UNUSED(action);
     //kDebug(30015) << "KWRdfDockerTree::dropMimeData() mime format:" << data->formats();
 
     if (data->hasFormat("text/directory")) {
@@ -150,8 +153,9 @@ QStringList KWRdfDockerTree::mimeTypes() const
     return QStringList();
 }
 
-QMimeData *KWRdfDockerTree::mimeData(QList<QTreeWidgetItem *> items) const
+QMimeData *KWRdfDockerTree::mimeData(const QList<QTreeWidgetItem *> items) const
 {
+    Q_UNUSED(items)
     //kDebug(30015) << "getting mime data, itemlist.sz:" << items.size();
     QByteArray ba;
     QMimeData *md = new QMimeData;
