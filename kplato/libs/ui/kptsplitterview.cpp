@@ -296,7 +296,7 @@ bool SplitterView::loadContext( const KoXmlElement &context )
     }
 #ifndef KOXML_USE_QDOM
     foreach ( const QString &s, e.attributeNames() ) {
-        ViewBase *v = findChildren<ViewBase*>( s ).value( 0 );
+        ViewBase *v = findChildren<ViewBase*>( s ).first();
         if ( v == 0 ) {
             continue;
         }

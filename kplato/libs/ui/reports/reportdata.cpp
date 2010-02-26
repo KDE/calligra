@@ -20,9 +20,6 @@
 
 #include "reportdata.h"
 
-#include "kptproject.h"
-#include "kptschedule.h"
-
 #include <kdebug.h>
 
 #include <QSortFilterProxyModel>
@@ -45,7 +42,7 @@ ReportData::~ReportData()
 
 bool ReportData::open()
 {
-    qDebug()<<"ReportData::open:"<<&m_model<<m_project<<m_schedulemanager<<recordCount();
+    //qDebug()<<"ReportData::open:"<<m_model;
     return true;
 }
 
@@ -203,7 +200,6 @@ KoReportData* ReportData::data(const QString &source)
 
 void ReportData::setModel( QAbstractItemModel *model )
 {
-    qDebug()<<"ReportData::setModel:"<<model;
     m_model.setSourceModel( model );
 }
 
@@ -225,25 +221,10 @@ ItemModelBase *ReportData::itemModel() const
     return qobject_cast<ItemModelBase*>( m );
 }
 
-void ReportData::setProject( Project *project )
-{
-    m_project = project;
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        qDebug()<<"ReportData::setProject:"<<m->project()<<m->scheduleManager();
-        m->setProject( m_project );
-    }
-}
-
 void ReportData::setScheduleManager( ScheduleManager *sm )
 {
     //qDebug()<<"ReportData::setScheduleManager:"<<sm;
     m_schedulemanager = sm;
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        qDebug()<<"ReportData::setScheduleManager:"<<m->project()<<m->scheduleManager();
-        m->setScheduleManager( m_schedulemanager );
-    }
     emit scheduleManagerChanged( sm );
 }
 

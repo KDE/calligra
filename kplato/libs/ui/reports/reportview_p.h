@@ -37,6 +37,9 @@ class RecordNavigator;
 class ScriptAdaptor;
 class ReportDesigner;
 
+namespace KoProperty {
+    class EditorView;
+}
 
 class QScrollArea;
 class QDomElement;
@@ -44,14 +47,21 @@ class QDomElement;
 namespace KPlato
 {
 
+//-----------------
+class KPlato_ReportDesigner : public KoReportDesigner
+{
+    Q_OBJECT
+public:
+    KPlato_ReportDesigner( QWidget *parent = 0);
+
+    QDomDocument document() const;
+};
 
 class ReportDesignPanel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ReportDesignPanel( QWidget *parent = 0 );
-
-    ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent );
+    ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, QWidget *parent );
     
     QDomDocument document() const;
     
@@ -60,8 +70,6 @@ public:
     QMap<QString, QAbstractItemModel*> m_modelmap;
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
-
-    ReportSourceModel *createSourceModel( QObject *parent = 0 ) const;
 
 signals:
     void insertItem( const QString &name );

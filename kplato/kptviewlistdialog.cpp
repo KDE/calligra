@@ -498,7 +498,7 @@ AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, 
     widget.setupUi( this );
     
     // NOTE: these lists must match switch in ok() FIXME: refactor
-    m_viewtypes << "ReportView";
+    m_viewtypes << "Report";
     QStringList lst;
     lst << i18n( "Report" );
     widget.viewtype->addItems( lst );
