@@ -1493,7 +1493,7 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
             case Load: return i18nc( "@title:column noun", "Load" );
         }
     }
-    return QVariant();
+    return ItemModelBase::headerData( section, orientation, role );
 }
 
 QModelIndex ResourceAppointmentsRowModel::parent( const QModelIndex &idx ) const
