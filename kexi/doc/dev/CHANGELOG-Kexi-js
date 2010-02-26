@@ -68,6 +68,15 @@ Reports
 *batch mode: generates output from data and design or shows report in data mode with minimal gui; add appropriate startup options and alter main window
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+2010-02-26
+*KexiDB
+**SQLite version handling improvements: added private copy of FindSqlite (kdelibs do not provide new enough, kde 4.4.1 probably will)
+**system SQLite is used for now
+TODO: look for features and WARN at the build time and runtime if someting is missing
+TODO: provide an sqlite patch in 3rdparty
+TODO: disable progress bar for compacting when sqlite is not patched
+TODO: fix sqlite includes and libs lookup for Windows
+
 2010-02-25
 KoProperty
 *moved to KOffice libs
