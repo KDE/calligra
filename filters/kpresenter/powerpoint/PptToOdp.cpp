@@ -1647,17 +1647,21 @@ enum {
    "chart", "date-time", "footer", "graphic", "handout", "header", "notes",
    "object", "orgchart", "outline", "page", "page-number", "subtitle", "table",
    "text" or "title" */
+/* Note: we use 'outline' for  PT_MasterBody, PT_Body and PT_VerticalBody types
+   to be compatible with OpenOffice. OpenOffice <= 3.2 does not render lists
+   properly if the presentation class is not 'outline', 'subtitle', or 'notes'.
+   */
 const char*
 getPresentationClass(const PlaceholderAtom* p)
 {
     if (p == 0) return 0;
     switch (p->placementId) {
     case 0x01: return "title";       // PT_MasterTitle
-    case 0x02: return "text";        // PT_MasterBody
+    case 0x02: return "outline";     // PT_MasterBody
     case 0x03: return "title";       // PT_MasterCenterTitle
     case 0x04: return "subtitle";    // PT_MasterSubTitle
     case 0x05: return "graphic";     // PT_MasterNotesSlideImage
-    case 0x06: return "text";        // PT_MasterNotesBody
+    case 0x06: return "notes";       // PT_MasterNotesBody
     case 0x07: return "date-time";   // PT_MasterDate
     case 0x08: return "page-number"; // PT_MasterSlideNumber
     case 0x09: return "footer";      // PT_MasterFooter
@@ -1665,11 +1669,11 @@ getPresentationClass(const PlaceholderAtom* p)
     case 0x0B: return "page";        // PT_NotesSlideImage
     case 0x0C: return "notes";       // PT_NotesBody
     case 0x0D: return "title";       // PT_Title
-    case 0x0E: return "text";        // PT_Body
+    case 0x0E: return "outline";     // PT_Body
     case 0x0F: return "title";       // PT_CenterTitle
     case 0x10: return "subtitle";    // PT_SubTitle
     case 0x11: return "title";       // PT_VerticalTitle
-    case 0x12: return "text";        // PT_VerticalBody
+    case 0x12: return "outline";     // PT_VerticalBody
     case 0x13: return "object";      // PT_Object
     case 0x14: return "chart";       // PT_Graph
     case 0x15: return "table";       // PT_Table
