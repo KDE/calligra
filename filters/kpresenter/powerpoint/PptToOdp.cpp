@@ -2360,22 +2360,6 @@ QColor PptToOdp::toQColor(const OfficeArtCOLORREF& c)
     return QColor(c.red, c.green, c.blue);
 }
 
-const TextPFException *PptToOdp::masterTextPFException(quint16 type, quint16 level)
-{
-    // TODO look for the right master, not just the first one
-    const MasterOrSlideContainer* m = p->masters[0];
-    const TextMasterStyleLevel *l = getTextMasterStyleLevel(type, level, m);
-    return (l) ? &l->pf : 0;
-}
-
-const TextCFException *PptToOdp::masterTextCFException(int type, unsigned int level)
-{
-    // TODO look for the right master, not just the first one
-    const MasterOrSlideContainer* m = p->masters[0];
-    const TextMasterStyleLevel *l = getTextMasterStyleLevel(type, level, m);
-    return (l) ? &l->cf : 0;
-}
-
 void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix)
 {
     switch (val) {

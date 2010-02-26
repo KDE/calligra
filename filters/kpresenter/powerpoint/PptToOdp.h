@@ -362,24 +362,6 @@ private:
                                  QStack<QString>& levels);
 
     /**
-    * @brief Helper method to find specified TextParagraphException from
-    * MainMasterContainer
-    * @param text type of the text whose style to get. See TextTypeEnum in
-    * [MS-PPT].pdf
-    * @param level TextMasterStyleLevel index (indentation level)
-    */
-    const PPT::TextPFException *masterTextPFException(quint16 type, quint16 level);
-
-    /**
-    * @brief Helper method to find specified TextCharacterException from
-    * MainMasterContainer
-    * @param text type of the text whose style to get. See TextTypeEnum in
-    * [MS-PPT].pdf
-    * @param level TextMasterStyleLevel index (indentation level)
-    */
-    const PPT::TextCFException *masterTextCFException(int type, unsigned int level);
-
-    /**
     * @brief Convert paraspacing value to centimeters
     *
     * ParaSpacing is a 2-byte signed integer that specifies text paragraph
