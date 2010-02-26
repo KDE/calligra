@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009,2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,10 @@ KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         m_pageManager(pageManager)
 {
     setSize(m_original->size());
+    // allow selecting me to get the tool for the original to still work.
+    QSet<KoShape*> delegates;
+    delegates << m_original;
+    setToolDelegates(delegates);
 }
 
 KWCopyShape::~KWCopyShape()
