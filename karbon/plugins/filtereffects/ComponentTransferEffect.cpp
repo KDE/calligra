@@ -112,9 +112,14 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
     qreal da, dr, dg, db;
     int pixel;
 
-    QRect roi = context.filterRegion().toRect();
-    for (int row = roi.top(); row < roi.bottom(); ++row) {
-        for (int col = roi.left(); col < roi.right(); ++col) {
+    const QRect roi = context.filterRegion().toRect();
+    const int minRow = roi.top();
+    const int maxRow = roi.bottom();
+    const int minCol = roi.left();
+    const int maxCol = roi.right();
+
+    for (int row = minRow; row <= maxRow; ++row) {
+        for (int col = minCol; col < maxCol; ++col) {
             pixel = row * w + col;
             const QRgb &s = src[pixel];
 
