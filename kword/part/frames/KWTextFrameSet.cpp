@@ -237,6 +237,8 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
     //kDebug() <<"KWTextFrameSet::framesEmpty" << emptyFrames;
     if (m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
         return;
+    if (KWord::isHeaderFooter(this)) // then we are deleted by the frameManager
+        return;
     QList<KWFrame*> myFrames = m_frames; // make a copy so we can do a removeFrame without worries
     QList<KWFrame*>::Iterator deleteFrom = myFrames.end();
     QList<KWFrame*>::Iterator iter = --myFrames.end();
@@ -260,7 +262,7 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
         return;
 
     iter = --myFrames.end();
-    do { // while (--iter != deleteFrom) {// remove all frames from end till last empty page
+    do { // remove all frames from end till last empty page
         if (*iter == *m_frames.begin())
             break;
         removeFrame(*iter);
