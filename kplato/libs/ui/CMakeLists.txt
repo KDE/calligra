@@ -11,11 +11,12 @@ include_directories(
 
     ${KOODF_INCLUDES} 
     ${KOPROPERTY_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/kexi
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/wrtembed
+
+    ${CMAKE_SOURCE_DIR}/libs/koreport
+    ${CMAKE_SOURCE_DIR}/libs/koreport/common
+    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+
     ${KOPROPERTIES_INCLUDES}
 
     ${KOMAIN_INCLUDES}    

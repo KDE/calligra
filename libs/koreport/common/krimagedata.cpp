@@ -63,7 +63,7 @@ QString KRImageData::inlineImageData()
     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
     QByteArray ba;
     QBuffer buffer(&ba);
-    buffer.open(IO_ReadWrite);
+    buffer.open(QIODevice::ReadWrite);
     pixmap.save(&buffer, "PNG");   // writes pixmap into ba in PNG format,
     //TODO should i remember the format used, or save as PNG as its lossless?
 

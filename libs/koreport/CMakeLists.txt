@@ -3,10 +3,12 @@
 
 include_directories( ${KOMAIN_INCLUDES} 
 ${KOODF_INCLUDES}
-${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/
-${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/common
-${CMAKE_SOURCE_DIR}/kexi/plugins/reports/koreport/renderer
+${CMAKE_SOURCE_DIR}/libs/
+${CMAKE_SOURCE_DIR}/libs/koreport
+${CMAKE_SOURCE_DIR}/libs/koreport/common
+${CMAKE_SOURCE_DIR}/libs/koreport/renderer
 ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
+
 )
 
 #build a shared library
