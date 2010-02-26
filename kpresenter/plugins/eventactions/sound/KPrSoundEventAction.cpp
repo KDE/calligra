@@ -19,7 +19,7 @@
 
 #include "KPrSoundEventAction.h"
 
-#include <Phonon/MediaObject>
+#include <phonon/mediaobject.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
