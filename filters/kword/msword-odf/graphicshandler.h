@@ -24,6 +24,7 @@
 
 #include <wv2/src/functor.h>
 #include <wv2/src/handlers.h>
+#include "wv2/src/ms_odraw.h"
 
 #include <QObject>
 #include "document.h"
@@ -59,6 +60,8 @@ public:
                             int type);
     virtual void wmfData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
     virtual void externalImage(const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
+
+    virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
 #endif // IMAGE_IMPORT
 
     //lets us write to another writer instead of directly to the main body writer
@@ -74,7 +77,9 @@ private:
 
     void ODTProcessing(QString* picName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type);
     int m_pictureCount;
+    int m_officeArtCount;
 
+    void officeArtLine(wvWare::OfficeArtProperties *artProperties);
 };
 
 // KWordDrawingHandler yet to come (Werner)

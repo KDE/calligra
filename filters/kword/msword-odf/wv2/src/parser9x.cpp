@@ -41,6 +41,8 @@
 #include "zcodec.hxx"
 #include "wvlog.h"
 
+#include "ms_odraw.h"
+
 #include <gsf/gsf-input.h>
 #include <gsf/gsf-output.h>
 #include <gsf/gsf-input-memory.h>
@@ -1015,6 +1017,10 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
             << "\n  endOfPicf = " << endOfPicf << std::endl;
 #endif
 
+    OfficeArtProperties artProps;
+    memset(&artProps, 0, sizeof(artProps));
+    artProps.width = 100.0f;                    // default is 100% width
+
     //from OOo code, looks like we have to process this type differently
     //  read a byte in, and that's an offset before reading the image
     if ( data.picf->mfp.mm == 102 )
@@ -1051,17 +1057,34 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                 wvlog << h.getRecordType() << std::endl;
 #endif
                 //process record
-                if( h.isAtom() )
-                {
-                    U8* s = new U8[ h.recordSize() ];
-                    stream->read( s, h.recordSize() );
-                    //clean up memory
-                    delete [] s;
+                if (h.isAtom()) {
+                    U8 alreadyProcessed = 0;
+
+                    if (h.getRecordType() == "msofbtSp") {          // is it 'OfficeArtFSP'? (MS-ODRAW, page 80/621)
+
+                    }
+
+                    if (h.getRecordType() == "msofbtOPT" || h.getRecordType() == "msofbtTerOPT") { // is it 'OfficeArtFOPT' or 'OfficeArtTertiaryFOPT'?
+                        parseOfficeArtFOPT(stream, h.recordSize(), &artProps);
+                        alreadyProcessed = 1;
+                    }
+
+                    if (alreadyProcessed != 1) {
+                        U8 *s = new U8[ h.recordSize() ];
+                        stream->read( s, h.recordSize() );
+                        //clean up memory
+                        delete [] s;
+                    }
                 }
                 else
+                  {
                     wvlog << "  Error - container inside a container!" << std::endl;
+                  }
             } while (stream->tell() != endOfContainer);
             wvlog << "End of container." << std::endl;
+
+            m_pictureHandler->officeArt(&artProps);
+
         } //finished processing a container
         else
         {
@@ -1132,6 +1155,74 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
         if( stream->tell() > endOfPicf )
             wvlog << "Error! We read past the end of the picture!" << std::endl;
     } while (stream->tell() != endOfPicf); //end of record
+}
+
+void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties)
+{
+#ifdef WV2_DEBUG_PICTURES
+  wvlog << "parseOfficeArtFOPT - processing bytes: " << dataSize << std::endl;
+#endif
+
+  U16 opid, opidOpid;
+  U8 fBid, fComplex;
+  S32 op;
+  float hrHeight = 0.0f;
+
+  while (dataSize >= 6) {
+      opid = stream->readU16();
+      op = stream->readS32();
+
+      fBid      = (opid >> 14) & 0x01;          // get bit 14
+      fComplex  = (opid >> 15) & 0x01;          // get bit 15
+      opidOpid  = opid & 0x3fff;                // leave only lowest 14 bits
+
+      switch (opidOpid) {
+          case opidGroupShapeProps:
+              if ((op & ((1<<11) | (1<<27))) == ((1<<11) | (1<<27))) {  // if true, it's a horizontal rule
+                  artProperties->shapeType = msosptLine;
+              }
+
+              break;
+
+          case opidPctHR:
+              artProperties->width = ((U16) op) / 10;
+              break;
+
+          case opidAlignHR:
+              artProperties->align = (wvWare::HRALIGN) op;
+              break;
+
+          case opidDxHeightHR:
+              artProperties->height = ((float) op) / 1440.0f;
+              break;
+
+          case opidFillCollor:
+              artProperties->color.r = (op      ) & 0xff;
+              artProperties->color.g = (op >>  8) & 0xff;
+              artProperties->color.b = (op >> 16) & 0xff;
+
+              break;
+
+          default:
+#ifdef WV2_DEBUG_PICTURES
+              wvlog << " >> [opid - fBid - fComplex = op] [ " <<  std::hex << (int) opidOpid << " - " << (int) fBid << " - " << (int) fComplex  << " = " << op  << " ] " << std::dec << std::endl;
+#endif
+              break;
+      }
+
+      dataSize = dataSize - 6;
+  }
+
+    if (dataSize > 0) {
+#ifdef WV2_DEBUG_PICTURES
+        wvlog << "parseOfficeArtFOPT - discarding bytes: " << dataSize << std::endl;
+#endif
+
+        U8* s = new U8[ dataSize ];
+        stream->read( s, dataSize );
+        //clean up memory
+        delete [] s;
+    }
 }
 
 void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream )

@@ -150,6 +150,9 @@ void PictureHandler::externalImage( const UString& /*name*/, SharedPtr<const Wor
 {
 }
 
+void PictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
+{
+}
 
 TextHandler::~TextHandler()
 {

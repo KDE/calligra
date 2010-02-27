@@ -112,7 +112,7 @@ string EscherHeader::getRecordType()
             s = "msofbtSp";
             break;
         case 0xF00B:
-            s = "msofbtOPT";
+            s = "msofbtOPT";            // OfficeArtFOPT - MS-ODRAW, page 44 of 621
             break;
         case 0xF010:
             s = "msofbtClientAnchor";
@@ -147,6 +147,9 @@ string EscherHeader::getRecordType()
         case 0xF118:
             s = "msofbtRegroupItems";
             break;
+        case 0xF122:
+            s = "msofbtTerOPT";         // OfficeArtTertiaryFOPT - MS-ODRAW, page 46 of 621
+            break;
         default:
             s = "unknown";
     }
@@ -157,6 +160,12 @@ string EscherHeader::getRecordType()
 int EscherHeader::recordSize()
 {
     return static_cast<int> (cbLength);
+}
+
+// returns the record instance
+int EscherHeader::recordInstance()
+{
+    return inst;
 }
 
 void EscherHeader::dump()

@@ -95,6 +95,8 @@ namespace wvWare
         msobiClient=0x800       // Clients should set this bit
     } MSOBI;                     // Blip signature as encoded in the MSOFBH.inst
 
+
+
     //this is a common header that every record
     //in Escher streams share
     class EscherHeader
@@ -105,6 +107,7 @@ namespace wvWare
 
         bool isAtom();
         int recordSize();
+        int recordInstance();
         string getRecordType();
         void dump();
 
@@ -131,6 +134,7 @@ namespace wvWare
         int recordSize();//size of the record without the Escher header
                     //(does NOT include actual picture data, either, which is in a
                     //new record)
+
         int getBlipType();
         int getStreamOffset();
         int getNameLength();

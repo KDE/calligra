@@ -27,6 +27,8 @@
 #include <stack>
 #include "wv2_export.h"
 
+#include "ms_odraw.h"
+
 namespace wvWare
 {
 
@@ -212,6 +214,8 @@ namespace wvWare
         void parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream );
         void parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream );
         void parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream );
+
+        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties);
 
         void saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode = Default );
         void restoreState();

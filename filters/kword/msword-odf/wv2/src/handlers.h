@@ -25,6 +25,7 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
+#include "ms_odraw.h"
 
 namespace wvWare {
 
@@ -250,6 +251,11 @@ namespace wvWare {
          * Word allows to store .tif, .bmp, or .gif images externally.
          */
         virtual void externalImage( const UString& name, SharedPtr<const Word97::PICF> picf );
+
+        /**
+         * For the output of officeArt.
+         */
+        virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
     };
 
 

@@ -37,7 +37,7 @@ using namespace wvWare;
 
 KWordPictureHandler::KWordPictureHandler(Document* doc, KoXmlWriter* bodyWriter,
         KoXmlWriter* manifestWriter, KoStore* store, KoGenStyles* mainStyles)
-        : QObject(), m_doc(doc), m_pictureCount(0)
+        : QObject(), m_doc(doc), m_pictureCount(0), m_officeArtCount(0)
 {
     kDebug(30513) ;
     m_bodyWriter = bodyWriter;
@@ -128,6 +128,81 @@ void KWordPictureHandler::escherData(std::vector<wvWare::U8> data, SharedPtr<con
     }
     Q_ASSERT(len == 0);
     m_store->close(); //close picture file
+}
+
+void KWordPictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
+{
+
+	if(artProperties->shapeType == msosptLine) {
+		officeArtLine(artProperties);
+	}
+	
+	
+}
+	
+void KWordPictureHandler::officeArtLine(wvWare::OfficeArtProperties *artProperties)
+{
+    QString hrAlign = QString("left");
+    QString xPos = QString::number(0.0f).append("in");
+    
+    switch (artProperties->align) {
+    	case wvWare::hrAlignLeft:	
+    		hrAlign = QString("left");		
+    		xPos = QString::number(0.0f).append("in");
+    		break;
+    	case wvWare::hrAlignCenter:	
+    		hrAlign = QString("center");	
+    		xPos = QString::number((6.1378f/2.0f) - ((artProperties->width * 6.1378f) / 200.0f)).append("in");		
+    		break;
+    	case wvWare::hrAlignRight:	
+    		hrAlign = QString("right");		
+    		xPos = QString::number(6.1378f - (artProperties->width * 6.1378f) / 100.0f).append("in");	
+    		break;
+    }
+    //--------------------
+	// create (or find) a graphic style
+    QString styleName("gr");
+    m_officeArtCount++;
+    
+    KoGenStyle *style = new KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic", "Graphics");
+
+    style->addProperty("draw:fill","solid");
+    
+    QString colorStr = QString("#%1%2%3").arg((int)artProperties->color.r, 2, 16, QChar('0')).arg((int)artProperties->color.g, 2, 16, QChar('0')).arg((int)artProperties->color.b, 2, 16, QChar('0'));
+    style->addProperty("draw:fill-color", colorStr);
+    
+    style->addProperty("draw:textarea-horizontal-align",hrAlign);
+    
+    style->addProperty("draw:textarea-vertical-align","top");
+    style->addProperty("draw:shadow","hidden");
+    style->addProperty("style:run-through","foreground");
+    
+    styleName = m_mainStyles->lookup(*style, styleName);
+    delete style;
+    //--------------------
+    // create a custom shape
+    m_bodyWriter->startElement("draw:custom-shape");
+
+    m_bodyWriter->addAttribute("text:anchor-type", "as-char");
+    
+    QString heightStr = QString::number(artProperties->height).append("in");
+    m_bodyWriter->addAttribute("svg:height", heightStr);
+    
+    QString widthStr = QString::number((artProperties->width * 6.1378f) / 100.0f).append("in");
+    m_bodyWriter->addAttribute("svg:width", widthStr);
+
+    m_bodyWriter->addAttribute("svg:x", xPos);
+    
+	m_bodyWriter->addAttribute("draw:style-name", styleName.toUtf8());
+
+	//--------------------
+	m_bodyWriter->startElement("draw:enhanced-geometry");
+	m_bodyWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
+	m_bodyWriter->addAttribute("draw:type", "rectangle");
+	m_bodyWriter->addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
+	m_bodyWriter->endElement();
+	//--------------------
+    m_bodyWriter->endElement();			// end draw:custom-shape
 }
 
 void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97::PICF> picf, int type)
