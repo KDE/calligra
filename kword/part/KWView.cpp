@@ -52,6 +52,7 @@
 // koffice libs includes
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
+#include <KoTextShapeData.h>
 #include <KoShapeCreateCommand.h>
 #include <KoImageSelectionWidget.h>
 #include <KoResourceManager.h>
@@ -1000,35 +1001,21 @@ void KWView::selectBookmark()
 
 void KWView::deleteBookmark(const QString &name)
 {
-    if (name.isNull()) return;
+    KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
+    KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
+    if (!bookmark || !bookmark->shape())
+        return;
 
-    int endPosition = -1;
-
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
-    KoShape *shape = bookmark->shape();
-
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
-    selection->deselectAll();
-    selection->select(shape);
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
-    Q_ASSERT(handler);
-
-    KoResourceManager *rm = m_canvas->resourceManager();
-
-    if (bookmark->hasSelection())
-        endPosition = bookmark->endBookmark()->position() - 1;
-
-    rm->setResource(KoText::CurrentTextPosition, bookmark->position());
-    handler->deleteInlineObjects(false);
-
-    if (endPosition != -1) {
-        rm->setResource(KoText::CurrentTextPosition, endPosition);
-        handler->deleteInlineObjects(false);
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(bookmark->shape()->userData());
+    if (!data)
+        return;
+    QTextCursor cursor(data->document());
+    if (bookmark->hasSelection()) {
+        cursor.setPosition(bookmark->endBookmark()->position() - 1);
+        manager->removeInlineObject(cursor);
     }
+    cursor.setPosition(bookmark->position());
+    manager->removeInlineObject(cursor);
 }
 
 void KWView::editDeleteFrame()
