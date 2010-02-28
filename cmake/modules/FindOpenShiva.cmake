@@ -11,7 +11,7 @@ if(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
   FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin/ /usr/local/bin )
 
   # query pkg-config asking for OpenShiva >= 0.9.10
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.10 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.12 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
 
   if(_return_VALUE STREQUAL "0")
 
