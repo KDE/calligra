@@ -5,7 +5,10 @@ add_subdirectory( queries )
 add_subdirectory( forms )
 add_subdirectory( migration )
 add_subdirectory( importexport )
-add_subdirectory( reports )
+
+if (WITH_kchart)
+    add_subdirectory( reports )
+endif (WITH_kchart)
 
 if(SHOULD_BUILD_SCRIPTING)
     add_subdirectory(scripting)
