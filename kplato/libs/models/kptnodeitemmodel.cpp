@@ -1823,90 +1823,90 @@ QVariant NodeModel::headerData( int section, int role )
 {
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
-            case NodeName: return i18n( "Name" );
-            case NodeType: return i18n( "Type" );
-            case NodeResponsible: return i18n( "Responsible" );
-            case NodeAllocation: return i18n( "Allocation" );
-            case NodeEstimateType: return i18n( "Estimate Type" );
-            case NodeEstimateCalendar: return i18n( "Calendar" );
-            case NodeEstimate: return i18n( "Estimate" );
-            case NodeOptimisticRatio: return i18n( "Optimistic" ); // Ratio
-            case NodePessimisticRatio: return i18n( "Pessimistic" ); // Ratio
-            case NodeRisk: return i18n( "Risk" );
-            case NodeConstraint: return i18n( "Constraint" );
-            case NodeConstraintStart: return i18n( "Constraint Start" );
-            case NodeConstraintEnd: return i18n( "Constraint End" );
-            case NodeRunningAccount: return i18n( "Running Account" );
-            case NodeStartupAccount: return i18n( "Startup Account" );
-            case NodeStartupCost: return i18n( "Startup Cost" );
-            case NodeShutdownAccount: return i18n( "Shutdown Account" );
-            case NodeShutdownCost: return i18n( "Shutdown Cost" );
-            case NodeDescription: return i18n( "Description" );
+            case NodeName: return i18nc( "@title:column", "Name" );
+            case NodeType: return i18nc( "@title:column", "Type" );
+            case NodeResponsible: return i18nc( "@title:column", "Responsible" );
+            case NodeAllocation: return i18nc( "@title:column", "Allocation" );
+            case NodeEstimateType: return i18nc( "@title:column", "Estimate Type" );
+            case NodeEstimateCalendar: return i18nc( "@title:column", "Calendar" );
+            case NodeEstimate: return i18nc( "@title:column", "Estimate" );
+            case NodeOptimisticRatio: return i18nc( "@title:column", "Optimistic" ); // Ratio
+            case NodePessimisticRatio: return i18nc( "@title:column", "Pessimistic" ); // Ratio
+            case NodeRisk: return i18nc( "@title:column", "Risk" );
+            case NodeConstraint: return i18nc( "@title:column", "Constraint" );
+            case NodeConstraintStart: return i18nc( "@title:column", "Constraint Start" );
+            case NodeConstraintEnd: return i18nc( "@title:column", "Constraint End" );
+            case NodeRunningAccount: return i18nc( "@title:column", "Running Account" );
+            case NodeStartupAccount: return i18nc( "@title:column", "Startup Account" );
+            case NodeStartupCost: return i18nc( "@title:column", "Startup Cost" );
+            case NodeShutdownAccount: return i18nc( "@title:column", "Shutdown Account" );
+            case NodeShutdownCost: return i18nc( "@title:column", "Shutdown Cost" );
+            case NodeDescription: return i18nc( "@title:column", "Description" );
             
             // Based on edited values
-            case NodeExpected: return i18n( "Expected" );
-            case NodeVarianceEstimate: return i18n( "Variance (Est)" );
-            case NodeOptimistic: return i18n( "Optimistic" );
-            case NodePessimistic: return i18n( "Pessimistic" );
+            case NodeExpected: return i18nc( "@title:column", "Expected" );
+            case NodeVarianceEstimate: return i18nc( "@title:column", "Variance (Est)" );
+            case NodeOptimistic: return i18nc( "@title:column", "Optimistic" );
+            case NodePessimistic: return i18nc( "@title:column", "Pessimistic" );
             
             // After scheduling
-            case NodeStartTime: return i18n( "Start Time" );
-            case NodeEndTime: return i18n( "End Time" );
-            case NodeEarlyStart: return i18n( "Early Start" );
-            case NodeEarlyFinish: return i18n( "Early Finish" );
-            case NodeLateStart: return i18n( "Late Start" );
-            case NodeLateFinish: return i18n( "Late Finish" );
-            case NodePositiveFloat: return i18n( "Positive Float" );
-            case NodeFreeFloat: return i18n( "Free Float" );
-            case NodeNegativeFloat: return i18n( "Negative Float" );
-            case NodeStartFloat: return i18n( "Start Float" );
-            case NodeFinishFloat: return i18n( "Finish Float" );
-            case NodeAssignments: return i18n( "Assignments" );
+            case NodeStartTime: return i18nc( "@title:column", "Start Time" );
+            case NodeEndTime: return i18nc( "@title:column", "End Time" );
+            case NodeEarlyStart: return i18nc( "@title:column", "Early Start" );
+            case NodeEarlyFinish: return i18nc( "@title:column", "Early Finish" );
+            case NodeLateStart: return i18nc( "@title:column", "Late Start" );
+            case NodeLateFinish: return i18nc( "@title:column", "Late Finish" );
+            case NodePositiveFloat: return i18nc( "@title:column", "Positive Float" );
+            case NodeFreeFloat: return i18nc( "@title:column", "Free Float" );
+            case NodeNegativeFloat: return i18nc( "@title:column", "Negative Float" );
+            case NodeStartFloat: return i18nc( "@title:column", "Start Float" );
+            case NodeFinishFloat: return i18nc( "@title:column", "Finish Float" );
+            case NodeAssignments: return i18nc( "@title:column", "Assignments" );
             
             // Based on scheduled values
-            case NodeDuration: return i18n( "Duration" );
-            case NodeVarianceDuration: return i18n( "Variance (Dur)" );
-            case NodeOptimisticDuration: return i18n( "Optimistic (Dur)" );
-            case NodePessimisticDuration: return i18n( "Pessimistic (Dur)" );
+            case NodeDuration: return i18nc( "@title:column", "Duration" );
+            case NodeVarianceDuration: return i18nc( "@title:column", "Variance (Dur)" );
+            case NodeOptimisticDuration: return i18nc( "@title:column", "Optimistic (Dur)" );
+            case NodePessimisticDuration: return i18nc( "@title:column", "Pessimistic (Dur)" );
 
             // Completion
-            case NodeStatus: return i18n( "Status" );
+            case NodeStatus: return i18nc( "@title:column", "Status" );
             // xgettext: no-c-format
-            case NodeCompleted: return i18n( "% Completed" );
-            case NodePlannedEffort: return i18n( "Planned Effort" );
-            case NodeActualEffort: return i18n( "Actual Effort" );
-            case NodeRemainingEffort: return i18n( "Remaining Effort" );
-            case NodePlannedCost: return i18n( "Planned Cost" );
-            case NodeActualCost: return i18n( "Actual Cost" );
-            case NodeActualStart: return i18n( "Actual Start" );
-            case NodeStarted: return i18n( "Started" );
-            case NodeActualFinish: return i18n( "Actual Finish" );
-            case NodeFinished: return i18n( "Finished" );
-            case NodeStatusNote: return i18n( "Status Note" );
+            case NodeCompleted: return i18nc( "@title:column", "% Completed" );
+            case NodePlannedEffort: return i18nc( "@title:column", "Planned Effort" );
+            case NodeActualEffort: return i18nc( "@title:column", "Actual Effort" );
+            case NodeRemainingEffort: return i18nc( "@title:column", "Remaining Effort" );
+            case NodePlannedCost: return i18nc( "@title:column", "Planned Cost" );
+            case NodeActualCost: return i18nc( "@title:column", "Actual Cost" );
+            case NodeActualStart: return i18nc( "@title:column", "Actual Start" );
+            case NodeStarted: return i18nc( "@title:column", "Started" );
+            case NodeActualFinish: return i18nc( "@title:column", "Actual Finish" );
+            case NodeFinished: return i18nc( "@title:column", "Finished" );
+            case NodeStatusNote: return i18nc( "@title:column", "Status Note" );
             
             // Scheduling errors
-            case NodeNotScheduled: return i18n( "Not Scheduled" );
-            case NodeAssignmentMissing: return i18n( "Assignment Missing" );
-            case NodeResourceOverbooked: return i18n( "Resource Overbooked" );
-            case NodeResourceUnavailable: return i18n( "Resource Unavailable" );
-            case NodeConstraintsError: return i18n( "Constraints Error" );
-            case NodeEffortNotMet: return i18n( "Effort Not Met" );
+            case NodeNotScheduled: return i18nc( "@title:column", "Not Scheduled" );
+            case NodeAssignmentMissing: return i18nc( "@title:column", "Assignment Missing" );
+            case NodeResourceOverbooked: return i18nc( "@title:column", "Resource Overbooked" );
+            case NodeResourceUnavailable: return i18nc( "@title:column", "Resource Unavailable" );
+            case NodeConstraintsError: return i18nc( "@title:column", "Constraints Error" );
+            case NodeEffortNotMet: return i18nc( "@title:column", "Effort Not Met" );
             
-            case NodeWBSCode: return i18n( "WBS Code" );
-            case NodeLevel: return i18nc( "Node level", "Level" );
+            case NodeWBSCode: return i18nc( "@title:column", "WBS Code" );
+            case NodeLevel: return i18nc( "@title:column Node level", "Level" );
             
             // Performance
-            case NodeBCWS: return i18nc( "Budgeted Cost of Work Scheduled", "BCWS" );
-            case NodeBCWP: return i18nc( "Budgeted Cost of Work Performed", "BCWP" );
-            case NodeACWP: return i18nc( "Actual Cost of Work Performed", "ACWP" );
-            case NodePerformanceIndex: return i18nc( "Schedule Performance Index", "SPI" );
-            case NodeCritical: return i18n( "Critical" );
-            case NodeCriticalPath: return i18n( "Critical Path" );
+            case NodeBCWS: return i18nc( "@title:column Budgeted Cost of Work Scheduled", "BCWS" );
+            case NodeBCWP: return i18nc( "@title:column Budgeted Cost of Work Performed", "BCWP" );
+            case NodeACWP: return i18nc( "@title:column Actual Cost of Work Performed", "ACWP" );
+            case NodePerformanceIndex: return i18nc( "@title:column Schedule Performance Index", "SPI" );
+            case NodeCritical: return i18nc( "@title:column", "Critical" );
+            case NodeCriticalPath: return i18nc( "@title:column", "Critical Path" );
             
             // Work package handling
-            case WPOwnerName: return i18n( "Owner" );
-            case WPTransmitionStatus: return i18n( "Status" );
-            case WPTransmitionTime: return i18n( "Time" );
+            case WPOwnerName: return i18nc( "@title:column", "Owner" );
+            case WPTransmitionStatus: return i18nc( "@title:column", "Status" );
+            case WPTransmitionTime: return i18nc( "@title:column", "Time" );
 
             default: return QVariant();
         }
@@ -1991,9 +1991,9 @@ QVariant NodeModel::headerData( int section, int role )
             case NodePerformanceIndex: return ToolTip::nodePerformanceIndex();
             
             // Work package handling FIXME
-            case WPOwnerName: return i18n( "Work package owner" );
-            case WPTransmitionStatus: return i18n( "Work package status" );
-            case WPTransmitionTime: return i18n( "Work package send/receive time" );
+            case WPOwnerName: return i18nc( "@title:column", "Work package owner" );
+            case WPTransmitionStatus: return i18nc( "@title:column", "Work package status" );
+            case WPTransmitionTime: return i18nc( "@title:column", "Work package send/receive time" );
 
             default: return QVariant();
         }

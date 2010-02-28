@@ -69,9 +69,9 @@ bool Document::isValid() const
 QStringList Document::typeList( bool trans )
 {
     return QStringList()
-            << ( trans ? i18n( "Unknown" ) : "Unknown" )
-            << ( trans ? i18n( "Product" ) : "Product" )
-            << ( trans ? i18n( "Reference" ) : "Reference" );
+            << ( trans ? i18nc( "@item", "Unknown" ) : "Unknown" )
+            << ( trans ? i18nc( "@item The produced document", "Product" ) : "Product" )
+            << ( trans ? i18nc( "@item Document is used for refrence", "Reference" ) : "Reference" );
 }
 
 QString Document::typeToString( Document::Type type, bool trans )
@@ -82,9 +82,9 @@ QString Document::typeToString( Document::Type type, bool trans )
 QStringList Document::sendAsList( bool trans )
 {
     return QStringList()
-            << ( trans ? i18n( "Unknown" ) : "Unknown" )
-            << ( trans ? i18n( "Copy" ) : "Copy" )
-            << ( trans ? i18n( "Reference" ) : "Reference" );
+            << ( trans ? i18nc( "@item", "Unknown" ) : "Unknown" )
+            << ( trans ? i18nc( "@item Send a copy of the document", "Copy" ) : "Copy" )
+            << ( trans ? i18nc( "@item Send the reference (url) of the document", "Reference" ) : "Reference" );
 }
 
 QString Document::sendAsToString( Document::SendAs snd, bool trans )

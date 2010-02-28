@@ -531,7 +531,7 @@ void ReportDesignDialog::slotButtonClicked( int button )
         if ( m_panel->m_modified ) {
             int res = KMessageBox::warningContinueCancel( this,
                     i18nc( "@info", "The report definition has been modified.<br/>"
-                    "<emphisis>If you continue, the modifications will be lost.<emphasis/>" ) );
+                    "<emphasis>If you continue, the modifications will be lost.</emphasis>" ) );
 
             if ( res == KMessageBox::Cancel ) {
                 return;
