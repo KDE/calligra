@@ -7,7 +7,7 @@ macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "Glib2" "Glib2" "http://www.gtk.org/" FALSE "" "Required by the msword .doc filter")
 
 macro_optional_find_package(LIBGSF)
-macro_log_feature(GSF_FOUND "libgsf" "LibGSF" "ftp://ftp.gnome.org/pub/GNOME/sources/libgsf" FALSE "" "Required by the msword .doc filter")
+macro_log_feature(LIBGSF_FOUND "libgsf" "LibGSF" "ftp://ftp.gnome.org/pub/GNOME/sources/libgsf" FALSE "" "Required by the msword .doc filter")
 
 macro_optional_find_package(Iconv)
 macro_log_feature(ICONV_FOUND "Iconv" "Iconv" "http://www.gnu.org/software/libiconv/" FALSE "" "Required by the msword .doc filter")
