@@ -932,7 +932,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 unsigned int code = text[0].unicode();
                 if ((code & 0xFF00) == 0xF000)   // see wv2
                     code &= 0x00FF;
-                listStyleWriter.addAttribute("text:bullet-char", QString::QString(code).toUtf8());
+                listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
             } else
                 kWarning(30513) << "Bullet with more than one character, not supported";
 
