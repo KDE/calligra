@@ -134,7 +134,7 @@ public:
     QString subScriptStyle, superScriptStyle;
     
     QHash<int,int> rowsRepeatedHash;
-    int rowsRepeated(int rowIndex);
+    int rowsRepeated(Row* row, int rowIndex);
 
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
@@ -312,7 +312,7 @@ void ExcelImport::Private::addProgress(int addValue)
     workbook->emitProgress(progress);
 }
 
-int ExcelImport::Private::rowsRepeated(int rowIndex)
+int ExcelImport::Private::rowsRepeated(Row* row, int rowIndex)
 {
     if(rowsRepeatedHash.contains(rowIndex))
         return rowsRepeatedHash[rowIndex];
@@ -321,9 +321,9 @@ int ExcelImport::Private::rowsRepeated(int rowIndex)
     // find the column of the rightmost cell (if any)
     int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     // find repeating rows by forward searching
-    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
+    const unsigned rowCount = qMin(maximalRowCount, row->sheet()->maxRow());
     for (unsigned i = rowIndex + 1; i <= rowCount; ++i) {
-        Row *nextRow = sheet->row(i, false);
+        Row *nextRow = row->sheet()->row(i, false);
         if(!nextRow) break;
         if (*row != *nextRow) break; // do the rows have the same properties?
         const int nextLastCol = row->sheet()->maxCellsInRow(i);
@@ -914,7 +914,7 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
     const QString styleName = rowStyles[rowFormatIndex];
     rowFormatIndex++;
 
-    repeat = rowsRepeated(rowIndex);
+    repeat = rowsRepeated(row, rowIndex);
 
     xmlWriter->startElement("table:table-row");
     xmlWriter->addAttribute("table:visibility", row->visible() ? "visible" : "collapse");
@@ -953,7 +953,7 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
     if (!row->sheet()) return repeat;
     if (!xmlWriter) return repeat;
 
-    repeat = rowsRepeated(rowIndex);
+    repeat = rowsRepeated(row, rowIndex);
 
     Format format = row->format();
     QString cellStyleName = processRowFormat(&format, "auto", repeat, row->height());
