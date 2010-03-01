@@ -233,15 +233,32 @@ void RecordRegistry::registerRecordClass(unsigned id, RecordFactory factory)
     instance()->records[id] = factory;
 }
 
+void RecordRegistry::registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void* args)
+{
+    instance()->recordsWithArgs[id] = factory;
+    instance()->recordArgs[id] = args;
+}
+
+void RecordRegistry::unregisterRecordClass(unsigned id)
+{
+    instance()->recordArgs.erase(id);
+}
+
 Record* RecordRegistry::createRecord(unsigned id, Workbook *book)
 {
     RecordRegistry* q = instance();
+
     std::map<unsigned, RecordFactory>::iterator it = q->records.find(id);
     if (it != q->records.end()) {
         return it->second(book);
-    } else {
-        return 0;
     }
+    
+    std::map<unsigned, RecordFactoryWithArgs>::iterator it2 = q->recordsWithArgs.find(id);
+    if (it2 != q->recordsWithArgs.end()) {
+        return it2->second(book,  q->recordArgs[id]);
+    }
+        
+    return 0;
 }
 
 RecordRegistry* RecordRegistry::instance()

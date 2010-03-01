@@ -29,7 +29,7 @@ QString CheckAndEscapeXmlText(const QString& strText)
     QString strReturn(strText);
     QChar ch;
 
-    for (uint i = 0; i < strReturn.length(); i++) {
+    for (int i = 0; i < strReturn.length(); i++) {
         ch = strReturn[i];
         const int test = ch.unicode();
 

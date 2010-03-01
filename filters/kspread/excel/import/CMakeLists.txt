@@ -24,6 +24,7 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/chartsubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/NumberFormatParser.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )

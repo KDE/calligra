@@ -36,10 +36,10 @@
 
 #include "pole.h"
 #include "swinder.h"
+#include "utils.h"
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
 #include "chartsubstreamhandler.h"
-#include "utils.h"
 
 //#define SWINDER_XLS2RAW
 
@@ -1687,11 +1687,11 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     const unsigned long cchText = readU16(data + 14);
     const unsigned char* startPict = data + 16;
     if(cchText > 0) {
-        const unsigned long cbRuns = readU16(startPict);
+        //const unsigned long cbRuns = readU16(startPict);
         const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
         startPict += 4 + cbFmla;
     } else {
-        const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
+        //const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
         startPict += 2;
     }
     
@@ -1811,7 +1811,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 if(blipItemOffset+44-data < 0) return;
                 std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
                 const unsigned btWin32 = readU8(blipItemOffset);
-                const unsigned btMacOS = readU8(blipItemOffset + 1);
+                //const unsigned btMacOS = readU8(blipItemOffset + 1);
                 switch(btWin32) {
                     case 0x00: printf("MsoDrawingGroupRecord: There was an error reading the file.\n"); break;
                     case 0x01: printf("MsoDrawingGroupRecord: Unknown BLIP type.\n"); break;
@@ -1826,7 +1826,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 }
                 //char rgbUid[16];
                 //for(int i = 0; i < 16; ++i) rgbUid[i] = readU8(blipItemOffset + 2 + i);
-                unsigned tag = readU16(blipItemOffset + 18);
+                //unsigned tag = readU16(blipItemOffset + 18);
                 unsigned long size = readU32(blipItemOffset + 20);
                 unsigned long cRef = readU32(blipItemOffset + 24);
                 unsigned long foDelay = readU32(blipItemOffset + 28);
@@ -2952,7 +2952,7 @@ void ExcelReader::handleBOF(BOFRecord* record)
         d->handlerStack.push_back(new WorksheetSubStreamHandler(sheet, d->globals));
     } else if (record->type() == BOFRecord::Chart) {
         SubStreamHandler* parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
-        d->handlerStack.push_back(new ChartSubStreamHandler(d->globals, parentHandler));
+        d->handlerStack.push_back(new Swinder::ChartSubStreamHandler(d->globals, parentHandler));
     } else {
         std::cout << "ExcelReader::handleBOF Unhandled type=" << record->type() << std::endl;
     }

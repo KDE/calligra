@@ -222,17 +222,22 @@ protected:
 };
 
 typedef Record*(*RecordFactory)(Workbook*);
+typedef Record*(*RecordFactoryWithArgs)(Workbook*, void*);
 
 class RecordRegistry
 {
 public:
     static void registerRecordClass(unsigned id, RecordFactory factory);
+    static void registerRecordClass(unsigned id, RecordFactoryWithArgs factory, void* args);
+    static void unregisterRecordClass(unsigned id);
     static Record* createRecord(unsigned id, Workbook *book);
 private:
     RecordRegistry() {};
     static RecordRegistry* instance();
 
     std::map<unsigned, RecordFactory> records;
+    std::map<unsigned, RecordFactoryWithArgs> recordsWithArgs;
+    std::map<unsigned, void*> recordArgs;
 };
 
 } // namespace Swinder

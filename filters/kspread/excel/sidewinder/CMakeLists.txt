@@ -25,6 +25,7 @@ set(sidewinder_SRCS
   substreamhandler.cpp
   globalssubstreamhandler.cpp
   worksheetsubstreamhandler.cpp
+  chartsubstreamhandler.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 

@@ -80,7 +80,7 @@ public:
 
     virtual void handleRecord(Record* record);
     
-protected:
+public:
     // from FormulaDecoder
     virtual const std::vector<UString>& externSheets() const;
     virtual UString nameFromIndex(unsigned index) const;
