@@ -24,6 +24,63 @@
   <computedField name="asValue" ctype="Value" value="isError() ? errorAsValue(value()) : Value(value() ? true : false)" />
 </record>
 
+<record name="StartBlock" id="0x0852">
+  <field name="frtHeaderOld" type="unsigned" size="32" />
+  <field name="iObjectKind" type="unsigned" size="16" />
+  <field name="iObjectContext" type="unsigned" size="16" />
+  <field name="iObjectInstance1" type="unsigned" size="16" />
+  <field name="iObjectInstance2" type="unsigned" size="16" />
+</record>
+
+<record name="EndBlock" id="0x0853">
+  <field name="frtHeaderOld" type="unsigned" size="32" />
+  <field name="iObjectKind" type="unsigned" size="16" />
+</record>
+
+<record name="ShapePropsStream" id="0x08a4">
+  <field name="rt" type="unsigned" size="16" />
+  <field name="grbitFrt" type="unsigned" size="16" />
+  <field name="reserved" type="unsigned" size="64" />
+  <field name="wObjContext" type="unsigned" size="16" />
+  <field name="unused" type="unsigned" size="16" />
+  <field name="dwChecksum" type="unsigned" size="32" />
+  <field name="cb" type="unsigned" size="32" />
+  <field name="rgb" type="bytestring" length="cb" />
+</record>
+
+<record name="TextPropsStream" id="0x08a5">
+  <field name="rt" type="unsigned" size="16" />
+  <field name="grbitFrt" type="unsigned" size="16" />
+  <field name="reserved" type="unsigned" size="64" />
+  <field name="dwChecksum" type="unsigned" size="32" />
+  <field name="cb" type="unsigned" size="32" />
+  <field name="rgb" type="bytestring" length="cb" />
+</record>
+
+<!--
+<record name="ChartMlFrt" id="0x089e"/>
+-->
+
+<record name="ChartLayout12A" id="0x08a7">
+  <field name="rt" type="unsigned" size="16" />
+  <field name="grbitFrt" type="unsigned" size="16" />
+  <field name="reserved" type="unsigned" size="64" />
+  <field name="dwChecksum" type="unsigned" size="32" />
+  <field name="fLayoutTargetInner" type="bool" size="1" />
+  <field name="reserved" size="15" />
+  <field name="xTL" type="signed" size="16" />
+  <field name="yTL" type="signed" size="16" />
+  <field name="xBR" type="signed" size="16" />
+  <field name="yBR" type="signed" size="16" />
+  <field name="wXMode" type="unsigned" size="16" />
+  <field name="wYMode" type="unsigned" size="16" />
+  <field name="wWidthMode" type="unsigned" size="16" />
+  <field name="wHeightMode" type="unsigned" size="16" />
+  <field name="x" type="float" size="64" />
+  <field name="y" type="float" size="64" />
+  <field name="dx" type="float" size="64" />
+  <field name="dy" type="float" size="64" />
+</record>
 
 <record name="LeftMargin" id="0x0026">
   <field name="leftMargin" type="float" size="64" />
@@ -40,7 +97,6 @@
 <record name="BottomMargin" id="0x0029">
   <field name="bottomMargin" type="float" size="64" />
 </record>
-
 
 <record name="BoundSheet" id="0x0085">
   <field name="bofPosition"     type="unsigned" size="32" />

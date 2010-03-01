@@ -3105,14 +3105,14 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         Record* record = Record::create(type, workbook);
 
         if (!record) {
-#ifdef SWINDER_XLS2RAW
+//#ifdef SWINDER_XLS2RAW
             std::cout << "Unhandled Record 0x";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
             std::cout << std::dec;
             std::cout << " (" << type << ")";
             std::cout << std::endl;
             std::cout << std::endl;
-#endif
+//#endif
         } else {
             // setup the record and invoke handler
             record->setVersion(d->globals->version());

@@ -66,7 +66,7 @@ struct Chart
     int x, y, width, height;
     //int marginLeft, marginTop, marginRight, MarginBottom;
     uint dataTypeX, dataTypeY, countXValues, countYValues, bubbleSizeDataType, countBubbleSizeValues;
-    QList<DataPoint*> dataset;
+    QList<DataPoint*> datasetFormat;
     ChartImpl *impl;
     explicit Chart() : x(-1), y(-1), width(-1), height(-1), impl(0) {}
 };
@@ -169,12 +169,17 @@ public:
             handleSIIndex(static_cast<SIIndexRecord*>(record));
         else if (type == MsoDrawingRecord::id)
             handleMsoDrawing(static_cast<MsoDrawingRecord*>(record));
+        else if (type == ShapePropsStreamRecord::id)
+            handleShapePropsStream(static_cast<ShapePropsStreamRecord*>(record));
+        else if (type == TextPropsStreamRecord::id)
+            handleTextPropsStream(static_cast<TextPropsStreamRecord*>(record));
         else if (type == CrtLinkRecord::id)
             {} // written but unused record
         else if (type == UnitsRecord::id)
             {} // written but must be ignored
         else {
             std::cout << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
+            //record->dump(std::cout);
         }
     }
 
@@ -268,7 +273,7 @@ private:
     void handlePieFormat(PieFormatRecord *record) {
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handlePieFormat pcExplode="<<record->pcExplode()<<std::endl;
-        m_chart->dataset << new PieFormat(record->pcExplode());
+        m_chart->datasetFormat << new PieFormat(record->pcExplode());
     }
     void handleMarkerFormat(MarkerFormatRecord *) {
         //TODO
@@ -324,11 +329,25 @@ private:
     void handleSIIndex(SIIndexRecord *record) { // type of data contained in the Number records following
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handleSIIndex numIndex=" << record->numIndex() << std::endl;
-        //TODO
+        /*TODO
+        0x0001 Series values or vertical values (for scatter or bubble chart groups)
+        0x0002 Category labels or horizontal values (for scatter or bubble chart groups)
+        0x0003 Bubble sizes
+        */
     }
     void handleMsoDrawing(MsoDrawingRecord* record) {
         if(!record) return;
         std::cout << "ChartSubStreamHandler::handleMsoDrawing" << std::endl;
+        //TODO
+    }
+    void handleShapePropsStream(ShapePropsStreamRecord* record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleShapePropsStream rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
+        //TODO
+    }
+    void handleTextPropsStream(TextPropsStreamRecord* record) {
+        if(!record) return;
+        std::cout << "ChartSubStreamHandler::handleTextPropsStream rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
         //TODO
     }
 
