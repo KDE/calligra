@@ -133,7 +133,9 @@ public:
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
     
-    QHash<int,int> rowsRepeated;
+    QHash<int,int> rowsRepeatedHash;
+    int rowsRepeated(int rowIndex);
+
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
 
@@ -308,6 +310,38 @@ void ExcelImport::Private::addProgress(int addValue)
     rowsCountDone += addValue;
     const int progress = int(rowsCountDone / double(rowsCountTotal) * 100.0 + 0.5);
     workbook->emitProgress(progress);
+}
+
+int ExcelImport::Private::rowsRepeated(int rowIndex)
+{
+    if(rowsRepeatedHash.contains(rowIndex))
+        return rowsRepeatedHash[rowIndex];
+    // a row does usually at least repeat itself
+    int repeat = 1;
+    // find the column of the rightmost cell (if any)
+    int lastCol = row->sheet()->maxCellsInRow(rowIndex);
+    // find repeating rows by forward searching
+    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
+    for (unsigned i = rowIndex + 1; i <= rowCount; ++i) {
+        Row *nextRow = sheet->row(i, false);
+        if(!nextRow) break;
+        if (*row != *nextRow) break; // do the rows have the same properties?
+        const int nextLastCol = row->sheet()->maxCellsInRow(i);
+        if (lastCol != nextLastCol) break;
+        bool cellsAreSame = true;
+        for(int c = 0; c <= lastCol; ++c) {
+            Cell* c1 = row->sheet()->cell(c, row->index(), false);
+            Cell* c2 = nextRow->sheet()->cell(c, nextRow->index(), false);
+            if (!c1 != !c2 || (c1 && *c1 != *c2)) {
+                cellsAreSame = false;
+                break; // job done, abort loop
+            }
+        }
+        if (!cellsAreSame) break;
+        ++repeat;
+    }
+    rowsRepeatedHash[rowIndex] = repeat; // cache the result
+    return repeat;
 }
 
 // Writes the spreadsheet content into the content.xml
@@ -880,11 +914,7 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
     const QString styleName = rowStyles[rowFormatIndex];
     rowFormatIndex++;
 
-    // find the column of the rightmost cell (if any)
-    int lastCol = row->sheet()->maxCellsInRow(rowIndex);
-
-    Q_ASSERT(rowsRepeated.contains(rowIndex));
-    repeat = rowsRepeated[rowIndex];
+    repeat = rowsRepeated(rowIndex);
 
     xmlWriter->startElement("table:table-row");
     xmlWriter->addAttribute("table:visibility", row->visible() ? "visible" : "collapse");
@@ -893,14 +923,15 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
     if(repeat > 1)
         xmlWriter->addAttribute("table:number-rows-repeated", repeat);
 
+    // find the column of the rightmost cell (if any)
+    const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     int i = 0;
     while(i <= lastCol) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(cell, repeat, xmlWriter);
             i += cell->columnRepeat() * repeat;
-        } else {
-            // empty cell
+        } else { // empty cell
             xmlWriter->startElement("table:table-cell");
             xmlWriter->endElement();
             ++i;
@@ -922,42 +953,21 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
     if (!row->sheet()) return repeat;
     if (!xmlWriter) return repeat;
 
-    // find the column of the rightmost cell (if any)
-    int lastCol = row->sheet()->maxCellsInRow(rowIndex);
+    repeat = rowsRepeated(rowIndex);
 
-    // find repeating rows by forward searching
-    const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
-    for (unsigned i = rowIndex + 1; i <= rowCount; ++i) {
-        Row *nextRow = sheet->row(i, false);
-        if(!nextRow) break;
-        if (*row != *nextRow) break; // do the rows have the same properties?
-        const int nextLastCol = row->sheet()->maxCellsInRow(i);
-        if (lastCol != nextLastCol) break;
-        bool cellsAreSame = true;
-        for(int c = 0; c <= lastCol; ++c) {
-            Cell* c1 = row->sheet()->cell(c, row->index(), false);
-            Cell* c2 = nextRow->sheet()->cell(c, nextRow->index(), false);
-            if (!c1 != !c2 || (c1 && *c1 != *c2)) {
-                cellsAreSame = false;
-                break; // job done, abort loop
-            }
-        }
-        if (!cellsAreSame) break;
-        ++repeat;
-    }
-    rowsRepeated[rowIndex] = repeat; // remember for reuse in processRowForBody()
-    
     Format format = row->format();
     QString cellStyleName = processRowFormat(&format, "auto", repeat, row->height());
     rowStyles.append(cellStyleName);
 
+    const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     for (int i = 0; i <= lastCol;) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForStyle(cell, xmlWriter);
             i += cell->columnRepeat() * repeat;
-        } else
+        } else { // row has no style
             ++i;
+        }
     }
 
     addProgress(repeat);
