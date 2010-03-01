@@ -1238,6 +1238,35 @@ std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
     return s;
 }
 
+FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version)
+{
+    FormulaTokens tokens;
+    const unsigned formula_len = readU16(data + pos);
+    for (unsigned j = pos + 2; j < size;) {
+        unsigned ptg = data[j++];
+        ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+        FormulaToken t(ptg);
+        t.setVersion(version);
+
+        if (t.id() == FormulaToken::String) {
+            // find bytes taken to represent the string
+            EString estr = (version == Excel97) ?
+                           EString::fromUnicodeString(data + j, false, formula_len) :
+                           EString::fromByteString(data + j, false, formula_len);
+            t.setData(estr.size(), data + j);
+            j += estr.size();
+        } else {
+            // normal, fixed-size token
+            if (t.size() > 0) {
+                t.setData(t.size(), data + j);
+                j += t.size();
+            }
+        }
+        tokens.push_back(t);
+    }
+    return tokens;
+}
+
 typedef std::vector<UString> UStringStack;
 
 static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString)

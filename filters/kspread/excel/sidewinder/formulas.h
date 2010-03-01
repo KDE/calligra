@@ -164,6 +164,8 @@ public:
     FormulaDecoder() {}
     virtual ~FormulaDecoder() {}
 
+    FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version);
+
     UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
     UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);    
 
