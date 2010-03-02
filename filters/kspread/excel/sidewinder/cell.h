@@ -32,6 +32,7 @@ namespace Swinder
 class Workbook;
 class Sheet;
 class Picture;
+class ChartObject;
 
 class Cell
 {
@@ -103,6 +104,10 @@ public:
     std::vector<Picture*> pictures() const;
     void setPictures(std::vector<Picture*>);
     void addPicture(Picture*);
+
+    // Defines a list of charts anchored to this cell.
+    std::vector<ChartObject*> charts() const;
+    void addChart(ChartObject* chart);
     
     bool operator==(const Cell &other) const;
     bool operator!=(const Cell &other) const;

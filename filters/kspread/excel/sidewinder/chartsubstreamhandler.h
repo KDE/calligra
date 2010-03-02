@@ -21,6 +21,7 @@
 #define SWINDER_CHARTSUBSTREAMHANDLER_H
 
 #include "substreamhandler.h"
+#include "objects.h"
 #include "swinder.h"
 //#include "ustring.h"
 //#include <vector>
@@ -33,40 +34,6 @@ namespace Swinder
 
 class GlobalsSubStreamHandler;
 class WorksheetSubStreamHandler;
-
-struct DataPoint
-{
-    DataPoint() {}
-    virtual ~DataPoint() {}
-};
-
-struct PieFormat : public DataPoint
-{
-    int pcExplode; // from PieFormat
-    PieFormat(int pcExplode) : DataPoint(), pcExplode(pcExplode) {}
-};
-
-struct ChartImpl
-{
-    ChartImpl() {}
-    virtual ~ChartImpl() {}
-};
-
-struct PieImpl : public ChartImpl
-{
-    int anStart, pcDonut;
-    PieImpl(int anStart, int pcDonut) : ChartImpl(), anStart(anStart), pcDonut(pcDonut) {}
-};
-
-struct Chart
-{
-    int x, y, width, height;
-    //int marginLeft, marginTop, marginRight, MarginBottom;
-    uint dataTypeX, dataTypeY, countXValues, countYValues, bubbleSizeDataType, countBubbleSizeValues;
-    QList<DataPoint*> datasetFormat;
-    ChartImpl *impl;
-    explicit Chart() : x(-1), y(-1), width(-1), height(-1), impl(0) {}
-};
 
 class BRAIRecord;
 
@@ -84,7 +51,7 @@ public:
 private:
     GlobalsSubStreamHandler* m_globals;
     SubStreamHandler* m_parentHandler;
-    Chart* m_chart;
+    ChartObject* m_chart;
     Sheet* m_sheet;
     
     void handleBOF(BOFRecord*);

@@ -121,6 +121,7 @@ public:
     QString inputFile;
     QString outputFile;
 
+    KoStore* storeout;
     Workbook *workbook;
 
     KoGenStyles *styles;
@@ -150,17 +151,17 @@ public:
     int rowFormatIndex;
     int cellFormatIndex;
 
-    void processWorkbookForBody(Workbook* workbook, KoXmlWriter* xmlWriter);
+    void processWorkbookForBody(KoOdfWriteStore* store, Workbook* workbook, KoXmlWriter* xmlWriter);
     void processWorkbookForStyle(Workbook* workbook, KoXmlWriter* xmlWriter);
-    void processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWriter);
+    void processSheetForBody(KoOdfWriteStore* store, Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* writer);
     void processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter);
     void processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
     void processColumnForStyle(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
-    int processRowForBody(Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
+    int processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
     int processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
-    void processCellForBody(Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
+    void processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
     QString processCellFormat(Format* format, const QString& formula = QString());
     QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, int rowHeight = -1);
@@ -203,10 +204,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->outputFile = m_chain->outputFile();
 
     // create output store
-    KoStore* storeout;
-    storeout = KoStore::createStore(d->outputFile, KoStore::Write,
+    d->storeout = KoStore::createStore(d->outputFile, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
-    if (!storeout) {
+    if (!d->storeout) {
         kWarning() << "Couldn't open the requested file.";
         delete d->workbook;
         return KoFilter::FileNotFound;
@@ -215,10 +215,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     emit sigProgress(0);
 
     // Tell KoStore not to touch the file names
-    storeout->disallowNameExpansion();
+    d->storeout->disallowNameExpansion();
 
     // open inputFile
-    StoreImpl *storeimpl = new StoreImpl(storeout);
+    StoreImpl *storeimpl = new StoreImpl(d->storeout);
     d->workbook = new Swinder::Workbook(storeimpl);
     connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
@@ -239,7 +239,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->styles = new KoGenStyles();
     d->mainStyles = new KoGenStyles();
 
-    KoOdfWriteStore oasisStore(storeout);
+    KoOdfWriteStore oasisStore(d->storeout);
     KoXmlWriter* manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
 
     // header and footer are read from each sheet and saved in styles
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     {
         kWarning() << "Couldn't open the file 'content.xml'.";
         delete d->workbook;
-        delete storeout;
+        delete d->storeout;
         return KoFilter::CreationError;
     }
 
@@ -258,7 +258,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     {
         kWarning() << "Couldn't open the file 'styles.xml'.";
         delete d->workbook;
-        delete storeout;
+        delete d->storeout;
         return KoFilter::CreationError;
     }
 
@@ -266,7 +266,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     if (!d->createMeta(&oasisStore)) {
         kWarning() << "Couldn't open the file 'meta.xml'.";
         delete d->workbook;
-        delete storeout;
+        delete d->storeout;
         return KoFilter::CreationError;
     }
     
@@ -274,7 +274,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     if (!d->createSettings(&oasisStore)) {
         kWarning() << "Couldn't open the file 'settings.xml'.";
         delete d->workbook;
-        delete storeout;
+        delete d->storeout;
         return KoFilter::CreationError;
     }
 
@@ -282,14 +282,14 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     if (!d->createManifest(&oasisStore, manifestWriter)) {
         kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
         delete d->workbook;
-        delete storeout;
+        delete d->storeout;
         return KoFilter::CreationError;
     }
 
     // we are done!
     delete d->workbook;
     delete d->styles;
-    delete storeout;
+    delete d->storeout;
     d->inputFile.clear();
     d->outputFile.clear();
     d->workbook = 0;
@@ -381,7 +381,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
 
     // office:body
     bodyWriter->startElement("office:body");
-    processWorkbookForBody(workbook, bodyWriter);
+    processWorkbookForBody(store, workbook, bodyWriter);
     bodyWriter->endElement();  // office:body
 
     return store->closeContentWriter();
@@ -560,7 +560,7 @@ bool ExcelImport::Private::createManifest(KoOdfWriteStore* store, KoXmlWriter* m
 }
 
 // Processes the workbook content. The workbook is the top-level element for content.
-void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbook* workbook, KoXmlWriter* xmlWriter)
 {
     if (!workbook) return;
     if (!xmlWriter) return;
@@ -577,7 +577,7 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
     // now start the whole work
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         Sheet* sheet = workbook->sheet(i);
-        processSheetForBody(sheet, xmlWriter);
+        processSheetForBody(store, sheet, xmlWriter);
     }
     
     std::map<UString, UString> &namedAreas = workbook->namedAreas();
@@ -663,7 +663,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
 }
 
 // Processes a sheet.
-void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sheet, KoXmlWriter* xmlWriter)
 {
     if (!sheet) return;
     if (!xmlWriter) return;
@@ -698,7 +698,7 @@ void ExcelImport::Private::processSheetForBody(Sheet* sheet, KoXmlWriter* xmlWri
     // add rows
     const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
     for (unsigned i = 0; i <= rowCount;) {
-        i += processRowForBody(sheet, i, xmlWriter);
+        i += processRowForBody(store, sheet, i, xmlWriter);
     }
 
     // same we did above with columns is also needed for rows.
@@ -898,7 +898,7 @@ void ExcelImport::Private::processColumnForStyle(Sheet* sheet, int columnIndex, 
 }
 
 // Processes a row in a sheet.
-int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter)
+int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter)
 {
     int repeat = 1;
 
@@ -929,7 +929,7 @@ int ExcelImport::Private::processRowForBody(Sheet* sheet, int rowIndex, KoXmlWri
     while(i <= lastCol) {
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
-            processCellForBody(cell, repeat, xmlWriter);
+            processCellForBody(store, cell, repeat, xmlWriter);
             i += cell->columnRepeat() * repeat;
         } else { // empty cell
             xmlWriter->startElement("table:table-cell");
@@ -1269,7 +1269,7 @@ QString currencyValue(const QString &value)
 }
 
 // Processes a cell within a sheet.
-void ExcelImport::Private::processCellForBody(Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter)
 {
     if (!cell) return;
     if (!xmlWriter) return;
@@ -1425,6 +1425,7 @@ void ExcelImport::Private::processCellForBody(Cell* cell, int rowsRepeat, KoXmlW
         xmlWriter->endElement(); // office:annotation
     }
     
+    // handle pictures
     foreach(Picture *picture, cell->pictures()) {
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
@@ -1443,6 +1444,39 @@ void ExcelImport::Private::processCellForBody(Cell* cell, int rowsRepeat, KoXmlW
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
         xmlWriter->endElement(); // draw:image
         xmlWriter->endElement(); // draw:frame
+    }
+
+    // handle charts
+    static int externalObject = 0;
+    int externalObj = ++externalObject;
+    foreach(ChartObject *chart, cell->charts()) {
+        //<draw:frame table:end-cell-address="Sheet1.I17" table:end-x="0.5217in" table:end-y="0.1382in" draw:z-index="0" draw:style-name="gr1" svg:width="3.1492in" svg:height="2.7555in" svg:x="0.0398in" svg:y="0.0394in">
+        //<draw:object draw:notify-on-update-of-ranges="Sheet1.C2:Sheet1.E2" xlink:href="./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+        //</draw:frame>
+        DrawingObject* drawobj = chart->drawingObject();
+        Q_ASSERT(drawobj);
+        const QString href = QString("./Object %1").arg(externalObj);
+        xmlWriter->startElement("draw:frame");
+        xmlWriter->addAttribute("table:end-cell-address", columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB));
+        xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL))+"pt");
+        xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT))+"pt");
+        xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
+        xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
+        xmlWriter->startElement("draw:object");
+        //xmlWriter->addAttribute("draw:notify-on-update-of-ranges", );
+        xmlWriter->addAttribute("xlink:href", href);
+        xmlWriter->addAttribute("xlink:type", "simple");
+        xmlWriter->addAttribute("xlink:show", "embed");
+        xmlWriter->addAttribute("xlink:actuate", "onLoad");
+        xmlWriter->endElement(); // draw:object
+        xmlWriter->endElement(); // draw:frame
+
+#if 0 //TODO
+        // now write the external object
+        KoEmbeddedDocumentSaver embeddedSaver;
+        //d->storeout
+        KoDocument::SavingContext documentContext(store, embeddedSaver);
+#endif
     }
 
     xmlWriter->endElement(); //  table:[covered-]table-cell

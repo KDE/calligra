@@ -202,6 +202,9 @@ public:
 
     // The last drawing object we got.
     DrawingObject* lastDrawingObject;
+
+    // list of id's with ChartObject's.
+    std::vector<unsigned long> charts;
 };
 
 WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals)
@@ -221,6 +224,8 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
 {
     for(std::map<std::pair<unsigned, unsigned>, DataTableRecord*>::iterator it = d->dataTables.begin(); it != d->dataTables.end(); ++it)
         delete (*it).second;
+    //for(std::map<unsigned long, Object*>::iterator it = d->sharedObjects.begin(); it != d->sharedObjects.end(); ++it)
+    //    delete (*it).second;
     //for(std::map<std::pair<unsigned, unsigned>, FormulaTokens*>::iterator it = d->sharedFormulas.begin(); it != d->sharedFormulas.end(); ++it)
     //    delete it.second.second;
     delete d->lastDrawingObject;
@@ -230,6 +235,16 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
 Sheet* WorksheetSubStreamHandler::sheet() const
 {
     return d->sheet;
+}
+
+std::map<unsigned long, Object*>& WorksheetSubStreamHandler::sharedObjects() const
+{
+    return d->sharedObjects;
+}
+
+std::vector<unsigned long>& WorksheetSubStreamHandler::charts() const
+{
+    return d->charts;
 }
 
 const std::vector<UString>& WorksheetSubStreamHandler::externSheets() const
@@ -853,7 +868,7 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
         NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[id]);
         if (obj) {
             int offset = d->noteMap[id] - 1;
-            Q_ASSERT(offset>=0 && offset<d->textObjects.size());
+            Q_ASSERT(offset>=0 && uint(offset)<d->textObjects.size());
             cell->setNote(d->textObjects[offset]);
             //cell->setNote(obj->note());
         }
@@ -873,6 +888,9 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
         //    PictureObject *r = static_cast<PictureObject*>(record->m_object);
         //    std::cout << "PICTURE embeddedStorage=" << r->embeddedStorage().c_str() << std::endl;
         //    break;
+        case Object::Chart:
+            d->charts.push_back(id);
+            break;
         case Object::Note:
             d->noteMap[id] = ++d->noteCount;
             break;
@@ -887,6 +905,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     }
 
     d->sharedObjects[id] = record->m_object;
+    record->m_object = 0; // take over ownership
 }
 
 void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* record)

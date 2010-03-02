@@ -241,6 +241,8 @@ void RecordRegistry::registerRecordClass(unsigned id, RecordFactoryWithArgs fact
 
 void RecordRegistry::unregisterRecordClass(unsigned id)
 {
+    instance()->records.erase(id);
+    instance()->recordsWithArgs.erase(id);
     instance()->recordArgs.erase(id);
 }
 
