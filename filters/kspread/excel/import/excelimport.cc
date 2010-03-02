@@ -133,6 +133,7 @@ public:
     QList<QString> sheetStyles;
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
+    QList<ChartObject*> charts;
     
     QHash<int,int> rowsRepeatedHash;
     int rowsRepeated(Row* row, int rowIndex);
@@ -143,7 +144,6 @@ public:
     bool createStyles(KoOdfWriteStore* store, KoXmlWriter* manifestWriter);
     bool createContent(KoOdfWriteStore* store);
     bool createMeta(KoOdfWriteStore* store);
-    bool createManifest(KoOdfWriteStore* store, KoXmlWriter* manifestWriter);
     bool createSettings(KoOdfWriteStore* store);
 
     int sheetFormatIndex;
@@ -168,6 +168,7 @@ public:
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
+    void processCharts(KoXmlWriter* manifestWriter);
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -269,7 +270,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         delete d->storeout;
         return KoFilter::CreationError;
     }
-    
+
     // store settings
     if (!d->createSettings(&oasisStore)) {
         kWarning() << "Couldn't open the file 'settings.xml'.";
@@ -278,13 +279,13 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         return KoFilter::CreationError;
     }
 
-    // store document manifest
-    if (!d->createManifest(&oasisStore, manifestWriter)) {
-        kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
-        delete d->workbook;
-        delete d->storeout;
-        return KoFilter::CreationError;
-    }
+    manifestWriter->addManifestEntry("meta.xml", "text/xml");
+    manifestWriter->addManifestEntry("styles.xml", "text/xml");
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    d->processCharts(manifestWriter);
+    oasisStore.closeManifestWriter();
 
     // we are done!
     delete d->workbook;
@@ -405,7 +406,23 @@ bool ExcelImport::Private::createStyles(KoOdfWriteStore* store, KoXmlWriter* man
     stylesWriter->addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
     stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
     stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-    stylesWriter->addAttribute("office:version", "1.0");
+    stylesWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    stylesWriter->addAttribute("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+    stylesWriter->addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    stylesWriter->addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+    stylesWriter->addAttribute("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+    //stylesWriter->addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
+    //stylesWriter->addAttribute("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+    stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+    //stylesWriter->addAttribute("xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+    //stylesWriter->addAttribute("xmlns:script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0");
+    //stylesWriter->addAttribute("xmlns:dom", "http://www.w3.org/2001/xml-events");
+    //stylesWriter->addAttribute("xmlns:xforms", "http://www.w3.org/2002/xforms");
+    //stylesWriter->addAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+    //stylesWriter->addAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
+    //stylesWriter->addAttribute("xmlns:rdfa", "http://docs.oasis-open.org/opendocument/meta/rdfa#");
+    stylesWriter->addAttribute("office:version", "1.2");
 
     mainStyles->saveOdfMasterStyles(stylesWriter);
     mainStyles->saveOdfDocumentStyles(stylesWriter); // office:style
@@ -547,16 +564,6 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
     settingsWriter->endDocument();
     delete settingsWriter;
     return store->store()->close();
-}
-
-// Writes the manifest into the manifest.xml
-bool ExcelImport::Private::createManifest(KoOdfWriteStore* store, KoXmlWriter* manifestWriter)
-{
-    manifestWriter->addManifestEntry("meta.xml", "text/xml");
-    manifestWriter->addManifestEntry("styles.xml", "text/xml");
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-
-    return store->closeManifestWriter();
 }
 
 // Processes the workbook content. The workbook is the top-level element for content.
@@ -1447,39 +1454,178 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     }
 
     // handle charts
-    static int externalObject = 0;
-    int externalObj = ++externalObject;
     foreach(ChartObject *chart, cell->charts()) {
         //<draw:frame table:end-cell-address="Sheet1.I17" table:end-x="0.5217in" table:end-y="0.1382in" draw:z-index="0" draw:style-name="gr1" svg:width="3.1492in" svg:height="2.7555in" svg:x="0.0398in" svg:y="0.0394in">
         //<draw:object draw:notify-on-update-of-ranges="Sheet1.C2:Sheet1.E2" xlink:href="./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
         //</draw:frame>
+        this->charts << chart;
         DrawingObject* drawobj = chart->drawingObject();
         Q_ASSERT(drawobj);
-        const QString href = QString("./Object %1").arg(externalObj);
+        const QString href = QString("./Object%1").arg(this->charts.count());
         xmlWriter->startElement("draw:frame");
+
+#if 0 //FIXME
         xmlWriter->addAttribute("table:end-cell-address", columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB));
         xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL))+"pt");
         xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT))+"pt");
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
         xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
+#else
+        xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H20");
+        xmlWriter->addAttribute("table:end-x", "0.2953in");
+        xmlWriter->addAttribute("table:end-y", "0.0232in");
+        xmlWriter->addAttribute("draw:z-index", "0");
+        xmlWriter->addAttribute("svg:x", "0.702in");
+        xmlWriter->addAttribute("svg:y", "0.1016in");
+        xmlWriter->addAttribute("svg:width", "3.1492in");
+        xmlWriter->addAttribute("svg:height", "2.7555in");
+#endif
         xmlWriter->startElement("draw:object");
-        //xmlWriter->addAttribute("draw:notify-on-update-of-ranges", );
+        xmlWriter->addAttribute("draw:notify-on-update-of-ranges", "Sheet1.D2:Sheet1.F2");
         xmlWriter->addAttribute("xlink:href", href);
         xmlWriter->addAttribute("xlink:type", "simple");
         xmlWriter->addAttribute("xlink:show", "embed");
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
         xmlWriter->endElement(); // draw:object
-        xmlWriter->endElement(); // draw:frame
 
-#if 0 //TODO
-        // now write the external object
-        KoEmbeddedDocumentSaver embeddedSaver;
-        //d->storeout
-        KoDocument::SavingContext documentContext(store, embeddedSaver);
-#endif
+        xmlWriter->endElement(); // draw:frame
     }
 
     xmlWriter->endElement(); //  table:[covered-]table-cell
+}
+
+void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
+{
+    KoGenStyles styles;
+    KoGenStyles mainStyles;
+
+    for(int i = 0; i < this->charts.count(); ++i) {
+        ChartObject *chart = this->charts[i];
+        const QString href = QString("Object%1").arg(i+1); // don't use relative directories here
+        this->storeout->pushDirectory();
+        this->storeout->enterDirectory(href);
+
+        KoOdfWriteStore s(this->storeout);
+        //KoXmlWriter* manifestWriter = s.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
+        KoXmlWriter* bodyWriter = s.bodyWriter();
+        KoXmlWriter* contentWriter = s.contentWriter();
+        Q_ASSERT(bodyWriter && contentWriter);
+        bodyWriter->startElement("office:body");
+        bodyWriter->startElement("office:chart");
+        bodyWriter->startElement("chart:chart"); //<chart:chart svg:width="8cm" svg:height="7cm" chart:class="chart:circle" chart:style-name="ch1">
+
+bodyWriter->addAttribute("chart:class", "chart:circle"); //FIXME
+bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
+bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
+
+        //KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
+        //style.addProperty("draw:stroke", "solid");
+        //style.addProperty("draw:fill-color", "#ff0000");
+        //bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
+        bodyWriter->addAttribute("chart:style-name", "ch94");
+
+        //<chart:legend chart:legend-position="end" svg:x="7.031cm" svg:y="2.843cm" chart:style-name="ch2"/>
+
+        bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
+
+        //KoGenStyle chartstyle(KoGenStyle::StyleChartAuto, "chart");
+        //chartstyle.addProperty("chart:include-hidden-cells", "false");
+        //chartstyle.addProperty("chart:auto-position", "true");
+        //chartstyle.addProperty("chart:auto-size", "true");
+        //chartstyle.addProperty("chart:series-source", "rows");
+        //chartstyle.addProperty("chart:sort-by-x-values", "false");
+        //chartstyle.addProperty("chart:right-angled-axes", "true");
+        //bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
+        bodyWriter->addAttribute("chart:style-name", "ch98");
+
+bodyWriter->addAttribute("table:cell-range-address", "Sheet1.C2:Sheet1.E2"); //FIXME
+bodyWriter->addAttribute("svg:x", "0.16cm"); //FIXME
+bodyWriter->addAttribute("svg:y", "0.14cm"); //FIXME
+bodyWriter->addAttribute("svg:width", "6.712cm"); //FIXME
+bodyWriter->addAttribute("svg:height", "6.58cm"); //FIXME
+
+        //<chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch4"/>
+        //<chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch5"><chart:grid chart:style-name="ch6" chart:class="major"/></chart:axis>
+
+        bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
+
+        //KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
+        //seriesstyle.addProperty("draw:stroke", "solid");
+        //seriesstyle.addProperty("draw:fill-color", "#ff0000");
+        //bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
+
+bodyWriter->addAttribute("chart:values-cell-range-address", "Sheet1.C2:Sheet1.E2"); //FIXME
+bodyWriter->addAttribute("chart:class", "chart:circle"); //FIXME
+for(int j=0; j < 3; ++j) {
+    //KoGenStyle gs(KoGenStyle::StyleGraphicAuto, "chart");
+    //gs.addProperty("draw:fill-color", "#004586");
+    bodyWriter->startElement("chart:data-point");
+    //bodyWriter->addAttribute("chart-style-name", styles.lookup(gs, "ch"));
+    bodyWriter->addAttribute("chart-style-name", "ch97");
+    bodyWriter->endElement();
+}
+        //<chart:data-point chart:style-name="ch8"/>
+        //<chart:data-point chart:style-name="ch9"/>
+        //<chart:data-point chart:style-name="ch10"/>
+        bodyWriter->endElement(); // chart:series
+        //<chart:wall chart:style-name="ch11"/>
+        //<chart:floor chart:style-name="ch12"/>
+        bodyWriter->endElement(); // chart:plot-area
+
+        bodyWriter->endElement(); // chart:chart
+        bodyWriter->endElement(); // office:chart
+        bodyWriter->endElement(); // office:body
+
+        styles.saveOdfAutomaticStyles(contentWriter, false);
+        s.closeContentWriter();
+
+        if(this->storeout->open("styles.xml")) {
+            KoStoreDevice dev(this->storeout);
+            KoXmlWriter* stylesWriter = new KoXmlWriter(&dev);
+
+            stylesWriter->startDocument("office:document-styles");
+            stylesWriter->startElement("office:document-styles");
+            stylesWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+            stylesWriter->addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
+            stylesWriter->addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+            stylesWriter->addAttribute("xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
+            stylesWriter->addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
+            stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+            stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+            stylesWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+            stylesWriter->addAttribute("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+            stylesWriter->addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+            stylesWriter->addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+            stylesWriter->addAttribute("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+            //stylesWriter->addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
+            //stylesWriter->addAttribute("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+            stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+            //stylesWriter->addAttribute("xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+            //stylesWriter->addAttribute("xmlns:script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0");
+            //stylesWriter->addAttribute("xmlns:dom", "http://www.w3.org/2001/xml-events");
+            //stylesWriter->addAttribute("xmlns:xforms", "http://www.w3.org/2002/xforms");
+            //stylesWriter->addAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+            //stylesWriter->addAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
+            //stylesWriter->addAttribute("xmlns:rdfa", "http://docs.oasis-open.org/opendocument/meta/rdfa#");
+            stylesWriter->addAttribute("office:version", "1.2");
+
+            mainStyles.saveOdfMasterStyles(stylesWriter);
+            mainStyles.saveOdfDocumentStyles(stylesWriter); // office:style
+            mainStyles.saveOdfAutomaticStyles(stylesWriter, false); // office:automatic-styles
+
+            stylesWriter->endElement(); // office:document-styles
+            stylesWriter->endDocument();
+            delete stylesWriter;
+            this->storeout->close();
+        }
+
+        manifestWriter->addManifestEntry(href, "application/vnd.oasis.opendocument.chart");
+        manifestWriter->addManifestEntry(QString("%1/styles.xml").arg(href), "text/xml");
+        manifestWriter->addManifestEntry(QString("%1/content.xml").arg(href), "text/xml");
+
+        this->storeout->popDirectory();
+    }
 }
 
 // Processes style for a cell within a sheet.
