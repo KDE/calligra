@@ -134,7 +134,12 @@ public:
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
 
-    typedef QPair<QString,ChartObject*> Chart;
+    struct Chart {
+        QString href;
+        Sheet* sheet;
+        ChartObject* chart;
+        Chart(const QString& href, Sheet* sheet, ChartObject* chart) : href(href), sheet(sheet), chart(chart) {}
+    };
     QList<Chart> charts;
     
     QHash<int,int> rowsRepeatedHash;
@@ -1459,15 +1464,11 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
     // handle charts
     foreach(ChartObject *chart, cell->charts()) {
-        //<draw:frame table:end-cell-address="Sheet1.I17" table:end-x="0.5217in" table:end-y="0.1382in" draw:z-index="0" draw:style-name="gr1" svg:width="3.1492in" svg:height="2.7555in" svg:x="0.0398in" svg:y="0.0394in">
-        //<draw:object draw:notify-on-update-of-ranges="Sheet1.C2:Sheet1.E2" xlink:href="./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-        //</draw:frame>
-        const QString href = QString("Object%1").arg(this->charts.count());
-        this->charts << Chart(href, chart);
         DrawingObject* drawobj = chart->drawingObject();
-        Q_ASSERT(drawobj);
+        if(!drawobj) continue;
+        const QString href = QString("Object%1").arg(this->charts.count()+1);
+        this->charts << Chart(href, cell->sheet(), chart);
         xmlWriter->startElement("draw:frame");
-
         //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H20");
         //xmlWriter->addAttribute("table:end-x", "0.2953in");
         //xmlWriter->addAttribute("table:end-y", "0.0232in");
@@ -1477,7 +1478,6 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
         xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
         //xmlWriter->addAttribute("draw:z-index", "0");
-
         xmlWriter->startElement("draw:object");
         xmlWriter->addAttribute("draw:notify-on-update-of-ranges", "Sheet1.D2:Sheet1.F2");
         xmlWriter->addAttribute("xlink:href", "./" + href);
@@ -1485,7 +1485,6 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("xlink:show", "embed");
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
         xmlWriter->endElement(); // draw:object
-
         xmlWriter->endElement(); // draw:frame
     }
 
@@ -1498,13 +1497,13 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
     KoGenStyles mainStyles;
 
     foreach(const Chart &_chart, this->charts) {
-        const QString href = _chart.first;
-        ChartObject *chart = _chart.second;
+        const QString href = _chart.href;
+        Sheet* sheet =_chart.sheet;
+        ChartObject *chart = _chart.chart;
         this->storeout->pushDirectory();
         this->storeout->enterDirectory(href);
 
         KoOdfWriteStore s(this->storeout);
-        //KoXmlWriter* manifestWriter = s.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
         KoXmlWriter* bodyWriter = s.bodyWriter();
         KoXmlWriter* contentWriter = s.contentWriter();
         Q_ASSERT(bodyWriter && contentWriter);
@@ -1512,9 +1511,16 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->startElement("office:chart");
         bodyWriter->startElement("chart:chart"); //<chart:chart svg:width="8cm" svg:height="7cm" chart:class="chart:circle" chart:style-name="ch1">
 
-bodyWriter->addAttribute("chart:class", "chart:circle"); //FIXME
-bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
-bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
+        const QByteArray className = qstrlen(chart->impl->name())>=1 ? QByteArray("chart:") + chart->impl->name() : QByteArray();
+        if(!className.isEmpty())
+            bodyWriter->addAttribute("chart:class", className);
+
+        DrawingObject* drawobj = chart->drawingObject();
+        //bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
+        //bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
+
+        bodyWriter->addAttribute("svg:width", QString::number(columnWidth(sheet,drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
+        bodyWriter->addAttribute("svg:height", QString::number(rowHeight(sheet,drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
 
         //KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
         //style.addProperty("draw:stroke", "solid");
@@ -1534,7 +1540,13 @@ bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
         //chartstyle.addProperty("chart:right-angled-axes", "true");
         //bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
 
-bodyWriter->addAttribute("table:cell-range-address", "Sheet1.C2:Sheet1.E2"); //FIXME
+        QString cellRange = string(chart->valuesCellRangeAddress);
+        if(cellRange.startsWith('[') && cellRange.endsWith(']'))
+            cellRange = cellRange.mid(1,cellRange.length()-2);
+
+        if(!cellRange.isEmpty())
+            bodyWriter->addAttribute("table:cell-range-address", cellRange); //"Sheet1.C2:Sheet1.E2");
+
         //bodyWriter->addAttribute("svg:x", "0.16cm"); //FIXME
         //bodyWriter->addAttribute("svg:y", "0.14cm"); //FIXME
         //bodyWriter->addAttribute("svg:width", "6.712cm"); //FIXME
@@ -1549,9 +1561,10 @@ bodyWriter->addAttribute("table:cell-range-address", "Sheet1.C2:Sheet1.E2"); //F
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
         //bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
+        //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
-bodyWriter->addAttribute("chart:values-cell-range-address", "Sheet1.C2:Sheet1.E2"); //FIXME
-        bodyWriter->addAttribute("chart:class", "chart:circle"); //FIXME
+        if(!cellRange.isEmpty())
+            bodyWriter->addAttribute("chart:values-cell-range-address", cellRange); //"Sheet1.C2:Sheet1.E2");
 
         /*
         for(int j=0; j < 3; ++j) {

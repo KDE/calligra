@@ -209,8 +209,9 @@ private:
 class ChartObject : public Object
 {
 public:
-    struct Value
+    class Value
     {
+    public:
         enum DataId {
             SeriesLegendOrTrendlineName = 0x00, // Referenced data specifies the series, legend entry, or trendline name. Error bars name MUST be empty.
             HorizontalValues = 0x01, // Referenced data specifies the values or horizontal values on bubble and scatter chart groups of the series and error bars.
@@ -234,28 +235,34 @@ public:
         virtual ~Value() {}
     };
 
-    struct Format
+    class Format
     {
+    public:
         Format() {}
         virtual ~Format() {}
     };
 
-    struct PieFormat : public Format
+    class PieFormat : public Format
     {
+    public:
         int pcExplode; // from PieFormat
         PieFormat(int pcExplode) : Format(), pcExplode(pcExplode) {}
     };
 
-    struct ChartImpl
+    class ChartImpl
     {
+    public:
         ChartImpl() {}
         virtual ~ChartImpl() {}
+        virtual const char* name() const = 0;
     };
 
-    struct PieImpl : public ChartImpl
+    class PieImpl : public ChartImpl
     {
+    public:
         int anStart, pcDonut;
         PieImpl(int anStart, int pcDonut) : ChartImpl(), anStart(anStart), pcDonut(pcDonut) {}
+        virtual const char* name() const { return "circle"; }
     };
 
     // Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
@@ -267,8 +274,13 @@ public:
 
     // The referenced values used in the chart
     QMap<Value::DataId, Value*> datasetValue;
+
+    // Range that contains the values that should be visualized by the dataSeries.
+    UString valuesCellRangeAddress;
+
     // The formatting for the referenced values
     QList<Format*> datasetFormat;
+
     // The more concrete chart implementation like e.g. a PieImpl for a pie chart.
     ChartImpl *impl;
 
