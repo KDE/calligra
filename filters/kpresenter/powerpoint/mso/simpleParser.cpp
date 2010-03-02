@@ -5477,6 +5477,8 @@ void PPT::parseTextDefaults9Atom(LEInputStream& in, TextDefaults9Atom& _s) {
 }
 void PPT::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
     _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _possiblyPresent;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0xF");
@@ -5488,13 +5490,45 @@ void PPT::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FC8");
     }
     parseKinsoku9Atom(in, _s.kinsoku9Atom);
-    if (_s.kinsoku9Atom.korLevel==2 || _s.kinsoku9Atom.scLevel==2 || _s.kinsoku9Atom.tcLevel==2 || _s.kinsoku9Atom.jpnLevel==2) {
-        _s.kinsokuLeadingAtom = QSharedPointer<KinsokuLeadingAtom>(new KinsokuLeadingAtom(&_s));
-        parseKinsokuLeadingAtom(in, *_s.kinsokuLeadingAtom.data());
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
     }
-    if (_s.kinsoku9Atom.korLevel==2 || _s.kinsoku9Atom.scLevel==2 || _s.kinsoku9Atom.tcLevel==2 || _s.kinsoku9Atom.jpnLevel==2) {
-        _s.kinsokuFollowingAtom = QSharedPointer<KinsokuFollowingAtom>(new KinsokuFollowingAtom(&_s));
-        parseKinsokuFollowingAtom(in, *_s.kinsokuFollowingAtom.data());
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.kinsokuLeadingAtom = QSharedPointer<KinsokuLeadingAtom>(new KinsokuLeadingAtom(&_s));
+            parseKinsokuLeadingAtom(in, *_s.kinsokuLeadingAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.kinsokuLeadingAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.kinsokuLeadingAtom.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 1 )&&(_optionCheck.recType == 0xFBA)&&(_optionCheck.recLen%2==0);
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.kinsokuFollowingAtom = QSharedPointer<KinsokuFollowingAtom>(new KinsokuFollowingAtom(&_s));
+            parseKinsokuFollowingAtom(in, *_s.kinsokuFollowingAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.kinsokuFollowingAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.kinsokuFollowingAtom.clear();
+            in.rewind(_m);
+        }
     }
 }
 void PPT::parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s) {
