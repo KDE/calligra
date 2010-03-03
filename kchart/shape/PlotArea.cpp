@@ -85,9 +85,12 @@ Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> )
 class PlotArea::Private
 {
 public:
-    Private( ChartShape *parent );
+    Private( PlotArea *q, ChartShape *parent );
     ~Private();
 
+    void initAxes();
+
+    PlotArea *q;
     // The parent chart shape
     ChartShape *shape;
 
@@ -144,10 +147,10 @@ public:
     mutable bool pixmapRepaintRequested;
 };
 
-PlotArea::Private::Private( ChartShape *parent )
+PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
+    : q(q)
+    , shape(parent)
 {
-    shape = parent;
-
     // Default type: normal bar chart
     chartType    = BarChartType;
     chartSubtype = NormalChartSubtype;
@@ -185,11 +188,31 @@ PlotArea::Private::~Private()
     delete kdChart;
 }
 
+void PlotArea::Private::initAxes()
+{
+    // Remove all old axes
+    while( !axes.isEmpty() ) {
+        Axis *axis = axes.takeLast();
+        Q_ASSERT( axis );
+        if ( axis->title() )
+            automaticallyHiddenAxisTitles.removeAll( axis->title() );
+        delete axis;
+    }
+    // There need to be at least these two axes. Do not delete, but
+    // hide them instead.
+    Axis *xAxis = new Axis( q );
+    Axis *yAxis = new Axis( q );
+    xAxis->setPosition( BottomAxisPosition );
+    yAxis->setPosition( LeftAxisPosition );
+    yAxis->setShowMajorGrid( true );
+    axes.append( xAxis );
+    axes.append( yAxis );
+}
 
 PlotArea::PlotArea( ChartShape *parent )
     : QObject()
     , KoShape()
-    , d( new Private( parent ) )
+    , d( new Private( this, parent ) )
 {
     setShapeId( ChartShapeId );
     
@@ -228,15 +251,7 @@ void PlotArea::plotAreaInit()
     d->wall = new Surface( this );
     //d->floor = new Surface( this );
     
-    // There need to be at least these two axes. Do not delete, but
-    // hide them instead.
-    Axis *xAxis = new Axis( this );
-    Axis *yAxis = new Axis( this );
-    xAxis->setPosition( BottomAxisPosition );
-    yAxis->setPosition( LeftAxisPosition );
-    yAxis->setShowMajorGrid( true );
-    d->axes.append( xAxis );
-    d->axes.append( yAxis );
+    d->initAxes();
 }
 
 void PlotArea::dataSetCountChanged()
@@ -404,6 +419,10 @@ bool PlotArea::removeAxis( Axis *axis )
     	qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
     	return false;
     }
+    
+    if ( axis->title() )
+        d->automaticallyHiddenAxisTitles.removeAll( axis->title() );
+
     d->axes.removeAll( axis );
     
     if ( axis->dimension() == XAxisDimension ) {
@@ -625,12 +644,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             d->shape->setModel( sheet.data() );
     }
 
-    // Remove all axes before loading new ones
-    while( !d->axes.isEmpty() ) {
-        Axis *axis = d->axes.takeLast();
-        Q_ASSERT( axis );
-        delete axis;
-    }
+    d->initAxes();
     
     // A data set is always attached to an axis, so load them first.
     KoXmlElement n;
