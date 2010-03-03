@@ -1467,7 +1467,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index )
 {
-    if ( index < 0 )
+    if ( index < 0 || index >= d->dataSetAxes.count() )
         return;
     Q_ASSERT( d->dataSetAxes.size() >= index );
     
