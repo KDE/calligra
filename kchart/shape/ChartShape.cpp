@@ -33,8 +33,6 @@
 #include <QSizeF>
 #include <QTextDocument>
 #include <QStandardItemModel>
-#include <QDir>
-#include <QFileInfo>
 
 // KDE
 #include <KDebug>
@@ -969,15 +967,11 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
     if ( !path.endsWith( '/' ) )
         path += '/';
 
-    QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
+    const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
     //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
-        mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
-        if ( mimeType.isEmpty() ) {
-            qDebug() << "!!! Manifest doesn't have media-type for" << path << url;
-            Q_ASSERT(false);
-            return false;
-        }
+        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
+        return false;
     }
 
     const bool isOdf = mimeType.startsWith( "application/vnd.oasis.opendocument" );
