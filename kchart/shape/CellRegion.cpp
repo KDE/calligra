@@ -112,7 +112,7 @@ CellRegion::CellRegion( const QString& region )
     if ( isPoint )
         regEx = QRegExp( "(.*)\\.([A-Z]+)([0-9]+)" );
     else
-        regEx = QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:([A-Z]+)([0-9]+)" );
+        regEx = QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
 
     // Check if region string is valid (e.g. not empty)
     if ( regEx.indexIn( searchStr ) >= 0 ) {
@@ -122,7 +122,7 @@ CellRegion::CellRegion( const QString& region )
         d->sheetName = regEx.cap( 1 );
 
         QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
-        QPoint bottomRight( rangeStringToInt( regEx.cap(4) ), regEx.cap(5).toInt() );
+        QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
 
         if ( isPoint )
             d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
