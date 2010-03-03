@@ -1595,7 +1595,7 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         //KoOdfWriteStore oasisStore(d->storeout);
         createStyles(this->storeout, manifestWriter, &mainStyles);
 
-        manifestWriter->addManifestEntry(href, "application/vnd.oasis.opendocument.chart");
+        manifestWriter->addManifestEntry(href+"/", "application/vnd.oasis.opendocument.chart");
         manifestWriter->addManifestEntry(QString("%1/styles.xml").arg(href), "text/xml");
         manifestWriter->addManifestEntry(QString("%1/content.xml").arg(href), "text/xml");
 
