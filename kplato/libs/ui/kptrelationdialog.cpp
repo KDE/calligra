@@ -35,6 +35,10 @@ RelationPanel::RelationPanel(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+    lagLabel->setText( i18nc( "@label:spinbox Time lag", "Lag:" ) );
+    QString tt = i18nc( "@info:tooltip", "<emphasis>Lag</emphasis> is the time the dependent task is delayed" );
+    lagLabel->setToolTip( tt );
+    lag->setToolTip( tt );
 }
     
 AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
