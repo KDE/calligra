@@ -106,14 +106,13 @@ CellRegion::CellRegion( const QString& region )
     // the same way.
     // See ODF specs $8.3.1 "Referencing Table Cells"
     QString searchStr = QString( region ).remove( "$" );
-    QString pointRegEx = "(.*)\\.([A-Z]+)([0-9]+)";
     QRegExp regEx;
 
     const bool isPoint = !region.contains( ':' );
     if ( isPoint )
-        regEx = QRegExp( pointRegEx );
+        regEx = QRegExp( "(.*)\\.([A-Z]+)([0-9]+)" );
     else
-        regEx = QRegExp ( pointRegEx + ":" + pointRegEx );
+        regEx = QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:([A-Z]+)([0-9]+)" );
 
     // Check if region string is valid (e.g. not empty)
     if ( regEx.indexIn( searchStr ) >= 0 ) {
@@ -122,8 +121,8 @@ CellRegion::CellRegion( const QString& region )
         // here. We do not support more than one table in a cell region.
         d->sheetName = regEx.cap( 1 );
 
-        QPoint topLeft( rangeStringToInt( regEx.cap( 2 ) ), regEx.cap(3).toInt() );
-        QPoint bottomRight( rangeStringToInt( regEx.cap( 5 ) ), regEx.cap(6).toInt() );
+        QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
+        QPoint bottomRight( rangeStringToInt( regEx.cap(4) ), regEx.cap(5).toInt() );
 
         if ( isPoint )
             d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
