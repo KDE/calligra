@@ -23,7 +23,7 @@
 #ifndef PPTTOODP_H
 #define PPTTOODP_H
 
-#include "mso/simpleParser.h"
+#include "generated/simpleParser.h"
 #include "pptstyle.h"
 #include "DateTimeFormat.h"
 #include "ParsedPresentation.h"
@@ -36,6 +36,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QRectF>
 #include <QtGui/QColor>
+#include <QtCore/QDebug>
 
 /**
  * Converts PPT files to ODP files.

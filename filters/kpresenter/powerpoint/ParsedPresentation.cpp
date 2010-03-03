@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "ParsedPresentation.h"
+#include "generated/leinputstream.h"
 #include <QtCore/QBuffer>
 
 using namespace PPT;

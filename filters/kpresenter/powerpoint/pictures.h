@@ -21,7 +21,7 @@
 
 #include <pole.h>
 #include <KoStore.h>
-#include "mso/simpleParser.h"
+#include "generated/simpleParser.h"
 
 struct PictureReference {
     QString name;

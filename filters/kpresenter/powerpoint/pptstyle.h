@@ -20,7 +20,7 @@
 #ifndef PPTSTYLE_H
 #define PPTSTYLE_H
 
-#include "mso/simpleParser.h"
+#include "generated/simpleParser.h"
 
 class PptTextPFRun {
     quint16 level_;

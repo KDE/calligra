@@ -5,7 +5,7 @@
 #include <QByteArray>
 #include <QVector>
 #include <QSharedPointer>// replace with QScopedPointer when switching to Qt 4.6
-#include "leinputstream.h"
+class LEInputStream;
 namespace PPT{
 class StreamOffset {
 public:

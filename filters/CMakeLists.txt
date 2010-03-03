@@ -34,6 +34,8 @@ set(liboofilter_SRCS
 
 set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
+add_subdirectory(libmso)
+
 macro_optional_add_subdirectory( generic_wrapper )
 macro_optional_add_subdirectory( libkowmf )
 macro_optional_add_subdirectory( libmsooxml )
