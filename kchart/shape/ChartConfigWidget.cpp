@@ -1203,9 +1203,8 @@ void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
 void ChartConfigWidget::ui_axisSelectionChanged( int index )
 {
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
     
     Axis *axis = d->axes[ index ];
     
@@ -1329,9 +1328,8 @@ void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
 void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
 {
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->dataSets.size() )
         return;
-    Q_ASSERT( d->dataSets.size() >= index );
     
     DataSet *dataSet = d->dataSets[ index ];
     const int dimensions = dataSet->dimension();
@@ -1353,9 +1351,8 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
 void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
 {
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->dataSets.size() )
         return;
-    Q_ASSERT( d->dataSets.size() >= index );
     
     DataSet *dataSet = d->dataSets[ index ];
     //d->ui.datasetColor->setText( axis->titleText() );
@@ -1480,14 +1477,16 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index )
 
 void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
 {
-    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
+        return;
     
     emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b )
 {
-    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
+        return;
     
     // To hide the axis title, we pass an empty string
     emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
@@ -1495,7 +1494,8 @@ void ChartConfigWidget::ui_axisShowTitleChanged( bool b )
 
 void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b )
 {
-    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
+        return;
     
     emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
