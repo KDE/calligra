@@ -1467,7 +1467,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index )
 {
-    if ( d->ui.dataSets->currentIndex() < 0 || d->ui.dataSets->currentIndex() >= d->dataSets )
+    if ( d->ui.dataSets->currentIndex() < 0 || d->ui.dataSets->currentIndex() >= d->dataSets.count() )
         return;
     DataSet *dataSet = d->dataSets[ d->ui.dataSets->currentIndex() ];
     
@@ -1515,9 +1515,8 @@ void ChartConfigWidget::ui_axisAdded()
     emit axisAdded( position, d->newAxisDialog.title->text() );
     update();
 
-    Q_ASSERT( d->ui.axes->count() > 0 );
-
-    d->ui.axes->setCurrentIndex( d->ui.axes->count() - 1 );
+    if( d->ui.axes->count() > 0 )
+        d->ui.axes->setCurrentIndex( d->ui.axes->count() - 1 );
 }
 
 void ChartConfigWidget::ui_addAxisClicked()
@@ -1529,9 +1528,8 @@ void ChartConfigWidget::ui_removeAxisClicked()
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     if ( KMessageBox::questionYesNo( this,
                                      i18n("Are you sure you want to remove this axis? All settings specific to this axis will be lost."),
@@ -1552,9 +1550,8 @@ void ChartConfigWidget::ui_axisUseLogarithmicScalingChanged( bool b )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     emit axisUseLogarithmicScalingChanged( d->axes[ index ], b );
 }
@@ -1563,9 +1560,8 @@ void ChartConfigWidget::ui_axisStepWidthChanged( qreal width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     emit axisStepWidthChanged( d->axes[ index ], width );
 }
@@ -1574,9 +1570,8 @@ void ChartConfigWidget::ui_axisSubStepWidthChanged( qreal width )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     emit axisSubStepWidthChanged( d->axes[ index ], width );
 }
@@ -1585,9 +1580,8 @@ void ChartConfigWidget::ui_axisUseAutomaticStepWidthChanged( bool b )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     emit axisUseAutomaticStepWidthChanged( d->axes[ index ], b );
 }
@@ -1596,9 +1590,8 @@ void ChartConfigWidget::ui_axisUseAutomaticSubStepWidthChanged( bool b )
 {
     int index = d->ui.axes->currentIndex();
     // Check for valid index
-    if ( index < 0 )
+    if ( index < 0 || index >= d->axes.size() )
         return;
-    Q_ASSERT( d->axes.size() > index );
 
     emit axisUseAutomaticSubStepWidthChanged( d->axes[ index ], b );
 }
@@ -1610,17 +1603,17 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
 
 void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
 {
-    if ( d->selectedDataSet < 0 )
+    if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
-    Q_ASSERT( d->dataSets.count() > d->selectedDataSet );
+
     emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
 }
 
 void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
 {
-    if ( d->selectedDataSet < 0 )
+    if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
-    Q_ASSERT( d->dataSets.count() > d->selectedDataSet );
+
     emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
 }
 
