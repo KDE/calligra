@@ -111,7 +111,7 @@ CellRegion::CellRegion( const QString& region )
     const bool isPoint = !region.contains( ':' );
     if ( isPoint )
         regEx = QRegExp( "(.*)\\.([A-Z]+)([0-9]+)" );
-    else
+    else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
         regEx = QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
 
     // Check if region string is valid (e.g. not empty)
@@ -122,12 +122,12 @@ CellRegion::CellRegion( const QString& region )
         d->sheetName = regEx.cap( 1 );
 
         QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
-        QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
-
-        if ( isPoint )
+        if ( isPoint ) {
             d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
-        else
+        } else {
+            QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
             d->rects.append( QRect( topLeft, bottomRight ) );
+        }
     }
 
     d->origString = region;

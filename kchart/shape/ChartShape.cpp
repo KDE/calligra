@@ -1106,8 +1106,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
                        OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements | OdfStyle );
 
 #ifndef NWORKAROUND_ODF_BUGS
-    if ( !background() )
-        setBackground( new KoColorBackground( KoOdfWorkaround::fixMissingFillColor( chartElement, context ) ) );
+    if ( !background() ) {
+        const QColor color = KoOdfWorkaround::fixMissingFillColor( chartElement, context );
+        if(color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
+            setBackground( new KoColorBackground( color ) );
+    }
 #endif
 
     // Check if we're loading an embedded document
