@@ -65,6 +65,13 @@ Module::Module(QObject* parent)
 {
     d->doc = 0;
     d->project = 0;
+
+    KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        locale->insertCatalog( "kplato" );
+        locale->insertCatalog( "kplatolibs" );
+        locale->insertCatalog( "timezones4" );
+    }
 }
 
 Module::~Module()
