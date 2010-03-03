@@ -1073,7 +1073,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         //load pie explode factor
         styleStack.save();
-        styleStack.clear();
         odfLoadingContext.fillStyleStack(m, KoXmlNS::chart, "style-name", "chart");
         styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty( KoXmlNS::chart, "pie-offset"))
