@@ -450,11 +450,13 @@ void DataSet::setChartType( ChartType type )
         return;
     
     Axis  *axis = d->attachedAxis;
-    axis->detachDataSet( this );
+    if ( axis )
+        axis->detachDataSet( this );
     
     d->chartType = type;
     
-    axis->attachDataSet( this );
+    if ( axis )
+        axis->attachDataSet( this );
 }
 
 void DataSet::setChartSubType( ChartSubtype subType )
