@@ -1173,9 +1173,9 @@ DependencyNodeItem *DependencyScene::createItem( Node *node )
     item->startConnector()->setEditable( m_readwrite );
     item->finishConnector()->setEditable( m_readwrite );
     //kDebug()<<item->text()<<item;
-    int col = item->nodeLevel();
+    int col = 0;
     if ( parent ) {
-        col += parent->column();
+        col += parent->column() + 1;
     }
     item->setRectangle( QRectF( itemX( col ), itemY(), itemWidth(), itemHeight() ) );
     m_allItems.insert( i+1, item );
