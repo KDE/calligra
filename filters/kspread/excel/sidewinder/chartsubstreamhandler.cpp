@@ -281,16 +281,14 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
     }
 }
 
-// series, trendline or errorchars
+// properties of the data for series, trendlines or errorbars
 void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
     if(!record) return;
     std::cout << "ChartSubStreamHandler::handleSeries dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
     m_chart->dataTypeX = record->dataTypeX();
-    m_chart->dataTypeY = record->dataTypeY();
     m_chart->countXValues = record->countXValues();
     m_chart->countYValues = record->countYValues();
-    m_chart->bubbleSizeDataType = record->bubbleSizeDataType();
     m_chart->countBubbleSizeValues = record->countBubbleSizeValues();
 }
 

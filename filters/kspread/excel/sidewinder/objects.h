@@ -267,10 +267,19 @@ public:
 
     // Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
     int x, y, width, height;
+
     // Margins around the chart object
     //int marginLeft, marginTop, marginRight, MarginBottom;
 
-    uint dataTypeX, dataTypeY, countXValues, countYValues, bubbleSizeDataType, countBubbleSizeValues;
+    // the type of data in categories, or horizontal values on bubble and scatter chart groups, in the
+    // series. MUST be either 0x0001=numeric or 0x0003=text.
+    uint dataTypeX;
+    // the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
+    uint countXValues;
+    // the count of values, or vertical values on bubble and scatter chart groups, in the series.
+    uint countYValues;
+    // the count of bubble size values in the series.
+    uint countBubbleSizeValues;
 
     // The referenced values used in the chart
     QMap<Value::DataId, Value*> datasetValue;

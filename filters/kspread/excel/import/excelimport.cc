@@ -1472,12 +1472,12 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H20");
         //xmlWriter->addAttribute("table:end-x", "0.2953in");
         //xmlWriter->addAttribute("table:end-y", "0.0232in");
-        xmlWriter->addAttribute("table:end-cell-address", columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB));
+        xmlWriter->addAttribute("table:end-cell-address", string(cell->sheet()->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB));
         xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL))+"pt");
         xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT))+"pt");
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
         xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
-        //xmlWriter->addAttribute("draw:z-index", "0");
+        xmlWriter->addAttribute("draw:z-index", "0");
         xmlWriter->startElement("draw:object");
         xmlWriter->addAttribute("draw:notify-on-update-of-ranges", "Sheet1.D2:Sheet1.F2");
         xmlWriter->addAttribute("xlink:href", "./" + href);
@@ -1522,28 +1522,29 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->addAttribute("svg:width", QString::number(columnWidth(sheet,drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR))+"pt");
         bodyWriter->addAttribute("svg:height", QString::number(rowHeight(sheet,drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
 
-        //KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
+        KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
+        style.addProperty("draw:stroke", "none");
         //style.addProperty("draw:stroke", "solid");
         //style.addProperty("draw:fill-color", "#ff0000");
-        //bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
+        bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
 
         //<chart:legend chart:legend-position="end" svg:x="7.031cm" svg:y="2.843cm" chart:style-name="ch2"/>
 
         bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 
-        //KoGenStyle chartstyle(KoGenStyle::StyleChartAuto, "chart");
+        KoGenStyle chartstyle(KoGenStyle::StyleChartAuto, "chart");
+        //chartstyle.addProperty("chart:connect-bars", "false");
         //chartstyle.addProperty("chart:include-hidden-cells", "false");
-        //chartstyle.addProperty("chart:auto-position", "true");
-        //chartstyle.addProperty("chart:auto-size", "true");
+        chartstyle.addProperty("chart:auto-position", "true");
+        chartstyle.addProperty("chart:auto-size", "true");
         //chartstyle.addProperty("chart:series-source", "rows");
         //chartstyle.addProperty("chart:sort-by-x-values", "false");
         //chartstyle.addProperty("chart:right-angled-axes", "true");
-        //bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
+        bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
 
         QString cellRange = string(chart->valuesCellRangeAddress);
         if(cellRange.startsWith('[') && cellRange.endsWith(']'))
             cellRange = cellRange.mid(1,cellRange.length()-2);
-
         if(!cellRange.isEmpty())
             bodyWriter->addAttribute("table:cell-range-address", cellRange); //"Sheet1.C2:Sheet1.E2");
 
@@ -1557,24 +1558,25 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
-        //KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
-        //seriesstyle.addProperty("draw:stroke", "solid");
-        //seriesstyle.addProperty("draw:fill-color", "#ff0000");
-        //bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
+        KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
+        seriesstyle.addProperty("draw:stroke", "solid");
+        seriesstyle.addProperty("draw:fill-color", "#ff0000");
+        bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
+
         //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
         if(!cellRange.isEmpty())
             bodyWriter->addAttribute("chart:values-cell-range-address", cellRange); //"Sheet1.C2:Sheet1.E2");
 
-        /*
-        for(int j=0; j < 3; ++j) {
-            //KoGenStyle gs(KoGenStyle::StyleGraphicAuto, "chart");
-            //gs.addProperty("draw:fill-color", "#004586");
+        for(uint j=0; j < chart->countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
-            //bodyWriter->addAttribute("chart-style-name", styles.lookup(gs, "ch"));
+            KoGenStyle gs(KoGenStyle::StyleGraphicAuto, "chart");
+            //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
+            //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
+            bodyWriter->addAttribute("chart-style-name", styles.lookup(gs, "ch"));
             bodyWriter->endElement();
         }
-        */
+
         //<chart:data-point chart:style-name="ch8"/>
         //<chart:data-point chart:style-name="ch9"/>
         //<chart:data-point chart:style-name="ch10"/>
