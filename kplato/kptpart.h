@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 

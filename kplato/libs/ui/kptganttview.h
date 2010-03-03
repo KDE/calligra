@@ -238,6 +238,7 @@ public slots:
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
     virtual void slotOptions();
+    virtual void slotOptionsFinished( int result );
     
 private:
     bool m_readWrite;

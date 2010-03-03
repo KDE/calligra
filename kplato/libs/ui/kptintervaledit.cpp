@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "kptintervaledit.h"
 #include "intervalitem.h"
 #include "kptcommand.h"
+#include "kptproject.h"
 
 #include <QPushButton>
 #include <QTreeWidget>
@@ -158,9 +159,10 @@ void IntervalEditImpl::enableButtons() {
 }
 
 //-------------------------------------------------------------
-IntervalEditDialog::IntervalEditDialog( CalendarDay *day, QWidget *parent)
+IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<CalendarDay*> &days, QWidget *parent)
     : KDialog( parent ),
-    m_day( day )
+    m_calendar( calendar ),
+    m_days( days )
 {
     //kDebug();
     setCaption( i18n("Edit Work Intervals") );
@@ -168,16 +170,81 @@ IntervalEditDialog::IntervalEditDialog( CalendarDay *day, QWidget *parent)
     setDefaultButton( Ok );
     showButtonSeparator( true );
     //kDebug()<<&p;
-    m_panel = new IntervalEdit( day, this );
+    m_panel = new IntervalEdit( days.value( 0 ), this );
     setMainWidget( m_panel );
     enableButtonOk( false );
 
     connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
+    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+}
+
+IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent)
+    : KDialog( parent ),
+    m_calendar( calendar ),
+    m_dates( dates )
+{
+    //kDebug();
+    setCaption( i18n("Edit Work Intervals") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+    //kDebug()<<&p;
+    foreach ( const QDate &d, dates ) {
+        CalendarDay *day = calendar->findDay( d );
+        if ( day ) {
+            m_days << day;
+        }
+    }
+    m_panel = new IntervalEdit( m_days.value( 0 ), this );
+    setMainWidget( m_panel );
+    enableButtonOk( false );
+
+    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
+    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+}
+
+void IntervalEditDialog::slotCalendarRemoved( const Calendar *cal )
+{
+    if ( m_calendar == cal ) {
+        reject();
+    }
 }
 
 void IntervalEditDialog::slotChanged()
 {
     enableButtonOk( true );
+}
+
+MacroCommand *IntervalEditDialog::buildCommand()
+{
+    MacroCommand *cmd = new MacroCommand( i18n( "Modify Work Interval" ) );
+    foreach ( const QDate &d, m_dates ) {
+        // these are dates, weekdays don't have date
+        CalendarDay *day = m_calendar->findDay( d );
+        if ( day == 0 ) {
+            // create a new day
+            day = new CalendarDay( d );
+            cmd->addCommand( new CalendarAddDayCmd( m_calendar, day ) );
+        }
+        MacroCommand *c = buildCommand( m_calendar, day );
+        if ( c ) {
+            cmd->addCommand( c );
+        }
+    }
+    if ( m_dates.isEmpty() ) {
+        // weekdays
+        foreach ( CalendarDay *day, m_days ) {
+            MacroCommand *c = buildCommand( m_calendar, day );
+            if ( c ) {
+                cmd->addCommand( c );
+            }
+        }
+    }
+    if ( cmd->isEmpty() ) {
+        delete cmd;
+        return 0;
+    }
+    return cmd;
 }
 
 MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay *day )

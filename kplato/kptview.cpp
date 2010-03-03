@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2010 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -707,7 +707,6 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
 
     connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    connect( resourceeditor, SIGNAL( addResource( ResourceGroup* ) ), SLOT( slotAddResource( ResourceGroup* ) ) );
     connect( resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
 
     connect( resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
@@ -1322,35 +1321,53 @@ void View::slotInsertFile()
 {
     qDebug()<<"View::slotInsertFile:";
     InsertFileDialog *dlg = new InsertFileDialog( getProject(), currentTask(), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotInsertFileFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+
+void View::slotInsertFileFinished( int result )
+{
+    qDebug()<<"View::slotInsertFile:";
+    InsertFileDialog *dlg = qobject_cast<InsertFileDialog*>( sender() );
+    if ( dlg == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted ) {
         getPart()->insertFile( dlg->url().url(), dlg->parentNode(), dlg->afterNode() );
     }
-    delete dlg;
+    dlg->deleteLater();
 }
 
 void View::slotProjectEdit()
 {
-    MainProjectDialog *dia = new MainProjectDialog( getProject(), this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            getPart() ->addCommand( cmd );
-        }
-    }
-    delete dia;
+    slotOpenNode( &getProject() );
 }
 
 void View::slotProjectWorktime()
 {
     StandardWorktimeDialog *dia = new StandardWorktimeDialog( getProject(), this );
-    if ( dia->exec()  == QDialog::Accepted) {
+    connect(dia, SIGNAL(finished(int)), this, SLOT(slotProjectWorktimeFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotProjectWorktimeFinished( int result )
+{
+    StandardWorktimeDialog *dia = qobject_cast<StandardWorktimeDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
-    delete dia;
+    dia->deleteLater();
 }
 
 void View::slotSelectionChanged( ScheduleManager *sm ) {
@@ -1616,47 +1633,48 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
 
 void View::slotAddSubTask()
 {
-    // If we are positionend on the root project, then what we really want to
-    // do is to add a first project. We will silently accept the challenge
-    // and will not complain.
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, getProject().accounts(), this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        Node * currNode = currentNode();
-        if ( currNode ) {
-            QUndoCommand *m = dia->buildCommand();
-            m->redo(); // do changes to task
-            delete m;
-            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add sub-task" ) );
-            getPart() ->addCommand( cmd ); // add task to project
-            delete dia;
-            return ;
-        } else
-            kDebug() <<"Cannot insert new project. Hmm, no current node!?";
+    SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
+    connect(dia, SIGNAL(finished(int)), SLOT(slotAddSubTaskFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotAddSubTaskFinished( int result )
+{
+    SubTaskAddDialog *dia = qobject_cast<SubTaskAddDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
     }
-    delete node;
-    delete dia;
+    if ( result  == QDialog::Accepted) {
+        QUndoCommand *m = dia->buildCommand();
+        getPart() ->addCommand( m ); // add task to project
+    }
+    dia->deleteLater();
 }
 
 void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, getProject().accounts(), this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        Node * currNode = currentNode();
-        if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand();
-            m->redo(); // do changes to task
-            delete m;
-            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add task" ) );
-            getPart() ->addCommand( cmd ); // add task to project
-            delete dia;
-            return ;
-        } else
-            kDebug() <<"Cannot insert new task. Hmm, no current node!?";
+    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
+    connect(dia, SIGNAL(finished(int)), SLOT(slotAddTaskFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotAddTaskFinished( int result )
+{
+    TaskAddDialog *dia = qobject_cast<TaskAddDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
     }
-    delete node;
-    delete dia;
+    if ( result == QDialog::Accepted) {
+        QUndoCommand *m = dia->buildCommand();
+        getPart() ->addCommand( m ); // add task to project
+    }
+    dia->deleteLater();
 }
 
 void View::slotAddMilestone()
@@ -1664,22 +1682,25 @@ void View::slotAddMilestone()
     Task * node = getProject().createTask( currentTask() );
     node->estimate() ->clear();
 
-    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, getProject().accounts(), this );
-    if ( dia->exec() == QDialog::Accepted ) {
-        Node * currNode = currentNode();
-        if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand();
-            m->redo(); // do changes to task
-            delete m;
-            TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add milestone" ) );
-            getPart() ->addCommand( cmd ); // add task to project
-            delete dia;
-            return ;
-        } else
-            kDebug() <<"Cannot insert new milestone. Hmm, no current node!?";
+    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
+    connect(dia, SIGNAL(finished(int)), SLOT(slotAddMilestoneFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotAddMilestoneFinished( int result )
+{
+    TaskAddDialog *dia = qobject_cast<TaskAddDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
     }
-    delete node;
-    delete dia;
+    if ( result == QDialog::Accepted) {
+        MacroCommand *c = new MacroCommand( i18n( "Add milestone" ) );
+        c->addCommand( dia->buildCommand() );
+        getPart() ->addCommand( c ); // add task to project
+    }
+    dia->deleteLater();
 }
 
 void View::slotAddSubMilestone()
@@ -1687,22 +1708,25 @@ void View::slotAddSubMilestone()
     Task * node = getProject().createTask( currentTask() );
     node->estimate() ->clear();
 
-    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, getProject().accounts(), this );
-    if ( dia->exec() == QDialog::Accepted ) {
-        Node * currNode = currentNode();
-        if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand();
-            m->redo(); // do changes to task
-            delete m;
-            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add sub-milestone" ) );
-            getPart() ->addCommand( cmd ); // add task to project
-            delete dia;
-            return ;
-        } else
-            kDebug() <<"Cannot insert new milestone. Hmm, no current node!?";
+    SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
+    connect(dia, SIGNAL(finished(int)), SLOT(slotAddSubMilestoneFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotAddSubMilestoneFinished( int result )
+{
+    SubTaskAddDialog *dia = qobject_cast<SubTaskAddDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
     }
-    delete node;
-    delete dia;
+    if ( result == QDialog::Accepted) {
+        MacroCommand *c = new MacroCommand( i18n( "Add sub-milestone" ) );
+        c->addCommand( dia->buildCommand() );
+        getPart() ->addCommand( c ); // add task to project
+    }
+    dia->deleteLater();
 }
 
 void View::slotDefineWBS()
@@ -1710,22 +1734,31 @@ void View::slotDefineWBS()
     //kDebug();
     Project &p = getProject();
     WBSDefinitionDialog *dia = new WBSDefinitionDialog( p, p.wbsDefinition(), this );
-    if ( dia->exec() == QDialog::Accepted ) {
+    connect(dia, SIGNAL(finished(int)), SLOT(slotDefineWBSFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotDefineWBSFinished( int result )
+{
+    //kDebug();
+    WBSDefinitionDialog *dia = qobject_cast<WBSDefinitionDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted ) {
         QUndoCommand *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart()->addCommand( cmd );
         }
     }
-    delete dia;
+    dia->deleteLater();
 }
 
 void View::slotConfigure()
 {
     //kDebug();
-//     KConfigDialog *dia = new ConfigDialog( getPart(), getPart() ->config(), this );
-//     dia->exec();
-//     delete dia;
-
     if( KConfigDialog::showDialog("KPlato Settings") ) {
         return;
     }
@@ -1814,31 +1847,24 @@ void View::slotOpenNode( Node *node )
 
     switch ( node->type() ) {
         case Node::Type_Project: {
-                Project * project = dynamic_cast<Project *>( node );
+                Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         case Node::Type_Subproject:
             //TODO
             break;
         case Node::Type_Task: {
-            Task *task = dynamic_cast<Task *>( node );
-                Q_ASSERT( task );
+                Task *task = static_cast<Task *>( node );
                 TaskDialog *dia = new TaskDialog( getProject(), *task, getProject().accounts(), this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotTaskEditFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         case Node::Type_Milestone: {
@@ -1846,34 +1872,75 @@ void View::slotOpenNode( Node *node )
                 // Maybe milestone should have it's own dialog, but we need to be able to
                 // enter a duration in case we accidentally set a tasks duration to zero
                 // and hence, create a milestone
-                Task *task = dynamic_cast<Task *>( node );
-                Q_ASSERT( task );
+                Task *task = static_cast<Task *>( node );
                 TaskDialog *dia = new TaskDialog( getProject(), *task, getProject().accounts(), this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotTaskEditFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         case Node::Type_Summarytask: {
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 SummaryTaskDialog *dia = new SummaryTaskDialog( *task, this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotSummaryTaskEditFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         default:
             break; // avoid warnings
     }
+}
+
+void View::slotProjectEditFinished( int result )
+{
+    qDebug()<<"View::slotProjectEditFinished:"<<result<<sender();
+    MainProjectDialog *dia = qobject_cast<MainProjectDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * cmd = dia->buildCommand();
+        if ( cmd ) {
+            getPart() ->addCommand( cmd );
+        }
+    }
+    dia->deleteLater();
+}
+
+void View::slotTaskEditFinished( int result )
+{
+    qDebug()<<"View::slotTaskEditFinished:"<<result<<sender();
+    TaskDialog *dia = qobject_cast<TaskDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * cmd = dia->buildCommand();
+        if ( cmd ) {
+            getPart() ->addCommand( cmd );
+        }
+    }
+    dia->deleteLater();
+}
+
+void View::slotSummaryTaskEditFinished( int result )
+{
+    qDebug()<<"View::slotSummaryTaskEditFinished:"<<result<<sender();
+    SummaryTaskDialog *dia = qobject_cast<SummaryTaskDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * cmd = dia->buildCommand();
+        if ( cmd ) {
+            getPart() ->addCommand( cmd );
+        }
+    }
+    dia->deleteLater();
 }
 
 ScheduleManager *View::currentScheduleManager() const
@@ -1919,25 +1986,19 @@ void View::slotTaskProgress()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime(), this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotTaskProgressFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task, this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotMilestoneProgressFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         case Node::Type_Summarytask: {
@@ -1947,6 +2008,36 @@ void View::slotTaskProgress()
         default:
             break; // avoid warnings
     }
+}
+
+void View::slotTaskProgressFinished( int result )
+{
+    TaskProgressDialog *dia = qobject_cast<TaskProgressDialog*>(sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * m = dia->buildCommand();
+        if ( m ) {
+            getPart() ->addCommand( m );
+        }
+    }
+    dia->deleteLater();
+}
+
+void View::slotMilestoneProgressFinished( int result )
+{
+    MilestoneProgressDialog *dia = qobject_cast<MilestoneProgressDialog*>(sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * m = dia->buildCommand();
+        if ( m ) {
+            getPart() ->addCommand( m );
+        }
+    }
+    dia->deleteLater();
 }
 
 void View::slotTaskDescription()
@@ -1969,18 +2060,30 @@ void View::slotTaskDescription()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskDescriptionDialog *dia = new TaskDescriptionDialog( *task, this );
-                if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand();
-                    if ( m ) {
-                        getPart() ->addCommand( m );
-                    }
-                }
-                delete dia;
+                connect(dia, SIGNAL(finished(int)), SLOT(slotTaskDescriptionFinished(int)));
+                dia->show();
+                dia->raise();
+                dia->activateWindow();
                 break;
             }
         default:
             break; // avoid warnings
     }
+}
+
+void View::slotTaskDescriptionFinished( int result )
+{
+    TaskDescriptionDialog *dia = qobject_cast<TaskDescriptionDialog*>(sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * m = dia->buildCommand();
+        if ( m ) {
+            getPart() ->addCommand( m );
+        }
+    }
+    dia->deleteLater();
 }
 
 void View::slotDeleteTask( QList<Node*> lst )
@@ -2126,14 +2229,25 @@ void View::slotAddRelation( Node *par, Node *child )
     //kDebug();
     Relation * rel = new Relation( par, child );
     AddRelationDialog *dia = new AddRelationDialog( getProject(), rel, this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd )
-            getPart() ->addCommand( cmd );
-    } else {
-        delete rel;
+    connect(dia, SIGNAL(finished(int)), SLOT(slotAddRelationFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotAddRelationFinished( int result )
+{
+    AddRelationDialog *dia = qobject_cast<AddRelationDialog*>(sender() );
+    if ( dia == 0 ) {
+        return;
     }
-    delete dia;
+    if ( result == QDialog::Accepted) {
+        QUndoCommand * m = dia->buildCommand();
+        if ( m ) {
+            getPart() ->addCommand( m );
+        }
+    }
+    dia->deleteLater();
 }
 
 void View::slotAddRelation( Node *par, Node *child, int linkType )
@@ -2153,17 +2267,25 @@ void View::slotModifyRelation( Relation *rel )
 {
     //kDebug();
     ModifyRelationDialog *dia = new ModifyRelationDialog( getProject(), rel, this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        if ( dia->relationIsDeleted() ) {
-            getPart() ->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete task dependency" ) ) );
-        } else {
-            QUndoCommand *cmd = dia->buildCommand();
-            if ( cmd ) {
-                getPart() ->addCommand( cmd );
-            }
+    connect(dia, SIGNAL(finished(int)), SLOT(slotModifyRelationFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotModifyRelationFinished( int result )
+{
+    ModifyRelationDialog *dia = qobject_cast<ModifyRelationDialog*>( sender() );
+    if ( dia == 0 ) {
+        return ;
+    }
+    if ( result == QDialog::Accepted) {
+        QUndoCommand *cmd = dia->buildCommand();
+        if ( cmd ) {
+            getPart() ->addCommand( cmd );
         }
     }
-    delete dia;
+    dia->deleteLater();
 }
 
 void View::slotModifyRelation( Relation *rel, int linkType )
@@ -2202,29 +2324,6 @@ void View::slotDeleteRelation()
     }
 }
 
-void View::slotAddResource( ResourceGroup *group )
-{
-    //kDebug();
-    if ( group == 0 ) {
-        return;
-    }
-    Resource *r = new Resource();
-    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
-    if ( dia->exec()  == QDialog::Accepted) {
-        MacroCommand *m = new MacroCommand( i18n( "Add resource" ) );
-        m->addCommand( new AddResourceCmd( group, r ) );
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            m->addCommand( cmd );
-        }
-        getPart()->addCommand( m );
-        delete dia;
-        return;
-    }
-    delete r;
-    delete dia;
-}
-
 void View::slotEditResource()
 {
     //kDebug();
@@ -2233,12 +2332,25 @@ void View::slotEditResource()
         return ;
     }
     ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
-    if ( dia->exec()  == QDialog::Accepted) {
+    connect(dia, SIGNAL(finished(int)), SLOT(slotEditResourceFinished(int)));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void View::slotEditResourceFinished( int result )
+{
+    //kDebug();
+    ResourceDialog *dia = qobject_cast<ResourceDialog*>( sender() );
+    if ( dia == 0 ) {
+        return ;
+    }
+    if ( result == QDialog::Accepted) {
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd )
             getPart() ->addCommand( cmd );
     }
-    delete dia;
+    dia->deleteLater();
 }
 
 void View::slotDeleteResource( Resource *resource )
@@ -2426,11 +2538,13 @@ void View::slotCreateReport()
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
-void View::slotCreateReportView(  ReportDesignDialog *dlg )
+void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     ViewListReportsDialog *vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
     connect( vd, SIGNAL( viewCreated( ViewBase* ) ), dlg, SLOT( slotViewCreated( ViewBase* ) ) );
@@ -2441,9 +2555,20 @@ void View::slotCreateReportView(  ReportDesignDialog *dlg )
 void View::slotOpenReportFile()
 {
     qDebug()<<"View::slotOpenReportFile:";
-    KFileDialog *fdlg = new KFileDialog( KUrl(), QString(), this );
+    KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
 
-    fdlg->exec();
+void View::slotOpenReportFileFinished( int result )
+{
+    qDebug()<<"View::slotOpenReportFileFinished:"<<result;
+    KFileDialog *fdlg = qobject_cast<KFileDialog*>( sender() );
+    if ( fdlg == 0 || result != QDialog::Accepted ) {
+        return;
+    }
     QString fn = fdlg->selectedFile();
     if ( fn.isEmpty() ) {
         return;
@@ -2461,8 +2586,10 @@ void View::slotOpenReportFile()
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void View::slotEditReportDesign( ReportView *view )
@@ -2471,25 +2598,33 @@ void View::slotEditReportDesign( ReportView *view )
         return;
     }
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
-void View::slotEditReport()
+void View::slotReportDesignFinished( int result )
 {
-    ViewListItem *item = m_reportActionMap.key( dynamic_cast<KAction*>( sender() ) );
-    Q_ASSERT( item );
-    if ( item == 0 ) {
-        return;
+    if ( sender() ) {
+        sender()->deleteLater();
     }
-    qDebug()<<"View::slotEditReport:"<<item->text(0);
 }
 
 void View::slotCreateView()
 {
     ViewListDialog *dlg = new ViewListDialog( this, *m_viewlist, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotCreateViewFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+
+void View::slotCreateViewFinished( int )
+{
+    if ( sender() ) {
+        sender()->deleteLater();
+    }
 }
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
@@ -2727,14 +2862,26 @@ void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
 void View::slotCurrencyConfig()
 {
     LocaleConfigMoneyDialog *dlg = new LocaleConfigMoneyDialog( getProject().locale(), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotCurrencyConfigFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+
+void View::slotCurrencyConfigFinished( int result )
+{
+    LocaleConfigMoneyDialog *dlg = qobject_cast<LocaleConfigMoneyDialog*>( sender() );
+    if ( dlg == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted ) {
         QUndoCommand *c = dlg->buildCommand( getProject() );
         if ( c ) {
             getPart()->addCommand( c );
         }
-        qDebug()<<"slotCurrencyConfig:"<<c;
+        qDebug()<<"slotCurrencyConfigFinished:"<<c;
     }
-    delete dlg;
+    dlg->deleteLater();
 }
 
 #ifndef NDEBUG

@@ -30,6 +30,7 @@ namespace KPlato
 
 class MilestoneProgressPanel;
 class Task;
+class Node;
 class MacroCommand;
 
 class KPLATOUI_EXPORT MilestoneProgressDialog : public KDialog {
@@ -41,9 +42,10 @@ public:
 
 protected slots:
     void slotChanged();
-    void slotOk();
+    void slotNodeRemoved( Node *node );
 
 private:
+    Node *m_node;
     MilestoneProgressPanel *m_panel;
 
 };

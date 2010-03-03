@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,17 +73,25 @@ class KPLATOUI_EXPORT IntervalEditDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit IntervalEditDialog( CalendarDay *day, QWidget *parent = 0 );
+    explicit IntervalEditDialog( Calendar *calendar, const QList<CalendarDay*> &days, QWidget *parent = 0 );
+    
+    explicit IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent = 0 );
 
-    MacroCommand *buildCommand( Calendar *calendar, CalendarDay *day );
+    MacroCommand *buildCommand();
     QList<TimeInterval*> intervals() const { return m_panel->intervals(); }
     
 protected slots:
     void slotChanged();
-    
+    void slotCalendarRemoved( const Calendar *cal );
+
+protected:
+    MacroCommand *buildCommand( Calendar *calendar, CalendarDay *day );
+
 private:
+    Calendar *m_calendar;
+    QList<CalendarDay*> m_days;
+    QList<QDate> m_dates;
     IntervalEdit *m_panel;
-    CalendarDay *m_day;
 };
 
 }  //KPlato namespace

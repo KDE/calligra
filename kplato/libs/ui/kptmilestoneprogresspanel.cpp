@@ -47,28 +47,23 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
 }
 
 
-bool MilestoneProgressPanel::ok() {
-    return true;
-}
-
 MacroCommand *MilestoneProgressPanel::buildCommand() {
     MacroCommand *cmd = 0;
     QString c = i18n("Modify milestone completion");
     
     if ( m_completion.isFinished() != finished->isChecked() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd( m_completion, finished->isChecked()) );
         cmd->addCommand( new ModifyCompletionStartedCmd( m_completion, finished->isChecked()) );
+        cmd->addCommand( new ModifyCompletionFinishedCmd( m_completion, finished->isChecked()) );
     }
     if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd( m_completion, finishTime->dateTime() ) );
         cmd->addCommand( new ModifyCompletionStartTimeCmd( m_completion, finishTime->dateTime() ) );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd( m_completion, finishTime->dateTime() ) );
     }
     if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
-        cmd->addCommand( new AddCompletionEntryCmd( m_completion, finishTime->dateTime().date(), e ) );
+        cmd->addCommand( new ModifyCompletionPercentFinishedCmd( m_completion, finishTime->dateTime().date(), 100 ) );
     } else {
         foreach( const QDate &date, m_completion.entries().keys() ) {
             if ( cmd == 0 ) cmd = new MacroCommand( c );

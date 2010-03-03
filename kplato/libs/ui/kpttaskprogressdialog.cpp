@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005-2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,9 @@
 #include "kpttaskprogressdialog.h"
 #include "kpttaskprogresspanel.h"
 #include "kptcommand.h"
+#include "kptproject.h"
+#include "kpttask.h"
+#include "kptnode.h"
 
 #include <klocale.h>
 
@@ -29,7 +32,8 @@ namespace KPlato
 {
 
 TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *p)
-    : KDialog( p)
+    : KDialog( p),
+    m_node( &task )
 {
     setCaption( i18n("Task Progress") );
     setButtons( Ok|Cancel );
@@ -42,7 +46,17 @@ TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, Standard
     enableButtonOk(false);
 
     connect(m_panel, SIGNAL( changed() ), SLOT(slotChanged()));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    Project *proj = static_cast<Project*>( task.projectNode() );
+    if ( proj ) {
+        connect(proj, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
+    }
+}
+
+void TaskProgressDialog::slotNodeRemoved( Node *node )
+{
+    if ( m_node == node ) {
+        reject();
+    }
 }
 
 void TaskProgressDialog::slotChanged() {
@@ -62,12 +76,6 @@ MacroCommand *TaskProgressDialog::buildCommand() {
         return 0;
     }
     return m;
-}
-
-void TaskProgressDialog::slotOk() {
-    if (!m_panel->ok())
-        return;
-    accept();
 }
 
 

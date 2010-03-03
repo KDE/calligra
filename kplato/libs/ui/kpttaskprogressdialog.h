@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005-2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ namespace KPlato
 
 class TaskProgressPanel;
 class Task;
+class Node;
 class StandardWorktime;
 class ScheduleManager;
 class MacroCommand;
@@ -43,9 +44,10 @@ public:
 
 protected slots:
     void slotChanged();
-    void slotOk();
+    void slotNodeRemoved( Node *node );
 
 private:
+    Node *m_node;
     TaskProgressPanel *m_panel;
 
 };

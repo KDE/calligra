@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 The koffice team <koffice@kde.org>
-   Copyright (C) 2003, 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ class DurationWidget;
 
 class Relation;
 class Project;
+class Node;
 class MacroCommand;
 
 class RelationPanel : public QWidget, public Ui_RelationPanel
@@ -50,6 +51,7 @@ class KPLATOUI_EXPORT AddRelationDialog : public KDialog
     Q_OBJECT
 public:
     AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
+    ~AddRelationDialog();
 
     virtual MacroCommand *buildCommand();
     int selectedRelationType() const;
@@ -61,11 +63,13 @@ protected slots:
     void slotFinishStartToggled(bool);
     void slotFinishFinishToggled(bool);
     void slotStartStartToggled(bool);
+    void slotNodeRemoved( Node *node );
 
 protected:
     Project &m_project;
     RelationPanel *m_panel;
     Relation *m_relation;
+    bool m_deleterelation;
 };
 
 
@@ -80,6 +84,8 @@ public:
 
 protected slots:
     void slotUser1();
+
+    void slotRelationRemoved( Relation *relation );
 
 private:
     bool m_deleted;

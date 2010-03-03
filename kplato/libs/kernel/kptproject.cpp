@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas zander <zander@kde.org>
- Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
  Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
 
@@ -694,11 +694,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     QList<Calendar*> cals;
     QString s;
     bool ok = false;
-    QString id = element.attribute( "id" );
-    if ( !setId( id ) ) {
-        kWarning() << "Id must be unique: " << id;
-    }
     m_name = element.attribute( "name" );
+    m_id = element.attribute( "id" );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
@@ -1377,6 +1374,7 @@ Task *Project::createTask( Node* parent )
 {
     Task * node = new Task( parent );
     node->setId( uniqueNodeId() );
+    reserveId( node->id(), node );
     return node;
 }
 
@@ -1384,15 +1382,32 @@ Task *Project::createTask( const Task &def, Node* parent )
 {
     Task * node = new Task( def, parent );
     node->setId( uniqueNodeId() );
+    reserveId( node->id(), node );
     return node;
 }
 
-QString Project::uniqueNodeId( int seed )
+Node *Project::findNode( const QString &id ) const
+{
+    if ( m_parent == 0 ) {
+        if ( nodeIdDict.contains( id ) ) {
+            return nodeIdDict[ id ];
+        }
+        return 0;
+    }
+    return m_parent->findNode( id );
+}
+
+bool Project::nodeIdentExists( const QString &id ) const
+{
+    return nodeIdDict.contains( id ) || nodeIdReserved.contains( id );
+}
+
+QString Project::uniqueNodeId( int seed ) const
 {
     Q_UNUSED(seed);
     QString ident = KRandom::randomString( 10 );
 //    int i = seed;
-    while ( findNode( ident ) ) {
+    while ( nodeIdentExists( ident ) ) {
         ident = KRandom::randomString( 10 );
     }
     return ident;
@@ -1410,32 +1425,37 @@ QString Project::uniqueNodeId( const QList<QString> &existingIds, int seed )
 bool Project::removeId( const QString &id )
 {
     //kDebug() <<"id=" << id;
-    return ( m_parent ? m_parent->removeId( id ) : nodeIdDict.remove( id ) );
+    if ( m_parent ) {
+        return m_parent->removeId( id );
     }
+    //kDebug() << "id=" << id<< nodeIdDict.contains(id);
+    return nodeIdDict.remove( id );
+}
 
-void Project::insertId( const QString &id, Node *node )
+void Project::reserveId( const QString &id, Node *node )
 {
-    //kDebug() <<"id=" << id <<"" << node->name();
-    if ( m_parent == 0 )
-        return ( void ) nodeIdDict.insert( id, node );
-    m_parent->insertId( id, node );
+    //kDebug() <<"id=" << id << node->name();
+    nodeIdReserved.insert( id, node );
 }
 
 bool Project::registerNodeId( Node *node )
 {
+    nodeIdReserved.remove( node->id() );
     if ( node->id().isEmpty() ) {
-        kError() << "Id is empty.";
+        kWarning() << "Node id is empty, cannot register it";
         return false;
     }
     Node *rn = findNode( node->id() );
     if ( rn == 0 ) {
-        insertId( node->id(), node );
+        //kDebug() <<"id=" << node->id() << node->name();
+        nodeIdDict.insert( node->id(), node );
         return true;
     }
     if ( rn != node ) {
         kError() << "Id already exists for different task: " << node->id();
         return false;
     }
+    //kDebug()<<"Already exists" <<"id=" << node->id() << node->name();
     return true;
 }
 

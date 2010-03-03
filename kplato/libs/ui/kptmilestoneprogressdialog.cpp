@@ -20,6 +20,9 @@
 #include "kptmilestoneprogressdialog.h"
 #include "kptmilestoneprogresspanel.h"
 
+#include "kptnode.h"
+#include "kptproject.h"
+
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -30,7 +33,8 @@ namespace KPlato
 class MacroCommand;
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
-    : KDialog(p)
+    : KDialog(p),
+    m_node( &task )
 {
     setCaption( i18n("Milestone Progress") );
     setButtons( Ok|Cancel );
@@ -42,8 +46,18 @@ MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
 
     enableButtonOk(false);
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
+    Project *proj = static_cast<Project*>( task.projectNode() );
+    if ( proj ) {
+        connect(proj, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
+    }
+}
+
+void MilestoneProgressDialog::slotNodeRemoved( Node *node )
+{
+    if ( m_node == node ) {
+        reject();
+    }
 }
 
 void MilestoneProgressDialog::slotChanged() {
@@ -52,12 +66,6 @@ void MilestoneProgressDialog::slotChanged() {
 
 MacroCommand *MilestoneProgressDialog::buildCommand() {
     return m_panel->buildCommand();;
-}
-
-void MilestoneProgressDialog::slotOk() {
-    if (!m_panel->ok())
-        return;
-    accept();
 }
 
 

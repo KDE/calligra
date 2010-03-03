@@ -493,10 +493,19 @@ void GanttView::slotOptions()
 {
     kDebug();
     GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt->treeView(), m_gantt->delegate(), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+
+void GanttView::slotOptionsFinished( int result )
+{
+    GanttViewSettingsDialog *dlg = qobject_cast<GanttViewSettingsDialog*>( sender() );
+    if ( dlg && result == QDialog::Accepted ) {
         m_gantt->graphicsView()->updateScene();
     }
-    delete dlg;
+    ViewBase::slotOptionsFinished( result );
 }
 
 void GanttView::clear()

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Bo Thorsen  bo@sonofthor.dk
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 -2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ class RequestResourcesPanel;
 class DocumentsPanel;
 class TaskCostPanel;
 class TaskDescriptionPanel;
+class Node;
 class Task;
 class Project;
 class StandardWorktime;
@@ -55,12 +56,16 @@ public:
      */
     TaskDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent=0);
 
-    MacroCommand *buildCommand();
+    virtual MacroCommand *buildCommand();
 
 protected slots:
     void slotButtonClicked(int button);
+    void slotTaskRemoved( Node *node );
 
 protected:
+    Project &m_project;
+    Node *m_node;
+
     TaskGeneralPanel *m_generalTab;
     RequestResourcesPanel *m_resourcesTab;
     DocumentsPanel *m_documentsTab;
@@ -71,7 +76,31 @@ protected:
 class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog {
     Q_OBJECT
 public:
-    TaskAddDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent=0);
+    TaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent=0);
+    ~TaskAddDialog();
+
+    virtual MacroCommand *buildCommand();
+
+protected slots:
+    void slotNodeRemoved( Node* );
+
+private:
+    Node *m_currentnode;
+};
+
+class KPLATOUI_EXPORT SubTaskAddDialog : public TaskDialog {
+    Q_OBJECT
+public:
+    SubTaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent=0);
+    ~SubTaskAddDialog();
+
+    virtual MacroCommand *buildCommand();
+
+protected slots:
+    void slotNodeRemoved( Node* );
+
+private:
+    Node *m_currentnode;
 };
 
 } //KPlato namespace

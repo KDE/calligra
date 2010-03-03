@@ -221,8 +221,10 @@ void PertResult::slotOptions()
 {
     kDebug();
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void PertResult::slotUpdate(){
@@ -416,8 +418,10 @@ void PertCpmView::slotOptions()
 {
     kDebug();
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )

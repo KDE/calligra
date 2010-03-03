@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 200 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 200 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -877,32 +877,9 @@ bool Node::isStartNode() const {
     return m_dependParentNodes.isEmpty();
 }
 
-bool Node::setId(const QString& id) {
+void Node::setId(const QString& id) {
     //kDebug()<<id;
-    if (id.isEmpty()) {
-        kError()<<"id is empty";
-        m_id = id;
-        return false;
-    }
-    if (!m_id.isEmpty()) {
-        Node *n = findNode();
-        if (n == this) {
-            //kDebug()<<"My id found, remove it";
-            removeId();
-        } else if (n) {
-            //Hmmm, shouldn't happen
-            kError()<<"My id '"<<m_id<<"' already used for different node: "<<n->name();
-        }
-    }
-    if (findNode(id)) {
-        kError()<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name();
-        m_id = QString(); // hmmm
-        return false;
-    }
     m_id = id;
-    insertId(id);
-    //kDebug()<<m_name<<": inserted id="<<id;
-    return true;
 }
 
 void Node::setStartTime(DateTime startTime, long id )

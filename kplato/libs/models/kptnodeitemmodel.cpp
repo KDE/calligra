@@ -2042,6 +2042,7 @@ void NodeItemModel::slotNodeInserted( Node *node )
     endInsertRows();
     m_node = 0;
     emit nodeInserted( node );
+    slotLayoutChanged(); //HACK to get both treeviews updated FIXME
 }
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )

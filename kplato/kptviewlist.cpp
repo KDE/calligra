@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 -2010 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -584,15 +584,25 @@ void ViewListWidget::slotConfigureItem()
     if ( m_contextitem == 0 ) {
         return;
     }
+    KDialog *dlg = 0;
     if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
-        ViewListEditCategoryDialog *dlg = new ViewListEditCategoryDialog( *this, m_contextitem, this );
-        dlg->exec();
-        delete dlg;
+        dlg = new ViewListEditCategoryDialog( *this, m_contextitem, this );
     } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
-        ViewListEditViewDialog *dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
-        dlg->exec();
-        delete dlg;
+        dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
+    }
+    if ( dlg ) {
+        connect(dlg, SIGNAL(finished(int)), SLOT(slotDialogFinished(int)));
+        dlg->show();
+        dlg->raise();
+        dlg->activateWindow();
+    }
+}
+
+void ViewListWidget::slotDialogFinished( int )
+{
+    if ( sender() ) {
+        sender()->deleteLater();
     }
 }
 
@@ -661,15 +671,15 @@ void ViewListWidget::setupContextMenus()
     // NOTE: can't use xml file as there may not be a factory()
     QAction *action;
     // view actions
-    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
+    action = new QAction( KIcon( "edit-rename" ), i18nc( "@action:inmenu rename view", "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditViewTitle() ) );
     m_viewactions.append( action );
 
-    action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
+    action = new QAction( KIcon( "configure" ), i18nc( "@action:inmenu configure view", "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_viewactions.append( action );
 
-    action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
+    action = new QAction( KIcon( "list-remove" ), i18nc( "@action:inmenu remove view", "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_viewactions.append( action );
 
@@ -678,15 +688,15 @@ void ViewListWidget::setupContextMenus()
     m_viewactions.append( action );
 
     // Category actions
-    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
+    action = new QAction( KIcon( "edit-rename" ), i18nc( "@action:inmenu rename view category", "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
     m_categoryactions.append( action );
 
-    action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
+    action = new QAction( KIcon( "configure" ), i18nc( "@action:inmenu configure view category", "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_categoryactions.append( action );
 
-    action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
+    action = new QAction( KIcon( "list-remove" ), i18nc( "@action:inmenu Remove view category", "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
     m_categoryactions.append( action );
 
@@ -695,7 +705,7 @@ void ViewListWidget::setupContextMenus()
     m_categoryactions.append( action );
 
     // list actions
-    action = new QAction( KIcon( "list-add" ), i18nc( "@action Insert View", "Insert..." ), this );
+    action = new QAction( KIcon( "list-add" ), i18nc( "@action:inmenu Insert View", "Insert..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
     m_listactions.append( action );
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Bo Thorsen  bo@sonofthor.dk
-   Copyright (C) 2004, 2006 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,9 @@
 #include "kptsummarytaskdialog.h"
 #include "kptsummarytaskgeneralpanel.h"
 #include "kptcommand.h"
+#include "kptnode.h"
+#include "kpttask.h"
+#include "kptproject.h"
 
 #include <klocale.h>
 
@@ -30,7 +33,8 @@ namespace KPlato
 {
 
 SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
-    : KDialog(p)
+    : KDialog(p),
+    m_node( &task )
 {
     setCaption( i18n("Summary Task Settings") );
     setButtons( Ok|Cancel );
@@ -41,6 +45,21 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     enableButtonOk(false);
 
     connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
+
+    Project *proj = static_cast<Project*>( task.projectNode() );
+    if ( proj ) {
+        connect(proj, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
+    }
+}
+
+void SummaryTaskDialog::slotTaskRemoved( Node *node )
+{
+    if ( node == m_node ) {
+        qDebug()<<"SummaryTaskDialog::slotTaskRemoved: This node removed";
+        reject();
+    } else {
+        qDebug()<<"SummaryTaskDialog::slotTaskRemoved: Another node removed";
+    }
 }
 
 

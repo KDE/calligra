@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 - 2007 Dag Andersen kplato@kde.org>
+   Copyright (C) 2005 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -291,8 +291,10 @@ void ResourceAppointmentsView::slotOptions()
 {
     kDebug();
     ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( m_view->model(), this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 

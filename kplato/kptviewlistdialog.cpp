@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,8 +51,14 @@ ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *p
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
+
+    connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
 
+void ViewListDialog::slotViewListItemRemoved( ViewListItem * )
+{
+    reject();
+}
 
 void ViewListDialog::slotOk() {
     if ( m_panel->ok() ) {
@@ -289,8 +295,14 @@ ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewLi
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+
+    connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
 
+void ViewListEditViewDialog::slotViewListItemRemoved( ViewListItem * )
+{
+    reject();
+}
 
 void ViewListEditViewDialog::slotOk() {
     if ( m_panel->ok() ) {
@@ -396,8 +408,14 @@ ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+
+    connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
 
+void ViewListEditCategoryDialog::slotViewListItemRemoved( ViewListItem * )
+{
+    reject();
+}
 
 void ViewListEditCategoryDialog::slotOk() {
     if ( m_panel->ok() ) {
@@ -478,8 +496,14 @@ ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewli
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
+
+    connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
 
+void ViewListReportsDialog::slotViewListItemRemoved( ViewListItem * )
+{
+    reject();
+}
 
 void ViewListReportsDialog::slotOk() {
     if ( m_panel->ok() ) {

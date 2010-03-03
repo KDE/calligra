@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Bo Thorsen  bo@sonofthor.dk
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 -2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,9 @@
 #include "kptdocumentspanel.h"
 #include "kpttaskdescriptiondialog.h"
 #include "kptcommand.h"
+#include "kptnode.h"
+#include "kpttask.h"
+#include "kptproject.h"
 
 #include <klocale.h>
 
@@ -35,7 +38,9 @@ namespace KPlato
 {
 
 TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidget *p)
-    : KPageDialog(p)
+    : KPageDialog(p),
+    m_project( project ),
+    m_node( &task )
 {
     setCaption( i18n("Task Settings") );
     setButtons( Ok|Cancel );
@@ -75,10 +80,18 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_descriptionTab, SIGNAL( textChanged(bool) ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 
+    connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
+}
+
+void TaskDialog::slotTaskRemoved( Node *node )
+{
+    if ( node == m_node ) {
+        reject();
+    }
 }
 
 MacroCommand *TaskDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18n("Modify Task"));
+    MacroCommand *m = new MacroCommand(i18n("Modify task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {
@@ -127,11 +140,77 @@ void TaskDialog::slotButtonClicked(int button) {
 }
 
 //---------------------------
-TaskAddDialog::TaskAddDialog(Project &project, Task &task, Accounts &accounts, QWidget *p)
+TaskAddDialog::TaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *p)
     : TaskDialog(project, task, accounts, p)
 {
+    m_currentnode = currentNode;
     // do not know wbs code yet
     m_generalTab->hideWbs();
+    
+    connect(&project, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
+}
+
+TaskAddDialog::~TaskAddDialog()
+{
+    delete m_node; // in case of cancel
+}
+
+void TaskAddDialog::slotNodeRemoved( Node *node )
+{
+    if ( m_currentnode == node ) {
+        reject();
+    }
+}
+
+MacroCommand *TaskAddDialog::buildCommand()
+{
+    MacroCommand *c = new MacroCommand( i18n( "Add task" ) );
+    c->addCommand( new TaskAddCmd( &m_project, m_node, m_currentnode ) );
+    MacroCommand *m = TaskDialog::buildCommand();
+    if ( m ) {
+        c->addCommand( m );
+    }
+    m_node = 0; // don't delete task
+    return c;
+}
+
+//---------------------------
+SubTaskAddDialog::SubTaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *p)
+    : TaskDialog(project, task, accounts, p)
+{
+    m_currentnode = currentNode;
+    // do not know wbs code yet
+    m_generalTab->hideWbs();
+
+    connect(&project, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
+}
+
+SubTaskAddDialog::~SubTaskAddDialog()
+{
+    delete m_node; // in case of cancel
+}
+
+void SubTaskAddDialog::slotNodeRemoved( Node *node )
+{
+    if ( m_currentnode == node ) {
+        reject();
+    }
+}
+
+MacroCommand *SubTaskAddDialog::buildCommand()
+{
+    QString s = i18n( "Add sub-task" );
+    if ( m_currentnode == 0 ) {
+        s = i18n( "Add task" ); // it will be added to project
+    }
+    MacroCommand *c = new MacroCommand( s );
+    c->addCommand( new SubtaskAddCmd( &m_project, m_node, m_currentnode ) );
+    MacroCommand *m = TaskDialog::buildCommand();
+    if ( m ) {
+        c->addCommand( m );
+    }
+    m_node = 0; // don't delete task
+    return c;
 }
 
 }  //KPlato namespace

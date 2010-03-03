@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 -2010 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -361,6 +361,13 @@ void ViewBase::createOptionAction()
     actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
+}
+
+void ViewBase::slotOptionsFinished( int )
+{
+    if ( sender() ) {
+        sender()->deleteLater();
+    }
 }
 
 //----------------------

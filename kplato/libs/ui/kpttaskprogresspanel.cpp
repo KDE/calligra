@@ -108,10 +108,6 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotFinishTimeChanged( const QDateTime& )));
 }
 
-bool TaskProgressPanel::ok() {
-    return true;
-}
-
 MacroCommand *TaskProgressPanel::buildCommand()
 {
     Project *project = dynamic_cast<Project*>( m_task.projectNode() );

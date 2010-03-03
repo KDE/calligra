@@ -124,6 +124,8 @@ protected slots:
     void slotSetVacation();
     void slotSetUndefined();
 
+    void slotIntervalEditDialogFinished( int result );
+
 protected:
     void contextMenuEvent ( QContextMenuEvent * event );
     void focusInEvent ( QFocusEvent * event );
@@ -166,6 +168,9 @@ protected:
     void updateActionsEnabled( bool on );
     void insertCalendar( Calendar *calendar, Calendar *parent );
     
+protected slots:
+    void slotIntervalEditDialogFinished( int result );
+
 private slots:
     void slotContextMenuCalendar( QModelIndex index, const QPoint& pos );
     void slotContextMenuDay( QModelIndex index, const QPoint& pos );

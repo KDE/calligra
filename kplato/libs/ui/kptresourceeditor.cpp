@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2006 - 2010 Dag Andersen kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -298,8 +298,10 @@ void ResourceEditor::slotOptions()
 {
     kDebug();
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 

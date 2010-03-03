@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -217,8 +217,16 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
     connect(dia->required, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia->account, SIGNAL(currentIndexChanged(const QString&)), SLOT(slotAccountChanged(const QString&)));
+    
+    connect(&project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)));
 }
 
+void ResourceDialog::slotResourceRemoved( const Resource *resource )
+{
+    if ( m_original == resource ) {
+        reject();
+    }
+}
 
 void ResourceDialog::enableButtonOk() {
 		KDialog::enableButtonOk(true);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
- Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004, 2010 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
  Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
@@ -96,6 +96,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 
     setProject( new Project( m_config ) ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
+    m_project->registerNodeId( m_project ); // register myself
 
     qDebug()<<"setProject: initial start"<<isReadWrite()<<isEmbedded()<<singleViewMode;
     QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
@@ -229,6 +230,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {
                     newProject->setId( newProject->uniqueNodeId() );
+                    newProject->registerNodeId( newProject );
                 }
                 // The load went fine. Throw out the old project
                 setProject( newProject );
@@ -852,11 +854,10 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
     // make sure node ids in new project is unique also in old project
     QList<QString> existingIds = m_project->nodeDict().keys();
     foreach ( Node *n, project.allNodes() ) {
-        if ( ! n->id().isEmpty() && ! m_project->findNode( n->id() ) ) {
-            continue; // id is ok to use in m_project
-        }
-        bool res = n->setId( project.uniqueNodeId( existingIds ) );
-        Q_ASSERT( res );
+        QString oldid = n->id();
+        n->setId( project.uniqueNodeId( existingIds ) );
+        project.removeId( oldid ); // remove old id
+        project.registerNodeId( n ); // register new id
     }
     qDebug()<<"Part::insertProject:"<<project.childNodeIterator();
     MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) );

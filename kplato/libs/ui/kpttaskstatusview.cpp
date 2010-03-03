@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -316,8 +316,10 @@ void TaskStatusView::slotOptions()
 {
     kDebug();
     TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( m_view, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
@@ -466,8 +468,10 @@ void ProjectStatusView::slotOptions()
 {
     kDebug();
     ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( m_view, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
@@ -921,8 +925,10 @@ void PerformanceStatusView::slotOptions()
 {
     kDebug();
     PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( m_view, this );
-    dlg->exec();
-    delete dlg;
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )

@@ -52,8 +52,6 @@ public:
     explicit MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
 
     MacroCommand *buildCommand();
-    
-    bool ok();
 
 private:
     Task &m_task;

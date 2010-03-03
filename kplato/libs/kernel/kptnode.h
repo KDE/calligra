@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -89,7 +89,7 @@ public:
     // Declare the class abstract
     virtual ~Node() = 0;
 
-    bool setId(const QString& id);
+    void setId(const QString& id);
     QString id() const { return m_id; } // unique identity
     
     enum NodeTypes {
@@ -405,15 +405,10 @@ public:
         { return (m_parent ? m_parent->findNode(id) : 0); }
     /// Remove myself from the id register
     virtual bool removeId()  { return removeId(m_id); }
-    /// Remove the registered identity id
+    /// Remove the registered identity @p id
     virtual bool removeId(const QString &id)
         { return (m_parent ? m_parent->removeId(id) : false); }
-    /// Insert myself into the id register
-    virtual void insertId(const QString &id) { insertId(id, this); }
-    /// Insert node with identity id into the register
-    virtual void insertId(const QString &id, Node *node)
-        { if (m_parent) m_parent->insertId(id, node); }
-    
+
     /**
      * This is when work can start on this node in accordance with 
      * the calendar of allocated resources. Normally this is the same

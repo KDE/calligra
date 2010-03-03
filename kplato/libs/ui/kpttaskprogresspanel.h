@@ -91,8 +91,6 @@ public:
     MacroCommand *buildCommand();
     
     static MacroCommand *buildCommand( const Project &project, Completion &org, Completion &curr );
-    
-    bool ok();
 
 protected slots:
     void slotWeekNumberChanged( int );

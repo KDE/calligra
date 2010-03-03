@@ -219,6 +219,10 @@ void CalendarDayView::slotSetWork()
     if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
         return;
     }
+    Calendar *cal = model()->calendar();
+    if ( cal == 0 ) {
+        return;
+    }
     QModelIndexList lst = selectionModel()->selectedIndexes();
     if ( lst.isEmpty() ) {
         lst << currentIndex();
@@ -226,28 +230,34 @@ void CalendarDayView::slotSetWork()
     if ( lst.isEmpty() ) {
         return;
     }
-    IntervalEditDialog *dlg = new IntervalEditDialog( model()->day( lst.first() ), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
-        bool mod = false;
-        MacroCommand *m = new MacroCommand( i18n( "Modify Weekday State" ) );
-        foreach ( const QModelIndex &i, lst ) {
-            CalendarDay *day = model()->day( i );
-            if ( day == 0 ) {
-                continue;
-            }
-            MacroCommand *cmd = dlg->buildCommand( model()->calendar(), day );
-            if ( cmd ) {
-                mod = true;
-                m->addCommand( cmd );
-            }
+    QList<CalendarDay*> days;
+    foreach ( const QModelIndex &i, lst ) {
+        CalendarDay *day = model()->day( i );
+        if ( day == 0 ) {
+            continue;
         }
-        if ( mod ) {
-            emit executeCommand( m );
-        } else {
-            delete m;
+        days << day;
+    }
+    IntervalEditDialog *dlg = new IntervalEditDialog( cal, days, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotIntervalEditDialogFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+
+void CalendarDayView::slotIntervalEditDialogFinished( int result )
+{
+    IntervalEditDialog *dlg = qobject_cast<IntervalEditDialog*>( sender() );
+    if ( dlg == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted ) {
+        MacroCommand *cmd = dlg->buildCommand();
+        if ( cmd ) {
+            emit executeCommand( cmd );
         }
     }
-    delete dlg;
+    dlg->deleteLater();
 }
 
 void CalendarDayView::slotSetVacation()
@@ -488,7 +498,7 @@ void CalendarEditor::setGuiActive( bool activate )
 
 void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates )
 {
-    kDebug()<<menu<<dates;
+    qDebug()<<"CalendarEditor::slotContextMenuDate:"<<menu<<dates;
     if ( ! isReadWrite() ) {
         return;
     }
@@ -738,40 +748,27 @@ void CalendarEditor::slotSetWork()
     if ( currentCalendar() == 0 || m_currentMenuDateList.isEmpty() ) {
         return;
     }
-    IntervalEditDialog *dlg = new IntervalEditDialog( currentCalendar()->findDay( m_currentMenuDateList.first() ), this );
-    if ( dlg->exec() == QDialog::Accepted ) {
-        bool mod = false;
-        MacroCommand *m = new MacroCommand( i18n ( "Modify Calendar" ) );
-        foreach ( const QDate &date, m_currentMenuDateList ) {
-            CalendarDay *day = currentCalendar()->findDay( date );
-            if ( day == 0 ) {
-                mod = true;
-                day = new CalendarDay( date, CalendarDay::Working );
-                day->setIntervals( dlg->intervals() );
-                m->addCommand( new CalendarAddDayCmd( currentCalendar(), day ) );
-                if ( m_currentMenuDateList.count() == 1 ) {
-                    m->setText( i18n( "%1: Set to Working", date.toString() ) );
-                }
-            } else {
-                MacroCommand *cmd = dlg->buildCommand( currentCalendar(), day );
-                if ( cmd ) {
-                    mod = true;
-                    kDebug()<<date<<"Modify day"<<day;
-                    m->addCommand( cmd );
-                    if ( m_currentMenuDateList.count() == 1 ) {
-                        m->setText( i18n( "%1: Modify Work Interval", date.toString() ) );
-                    }
-                }
-            }
-        }
-        if ( mod ) {
-            part()->addCommand( m );
-        } else {
-            delete m;
+    IntervalEditDialog *dlg = new IntervalEditDialog( currentCalendar(), m_currentMenuDateList, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotIntervalEditDialogFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+    m_currentMenuDateList.clear();
+}
+
+void CalendarEditor::slotIntervalEditDialogFinished( int result )
+{
+    IntervalEditDialog *dlg = qobject_cast<IntervalEditDialog*>( sender() );
+    if ( dlg == 0 ) {
+        return;
+    }
+    if ( result == QDialog::Accepted ) {
+        MacroCommand *cmd = dlg->buildCommand();
+        if ( cmd ) {
+            part()->addCommand( cmd );
         }
     }
-    m_currentMenuDateList.clear();
-    delete dlg;
+    dlg->deleteLater();
 }
 
 void CalendarEditor::slotSetVacation()

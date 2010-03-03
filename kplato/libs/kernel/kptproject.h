@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2001 Thomas Zander zander@kde.org
-  Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
 
@@ -308,26 +308,20 @@ public:
 
     using Node::findNode;
     /// Find the node with identity id
-    virtual Node *findNode( const QString &id ) const
-    {
-        if ( m_parent == 0 ) {
-            if ( nodeIdDict.contains( id ) )
-                return nodeIdDict[ id ];
-            return 0;
-        }
-        return m_parent->findNode( id );
-    }
+    virtual Node *findNode( const QString &id ) const;
+
     using Node::removeId;
-    /// Remove the node with identity id from the register
+    /// Remove the node with identity id from the registers
     virtual bool removeId( const QString &id );
     
-    using Node::insertId;
-    /// Insert the node with identity id
-    virtual void insertId( const QString &id, Node *node );
-    /// Register node. The nodes id must be unique and non-empty.
+    /// Reserve @p id for the @p node
+    virtual void reserveId( const QString &id, Node *node );
+    /// Register @p node. The nodes id must be unique and non-empty.
     bool registerNodeId( Node *node );
     /// Create a unique id.
-    QString uniqueNodeId( int seed = 1 );
+    QString uniqueNodeId( int seed = 1 ) const;
+    /// Check if node @p id is used
+    bool nodeIdentExists( const QString &id ) const;
 
     /// Create a unique id.
     QString uniqueNodeId( const QList<QString> &existingIds, int seed = 1 );
@@ -633,6 +627,7 @@ private:
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;
     QHash<QString, Node*> nodeIdDict;
+    QMap<QString, Node*> nodeIdReserved;
     QMap<QString, Calendar*> calendarIdDict;
 
     QList<ScheduleManager*> m_managers;
