@@ -68,7 +68,8 @@ public:
         CategoryDataRole,
         CustomDataRole,
         BrushDataRole,
-        PenDataRole
+        PenDataRole,
+        ExplodeRole
     };
     
     /**

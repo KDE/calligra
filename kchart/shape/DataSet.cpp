@@ -103,10 +103,13 @@ public:
     bool penIsSet;
     // Determines whether brush has been set
     bool brushIsSet;
+    bool pieExplodeFactorIsSet;
     QPen pen;
     QBrush brush;
+    int pieExplodeFactor;
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
+    QMap<int, int> pieExplodeFactors;
 
     int num;
 
@@ -561,6 +564,13 @@ void DataSet::setBrush( const QBrush &brush )
         d->kdChartModel->dataSetChanged( this );
 }
 
+void DataSet::setPieExplodeFactor( int factor )
+{
+    d->pieExplodeFactor = factor;
+    if( d->kdChartModel )
+        d->kdChartModel->dataSetChanged( this );
+}
+
 void DataSet::setPen( int section, const QPen &pen )
 {
     d->pens[ section ] = pen;
@@ -573,6 +583,13 @@ void DataSet::setBrush( int section, const QBrush &brush )
     d->brushes[ section ] = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::BrushDataRole, section );
+}
+
+void DataSet::setPieExplodeFactor( int section, int factor )
+{
+    d->pieExplodeFactors[ section ] = factor;
+    if( d->kdChartModel )
+        d->kdChartModel->dataSetChanged(this, KDChartModel::ExplodeRole, section );
 }
 
 QColor DataSet::color() const
@@ -962,11 +979,6 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     styleStack.clear();
     odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
-    //styleStack.setTypeProperties( "chart" );
-    // FIXME: Load Pie explode factors
-    //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
-    //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-
     brushLoaded = false;                                                                                                                                                 
     penLoaded = false; 
 
@@ -1028,6 +1040,8 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             setPen( pen );
         if(brushLoaded)
             setBrush( brush );
+        if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
+            setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset"  ).toInt() );
     }
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
@@ -1056,8 +1070,18 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             setPen( loadedDataPointCount, pen );
         if(brushLoaded)
             setBrush( loadedDataPointCount, brush );
+
+        //load pie explode factor
+        styleStack.save();
+        styleStack.clear();
+        odfLoadingContext.fillStyleStack(m, KoXmlNS::chart, "style-name", "chart");
+        styleStack.setTypeProperties("chart");
+        if(styleStack.hasProperty( KoXmlNS::chart, "pie-offset"))
+            setPieExplodeFactor( loadedDataPointCount, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
+        styleStack.restore();
+
         ++loadedDataPointCount;
     }
-    
+
     return true;
 }

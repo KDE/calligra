@@ -104,6 +104,9 @@ public:
     void setColor( const QColor &color );
     void setNumber( int num );
 
+    void setPieExplodeFactor( int factor );
+    void setPieExplodeFactor( int section, int factor );
+
     void setShowMeanValue( bool b );
     void setMeanValuePen( const QPen &pen );
 
