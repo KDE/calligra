@@ -1325,6 +1325,11 @@ Qt::Orientation Axis::orientation()
     return Qt::Vertical;
 }
 
+QString Axis::categoryDataRegionString() const
+{
+    return d->categoryDataRegionString;
+}
+
 void Axis::setCategoryDataRegionString( const QString &region )
 {
     d->categoryDataRegionString = region;

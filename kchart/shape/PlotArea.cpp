@@ -524,6 +524,21 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     styleStack.clear();
 
+    // First step is to load the axis. Datasets are attached to an
+    // axis and we need the axis to check for categories.
+    d->initAxes();
+    KoXmlElement n;
+    forEachElement ( n, plotAreaElement ) {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+
+        if ( n.localName() == "axis" ) {
+            Axis *axis = new Axis( this );
+            axis->loadOdf( n, context );
+            addAxis( axis );
+        }
+    }
+
     CellRegion cellRangeAddress;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
     {
@@ -590,13 +605,25 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     
     // Find out if the data table contains labels as first row and/or column.
     // This is in the plot-area element itself.
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
-                                         "data-source-has-labels" ) ) {
+    bool hasDataSourceHasLabels = plotAreaElement.hasAttributeNS( KoXmlNS::chart,
+                                                                  "data-source-has-labels" );
 
+    if ( hasDataSourceHasLabels ) {
+        // if chart:categories with a table:cell-range-address is defined within an axis
+        // then we need to ignore the data-source-has-labels.
+        foreach(Axis* axis, d->axes) {
+            if(!axis->categoryDataRegionString().isEmpty()) {
+                hasDataSourceHasLabels = false;
+                break;
+            }
+        }
+    }
+        
+    if( hasDataSourceHasLabels ) {
         // Yes, it does.  Now find out how.
         const QString  dataSourceHasLabels
             = plotAreaElement.attributeNS( KoXmlNS::chart,
-                                           "data-source-has-labels" );
+                                        "data-source-has-labels" );
         if ( dataSourceHasLabels == "both" ) {
             proxyModel()->setFirstRowIsLabel( true );
             proxyModel()->setFirstColumnIsLabel( true );
@@ -624,16 +651,11 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
     }
 
-    QString sheetName;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-    {
-        CellRegion cellRangeAddress( plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
-        setCellRangeAddress( cellRangeAddress );
-        sheetName = cellRangeAddress.sheetName();
-    }
+    setCellRangeAddress( cellRangeAddress );
 
     if ( sheetAccessModel )
     {
+        const QString sheetName = cellRangeAddress.sheetName();
         int sheetIndex = 0;
         // Find sheet that this cell range address is associated with
         if ( !sheetName.isEmpty() ) {
@@ -648,22 +670,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         if ( sheet )
             d->shape->setModel( sheet.data() );
     }
-
-    d->initAxes();
     
-    // A data set is always attached to an axis, so load them first.
-    KoXmlElement n;
-    forEachElement ( n, plotAreaElement ) {
-        if ( n.namespaceURI() != KoXmlNS::chart )
-            continue;
-
-        if ( n.localName() == "axis" ) {
-            Axis *axis = new Axis( this );
-            axis->loadOdf( n, context );
-            addAxis( axis );
-        }
-    }
-
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the
     // actual data is not stored here.

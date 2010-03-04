@@ -77,6 +77,7 @@ public:
     QFont font() const;
     bool isVisible() const;
     
+    QString categoryDataRegionString() const;
     void setCategoryDataRegionString( const QString &region );
 	
     void setPosition( AxisPosition position );
