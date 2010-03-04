@@ -168,6 +168,9 @@ CellRegion& CellRegion::operator = ( const CellRegion& region )
 {
     d->rects        = region.d->rects;
     d->boundingRect = region.d->boundingRect;
+    d->origString = region.d->origString;
+    d->origStringValid = region.d->origStringValid;
+    d->sheetName = region.d->sheetName;
 
     return *this;
 }
