@@ -38,7 +38,8 @@ const char* DrawingObject::propertyName(Property p)
         case DrawingObject::shadowStyleBooleanProperties: return "shadowStyleBooleanProperties"; break;
         case DrawingObject::groupShapeBooleanProperties: return "groupShapeBooleanProperties"; break;
         case DrawingObject::pictureContrast: return "pictureContrast"; break;
-        case DrawingObject::textBooleanProperties: return "TextBooleanProperties"; break;
+        case DrawingObject::textBooleanProperties: return "textBooleanProperties"; break;
+        case DrawingObject::lineStyleBooleanProperties: return "lineStyleBooleanProperties"; break;
         case DrawingObject::wzName: return "wzName"; break;
     }
     return "Unknown";

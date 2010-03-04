@@ -515,6 +515,19 @@
 </record>
 
 <record name="Legend" id="0x1015">
+  <field name="x" type="unsigned" size="32" />
+  <field name="y" type="unsigned" size="32" />
+  <field name="dx" type="unsigned" size="32" />
+  <field name="dy" type="unsigned" size="32" />
+  <field name="unused" type="unsigned" size="8" />
+  <field name="wSpace" type="unsigned" size="8" />
+  <field name="fAutoPosition" type="bool" size="1" />
+  <field name="reserved1" type="bool" size="1" />
+  <field name="fAutoPosX" type="bool" size="1" />
+  <field name="fAutoPosY" type="bool" size="1" />
+  <field name="fVert" type="bool" size="1" />
+  <field name="fWasDataTable" type="bool" size="1" />
+  <field name="reserved2" type="unsigned" size="10" />
 </record>
 
 <record name="SeriesList" id="0x1016">
@@ -550,7 +563,12 @@
 <record name="CrtLink" id="0x1022"/>
 
 <record name="DefaultText" id="0x1024">
-  <field name="identifier" type="unsigned" size="16" />
+  <field name="identifier" type="unsigned" size="16">
+    <enum name="ShowPercent0_or_ShowValue0" value="0x0000" />
+    <enum name="ShowPercent1_or_ShowValue1" value="0x0001" />
+    <enum name="Scalable0" value="0x0002" />
+    <enum name="Scalable1" value="0x0003" />
+  </field>
 </record>
 
 <record name="Text" id="0x1025">

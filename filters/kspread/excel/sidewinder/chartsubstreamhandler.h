@@ -54,6 +54,7 @@ private:
     ChartObject* m_chart;
     Sheet* m_sheet;
     ChartObject::Series* m_currentSeries;
+    int m_level;
     
     void handleBOF(BOFRecord*);
     void handleEOF(EOFRecord *);
@@ -63,6 +64,10 @@ private:
     void handleHCenter(HCenterRecord *);
     void handleVCenter(VCenterRecord *);
     void handleZoomLevel(ZoomLevelRecord *);
+    void handleLeftMargin(LeftMarginRecord *);
+    void handleRightMargin(RightMarginRecord *);
+    void handleTopMargin(TopMarginRecord *);
+    void handleBottomMargin(BottomMarginRecord *);
     void handleDimension(DimensionRecord *);
     void handleChart(ChartRecord *);
     void handleBegin(BeginRecord *);

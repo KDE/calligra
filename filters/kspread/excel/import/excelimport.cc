@@ -113,6 +113,14 @@ QString columnName(uint column)
     return s;
 }
 
+// Takes a Excel cellrange and translates it into a ODF cellrange
+QString normalizeCellRange(const QString &range)
+{
+    if(range.startsWith('[') && range.endsWith(']'))
+        return range.mid(1, range.length() - 2);
+    return range;
+}
+
 using namespace Swinder;
 
 class ExcelImport::Private
@@ -602,12 +610,7 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
         for(std::map<UString, UString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
             xmlWriter->startElement("table:named-range");
             xmlWriter->addAttribute("table:name", string((*it).first) ); // e.g. "My Named Range"
-            
-            QString range = string((*it).second);
-            if(range.startsWith('[') && range.endsWith(']')) {
-                range = range.mid(1,range.length()-2);
-            }
-                
+            QString range = normalizeCellRange(string((*it).second));
             xmlWriter->addAttribute("table:cell-range-address", range); // e.g. "$Sheet1.$B$2:.$B$3"
             xmlWriter->endElement();//[Sheet1.$B$2:$B$3]
         }
@@ -1445,7 +1448,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     foreach(Picture *picture, cell->pictures()) {
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell", columnName(picture->m_colR) + QString::number(picture->m_rwB));
+        xmlWriter->addAttribute("table:end-cell", string(cell->sheet()->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
         xmlWriter->addAttribute("table:table:end-x", QString::number(picture->m_dxR));
         xmlWriter->addAttribute("table:table:end-y", QString::number(picture->m_dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
@@ -1491,13 +1494,6 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     xmlWriter->endElement(); //  table:[covered-]table-cell
 }
 
-QString normalizedCellRange(const QString &range)
-{
-    if(range.startsWith('[') && range.endsWith(']'))
-        return range.mid(1, range.length() - 2);
-    return range;
-}
-
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
     KoGenStyles styles;
@@ -1536,6 +1532,9 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
 
         //<chart:legend chart:legend-position="end" svg:x="7.031cm" svg:y="2.843cm" chart:style-name="ch2"/>
+        bodyWriter->startElement("chart:legend");
+        bodyWriter->addAttribute("chart:legend-position", "end");
+        bodyWriter->endElement(); // chart:legend
 
         bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 
@@ -1549,14 +1548,36 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         //chartstyle.addProperty("chart:right-angled-axes", "true");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
 
-        const QString cellRangeAddress = normalizedCellRange(string(chart->cellRangeAddress));
-        if(!cellRangeAddress.isEmpty())
-            bodyWriter->addAttribute("table:cell-range-address", cellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+        if(chart->cellRangeAddress.isValid()) {
+            const QString sheetName = string(sheet->name());
+            QString cellRangeAddress = sheetName + "." + columnName(chart->cellRangeAddress.left()) + QString::number(chart->cellRangeAddress.top()) + ":" +
+                                       sheetName + "." + columnName(chart->cellRangeAddress.right()) + QString::number(chart->cellRangeAddress.bottom());
+            bodyWriter->addAttribute("table:cell-range-address", cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+            bodyWriter->addAttribute("chart:data-source-has-labels", "both"); // needed for categories
+        }
 
         //bodyWriter->addAttribute("svg:x", "0.16cm"); //FIXME
         //bodyWriter->addAttribute("svg:y", "0.14cm"); //FIXME
         //bodyWriter->addAttribute("svg:width", "6.712cm"); //FIXME
         //bodyWriter->addAttribute("svg:height", "6.58cm"); //FIXME
+
+        // First axis
+        bodyWriter->startElement("chart:axis");
+        bodyWriter->addAttribute("chart:dimension", "x");
+        bodyWriter->addAttribute("chart:name", "primary-x");
+        const QString verticalCellRangeAddress = normalizeCellRange(string(chart->verticalCellRangeAddress));
+        if(!verticalCellRangeAddress.isEmpty()) {
+            bodyWriter->startElement("chart:categories");
+            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+            bodyWriter->endElement();
+        }
+        bodyWriter->endElement(); // chart:axis
+
+        // Second axis
+        bodyWriter->startElement("chart:axis");
+        bodyWriter->addAttribute("chart:dimension", "y");
+        bodyWriter->addAttribute("chart:name", "primary-y");
+        bodyWriter->endElement(); // chart:axis
 
         //<chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch4"/>
         //<chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch5"><chart:grid chart:style-name="ch6" chart:class="major"/></chart:axis>
@@ -1571,7 +1592,7 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 
             //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
-            const QString valuesCellRangeAddress = normalizedCellRange(string(series->valuesCellRangeAddress));
+            const QString valuesCellRangeAddress = normalizeCellRange(string(series->valuesCellRangeAddress));
             if(!valuesCellRangeAddress.isEmpty())
                 bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
 
