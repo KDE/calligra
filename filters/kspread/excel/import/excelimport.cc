@@ -1553,6 +1553,8 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
             QString cellRangeAddress = sheetName + "." + columnName(chart->cellRangeAddress.left()) + QString::number(chart->cellRangeAddress.top()) + ":" +
                                        sheetName + "." + columnName(chart->cellRangeAddress.right()) + QString::number(chart->cellRangeAddress.bottom());
             bodyWriter->addAttribute("table:cell-range-address", cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+
+            //TODO deactivate this to trigger a bug in kchart
             bodyWriter->addAttribute("chart:data-source-has-labels", "both"); // needed for categories
         }
 
