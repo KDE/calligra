@@ -44,7 +44,7 @@ void FlatProxyModelTester::test()
     m_standardmodel.setHorizontalHeaderLabels( QStringList() << "Column 1" );
     m_flatmodel.setSourceModel( &m_standardmodel );
     
-    QCOMPARE( m_flatmodel.columnCount(), 1 );
+    QCOMPARE( m_flatmodel.columnCount(), 2 ); // it adds an extra column
     QCOMPARE( m_flatmodel.rowCount(), 1 );
     QCOMPARE( m_flatmodel.headerData( 0, Qt::Horizontal ), QVariant( "Column 1" ) );
     
@@ -58,7 +58,7 @@ void FlatProxyModelTester::test()
     
     qDebug()<<"1 row, set 2 columns";
     m_standardmodel.setColumnCount( 2 );
-    QCOMPARE( m_flatmodel.columnCount(), 2 );
+    QCOMPARE( m_flatmodel.columnCount(), 3 ); // it adds an extra column
     m_flatmodel.setHeaderData( 1, Qt::Horizontal, "Column 2" );
     QCOMPARE( m_flatmodel.headerData( 1, Qt::Horizontal ), QVariant( "Column 2" ) );
     m_standardmodel.setData( m_standardmodel.index( 0, 1 ), "Index 0,1" );
