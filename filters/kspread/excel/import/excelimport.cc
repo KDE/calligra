@@ -1523,7 +1523,7 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->addAttribute("svg:height", QString::number(rowHeight(sheet,drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB))+"pt");
 
         KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
-        style.addProperty("draw:stroke", "none");
+        //style.addProperty("draw:stroke", "none");
         //style.addProperty("draw:stroke", "solid");
         //style.addProperty("draw:fill-color", "#ff0000");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
@@ -1559,8 +1559,8 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
         KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
-        seriesstyle.addProperty("draw:stroke", "solid");
-        seriesstyle.addProperty("draw:fill-color", "#ff0000");
+        //seriesstyle.addProperty("draw:stroke", "solid");
+        //seriesstyle.addProperty("draw:fill-color", "#ff0000");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
 
         //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
