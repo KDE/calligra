@@ -607,7 +607,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // This is in the plot-area element itself.
     bool hasDataSourceHasLabels = plotAreaElement.hasAttributeNS( KoXmlNS::chart,
                                                                   "data-source-has-labels" );
-
+#if 0 //FIXME we probably need to remember this special case for ChartProxyModel::createDataSetsFromRegion
     if ( hasDataSourceHasLabels ) {
         // if chart:categories with a table:cell-range-address is defined within an axis
         // then we need to ignore the data-source-has-labels.
@@ -618,7 +618,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             }
         }
     }
-        
+#endif
     if( hasDataSourceHasLabels ) {
         // Yes, it does.  Now find out how.
         const QString  dataSourceHasLabels
