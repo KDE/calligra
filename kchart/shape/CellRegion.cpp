@@ -206,7 +206,8 @@ QString CellRegion::Private::pointToString( const QPoint &point ) const
 {
     QString result;
 
-    result.append( '$' + sheetName + '.' );
+    if(!sheetName.isEmpty())
+        result.append( '$' + sheetName + '.' );
     result.append( '$' + columnName( point.x() ) );
     result.append( '$' + QString::number( point.y() ) );
 
