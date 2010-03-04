@@ -589,11 +589,26 @@
 </record>
 
 <record name="ObjectLink" id="0x1027">
+  <field name="wLinkObj" type="unsigned" size="16">
+    <enum name="EntireChart" value="0x0001" />
+    <enum name="ValueOrVerticalAxis" value="0x0002" />
+    <enum name="CategoryOrHorizontalAxis" value="0x0003" />
+    <enum name="SeriesOrDatapoints" value="0x0004" />
+    <enum name="SeriesAxis" value="0x0007" />
+    <enum name="DisplayUnitsLabelsOfAxis" value="0x000c" />
+  </field>
+  <!-- zero-based index of a series on the collection of series -->
+  <field name="wLinkVar1" type="unsigned" size="16" />
+  <!-- zero-based index of the category in the series -->
+  <field name="wLinkVar2" type="unsigned" size="16" />
 </record>
 
 <record name="PlotArea" id="0x1035">
 </record>
 
+<record name="MsoDrawingSelection" id="0x00ed">
+  <!-- an OfficeArtFDGSL structure -->
+</record>
 
 <record name="Chart3d" id="0x103a">
   <field name="anRot"         type="signed"   size="16" />

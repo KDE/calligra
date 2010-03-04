@@ -79,7 +79,7 @@ const unsigned BRAIRecord::id = 0x1051;
 using namespace Swinder;
 
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(0), m_sheet(0)
+    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(0), m_sheet(0), m_currentSeries(0)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
@@ -170,6 +170,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleDefaultText(static_cast<DefaultTextRecord*>(record));
     else if (type == TextRecord::id)
         handleText(static_cast<TextRecord*>(record));
+    else if (type == SeriesTextRecord::id)
+        handleSeriesText(static_cast<SeriesTextRecord*>(record));
     else if (type == PosRecord::id)
         handlePos(static_cast<PosRecord*>(record));
     else if (type == FontXRecord::id)
@@ -194,6 +196,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleShapePropsStream(static_cast<ShapePropsStreamRecord*>(record));
     else if (type == TextPropsStreamRecord::id)
         handleTextPropsStream(static_cast<TextPropsStreamRecord*>(record));
+    else if (type == ObjectLinkRecord::id)
+        handleObjectLink(static_cast<ObjectLinkRecord*>(record));
     else if (type == CrtLinkRecord::id)
         {} // written but unused record
     else if (type == UnitsRecord::id)
@@ -286,26 +290,32 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
     if(!record) return;
     std::cout << "ChartSubStreamHandler::handleSeries dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
-    m_chart->dataTypeX = record->dataTypeX();
-    m_chart->countXValues = record->countXValues();
-    m_chart->countYValues = record->countYValues();
-    m_chart->countBubbleSizeValues = record->countBubbleSizeValues();
+    m_currentSeries = new ChartObject::Series;
+    m_currentSeries->dataTypeX = record->dataTypeX();
+    m_currentSeries->countXValues = record->countXValues();
+    m_currentSeries->countYValues = record->countYValues();
+    m_currentSeries->countBubbleSizeValues = record->countBubbleSizeValues();
+    m_chart->series << m_currentSeries;
 }
 
 void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 {
     if(!record) return;
+    if(!m_currentSeries) return;
     std::cout << "ChartSubStreamHandler::handleBRAI dataId=" << record->m_value->dataId << " type=" << record->m_value->type << " isUnlinkedNumberFormat=" << record->m_value->isUnlinkedFormat << " numberFormat=" << record->m_value->numberFormat << " formula=" << record->m_value->formula << std::endl;
 
-    //FIXME remember this per series rather then only one per chart (can there be more then one series per chart?)
-    if(record->m_value->dataId == ChartObject::Value::HorizontalValues) { //FIXME handle VerticalValues and BubbleSizeValues
+    //FIXME is that correct or do we need to take the series somehow into account to provide one cellRangeAddress per series similar to valuesCellRangeAddress?
+    //FIXME handle VerticalValues and BubbleSizeValues
+    if(record->m_value->dataId == ChartObject::Value::HorizontalValues) {
         if(record->m_value->type == ChartObject::Value::TextOrValue || record->m_value->type == ChartObject::Value::CellRange) {
-            //if(!record->m_value->formula.isEmpty())
-                m_chart->valuesCellRangeAddress = record->m_value->formula;
+            if(!record->m_value->formula.isEmpty()) {
+                m_currentSeries->valuesCellRangeAddress = record->m_value->formula;
+                m_chart->cellRangeAddress = record->m_value->formula;
             }
+        }
     }
 
-    m_chart->datasetValue[record->m_value->dataId] = record->m_value;
+    m_currentSeries->datasetValue[record->m_value->dataId] = record->m_value;
     record->m_value = 0; //take over ownership
 }
 
@@ -344,8 +354,9 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *)
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
 {
     if(!record) return;
+    if(!m_currentSeries) return;
     std::cout << "ChartSubStreamHandler::handlePieFormat pcExplode="<<record->pcExplode()<<std::endl;
-    m_chart->datasetFormat << new ChartObject::PieFormat(record->pcExplode());
+    m_currentSeries->datasetFormat << new ChartObject::PieFormat(record->pcExplode());
 }
 
 void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *)
@@ -389,6 +400,13 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 {
     if(!record) return;
     std::cout << "ChartSubStreamHandler::handleText" << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
+{
+    if(!record) return;
+    std::cout << "ChartSubStreamHandler::handleSeriesText text=" << record->text() << std::endl;
     //TODO
 }
 
@@ -462,5 +480,12 @@ void ChartSubStreamHandler::handleTextPropsStream(TextPropsStreamRecord* record)
 {
     if(!record) return;
     std::cout << "ChartSubStreamHandler::handleTextPropsStream rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
+{
+    if(!record) return;
+    std::cout << "ChartSubStreamHandler::handleObjectLink wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
     //TODO
 }

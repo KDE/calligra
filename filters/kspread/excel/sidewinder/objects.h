@@ -260,9 +260,30 @@ public:
     class PieImpl : public ChartImpl
     {
     public:
-        int anStart, pcDonut;
+        int anStart;
+        int pcDonut;
         PieImpl(int anStart, int pcDonut) : ChartImpl(), anStart(anStart), pcDonut(pcDonut) {}
         virtual const char* name() const { return "circle"; }
+    };
+
+    class Series
+    {
+    public:
+        // the type of data in categories, or horizontal values on bubble and scatter chart groups, in the
+        // series. MUST be either 0x0001=numeric or 0x0003=text.
+        uint dataTypeX;
+        // the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
+        uint countXValues;
+        // the count of values, or vertical values on bubble and scatter chart groups, in the series.
+        uint countYValues;
+        // the count of bubble size values in the series.
+        uint countBubbleSizeValues;
+        // Range that contains the values that should be visualized by the dataSeries.
+        UString valuesCellRangeAddress;
+        // The referenced values used in the chart
+        QMap<Value::DataId, Value*> datasetValue;
+        // The formatting for the referenced values
+        QList<Format*> datasetFormat;
     };
 
     // Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
@@ -271,24 +292,11 @@ public:
     // Margins around the chart object
     //int marginLeft, marginTop, marginRight, MarginBottom;
 
-    // the type of data in categories, or horizontal values on bubble and scatter chart groups, in the
-    // series. MUST be either 0x0001=numeric or 0x0003=text.
-    uint dataTypeX;
-    // the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
-    uint countXValues;
-    // the count of values, or vertical values on bubble and scatter chart groups, in the series.
-    uint countYValues;
-    // the count of bubble size values in the series.
-    uint countBubbleSizeValues;
+    // List of series
+    QList<Series*> series;
 
-    // The referenced values used in the chart
-    QMap<Value::DataId, Value*> datasetValue;
-
-    // Range that contains the values that should be visualized by the dataSeries.
-    UString valuesCellRangeAddress;
-
-    // The formatting for the referenced values
-    QList<Format*> datasetFormat;
+    // Range that contains the values for the plot-area.
+    UString cellRangeAddress;
 
     // The more concrete chart implementation like e.g. a PieImpl for a pie chart.
     ChartImpl *impl;

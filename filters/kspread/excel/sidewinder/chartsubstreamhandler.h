@@ -53,6 +53,7 @@ private:
     SubStreamHandler* m_parentHandler;
     ChartObject* m_chart;
     Sheet* m_sheet;
+    ChartObject::Series* m_currentSeries;
     
     void handleBOF(BOFRecord*);
     void handleEOF(EOFRecord *);
@@ -82,6 +83,7 @@ private:
     void handleShtProps(ShtPropsRecord *);
     void handleDefaultText(DefaultTextRecord *);
     void handleText(TextRecord *);
+    void handleSeriesText(SeriesTextRecord *);
     void handlePos(PosRecord *);
     void handleFontX(FontXRecord *);
     void handlePlotGrowth(PlotGrowthRecord *);
@@ -93,6 +95,7 @@ private:
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);
     void handleTextPropsStream(TextPropsStreamRecord *);
+    void handleObjectLink(ObjectLinkRecord *);
 
 };
 
