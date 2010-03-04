@@ -297,8 +297,8 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
     if(!record) return;
     std::cout << "ChartSubStreamHandler::handleBRAI dataId=" << record->m_value->dataId << " type=" << record->m_value->type << " isUnlinkedNumberFormat=" << record->m_value->isUnlinkedFormat << " numberFormat=" << record->m_value->numberFormat << " formula=" << record->m_value->formula << std::endl;
 
-    //FIXME remember this per series rather then only one per chart...
-    if(record->m_value->dataId == ChartObject::Value::HorizontalValues) {
+    //FIXME remember this per series rather then only one per chart (can there be more then one series per chart?)
+    if(record->m_value->dataId == ChartObject::Value::HorizontalValues) { //FIXME handle VerticalValues and BubbleSizeValues
         if(record->m_value->type == ChartObject::Value::TextOrValue || record->m_value->type == ChartObject::Value::CellRange) {
             //if(!record->m_value->formula.isEmpty())
                 m_chart->valuesCellRangeAddress = record->m_value->formula;
