@@ -524,10 +524,17 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     styleStack.clear();
 
+    CellRegion cellRangeAddress;
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+    {
+        cellRangeAddress = CellRegion( plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+    }
+
     // Find out about things that are in the plotarea style.
     // 
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
+    QString seriesSource;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
@@ -556,17 +563,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
         // Data direction: It's in the plotarea style.
         if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
-            const QString  seriesSource
-                = styleStack.property( KoXmlNS::chart, "series-source" );
-
+            seriesSource = styleStack.property( KoXmlNS::chart, "series-source" );
             kDebug(35001) << "series-source=" << seriesSource;
-            if ( seriesSource == "rows" )
-                proxyModel()->setDataDirection( Qt::Horizontal );
-            else if ( seriesSource == "columns" )
-                proxyModel()->setDataDirection( Qt::Vertical );
-            else
-                // Use the default value for wrong values (not "rows" or "columns")
-                proxyModel()->setDataDirection( Qt::Vertical );
         }
 
         // Special properties for various chart types
@@ -578,6 +576,13 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
 #endif
     }
+
+    if ( seriesSource == "rows" )
+        proxyModel()->setDataDirection( Qt::Horizontal );
+    else if ( seriesSource == "columns" )
+        proxyModel()->setDataDirection( Qt::Vertical );
+    else
+        proxyModel()->setDataDirection( cellRangeAddress.orientation() );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
