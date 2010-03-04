@@ -32,6 +32,11 @@ Scripting::Node::Node( Scripting::Project *project, KPlato::Node *node, QObject 
 {
 }
 
+QString Scripting::Node::name()
+{
+    return m_node->name();
+}
+
 QDate Scripting::Node::startDate()
 {
     return m_node->startTime().dateTime().date();
@@ -75,6 +80,39 @@ QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const Q
         e = QDate::currentDate();
     }
     KPlato::EffortCostMap ec = m_node->plannedEffortCostPrDay( s, e, schedule.toLongLong() );
+    KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
+    for (; it != ec.days().constEnd(); ++it ) {
+        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    }
+    return map;
+}
+
+QVariant Scripting::Node::bcwsPrDay( const QVariant &schedule ) const
+{
+    QVariantMap map;
+    KPlato::EffortCostMap ec = m_node->bcwsPrDay( schedule.toLongLong() );
+    KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
+    for (; it != ec.days().constEnd(); ++it ) {
+        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    }
+    return map;
+}
+
+QVariant Scripting::Node::bcwpPrDay( const QVariant &schedule ) const
+{
+    QVariantMap map;
+    KPlato::EffortCostMap ec = m_node->bcwpPrDay( schedule.toLongLong() );
+    KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
+    for (; it != ec.days().constEnd(); ++it ) {
+        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    }
+    return map;
+}
+
+QVariant Scripting::Node::acwpPrDay( const QVariant &schedule ) const
+{
+    QVariantMap map;
+    KPlato::EffortCostMap ec = m_node->acwp( schedule.toLongLong() );
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
     for (; it != ec.days().constEnd(); ++it ) {
         map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );

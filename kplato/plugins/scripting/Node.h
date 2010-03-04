@@ -47,6 +47,8 @@ namespace Scripting {
             KPlato::Node *kplatoNode() const { return m_node; }
             
         public Q_SLOTS:
+            QString name();
+
             QDate startDate();
             QDate endDate();
             
@@ -62,6 +64,13 @@ namespace Scripting {
             
             /// Return a map of planed effort and cost pr day
             QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
+
+            /// Return a map of Budgeted Cost of Work Scheduled pr day
+            QVariant bcwsPrDay( const QVariant &schedule ) const;
+            /// Return a map of Budgeted Cost of Work Performed pr day
+            QVariant bcwpPrDay( const QVariant &schedule ) const;
+            /// Return a map of Actual Cost of Work Performed pr day
+            QVariant acwpPrDay( const QVariant &schedule ) const;
 
         protected:
             Project *m_project;

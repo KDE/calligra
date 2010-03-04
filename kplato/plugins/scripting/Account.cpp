@@ -93,5 +93,28 @@ QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &start, const
     return map;
 }
 
+QVariant Scripting::Account::plannedEffortCostPrDay( const QVariant &schedule )
+{
+    //kDebug()<<start<<end<<schedule;
+    QVariantMap map;
+    KPlato::EffortCostMap ec = m_account->plannedCost( schedule.toLongLong() );
+    KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
+    for (; it != ec.days().constEnd(); ++it ) {
+        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    }
+    return map;
+}
+
+QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &schedule )
+{
+    //kDebug()<<start<<end<<schedule;
+    QVariantMap map;
+    KPlato::EffortCostMap ec = m_account->actualCost( schedule.toLongLong() );
+    KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
+    for (; it != ec.days().constEnd(); ++it ) {
+        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    }
+    return map;
+}
 
 #include "Account.moc"

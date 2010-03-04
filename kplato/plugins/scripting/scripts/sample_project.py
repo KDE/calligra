@@ -5,15 +5,72 @@ import os, sys, traceback, tempfile, zipfile
 import Kross
 import KPlato
 
-def printNodes( node, props, types = None ):
-    printNode( node, props, types )
-    for i in range( node.childCount() ):
-        printNodes( node.childAt( i ), props, types )
+State_Started = 0
+State_StartedLate = 1
+State_StartedEarly = 2
+State_Finished = 3
+State_FinishedLate = 4
+State_FinishedEarly = 5
+State_Running = 6
+State_RunningLate = 7
+State_RunningEarly = 8
+State_ReadyToStart = 9        # all precceeding tasks finished (if any)
+State_NotReadyToStart = 10    # all precceeding tasks not finished (must be one or more)
+State_NotScheduled = 11
 
-def printNode( node, props, types = None ):
+def testBit(int_type, offset):
+    mask = 1 << offset
+    return ( int_type & mask ) > 0
+
+def state( int_type ):
+    if testBit( int_type, State_NotScheduled ) is True:
+        return "Not scheduled"
+    if testBit( int_type, State_FinishedEarly ) is True:
+        return "Finished early"
+    if testBit( int_type, State_FinishedLate ) is True:
+        return "Finished late"
+    if testBit( int_type, State_Finished ) is True:
+        return "Finished"
+    if testBit( int_type, State_ReadyToStart ) is True:
+        return "Ready to start"
+    if testBit( int_type, State_NotReadyToStart ) is True:
+        return "Not ready to start"
+    if testBit( int_type, State_StartedLate ) is True:
+        return "Started late"
+    if testBit( int_type, State_StartedEarly ) is True:
+        return "Started early"
+    if testBit( int_type, State_RunningEarly ) is True:
+        return "Running early"
+    if testBit( int_type, State_RunningLate ) is True:
+        return "Running late"
+    if testBit( int_type, State_Running ) is True:
+        return "Running"
+    if int_type > 0:
+        return "Error: Invalid state %d" % ( int_type )
+    return "None"
+
+def printStates( node, schedule ):
+    printState( node, schedule )
+    for i in range( node.childCount() ):
+        printStates( node.childAt( i ), schedule )
+
+def printState( node, schedule ):
+    if node.type() in [ 'Task' ]:
+        st = KPlato.data( node, 'NodeStatus', 'EditRole', schedule )
+        print "%-30s %-20s %20s" % ( 
+            KPlato.data( node, 'NodeName', 'DisplayRole', schedule ),
+            KPlato.data( node, 'NodeStatus', 'DisplayRole', schedule ),
+            state( int( st ) ) )
+
+def printNodes( node, props, schedule, types = None ):
+    printNode( node, props, schedule, types )
+    for i in range( node.childCount() ):
+        printNodes( node.childAt( i ), props, schedule, types )
+
+def printNode( node, props, schedule, types = None ):
     if types is None or node.type() in types:
         for prop in props:
-            print "%-25s" % ( KPlato.data( node, prop ) ),
+            print "%-25s" % ( KPlato.data( node, prop[0], prop[1], schedule ) ),
         print
 
 def printGroup( group, props ):
@@ -29,15 +86,14 @@ def printResource( resource, props ):
     print
 
 def printSchedules():
-    print "%-10s %-25s" % ( "Identity", "Name" )
+    print "%-10s %-25s %-10s" % ( "Identity", "Name", "Scheduled" )
     for i in range( proj.scheduleCount() ):
         printSchedule( proj.scheduleAt( i ) )
-        
     print
 
 
 def printSchedule( sch ):
-    print "%-10s %-25s" % ( sch.id(), sch.name() )
+    print "%-10s %-25s %-10s" % ( sch.id(), sch.name(), sch.isScheduled() )
     for i in range( sch.childCount() ):
         printSchedule( sch.childAt( i ) )
 
@@ -46,7 +102,7 @@ def printEffortCost( name, values ):
     for d, v in sorted( values.iteritems() ):
         e = v[0]
         c = v[1]
-        print "%-20s %-10s %-10f %-10f" % ( "", d, e, c )
+        print "%-20s %-15s %20f %20f" % ( "", d, e, c )
 
 def printProjectBusyinfo( proj ):
     print "%-20s %-30s %-30s %8s" % ( "Resource", "Start", "End", "Load" )
@@ -79,20 +135,28 @@ def printChildCalendars( calendar ):
 #------------------------
 proj = KPlato.project()
 
-nodeprops = ['NodeWBSCode', 'NodeName', 'NodeType', 'NodeResponsible' ]
+sid = -1;
+# get a schedule id
+if proj.scheduleCount() > 0:
+    sid = proj.scheduleAt( 0 ).id()
+
+print "Using schedule id: %-3s" % ( sid )
+print
+
+nodeprops = [['NodeWBSCode', 'DisplayRole'], ['NodeName', 'DisplayRole'], ['NodeType', 'DisplayRole'], ['NodeResponsible', 'DisplayRole'], ['NodeStatus', 'EditRole'] ]
 print "Print tasks and milestones in arbitrary order:"
 # print the localized headers
 for prop in nodeprops:
     print "%-25s" % (proj.nodeHeaderData( prop ) ),
 print
-printNodes( proj, nodeprops, [ 'Task', 'Milestone' ] )
+printNodes( proj, nodeprops, sid, [ 'Task', 'Milestone' ] )
 print
 
 print "Print all nodes including project:"
 for prop in nodeprops:
     print "%-25s" % (proj.nodeHeaderData( prop ) ),
 print
-printNodes( proj, nodeprops )
+printNodes( proj, nodeprops, sid )
 print
 
 print "Print Resources:"
@@ -111,11 +175,6 @@ print "Print Schedules:"
 printSchedules()
 print
 
-
-sid = -1;
-# get a schedule id
-if proj.scheduleCount() > 0:
-    sid = proj.scheduleAt( 0 ).id()
 
 print "Print Effort/Cost for each node:"
 print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
@@ -139,17 +198,38 @@ printProjectCalendars( proj )
 print
 
 print "Print planned Effort/Cost for each account:"
-print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
 for i in range( proj.accountCount() ):
     account = proj.accountAt( i )
-    name = KPlato.data( account, 'AccountName' )
-    printEffortCost( name, account.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
+    name = KPlato.data( account, 'Name' )
+    printEffortCost( name, account.plannedEffortCostPrDay( sid ) )
 print
 
 print "Print actual Effort/Cost for each account:"
-print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
 for i in range( proj.accountCount() ):
     account = proj.accountAt( i )
-    name = KPlato.data( account, 'AccountName' )
-    printEffortCost( name, account.actualEffortCostPrDay( "2007-09-12", "2008-04-18", -3 ) )
+    name = KPlato.data( account, 'Name' )
+    printEffortCost( name, account.actualEffortCostPrDay( sid ) )
+print
+
+print "Print BCWS for the project:"
+print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+printEffortCost( proj.name(), proj.bcwsPrDay( sid ) )
+print
+print "Print BCWP for the project:"
+print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+printEffortCost( proj.name(), proj.bcwpPrDay( sid ) )
+print
+
+print "Print ACWP for the project:"
+print "%-20s %-15s %20s %20s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+printEffortCost( proj.name(), proj.acwpPrDay( sid ) )
+print
+
+print "Print Task status:"
+printStates( proj, sid )
+print
+
+print testBit( 8, 1 ) is False, testBit( 7, 1) is True, testBit( 7, 2 ) is True
 print
