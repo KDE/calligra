@@ -190,6 +190,9 @@ PlotArea::Private::~Private()
 
 void PlotArea::Private::initAxes()
 {
+    // The category data region is anchored to an axis and will be set on addAxis if the
+    // axis defines the Axis::categoryDataRegionString(). So, clear it now.
+    q->proxyModel()->setCategoryDataRegion(QString());
     // Remove all old axes
     while( !axes.isEmpty() ) {
         Axis *axis = axes.takeLast();
@@ -398,9 +401,16 @@ bool PlotArea::addAxis( Axis *axis )
     d->axes.append( axis );
     
     if ( axis->dimension() == XAxisDimension ) {
-        foreach ( Axis *_axis, d->axes )
+        // set the categoryDataRegion of the proxyModel. This will then be used on
+        // ChartProxyModel::createDataSetsFromRegion to create the dataSets.
+        if ( proxyModel()->categoryDataRegion().isEmpty() && ! axis->categoryDataRegionString().isEmpty() )
+            proxyModel()->setCategoryDataRegion(axis->categoryDataRegionString());
+
+        // let each axis know about the other axis
+        foreach ( Axis *_axis, d->axes ) {
             if ( _axis->isVisible() )
                 _axis->registerKdAxis( axis->kdAxis() );
+        }
     }
     
     requestRepaint();
@@ -426,6 +436,17 @@ bool PlotArea::removeAxis( Axis *axis )
     d->axes.removeAll( axis );
     
     if ( axis->dimension() == XAxisDimension ) {
+        // If the axis is removed we probably need to update the used categoryDataRegion too.
+        if ( ! proxyModel()->categoryDataRegion().isEmpty() && proxyModel()->categoryDataRegion() == axis->categoryDataRegionString() ) {
+            proxyModel()->setCategoryDataRegion(QString());
+            foreach ( Axis *_axis, d->axes ) {
+                 if ( _axis->dimension() == XAxisDimension && ! _axis->categoryDataRegionString().isEmpty()) {
+                     proxyModel()->setCategoryDataRegion( _axis->categoryDataRegionString() );
+                     break;
+                 }
+            }
+        }
+        
         foreach ( Axis *_axis, d->axes )
             _axis->deregisterKdAxis( axis->kdAxis() );
     }
@@ -601,25 +622,10 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
-    //KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
-    
     // Find out if the data table contains labels as first row and/or column.
     // This is in the plot-area element itself.
-    bool hasDataSourceHasLabels = plotAreaElement.hasAttributeNS( KoXmlNS::chart,
-                                                                  "data-source-has-labels" );
-#if 0 //FIXME we probably need to remember this special case for ChartProxyModel::createDataSetsFromRegion
-    if ( hasDataSourceHasLabels ) {
-        // if chart:categories with a table:cell-range-address is defined within an axis
-        // then we need to ignore the data-source-has-labels.
-        foreach(Axis* axis, d->axes) {
-            if(!axis->categoryDataRegionString().isEmpty()) {
-                hasDataSourceHasLabels = false;
-                break;
-            }
-        }
-    }
-#endif
-    if( hasDataSourceHasLabels ) {
+    if( proxyModel()->categoryDataRegion().isEmpty() && // if chart:categories with a table:cell-range-address is defined within an axis then we need to ignore the data-source-has-labels.
+        plotAreaElement.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
         // Yes, it does.  Now find out how.
         const QString  dataSourceHasLabels
             = plotAreaElement.attributeNS( KoXmlNS::chart,

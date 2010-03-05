@@ -98,6 +98,9 @@ public slots:
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
+    
+    QString categoryDataRegion() const;
+    void setCategoryDataRegion(const QString& region);
 
     QList<DataSet*> dataSets() const;
 

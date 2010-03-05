@@ -61,6 +61,8 @@ public:
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
+    
+    QString categoryDataRegion;
 
     QVector< CellRegion > dataSetRegions;
     
@@ -193,14 +195,15 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
         
         QMapIterator<int, QVector<QRect> > j( sortedRows );
         
-        CellRegion categoryDataRegion;
-        
-        if ( d->firstRowIsLabel && j.hasNext() ) {
+        CellRegion category;
+        if ( ! categoryDataRegion().isEmpty() ) {
+            category = CellRegion( categoryDataRegion() );
+        } else if ( d->firstRowIsLabel && j.hasNext() ) {
             j.next();
             
-            categoryDataRegion = CellRegion( j.value() );
+            category = CellRegion( j.value() );
             if ( d->firstColumnIsLabel )
-                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
+                category.subtract( category.pointAtIndex( 0 ) );
         }
         
         while ( j.hasNext() ) {
@@ -244,7 +247,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
 
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
-            dataSet->setCategoryDataRegion( categoryDataRegion );
+            dataSet->setCategoryDataRegion( category );
             dataSet->setLabelDataRegion( labelDataRegion );
             createdDataSetCount++;
             dataSet->blockSignals( false );
@@ -293,14 +296,15 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
         
         QMapIterator<int, QVector<QRect> > j( sortedColumns );
         
-        CellRegion categoryDataRegion;
-        
-        if ( d->firstColumnIsLabel && j.hasNext() ) {
+        CellRegion category;
+        if ( ! categoryDataRegion().isEmpty() ) {
+            category = CellRegion( categoryDataRegion() );
+        } else if ( d->firstColumnIsLabel && j.hasNext() ) {
             j.next();
             
-            categoryDataRegion = CellRegion( j.value() );
+            category = CellRegion( j.value() );
             if ( d->firstRowIsLabel )
-                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
+                category.subtract( category.pointAtIndex( 0 ) );
         }
         
         while ( j.hasNext() ) {
@@ -345,7 +349,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
             dataSet->setXDataRegion( xDataRegion );
             dataSet->setYDataRegion( yDataRegion );
             dataSet->setLabelDataRegion( labelDataRegion );
-            dataSet->setCategoryDataRegion( categoryDataRegion );
+            dataSet->setCategoryDataRegion( category );
             createdDataSetCount++;
             dataSet->blockSignals( false );
         }
@@ -816,6 +820,16 @@ bool ChartProxyModel::firstRowIsLabel() const
 bool ChartProxyModel::firstColumnIsLabel() const
 {
     return d->firstColumnIsLabel;
+}
+
+QString ChartProxyModel::categoryDataRegion() const
+{
+    return d->categoryDataRegion;
+}
+
+void ChartProxyModel::setCategoryDataRegion(const QString& region)
+{
+    d->categoryDataRegion = region;
 }
 
 QList<DataSet*> ChartProxyModel::dataSets() const
