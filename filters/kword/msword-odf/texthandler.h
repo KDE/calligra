@@ -34,6 +34,7 @@
 #include <QObject>
 #include <QDomElement>
 #include <QBuffer>
+#include <QStack>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -173,6 +174,7 @@ private:
     void saveState();
     void restoreState();
 
+    QStack <KoXmlWriter*> m_usedListWriters;
 
     // Current paragraph
     wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end

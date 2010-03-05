@@ -57,7 +57,6 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
     return 0xad; // soft hyphen, according to kword.dtd
 }
 
-
 KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
     : m_writingHeader(false)
     , m_writeMasterStyleName(false)
@@ -846,6 +845,9 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     if (listInfo->lsid() == 1 && nfc == 255) {
         return false;
     }
+    
+    m_usedListWriters.push(writer);		// put the currently used writer in the stack 
+
     //process the different places we could be in a list
     if (m_currentListID == 0) {
         //we're starting a new list...
@@ -1078,17 +1080,7 @@ void KWordTextHandler::closeList()
     kDebug(30513);
     // Set the correct XML writer.
     //
-    // TODO create m_writer, and just keep it pointing to the current writer
-    KoXmlWriter *writer;
-    if (m_insideFootnote) {
-        writer = m_footnoteWriter;
-    } else if (m_writingHeader) {
-        writer = m_headerWriter;
-    } else if (m_insideAnnotation) {
-        writer = m_annotationWriter;
-    } else {
-        writer = m_bodyWriter;
-    }
+    KoXmlWriter *writer = m_usedListWriters.pop();		// get the last used writer from stack
 
     //TODO should probably test this more, to make sure it does work this way
     //for level 0, we need to close the last item and the list
