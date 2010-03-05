@@ -163,7 +163,7 @@ protected slots:
     void slotSaveToFile();
     void slotSaveToView();
     virtual void slotButtonClicked(int button);
-
+    void closeEvent ( QCloseEvent * e );
 private:
     ReportDesignPanel *m_panel;
     ReportView *m_view;

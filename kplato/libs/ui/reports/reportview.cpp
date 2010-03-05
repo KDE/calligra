@@ -53,6 +53,7 @@
 #include <kdebug.h>
 #include <KToolBar>
 #include <KFileDialog>
+#include <KPushButton>
 
 #include <QPainter>
 #include <QPrintDialog>
@@ -525,9 +526,23 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
 
+void ReportDesignDialog::closeEvent ( QCloseEvent * e )
+{
+    if ( m_panel->m_modified ) {
+        //NOTE: When the close (x) button in the window frame is clicked, QWidget automatically hides us if we don't handle it
+        KPushButton *b = button( KDialog::Close );
+        if ( b ) {
+            b->animateClick();
+            e->ignore();
+            return;
+        }
+    }
+    KDialog::closeEvent ( e );
+}
+
 void ReportDesignDialog::slotButtonClicked( int button )
 {
-    if ( button == KDialog::Close || button == KDialog::Cancel ) {
+    if ( button == KDialog::Close ) {
         if ( m_panel->m_modified ) {
             int res = KMessageBox::warningContinueCancel( this,
                     i18nc( "@info", "The report definition has been modified.<br/>"
@@ -537,6 +552,9 @@ void ReportDesignDialog::slotButtonClicked( int button )
                 return;
             }
         }
+        hide();
+        reject();
+        return;
     }
     KDialog::slotButtonClicked( button );
 }
