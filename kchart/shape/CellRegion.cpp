@@ -110,16 +110,20 @@ CellRegion::CellRegion( const QString& region )
 
     const bool isPoint = !region.contains( ':' );
     if ( isPoint )
-        regEx = QRegExp( "(.*)\\.([A-Z]+)([0-9]+)" );
+        regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
     else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
-        regEx = QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
+        regEx = QRegExp ( "(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
 
     // Check if region string is valid (e.g. not empty)
     if ( regEx.indexIn( searchStr ) >= 0 ) {
         // It is possible for a cell-range-address as defined in ODF to contain
         // refernces to cells of more than one sheet. This, however, we ignore
         // here. We do not support more than one table in a cell region.
+        // Also we do not support regions spanned over different sheets. For us
+        // everything is either on no sheet or on the same sheet.
         d->sheetName = regEx.cap( 1 );
+        if ( d->sheetName.endsWith( "." ) )
+            d->sheetName = d->sheetName.left( d->sheetName.length() - 1 );
 
         QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
         if ( isPoint ) {
@@ -452,12 +456,12 @@ int CellRegion::indexAtPoint( const QPoint &point ) const
     return found ? indicesLeftToPoint : -1;
 }
 
+#if 0 // Unused?
 static int rangeCharToInt( char c )
 {
     return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;
 }
 
-#if 0 // Unused?
 static int rangeStringToInt( const QString &string )
 {
     int result = 0;
