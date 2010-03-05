@@ -1548,15 +1548,20 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         //chartstyle.addProperty("chart:right-angled-axes", "true");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
 
+        const QString verticalCellRangeAddress = normalizeCellRange(string(chart->verticalCellRangeAddress));
         if(chart->cellRangeAddress.isValid()) {
             const QString sheetName = string(sheet->name());
             QString cellRangeAddress = sheetName + "." + columnName(chart->cellRangeAddress.left()) + QString::number(chart->cellRangeAddress.top()) + ":" +
                                        sheetName + "." + columnName(chart->cellRangeAddress.right()) + QString::number(chart->cellRangeAddress.bottom());
             bodyWriter->addAttribute("table:cell-range-address", cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
-
-            //TODO deactivate this to trigger a bug in kchart
-            bodyWriter->addAttribute("chart:data-source-has-labels", "both"); // needed for categories
         }
+
+        /*FIXME
+        if(verticalCellRangeAddress.isEmpty()) {
+            // only add the chart:data-source-has-labels if no chart:categories with a table:cell-range-address was defined within an axis.
+            bodyWriter->addAttribute("chart:data-source-has-labels", "both");
+        }
+        */
 
         //bodyWriter->addAttribute("svg:x", "0.16cm"); //FIXME
         //bodyWriter->addAttribute("svg:y", "0.14cm"); //FIXME
@@ -1567,7 +1572,6 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         bodyWriter->startElement("chart:axis");
         bodyWriter->addAttribute("chart:dimension", "x");
         bodyWriter->addAttribute("chart:name", "primary-x");
-        const QString verticalCellRangeAddress = normalizeCellRange(string(chart->verticalCellRangeAddress));
         if(!verticalCellRangeAddress.isEmpty()) {
             bodyWriter->startElement("chart:categories");
             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
