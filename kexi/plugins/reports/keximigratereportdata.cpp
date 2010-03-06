@@ -61,14 +61,16 @@ uint KexiMigrateReportData::fieldNumber(const QString &fld) const
     KexiDB::QueryColumnInfo::Vector flds;
 
     uint x = -1;
-    flds = m_schema->columns();
 
-    for (int i = 0; i < flds.size() ; ++i) {
-        if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
-            x = i;
+    if (m_schema) {
+        flds = m_schema->columns();
+
+        for (int i = 0; i < flds.size() ; ++i) {
+            if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
+                x = i;
+            }
         }
     }
-
     return x;
 }
 
@@ -77,10 +79,12 @@ QStringList KexiMigrateReportData::fieldNames() const
     KexiDB::QueryColumnInfo::Vector flds;
     QStringList names;
 
-    flds = m_schema->columns();
+    if (m_schema) {
+        flds = m_schema->columns();
 
-    for (int i = 0; i < flds.size() ; ++i) {
-        names << flds[i]->field->name();
+        for (int i = 0; i < flds.size() ; ++i) {
+            names << flds[i]->field->name();
+        }
     }
     return names;
 }

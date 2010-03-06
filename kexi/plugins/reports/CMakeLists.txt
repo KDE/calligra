@@ -48,9 +48,5 @@ target_link_libraries(kexihandler_report
     ${KDE4_KROSSCORE_LIBS}
 )
 
-if (SHOULD_BUILD_KSPREAD)
-    target_link_libraries(kexihandler_report kspreadcommon)
-endif (SHOULD_BUILD_KSPREAD)
-
 install(TARGETS kexihandler_report DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kexireporthandler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
