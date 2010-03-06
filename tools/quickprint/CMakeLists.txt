@@ -7,9 +7,10 @@ if( BUILD_kformula )
 set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kformula_konqi.desktop )
 endif( BUILD_kformula )
 
-if( BUILD_kexi )
-set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kexi_konqi.desktop )
-endif( BUILD_kexi )
+# TODO unsupported for now
+# if( BUILD_kexi )
+# set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kexi_konqi.desktop )
+# endif( BUILD_kexi )
 
 if( BUILD_kivio )
 set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kivio_konqi.desktop )
