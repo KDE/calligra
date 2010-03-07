@@ -8,19 +8,11 @@ include_directories(
 set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp 
   styleproxy.cpp longlongvalidator.cpp InternalPropertyMap.cpp
   SmallToolButton.cpp FlowLayout.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp)
+  transliteration_table.cpp)
 
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 target_link_libraries(kexiutils  ${KDE4_KIO_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${KDE4_KDE3SUPPORT_LIBS})
-
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp
-  COMMAND ${BZIP2_EXECUTABLE} ARGS -dc -k ${CMAKE_CURRENT_SOURCE_DIR}/transliteration_table.cpp.bz2 > ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/transliteration_table.cpp.bz2
-)
-
-macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp )
 
 set_target_properties(kexiutils PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

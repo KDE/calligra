@@ -20,10 +20,10 @@
 #   Boston, MA 02110-1301, USA.
 
 #
-# Generates a transliteration_table.{h|cpp} files using recode's "flat" character set
+# Generates a transliteration_table.h and transliteration_table.cpp.orig.bz2 files using recode's "flat" character set
 #
 
-out_cpp="transliteration_table.cpp"
+out_cpp="transliteration_table.cpp.orig"
 out_h="transliteration_table.h"
 max=65534
 
@@ -73,3 +73,5 @@ while read i && read f && read ch; do
 done >> $out_cpp
 
 echo "0};" >> $out_cpp;
+
+bzip2 -9 $out_cpp || exit 1

@@ -29,26 +29,22 @@ included by identifier.cpp for use in public utility functions.
 For each item, the table (basically a table of c-strings) contains:
 - a NULL string it the resulting conversion have to be "_" string;
 - a c-string of size 1 or more containing a valid transliteration 
-   as described in 1;
+   as described in 1.;
 - an empty string "" if the transliteration should return empty string
   (can be useful e.g. for soft signs in Cyrillic)
 
 4. Fixes: Because iconv/recode tools are not fully implemented in regards 
-to transliteration to latin-1 (e.g. no good support 
-for Greek and Cyrillic/Serbian characters), 
-the transliteration_table.cpp file is patched with 
-transliteration_table.cpp.patch which provides fixes written by hand.
+to transliteration to latin-1 (e.g. no good support for Greek and 
+Cyrillic/Serbian characters), the transliteration_table.cpp file is patched.
+The original table computer-generated table is available in
+transliteration_table.cpp.orig.bz2 file.
 
-If you find invalid or missing transliterations:
- a) edit transliteration_table.cpp (using UTF-8-compliant text editor!)
-   - if transliteration_table.cpp file does not exist, 
-   extract it from transliteration_table.bz2 archive
- b) run update_transliteration_table_patch.sh shell script,
-   what will update the transliteration_table.cpp.patch file
- c) send the transliteration_table.cpp.patch file to the Kexi team
+If you find invalid or missing transliterations, please edit
+transliteration_table.cpp (using UTF-8-compliant text editor, e.g. Kate).
+Then please send the transliteration_table.cpp file to the Kexi Team.
 
 5. Credits
- Jarosław Staniek <staniek at kde.org>
+ Jaroslaw Staniek <staniek at kde.org>
  Michael Drueing <michael at drueing.de>
  Chusslove Illich <caslav.ilic at gmx.net>
  Michal Svec <rebel at atrey.karlin.mff.cuni.cz>
