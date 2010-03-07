@@ -542,10 +542,6 @@ void KWDocument::clear()
 bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 {
     clear();
-    foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, true);
-    }
     KWOdfLoader loader(this);
     bool rc = loader.load(odfStore);
     if (rc)
@@ -555,10 +551,6 @@ bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 
 bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
-    foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->resourceManager()->setResource(KoCanvasResource::DocumentIsLoading, true);
-    }
     clear();
     KoXmlElement root = doc.documentElement();
     KWDLoader loader(this, store);
