@@ -4,7 +4,7 @@
 
 
 #include "transliteration_table.h"
-const char *const transliteration_table[TRANSLITERATION_TABLE_SIZE + 1] = {
+static const char *const g_transliteration_table[TRANSLITERATION_TABLE_SIZE + 1] = {
 
 
 /*0000*/0/*_*/,0/*_*/,0/*_*/,0/*_*/,0/*_*/,0/*_*/,0/*_*/,0/*_*/,
@@ -8198,4 +8198,6 @@ const char *const transliteration_table[TRANSLITERATION_TABLE_SIZE + 1] = {
 /*ffe0*/0/*￠*/,0/*￡*/,0/*￢*/,0/*￣*/,0/*￤*/,0/*￥*/,0/*￦*/,0/*￧*/,
 /*ffe8*/0/*￨*/,0/*￩*/,0/*￪*/,0/*￫*/,0/*￬*/,0/*￭*/,0/*￮*/,0/*￯*/,
 /*fff0*/0/*￰*/,0/*￱*/,0/*￲*/,0/*￳*/,0/*￴*/,0/*￵*/,0/*￶*/,0/*￷*/,
-/*fff8*/0/*￸*/,0/*￹*/,0/*￺*/,0/*￻*/,0/*￼*/,0/*�*/,0/*￾*/,0};
+/*fff8*/0/*￸*/,0/*￹*/,0/*￺*/,0/*￻*/,0/*￼*/,0/*�*/,0/*�*/,0};
+
+const char* const* transliteration_table() { return g_transliteration_table; }

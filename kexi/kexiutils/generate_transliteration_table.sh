@@ -27,7 +27,7 @@ out_cpp="transliteration_table.cpp.orig"
 out_h="transliteration_table.h"
 max=65534
 
-decl="const char *const transliteration_table[TRANSLITERATION_TABLE_SIZE + 1]"
+decl="const char *const transliteration_table"
 
 header=\
 "/* Transliteration table of `expr $max + 1` unicode characters
@@ -37,12 +37,12 @@ header=\
 "
 echo "$header
 #define TRANSLITERATION_TABLE_SIZE `expr $max + 1`
-extern $decl;
+const char* const* transliteration_table();
 " > $out_h
 
 echo "$header
 #include \"$out_h\"
-$decl = {
+static const char *const g_transliteration_table[TRANSLITERATION_TABLE_SIZE + 1] = {
 " > $out_cpp
 
 for i in `seq 0 $max` ; do
@@ -72,6 +72,9 @@ while read i && read f && read ch; do
 	fi
 done >> $out_cpp
 
-echo "0};" >> $out_cpp;
+echo "0};
+
+const char* const* transliteration_table() { return g_transliteration_table; }
+" >> $out_cpp;
 
 bzip2 -9 $out_cpp || exit 1

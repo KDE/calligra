@@ -48,7 +48,7 @@ inline QString char2Identifier(const QChar& c)
 {
     if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
         return QString(QChar('_'));
-    const char *const s = transliteration_table[c.unicode()];
+    const char *const s = transliteration_table()[c.unicode()];
     return s ? QString::fromLatin1(s) : QString(QChar('_'));
 }
 

@@ -4,5 +4,5 @@
 
 
 #define TRANSLITERATION_TABLE_SIZE 65535
-extern const char *const transliteration_table[TRANSLITERATION_TABLE_SIZE + 1];
+const char* const* transliteration_table();
 
