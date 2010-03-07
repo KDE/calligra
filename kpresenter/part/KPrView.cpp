@@ -167,9 +167,11 @@ void KPrView::initActions()
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
     KAction* action = new KAction( i18n( "From Current Slide" ), 
 this );
+    action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
     action = new KAction( i18n( "From First Slide" ), this );
+    action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
 
