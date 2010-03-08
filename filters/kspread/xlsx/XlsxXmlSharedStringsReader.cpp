@@ -146,8 +146,8 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
     TRY_READ_ATTR_WITHOUT_NS(count)
 //! @todo use uniqueCount attr?
 //    TRY_READ_ATTR_WITHOUT_NS(uniqueCount)
-    bool ok;
-    const uint countNumber = count.toUInt(&ok);
+    bool ok = true;
+    const uint countNumber = count.isEmpty() ? 0 : count.toUInt(&ok);
     if (!ok) {
         raiseUnexpectedAttributeValueError(count, "sst@count");
         return KoFilter::WrongFormat;
