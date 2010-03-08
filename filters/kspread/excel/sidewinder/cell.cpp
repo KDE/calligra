@@ -71,6 +71,8 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
 
 Cell::~Cell()
 {
+    qDeleteAll(d->pictures);
+    qDeleteAll(d->charts);
     delete d;
 }
 
