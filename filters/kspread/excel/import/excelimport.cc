@@ -1531,6 +1531,17 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         //style.addProperty("draw:fill-color", "#ff0000");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
 
+        //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
+        foreach(ChartObject::Text* t, chart->texts) {
+            bodyWriter->startElement("chart:title");
+            //bodyWriter->addAttribute("svg:x", );
+            //bodyWriter->addAttribute("svg:y", );
+            bodyWriter->startElement("text:p");
+            bodyWriter->addTextNode( string(t->text) );
+            bodyWriter->endElement(); // text:p
+            bodyWriter->endElement(); // chart:title
+        }
+
         //<chart:legend chart:legend-position="end" svg:x="7.031cm" svg:y="2.843cm" chart:style-name="ch2"/>
         bodyWriter->startElement("chart:legend");
         bodyWriter->addAttribute("chart:legend-position", "end");

@@ -270,6 +270,22 @@ public:
         virtual const char* name() const { return "circle"; }
     };
 
+    class Obj
+    {
+    public:
+        unsigned int mdTopLt, mdBotRt, x1, y1, x2, y2;
+        explicit Obj() {}
+        virtual ~Obj() {}
+    };
+
+    class Text : public Obj
+    {
+    public:
+        UString text;
+        explicit Text() : Obj() {}
+        virtual ~Text() {}
+    };
+
     class Series
     {
     public:
@@ -287,6 +303,11 @@ public:
         QMap<Value::DataId, Value*> datasetValue;
         /// The formatting for the referenced values
         QList<Format*> datasetFormat;
+        /// List of text records attached to the series.
+        //QHash<QList<Text*> > texts;
+
+        explicit Series() {}
+        ~Series() { qDeleteAll(datasetValue); qDeleteAll(datasetFormat); }
     };
 
     /// Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
@@ -298,6 +319,9 @@ public:
     /// List of series
     QList<Series*> series;
 
+    /// List of text records attached to the chart.
+    QList<Text*> texts;
+
     /// Range of all referenced cells.
     QRect cellRangeAddress;
     /// Range that contains the vertical values (the categories) for the plot-area.
@@ -307,7 +331,7 @@ public:
     ChartImpl *impl;
 
     explicit ChartObject(unsigned long id) : Object(Chart, id), x(-1), y(-1), width(-1), height(-1), leftMargin(0), topMargin(0), rightMargin(0), bottomMargin(0), impl(0) {}
-    virtual ~ChartObject() {}
+    virtual ~ChartObject() { qDeleteAll(series); qDeleteAll(texts); delete impl; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }
 };

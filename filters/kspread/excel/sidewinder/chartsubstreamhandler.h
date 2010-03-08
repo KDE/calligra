@@ -54,6 +54,7 @@ private:
     ChartObject* m_chart;
     Sheet* m_sheet;
     ChartObject::Series* m_currentSeries;
+    ChartObject::Obj* m_currentObj;
     int m_level;
     
     void handleBOF(BOFRecord*);

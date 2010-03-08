@@ -120,7 +120,7 @@ const unsigned BRAIRecord::id = 0x1051;
 using namespace Swinder;
 
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(0), m_sheet(0), m_currentSeries(0), m_level(0)
+    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(0), m_sheet(0), m_currentSeries(0), m_currentObj(0), m_level(0)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
@@ -510,21 +510,29 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
-    //TODO
+    m_currentObj = new ChartObject::Text;
 }
 
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if(!record) return;
     DEBUG << "text=" << record->text() << std::endl;
-    //TODO
+    if(ChartObject::Text *t = dynamic_cast<ChartObject::Text*>(m_currentObj))
+        t->text = record->text();
 }
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
 {
     if(!record) return;
     DEBUG << "mdTopLt=" << record->mdTopLt() << " mdBotRt=" << record->mdBotRt() << " x1=" << record->x1() << " y1=" << record->y1() << " x2=" << record->x2() << " y2=" << record->y2() << std::endl;
-    //TODO
+    if(m_currentObj) {
+        m_currentObj->mdBotRt = record->mdBotRt();
+        m_currentObj->mdTopLt = record->mdTopLt();
+        m_currentObj->x1 = record->x1();
+        m_currentObj->y1 = record->y1();
+        m_currentObj->x2 = record->x2();
+        m_currentObj->y2 = record->y2();
+    }
 }
 
 void ChartSubStreamHandler::handleFontX(FontXRecord *record)
@@ -607,12 +615,26 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
 {
     if(!record) return;
     DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
-    if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->series.count()) return;
 
-    //if(record->wLinkObj() == ObjectLinkRecord::SeriesOrDatapoints) {
-    //    ChartObject::Series* series = m_chart->series[record->wLinkVar1()];
-    //    series->category[record->wLinkVar2()];
-    //    TODO
-    //}
+    ChartObject::Text *t = dynamic_cast<ChartObject::Text*>(m_currentObj);
+    if(!t) return;
 
+    switch(record->wLinkObj()) {
+        case ObjectLinkRecord::EntireChart: {
+            m_chart->texts << t;
+        } break;
+        case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
+        case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
+        case ObjectLinkRecord::SeriesOrDatapoints: {
+            if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->series.count()) return;
+            ChartObject::Series* series = m_chart->series[ record->wLinkVar1() ];
+            if(record->wLinkVar2() == 0xFFFF) {
+                //TODO series->texts << t;
+            } else {
+                //TODO series->category[record->wLinkVar2()];
+            }
+        } break;
+        case ObjectLinkRecord::SeriesAxis: break; //TODO
+        case ObjectLinkRecord::DisplayUnitsLabelsOfAxis: break; //TODO
+    }
 }
