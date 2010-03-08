@@ -427,14 +427,17 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
 {
     if(!record) return;
     DEBUG << std::endl;
-    //TODO
+
+
+
 }
 
 // specifies that chart is rendered in 3d scene
 void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 {
     if(!record) return;
-    DEBUG << std::endl;
+    DEBUG << "anRot=" << record->anRot() << " anElev=" << record->anElev() << " pcDist=" << record->pcDist() << " pcHeight=" << record->pcHeight() << " pcDepth=" << record->pcDepth() << std::endl;
+    m_chart->is3d = true;
     //TODO
 }
 

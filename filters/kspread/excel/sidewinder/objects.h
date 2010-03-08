@@ -312,6 +312,9 @@ public:
 
     /// Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
     int x, y, width, height;
+    /// If true then the chart is a 3d chart else teh chart is 2d.
+    bool is3d;
+    //int anRot, anElv, pcDist;
 
     /// Margins around the chart object
     int leftMargin, topMargin, rightMargin, bottomMargin;
@@ -330,7 +333,7 @@ public:
     /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
     ChartImpl *impl;
 
-    explicit ChartObject(unsigned long id) : Object(Chart, id), x(-1), y(-1), width(-1), height(-1), leftMargin(0), topMargin(0), rightMargin(0), bottomMargin(0), impl(0) {}
+    explicit ChartObject(unsigned long id) : Object(Chart, id), x(-1), y(-1), width(-1), height(-1), is3d(false), leftMargin(0), topMargin(0), rightMargin(0), bottomMargin(0), impl(0) {}
     virtual ~ChartObject() { qDeleteAll(series); qDeleteAll(texts); delete impl; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }

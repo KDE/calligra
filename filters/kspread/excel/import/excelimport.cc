@@ -1549,6 +1549,20 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 
         bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 
+        if(chart->is3d) {
+            //bodyWriter->addAttribute("dr3d:transform", "matrix (0.893670830886674 0.102940425033731 -0.436755898547686 -0.437131441492021 0.419523087196176 -0.795560483036015 0.101333848646097 0.901888933407692 0.419914042293545 0cm 0cm 0cm)");
+            //bodyWriter->addAttribute("dr3d:vrp", "(12684.722548717 7388.35827488833 17691.2795565958)");
+            //bodyWriter->addAttribute("dr3d:vpn", "(0.416199821709347 0.173649045905254 0.892537795986984)");
+            //bodyWriter->addAttribute("dr3d:vup", "(-0.0733876362771618 0.984807599917971 -0.157379306090273)");
+            //bodyWriter->addAttribute("dr3d:projection", "parallel");
+            //bodyWriter->addAttribute("dr3d:distance", "4.2cm");
+            //bodyWriter->addAttribute("dr3d:focal-length", "8cm");
+            //bodyWriter->addAttribute("dr3d:shadow-slant", "0");
+            //bodyWriter->addAttribute("dr3d:shade-mode", "flat");
+            //bodyWriter->addAttribute("dr3d:ambient-color", "#b3b3b3");
+            //bodyWriter->addAttribute("dr3d:lighting-mode", "true");
+        }
+
         KoGenStyle chartstyle(KoGenStyle::StyleChartAuto, "chart");
         //chartstyle.addProperty("chart:connect-bars", "false");
         //chartstyle.addProperty("chart:include-hidden-cells", "false");
@@ -1557,6 +1571,11 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
         //chartstyle.addProperty("chart:series-source", "rows");
         //chartstyle.addProperty("chart:sort-by-x-values", "false");
         //chartstyle.addProperty("chart:right-angled-axes", "true");
+        if(chart->is3d)
+            chartstyle.addProperty("chart:three-dimensional", "true");
+        //chartstyle.addProperty("chart:angle-offset", "90");
+        //chartstyle.addProperty("chart:series-source", "rows");
+        //chartstyle.addProperty("chart:right-angled-axes", "false");
         bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
 
         const QString verticalCellRangeAddress = normalizeCellRange(string(chart->verticalCellRangeAddress));
