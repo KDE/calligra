@@ -181,7 +181,9 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
     if ( !labelData )
         return false;
 
-    label->loadOdf( labelElement, context );
+    // Following will always return false cause KoTextShapeData::loadOdf will try to load
+    // a frame while our text:p is not within a frame. So, let's just not call loadOdf then...
+    //label->loadOdf( labelElement, context );
 
     // TODO: Read optional attributes
     // 1. Table range
@@ -189,8 +191,6 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
                                                  KoXmlNS::text, "p" );
 
     labelData->document()->setPlainText( pElement.text() );
-
-    label->setVisible( true );
 
     return true;
 }
@@ -1145,40 +1145,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
         return false;
     }
 
-    // 2. Load the title.
-    KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
-                                                 KoXmlNS::chart, "title" );
-    if ( !titleElem.isNull() ) {
-        if ( !loadOdfLabel( d->title, titleElem, context) )
-            return false;
-    }
-
-    // 3. Load the subtitle.
-    KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement,
-                                                    KoXmlNS::chart, "subtitle" );
-    if ( !subTitleElem.isNull() ) {
-        if ( !loadOdfLabel( d->subTitle, subTitleElem, context) )
-            return false;
-    }
-
-    // 4. Load the footer.
-    KoXmlElement footerElem = KoXml::namedItemNS( chartElement,
-                                                  KoXmlNS::chart, "footer" );
-    if ( !footerElem.isNull() ) {
-        if ( !loadOdfLabel( d->footer, footerElem, context ) )
-            return false;
-    }
-
-    // 5. Load the legend.
-    KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
-                          "legend" );
-    if ( !legendElem.isNull() ) {
-        if ( !d->legend->loadOdf( legendElem, context ) )
-            return false;
-    }
-    d->legend->update();
-
-    // 6. Load the data
+    // 2. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
@@ -1186,13 +1153,49 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
             return false;
     }
 
-    // 7. Load the plot area (this is where the meat is!).
+    // 3. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;
     }
+
+    // 4. Load the title.
+    KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
+                                                 KoXmlNS::chart, "title" );
+    if ( !titleElem.isNull() ) {
+        if ( !loadOdfLabel( d->title, titleElem, context) )
+            return false;
+        d->showLabel(d->title);
+    }
+
+    // 5. Load the subtitle.
+    KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement,
+                                                    KoXmlNS::chart, "subtitle" );
+    if ( !subTitleElem.isNull() ) {
+        if ( !loadOdfLabel( d->subTitle, subTitleElem, context) )
+            return false;
+        d->showLabel(d->subTitle);
+    }
+
+    // 6. Load the footer.
+    KoXmlElement footerElem = KoXml::namedItemNS( chartElement,
+                                                  KoXmlNS::chart, "footer" );
+    if ( !footerElem.isNull() ) {
+        if ( !loadOdfLabel( d->footer, footerElem, context ) )
+            return false;
+        d->showLabel(d->footer);
+    }
+
+    // 7. Load the legend.
+    KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
+                          "legend" );
+    if ( !legendElem.isNull() ) {
+        if ( !d->legend->loadOdf( legendElem, context ) )
+            return false;
+    }
+    d->legend->update();
 
     requestRepaint();
 
