@@ -83,7 +83,7 @@ public:
             ActualEffort *takeEffort( const QDate &date ) { return m_actual.take( date ); }
             /// Returns the total effort for all registered dates
             Duration effort() const;
-            const QMap<QDate, ActualEffort*> &actualEffortMap() const { return m_actual; }
+            QMap<QDate, ActualEffort*> actualEffortMap() const { return m_actual; }
             
             /// Load from document
             bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
@@ -293,7 +293,7 @@ public:
     const Completion &completion() const;
 
     void addLogEntry( DateTime &dt, const QString &str );
-    const QMap<DateTime, QString> &log() const;
+    QMap<DateTime, QString> log() const;
     QStringList log();
 
     /// Return a list of resources fetched from the appointements or requests

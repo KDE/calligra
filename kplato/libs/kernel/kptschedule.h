@@ -118,10 +118,10 @@ public:
     /// Return calculation mode
     int calculationMode() const { return m_calculationMode; }
     /// Return the list of appointments
-    QList<Appointment*> &appointments() { return m_appointments; }
+    QList<Appointment*> appointments() const { return m_appointments; }
     /// Return the list of appointments
     /// @param which specifies which list is returned
-    QList<Appointment*> &appointments( int which);
+    QList<Appointment*> appointments(int which) const;
     /// Adds appointment to this schedule only
     virtual bool add( Appointment *appointment );
     /// Adds appointment to both this resource schedule and node schedule
@@ -470,8 +470,7 @@ public:
     }
     void addCriticalPathNode( Node *node );
     
-    QList<Schedule::Log> logs();
-    const QList<Schedule::Log> &logs() const;
+    QList<Schedule::Log> logs() const;
     virtual void addLog( Schedule::Log &log );
     virtual void clearLogs() { m_log.clear(); m_logPhase.clear(); }
     
@@ -536,7 +535,7 @@ public:
     
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
-    const QList<ScheduleManager*> &children() const { return m_children; }
+    QList<ScheduleManager*> children() const { return m_children; }
     int childCount() const { return m_children.count(); }
     ScheduleManager *childAt( int index ) const { return m_children.value( index ); }
     /// Return list of all child managers (also childrens children)

@@ -400,7 +400,7 @@ public:
     Schedule *currentSchedule() const { return m_currentSchedule; }
 
     bool isScheduled() const;
-    QHash<long, Schedule*> &schedules() { return m_schedules; }
+    QHash<long, Schedule*> schedules() const { return m_schedules; }
     /**
      * Return schedule with @id
      * If @id == -1, return m_currentSchedule
@@ -624,7 +624,7 @@ public:
     ResourceGroup *group() const { return m_group; }
     void setGroup( ResourceGroup *group ) { m_group = group; }
     void unregister( const ResourceGroup *group ) { if ( group == m_group ) m_group = 0; }
-    QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
+    QList<ResourceRequest*> resourceRequests() { return m_resourceRequests; }
     void addResourceRequest( ResourceRequest *request );
     void deleteResourceRequest( ResourceRequest *request );
     int count() const { return m_resourceRequests.count(); }
@@ -707,7 +707,7 @@ public:
     explicit ResourceRequestCollection( Task *task = 0 );
     ~ResourceRequestCollection();
 
-    const QList<ResourceGroupRequest*> &requests() const { return m_requests; }
+    QList<ResourceGroupRequest*> requests() const { return m_requests; }
     void addRequest( ResourceGroupRequest *request );
     void deleteRequest( ResourceGroupRequest *request )
     {

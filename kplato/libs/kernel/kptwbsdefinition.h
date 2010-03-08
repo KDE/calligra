@@ -76,7 +76,7 @@ public:
     bool level0Enabled() const;
     void setLevelsDefEnabled(bool on) { m_levelsEnabled = on; }
     void clearLevelsDef() { m_levelsDef.clear(); }
-    const QMap<int, CodeDef> &levelsDef() const { return m_levelsDef; }
+    QMap<int, CodeDef> levelsDef() const { return m_levelsDef; }
     void setLevelsDef(QMap<int, CodeDef> def);
     CodeDef levelsDef(int level) const;
     void setLevelsDef(int level, CodeDef def);

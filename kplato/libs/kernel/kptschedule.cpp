@@ -433,7 +433,7 @@ DateTime Schedule::appointmentEndTime() const
     return dt;
 }
 
-QList<Appointment*> &Schedule::appointments( int which)
+QList<Appointment*> Schedule::appointments( int which ) const
 {
     if ( which == CalculateForward ) {
         return m_forward;
@@ -1310,12 +1310,7 @@ void MainSchedule::addCriticalPathNode( Node *node )
     m_currentCriticalPath->append( node );
 }
 
-QList<Schedule::Log> MainSchedule::logs()
-{
-    return m_log;
-}
-
-const QList<Schedule::Log> &MainSchedule::logs() const
+QList<Schedule::Log> MainSchedule::logs() const
 {
     return m_log;
 }
