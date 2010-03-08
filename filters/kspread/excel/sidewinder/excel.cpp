@@ -1803,12 +1803,12 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     if(recType == 0xF001) {
         blipStoreOffset += 8;
         for(uint i = 0; i < recInstance; ++i) {
-            if(blipStoreOffset-data < 8) return;
+            if(blipStoreOffset-data-size < 8) return;
             unsigned long blibRecLen = 0;
             readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
             const unsigned char* blipItemOffset = blipStoreOffset + 8;
             if(recType == 0xF007) { // OfficeArtFBSE
-                if(blipItemOffset+44-data < 0) return;
+                if(blipItemOffset+44-data-size < 0) return;
                 std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
                 const unsigned btWin32 = readU8(blipItemOffset);
                 //const unsigned btMacOS = readU8(blipItemOffset + 1);
@@ -1851,6 +1851,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             }
 
             // OfficeArtBlip
+            if(blipItemOffset+16*8+data-size < 0) return;
 
             char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
             for(int i = 0; i < 16; ++i)
@@ -1919,11 +1920,11 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     }
 
     // drawingPrimaryOptions
-    if(blipStoreOffset-data < 8) return;
+    if(blipStoreOffset-data-size < 8) return;
     blipStoreOffset += handleObject(size, blipStoreOffset);
 
     // drawingTertiaryOptions
-    if(blipStoreOffset-data < 8) return;
+    if(blipStoreOffset-data-size < 8) return;
     blipStoreOffset += handleObject(size, blipStoreOffset);
 
     // colorMRU
