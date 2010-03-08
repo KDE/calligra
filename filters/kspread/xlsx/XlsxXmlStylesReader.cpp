@@ -744,9 +744,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(fonts)
-            TRY_READ_IF(fills)
-            TRY_READ_IF(numFmts)
-            TRY_READ_IF(cellXfs)
+            ELSE_TRY_READ_IF(fills)
+            ELSE_TRY_READ_IF(numFmts)
+            ELSE_TRY_READ_IF(cellXfs)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
