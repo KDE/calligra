@@ -122,7 +122,7 @@
 //! Must be enclosed within if (isStartElement()), otherwise error will be returned.
 #define TRY_READ_IF(name) \
     if (!isStartElement()) { /* sanity check */ \
-        raiseError(i18n("Start element expected, found %1", QLatin1String(STRINGIFY(name)))); \
+        raiseError(i18n("Start element \"%1\" expected, found \"%2\"", QLatin1String(STRINGIFY(name)), tokenString())); \
         return KoFilter::WrongFormat; \
     } \
     TRY_READ_IF_INTERNAL(name)
@@ -140,7 +140,7 @@
 //! Like TRY_READ_IF() but namespace for explicit namespace @a ns.
 #define TRY_READ_IF_NS(ns, name) \
     if (!isStartElement()) { /* sanity check */ \
-        raiseError(i18n("Start element expected, found %1", QLatin1String(JOIN(STRINGIFY(ns) ":", name)))); \
+        raiseError(i18n("Start element \"%1\" expected, found \"%2\"", QLatin1String(JOIN(STRINGIFY(ns) ":", name)), tokenString())); \
         return KoFilter::WrongFormat; \
     } \
     else TRY_READ_IF_NS_INTERNAL(ns, name)
