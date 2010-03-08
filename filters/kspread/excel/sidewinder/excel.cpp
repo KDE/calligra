@@ -1767,7 +1767,7 @@ void MsoDrawingGroupRecord::dump(std::ostream& out) const
 void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     //printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data, *continuePositions);
-    if(size < 8 || !m_workbook->store()) {
+    if(size < 32 || !m_workbook->store()) {
         setIsValid(false);
         return;
     }
@@ -1799,6 +1799,10 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     
     // blipStore
     const unsigned char* blipStoreOffset = data + 16 + recLen;
+    if(blipStoreOffset-data-size < 8) {
+        setIsValid(false);
+        return;
+    }
     readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &recLen);
     if(recType == 0xF001) {
         blipStoreOffset += 8;
@@ -1851,7 +1855,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             }
 
             // OfficeArtBlip
-            if(blipItemOffset+16*8+data-size < 0) return;
+            if(blipItemOffset-data-size < 16*8) return;
 
             char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
             for(int i = 0; i < 16; ++i)
