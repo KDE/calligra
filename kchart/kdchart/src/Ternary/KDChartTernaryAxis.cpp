@@ -206,11 +206,11 @@ bool TernaryAxis::hasDefaultTitleTextAttributes() const
 void TernaryAxis::updatePrerenderedLabels()
 {
     TextAttributes attributes = titleTextAttributes();
-    double axisLabelAngle;
-    double fiftyMarkAngle;
+    double axisLabelAngle = 0.0;
+    double fiftyMarkAngle = 0.0;
     QPointF axisLabelPosition;
-    QPointF fiftyMarkPosition;
-    KDChartEnums::PositionValue fiftyMarkReferencePoint;
+    QPointF fiftyMarkPosition(0.0, 0.0);
+    KDChartEnums::PositionValue fiftyMarkReferencePoint = KDChartEnums::PositionUnknown;
 
     switch( position().value() ) {
     case KDChartEnums::PositionSouth:
