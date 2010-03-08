@@ -1630,7 +1630,7 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 
             foreach(ChartObject::Format* f, series->datasetFormat) {
                 if(ChartObject::PieFormat* pieformat = dynamic_cast<ChartObject::PieFormat*>(f))
-                    if(pieformat->pcExplode > 0)
+                    if(pieformat->pcExplode != 0)
                         bodyWriter->addAttribute("chart:pie-offset", pieformat->pcExplode);
             }
 

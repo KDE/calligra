@@ -250,7 +250,7 @@ public:
     {
     public:
         int pcExplode; // from PieFormat
-        PieFormat(int pcExplode) : Format(), pcExplode(pcExplode) {}
+        PieFormat(int pcExplode = 0) : Format(), pcExplode(pcExplode) {}
     };
 
     class ChartImpl
