@@ -1628,6 +1628,13 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 
             //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
+            foreach(ChartObject::Format* f, series->datasetFormat) {
+                if(ChartObject::PieFormat* pieformat = dynamic_cast<ChartObject::PieFormat*>(f))
+                    if(pieformat->pcExplode > 0)
+                        bodyWriter->addAttribute("chart:pie-offset", pieformat->pcExplode);
+            }
+
+
             const QString valuesCellRangeAddress = normalizeCellRange(string(series->valuesCellRangeAddress));
             if(!valuesCellRangeAddress.isEmpty())
                 bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
