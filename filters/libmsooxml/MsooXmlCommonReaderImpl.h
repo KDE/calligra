@@ -909,7 +909,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
+        //break;   // Why was this here?
     }
 
     READ_EPILOGUE
