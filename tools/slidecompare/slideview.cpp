@@ -239,18 +239,23 @@ void SlideView::toggleSlideZoom(const GraphicsSlideItem* item) {
     // is already active, then zoom to level 0.25 in the range of the clicked
     // slide
     // this function does not work well, the behavior of the scrollbar is a
-    // mystery
+    // mystery, but the magic dance seems to work ok so far
     QScrollBar* sb = view.verticalScrollBar();
     int offset = 2;
     qreal y = item->boundingRect().top();
+    qDebug() << y << " " << sb->value();
     if (zoomfactor == 1
-            && (qAbs(y - sb->value()) <= offset
+            && (qAbs(y - sb->value()) <= offset+1
                 || sb->value()+1 >= sb->maximum())) {
         zoomfactor = 0.25;
     } else {
         zoomfactor = 1;
     }
     layout();
+    // magic dance
+    layout();
+    view.mapToScene(0, 0).y();
+    // end of magic dance
     y = item->boundingRect().top();
     view.verticalScrollBar()->setValue(y - offset); // small offset looks nice
 }

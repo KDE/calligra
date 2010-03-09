@@ -10,7 +10,7 @@ main(int argc, char** argv) {
 //    QPixmapCache::setCacheLimit(100000);
 
     CombinedView cv;
-    cv.resize(640, 480);
+    cv.resize(630, 410);
     cv.show();
     if (argc > 1) {
         qDebug() << "opening " << argv[1];
