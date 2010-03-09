@@ -19,6 +19,8 @@
 #include "kpresenterslideloader.h"
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
+#include <KDE/KPluginFactory>
+#include <KDE/KStandardDirs>
 #include <KDE/KMimeType>
 #include <KDE/KParts/ComponentFactory>
 #include <QtCore/QDebug>
@@ -51,19 +53,16 @@ KPresenterSlideLoader::open(const QString& path)
     QString mimetype = KMimeType::findByPath(path)->name();
 
     int errorCode = 0;
-    KoDocument* kodoc
-            = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>(
-                mimetype, QString(),
-                0, 0, QStringList(),
-                &errorCode);
-    KoPADocument* doc = dynamic_cast<KoPADocument*>(kodoc);
-    m_doc = doc;
-    if (!m_doc) {
-        qDebug() << "could not create KoDocument";
-        delete doc;
+    KComponentData cd("KPresenterSlideLoader", QByteArray(),
+                      KComponentData::SkipMainComponentRegistration);
+    KPluginFactory *factory = KPluginLoader("libkpresenterpart", cd).factory();
+    if (!factory) {
+        qDebug() << "could not load libkpresenterpart";
         closeDocument();
         return;
     }
+    KoPADocument* doc = factory->create<KoPADocument>();
+    m_doc = doc;
     KUrl url;
     url.setPath(path);
     doc->setCheckAutoSaveFile(false);
