@@ -58,7 +58,6 @@ KPresenterSlideLoader::open(const QString& path)
     doc->setReadWrite(false);
     doc->setAutoSave(0);
     emit slidesChanged();
-    qDebug() << "slide size " << slideSize();
 }
 int
 KPresenterSlideLoader::numberOfSlides() {

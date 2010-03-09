@@ -5,7 +5,9 @@
 #include "oothread.h"
 #include <PptToOdp.h>
 #include <QtGui/QGridLayout>
+#include <QtGui/QDragEnterEvent>
 #include <QtCore/QCoreApplication>
+#include <KDE/KMimeType>
 
 CombinedView::CombinedView(QWidget* parent) :QWidget(parent),
         ooodploader(new DirSlideLoader(this)),
@@ -43,6 +45,7 @@ CombinedView::CombinedView(QWidget* parent) :QWidget(parent),
         this, SLOT(slotHandleOoOdp(QString)));
     connect(oothread, SIGNAL(toPngDone(QString)),
         this, SLOT(slotHandleOoPng(QString)));
+    setAcceptDrops(true);
 }
 
 CombinedView::~CombinedView() {
@@ -118,5 +121,26 @@ CombinedView::slotHandleOoPng(const QString& /*path*/) {
             koodploader->slideSize().width());
         oopptloader->setSlideDir(dir);
         nextodpfile = "";
+    }
+}
+void CombinedView::dragEnterEvent(QDragEnterEvent *event)
+{
+    foreach (const QUrl& url, event->mimeData()->urls()) {
+        const QString path(url.toLocalFile());
+        if (path.isEmpty()) { // url is not local
+            event->acceptProposedAction();
+        } else {
+            QString mimetype = KMimeType::findByUrl(url)->name();
+            if (mimetype == "application/vnd.oasis.opendocument.presentation"
+                || mimetype == "application/vnd.ms-powerpoint") {
+                event->acceptProposedAction();
+            }
+        }
+    }
+}
+void CombinedView::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->urls().size()) {
+        openFile(event->mimeData()->urls().first().toLocalFile());
     }
 }

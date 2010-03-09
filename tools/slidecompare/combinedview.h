@@ -6,8 +6,8 @@
 class SlideView;
 class DirSlideLoader;
 class KPresenterSlideLoader;
-class QGridLayout;
 class OoThread;
+class QGridLayout;
 
 class CombinedView : public QWidget {
 private:
@@ -26,6 +26,8 @@ Q_OBJECT
     QString ooodpresult;
     QString nextodpfile;
 
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
     void addSlideView(SlideView* slideview);
 private slots:
     void slotSetView(qreal zoomFactor, int h, int v);

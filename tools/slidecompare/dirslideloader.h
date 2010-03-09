@@ -105,7 +105,7 @@ private slots:
                 }
             }
         } else {
-            QRegExp pattern(slideNamePattern.replace("%1", "(\\d+)"));
+            QRegExp pattern(QString(slideNamePattern).replace("%1", "(\\d+)"));
             foreach (const QString& name, dir.entryList()) {
                 if (pattern.indexIn(name) != -1) {
                     bool ok;

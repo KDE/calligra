@@ -259,3 +259,8 @@ void SlideView::toggleSlideZoom(const GraphicsSlideItem* item) {
     y = item->boundingRect().top();
     view.verticalScrollBar()->setValue(y - offset); // small offset looks nice
 }
+void SlideView::SlideGraphicsScene::dragEnterEvent(
+        QGraphicsSceneDragDropEvent *event)
+{
+    event->ignore();
+}

@@ -13,8 +13,12 @@ class SlideView : public QWidget {
 friend class GraphicsSlideItem;
 private:
     Q_OBJECT
+    class SlideGraphicsScene : public QGraphicsScene {
+    public:
+        void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    };
     QGraphicsView view;
-    QGraphicsScene scene;
+    SlideGraphicsScene scene;
     QProgressBar progressBar;
     SlideLoader* loader;
     qreal zoomfactor;

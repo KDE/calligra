@@ -1,7 +1,6 @@
 #include "combinedview.h"
 #include <QtGui/QApplication>
 #include <QtGui/QPixmap>
-#include <QtCore/QDebug>
 
 int
 main(int argc, char** argv) {
@@ -13,7 +12,6 @@ main(int argc, char** argv) {
     cv.resize(630, 410);
     cv.show();
     if (argc > 1) {
-        qDebug() << "opening " << argv[1];
         cv.openFile(argv[1]);
     }
     return app.exec();
