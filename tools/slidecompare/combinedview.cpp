@@ -25,6 +25,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QDragEnterEvent>
 #include <QtCore/QCoreApplication>
+#include <KDE/KMessageBox>
 #include <KDE/KMimeType>
 
 CombinedView::CombinedView(QWidget* parent) :QWidget(parent),
@@ -99,23 +100,38 @@ CombinedView::openFile(const QString& path) {
     // may be slow
     qApp->processEvents();
     oopptloader->setSlideDir("");
-    kopptloader->open("");
+    kopptloader->close();
+
+    if (!QFileInfo(path).exists()) {
+         KMessageBox::error(this,
+                       QString("File %1 does not exist.").arg(path));
+         return;
+    }
 
     if (!odp) {
         nextodpfile = koppttoodp(path);
+        if (!QFileInfo(nextodpfile).exists()) {
+            KMessageBox::error(this, QString(
+                    "File %1 cannot be converted by PptToOdp.").arg(path));
+            return;
+        }
         koodploader->open(nextodpfile);
     } else {
         nextodpfile = "";
         koodploader->open(path);
     }
+    quint32 nslides = koodploader->numberOfSlides();
+    if (nslides == 0) {
+        return;
+    }
     ooodploader->setSlideSize(koodploader->slideSize());
-    ooodploader->setNumberOfSlides(koodploader->numberOfSlides());
+    ooodploader->setNumberOfSlides(nslides);
 
     if (!odp) {
         // start conversion to odp
         ooodpresult = oothread->toOdp(path);
         oopptloader->setSlideSize(koodploader->slideSize());
-        oopptloader->setNumberOfSlides(koodploader->numberOfSlides());
+        oopptloader->setNumberOfSlides(nslides);
     } else {
         oopptloader->setNumberOfSlides(0);
     }
@@ -125,7 +141,6 @@ CombinedView::openFile(const QString& path) {
     // png
 
     // adapt zoom level to number of slides
-    quint32 nslides = koodploader->numberOfSlides();
     qreal zoomlevel = (nslides > 3 || nslides == 0) ?0.25 :1.0/nslides;
     ooodpview->setView(zoomlevel, 0, 0);
     koodpview->setView(zoomlevel, 0, 0);

@@ -28,7 +28,6 @@ private:
     const KoPADocument* m_doc;
     int version;
 
-    void closeDocument();
 public:
     KPresenterSlideLoader(QObject* parent = 0);
     ~KPresenterSlideLoader();
@@ -40,6 +39,7 @@ public:
     }
     QPixmap loadSlide(int number, const QSize& maxsize);
     void open(const QString& path);
+    void close();
 };
 
 #endif

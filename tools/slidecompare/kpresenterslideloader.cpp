@@ -31,9 +31,9 @@ KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(paren
 }
 
 KPresenterSlideLoader::~KPresenterSlideLoader() {
-    closeDocument();
+    close();
 }
-void KPresenterSlideLoader::closeDocument() {
+void KPresenterSlideLoader::close() {
     if (m_doc) {
         delete m_doc;
     }
@@ -45,20 +45,14 @@ void KPresenterSlideLoader::closeDocument() {
 void
 KPresenterSlideLoader::open(const QString& path)
 {
-    closeDocument();
-    if (path.isEmpty()) return;
-    // supported mimetypes
-    // "application/vnd.oasis.opendocument.presentation"
-    // "application/vnd.ms-powerpoint"
-    QString mimetype = KMimeType::findByPath(path)->name();
+    close();
 
-    int errorCode = 0;
     KComponentData cd("KPresenterSlideLoader", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
     KPluginFactory *factory = KPluginLoader("libkpresenterpart", cd).factory();
     if (!factory) {
         qDebug() << "could not load libkpresenterpart";
-        closeDocument();
+        close();
         return;
     }
     KoPADocument* doc = factory->create<KoPADocument>();
@@ -66,10 +60,10 @@ KPresenterSlideLoader::open(const QString& path)
     KUrl url;
     url.setPath(path);
     doc->setCheckAutoSaveFile(false);
-    doc->setAutoErrorHandlingEnabled(true);
+    doc->setAutoErrorHandlingEnabled(true); // show error dialogs
     if (!doc->openUrl(url)) {
         qDebug() << "could not open " << path;
-        closeDocument();
+        close();
         return;
     }
     doc->setReadWrite(false);
