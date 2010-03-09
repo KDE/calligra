@@ -1,9 +1,12 @@
 #
+# OOslidesToPngs.py
+# derived from
 # PyODConverter (Python OpenDocument Converter) v1.0.0 - 2008-05-05
 #
-# This script converts a document from one office format to another by
+# This script converts a presentation document to a set of png files
 # connecting to an OpenOffice.org instance via Python-UNO bridge.
 #
+# Copyright (C) 2010 Jos van den Oever
 # Copyright (C) 2008 Mirko Nasato <mirko@artofsolving.com>
 # Licensed under the GNU LGPL v2.1 - http://www.gnu.org/licenses/lgpl-2.1.html
 # - or any later version.
@@ -16,7 +19,7 @@ DEFAULT_OPENOFFICE_PORT = 8100
 import sys, os, getopt, time, traceback, subprocess, signal
 
 # this was needed to find uno
-sys.path.append("/usr/lib/ooo-2.0/program") 
+sys.path.append("/opt/openoffice.org3/program") 
 
 import uno
 from os.path import abspath, isfile, splitext
@@ -47,37 +50,6 @@ class UnoServer:
         if hasattr(self,'process'):
             os.kill(self.process.pid, signal.SIGKILL)
 
-FAMILY_TEXT = "Text"
-FAMILY_SPREADSHEET = "Spreadsheet"
-FAMILY_PRESENTATION = "Presentation"
-FAMILY_DRAWING = "Drawing"
-
-FILTER_MAP = {
-    "pdf": {
-        FAMILY_TEXT: "writer_pdf_Export",
-        FAMILY_SPREADSHEET: "calc_pdf_Export",
-        FAMILY_PRESENTATION: "impress_pdf_Export",
-        FAMILY_DRAWING: "draw_pdf_Export"
-    },
-    "html": {
-        FAMILY_TEXT: "HTML (StarWriter)",
-        FAMILY_SPREADSHEET: "HTML (StarCalc)",
-        FAMILY_PRESENTATION: "impress_html_Export"
-    },
-    "odt": { FAMILY_TEXT: "writer8" },
-    "doc": { FAMILY_TEXT: "MS Word 97" },
-    "rtf": { FAMILY_TEXT: "Rich Text Format" },
-    "txt": { FAMILY_TEXT: "Text" },
-    "ods": { FAMILY_SPREADSHEET: "calc8" },
-    "xls": { FAMILY_SPREADSHEET: "MS Excel 97" },
-    "odp": { FAMILY_PRESENTATION: "impress8" },
-    "ppt": { FAMILY_PRESENTATION: "MS PowerPoint 97" },
-    "swf": { FAMILY_PRESENTATION: "impress_flash_Export" }
-}
-# see http://wiki.services.openoffice.org/wiki/Framework/Article/Filter
-# for more available filters
-
-
 class DocumentConversionException(Exception):
 
     def __init__(self, message):
@@ -105,53 +77,27 @@ class DocumentConverter:
         self.desktop = context.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", context)
 
     def convert(self, inputFile, outputFile):
-
         inputUrl = self._toFileUrl(inputFile)
         outputUrl = self._toFileUrl(outputFile)
-
-        print inputUrl        
+        
         document = self.desktop.loadComponentFromURL(inputUrl, "_blank", 0, self._toProperties(Hidden=True))
         try:
           document.refresh()
         except AttributeError:
           pass
         
-        outputExt = self._getFileExt(outputFile)
-        filterName = self._filterName(document, outputExt)
-
         try:
-            document.storeToURL(outputUrl, self._toProperties(FilterName=filterName))
+            filterData = self._toProperties(
+                PublishMode=0, #html
+                Format=2, #png
+                Width=1024,
+                PageRange="1-1")
+            fD = uno.Any("[]com.sun.star.beans.PropertyValue", filterData)
+            document.storeToURL(outputUrl, self._toProperties(
+                FilterName="impress_html_Export",
+                FilterData=fD))
         finally:
             document.close(True)
-
-    def _filterName(self, document, outputExt):
-        family = self._detectFamily(document)
-        try:
-            filterByFamily = FILTER_MAP[outputExt]
-        except KeyError:
-            raise DocumentConversionException, "unknown output format: '%s'" % outputExt
-        try:
-            return filterByFamily[family]
-        except KeyError:
-            raise DocumentConversionException, "unsupported conversion: from '%s' to '%s'" % (family, outputExt)
-    
-    def _detectFamily(self, document):
-        if document.supportsService("com.sun.star.text.GenericTextDocument"):
-            # NOTE: a GenericTextDocument is either a TextDocument, a WebDocument, or a GlobalDocument
-            # but this further distinction doesn't seem to matter for conversions
-            return FAMILY_TEXT
-        if document.supportsService("com.sun.star.sheet.SpreadsheetDocument"):
-            return FAMILY_SPREADSHEET
-        if document.supportsService("com.sun.star.presentation.PresentationDocument"):
-            return FAMILY_PRESENTATION
-        if document.supportsService("com.sun.star.drawing.DrawingDocument"):
-            return FAMILY_DRAWING
-        raise DocumentConversionException, "unknown document family: %s" % document
-
-    def _getFileExt(self, path):
-        ext = splitext(path)[1]
-        if ext is not None:
-            return ext[1:].lower()
 
     def _toFileUrl(self, path):
         return uno.systemPathToFileUrl(abspath(path))
