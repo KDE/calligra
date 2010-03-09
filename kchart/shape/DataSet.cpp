@@ -103,13 +103,13 @@ public:
     bool penIsSet;
     // Determines whether brush has been set
     bool brushIsSet;
-    bool pieExplodeFactorIsSet;
     QPen pen;
     QBrush brush;
-    int pieExplodeFactor;
+    KDChart::PieAttributes pieAttributes;
+
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
-    QMap<int, int> pieExplodeFactors;
+    QMap<int, KDChart::PieAttributes> sectionsPieAttributes;
 
     int num;
 
@@ -541,6 +541,11 @@ QPen DataSet::pen( int section ) const
     return pen();
 }
 
+KDChart::PieAttributes DataSet::pieAttributes() const
+{
+    return d->pieAttributes;
+}
+
 QBrush DataSet::brush( int section ) const
 {
     if ( d->brushes.contains( section ) )
@@ -548,6 +553,13 @@ QBrush DataSet::brush( int section ) const
     if ( d->brushIsSet )
         return brush();
     return d->defaultBrush( section );
+}
+
+KDChart::PieAttributes DataSet::pieAttributes( int section ) const
+{
+    if( d->sectionsPieAttributes.contains( section ) )
+        return d->sectionsPieAttributes[ section ];
+    return pieAttributes();
 }
 
 void DataSet::setPen( const QPen &pen )
@@ -568,7 +580,9 @@ void DataSet::setBrush( const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int factor )
 {
-    d->pieExplodeFactor = factor;
+    KDChart::PieAttributes pieAttributes;
+    pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
+    d->pieAttributes = pieAttributes;
     if( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
 }
@@ -589,9 +603,11 @@ void DataSet::setBrush( int section, const QBrush &brush )
 
 void DataSet::setPieExplodeFactor( int section, int factor )
 {
-    d->pieExplodeFactors[ section ] = factor;
+    KDChart::PieAttributes pieAttributes;
+    pieAttributes.setExplodeFactor( (qreal)factor / (qreal)100 );
+    d->sectionsPieAttributes[ section ] = pieAttributes;
     if( d->kdChartModel )
-        d->kdChartModel->dataSetChanged(this, KDChartModel::ExplodeRole, section );
+        d->kdChartModel->dataSetChanged( this, KDChartModel::PieAttributesRole, section);
 }
 
 QColor DataSet::color() const
@@ -978,6 +994,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
 
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.save();
     styleStack.clear();
     odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
@@ -1023,6 +1040,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     }
 #endif
 
+    styleStack.restore();
     return true;
 }
 
@@ -1042,8 +1060,11 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             setPen( pen );
         if(brushLoaded)
             setBrush( brush );
+        styleStack.save();
+        styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
-            setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset"  ).toInt() );
+            setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
+        styleStack.restore();
     }
 
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {

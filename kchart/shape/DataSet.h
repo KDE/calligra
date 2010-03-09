@@ -26,6 +26,9 @@
 // Qt
 #include <QPen>
 
+//KDChart
+#include <KDChartPieAttributes>
+
 // KChart
 #include "ChartShape.h"
 #include "CellRegion.h"
@@ -70,8 +73,10 @@ public:
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
+    KDChart::PieAttributes pieAttributes() const;
     QPen   pen( int section ) const;
     QBrush brush( int section ) const;
+    KDChart::PieAttributes pieAttributes( int section ) const;
     QColor color() const;
     int    number() const;
 

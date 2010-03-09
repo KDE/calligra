@@ -69,7 +69,7 @@ public:
         CustomDataRole,
         BrushDataRole,
         PenDataRole,
-        ExplodeRole
+        PieAttributesRole
     };
     
     /**

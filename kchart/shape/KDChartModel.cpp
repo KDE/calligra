@@ -130,7 +130,8 @@ Qt::Orientation KDChartModel::categoryDirection() const
 QVariant KDChartModel::data( const QModelIndex &index,
                              int role /* = Qt::DisplayRole */ ) const
 {
-    if ( !d->isKnownDataRole( role ) ) {
+    if ( !index.isValid() ||
+         !d->isKnownDataRole( role ) ) {
         return QVariant();
     }
 
@@ -155,8 +156,11 @@ QVariant KDChartModel::data( const QModelIndex &index,
         section = index.row();
     }
 
+    if( dataSetNumber >= d->dataSets.size() )
+        return QVariant();
+
     DataSet  *dataSet       = d->dataSets[ dataSetNumber ];
-    
+
     switch ( role ) {
     case Qt::DisplayRole:
         if ( d->dataDimensions > 1 && dataSection == 0 )
@@ -167,11 +171,13 @@ QVariant KDChartModel::data( const QModelIndex &index,
         return dataSet->brush( section );
     case KDChart::DatasetPenRole:
         return dataSet->pen( section );
+    case KDChart::PieAttributesRole:
+        return QVariant::fromValue(dataSet->pieAttributes( section ));
     }
 
     // TODO (Johannes): Support for third data dimension
     // We need to implement zData in Dataset first.
-    
+
     // Should never happen
     return QVariant();
 }
@@ -290,6 +296,7 @@ bool KDChartModel::Private::isKnownDataRole( int role ) const
     case Qt::DisplayRole:
     case KDChart::DatasetPenRole:
     case KDChart::DatasetBrushRole:
+    case KDChart::PieAttributesRole:
         return true;
     }
 
@@ -308,6 +315,8 @@ QString roleToString( int role )
         return "KDChart::DatasetBrushRole";
     case KDChart::DatasetPenRole:
         return "KDChart::DatasetPenRole";
+    case KDChart::PieAttributesRole:
+        return "KDChart::PieAttributesRole";
     }
     return "Unknown DataRole";
 }
@@ -337,6 +346,8 @@ QVariant KDChartModel::headerData( int section,
             return dataSet->brush();
         case KDChart::DatasetPenRole:
             return dataSet->pen();
+        case KDChart::PieAttributesRole:
+            return QVariant::fromValue(dataSet->pieAttributes());
         }
     }
     /* else if ( orientation == d->dataDirection ) { */
@@ -351,6 +362,8 @@ QVariant KDChartModel::headerData( int section,
         return dataSet->brush( section );
     case KDChart::DatasetPenRole:
         return dataSet->pen( section );
+    case KDChart::PieAttributesRole:
+        return QVariant::fromValue(dataSet->pieAttributes( section ));
     }
     /* } */
 
