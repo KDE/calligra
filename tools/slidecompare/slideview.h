@@ -7,8 +7,10 @@
 #include <QtGui/QGraphicsScene>
 
 class SlideLoader;
+class GraphicsSlideItem;
 
 class SlideView : public QWidget {
+friend class GraphicsSlideItem;
 private:
     Q_OBJECT
     QGraphicsView view;
@@ -20,6 +22,7 @@ private:
 
     void layout();
     bool eventFilter(QObject *obj, QEvent *event);
+    void toggleSlideZoom(const GraphicsSlideItem* slide);
 private slots:
     void slotUpdateSlides();
     void slotViewChanged();

@@ -6,6 +6,7 @@
 #include <QtGui/QImage>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPixmapCache>
+#include <QtGui/QGraphicsSceneEvent>
 #include <QtGui/QScrollBar>
 #include <QtGui/QTransform>
 #include <QtGui/QWheelEvent>
@@ -47,13 +48,12 @@ public:
     Cache cache;
     QRectF rect;
     QPainterPath path;
-    SlideLoader* const loader;
+    SlideView* const view;
     int position;
     int slideVersion;
 
-    explicit GraphicsSlideItem(int pos, SlideLoader* l,
-             QGraphicsItem * parent = 0)
-            :QGraphicsItem(parent), loader(l), position(pos) {
+    explicit GraphicsSlideItem(int pos, SlideView* v)
+            :QGraphicsItem(), view(v), position(pos) {
         slideVersion = -1;
     }
     void setPosition(int pos) {
@@ -61,17 +61,17 @@ public:
             position = pos;
             slideVersion = -1;
         }
-        if (loader->slideVersion(position) != slideVersion) {
+        if (view->loader->slideVersion(position) != slideVersion) {
             update(rect);
         }
     } 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem * /*option*/,
                QWidget * /*widget*/ = 0) {
         QPixmap pixmap;
-        if (slideVersion != loader->slideVersion(position)
+        if (slideVersion != view->loader->slideVersion(position)
                 || !cache.find(pixmap)) {
-            slideVersion = loader->slideVersion(position);
-            pixmap = loader->loadSlide(position, rect.size().toSize());
+            slideVersion = view->loader->slideVersion(position);
+            pixmap = view->loader->loadSlide(position, rect.size().toSize());
             cache.add(pixmap);
         }
         if (pixmap.isNull()) {
@@ -96,6 +96,9 @@ public:
             path = QPainterPath();
             path.addRect(rect);
         }
+    }
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * /*event*/) {
+        view->toggleSlideZoom(this);
     }
 };
 
@@ -138,7 +141,7 @@ void SlideView::slotUpdateSlides() {
     } else if (numberOfSlides > items.size()) {
         // add new items
         for (int i=items.size(); i<numberOfSlides; ++i) {
-            GraphicsSlideItem* item = new GraphicsSlideItem(i, loader);
+            GraphicsSlideItem* item = new GraphicsSlideItem(i, this);
             item->setVisible(true);
             scene.addItem(item);
         }
@@ -199,7 +202,8 @@ void SlideView::layout() {
         scene.setSceneRect(0, 0, slidesPerRow*dx, y + dy);
     }
 }
-bool SlideView::eventFilter(QObject * /*obj*/, QEvent *event) {
+bool SlideView::eventFilter(QObject * obj, QEvent *event) {
+    if (obj != view.viewport()) return false;
     if (event->type() == QEvent::Wheel) {
         const QWheelEvent* e = static_cast<QWheelEvent*>(event);
         if (e->modifiers() == Qt::ControlModifier) {
@@ -218,6 +222,7 @@ void
 SlideView::setView(qreal zoomfactor, int h, int v) {
     if (sendingChange) return;
     this->zoomfactor = zoomfactor;
+    if (scene.items().size())
     layout();
     view.horizontalScrollBar()->setValue(h);
     view.verticalScrollBar()->setValue(v);
@@ -228,4 +233,24 @@ void SlideView::slotViewChanged() {
     int v = view.verticalScrollBar()->value();
     emit viewChanged(zoomfactor, h, v);
     sendingChange = false;
+}
+void SlideView::toggleSlideZoom(const GraphicsSlideItem* item) {
+    // zoom to zoomfactor 1 with clicked slide on the top, unless that slide
+    // is already active, then zoom to level 0.25 in the range of the clicked
+    // slide
+    // this function does not work well, the behavior of the scrollbar is a
+    // mystery
+    QScrollBar* sb = view.verticalScrollBar();
+    int offset = 2;
+    qreal y = item->boundingRect().top();
+    if (zoomfactor == 1
+            && (qAbs(y - sb->value()) <= offset
+                || sb->value()+1 >= sb->maximum())) {
+        zoomfactor = 0.25;
+    } else {
+        zoomfactor = 1;
+    }
+    layout();
+    y = item->boundingRect().top();
+    view.verticalScrollBar()->setValue(y - offset); // small offset looks nice
 }

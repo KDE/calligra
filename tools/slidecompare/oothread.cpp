@@ -79,6 +79,7 @@ void OoThread::run() {
     oo = new OOConnection();
     while (running) {
         mutex.lock();
+        currentToOdp = currentToPng = Conversion();
         if (!(nextToOdp || nextToPng)) {
             moreWork.wait(&mutex);
         }
