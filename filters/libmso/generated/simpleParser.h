@@ -6,7 +6,7 @@
 #include <QVector>
 #include <QSharedPointer>// replace with QScopedPointer when switching to Qt 4.6
 class LEInputStream;
-namespace PPT{
+namespace MSO{
 class StreamOffset {
 public:
     virtual ~StreamOffset() {}
@@ -374,12 +374,16 @@ class OfficeArtCOLORREF;
 void parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s);
 class OfficeArtChildAnchor;
 void parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s);
+class DocOfficeArtClientAnchor;
+void parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnchor& _s);
 class OfficeArtFPSPL;
 void parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s);
 class RectStruct;
 void parseRectStruct(LEInputStream& in, RectStruct& _s);
 class SmallRectStruct;
 void parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s);
+class DocOfficeArtClientData;
+void parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s);
 class ShapeFlagsAtom;
 void parseShapeFlagsAtom(LEInputStream& in, ShapeFlagsAtom& _s);
 class ShapeFlags10Atom;
@@ -416,8 +420,10 @@ class RoundTripHFPlaceholder12Atom;
 void parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceholder12Atom& _s);
 class RoundTripShapeCheckSumForCustomLayouts12Atom;
 void parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, RoundTripShapeCheckSumForCustomLayouts12Atom& _s);
-class OfficeArtClientTextBox;
-void parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s);
+class PptOfficeArtClientTextBox;
+void parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s);
+class DocOfficeArtClientTextBox;
+void parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTextBox& _s);
 class OfficeArtIDCL;
 void parseOfficeArtIDCL(LEInputStream& in, OfficeArtIDCL& _s);
 class OfficeArtFOPTEOPID;
@@ -578,6 +584,8 @@ class Rotation;
 void parseRotation(LEInputStream& in, Rotation& _s);
 class ITxid;
 void parseITxid(LEInputStream& in, ITxid& _s);
+class DiagramBooleanProperties;
+void parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanProperties& _s);
 class DxTextLeft;
 void parseDxTextLeft(LEInputStream& in, DxTextLeft& _s);
 class DyTextTop;
@@ -670,8 +678,8 @@ class LidRegroup;
 void parseLidRegroup(LEInputStream& in, LidRegroup& _s);
 class WzFillId;
 void parseWzFillId(LEInputStream& in, WzFillId& _s);
-class OfficeArtClientAnchor;
-void parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s);
+class PptOfficeArtClientAnchor;
+void parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s);
 class AnimationInfoContainer;
 void parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer& _s);
 class MouseClickInteractiveInfoContainer;
@@ -682,6 +690,8 @@ class ShapeClientRoundtripDataSubcontainerOrAtom;
 void parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s);
 class ShapeProgBinaryTagSubContainerOrAtom;
 void parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s);
+class OfficeArtClientTextBox;
+void parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s);
 class TextRulerAtom;
 void parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s);
 class OfficeArtFOPTE;
@@ -756,8 +766,10 @@ class OfficeArtDggContainer;
 void parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _s);
 class OfficeArtFOPTEChoice;
 void parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s);
-class OfficeArtClientData;
-void parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s);
+class OfficeArtClientAnchor;
+void parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s);
+class PptOfficeArtClientData;
+void parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData& _s);
 class ShapeProgBinaryTagContainer;
 void parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s);
 class WordDocument;
@@ -788,8 +800,8 @@ class SlideProgBinaryTagSubContainerOrAtom;
 void parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s);
 class DrawingGroupContainer;
 void parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s);
-class OfficeArtSpContainer;
-void parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s);
+class OfficeArtClientData;
+void parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s);
 class ShapeProgTagsSubContainerOrAtom;
 void parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s);
 class DocumentContainer;
@@ -800,14 +812,16 @@ class DocProgBinaryTagContainer;
 void parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s);
 class SlideProgBinaryTagContainer;
 void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
-class OfficeArtDgContainer;
-void parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s);
-class OfficeArtSpgrContainerFileBlock;
-void parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s);
+class OfficeArtSpContainer;
+void parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s);
 class DocProgTagsSubContainerOrAtom;
 void parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s);
 class SlideProgTagsSubContainerOrAtom;
 void parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsSubContainerOrAtom& _s);
+class OfficeArtDgContainer;
+void parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s);
+class OfficeArtSpgrContainerFileBlock;
+void parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s);
 class DrawingContainer;
 void parseDrawingContainer(LEInputStream& in, DrawingContainer& _s);
 class MainMasterContainer;
@@ -2221,6 +2235,12 @@ public:
     qint32 yBottom;
     OfficeArtChildAnchor(void* /*dummy*/ = 0) {}
 };
+class DocOfficeArtClientAnchor : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    qint32 clientAnchor;
+    DocOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+};
 class OfficeArtFPSPL : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
@@ -2244,6 +2264,12 @@ public:
     qint16 right;
     qint16 bottom;
     SmallRectStruct(void* /*dummy*/ = 0) {}
+};
+class DocOfficeArtClientData : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint32 clientData;
+    DocOfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeFlagsAtom : public StreamOffset {
 public:
@@ -2375,11 +2401,17 @@ public:
     QByteArray unknown;
     RoundTripShapeCheckSumForCustomLayouts12Atom(void* /*dummy*/ = 0) {}
 };
-class OfficeArtClientTextBox : public StreamOffset {
+class PptOfficeArtClientTextBox : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
     QList<TextClientDataSubContainerOrAtom> rgChildRec;
-    OfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+};
+class DocOfficeArtClientTextBox : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    quint32 clientTextBox;
+    DocOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
 };
 class OfficeArtIDCL : public StreamOffset {
 public:
@@ -3457,6 +3489,33 @@ public:
     qint32 iTxid;
     ITxid(void* /*dummy*/ = 0) {}
 };
+class DiagramBooleanProperties : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    bool fLockAgainstGrouping;
+    bool fLockAdjustHandles;
+    bool fLockText;
+    bool fLockVertices;
+    bool fLockCropping;
+    bool fLockAgainstSelect;
+    bool fLockPosition;
+    bool fLockAspectRatio;
+    bool fLockRotation;
+    bool fLockAgainstUngrouping;
+    quint8 unused6;
+    bool fUsefLockAgainstGrouping;
+    bool fUseLockAdjustHandles;
+    bool fUseLockText;
+    bool fUsefLockVertices;
+    bool fUsefLockCropping;
+    bool fUsefLockAgainstSelect;
+    bool fUsefLockPosition;
+    bool fUsefLockAspectRatio;
+    bool fUsefLockRotation;
+    bool fUsefLockAgainstUngrouping;
+    quint8 unused2;
+    DiagramBooleanProperties(void* /*dummy*/ = 0) {}
+};
 class DxTextLeft : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -3831,12 +3890,12 @@ public:
     qint32 wzFillId;
     WzFillId(void* /*dummy*/ = 0) {}
 };
-class OfficeArtClientAnchor : public StreamOffset {
+class PptOfficeArtClientAnchor : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<SmallRectStruct> rect1;
     QSharedPointer<RectStruct> rect2;
-    OfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
 };
 class AnimationInfoContainer : public StreamOffset {
 public:
@@ -3891,6 +3950,20 @@ public:
     };
     choice2754406405 anon;
     ShapeProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
+};
+class OfficeArtClientTextBox : public StreamOffset {
+public:
+    class choice1016492251 : public QSharedPointer<StreamOffset> {
+    public:
+        choice1016492251() {}
+        explicit choice1016492251(PptOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1016492251(DocOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice1016492251 anon;
+    OfficeArtClientTextBox(void* /*dummy*/ = 0) {}
 };
 class TextRulerAtom : public StreamOffset {
 public:
@@ -4254,7 +4327,7 @@ public:
     OfficeArtRecordHeader rh;
     OfficeArtFDGGBlock drawingGroup;
     QSharedPointer<OfficeArtBStoreContainer> blipStore;
-    OfficeArtFOPT drawingPrimaryOptions;
+    QSharedPointer<OfficeArtFOPT> drawingPrimaryOptions;
     QSharedPointer<OfficeArtTertiaryFOPT> drawingTertiaryOptions;
     QSharedPointer<OfficeArtColorMRUContainer> colorMRU;
     OfficeArtSplitMenuColorContainer splitColors;
@@ -4264,67 +4337,82 @@ public:
 };
 class OfficeArtFOPTEChoice : public StreamOffset {
 public:
-    class choice1276819694 : public QSharedPointer<StreamOffset> {
+    class choice3614317431 : public QSharedPointer<StreamOffset> {
     public:
-        choice1276819694() {}
-        explicit choice1276819694(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(Pib* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(PibName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShadowStyleBooleanPropertiesr* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1276819694(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
+        choice3614317431() {}
+        explicit choice3614317431(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(DiagramBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(Pib* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(PibName* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillType* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShadowStyleBooleanPropertiesr* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3614317431(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice1276819694 anon;
+    choice3614317431 anon;
     OfficeArtFOPTEChoice(void* /*dummy*/ = 0) {}
 };
-class OfficeArtClientData : public StreamOffset {
+class OfficeArtClientAnchor : public StreamOffset {
+public:
+    class choice3312540203 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3312540203() {}
+        explicit choice3312540203(PptOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3312540203(DocOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3312540203 anon;
+    OfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+};
+class PptOfficeArtClientData : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
     QSharedPointer<ShapeFlagsAtom> shapeFlagsAtom;
@@ -4339,7 +4427,7 @@ public:
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown1;
     QList<ShapeClientRoundtripDataSubcontainerOrAtom> rgShapeClientRoundtripData;
     QSharedPointer<UnknownOfficeArtClientDataChild> unknown2;
-    OfficeArtClientData(void* /*dummy*/ = 0) {}
+    PptOfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeProgBinaryTagContainer : public StreamOffset {
 public:
@@ -4523,22 +4611,19 @@ public:
     OfficeArtDggContainer OfficeArtDgg;
     DrawingGroupContainer(void* /*dummy*/ = 0) {}
 };
-class OfficeArtSpContainer : public StreamOffset {
+class OfficeArtClientData : public StreamOffset {
 public:
-    OfficeArtRecordHeader rh;
-    QSharedPointer<OfficeArtFSPGR> shapeGroup;
-    OfficeArtFSP shapeProp;
-    QSharedPointer<OfficeArtFPSPL> deletedshape;
-    QSharedPointer<OfficeArtFOPT> shapePrimaryOptions;
-    QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions1;
-    QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions1;
-    QSharedPointer<OfficeArtChildAnchor> childAnchor;
-    QSharedPointer<OfficeArtClientAnchor> clientAnchor;
-    QSharedPointer<OfficeArtClientData> clientData;
-    QSharedPointer<OfficeArtClientTextBox> clientTextbox;
-    QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
-    QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
-    OfficeArtSpContainer(void* /*dummy*/ = 0) {}
+    class choice980859409 : public QSharedPointer<StreamOffset> {
+    public:
+        choice980859409() {}
+        explicit choice980859409(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice980859409(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice980859409 anon;
+    OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeProgTagsSubContainerOrAtom : public StreamOffset {
 public:
@@ -4615,30 +4700,22 @@ public:
     SlideProgBinaryTagSubContainerOrAtom rec;
     SlideProgBinaryTagContainer(void* /*dummy*/ = 0) {}
 };
-class OfficeArtDgContainer : public StreamOffset {
+class OfficeArtSpContainer : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    OfficeArtFDG drawingData;
-    QSharedPointer<OfficeArtFRITContainer> regroupItems;
-    OfficeArtSpgrContainer groupShape;
-    QSharedPointer<OfficeArtSpContainer> shape;
-    QList<OfficeArtSpgrContainerFileBlock> deletedShapes;
-    QSharedPointer<OfficeArtSolverContainer> solvers;
-    OfficeArtDgContainer(void* /*dummy*/ = 0) {}
-};
-class OfficeArtSpgrContainerFileBlock : public StreamOffset {
-public:
-    class choice3415770141 : public QSharedPointer<StreamOffset> {
-    public:
-        choice3415770141() {}
-        explicit choice3415770141(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3415770141(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice3415770141 anon;
-    OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
+    QSharedPointer<OfficeArtFSPGR> shapeGroup;
+    OfficeArtFSP shapeProp;
+    QSharedPointer<OfficeArtFPSPL> deletedshape;
+    QSharedPointer<OfficeArtFOPT> shapePrimaryOptions;
+    QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions1;
+    QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions1;
+    QSharedPointer<OfficeArtChildAnchor> childAnchor;
+    QSharedPointer<OfficeArtClientAnchor> clientAnchor;
+    QSharedPointer<OfficeArtClientData> clientData;
+    QSharedPointer<OfficeArtClientTextBox> clientTextbox;
+    QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
+    QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
+    OfficeArtSpContainer(void* /*dummy*/ = 0) {}
 };
 class DocProgTagsSubContainerOrAtom : public StreamOffset {
 public:
@@ -4667,6 +4744,31 @@ public:
     };
     choice310259039 anon;
     SlideProgTagsSubContainerOrAtom(void* /*dummy*/ = 0) {}
+};
+class OfficeArtDgContainer : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QSharedPointer<OfficeArtFDG> drawingData;
+    QSharedPointer<OfficeArtFRITContainer> regroupItems;
+    OfficeArtSpgrContainer groupShape;
+    QSharedPointer<OfficeArtSpContainer> shape;
+    QList<OfficeArtSpgrContainerFileBlock> deletedShapes;
+    QSharedPointer<OfficeArtSolverContainer> solvers;
+    OfficeArtDgContainer(void* /*dummy*/ = 0) {}
+};
+class OfficeArtSpgrContainerFileBlock : public StreamOffset {
+public:
+    class choice3415770141 : public QSharedPointer<StreamOffset> {
+    public:
+        choice3415770141() {}
+        explicit choice3415770141(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3415770141(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice3415770141 anon;
+    OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
 };
 class DrawingContainer : public StreamOffset {
 public:

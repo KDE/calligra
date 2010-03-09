@@ -24,18 +24,18 @@
 
 class PptTextPFRun {
     quint16 level_;
-    const PPT::TextPFException* pfs[6];
+    const MSO::TextPFException* pfs[6];
 public:
-    PptTextPFRun(const PPT::DocumentContainer* d,
-                 const PPT::MasterOrSlideContainer* m,
+    PptTextPFRun(const MSO::DocumentContainer* d,
+                 const MSO::MasterOrSlideContainer* m,
                  quint32 textType);
-    PptTextPFRun(const PPT::DocumentContainer* d = 0,
-                 const PPT::MasterOrSlideContainer* m = 0,
-                 const PPT::TextContainer* tc = 0,
+    PptTextPFRun(const MSO::DocumentContainer* d = 0,
+                 const MSO::MasterOrSlideContainer* m = 0,
+                 const MSO::TextContainer* tc = 0,
                  quint32 start = 0);
 
     quint16 level() const { return level_; }
-    //const PPT::TextPFException* pf() const { return pfs[0]; }
+    //const MSO::TextPFException* pf() const { return pfs[0]; }
 
     bool fHasBullet() const;
     bool fBulletHasFont() const;
@@ -44,7 +44,7 @@ public:
     qint16 bulletChar() const;
     quint16 bulletFontRef() const;
     qint16 bulletSize() const;
-    PPT::ColorIndexStruct bulletColor() const;
+    MSO::ColorIndexStruct bulletColor() const;
     quint16 textAlignment() const;
     qint16 lineSpacing() const;
     qint16 spaceBefore() const;
@@ -52,7 +52,7 @@ public:
     quint16 leftMargin() const;
     quint16 indent() const;
     quint16 defaultTabSize() const;
-    PPT::TabStops tabStops() const;
+    MSO::TabStops tabStops() const;
     quint16 fontAlign() const;
     bool charWrap() const;
     bool wordWrap() const;
@@ -63,19 +63,19 @@ public:
 
 class PptTextCFRun {
     quint16 level_;
-    const PPT::TextCFException* cfs[6];
+    const MSO::TextCFException* cfs[6];
 public:
     PptTextCFRun() :level_(0)
     {
         *cfs = 0;
     }
-    PptTextCFRun(const PPT::DocumentContainer* d,
-                 const PPT::MasterOrSlideContainer* m,
-                 const PPT::TextContainer& tc,
+    PptTextCFRun(const MSO::DocumentContainer* d,
+                 const MSO::MasterOrSlideContainer* m,
+                 const MSO::TextContainer& tc,
                  quint16 level,
                  quint32 start);
 
-    const PPT::TextCFException* cf() const { return cfs[0]; }
+    const MSO::TextCFException* cf() const { return cfs[0]; }
 
     bool bold() const;
     bool italic() const;
@@ -90,7 +90,7 @@ public:
     quint16 ansiFontRef() const;
     quint16 symbolFontRef() const;
     quint16 fontSize() const;
-    PPT::ColorIndexStruct color() const;
+    MSO::ColorIndexStruct color() const;
     qint16 position() const;
 };
 

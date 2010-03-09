@@ -27,17 +27,17 @@
 class ParsedPresentation
 {
 public:
-    PPT::CurrentUserStream currentUserStream;
-    PPT::PowerPointStructs presentation;
-    PPT::PicturesStream pictures;
+    MSO::CurrentUserStream currentUserStream;
+    MSO::PowerPointStructs presentation;
+    MSO::PicturesStream pictures;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
-    const PPT::DocumentContainer* documentContainer;
-    const PPT::NotesContainer* notesMaster;
-    const PPT::HandoutContainer* handoutMaster;
-    QVector<const PPT::MasterOrSlideContainer*> masters;
-    QVector<const PPT::SlideContainer*> slides;
-    QVector<const PPT::NotesContainer*> notes;
+    const MSO::DocumentContainer* documentContainer;
+    const MSO::NotesContainer* notesMaster;
+    const MSO::HandoutContainer* handoutMaster;
+    QVector<const MSO::MasterOrSlideContainer*> masters;
+    QVector<const MSO::SlideContainer*> slides;
+    QVector<const MSO::NotesContainer*> notes;
 
     ParsedPresentation() {
         documentContainer = 0;
@@ -45,7 +45,7 @@ public:
         handoutMaster = 0;
     }
 
-    const PPT::MasterOrSlideContainer* getMaster(const PPT::SlideContainer* slide) const;
+    const MSO::MasterOrSlideContainer* getMaster(const MSO::SlideContainer* slide) const;
     bool parse(POLE::Storage& storage);
 };
 

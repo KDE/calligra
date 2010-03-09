@@ -40,7 +40,7 @@ struct PictureReference {
  **/
 PictureReference savePicture(POLE::Stream& stream, KoStore* store);
 
-PictureReference savePicture(const PPT::OfficeArtBStoreContainerFileBlock& a,
+PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
                              KoStore* store);
 
 #endif

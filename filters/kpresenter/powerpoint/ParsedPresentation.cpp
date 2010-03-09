@@ -20,7 +20,7 @@
 #include "generated/leinputstream.h"
 #include <QtCore/QBuffer>
 
-using namespace PPT;
+using namespace MSO;
 
 bool
 readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
@@ -300,7 +300,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
 // Part 11: Identify the VBA project persist object
     return true;
 }
-const PPT::MasterOrSlideContainer*
+const MSO::MasterOrSlideContainer*
 ParsedPresentation::getMaster(const SlideContainer* slide) const
 {
     foreach(const MasterPersistAtom& m, documentContainer->masterList.rgMasterPersistAtom) {

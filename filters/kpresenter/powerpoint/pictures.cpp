@@ -157,17 +157,17 @@ savePicture(PictureReference& ref, const T* a, KoStore* store)
     savePicture(ref, a, store, compressed);
 }
 PictureReference
-savePicture(const PPT::OfficeArtBlip& a, KoStore* store)
+savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
     // only one of these calls will actually save a picture
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipEMF>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipWMF>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPICT>(), store);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipJPEG>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipPNG>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipDIB>(), store, false);
-    savePicture(ref, a.anon.get<PPT::OfficeArtBlipTIFF>(), store, false);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store, false);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store, false);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store, false);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store, false);
     return ref;
 }
 }
@@ -242,10 +242,10 @@ savePicture(POLE::Stream& stream, KoStore* out)
     return ref;
 }
 PictureReference
-savePicture(const PPT::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
+savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 {
-    const PPT::OfficeArtBlip* blip = a.anon.get<PPT::OfficeArtBlip>();
-    const PPT::OfficeArtFBSE* fbse = a.anon.get<PPT::OfficeArtFBSE>();
+    const MSO::OfficeArtBlip* blip = a.anon.get<MSO::OfficeArtBlip>();
+    const MSO::OfficeArtFBSE* fbse = a.anon.get<MSO::OfficeArtFBSE>();
     if (blip) {
         return savePicture(*blip, store);
     }

@@ -102,7 +102,6 @@ CombinedView::openFile(const QString& path) {
     kopptloader->open("");
 
     if (!odp) {
-        qDebug() << "PptToOdp " << path;
         nextodpfile = koppttoodp(path);
         koodploader->open(nextodpfile);
     } else {
@@ -124,10 +123,17 @@ CombinedView::openFile(const QString& path) {
     ooodploader->setSlideDir(dir);
     // if ppt, convert to odp with koffice and put in queue for conversion to
     // png
+
+    // adapt zoom level to number of slides
+    quint32 nslides = koodploader->numberOfSlides();
+    qreal zoomlevel = (nslides > 3 || nslides == 0) ?0.25 :1.0/nslides;
+    ooodpview->setView(zoomlevel, 0, 0);
+    koodpview->setView(zoomlevel, 0, 0);
+    oopptview->setView(zoomlevel, 0, 0);
+    kopptview->setView(zoomlevel, 0, 0);
 }
 void
 CombinedView::slotHandleOoOdp(const QString& path) {
-    qDebug() << "got " << path;
     if (path == ooodpresult) {
         kopptloader->open(path);
     }

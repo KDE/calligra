@@ -25,10 +25,10 @@
  * Report global objects belonging to global options to the collector.
  */
 template <typename C, typename T>
-void collectGlobalObjects(C& collector, const PPT::DrawingGroupContainer& c,
+void collectGlobalObjects(C& collector, const MSO::DrawingGroupContainer& c,
                           const T& fopt)
 {
-    foreach(const PPT::OfficeArtFOPTEChoice& f, fopt.fopt) {
+    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt) {
         collector.add(c, f);
     }
 }
@@ -36,15 +36,15 @@ void collectGlobalObjects(C& collector, const PPT::DrawingGroupContainer& c,
  * Report global objects belonging to incidental options to the collector.
  */
 template <typename C, typename T>
-void collectGlobalObjects(C& collector, const PPT::OfficeArtSpContainer& sp,
+void collectGlobalObjects(C& collector, const MSO::OfficeArtSpContainer& sp,
                           const T& fopt)
 {
-    foreach(const PPT::OfficeArtFOPTEChoice& f, fopt.fopt) {
+    foreach(const MSO::OfficeArtFOPTEChoice& f, fopt.fopt) {
         collector.add(sp, f);
     }
 }
 template <typename C>
-void collectGlobalObjects(C& collector, const PPT::OfficeArtSpContainer& sp)
+void collectGlobalObjects(C& collector, const MSO::OfficeArtSpContainer& sp)
 {
     if (sp.shapePrimaryOptions)
         collectGlobalObjects(collector, sp, *sp.shapePrimaryOptions);
@@ -59,60 +59,65 @@ void collectGlobalObjects(C& collector, const PPT::OfficeArtSpContainer& sp)
 }
 template <typename C>
 void collectGlobalObjects(C& collector,
-                          const PPT::OfficeArtSpgrContainerFileBlock& spgr);
+                          const MSO::OfficeArtSpgrContainerFileBlock& spgr);
 template <typename C>
 void collectGlobalObjects(C& collector,
-                          const PPT::OfficeArtSpgrContainer& spgr)
+                          const MSO::OfficeArtSpgrContainer& spgr)
 {
-    foreach(const PPT::OfficeArtSpgrContainerFileBlock& o, spgr.rgfb) {
+    foreach(const MSO::OfficeArtSpgrContainerFileBlock& o, spgr.rgfb) {
         collectGlobalObjects(collector, o);
     }
 }
 template <typename C>
-void collectGlobalObjects(C& collector, const PPT::OfficeArtDgContainer& dg)
+void collectGlobalObjects(C& collector, const MSO::OfficeArtDgContainer& dg)
 {
     collectGlobalObjects(collector, dg.groupShape);
     if (dg.shape) {
         collectGlobalObjects(collector, *dg.shape);
     }
-    foreach(const PPT::OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes) {
+    foreach(const MSO::OfficeArtSpgrContainerFileBlock& o, dg.deletedShapes) {
         collectGlobalObjects(collector, o);
     }
 }
 template <class C>
 void collectGlobalObjects(C& collector,
-                          const PPT::OfficeArtSpgrContainerFileBlock& spgr)
+                          const MSO::OfficeArtSpgrContainerFileBlock& spgr)
 {
-    if (spgr.anon.is<PPT::OfficeArtSpContainer>())
-        collectGlobalObjects(collector, *spgr.anon.get<PPT::OfficeArtSpContainer>());
-    if (spgr.anon.is<PPT::OfficeArtSpgrContainer>())
-        collectGlobalObjects(collector, *spgr.anon.get<PPT::OfficeArtSpgrContainer>());
+    if (spgr.anon.is<MSO::OfficeArtSpContainer>())
+        collectGlobalObjects(collector, *spgr.anon.get<MSO::OfficeArtSpContainer>());
+    if (spgr.anon.is<MSO::OfficeArtSpgrContainer>())
+        collectGlobalObjects(collector, *spgr.anon.get<MSO::OfficeArtSpgrContainer>());
 }
 template <class C>
 void collectGlobalObjects(C& collector, const ParsedPresentation& p) {
     // loop over all objects to find all OfficeArtFOPTE instances and feed them
     // into the collector
     // get object from default options
-    const PPT::DrawingGroupContainer& dg = p.documentContainer->drawingGroup;
-    collectGlobalObjects(collector, dg, dg.OfficeArtDgg.drawingPrimaryOptions);
+    const MSO::DrawingGroupContainer& dg = p.documentContainer->drawingGroup;
+    if (dg.OfficeArtDgg.drawingPrimaryOptions)
+        collectGlobalObjects(collector, dg,
+                             *dg.OfficeArtDgg.drawingPrimaryOptions);
     if (dg.OfficeArtDgg.drawingTertiaryOptions)
         collectGlobalObjects(collector, dg,
                              *dg.OfficeArtDgg.drawingTertiaryOptions);
     // get objects from masters
-    foreach(const PPT::MasterOrSlideContainer* master, p.masters) {
-        if (master->anon.is<PPT::SlideContainer>())
-            collectGlobalObjects(collector,
-                                 master->anon.get<PPT::SlideContainer>()->drawing.OfficeArtDg);
-        if (master->anon.is<PPT::MainMasterContainer>())
-            collectGlobalObjects(collector,
-                                 master->anon.get<PPT::MainMasterContainer>()->drawing.OfficeArtDg);
+    foreach(const MSO::MasterOrSlideContainer* master, p.masters) {
+        const MSO::SlideContainer* sc = master->anon.get<MSO::SlideContainer>();
+        const MSO::MainMasterContainer* sm
+                = master->anon.get<MSO::MainMasterContainer>();
+        if (sc) {
+            collectGlobalObjects(collector, sc->drawing.OfficeArtDg);
+        }
+        if (sm) {
+            collectGlobalObjects(collector, sm->drawing.OfficeArtDg);
+        }
     }
     // get objects from slides
-    foreach(const PPT::SlideContainer* slide, p.slides) {
+    foreach(const MSO::SlideContainer* slide, p.slides) {
         collectGlobalObjects(collector, slide->drawing.OfficeArtDg);
     }
     // get objects from notes
-    foreach(const PPT::NotesContainer* notes, p.notes) {
+    foreach(const MSO::NotesContainer* notes, p.notes) {
         if (notes) {
             collectGlobalObjects(collector, notes->drawing.OfficeArtDg);
         }
@@ -125,21 +130,21 @@ class FillImageCollector {
 public:
     KoGenStyles& styles;
     const PptToOdp& pto;
-    QMap<const PPT::DrawingGroupContainer*, QString> globalFillImageNames;
-    QMap<const PPT::OfficeArtSpContainer*, QString> fillImageNames;
+    QMap<const MSO::DrawingGroupContainer*, QString> globalFillImageNames;
+    QMap<const MSO::OfficeArtSpContainer*, QString> fillImageNames;
 
     FillImageCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
 
-    void add(const PPT::DrawingGroupContainer& o, const PPT::OfficeArtFOPTEChoice& t) {
+    void add(const MSO::DrawingGroupContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
         const QString name = add(t);
         if (!name.isEmpty()) globalFillImageNames[&o] = name;
     }
-    void add(const PPT::OfficeArtSpContainer& o, const PPT::OfficeArtFOPTEChoice& t) {
+    void add(const MSO::OfficeArtSpContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
         const QString name = add(t);
         if (!name.isEmpty()) fillImageNames[&o] = name;
     }
-    QString add(const PPT::OfficeArtFOPTEChoice& t) {
-        const PPT::FillBlip* fb = t.anon.get<PPT::FillBlip>();
+    QString add(const MSO::OfficeArtFOPTEChoice& t) {
+        const MSO::FillBlip* fb = t.anon.get<MSO::FillBlip>();
         if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return QString();
         KoGenStyle fillImage(KoGenStyle::StyleFillImage);
         fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
@@ -154,22 +159,22 @@ class StrokeDashCollector {
 public:
     KoGenStyles& styles;
     const PptToOdp& pto;
-    QMap<const PPT::DrawingGroupContainer*, QString> globalStrokeDashNames;
-    QMap<const PPT::OfficeArtSpContainer*, QString> strokeDashNames;
+    QMap<const MSO::DrawingGroupContainer*, QString> globalStrokeDashNames;
+    QMap<const MSO::OfficeArtSpContainer*, QString> strokeDashNames;
 
     StrokeDashCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
 
-    void add(const PPT::DrawingGroupContainer& o, const PPT::OfficeArtFOPTEChoice& t) {
+    void add(const MSO::DrawingGroupContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
         const QString name = add(t);
         if (!name.isEmpty()) globalStrokeDashNames[&o] = name;
     }
-    void add(const PPT::OfficeArtSpContainer& o, const PPT::OfficeArtFOPTEChoice& t) {
+    void add(const MSO::OfficeArtSpContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
         const QString name = add(t);
         if (!name.isEmpty()) strokeDashNames[&o] = name;
     }
-    QString add(const PPT::OfficeArtFOPTEChoice& t) {
+    QString add(const MSO::OfficeArtFOPTEChoice& t) {
         quint32 lineDashing = 0;
-        const PPT::LineDashing* ld1 = t.anon.get<PPT::LineDashing>();
+        const MSO::LineDashing* ld1 = t.anon.get<MSO::LineDashing>();
         if (ld1) lineDashing = ld1->lineDashing;
         /* TODO
         const LineBottomDashing* ld2 = t.anon.get<LineBottomDashing>();

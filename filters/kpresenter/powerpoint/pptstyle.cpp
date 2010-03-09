@@ -19,7 +19,7 @@
 
 #include "pptstyle.h"
 
-using namespace PPT;
+using namespace MSO;
 
 namespace {
 
@@ -146,7 +146,7 @@ const TextCFException* getBaseLevelCF(const MasterOrSlideContainer* m,
     const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
     return (ml) ?&ml->cf :0;
 }
-const TextMasterStyleLevel* getDefaultLevel(const PPT::DocumentContainer* d,
+const TextMasterStyleLevel* getDefaultLevel(const MSO::DocumentContainer* d,
                                             quint16 level)
 {
     if (!d) return 0;
@@ -158,26 +158,26 @@ const TextMasterStyleLevel* getDefaultLevel(const PPT::DocumentContainer* d,
     }
     return ml;
 }
-const TextPFException* getDefaultLevelPF(const PPT::DocumentContainer* d,
+const TextPFException* getDefaultLevelPF(const MSO::DocumentContainer* d,
                                          quint16 level)
 {
     const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
     return (ml) ?&ml->pf :0;
 }
-const TextCFException* getDefaultLevelCF(const PPT::DocumentContainer* d,
+const TextCFException* getDefaultLevelCF(const MSO::DocumentContainer* d,
                                          quint16 level)
 {
     const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
     return (ml) ?&ml->cf :0;
 }
-const TextPFException* getDefaultPF(const PPT::DocumentContainer* d)
+const TextPFException* getDefaultPF(const MSO::DocumentContainer* d)
 {
     if (d && d->documentTextInfo.textPFDefaultsAtom) {
         return &d->documentTextInfo.textPFDefaultsAtom->pf;
     }
     return 0;
 }
-const TextCFException* getDefaultCF(const PPT::DocumentContainer* d)
+const TextCFException* getDefaultCF(const MSO::DocumentContainer* d)
 {
     if (d && d->documentTextInfo.textCFDefaultsAtom) {
         return &d->documentTextInfo.textCFDefaultsAtom->cf;
@@ -196,8 +196,8 @@ void addStyle(const Style** list, const Style* style)
 }
 }
 
-PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
-             const PPT::MasterOrSlideContainer* m,
+PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
+             const MSO::MasterOrSlideContainer* m,
              quint32 textType)
 {
     level_ = 0;
@@ -207,7 +207,7 @@ PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
     addStyle(pfs, getDefaultPF(d));
 }
 
-PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
+PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
                            const MasterOrSlideContainer* m,
                            const TextContainer* tc,
                            quint32 start)
@@ -231,7 +231,7 @@ PptTextPFRun::PptTextPFRun(const PPT::DocumentContainer* d,
     // active, 1 is lowest list level, 5 is the highest list level
     level_ = (fHasBullet()) ?level + 1 :0;
 }
-PptTextCFRun::PptTextCFRun(const PPT::DocumentContainer* d,
+PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
                            const MasterOrSlideContainer* m,
                            const TextContainer& tc,
                            quint16 level,
@@ -250,7 +250,7 @@ PptTextCFRun::PptTextCFRun(const PPT::DocumentContainer* d,
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    const PPT::TextPFException* const * p = pfs; \
+    const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
         if ((*p)->masks.TEST) { \
             return PRE (*p)->PARENT NAME; \
@@ -287,7 +287,7 @@ GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextCFRun::NAME() const \
 { \
-    const PPT::TextCFException* const * c = cfs; \
+    const MSO::TextCFException* const * c = cfs; \
     while (*c) { \
         if ((*c)->TEST) { \
             return PRE (*c)->PARENT NAME; \

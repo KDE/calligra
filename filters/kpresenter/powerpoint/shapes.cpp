@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-using namespace PPT;
+using namespace MSO;
 
 enum {
     msosptMin = 0,
