@@ -1624,16 +1624,14 @@ void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
             KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
             //seriesstyle.addProperty("draw:stroke", "solid");
             //seriesstyle.addProperty("draw:fill-color", "#ff0000");
-            bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
-
-            //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
-
             foreach(ChartObject::Format* f, series->datasetFormat) {
                 if(ChartObject::PieFormat* pieformat = dynamic_cast<ChartObject::PieFormat*>(f))
                     if(pieformat->pcExplode != 0)
-                        bodyWriter->addAttribute("chart:pie-offset", pieformat->pcExplode);
+                        seriesstyle.addProperty("chart:pie-offset", pieformat->pcExplode, KoGenStyle::ChartType);
             }
+            bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
 
+            //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
             const QString valuesCellRangeAddress = normalizeCellRange(string(series->valuesCellRangeAddress));
             if(!valuesCellRangeAddress.isEmpty())
