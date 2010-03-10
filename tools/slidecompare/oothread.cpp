@@ -74,7 +74,9 @@ public:
     }
     ~OOConnection() {
         try {
-            Reference<XDesktop>::query(xComponentLoader)->terminate();
+            if (xComponentLoader.get()) {
+                Reference<XDesktop>::query(xComponentLoader)->terminate();
+            }
         } catch(Exception &e) {
             OString o = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             qDebug() << "Error in ~OOConnection(): " << o;
@@ -95,6 +97,7 @@ OoThread::~OoThread() {
 }
 void OoThread::run() {
     oo = new OOConnection();
+    running = oo->xComponentLoader.get() != 0;
     while (running) {
         mutex.lock();
         currentToOdp = currentToPng = Conversion();
