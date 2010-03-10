@@ -35,21 +35,27 @@ using namespace MSO;
 
 namespace
 {
+    QString format(double v) {
+        static const QString f("%1");
+        static const QString e("");
+        static const QRegExp r("\\.?0+$");
+        return f.arg(v, 0, 'f').replace(r, e);
+    }
+
     QString mm(double v) {
-        static const QString mm("%1mm");
-        return mm.arg(v, 0, 'f');
+        static const QString mm("mm");
+        return format(v) + mm;
     }
     QString cm(double v) {
-        static const QString cm("%1cm");
-        return cm.arg(v, 0, 'f');
+        static const QString cm("cm");
+        return format(v) + cm;
     }
     QString pt(double v) {
-        static const QString pt("%1pt");
-        return pt.arg(v, 0, 'f');
+        static const QString pt("pt");
+        return format(v) + pt;
     }
     QString percent(double v) {
-        static const QString percent("%1%");
-        return percent.arg(v, 0, 'f');
+        return format(v) + '%';
     }
 
 /**
@@ -566,7 +572,8 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
     style.addProperty("draw:fill-color", "#ffffff", gt);
     const OfficeArtDggContainer& drawingGroup
         = p->documentContainer->drawingGroup.OfficeArtDgg;
-    defineGraphicProperties(style, drawingGroup);
+    const DrawStyle ds(drawingGroup);
+    defineGraphicProperties(style, ds);
 }
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
@@ -2432,8 +2439,8 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
         break;
     }
 }
-template <typename T>
-void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
+
+void PptToOdp::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
                                        const QString& listStyle)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
@@ -2480,30 +2487,29 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:end-line-spacing-horizontal
     // draw:end-line-spacing-vertical
     // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    const FillStyleBooleanProperties* fs = get<FillStyleBooleanProperties>(o);
-    const FillType* fillType = get<FillType>(o);
-    if (fs && fs->fUseFilled && !fs->fFilled) {
+    qint32 fillType = ds.fillType();
+    if (ds.fFilled()) {
+        style.addProperty("draw:fill", getFillType(fillType), gt);
+    } else {
         style.addProperty("draw:fill", "none", gt);
-    } else if (fillType) {
-        style.addProperty("draw:fill", getFillType(fillType->fillType), gt);
     }
     // draw:fill-color
-    const FillColor* fc = get<FillColor>(o);
-    if (fc && fillType && fillType->fillType == 0) {
-        // only set the color if the fill type is 'solid' because OOo ignores
-        // fill='non' if the color is set
-        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(), gt);
+    // only set the color if the fill type is 'solid' because OOo ignores
+    // fill='none' if the color is set
+    if (fillType == 0) {
+        style.addProperty("draw:fill-color", toQColor(ds.fillColor()).name(),
+                          gt);
     }
     // draw:fill-gradient-name
     // draw:fill-hatch-name
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
-    const FillBlip* fb = get<FillBlip>(o);
-    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
+    quint32 fillBlip = ds.fillBlip();
+    const QString fillImagePath = getPicturePath(fillBlip);
     if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill-image-name",
-                          "fillImage" + QString::number(fb->fillBlip), gt);
+                          "fillImage" + QString::number(fillBlip), gt);
     }
     // draw:fill-image-ref-point
     // draw:fill-image-ref-point-x
@@ -2524,31 +2530,25 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:line-distance
     // draw:luminance
     // draw:marker-end
-    const LineEndArrowhead* lea = get<LineEndArrowhead>(o);
-    if (lea && lea->lineEndArrowhead > 0 && lea->lineEndArrowhead < 6) {
-        style.addProperty("draw:marker-end",
-                          arrowHeads[lea->lineEndArrowhead], gt);
+    quint32 lineEndArrowhead = ds.lineEndArrowhead();
+    if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
+        style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
     }
     // draw:marker-end-center
     // draw:marker-end-width
-    const LineWidth* lw = get<LineWidth>(o);
-    const LineEndArrowWidth* lew = get<LineEndArrowWidth>(o);
-    if (lw && lew) {
-        style.addProperty("draw:marker-end-width", cm(lw->lineWidth*lew->lineEndArrowWidth), gt);
-    }
+    qreal lineWidthPt = ds.lineWidth() / 12700.;
+    style.addProperty("draw:marker-end-width",
+                      pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
     // draw:marker-start
-    const LineStartArrowhead* lsa = get<LineStartArrowhead>(o);
-    if (lsa && lsa->lineStartArrowhead > 0 && lsa->lineStartArrowhead < 6) {
-        style.addProperty("draw:marker-start",
-                          arrowHeads[lsa->lineStartArrowhead], gt);
+    quint32 lineStartArrowhead = ds.lineStartArrowhead();
+    if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
+        style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead],
+                          gt);
     }
     // draw:marker-start-center
     // draw:marker-start-width
-    const LineStartArrowWidth* lsw = get<LineStartArrowWidth>(o);
-    if (lw && lsw) {
-        style.addProperty("draw:marker-start-width",
-                          cm(lw->lineWidth*lsw->lineStartArrowWidth), gt);
-    }
+    style.addProperty("draw:marker-start-width",
+                      pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
     // draw:measure-align
     // draw:measure-vertical-align
     // draw:ole-draw-aspect
@@ -2561,48 +2561,35 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:shadow
     // draw:shadow-color
     // draw:shadow-offset-x
-    const ShadowOffsetX* sox =  get<ShadowOffsetX>(o);
-    if (sox) {
-        style.addProperty("draw:shadow-offset-x", cm(sox->shadowOffsetX), gt);
-    }
+    style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
     // draw:shadow-offset-y
-    const ShadowOffsetY* soy =  get<ShadowOffsetY>(o);
-    if (soy) {
-        style.addProperty("draw:shadow-offset-y", cm(soy->shadowOffsetY), gt);
-    }
+    style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
     // draw:shadow-opacity
-    const ShadowOpacity* so = get<ShadowOpacity>(o);
-    if (so) {
-        float opacity = toQReal(so->shadowOpacity);
-        style.addProperty("draw:shadow-opacity", percent(opacity), gt);
-    }
+    float shadowOpacity = toQReal(ds.shadowOpacity());
+    style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
     // draw:stroke ('dash', 'none' or 'solid')
-    const LineDashing* ld = get<LineDashing>(o);
-    const LineStyleBooleanProperties* bp = get<LineStyleBooleanProperties>(o);
+    quint32 lineDashing = ds.lineDashing();
     // OOo interprets solid line with with 0 as hairline, so if
     // width == 0, stroke *must* be none to avoid OOo from
     // displaying a line
-    if (lw && lw->lineWidth == 0) {
+    if (lineWidthPt == 0) {
         style.addProperty("draw:stroke", "none", gt);
-    } else if (bp && bp->fUsefLine) {
-        if (bp->fLine
-                || (ld && bp->fUseNoLineDrawDash && bp->fNoLineDrawDash)) {
-            if (ld && ld->lineDashing > 0 && ld->lineDashing < 11) {
-                style.addProperty("draw:stroke", "dash", gt);
-            } else {
-                style.addProperty("draw:stroke", "solid", gt);
-            }
+    } else if (ds.fLine() || ds.fNoLineDrawDash()) {
+        if (lineDashing > 0 && lineDashing < 11) {
+            style.addProperty("draw:stroke", "dash", gt);
         } else {
-            style.addProperty("draw:stroke", "none", gt);
+            style.addProperty("draw:stroke", "solid", gt);
         }
+    } else {
+        style.addProperty("draw:stroke", "none", gt);
     }
     // draw:stroke-dash from 2.3.8.17 lineDashing
-    if (ld && ld->lineDashing > 0 && ld->lineDashing < 11) {
-        style.addProperty("draw:stroke-dash", dashses[ld->lineDashing], gt);
+    if (lineDashing > 0 && lineDashing < 11) {
+        style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
     }
     // draw:stroke-dash-names
     // draw:stroke-linejoin
@@ -2666,21 +2653,12 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // svg:fill-rule
     // svg:height
     // svg:stroke-color from 2.3.8.1 lineColor
-    const LineColor* lc = get<LineColor>(o);
-    if (lc) {
-        style.addProperty("svg:stroke-color", toQColor(lc->lineColor).name(),
-                          gt);
-    }
+    style.addProperty("svg:stroke-color", toQColor(ds.lineColor()).name(), gt);
     // svg:stroke-opacity from 2.3.8.2 lineOpacity
-    const LineOpacity* lo = get<LineOpacity>(o);
-    if (lo) {
-        style.addProperty("svg:stroke-opacity", lo->lineOpacity / 0x10000f, gt);
-    }
+    style.addProperty("svg:stroke-opacity",
+                      percent(100.0 * ds.lineOpacity() / 0x10000), gt);
     // svg:stroke-width from 2.3.8.14 lineWidth
-    if (lw) {
-        style.addProperty("svg:stroke-width",
-                          pt(lw->lineWidth / 12700.f), gt);
-    }
+    style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
     // svg:width
     // svg:x
     // svg:y
@@ -2787,7 +2765,10 @@ void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
         defineListStyle(list, *listStyle);
         listStyleName = out.styles.lookup(list);
     }
-    defineGraphicProperties(style, o, listStyleName);
+    const OfficeArtDggContainer& drawingGroup
+        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    const DrawStyle ds(drawingGroup, &o);
+    defineGraphicProperties(style, ds, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(p->documentContainer, currentMaster, textType);
         defineParagraphProperties(style, pf);
@@ -2828,7 +2809,10 @@ void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
         defineListStyle(list, *listStyle);
         listStyleName = out.styles.lookup(list);
     }
-    defineGraphicProperties(style, o, listStyleName);
+    const OfficeArtDggContainer& drawingGroup
+        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    const DrawStyle ds(drawingGroup, &o);
+    defineGraphicProperties(style, ds, listStyleName);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(p->documentContainer, currentMaster, textType);
         defineParagraphProperties(style, pf);

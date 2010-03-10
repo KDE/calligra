@@ -25,6 +25,7 @@
 
 #include "generated/simpleParser.h"
 #include "pptstyle.h"
+#include "drawstyle.h"
 #include "DateTimeFormat.h"
 #include "ParsedPresentation.h"
 
@@ -197,8 +198,7 @@ private:
                                 const MSO::HeadersFootersAtom* hf);
 
     /* Extract data into the style */
-    template <typename T>
-    void defineGraphicProperties(KoGenStyle& style, const T& o,
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
                                  const QString& listStyle = QString());
 
     /**
@@ -578,7 +578,9 @@ private:
                 return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
             }
         }
-        qDebug() << "Could not find image for pib " << pib;
+        if (pib != 0xFFFF && pib != 0) {
+            qDebug() << "Could not find image for pib " << pib;
+        }
         return QByteArray();
     }
     const MSO::FontEntityAtom*
@@ -660,78 +662,6 @@ private:
     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
 };
-
-
-/**
- * Retrieve an option from an options containing class B
- *
- * @p b must have a member fopt that is an array of
- * type OfficeArtFOPTEChoice.
- * A is the type of the required option. The option containers
- * in PPT have only one instance of each option in a option container.
- * @param b class that contains options.
- * @return pointer to the option of type A or 0 if there is none.
- */
-template <typename A, typename B>
-const A*
-get(const B& b)
-{
-    foreach(const MSO::OfficeArtFOPTEChoice& a, b.fopt) {
-        const A *ptr = a.anon.get<A>();
-        if (ptr) return ptr;
-    }
-    return 0;
-}
-/**
- * Retrieve an option from an OfficeArtSpContainer
- *
- * Look in all option containers in @p o for an option of type A.
- * @param o OfficeArtSpContainer instance which contains options.
- * @return pointer to the option of type A or 0 if there is none.
- */
-template <typename A>
-const A*
-get(const MSO::OfficeArtSpContainer& o)
-{
-    const A* a = 0;
-    if (o.shapePrimaryOptions) a = get<A>(*o.shapePrimaryOptions);
-    if (!a && o.shapeSecondaryOptions1) a = get<A>(*o.shapeSecondaryOptions1);
-    if (!a && o.shapeSecondaryOptions2) a = get<A>(*o.shapeSecondaryOptions2);
-    if (!a && o.shapeTertiaryOptions1) a = get<A>(*o.shapeTertiaryOptions1);
-    if (!a && o.shapeTertiaryOptions2) a = get<A>(*o.shapeTertiaryOptions2);
-    return a;
-}
-/**
- * Retrieve an option from an OfficeArtDggContainer
- *
- * Look in all option containers in @p o for an option of type A.
- * @param o OfficeArtDggContainer instance which contains options.
- * @return pointer to the option of type A or 0 if there is none.
- */
-template <typename A>
-const A*
-get(const MSO::OfficeArtDggContainer& o)
-{
-    const A* a = 0;
-    if (o.drawingPrimaryOptions) {
-        get<A>(*o.drawingPrimaryOptions);
-    }
-    if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
-    return a;
-}
-/**
- * Retrieve an option from a container
- *
- * Look in all option containers in @p o for an option of type A.
- * @param o OfficeArtDggContainer instance which contains options.
- * @return pointer to the option of type A or 0 if there is none.
- */
-template <typename A, typename T>
-const A*
-get(const T* o)
-{
-    return (o) ?get<A>(*o) :0;
-}
 
 /**
  * Convert FixedPoint to a qreal
