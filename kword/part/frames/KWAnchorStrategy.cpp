@@ -36,44 +36,7 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
         m_lastVerticalAnchorAlignment(KoTextAnchor::TopOfFrame),
         m_lastHorizontalAnchorAlignment(KoTextAnchor::Left)
 {
-    // figure out until what cursor position we need to layout to get all the info we need
-    switch (m_anchor->horizontalAlignment()) {
-    case KoTextAnchor::ClosestToBinding:
-    case KoTextAnchor::Left:
-    case KoTextAnchor::FurtherFromBinding:
-    case KoTextAnchor::Right:
-    case KoTextAnchor::Center: {
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
-        Q_ASSERT(data);
-        m_knowledgePoint = data->position();
-        break;
-    }
-    case KoTextAnchor::HorizontalOffset:
-        m_knowledgePoint = anchor->positionInDocument();
-    }
-    switch (m_anchor->verticalAlignment()) {
-    case KoTextAnchor::TopOfParagraph:
-        m_knowledgePoint = qMax(m_knowledgePoint,
-                                anchor->document()->findBlock(anchor->positionInDocument()).position() + 1);
-        break;
-    case KoTextAnchor::VerticalOffset:
-    case KoTextAnchor::AboveCurrentLine:
-    case KoTextAnchor::BelowCurrentLine:
-        m_knowledgePoint = qMax(m_knowledgePoint, anchor->positionInDocument());
-        break;
-    case KoTextAnchor::TopOfFrame:
-    case KoTextAnchor::BottomOfFrame: {
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
-        Q_ASSERT(data);
-        m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
-        break;
-    }
-    case KoTextAnchor::BottomOfParagraph: {
-        QTextBlock block = anchor->document()->findBlock(anchor->positionInDocument());
-        m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length() - 2);
-        break;
-    }
-    }
+    calculateKnowledgePoint();
 }
 
 KWAnchorStrategy::~KWAnchorStrategy()
@@ -82,6 +45,18 @@ KWAnchorStrategy::~KWAnchorStrategy()
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
 {
+    if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
+        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
+        if (sc == 0) {
+            kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
+            return false;
+        }
+        sc->addChild(m_anchor->shape());
+        calculateKnowledgePoint();
+    }
+    if (m_knowledgePoint < 0)
+        return false;
+
     if (m_lastknownPosInDoc != m_anchor->positionInDocument()
             || m_lastOffset != m_anchor->offset()
             || m_lastVerticalAnchorAlignment != m_anchor->verticalAlignment()
@@ -106,14 +81,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
 
 // TODO rewrite the below to account for rotation etc.
     QRectF boundingRect = m_anchor->shape()->boundingRect();
-    if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
-        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
-        if (sc == 0) {
-            kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
-            return false;
-        }
-        sc->addChild(m_anchor->shape());
-    }
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QPointF newPosition;
     switch (m_anchor->horizontalAlignment()) {
@@ -246,3 +213,49 @@ KoShape * KWAnchorStrategy::anchoredShape() const
     return m_anchor->shape();
 }
 
+void KWAnchorStrategy::calculateKnowledgePoint()
+{
+    m_knowledgePoint = -1;
+    // figure out until what cursor position we need to layout to get all the info we need
+    switch (m_anchor->horizontalAlignment()) {
+    case KoTextAnchor::ClosestToBinding:
+    case KoTextAnchor::Left:
+    case KoTextAnchor::FurtherFromBinding:
+    case KoTextAnchor::Right:
+    case KoTextAnchor::Center: {
+        if (m_anchor->shape()->parent() == 0) // not enough info yet.
+            return;
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+        Q_ASSERT(data);
+        m_knowledgePoint = data->position();
+        break;
+    }
+    case KoTextAnchor::HorizontalOffset:
+        m_knowledgePoint = m_anchor->positionInDocument();
+    }
+    switch (m_anchor->verticalAlignment()) {
+    case KoTextAnchor::TopOfParagraph:
+        m_knowledgePoint = qMax(m_knowledgePoint,
+                                m_anchor->document()->findBlock(m_anchor->positionInDocument()).position() + 1);
+        break;
+    case KoTextAnchor::VerticalOffset:
+    case KoTextAnchor::AboveCurrentLine:
+    case KoTextAnchor::BelowCurrentLine:
+        m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument());
+        break;
+    case KoTextAnchor::TopOfFrame:
+    case KoTextAnchor::BottomOfFrame: {
+        if (m_anchor->shape()->parent() == 0) // not enough info yet.
+            return;
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+        Q_ASSERT(data);
+        m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
+        break;
+    }
+    case KoTextAnchor::BottomOfParagraph: {
+        QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
+        m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length() - 2);
+        break;
+    }
+    }
+}
