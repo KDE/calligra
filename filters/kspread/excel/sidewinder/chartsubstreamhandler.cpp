@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include <QRegExp>
+#include <QDebug>
 
 namespace Swinder {
 
@@ -67,7 +68,7 @@ QPair<QString,QRect> splitCellRange(QString range)
 class BRAIRecord : public Record
 {
 public:
-    ChartObject::Value* m_value;
+    Charting::Value* m_value;
 
     static const unsigned int id;
     unsigned int rtti() const { return this->id; }
@@ -90,8 +91,8 @@ public:
             return;
         }
 
-        ChartObject::Value::DataId dataId = (ChartObject::Value::DataId) readU8(data);
-        ChartObject::Value::DataType type = (ChartObject::Value::DataType) readU8(data + 1);
+        Charting::Value::DataId dataId = (Charting::Value::DataId) readU8(data);
+        Charting::Value::DataType type = (Charting::Value::DataType) readU8(data + 1);
         bool isUnlinkedFormat = readU16(data + 2) & 0x01;
         unsigned numberFormat = readU16(data + 4);
 
@@ -105,7 +106,7 @@ public:
         }
 
         if(m_value) delete m_value;
-        m_value = new ChartObject::Value(dataId, type, isUnlinkedFormat, numberFormat, formula);
+        m_value = new Charting::Value(dataId, type, isUnlinkedFormat, numberFormat, string(formula));
     }
 
 private:
@@ -120,7 +121,7 @@ const unsigned BRAIRecord::id = 0x1051;
 using namespace Swinder;
 
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_chart(0), m_sheet(0), m_currentSeries(0), m_currentObj(0), m_level(0)
+    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_level(0)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
@@ -135,12 +136,14 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, S
         std::map<unsigned long, Object*>::iterator it = worksheetHandler->sharedObjects().find(id);
         Q_ASSERT(it != worksheetHandler->sharedObjects().end());
         //worksheetHandler->sharedObjects().erase(id); // remove from the sharedObjects and take over ownership
-        m_chart = dynamic_cast<ChartObject*>(it->second);
+        m_chartObject = dynamic_cast<ChartObject*>(it->second);
+        Q_ASSERT(m_chartObject);
+        m_chart = m_chartObject->m_chart;
         Q_ASSERT(m_chart);
 
         //unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
-        Cell* cell = m_sheet->cell(m_chart->drawingObject()->m_colL, m_chart->drawingObject()->m_rwT, true);
-        cell->addChart(m_chart);
+        Cell* cell = m_sheet->cell(m_chartObject->drawingObject()->m_colL, m_chartObject->drawingObject()->m_rwT, true);
+        cell->addChart(m_chartObject);
     } else {
         std::cerr << "ChartSubStreamHandler: Chart is not embedded into a worksheet. This is not handled yet." << std::endl;
         //TODO
@@ -306,25 +309,25 @@ void ChartSubStreamHandler::handleZoomLevel(ZoomLevelRecord *)
 void ChartSubStreamHandler::handleLeftMargin(LeftMarginRecord* record)
 {
     if(!record) return;
-    m_chart->leftMargin = record->leftMargin();
+    m_chart->m_leftMargin = record->leftMargin();
 }
 
 void ChartSubStreamHandler::handleRightMargin(RightMarginRecord* record)
 {
     if(!record) return;
-    m_chart->rightMargin = record->rightMargin();
+    m_chart->m_rightMargin = record->rightMargin();
 }
 
 void ChartSubStreamHandler::handleTopMargin(TopMarginRecord* record)
 {
     if(!record) return;
-    m_chart->topMargin = record->topMargin();
+    m_chart->m_topMargin = record->topMargin();
 }
 
 void ChartSubStreamHandler::handleBottomMargin(BottomMarginRecord* record)
 {
     if(!record) return;
-    m_chart->bottomMargin = record->bottomMargin();
+    m_chart->m_bottomMargin = record->bottomMargin();
 }
 
 void ChartSubStreamHandler::handleDimension(DimensionRecord *record)
@@ -337,10 +340,10 @@ void ChartSubStreamHandler::handleChart(ChartRecord *record)
 {
     if(!record) return;
     DEBUG << "x=" << record->x() << " y=" << record->y() << " width=" << record->width() << " height=" << record->height() <<  std::endl;
-    m_chart->x = record->x();
-    m_chart->y = record->y();
-    m_chart->width = record->width();
-    m_chart->height = record->height();
+    m_chart->m_total_x = record->x();
+    m_chart->m_total_y = record->y();
+    m_chart->m_total_width = record->width();
+    m_chart->m_total_height = record->height();
 }
 
 
@@ -360,12 +363,12 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if(!record) return;
     if(record->isAutoPosition()) {
-        m_chart->x = -1;
-        m_chart->y = -1;
+        m_chart->m_total_x = -1;
+        m_chart->m_total_y = -1;
     }
     if(record->isAutoSize()) {
-        m_chart->width = -1;
-        m_chart->height = -1;
+        m_chart->m_total_width = -1;
+        m_chart->m_total_height = -1;
     }
 }
 
@@ -374,12 +377,12 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
     if(!record) return;
     DEBUG << "dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
-    m_currentSeries = new ChartObject::Series;
-    m_currentSeries->dataTypeX = record->dataTypeX();
-    m_currentSeries->countXValues = record->countXValues();
-    m_currentSeries->countYValues = record->countYValues();
-    m_currentSeries->countBubbleSizeValues = record->countBubbleSizeValues();
-    m_chart->series << m_currentSeries;
+    m_currentSeries = new Charting::Series;
+    m_currentSeries->m_dataTypeX = record->dataTypeX();
+    m_currentSeries->m_countXValues = record->countXValues();
+    m_currentSeries->m_countYValues = record->countYValues();
+    m_currentSeries->m_countBubbleSizeValues = record->countBubbleSizeValues();
+    m_chart->m_series << m_currentSeries;
 }
 
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
@@ -387,32 +390,32 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 {
     if(!record) return;
     if(!m_currentSeries) return;
-    DEBUG << "dataId=" << record->m_value->dataId << " type=" << record->m_value->type << " isUnlinkedNumberFormat=" << record->m_value->isUnlinkedFormat << " numberFormat=" << record->m_value->numberFormat << " formula=" << record->m_value->formula << std::endl;
+    DEBUG << "dataId=" << record->m_value->m_dataId << " type=" << record->m_value->m_type << " isUnlinkedNumberFormat=" << record->m_value->m_isUnlinkedFormat << " numberFormat=" << record->m_value->m_numberFormat << " formula=" << record->m_value->m_formula.toUtf8().constData() << std::endl;
 
     //FIXME is that correct or do we need to take the series somehow into account to provide one cellRangeAddress per series similar to valuesCellRangeAddress?
     //FIXME handle VerticalValues and BubbleSizeValues
-    if(!record->m_value->formula.isEmpty()) {
-        if(record->m_value->type == ChartObject::Value::TextOrValue || record->m_value->type == ChartObject::Value::CellRange) {
-            if(record->m_value->dataId == ChartObject::Value::HorizontalValues)
-                m_currentSeries->valuesCellRangeAddress = record->m_value->formula;
-            else if(record->m_value->dataId == ChartObject::Value::VerticalValues)
-                m_chart->verticalCellRangeAddress = record->m_value->formula;
+    if(!record->m_value->m_formula.isEmpty()) {
+        if(record->m_value->m_type == Charting::Value::TextOrValue || record->m_value->m_type == Charting::Value::CellRange) {
+            if(record->m_value->m_dataId == Charting::Value::HorizontalValues)
+                m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
+            else if(record->m_value->m_dataId == Charting::Value::VerticalValues)
+                m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
 
             //FIXME we are ignoring the sheetname here but we probably should handle the case where a series is made from different sheets...
-            QPair<QString,QRect> result = splitCellRange( QString::fromRawData(reinterpret_cast<const QChar*>(record->m_value->formula.data()), record->m_value->formula.length()) );
+            QPair<QString,QRect> result = splitCellRange( record->m_value->m_formula );
             QRect r = result.second;
-            if(r.isValid() && m_chart->cellRangeAddress.isValid()) {
-                if(r.left() < m_chart->cellRangeAddress.left()) m_chart->cellRangeAddress.setLeft(r.left());
-                if(r.top() < m_chart->cellRangeAddress.top()) m_chart->cellRangeAddress.setTop(r.top());
-                if(r.right() > m_chart->cellRangeAddress.right()) m_chart->cellRangeAddress.setRight(r.right());
-                if(r.bottom() > m_chart->cellRangeAddress.bottom()) m_chart->cellRangeAddress.setBottom(r.bottom());
+            if(r.isValid() && m_chart->m_cellRangeAddress.isValid()) {
+                if(r.left() < m_chart->m_cellRangeAddress.left()) m_chart->m_cellRangeAddress.setLeft(r.left());
+                if(r.top() < m_chart->m_cellRangeAddress.top()) m_chart->m_cellRangeAddress.setTop(r.top());
+                if(r.right() > m_chart->m_cellRangeAddress.right()) m_chart->m_cellRangeAddress.setRight(r.right());
+                if(r.bottom() > m_chart->m_cellRangeAddress.bottom()) m_chart->m_cellRangeAddress.setBottom(r.bottom());
             } else {
-                m_chart->cellRangeAddress = r;
+                m_chart->m_cellRangeAddress = r;
             }
         }
     }
 
-    m_currentSeries->datasetValue[record->m_value->dataId] = record->m_value;
+    m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
     record->m_value = 0; //take over ownership
 }
 
@@ -437,7 +440,7 @@ void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 {
     if(!record) return;
     DEBUG << "anRot=" << record->anRot() << " anElev=" << record->anElev() << " pcDist=" << record->pcDist() << " pcHeight=" << record->pcHeight() << " pcDepth=" << record->pcDepth() << std::endl;
-    m_chart->is3d = true;
+    m_chart->m_is3d = true;
     //TODO
 }
 
@@ -460,7 +463,7 @@ void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
     if(!record) return;
     if(!m_currentSeries) return;
     DEBUG << "pcExplode="<<record->pcExplode()<<std::endl;
-    m_currentSeries->datasetFormat << new ChartObject::PieFormat(record->pcExplode());
+    m_currentSeries->m_datasetFormat << new Charting::PieFormat(record->pcExplode());
 }
 
 void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
@@ -513,15 +516,16 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
-    m_currentObj = new ChartObject::Text;
+    m_currentObj = new Charting::Text;
 }
 
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if(!record) return;
     DEBUG << "text=" << record->text() << std::endl;
-    if(ChartObject::Text *t = dynamic_cast<ChartObject::Text*>(m_currentObj))
-        t->text = record->text();
+    if(Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
+        t->m_text = string(record->text());
+    }
 }
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
@@ -529,12 +533,12 @@ void ChartSubStreamHandler::handlePos(PosRecord *record)
     if(!record) return;
     DEBUG << "mdTopLt=" << record->mdTopLt() << " mdBotRt=" << record->mdBotRt() << " x1=" << record->x1() << " y1=" << record->y1() << " x2=" << record->x2() << " y2=" << record->y2() << std::endl;
     if(m_currentObj) {
-        m_currentObj->mdBotRt = record->mdBotRt();
-        m_currentObj->mdTopLt = record->mdTopLt();
-        m_currentObj->x1 = record->x1();
-        m_currentObj->y1 = record->y1();
-        m_currentObj->x2 = record->x2();
-        m_currentObj->y2 = record->y2();
+        m_currentObj->m_mdBotRt = record->mdBotRt();
+        m_currentObj->m_mdTopLt = record->mdTopLt();
+        m_currentObj->m_x1 = record->x1();
+        m_currentObj->m_y1 = record->y1();
+        m_currentObj->m_x2 = record->x2();
+        m_currentObj->m_y2 = record->y2();
     }
 }
 
@@ -578,7 +582,7 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
     if(!record) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
-    m_chart->impl = new ChartObject::PieImpl(record->anStart(), record->pcDonut());
+    m_chart->m_impl = new Charting::PieImpl(record->anStart(), record->pcDonut());
 }
 
 // type of data contained in the Number records following
@@ -619,18 +623,19 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
     if(!record) return;
     DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
 
-    ChartObject::Text *t = dynamic_cast<ChartObject::Text*>(m_currentObj);
-    if(!t) return;
+    Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj);
+    //if(!t) return;
+    Q_ASSERT(t);
 
     switch(record->wLinkObj()) {
         case ObjectLinkRecord::EntireChart: {
-            m_chart->texts << t;
+            m_chart->m_texts << t;
         } break;
         case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
         case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
         case ObjectLinkRecord::SeriesOrDatapoints: {
-            if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->series.count()) return;
-            ChartObject::Series* series = m_chart->series[ record->wLinkVar1() ];
+            if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->m_series.count()) return;
+            //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
             if(record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;
             } else {

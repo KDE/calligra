@@ -29,6 +29,13 @@
 //#include "sheet.h"
 //#include <map>
 
+namespace Charting
+{
+    class Chart;
+    class Series;
+    class Obj;
+}
+
 namespace Swinder
 {
 
@@ -51,10 +58,11 @@ public:
 private:
     GlobalsSubStreamHandler* m_globals;
     SubStreamHandler* m_parentHandler;
-    ChartObject* m_chart;
     Sheet* m_sheet;
-    ChartObject::Series* m_currentSeries;
-    ChartObject::Obj* m_currentObj;
+    ChartObject* m_chartObject;
+    Charting::Chart* m_chart;
+    Charting::Series* m_currentSeries;
+    Charting::Obj* m_currentObj;
     int m_level;
     
     void handleBOF(BOFRecord*);

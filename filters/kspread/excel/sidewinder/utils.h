@@ -24,6 +24,8 @@
 #include "value.h"
 #include <map>
 
+#include <QtCore/QString>
+
 namespace Swinder
 {
 
@@ -137,6 +139,13 @@ UString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -
 UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
 
 std::ostream& operator<<(std::ostream& s, Swinder::UString ustring);
+
+inline QString string(const Swinder::UString& str)
+{
+    // don't use QString::fromRawData cause it does not create a deep copy what may result in
+    // garbage if the underlying str got deleted before we are using our QString.
+    return QString(reinterpret_cast<const QChar*>(str.data()), str.length());
+}
 
 /**
   Class Record represents a base class for all other type record,
