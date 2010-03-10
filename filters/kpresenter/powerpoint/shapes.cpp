@@ -765,28 +765,24 @@ void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
 void PptToOdp::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
-    QString x1Str = QString("%1mm").arg(rect.x());
-    QString y1Str = QString("%1mm").arg(rect.y());
-    QString x2Str = QString("%1mm").arg(rect.x() + rect.width());
-    QString y2Str = QString("%1mm").arg(rect.y() + rect.height());
+    qreal x1 = rect.x();
+    qreal y1 = rect.y();
+    qreal x2 = rect.x() + rect.width();
+    qreal y2 = rect.y() + rect.height();
 
     if (o.shapeProp.fFlipV) {
-        QString temp = y1Str;
-        y1Str = y2Str;
-        y2Str = temp;
+        qSwap(y1, y2);
     }
     if (o.shapeProp.fFlipH) {
-        QString temp = x1Str;
-        x1Str = x2Str;
-        x2Str = temp;
+        qSwap(x1, x2);
     }
 
     out.xml.startElement("draw:line");
     addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("svg:y1", y1Str);
-    out.xml.addAttribute("svg:y2", y2Str);
-    out.xml.addAttribute("svg:x1", x1Str);
-    out.xml.addAttribute("svg:x2", x2Str);
+    out.xml.addAttribute("svg:y1", out.vOffset(y1));
+    out.xml.addAttribute("svg:y2", out.vOffset(y2));
+    out.xml.addAttribute("svg:x1", out.hOffset(x1));
+    out.xml.addAttribute("svg:x2", out.hOffset(x2));
     out.xml.addAttribute("draw:layer", "layout");
 
     out.xml.endElement();
