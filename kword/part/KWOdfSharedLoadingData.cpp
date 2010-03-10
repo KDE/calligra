@@ -28,12 +28,7 @@
 #include "frames/KWTextFrame.h"
 #include "frames/KWCopyShape.h"
 
-#include <KoShape.h>
-#include <KoTextAnchor.h>
-#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
-#include <KoTextDocumentLayout.h>
-#include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
