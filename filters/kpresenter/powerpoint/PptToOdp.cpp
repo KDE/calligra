@@ -996,7 +996,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
     }
     out.addAttribute("text:level", level);
 
-    bool hasIndent = i.pf.indent();
+    bool hasIndent = i.pf.level();
     out.startElement("style:list-level-properties");
     // fo:height
     if (imageBullet && !bulletSize.isNull()) {
@@ -1934,18 +1934,18 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf, pf9);
         // remove levels until the top level is the right indentation
-        if ((quint16)levels.size() > pf.indent()
-                && levels[pf.indent()] == listStyle) {
-            writeTextObjectDeIndent(out.xml, pf.indent() + 1, levels);
+        if ((quint16)levels.size() > pf.level()
+                && levels[pf.level()] == listStyle) {
+            writeTextObjectDeIndent(out.xml, pf.level() + 1, levels);
         } else {
-            writeTextObjectDeIndent(out.xml, pf.indent(), levels);
+            writeTextObjectDeIndent(out.xml, pf.level(), levels);
         }
         // add styleless levels up to the current level of indentation
-        while ((quint16)levels.size() < pf.indent()) {
+        while ((quint16)levels.size() < pf.level()) {
             addListElement(out.xml, levels, "");
         }
         // at this point, levels.size() == paragraphIndent
-        if (pf.indent() + 1 != levels.size()) {
+        if (pf.level() + 1 != levels.size()) {
             addListElement(out.xml, levels, listStyle);
         }
         out.xml.startElement("text:list-item");
