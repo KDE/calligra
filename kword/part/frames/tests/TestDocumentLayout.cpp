@@ -176,4 +176,4 @@ void TestDocumentLayout::placeAnchoredFrame()
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
-#include "TestDocumentLayout.moc"
+#include <TestDocumentLayout.moc>

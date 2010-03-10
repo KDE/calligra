@@ -20,7 +20,7 @@
 #ifndef KWCREATEBOOKMARKDIALOG_H
 #define KWCREATEBOOKMARKDIALOG_H
 
-#include "ui_KWCreateBookmark.h"
+#include <ui_KWCreateBookmark.h>
 
 #include <QWidget>
 #include <QList>

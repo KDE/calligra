@@ -20,7 +20,7 @@
 #ifndef KWFRAMECONNECTSELECTOR_H
 #define KWFRAMECONNECTSELECTOR_H
 
-#include "ui_KWFrameConnectSelector.h"
+#include <ui_KWFrameConnectSelector.h>
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>

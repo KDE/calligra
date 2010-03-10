@@ -156,4 +156,4 @@ void FrameConfigSharedState::setFrame(KWFrame *frame)
     m_frame = frame;
 }
 
-#include "KWShapeConfigFactory.moc"
+#include <KWShapeConfigFactory.moc>

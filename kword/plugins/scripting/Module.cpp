@@ -246,4 +246,4 @@ QObject* Module::tool()
     return new Tool(this);
 }
 
-#include "Module.moc"
+#include <Module.moc>

@@ -56,4 +56,4 @@ KWTextFrame * TestTextFrameManagement::createFrame(const QPointF &position, KWTe
 
 QTEST_KDEMAIN(TestTextFrameManagement, GUI)
 
-#include "TestTextFrameManagement.moc"
+#include <TestTextFrameManagement.moc>

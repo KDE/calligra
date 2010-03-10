@@ -20,7 +20,7 @@
 #ifndef KWGENERALFRAMEPROPERTIES_H
 #define KWGENERALFRAMEPROPERTIES_H
 
-#include "ui_KWGeneralFrameProperties.h"
+#include <ui_KWGeneralFrameProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>

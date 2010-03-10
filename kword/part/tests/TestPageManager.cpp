@@ -667,4 +667,4 @@ void TestPageManager::testBackgroundRefCount()
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)
-#include "TestPageManager.moc"
+#include <TestPageManager.moc>

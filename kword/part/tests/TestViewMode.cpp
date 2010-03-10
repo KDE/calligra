@@ -106,4 +106,4 @@ void TestViewMode::testBasicConversion()
 }
 
 QTEST_KDEMAIN(TestViewMode, GUI)
-#include "TestViewMode.moc"
+#include <TestViewMode.moc>

@@ -382,4 +382,4 @@ void TestBasicLayout::removeAllFrames()
 
 QTEST_KDEMAIN(TestBasicLayout, GUI)
 
-#include "TestBasicLayout.moc"
+#include <TestBasicLayout.moc>

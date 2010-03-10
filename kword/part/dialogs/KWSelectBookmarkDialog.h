@@ -20,7 +20,7 @@
 #ifndef KWSELECTBOOKMARKDIALOG_H
 #define KWSELECTBOOKMARKDIALOG_H
 
-#include "ui_KWSelectBookmark.h"
+#include <ui_KWSelectBookmark.h>
 
 #include <QWidget>
 #include <KDialog>

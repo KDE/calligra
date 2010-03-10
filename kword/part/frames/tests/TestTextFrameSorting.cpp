@@ -177,4 +177,4 @@ KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextF
 
 QTEST_KDEMAIN(TestTextFrameSorting, GUI)
 
-#include "TestTextFrameSorting.moc"
+#include <TestTextFrameSorting.moc>

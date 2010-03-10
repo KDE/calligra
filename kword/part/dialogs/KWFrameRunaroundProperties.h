@@ -20,7 +20,7 @@
 #ifndef KWFRAMERUNAROUNDPROPERTIES_H
 #define KWFRAMERUNAROUNDPROPERTIES_H
 
-#include "ui_KWFrameRunaroundProperties.h"
+#include <ui_KWFrameRunaroundProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>

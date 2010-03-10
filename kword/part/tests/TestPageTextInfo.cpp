@@ -81,4 +81,4 @@ void TestPageTextInfo::testPageNumber()
 }
 
 QTEST_KDEMAIN(TestPageTextInfo, GUI)
-#include "TestPageTextInfo.moc"
+#include <TestPageTextInfo.moc>

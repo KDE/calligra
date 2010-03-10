@@ -509,4 +509,4 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
 }
 
 QTEST_KDEMAIN(TestPageCommands, GUI)
-#include "TestPageCommands.moc"
+#include <TestPageCommands.moc>
