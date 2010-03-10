@@ -2,6 +2,7 @@
 Type=Service
 Name=HTML Import Filter for KSpread
 Name[en_GB]=HTML Import Filter for KSpread
+Name[et]=KSpreadi HTML-i impordifilter
 Name[nds]=HTML-Importfilter för KSpread
 Name[nl]=HTML-importfilter voor KSpread
 Name[pt]=Filtro de Importação de HTML para o KSpread
