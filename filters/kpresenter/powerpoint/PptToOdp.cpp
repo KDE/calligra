@@ -707,7 +707,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:line-height
     // fo:margin
     // fo:margin-bottom
-    style.addProperty("fo:margin-bottom", pf.spaceAfter(), para);
+    style.addProperty("fo:margin-bottom", paraSpacingToCm(pf.spaceAfter()), para);
     // fo:margin-left
     style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()),
                 para);
@@ -972,8 +972,9 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", getBulletChar(i.pf));
-            if (i.pf.fBulletHasSize()) {
-                out.addAttribute("text:bullet-relative-size", i.pf.bulletSize());
+            if (i.pf.fBulletHasSize() && i.cf) {
+                qreal relSize = 100.0 * i.pf.bulletSize() / i.cf->fontSize;
+                out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
         } else {
             elementName = "text:list-level-style-number";
