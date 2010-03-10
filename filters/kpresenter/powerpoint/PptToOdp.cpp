@@ -559,10 +559,10 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
 
 void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
-    style.addProperty("svg:stroke-width", "0pt", gt);
+    style.addProperty("svg:stroke-width", "0.75pt", gt); // 2.3.8.15
+    style.addProperty("draw:fill", "none", gt); // 2.3.8.38
     style.addProperty("draw:auto-grow-height", false, gt);
-    style.addProperty("draw:stroke", "none", gt);
-    style.addProperty("draw:fill", "none", gt);
+    style.addProperty("draw:stroke", "solid", gt);
     style.addProperty("draw:fill-color", "#ffffff", gt);
     const OfficeArtDggContainer& drawingGroup
         = p->documentContainer->drawingGroup.OfficeArtDgg;
@@ -2582,24 +2582,22 @@ void PptToOdp::defineGraphicProperties(KoGenStyle& style, const T& o,
     // draw:start-line-spacing-vertical
     // draw:stroke ('dash', 'none' or 'solid')
     const LineDashing* ld = get<LineDashing>(o);
-    // for now, go by the assumption that there is only a line
-    // when fUsefLine and fLine are true
     const LineStyleBooleanProperties* bp = get<LineStyleBooleanProperties>(o);
-    if (bp && bp->fUsefLine && bp->fLine) {
-        if (ld && !(bp->fUseNoLineDrawDash && bp->fNoLineDrawDash)) {
-            if (ld->lineDashing == 0 || ld->lineDashing >= 11) { // solid
-                style.addProperty("draw:stroke", "solid", gt);
-            } else {
+    // OOo interprets solid line with with 0 as hairline, so if
+    // width == 0, stroke *must* be none to avoid OOo from
+    // displaying a line
+    if (lw && lw->lineWidth == 0) {
+        style.addProperty("draw:stroke", "none", gt);
+    } else if (bp && bp->fUsefLine) {
+        if (bp->fLine
+                || (ld && bp->fUseNoLineDrawDash && bp->fNoLineDrawDash)) {
+            if (ld && ld->lineDashing > 0 && ld->lineDashing < 11) {
                 style.addProperty("draw:stroke", "dash", gt);
+            } else {
+                style.addProperty("draw:stroke", "solid", gt);
             }
         } else {
-            // OOo interprets solid line with with 0 as hairline, so if
-            // width == 0, stroke *must* be none
-            if (lw && lw->lineWidth > 0) {
-                style.addProperty("draw:stroke", "solid", gt);
-            } else {
-                style.addProperty("draw:stroke", "none", gt);
-            }
+            style.addProperty("draw:stroke", "none", gt);
         }
     }
     // draw:stroke-dash from 2.3.8.17 lineDashing
