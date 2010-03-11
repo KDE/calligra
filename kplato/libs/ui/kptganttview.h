@@ -246,6 +246,8 @@ private:
     QSplitter *m_splitter;
     MyKDGanttView *m_gantt;
     Project *m_project;
+    
+    KAction *actionShowProject;
 };
 
 class KPLATOUI_EXPORT MilestoneKDGanttView : public GanttViewBase

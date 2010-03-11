@@ -2013,7 +2013,7 @@ QVariant NodeModel::headerData( int section, int role )
 NodeItemModel::NodeItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_node( 0 ),
-    m_projectshown( true )
+    m_projectshown( false )
 {
 }
 

@@ -57,6 +57,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <KToggleAction>
 
 #include "kdganttglobal.h"
 #include "kdganttstyleoptionganttitem.h"
@@ -278,6 +279,7 @@ void GanttViewBase::setProject( Project *project )
 bool GanttViewBase::loadContext( const KoXmlElement &settings )
 {
     treeView()->loadContext( model()->columnMap(), settings );
+
     KoXmlElement e = settings.namedItem( "ganttchart" ).toElement();
     if ( ! e.isNull() ) {
         m_ganttdelegate->showTaskLinks = (bool)( e.attribute( "show-dependencies", "0" ).toInt() );
@@ -486,6 +488,11 @@ void GanttView::setZoom( double )
 
 void GanttView::setupGui()
 {
+    // create context menu actions
+    actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
+    connect(actionShowProject, SIGNAL(triggered(bool) ), m_gantt->model(), SLOT(setShowProject(bool)));
+    addContextAction( actionShowProject );
+
     createOptionAction();
 }
 
@@ -618,13 +625,20 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
+    bool show = (bool)(settings.attribute( "show-project", "0" ).toInt() );
+    actionShowProject->setChecked( show );
+    m_gantt->model()->setShowProject( show ); // why is this not called by the action?
+
     return m_gantt->loadContext( settings );
 }
 
 void GanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
+    settings.setAttribute( "show-project", actionShowProject->isChecked() );
+
     m_gantt->saveContext( settings );
+
 }
 
 void GanttView::updateReadWrite( bool on )
