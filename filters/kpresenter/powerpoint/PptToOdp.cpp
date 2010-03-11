@@ -2770,6 +2770,9 @@ void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
         = p->documentContainer->drawingGroup.OfficeArtDgg;
     const DrawStyle ds(drawingGroup, &o);
     defineGraphicProperties(style, ds, listStyleName);
+    // small workaround to avoid presenation frames from having borders,
+    // even though the ppt file seems to specify that they should have one
+    style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(p->documentContainer, currentMaster, textType);
         defineParagraphProperties(style, pf);
