@@ -1687,11 +1687,12 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
     }
 }
 const TextCFException*
-getTextCFException(const MSO::TextContainer& tc, const int start, int& cfend)
+getTextCFException(const MSO::TextContainer& tc, const int start)
 {
     if (!tc.style) return 0;
     const QList<TextCFRun> &cfs = tc.style->rgTextCFRun;
     int i = 0;
+    int cfend = 0;
     while (i < cfs.size()) {
         cfend += cfs[i].count;
         if (cfend > start) {
@@ -1711,8 +1712,7 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
 {
     // find all components that start at position start
     // get the right character run
-    int cfend = end;
-    const TextCFException* cf = getTextCFException(tc, start, cfend);
+    const TextCFException* cf = getTextCFException(tc, start);
 
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
@@ -1924,8 +1924,7 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
 
     // to find the pf9, the cf has to be obtained which contains a pp9rt
     quint8 pp9rt = 0;
-    int cfend = 0;
-    const TextCFException* cf = getTextCFException(tc, start, cfend);
+    const TextCFException* cf = getTextCFException(tc, start);
     if (cf && cf->fontStyle) {
         pp9rt = cf->fontStyle->pp9rt;
     }
