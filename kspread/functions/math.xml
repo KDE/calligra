@@ -1128,11 +1128,12 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The ROUNDUP(value;[digits]) function returns value rounded up. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
+	<Text>The ROUNDUP(value;[digits]) function returns value rounded so that its absolute value is greater. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
 	<Syntax>ROUNDUP(value;[digits])</Syntax>
+	<Example>ROUNDUP(1.252) equals 2</Example>
 	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
-	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
-	<Example>ROUNDUP(-1.252) equals -1</Example>
+	<Example>ROUNDUP(-1.252;2) equals -1.26</Example>
+	<Example>ROUNDUP(-1.252) equals -2</Example>
 	<Related>ROUND</Related>
 	<Related>ROUNDDOWN</Related>
       </Help>
@@ -1150,11 +1151,12 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The ROUNDDOWN(value;[digits]) function returns value rounded down. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
+	<Text>The ROUNDDOWN(value;[digits]) function returns value rounded so that its absolute value is lesser. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
 	<Syntax>ROUNDDOWN(value;[digits])</Syntax>
+    <Example>ROUNDDOWN(1.252) equals 1</Example>
 	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
-	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
-	<Example>ROUNDDOWN(-1.252) equals -2</Example>
+	<Example>ROUNDDOWN(-1.252;2) equals -1.25</Example>
+	<Example>ROUNDDOWN(-1.252) equals -1</Example>
 	<Related>ROUND</Related>
 	<Related>ROUNDUP</Related>
       </Help>
