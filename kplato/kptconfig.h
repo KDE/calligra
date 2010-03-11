@@ -29,7 +29,8 @@ namespace KPlato
 
 class Config : public ConfigBase
 {
-public:    
+    Q_OBJECT
+public:
     Config();
     ~Config();
 

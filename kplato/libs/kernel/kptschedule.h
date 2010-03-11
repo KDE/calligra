@@ -613,7 +613,13 @@ public:
     int schedulerPluginIndex() const;
     void setSchedulerPlugin( int index );
 
+    void stopCalculation();
     void calculateSchedule();
+
+    int progress() const { return m_progress; }
+    void setProgress( int progress );
+    int maxProgress() const { return m_maxprogress; }
+    void setMaxProgress( int max ) { m_maxprogress = max; }
 
 protected:
     MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
@@ -631,6 +637,8 @@ protected:
     DateTime m_recalculateFrom;
     bool m_schedulingDirection;
     bool m_scheduling;
+    int m_progress;
+    int m_maxprogress;
     MainSchedule *m_expected;
     MainSchedule *m_optimistic;
     MainSchedule *m_pessimistic;

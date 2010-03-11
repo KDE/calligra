@@ -36,6 +36,8 @@ namespace KPlato
 {
     class Project;
     class ScheduleManager;
+    class Schedule;
+    class MainSchedule;
     class Resource;
     class ResourceRequest;
     class Task;
@@ -67,6 +69,7 @@ public:
     int kplatoToRCPS();
     void kplatoFromRCPS();
     ScheduleManager *manager() const { return m_manager; }
+    void setManager( ScheduleManager *sm ) { m_manager = sm; }
     
     int result;
 
@@ -78,16 +81,26 @@ public:
 
     void doRun();
     
+    /// The scheduling is stopping
+    bool isStopped() const { return m_stopScheduling; }
+
 signals:
     void jobStarted( KPlatoRCPSScheduler *job );
     void jobFinished( KPlatoRCPSScheduler *job );
     
-    void maxProgress( int );
-    void sigProgress( int );
+    void maxProgress( int, ScheduleManager* );
+    void sigProgress( int, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
 
+    void logError( KPlato::Schedule*, QString, int = -1 );
+    void logWarning( KPlato::Schedule*, QString, int = -1 );
+    void logInfo( KPlato::Schedule*, QString, int = -1 );
+    void logDebug( KPlato::Schedule*, QString, int = -1 );
+
 public slots:
+    /// Stop scheduling. Result may still be used.
     void stopScheduling() { m_stopScheduling = true; }
+    /// Halt scheduling. Use only when plugin (owner) is deleted.
     void haltScheduling() { m_haltScheduling = true; }
     
 protected slots:
@@ -117,8 +130,14 @@ protected:
     void addRequest( struct rcps_job *job, Task *task );
 
 private:
+    KLocale *locale() const;
+
+private:
     Project *m_project;
     ScheduleManager *m_manager;
+    MainSchedule *m_schedule;
+    bool m_recalculate;
+    bool m_usePert;
     struct rcps_problem *m_problem;
     DateTime m_starttime;
     qint64 m_timeunit;
@@ -134,8 +153,6 @@ private:
     ProgressInfo *m_progressinfo;
     bool m_stopScheduling; // Stop next time progress is called
     bool m_haltScheduling; // Do not access project structure anymore !
-
-    KLocale *m_locale;
 };
 
 #endif // KPLATORCPSPSCHEDULER_H

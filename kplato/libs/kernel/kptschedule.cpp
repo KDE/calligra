@@ -1358,6 +1358,8 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_recalculate( false ),
     m_schedulingDirection( false ),
     m_scheduling( false ),
+    m_progress( 0 ),
+    m_maxprogress( 0 ),
     m_expected( 0 ),
     m_optimistic( 0 ),
     m_pessimistic( 0 )
@@ -1544,8 +1546,10 @@ void ScheduleManager::setSchedulingDirection( bool on )
 
 void ScheduleManager::setScheduling( bool on )
 {
-    //kDebug()<<on;
     m_scheduling = on;
+    if ( ! on ) {
+        m_project.setProgress( 0, this );
+    }
     m_project.changed( this );
 }
 
@@ -1595,6 +1599,8 @@ int ScheduleManager::schedulerPluginIndex() const
 
 void ScheduleManager::setSchedulerPlugin( int index )
 {
+    schedulerPlugin()->stopCalculation( this ); // in case...
+
     m_schedulerPluginId = m_project.schedulerPlugins().keys().at( index );
     kDebug()<<index<<m_schedulerPluginId;
     m_project.changed( this );
@@ -1603,6 +1609,17 @@ void ScheduleManager::setSchedulerPlugin( int index )
 void ScheduleManager::calculateSchedule()
 {
     schedulerPlugin()->calculate( m_project, this );
+}
+
+void ScheduleManager::stopCalculation()
+{
+    schedulerPlugin()->stopCalculation( this );
+}
+
+void ScheduleManager::setProgress( int progress )
+{
+    m_progress = progress;
+    m_project.changed( this );
 }
 
 void ScheduleManager::setDeleted( bool on )

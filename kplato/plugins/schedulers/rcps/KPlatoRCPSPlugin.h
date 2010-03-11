@@ -31,6 +31,7 @@ namespace KPlato
 {
     class Project;
     class ScheduleManager;
+    class Schedule;
 }
 
 class KPlatoRCPSPlugin : public KPlato::SchedulerPlugin 
@@ -44,9 +45,20 @@ public:
     /// Calculate the project
     virtual void calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread = false );
 
+    void stopCalculation( KPlato::ScheduleManager *sm );
+
+public slots:
+    void stopAllCalculations();
+    void stopCalculation( KPlatoRCPSScheduler *sch );
+
 protected slots:
     void slotStarted( KPlatoRCPSScheduler *job );
     void slotFinished( KPlatoRCPSScheduler *job );
+    
+    void logError( KPlato::Schedule*, QString, int );
+    void logWarning( KPlato::Schedule*, QString, int );
+    void logInfo( KPlato::Schedule*, QString, int );
+    void logDebug( KPlato::Schedule*, QString, int );
 
 private:
     QList<KPlatoRCPSScheduler*> m_jobs;

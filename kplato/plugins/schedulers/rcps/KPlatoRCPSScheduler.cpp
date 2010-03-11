@@ -62,28 +62,25 @@ KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm,
     m_stopScheduling(false ),
     m_haltScheduling( false )
 {
-    m_locale = project->locale() ? project->locale() : KGlobal::locale();
-    m_starttime = sm->recalculate() ? sm->recalculateFrom() : m_project->constraintStartTime();
+    KGlobal::ref(); // keep locale around
+    project->ref(); // keep project around
 
     connect( this, SIGNAL( started() ), this, SLOT( slotStarted() ) );
     connect( this, SIGNAL( finished() ), this, SLOT( slotFinished() ) );
     
-    qDebug()<<"KPlatoRCPSScheduler:"<<m_project->name()<<m_manager->name()<<project->constraintStartTime();
-    KLocale *locale = KGlobal::locale();
     m_problem = rcps_problem_new();
+
+    m_recalculate = sm->recalculate();
+    m_starttime =  m_recalculate ? sm->recalculateFrom() : m_project->constraintStartTime();
 
     m_manager->createSchedules();
     m_project->setCurrentSchedule( m_manager->expected()->id() );
-    MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
-    Q_ASSERT( cs );
-    m_project->initiateCalculation( *cs );
-    m_project->initiateCalculationLists( *cs );
-    cs->setPhaseName( 0, i18n( "Init" ) );
-    cs->logInfo( i18n( "Schedule project using RCPS Scheduler, starting at %1", m_locale->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
-    cs->logInfo( i18n( "Project start %1", m_locale->formatDateTime( project->constraintStartTime() ) ), 0 );
-    
-    connect( this, SIGNAL( maxProgress( int ) ), project, SIGNAL( maxProgress( int ) ) );
-    connect( this, SIGNAL( sigProgress( int ) ), project, SIGNAL( sigProgress( int ) ) );
+    m_schedule = static_cast<MainSchedule*>( m_project->currentSchedule() );
+    Q_ASSERT( m_schedule );
+    m_project->initiateCalculation( *m_schedule );
+    m_project->initiateCalculationLists( *m_schedule );
+    connect( this, SIGNAL( maxProgress( int, ScheduleManager* ) ), project, SLOT( setMaxProgress( int, ScheduleManager* ) ) );
+    connect( this, SIGNAL( sigProgress( int, ScheduleManager* ) ), project, SLOT( setProgress( int, ScheduleManager* ) ) );
     connect( this, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ) );
 }
 
@@ -92,7 +89,14 @@ KPlatoRCPSScheduler::~KPlatoRCPSScheduler()
     delete m_progressinfo;
     qDeleteAll( m_duration_info_list );
     rcps_problem_free( m_problem );
-    qDebug()<<"KPlatoRCPSScheduler::~KPlatoRCPSScheduler()";
+
+    m_project->deref(); // deletes if I'm last user
+    KGlobal::deref();
+}
+
+KLocale *KPlatoRCPSScheduler::locale() const
+{
+    return m_project->locale();
 }
 
 int KPlatoRCPSScheduler::progress_callback( int generations, int duration, void *arg )
@@ -107,9 +111,14 @@ int KPlatoRCPSScheduler::progress_callback( int generations, int duration, void 
 
 int KPlatoRCPSScheduler::progress( int generations, int duration )
 {
+    if ( m_haltScheduling ) {
+        //qDebug()<<"KPlatoRCPSScheduler::progress:"<<"halt";
+        return -1;
+    }
     //qDebug()<<"KPlatoRCPSScheduler::progress"<<generations;
-    if ( m_stopScheduling || m_haltScheduling ) {
-        m_manager->expected()->logWarning( i18n( "Scheduling halted after %1 generations" ).arg( generations ), 1 );
+    if ( m_stopScheduling ) {
+        //qDebug()<<"KPlatoRCPSScheduler::progress:"<<"stop";
+        emit logWarning( m_schedule, i18n( "Scheduling halted after %1 generations" ).arg( generations ), 1 );
         return -1;
     }
     if ( m_progressinfo->init ) {
@@ -126,11 +135,12 @@ int KPlatoRCPSScheduler::progress( int generations, int duration )
         m_progressinfo->duration = duration;
         m_progressinfo->base = generations;
     }
-    emit sigProgress( m_progressinfo->progress );
+    m_manager->setProgress( m_progressinfo->progress );
+    emit sigProgress( m_progressinfo->progress, m_manager );
     int result = ( generations >= m_progressinfo->base + GENERATION_MIN_LIMIT ? 1 : 0 );
     if ( result ) {
-        qDebug()<<"KPlatoRCPSScheduler::progress, stop after"<<generations<<"generations, progress:"<<m_progressinfo->progress;
-        m_manager->expected()->logDebug( QString( "Acceptable solution found after %1 generations" ).arg( generations ), 1 );
+        //qDebug()<<"KPlatoRCPSScheduler::progress, stop after"<<generations<<"generations, progress:"<<m_progressinfo->progress;
+        emit logDebug( m_schedule, QString( "Acceptable solution found after %1 generations" ).arg( generations ), 1 );
     }
     return result;
 }
@@ -147,12 +157,12 @@ int KPlatoRCPSScheduler::duration_callback( int direction, int time, int nominal
 
 int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration,  KPlatoRCPSScheduler::duration_info  *info )
 {
+    if ( m_haltScheduling || m_manager == 0 ) {
+        return nominal_duration;
+    }
     ++(info->calls);
     if ( info->cache.contains( time ) ) {
         return info->cache[ time ];
-    }
-    if ( m_haltScheduling ) {
-        return nominal_duration;
     }
     if ( m_manager->recalculate() && info->task->completion().isFinished() ) {
         return 0;
@@ -181,7 +191,7 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
 
 void KPlatoRCPSScheduler::doRun()
 {
-    emit maxProgress( PROGRESS_MAX_VALUE );
+    emit maxProgress( PROGRESS_MAX_VALUE, m_manager );
     slotStarted();
     run();
     slotFinished();
@@ -189,30 +199,37 @@ void KPlatoRCPSScheduler::doRun()
 
 void KPlatoRCPSScheduler::run()
 {
-    m_manager->expected()->setPhaseName( 1, i18n( "Schedule" ) );
-    emit maxProgress( PROGRESS_MAX_VALUE );
-    solve();
-    if ( result != 0 ) {
-        m_manager->expected()->logError( i18n( "Solution is not valid: %1", result, 1 ) );
-        return;
+    m_schedule->setPhaseName( 0, i18n( "Init" ) );
+    if ( locale() ) {
+        emit logInfo( m_schedule, i18n( "Schedule project using RCPS Scheduler, starting at %1", locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+        emit logInfo( m_schedule, i18n( "Project start %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
     }
-    kplatoFromRCPS();
+    m_schedule->setPhaseName( 1, i18n( "Schedule" ) );
+
+    emit maxProgress( PROGRESS_MAX_VALUE, m_manager );
+    solve();
+    if ( m_haltScheduling ) {
+        deleteLater();
+    } else if ( result != 0 ) {
+        emit logError( m_schedule, i18n( "Solution is not valid: %1", result, 1 ) );
+    }
 }
 
 void KPlatoRCPSScheduler::slotStarted()
 {
-    qDebug()<<"KPlatoRCPSScheduler::slotStarted:";
     emit jobStarted( this );
     m_progressinfo->progress += PROGRESS_INIT_STEP / 5;
-    emit sigProgress( m_progressinfo->progress );
+    m_manager->setProgress( m_progressinfo->progress );
+    emit sigProgress( m_progressinfo->progress, m_manager );
 }
 
 void KPlatoRCPSScheduler::slotFinished()
 {
-    qDebug()<<"KPlatoRCPSScheduler::slotFinished:";
-    emit sigProgress( PROGRESS_MAX_VALUE );
+    emit sigProgress( PROGRESS_MAX_VALUE, m_manager );
     emit sigCalculationFinished( m_project, m_manager );
     emit jobFinished( this );
+
+    m_manager->setProgress( 0 );
 }
 
 int KPlatoRCPSScheduler::check()
@@ -243,6 +260,9 @@ int KPlatoRCPSScheduler::kplatoToRCPS()
 
 void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap )
 {
+    if ( m_haltScheduling || m_manager == 0 ) {
+        return;
+    }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
     struct rcps_mode *mode = rcps_mode_get(job, rcps_job_getmode_res(job));
@@ -253,19 +273,20 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
     if ( info == 0 ) {
         dur = rcps_mode_getduration(mode);
     } else {
-        cs->logDebug( i18n( "Task '%1' estimate: %2", task->name(), task->estimate()->value( Estimate::Use_Expected, false ).toString() ), 1 );
-        cs->logDebug( i18n( "Task '%1' duration called %2 times, cached values: %3", rcps_job_getname(job), info->calls, info->cache.count() ) );
+        emit logDebug( cs, i18n( "Task '%1' estimate: %2", task->name(), task->estimate()->value( Estimate::Use_Expected, false ).toString() ), 1 );
+        emit logDebug( cs, i18n( "Task '%1' duration called %2 times, cached values: %3", rcps_job_getname(job), info->calls, info->cache.count() ) );
 
         dur = duration_callback( 0, st, rcps_mode_getduration(mode), info );
 
         for ( QMap<int, int>::ConstIterator it = info->cache.constBegin(); it != info->cache.constEnd(); ++it ) {
-            cs->logDebug( i18n( "Task '%1' start: %2, duration: %3 (%4, %5 hours)", rcps_job_getname(job), it.key(), it.value(), m_starttime.addSecs( (it.key()*m_timeunit)).toString(), (double)(it.value())/60.0 ), 1 );
+            emit logDebug( cs, i18n( "Task '%1' start: %2, duration: %3 (%4, %5 hours)", rcps_job_getname(job), it.key(), it.value(), m_starttime.addSecs( (it.key()*m_timeunit)).toString(), (double)(it.value())/60.0 ), 1 );
         }
     }
     DateTime start = m_starttime.addSecs(st * m_timeunit);
     DateTime end = start + Duration( dur * m_timeunit * 1000 );
-    cs->logDebug( i18n( "Task '%1' start=%2, duration=%3: %4 - %5", rcps_job_getname(job), st, dur, m_locale->formatDateTime( start ), m_locale->formatDateTime( end ) ), 1 );
-
+    if ( locale() ) {
+        emit logDebug( cs, i18n( "Task '%1' start=%2, duration=%3: %4 - %5", rcps_job_getname(job), st, dur, locale()->formatDateTime( start ), locale()->formatDateTime( end ) ), 1 );
+    }
     task->setStartTime( start );
     task->setEndTime( end );
     for ( int reqs = 0; reqs < rcps_request_count(mode); ++reqs ) {
@@ -274,25 +295,29 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
         int amount = rcps_alternative_getamount(alt);
         struct rcps_resource *res = rcps_alternative_getresource(alt);
 
-        cs->logDebug( i18n( "Job %1: resource %2 is %3 available", rcps_job_getname(job), rcps_resource_getname(res), amount ), 1 );
+        emit logDebug( cs, i18n( "Job %1: resource %2 is %3 available", rcps_job_getname(job), rcps_resource_getname(res), amount ), 1 );
         
         // do actual appoinments etc
         ResourceRequest *r = m_requestmap.value( req );
         if ( r == 0 ) {
-            cs->logWarning( i18n( "No resource request is registered" ), 1 );
+            emit logWarning( cs, i18n( "No resource request is registered" ), 1 );
             continue;
         }
         resourcemap[ task ] << r;
-        cs->logInfo( i18n( "Make appointments to resource %1", r->resource()->name() ), 1 );
+        emit logInfo( cs, i18n( "Make appointments to resource %1", r->resource()->name() ), 1 );
         r->makeAppointment( cs, amount );
     }
-    if ( m_manager->recalculate() ) {
+    if ( m_recalculate ) {
         if ( task->completion().isFinished() ) {
             task->copySchedule();
-            cs->logInfo( i18n( "Task is completed, copied schedule: %2 to %3", task->name(), m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( task->endTime() ) ), 1 );
+            if ( locale() && m_manager ) {
+                emit logInfo( cs, i18n( "Task is completed, copied schedule: %2 to %3", task->name(), locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
+            }
         } else if ( task->completion().isStarted() ) {
             task->copyAppointments( DateTime(), start );
-            cs->logInfo( i18n( "Task is %4% completed, copied appointments from %2 to %3", task->name(), m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( start ), task->completion().percentFinished() ), 1 );
+            if ( locale() && m_manager ) {
+                emit logInfo( cs, i18n( "Task is %4% completed, copied appointments from %2 to %3", task->name(), locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( start ), task->completion().percentFinished() ), 1 );
+            }
         }
     }
     cs->setScheduled( true );
@@ -314,7 +339,9 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
         }
     } //else  Fixed duration
     task->setDuration( task->endTime() - task->startTime() );
-    cs->logInfo( i18n( "Scheduled from %1 to %2", m_locale->formatDateTime( task->startTime() ), m_locale->formatDateTime( task->endTime() ) ), 1 );
+    if ( locale() ) {
+        emit logInfo( cs, i18n( "Scheduled from %1 to %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
+    }
 }
 
 void KPlatoRCPSScheduler::kplatoFromRCPS()
@@ -326,7 +353,8 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
     DateTime projectstart = m_starttime.addSecs( rcps_job_getstart_res(m_jobstart) * m_timeunit );
     for ( int i = 0; i < count; ++i ) {
         m_progressinfo->progress += step;
-        emit sigProgress( m_progressinfo->progress );
+        m_manager->setProgress( m_progressinfo->progress );
+        emit sigProgress( m_progressinfo->progress, m_manager );
 
         struct rcps_job *job = rcps_job_get( m_problem, i );
         Task *task = m_taskmap.value( job );
@@ -345,20 +373,24 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
     DateTime end = m_starttime.addSecs( et );
     m_project->setStartTime( projectstart );
     m_project->setEndTime( end );
-    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", m_locale->formatDateTime( projectstart ), m_locale->formatDateTime( end ) ), 1 );
+    emit logInfo( cs, i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
 
     m_project->adjustSummarytask();
     
     calculatePertValues( resourcemap );
 
-    cs->logDebug( i18n( "Project scheduling finished at %1", QDateTime::currentDateTime().toString() ), 1 );
-    m_project->finishCalculation( *m_manager );
-    m_manager->scheduleChanged( cs );
+    if ( m_manager ) {
+        if ( locale() ) emit logDebug( cs, i18n( "Project scheduling finished at %1", QDateTime::currentDateTime().toString() ), 1 );
+        m_project->finishCalculation( *m_manager );
+        m_manager->scheduleChanged( cs );
+    }
 }
 
 void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceRequest*> > &map )
 {
-    m_manager->expected()->setPhaseName( 2, i18n( "PERT" ) );
+    if ( m_manager ) {
+        m_schedule->setPhaseName( 2, i18n( "PERT" ) );
+    }
     foreach ( Node *n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
@@ -383,14 +415,14 @@ Duration KPlatoRCPSScheduler::calculateLateStuff( const QMap<Node*, QList<Resour
         if ( task->estimate()->type() == Estimate::Type_Effort ) {
             foreach ( ResourceRequest *r, map.value( static_cast<Node*>( task ) ) ) {
                 DateTime x = r->resource()->availableBefore( m_project->endTime(), task->endTime(), 0 );
-                if ( cs ) cs->logDebug( QString( "Resource '%1' available before %2: %3" ).arg( r->resource()->name() ).arg(  m_project->endTime().toString() ).arg( x.toString() ), 2 );
+                emit logDebug( cs, QString( "Resource '%1' available before %2: %3" ).arg( r->resource()->name() ).arg(  m_project->endTime().toString() ).arg( x.toString() ), 2 );
                 if ( x.isValid() && x > end ) {
                     end = x;
                 }
             }
         } else if ( task->estimate()->calendar() ) {
             end = task->estimate()->calendar()->firstAvailableBefore( m_project->endTime(), task->endTime() );
-            if ( cs ) cs->logDebug( QString( "Calendar work time before %1: %2" ).arg(  m_project->endTime().toString() ).arg( end.toString() ), 2 );
+            emit logDebug( cs, QString( "Calendar work time before %1: %2" ).arg(  m_project->endTime().toString() ).arg( end.toString() ), 2 );
         }
         // TODO must calculate backwards to get late *start* of task
         pf = end.isValid() ? end - task->endTime() : m_project->endTime() - task->endTime();
@@ -404,14 +436,14 @@ Duration KPlatoRCPSScheduler::calculateLateStuff( const QMap<Node*, QList<Resour
             if ( task->estimate()->type() == Estimate::Type_Effort ) {
                 foreach ( ResourceRequest *req, map.value( static_cast<Node*>( task ) ) ) {
                     DateTime y = req->resource()->availableBefore( r->child()->startTime(), task->endTime(), 0 );
-                    if ( cs ) cs->logDebug( QString( "Resource '%1' available before %2: %3" ).arg( req->resource()->name() ).arg(  r->child()->startTime().toString() ).arg( y.toString() ), 2 );
+                    emit logDebug( cs, QString( "Resource '%1' available before %2: %3" ).arg( req->resource()->name() ).arg(  r->child()->startTime().toString() ).arg( y.toString() ), 2 );
                     if ( y.isValid() && y > end ) {
                         end = y;
                     }
                 }
             } else if ( task->estimate()->calendar() ) {
                 end = task->estimate()->calendar()->firstAvailableBefore( r->child()->startTime(), task->endTime() );
-                if ( cs ) cs->logDebug( QString( "Calendar work time before %1: %2" ).arg(  r->child()->startTime().toString() ).arg( end.toString() ), 2 );
+                emit logDebug( cs, QString( "Calendar work time before %1: %2" ).arg(  r->child()->startTime().toString() ).arg( end.toString() ), 2 );
             }
             x = qMin( x, end.isValid() ? end - task->endTime() : r->child()->startTime() - task->endTime() );
         }
@@ -422,7 +454,9 @@ Duration KPlatoRCPSScheduler::calculateLateStuff( const QMap<Node*, QList<Resour
     task->setPositiveFloat( pf );
     task->setLateFinish( task->endTime() + pf );
     task->setLateStart( task->lateFinish() - ( task->endTime() - task->startTime() ) );
-    if ( cs ) cs->logInfo( i18n( "Late start %1, late finish %2, positive float %3", m_locale->formatDateTime( task->lateStart() ), m_locale->formatDateTime( task->lateFinish() ), pf.toString() ), 2 );
+    if ( locale() ) {
+        emit logInfo( cs, i18n( "Late start %1, late finish %2, positive float %3", locale()->formatDateTime( task->lateStart() ), locale()->formatDateTime( task->lateFinish() ), pf.toString() ), 2 );
+    }
     return pf;
 }
 
@@ -437,14 +471,14 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
         if ( task->estimate()->type() == Estimate::Type_Effort ) {
             foreach ( ResourceRequest *r, map.value( static_cast<Node*>( task ) ) ) {
                 DateTime x = r->resource()->availableAfter( m_project->startTime(), task->startTime(), 0 );
-                if ( cs ) cs->logDebug( QString( "Resource '%1' available after %2 (%4): %3" ).arg( r->resource()->name() ).arg(  m_project->startTime().toString() ).arg( x.toString() ).arg( task->startTime().toString() ), 2 );
+                emit logDebug( cs, QString( "Resource '%1' available after %2 (%4): %3" ).arg( r->resource()->name() ).arg(  m_project->startTime().toString() ).arg( x.toString() ).arg( task->startTime().toString() ), 2 );
                 if ( x.isValid() && x < earlystart ) {
                     earlystart = x;
                 }
             }
         } else if ( task->estimate()->calendar() ) {
             earlystart = task->estimate()->calendar()->firstAvailableAfter( m_project->startTime(), task->startTime() );
-            if ( cs ) cs->logDebug( QString( "Calendar work time after %1: %2" ).arg(  m_project->startTime().toString() ).arg( earlystart.toString() ), 2 );
+            emit logDebug( cs, QString( "Calendar work time after %1: %2" ).arg(  m_project->startTime().toString() ).arg( earlystart.toString() ), 2 );
         }
         // TODO must calculate forward to get early *????* of task
         tot = earlystart.isValid() ? task->startTime() - earlystart : task->startTime() - m_project->startTime();
@@ -457,14 +491,14 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
             if ( task->estimate()->type() == Estimate::Type_Effort ) {
                 foreach ( ResourceRequest *req, map.value( static_cast<Node*>( task ) ) ) {
                     DateTime y = req->resource()->availableAfter( r->parent()->endTime(), task->startTime(), 0 );
-                    if ( cs ) cs->logDebug( QString( "Resource '%1' available after %2: %3" ).arg( req->resource()->name() ).arg(  r->parent()->endTime().toString() ).arg( y.toString() ), 2 );
+                    emit logDebug( cs, QString( "Resource '%1' available after %2: %3" ).arg( req->resource()->name() ).arg(  r->parent()->endTime().toString() ).arg( y.toString() ), 2 );
                     if ( y.isValid() && y < earlystart ) {
                         earlystart = y;
                     }
                 }
             } else if ( task->estimate()->calendar() ) {
                 earlystart = task->estimate()->calendar()->firstAvailableAfter( r->parent()->endTime(), task->startTime() );
-                if ( cs ) cs->logDebug( QString( "Calendar work time after %1: %2" ).arg(  r->parent()->endTime().toString() ).arg( earlystart.toString() ), 2 );
+                emit logDebug( cs, QString( "Calendar work time after %1: %2" ).arg(  r->parent()->endTime().toString() ).arg( earlystart.toString() ), 2 );
             }
             x = qMin( x, earlystart.isValid() ? task->startTime() - earlystart : task->startTime() - r->parent()->startTime() );
         }
@@ -473,7 +507,9 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
     }
     task->setEarlyStart( task->startTime() - tot );
     task->setEarlyFinish( task->earlyStart() + ( task->endTime() - task->startTime() ) );
-    if ( cs ) cs->logInfo( i18n( "Early start %1, early finish %2", m_locale->formatDateTime( task->earlyStart() ), m_locale->formatDateTime( task->earlyFinish() ) ), 2 );
+    if ( locale() ) {
+        emit logInfo( cs, i18n( "Early start %1, early finish %2", locale()->formatDateTime( task->earlyStart() ), locale()->formatDateTime( task->earlyFinish() ) ), 2 );
+    }
     return tot;
 }
 
@@ -624,13 +660,13 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     kDebug();
     struct rcps_mode *mode = rcps_mode_new();
     rcps_mode_add( job, mode );
-    if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_manager->recalculate() && task->completion().isFinished() ) ) {
+    if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         rcps_mode_setduration(mode, 0);
         return;
     }
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() == 0 ) {
         // Fixed duration, no callback needed
-        rcps_mode_setduration(mode, task->estimate()->value( Estimate::Use_Expected, m_manager->usePert() ).seconds() / m_timeunit );
+        rcps_mode_setduration(mode, task->estimate()->value( Estimate::Use_Expected, m_usePert ).seconds() / m_timeunit );
         return;
     }
     /* set the argument for the duration callback */
@@ -638,7 +674,7 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     info->self = this;
     info->calls = 0;
     info->task = task;
-    info->estimate = task->estimate()->value( Estimate::Use_Expected, m_manager->usePert() );
+    info->estimate = task->estimate()->value( Estimate::Use_Expected, m_usePert );
     info->requests = task->requests().resourceRequests();
     info->estimatetype = task->estimate()->type();
 

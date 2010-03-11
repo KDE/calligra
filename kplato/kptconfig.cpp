@@ -111,3 +111,5 @@ KUrl Config::retrieveUrl() const
 }
 
 }  //KPlato namespace
+
+#include "kptconfig.moc"

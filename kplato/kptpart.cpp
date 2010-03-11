@@ -106,7 +106,10 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 
 Part::~Part()
 {
-    delete m_project;
+    qDeleteAll( m_schedulerPlugins );
+    if ( m_project ) {
+        m_project->deref(); // deletes if last user
+    }
     qDeleteAll( m_mergedPackages );
     delete m_context;
 }

@@ -19,6 +19,7 @@
 
 #include "kptconfigbase.h"
 
+#include <KGlobal>
 #include <KLocale>
 #include <kdebug.h>
 
@@ -60,4 +61,16 @@ void ConfigBase::setLocale( KLocale *locale )
     }
 }
 
+const KLocale *ConfigBase::locale() const
+{
+    return m_locale ? m_locale : KGlobal::locale();
+}
+
+KLocale *ConfigBase::locale()
+{
+    return m_locale ? m_locale : KGlobal::locale();
+}
+
 }  //KPlato namespace
+
+#include "kptconfigbase.moc"

@@ -38,6 +38,8 @@ public:
     SchedulerPlugin(QObject *parent);
     virtual ~SchedulerPlugin();
 
+    /// Stop calculation of the schedule @p sm
+    virtual void stopCalculation( ScheduleManager *sm ) {}
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
 

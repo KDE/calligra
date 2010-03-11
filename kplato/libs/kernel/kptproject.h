@@ -39,6 +39,7 @@
 #include <QMap>
 #include <QList>
 #include <QHash>
+#include <QPointer>
 
 #include <klocale.h>
 #include <ktimezone.h>
@@ -78,6 +79,11 @@ public:
     explicit Project( Node *parent = 0 );
     explicit Project( ConfigBase &config, Node *parent = 0 );
     ~Project();
+
+    /// Reference this project.
+    void ref() { ++m_refCount; }
+    /// De-reference this project. Deletes project of ref count <= 0
+    void deref();
 
     /// Returns the node type. Can be Type_Project or Type_Subproject.
     virtual int type() const;
@@ -476,16 +482,16 @@ public:
     void generateUniqueNodeIds();
     void generateUniqueIds();
     
-    const ConfigBase &config() const { return *m_config; }
+    const ConfigBase &config() const { return m_config ? *m_config : emptyConfig; }
     /// Set configuration data
     void setConfig( ConfigBase *config ) { m_config = config; }
 
-    const Task &taskDefaults() const { return m_config->taskDefaults(); }
+    const Task &taskDefaults() const { return config().taskDefaults(); }
 
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    KLocale *locale() { return m_config->locale(); }
+    KLocale *locale() { return const_cast<ConfigBase&>(config()).locale(); }
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    const KLocale *locale() const { return m_config->locale(); }
+    const KLocale *locale() const { return config().locale(); }
     /// Signal that locale data has changed
     void emitLocaleChanged();
     
@@ -501,6 +507,10 @@ public:
     void adjustSummarytask();
 
     void emitMaxProgress( int value );
+
+public slots:
+    void setProgress( int progress, ScheduleManager *sm = 0 );
+    void setMaxProgress( int max, ScheduleManager *sm = 0 );
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
@@ -635,15 +645,14 @@ private:
     
     WBSDefinition m_wbsDefinition;
     
-    //use in pert to store the project slack
-    int m_projectSlack;
-
-    ConfigBase *emptyConfig;
-    ConfigBase *m_config; // this one is not owned by me, don't delete
+    ConfigBase emptyConfig;
+    QPointer<ConfigBase> m_config; // this one is not owned by me, don't delete
 
     int m_progress;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
+
+    int m_refCount; // make it possible to use the project by different threads
 
 #ifndef NDEBUG
 public:

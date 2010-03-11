@@ -51,8 +51,7 @@ Project::Project( Node *parent )
         : Node( parent ),
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
-        emptyConfig( new ConfigBase() ),
-        m_config( emptyConfig ),
+        m_config( 0 ),
         m_schedulerPlugins()
 {
     //kDebug()<<"("<<this<<")";
@@ -63,7 +62,6 @@ Project::Project( ConfigBase &config, Node *parent )
         : Node( parent ),
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
-        emptyConfig( 0 ),
         m_config( &config ),
         m_schedulerPlugins()
 {
@@ -73,6 +71,7 @@ Project::Project( ConfigBase &config, Node *parent )
 
 void Project::init()
 {
+    m_refCount = 1; // always used by crateor
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     m_spec = KDateTime::Spec::LocalZone();
@@ -87,6 +86,14 @@ void Project::init()
     }
 }
 
+void Project::deref()
+{
+    --m_refCount;
+    Q_ASSERT( m_refCount >= 0 );
+    if ( m_refCount <= 0 ) {
+        deleteLater();
+    }
+}
 
 Project::~Project()
 {
@@ -100,7 +107,6 @@ Project::~Project()
         delete m_managers.takeFirst();
     
     m_config = 0; //not mine, don't delete
-    delete emptyConfig;
 }
 
 int Project::type() const { return Node::Type_Project; }
@@ -365,6 +371,23 @@ void Project::finishCalculation( ScheduleManager &sm )
     calcFreeFloat();
     emit scheduleChanged( cs );
     emit changed();
+}
+
+void Project::setProgress( int progress, ScheduleManager *sm )
+{
+    m_progress = progress;
+    if ( sm ) {
+        sm->setProgress( progress );
+    }
+    emit sigProgress( progress );
+}
+
+void Project::setMaxProgress( int max, ScheduleManager *sm )
+{
+    if ( sm ) {
+        sm->setMaxProgress( max );
+    }
+    emitMaxProgress( max );
 }
 
 void Project::incProgress()
@@ -2195,6 +2218,9 @@ int Project::takeScheduleManager( ScheduleManager *sm )
 {
     foreach ( ScheduleManager *s, sm->children() ) {
         takeScheduleManager( s );
+    }
+    if ( sm->scheduling() ) {
+        sm->stopCalculation();
     }
     int index = -1;
     if ( sm->parentManager() ) {

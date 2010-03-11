@@ -2975,9 +2975,18 @@ void CalculateScheduleCmd::execute()
 
 void CalculateScheduleCmd::unexecute()
 {
+    if ( m_sm.scheduling() ) {
+        // terminate scheduling
+        QApplication::setOverrideCursor( Qt::WaitCursor );
+        m_sm.stopCalculation();
+        m_first = true;
+        QApplication::restoreOverrideCursor();
+
+    }
     m_sm.setExpected( m_oldexpected );
     m_sm.setOptimistic( m_oldoptimistic );
     m_sm.setPessimistic( m_oldpessimistic );
+
 }
 
 //------------------------

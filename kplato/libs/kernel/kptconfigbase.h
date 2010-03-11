@@ -27,14 +27,18 @@ class KLocale;
 namespace KPlato
 {
 
-class KPLATOKERNEL_EXPORT ConfigBase 
+class KPLATOKERNEL_EXPORT ConfigBase : public QObject
 {
+    Q_OBJECT
 public:
     ConfigBase();
     virtual ~ConfigBase();
 
     void setReadWrite(bool readWrite) { m_readWrite = readWrite; }
-    Task &taskDefaults() { setDefaultValues( *m_taskDefaults ); return *m_taskDefaults; }
+    Task &taskDefaults() const {
+        const_cast<ConfigBase*>( this )->setDefaultValues( *m_taskDefaults );
+        return *m_taskDefaults;
+    }
     void setTaskDefaults( Task * );
 
     virtual void setDefaultValues( Task & ) {}
@@ -44,8 +48,8 @@ public:
 
     
     void setLocale( KLocale *locale );
-    const KLocale *locale() const { return m_locale; }
-    KLocale *locale() { return m_locale; }
+    const KLocale *locale() const;
+    KLocale *locale();
 
 protected:
     bool m_readWrite;
