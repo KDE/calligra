@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
 
    Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
+   Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+     Contact: Suresh Chande suresh.chande@nokia.com
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
