@@ -2006,8 +2006,9 @@ void PptToOdp::processTextForBody(const OfficeArtSpContainer& o,
     while (pos < text.length()) {
         int end = text.indexOf(lineend, pos);
         if (end == -1) end = text.size();
-
-        processTextLine(out, o, tc, text, pos, end, levels);
+        if (pos != end) {
+            processTextLine(out, o, tc, text, pos, end, levels);
+        }
 
         pos = end + 1;
     }
