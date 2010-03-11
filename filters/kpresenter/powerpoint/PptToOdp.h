@@ -670,5 +670,9 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 {
     return f.integral + f.fractional / 65536.0;
 }
+/**
+ * Define the standard arrows used in PPT files.
+ */
+void defineArrow(KoGenStyles& styles);
 
 #endif // POWERPOINTIMPORT_H

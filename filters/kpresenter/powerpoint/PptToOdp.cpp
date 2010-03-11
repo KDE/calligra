@@ -1281,7 +1281,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // style:fill-image
     FillImageCollector fillImageCollector(styles, *this);
     collectGlobalObjects(fillImageCollector, *p);
-    // TODO: draw:marker
+    // draw:marker
+    defineArrow(styles);
     // draw:stroke-dash
     StrokeDashCollector strokeDashCollector(styles, *this);
     collectGlobalObjects(strokeDashCollector, *p);
