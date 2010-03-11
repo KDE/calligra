@@ -111,8 +111,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //! @todo hardcoded draw:style-name = gr1
         QString currentDrawStyleName("gr1");
 #endif
+#if defined(DOCXXMLDOCREADER_H) || defined(HARDCODED_PRESENTATIONSTYLENAME)
         kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
         body->addAttribute("draw:style-name", currentDrawStyleName);
+#endif
+
 //! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
         if (m_drawing_inline) {
             body->addAttribute("text:anchor-type", "as-char");
