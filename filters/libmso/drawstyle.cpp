@@ -61,6 +61,7 @@ TYPE DrawStyle::NAME() const \
 GETTER(quint32,                FillType,            fillType,           0)
 GETTER(MSO::OfficeArtCOLORREF, FillColor,           fillColor,          white())
 GETTER(quint32,                FillBlip,            fillBlip,           0)
+GETTER(qint32,                 FillDztype,          fillDztype,         0)
 GETTER(quint32,                LineEndArrowhead,    lineEndArrowhead,   0)
 GETTER(quint32,                LineStartArrowhead,  lineStartArrowhead, 0)
 GETTER(quint32,                LineStartArrowWidth, lineStartArrowWidth,1)
@@ -92,7 +93,7 @@ bool DrawStyle::NAME() const \
 }
 //     FOPT                       NAME             TEST               DEFAULT
 #define FOPT FillStyleBooleanProperties
-GETTER(fNoFillHitText,        fUseNoFillHitTest,         false)
+GETTER(fNoFillHitTest,        fUseNoFillHitTest,         false)
 GETTER(fillUseRect,           fUseFillUseRext,           false)
 GETTER(fillShape,             fUseFillShape,             true)
 GETTER(fHitTestFill,          fUseHitTestFill,           true)

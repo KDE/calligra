@@ -193,8 +193,7 @@ private:
     void defineParagraphProperties(KoGenStyle& style,
                                    const PptTextPFRun& pf);
     /* Extract data into the style */
-    template <typename T>
-    void defineDrawingPageStyle(KoGenStyle& style, const T* o,
+    void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                                 const MSO::HeadersFootersAtom* hf);
 
     /* Extract data into the style */

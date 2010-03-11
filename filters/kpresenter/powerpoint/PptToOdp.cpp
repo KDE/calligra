@@ -499,19 +499,18 @@ void PptToOdp::defineDefaultPresentationStyle(KoGenStyles& styles)
 
 void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
 {
+    if (!p->documentContainer) return;
     // write style <style:default-style style:family="drawing-page">
     KoGenStyle style(KoGenStyle::StyleDrawingPage, "drawing-page");
     const KoGenStyle::PropertyType dpt = KoGenStyle::DrawingPageType;
     style.addProperty("draw:background-size", "border", dpt);
     style.addProperty("draw:fill", "none", dpt);
-    style.addProperty("style:repeat", "stretch", dpt);
     style.setDefaultStyle(true);
-    const OfficeArtDggContainer* drawingGroup = 0;
-    if (p->documentContainer) {
-        drawingGroup = &p->documentContainer->drawingGroup.OfficeArtDgg;
-    }
     const MSO::SlideHeadersFootersContainer* hf = getSlideHF();
-    defineDrawingPageStyle(style, drawingGroup, (hf) ?&hf->hfAtom :0);
+    const OfficeArtDggContainer& drawingGroup
+            = p->documentContainer->drawingGroup.OfficeArtDgg;
+    DrawStyle ds(drawingGroup);
+    defineDrawingPageStyle(style, ds, (hf) ?&hf->hfAtom :0);
     styles.lookup(style);
 }
 
@@ -762,43 +761,36 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // text:number-lines
 }
 
-template <typename T>
-void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
+void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                                       const HeadersFootersAtom* hf)
 {
     const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
     // draw:background-size ("border", or "full")
-    const FillStyleBooleanProperties* fs
-            = get<FillStyleBooleanProperties>(o);
-    if (fs) {
-        style.addProperty("draw:background-size",
-                          (fs->fUseFillUseRext && fs->fillUseRect)
+    style.addProperty("draw:background-size", ds.fillUseRect()
                           ?"border" :"full", dp);
-    }
     // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    const FillType* fillType = get<FillType>(o);
-    if (fs && fs->fUseFilled && !fs->fFilled) {
+    quint32 fillType = ds.fillType();
+    if (!ds.fFilled()) {
         style.addProperty("draw:fill", "none", dp);
-    } else if (fillType) {
-        style.addProperty("draw:fill", getFillType(fillType->fillType), dp);
+    } else {
+        style.addProperty("draw:fill", getFillType(fillType), dp);
     }
     // draw:fill-color
-    const FillColor* fc = get<FillColor>(o);
-    if (fc && fillType && fillType->fillType == 0) {
+    if (fillType == 0) {
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='non' if the color is set
-        style.addProperty("draw:fill-color", toQColor(fc->fillColor).name(), dp);
+        style.addProperty("draw:fill-color", toQColor(ds.fillColor()).name(), dp);
     }
     // draw:fill-gradient-name
     // draw:fill-hatch-name
     // draw:fill-hatch-solid
     // draw:fill-image-height
     // draw:fill-image-name
-    const FillBlip* fb = get<FillBlip>(o);
-    const QString fillImagePath = (fb) ?getPicturePath(fb->fillBlip) :"";
+    quint32 fillBlip = ds.fillBlip();
+    const QString fillImagePath = getPicturePath(fillBlip);
     if (!fillImagePath.isEmpty()) {
         style.addProperty("draw:fill-image-name",
-                          "fillImage" + QString::number(fb->fillBlip), dp);
+                          "fillImage" + QString::number(fillBlip), dp);
     }
     // draw:fill-image-ref-point-x
     // draw:fill-image-ref-point-y
@@ -841,6 +833,9 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const T* o,
     // smil:subtype
     // smil:type
     // style:repeat
+    if (ds.fillDztype() == 0) {
+        style.addProperty("style:repeat", "stretch");
+    }
     // svg:fill-rule
 }
 
@@ -1204,7 +1199,10 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 scp = mm->drawing.OfficeArtDg.shape.data();
             }
         }
-        defineDrawingPageStyle(dp, scp, hf);
+        const OfficeArtDggContainer& drawingGroup
+                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        DrawStyle ds(drawingGroup, scp);
+        defineDrawingPageStyle(dp, ds, hf);
         drawingPageStyles[m] = styles.lookup(dp, "Mdp");
     }
     QString notesMasterPageStyle;
@@ -1217,8 +1215,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         }
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(true);
-        defineDrawingPageStyle(dp,
-                p->notesMaster->drawing.OfficeArtDg.shape.data(), hf);
+        const OfficeArtDggContainer& drawingGroup
+                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        DrawStyle ds(drawingGroup,
+                     p->notesMaster->drawing.OfficeArtDg.shape.data());
+        defineDrawingPageStyle(dp, ds, hf);
         notesMasterPageStyle = styles.lookup(dp, "Mdp");
         drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
@@ -1235,7 +1236,10 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         if (sc->perSlideHFContainer) {
             hf = &sc->perSlideHFContainer->hfAtom;
         }
-        defineDrawingPageStyle(dp, sc->drawing.OfficeArtDg.shape.data(),  hf);
+        const OfficeArtDggContainer& drawingGroup
+                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        DrawStyle ds(drawingGroup, sc->drawing.OfficeArtDg.shape.data());
+        defineDrawingPageStyle(dp, ds, hf);
         drawingPageStyles[sc] = styles.lookup(dp, "dp");
     }
 
@@ -1251,7 +1255,10 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
         dp.setParentName(notesMasterPageStyle);
-        defineDrawingPageStyle(dp, nc->drawing.OfficeArtDg.shape.data(), hf);
+        const OfficeArtDggContainer& drawingGroup
+                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        DrawStyle ds(drawingGroup, nc->drawing.OfficeArtDg.shape.data());
+        defineDrawingPageStyle(dp, ds, hf);
         drawingPageStyles[nc] = styles.lookup(dp, "dp");
     }
 }

@@ -32,7 +32,7 @@ public:
                   :d(d_), sp(sp_) {}
 
     // FillStyleBooleanProperties
-    bool fNoFillHitText() const;
+    bool fNoFillHitTest() const;
     bool fillUseRect() const;
     bool fillShape() const;
     bool fHitTestFill() const;
@@ -45,6 +45,8 @@ public:
     MSO::OfficeArtCOLORREF fillColor() const;
     // FillBlip
     quint32 fillBlip() const;
+    // FillDztype
+    qint32 fillDztype() const;
     // LineEndArrowhead
     quint32 lineEndArrowhead() const;
     // LineStartArrowhead
