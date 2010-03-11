@@ -55,6 +55,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_pictureHandler(new KWordPictureHandler(this, bodyWriter,
                            manifestWriter, store,
                            mainStyles))
+        , m_drawingHandler(new KWordDrawingHandler(this,mainStyles,bodyWriter))
         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
         , m_headerFooters(0)
@@ -100,6 +101,10 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
                 this, SLOT(slotTableFound(KWord::Table*)));
         connect(m_textHandler, SIGNAL(pictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)),
                 this, SLOT(slotPictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)));
+        connect(m_textHandler, SIGNAL(drawingFound(unsigned int , KoXmlWriter* )),
+                this, SLOT(slotDrawingFound(unsigned int , KoXmlWriter* )));
+        connect(m_drawingHandler, SIGNAL(textBoxFound(uint , KoXmlWriter* )),
+                this, SLOT(slotTextBoxFound(uint , KoXmlWriter* )));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
@@ -107,6 +112,9 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
 #ifdef IMAGE_IMPORT
         m_parser->setPictureHandler(m_pictureHandler);
 #endif
+        m_drawingHandler->init(m_parser->getDrawings(),m_parser->getTable(),m_parser->fib());
+        m_parser->setDrawingHandler(m_drawingHandler);
+
         m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
@@ -352,6 +360,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
     QString masterStyleName("section");
     m_masterStyle->addAttribute("style:display-name", masterStyleName.append(QString::number(m_textHandler->m_sectionNumber)));
+    m_masterStyle->addAttribute("style:display-name", masterStyleName);
     m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
     delete m_masterStyle; //delete the object since we've added it to the collection
 
@@ -773,6 +782,27 @@ void Document::slotPictureFound(const QString& frameName, const QString& picture
     if (writer) {
         m_pictureHandler->setBodyWriter(m_bodyWriter);
     }
+}
+
+void Document::slotDrawingFound(unsigned int globalCP, KoXmlWriter* writer)
+{
+    kDebug(30513) ;
+    //if we have a temp writer, tell the drawingHandler
+    if (writer) {
+        m_drawingHandler->setBodyWriter(writer);
+    }
+    m_drawingHandler->drawingData(globalCP);
+
+    if (writer) {
+        m_drawingHandler->setBodyWriter(m_bodyWriter);
+    }
+}
+
+void Document::slotTextBoxFound( uint lid, KoXmlWriter* /*writer*/)
+{
+    kDebug(30513) ;
+
+    m_parser->parseTextBox(lid);
 }
 
 //process through all the subDocs and the tables

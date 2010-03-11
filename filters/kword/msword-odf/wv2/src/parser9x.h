@@ -101,6 +101,10 @@ namespace wvWare
 
         virtual const StyleSheet& styleSheet() const;
 
+        virtual Drawings * getDrawings();
+
+        virtual OLEStreamReader* getTable();
+
         // This part of the public API is only visible to the Functor classes,
         // as the "outside world" only sees the public API of Parser. The Functors
         // allow to delay the parsing of certain text inside the file (e.g. headers)
@@ -115,6 +119,8 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
+        //I can't create Functor for textbox in advance because i don't know lid
+        virtual void parseTextBox( uint lid);
 
     protected:
         // First all variables which don't change their state during
@@ -205,7 +211,7 @@ namespace wvWare
         // Helper methods to gather and emit the information needed for the functors
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
-        void emitDrawnObject( SharedPtr<const Word97::CHP> chp );
+        void emitDrawnObject( U32 globalCP );
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 

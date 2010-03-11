@@ -25,10 +25,13 @@
 #include <wv2/src/functor.h>
 #include <wv2/src/handlers.h>
 #include "wv2/src/ms_odraw.h"
+#include "wv2/src/graphics.h"
 
 #include <QObject>
 #include "document.h"
 #include "versionmagic.h"
+#include "generated/simpleParser.h"
+#include "writer.h"
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
@@ -82,6 +85,64 @@ private:
     void officeArtLine(wvWare::OfficeArtProperties *artProperties);
 };
 
-// KWordDrawingHandler yet to come (Werner)
+ class DrawingWriter : public Writer
+ {
+ public:
+     int xLeft;
+     int xRight;
+     int yTop;
+     int yBottom;
+
+     DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_);
+
+     QString vLength();
+     QString hLength();
+     QString vOffset();
+     QString hOffset();
+
+     void SetRectangle(wvWare::Word97::FSPA& spa);
+     void SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
+     void SetClientRectangle(MSO::OfficeArtChildAnchor& anchor);
+ };
+
+class KWordDrawingHandler : public QObject, public wvWare::DrawingHandler
+{
+    Q_OBJECT
+public:
+    KWordDrawingHandler(Document* doc, KoGenStyles* mainStyles, KoXmlWriter* bodyWriter);
+    ~KWordDrawingHandler();
+
+    void init(wvWare::Drawings * pDrawings, wvWare::OLEStreamReader* table,const  wvWare::Word97::FIB &fib);
+    virtual void drawingData(unsigned int globalCP);
+    void setBodyWriter(KoXmlWriter* writer);
+
+    // Communication with Document, without having to know about Document
+signals:
+void textBoxFound( uint lid, KoXmlWriter* writer);
+
+private:
+
+    void drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out
+            , wvWare::Word97::FSPA* spa);
+    void processObjectForBody(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
+    void processObjectForBody(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+
+    void parseOfficeArtContainer(wvWare::OLEStreamReader* table
+            ,const  wvWare::Word97::FIB &fib);
+//    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
+
+    void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processPictureFrame(const MSO::OfficeArtSpContainer& o,DrawingWriter& out);
+
+    Document* m_doc;
+    KoGenStyles* m_mainStyles;
+    KoXmlWriter* m_bodyWriter;
+
+    wvWare::Drawings * m_drawings;
+
+    MSO::OfficeArtDggContainer m_OfficeArtDggContainer;
+    MSO::OfficeArtDgContainer * m_pOfficeArtHeaderDgContainer;
+    MSO::OfficeArtDgContainer * m_pOfficeArtBodyDgContainer;
+};
 
 #endif // GRAPHICSHANDLER_H

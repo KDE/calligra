@@ -200,6 +200,16 @@ const StyleSheet& Parser9x::styleSheet() const
     return m_properties->styleSheet();
 }
 
+Drawings * Parser9x::getDrawings()
+{
+    return m_drawings;
+}
+
+OLEStreamReader* Parser9x::getTable()
+{
+    return m_table;
+}
+
 void Parser9x::parseHeaders( const HeaderData& data )
 {
     m_subDocumentHandler->headersStart();
@@ -311,6 +321,34 @@ void Parser9x::parsePicture( const PictureData& data )
         }
     }
     stream->pop();
+}
+
+void Parser9x::parseTextBox( uint lid)
+{
+    wvlog << "Parser9x::parseTextBox" << std::endl;
+
+    PLCF<Word97::FTXBXS> * plcftxbxTxt =  m_drawings->getTxbxTxt();
+
+    if(plcftxbxTxt == NULL) {
+        return;
+    }
+
+    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
+
+    for(size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
+        if(it.current()->lid == (S32)lid) {
+            saveState( it.currentLim() - it.currentStart(), TextBox );
+
+            U32 offset = m_fib.ccpText + it.currentStart();
+
+            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn
+                      + m_fib.ccpEdn;
+
+            parseHelper( Position( offset, m_plcfpcd ) );
+
+            restoreState();
+        }
+    }
 }
 
 std::string Parser9x::tableStream() const
@@ -800,7 +838,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
         emitPictureData( chp );
         break;
     case TextHandler::DrawnObject:
-        emitDrawnObject( chp );
+        emitDrawnObject( globalCP );
         break;
     case TextHandler::FootnoteAuto:
         if ( m_subDocument == Footnote || m_subDocument == Endnote )
@@ -902,14 +940,9 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
     m_textHandler->headersFound( make_functor( *this, &Parser9x::parseHeaders, data ) );
 }
 
-void Parser9x::emitDrawnObject( SharedPtr<const Word97::CHP> chp )
+void Parser9x::emitDrawnObject( U32 globalCP )
 {
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "TODO: process 'Drawn object': " << static_cast<int> (chp->fSpec) << " "
-            << static_cast<int> (chp->fObj) << " " << static_cast<int> (chp->fOle2) << " "
-            << chp->fcPic_fcObj_lTagObj << std::endl;
-#endif
-
+    m_textHandler->drawingFound(globalCP);
 }
 
 void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )

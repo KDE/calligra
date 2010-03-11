@@ -1,5 +1,5 @@
 add_subdirectory(wv2)
-INCLUDE_DIRECTORIES( ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ../../libmso )
 
 set(mswordodf_import_PART_SRCS
    mswordodfimport.cpp
@@ -10,9 +10,11 @@ set(mswordodf_import_PART_SRCS
    tablehandler.cpp
    graphicshandler.cpp )
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
+
 kde4_add_plugin(mswordodf_import WITH_PREFIX ${mswordodf_import_PART_SRCS})
 
-target_link_libraries(mswordodf_import wv2  komain)
+target_link_libraries(mswordodf_import wv2  komain mso)
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

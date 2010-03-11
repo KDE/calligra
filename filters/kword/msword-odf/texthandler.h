@@ -95,6 +95,7 @@ public:
     virtual void pictureFound(const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 #endif // IMAGE_IMPORT
+    void drawingFound(unsigned int globalCP );
     ///////// Our own interface, also used by processStyles
 
     Document* document() const {
@@ -133,6 +134,7 @@ signals:
     void tableFound(KWord::Table* table);
     void pictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
                       const wvWare::FunctorBase* pictureFunctor);
+    void drawingFound(unsigned int globalCP, KoXmlWriter* writer);
     void updateListDepth(int);
 
 protected:
@@ -200,6 +202,9 @@ private:
     bool m_insideAnnotation;
     KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
     QBuffer* m_annotationBuffer; //buffer for the annotation data
+
+    bool m_insideDrawing;
+    KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
 
     int m_maxColumns;//max number of columns in a table
 

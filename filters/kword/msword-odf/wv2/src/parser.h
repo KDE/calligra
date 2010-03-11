@@ -45,10 +45,12 @@ class SubDocumentHandler;
 class TableHandler;
 class PictureHandler;
 class TextHandler;
+class DrawingHandler;
 class OLEStorage;
 class OLEStreamReader;
 class StyleSheet;
 class AssociatedStrings;
+class Drawings;
 
 class WV2_EXPORT Parser : public Shared
 {
@@ -106,6 +108,21 @@ public:
     virtual const StyleSheet& styleSheet() const = 0;
 
     /**
+     * This Drawings holds all the information about drawings the Word file
+     */
+    virtual Drawings * getDrawings() = 0;
+
+    /**
+     * This table holds actuald MS-Doc stream
+     */
+    virtual OLEStreamReader* getTable() = 0;
+
+    /**
+     * Looks for textbox text data and process them
+     */
+    virtual void parseTextBox( uint lid) =0;
+
+    /**
      * The inline replacement handler is used to replace certain characters on the fly.
      * We don't take ownership of the handler!
      */
@@ -131,6 +148,11 @@ public:
      * We don't take ownership of the handler!
      */
     void setTextHandler( TextHandler* handler );
+    /**
+     * The drawing handler is used to tell the consumer about drawing structures.
+     * We don't take ownership of the handler!
+     */
+    void setDrawingHandler( DrawingHandler* handler );
 
     // Do we need public access to parts of the OLEStorage interface?
     // If we add public accessors we should make m_storage private.
@@ -141,11 +163,13 @@ protected:
     TableHandler* m_tableHandler;
     PictureHandler* m_pictureHandler;
     TextHandler* m_textHandler;
+    DrawingHandler* m_drawingHandler;
     bool m_ourInlineHandler;
     bool m_ourSubDocumentHandler;
     bool m_ourTableHandler;
     bool m_ourPictureHandler;
     bool m_ourTextHandler;
+    bool m_ourDrawingHandler;
 
     OLEStorage* m_storage;           // The storage representing the file
     OLEStreamReader* m_wordDocument; // document stream ('WordDocument')

@@ -154,6 +154,16 @@ void PictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
 {
 }
 
+DrawingHandler::~DrawingHandler()
+{
+
+}
+
+void DrawingHandler::drawingData(unsigned int /*globalCP*/)
+{
+
+}
+
 TextHandler::~TextHandler()
 {
 }
@@ -239,4 +249,9 @@ void TextHandler::pictureFound( const PictureFunctor& picture, SharedPtr<const W
                                 SharedPtr<const Word97::CHP> /*chp*/ )
 {
     picture();
+}
+
+void TextHandler::drawingFound( unsigned int globalCP )
+{
+
 }

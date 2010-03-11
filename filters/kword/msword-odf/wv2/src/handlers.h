@@ -258,6 +258,19 @@ namespace wvWare {
         virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
     };
 
+    class WV2_EXPORT DrawingHandler
+    {
+    public:
+
+        virtual ~DrawingHandler();
+
+        /**
+         *This method is called when picture should be drawn. Function gets cp of drawing
+         *and and draws the date belonging to it.
+         */
+        virtual void drawingData(unsigned int globalCP);
+    };
+
 
     class ParagraphProperties;
     struct FLD;
@@ -431,6 +444,11 @@ namespace wvWare {
          */
         virtual void pictureFound( const PictureFunctor& picture, SharedPtr<const Word97::PICF> picf,
                                    SharedPtr<const Word97::CHP> chp );
+
+        /**
+         * This method is called every time we find a drawing.
+         */
+        virtual void drawingFound( unsigned int globalCP );
     };
 
 } // namespace wvWare

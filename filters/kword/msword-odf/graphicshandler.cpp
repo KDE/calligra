@@ -23,6 +23,8 @@
 #include "document.h"
 
 #include <wv2/src/olestream.h>
+#include <wv2/src/ms_odraw.h>
+#include "generated/leinputstream.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -31,6 +33,7 @@
 
 
 using namespace wvWare;
+using namespace MSO;
 
 #define IMG_BUF_SIZE 2048L
 
@@ -139,6 +142,8 @@ void KWordPictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
 	
 	
 }
+
+#endif // IMAGE_IMPORT
 	
 void KWordPictureHandler::officeArtLine(wvWare::OfficeArtProperties *artProperties)
 {
@@ -318,6 +323,366 @@ void KWordPictureHandler::externalImage(const UString& name, SharedPtr<const Wor
     kDebug(30513);
 }
 
-#endif // IMAGE_IMPORT
+DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_)
+        : Writer(xmlWriter,kostyles,stylesxml_),
+        xLeft(0),
+        xRight(0),
+        yTop(0),
+        yBottom(0)
+{
+    scaleX = 25.4 / 1440;
+    scaleY = 25.4 / 1440;
+}
+
+QString DrawingWriter::vLength()
+{
+    return Writer::vLength(yBottom - yTop);
+}
+
+QString DrawingWriter::hLength()
+{
+    return Writer::hLength(xRight - xLeft);
+}
+
+QString DrawingWriter::vOffset()
+{
+    return Writer::vOffset(yTop);
+}
+
+QString DrawingWriter::hOffset()
+{
+    return Writer::hOffset(xLeft);
+}
+
+void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
+{
+    xLeft = spa.xaLeft;
+    xRight = spa.xaRight;
+    yTop = spa.yaTop;
+    yBottom = spa.yaBottom;
+}
+
+void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
+{
+    if(fspgr.xRight == fspgr.xLeft) {
+        return;
+    }
+
+    if(fspgr.yBottom == fspgr.yTop)
+        return;
+
+    xOffset = xOffset + xLeft*scaleX;
+    yOffset = yOffset + yTop*scaleY;
+
+    scaleX = scaleX * (xRight - xLeft)/(qreal)(fspgr.xRight - fspgr.xLeft);
+    scaleY = scaleY * (yBottom - yTop)/(qreal)(fspgr.yBottom - fspgr.yTop);
+
+    xOffset = xOffset - fspgr.xLeft * scaleX;
+    yOffset = yOffset - fspgr.yTop * scaleY;
+}
+
+void DrawingWriter::SetClientRectangle(MSO::OfficeArtChildAnchor& anchor)
+{
+    xLeft = anchor.xLeft;
+    xRight = anchor.xRight;
+    yTop = anchor.yTop;
+    yBottom = anchor.yBottom;
+}
+
+KWordDrawingHandler::KWordDrawingHandler(Document* doc, KoGenStyles* mainStyles, KoXmlWriter* bodyWriter): QObject()
+, m_doc(doc)
+, m_mainStyles(mainStyles)
+, m_bodyWriter(bodyWriter)
+, m_drawings(0)
+, m_pOfficeArtHeaderDgContainer(0)
+, m_pOfficeArtBodyDgContainer(0)
+{
+
+}
+
+KWordDrawingHandler::~KWordDrawingHandler()
+{
+    delete m_pOfficeArtHeaderDgContainer;
+    delete m_pOfficeArtBodyDgContainer;
+}
+
+void KWordDrawingHandler::init(Drawings * pDrawings, wvWare::OLEStreamReader* table,const  wvWare::Word97::FIB &fib)
+{
+    kDebug(30513);
+
+    parseOfficeArtContainer(table,fib);
+
+//     create default draw style
+//    KoGenStyle style(KoGenStyle::StyleGraphic, "graphic");
+//    style.setDefaultStyle(true);
+//
+//    defineDefaultGraphicProperties(&style,pDrawings);
+//
+//    //add default draw style to styles
+//    m_mainStyles->lookup(style, "");
+
+    m_drawings = pDrawings;
+}
+
+void KWordDrawingHandler::drawingData(unsigned int globalCP)
+{
+    kDebug(30513);
+
+    // draw shape or group of shapes
+    if(m_drawings == NULL) {
+        return;
+    }
+
+    PLCF<Word97::FSPA>* fspa = m_drawings->getSpaMom();
+    if(fspa == NULL) {
+        return;
+    }
+
+    PLCFIterator<Word97::FSPA> it( fspa->at( 0 ) );
+
+    kDebug(30513) << "globalCP" << globalCP ;
+
+    //search for drawing
+    for(size_t i = 0; i < fspa->count(); i++, ++it) {
+        kDebug(30513) << "FSPA start:" << it.currentStart();
+        kDebug(30513) << "FSPA spid:" << it.current()->spid;
+
+        if(it.currentStart() == globalCP) {
+            KoGenStyles tmpStyles; //not used yet
+            DrawingWriter out(*m_bodyWriter,tmpStyles,true);
+            drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out,it.current());
+            break;
+        }
+    }
+}
+
+void KWordDrawingHandler::setBodyWriter(KoXmlWriter* writer)
+{
+    m_bodyWriter = writer;
+}
+
+void KWordDrawingHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out
+        , wvWare::Word97::FSPA* spa)
+{
+    if(dg == NULL)
+        return;
+
+    foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape.rgfb) {
+        //if spgr is in root, find out if his first item is sp with right spid
+        if (co.anon.is<OfficeArtSpgrContainer>()) {
+            const OfficeArtSpContainer* first =
+                    (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
+
+            if(first && first->shapeProp.spid == spid) {
+                out.SetRectangle(*spa);
+                processObjectForBody(*co.anon.get<OfficeArtSpgrContainer>(), out); //draw group
+                break;
+            }
+        }
+        else //if sp is in root, find out if it has the right spid
+        {
+            const OfficeArtSpContainer & spCo = *co.anon.get<OfficeArtSpContainer>();
+
+            if(spCo.shapeProp.spid == spid) {
+                out.SetRectangle(*spa);
+                processObjectForBody(spCo, out); //draw object
+                break;
+            }
+        }
+    }
+}
+
+void KWordDrawingHandler::processObjectForBody(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
+{
+    if (o.rgfb.size() < 2) return;
+
+    out.xml.startElement("draw:g");
+
+    const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    if(first && first->shapeGroup) {
+        out.SetGroupRectangle(*first->shapeGroup); //set group rectangle
+    }
+
+    for (int i = 1; i < o.rgfb.size(); ++i) {
+        if(o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
+
+            OfficeArtSpContainer tempSp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
+
+            if(tempSp.childAnchor) {
+                out.SetClientRectangle(*tempSp.childAnchor); //set child rectangle
+            }
+
+            processObjectForBody(tempSp, out); //draw objects
+        }
+    }
+
+    out.xml.endElement(); // draw:g
+}
+
+void KWordDrawingHandler::processObjectForBody(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+{
+    kDebug(30513);
+
+    // textbox can be msosptTextBox or msosptRectangle or ...
+    if(!o.clientTextbox.isNull()) {
+        kDebug(30513)<< "processing text box";
+        parseTextBox(o, out);
+        return;
+    }
+
+
+    switch (o.shapeProp.rh.recInstance)
+    {
+        case msosptPictureFrame:
+            kDebug(30513)<< "processing picture frame";
+            processPictureFrame(o, out);
+            break;
+    }
+}
+
+void KWordDrawingHandler::parseOfficeArtContainer(wvWare::OLEStreamReader* table,
+        const  wvWare::Word97::FIB &fib)
+{
+    kDebug(30513);
+    // get OfficeArtContent
+    if(fib.lcbDggInfo != 0) {
+        QBuffer buffer;
+        QByteArray array;
+
+        // copy of OfficeArtContent data into temp buffer
+        array.resize(fib.lcbDggInfo);
+        table->seek( fib.fcDggInfo );
+        table->read( (U8 *)array.data(), fib.lcbDggInfo );
+
+        buffer.setData(array);
+        buffer.open(QIODevice::ReadOnly);
+
+        // creation of streem needed by simpleParser.h
+        LEInputStream stream(&buffer);
+
+        //parse OfficeArfDggContainer from msdoc
+        try {
+            parseOfficeArtDggContainer(stream, m_OfficeArtDggContainer);
+        }
+        catch (IOException e) {
+            kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer ";
+            return;
+        }
+        catch (...) {
+            kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
+            return;
+        }
+        kDebug(30513) << "OfficeArtDggContainer parsed succesful " ;
+
+
+        // parse drawingsVariable from msdoc
+        // 0 - next OfficeArtDgContainer belongs to Main document;
+        // 1 - next OfficeArtDgContainer belongs to Header Document
+        unsigned char drawingsVariable = 0;
+        try {
+            drawingsVariable = stream.readuint8();
+        }
+        catch (IOException e) {
+            kDebug(30513) << "caught IOException while parsing drawingsVariable ";
+            return;
+        }
+        catch (...) {
+            kDebug(30513) << "caught unknown exception while parsing drawingsVariable";
+            return;
+        }
+
+        //parse OfficeArfDgContainer from msdoc
+        OfficeArtDgContainer * pDgContainer = NULL;
+        try {
+            pDgContainer = new OfficeArtDgContainer();
+            if(drawingsVariable == 0) {
+                m_pOfficeArtBodyDgContainer = pDgContainer;
+            } else {
+                m_pOfficeArtHeaderDgContainer = pDgContainer;
+            }
+            parseOfficeArtDgContainer(stream, *pDgContainer);
+        }
+        catch (IOException e) {
+            kDebug(30513) << "caught IOException while parsing OfficeArtDgContainer ";
+            return;
+        }
+        catch (...) {
+            kDebug(30513) << "caught unknown exception while parsing OfficeArtDgContainer";
+            return;
+        }
+
+        // parse drawingsVariable from msdoc
+        // 0 - next OfficeArtDgContainer belongs to Main document;
+        // 1 - next OfficeArtDgContainer belongs to Header Document
+        try {
+            drawingsVariable = stream.readuint8();
+        }
+        catch (IOException e) {
+            kDebug(30513) << "caught IOException while parsing second drawingsVariable ";
+            //wvlog << "stream position: " << stream.getPosition() << std::endl;
+            return;
+        }
+        catch (...) {
+            kDebug(30513) << "caught unknown exception while parsing second drawingsVariable";
+            return;
+        }
+
+        //parse OfficeArfDgContainer from msdoc
+        pDgContainer = NULL;
+        try {
+            pDgContainer = new OfficeArtDgContainer();
+            if(drawingsVariable == 0) {
+                if(m_pOfficeArtBodyDgContainer!= NULL){
+                    delete m_pOfficeArtBodyDgContainer;
+                }
+                m_pOfficeArtBodyDgContainer = pDgContainer;
+            }
+            else
+            {
+                if(m_pOfficeArtHeaderDgContainer != NULL) {
+                    delete m_pOfficeArtHeaderDgContainer;
+                }
+                m_pOfficeArtHeaderDgContainer = pDgContainer;
+            }
+            parseOfficeArtDgContainer(stream, *pDgContainer);
+        }
+        catch (IOException e) {
+            kDebug(30513) << "caught IOException while parsing second OfficeArtDgContainer ";
+            return;
+        }
+        catch (...) {
+            kDebug(30513) << "caught unknown exception while parsing second OfficeArtDgContainer";
+            return;
+        }
+
+        if (stream.getPosition() != buffer.size()) {
+            kDebug(30513) << (uint)(buffer.size() - stream.getPosition())
+            << "bytes left at the end of parseOfficeArtDggContainer,"
+            << " parseOfficeArtDgContainer, so probably an error at position "
+            << (uint)stream.getMaxPosition();
+        }
+    }
+}
+
+void KWordDrawingHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+{
+    out.xml.startElement("draw:frame");
+
+    out.xml.addAttribute("svg:width", out.hLength());
+    out.xml.addAttribute("svg:height", out.vLength());
+    out.xml.addAttribute("svg:x", out.hOffset());
+    out.xml.addAttribute("svg:y", out.vOffset());
+
+    out.xml.startElement("draw:text-box");
+
+    emit textBoxFound(o.shapeProp.spid , &out.xml);
+
+    out.xml.endElement(); //draw:text-box
+    out.xml.endElement(); // draw:frame
+}
+
+void KWordDrawingHandler::processPictureFrame(const MSO::OfficeArtSpContainer&/* o*/,DrawingWriter&/* out*/)
+{
+}
 
 #include "graphicshandler.moc"

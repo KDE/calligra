@@ -79,6 +79,8 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_insideAnnotation(false)
     , m_annotationWriter(0)
     , m_annotationBuffer(0)
+    , m_insideDrawing(false)
+    , m_drawingWriter(0)
     , m_maxColumns(0)
     , m_currentListDepth(-1)
     , m_currentListID(0)
@@ -475,6 +477,33 @@ void KWordTextHandler::pictureFound(const wvWare::PictureFunctor& pictureFunctor
 }
 #endif // IMAGE_IMPORT
 
+void KWordTextHandler::drawingFound(unsigned int globalCP)
+{
+    kDebug(30513);
+    //create temporary writer for the picture tags
+    m_insideDrawing = true;
+    QBuffer drawingBuffer;
+    drawingBuffer.open(QIODevice::WriteOnly);
+
+    m_drawingWriter = new KoXmlWriter(&drawingBuffer);
+
+    saveState();
+    emit
+    drawingFound(globalCP, m_drawingWriter);
+    restoreState();
+
+    //now add content to our current paragraph
+    QString contents = QString::fromUtf8(drawingBuffer.buffer(),
+            drawingBuffer.buffer().size());
+    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+
+    m_insideDrawing = false;
+
+    //cleanup
+    delete m_drawingWriter;
+    m_drawingWriter = 0;
+}
+
 QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
 {
     Q_UNUSED(fsname);
@@ -520,6 +549,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     bool inStylesDotXml = false;
     if (m_insideFootnote) {
         writer = m_footnoteWriter;
+    } else if (m_insideDrawing) {
+        writer = m_drawingWriter;
     } else if (m_writingHeader) {
         writer = m_headerWriter;
         inStylesDotXml = true;
@@ -633,6 +664,9 @@ void KWordTextHandler::paragraphEnd()
     } else if (m_insideAnnotation) {
         kDebug(30513) << "writing an annotation";
         m_paragraph->writeToFile(m_annotationWriter);
+    } else if (m_insideDrawing) {
+        kDebug(30513) << "writing an drawing";
+        m_paragraph->writeToFile(m_drawingWriter);
     } else if (!m_writingHeader) {
         kDebug(30513) << "writing to body";
         m_paragraph->writeToFile(m_bodyWriter);

@@ -27,9 +27,10 @@ using namespace wvWare;
 Parser::Parser( OLEStorage* storage, OLEStreamReader* wordDocument ) :
     m_inlineHandler( new InlineReplacementHandler ), m_subDocumentHandler( new SubDocumentHandler ),
     m_tableHandler( new TableHandler ), m_pictureHandler( new PictureHandler ),
-    m_textHandler( new TextHandler ), m_ourInlineHandler( true ), m_ourSubDocumentHandler( true ),
-    m_ourTableHandler( true ), m_ourPictureHandler( true ), m_ourTextHandler( true ),
-    m_storage( storage ), m_wordDocument( wordDocument ), m_okay( true )
+    m_textHandler( new TextHandler ),m_drawingHandler( new DrawingHandler ), m_ourInlineHandler( true ),
+    m_ourSubDocumentHandler( true ), m_ourTableHandler( true ), m_ourPictureHandler( true ),
+    m_ourTextHandler( true ), m_ourDrawingHandler ( true ), m_storage( storage ),
+    m_wordDocument( wordDocument ), m_okay( true )
 {
     if ( !storage || !wordDocument ) {
         m_okay = false;
@@ -57,6 +58,8 @@ Parser::~Parser()
         delete m_pictureHandler;
     if ( m_ourTextHandler )
         delete m_textHandler;
+    if( m_ourDrawingHandler)
+        delete m_drawingHandler;
 
     // Don't forget to close everything properly here
     delete m_wordDocument;
@@ -87,4 +90,9 @@ void Parser::setPictureHandler( PictureHandler* handler )
 void Parser::setTextHandler( TextHandler* handler )
 {
     setHandler<TextHandler>( handler, &m_textHandler, m_ourTextHandler );
+}
+
+void Parser::setDrawingHandler( DrawingHandler* handler )
+{
+    setHandler<DrawingHandler>( handler, &m_drawingHandler, m_ourDrawingHandler );
 }

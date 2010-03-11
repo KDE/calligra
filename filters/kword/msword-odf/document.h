@@ -57,6 +57,7 @@ class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordPictureHandler;
 class KWordTextHandler;
+class KWordDrawingHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
 {
@@ -129,6 +130,10 @@ public slots:
     void slotPictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
                           const wvWare::FunctorBase*);
 
+    void slotDrawingFound(unsigned int globalCP, KoXmlWriter* writer);
+
+    void slotTextBoxFound(uint lid, KoXmlWriter* writer);
+
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
     //void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
@@ -145,6 +150,7 @@ private:
     KWordTableHandler*       m_tableHandler;
     KWordReplacementHandler* m_replacementHandler;
     KWordPictureHandler*     m_pictureHandler;
+    KWordDrawingHandler*     m_drawingHandler;
 
     KoFilterChain* m_chain;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
