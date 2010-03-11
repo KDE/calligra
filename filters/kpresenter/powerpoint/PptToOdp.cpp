@@ -2049,7 +2049,12 @@ void PptToOdp::processTextObjectForBody(const OfficeArtSpContainer& o,
         out.xml.addAttribute("presentation:class", classStr);
     }
     out.xml.startElement("draw:text-box");
+    const MSO::MasterOrSlideContainer* tmpMaster = currentMaster;
+    // if this is not a presentation frame, set master to 0, to avoid the
+    // text style from inheriting from the master style
+    if (p == 0) currentMaster = 0;
     processTextForBody(o, tc, out);
+    currentMaster = tmpMaster;
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }
