@@ -114,26 +114,33 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
 
     if ( !( opt.state & QStyle::State_Editing ) ) {
-        QStyleOptionProgressBar pbOption;
-        pbOption.QStyleOption::operator=( option );
-        initStyleOptionProgressBar( &pbOption, index );
+        bool ok = false;
+        (void) index.data().toInt(&ok);
+        if ( ok ) {
+            QStyleOptionProgressBar pbOption;
+            pbOption.QStyleOption::operator=( option );
+            initStyleOptionProgressBar( &pbOption, index );
 
-        style->drawControl( QStyle::CE_ProgressBar, &pbOption, painter );
-        // Draw focus, copied from qt
-        if (opt.state & QStyle::State_HasFocus) {
-            painter->save();
-            QStyleOptionFocusRect o;
-            o.QStyleOption::operator=( opt );
-            o.rect = style->subElementRect( QStyle::SE_ItemViewItemFocusRect, &opt, opt.widget );
-            o.state |= QStyle::State_KeyboardFocusChange;
-            o.state |= QStyle::State_Item;
-            QPalette::ColorGroup cg = ( opt.state & QStyle::State_Enabled )
-                            ? QPalette::Normal : QPalette::Disabled;
-            o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
-                                            ? QPalette::Highlight : QPalette::Window );
-            style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
-            //kDebug()<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
-            painter->restore();
+            style->drawControl( QStyle::CE_ProgressBar, &pbOption, painter );
+            // Draw focus, copied from qt
+            if (opt.state & QStyle::State_HasFocus) {
+                painter->save();
+                QStyleOptionFocusRect o;
+                o.QStyleOption::operator=( opt );
+                o.rect = style->subElementRect( QStyle::SE_ItemViewItemFocusRect, &opt, opt.widget );
+                o.state |= QStyle::State_KeyboardFocusChange;
+                o.state |= QStyle::State_Item;
+                QPalette::ColorGroup cg = ( opt.state & QStyle::State_Enabled )
+                                ? QPalette::Normal : QPalette::Disabled;
+                o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
+                                                ? QPalette::Highlight : QPalette::Window );
+                style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
+                //kDebug()<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
+                painter->restore();
+            }
+        } else {
+            EnumDelegate del;
+            del.paint( painter, option, index );
         }
     }
 }
@@ -155,10 +162,11 @@ QSize ProgressBarDelegate::sizeHint( const QStyleOptionViewItem &option, const Q
 void ProgressBarDelegate::initStyleOptionProgressBar( QStyleOptionProgressBar *option, const QModelIndex &index ) const
 {
     option->rect.adjust( 0, 1, 0, -1 );
-    option->maximum = 100;
     option->minimum = 0;
+    int max = index.data( Role::Maximum ).toInt();
+    option->maximum = max > option->minimum ? max : option->minimum + 100;
     option->progress = index.data().toInt();
-    option->text = index.data().toString() + QChar::fromAscii( '%' );
+    option->text = QString::number( ( option->progress * 100 ) / ( option->maximum - option->minimum ) ) + QChar::fromAscii( '%' );
     option->textAlignment = Qt::AlignCenter;
     option->textVisible = true;
 }

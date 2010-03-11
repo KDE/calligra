@@ -362,6 +362,16 @@ QVariant ScheduleItemModel::state( const QModelIndex &index, int role ) const
     }
     switch ( role ) {
         case Qt::DisplayRole:
+        {
+            if ( sm->progress() > 0 ) {
+                return sm->progress();
+            }
+            QStringList l = sm->state();
+            if ( l.isEmpty() ) {
+                return "";
+            }
+            return l.first();
+        }
         case Qt::EditRole: 
         {
             QStringList l = sm->state();
@@ -377,6 +387,10 @@ QVariant ScheduleItemModel::state( const QModelIndex &index, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Maximum:
+            return sm->maxProgress();
+        case Role::Minimum:
+            return 0;
     }
     return QVariant();
 }
@@ -765,6 +779,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
 QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
+        case ScheduleModel::ScheduleState: return new ProgressBarDelegate( parent );
         case ScheduleModel::ScheduleDirection: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleOverbooking: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleDistribution: return new EnumDelegate( parent );
@@ -947,19 +962,22 @@ void ScheduleLogItemModel::refresh()
     }
     kDebug()<<m_schedule<<m_schedule->logs().count();
     QStandardItem *parentItem = invisibleRootItem();
-    QList<Schedule::Log>::ConstIterator it;
-    for ( it = m_schedule->logs().constBegin(); it != m_schedule->logs().constEnd(); ++it ) {
+    QListIterator<Schedule::Log> it( m_schedule->logs() );
+    while ( it.hasNext() ) {
+        Schedule::Log log = it.next();
         QList<QStandardItem*> lst;
-        if ( (*it).resource ) {
-            lst.append( new QStandardItem( (*it).resource->name() ) );
+        if ( log.resource ) {
+            lst.append( new QStandardItem( log.resource->name() ) );
+        } else if ( log.node ) {
+            lst.append( new QStandardItem( log.node->name() ) );
         } else {
-            lst.append( new QStandardItem( (*it).node->name() ) );
+            lst.append(  new QStandardItem( "" ) );
         }
-        lst.append( new QStandardItem( m_schedule->logPhase( (*it).phase ) ) );
-        QStandardItem *item = new QStandardItem( m_schedule->logSeverity( (*it).severity ) );
-        item->setData( (*it).severity );
+        lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
+        QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
+        item->setData( log.severity );
         lst.append( item );
-        lst.append( new QStandardItem( (*it).message ) );
+        lst.append( new QStandardItem( log.message ) );
         parentItem->appendRow( lst );
         //kDebug()<<rowCount()<<columnCount()<<parentItem<<lst;
     }
