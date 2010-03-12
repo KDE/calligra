@@ -740,9 +740,10 @@ void TestMathFunctions::testROUNDDOWN()
     CHECK_EVAL("=ROUNDDOWN(1;0)",           Value(1));
     CHECK_EVAL("=ROUNDDOWN(1)",             Value(1));
     CHECK_EVAL("=ROUNDDOWN(9;-1)",          Value(0));
+    CHECK_EVAL("=ROUNDDOWN(-9;-1)",          Value(0));
     CHECK_EVAL("=ROUNDDOWN(9;0)",           Value(9));
-    CHECK_EVAL("=ROUNDDOWN(-1.1)",          Value(-2));
-    CHECK_EVAL("=ROUNDDOWN(-1.9)",          Value(-2));
+    CHECK_EVAL("=ROUNDDOWN(-1.1)",          Value(-1));
+    CHECK_EVAL("=ROUNDDOWN(-1.9)",          Value(-1));
 }
 
 void TestMathFunctions::testROUNDUP()
@@ -753,9 +754,10 @@ void TestMathFunctions::testROUNDUP()
     CHECK_EVAL("=ROUNDUP(1.9;0)",       Value(2));
     CHECK_EVAL("=ROUNDUP(1)",           Value(1));
     CHECK_EVAL("=ROUNDUP(9;-1)",        Value(10));
+    CHECK_EVAL("=ROUNDUP(-9;-1)",        Value(-10));
     CHECK_EVAL("=ROUNDUP(9;0)",         Value(9));
-    CHECK_EVAL("=ROUNDUP(-1.1)",        Value(-1));
-    CHECK_EVAL("=ROUNDUP(-1.9)",        Value(-1));
+    CHECK_EVAL("=ROUNDUP(-1.1)",        Value(-2));
+    CHECK_EVAL("=ROUNDUP(-1.9)",        Value(-2));
 }
 
 void TestMathFunctions::testSERIESSUM()
