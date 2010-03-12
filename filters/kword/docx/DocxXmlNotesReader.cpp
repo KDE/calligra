@@ -34,7 +34,7 @@
 #include <MsooXmlReader_p.h>
 
 DocxXmlNotesReaderContext::DocxXmlNotesReaderContext(QMap<int, DocxNote>& _notes)
-        : notes(&_notes)
+    : notes(&_notes)
 {
 }
 
@@ -50,9 +50,9 @@ public:
 };
 
 DocxXmlNotesReader::DocxXmlNotesReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -85,11 +85,11 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read(MSOOXML::MsooXmlReaderContex
         return KoFilter::WrongFormat;
     }
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
-/*    for (int i = 0; i < namespaces.count(); i++) {
+    /*    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
-//! @todo find out whether the namespace returned by namespaceUri()
-//!       is exactly the same ref as the element of namespaceDeclarations()
+    //! @todo find out whether the namespace returned by namespaceUri()
+    //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
         return KoFilter::WrongFormat;
@@ -99,7 +99,7 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read(MSOOXML::MsooXmlReaderContex
 
     RETURN_IF_ERROR(read_notes())
 
-    if (!expectElEnd(qn)) {
+            if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
     kDebug() << "===========finished============";
@@ -117,9 +117,9 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_notes()
         if (isStartElement()) {
             if (qualifiedName() == itemName.constData()) {
                 RETURN_IF_ERROR(read_note(itemName))
-            }
+                    }
             ELSE_WRONG_FORMAT
-        }
+                }
         if (qualifiedName() == notesMainName && isEndElement())
             break;
     }
@@ -131,8 +131,9 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_note(const char *noteType)
     const QXmlStreamAttributes attrs(attributes());
 
     DocxNote note;
+
     TRY_READ_ATTR(id)
-    int idNumber = INT_MAX; // good enough value
+            int idNumber = INT_MAX; // good enough value
     if (!id.isEmpty()) {
         bool ok;
         idNumber = id.toInt(&ok);
@@ -151,15 +152,23 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_note(const char *noteType)
             break;
     }
 
-    d->counter++;
-    note.number = d->counter;
-    if (m_context->notes->contains(idNumber)) {
-        // ECMA: If more than one footnote shares the same ID, then this document shall
-        // be considered non-conformant. If more than one endnote shares the same ID,
-        // then this document shall be considered non-conformant.
-        raiseError(i18n("Note \"%1\" already exists", idNumber));
-        return KoFilter::WrongFormat;
+
+    TRY_READ_ATTR(type);
+
+
+    if (type.isNull()) {
+        // not a separator or continuationSeparator, but a real note.
+        // docx saves the separator and continuations separator as footnote elements.
+        d->counter++;
+        note.number = d->counter;
+        if (m_context->notes->contains(idNumber)) {
+            // ECMA: If more than one footnote shares the same ID, then this document shall
+            // be considered non-conformant. If more than one endnote shares the same ID,
+            // then this document shall be considered non-conformant.
+            raiseError(i18n("Note \"%1\" already exists", idNumber));
+            return KoFilter::WrongFormat;
+        }
+        m_context->notes->insert(idNumber, note);
     }
-    m_context->notes->insert(idNumber, note);
     return KoFilter::OK;
 }

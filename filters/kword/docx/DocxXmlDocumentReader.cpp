@@ -22,6 +22,7 @@
  */
 
 #include "DocxXmlDocumentReader.h"
+#include "DocxXmlNotesReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -89,6 +90,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadFootnotes(KoOdfWrit
         = import->loadAndParseDocument(&reader, "word/footnotes.xml", errorMessage, &context);
     if (status != KoFilter::OK)
         reader.raiseError(errorMessage);
+
     return status;
 }
 
