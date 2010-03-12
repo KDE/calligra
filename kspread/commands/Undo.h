@@ -93,7 +93,7 @@ struct styleCell {
 class FormulaOfCell
 {
 public:
-    FormulaOfCell(): m_sheetName(0) {}
+    FormulaOfCell(): m_sheetName() {}
     FormulaOfCell(QString & sheetName, int col, int row, QString & formula)
             : m_sheetName(sheetName), m_col(col), m_row(row), m_formula(formula) {}
 
