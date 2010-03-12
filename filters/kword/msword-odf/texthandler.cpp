@@ -85,6 +85,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentListDepth(-1)
     , m_currentListID(0)
     , m_previousListID(0)
+    , m_hyperLinkActive(false)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -693,8 +694,17 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     switch (m_fieldType) {
     case 26:
     case 33:
+    case 37: // TAB
+        if (m_hyperLinkActive) {
+            m_fieldType = 88;
+        } else {
+            kDebug(30513) << "can't process field, just outputting text into document...";
+            m_fieldType = -1; //set m_fieldType for unprocessed field
+        }
+        break;
     case 88:  // HyperLink
         kDebug(30513) << "processing field...";
+        m_hyperLinkActive = true;
         break;
     default:
         kDebug(30513) << "can't process field, just outputting text into document...";
@@ -731,21 +741,63 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.endElement();
         break;
     case 88:  // HyperLink
-        if (m_hyperLinkList.size() == 2) {
-            writer.startElement("text:a");
-            writer.addAttribute("xlink:type", "simple");
+        QList<QString> fullList(m_hyperLinkList);
+        QList<QString> emptyList;
+        QString hyperlink;
 
-            // Remove unneeded word and '"' or ' ' characters from the URL
-            QString urlStr = m_hyperLinkList[0].remove(" HYPERLINK ");
-            while(urlStr.startsWith("\"") || urlStr.startsWith(" "))
-                urlStr = urlStr.remove(0, 1);
-            while(urlStr.endsWith("\"") || urlStr.endsWith(" "))
-                urlStr = urlStr.remove(urlStr.length() - 1, 1);
+        for (int i = 0; i < fullList.size(); i++) {
+            if (fullList[i].contains("PAGEREF")) {
+                fullList.removeAt(i);
+            }
+        }
 
-            writer.addAttribute("xlink:href", QUrl(urlStr).toEncoded());
-            writer.addTextNode(m_hyperLinkList[1]);
-            writer.endElement();
+        while (fullList.size() >= 1) {
+            emptyList.clear();
+            if (fullList.size() >= 4) {
+                if (fullList[0] == " " && fullList[1].contains("HYPERLINK") && fullList[2] == " ") {
+                    hyperlink = fullList[0] + fullList[1] + fullList[2];
+                    emptyList.append(hyperlink);
+                    emptyList.append(fullList[3]);
+                    for(int i = 0; i<4; i++) {
+                        fullList.removeAt(0);
+                    }
+                }
+            } else if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK")) {
+                emptyList.append(fullList[0]);
+                emptyList.append(fullList[1]);
+                for(int i = 0; i<2; i++) {
+                    fullList.removeAt(0);
+                }
+            } else {
+                emptyList.append(hyperlink);
+                emptyList.append(fullList[0]);
+                fullList.removeAt(0);
+            }
+
             m_hyperLinkList.clear();
+            m_hyperLinkList.append(emptyList[0]);
+            m_hyperLinkList.append(emptyList[1]);
+            if (m_hyperLinkList.size() == 2) {
+                writer.startElement("text:a");
+                writer.addAttribute("xlink:type", "simple");
+
+                // Remove unneeded word and '"' or ' ' characters from the URL
+                QString urlStr = m_hyperLinkList[0].remove(" HYPERLINK ");
+                while(urlStr.startsWith("\"") || urlStr.startsWith(" "))
+                    urlStr = urlStr.remove(0, 1);
+                while(urlStr.endsWith("\"") || urlStr.endsWith(" "))
+                    urlStr = urlStr.remove(urlStr.length() - 1, 1);
+
+                writer.addAttribute("xlink:href", QUrl(urlStr).toEncoded());
+                if (m_hyperLinkList[1].contains("\t")) {
+                    writer.startElement("text:tab");
+                    writer.endElement();
+                }
+                writer.addTextNode(m_hyperLinkList[1]);
+                writer.endElement();
+                m_hyperLinkList.clear();
+                m_hyperLinkActive = false;
+            }
         }
         break;
     }
@@ -788,6 +840,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     if (m_insideField && m_fieldAfterSeparator && (m_fieldType > 0)) {
         kDebug(30513) << "adding this text to field value.";
         m_fieldValue.append(newText);
+        m_fieldType = 0;
         return;
     }
 

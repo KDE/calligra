@@ -215,6 +215,7 @@ private:
     QString m_previousListStyleName;
 
     QList<QString> m_hyperLinkList;
+    bool m_hyperLinkActive;
 };
 
 #endif // TEXTHANDLER_H
