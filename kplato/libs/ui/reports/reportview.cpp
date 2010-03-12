@@ -29,6 +29,7 @@
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
 #include <renderobjects.h>
+#include <KoReportKSpreadRenderer.h>
 #include <KoReportHTMLCSSRenderer.h>
 #include <reportsection.h>
 #include <koproperty/EditorView.h>
@@ -70,6 +71,36 @@
 namespace KPlato
 {
 
+//----------------
+ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportDocument )
+    : KoPrintingDialog( view ),
+    m_reportDocument( reportDocument )
+{
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
+    m_cxt.printer = &printer();
+    m_cxt.painter = 0;
+    KoReportRendererFactory factory;
+    m_renderer = factory.createInstance( "print" );
+}
+
+ReportPrintingDialog::~ReportPrintingDialog()
+{
+    delete m_renderer;
+}
+
+int ReportPrintingDialog::documentLastPage() const
+{
+    return m_reportDocument->pages();
+}
+
+
+void ReportPrintingDialog::printPage( int page, QPainter &painter )
+{
+    m_cxt.painter = &painter;
+    m_renderer->render( m_cxt, m_reportDocument, page );
+}
+
+//---------------------
 ReportView::ReportView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
@@ -207,83 +238,92 @@ void ReportView::slotEditReport()
     emit editReportDesign( this );
 }
 
-void ReportView::slotPrintReport()
+KoPrintJob *ReportView::createPrintJob()
 {
-/*    QPrinter printer;
-    KoReportPrintRenderer pr;
-
-    // do some printer initialization
-    pr.setPrinter(&printer);
-    pr.setupPrinter(m_reportDocument, &printer);
-
-    QPrintDialog *dialog = new QPrintDialog(&printer, this);
-    if (dialog->exec() != QDialog::Accepted)
-        return;
-
-    pr.render(m_reportDocument);*/
+    return new ReportPrintingDialog( this, m_reportDocument );
 }
 
-#if 0
-void ReportView::slotRenderKSpread()
+void ReportView::slotExportOds()
 {
-#ifdef HAVE_KSPREAD
-    KRKSpreadRender ks;
-    KUrl saveUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
-    if (!saveUrl.isValid()) {
-        KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
+    KFileDialog *dia = new KFileDialog( KUrl(), QString(), this );
+    dia->setOperationMode( KFileDialog::Saving );
+    dia->setMode( KFile::File );
+    dia->setConfirmOverwrite( true );
+    dia->setInlinePreviewShown( true );
+    dia->setCaption( i18nc( "@title:window", "Export Report" ) );
+    dia->setFilter( QString( "*.ods|%1\n*|%2" ).arg( i18n( "Open docoument spreadsheet" ) ).arg( i18n( "All Files" ) ) );
+
+    connect(dia, SIGNAL(okClicked()), SLOT(slotExportOdsOkClicked()));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+}
+
+void ReportView::slotExportOdsOkClicked()
+{
+    KFileDialog *dia = dynamic_cast<KFileDialog*>( sender() );
+    if ( dia == 0 ) {
+        return;
+    }
+    KoReportRendererBase *renderer;
+    KoReportRendererContext cxt;
+
+    renderer = m_factory.createInstance("ods");
+    if ( renderer == 0 ) {
+        return;
+    }
+    cxt.destinationUrl = dia->selectedUrl();
+    if (!cxt.destinationUrl.isValid()) {
+        KMessageBox::error(this, i18n("Cannot export report. The URL was invalid"), i18n( "Not Saved" ) );
         return;
     }
 
-    if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
-        int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
-        if (wantSave != KMessageBox::Continue) {
-            return;
-        }
+    if (!renderer->render(cxt, m_reportDocument)) {
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", cxt.destinationUrl.prettyUrl()) , i18n("Export to spreadsheet failed"));
     }
-    if (!ks.render(m_reportDocument, saveUrl)) {
-        KMessageBox::error(this, i18n("Failed to open %1 in KSpread", saveUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
-    }
-#endif
+    dia->deleteLater();
 }
-#endif
 
 void ReportView::slotExportHTML()
 {
-    KoReportRendererContext cxt;
-    KoReportRendererBase *renderer;
-    
-    cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Export Report as Web Page"));
-    if (!cxt.destinationUrl.isValid()) {
-        KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Exported"));
+    KFileDialog *dia = new KFileDialog( KUrl(), QString(), this );
+    dia->setOperationMode( KFileDialog::Saving );
+    dia->setMode( KFile::File );
+    dia->setConfirmOverwrite( true );
+    dia->setInlinePreviewShown( true );
+    dia->setCaption( i18nc( "@title:window", "Export Report" ) );
+    dia->setFilter( QString( "*.html|%1\n*|%2" ).arg( i18n( "HTML files" ) ).arg( i18n( "All Files" ) ) );
+
+    connect(dia, SIGNAL(okClicked()), SLOT(slotExportHTMLOkClicked()));
+    dia->show();
+    dia->raise();
+    dia->activateWindow();
+
+}
+
+void ReportView::slotExportHTMLOkClicked()
+{
+    KFileDialog *dia = dynamic_cast<KFileDialog*>( sender() );
+    if ( dia == 0 ) {
         return;
     }
-    if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
-        int wantSave = KMessageBox::warningContinueCancel(this,
-            i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()),
-            i18n("Warning"), KGuiItem(i18n("Overwrite")));
-        if (wantSave != KMessageBox::Continue) {
-            return;
-        }
+    KoReportRendererBase *renderer;
+    KoReportRendererContext cxt;
+
+    renderer = m_factory.createInstance("htmlcss");
+    if ( renderer == 0 ) {
+        return;
+    }
+    cxt.destinationUrl = dia->selectedUrl();
+    if (!cxt.destinationUrl.isValid()) {
+        KMessageBox::error(this, i18n("Cannot export report. The URL was invalid"), i18n( "Not Saved" ) );
+        return;
     }
 
-    bool css = (KMessageBox::questionYesNo(this,
-        i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, "
-             "or export using a Table which outputs a much simpler format."), i18n("Export Style"),
-             KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
-
-    KoReportRendererFactory m_factory;
-    if (css){
-        renderer = m_factory.createInstance("htmlcss");
-    }
-    else {
-        renderer = m_factory.createInstance("htmltable");
-    }
-    
     if (!renderer->render(cxt, m_reportDocument)) {
-        KMessageBox::error(this, i18n("Exporting report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Exporting failed"));
-    } else {
-        KMessageBox::information(this, i18n("Report exported to %1", cxt.destinationUrl.prettyUrl()) , i18n("Exporting Succeeded"));
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", cxt.destinationUrl.prettyUrl()) , i18n("Export to HTML failed"));
     }
+    dia->deleteLater();
 }
 
 void ReportView::setupGui()
@@ -292,26 +332,24 @@ void ReportView::setupGui()
     KAction *a = 0;
     QString name = "reportview_list";
 
-#if 0
-#ifdef HAVE_KSPREAD
-    a = new KAction(KIcon("kspread"), i18n("Open in KSpread"), this));
-    a->setToolTip(i18n("Open the report in KSpread"));
-    a->setWhatsThis(i18n("Opens the current report in KSpread."));
-    connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
+    a = new KAction( KIcon( "document-edit" ), i18n( "Edit Report" ), this );
+    a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
+    a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
+    connect(a, SIGNAL(triggered()), this, SLOT(slotEditReport()));
     addAction( name, a );
-#endif
-#endif
 
-    a = new KAction( KIcon( "text-html" ), i18n( "Export to HTML" ), this );
-    a->setToolTip( i18n( "Export the report to HTML" ) );
-    a->setWhatsThis( i18n( "Exports the report to a HTML file." ) );
+//#ifdef HAVE_KSPREAD
+    a = new KAction( KIcon( "application-vnd.oasis.opendocument.spreadsheet" ), i18nc( "@label:button", "Spreadsheet" ), this );
+    a->setToolTip( i18nc( "@info:tooltip", "Export to spreadsheet" ) );
+    a->setWhatsThis( i18nc( "@info:whatsthis", "Exports report to an open document spreadsheet file." ) );
+    connect(a, SIGNAL(triggered()), this, SLOT(slotExportOds()));
+    addAction( name, a );
+//#endif
+
+    a = new KAction( KIcon( "application-xhtml+xml" ), i18n( "HTML" ), this );
+    a->setToolTip( i18nc( "@info:tooltip", "Export to HTML" ) );
+    a->setWhatsThis( i18nc( "@info:whatsthis", "Exports the report to a HTML file in css format." ) );
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportHTML()));
-    addAction( name, a );
-
-    a = new KAction( KIcon( "printer" ), i18n( "Print" ), this );
-    a->setToolTip(i18n("Print Report"));
-    a->setWhatsThis(i18n("Prints the current report."));
-    connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
     addAction( name, a );
 
 /*    a = new KAction( KIcon( "kword" ), i18n( "Open in KWord" ), this );
@@ -320,12 +358,6 @@ void ReportView::setupGui()
     a->setEnabled(false);
 //! @todo connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
     addAction( name, a );*/
-
-    a = new KAction( KIcon( "document-edit" ), i18n( "Edit Report" ), this );
-    a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
-    a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
-    connect(a, SIGNAL(triggered()), this, SLOT(slotEditReport()));
-    addAction( name, a );
 
 }
 

@@ -28,7 +28,10 @@
 #include "kptsplitterview.h"
 #include "ui_reportnavigator.h"
 
+#include <KoReportRendererBase.h>
+
 class KoDocument;
+class KoShape;
 
 class KoReportData;
 class KoReportPreRenderer;
@@ -36,6 +39,7 @@ class ORODocument;
 class ReportViewPageSelect;
 class ScriptAdaptor;
 class KoReportDesigner;
+class KoReportRendererBase;
 
 namespace KoProperty
 {
@@ -62,7 +66,27 @@ class ReportNavigator;
 class ReportDesignPanel;
 class ReportSourceModel;
 
+class ReportPrintingDialog : public KoPrintingDialog
+{
+    Q_OBJECT
+public:
+    ReportPrintingDialog( ViewBase *view, ORODocument *reportDocument );
+    ~ReportPrintingDialog();
+    
+    void printPage( int page, QPainter &painter );
 
+    int documentLastPage() const;
+
+    virtual QList<QWidget*> createOptionWidgets() const { return QList<QWidget*>(); }
+    virtual QList<KoShape*> shapesOnPage(int) { return QList<KoShape*>(); }
+
+protected:
+    ORODocument *m_reportDocument;
+    KoReportRendererContext m_cxt;
+    KoReportRendererBase *m_renderer;
+};
+
+//-------------------
 class KPLATOUI_EXPORT ReportView : public ViewBase 
 {
     Q_OBJECT
@@ -91,6 +115,8 @@ public slots:
 
     QMap<QString, QAbstractItemModel*> createReportModels( Project *project, ScheduleManager *manager, QObject *parent = 0 ) const;
 
+    KoPrintJob *createPrintJob();
+
 signals:
     void editReportDesign( ReportView *view );
 
@@ -103,17 +129,17 @@ private slots:
     void firstPage();
     void lastPage();
     void slotEditReport();
-    void slotPrintReport();
-#if 0
-    void slotRenderKSpread();
-#endif
+    void slotExportOds();
+    void slotExportOdsOkClicked();
     void slotExportHTML();
+    void slotExportHTMLOkClicked();
 
 private:
     ReportData *createReportData( const QDomElement &connection );
 
 private:
     KoReportPreRenderer *m_preRenderer;
+    KoReportRendererFactory m_factory;
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
     ReportPage *m_reportWidget;
