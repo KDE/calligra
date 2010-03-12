@@ -552,7 +552,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_commentRangeStart()
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR(id)
-    int idNumber;
+    int idNumber = -1;
     STRING_TO_INT(id, idNumber, "commentRangeStart@id")
     const DocxComment comment(m_context->comment(this, idNumber));
     if (comment.isNull()) {
@@ -598,7 +598,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
     */
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(id)
-    int idNumber;
+    int idNumber = -1;
     STRING_TO_INT(id, idNumber, "endnoteReference@id")
     const DocxNote note(m_context->endnote(this, idNumber));
     if (note.isNull()) {
@@ -643,7 +643,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     */
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(id)
-    int idNumber;
+    int idNumber = -1;
     STRING_TO_INT(id, idNumber, "footnoteReference@id")
     const DocxNote note(m_context->footnote(this, idNumber));
     if (note.isNull()) {

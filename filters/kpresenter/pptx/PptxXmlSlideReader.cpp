@@ -814,7 +814,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 
     //line ending cap
     TRY_READ_ATTR_WITHOUT_NS(cap)
-    Qt::PenCapStyle penCap;
+    Qt::PenCapStyle penCap = m_currentPen.capStyle();
     //flat
     if (cap.isEmpty() || cap == "sq") {
        penCap = Qt::SquareCap;

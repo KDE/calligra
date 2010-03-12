@@ -773,7 +773,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-    uint countNumber;
+    uint countNumber = 0;
     STRING_TO_INT(count, countNumber, "styleSheet/fonts@count")
     m_context->styles->fontStyles.resize(countNumber);
     m_fontStyleIndex = 0;
@@ -808,7 +808,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS( count )
-    int countNumber;
+    int countNumber = 0;
     STRING_TO_INT( count, countNumber, "styleSheet/numFmts@count" );
 
     while( !atEnd() )
@@ -846,12 +846,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS( numFmtId )
-    int id;
+    int id = -1;
     STRING_TO_INT(numFmtId, id, "numFmt@numFmtId")
 
     TRY_READ_ATTR_WITHOUT_NS( formatCode );
-
-    m_context->styles->numberFormatStrings[ id ] = formatCode;
+    if (id >= 0 && !formatCode.isEmpty()) {
+        m_context->styles->numberFormatStrings[ id ] = formatCode;
+    }
 
     while( true )
     {
@@ -1193,7 +1194,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-    uint countNumber;
+    uint countNumber = 0;
     STRING_TO_INT(count, countNumber, "styleSheet/cellXfs@count")
     m_context->styles->cellFormats.resize(countNumber);
     m_cellFormatIndex = 0;
@@ -1354,7 +1355,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
-    uint countNumber;
+    uint countNumber = 0;
     STRING_TO_INT(count, countNumber, "styleSheet/fills@count")
     m_context->styles->fillStyles.resize(countNumber);
     m_fillStyleIndex = 0;
