@@ -353,8 +353,18 @@ QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
+            if ( node->type() == Node::Type_Task ) {
+                if ( node->estimate()->calendar() ) {
+                    return node->estimate()->calendar()->name();
+                }
+                return i18n( "None" );
+            }
+            return QString();
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
+                if ( node->estimate()->type() == Estimate::Type_Effort ) {
+                    return i18nc( "@info:tooltip", "Not applicable, estimate type is Effort" );
+                }
                 if ( node->estimate()->calendar() ) {
                     return node->estimate()->calendar()->name();
                 }
@@ -403,7 +413,11 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
-                return KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                QString s = KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
+                    s = '(' + s + ')';
+                }
+                return s;
             }
             break;
         case Qt::ToolTipRole:
@@ -411,7 +425,9 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
-                if ( t == Estimate::Type_Effort ) {
+                if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
+                    s = i18n( "Not applicable, constraint is Fixed Interval" );
+                } else if ( t == Estimate::Type_Effort ) {
                     s = i18n( "Estimated effort: %1", s );
                 } else {
                     s = i18n( "Estimated duration: %1", s );
@@ -440,7 +456,11 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->estimate()->optimisticRatio();
+                QString s = QString::number( node->estimate()->optimisticRatio() );
+                if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
+                    s = '(' + s + ')';
+                }
+                return s;
             }
             return QString();
         case Qt::ToolTipRole:
@@ -448,7 +468,9 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
-                if ( t == Estimate::Type_Effort ) {
+                if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
+                    s = i18n( "Not applicable. constraint is Fixed Interval" );
+                } else if ( t == Estimate::Type_Effort ) {
                     s = i18n( "Optimistic effort: %1", s );
                 } else {
                     s = i18n( "Optimistic duration: %1", s );
@@ -473,7 +495,11 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->estimate()->pessimisticRatio();
+                QString s = QString::number( node->estimate()->pessimisticRatio() );
+                if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
+                    s = '(' + s + ')';
+                }
+                return s;
             }
             return QString();
         case Qt::ToolTipRole:
@@ -481,7 +507,9 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
                 Duration::Unit unit = node->estimate()->unit();
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
-                if ( t == Estimate::Type_Effort ) {
+                if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
+                    s = i18n( "Not applicable, constraint is Fixed Interval" );
+                } else if ( t == Estimate::Type_Effort ) {
                     s = i18n( "Pessimistic effort: %1", s );
                 } else {
                     s = i18n( "Pessimistic duration: %1", s );
@@ -2176,7 +2204,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             }
             case NodeModel::NodeEstimateCalendar:
             {
-                if ( n->type() == Node::Type_Task && n->estimate()->type() == Estimate::Type_Duration )
+                if ( n->type() == Node::Type_Task )
                 {
                     flags |= Qt::ItemIsEditable;
                 }
