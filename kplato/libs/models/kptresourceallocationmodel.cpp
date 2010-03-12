@@ -333,7 +333,7 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestName: return i18n( "Name" );
             case RequestType: return i18n( "Type" );
             case RequestAllocation: return i18n( "Allocation" );
-            case RequestMaximum: return i18n( "Maximum" );
+            case RequestMaximum: return i18nc( "@title:column", "Available" );
             case RequestRequired: return i18nc( "@title:column", "Required Resources" );
             default: return QVariant();
         }
@@ -347,7 +347,7 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestName: return ToolTip::resourceName();
             case RequestType: return ToolTip::resourceType();
             case RequestAllocation: return i18n( "Resource allocation" );
-            case RequestMaximum: return i18n( "Maximum amount of units or resources that can be allocated" );
+            case RequestMaximum: return i18nc( "@info:tootip", "Available resources or resource units" );
             case RequestRequired: return i18nc( "@info:tootip", "Required Resources" );
             default: return QVariant();
         }
@@ -650,7 +650,10 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *group, co
         case Qt::EditRole:
             return m_resourceCache[ res ]->units();
         case Qt::ToolTipRole: {
-            return i18np( "Not allocated", "Allocated units: %2", m_resourceCache[ res ]->units(), allocation( group, res, Qt::DisplayRole ).toString() );
+            if ( res->units() == 0 ) {
+                return i18nc( "@info:tooltip", "Not allocated" );
+            }
+            return i18nc( "@info:tooltip", "%1 allocated out of %2 available", allocation( group, res, Qt::DisplayRole ).toString(), m_model.maximum( res, Qt::DisplayRole ).toString() );
         }
         case Qt::CheckStateRole:
             return m_resourceCache[ res ]->units() == 0 ? Qt::Unchecked : Qt::Checked;
@@ -696,7 +699,7 @@ bool ResourceAllocationItemModel::setAllocation( Resource *res, const QVariant &
                 m_resourceCache[ res ] = new ResourceRequest( res, 0 );
             }
             if ( m_resourceCache[ res ]->units() == 0 ) {
-                m_resourceCache[ res ]->setUnits( res->units() );
+                m_resourceCache[ res ]->setUnits( 100 );
             } else {
                 m_resourceCache[ res ]->setUnits( 0 );
             }
