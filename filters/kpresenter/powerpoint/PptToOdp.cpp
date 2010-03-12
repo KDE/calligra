@@ -803,6 +803,7 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
     // draw:tile-repeat-offset
     // presentation:background-objects-visible
     // presentation:background-visible
+    style.addProperty("presentation:background-visible", true);
     // presentation:display-date-time
     if (hf) {
         style.addProperty("presentation:display-date-time",
@@ -1174,6 +1175,23 @@ void PptToOdp::defineMasterStyles(KoGenStyles& styles)
         }
     }
 }
+const MSO::OfficeArtSpContainer*
+getMasterShape(const MSO::MasterOrSlideContainer* m) {
+    const SlideContainer* sc = m->anon.get<SlideContainer>();
+    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+    qDebug() << sc << " " << mm;
+    const OfficeArtSpContainer* scp = 0;
+    if (sc) {
+        if (sc->drawing.OfficeArtDg.shape) {
+            scp = sc->drawing.OfficeArtDg.shape.data();
+        }
+    } else if (mm) {
+        if (mm->drawing.OfficeArtDg.shape) {
+            scp = mm->drawing.OfficeArtDg.shape.data();
+        }
+    }
+    return scp;
+}
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     // define for master for use in <master-page style:name="...">
@@ -1183,20 +1201,14 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
         const HeadersFootersAtom* hf = 0;
-        const OfficeArtSpContainer* scp = 0;
+        const OfficeArtSpContainer* scp = getMasterShape(m);
         if (sc) {
             if (sc->perSlideHFContainer) {
                 hf = &sc->perSlideHFContainer->hfAtom;
             }
-            if (sc->drawing.OfficeArtDg.shape) {
-                scp = sc->drawing.OfficeArtDg.shape.data();
-            }
         } else if (mm) {
             if (mm->perSlideHeadersFootersContainer) {
                 hf = &mm->perSlideHeadersFootersContainer->hfAtom;
-            }
-            if (mm->drawing.OfficeArtDg.shape) {
-                scp = mm->drawing.OfficeArtDg.shape.data();
             }
         }
         const OfficeArtDggContainer& drawingGroup
@@ -1238,7 +1250,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         }
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
-        DrawStyle ds(drawingGroup, sc->drawing.OfficeArtDg.shape.data());
+        const OfficeArtSpContainer* slideShape
+                = sc->drawing.OfficeArtDg.shape.data();
+        const OfficeArtSpContainer* masterSlideShape
+                = getMasterShape(p->getMaster(sc));
+        DrawStyle ds(drawingGroup, masterSlideShape, slideShape);
         defineDrawingPageStyle(dp, ds, hf);
         drawingPageStyles[sc] = styles.lookup(dp, "dp");
     }

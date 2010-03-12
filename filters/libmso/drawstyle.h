@@ -25,11 +25,13 @@
 class DrawStyle {
 private:
     const MSO::OfficeArtDggContainer& d;
+    const MSO::OfficeArtSpContainer* mastersp;
     const MSO::OfficeArtSpContainer* sp;
 public:
     DrawStyle(const MSO::OfficeArtDggContainer& d_,
+              const MSO::OfficeArtSpContainer* mastersp_ = 0,
               const MSO::OfficeArtSpContainer* sp_ = 0)
-                  :d(d_), sp(sp_) {}
+                  :d(d_), mastersp(mastersp_), sp(sp_) {}
 
     // FillStyleBooleanProperties
     bool fNoFillHitTest() const;

@@ -148,7 +148,9 @@ public:
         if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return QString();
         KoGenStyle fillImage(KoGenStyle::StyleFillImage);
         fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
-        return styles.lookup(fillImage, "fillImage");
+        return styles.lookup(fillImage,
+                             QString("fillImage%1").arg(fb->fillBlip),
+                             KoGenStyles::DontForceNumbering);
     }
 };
 /**

@@ -48,6 +48,9 @@ TYPE DrawStyle::NAME() const \
     if (sp) { \
         p = get<MSO::FOPT>(*sp); \
     } \
+    if (mastersp) { \
+        p = get<MSO::FOPT>(*mastersp); \
+    } \
     if (!p) { \
         p = get<MSO::FOPT>(d); \
     } \
@@ -81,6 +84,12 @@ bool DrawStyle::NAME() const \
     const MSO::FOPT* p = 0; \
     if (sp) { \
         p = get<MSO::FOPT>(*sp); \
+        if (p && p->TEST) { \
+            return p->NAME; \
+        } \
+    } \
+    if (mastersp) { \
+        p = get<MSO::FOPT>(*mastersp); \
         if (p && p->TEST) { \
             return p->NAME; \
         } \
