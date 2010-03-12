@@ -762,7 +762,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                         fullList.removeAt(0);
                     }
                 }
-            } else if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK")) {
+            }
+            if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK")) {
                 emptyList.append(fullList[0]);
                 emptyList.append(fullList[1]);
                 for(int i = 0; i<2; i++) {
@@ -932,8 +933,8 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     if (listInfo->lsid() == 1 && nfc == 255) {
         return false;
     }
-    
-    m_usedListWriters.push(writer);		// put the currently used writer in the stack 
+
+    m_usedListWriters.push(writer);		// put the currently used writer in the stack
 
     //process the different places we could be in a list
     if (m_currentListID == 0) {
