@@ -4622,16 +4622,16 @@ public:
 };
 class OfficeArtClientData : public StreamOffset {
 public:
-    class choice980859409 : public QSharedPointer<StreamOffset> {
+    class choice2642699428 : public QSharedPointer<StreamOffset> {
     public:
-        choice980859409() {}
-        explicit choice980859409(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice980859409(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2642699428() {}
+        explicit choice2642699428(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2642699428(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice980859409 anon;
+    choice2642699428 anon;
     OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeProgTagsSubContainerOrAtom : public StreamOffset {

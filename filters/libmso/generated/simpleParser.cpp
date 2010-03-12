@@ -3885,8 +3885,8 @@ void MSO::parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s) {
 void MSO::parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
-    if (!(_s.rh.recVer == 0 || _s.rh.recVer == 0xF)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0 || _s.rh.recVer == 0xF");
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
@@ -3894,8 +3894,8 @@ void MSO::parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData&
     if (!(_s.rh.recType == 0xF011)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF011");
     }
-    if (!(_s.rh.recLen == 0x4)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x4");
+    if (!(_s.rh.recLen == 4)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 4");
     }
     _s.clientData = in.readuint32();
 }
@@ -9749,9 +9749,6 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
     if (!(_s.rh.recType == 0xF011)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xF011");
     }
-    if (!(_s.rh.recLen!=4)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen!=4");
-    }
     _m = in.setMark();
     {
         OfficeArtRecordHeader _optionCheck(&_s);
@@ -10462,12 +10459,12 @@ void MSO::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
     OfficeArtRecordHeader _choice(&_s);
     parseOfficeArtRecordHeader(in, _choice);
     in.rewind(_m);
-    if ((_choice.recVer == 0xF)&&(_choice.recLen!=4)) {
-        _s.anon = OfficeArtClientData::choice980859409(new PptOfficeArtClientData(&_s));
-        parsePptOfficeArtClientData(in, *(PptOfficeArtClientData*)_s.anon.data());
-    } else {
-        _s.anon = OfficeArtClientData::choice980859409(new DocOfficeArtClientData(&_s));
+    if ((_choice.recVer == 0)&&(_choice.recLen == 4)) {
+        _s.anon = OfficeArtClientData::choice2642699428(new DocOfficeArtClientData(&_s));
         parseDocOfficeArtClientData(in, *(DocOfficeArtClientData*)_s.anon.data());
+    } else {
+        _s.anon = OfficeArtClientData::choice2642699428(new PptOfficeArtClientData(&_s));
+        parsePptOfficeArtClientData(in, *(PptOfficeArtClientData*)_s.anon.data());
     }
 }
 void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s) {
@@ -11107,7 +11104,7 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
     {
         OfficeArtRecordHeader _optionCheck(&_s);
         parseOfficeArtRecordHeader(in, _optionCheck);
-        _possiblyPresent = ((_optionCheck.recVer == 0xF)&&(_optionCheck.recLen!=4))||((_optionCheck.recVer == 0 || _optionCheck.recVer == 0xF)&&(_optionCheck.recLen == 0x4));
+        _possiblyPresent = ((_optionCheck.recVer == 0)&&(_optionCheck.recLen == 4))||((_optionCheck.recVer == 0xF));
     }
     in.rewind(_m);
     _m = in.setMark();
