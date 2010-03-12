@@ -23,6 +23,10 @@
 
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlStylesReader.h"
+#include "XlsxXmlDocumentReader.h"
+#include "XlsxImport.h"
+
+#include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
@@ -54,15 +58,28 @@
 
 #include <math.h>
 
+#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic, etc.
+
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
     const QString& _worksheetName,
+    const QString _path, const QString _file,
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
-    const XlsxStyles& _styles)
-        : worksheetNumber(_worksheetNumber)
-        , worksheetName(_worksheetName), themes(&_themes)
-        , sharedStrings(&_sharedStrings), styles(&_styles)
+    const XlsxStyles& _styles,
+    XlsxImport* _import
+    )
+        : MSOOXML::MsooXmlReaderContext()
+        , worksheetNumber(_worksheetNumber)
+        , worksheetName(_worksheetName)
+        , themes(&_themes)
+        , sharedStrings(&_sharedStrings)
+        , styles(&_styles)
+        , documentReaderContext(documentReaderContext)
+        , import(_import)
+        , path(_path)
+        , file(_file)
 {
 }
 
@@ -242,6 +259,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData)
+            ELSE_TRY_READ_IF(drawing)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);

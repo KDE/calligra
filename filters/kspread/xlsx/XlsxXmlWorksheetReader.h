@@ -31,8 +31,11 @@
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 
+class DocxXmlDocumentReaderContext;
 class XlsxXmlWorksheetReaderContext;
+class XlsxXmlDocumentReaderContext;
 class XlsxStyles;
+class XlsxImport;
 
 //! A class reading MSOOXML XLSX markup - xl/worksheets/sheet*.xml part.
 class XlsxXmlWorksheetReader : public MSOOXML::MsooXmlCommonReader
@@ -98,6 +101,7 @@ private:
     void appendTableCells(int cells);
 
 #include <MsooXmlCommonReaderMethods.h>
+#include <MsooXmlCommonReaderDrawingMLMethods.h>
 
     class Private;
     Private* const d;
@@ -110,13 +114,21 @@ public:
     XlsxXmlWorksheetReaderContext(
         uint _worksheetNumber,
         const QString& _worksheetName,
+        const QString _path, const QString _file,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        const XlsxSharedStringVector& _sharedStrings, const XlsxStyles& _styles);
+        const XlsxSharedStringVector& _sharedStrings,
+        const XlsxStyles& _styles,
+        XlsxImport* _import);
     const uint worksheetNumber;
     QString worksheetName;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
     const XlsxSharedStringVector *sharedStrings;
     const XlsxStyles* styles;
+    XlsxXmlDocumentReaderContext* documentReaderContext;
+    
+    XlsxImport* import;
+    const QString path;
+    const QString file;
 };
 
 #endif

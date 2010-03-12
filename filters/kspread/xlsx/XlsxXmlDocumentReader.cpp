@@ -26,6 +26,7 @@
 #include "XlsxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+#include <MsooXmlRelationships.h>
 #include <KoXmlWriter.h>
 #include <KoFontFace.h>
 
@@ -36,12 +37,17 @@
 #include <MsooXmlReader_p.h>
 
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
-    XlsxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-    const XlsxSharedStringVector& _sharedStrings, const XlsxStyles& _styles,
-    MSOOXML::MsooXmlRelationships& _relationships)
-        : MSOOXML::MsooXmlReaderContext(&_relationships),
-        import(&_import), themes(&_themes), sharedStrings(&_sharedStrings),
-        styles(&_styles)
+    XlsxImport& _import,
+    const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+    const XlsxSharedStringVector& _sharedStrings,
+    const XlsxStyles& _styles,
+    MSOOXML::MsooXmlRelationships& _relationships
+    )
+        : MSOOXML::MsooXmlReaderContext(&_relationships)
+        , import(&_import)
+        , themes(&_themes)
+        , sharedStrings(&_sharedStrings)
+        , styles(&_styles)
 {
 }
 
@@ -242,15 +248,18 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 //! @todo implement MsooXmlRelationships with internal MsooXmlRelationshipsReader
 //!       (for now we hardcode relationships, e.g. we use sheet1, sheet2...)
     d->worksheetNumber++; // counted from 1
-    QString path = QString("xl/worksheets/sheet%1.xml").arg(d->worksheetNumber);
-    kDebug() << "path:" << path;
+    QString path = QString("xl/worksheets");
+    QString file = QString("sheet%1.xml").arg(d->worksheetNumber);
+    QString filepath = path + "/" + file;
+    kDebug() << "path:" << path << "file:" << file;
     if (!d->worksheetReader) {
         d->worksheetReader = new XlsxXmlWorksheetReader(this);
     }
-    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name,
-                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles);
+
+    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, path, file,
+                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles, m_context->import );
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                d->worksheetReader, path, &context);
+                d->worksheetReader, filepath, &context);
     if (result != KoFilter::OK) {
         raiseError(d->worksheetReader->errorString());
         return result;
