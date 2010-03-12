@@ -1697,7 +1697,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     
     const unsigned opts = readU8(startPict);
     const bool fHighByte = opts & 0x01;
-    Q_ASSERT((opts << 1) == 0x0);
+    
+    // this seems to assert with some documents...
+    //Q_ASSERT((opts << 1) == 0x0);
 
     // XLUnicodeStringNoCch
     m_text = UString();
