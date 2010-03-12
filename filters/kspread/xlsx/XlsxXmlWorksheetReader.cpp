@@ -76,7 +76,6 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , themes(&_themes)
         , sharedStrings(&_sharedStrings)
         , styles(&_styles)
-        , documentReaderContext(documentReaderContext)
         , import(_import)
         , path(_path)
         , file(_file)

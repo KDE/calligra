@@ -124,7 +124,6 @@ public:
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
     const XlsxSharedStringVector *sharedStrings;
     const XlsxStyles* styles;
-    XlsxXmlDocumentReaderContext* documentReaderContext;
     
     XlsxImport* import;
     const QString path;
