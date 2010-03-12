@@ -55,7 +55,7 @@ KWRdfDocker::KWRdfDocker()
     widgetDocker.setupUi(widget);
     widgetDocker.refresh->setIcon(KIcon("view-refresh"));
     // Semantic view
-    m_rdfSemanticTree = RdfSemanticTree::createTree(widgetDocker.semanticView);
+    m_rdfSemanticTree = KoRdfSemanticTree::createTree(widgetDocker.semanticView);
 
     widgetDocker.semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -79,10 +79,10 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
     if (newDoc != m_document) {
         m_document = newDoc;
         widgetDocker.semanticView->setDocumentRdf(m_document->documentRdf());
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(RdfSemanticItem*)),
-                this, SLOT(semanticObjectAdded(RdfSemanticItem*)));
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(RdfSemanticItem*)),
-                this, SLOT(semanticObjectUpdated(RdfSemanticItem*)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectAdded(KoRdfSemanticItem*)),
+                this, SLOT(semanticObjectAdded(KoRdfSemanticItem*)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(KoRdfSemanticItem*)),
+                this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
 
@@ -90,14 +90,14 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
 
-void KWRdfDocker::semanticObjectAdded(RdfSemanticItem *item)
+void KWRdfDocker::semanticObjectAdded(KoRdfSemanticItem *item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "new item...";
     updateData();
 }
 
-void KWRdfDocker::semanticObjectUpdated(RdfSemanticItem *item)
+void KWRdfDocker::semanticObjectUpdated(KoRdfSemanticItem *item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "updated item...";
@@ -112,7 +112,7 @@ void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
     QPointer<KMenu> menu = new KMenu(0); // TODO why QPointer???
     QList<KAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
-        if (RdfSemanticTreeWidgetItem *item = dynamic_cast<RdfSemanticTreeWidgetItem*>(baseitem)) {
+        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu, m_canvas);
         }
     }

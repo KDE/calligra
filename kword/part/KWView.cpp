@@ -25,7 +25,7 @@
 #include <rdf/KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
-#include <rdf/SemanticStylesheetsEditor.h>
+#include <rdf/KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
@@ -157,8 +157,8 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = m_document->documentRdf()) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(RdfSemanticItem*, const QString&)),
-                this, SLOT(semanticObjectViewSiteUpdated(RdfSemanticItem*, const QString&)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
+                this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
 #endif
 }
@@ -292,6 +292,18 @@ void KWView::setupActions()
     foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
+
+#ifdef SHOULD_BUILD_RDF
+    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
+        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(kwcanvas());
+        actionCollection()->addAction("insert_semanticobject_ref", createRef);
+        KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
+        actionCollection()->addAction("insert_semanticobject_new", subMenu);
+        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(kwcanvas())) {
+            subMenu->addAction(action);
+        }
+    }
+#endif
 
     m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
@@ -1092,7 +1104,7 @@ void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = m_document->documentRdf()) {
-        SemanticStylesheetsEditor *dia = new SemanticStylesheetsEditor(this, rdf);
+        KoSemanticStylesheetsEditor *dia = new KoSemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory
     }
@@ -1438,7 +1450,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
-void KWView::semanticObjectViewSiteUpdated(RdfSemanticItem* item, const QString &xmlid)
+void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QString &xmlid)
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
@@ -1448,7 +1460,7 @@ void KWView::semanticObjectViewSiteUpdated(RdfSemanticItem* item, const QString 
         return;
     }
     kDebug(30015) << "reflowing rdf semantic item.";
-    RdfSemanticItemViewSite vs(item, xmlid);
+    KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
 #endif
 }

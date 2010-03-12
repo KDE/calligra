@@ -54,8 +54,8 @@ private slots:
     void updateData();
     void setAutoUpdate(int);
     void showSemanticViewContextMenu(const QPoint &);
-    void semanticObjectAdded(RdfSemanticItem *item);
-    void semanticObjectUpdated(RdfSemanticItem *item);
+    void semanticObjectAdded(KoRdfSemanticItem *item);
+    void semanticObjectUpdated(KoRdfSemanticItem *item);
     void resourceChanged(int key, const QVariant &value);
 
 private:
@@ -66,7 +66,7 @@ private:
     KoSelection *m_selection;
     QTimer *m_timer;
     QTextDocument *m_textDocument;
-    RdfSemanticTree m_rdfSemanticTree;
+    KoRdfSemanticTree m_rdfSemanticTree;
 
     Ui::KWRdfDocker widgetDocker;
 };

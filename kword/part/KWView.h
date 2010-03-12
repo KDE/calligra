@@ -37,7 +37,7 @@ class KWGui;
 
 class KoZoomController;
 class KToggleAction;
-class RdfSemanticItem;
+class KoRdfSemanticItem;
 
 /**
  * KWords view class. Following the broad model-view-controller idea this class
@@ -192,7 +192,7 @@ private slots:
     /// go to next page
     void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(RdfSemanticItem *item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
