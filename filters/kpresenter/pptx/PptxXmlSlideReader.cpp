@@ -148,7 +148,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     if (m_context->type == SlideMaster) {
         //! Clear body pointer for SlideMaster mode: avoid writting to body by mistake in this mode
         d->body = body;
-        body = 0;
+      //  body = 0;
     }
 
     readNext();
@@ -506,7 +506,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
                 if (isOutline) { // CASE #P612
 //                    delete body;
 //                    body = origBody;
-                    body = paragraphBuf.originalWriter();
+                      body = paragraphBuf.originalWriter();
                     for (uint i = 0; i <= m_pPr_lvl; i++) {
                         body->startElement("text:list");
                         if (i == 0) {

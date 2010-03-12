@@ -339,11 +339,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
 //kDebug() << "CALLER_IS(r)";
         // DrawingML: b, i, strike, u attributes:
         if (attrs.hasAttribute("b")) {
-            m_currentTextStyleProperties->setFontWeight(readBooleanAttr("b") ? QFont::Bold : QFont::Normal);
+            m_currentTextStyleProperties->setFontWeight(MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
         }
         if (attrs.hasAttribute("i")) {
-            m_currentTextStyleProperties->setFontItalic(readBooleanAttr("i"));
+            m_currentTextStyleProperties->setFontItalic(MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
+        }
+        if (attrs.hasAttribute("sz")) {
+            bool ok = false;
+            const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
+            if (ok) {
+                m_currentTextStyleProperties->setFontPointSize(pointSize);
+            }
         }
         // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
         TRY_READ_ATTR_WITHOUT_NS(strike)
@@ -402,6 +409,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_b()
 {
     READ_PROLOGUE
+qDebug() << "What is this?";
     m_currentTextStyleProperties->setFontWeight(READ_BOOLEAN_ATTR ? QFont::Bold : QFont::Normal);
     readNext();
     READ_EPILOGUE
@@ -1053,7 +1061,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
 
-    const bool behindDoc = readBooleanAttr("behindDoc");
+    const bool behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
 
     while (!atEnd()) {
         readNext();
@@ -1444,7 +1452,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
-            TRY_READ_IF(docPr)
+            ELSE_TRY_READ_IF(docPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);

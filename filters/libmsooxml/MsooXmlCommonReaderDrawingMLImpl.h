@@ -639,8 +639,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     const QXmlStreamAttributes attrs(attributes());
 
     // Read attributes.
-    m_flipH = readBooleanAttr("flipH", false);
-    m_flipV = readBooleanAttr("flipV", false);
+    m_flipH = MSOOXML::Utils::convertBooleanAttr(attrs.value("flipH").toString(), false);
+    m_flipV = MSOOXML::Utils::convertBooleanAttr(attrs.value("flipV").toString(), false);
     m_rot = 0;
     TRY_READ_ATTR_WITHOUT_NS(rot)
     STRING_TO_INT(rot, m_rot, "xfrm@rot")

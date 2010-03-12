@@ -293,6 +293,7 @@ bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
     if (val.isEmpty())
         return defaultValue;
 kDebug() << val;
+    
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 
