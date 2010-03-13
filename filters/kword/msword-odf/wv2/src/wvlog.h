@@ -79,9 +79,10 @@ namespace wvWare
         const wvnodebugstream& operator<<( ostream& (*__pf)( ostream& ) ) const { std::cerr << __pf; return *this; }
         const wvnodebugstream& operator<<( ios (*__pf)( ios& ) ) const { std::cerr << __pf; return *this; }
 #else
-        const wvnodebugstream& operator<<( std::basic_ostream<char>& (*__pf)( std::basic_ostream<char>& ) ) const { return *this; }
-        const wvnodebugstream& operator<<( std::ios (*__pf)( std::ios& ) ) const { return *this; }
-        const wvnodebugstream& operator<<( std::ios_base& (*__pf) ( std::ios_base& ) ) const { return *this; }
+        // The usage of __pf in these methods is simply to suppress warnings. With luck, they'll be optimised away...
+        const wvnodebugstream& operator<<( std::basic_ostream<char>& (*__pf)( std::basic_ostream<char>& ) ) const { __pf = __pf; return *this; }
+        const wvnodebugstream& operator<<( std::ios (*__pf)( std::ios& ) ) const { __pf = __pf; return *this; }
+        const wvnodebugstream& operator<<( std::ios_base& (*__pf) ( std::ios_base& ) ) const { __pf = __pf; return *this; }
 #endif
         const wvnodebugstream& operator<<( long ) const { return *this; }
         const wvnodebugstream& operator<<( unsigned long ) const { return *this; }
