@@ -13,6 +13,8 @@ SET( wv2_GENERATED
 	word95_generated.cpp 
 	word97_generated.h 
 	word97_generated.cpp 
+	convert.h 
+	convert.cpp 
     )
 
 SET( wv2_SOURCES 
@@ -22,7 +24,6 @@ SET( wv2_SOURCES
 	word97_helper.cpp 
 	word95_helper.cpp 
 	word_helper.cpp 
-	convert.cpp 
 	global.cpp 
 	parser.cpp 
 	parser9x.cpp 
@@ -64,7 +65,6 @@ SET( wv2_HEADERS
 	textconverter.h 
 	styles.h 
 	sharedptr.h 
-	convert.h 
 	global.h 
 	handlers.h 
 	fonts.h 
