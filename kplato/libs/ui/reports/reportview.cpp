@@ -251,7 +251,7 @@ void ReportView::slotExportOds()
     dia->setConfirmOverwrite( true );
     dia->setInlinePreviewShown( true );
     dia->setCaption( i18nc( "@title:window", "Export Report" ) );
-    dia->setFilter( QString( "*.ods|%1\n*|%2" ).arg( i18n( "Open docoument spreadsheet" ) ).arg( i18n( "All Files" ) ) );
+    dia->setFilter( QString( "*.ods|%1\n*|%2" ).arg( i18n( "Open document spreadsheet" ) ).arg( i18n( "All Files" ) ) );
 
     connect(dia, SIGNAL(okClicked()), SLOT(slotExportOdsOkClicked()));
     dia->show();

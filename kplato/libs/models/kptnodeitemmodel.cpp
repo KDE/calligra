@@ -469,7 +469,7 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
                 QString s = KGlobal::locale()->formatNumber( node->estimate()->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
                 if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
-                    s = i18n( "Not applicable. constraint is Fixed Interval" );
+                    s = i18n( "Not applicable, constraint is Fixed Interval" );
                 } else if ( t == Estimate::Type_Effort ) {
                     s = i18n( "Optimistic effort: %1", s );
                 } else {
