@@ -128,7 +128,6 @@ CONFIGURE_FILE( wv2-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/wv2-config @ONL
 
 # Source directories
 ADD_SUBDIRECTORY( src )
-ADD_SUBDIRECTORY( src/generator )
 ADD_SUBDIRECTORY( tests )
 
 # Installation (more in src/CMakeLists.txt)
