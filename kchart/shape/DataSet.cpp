@@ -65,10 +65,11 @@ public:
     Private( DataSet *parent );
     ~Private();
     
-    void       updateSize();
-    ChartType  effectiveChartType() const;
-    bool       isValidDataPoint( const QPoint &point ) const;
-    QVariant   data( const CellRegion &region, int index ) const;
+    void         updateSize();
+    bool         hasOwnChartType() const;
+    ChartType    effectiveChartType() const;
+    bool         isValidDataPoint( const QPoint &point ) const;
+    QVariant     data( const CellRegion &region, int index ) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
@@ -84,10 +85,6 @@ public:
     
     ChartType     chartType;
     ChartSubtype  chartSubType;
-
-    // FIXME: Retrieve these two from the plot area
-    ChartType     globalChartType;
-    ChartSubtype  globalChartSubType;
 
     Axis *attachedAxis;
     bool showMeanValue;
@@ -140,8 +137,6 @@ DataSet::Private::Private( DataSet *parent )
 {
     this->parent = parent;
     num = -1;
-    globalChartType = LastChartType;
-    globalChartSubType = NoChartSubtype;
     chartType = LastChartType;
     chartSubType = NoChartSubtype;
     kdChartModel = 0;
@@ -184,6 +179,11 @@ void DataSet::Private::updateSize()
     }
 }
 
+bool DataSet::Private::hasOwnChartType() const
+{
+    return chartType != LastChartType;
+}
+
 /**
  * Returns the effective chart type of this data set, i.e.
  * returns the chart type of the diagram this data set is
@@ -192,9 +192,11 @@ void DataSet::Private::updateSize()
  */
 ChartType DataSet::Private::effectiveChartType() const
 {
-    if ( attachedAxis && chartType == LastChartType )
-        return attachedAxis->plotArea()->chartType();
-    return chartType;
+    if ( hasOwnChartType() )
+        return chartType;
+
+    Q_ASSERT( attachedAxis );
+    return attachedAxis->plotArea()->chartType();
 }
 
 bool DataSet::Private::isValidDataPoint( const QPoint &point ) const
@@ -375,16 +377,6 @@ ChartSubtype DataSet::chartSubType() const
     return d->chartSubType;
 }
 
-ChartType DataSet::globalChartType() const
-{
-    return d->globalChartType;
-}
-
-ChartSubtype DataSet::globalChartSubType() const
-{
-    return d->globalChartSubType;
-}
-
 Axis *DataSet::attachedAxis() const
 {
     return d->attachedAxis;
@@ -473,16 +465,6 @@ void DataSet::setChartSubType( ChartSubtype subType )
     d->chartSubType = subType;
     
     axis->attachDataSet( this );
-}
-
-void DataSet::setGlobalChartType( ChartType type )
-{
-    d->globalChartType = type;
-}
-
-void DataSet::setGlobalChartSubType( ChartSubtype type )
-{
-    d->globalChartSubType = type;
 }
 
 
@@ -918,9 +900,7 @@ void DataSet::categoryDataChanged( const QRect &region ) const
 
 int DataSet::dimension() const
 {
-    const ChartType chartType = ( d->chartType != LastChartType
-				  ? d->chartType
-				  : d->globalChartType );
+    const ChartType chartType = d->effectiveChartType();
     // FIXME BUG: Ring, Surface
     switch ( chartType ) {
     case BarChartType:

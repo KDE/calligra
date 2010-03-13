@@ -1067,7 +1067,6 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
             return false;
     
         dataSet->setKdDiagram( diagram );
-        dataSet->setGlobalChartType( chartType );
         if ( model )
             model->addDataSet( dataSet, silent );
         
@@ -1835,7 +1834,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
             else
                 (*oldModel)->removeDataSet( dataSet );
         }
-        dataSet->setGlobalChartType( newChartType );
     }
     
     d->plotAreaChartType = newChartType;
@@ -1909,9 +1907,6 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
     default:;
         // FIXME: Implement more chart types
     }
-
-    foreach ( DataSet *dataSet, d->dataSets )
-        dataSet->setGlobalChartSubType( subType );
 }
 
 void Axis::registerKdAxis( KDChart::CartesianAxis *axis )

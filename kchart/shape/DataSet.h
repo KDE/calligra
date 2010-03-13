@@ -64,8 +64,6 @@ public:
     QString       title() const;
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
-    ChartType     globalChartType() const;
-    ChartSubtype  globalChartSubType() const;
     Axis         *attachedAxis() const;
 
     ChartProxyModel   *model() const;
@@ -98,8 +96,6 @@ public:
     // Setter methods
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype type );
-    void setGlobalChartType( ChartType type );
-    void setGlobalChartSubType( ChartSubtype type );
     void setAttachedAxis( Axis *axis );
 
     void setShowValues( bool showValues );
