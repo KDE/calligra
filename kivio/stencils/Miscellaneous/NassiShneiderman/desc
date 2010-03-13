@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<KivioStencilSpawnerSet>
-  <Title data="Nassi Shneiderman Diagram Shapes"/>
-  <Id data="Joerg de la Haye - Nassi Shneiderman Shapes"/>
-  <Description>Nassi Shneiderman diagrams are useful for programming by creating a logical structure of the program, filling a gap between concept and source code. Within the diagrams' text labels both pseudo and programming language code are possible, depending on the programmers choice of diagram usage.</Description>
-</KivioStencilSpawnerSet>
