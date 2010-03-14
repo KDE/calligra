@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,8 +48,20 @@ void KWPageSettingsDialog::accept()
         // TODO
     } else {
         KoText::Direction newDir = textDirection();
+        KoPageLayout lay = pageLayout();
+        if (lay.pageEdge >= 0 || lay.bindingSide >= 0) {
+            // asserts check if our super didn't somehow mess up
+            Q_ASSERT(lay.pageEdge >= 0);
+            Q_ASSERT(lay.bindingSide >= 0);
+            Q_ASSERT(lay.leftMargin == -1);
+            Q_ASSERT(lay.rightMargin == -1);
+
+            // its a page spread, which kword can handle, so we can savely set the
+            // normal page size and assume that the page object will do the right thing
+            lay.width /= (qreal) 2;
+        }
         KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page,
-                pageLayout(), newDir, m_columns->columns());
+                lay, newDir, m_columns->columns());
         m_document->addCommand(cmd);
     }
 
