@@ -33,10 +33,10 @@
 #include <ImportDialog.h>
 
 AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
-        : KDialog(parent),
-        m_dialog(this)
+        : KDialog(parent)
 {
-    m_ui.setupUi(m_dialog);
+    QWidget *widget = new QWidget();
+    m_ui.setupUi(widget);
     m_radioGroup.addButton(m_ui.radioParagraphAsIs);
     m_radioGroup.addButton(m_ui.radioParagraphSentence);
     m_radioGroup.addButton(m_ui.radioParagraphOldWay);
@@ -58,15 +58,15 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
     m_ui.comboBoxEncoding->addItems(encodings);
 
-    setMainWidget(m_dialog);
+    setMainWidget(widget);
 }
 
-AsciiImportDialog :: ~AsciiImportDialog(void)
+AsciiImportDialog :: ~AsciiImportDialog()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
-QTextCodec* AsciiImportDialog::getCodec(void) const
+QTextCodec* AsciiImportDialog::getCodec() const
 {
     const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
     kDebug(30502) << "Encoding:" << strCodec;
@@ -93,7 +93,7 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
     return codec;
 }
 
-int AsciiImportDialog::getParagraphStrategy(void) const
+int AsciiImportDialog::getParagraphStrategy() const
 {
     QAbstractButton* checkedButton = m_radioGroup.checkedButton();
     if (m_ui.radioParagraphAsIs == checkedButton) {

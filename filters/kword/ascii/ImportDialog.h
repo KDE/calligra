@@ -31,12 +31,12 @@ class AsciiImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AsciiImportDialog(QWidget* parent = NULL);
-    ~AsciiImportDialog(void);
-    QTextCodec* getCodec(void) const;
-    int getParagraphStrategy(void) const;
+    AsciiImportDialog(QWidget *parent = 0);
+    ~AsciiImportDialog();
+    QTextCodec *getCodec() const;
+    int getParagraphStrategy() const;
+
 private:
-    QWidget* const m_dialog;
     Ui::ImportDialogUI m_ui;
     QButtonGroup m_radioGroup;
 };
