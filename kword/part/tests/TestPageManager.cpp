@@ -594,6 +594,8 @@ void TestPageManager::testPadding()
     QCOMPARE(padding2.right, padding.right);
 
     KoPageLayout lay;
+    QVERIFY(lay.leftMargin >= 0);
+    QVERIFY(lay.bindingSide == -1);
     lay.width = 100;
     lay.height = 50;
     KWPageStyle style("testStyle");
@@ -664,6 +666,43 @@ void TestPageManager::testBackgroundRefCount()
     ps1.setBackground(0);
     QCOMPARE(background->useCount(), 1);
     delete background;
+}
+
+void TestPageManager::testAppendPageSpread()
+{
+    KWPageManager manager;
+
+    KWPageStyle style = manager.addPageStyle("pagestyle1");
+    KoPageLayout layout = style.pageLayout();
+    layout.leftMargin = -1;
+    layout.rightMargin = -1;
+    layout.pageEdge = 7;
+    layout.bindingSide = 13;
+    style.setPageLayout(layout);
+
+    KWPage page1 = manager.appendPage(style);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page1.width(), style.pageLayout().width);
+
+    KWPage page2 = manager.appendPage(style);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.width(), style.pageLayout().width * 2);
+
+    KWPage page3 = manager.insertPage(2, style);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(page2.pageNumber(), 4);
+    QCOMPARE(page2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.width(), style.pageLayout().width * 2);
+    QCOMPARE(page3.pageNumber(), 2);
+    QCOMPARE(page3.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page3.width(), style.pageLayout().width * 2);
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)

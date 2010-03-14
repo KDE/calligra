@@ -48,6 +48,7 @@ private slots: // tests
     void testPadding();
     void testPageOffset();
     void testBackgroundRefCount();
+    void testAppendPageSpread();
 };
 
 #endif

@@ -112,8 +112,9 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
     // increase the pagenumbers of pages following the pageNumber
-    QMap<int, int> numbers = pageNumbers;
-    if (numbers.count()) {
+    if (!pageNumbers.isEmpty()) {
+        QMap<int, int> numbers = pageNumbers;
+        const int offset = newPage.pageSide == KWPage::PageSpread ? 2 : 1;
         QMap<int, int>::iterator iter = numbers.end();
         do {
             --iter;
@@ -122,7 +123,7 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
                 break;
             KWPageManagerPrivate::Page page = pages[iter.value()];
             pageNumbers.remove(page.pageNumber);
-            page.pageNumber++;
+            page.pageNumber += offset;
             pages.insert(iter.value(), page);
             pageNumbers.insert(page.pageNumber, iter.value());
         } while (iter != numbers.begin());
@@ -230,7 +231,15 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
     if (! newPage.style.isValid())
         newPage.style = defaultPageStyle();
     newPage.pageNumber = pageNumber;
-    newPage.pageSide = newPage.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
+    if (newPage.pageNumber % 2 == 0) {
+        if (newPage.style.pageLayout().bindingSide >= 0) // pageSpread
+            newPage.pageSide = KWPage::PageSpread;
+        else
+            newPage.pageSide = KWPage::Left;
+    } else {
+        newPage.pageSide = KWPage::Right;
+    }
+
     d->insertPage(newPage);
 
 #ifdef DEBUG_PAGES
@@ -252,16 +261,23 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         ++page.pageNumber;
         if (lastPage.pageSide == KWPage::PageSpread)
             ++page.pageNumber;
-    }
-    else {
+    } else {
         page.pageNumber = 1;
     }
-    page.pageSide = page.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
 
     if (pageStyle.isValid())
         page.style = pageStyle;
     if (!page.style.isValid())
         page.style = defaultPageStyle();
+
+    if (page.pageNumber % 2 == 0) {
+        if (page.style.pageLayout().bindingSide >= 0) // pageSpread
+            page.pageSide = KWPage::PageSpread;
+        else
+            page.pageSide = KWPage::Left;
+    } else {
+        page.pageSide = KWPage::Right;
+    }
 
     d->pages.insert(++d->lastId, page);
     d->pageNumbers.insert(page.pageNumber, d->lastId);
@@ -380,6 +396,7 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
     Q_ASSERT(! pageStyle.name().isEmpty());
+    Q_ASSERT(pageStyle.isValid());
     d->pageStyles.insert(pageStyle.name(), pageStyle);
 }
 
