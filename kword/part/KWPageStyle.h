@@ -66,7 +66,7 @@ public:
      *
      * \p masterPageName The name of this page style.
      */
-    KWPageStyle(const QString& mastername);
+    explicit KWPageStyle(const QString &mastername);
     /**
      * copy constructor
      *
