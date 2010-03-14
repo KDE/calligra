@@ -140,6 +140,7 @@ void TestDocumentLayout::placeAnchoredFrame()
 {
     initForNewTest(QString());
     MockShape *picture = new MockShape();
+    picture->setSize(QSizeF(100, 100));
     KoTextAnchor *anchor = new KoTextAnchor(picture);
     anchor->setOffset(QPointF(23, 45));
     QTextCursor cursor(doc);
@@ -160,18 +161,37 @@ void TestDocumentLayout::placeAnchoredFrame()
     QCOMPARE(picture->position(), QPointF(23, 45));
 
     cursor.setPosition(0);
-    cursor.insertText("foo");
+    cursor.insertText("foo"); // moves my anchors slightly to the right/down and gives line height
     layout->layout();
     QCOMPARE(picture->parent(), shape1);
     QPointF newPos = picture->position();
-    QVERIFY(newPos.x() > 23.);
-    QVERIFY(newPos.y() > 45.); // it adds the baseline now
+    QVERIFY(newPos.x() > 23);
+    QVERIFY(newPos.y() > 45); // it adds the baseline now
 
     cursor.movePosition(QTextCursor::End);
     cursor.insertText("\nNew Line\nAnd another");
 
     layout->layout();
-    QCOMPARE(newPos, picture->position());
+    QCOMPARE(picture->position(), newPos);
+
+    QTextLayout *firstLineLayout = doc->begin().layout();
+    QTextOption option = firstLineLayout->textOption();
+    option.setAlignment(Qt::AlignHCenter);
+    firstLineLayout->setTextOption(option);
+
+    layout->layout();
+    QTextLine first = doc->begin().layout()->lineAt(0);
+    QVERIFY(first.isValid());
+    QVERIFY(first.naturalTextRect().x() > 10);
+    newPos.setX(newPos.x() + first.naturalTextRect().x()); // text is moved due to alignment
+    QCOMPARE(picture->position(), newPos);
+
+    anchor->setOffset(QPointF());
+    anchor->setAlignment(KoTextAnchor::Left);
+    anchor->setAlignment(KoTextAnchor::TopOfParagraph);
+    layout->layout();
+    // image is 100 wide, now centered in a parent of 200 so X = 50
+    QCOMPARE(picture->position(), QPointF(50, 0));
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

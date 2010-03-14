@@ -85,9 +85,19 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
     QPointF newPosition;
     switch (m_anchor->horizontalAlignment()) {
     case KoTextAnchor::ClosestToBinding: // TODO figure out a way to do pages...
-    case KoTextAnchor::Left:
+    case KoTextAnchor::Left: {
+        // take into account text indent and alignment.
+        Qt::Alignment alignment = block.layout()->textOption().alignment() & Qt::AlignHorizontal_Mask;
+        if ((alignment & Qt::AlignLeft) || (alignment & Qt::AlignJustify)) {
+            newPosition.setX(state->x());
+        } else if (alignment & Qt::AlignRight) {
+            newPosition.setX(state->x() + state->width());
+        } else if (alignment & Qt::AlignHCenter) {
+            newPosition.setX((state->x() + state->width()) / 2 - boundingRect.width() / 2);
+        }
         recalcFrom = block.position();
         break;
+    }
     case KoTextAnchor::FurtherFromBinding: // TODO figure out a way to do pages...
     case KoTextAnchor::Right:
         newPosition.setX(containerBoundingRect.width() - boundingRect.width());
