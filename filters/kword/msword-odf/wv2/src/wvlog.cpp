@@ -20,7 +20,16 @@
 
 #include "wvlog.h"
 
-namespace wvWare
+KDECORE_EXPORT QDebug operator<<(QDebug s, const std::string &o)
 {
-    const wvlogstream wvlog = wvlog;
-} // wvWare
+    s << o.c_str();
+    return s;
+}
+
+KDECORE_EXPORT QDebug operator<<(QDebug s, std::basic_ostream<char>& (*o)( std::basic_ostream<char>& ))
+{
+    // This is a bit naughty...but it is a safe guess.
+    s << endl;
+    return s;
+}
+

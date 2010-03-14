@@ -20,100 +20,11 @@
 #define WVLOG_H
 
 #include <iostream>
-#include <string>     // Make gcc 2.95.x happy
-#include "wv2_export.h"
+#include <kdebug.h>
 
-// ...and work around gcc 2.95.x's STL problems (e.g. ostream isn't a template)
-#if defined(__GNUC__)
-#  if __GNUC__ < 3
-#    define WV2_OLD_STL_WORKAROUND 1
-#  endif
-#endif
+#define wvlog kDebug()
 
-/**
- * @file A very primitve logging mechanism used to disable any
- * debug output for release builds. Use it like std::cerr, as it
- * is std::cerr (if it's enabled).
- */
-namespace wvWare
-{
-
-    class wvdebugstream
-    {
-    public:
-#ifdef WV2_OLD_STL_WORKAROUND
-        const wvdebugstream& operator<<( ostream& (*__pf)( ostream& ) ) const { std::cerr << __pf; return *this; }
-        const wvdebugstream& operator<<( ios (*__pf)( ios& ) ) const { std::cerr << __pf; return *this; }
-#else
-        const wvdebugstream& operator<<( std::basic_ostream<char>& (*__pf)( std::basic_ostream<char>& ) ) const { std::cerr << __pf; return *this; }
-        const wvdebugstream& operator<<( std::ios (*__pf)( std::ios& ) ) const { std::cerr << __pf; return *this; }
-        const wvdebugstream& operator<<( std::ios_base& (*__pf) ( std::ios_base& ) ) const { std::cerr << __pf; return *this; }
-#endif
-        const wvdebugstream& operator<<( long l ) const { std::cerr << l; return *this; }
-        const wvdebugstream& operator<<( unsigned long l ) const { std::cerr << l; return *this; }
-        const wvdebugstream& operator<<( bool b ) const { std::cerr << b; return *this; }
-        const wvdebugstream& operator<<( short s ) const { std::cerr << s; return *this; }
-        const wvdebugstream& operator<<( unsigned short s ) const { std::cerr << s; return *this; }
-        const wvdebugstream& operator<<( int i ) const { std::cerr << i; return *this; }
-        const wvdebugstream& operator<<( unsigned int i ) const { std::cerr << i; return *this; }
-        const wvdebugstream& operator<<( double d ) const { std::cerr << d; return *this; }
-        const wvdebugstream& operator<<( float f ) const { std::cerr << f; return *this; }
-        const wvdebugstream& operator<<( long double d ) const { std::cerr << d; return *this; }
-        const wvdebugstream& operator<<( const void* cv ) const { std::cerr << cv; return *this; }
-#ifdef WV2_OLD_STL_WORKAROUND
-        const wvdebugstream& operator<<( streambuf* s ) const { std::cerr << s; return *this; }
-#else
-        const wvdebugstream& operator<<( std::basic_streambuf<char>* s ) const { std::cerr << s; return *this; }
-#endif
-        const wvdebugstream& operator<<( signed char c ) const { std::cerr << c; return *this; }
-        const wvdebugstream& operator<<( unsigned char c ) const { std::cerr << c; return *this; }
-        const wvdebugstream& operator<<( const char* s ) const { std::cerr << s; return *this; }
-        const wvdebugstream& operator<<( const std::string& s ) const { std::cerr << s; return *this; }
-    };
-
-
-    class wvnodebugstream
-    {
-    public:
-#ifdef WV2_OLD_STL_WORKAROUND
-        const wvnodebugstream& operator<<( ostream& (*__pf)( ostream& ) ) const { std::cerr << __pf; return *this; }
-        const wvnodebugstream& operator<<( ios (*__pf)( ios& ) ) const { std::cerr << __pf; return *this; }
-#else
-        // The usage of __pf in these methods is simply to suppress warnings. With luck, they'll be optimised away...
-        const wvnodebugstream& operator<<( std::basic_ostream<char>& (*__pf)( std::basic_ostream<char>& ) ) const { __pf = __pf; return *this; }
-        const wvnodebugstream& operator<<( std::ios (*__pf)( std::ios& ) ) const { __pf = __pf; return *this; }
-        const wvnodebugstream& operator<<( std::ios_base& (*__pf) ( std::ios_base& ) ) const { __pf = __pf; return *this; }
-#endif
-        const wvnodebugstream& operator<<( long ) const { return *this; }
-        const wvnodebugstream& operator<<( unsigned long ) const { return *this; }
-        const wvnodebugstream& operator<<( bool ) const { return *this; }
-        const wvnodebugstream& operator<<( short ) const { return *this; }
-        const wvnodebugstream& operator<<( unsigned short ) const { return *this; }
-        const wvnodebugstream& operator<<( int ) const { return *this; }
-        const wvnodebugstream& operator<<( unsigned int ) const { return *this; }
-        const wvnodebugstream& operator<<( double ) const { return *this; }
-        const wvnodebugstream& operator<<( float ) const { return *this; }
-        const wvnodebugstream& operator<<( long double ) const { return *this; }
-        const wvnodebugstream& operator<<( const void* ) const { return *this; }
-#ifdef WV2_OLD_STL_WORKAROUND
-        const wvnodebugstream& operator<<( streambuf* ) const { return *this; }
-#else
-        const wvnodebugstream& operator<<( std::basic_streambuf<char>* ) const { return *this; }
-#endif
-        const wvnodebugstream& operator<<( signed char ) const { return *this; }
-        const wvnodebugstream& operator<<( unsigned char ) const { return *this; }
-        const wvnodebugstream& operator<<( const char* ) const { return *this; }
-        const wvnodebugstream& operator<<( const std::string& ) const { return *this; }
-    };
-
-#ifdef NDEBUG
-    typedef wvnodebugstream wvlogstream;
-#else
-    typedef wvdebugstream wvlogstream;
-#endif
-
-    extern const wvlogstream wvlog;
-
-} // wvWare
+KDECORE_EXPORT QDebug operator<<(QDebug s, const std::string &o);
+KDECORE_EXPORT QDebug operator<<(QDebug s, std::basic_ostream<char>& (*o)( std::basic_ostream<char>& ));
 
 #endif // WVLOG_H
