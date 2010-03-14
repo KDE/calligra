@@ -48,6 +48,7 @@ KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *s
 
 void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
 {
+    m_state->addUser();
     m_frames = frames;
     GuiHelper::State layout = GuiHelper::Unset, runaround = GuiHelper::Unset, raDistance = GuiHelper::Unset;
     KWord::RunAroundSide side = KWord::BiggestRunAroundSide;
