@@ -177,10 +177,10 @@ public:
     void addPageStyle(const KWPageStyle &pageStyle);
 
     /**
-     * Add a new \a KWPageStyle instance to this document.
+     * Create a new named KWPageStyle for this document.
      *
      * \note that you need to make sure that you only add pageStyle with a
-     * masterpage-name that are NOT already registered cause those names need
+     * masterpage-name that are NOT already registered because those names need
      * to be unique.
      *
      * \param pageStyle The \a KWPageStyle instance that should be added. The
