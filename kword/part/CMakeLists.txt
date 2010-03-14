@@ -1,6 +1,5 @@
 project(kwordpart)
 
-add_subdirectory( frames/tests )
 add_subdirectory( tests )
 
 include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )

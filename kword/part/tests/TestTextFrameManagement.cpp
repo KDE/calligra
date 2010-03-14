@@ -1,9 +1,8 @@
 #include "TestTextFrameManagement.h"
-#include "KWPageManager.h"
-#include "KWPage.h"
-#include "KWTextFrameSet.h"
-#include "KWTextFrame.h"
-//#include "KWDocument.h"
+#include "../KWPageManager.h"
+#include "../KWPage.h"
+#include "../frames/KWTextFrameSet.h"
+#include "../frames/KWTextFrame.h"
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>

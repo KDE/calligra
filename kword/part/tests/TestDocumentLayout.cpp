@@ -1,8 +1,8 @@
 #include "TestDocumentLayout.h"
 
-#include <KWTextFrame.h>
-#include <KWTextFrameSet.h>
-#include <KWTextDocumentLayout.h>
+#include "../frames/KWTextFrame.h"
+#include "../frames/KWTextFrameSet.h"
+#include "../frames/KWTextDocumentLayout.h"
 
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>

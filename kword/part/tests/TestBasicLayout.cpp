@@ -1,14 +1,14 @@
 #include "TestBasicLayout.h"
 #include "TestDocumentLayout.h"
 
-#include "KWPageManager.h"
-#include "KWPage.h"
-#include "KWPageStyle.h"
-#include "KWFrameLayout.h"
-#include "KWTextFrameSet.h"
-#include "KWTextFrame.h"
-#include "KWDocument.h"
-#include "KWord.h"
+#include "../KWPageManager.h"
+#include "../KWPage.h"
+#include "../KWPageStyle.h"
+#include "../frames/KWFrameLayout.h"
+#include "../frames/KWTextFrameSet.h"
+#include "../frames/KWTextFrame.h"
+#include "../KWDocument.h"
+#include "../KWord.h"
 
 #include <kcomponentdata.h>
 
