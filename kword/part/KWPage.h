@@ -23,7 +23,6 @@
 #include "KWPageStyle.h"
 #include "kword_export.h"
 
-#include <KoPageLayout.h>
 #include <KoText.h>
 #include <QRectF>
 #include <QObject>
