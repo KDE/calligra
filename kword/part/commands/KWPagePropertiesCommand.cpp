@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include <KoShapeMoveCommand.h>
 
 #include <KLocale>
+#include <KDebug>
 
 KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWPage &page,
         const KoPageLayout &newLayout, KoText::Direction direction, const KoColumns &columns, QUndoCommand *parent)
@@ -51,10 +52,10 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
     QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.leftMargin < 0 ? 2 : 1), m_newLayout.height);
     const qreal bottom = rect.bottom();
     const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
-    foreach(KWFrameSet *fs, document->frameSets()) {
+    foreach (KWFrameSet *fs, document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
-        foreach(KWFrame *frame, fs->frames()) {
+        foreach (KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if (remove && shape->boundingRect().intersects(page.rect())) {
                 if (m_oldLayout.leftMargin < 0 && m_newLayout.leftMargin >= 0 &&
@@ -78,8 +79,8 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
     if (shapes.count() > 0)
         new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
 
-    if (page.pageNumber() % 2 == 1 && newLayout.leftMargin < 0)
-        new KWPageInsertCommand(m_document, page.pageNumber() - 1, QString(), this);
+    if (page.pageNumber() % 2 == 0 && newLayout.leftMargin < 0)
+        new KWPageInsertCommand(m_document, page.pageNumber(), QString(), this);
 }
 
 void KWPagePropertiesCommand::redo()
@@ -104,10 +105,14 @@ void KWPagePropertiesCommand::undo()
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout)
 {
-    m_page.pageStyle().setPageLayout(layout);
-    if (layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
-            m_page.pageNumber() % 2 == 0)
-        m_page.setPageSide(KWPage::PageSpread);
-    else
-        m_page.setPageSide(m_page.pageNumber() % 2 == 0 ? KWPage::Left : KWPage::Right);
+    KWPageStyle style = m_page.pageStyle();
+    style.setPageLayout(layout);
+
+    const bool pageSpread = layout.pageEdge >= 0; // assumption based on the KWPageLayout widget.
+    foreach (KWPage page, m_document->m_pageManager.pages(style.name())) {
+        if (pageSpread && page.pageNumber() % 2 == 0)
+            page.setPageSide(KWPage::PageSpread); //TODO we may have to merge pages...
+        else
+            page.setPageSide(page.pageNumber() % 2 == 0 ? KWPage::Left : KWPage::Right);
+    }
 }

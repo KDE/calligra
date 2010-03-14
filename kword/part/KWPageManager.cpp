@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005-2006, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
@@ -351,10 +351,13 @@ QPointF KWPageManager::clipToDocument(const QPointF &point) const
     return rc;
 }
 
-QList<KWPage> KWPageManager::pages() const
+QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
 {
     QList<KWPage> answer;
+    const bool checkForStyle = !pageStyle.isEmpty();
     foreach (int key, d->pages.keys()) {
+        if (checkForStyle && d->pages.value(key).style.name() != pageStyle)
+            continue;
         answer << KWPage(d, key);
     }
     return answer;

@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
@@ -134,8 +134,9 @@ public:
 
     /**
      * Return an ordered list of all pages.
+     * @param pageStyle if non empty return only the pages that follow the page style.
      */
-    QList<KWPage> pages() const;
+    QList<KWPage> pages(const QString &pageStyle = QString()) const;
 
     /**
      * Return the padding used for this document. This is used to have some space around each

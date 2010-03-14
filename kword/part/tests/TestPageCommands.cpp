@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005,2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005,2008, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -506,6 +506,70 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     QVERIFY(!manager->page(3).isValid());
     QCOMPARE(page2.pageNumber(), 2);
     QCOMPARE(page2.pageSide(), KWPage::Left);
+}
+
+void TestPageCommands::testMakePageSpread()
+{
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    KoPageLayout layout = style.pageLayout();
+
+    manager->addPageStyle(style);
+    KWPage page1 = manager->appendPage(style);
+    QCOMPARE(page1.width(), layout.width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(manager->pageCount(), 1);
+    // make it a pagespread
+    layout.leftMargin = -1;
+    layout.rightMargin = -1;
+    layout.pageEdge = 7;
+    layout.bindingSide = 13;
+    KWPagePropertiesCommand cmd1(&document, page1, layout,
+        style.direction(), style.columns());
+    cmd1.redo();
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(manager->pageCount(), 1);
+    KoPageLayout newLayout = style.pageLayout();
+    QCOMPARE(newLayout.width, layout.width);
+    QCOMPARE(newLayout.leftMargin, layout.leftMargin);
+    QCOMPARE(newLayout.rightMargin, layout.rightMargin);
+    QCOMPARE(newLayout.pageEdge, layout.pageEdge);
+    QCOMPARE(newLayout.bindingSide, layout.bindingSide);
+
+    cmd1.undo();
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(manager->pageCount(), 1);
+
+    // create another page. So we have 2 single sided pages. (Right/Left)
+    KWPage page2 = manager->appendPage(style);
+    QCOMPARE(page2.width(), style.pageLayout().width);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::Left);
+    QCOMPARE(manager->pageCount(), 2);
+
+    // avoid reusing cmd1 as that assumes the constructor doens't do anything. Which is
+    // not a restriction we put on the command. (i.e. that doesn't *have* to work)
+    KWPagePropertiesCommand cmd2(&document, page1, layout,
+        style.direction(), style.columns());
+    cmd2.redo();
+
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.width(), style.pageLayout().width * 2);
+    QCOMPARE(manager->pageCount(), 3);
+
+    cmd2.undo();
+    // test for page side etc.
 }
 
 QTEST_KDEMAIN(TestPageCommands, GUI)
