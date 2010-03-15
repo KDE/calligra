@@ -84,7 +84,11 @@ void CombinedView::addSlideView(SlideView* slideview) {
 }
 QString
 koppttoodp(const QString& from) {
-    QString to = "/tmp/out.odp"; // maybe use tmp name ;-)
+    QDir d(QDir::temp().filePath("slidecompare-" + QDir::home().dirName()));
+    QString dirpath = d.absolutePath();
+    d.mkpath(dirpath);
+    QString to = dirpath + QDir::separator()
+                 + QFileInfo(from).baseName() + ".odp";
     QFile::remove(to);
     PptToOdp ppttoodp;
     ppttoodp.convert(from, to, KoStore::Zip);

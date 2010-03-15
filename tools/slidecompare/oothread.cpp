@@ -136,7 +136,8 @@ namespace {
 }
 QString
 OoThread::toOdp(const QString& path) {
-    QDir dir(QDir::temp());
+    QDir dir(QDir::temp().filePath("slidecompare-" + QDir::home().dirName()));
+    dir.mkpath(dir.absolutePath());
     Conversion c;
     c.from = path;
     do {
@@ -150,7 +151,8 @@ OoThread::toOdp(const QString& path) {
 }
 QString
 OoThread::toPng(const QString& path, int pngwidth) {
-    QDir dir(QDir::temp());
+    QDir dir(QDir::temp().filePath("slidecompare-" + QDir::home().dirName()));
+    dir.mkpath(dir.absolutePath());
     Conversion c;
     c.from = path;
     c.width = pngwidth;
