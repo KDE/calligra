@@ -70,7 +70,7 @@ public:
      * Creates a date format.
      * \param formatType the value format, e.g. number, date
      */
-    QString dateFormat(const QDate& date, Format::Type formatType);
+    QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() );
 
     /**
      * Creates a time format.

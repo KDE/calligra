@@ -87,7 +87,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     else if (Format::isDate(fmtType)) {
         Value dateValue = m_converter->asDate(value, &ok);
         if (ok) {
-            result = Value(dateFormat(dateValue.asDate(settings()), fmtType));
+            result = Value(dateFormat(dateValue.asDate(settings()), fmtType, formatString));
             result.setFormat(Value::fmt_Date);
         }
     }
@@ -530,8 +530,12 @@ QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtTyp
     return result;
 }
 
-QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType)
+QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString& formatString )
 {
+    if( !formatString.isEmpty() ) {
+        return date.toString( formatString );
+    }
+
     QString tmp;
     if (fmtType == Format::ShortDate) {
         tmp = m_converter->settings()->locale()->formatDate(date, KLocale::ShortDate);

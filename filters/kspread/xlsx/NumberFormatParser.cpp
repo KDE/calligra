@@ -152,7 +152,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
         const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
         const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
         const bool isWayTooLong = isLongest && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
-
+        
 
         switch (c) {
             // condition or color or locale...
@@ -363,11 +363,15 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                 SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericDate)
                 FINISH_PLAIN_TEXT_PART;
                 xmlWriter.startElement("number:month");
-                if (isLongest)
+                const bool isReallyReallyLong = isWayTooLong && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
+                if (isLongest && !isReallyReallyLong)
                     xmlWriter.addAttribute("number:style", "long");
                 xmlWriter.addAttribute("number:textual", "true");
                 xmlWriter.endElement();
                 i += isLongest ? (isWayTooLong ? 4 : 3) : 2;
+                if (isReallyReallyLong ) {
+                    ++i;
+                }
             }
             // depends on the context. After hours and before seconds, it's minutes
             // otherwise it's the month
