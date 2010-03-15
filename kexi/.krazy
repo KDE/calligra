@@ -1,2 +1,1 @@
-SKIP /3rdparty/
-
+SKIP /3rdparty/\|/migration/mdb/src/mdbtools/
