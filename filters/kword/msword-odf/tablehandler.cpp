@@ -372,6 +372,11 @@ void KWordTableHandler::tableCellStart()
     if (shd.ipat == 0 && shd.cvBack != 0xff000000)
         cellStyle.addProperty("fo:background-color", '#' + QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
 
+    if (shd.ipat >= 0x02 && shd.ipat <=0x0d) {                          // if it's ipatPct5 to ipatPct90
+        uint grayColor = Conversion::shadingPatternToColor(shd.ipat);   // get the color from shading pattern
+        cellStyle.addProperty("fo:background-color", '#' + QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
+    }
+
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");

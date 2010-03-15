@@ -67,6 +67,9 @@ int fillPatternStyle(int ipat);
 // Hackery for gray levels
 int ditheringToGray(int ipat, bool* ok);
 
+// convert shading pattern (ipat) to RGB color
+uint shadingPatternToColor(int ipat);
+
 // Convert alignment code to string
 //QString alignment( int jc );
 

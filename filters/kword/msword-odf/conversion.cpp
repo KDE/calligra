@@ -182,6 +182,19 @@ int Conversion::fillPatternStyle(int ipat)
     }
 }
 
+uint Conversion::shadingPatternToColor(int ipat)
+{
+    uint resultColor = 0xffffff, grayLevel = 0;
+    bool ok;
+
+    grayLevel = ditheringToGray(ipat, &ok);     // try to convert ipat to gray level
+
+    if(ok != true)                              // if conversion failed, return white (shouldn't happen)
+        return resultColor;
+
+    resultColor = (grayLevel << 16) | (grayLevel <<  8) | grayLevel;    // construct RGB from the same value (to create gray)
+    return resultColor;
+}
 
 int Conversion::ditheringToGray(int ipat, bool* ok)
 {
