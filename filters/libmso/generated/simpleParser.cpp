@@ -2599,10 +2599,8 @@ void MSO::parseBuildListContainer(LEInputStream& in, BuildListContainer& _s) {
     _s.todo.resize(_c);
     in.readBytes(_s.todo);
 }
-void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s) {
+void MSO::parseRoundTripHeaderFooterDefaults12Atom(LEInputStream& in, RoundTripHeaderFooterDefaults12Atom& _s) {
     _s.streamOffset = in.getPosition();
-    int _c;
-    LEInputStream::Mark _m;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
@@ -2610,30 +2608,17 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0xFBA)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
+    if (!(_s.rh.recType == 0x0424)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0424");
     }
-    if (!(_s.rh.recLen == 0xE)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0xE");
+    if (!(_s.rh.recLen == 1)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 1");
     }
-    _c = 8;
-    _s.tagName.resize(_c);
-    for (int _i=0; _i<_c; ++_i) {
-        _s.tagName[_i] = in.readuint16();
-    }
-    parseRecordHeader(in, _s.rhData);
-    if (!(_s.rhData.recVer == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
-    }
-    if (!(_s.rhData.recInstance == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
-    }
-    if (!(_s.rhData.recType == 0x138B)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
-    }
-    _c = _s.rhData.recLen;
-    _s.todo.resize(_c);
-    in.readBytes(_s.todo);
+    _s.fIncludeDate = in.readbit();
+    _s.fIncludeFooter = in.readbit();
+    _s.fIncludeHeader = in.readbit();
+    _s.fIncludeSlideNumber = in.readbit();
+    _s.reserved = in.readuint4();
 }
 void MSO::parseTagNameAtom(LEInputStream& in, TagNameAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -6378,6 +6363,62 @@ void MSO::parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
     }
     parseFILETIME(in, _s.fileTime);
+}
+void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    bool _possiblyPresent;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
+    }
+    if (!(_s.rh.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
+    }
+    if (!(_s.rh.recType == 0xFBA)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
+    }
+    if (!(_s.rh.recLen == 0xE)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0xE");
+    }
+    _c = 8;
+    _s.tagName.resize(_c);
+    for (int _i=0; _i<_c; ++_i) {
+        _s.tagName[_i] = in.readuint16();
+    }
+    parseRecordHeader(in, _s.rhData);
+    if (!(_s.rhData.recVer == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
+    }
+    if (!(_s.rhData.recInstance == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recInstance == 0");
+    }
+    if (!(_s.rhData.recType == 0x138B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
+    }
+    _m = in.setMark();
+    try {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0424)&&(_optionCheck.recLen == 1);
+    } catch(EOFException _e) {
+        _possiblyPresent = false;
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.roundTripHeaderFooterDefaultsAtom = QSharedPointer<RoundTripHeaderFooterDefaults12Atom>(new RoundTripHeaderFooterDefaults12Atom(&_s));
+            parseRoundTripHeaderFooterDefaults12Atom(in, *_s.roundTripHeaderFooterDefaultsAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.roundTripHeaderFooterDefaultsAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.roundTripHeaderFooterDefaultsAtom.clear();
+            in.rewind(_m);
+        }
+    }
 }
 void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s) {
     _s.streamOffset = in.getPosition();

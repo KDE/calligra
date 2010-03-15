@@ -250,8 +250,8 @@ class ExtTimeNodeContainer;
 void parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s);
 class BuildListContainer;
 void parseBuildListContainer(LEInputStream& in, BuildListContainer& _s);
-class PP12SlideBinaryTagExtension;
-void parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s);
+class RoundTripHeaderFooterDefaults12Atom;
+void parseRoundTripHeaderFooterDefaults12Atom(LEInputStream& in, RoundTripHeaderFooterDefaults12Atom& _s);
 class TagNameAtom;
 void parseTagNameAtom(LEInputStream& in, TagNameAtom& _s);
 class TagValueAtom;
@@ -560,6 +560,8 @@ class DocumentAtom;
 void parseDocumentAtom(LEInputStream& in, DocumentAtom& _s);
 class SlideTime10Atom;
 void parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s);
+class PP12SlideBinaryTagExtension;
+void parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s);
 class ProgStringTagContainer;
 void parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s);
 class NotesAtom;
@@ -1757,13 +1759,15 @@ public:
     QByteArray todo;
     BuildListContainer(void* /*dummy*/ = 0) {}
 };
-class PP12SlideBinaryTagExtension : public StreamOffset {
+class RoundTripHeaderFooterDefaults12Atom : public StreamOffset {
 public:
     RecordHeader rh;
-    QVector<quint16> tagName;
-    RecordHeader rhData;
-    QByteArray todo;
-    PP12SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
+    bool fIncludeDate;
+    bool fIncludeFooter;
+    bool fIncludeHeader;
+    bool fIncludeSlideNumber;
+    quint8 reserved;
+    RoundTripHeaderFooterDefaults12Atom(void* /*dummy*/ = 0) {}
 };
 class TagNameAtom : public StreamOffset {
 public:
@@ -3365,6 +3369,14 @@ public:
     RecordHeader rh;
     FILETIME fileTime;
     SlideTime10Atom(void* /*dummy*/ = 0) {}
+};
+class PP12SlideBinaryTagExtension : public StreamOffset {
+public:
+    RecordHeader rh;
+    QVector<quint16> tagName;
+    RecordHeader rhData;
+    QSharedPointer<RoundTripHeaderFooterDefaults12Atom> roundTripHeaderFooterDefaultsAtom;
+    PP12SlideBinaryTagExtension(void* /*dummy*/ = 0) {}
 };
 class ProgStringTagContainer : public StreamOffset {
 public:
