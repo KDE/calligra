@@ -61,8 +61,10 @@ target_link_libraries(TestTextFrameManagement kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestRdf_SRCS TestRdf.cpp )
-kde4_add_unit_test(TestRdf TESTNAME kword-part-TestRdf ${TestRdf_SRCS})
-target_link_libraries(TestRdf kwordprivate ${QT_QTTEST_LIBRARY})
+if( Soprano_FOUND )
+  set(TestRdf_SRCS TestRdf.cpp )
+  kde4_add_unit_test(TestRdf TESTNAME kword-part-TestRdf ${TestRdf_SRCS})
+  target_link_libraries(TestRdf kwordprivate ${QT_QTTEST_LIBRARY})
+endif( Soprano_FOUND )
 
 ########### end ###############
