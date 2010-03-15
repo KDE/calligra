@@ -91,7 +91,8 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         if ((alignment & Qt::AlignLeft) || (alignment & Qt::AlignJustify)) {
             newPosition.setX(state->x());
         } else if (alignment & Qt::AlignRight) {
-            newPosition.setX(state->x() + state->width());
+            newPosition.setX(state->x() + state->width() - boundingRect.width()
+                    - m_anchor->offset().x());
         } else if (alignment & Qt::AlignHCenter) {
             newPosition.setX((state->x() + state->width()) / 2 - boundingRect.width() / 2);
         }
