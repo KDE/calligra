@@ -4,6 +4,8 @@ add_definitions(-DCOMPILING_TESTS)
 include_directories(  ${KOTEXT_INCLUDES} ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/flake/tests
         ${CMAKE_SOURCE_DIR}/kword/part)
 
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
 ########### next target ###############
 
 set(TestPageManager_test_SRCS TestPageManager.cpp)
@@ -56,5 +58,11 @@ target_link_libraries(TestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
 set(TestTextFrameManagement_test_SRCS TestTextFrameManagement.cpp)
 kde4_add_unit_test(TestTextFrameManagement TESTNAME kword-part-frame-TestTextFrameManagement  ${TestTextFrameManagement_test_SRCS})
 target_link_libraries(TestTextFrameManagement kwordprivate ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestRdf_SRCS TestRdf.cpp )
+kde4_add_unit_test(TestRdf TESTNAME kword-part-TestRdf ${TestRdf_SRCS})
+target_link_libraries(TestRdf kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
