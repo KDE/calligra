@@ -1361,7 +1361,7 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
         } break;
         case Value::Array:
         case Value::CellRange:
-            break;
+            return v;
     }
     return Value::errorVALUE();
 }
