@@ -96,7 +96,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     else if (Format::isTime(fmtType)) {
         Value timeValue = m_converter->asDateTime(value, &ok);
         if (ok) {
-            result = Value(timeFormat(timeValue.asDateTime(settings()), fmtType));
+            result = Value(timeFormat(timeValue.asDateTime(settings()), fmtType, formatString));
             result.setFormat(Value::fmt_Time);
         }
     }
@@ -447,8 +447,12 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
     }
 }
 
-QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType)
+QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString)
 {
+    if (!formatString.isEmpty()) {
+        return _dt.toString( formatString );
+    }
+
     const QDateTime dt(_dt.toUTC());
     QString result;
     if (fmtType == Format::Time)

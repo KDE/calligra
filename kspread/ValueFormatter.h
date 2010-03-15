@@ -76,7 +76,7 @@ public:
      * Creates a time format.
      * \param formatType the value format, e.g. number, date
      */
-    QString timeFormat(const QDateTime& time, Format::Type formatType);
+    QString timeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
     /**
      * Creates a date and time format.
