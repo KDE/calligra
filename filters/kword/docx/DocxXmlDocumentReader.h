@@ -56,6 +56,8 @@ public:
 
 protected:
     KoFilter::ConversionStatus read_body();
+    KoFilter::ConversionStatus read_p();
+    KoFilter::ConversionStatus read_r();
     KoFilter::ConversionStatus read_sectPr();
     KoFilter::ConversionStatus read_pgSz();
     KoFilter::ConversionStatus read_pgMar();
@@ -70,6 +72,8 @@ protected:
     KoFilter::ConversionStatus read_commentRangeStart();
     KoFilter::ConversionStatus read_endnoteReference();
     KoFilter::ConversionStatus read_footnoteReference();
+    KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_drawing();
 
     typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
@@ -80,7 +84,9 @@ protected:
     };
     QMap<QString, BorderSide> m_pageBorderStyles; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
     QMap<QString, BorderSide> m_pageBorderPaddings; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
+
     DocxXmlDocumentReaderContext* m_context;
+
 private:
     void init();
     KoFilter::ConversionStatus read_border(BorderSide borderSide, const char *borderSideName);

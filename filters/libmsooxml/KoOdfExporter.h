@@ -46,18 +46,6 @@ struct MSOOXML_EXPORT KoOdfWriters {
 /**
  * @brief The base class for filters exporting to ODF.
  *
- * Derive your filter class from this base class and implement
- * the pure virtual methods. Don't forget to specify the Q_OBJECT
- * macro in your class even if you don't use signals or slots.
- * This is needed as filters are created on the fly.
- * The m_chain member allows access to the @ref KoFilterChain
- * which invokes the filter to query for input/output.
- *
- * @note Take care: The m_chain pointer is invalid while the constructor
- * runs due to the implementation -- @em don't use it in the constructor.
- * After the constructor, when running the @ref convert() method it's
- * guaranteed to be valid, so no need to check against 0.
- *
  * @todo Move to libs, e.g. komain
  *
  * @author Jarosław Staniek <staniek@kde.org>

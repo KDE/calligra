@@ -914,7 +914,7 @@ void Utils::XmlWriteBuffer::clear()
 
 // <units> -------------------
 
-QString Utils::EMU_to_ODF_CM(const QString& emuValue)
+QString Utils::EMU_to_ODF(const QString& emuValue)
 {
     if (emuValue.isEmpty())
         return QLatin1String("0cm");
@@ -928,7 +928,7 @@ QString Utils::EMU_to_ODF_CM(const QString& emuValue)
 //    return QString::number(, 'g', 3) + QLatin1String("cm");
 }
 
-QString Utils::ST_EighthPointMeasure_to_pt(const QString& value)
+QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)
 {
     if (value.isEmpty())
         return QString();
@@ -937,6 +937,84 @@ QString Utils::ST_EighthPointMeasure_to_pt(const QString& value)
     if (!ok)
         return QString();
     return QString::number(point, 'g', 2) + QLatin1String("pt");
+}
+
+//! @return true if @a string is non-negative integer number
+static bool isNumber(const QString& string)
+{
+    for (const QChar *c = string.constData(); !c->isNull(); c++) {
+        if (!c->isNumber())
+            return false;
+    }
+    return !string.isEmpty();
+}
+
+//! Splits number and unit
+static bool splitNumberAndUnit(const QString& _string, int *number, QString* unit)
+{
+    int unitIndex = 0;
+    QString string(_string);
+    for (const QChar *c = string.constData(); !c->isNull(); c++, unitIndex++) {
+        if (!c->isNumber())
+            break;
+    }
+    *unit = string.mid(unitIndex);
+    string.truncate(unitIndex);
+    if (string.isEmpty()) {
+        kWarning() << "No unit found in" << _string;
+        return false;
+    }
+    bool ok;
+    *number = string.toUInt(&ok);
+    if (!ok)
+        kWarning() << "Invalid number in" << _string;
+    return ok;
+}
+
+//! @return true is @a unit is one of these mentioned in 22.9.2.15 ST_UniversalMeasure (Universal Measurement)
+static bool isUnitAcceptable(const QString& unit)
+{
+    if (unit.length() != 2)
+        return false;
+    return unit == QString::fromLatin1("cm")
+           || unit == QString::fromLatin1("mm")
+           || unit == QString::fromLatin1("in")
+           || unit == QString::fromLatin1("pt")
+           || unit == QString::fromLatin1("pc")
+           || unit == QString::fromLatin1("pi");
+}
+
+MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_ODF(const QString& value)
+{
+    if (value.isEmpty())
+        return QString();
+    if (isNumber(value)) {
+        // a positive number in twips (twentieths of a point, equivalent to 1/1440th of an inch)
+        bool ok;
+        const qreal point = TWIP_TO_POINT( qreal(value.toFloat(&ok)) );
+        if (!ok)
+            return QString();
+        return QString::number(point, 'g', 2) + QLatin1String("pt");
+    }
+    return Utils::ST_PositiveUniversalMeasure_to_ODF(value);
+}
+
+MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
+{
+    // a positive decimal number immediately following by a unit identifier.
+    int number;
+    QString unit;
+    if (!splitNumberAndUnit(value, &number, &unit))
+        return QString();
+    // special case: pc is another name for pica
+    if (unit == QString::fromLatin1("pc")) {
+        return QString::number(number) + QLatin1String("pi");
+    }
+    if (!isUnitAcceptable(unit)) {
+        kWarning() << "Unit" << unit << "not supported. Expected cm/mm/in/pt/pc/pi.";
+        return QString();
+    }
+    return value; // the original is OK
 }
 
 // </units> -------------------

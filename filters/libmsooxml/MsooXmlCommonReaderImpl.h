@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -32,6 +32,7 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_hasPosOffsetV = false;
     m_posOffsetH = 0;
     m_posOffsetV = 0;
+    m_currentTextStylePredefined = false;
     m_currentTextStyleProperties = 0;
     m_fillImageRenderingStyleStretch = false;
 }
@@ -39,63 +40,6 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 void MSOOXML_CURRENT_CLASS::doneInternal()
 {
     delete m_currentTextStyleProperties;
-}
-
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
-    QString& destinationName)
-{
-    destinationName =  destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
-    if (m_copiedFiles.contains(sourceName)) {
-        kDebug() << sourceName << "already copied - skipping";
-    }
-    else {
-//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
-        addManifestEntryForFile(destinationName);
-        m_copiedFiles.insert(sourceName);
-    }
-    return KoFilter::OK;
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL hyperlink
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
-{
-    READ_PROLOGUE
-
-    QString link_target;
-    MSOOXML::Utils::XmlWriteBuffer linkBuf;
-    body = linkBuf.setWriter(body);
-
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(id)
-    if (id.isEmpty()) {
-        link_target.clear();
-    }
-    else {
-        link_target = m_context->relationships->linkTarget(id);
-    }
-    kDebug() << "link_target:" << link_target;
-
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF(rPr)
-            ELSE_TRY_READ_IF(t)
-            ELSE_TRY_READ_IF(r)
-            //! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL)
-    }
-
-    body = linkBuf.originalWriter();
-    body->startElement("text:a");
-    body->addAttribute("xlink:type", "simple");
-    body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
-    (void)linkBuf.releaseWriter();
-    body->endElement(); // text:a
-
-    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -125,109 +69,61 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL r
-//! r handler (Text Run)
-/*! ECMA-376, 17.3.2.25, p.320.
-
- Parent elements:
- - bdo (§17.3.2.3)
- - customXml (§17.5.1.3)
- - del (§17.13.5.14)
- - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
- - hyperlink (§17.16.22)
- - ins (§17.13.5.18)
- - moveFrom (§17.13.5.22)
- - moveTo (§17.13.5.25)
- - [done] p (§17.3.1.22)
- - rt (§17.3.3.24)
- - rubyBase (§17.3.3.27)
- - sdtContent (§17.5.2.36)
- - smartTag (§17.5.1.9)
- Child elements:
- - annotationRef (Comment Information Block) §17.13.4.1
- - br (Break) §17.3.3.1
- - commentReference (Comment Content Reference Mark) §17.13.4.5
- - contentPart (Content Part) §17.3.3.2
- - continuationSeparator (Continuation Separator Mark) §17.11.1
- - cr (Carriage Return) §17.3.3.4
- - dayLong (Date Block - Long Day Format) §17.3.3.5
- - dayShort (Date Block - Short Day Format) §17.3.3.6
- - delInstrText (Deleted Field Code) §17.16.13
- - delText (Deleted Text) §17.3.3.7
- - [done] drawing (DrawingML Object) §17.3.3.9
- - endnoteRef (Endnote Reference Mark) §17.11.6
- - [done] endnoteReference (Endnote Reference) §17.11.7
- - fldChar (Complex Field Character) §17.16.18
- - footnoteRef (Footnote Reference Mark) §17.11.13
- - [done] footnoteReference (Footnote Reference) §17.11.14
- - instrText (Field Code) §17.16.23
- - lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
- - monthLong (Date Block - Long Month Format) §17.3.3.15
- - monthShort (Date Block - Short Month Format) §17.3.3.16
- - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
- - [done] object (Embedded Object) §17.3.3.19
- - pgNum (Page Number Block) §17.3.3.22
- - ptab (Absolute Position Tab Character) §17.3.3.23
- - [done] rPr (Run Properties) §17.3.2.28
- - ruby (Phonetic Guide) §17.3.3.25
- - separator (Footnote/Endnote Separator Mark) §17.11.23
- - softHyphen (Optional Hyphen Character) §17.3.3.29
- - sym (Symbol Character) §17.3.3.30
- - [done] t (Text) §17.3.3.31
- - tab (Tab Character) §17.3.3.32
- - yearLong (Date Block - Long Year Format) §17.3.3.33
- - yearShort (Date Block - Short Year Format) §17.3.3.34
-
- VML child elements (see Part 4):
- - pict (VML Object) §9.2.2.2
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-//kDebug() <<"[0]";
-        readNext();
-        kDebug() << *this;
-//kDebug() <<"[1]";
-        if (isStartElement()) {
-            TRY_READ_IF(rPr)
-            ELSE_TRY_READ_IF(t)
-            ELSE_TRY_READ_IF(drawing)
-#ifdef DOCXXMLDOCREADER_CPP
-            ELSE_TRY_READ_IF(endnoteReference)
-            ELSE_TRY_READ_IF(footnoteReference)
-            ELSE_TRY_READ_IF(object)
-            ELSE_TRY_READ_IF(pict)
-#endif
-//            else { SKIP_EVERYTHING }
-//! @todo add ELSE_WRONG_FORMAT
-//kDebug() <<"[1.5]";
-        }
-//kDebug() <<"[2]";
-        BREAK_IF_END_OF(CURRENT_EL);
-//kDebug() <<"[2.5]";
-    }
-//kDebug() <<"[3]";
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
 #define CURRENT_EL lang
-//! lang handler (Languages for Run Content)
+//! w:lang handler (Languages for Run Content)
 /*! ECMA-376, 17.3.2.20, p.314.
+ Parent elements:
+ - [done] rPr (§17.3.1.29) (within pPr §17.3.1.26)
+ - rPr (§17.3.1.30) (within rPrChange §17.13.5.30)
+ - rPr (§17.3.2.27) (within del §17.13.5.13, ins §17.13.5.16, rPrChange §17.13.5.31)
+ - [done] rPr (§17.3.2.28) (witin ctrlPr §22.1.2.23, r §22.1.2.87, r §17.3.2.25)
+ - rPr (§17.5.2.27) (within sdtPr §17.5.2.38)
+ - rPr (§17.5.2.28) (within sdtEndPr §17.5.2.37)
+ - [done] rPr (§17.7.9.1) (within style §17.7.4.17 - styles)
+ - [done] rPr (§17.7.5.4) (within rPrDefault §17.7.5.5 - styles)
+ - rPr (§17.7.6.2) (within tblStylePr §17.7.6.6 - styles)
+ - rPr (§17.9.25) (within lvl §17.9.6, lvl §17.9.7 - numbering)
+ No child elements.
+
+ CASE #850 -> CASE #858 -> CASE #861 -> CASE #1100
+
+ @todo support all elements
 */
-//! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lang()
 {
     READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-//! @todo add ELSE_WRONG_FORMAT
-        BREAK_IF_END_OF(CURRENT_EL);
+    const QXmlStreamAttributes attrs(attributes());
+// CASE #1100
+    TRY_READ_ATTR(bidi)
+    QString language, country;
+    if (!bidi.isEmpty()) {
+        if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(bidi, language, country)) {
+            m_currentTextStyle.addProperty("style:language-complex", language, KoGenStyle::TextType);
+            m_currentTextStyle.addProperty("style:country-complex", country, KoGenStyle::TextType);
+        } else {
+            kWarning() << "invalid value of \"bidi\" attribute:" << bidi << " - skipping";
+        }
     }
+    TRY_READ_ATTR(val)
+    if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(val, language, country)) {
+        m_currentTextStyle.addProperty("fo:language", language, KoGenStyle::TextType);
+        m_currentTextStyle.addProperty("fo:country", country, KoGenStyle::TextType);
+    } else {
+        kWarning() << "invalid value of \"val\" attribute:" << val << " - skipping";
+    }
+
+    TRY_READ_ATTR(eastAsia)
+    if (!eastAsia.isEmpty()) {
+        if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(eastAsia, language, country)) {
+            m_currentTextStyle.addProperty("style:language-asian", language, KoGenStyle::TextType);
+            m_currentTextStyle.addProperty("style:country-asian", country, KoGenStyle::TextType);
+        } else {
+            kWarning() << "invalid value of \"eastAsia\" attribute:" << eastAsia << " - skipping";
+        }
+    }
+    kDebug() << "bidi:" << bidi << "val:" << val << "eastAsia:" << eastAsia;
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -279,7 +175,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lang()
  - oMath (Office Open XML Math) §17.3.2.22
  - outline (Display Character Outline) §17.3.2.23
  - position (Vertically Raised or Lowered Text) §17.3.2.24
- - rFonts (Run Fonts) §17.3.2.26
+ - [done] rFonts (Run Fonts) §17.3.2.26
  - rPrChange (Revision Information for Run Properties on the Paragraph Mark) §17.13.5.30
  - rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
@@ -301,17 +197,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lang()
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
 {
+#ifdef DOCXXMLDOCREADER_CPP
     ReadMethod caller = m_calls.top();
+#endif
     READ_PROLOGUE
+
+    const bool setupTextStyle =
+#ifdef DOCXXMLDOCREADER_CPP
+        CALLER_IS(r);
+#else
+        true;
+#endif
 
     const QXmlStreamAttributes attrs(attributes());
 
-    delete m_currentTextStyleProperties;
+    Q_ASSERT(m_currentTextStyleProperties == 0);
+//    delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = new KoCharacterStyle();
-    m_currentTextStyle = KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+
+    if (!m_currentTextStylePredefined) {
+        m_currentTextStyle = KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+    }
 
     MSOOXML::Utils::XmlWriteBuffer textSpanBuf;
-    if (CALLER_IS(r)) {
+    if (setupTextStyle) {
 //kDebug() << "text:span...";
         body = textSpanBuf.setWriter(body);
     }
@@ -330,12 +239,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
             ELSE_TRY_READ_IF(lang)
             ELSE_TRY_READ_IF(shd)
             ELSE_TRY_READ_IF(vertAlign)
+            ELSE_TRY_READ_IF(rFonts)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    if (CALLER_IS(r)) {
+    if (setupTextStyle) {
 //kDebug() << "CALLER_IS(r)";
         // DrawingML: b, i, strike, u attributes:
         if (attrs.hasAttribute("b")) {
@@ -394,7 +304,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
-    if (CALLER_IS(r)) {
+    if (setupTextStyle) {
         return KoFilter::OK;
     }
 
@@ -461,7 +371,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_u()
  - rPr (§17.5.2.28)
  - rPr (§17.9.25)
  - rPr (§17.7.9.1)
- - rPr (§17.7.5.4)
+ - rPr (§17.7.5.4) (within style)
  - [done] rPr (§17.3.2.28)
  - rPr (§17.5.2.27)
  - rPr (§17.7.6.2)
@@ -473,21 +383,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_u()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sz()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(val)
-// CASE #1164
-    bool ok;
-    const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0;   /* half-points */
-    if (ok) {
-        m_currentTextStyleProperties->setFontPointSize(pointSize);
-    }
-
-    while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
-        break;
-    }
-
+    const char *ns = 0;
+#ifdef MSOOXML_CURRENT_NS
+    ns = MSOOXML_CURRENT_NS;
+#endif
+    RETURN_IF_ERROR(MSOOXML::MsooXmlReader::read_sz(ns, m_currentTextStyleProperties))
     READ_EPILOGUE
 }
 
@@ -512,6 +412,111 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_vertAlign()
     else if (QString::compare(val, "subscript", Qt::CaseInsensitive) == 0)
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
     readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rFonts
+//! w:lang handler (Run Fonts)
+/*! ECMA-376, 17.3.2.26, p.323.
+ Parent elements:
+ - rPr (§17.3.1.29) (within p)
+ - rPr (§17.3.1.30)
+ - rPr (§17.5.2.28)
+ - rPr (§17.9.25)
+ - rPr (§17.7.9.1)
+ - rPr (§17.7.5.4) (within style)
+ - rPr (§17.3.2.28)
+ - rPr (§17.5.2.27)
+ - rPr (§17.7.6.2)
+ - rPr (§17.3.2.27)
+ No child elements.
+
+ CASE #850 -> CASE #858 -> CASE #861 -> CASE #1150
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rFonts()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+// CASE #1153
+    TRY_READ_ATTR(ascii)
+    if (!ascii.isEmpty()) {
+        m_currentParagraphStyle.addProperty("style:font-name", ascii, KoGenStyle::TextType);
+    }
+// CASE #1152
+    if (ascii.isEmpty()) {
+        TRY_READ_ATTR(asciiTheme)
+        if (!asciiTheme.isEmpty()) {
+            //! @todo
+        }
+    }
+// CASE #1155
+    TRY_READ_ATTR(cs)
+    if (!cs.isEmpty()) {
+        m_currentParagraphStyle.addProperty("style:font-name-complex", cs, KoGenStyle::TextType);
+    }
+// CASE #1154
+    if (cs.isEmpty()) {
+        TRY_READ_ATTR(cstheme)
+        if (!cstheme.isEmpty()) {
+            //! @todo
+        }
+    }
+// CASE #1157
+    TRY_READ_ATTR(eastAsia)
+    if (!eastAsia.isEmpty()) {
+        m_currentParagraphStyle.addProperty("style:font-name-asian", eastAsia, KoGenStyle::TextType);
+    }
+// CASE #1156
+    if (eastAsia.isEmpty()) {
+        TRY_READ_ATTR(eastAsiaTheme)
+        if (!eastAsiaTheme.isEmpty()) {
+            //! @todo
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pStyle
+//! pStyle handler (Referenced Paragraph Style)
+/*! ECMA-376, WML, 17.3.1.27, p.260.
+
+ This element specifies the style ID of the paragraph style which shall be used to format the contents
+ of this paragraph. This formatting is applied at the following location in the style hierarchy:
+ - Document defaults
+ - Table styles
+ - Numbering styles
+ - Paragraph styles (this element)
+ - Character styles
+ - Direct Formatting
+
+ This means that all properties specified in the style element (§17.7.4.17) with a styleId which
+ corresponds to the value in this element's val attribute are applied to the paragraph at the appropriate
+ level in the hierarchy.
+
+ Parent elements:
+ - pPr (§17.3.1.26)
+ - pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
+
+ No child elements.
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pStyle()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_INTO(val, m_currentStyleName)
+    SKIP_EVERYTHING
     READ_EPILOGUE
 }
 
@@ -613,6 +618,49 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_jc()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL spacing
+//! spacing handler (Spacing Between Lines and Above/Below Paragraph)
+/*! ECMA-376, 17.3.1.33, p.269.
+
+ This element specifies the inter-line and inter-paragraph spacing which shall be applied
+ to the contents of this paragraph when it is displayed by a consumer.
+
+ Parent elements:
+ - pPr (§17.3.1.26)
+ - pPr (§17.3.1.25)
+ - pPr (§17.7.5.2)
+ - pPr (§17.7.6.1)
+ - pPr (§17.9.23)
+ - pPr (§17.7.8.2)
+
+ No child elements.
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spacing()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(after)
+    const QString marginBottom(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(after));
+    if (!marginBottom.isEmpty()) {
+        m_currentParagraphStyle.addAttribute("fo:margin-bottom", marginBottom);
+    }
+
+    TRY_READ_ATTR(before)
+    const QString marginTop(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(before));
+    if (!marginTop.isEmpty()) {
+        m_currentParagraphStyle.addAttribute("fo:margin-top", marginTop);
+    }
+
+    TRY_READ_ATTR(line)
+    TRY_READ_ATTR(lineRule)
+
+    SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
 //! CASE #410
 void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttributes& attrs)
 {
@@ -636,10 +684,28 @@ void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttribut
 #undef CURRENT_EL
 #define CURRENT_EL pPr
 //! pPr handler (Paragraph Properties)
-/*! ECMA-376, 17.3.1.26, p. 259.
-
+/*!
+ 1. pPr (Paragraph Properties) 17.3.1.26, p.259.
  Parent elements:
- - [done] p (§17.3.1.22)
+ - [done] p (§17.3.1.22) - common reader
+
+ 2. pPr (Paragraph Properties) 17.7.5.2, p.725.
+ Parent elements:
+ - [done] pPrDefault - DocxXmlStylesReader
+
+ 3. pPr (Table Style Conditional Formatting Paragraph Properties)  17.7.6.1, p.733.
+ Parent elements:
+ - tblStylePr (§17.7.6.6)
+
+ 4. pPr (Style Paragraph Properties) 17.7.8.2, p.752.
+ Parent elements:
+ - [done] style (§17.7.4.17) - DocxXmlStylesReader
+
+ 5. pPr (Numbering Level Associated Paragraph Properties) 17.9.23, p.818.
+ Parent elements:
+ - lvl (§17.9.6)
+ - lvl (§17.9.7)
+
  Child elements:
  - adjustRightInd (Automatically Adjust Right Indent When Using Document Grid) §17.3.1.1
  - autoSpaceDE (Automatically Adjust Spacing of Latin and East Asian Text) §17.3.1.2
@@ -650,7 +716,7 @@ void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttribut
  - divId (Associated HTML div ID) §17.3.1.10
  - framePr (Text Frame Properties) §17.3.1.11
  - ind (Paragraph Indentation) §17.3.1.12
- - jc (Paragraph Alignment) §17.3.1.13
+ - [done] jc (Paragraph Alignment) §17.3.1.13
  - keepLines (Keep All Lines On One Page) §17.3.1.14
  - keepNext (Keep Paragraph With Next Paragraph) §17.3.1.15
  - kinsoku (Use East Asian Typography Rules for First and Last Character per Line) §17.3.1.16
@@ -661,12 +727,12 @@ void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttribut
  - pageBreakBefore (Start Paragraph on Next Page) §17.3.1.23
  - pBdr (Paragraph Borders) §17.3.1.24
  - pPrChange (Revision Information for Paragraph Properties) §17.13.5.29
- - pStyle (Referenced Paragraph Style) §17.3.1.27
+ - [done] pStyle (Referenced Paragraph Style) §17.3.1.27
  - [done] rPr (Run Properties for the Paragraph Mark) §17.3.1.29
  - sectPr (Section Properties) §17.6.18
- - shd (Paragraph Shading) §17.3.1.31
+ - [done] shd (Paragraph Shading) §17.3.1.31
  - snapToGrid (Use Document Grid Settings for Inter-Line Paragraph Spacing) §17.3.1.32
- - spacing (Spacing Between Lines and Above/Below Paragraph) §17.3.1.33
+ - [done] spacing (Spacing Between Lines and Above/Below Paragraph) §17.3.1.33
  - suppressAutoHyphens (Suppress Hyphenation for Paragraph) §17.3.1.34
  - suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
  - suppressOverlap (Prevent Text Frames From Overlapping) §17.3.1.36
@@ -678,13 +744,11 @@ void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttribut
  - widowControl (Allow First/Last Line to Display on a Separate Page) §17.3.1.44
  - wordWrap (Allow Line Breaking At Character Level) §17.3.1.45
 */
+//! CASE #850 -> CASE #853
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
 {
     READ_PROLOGUE
-//    if (!m_currentParagraphStyleCreated) {
-    // add automatic style for the paragraph
-//    }
     const QXmlStreamAttributes attrs(attributes());
     setParentParagraphStyleName(attrs);
 
@@ -698,16 +762,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(shd)
             ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF(spacing)
+            ELSE_TRY_READ_IF(pStyle)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
-    /* moved to buffer in read_p()
-    #ifndef SETUP_PARA_STYLE_IN_READ_P // for DOCX
-        setupParagraphStyle();
-    #endif
-    */
     READ_EPILOGUE
 }
 
@@ -755,129 +815,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shd()
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL p
-//! [1] p handler (Paragraph) ECMA-376, WPML 17.3.1.22, p. 251,
-//!       This element specifies a paragraph of content in the document.
-
-//! [2] p handler (Text Paragraphs) ECMA-376, DrawingML 21.1.2.2.6, p. 3587.
-//!       This element specifies the presence of a paragraph of text within the containing text body.
-/*!
- Parent elements:
- - [done] body (§17.2.2)
- - comment (§17.13.4.2)
- - customXml (§17.5.1.6)
- - docPartBody (§17.12.6)
- - endnote (§17.11.2)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
- - sdtContent (§17.5.2.34)
- - tc (§17.4.66)
- - [done] p (§17.3.1.22)
- Child elements:
- - bdo (Bidirectional Override) §17.3.2.3
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
- - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
- - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4
- - customXml (Inline-Level Custom XML Element) §17.5.1.3
- - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
- - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
- - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
- - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
- - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
- - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
- - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
- - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
- - dir (Bidirectional Embedding Level) §17.3.2.8
- - fldSimple (Simple Field) §17.16.19
- - hyperlink (Hyperlink) §17.16.22
- - ins (Inserted Run Content) §17.13.5.18
- - moveFrom (Move Source Run Content) §17.13.5.22
- - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
- - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
- - moveTo (Move Destination Run Content) §17.13.5.25
- - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
- - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
- - oMath (Office Math) §22.1.2.77
- - oMathPara (Office Math Paragraph) §22.1.2.78
- - permEnd (Range Permission End) §17.13.7.1
- - permStart (Range Permission Start) §17.13.7.2
- - [done] pPr (Paragraph Properties) §17.3.1.26
- - proofErr (Proofing Error Anchor) §17.13.8.1
- - [done] r (Text Run) §17.3.2.25
- - sdt (Inline-Level Structured Document Tag) §17.5.2.31
- - smartTag (Inline-Level Smart Tag) §17.5.1.9
- - subDoc (Anchor for Subdocument Location) §17.17.1.1
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
-{
-    READ_PROLOGUE
-    const read_p_args args = m_read_p_args;
-    m_read_p_args = 0;
-    m_paragraphStyleNameWritten = false;
-
-    MSOOXML::Utils::XmlWriteBuffer textPBuf;
-
-    if (args & read_p_Skip) {
-        kDebug() << "SKIP!";
-    } else {
-        body = textPBuf.setWriter(body);
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
-//        m_currentParagraphStyleNumber++;
-//moved        body->addAttribute("text:style-name", currentParagraphStyleName());
-//moved down
-//      #ifdef SETUP_PARA_STYLE_IN_READ_P // for PPTX
-//moved         setupParagraphStyle();
-//moved #endif
-    }
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(p)) {
-// CASE #301: avoid nested paragaraphs
-                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
-                TRY_READ_WITH_ARGS(p, read_p_Skip;)
-            }
-            ELSE_TRY_READ_IF(hyperlink)
-            //ELSE_TRY_READ_IF(commentRangeEnd)
-#ifdef DOCXXMLDOCREADER_CPP
-            ELSE_TRY_READ_IF(commentRangeStart)
-#endif
-// CASE #400.1
-            ELSE_TRY_READ_IF(pPr)
-// CASE #400.2
-//! @todo add more conditions testing the parent
-            ELSE_TRY_READ_IF(r)
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    if (args & read_p_Skip) {
-        //nothing
-    } else {
-        body = textPBuf.originalWriter();
-        body->startElement("text:p", false);
-//#ifndef SETUP_PARA_STYLE_IN_READ_P // for DOCX
-        setupParagraphStyle();
-//#endif
-        /*        if (!m_paragraphStyleNameWritten) {
-                    // no style, set default
-                    body->addAttribute("text:style-name", "Standard");
-                }*/
-        (void)textPBuf.releaseWriter();
-        body->endElement(); //text:p
-        kDebug() << "/text:p";
-    }
-    READ_EPILOGUE
-}
-
 //! lstStyle handler (Text List Styles) ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
 //!          This element specifies the list of styles associated with this body of text.
 /*!
@@ -917,954 +854,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        //break;   // Why was this here?
     }
 
     READ_EPILOGUE
 }
-
-#undef CURRENT_EL
-#define CURRENT_EL drawing
-//! drawing handler (DrawingML Object)
-/*! ECMA-376, 17.3.3.9, p.362.
-
- This element specifies that a DrawingML object is located at this position
- in the run’s contents. The layout properties of this DrawingML object
- are specified using the WordprocessingML Drawing syntax (§20.4, p. 3466).
-
- Parent elements:
- - background (§17.2.1)
- - numPicBullet (§17.9.21)
- - object (§17.3.3.19)
- - r (§22.1.2.87) - Shared ML
- - [done] r (§17.3.2.25)
-
- Child elements:
- - [done] anchor (Anchor for Floating DrawingML Object) §20.4.2.3
- - [done] inline (Inline DrawingML Object) §20.4.2.8
-*/
-//! CASE #1300
-//! CASE #1301
-//! CASE #1380
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
-{
-    READ_PROLOGUE
-
-#ifdef DOCXXMLDOCREADER_H
-    m_currentDrawStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
-    m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
-#endif
-
-    m_drawing_anchor = false;
-    m_drawing_inline = false;
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF_NS(wp, anchor)
-            ELSE_TRY_READ_IF_NS(wp, inline)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    m_drawing_anchor = false;
-    m_drawing_inline = false;
-    READ_EPILOGUE
-}
-
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "wp" // wordprocessingDrawing
-
-void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString emuValue)
-{
-    if (emuValue.isEmpty() || emuValue == "0") // skip 0cm which is the default
-        return;
-    QString s = MSOOXML::Utils::EMU_to_ODF_CM(emuValue);
-    if (!s.isEmpty()) {
-        m_currentDrawStyle.addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
-    }
-}
-
-void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
-{
-    m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL anchor
-//! anchor handler (Anchor for Floating DrawingML Object)
-/*! ECMA-376, 20.4.2.3, p.3469.
-
- This element specifies that the DrawingML object located at this position
- in the document is a floating object.
- Within a WordprocessingML document, drawing objects can exist in two states:
- - Inline - The drawing object is in line with the text, and affects the line
-   height and layout of its line (like a character glyph of similar size).
- - Floating - The drawing object is anchored within the text, but can be
-   absolutely positioned in the document relative to the page.
-
- When this element encapsulates the DrawingML object's information,
- then all child elements shall dictate the positioning of this object
- as a floating object on the page.
-
- Parent elements:
- - [done] drawing (§17.3.3.9)
-
- Child elements:
- - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
- - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
- - effectExtent (Object Extents Including Effects) §20.4.2.6
- - extent (Drawing Object Size) §20.4.2.7
- - [done] graphic (Graphic Object) §20.1.2.2.16
- - [done] positionH (Horizontal Positioning) §20.4.2.10
- - [done] positionV (Vertical Positioning) §20.4.2.11
- - simplePos (Simple Positioning Coordinates) §20.4.2.13
- - [done] wrapNone (No Text Wrapping) §20.4.2.15
- - [done] wrapSquare (Square Wrapping) §20.4.2.17
- - [done] wrapThrough (Through Wrapping) §20.4.2.18
- - [done] wrapTight (Tight Wrapping) §20.4.2.19
- - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
-
- Attributes:
- - allowOverlap (Allow Objects to Overlap)
- - [done] behindDoc (Display Behind Document Text)
- - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
- - [done] distL (Distance From Text on Left Edge) (see also: inline)
- - [done] distR (Distance From Text on Right Edge) (see also: inline)
- - [done] distT (Distance From Text on Top Edge) (see also: inline)
- - hidden (Hidden)
- - layoutInCell (Layout In Table Cell)
- - locked (Lock Anchor)
- - relativeHeight (Relative Z-Ordering Position)
- - simplePos (Page Positioning)
-*/
-//! @todo support all elements
-//! CASE #1340
-//! CASE #1410
-//! CASE #1420
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
-{
-    READ_PROLOGUE
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
-    m_docPrName.clear();
-    m_docPrDescr.clear();
-    m_drawing_anchor = true; // for pic:pic
-
-    const QXmlStreamAttributes attrs(attributes());
-//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
-    READ_ATTR_WITHOUT_NS(distT)
-    distToODF("fo:margin-top", distT);
-    READ_ATTR_WITHOUT_NS(distB)
-    distToODF("fo:margin-bottom", distB);
-    READ_ATTR_WITHOUT_NS(distL)
-    distToODF("fo:margin-left", distL);
-    READ_ATTR_WITHOUT_NS(distR)
-    distToODF("fo:margin-right", distR);
-
-    const bool behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
-
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF_NS(a, graphic)
-            ELSE_TRY_READ_IF(positionH)
-            ELSE_TRY_READ_IF(positionV)
-            ELSE_TRY_READ_IF(docPr)
-            ELSE_TRY_READ_IF(wrapSquare)
-            ELSE_TRY_READ_IF(wrapTight)
-            ELSE_TRY_READ_IF(wrapThrough)
-            else if (QUALIFIED_NAME_IS(wrapNone)) {
-                // wrapNone (No Text Wrapping), ECMA-376, 20.4.2.15
-                // This element specifies that the parent DrawingML object shall
-                // not cause any text wrapping within the contents of the host
-                // WordprocessingML document based on its display location.
-                // CASE #1410
-                readNext();
-                if (!expectElEnd(QUALIFIED_NAME(wrapNone)))
-                    return KoFilter::WrongFormat;
-                saveStyleWrap("run-through");
-                m_currentDrawStyle.addProperty(QLatin1String("style:run-through"),
-                                               (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
-                                               KoGenStyle::GraphicType);
-            } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
-                // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
-                // This element specifies that text shall wrap around the top
-                // and bottom of this object, but not its left or right edges.
-                // CASE #1410
-                readNext();
-                if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom)))
-                    return KoFilter::WrongFormat;
-                saveStyleWrap("none");
-            }
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
-    READ_EPILOGUE
-}
-
-//! @todo Currently all read_wrap*() uses the same read_wrap(), no idea if they can behave differently
-//! CASE #1425
-void MSOOXML_CURRENT_CLASS::readWrap()
-{
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(wrapText)
-    if (wrapText == "bothSides")
-        saveStyleWrap("parallel");
-    else if (wrapText == "largest")
-        saveStyleWrap("dynamic");
-    else
-        saveStyleWrap(wrapText.toLatin1());
-//! @todo Is saveStyleWrap(wrapText) OK?
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL wrapSquare
-//! wrapSquare handler (Square Wrapping)
-/*! ECMA-376, 20.4.2.17, p.3497.
- This element specifies that text shall wrap around a virtual rectangle bounding
- this object. The bounds of the wrapping rectangle shall be dictated by the extents
- including the addition of the effectExtent element as a child of this element
- (if present) or the effectExtent present on the parent element.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
-
- Child elements:
- - effectExtent (Object Extents Including Effects)
-
- Attributes:
- - distB (Distance From Text on Bottom Edge)
- - distL (Distance From Text on Left Edge)
- - distR (Distance From Text on Right Edge)
- - distT (Distance From Text (Top))
- - [done] wrapText (Text Wrapping Location)
-*/
-//! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapSquare()
-{
-    READ_PROLOGUE
-    readWrap();
-
-    while (!atEnd()) {
-        readNext();
-//        if (isStartElement()) {
-//! @todo effectExtent
-//        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL wrapTight
-//! wrapTight handler (Tight Wrapping)
-/*! ECMA-376, 20.4.2.17, p.3497.
- This element specifies that text shall wrap around the wrapping polygon
- bounding this object as defined by the child wrapPolygon element.
- When this element specifies a wrapping polygon, it shall not allow text
- to wrap within the object's maximum left and right extents.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
-
- Child elements:
- - wrapPolygon (Wrapping Polygon)
-
- Attributes:
- - distL (Distance From Text on Left Edge)
- - distR (Distance From Text on Right Edge)
- - [done] wrapText (Text Wrapping Location)
-*/
-//! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapTight()
-{
-    READ_PROLOGUE
-    readWrap();
-
-    while (!atEnd()) {
-        readNext();
-//        if (isStartElement()) {
-//! @todo effectExtent
-//        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL wrapThrough
-//! wrapThrough handler (Through Wrapping)
-/*! ECMA-376, 20.4.2.18, p.3500.
- This element specifies that text shall wrap around the wrapping polygon
- bounding this object as defined by the child wrapPolygon element.
- When this element specifies a wrapping polygon, it shall allow text
- to wrap within the object's maximum left and right extents.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
-
- Child elements:
- - wrapPolygon (Wrapping Polygon)
-
- Attributes:
- - distL (Distance From Text on Left Edge)
- - distR (Distance From Text on Right Edge)
- - [done] wrapText (Text Wrapping Location)
-*/
-//! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
-{
-    READ_PROLOGUE
-    readWrap();
-
-    while (!atEnd()) {
-        readNext();
-//        if (isStartElement()) {
-//! @todo effectExtent
-//        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL positionH
-//! positionH handler (Horizontal Positioning)
-/*! ECMA-376, 20.4.2.10, p.3490.
- This element specifies the horizontal positioning of a floating
- DrawingML object within a WordprocessingML document.
- This positioning is specified in two parts:
-
- - Positioning Base - The relativeFrom attribute on this element
-   specifies the part of the document from which the positioning
-   shall be calculated.
- - Positioning - The child element of this element (align
-   or posOffset) specifies how the object is positioned relative
-   to that base.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
-
- Child elements:
- - [done] align (Relative Horizontal Alignment) §20.4.2.1
- - [done] posOffset (Absolute Position Offset) §20.4.2.12
-
- Attributes:
- - [done] relativeFrom (Horizontal Position Relative Base)
-*/
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
-{
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
-    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromH)
-
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF(align)
-            ELSE_TRY_READ_IF(posOffset)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL positionV
-//! positionV handler (Vertical Positioning)
-/*! ECMA-376, 20.4.2.11, p.3491.
- This element specifies the vertical positioning of a floating
- DrawingML object within a WordprocessingML document.
- This positioning is specified in two parts:
-
- - Positioning Base - The relativeFrom attribute on this element
-   specifies the part of the document from which the positioning
-   shall be calculated.
- - Positioning - The child element of this element (align
-   or posOffset) specifies how the object is positioned relative
-   to that base.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
-
- Child elements:
- - [done] align (Relative Vertical Alignment) §20.4.2.2
- - [done] posOffset (Absolute Position Offset) §20.4.2.12
-
- Attributes:
- - [done] relativeFrom (Horizontal Position Relative Base)
-*/
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
-{
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-//! @todo parse 20.4.3.5 ST_RelFromV (Vertical Relative Positioning), p. 3512
-    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromV)
-
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF(align)
-            ELSE_TRY_READ_IF(posOffset)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL align
-//! align handler (Relative Horizontal Alignment, Relative Vertical Alignment)
-/*! ECMA-376, 20.4.2.1, 20.4.2.2, p.3468, 3469.
- This element specifies how a DrawingML object shall be horizontally/vertically
- aligned relative to the horizontal alignment base defined
- by the parent element. Once an alignment base is defined,
- this element shall determine how the DrawingML object shall
- be aligned relative to that location.
-
- Parent elements:
- - [done] positionH (§20.4.2.10)
- - [done] positionV (§20.4.2.11)
-
- No child elements.
-*/
-//! CASE #1340
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
-{
-    ReadMethod caller = m_calls.top();
-    READ_PROLOGUE
-    if (CALLER_IS(positionH)) {
-//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
-        /*center
-        inside
-        left
-        outside
-        right*/
-        m_alignH = text().toString();
-    } else if (CALLER_IS(positionV)) {
-//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
-        /*bottom
-        center
-        inside
-        outside
-        top*/
-        m_alignV = text().toString();
-    }
-
-    SKIP_EVERYTHING
-    /*    while (!atEnd()) {
-            readNext();
-            BREAK_IF_END_OF(CURRENT_EL);
-        }*/
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL posOffset
-//! posOffset handler (Absolute Position Offset)
-/*! ECMA-376, 20.4.2.12, p.3492.
- This element specifies an absolute measurement for the positioning
- of a floating DrawingML object within a WordprocessingML document.
- This measurement shall be calculated relative to the top left edge
- of the positioning base specified by the parent element's
- relativeFrom attribute.
-
- Parent elements:
- - [done] positionH (§20.4.2.10)
- - [done] positionV (§20.4.2.11)
-
- No child elements.
-*/
-//! CASE #1360
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
-{
-    ReadMethod caller = m_calls.top();
-    READ_PROLOGUE
-
-    readNext();
-    if (isCharacters()) {
-        if (CALLER_IS(positionH)) {
-            STRING_TO_INT(text().toString(), m_posOffsetH, "positionH/posOffset text")
-            m_hasPosOffsetH = true;
-        } else if (CALLER_IS(positionV)) {
-            STRING_TO_INT(text().toString(), m_posOffsetV, "positionV/posOffset text")
-            m_hasPosOffsetV = true;
-        }
-        ELSE_WRONG_FORMAT
-    }
-    ELSE_WRONG_FORMAT
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL inline
-//! inline handler (Inline DrawingML Object)
-/*! ECMA-376, 20.4.2.8, p.3485.
-
- This element specifies that the DrawingML object located at this position
- in the document is a floating object.
- Within a WordprocessingML document, drawing objects can exist in two states:
- - Inline - The drawing object is in line with the text, and affects the line
-   height and layout of its line (like a character glyph of similar size).
- - Floating - The drawing object is anchored within the text, but can be
-   absolutely positioned in the document relative to the page.
-
- When this element encapsulates the DrawingML object's information,
- then all child elements shall dictate the positioning of this object
- as a floating object on the page.
-
- Parent elements:
- - [done] drawing (§17.3.3.9)
-
- Child elements:
- - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
- - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
- - effectExtent (Object Extents Including Effects) §20.4.2.6
- - extent (Drawing Object Size) §20.4.2.7
- - [done] graphic (Graphic Object) §20.1.2.2.16
-
- Attributes:
- - distB (Distance From Text on Bottom Edge)
- - distL (Distance From Text on Left Edge)
- - distR (Distance From Text on Right Edge)
- - distT (Distance From Text on Top Edge)
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
-{
-    READ_PROLOGUE
-    m_docPrName.clear();
-    m_docPrDescr.clear();
-    m_drawing_inline = true; // for pic
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF_NS(a, graphic)
-            ELSE_TRY_READ_IF(docPr)
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL docPr
-//! docPr handler (Drawing Object Non-Visual Properties)
-/*! ECMA-376, 20.4.2.5, p.3478.
-
- This element specifies non-visual object properties for the parent DrawingML object.
- These properties are specified as child elements of this element.
-
- Parent elements:
- - [done]anchor (§20.4.2.3)
- - inline (§20.4.2.8)
-
- Child elements:
- - extLst (Extension List) §20.1.2.2.15
- - hlinkClick (Click Hyperlink) §21.1.2.3.5
- - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
-
- Attributes:
- - descr (Alternative Text for Object)
- - hidden (Hidden)
- - id (Unique Identifier)
- - name (Name)
-*/
-//! CASE #1340
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
-{
-    READ_PROLOGUE
-
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_docPrName)
-    TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_docPrDescr)
-//! @todo support docPr/@hidden (maybe to style:text-properties/@text:display)
-
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL wrapSquare
-//! wrapSquare handler (Drawing Object Non-Visual Properties)
-/*! ECMA-376, 20.4.2.5, p.3478.
-
- This element specifies non-visual object properties for the parent DrawingML object.
- These properties are specified as child elements of this element.
-
- Parent elements:
- - [done]anchor (§20.4.2.3)
- - inline (§20.4.2.8)
-
- Child elements:
- - extLst (Extension List) §20.1.2.2.15
- - hlinkClick (Click Hyperlink) §21.1.2.3.5
- - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
-
- Attributes:
- - descr (Alternative Text for Object)
- - hidden (Hidden)
- - id (Unique Identifier)
- - name (Name)
-*/
-//! CASE #1410
-
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "a" // DrawingML
-
-#undef CURRENT_EL
-#define CURRENT_EL graphic
-//! graphic handler (Graphic Object)
-/*! ECMA-376, 20.1.2.2.16, p.3037.
-
- This element specifies the existence of a single graphic object.
- Document authors should refer to this element when they wish to persist
- a graphical object of some kind. The specification for this graphical
- object is provided entirely by the document author and referenced within
- the graphicData child element.
-
- Parent elements:
- - [done] anchor (§20.4.2.3)
- - graphicFrame (§21.3.2.12)
- - graphicFrame (§20.1.2.2.18)
- - graphicFrame (§20.5.2.16)
- - graphicFrame (§19.3.1.21)
- - [done] inline (§20.4.2.8)
-
- Child elements:
- - [done] graphicData (Graphic Object Data) §20.1.2.2.17
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF(graphicData)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL graphicData
-//! graphicData handler (Graphic Object Data)
-/*! ECMA-376, 20.1.2.2.17, p.3038.
-
- This element specifies the reference to a graphic object within the document.
- This graphic object is provided entirely by the document authors who choose
- to persist this data within the document.
-
- Parent elements:
- - [done] graphic (§20.1.2.2.16)
-
- Child elements:
- - Any element in any namespace
-
- Attributes:
- - uri (Uniform Resource Identifier)
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        if (isStartElement()) {
-            TRY_READ_IF_NS(pic, pic)
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS blipFill_NS
-
-#undef CURRENT_EL
-#define CURRENT_EL blipFill
-//! blipFill handler (Picture Fill)
-//! ECMA-376, PresentationML, 19.3.1.4, p. 2818; DrawingML, 20.1.8.14, p. 3195
-//! @todo use it in DrawingML, 20.2.2.1, p. 3456
-/*! This element specifies the type of picture fill that the picture object has.
- Because a picture has a picture fill already by default, it is possible to have
- two fills specified for a picture object.
-
- BLIPs refer to Binary Large Image or Pictures. Blip Fills are made up of several components: a Blip
- Reference, a Source Rectangle, and a Fill Mode.
- See also M.4.8.4.3 Blip Fills, ECMA-376, p. 5411.
-
- Parent elements:
-    - bg (§21.4.3.1)
-    - bgFillStyleLst (§20.1.4.1.7)
-    - bgPr (§19.3.1.2)
-    - defRPr (§21.1.2.3.2)
-    - endParaRPr (§21.1.2.2.3)
-    - fill (§20.1.8.28)
-    - fill (§20.1.4.2.9)
-    - fillOverlay (§20.1.8.29)
-    - fillStyleLst (§20.1.4.1.13)
-    - grpSpPr (§21.3.2.14)
-    - grpSpPr (§20.1.2.2.22)
-    - grpSpPr (§20.5.2.18)
-    - grpSpPr (§19.3.1.23)
-    - [done] pic (§20.1.2.2.30) - DrawingML
-    - [done] pic (§19.3.1.37) - PresentationML
-    - rPr (§21.1.2.3.9)
-    - spPr (§21.2.2.197)
-    - spPr (§21.3.2.23)
-    - spPr (§21.4.3.7)
-    - spPr (§20.1.2.2.35)
-    - spPr (§20.2.2.6)
-    - spPr (§20.5.2.30)
-    - spPr (§19.3.1.44)
-    - tblPr (§21.1.3.15)
-    - tcPr (§21.1.3.17)
-    - uFill (§21.1.2.3.12)
-
- Child elements:
-    - [done] blip (Blip) §20.1.8.13
-    - srcRect (Source Rectangle) §20.1.8.55
-    - stretch (Stretch) §20.1.8.56
-    - tile (Tile) §20.1.8.58
-
- Attributes:
-    - dpi (DPI Setting)
-    - rotWithShape (Rotate With Shape)
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
-{
-    READ_PROLOGUE
-
-    m_fillImageRenderingStyleStretch = false;
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:blip")) {
-                TRY_READ(blip)
-            } else if (qualifiedName() == QLatin1String("a:stretch")) {
-                TRY_READ(stretch)
-            }
-            //! @todo read_tile
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "a"
-
-#undef CURRENT_EL
-#define CURRENT_EL blip
-//! blip handler (Blip)
-//! ECMA-376, 20.1.8.13, p. 3194
-/*! This element specifies the existence of an image (binary large image or picture)
-    and contains a reference to the image data.
-
- Parent elements:
-    - blipFill (§21.3.2.2) - DrawingML, p. 3919
-    - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
-    - blipFill (§20.2.2.1) - DrawingML, p. 3456
-    - blipFill (§20.5.2.2) - DrawingML, p. 3518
-    - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
-    - buBlip (§21.1.2.4.2)
-
- Child elements:
-    - alphaBiLevel (Alpha Bi-Level Effect) §20.1.8.1
-    - alphaCeiling (Alpha Ceiling Effect) §20.1.8.2
-    - alphaFloor (Alpha Floor Effect) §20.1.8.3
-    - alphaInv (Alpha Inverse Effect) §20.1.8.4
-    - alphaMod (Alpha Modulate Effect) §20.1.8.5
-    - alphaModFix (Alpha Modulate Fixed Effect) §20.1.8.6
-    - alphaRepl (Alpha Replace Effect) §20.1.8.8
-    - biLevel (Bi-Level (Black/White) Effect) §20.1.8.11
-    - blur (Blur Effect) §20.1.8.15
-    - clrChange (Color Change Effect) §20.1.8.16
-    - clrRepl (Solid Color Replacement) §20.1.8.18
-    - duotone (Duotone Effect) §20.1.8.23
-    - extLst (Extension List) §20.1.2.2.15
-    - fillOverlay (Fill Overlay Effect) §20.1.8.29
-    - grayscl (Gray Scale Effect) §20.1.8.34
-    - hsl (Hue Saturation Luminance Effect) §20.1.8.39
-    - lum (Luminance Effect) §20.1.8.42
-    - tint (Tint Effect) §20.1.8.60
-
- Attributes:
-    - cstate (Compression State)
-    - [done] embed (Embedded Picture Reference), 22.8.2.1 ST_RelationshipId (Explicit Relationship ID), p. 4324
-    - link (Linked Picture Reference)
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
-{
-    READ_PROLOGUE
-
-    m_xlinkHref.clear();
-    const QXmlStreamAttributes attrs(attributes());
-//! @todo more attrs
-    TRY_READ_ATTR_WITH_NS(r, embed)
-    kDebug() << "embed:" << r_embed;
-    if (!r_embed.isEmpty()) {
-        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_embed));
-        kDebug() << "sourceName:" << sourceName;
-        if (sourceName.isEmpty()) {
-            return KoFilter::FileNotFound;
-        }
-        QString destinationName;
-        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-        addManifestEntryForPicturesDir();
-        m_xlinkHref = destinationName;
-    }
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        if (isStartElement()) {
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL stretch
-//! stretch handler (Stretch)
-//! ECMA-376, 20.1.8.56, p. 3233
-/*! This element specifies that a BLIP should be stretched
- to fill the target rectangle. The other option is a tile where
- a BLIP is tiled to fill the available area.
-
- Parent elements:
-    - blipFill (§21.3.2.2) - DrawingML, p. 3919
-    - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
-    - blipFill (§20.2.2.1) - DrawingML, p. 3456
-    - blipFill (§20.5.2.2) - DrawingML, p. 3518
-    - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
-
- Child elements:
-    - [done] fillRect (Fill Rectangle) §20.1.8.30
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
-{
-    READ_PROLOGUE
-
-    m_fillImageRenderingStyleStretch = true;
-    //! todo for tead_tile: m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
-    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("stretch"));
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        if (isStartElement()) {
-            TRY_READ_IF(fillRect)
-            ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL fillRect
-//! fillRect handler (Fill Rectangle)
-//! ECMA-376, 20.1.8.30, p. 3212
-/*! This element specifies a fill rectangle. When stretching of an image
-    is specified, a source rectangle, srcRect, is scaled to fit the specified fill rectangle.
-
- Parent elements:
-    - [done] stretch (§20.1.8.56)
-
- No child elements.
-
- Attributes:
-    - b (Bottom Offset)
-    - l (Left Offset)
-    - r (Right Offset)
-    - t (Top Offset)
-
- Complex type: CT_RelativeRect, p. 4545
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
-{
-    READ_PROLOGUE
-
-//    const QXmlStreamAttributes attrs( attributes() );
-//! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
-    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
-        TRY_READ_ATTR_WITHOUT_NS(r, l)
-        TRY_READ_ATTR_WITHOUT_NS(r, r)
-        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
-//MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
-
-    //m_fillImageRenderingStyle = QLatin1String("stretch");
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-//! @todo KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
-/*
- No child elements.
-
- Attributes:
-    - b (Bottom Offset)
-    - l (Left Offset)
-    - r (Right Offset)
-    - t (Top Offset)
-
- Complex type: CT_RelativeRect, p. 4545
-
- const QXmlStreamAttributes attrs( attributes() );
- use double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
-*/
-
-
-#if 0 //todo
-#undef CURRENT_EL
-#define CURRENT_EL background
-//! background handler (Document Background)
-/*! ECMA-376, 17.2.1, p. 199.
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
-{
-}
-#endif
 
 #endif

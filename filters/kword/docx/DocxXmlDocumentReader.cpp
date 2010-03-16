@@ -270,7 +270,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     m_currentPageStyle = KoGenStyle(KoGenStyle::StylePageLayout);
     m_currentPageStyle.setAutoStyleInStylesDotXml(true);
     m_currentPageStyle.addProperty("style:writing-mode", "lr-tb");
-// @todo handle all valued of style:print-orientation
+//! @todo handle all valued of style:print-orientation
     m_currentPageStyle.addProperty("style:print-orientation", "portrait");
 
     while (!atEnd()) {
@@ -507,7 +507,7 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     QString border;
     if (!size.isEmpty())
-        border += MSOOXML::Utils::ST_EighthPointMeasure_to_pt(size) + " ";
+        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + " ";
 
     border.append(lineStyle + " ");
 
@@ -669,11 +669,354 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     return KoFilter::OK;
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL hyperlink
+//! hyperlink handler (Hyperlink)
+/*! ECMA-376, 17.3.3.31, p.1431.
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - customXml (§17.5.1.3)
+ - dir (§17.3.2.8)
+ - fldSimple (§17.16.19)
+ - hyperlink (§17.16.22)
+ - p (§17.3.1.22)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+
+ Child elements:
+ - bdo (Bidirectional Override) §17.3.2.3
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Inline-Level Custom XML Element) §17.5.1.3
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - dir (Bidirectional Embedding Level) §17.3.2.8
+ - fldSimple (Simple Field) §17.16.19
+ - [done] hyperlink (Hyperlink) §17.16.22
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - r (Text Run) §17.3.2.25
+ - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - smartTag (Inline-Level Smart Tag) §17.5.1.9
+ - subDoc (Anchor for Subdocument Location) §17.17.1.1
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
+{
+    READ_PROLOGUE
+
+    QString link_target;
+    MSOOXML::Utils::XmlWriteBuffer linkBuf;
+    body = linkBuf.setWriter(body);
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(id)
+    if (id.isEmpty()) {
+        link_target.clear();
+    }
+    else {
+        link_target = m_context->relationships->linkTarget(id);
+    }
+    kDebug() << "link_target:" << link_target;
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(hyperlink)
+            //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
+
+    body = linkBuf.originalWriter();
+    body->startElement("text:a");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+    (void)linkBuf.releaseWriter();
+    body->endElement(); // text:a
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL p
+//! [1] p handler (Paragraph) ECMA-376, WML 17.3.1.22, p. 251,
+//!       This element specifies a paragraph of content in the document.
+
+//! [2] p handler (Text Paragraphs) ECMA-376, DrawingML 21.1.2.2.6, p. 3587.
+//!       This element specifies the presence of a paragraph of text within the containing text body.
+/*!
+ Parent elements:
+ - [done] body (§17.2.2)
+ - comment (§17.13.4.2)
+ - customXml (§17.5.1.6)
+ - docPartBody (§17.12.6)
+ - endnote (§17.11.2)
+ - footnote (§17.11.10)
+ - ftr (§17.10.3)
+ - hdr (§17.10.4)
+ - sdtContent (§17.5.2.34)
+ - tc (§17.4.66)
+ - [done] p (§17.3.1.22)
+ Child elements:
+ - bdo (Bidirectional Override) §17.3.2.3
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4 - WML only
+ - customXml (Inline-Level Custom XML Element) §17.5.1.3
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - dir (Bidirectional Embedding Level) §17.3.2.8
+ - fldSimple (Simple Field) §17.16.19
+ - [done] hyperlink (Hyperlink) §17.16.22 - WML only
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - [done] pPr (Paragraph Properties) §17.3.1.26
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - [done] r (Text Run) §17.3.2.25
+ - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - smartTag (Inline-Level Smart Tag) §17.5.1.9
+ - subDoc (Anchor for Subdocument Location) §17.17.1.1
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
+{
+    READ_PROLOGUE
+    const read_p_args args = m_read_p_args;
+    m_read_p_args = 0;
+    m_paragraphStyleNameWritten = false;
+    m_currentStyleName.clear();
+
+    MSOOXML::Utils::XmlWriteBuffer textPBuf;
+
+    if (args & read_p_Skip) {
+        kDebug() << "SKIP!";
+    } else {
+        body = textPBuf.setWriter(body);
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+    }
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(p)) {
+                // CASE #301: avoid nested paragaraphs
+                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
+                TRY_READ_WITH_ARGS(p, read_p_Skip;)
+            }
+            //ELSE_TRY_READ_IF(commentRangeEnd)
+            ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(commentRangeStart)
+            ELSE_TRY_READ_IF(pPr) // CASE #400.1
+//! @todo add more conditions testing the parent
+            ELSE_TRY_READ_IF(r) // CASE #400.2
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (args & read_p_Skip) {
+        //nothing
+    } else {
+        body = textPBuf.originalWriter();
+        body->startElement("text:p", false);
+        if (m_currentStyleName.isEmpty()) {
+            setupParagraphStyle();
+        }
+        else {
+            body->addAttribute("text:style-name", m_currentStyleName);
+        }
+        /*        if (!m_paragraphStyleNameWritten) {
+                    // no style, set default
+                    body->addAttribute("text:style-name", "Standard");
+                }*/
+        (void)textPBuf.releaseWriter();
+        body->endElement(); //text:p
+        kDebug() << "/text:p";
+    }
+    m_currentStyleName.clear();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL r
+//! r handler (Text Run)
+/*! ECMA-376, 17.3.2.25, p.320.
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - customXml (§17.5.1.3)
+ - del (§17.13.5.14)
+ - dir (§17.3.2.8)
+ - fldSimple (§17.16.19)
+ - [done] hyperlink (§17.16.22)
+ - ins (§17.13.5.18)
+ - moveFrom (§17.13.5.22)
+ - moveTo (§17.13.5.25)
+ - [done] p (§17.3.1.22)
+ - rt (§17.3.3.24)
+ - rubyBase (§17.3.3.27)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+
+ Child elements:
+ - annotationRef (Comment Information Block) §17.13.4.1
+ - br (Break) §17.3.3.1
+ - commentReference (Comment Content Reference Mark) §17.13.4.5
+ - contentPart (Content Part) §17.3.3.2
+ - continuationSeparator (Continuation Separator Mark) §17.11.1
+ - cr (Carriage Return) §17.3.3.4
+ - dayLong (Date Block - Long Day Format) §17.3.3.5
+ - dayShort (Date Block - Short Day Format) §17.3.3.6
+ - delInstrText (Deleted Field Code) §17.16.13
+ - delText (Deleted Text) §17.3.3.7
+ - [done] drawing (DrawingML Object) §17.3.3.9
+ - endnoteRef (Endnote Reference Mark) §17.11.6
+ - [done] endnoteReference (Endnote Reference) §17.11.7
+ - fldChar (Complex Field Character) §17.16.18
+ - footnoteRef (Footnote Reference Mark) §17.11.13
+ - [done] footnoteReference (Footnote Reference) §17.11.14
+ - instrText (Field Code) §17.16.23
+ - lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
+ - monthLong (Date Block - Long Month Format) §17.3.3.15
+ - monthShort (Date Block - Short Month Format) §17.3.3.16
+ - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
+ - [done] object (Embedded Object) §17.3.3.19
+ - pgNum (Page Number Block) §17.3.3.22
+ - ptab (Absolute Position Tab Character) §17.3.3.23
+ - [done] rPr (Run Properties) §17.3.2.28
+ - ruby (Phonetic Guide) §17.3.3.25
+ - separator (Footnote/Endnote Separator Mark) §17.11.23
+ - softHyphen (Optional Hyphen Character) §17.3.3.29
+ - sym (Symbol Character) §17.3.3.30
+ - [done] t (Text) §17.3.3.31
+ - tab (Tab Character) §17.3.3.32
+ - yearLong (Date Block - Long Year Format) §17.3.3.33
+ - yearShort (Date Block - Short Year Format) §17.3.3.34
+
+ VML child elements (see Part 4):
+ - pict (VML Object) §9.2.2.2
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_r()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+//kDebug() <<"[0]";
+        readNext();
+        kDebug() << *this;
+//kDebug() <<"[1]";
+        if (isStartElement()) {
+            TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(drawing)
+            ELSE_TRY_READ_IF(endnoteReference)
+            ELSE_TRY_READ_IF(footnoteReference)
+            ELSE_TRY_READ_IF(object)
+            ELSE_TRY_READ_IF(pict)
+//            else { SKIP_EVERYTHING }
+//! @todo add ELSE_WRONG_FORMAT
+//kDebug() <<"[1.5]";
+        }
+//kDebug() <<"[2]";
+        BREAK_IF_END_OF(CURRENT_EL);
+//kDebug() <<"[2.5]";
+    }
+//kDebug() <<"[3]";
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL drawing
+//! drawing handler (DrawingML Object)
+/*! ECMA-376, 17.3.3.9, p.362.
+
+ This element specifies that a DrawingML object is located at this position
+ in the run’s contents. The layout properties of this DrawingML object
+ are specified using the WordprocessingML Drawing syntax (§20.4, p. 3466).
+
+ Parent elements:
+ - background (§17.2.1)
+ - numPicBullet (§17.9.21)
+ - object (§17.3.3.19)
+ - r (§22.1.2.87) - Shared ML
+ - [done] r (§17.3.2.25)
+
+ Child elements:
+ - [done] anchor (Anchor for Floating DrawingML Object) §20.4.2.3
+ - [done] inline (Inline DrawingML Object) §20.4.2.8
+*/
+//! CASE #1300
+//! CASE #1301
+//! CASE #1380
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
+{
+    READ_PROLOGUE
+
+    m_currentDrawStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+    m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
+
+    m_drawing_anchor = false;
+    m_drawing_inline = false;
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(wp, anchor)
+            ELSE_TRY_READ_IF_NS(wp, inline)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    m_drawing_anchor = false;
+    m_drawing_inline = false;
+    READ_EPILOGUE
+}
+
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"
 
-#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#include <MsooXmlCommonReaderImpl.h> // this adds w:p, w:pPr, w:t, w:r, etc.
 
 // ---------------------------------------------------------------------------
 

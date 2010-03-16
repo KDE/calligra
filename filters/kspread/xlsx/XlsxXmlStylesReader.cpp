@@ -769,7 +769,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 {
     READ_PROLOGUE
     if (!m_context->styles->fontStyles.isEmpty()) {
-        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+        raiseUnexpectedSecondOccurenceOfElError(STRINGIFY(CURRENT_EL));
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
@@ -1190,7 +1190,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 {
     READ_PROLOGUE
     if (!m_context->styles->cellFormats.isEmpty()) {
-        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+        raiseUnexpectedSecondOccurenceOfElError(STRINGIFY(CURRENT_EL));
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
@@ -1351,7 +1351,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
 {
     READ_PROLOGUE
     if (!m_context->styles->fillStyles.isEmpty()) {
-        ERROR_UNEXPECTED_SECOND_OCCURENCE(CURRENT_EL);
+        raiseUnexpectedSecondOccurenceOfElError(STRINGIFY(CURRENT_EL));
     }
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)

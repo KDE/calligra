@@ -55,7 +55,11 @@ protected:
     void setupParagraphStyle();
 
     KoGenStyle m_currentTextStyle;
+    bool m_currentTextStylePredefined; //!< true id m_currentTextStyle shouldn't be created in read_rPr
     KoCharacterStyle* m_currentTextStyleProperties;
+
+    //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
+    QString m_currentStyleName;
 
     bool isDefaultTocStyle(const QString& name) const;
 

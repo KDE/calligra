@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -31,7 +31,6 @@
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 
-class DocxXmlDocumentReaderContext;
 class XlsxXmlWorksheetReaderContext;
 class XlsxXmlDocumentReaderContext;
 class XlsxStyles;
@@ -59,6 +58,7 @@ protected:
     KoFilter::ConversionStatus read_c();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_v();
+    KoFilter::ConversionStatus read_drawing();
 
     typedef KoFilter::ConversionStatus(XlsxXmlWorksheetReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;

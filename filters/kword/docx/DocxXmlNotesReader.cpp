@@ -99,7 +99,7 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read(MSOOXML::MsooXmlReaderContex
 
     RETURN_IF_ERROR(read_notes())
 
-            if (!expectElEnd(qn)) {
+    if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
     kDebug() << "===========finished============";
@@ -117,9 +117,9 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_notes()
         if (isStartElement()) {
             if (qualifiedName() == itemName.constData()) {
                 RETURN_IF_ERROR(read_note(itemName))
-                    }
+            }
             ELSE_WRONG_FORMAT
-                }
+        }
         if (qualifiedName() == notesMainName && isEndElement())
             break;
     }
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_note(const char *noteType)
     DocxNote note;
 
     TRY_READ_ATTR(id)
-            int idNumber = INT_MAX; // good enough value
+    int idNumber = INT_MAX; // good enough value
     if (!id.isEmpty()) {
         bool ok;
         idNumber = id.toInt(&ok);
@@ -152,11 +152,8 @@ KoFilter::ConversionStatus DocxXmlNotesReader::read_note(const char *noteType)
             break;
     }
 
-
     TRY_READ_ATTR(type);
-
-
-    if (type.isNull()) {
+    if (type.isEmpty()) {
         // not a separator or continuationSeparator, but a real note.
         // docx saves the separator and continuations separator as footnote elements.
         d->counter++;

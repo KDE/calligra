@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -50,7 +50,7 @@
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
 
-#undef  MSOOXML_CURRENT_NS
+#undef  MSOOXML_CURRENT_NS // tags without namespace
 #define MSOOXML_CURRENT_CLASS XlsxXmlWorksheetReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
@@ -58,7 +58,7 @@
 
 #include <math.h>
 
-#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#include <MsooXmlCommonReaderImpl.h> // this adds p, pPr, t, r, etc.
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic, etc.
 
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
@@ -203,7 +203,7 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
  - dataConsolidate (Data Consolidate) §18.3.1.29
  - dataValidations (Data Validations) §18.3.1.33
  - dimension (Worksheet Dimensions) §18.3.1.35
- - drawing (Drawing) §18.3.1.36
+ - [done] drawing (Drawing) §18.3.1.36
  - drawingHF (Drawing Reference in Header Footer) §18.3.1.37
  - extLst (Future Feature Data Storage Area) §18.2.10
  - headerFooter (Header Footer Settings) §18.3.1.46
@@ -957,4 +957,35 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
         return QString();
 
     return q->mainStyles->lookup( style, "N" );
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL drawing
+//! drawing handler (Drawing)
+/*! ECMA-376, 18.3.1.36, p.1804.
+
+ This element indicates that the sheet contains drawing components built
+ on the drawingML platform. The relationship Id references the part containing
+ the drawingML definitions.
+
+ Parent elements:
+ - chartsheet (§18.3.1.12)
+ - dialogsheet (§18.3.1.34)
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements - see DrawingML.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//todo    READ_ATTR_WITHOUT_NS(id)
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//! @todo
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
 }

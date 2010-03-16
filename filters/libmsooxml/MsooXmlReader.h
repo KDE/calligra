@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -35,6 +35,8 @@
 #include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoOdfExporter.h>
+
+class KoCharacterStyle;
 
 namespace MSOOXML
 {
@@ -111,10 +113,17 @@ protected:
     bool expectElEnd(const QString& qualifiedElementName);
     bool expectElEnd(const char* qualifiedElementName);
     bool expectNS(const char* nsName);
+    void raiseElNotFoundError(const char* elementName);
+    void raiseAttributeNotFoundError(const char* attrName);
+    void raiseNSNotFoundError(const char* nsName);
     void raiseUnexpectedAttributeValueError(const QString& value, const char* attrName);
+    void raiseUnexpectedSecondOccurenceOfElError(const char* elementName);
 
     //! Decodes boolean attribute. Used by read_b(), read_i(), etc.
     bool readBooleanAttr(const char* attrName, bool defaultValue = false) const;
+
+    //! generic reader methods for common elements
+    KoFilter::ConversionStatus read_sz(const QByteArray& ns, KoCharacterStyle* characterStyle);
 
     QString m_defaultNamespace; //!< stores namespace (for optimization)
 

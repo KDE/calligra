@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -75,13 +75,16 @@
 # define POP_NAME
 #endif
 
-#define READ_PROLOGUE \
-    MSOOXML_CALL_STACK.push(PASTE(&MSOOXML_CURRENT_CLASS::read_, CURRENT_EL)); \
+#define READ_PROLOGUE2(method) \
+    MSOOXML_CALL_STACK.push(PASTE(&MSOOXML_CURRENT_CLASS::read_, method)); \
     PUSH_NAME \
     /*kDebug() << *this;*/ \
     if (!expectEl(QUALIFIED_NAME(CURRENT_EL))) { \
         return KoFilter::WrongFormat; \
     }
+
+#define READ_PROLOGUE \
+    READ_PROLOGUE2(CURRENT_EL)
 
 #define READ_EPILOGUE_WITHOUT_RETURN \
     MSOOXML_CALL_STACK.pop(); \
@@ -159,18 +162,6 @@
         return KoFilter::WrongFormat; \
     }
 
-#define ERROR_NO_ELEMENT(el) \
-    raiseError(i18n("Element \"%1\" not found", QString(el))); \
-    return KoFilter::WrongFormat;
-
-#define ERROR_UNEXPECTED_SECOND_OCCURENCE(el) \
-    raiseError(i18n("Unexpected second occurence of \"%1\" element", QLatin1String(STRINGIFY(el)))); \
-    return KoFilter::WrongFormat;
-
-#define ERROR_NO_ATTRIBUTE(attr) \
-    raiseError(i18n("Attribute \"%1\" not found", QString(attr))); \
-    return KoFilter::WrongFormat;
-
 //! Reads optional attribute of name @a atrname and allocates variable of the same name.
 /*! Requires the following line to be present above:
     @code
@@ -179,6 +170,16 @@
 */
 #define TRY_READ_ATTR(atrname) \
     QString atrname( attrs.value(QUALIFIED_NAME(atrname)).toString() );
+
+//! Reads optional attribute of name @a atrname into the variable @a destination.
+/*! Requires the following line to be present above:
+    @code
+    const QXmlStreamAttributes attrs( attributes() );
+    @endcode
+*/
+#define TRY_READ_ATTR_INTO(atrname, destination) \
+    destination = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
+    kDebug() << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;
 
 //! Reads optional attribute of name @a atrname with explicitly specified namespace @a ns.
 /*! Creates QString variable with name \<ns\>_\<atrame\>
@@ -231,14 +232,14 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     if (attrs.hasAttribute(QUALIFIED_NAME(atrname))) { \
         atrname = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR: " QUALIFIED_NAME(atrname) " not found" )
 
 //! Like @ref READ_ATTR(atrname) but reads the attribute into the variable @a destination.
 #define READ_ATTR_INTO(atrname, destination) \
     if (attrs.hasAttribute(QUALIFIED_NAME(atrname))) { \
         destination = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_INTO: " QUALIFIED_NAME(atrname) " not found" )
 
 //! Reads required attribute of name @a atrname with explicitly specified namespace @a ns
 /*! into the variable @a destination.
@@ -252,7 +253,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     if (attrs.hasAttribute(JOIN(STRINGIFY(ns) ":", atrname))) { \
         destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITH_NS_INTO: " JOIN(STRINGIFY(ns) ":", atrname) " not found" )
 
 //! Reads required attribute of name @a atrname with explicitly specified namespace @a ns.
 /*! Creates QString variable with name \<ns\>_\<atrame\>
@@ -267,7 +268,7 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     if (attrs.hasAttribute(JOIN(STRINGIFY(ns) ":", atrname))) { \
         PASTE3(ns, _, atrname) = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITH_NS: " JOIN(STRINGIFY(ns) ":", atrname) " not found" )
 
 //! Reads required attribute of name @a atrname without namespace.
 /*! Creates QString variable with name \<atrname\>
@@ -282,14 +283,14 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     if (attrs.hasAttribute(STRINGIFY(atrname))) { \
         atrname = attrs.value(STRINGIFY(atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITHOUT_NS: " STRINGIFY(atrname) " not found" )
 
 //! Like @ref READ_ATTR_WITHOUT_NS(atrname) but reads the attribute into the variable @a destination.
 #define READ_ATTR_WITHOUT_NS_INTO(atrname, destination) \
     if (attrs.hasAttribute(STRINGIFY(atrname))) { \
         destination = attrs.value(STRINGIFY(atrname)).toString(); \
     } \
-    ELSE_WRONG_FORMAT
+    ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITHOUT_NS_INTO: " STRINGIFY(atrname) " not found" )
 
 
 /*! Requires the following line to be present above:
@@ -311,7 +312,8 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 #define READ_BOOLEAN_ATTR \
     readBooleanAttr(QUALIFIED_NAME(CURRENT_EL))
 
-//! converts @a string into integer @a destination; returns KoFilter::WrongFormat on failure
+//! Converts @a string into integer @a destination; returns KoFilter::WrongFormat on failure.
+//! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
 #define STRING_TO_INT(string, destination, debugElement) \
     if (string.isEmpty()) {} else { \
         bool ok; \
@@ -323,6 +325,8 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         destination = val; \
     }
 
+//! Converts @a string into a qreal value in @a destination; returns KoFilter::WrongFormat on failure.
+//! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
 #define STRING_TO_QREAL(string, destination, debugElement) \
     if (string.isEmpty()) {} else { \
         bool ok; \

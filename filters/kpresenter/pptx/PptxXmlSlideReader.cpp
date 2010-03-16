@@ -502,7 +502,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 //                    body = new KoXmlWriter(&paragraphBuf, origBody->indentLevel()+1);
                     body = paragraphBuf.setWriter(body);
                 }
-                TRY_READ(p);
+                TRY_READ(DrawingML_p);
                 if (isOutline) { // CASE #P612
 //                    delete body;
 //                    body = origBody;

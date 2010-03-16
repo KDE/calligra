@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
  * Copyright (C) 2003 David Faure <faure@kde.org>
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -79,15 +79,33 @@ namespace Utils {
     to ODF-compliant "0.000cm" unit.
     @return empty string on error. */
 //! CASE #P505
-MSOOXML_EXPORT QString EMU_to_ODF_CM(const QString& emuValue);
+MSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
 
 //! ECMA-376, 17.18.23 ST_EighthPointMeasure (Measurement in Eighths of a Point), p. 1540
-/*! Converts eighths of a point (equivalent to 1/576th of an inch) to point.
+/*! Converts eighths of a point (equivalent to 1/576th of an inch) to point
+    to ODF-compliant "0.000pt" unit.
     @return empty string on failure. */
-MSOOXML_EXPORT QString ST_EighthPointMeasure_to_pt(const QString& value);
+MSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
 
-}
-}
+//! ECMA-376, 22.9.2.14 ST_TwipsMeasure (Measurement in Twentieths of a Point), p. 4339
+/*! Converts:
+    * Case 1: a positive number in twips (twentieths of a point, equivalent to 1/1440th of an inch), or
+    * Case 2: a positive decimal number immediately following by a unit identifier.
+    The conversion's target is ODF-compliant "0.000xx" unit, where xx is "mm", "cm", "pt", etc.
+    For case 1 it is always "pt".
+    @return empty string on error. */
+MSOOXML_EXPORT QString ST_TwipsMeasure_to_ODF(const QString& value);
+
+//! ECMA-376, 22.9.2.12 ST_PositiveUniversalMeasure (Positive Universal Measurement), p. 4340
+/*! Converts number+unit of measurement into ODF-compliant number+unit.
+    @a value should match the following regular expression pattern: [0-9]+(\.[0-9]+)?(mm|cm|in|pt|pc|pi).
+    Values with units mm, cm, in, pt, pi are just copied.
+    Values with "pc" (another name for Pica) are replaced with "pi".
+    @return empty string on error. */
+MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString& value);
+
+} // Utils
+} // MSOOXML
 
 // px conversion
 #define PT_TO_PX(pt) ((pt)*1.33597222222)

@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -26,6 +26,7 @@
 #include "MsooXmlUtils.h"
 
 #include <KoXmlWriter.h>
+#include <KoCharacterStyle.h>
 
 QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 {
@@ -164,11 +165,36 @@ void MsooXmlReader::undoReadNext()
     m_readUndoed = true;
 }
 
+void MsooXmlReader::raiseElNotFoundError(const char* elementName)
+{
+    raiseError(i18n("Element \"%1\" not found", QLatin1String(elementName)));
+}
+
+void MsooXmlReader::raiseAttributeNotFoundError(const char* attrName)
+{
+    raiseError(i18n("Attribute \"%1\" not found", QLatin1String(attrName)));
+}
+
+void MsooXmlReader::raiseNSNotFoundError(const char* nsName)
+{
+    raiseError(i18n("Namespace \"%1\" not found", nsName));
+}
+
+void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString& value, const char* attrName)
+{
+    raiseError(i18n("Unexpected value \"%1\" of attribute \"%2\"", value, attrName));
+}
+
+void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char* elementName)
+{
+    raiseError(i18n("Unexpected second occurence of \"%1\" element", QLatin1String(elementName)));
+}
+
 bool MsooXmlReader::expectElName(const char* elementName)
 {
     kDebug() << elementName << "found:" << name();
     if (!isStartElement() || name() != QLatin1String(elementName)) {
-        raiseError(i18n("Element \"%1\" not found", elementName));
+        raiseElNotFoundError(elementName);
         return false;
     }
     return true;
@@ -188,7 +214,7 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 {
     kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != QLatin1String(qualifiedElementName)) {
-        raiseError(i18n("Element \"%1\" not found", qualifiedElementName));
+        raiseElNotFoundError(qualifiedElementName);
         return false;
     }
     return true;
@@ -234,13 +260,28 @@ bool MsooXmlReader::expectNS(const char* nsName)
 {
     kDebug() << namespaceUri() << (namespaceUri().compare(nsName) == 0);
     if (0 != namespaceUri().compare(nsName)) {
-        raiseError(i18n("Namespace \"%1\" not found", nsName));
+        raiseNSNotFoundError(nsName);
         return false;
     }
     return true;
 }
 
-void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString& value, const char* attrName)
+//----------------------------------------------------------------------------
+
+KoFilter::ConversionStatus MsooXmlReader::read_sz(const QByteArray& ns, KoCharacterStyle* characterStyle)
 {
-    raiseError(i18n("Unexpected value \"%1\" of attribute \"%2\"", value, attrName));
+    const QXmlStreamAttributes attrs(attributes());
+    QString val(attrs.value(ns + ":val").toString());
+    kDebug() << (ns + ":val") << val;
+    if (!val.isEmpty()) {
+// CASE #1164
+        bool ok;
+        const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0;   /* half-points */
+        if (ok) {
+            kDebug() << "pointSize:" << pointSize;
+            characterStyle->setFontPointSize(pointSize);
+        }
+    }
+    readNext();
+    return KoFilter::OK;
 }

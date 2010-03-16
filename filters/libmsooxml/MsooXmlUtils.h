@@ -253,8 +253,8 @@ MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterS
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based
     on XML elements parsed later. In such case the information cannot be saved in one pass.
-    Example of this is paragtaphs style name: is should be written to style:name attribute but
-    relevant XML elements (that we use for buildingthe style) are appearing later.
+    Example of this is paragraphs style name: is should be written to style:name attribute but
+    relevant XML elements (that we use for building the style) are appearing later.
     So we first output created XML to a buffer, then save the parent element with the style name
     and use KoXmlWriter::addCompleteElement() to redirect the buffer contents as a subelement.
 

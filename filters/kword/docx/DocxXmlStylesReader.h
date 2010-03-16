@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -24,19 +24,20 @@
 #ifndef DOCXXMLSTYLESREADER_H
 #define DOCXXMLSTYLESREADER_H
 
-#include <MsooXmlReader.h>
+#include <QtCore/QMap>
+
+#include <MsooXmlCommonReader.h>
 
 #include <KoGenStyles.h>
+#include <KoCharacterStyle.h>
 
 //! A class reading MSOOXML DOCX markup - styles.xml part.
 /*! @todo generalize for other MSOOXML subformats.
  */
-class DocxXmlStylesReader : public MSOOXML::MsooXmlReader
+class DocxXmlStylesReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    DocxXmlStylesReader(KoOdfWriters *writers);
-
-    DocxXmlStylesReader(QIODevice* io, KoOdfWriters *writers);
+    explicit DocxXmlStylesReader(KoOdfWriters *writers);
 
     virtual ~DocxXmlStylesReader();
 
@@ -47,16 +48,32 @@ protected:
     KoFilter::ConversionStatus read_docDefaults();
     KoFilter::ConversionStatus read_pPrDefault();
     KoFilter::ConversionStatus read_rPrDefault();
-    KoFilter::ConversionStatus read_pPr();
-    KoFilter::ConversionStatus read_rPr();
-    KoFilter::ConversionStatus read_lang();
-    KoFilter::ConversionStatus read_rFonts();
+    KoFilter::ConversionStatus read_style();
+    KoFilter::ConversionStatus read_name();
 
-    KoGenStyle m_defaultParagraphStyle;
+    //! Context used by methods like read_lang to know the parent element
+    enum DocxXmlStylesReadingContext {
+        NoContext,
+        DocDefaultsContext, //!< we're within read_docDefaults()
+        StyleContext //!< we're within read_style()
+    };
+    DocxXmlStylesReadingContext m_context;
+
+    void createDefaultStyle(KoGenStyle::Type type, const char* family);
+    QMap<QByteArray, KoGenStyle*> m_defaultStyles;
+
+    //! provided by docDefaults element
+    //! @todo use it
+    KoGenStyle m_defaultStyle;
 
     typedef KoFilter::ConversionStatus(DocxXmlStylesReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
+    QString m_name; //!< set by read_name()
+
+private:
+    void init();
+#include <MsooXmlCommonReaderMethods.h>
 };
 
 #endif

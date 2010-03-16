@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -23,6 +23,22 @@
 
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
+
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
+    QString& destinationName)
+{
+    destinationName =  destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+    if (m_copiedFiles.contains(sourceName)) {
+        kDebug() << sourceName << "already copied - skipping";
+    }
+    else {
+//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_copiedFiles.insert(sourceName);
+    }
+    return KoFilter::OK;
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL pic
@@ -412,7 +428,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
     - style (Shape Style) §19.3.1.46
     - style (Shape Style) §20.1.2.2.37 - DrawingML
-    - [done] txBody (Shape Text Body) §19.3.1.51
+    - [done] txBody (Shape Text Body) §19.3.1.51 - PML
     - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
  Attributes:
  - [unsupported?] useBgFill
@@ -608,6 +624,71 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #define MSOOXML_CURRENT_NS "a"
 
 #undef CURRENT_EL
+#define CURRENT_EL p
+//! p handler (Text Paragraphs) ECMA-376, DrawingML 21.1.2.2.6, p. 3587.
+//!   This element specifies the presence of a paragraph of text within the containing text body.
+/*!
+ Parent elements:
+ - rich (§21.2.2.156)
+ - t (§21.4.3.8)
+ - txBody (§21.3.2.26)
+ - txBody (§20.1.2.2.40)
+ - txBody (§20.5.2.34)
+ - [done] txBody (§19.3.1.51) - PML
+ - txPr (§21.2.2.216)
+
+ Child elements:
+ - br (Text Line Break) §21.1.2.2.1
+ - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
+ - fld (Text Field) §21.1.2.2.4
+ - pPr (Text Paragraph Properties) §21.1.2.2.7
+ - [done] r (Text Run) §21.1.2.3.8
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
+{
+    READ_PROLOGUE2(DrawingML_p)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(DrawingML_r)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL r
+//! r handler (Text Run)
+/*! ECMA-376, 21.1.2.3.8, p.3623.
+
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - [done] rPr (Text Run Properties) §21.1.2.3.9
+ - [done] t (Text String) §21.1.2.3.11
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
+{
+    READ_PROLOGUE2(DrawingML_r)
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(t)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL xfrm
 //! xfrm handler (2D Transform for Individual Objects)
 //! DrawingML ECMA-376, 20.1.7.6, p. 3187.
@@ -679,10 +760,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideMaster) { // save
         if (!off_read) {
-            ERROR_NO_ELEMENT("a:off")
+            raiseElNotFoundError("a:off");
+            return KoFilter::WrongFormat;
         }
         if (!ext_read) {
-            ERROR_NO_ELEMENT("a:ext")
+            raiseElNotFoundError("a:ext");
+            return KoFilter::WrongFormat;
         }
         m_currentShapeProperties->x = m_svgX;
         m_currentShapeProperties->y = m_svgY;
@@ -780,6 +863,871 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         break;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL blip
+//! blip handler (Blip)
+//! ECMA-376, 20.1.8.13, p. 3194
+/*! This element specifies the existence of an image (binary large image or picture)
+    and contains a reference to the image data.
+
+ Parent elements:
+    - blipFill (§21.3.2.2) - DrawingML, p. 3919
+    - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
+    - blipFill (§20.2.2.1) - DrawingML, p. 3456
+    - blipFill (§20.5.2.2) - DrawingML, p. 3518
+    - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
+    - buBlip (§21.1.2.4.2)
+
+ Child elements:
+    - alphaBiLevel (Alpha Bi-Level Effect) §20.1.8.1
+    - alphaCeiling (Alpha Ceiling Effect) §20.1.8.2
+    - alphaFloor (Alpha Floor Effect) §20.1.8.3
+    - alphaInv (Alpha Inverse Effect) §20.1.8.4
+    - alphaMod (Alpha Modulate Effect) §20.1.8.5
+    - alphaModFix (Alpha Modulate Fixed Effect) §20.1.8.6
+    - alphaRepl (Alpha Replace Effect) §20.1.8.8
+    - biLevel (Bi-Level (Black/White) Effect) §20.1.8.11
+    - blur (Blur Effect) §20.1.8.15
+    - clrChange (Color Change Effect) §20.1.8.16
+    - clrRepl (Solid Color Replacement) §20.1.8.18
+    - duotone (Duotone Effect) §20.1.8.23
+    - extLst (Extension List) §20.1.2.2.15
+    - fillOverlay (Fill Overlay Effect) §20.1.8.29
+    - grayscl (Gray Scale Effect) §20.1.8.34
+    - hsl (Hue Saturation Luminance Effect) §20.1.8.39
+    - lum (Luminance Effect) §20.1.8.42
+    - tint (Tint Effect) §20.1.8.60
+
+ Attributes:
+    - cstate (Compression State)
+    - [done] embed (Embedded Picture Reference), 22.8.2.1 ST_RelationshipId (Explicit Relationship ID), p. 4324
+    - link (Linked Picture Reference)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
+{
+    READ_PROLOGUE
+
+    m_xlinkHref.clear();
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo more attrs
+    TRY_READ_ATTR_WITH_NS(r, embed)
+    kDebug() << "embed:" << r_embed;
+    if (!r_embed.isEmpty()) {
+        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_embed));
+        kDebug() << "sourceName:" << sourceName;
+        if (sourceName.isEmpty()) {
+            return KoFilter::FileNotFound;
+        }
+        QString destinationName;
+        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        addManifestEntryForPicturesDir();
+        m_xlinkHref = destinationName;
+    }
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL stretch
+//! stretch handler (Stretch)
+//! ECMA-376, 20.1.8.56, p. 3233
+/*! This element specifies that a BLIP should be stretched
+ to fill the target rectangle. The other option is a tile where
+ a BLIP is tiled to fill the available area.
+
+ Parent elements:
+    - blipFill (§21.3.2.2) - DrawingML, p. 3919
+    - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
+    - blipFill (§20.2.2.1) - DrawingML, p. 3456
+    - blipFill (§20.5.2.2) - DrawingML, p. 3518
+    - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
+
+ Child elements:
+    - [done] fillRect (Fill Rectangle) §20.1.8.30
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
+{
+    READ_PROLOGUE
+
+    m_fillImageRenderingStyleStretch = true;
+    //! todo for tead_tile: m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
+    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("stretch"));
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(fillRect)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fillRect
+//! fillRect handler (Fill Rectangle)
+//! ECMA-376, 20.1.8.30, p. 3212
+/*! This element specifies a fill rectangle. When stretching of an image
+    is specified, a source rectangle, srcRect, is scaled to fit the specified fill rectangle.
+
+ Parent elements:
+    - [done] stretch (§20.1.8.56)
+
+ No child elements.
+
+ Attributes:
+    - b (Bottom Offset)
+    - l (Left Offset)
+    - r (Right Offset)
+    - t (Top Offset)
+
+ Complex type: CT_RelativeRect, p. 4545
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
+{
+    READ_PROLOGUE
+
+//    const QXmlStreamAttributes attrs( attributes() );
+//! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
+    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
+        TRY_READ_ATTR_WITHOUT_NS(r, l)
+        TRY_READ_ATTR_WITHOUT_NS(r, r)
+        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
+//MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+
+    //m_fillImageRenderingStyle = QLatin1String("stretch");
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL graphic
+//! graphic handler (Graphic Object)
+/*! ECMA-376, 20.1.2.2.16, p.3037.
+
+ This element specifies the existence of a single graphic object.
+ Document authors should refer to this element when they wish to persist
+ a graphical object of some kind. The specification for this graphical
+ object is provided entirely by the document author and referenced within
+ the graphicData child element.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+ - graphicFrame (§21.3.2.12)
+ - graphicFrame (§20.1.2.2.18)
+ - graphicFrame (§20.5.2.16)
+ - graphicFrame (§19.3.1.21)
+ - [done] inline (§20.4.2.8)
+
+ Child elements:
+ - [done] graphicData (Graphic Object Data) §20.1.2.2.17
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(graphicData)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL graphicData
+//! graphicData handler (Graphic Object Data)
+/*! ECMA-376, 20.1.2.2.17, p.3038.
+
+ This element specifies the reference to a graphic object within the document.
+ This graphic object is provided entirely by the document authors who choose
+ to persist this data within the document.
+
+ Parent elements:
+ - [done] graphic (§20.1.2.2.16)
+
+ Child elements:
+ - Any element in any namespace
+
+ Attributes:
+ - uri (Uniform Resource Identifier)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(pic, pic)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS blipFill_NS
+
+#undef CURRENT_EL
+#define CURRENT_EL blipFill
+//! blipFill handler (Picture Fill)
+//! ECMA-376, PresentationML, 19.3.1.4, p. 2818; DrawingML, 20.1.8.14, p. 3195
+//! @todo use it in DrawingML, 20.2.2.1, p. 3456
+/*! This element specifies the type of picture fill that the picture object has.
+ Because a picture has a picture fill already by default, it is possible to have
+ two fills specified for a picture object.
+
+ BLIPs refer to Binary Large Image or Pictures. Blip Fills are made up of several components: a Blip
+ Reference, a Source Rectangle, and a Fill Mode.
+ See also M.4.8.4.3 Blip Fills, ECMA-376, p. 5411.
+
+ Parent elements:
+    - bg (§21.4.3.1)
+    - bgFillStyleLst (§20.1.4.1.7)
+    - bgPr (§19.3.1.2)
+    - defRPr (§21.1.2.3.2)
+    - endParaRPr (§21.1.2.2.3)
+    - fill (§20.1.8.28)
+    - fill (§20.1.4.2.9)
+    - fillOverlay (§20.1.8.29)
+    - fillStyleLst (§20.1.4.1.13)
+    - grpSpPr (§21.3.2.14)
+    - grpSpPr (§20.1.2.2.22)
+    - grpSpPr (§20.5.2.18)
+    - grpSpPr (§19.3.1.23)
+    - [done] pic (§20.1.2.2.30) - DrawingML
+    - [done] pic (§19.3.1.37) - PresentationML
+    - rPr (§21.1.2.3.9)
+    - spPr (§21.2.2.197)
+    - spPr (§21.3.2.23)
+    - spPr (§21.4.3.7)
+    - spPr (§20.1.2.2.35)
+    - spPr (§20.2.2.6)
+    - spPr (§20.5.2.30)
+    - spPr (§19.3.1.44)
+    - tblPr (§21.1.3.15)
+    - tcPr (§21.1.3.17)
+    - uFill (§21.1.2.3.12)
+
+ Child elements:
+    - [done] blip (Blip) §20.1.8.13
+    - srcRect (Source Rectangle) §20.1.8.55
+    - stretch (Stretch) §20.1.8.56
+    - tile (Tile) §20.1.8.58
+
+ Attributes:
+    - dpi (DPI Setting)
+    - rotWithShape (Rotate With Shape)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
+{
+    READ_PROLOGUE
+
+    m_fillImageRenderingStyleStretch = false;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:blip")) {
+                TRY_READ(blip)
+            } else if (qualifiedName() == QLatin1String("a:stretch")) {
+                TRY_READ(stretch)
+            }
+            //! @todo read_tile
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+//! @todo KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
+/*
+ No child elements.
+
+ Attributes:
+    - b (Bottom Offset)
+    - l (Left Offset)
+    - r (Right Offset)
+    - t (Top Offset)
+
+ Complex type: CT_RelativeRect, p. 4545
+
+ const QXmlStreamAttributes attrs( attributes() );
+ use double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
+*/
+
+
+#if 0 //todo
+#undef CURRENT_EL
+#define CURRENT_EL background
+//! background handler (Document Background)
+/*! ECMA-376, 17.2.1, p. 199.
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
+{
+}
+#endif
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "wp" // wordprocessingDrawing
+
+void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString emuValue)
+{
+    if (emuValue.isEmpty() || emuValue == "0") // skip 0cm which is the default
+        return;
+    QString s = MSOOXML::Utils::EMU_to_ODF(emuValue);
+    if (!s.isEmpty()) {
+        m_currentDrawStyle.addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
+    }
+}
+
+void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
+{
+    m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL anchor
+//! anchor handler (Anchor for Floating DrawingML Object)
+/*! ECMA-376, 20.4.2.3, p.3469.
+
+ This element specifies that the DrawingML object located at this position
+ in the document is a floating object.
+ Within a WordprocessingML document, drawing objects can exist in two states:
+ - Inline - The drawing object is in line with the text, and affects the line
+   height and layout of its line (like a character glyph of similar size).
+ - Floating - The drawing object is anchored within the text, but can be
+   absolutely positioned in the document relative to the page.
+
+ When this element encapsulates the DrawingML object's information,
+ then all child elements shall dictate the positioning of this object
+ as a floating object on the page.
+
+ Parent elements:
+ - [done] drawing (§17.3.3.9)
+
+ Child elements:
+ - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
+ - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
+ - effectExtent (Object Extents Including Effects) §20.4.2.6
+ - extent (Drawing Object Size) §20.4.2.7
+ - [done] graphic (Graphic Object) §20.1.2.2.16
+ - [done] positionH (Horizontal Positioning) §20.4.2.10
+ - [done] positionV (Vertical Positioning) §20.4.2.11
+ - simplePos (Simple Positioning Coordinates) §20.4.2.13
+ - [done] wrapNone (No Text Wrapping) §20.4.2.15
+ - [done] wrapSquare (Square Wrapping) §20.4.2.17
+ - [done] wrapThrough (Through Wrapping) §20.4.2.18
+ - [done] wrapTight (Tight Wrapping) §20.4.2.19
+ - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
+
+ Attributes:
+ - allowOverlap (Allow Objects to Overlap)
+ - [done] behindDoc (Display Behind Document Text)
+ - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
+ - [done] distL (Distance From Text on Left Edge) (see also: inline)
+ - [done] distR (Distance From Text on Right Edge) (see also: inline)
+ - [done] distT (Distance From Text on Top Edge) (see also: inline)
+ - hidden (Hidden)
+ - layoutInCell (Layout In Table Cell)
+ - locked (Lock Anchor)
+ - relativeHeight (Relative Z-Ordering Position)
+ - simplePos (Page Positioning)
+*/
+//! @todo support all elements
+//! CASE #1340
+//! CASE #1410
+//! CASE #1420
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
+{
+    READ_PROLOGUE
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    m_docPrName.clear();
+    m_docPrDescr.clear();
+    m_drawing_anchor = true; // for pic:pic
+
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
+    READ_ATTR_WITHOUT_NS(distT)
+    distToODF("fo:margin-top", distT);
+    READ_ATTR_WITHOUT_NS(distB)
+    distToODF("fo:margin-bottom", distB);
+    READ_ATTR_WITHOUT_NS(distL)
+    distToODF("fo:margin-left", distL);
+    READ_ATTR_WITHOUT_NS(distR)
+    distToODF("fo:margin-right", distR);
+
+    const bool behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF(positionH)
+            ELSE_TRY_READ_IF(positionV)
+            ELSE_TRY_READ_IF(docPr)
+            ELSE_TRY_READ_IF(wrapSquare)
+            ELSE_TRY_READ_IF(wrapTight)
+            ELSE_TRY_READ_IF(wrapThrough)
+            else if (QUALIFIED_NAME_IS(wrapNone)) {
+                // wrapNone (No Text Wrapping), ECMA-376, 20.4.2.15
+                // This element specifies that the parent DrawingML object shall
+                // not cause any text wrapping within the contents of the host
+                // WordprocessingML document based on its display location.
+                // CASE #1410
+                readNext();
+                if (!expectElEnd(QUALIFIED_NAME(wrapNone)))
+                    return KoFilter::WrongFormat;
+                saveStyleWrap("run-through");
+                m_currentDrawStyle.addProperty(QLatin1String("style:run-through"),
+                                               (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
+                                               KoGenStyle::GraphicType);
+            } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
+                // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
+                // This element specifies that text shall wrap around the top
+                // and bottom of this object, but not its left or right edges.
+                // CASE #1410
+                readNext();
+                if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom)))
+                    return KoFilter::WrongFormat;
+                saveStyleWrap("none");
+            }
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    READ_EPILOGUE
+}
+
+//! @todo Currently all read_wrap*() uses the same read_wrap(), no idea if they can behave differently
+//! CASE #1425
+void MSOOXML_CURRENT_CLASS::readWrap()
+{
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(wrapText)
+    if (wrapText == "bothSides")
+        saveStyleWrap("parallel");
+    else if (wrapText == "largest")
+        saveStyleWrap("dynamic");
+    else
+        saveStyleWrap(wrapText.toLatin1());
+//! @todo Is saveStyleWrap(wrapText) OK?
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapSquare
+//! wrapSquare handler (Square Wrapping)
+/*! ECMA-376, 20.4.2.17, p.3497.
+ This element specifies that text shall wrap around a virtual rectangle bounding
+ this object. The bounds of the wrapping rectangle shall be dictated by the extents
+ including the addition of the effectExtent element as a child of this element
+ (if present) or the effectExtent present on the parent element.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - effectExtent (Object Extents Including Effects)
+
+ Attributes:
+ - distB (Distance From Text on Bottom Edge)
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - distT (Distance From Text (Top))
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapSquare()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapTight
+//! wrapTight handler (Tight Wrapping)
+/*! ECMA-376, 20.4.2.17, p.3497.
+ This element specifies that text shall wrap around the wrapping polygon
+ bounding this object as defined by the child wrapPolygon element.
+ When this element specifies a wrapping polygon, it shall not allow text
+ to wrap within the object's maximum left and right extents.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - wrapPolygon (Wrapping Polygon)
+
+ Attributes:
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapTight()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapThrough
+//! wrapThrough handler (Through Wrapping)
+/*! ECMA-376, 20.4.2.18, p.3500.
+ This element specifies that text shall wrap around the wrapping polygon
+ bounding this object as defined by the child wrapPolygon element.
+ When this element specifies a wrapping polygon, it shall allow text
+ to wrap within the object's maximum left and right extents.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - wrapPolygon (Wrapping Polygon)
+
+ Attributes:
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL positionH
+//! positionH handler (Horizontal Positioning)
+/*! ECMA-376, 20.4.2.10, p.3490.
+ This element specifies the horizontal positioning of a floating
+ DrawingML object within a WordprocessingML document.
+ This positioning is specified in two parts:
+
+ - Positioning Base - The relativeFrom attribute on this element
+   specifies the part of the document from which the positioning
+   shall be calculated.
+ - Positioning - The child element of this element (align
+   or posOffset) specifies how the object is positioned relative
+   to that base.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - [done] align (Relative Horizontal Alignment) §20.4.2.1
+ - [done] posOffset (Absolute Position Offset) §20.4.2.12
+
+ Attributes:
+ - [done] relativeFrom (Horizontal Position Relative Base)
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
+    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromH)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(align)
+            ELSE_TRY_READ_IF(posOffset)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL positionV
+//! positionV handler (Vertical Positioning)
+/*! ECMA-376, 20.4.2.11, p.3491.
+ This element specifies the vertical positioning of a floating
+ DrawingML object within a WordprocessingML document.
+ This positioning is specified in two parts:
+
+ - Positioning Base - The relativeFrom attribute on this element
+   specifies the part of the document from which the positioning
+   shall be calculated.
+ - Positioning - The child element of this element (align
+   or posOffset) specifies how the object is positioned relative
+   to that base.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - [done] align (Relative Vertical Alignment) §20.4.2.2
+ - [done] posOffset (Absolute Position Offset) §20.4.2.12
+
+ Attributes:
+ - [done] relativeFrom (Horizontal Position Relative Base)
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.5 ST_RelFromV (Vertical Relative Positioning), p. 3512
+    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromV)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(align)
+            ELSE_TRY_READ_IF(posOffset)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL align
+//! align handler (Relative Horizontal Alignment, Relative Vertical Alignment)
+/*! ECMA-376, 20.4.2.1, 20.4.2.2, p.3468, 3469.
+ This element specifies how a DrawingML object shall be horizontally/vertically
+ aligned relative to the horizontal alignment base defined
+ by the parent element. Once an alignment base is defined,
+ this element shall determine how the DrawingML object shall
+ be aligned relative to that location.
+
+ Parent elements:
+ - [done] positionH (§20.4.2.10)
+ - [done] positionV (§20.4.2.11)
+
+ No child elements.
+*/
+//! CASE #1340
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
+{
+    ReadMethod caller = m_calls.top();
+    READ_PROLOGUE
+    if (CALLER_IS(positionH)) {
+//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
+        /*center
+        inside
+        left
+        outside
+        right*/
+        m_alignH = text().toString();
+    } else if (CALLER_IS(positionV)) {
+//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
+        /*bottom
+        center
+        inside
+        outside
+        top*/
+        m_alignV = text().toString();
+    }
+
+    SKIP_EVERYTHING
+    /*    while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL);
+        }*/
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL posOffset
+//! posOffset handler (Absolute Position Offset)
+/*! ECMA-376, 20.4.2.12, p.3492.
+ This element specifies an absolute measurement for the positioning
+ of a floating DrawingML object within a WordprocessingML document.
+ This measurement shall be calculated relative to the top left edge
+ of the positioning base specified by the parent element's
+ relativeFrom attribute.
+
+ Parent elements:
+ - [done] positionH (§20.4.2.10)
+ - [done] positionV (§20.4.2.11)
+
+ No child elements.
+*/
+//! CASE #1360
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
+{
+    ReadMethod caller = m_calls.top();
+    READ_PROLOGUE
+
+    readNext();
+    if (isCharacters()) {
+        if (CALLER_IS(positionH)) {
+            STRING_TO_INT(text().toString(), m_posOffsetH, "positionH/posOffset text")
+            m_hasPosOffsetH = true;
+        } else if (CALLER_IS(positionV)) {
+            STRING_TO_INT(text().toString(), m_posOffsetV, "positionV/posOffset text")
+            m_hasPosOffsetV = true;
+        }
+        ELSE_WRONG_FORMAT
+    }
+    ELSE_WRONG_FORMAT
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL inline
+//! inline handler (Inline DrawingML Object)
+/*! ECMA-376, 20.4.2.8, p.3485.
+
+ This element specifies that the DrawingML object located at this position
+ in the document is a floating object.
+ Within a WordprocessingML document, drawing objects can exist in two states:
+ - Inline - The drawing object is in line with the text, and affects the line
+   height and layout of its line (like a character glyph of similar size).
+ - Floating - The drawing object is anchored within the text, but can be
+   absolutely positioned in the document relative to the page.
+
+ When this element encapsulates the DrawingML object's information,
+ then all child elements shall dictate the positioning of this object
+ as a floating object on the page.
+
+ Parent elements:
+ - [done] drawing (§17.3.3.9)
+
+ Child elements:
+ - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
+ - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
+ - effectExtent (Object Extents Including Effects) §20.4.2.6
+ - extent (Drawing Object Size) §20.4.2.7
+ - [done] graphic (Graphic Object) §20.1.2.2.16
+
+ Attributes:
+ - distB (Distance From Text on Bottom Edge)
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - distT (Distance From Text on Top Edge)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
+{
+    READ_PROLOGUE
+    m_docPrName.clear();
+    m_docPrDescr.clear();
+    m_drawing_inline = true; // for pic
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF(docPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL docPr
+//! docPr handler (Drawing Object Non-Visual Properties)
+/*! ECMA-376, 20.4.2.5, p.3478.
+
+ This element specifies non-visual object properties for the parent DrawingML object.
+ These properties are specified as child elements of this element.
+
+ Parent elements:
+ - [done]anchor (§20.4.2.3)
+ - inline (§20.4.2.8)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+ - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
+
+ Attributes:
+ - descr (Alternative Text for Object)
+ - hidden (Hidden)
+ - id (Unique Identifier)
+ - name (Name)
+*/
+//! CASE #1340
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_docPrName)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_docPrDescr)
+//! @todo support docPr/@hidden (maybe to style:text-properties/@text:display)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
