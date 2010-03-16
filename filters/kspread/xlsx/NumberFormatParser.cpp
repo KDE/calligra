@@ -126,8 +126,10 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
+#include <QDebug>
 KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 {
+    qDebug() << "NumberFormatParser::parse" << numberFormat;
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
@@ -222,7 +224,8 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
             // asterisk: ignore
         case '*':
-            ++i;
+        case '(':
+        case ')':
             break;
 
             // percentage

@@ -1314,19 +1314,9 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
             const QString fractionValue = convertFraction(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "float");
             xmlWriter->addAttribute("office:value", fractionValue);
-        } else {
-            QString currencyVal, formatVal;
-            if (currencyFormat(valueFormat, &currencyVal, &formatVal)) {
-                const QString v = convertCurrency(value.asFloat(), valueFormat);
-                xmlWriter->addAttribute("office:value-type", "currency");
-                const QString cv = currencyValue(currencyVal);
-                if(!cv.isEmpty())
-                    xmlWriter->addAttribute("office:currency", cv);
-                xmlWriter->addAttribute("office:value", v);
-            } else { // fallback is the generic float format
-                xmlWriter->addAttribute("office:value-type", "float");
-                xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
-            }
+        } else { // fallback is the generic float format
+            xmlWriter->addAttribute("office:value-type", "float");
+            xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
         }
     } else if (value.isText() || value.isError()) {
         QString str = string(value.asString());

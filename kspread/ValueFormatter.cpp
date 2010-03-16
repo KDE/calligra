@@ -257,8 +257,15 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             formatString = re.cap( 2 );
             postfix = re.cap( 3 );
         }
+        if (formatString.isEmpty()) {
+            return prefix + postfix;
+        } else if (formatString.contains(QLatin1Char('.'))) {
+            precision = formatString.length() - formatString.indexOf(QLatin1Char('.')) - 1;
+        } else {
+            precision = 0;
+        }
     }
-    
+   
     // NOTE: If precision (obtained from the cell style) is -1 (arbitrary),
     //       use the document default decimal precision.
     int p = (precision == -1) ? settings()->defaultDecimalPrecision() : precision;
