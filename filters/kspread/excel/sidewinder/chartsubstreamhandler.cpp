@@ -431,8 +431,7 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
     if(!record) return;
     DEBUG << std::endl;
 
-
-
+    m_chart->m_impl = new Charting::BarImpl;//(record->anStart(), record->pcDonut());
 }
 
 // specifies that chart is rendered in 3d scene

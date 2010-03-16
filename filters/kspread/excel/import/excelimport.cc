@@ -1433,6 +1433,10 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     foreach(ChartObject *chart, cell->charts()) {
         DrawingObject* drawobj = chart->drawingObject();
         if(!drawobj) continue;
+        if(chart->m_chart->m_impl==0) {
+            kDebug() << "Invalid chart to be created, no implementation.";
+            continue;
+        }
 
         ChartExport *c = new ChartExport(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);

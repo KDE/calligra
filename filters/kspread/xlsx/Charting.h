@@ -86,6 +86,12 @@ namespace Charting
         virtual const char* name() const { return "circle"; }
     };
 
+    class BarImpl : public ChartImpl
+    {
+    public:
+        virtual const char* name() const { return "bar"; }
+    };
+
     class Obj
     {
     public:
