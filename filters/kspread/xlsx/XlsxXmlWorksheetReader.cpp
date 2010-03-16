@@ -987,13 +987,18 @@ public:
             return KoFilter::WrongFormat;
         }
 
-        kDebug() << *this << namespaceUri();
+        readNext();
+        if(namespaceUri() != "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") {
+            return KoFilter::WrongFormat;
+        }
+        if (!expectEl("xdr:wsDr")) {
+            return KoFilter::WrongFormat;
+        }
 
         //readNext();
-        //if (!expectEl("worksheet")) return KoFilter::WrongFormat;
-        //if (!expectNS(MSOOXML::Schemas::spreadsheetml)) return KoFilter::WrongFormat;
         //TRY_READ(worksheet)
 
+Q_ASSERT(false);
         m_context = 0;
         return KoFilter::OK;
     }
