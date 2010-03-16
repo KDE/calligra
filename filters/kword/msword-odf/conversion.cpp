@@ -573,3 +573,18 @@ int Conversion::fldToFieldType(const wvWare::FLD* fld)
 
     return m_fieldType;
 }
+
+qreal Conversion::twipsToInch(int twips)
+{
+    qreal inches = (qreal) twips;
+    inches = inches * 0.00069444444;
+    return inches;
+}
+
+qreal Conversion::twipsToPt(int twips)
+{
+    qreal pt = (qreal) twips;
+    pt = pt / 20.0;
+    return pt;
+}
+

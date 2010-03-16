@@ -106,6 +106,10 @@ int headerMaskToFType(unsigned char mask);
 int fldToFieldType(const wvWare::FLD* fld);
 
 bool isHeader(unsigned char type);
+
+qreal twipsToInch(int twips);
+
+qreal twipsToPt(int twips);
 }
 
 #endif

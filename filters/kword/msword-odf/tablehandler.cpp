@@ -121,7 +121,6 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     //            << ", number of cells: " << tap->itcMac;
 
     KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
-    QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
 
     // The 6 BRC objects are for top, left, bottom, right,
     // insidehorizontal, insidevertical (default values).
@@ -133,15 +132,20 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     }
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
 
+    qreal rowHeightPt = Conversion::twipsToPt(qAbs(tap->dyaRowHeight));         // convert twips to Pts
+    QString rowHeightString = QString::number(rowHeightPt).append("pt");        // make height string from number
+
     if (tap->dyaRowHeight > 0) {
-        rowStyle.addProperty("style:min-row-height", tap->dyaRowHeight);
-    } else if (tap->dyaRowHeight > 0) {
-        rowStyle.addProperty("style:row-height", -tap->dyaRowHeight);
+        rowStyle.addProperty("style:min-row-height", rowHeightString);
+    } else if (tap->dyaRowHeight < 0) {
+        rowStyle.addProperty("style:row-height", rowHeightString);
     }
 
     if (tap->fCantSplit) {
         rowStyle.addProperty("style:keep-together", "always");
     }
+
+    QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
 
     //start table row in content
     writer->startElement("table:table-row");
