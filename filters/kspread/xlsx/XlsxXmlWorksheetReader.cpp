@@ -93,7 +93,8 @@ class XlsxXmlWorksheetReader::Private
 public:
     Private( XlsxXmlWorksheetReader* qq )
      : q( qq ),
-       warningAboutWorksheetSizeDisplayed(false)
+       warningAboutWorksheetSizeDisplayed(false),
+       drawingNumber(0)
     {
     }
     ~Private() {
@@ -101,6 +102,7 @@ public:
     XlsxXmlWorksheetReader* const q;
     QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
+    int drawingNumber;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -961,6 +963,44 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 
 #undef CURRENT_EL
 #define CURRENT_EL drawing
+
+class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
+{
+public:
+    XlsxXmlDrawingReaderContext() : MSOOXML::MsooXmlReaderContext() {}
+    virtual ~XlsxXmlDrawingReaderContext() {}
+};
+
+class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
+{
+public:
+    XlsxXmlDrawingReader(KoOdfWriters *writers) : MSOOXML::MsooXmlCommonReader(writers) {}
+    virtual ~XlsxXmlDrawingReader() {}
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) {
+        kDebug()<<"XlsxXmlDrawingReader #######################################################";
+        
+        m_context = dynamic_cast<XlsxXmlDrawingReaderContext*>(context);
+        Q_ASSERT(m_context);
+
+        readNext();
+        if (!isStartDocument()) {
+            return KoFilter::WrongFormat;
+        }
+
+        kDebug() << *this << namespaceUri();
+
+        //readNext();
+        //if (!expectEl("worksheet")) return KoFilter::WrongFormat;
+        //if (!expectNS(MSOOXML::Schemas::spreadsheetml)) return KoFilter::WrongFormat;
+        //TRY_READ(worksheet)
+
+        m_context = 0;
+        return KoFilter::OK;
+    }
+private:
+    XlsxXmlDrawingReaderContext *m_context;
+};
+
 //! drawing handler (Drawing)
 /*! ECMA-376, 18.3.1.36, p.1804.
 
@@ -978,8 +1018,28 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
 {
     READ_PROLOGUE
+    
     const QXmlStreamAttributes attrs(attributes());
-//todo    READ_ATTR_WITHOUT_NS(id)
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if(!r_id.isEmpty() && !this->m_context->path.isEmpty()) {
+        //! @todo use MSOOXML::MsooXmlRelationships
+
+        QString path = this->m_context->path;
+        const int pos = path.indexOf('/', 1);
+        if( pos > 0 ) path = path.left(pos);
+        path += "/drawings";
+        QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
+        QString filepath = path + "/" + file;
+
+        XlsxXmlDrawingReader reader(this);
+        XlsxXmlDrawingReaderContext context;
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        if (result != KoFilter::OK) {
+            raiseError(reader.errorString());
+            return result;
+        }
+    }
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
