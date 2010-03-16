@@ -236,11 +236,11 @@ OoThread::convertToPng(const Conversion& c) {
 
         Sequence<PropertyValue> pngProps(3);
         pngProps[0].Name = OUString::createFromAscii("Format");
-        pngProps[0].Value = Any(2); // png
+        pngProps[0].Value = Any((sal_uInt32)2); // png
         pngProps[1].Name = OUString::createFromAscii("Width");
-        pngProps[1].Value = Any(c.width);
+        pngProps[1].Value = Any((sal_uInt32)c.width);
         pngProps[2].Name = OUString::createFromAscii("PublishMode");
-        pngProps[2].Value = Any(0); // html
+        pngProps[2].Value = Any((sal_uInt32)0); // html
 
         Sequence<PropertyValue> htmlProps(3);
         htmlProps[0].Name = OUString::createFromAscii("Overwrite");
