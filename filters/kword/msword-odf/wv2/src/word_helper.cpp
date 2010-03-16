@@ -152,11 +152,11 @@ namespace wvWare
     void STTBF::dumpStrings() const
     {
         wvlog << "STTBF::dumpStrings(): count=" << count() << " extraDataLength="
-              << extraDataLength() << std::endl;
+              << extraDataLength() << endl;
         std::vector<UString>::const_iterator it = m_strings.begin();
         std::vector<UString>::const_iterator end = m_strings.end();
         for ( ; it != end; ++it )
-            wvlog << "   '" << ( *it ).ascii() << "'" << std::endl;
+            wvlog << "   '" << ( *it ).ascii() << "'" << endl;
     }
 
     void STTBF::init( U16 lid, OLEStreamReader* reader, const U8* ptr )
@@ -223,7 +223,7 @@ namespace wvWare
             return ret;
         }
         else {
-            wvlog << "Warning: Internal error while reading STTBF" << std::endl;
+            wvlog << "Warning: Internal error while reading STTBF" << endl;
             return 0;
         }
     }
@@ -238,7 +238,7 @@ namespace wvWare
             return ret;
         }
         else {
-            wvlog << "Warning: Internal error while reading STTBF" << std::endl;
+            wvlog << "Warning: Internal error while reading STTBF" << endl;
             return 0;
         }
     }
@@ -253,7 +253,7 @@ namespace wvWare
             return true;
         }
         else {
-            wvlog << "Warning: Internal error while reading STTBF" << std::endl;
+            wvlog << "Warning: Internal error while reading STTBF" << endl;
             return false;
         }
     }

@@ -30,7 +30,7 @@ Headers95::Headers95( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStrea
 std::pair<U32, U32> Headers95::findHeader( int sectionNumber, unsigned char mask ) const
 {
     if ( m_grpfIhdt.size() <= static_cast<std::vector<U32>::size_type>( sectionNumber ) ) {
-        wvlog << "Warning: You are trying to access a section that has not been registered yet!" << std::endl;
+        wvlog << "Warning: You are trying to access a section that has not been registered yet!" << endl;
         return std::make_pair( 0u, 0u );
     }
 

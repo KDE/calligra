@@ -45,7 +45,7 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
         const U16 count = reader->readU16();
         const U16 extraData = reader->readU16();
         if ( extraData != 0 )
-            wvlog << "Huh?? Found STTBF extra data within the STTBF of FFNs" << std::endl;
+            wvlog << "Huh?? Found STTBF extra data within the STTBF of FFNs" << endl;
 
         for ( int i = 0; i < count; ++i )
             m_fonts.push_back( new Word97::FFN( reader, Word97::FFN::Word97, false ) );
@@ -53,7 +53,7 @@ FontCollection::FontCollection( OLEStreamReader* reader, const Word97::FIB& fib 
 
     if ( reader->tell() - fib.fcSttbfffn != fib.lcbSttbfffn )
         wvlog << "Warning: Didn't read lcbSttbfffn bytes: read=" << reader->tell() - fib.fcSttbfffn
-              << " lcbSttbfffn=" << fib.lcbSttbfffn << std::endl;
+              << " lcbSttbfffn=" << fib.lcbSttbfffn << endl;
     reader->pop();
 }
 
@@ -75,8 +75,8 @@ void FontCollection::dump() const
     std::vector<Word97::FFN*>::const_iterator it = m_fonts.begin();
     std::vector<Word97::FFN*>::const_iterator end = m_fonts.end();
     for ( ; it != end; ++it ) {
-        wvlog << "Font: xszFfn='" << ( *it )->xszFfn.ascii() << "'" << std::endl;
+        wvlog << "Font: xszFfn='" << ( *it )->xszFfn.ascii() << "'" << endl;
         if ( !( *it )->xszFfnAlt.isEmpty() )
-            wvlog << "      xszFfnAlt='" << ( *it )->xszFfnAlt.ascii() << "'" << std::endl;
+            wvlog << "      xszFfnAlt='" << ( *it )->xszFfnAlt.ascii() << "'" << endl;
     }
 }

@@ -101,7 +101,7 @@ OLEStreamReader* OLEStreamReader::inflate( int offset ) const
     //call the inflate function
     wvlog << "calling gsf_msole_inflate with offset of ... " << offset;
     GByteArray* gbArray = gsf_msole_inflate( m_stream, offset );
-    wvlog << " got " << gbArray->len << " decompressed bytes." << std::endl;
+    wvlog << " got " << gbArray->len << " decompressed bytes." << endl;
     //transform it to an unsigned char* buffer (better way to do this?)
     unsigned char* buffer = new unsigned char [gbArray->len];
     for ( int i = 0; i < gbArray->len; i++ ) {
@@ -111,7 +111,7 @@ OLEStreamReader* OLEStreamReader::inflate( int offset ) const
     //create storage
     /*OLEStorage store( buffer, gbArray->len );
     if ( !store.open( OLEStorage::ReadOnly ) )
-        wvlog << "Couldn't open OLEStorage." << std::endl;
+        wvlog << "Couldn't open OLEStorage." << endl;
     //now get a stream reader
     OLEStreamReader* reader = store.createStreamReader("");
     */
@@ -238,7 +238,7 @@ OLEImageReader::OLEImageReader( OLEStreamReader& reader, unsigned int start, uns
     m_reader( reader ), m_start( start ), m_limit( limit ), m_position( start )
 {
     if ( limit <= start )
-        wvlog << "Error: The passed region is empty." << std::endl;
+        wvlog << "Error: The passed region is empty." << endl;
 }
 
 OLEImageReader::OLEImageReader( const OLEImageReader& rhs ) : m_reader( rhs.m_reader ), m_start( rhs.m_start ),
@@ -266,7 +266,7 @@ bool OLEImageReader::seek( int offset, GSeekType whence )
         case G_SEEK_END:
             return updatePosition( m_limit - 1 + offset );
         default:
-            wvlog << "Error: Unknown GSeekType!" << std::endl;
+            wvlog << "Error: Unknown GSeekType!" << endl;
             return false;
     }
 }
@@ -296,9 +296,9 @@ size_t OLEImageReader::read( U8 *buffer, size_t length )
     }
     //have to update our position in the stream
     unsigned int newpos = m_position + (unsigned int) bytesRead;
-    wvlog << "new position is " << newpos << std::endl;
+    wvlog << "new position is " << newpos << endl;
     if ( !updatePosition( newpos ) )
-        wvlog << "error updating position in stream" << std::endl;
+        wvlog << "error updating position in stream" << endl;
     m_reader.pop();
     return bytesRead;
 }

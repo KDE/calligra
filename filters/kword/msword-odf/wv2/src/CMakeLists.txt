@@ -48,7 +48,6 @@ SET( wv2_SOURCES
 	fields.cpp 
 	utilities.cpp 
 	crc32.c 
-	wvlog.cpp 
 	graphics.cpp 
 	wv2version.cpp 
 	zcodec.cxx

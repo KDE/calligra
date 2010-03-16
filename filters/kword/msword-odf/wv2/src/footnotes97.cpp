@@ -29,11 +29,11 @@ Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib )
     m_footnoteRef( 0 ), m_footnoteRefIt( 0 ), m_endnoteRef( 0 ), m_endnoteRefIt( 0 )
 {
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Footnotes97::Footnotes97()" << std::endl
-          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << std::endl
-          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << std::endl
-          << "   fcPlcfendRef=" << fib.fcPlcfendRef << " lcbPlcfendRef=" << fib.lcbPlcfendRef << std::endl
-          << "   fcPlcfendTxt=" << fib.fcPlcfendTxt << " lcbPlcfendTxt=" << fib.lcbPlcfendTxt << std::endl;
+    wvlog << "Footnotes97::Footnotes97()" << endl
+          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << endl
+          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << endl
+          << "   fcPlcfendRef=" << fib.fcPlcfendRef << " lcbPlcfendRef=" << fib.lcbPlcfendRef << endl
+          << "   fcPlcfendTxt=" << fib.fcPlcfendTxt << " lcbPlcfendTxt=" << fib.lcbPlcfendTxt << endl;
 #endif
     tableStream->push();
     // Footnotes
@@ -56,7 +56,7 @@ Footnotes97::~Footnotes97()
 FootnoteData Footnotes97::footnote( U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Footnotes97::footnote(): globalCP=" << globalCP << std::endl;
+    wvlog << "Footnotes97::footnote(): globalCP=" << globalCP << endl;
 #endif
     ok = true; // let's assume we will find it
     if ( m_footnoteRefIt && m_footnoteRefIt->currentStart() == globalCP &&
@@ -79,7 +79,7 @@ FootnoteData Footnotes97::footnote( U32 globalCP, bool& ok )
         return FootnoteData( FootnoteData::Endnote, fAuto, start, *m_endnoteTxtIt );
     }
 
-    wvlog << "Bug: There is no footnote or endnote with the CP " << globalCP << std::endl;
+    wvlog << "Bug: There is no footnote or endnote with the CP " << globalCP << endl;
     ok = false;
     return FootnoteData( FootnoteData::Footnote, false, 0, 0 );
 }
@@ -106,26 +106,26 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
     *refIt = new PLCFIterator<Word97::FRD>( **ref );
 
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Footnotes97::init()" << std::endl;
+    wvlog << "Footnotes97::init()" << endl;
     ( *ref )->dumpCPs();
 #endif
 
     if ( lcbTxt == 0 )
-        wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << std::endl;
+        wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << endl;
     else {
         if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
-            wvlog << "Warning: Found a hole in the table stream" << std::endl;
+            wvlog << "Warning: Found a hole in the table stream" << endl;
             tableStream->seek( fcTxt, G_SEEK_SET );
         }
         for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
             txt.push_back( tableStream->readU32() );
 #ifdef WV2_DEBUG_FOOTNOTES
-            wvlog << "read: " << txt.back() << std::endl;
+            wvlog << "read: " << txt.back() << endl;
 #endif
         }
         txtIt = txt.begin();
     }
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Footnotes97::init() done" << std::endl;
+    wvlog << "Footnotes97::init() done" << endl;
 #endif
 }

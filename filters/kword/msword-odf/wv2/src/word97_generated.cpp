@@ -233,9 +233,9 @@ void DTTM::clear() {
 
 void DTTM::dump() const
 {
-    wvlog << "Dumping DTTM:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping DTTM done." << std::endl;
+    wvlog << "Dumping DTTM:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping DTTM done." << endl;
 }
 
 std::string DTTM::toString() const
@@ -630,9 +630,9 @@ void SHD::clear() {
 
 void SHD::dump() const
 {
-    wvlog << "Dumping SHD:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping SHD done." << std::endl;
+    wvlog << "Dumping SHD:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping SHD done." << endl;
 }
 
 std::string SHD::toString() const
@@ -762,9 +762,9 @@ void PHE::clear() {
 
 void PHE::dump() const
 {
-    wvlog << "Dumping PHE:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping PHE done." << std::endl;
+    wvlog << "Dumping PHE:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping PHE done." << endl;
 }
 
 std::string PHE::toString() const
@@ -940,9 +940,9 @@ void BRC::clear() {
 
 void BRC::dump() const
 {
-    wvlog << "Dumping BRC:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping BRC done." << std::endl;
+    wvlog << "Dumping BRC:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping BRC done." << endl;
 }
 
 std::string BRC::toString() const
@@ -1102,9 +1102,9 @@ void TLP::clear() {
 
 void TLP::dump() const
 {
-    wvlog << "Dumping TLP:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping TLP done." << std::endl;
+    wvlog << "Dumping TLP:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping TLP done." << endl;
 }
 
 std::string TLP::toString() const
@@ -1235,7 +1235,7 @@ void TC::readPtr(const U8 *ptr) {
     fUnused=shifterU16;
     wUnused=readU16(ptr);
     ptr+=sizeof(U16);
-    wvlog << std::endl;
+    wvlog << endl;
     brcTop.readPtr(ptr);
     ptr+=BRC::sizeOf97;
     brcLeft.readPtr(ptr);
@@ -1293,9 +1293,9 @@ void TC::clear() {
 
 void TC::dump() const
 {
-    wvlog << "Dumping TC:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping TC done." << std::endl;
+    wvlog << "Dumping TC:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping TC done." << endl;
 }
 
 std::string TC::toString() const
@@ -1470,9 +1470,9 @@ void TAP::clear() {
 
 void TAP::dump() const
 {
-    wvlog << "Dumping TAP:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping TAP done." << std::endl;
+    wvlog << "Dumping TAP:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping TAP done." << endl;
 }
 
 std::string TAP::toString() const
@@ -1791,9 +1791,9 @@ void ANLD::clear() {
 
 void ANLD::dump() const
 {
-    wvlog << "Dumping ANLD:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping ANLD done." << std::endl;
+    wvlog << "Dumping ANLD:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping ANLD done." << endl;
 }
 
 std::string ANLD::toString() const
@@ -2111,9 +2111,9 @@ void ANLV::clear() {
 
 void ANLV::dump() const
 {
-    wvlog << "Dumping ANLV:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping ANLV done." << std::endl;
+    wvlog << "Dumping ANLV:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping ANLV done." << endl;
 }
 
 std::string ANLV::toString() const
@@ -3104,9 +3104,9 @@ void CHP::clear() {
 
 void CHP::dump() const
 {
-    wvlog << "Dumping CHP:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping CHP done." << std::endl;
+    wvlog << "Dumping CHP:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping CHP done." << endl;
 }
 
 std::string CHP::toString() const
@@ -3441,9 +3441,9 @@ void DCS::clear() {
 
 void DCS::dump() const
 {
-    wvlog << "Dumping DCS:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping DCS done." << std::endl;
+    wvlog << "Dumping DCS:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping DCS done." << endl;
 }
 
 std::string DCS::toString() const
@@ -5883,9 +5883,9 @@ void LSPD::clear() {
 
 void LSPD::dump() const
 {
-    wvlog << "Dumping LSPD:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping LSPD done." << std::endl;
+    wvlog << "Dumping LSPD:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping LSPD done." << endl;
 }
 
 std::string LSPD::toString() const
@@ -6178,9 +6178,9 @@ void METAFILEPICT::clear() {
 
 void METAFILEPICT::dump() const
 {
-    wvlog << "Dumping METAFILEPICT:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping METAFILEPICT done." << std::endl;
+    wvlog << "Dumping METAFILEPICT:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping METAFILEPICT done." << endl;
 }
 
 std::string METAFILEPICT::toString() const
@@ -6323,9 +6323,9 @@ void NUMRM::clear() {
 
 void NUMRM::dump() const
 {
-    wvlog << "Dumping NUMRM:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping NUMRM done." << std::endl;
+    wvlog << "Dumping NUMRM:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping NUMRM done." << endl;
 }
 
 std::string NUMRM::toString() const
@@ -6541,9 +6541,9 @@ void OLST::clear() {
 
 void OLST::dump() const
 {
-    wvlog << "Dumping OLST:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping OLST done." << std::endl;
+    wvlog << "Dumping OLST:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping OLST done." << endl;
 }
 
 std::string OLST::toString() const
@@ -6873,9 +6873,9 @@ void PAP::clear() {
 
 void PAP::dump() const
 {
-    wvlog << "Dumping PAP:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping PAP done." << std::endl;
+    wvlog << "Dumping PAP:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping PAP done." << endl;
 }
 
 std::string PAP::toString() const
@@ -7557,9 +7557,9 @@ void PICF::clear() {
 
 void PICF::dump() const
 {
-    wvlog << "Dumping PICF:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping PICF done." << std::endl;
+    wvlog << "Dumping PICF:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping PICF done." << endl;
 }
 
 std::string PICF::toString() const
@@ -8082,9 +8082,9 @@ void SEP::clear() {
 
 void SEP::dump() const
 {
-    wvlog << "Dumping SEP:" << std::endl;
-    wvlog << toString().c_str() << std::endl;
-    wvlog << "\nDumping SEP done." << std::endl;
+    wvlog << "Dumping SEP:" << endl;
+    wvlog << toString().c_str() << endl;
+    wvlog << "\nDumping SEP done." << endl;
 }
 
 std::string SEP::toString() const

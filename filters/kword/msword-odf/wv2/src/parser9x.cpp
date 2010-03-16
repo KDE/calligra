@@ -78,45 +78,45 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 
     m_table = storage->createStreamReader( tableStream() );
     if ( !m_table || !m_table->isValid() ) {
-        wvlog << "Error: Couldn't open the table stream (i.e. [0|1]Table or WordDocument)" << std::endl;
+        wvlog << "Error: Couldn't open the table stream (i.e. [0|1]Table or WordDocument)" << endl;
         m_okay = false;
         return;
     }
 
     m_data = storage->createStreamReader( "Data" );
     if ( !m_data || !m_data->isValid() ) {
-        wvlog << "Information: Couldn't open the Data stream, no big deal" << std::endl;
+        wvlog << "Information: Couldn't open the Data stream, no big deal" << endl;
         delete m_data;
         m_data = 0;
     }
 
 #ifdef WV2_DUMP_FIB
-    wvlog << "Dumping some parts of the FIB: " << std::endl;
-    wvlog << "   wIdent=" << m_fib.wIdent << std::endl;
-    wvlog << "   nFib=" << m_fib.nFib << std::endl;
-    wvlog << "   nFibBack=" << m_fib.nFibBack << std::endl;
-    wvlog << "   lid=0x" << std::hex << m_fib.lid << std::dec << std::endl;
-    wvlog << "   lidFE=0x" << std::hex << m_fib.lidFE << std::dec << std::endl;
-    wvlog << "   fEncrypted=" << m_fib.fEncrypted << std::endl;
-    wvlog << "   chs=" << m_fib.chs << std::endl;
-    wvlog << "   fcMin=" << m_fib.fcMin << std::endl;
-    wvlog << "   fcMac=" << m_fib.fcMac << std::endl;
-    wvlog << "   ccpText=" << m_fib.ccpText << std::endl;
-    wvlog << "   ccpFtn=" << m_fib.ccpFtn << std::endl;
-    wvlog << "   ccpHdd=" << m_fib.ccpHdd << std::endl;
-    wvlog << "   ccpMcr=" << m_fib.ccpMcr << std::endl;
-    wvlog << "   ccpAtn=" << m_fib.ccpAtn << std::endl;
-    wvlog << "   ccpEdn=" << m_fib.ccpEdn << std::endl;
-    wvlog << "   ccpTxbx=" << m_fib.ccpTxbx << std::endl;
-    wvlog << "   ccpHdrTxbx=" << m_fib.ccpHdrTxbx << std::endl;
-    wvlog << "   pnFbpChpFirst=" << m_fib.pnFbpChpFirst << std::endl;
-    wvlog << "   pnChpFirst=" << m_fib.pnChpFirst << std::endl;
-    wvlog << "   cpnBteChp=" << m_fib.cpnBteChp << std::endl;
-    wvlog << "   pnFbpPapFirst=" << m_fib.pnFbpPapFirst << std::endl;
-    wvlog << "   pnPapFirst=" << m_fib.pnPapFirst << std::endl;
-    wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << std::endl;
-    wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << std::endl;
-    wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << std::endl;
+    wvlog << "Dumping some parts of the FIB: " << endl;
+    wvlog << "   wIdent=" << m_fib.wIdent << endl;
+    wvlog << "   nFib=" << m_fib.nFib << endl;
+    wvlog << "   nFibBack=" << m_fib.nFibBack << endl;
+    wvlog << "   lid=0x" << hex << m_fib.lid << dec << endl;
+    wvlog << "   lidFE=0x" << hex << m_fib.lidFE << dec << endl;
+    wvlog << "   fEncrypted=" << m_fib.fEncrypted << endl;
+    wvlog << "   chs=" << m_fib.chs << endl;
+    wvlog << "   fcMin=" << m_fib.fcMin << endl;
+    wvlog << "   fcMac=" << m_fib.fcMac << endl;
+    wvlog << "   ccpText=" << m_fib.ccpText << endl;
+    wvlog << "   ccpFtn=" << m_fib.ccpFtn << endl;
+    wvlog << "   ccpHdd=" << m_fib.ccpHdd << endl;
+    wvlog << "   ccpMcr=" << m_fib.ccpMcr << endl;
+    wvlog << "   ccpAtn=" << m_fib.ccpAtn << endl;
+    wvlog << "   ccpEdn=" << m_fib.ccpEdn << endl;
+    wvlog << "   ccpTxbx=" << m_fib.ccpTxbx << endl;
+    wvlog << "   ccpHdrTxbx=" << m_fib.ccpHdrTxbx << endl;
+    wvlog << "   pnFbpChpFirst=" << m_fib.pnFbpChpFirst << endl;
+    wvlog << "   pnChpFirst=" << m_fib.pnChpFirst << endl;
+    wvlog << "   cpnBteChp=" << m_fib.cpnBteChp << endl;
+    wvlog << "   pnFbpPapFirst=" << m_fib.pnFbpPapFirst << endl;
+    wvlog << "   pnPapFirst=" << m_fib.pnPapFirst << endl;
+    wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
+    wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
+    wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
 
 #endif
 
@@ -129,7 +129,7 @@ Parser9x::~Parser9x()
 {
     // Sanity check
     if ( !oldParsingStates.empty() || m_subDocument != None )
-        wvlog << "Bug: Someone messed up the save/restore stack!" << std::endl;
+        wvlog << "Bug: Someone messed up the save/restore stack!" << endl;
 
     delete m_currentParagraph;
     delete m_tableRowStart;
@@ -156,7 +156,7 @@ bool Parser9x::parse()
         // There is some code out there to break this "encryption", do we want
         // to implement that?
         // We could either ask for a password or cheat a bit :-)
-        wvlog << "Error: The document is encrypted." << std::endl;
+        wvlog << "Error: The document is encrypted." << endl;
         return false;
     }
 
@@ -222,7 +222,7 @@ void Parser9x::parseHeaders( const HeaderData& data )
 void Parser9x::parseFootnote( const FootnoteData& data )
 {
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Parser9x::parseFootnote() #####################" << std::endl;
+    wvlog << "Parser9x::parseFootnote() #####################" << endl;
 #endif
     if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
         return;
@@ -238,14 +238,14 @@ void Parser9x::parseFootnote( const FootnoteData& data )
     m_subDocumentHandler->footnoteEnd();
     restoreState();
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Parser9x::parseFootnote() done ################" << std::endl;
+    wvlog << "Parser9x::parseFootnote() done ################" << endl;
 #endif
 }
 
 void Parser9x::parseAnnotation( const AnnotationData& data )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Parser9x::parseAnnotation() #####################" << std::endl;
+    wvlog << "Parser9x::parseAnnotation() #####################" << endl;
 #endif
     if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
         return;
@@ -259,7 +259,7 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
     m_subDocumentHandler->annotationEnd();
     restoreState();
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Parser9x::parseAnnotation() done ################" << std::endl;
+    wvlog << "Parser9x::parseAnnotation() done ################" << endl;
 #endif
 }
 
@@ -267,7 +267,7 @@ void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
     wvlog << "Parser9x::parseTableRow(): startPiece=" << data.startPiece << " startOffset="
-            << data.startOffset << " length=" << data.length << std::endl;
+            << data.startOffset << " length=" << data.length << endl;
 #endif
 
     if ( data.length == 0 ) // idiot safe ;-)
@@ -284,25 +284,25 @@ void Parser9x::parseTableRow( const TableRowData& data )
     restoreState();
 
 #ifdef WV2_DEBUG_TABLES
-    wvlog << "Parser9x::parseTableRow() done #####################" << std::endl;
+    wvlog << "Parser9x::parseTableRow() done #####################" << endl;
 #endif
 }
 
 void Parser9x::parsePicture( const PictureData& data )
 {
-    wvlog << "Parser9x::parsePicture" << std::endl;
+    wvlog << "Parser9x::parsePicture" << endl;
     OLEStreamReader* stream = m_fib.nFib < Word8nFib ? m_wordDocument : m_data;
     stream->push(); // saveState would be overkill
 
     //go to the position in the stream after the PICF, where the actual picture data/escher is
     if ( !stream->seek( data.fcPic + data.picf->cbHeader, G_SEEK_SET ) ) {
-        wvlog << "Error: Parser9x::parsePicture couldn't seek properly" << std::endl;
+        wvlog << "Error: Parser9x::parsePicture couldn't seek properly" << endl;
         stream->pop();
         return;
     }
 
     if ( data.picf->mfp.mm == 0x64 || data.picf->mfp.mm == 0x66 ) {
-        wvlog << "Linked graphic in Escher object" << std::endl;
+        wvlog << "Linked graphic in Escher object" << endl;
         parsePictureEscher( data, stream, data.picf->lcb, data.fcPic );
     }
     else {
@@ -315,7 +315,7 @@ void Parser9x::parsePicture( const PictureData& data )
             parsePictureBitmapHelper( data, stream );
             break;
         default: // It has to be a .wmf or .emf file (right after the PICF)
-            wvlog << "assuming WMF/EMF file... not sure this is correct" << std::endl;
+            wvlog << "assuming WMF/EMF file... not sure this is correct" << endl;
             parsePictureWmfHelper( data, stream );
             break;
         }
@@ -325,7 +325,7 @@ void Parser9x::parsePicture( const PictureData& data )
 
 void Parser9x::parseTextBox( uint lid)
 {
-    wvlog << "Parser9x::parseTextBox" << std::endl;
+    wvlog << "Parser9x::parseTextBox" << endl;
 
     PLCF<Word97::FTXBXS> * plcftxbxTxt =  m_drawings->getTxbxTxt();
 
@@ -396,7 +396,7 @@ bool Parser9x::readPieceTable()
     while ( blockType == wvWare::clxtGrpprl ) {
         U16 size = m_table->readU16();
 #if WV2_DUMP_PIECE_TABLE > 0
-        wvlog << "Found a clxtGrpprl (size=" << size << ")" << std::endl;
+        wvlog << "Found a clxtGrpprl (size=" << size << ")" << endl;
 #endif
         m_table->seek( size, G_SEEK_CUR );
         blockType = m_table->readU8();
@@ -404,49 +404,49 @@ bool Parser9x::readPieceTable()
     if ( blockType == wvWare::clxtPlcfpcd ) {
         U32 size = m_table->readU32();
 #if WV2_DUMP_PIECE_TABLE > 0
-        wvlog << "Found the clxtPlcfpcd (size=" << size << ")" << std::endl;
+        wvlog << "Found the clxtPlcfpcd (size=" << size << ")" << endl;
 #endif
         m_plcfpcd = new PLCF<Word97::PCD>( size, m_table, false );
 
 #if WV2_DUMP_PIECE_TABLE > 1
         PLCFIterator<Word97::PCD> it( *m_plcfpcd );
         for ( int i = 0; it.current(); ++it, ++i ) {
-            wvlog << "Piece Table Entry(" << i << "): " << std::endl;
-            wvlog << "   start: " << it.currentStart() << std::endl;
-            wvlog << "   lim: " << it.currentLim() << std::endl;
-            wvlog << "   complex: " << it.current()->prm.fComplex << std::endl;
+            wvlog << "Piece Table Entry(" << i << "): " << endl;
+            wvlog << "   start: " << it.currentStart() << endl;
+            wvlog << "   lim: " << it.currentLim() << endl;
+            wvlog << "   complex: " << it.current()->prm.fComplex << endl;
             if ( it.current()->prm.fComplex )
-                wvlog << "   igrpprl: " << it.current()->prm.toPRM2().igrpprl << std::endl;
+                wvlog << "   igrpprl: " << it.current()->prm.toPRM2().igrpprl << endl;
             else
-                wvlog << "   isprm: " << it.current()->prm.isprm << std::endl;
+                wvlog << "   isprm: " << it.current()->prm.isprm << endl;
 
             U32 fc = it.current()->fc;
             U32 limit = it.currentRun() << 1;
-            wvlog << "   value: " << fc << std::endl;
+            wvlog << "   value: " << fc << endl;
             if ( fc & 0x40000000 ) {
                 fc = ( fc & 0xbfffffff ) >> 1;
                 limit >>= 1;
-                wvlog << "   value (cleared 2nd MSB, div. by 2): " << fc << std::endl;
+                wvlog << "   value (cleared 2nd MSB, div. by 2): " << fc << endl;
             }
             m_wordDocument->seek( fc );
-            wvlog << "   position: " << m_wordDocument->tell() << ", limit: " << limit << std::endl;
+            wvlog << "   position: " << m_wordDocument->tell() << ", limit: " << limit << endl;
             for ( unsigned int j = 0; j < limit; ++j ) {
                 U8 foo = m_wordDocument->readU8();
                 if ( foo > 31 )
                     wvlog << static_cast<char>( foo );
                 else if ( foo == PARAGRAPH_MARK )
-                    wvlog << std::endl;
+                    wvlog << endl;
                 else if ( foo > 0 )
                     wvlog << "{" <<  static_cast<int>( foo ) << "}";
                 else
                     wvlog << "_";
             }
-            wvlog << std::endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << std::endl;
+            wvlog << endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << endl;
         }
 #endif
     }
     else {
-        wvlog << "Oooops, couldn't find the piece table." << std::endl;
+        wvlog << "Oooops, couldn't find the piece table." << endl;
         return false;
     }
     return true;
@@ -531,7 +531,7 @@ void Parser9x::parseHelper( Position startPos )
                     // Symbol and the Wingdings font. We simply clear these bits to shift the
                     // characters to 0x00XX and hope the correct font is installed. If the font
                     // isn't there, the user will get some ASCII text instead of symbols :}
-                    //wvlog << "private unicode area detected -- cropping" << std::endl;
+                    //wvlog << "private unicode area detected -- cropping" << endl;
                     string[ j ] &= 0x00ff;
                 }
             }
@@ -658,7 +658,7 @@ void Parser9x::processParagraph( U32 fc )
             m_tableRowLength = 0;
 #ifdef WV2_DEBUG_TABLES
             wvlog << "Start of a table row: piece=" << m_tableRowStart->piece << " offset="
-                    << m_tableRowStart->offset << std::endl;
+                    << m_tableRowStart->offset << endl;
 #endif
         }
         m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(),
@@ -692,7 +692,7 @@ void Parser9x::processParagraph( U32 fc )
         // Get the appropriate style for this paragraph
         const Style* style = m_properties->styleByIndex( props->pap().istd );
         if ( !style ) {
-            wvlog << "Warning: Huh, really obscure error, couldn't find the Style for the current PAP -- skipping" << std::endl;
+            wvlog << "Warning: Huh, really obscure error, couldn't find the Style for the current PAP -- skipping" << endl;
             return;
         }
 
@@ -756,14 +756,14 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd << " disruption="
-                    << disruption << " length=" << length << std::endl;
+                    << disruption << " length=" << length << endl;
 #endif
         }
         U32 startCP = currentStart + chunk.m_position.offset + index;
 
         if ( disruption >= startCP && disruption < startCP + length ) {
 #ifdef WV2_DEBUG_FOOTNOTES
-            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << std::endl;
+            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
 #endif
             U32 disLen = disruption - startCP;
             if ( disLen != 0 )
@@ -872,11 +872,11 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
             processAnnotation(UString(character), globalCP, chp);
         }
     case TextHandler::FieldEscapeChar:
-            wvlog << "Found an escape character ++++++++++++++++++++?" << std::endl;
+            wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
     break;
     default:
     wvlog << "Parser9x::processSpecialCharacter(): Support for character " << character.unicode()
-            << " not implemented yet." << std::endl;
+            << " not implemented yet." << endl;
     break;
 }
 }
@@ -884,11 +884,11 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
 void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
 {
     if ( !m_footnotes ) {
-        wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << std::endl;
+        wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
         return;
     }
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "######### Footnote found: CP=" << globalCP << std::endl;
+    wvlog << "######### Footnote found: CP=" << globalCP << endl;
 #endif
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
@@ -901,9 +901,9 @@ void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<co
     for (int i = 0; i < characters.length(); ++i) {
         wvlog << characters[i].unicode();
     }
-    wvlog << std::endl;
+    wvlog << endl;
     if ( !m_annotations ) {
-        wvlog << "Bug: Found an annotation, but m_annotations == 0!" << std::endl;
+        wvlog << "Bug: Found an annotation, but m_annotations == 0!" << endl;
         return;
     }
 
@@ -948,12 +948,12 @@ void Parser9x::emitDrawnObject( U32 globalCP )
 void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
 {
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Found a picture; the fcPic is " << chp->fcPic_fcObj_lTagObj << std::endl;
+    wvlog << "Found a picture; the fcPic is " << chp->fcPic_fcObj_lTagObj << endl;
 #endif
 
     OLEStreamReader* stream( m_fib.nFib < Word8nFib ? m_wordDocument : m_data );
     if ( !stream || static_cast<unsigned int>( chp->fcPic_fcObj_lTagObj ) >= stream->size() ) {
-        wvlog << "Error: Severe problems when trying to read an image. Skipping." << std::endl;
+        wvlog << "Error: Severe problems when trying to read an image. Skipping." << endl;
         return;
     }
     stream->push();
@@ -967,28 +967,28 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     stream->pop();
 
     if ( picf->cbHeader < 58 ) {
-        wvlog << "Error: Found an image with a PICF smaller than 58 bytes! Skipping the image." << std::endl;
+        wvlog << "Error: Found an image with a PICF smaller than 58 bytes! Skipping the image." << endl;
         delete picf;
         return;
     }
     if ( picf->fError ) {
-        wvlog << "Information: Skipping the image, fError is set" << std::endl;
+        wvlog << "Information: Skipping the image, fError is set" << endl;
         delete picf;
         return;
     }
 
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "picf:" << std::endl << " lcb=" << picf->lcb << " cbHeader=" << picf->cbHeader
-            <<  std::endl << " mfp.mm=" << picf->mfp.mm << " mfp.xExt=" << picf->mfp.xExt
-            << " mfp.yExt=" << picf->mfp.yExt << " mfp.hMF=" << picf->mfp.hMF << std::endl
+    wvlog << "picf:" << endl << " lcb=" << picf->lcb << " cbHeader=" << picf->cbHeader
+            <<  endl << " mfp.mm=" << picf->mfp.mm << " mfp.xExt=" << picf->mfp.xExt
+            << " mfp.yExt=" << picf->mfp.yExt << " mfp.hMF=" << picf->mfp.hMF << endl
             << " dxaGoal=" << picf->dxaGoal << " dyaGoal=" << picf->dyaGoal << " mx="
-            << picf->mx << " my=" << picf->my << std::endl << " dxaCropLeft=" << picf->dxaCropLeft
+            << picf->mx << " my=" << picf->my << endl << " dxaCropLeft=" << picf->dxaCropLeft
             << " dyaCropTop=" << picf->dyaCropTop << " dxaCropRight=" << picf->dxaCropRight
-            << " dyaCropBottom=" << picf->dyaCropBottom << std::endl << " fFrameEmpty="
+            << " dyaCropBottom=" << picf->dyaCropBottom << endl << " fFrameEmpty="
             << picf->fFrameEmpty << " fBitmap=" << picf->fBitmap << " fDrawHatch="
             << picf->fDrawHatch << " fError=" << picf->fError << " bpp=" << picf->bpp
-            << std::endl << " dxaOrigin=" << picf->dxaOrigin << " dyaOrigin="
-            << picf->dyaOrigin << std::endl;
+            << endl << " dxaOrigin=" << picf->dxaOrigin << " dyaOrigin="
+            << picf->dyaOrigin << endl;
 #endif
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
@@ -1001,7 +1001,7 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 {
 #ifdef WV2_DEBUG_HEADERS
     wvlog << "parsing one header for section " << data.sectionNumber << ": mask=0x"
-            <<  std::hex << static_cast<int>( mask ) << std::dec << std::endl;
+            <<  hex << static_cast<int>( mask ) << dec << endl;
 #endif
 
     // First we have to determine the CP start/lim for the header text. From what I
@@ -1013,12 +1013,12 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 
     int length = range.second - range.first;
 #ifdef WV2_DEBUG_HEADERS
-    wvlog << "found a range: start=" << range.first << " lim=" << range.second << std::endl
-            << "length: " << length << std::endl;
+    wvlog << "found a range: start=" << range.first << " lim=" << range.second << endl
+            << "length: " << length << endl;
 #endif
     if ( length < 1 ) {
 #ifdef WV2_DEBUG_HEADERS
-        wvlog << "Warning: Didn't find a valid CPs for this header -- faking it" << std::endl;
+        wvlog << "Warning: Didn't find a valid CPs for this header -- faking it" << endl;
 #endif
         m_subDocumentHandler->headerStart( static_cast<HeaderData::Type>( mask ) );
         SharedPtr<const ParagraphProperties> sharedProps( new ParagraphProperties );
@@ -1047,7 +1047,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
     wvlog << "Parser9x::parsePictureEscher:\n  Total PICF size = " << totalPicfSize
             << "\n  PICF start position = " << picfStartPos
             << "\n  current stream position = " << stream->tell()
-            << "\n  endOfPicf = " << endOfPicf << std::endl;
+            << "\n  endOfPicf = " << endOfPicf << endl;
 #endif
 
     OfficeArtProperties artProps;
@@ -1060,7 +1060,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
     {
         U8 byte = stream->readU8();
         int offset = static_cast<unsigned int> (byte);
-        wvlog << "  0x66 offset is " << offset << std::endl;
+        wvlog << "  0x66 offset is " << offset << endl;
         stream->seek( offset, G_SEEK_CUR );
     }
 
@@ -1070,14 +1070,14 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
         //read header
         EscherHeader header( stream );
 #ifdef WV2_DEBUG_PICTURES
-        wvlog << "Starting new outer record: " << std::endl;
+        wvlog << "Starting new outer record: " << endl;
         header.dump();
 #endif
         //process record
-        wvlog << header.getRecordType() << std::endl;
+        wvlog << header.getRecordType().c_str() << endl;
         if( !header.isAtom() )
         {
-            wvlog << "Reading container..." << std::endl;
+            wvlog << "Reading container..." << endl;
             //same process again with container
             int endOfContainer = stream->tell() + header.recordSize();
             do
@@ -1085,9 +1085,9 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                 //read header
                 EscherHeader h( stream );
 #ifdef WV2_DEBUG_PICTURES
-                wvlog << "  starting new inner record: " << std::endl;
+                wvlog << "  starting new inner record: " << endl;
                 h.dump();
-                wvlog << h.getRecordType() << std::endl;
+                wvlog << h.getRecordType() << endl;
 #endif
                 //process record
                 if (h.isAtom()) {
@@ -1111,49 +1111,49 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                 }
                 else
                   {
-                    wvlog << "  Error - container inside a container!" << std::endl;
+                    wvlog << "  Error - container inside a container!" << endl;
                   }
             } while (stream->tell() != endOfContainer);
-            wvlog << "End of container." << std::endl;
+            wvlog << "End of container." << endl;
 
             m_pictureHandler->officeArt(&artProps);
 
         } //finished processing a container
         else
         {
-            wvlog << "Reading atom" << std::endl;
+            wvlog << "Reading atom" << endl;
             if( header.getRecordType() == "msofbtBSE" )
             {
                 //process image
                 FBSE fbse( stream );
 #ifdef WV2_DEBUG_PICTURES
                 fbse.dump();
-                wvlog << "name length is " << fbse.getNameLength() << std::endl;
+                wvlog << "name length is " << fbse.getNameLength() << endl;
 #endif
                 //the data is actually in a new record!
                 EscherHeader h( stream );
 #ifdef WV2_DEBUG_PICTURES
-                wvlog << " reading data record after fbse record" << std::endl;
+                wvlog << " reading data record after fbse record" << endl;
                 h.dump();
 #endif
                 string blipType = h.getRecordType();
                 Blip blip( stream, blipType );
 #ifdef WV2_DEBUG_PICTURES
-                wvlog << "  Blip record dump:" << std::endl;
+                wvlog << "  Blip record dump:" << endl;
                 blip.dump();
 #endif
                 //if Blip is compressed, we have to process differently
                 if( blip.isCompressed() )
                 {
-                    wvlog << "Decompressing image data at " << stream->tell() << "..." << std::endl;
+                    wvlog << "Decompressing image data at " << stream->tell() << "..." << endl;
                     ZCodec z( 0x8000, 0x8000 );
                     z.BeginCompression();
                     z.SetBreak(blip.compressedImageSize());
                     std::vector<U8> outBuffer;
                     int err = z.Decompress( *stream, &outBuffer );
 #ifdef WV2_DEBUG_PICTURES
-                    wvlog << "  err=" << err << std::endl;
-                    wvlog << "  outBuffer size = " << outBuffer.size() << std::endl;
+                    wvlog << "  err=" << err << endl;
+                    wvlog << "  outBuffer size = " << outBuffer.size() << endl;
 #endif
                     z.EndCompression(&outBuffer);
                     //pass vector to escherData instead of OLEImageReader
@@ -1175,25 +1175,25 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
             {
                 //we can't really process this atom, because we don't recognize the type
                 //so just skip to the end of this picf
-                wvlog << "  unrecognized atom, so we'll skip this image" << std::endl;
+                wvlog << "  unrecognized atom, so we'll skip this image" << endl;
                 stream->seek( endOfPicf );
                 //U8* string = new U8[ header.recordSize() ];
                 //stream->read( string, header.recordSize() );
                 //clean up memory
                 //delete [] string;
             }
-            wvlog << "End of atom." << std::endl;
+            wvlog << "End of atom." << endl;
         } //finished processing an atom record
-        wvlog << "current position: " << stream->tell() << ", endOfPicf:" << endOfPicf << std::endl;
+        wvlog << "current position: " << stream->tell() << ", endOfPicf:" << endOfPicf << endl;
         if( stream->tell() > endOfPicf )
-            wvlog << "Error! We read past the end of the picture!" << std::endl;
+            wvlog << "Error! We read past the end of the picture!" << endl;
     } while (stream->tell() != endOfPicf); //end of record
 }
 
 void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties)
 {
 #ifdef WV2_DEBUG_PICTURES
-  wvlog << "parseOfficeArtFOPT - processing bytes: " << dataSize << std::endl;
+  wvlog << "parseOfficeArtFOPT - processing bytes: " << dataSize << endl;
 #endif
 
   U16 opid, opidOpid;
@@ -1238,7 +1238,7 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
 
           default:
 #ifdef WV2_DEBUG_PICTURES
-              wvlog << " >> [opid - fBid - fComplex = op] [ " <<  std::hex << (int) opidOpid << " - " << (int) fBid << " - " << (int) fComplex  << " = " << op  << " ] " << std::dec << std::endl;
+              wvlog << " >> [opid - fBid - fComplex = op] [ " <<  hex << (int) opidOpid << " - " << (int) fBid << " - " << (int) fComplex  << " = " << op  << " ] " << dec << endl;
 #endif
               break;
       }
@@ -1248,7 +1248,7 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
 
     if (dataSize > 0) {
 #ifdef WV2_DEBUG_PICTURES
-        wvlog << "parseOfficeArtFOPT - discarding bytes: " << dataSize << std::endl;
+        wvlog << "parseOfficeArtFOPT - discarding bytes: " << dataSize << endl;
 #endif
 
         U8* s = new U8[ dataSize ];
@@ -1261,7 +1261,7 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
 void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream )
 {
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureExternalHelper" << std::endl;
+    wvlog << "Parser9x::parsePictureExternalHelper" << endl;
 #endif
 
     // Guessing... some testing would be nice
@@ -1279,7 +1279,7 @@ void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamRea
 void Parser9x::parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream )
 {
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureBitmapHelper" << std::endl;
+    wvlog << "Parser9x::parsePictureBitmapHelper" << endl;
 #endif
     OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
     m_pictureHandler->bitmapData( reader, data.picf );
@@ -1288,7 +1288,7 @@ void Parser9x::parsePictureBitmapHelper( const PictureData& data, OLEStreamReade
 void Parser9x::parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream )
 {
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureWmfHelper" << std::endl;
+    wvlog << "Parser9x::parsePictureWmfHelper" << endl;
 #endif
     // ###### TODO: Handle the Mac case (x-wmf + PICT)
     // ###### CHECK: Do we want to do anything about .emf files?
@@ -1316,7 +1316,7 @@ void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, Par
 void Parser9x::restoreState()
 {
     if ( oldParsingStates.empty() ) {
-        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << std::endl;
+        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << endl;
         return;
     }
 
@@ -1328,7 +1328,7 @@ void Parser9x::restoreState()
     oldParsingStates.pop();
 
     if ( m_tableRowStart )
-        wvlog << "Bug: We still have to process the table row." << std::endl;
+        wvlog << "Bug: We still have to process the table row." << endl;
     delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
     m_tableRowStart = ps.tableRowStart;
     m_tableRowLength = ps.tableRowLength;
@@ -1336,12 +1336,12 @@ void Parser9x::restoreState()
     m_remainingCells = ps.remainingCells;
 
     if ( !m_currentParagraph->empty() )
-        wvlog << "Bug: The current paragraph isn't empty." << std::endl;
+        wvlog << "Bug: The current paragraph isn't empty." << endl;
     delete m_currentParagraph;
     m_currentParagraph = ps.paragraph;
 
     if ( m_remainingChars != 0 )
-        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << std::endl;
+        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
     m_remainingChars = ps.remainingChars;
     m_sectionNumber = ps.sectionNumber;
 
@@ -1383,7 +1383,7 @@ U32 Parser9x::toLocalCP( U32 globalCP ) const
         return globalCP;
     globalCP -= m_fib.ccpHdrTxbx;
 
-    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << std::endl;
+    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << endl;
     return globalCP;
 }
 

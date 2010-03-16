@@ -95,7 +95,7 @@ static int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 ZCodec::ZCodec( ULONG nInBufSize, ULONG nOutBufSize, ULONG nMemUsage )
     : mnCRC(0)
 {
-    wvlog << "Creating ZCodec object..." << std::endl;
+    wvlog << "Creating ZCodec object..." << endl;
     //initialize variables
     mnMemUsage = nMemUsage;
     mnInBufSize = nInBufSize;
@@ -208,7 +208,7 @@ long ZCodec::Compress( OLEStreamReader& rIStm, OLEStreamWriter& rOStm )
 long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 {
     wvlog << "Decompressing... (mnInToRead=" << mnInToRead << ",avail_in=" 
-        << PZSTREAM->avail_in << ")" << std::endl;
+        << PZSTREAM->avail_in << ")" << endl;
 	int err;
 	ULONG	nInToRead;
 	long	nOldTotal_Out = PZSTREAM->total_out;
@@ -218,7 +218,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 
 	if ( mbInit == 0 )
 	{
-            wvlog << "  decompression initialization" << std::endl;
+            wvlog << "  decompression initialization" << endl;
 		mpIStm = &rIStm;
 		//mpOStm = &rOStm;
 		ImplInitBuf( true );
@@ -228,7 +228,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 	do
 	{
             wvlog << "top of do-while loop; PZSTREAM->avail_out=" << PZSTREAM->avail_out
-                << "; PZSTREAM->avail_in=" << PZSTREAM->avail_in << "; mnInToRead=" << mnInToRead << std::endl;
+                << "; PZSTREAM->avail_in=" << PZSTREAM->avail_in << "; mnInToRead=" << mnInToRead << endl;
             //replenish in-buffer if needed
 		if ( PZSTREAM->avail_in == 0 && mnInToRead )
 		{		
@@ -236,14 +236,14 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 			nInToRead = ( mnInBufSize > mnInToRead ) ? mnInToRead : mnInBufSize;
                         //read some more bytes
                         wvlog << " trying to read " << nInToRead << " bytes from stream at " 
-                            << mpIStm->tell() << std::endl;
+                            << mpIStm->tell() << endl;
                         //read nInToRead bytes into the next_in, which is mpInBuf
                         //and put number of bytes read into avail_in
 			//PZSTREAM->avail_in = 
                         //this read() function doesn't return the number of bytes read...
                         bool read = mpIStm->read( PZSTREAM->next_in = mpInBuf, nInToRead );
                         if(!read)
-                            wvlog << "Error reading bytes!" << std::endl;
+                            wvlog << "Error reading bytes!" << endl;
                         PZSTREAM->avail_in = nInToRead;
                         //update the number of bytes left to read
 			mnInToRead -= nInToRead;
@@ -254,9 +254,9 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 
 		}
                 //actually perform the decompression, storing error code in err
-                wvlog << "  inflate()" << std::endl;
+                wvlog << "  inflate()" << endl;
 		err = inflate( PZSTREAM, Z_NO_FLUSH );
-                wvlog << "inflate() return code: " << err << std::endl;
+                wvlog << "inflate() return code: " << err << endl;
 		if ( err < 0 )
 		{
 			mbStatus = false;
@@ -270,7 +270,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
         //set the "finished" flag if we got the stream-end signal?
 	if ( err == Z_STREAM_END ) 
 		mbFinish = true;	
-        wvlog << "  total_in=" << PZSTREAM->total_in << ",total_out=" << PZSTREAM->total_out << std::endl;
+        wvlog << "  total_in=" << PZSTREAM->total_in << ",total_out=" << PZSTREAM->total_out << endl;
         //return code: -1 if mbStatus is false, otherwise # of bytes decompressed
 	return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
@@ -280,7 +280,7 @@ long ZCodec::Decompress( OLEStreamReader& rIStm, std::vector<U8>* outBuffer )
 void ZCodec::ImplWriteBack( std::vector<U8>* outBuffer )
 {
     ULONG nAvail = mnOutBufSize - PZSTREAM->avail_out;
-    wvlog << "ImplWriteBack() nAvail=" << nAvail << std::endl;
+    wvlog << "ImplWriteBack() nAvail=" << nAvail << endl;
 	
     if ( nAvail )
     {

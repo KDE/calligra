@@ -29,13 +29,13 @@ Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib )
         m_annotationRef( 0 ), m_annotationRefIt( 0 )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::Annotations "<< std::endl
-          << "footnotes" << std::endl
-          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << std::endl
-          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << std::endl
-          << "annotations" << std::endl
-          << "   fcPlcfandRef=" << fib.fcPlcfandRef << " lcbPlcfandRef=" << fib.lcbPlcfandRef << std::endl
-          << "   fcPlcfandTxt=" << fib.fcPlcfandTxt << " lcbPlcfandTxt=" << fib.lcbPlcfandTxt << std::endl;
+    wvlog << "Annotations::Annotations "<< endl
+          << "footnotes" << endl
+          << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << endl
+          << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << endl
+          << "annotations" << endl
+          << "   fcPlcfandRef=" << fib.fcPlcfandRef << " lcbPlcfandRef=" << fib.lcbPlcfandRef << endl
+          << "   fcPlcfandTxt=" << fib.fcPlcfandTxt << " lcbPlcfandTxt=" << fib.lcbPlcfandTxt << endl;
 #endif
     tableStream->push();
     // Annotations
@@ -53,7 +53,7 @@ Annotations::~Annotations()
 AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::annotation(): globalCP=" << globalCP << std::endl;
+    wvlog << "Annotations::annotation(): globalCP=" << globalCP << endl;
 #endif
     ok = true; // let's assume we will find it
     if (    m_annotationRefIt && m_annotationRefIt->currentStart() == globalCP
@@ -66,14 +66,14 @@ AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
         return AnnotationData( start, *m_annotationTxtIt );
     }
 
-    wvlog << "Bug: There is no annotation with the CP " << globalCP << std::endl;
+    wvlog << "Bug: There is no annotation with the CP " << globalCP << endl;
     ok = false;
     return AnnotationData( 0, 0 );
 }
 
 U32 Annotations::nextAnnotation() const
 {
-    wvlog << "Annotations::nextAnnotation()" << std::endl;
+    wvlog << "Annotations::nextAnnotation()" << endl;
     return m_annotationRefIt && m_annotationRefIt->current() ? m_annotationRefIt->currentStart() : 0xffffffff;
 }
 
@@ -89,26 +89,26 @@ void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
     *refIt = new PLCFIterator<Word97::FRD>( **ref );
 
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::init()" << std::endl;
+    wvlog << "Annotations::init()" << endl;
     ( *ref )->dumpCPs();
 #endif
 
     if ( lcbTxt == 0 )
-        wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << std::endl;
+        wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << endl;
     else {
         if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
-            wvlog << "Warning: Found a hole in the table stream" << std::endl;
+            wvlog << "Warning: Found a hole in the table stream" << endl;
             tableStream->seek( fcTxt, G_SEEK_SET );
         }
         for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
             txt.push_back( tableStream->readU32() );
 #ifdef WV2_DEBUG_ANNOTATIONS
-            wvlog << "read: " << txt.back() << std::endl;
+            wvlog << "read: " << txt.back() << endl;
 #endif
         }
         txtIt = txt.begin();
     }
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::init() done" << std::endl;
+    wvlog << "Annotations::init() done" << endl;
 #endif
 }

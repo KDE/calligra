@@ -170,12 +170,12 @@ int EscherHeader::recordInstance()
 
 void EscherHeader::dump()
 {
-    wvlog << "Dumping Escher header:" << std::endl;
-    wvlog << " ver = " << ver << std::endl;
-    wvlog << " inst = " << inst << std::endl;
-    wvlog << " fbt = " << fbt << std::endl;
-    wvlog << " cbLength = " << cbLength << std::endl;
-    wvlog << "Finished dumping Escher header." << std::endl;
+    wvlog << "Dumping Escher header:" << endl;
+    wvlog << " ver = " << ver << endl;
+    wvlog << " inst = " << inst << endl;
+    wvlog << " fbt = " << fbt << endl;
+    wvlog << " cbLength = " << cbLength << endl;
+    wvlog << "Finished dumping Escher header." << endl;
 }
 
 FBSE::FBSE( OLEStreamReader* stream )
@@ -199,19 +199,19 @@ FBSE::~FBSE()
 
 void FBSE::dump()
 {
-    wvlog << "Dumping FBSE:" << std::endl;
-    wvlog << "\tbtWin32 = " << btWin32 << std::endl;
-    wvlog << "\tbtMacOS = " << btMacOS << std::endl;
-    wvlog << "\trgbUid = " << rgbUid << std::endl;
-    wvlog << "\ttag = " << tag << std::endl;
-    wvlog << "\tsize = " << size << std::endl;
-    wvlog << "\tcRef = " << cRef << std::endl;
-    wvlog << "\tfoDelay = " << foDelay << std::endl;
-    wvlog << "\tusage = " << static_cast<int> (usage) << std::endl;
-    wvlog << "\tcbName = " << static_cast<unsigned int> (cbName) << std::endl;
-    wvlog << "\tunused2 = " << static_cast<unsigned int> (unused2) << std::endl;
-    wvlog << "\tunused3 = " << static_cast<unsigned int> (unused3) << std::endl;
-    wvlog << "Finished dumping FBSE." << std::endl;
+    wvlog << "Dumping FBSE:" << endl;
+    wvlog << "\tbtWin32 = " << btWin32 << endl;
+    wvlog << "\tbtMacOS = " << btMacOS << endl;
+    wvlog << "\trgbUid = " << rgbUid << endl;
+    wvlog << "\ttag = " << tag << endl;
+    wvlog << "\tsize = " << size << endl;
+    wvlog << "\tcRef = " << cRef << endl;
+    wvlog << "\tfoDelay = " << foDelay << endl;
+    wvlog << "\tusage = " << static_cast<int> (usage) << endl;
+    wvlog << "\tcbName = " << static_cast<unsigned int> (cbName) << endl;
+    wvlog << "\tunused2 = " << static_cast<unsigned int> (unused2) << endl;
+    wvlog << "\tunused3 = " << static_cast<unsigned int> (unused3) << endl;
+    wvlog << "Finished dumping FBSE." << endl;
 }
 
 int FBSE::recordSize()
@@ -311,20 +311,20 @@ void Blip::dump()
 {
     if( !isCompressed() )
     {
-        wvlog << " bitmap blip:" << std::endl;
-        wvlog << " m_rgbUid = " << m_rgbUid << std::endl;
-        wvlog << " m_bTag = " << static_cast<unsigned int> (m_bTag) << std::endl;
+        wvlog << " bitmap blip:" << endl;
+        wvlog << " m_rgbUid = " << m_rgbUid << endl;
+        wvlog << " m_bTag = " << static_cast<unsigned int> (m_bTag) << endl;
     }
     else 
     {
-        wvlog << " metafile blip:" << std::endl;
-        wvlog << " m_rgbUid = " << m_rgbUid << std::endl;
-        wvlog << " m_cb = " << m_cb << std::endl;
-        wvlog << " m_rcBounds = " << m_rcBounds << std::endl;
-        wvlog << " m_ptSize = " << m_ptSize << std::endl;
-        wvlog << " m_cbSave = " << m_cbSave << std::endl;
-        wvlog << " m_fCompression = " << static_cast<unsigned int> (m_fCompression) << std::endl;
-        wvlog << " m_fFilter = " << static_cast<unsigned int> (m_fFilter) << std::endl;
+        wvlog << " metafile blip:" << endl;
+        wvlog << " m_rgbUid = " << m_rgbUid << endl;
+        wvlog << " m_cb = " << m_cb << endl;
+        wvlog << " m_rcBounds = " << m_rcBounds << endl;
+        wvlog << " m_ptSize = " << m_ptSize << endl;
+        wvlog << " m_cbSave = " << m_cbSave << endl;
+        wvlog << " m_fCompression = " << static_cast<unsigned int> (m_fCompression) << endl;
+        wvlog << " m_fFilter = " << static_cast<unsigned int> (m_fFilter) << endl;
     }
 }
 

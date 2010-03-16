@@ -125,7 +125,7 @@ UString TextConverter::convert( const std::string& input ) const
 UString TextConverter::convert( const char* input, unsigned int length ) const
 {
     if ( !isOk() ) {
-        wvlog << "Error: I don't have any open converter." << std::endl;
+        wvlog << "Error: I don't have any open converter." << endl;
         return UString();
     }
 
@@ -149,13 +149,13 @@ UString TextConverter::convert( const char* input, unsigned int length ) const
             return ustring;
         }
         else {
-            wvlog << "Error: The conversion was not successful: " << errno << std::endl;
+            wvlog << "Error: The conversion was not successful: " << errno << endl;
             return UString();
         }
     }
 
     if ( outputLen != 0 || ( outputLen & 0x00000001 ) == 1 )
-        wvlog << "Strange, got an outputLen of " << outputLen << std::endl;
+        wvlog << "Strange, got an outputLen of " << outputLen << endl;
 
     UString ustring( output, length - ( outputLen >> 1 ), true );
     delete [] output;
@@ -312,18 +312,18 @@ void TextConverter::close()
 void TextConverter::open()
 {
     if ( d->m_iconv != reinterpret_cast<iconv_t>( -1 ) ) {
-        wvlog << "Warning: Do you really want to get rid of the current converter?" << std::endl;
+        wvlog << "Warning: Do you really want to get rid of the current converter?" << endl;
         close();
     }
 #ifdef WORDS_BIGENDIAN
     if ( d->m_toCode != "UNICODEBIG" )
-        wvlog << "Warning: Do you really want to do convert to something else than UNICODEBIG?" << std::endl;
+        wvlog << "Warning: Do you really want to do convert to something else than UNICODEBIG?" << endl;
 #else
     if ( d->m_toCode != "UNICODELITTLE" )
-        wvlog << "Warning: Do you really want to do convert to something else than UNICODELITTLE?" << std::endl;
+        wvlog << "Warning: Do you really want to do convert to something else than UNICODELITTLE?" << endl;
 #endif
     if ( d->m_fromCode == "not known" )
-        wvlog << "Warning: We don't know the current charset you want to convert from!" << std::endl;
+        wvlog << "Warning: We don't know the current charset you want to convert from!" << endl;
 
     if ( !d->m_toCode.empty() && !d->m_fromCode.empty() )
         d->m_iconv = iconv_open( d->m_toCode.c_str(), d->m_fromCode.c_str() );

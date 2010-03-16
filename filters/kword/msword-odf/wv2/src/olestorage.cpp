@@ -100,7 +100,7 @@ bool OLEStorage::open( Mode mode )
         if ( !input )  {
             if ( !err )
                 return false;
-            wvlog << m_fileName <<  " error: " << err->message << std::endl;
+            wvlog << m_fileName.c_str() <<  " error: " << err->message << endl;
             g_error_free( err );
             return false;
         }
@@ -110,7 +110,7 @@ bool OLEStorage::open( Mode mode )
         if ( !m_inputFile ) {
             if ( !err )
                 return false;
-            wvlog << m_fileName << " Not an OLE file: " << err->message << std::endl;
+            wvlog << m_fileName.c_str() << " Not an OLE file: " << err->message << endl;
             g_error_free( err );
             return false;
         }
@@ -120,7 +120,7 @@ bool OLEStorage::open( Mode mode )
         if ( !output )  {
             if ( !err )
                 return false;
-            wvlog << m_fileName << " error: " << err->message << std::endl;
+            wvlog << m_fileName.c_str() << " error: " << err->message << endl;
             g_error_free( err );
             return false;
         }
@@ -140,7 +140,7 @@ void OLEStorage::close()
         OLEStream* stream( *it );
         ++it; // first advance the iterator, as the stream will remove itself from the list
         delete stream;
-        wvlog << "Warning: Closing a stream you didn't delete." << std::endl;
+        wvlog << "Warning: Closing a stream you didn't delete." << endl;
     }
     m_streams.clear(); // should be a no-op
 
@@ -307,7 +307,7 @@ OLEStreamWriter* OLEStorage::createStreamWriter( const std::string& stream )
         return 0;
     // Don't try to confuse our highly intelligent path system :p
     if ( stream.find('/') != std::string::npos ) {
-        wvlog << "Warning: You tried to create a stream with a '/' in its name." << std::endl;
+        wvlog << "Warning: You tried to create a stream with a '/' in its name." << endl;
         return 0;
     }
 

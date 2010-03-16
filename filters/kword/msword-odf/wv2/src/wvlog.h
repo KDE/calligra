@@ -19,12 +19,8 @@
 #ifndef WVLOG_H
 #define WVLOG_H
 
-#include <iostream>
 #include <kdebug.h>
 
 #define wvlog kDebug()
-
-KDECORE_EXPORT QDebug operator<<(QDebug s, const std::string &o);
-KDECORE_EXPORT QDebug operator<<(QDebug s, std::basic_ostream<char>& (*o)( std::basic_ostream<char>& ));
 
 #endif // WVLOG_H

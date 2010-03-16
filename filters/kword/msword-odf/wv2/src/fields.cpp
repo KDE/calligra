@@ -89,14 +89,14 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     tableStream->push();
 
 #ifdef WV2_DEBUG_FIELDS
-    wvlog << "Fields --------------" << std::endl
-          << "  main: fc=" << fib.fcPlcffldMom << " lcb=" << fib.lcbPlcffldMom << std::endl
-          << "  header: fc=" << fib.fcPlcffldHdr << " lcb=" << fib.lcbPlcffldHdr << std::endl
-          << "  footnote: fc=" << fib.fcPlcffldFtn << " lcb=" << fib.lcbPlcffldFtn << std::endl
-          << "  annotation: fc=" << fib.fcPlcffldAtn << " lcb=" << fib.lcbPlcffldAtn << std::endl
-          << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << std::endl
-          << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << std::endl
-          << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << std::endl;
+    wvlog << "Fields --------------" << endl
+          << "  main: fc=" << fib.fcPlcffldMom << " lcb=" << fib.lcbPlcffldMom << endl
+          << "  header: fc=" << fib.fcPlcffldHdr << " lcb=" << fib.lcbPlcffldHdr << endl
+          << "  footnote: fc=" << fib.fcPlcffldFtn << " lcb=" << fib.lcbPlcffldFtn << endl
+          << "  annotation: fc=" << fib.fcPlcffldAtn << " lcb=" << fib.lcbPlcffldAtn << endl
+          << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << endl
+          << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << endl
+          << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << endl;
 #endif
 
     tableStream->seek( fib.fcPlcffldMom, G_SEEK_SET ); // to make the sanity check work
@@ -138,7 +138,7 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
 {
     switch( subDocument ) {
         case Parser::None:
-            wvlog << "Error: The state of the parser is invalid!" << std::endl;
+            wvlog << "Error: The state of the parser is invalid!" << endl;
             return 0;
             break;
         case Parser::Main:
@@ -151,7 +151,7 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
             return fldForCP( m_header, cp );
             break;
         case Parser::Macro:
-            wvlog << "Warning: There shouldn't be any fields in macro text" << std::endl;
+            wvlog << "Warning: There shouldn't be any fields in macro text" << endl;
             return 0;
             break;
         case Parser::Annotation:
@@ -181,7 +181,7 @@ void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCF<FLD>** pl
 void Fields::sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lcb ) const
 {
     if ( lcb != 0 && static_cast<U32>( tableStream->tell() ) != nextFC )
-        wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << std::endl;
+        wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << endl;
 }
 
 const FLD* Fields::fldForCP( const PLCF<FLD>* plcf, U32 cp ) const

@@ -31,16 +31,16 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
 
     tableStream->push();
 #ifdef WV2_DEBUG_HEADERS
-    wvlog << "Headers::Headers(): fc=" << fcPlcfhdd << " lcb=" << lcbPlcfhdd << std::endl;
+    wvlog << "Headers::Headers(): fc=" << fcPlcfhdd << " lcb=" << lcbPlcfhdd << endl;
     if ( version == Word8 )
-        wvlog << "   there is/are " << lcbPlcfhdd / 4 - 2 << " header(s)" << std::endl;
+        wvlog << "   there is/are " << lcbPlcfhdd / 4 - 2 << " header(s)" << endl;
 #endif
 
     // remove later (do we want asserts in here???)
     if ( lcbPlcfhdd % 4 )
-        wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << std::endl;
+        wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << endl;
     else if ( version == Word8 && ( lcbPlcfhdd / 4 - 2 ) % headerTypes )
-        wvlog << "Bug: #headers % " << headerTypes << " != 0!" << std::endl;
+        wvlog << "Bug: #headers % " << headerTypes << " != 0!" << endl;
 
     tableStream->seek( fcPlcfhdd, G_SEEK_SET );
 
@@ -48,7 +48,7 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
     if ( version == Word8 )
         for ( ; i < headerTypes * sizeof( U32 ); i += sizeof( U32 ) )
             if ( tableStream->readU32() )
-                wvlog << "Bug: Read a value != 0 where I expected a 0!" << std::endl;
+                wvlog << "Bug: Read a value != 0 where I expected a 0!" << endl;
     for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) )
         m_headers.push_back( tableStream->readU32() );
 

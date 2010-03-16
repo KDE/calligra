@@ -31,7 +31,7 @@ AssociatedStrings::AssociatedStrings( U32 fcSttbfAssoc, U32 lcbSttbfAssoc, U16 l
     tableStream->seek( fcSttbfAssoc );
     m_sttbf = new STTBF( lid, tableStream );
     if ( tableStream->tell() - fcSttbfAssoc != lcbSttbfAssoc )
-        wvlog << "Warning: Associated strings have a different size than expected!" << std::endl;
+        wvlog << "Warning: Associated strings have a different size than expected!" << endl;
     tableStream->pop();
 }
 

@@ -68,7 +68,7 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
         m_dop = Word95::toWord97( Word95::DOP( m_table, false ) );
 
     if ( m_table->tell() != static_cast<S32>( fib.fcDop + fib.lcbDop ) )
-        wvlog << "Warning: DOP has a different size than expected." << std::endl;
+        wvlog << "Warning: DOP has a different size than expected." << endl;
 
     // Read the PLCF SED. The Word95::SED is different, but the differing
     // fields are unused and of the same size, so what :-)
@@ -83,7 +83,7 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
         else
             m_plcfbtePapx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbtePapx, m_table ) );
         if ( fib.cpnBtePap != 0 && fib.cpnBtePap != m_plcfbtePapx->count() )
-            wvlog << "Error: The PAP piece table is incomplete! (Should be " << fib.cpnBtePap << ")" << std::endl;
+            wvlog << "Error: The PAP piece table is incomplete! (Should be " << fib.cpnBtePap << ")" << endl;
 
         m_table->seek( fib.fcPlcfbteChpx );
         if ( m_version == Word8 )
@@ -91,7 +91,7 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
         else
             m_plcfbteChpx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbteChpx, m_table ) );
         if ( fib.cpnBteChp != 0 && fib.cpnBteChp != m_plcfbteChpx->count() )
-            wvlog << "Error: The CHP piece table is incomplete! (Should be " << fib.cpnBteChp << ")" << std::endl;
+            wvlog << "Error: The CHP piece table is incomplete! (Should be " << fib.cpnBteChp << ")" << endl;
     }
     else {
         // Read the PAPX and CHPX BTE PLCFs (to locate the appropriate FKPs) from a non-complex file
@@ -176,7 +176,7 @@ ParagraphProperties* Properties97::fullSavedPap( U32 fc, OLEStreamReader* dataSt
         ++it;
 
     if ( !it.current() ) {
-        wvlog << "Bug: PAPX BTE screwed" << std::endl;
+        wvlog << "Bug: PAPX BTE screwed" << endl;
         return new ParagraphProperties;
     }
 
@@ -231,7 +231,7 @@ Word97::TAP* Properties97::fullSavedTap( U32 fc, OLEStreamReader* dataStream )
         ++it;
 
     if ( !it.current() ) {
-        wvlog << "Bug: TAPX BTE screwed" << std::endl;
+        wvlog << "Bug: TAPX BTE screwed" << endl;
         return new Word97::TAP;
     }
 
@@ -281,7 +281,7 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
             chp->apply( upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, 0, m_version );
         }
         else
-            wvlog << "Couldn't find the character style with istd " << chp->istd << std::endl;
+            wvlog << "Couldn't find the character style with istd " << chp->istd << endl;
     }
 
     // Step 1: Search the correct FKP entry in the PLCFBTE
@@ -290,7 +290,7 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
         ++it;
 
     if ( !it.current() ) {
-        wvlog << "Bug: CHPX BTE screwed (backing out by faking properties)" << std::endl;
+        wvlog << "Bug: CHPX BTE screwed (backing out by faking properties)" << endl;
         it.toFirst();
     }
 
@@ -330,20 +330,20 @@ template<class P>
 void Properties97::applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* properties, const Style* style )
 {
     if ( !pcd ) {
-        wvlog << "Huh? This can't have happended, right?" << std::endl;
+        wvlog << "Huh? This can't have happended, right?" << endl;
         return;
     }
 
     if ( pcd->prm.fComplex != 0 ) {
         U16 igrpprl = pcd->prm.toPRM2().igrpprl;
-        //wvlog << "############# igrpprl: " << igrpprl << std::endl;
+        //wvlog << "############# igrpprl: " << igrpprl << endl;
         m_table->push();
         m_table->seek( fcClx );
         U8 blockType = m_table->readU8();
 
         while ( blockType == wvWare::clxtGrpprl && igrpprl > 0 ) {
             U16 size = m_table->readU16();
-            //wvlog << "Skipping a clxtGrpprl (size=" << size << ")" << std::endl;
+            //wvlog << "Skipping a clxtGrpprl (size=" << size << ")" << endl;
             m_table->seek( size, G_SEEK_CUR );
             blockType = m_table->readU8();
             --igrpprl;
@@ -351,7 +351,7 @@ void Properties97::applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* pro
 
         if ( blockType == wvWare::clxtGrpprl ) {
             U16 size = m_table->readU16();
-            //wvlog << "Found the right clxtGrpprl (size=" << size << ")" << std::endl;
+            //wvlog << "Found the right clxtGrpprl (size=" << size << ")" << endl;
             U8 *grpprl = new U8[ size ];
             m_table->read( grpprl, size );
             properties->apply( grpprl, size, style, m_stylesheet, 0, m_version ); // dataStream shouldn't be necessary in a clx
@@ -363,7 +363,7 @@ void Properties97::applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* pro
         U16 sprm = toLittleEndian( Word97::SPRM::unzippedOpCode( pcd->prm.isprm ) ); // force LE order
         if ( sprm != 0 ) {
             //wvlog << "CHPX/PAPX/TAPX ###### compressed: " << pcd->prm.isprm << " Uncompressed sprm: " << sprm
-            //      << " data: " << ( int )pcd->prm.val << std::endl;
+            //      << " data: " << ( int )pcd->prm.val << endl;
             U8 grpprl[ 3 ];
             grpprl[ 0 ] = static_cast<U8>( sprm & 0x00ff );
             grpprl[ 1 ] = static_cast<U8>( ( sprm & 0xff00 ) >> 8 );

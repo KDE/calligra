@@ -217,7 +217,7 @@ void TextHandler::annotationFound( UString characters,
     for (int i = 0; i < characters.length(); ++i) {
         wvlog << characters[i].unicode();
     }
-    wvlog << std::endl;
+    wvlog << endl;
 #endif
     runOfText(characters, chp);
     parseAnnotation();
