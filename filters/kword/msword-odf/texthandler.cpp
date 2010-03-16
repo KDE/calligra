@@ -753,7 +753,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 
         while (fullList.size() >= 1) {
             emptyList.clear();
-            bool passThrough = true;
             if (fullList.size() >= 4) {
                 if (fullList[0] == " " && fullList[1].contains("HYPERLINK") && fullList[2] == " ") {
                     hyperlink = fullList[0] + fullList[1] + fullList[2];
@@ -763,15 +762,14 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                         fullList.removeAt(0);
                     }
                 }
-                passThrough = false;
             }
-            if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK") && passThrough) {
+            if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK")) {
                 emptyList.append(fullList[0]);
                 emptyList.append(fullList[1]);
                 for(int i = 0; i<2; i++) {
                     fullList.removeAt(0);
                 }
-            } else if (passThrough) {
+            } else {
                 emptyList.append(hyperlink);
                 emptyList.append(fullList[0]);
                 fullList.removeAt(0);
