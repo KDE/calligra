@@ -358,8 +358,12 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //need to add master style to m_mainStyle
     kDebug(30513) << "creating master style for this section";
     m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
-    QString masterStyleName("section");
-    m_masterStyle->addAttribute("style:display-name", masterStyleName.append(QString::number(m_textHandler->m_sectionNumber)));
+
+    QString masterStyleName("Standard");
+    if (m_textHandler->m_sectionNumber > 1) {
+        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+    }
+
     m_masterStyle->addAttribute("style:display-name", masterStyleName);
     m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
     delete m_masterStyle; //delete the object since we've added it to the collection
