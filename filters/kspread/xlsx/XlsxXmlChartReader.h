@@ -1,7 +1,8 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -42,10 +43,13 @@
 //#include <QRegExp>
 //#include "NumberFormatParser.h"
 
+class XlsxXmlDrawingReaderContext;
+
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlChartReaderContext();
+    XlsxXmlDrawingReaderContext* drawingReaderContext;
+    explicit XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext);
     virtual ~XlsxXmlChartReaderContext();
 };
 
@@ -59,9 +63,13 @@ protected:
     KoFilter::ConversionStatus read_plotArea();
     KoFilter::ConversionStatus read_ser();
     KoFilter::ConversionStatus read_legend();
+
+    KoFilter::ConversionStatus read_pieChart();
+    KoFilter::ConversionStatus read_firstSliceAng();
     
 private:
-    XlsxXmlChartReaderContext *m_context;
+    class Private;
+    Private *const d;
 };
 
 #endif

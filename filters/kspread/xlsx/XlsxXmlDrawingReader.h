@@ -1,7 +1,8 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -42,10 +43,28 @@
 //#include <QRegExp>
 //#include "NumberFormatParser.h"
 
+class XlsxImport;
+class XlsxXmlWorksheetReaderContext;
+
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlDrawingReaderContext();
+    XlsxXmlWorksheetReaderContext* worksheetReaderContext;
+
+    enum AnchorType {
+        NoAnchor,
+        FromAnchor,
+        ToAnchor
+    };
+
+    struct Position {
+        int m_row, m_col, m_rowOff, m_colOff;
+        Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
+    };
+
+    QMap<AnchorType, Position> m_positions;
+
+    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
     virtual ~XlsxXmlDrawingReaderContext();
 };
 
@@ -55,6 +74,7 @@ public:
     XlsxXmlDrawingReader(KoOdfWriters *writers);
     virtual ~XlsxXmlDrawingReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+
 protected:
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
@@ -65,17 +85,8 @@ protected:
     KoFilter::ConversionStatus read_chart();
 private:
     XlsxXmlDrawingReaderContext *m_context;
+    XlsxXmlDrawingReaderContext::AnchorType m_anchorType;
     
-    enum AnchorToken { NoAnchor, FromAnchor, ToAnchor };
-    AnchorToken m_anchorToken;
-    
-    struct Position {
-        int m_row, m_col, m_rowOff, m_colOff;
-        Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
-    };
-
-    QMap<AnchorToken, Position> m_positions;
-
     typedef KoFilter::ConversionStatus(XlsxXmlDrawingReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
     

@@ -1,6 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
+ * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
@@ -119,6 +120,7 @@ public:
         const XlsxSharedStringVector& _sharedStrings,
         const XlsxStyles& _styles,
         XlsxImport* _import);
+
     const uint worksheetNumber;
     QString worksheetName;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;

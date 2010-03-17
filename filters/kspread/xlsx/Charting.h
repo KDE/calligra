@@ -80,9 +80,10 @@ namespace Charting
     class PieImpl : public ChartImpl
     {
     public:
+        /// starting angle of the first data point clockwise from the top of the circle
         int m_anStart;
         unsigned int m_pcDonut;
-        PieImpl(int anStart, unsigned int pcDonut = 0) : ChartImpl(), m_anStart(anStart), m_pcDonut(pcDonut) {}
+        PieImpl(int anStart = 0, unsigned int pcDonut = 0) : ChartImpl(), m_anStart(anStart), m_pcDonut(pcDonut) {}
         virtual const char* name() const { return "circle"; }
     };
 
