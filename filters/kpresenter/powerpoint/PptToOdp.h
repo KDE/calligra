@@ -563,6 +563,18 @@ private:
                ? p->documentContainer->slideHF.data()
                : p->documentContainer->slideHF2.data();
     }
+    const MSO::HeadersFootersAtom* getSlideHFAtom(
+            const MSO::SlideContainer* slide) const {
+        const MSO::HeadersFootersAtom* hf = 0;
+        if (slide && slide->perSlideHFContainer) {
+            hf = &slide->perSlideHFContainer->hfAtom;
+        } else if (p->documentContainer->slideHF) {
+            hf = &p->documentContainer->slideHF->hfAtom;
+        } else if (p->documentContainer->slideHF2) {
+            hf = &p->documentContainer->slideHF2->hfAtom;
+        }
+        return hf;
+    }
 
     /**
       * Look in blipStore for the id mapping to this object

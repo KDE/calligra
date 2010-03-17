@@ -764,6 +764,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
 void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                                       const HeadersFootersAtom* hf)
 {
+    qDebug() << "defineDrawingPageStyle " << hf;
     const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
     // draw:background-size ("border", or "full")
     style.addProperty("draw:background-size", ds.fillUseRect()
@@ -1244,10 +1245,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         KoGenStyle dp(KoGenStyle::StyleDrawingPageAuto, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
         // TODO derive from master page style
-        const HeadersFootersAtom* hf = 0;
-        if (sc->perSlideHFContainer) {
-            hf = &sc->perSlideHFContainer->hfAtom;
-        }
+        const HeadersFootersAtom* hf = getSlideHFAtom(sc);
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         const OfficeArtSpContainer* slideShape
