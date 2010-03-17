@@ -178,6 +178,13 @@ private:
     QBuffer* m_bufferEven; //for even header/footer tags
     int m_headerCount; //just so we have a unique name for the element we're putting in m_masterStyle
     QString m_masterStyleName; //need to know what the master style name is so we can write it
+
+    int m_footnoteRestart; // rnc/rncFtn 0:document 1:section 2:page
+    int m_endnoteRestart; // rnc/rncEdn 0:don't restart, 1:section: 2page
+    int m_initialFootnoteNumber;
+    int m_initialEndnoteNumber;
+    QString m_footnoteType;
+    QString m_endnoteType;
 };
 
 #endif // DOCUMENT_H

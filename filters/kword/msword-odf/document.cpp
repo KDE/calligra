@@ -157,14 +157,20 @@ void Document::finishDocument()
         m_textHandler->m_writingHeader = false;
     }
 
-    /*
         const wvWare::Word97::DOP& dop = m_parser->dop();
-        //"tabStopValue", (double)dop.dxaTab / 20.0
-        //dop.nFtn = initial footnote number for document, starts at 1
-        //Conversion::numberFormatCode(dop.nfcFtnRef2)
-        //dop.nEdn = initial endnote number for document, starts at 1
-        //Conversion::numberFormatCode(dop.nfcEdnRef2)
 
+        m_footnoteRestart = dop.rncFtn;
+        m_endnoteRestart = dop.rncEdn;
+
+        m_initialFootnoteNumber = dop.nFtn;
+        m_initialEndnoteNumber = dop.nEdn;
+
+        m_footnoteType = Conversion::numberFormatCode(dop.nfcFtnRef2);
+        m_endnoteType = Conversion::numberFormatCode(dop.nfcEdnRef2);
+
+        //"tabStopValue", (double)dop.dxaTab / 20.0
+
+/*
         QDomElement elementDoc = m_mainDocument.documentElement();
 
         QDomElement element;
@@ -182,16 +188,6 @@ void Document::finishDocument()
 
         element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
         elementDoc.appendChild(element);
-
-        element = m_mainDocument.createElement("FOOTNOTESETTING");
-        elementDoc.appendChild(element);
-        element.setAttribute( "start", dop.nFtn ); // initial footnote number for document. Starts at 1.
-        element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcFtnRef2 ) );
-
-        element = m_mainDocument.createElement("ENDNOTESETTING");
-        elementDoc.appendChild(element);
-        element.setAttribute( "start", dop.nEdn ); // initial endnote number for document. Starts at 1.
-        element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcEdnRef2 ) );
 
         // Done at the end: write the type of headers/footers,
         // depending on which kind of headers and footers we received.
