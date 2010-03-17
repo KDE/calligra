@@ -566,8 +566,17 @@ private:
     const MSO::HeadersFootersAtom* getSlideHFAtom(
             const MSO::SlideContainer* slide) const {
         const MSO::HeadersFootersAtom* hf = 0;
+        const MSO::MasterOrSlideContainer* master = p->getMaster(slide);
+        const MSO::MainMasterContainer* m1 =
+                (master) ?master->anon.get<MSO::MainMasterContainer>() :0;
+        const MSO::SlideContainer* m2 =
+                (master) ?master->anon.get<MSO::SlideContainer>() :0;
         if (slide && slide->perSlideHFContainer) {
             hf = &slide->perSlideHFContainer->hfAtom;
+        } else if (m1 && m1->perSlideHeadersFootersContainer) {
+            hf = &m1->perSlideHeadersFootersContainer->hfAtom;
+        } else if (m2 && m2->perSlideHFContainer) {
+            hf = &m2->perSlideHFContainer->hfAtom;
         } else if (p->documentContainer->slideHF) {
             hf = &p->documentContainer->slideHF->hfAtom;
         } else if (p->documentContainer->slideHF2) {
