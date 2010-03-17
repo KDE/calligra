@@ -1379,9 +1379,11 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                     currency = Currency(element.attributeNS(KoXmlNS::office, "currency", QString()));
                 }
 
-                Style style;
-                style.setCurrency(currency);
-                setStyle(style);
+                if( style().isEmpty() ) {
+                    Style style;
+                    style.setCurrency(currency);
+                    setStyle(style);
+                }
             }
         } else if (valuetype == "percentage") {
             bool ok = false;
