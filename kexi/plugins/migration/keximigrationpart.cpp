@@ -47,6 +47,9 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     else if (QString(widgetClass) == "importtable") {
         w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
     }
+    else
+        return 0;
+
     w->setObjectName(objName);
     return w;
 }
