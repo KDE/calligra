@@ -1092,39 +1092,8 @@ static bool isDateFormat(const Value &value, const QString& valueFormat)
     if (value.type() != Value::Float)
         return false;
 
-    QString vf = valueFormat;
-    QString locale = extractLocale(vf);
-    Q_UNUSED(locale);
-    vf = removeEscaped(vf);
-
-    //QString vfu = valueFormat.toUpper();
-    // if( vfu == "M/D/YY" ) return true;
-    // if( vfu == "M/D/YYYY" ) return true;
-    // if( vfu == "MM/DD/YY" ) return true;
-    // if( vfu == "MM/DD/YYYY" ) return true;
-    // if( vfu == "D-MMM-YY" ) return true;
-    // if( vfu == "D\\-MMM\\-YY" ) return true;
-    // if( vfu == "D-MMM-YYYY" ) return true;
-    // if( vfu == "D\\-MMM\\-YYYY" ) return true;
-    // if( vfu == "D-MMM" ) return true;
-    // if( vfu == "D\\-MMM" ) return true;
-    // if( vfu == "D-MM" ) return true;
-    // if( vfu == "D\\-MM" ) return true;
-    // if( vfu == "MMM/DD" ) return true;
-    // if( vfu == "MMM/D" ) return true;
-    // if( vfu == "MM/DD" ) return true;
-    // if( vfu == "MM/D" ) return true;
-    // if( vfu == "MM/DD/YY" ) return true;
-    // if( vfu == "MM/DD/YYYY" ) return true;
-    // if( vfu == "YYYY/MM/D" ) return true;
-    // if( vfu == "YYYY/MM/DD" ) return true;
-    // if( vfu == "YYYY-MM-D" ) return true;
-    // if( vfu == "YYYY\\-MM\\-D" ) return true;
-    // if( vfu == "YYYY-MM-DD" ) return true;
-    // if( vfu == "YYYY\\-MM\\-DD" ) return true;
-
-    QRegExp ex("(d|m|y)");
-    return (ex.indexIn(vf) >= 0) && value.asFloat() >= 1.0;
+    const KoGenStyle style = NumberFormatParser::parse( valueFormat );
+    return style.type() == KoGenStyle::StyleNumericDate;
 }
 
 static bool isTimeFormat(const Value &value, const QString& valueFormat)
