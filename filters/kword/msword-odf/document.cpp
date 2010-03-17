@@ -3,6 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010 Boudewijn Remppt <boud@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -43,7 +44,7 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 #include <KoFontFace.h>
-//Added by qt3to4:
+
 #include <QList>
 #include <QBuffer>
 
@@ -170,13 +171,13 @@ void Document::finishDocument()
 
         QString footnoteConfig("<text:notes-configuration "
                                "text:note-class=\"footnote\" "
-                               //"text:default-style-name=\"Footnote\" "
-                               //"text:citation-style-name=\"Footnote_20_Symbol\" "
-                               //"text:citation-body-style-name=\"Footnote_20_anchor\" "
-                               //"text:master-page-name=\"Footnote\" "
+                               "text:default-style-name=\"Footnote\" "
+                               "text:citation-style-name=\"Footnote_20_Symbol\" "
+                               "text:citation-body-style-name=\"Footnote_20_anchor\" "
+                               "text:master-page-name=\"Footnote\" "
                                "style:num-format=\"%1\" "
                                "text:start-value=\"%2\" "
-                               //"text:footnotes-position=\"page\" "
+                               "text:footnotes-position=\"page\" "
                                "text:start-numbering-at=\"%3\" "
                                "/>");
 
@@ -185,12 +186,13 @@ void Document::finishDocument()
                                                             .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
                                                             .toLatin1());
 
+        // ms-word has start-numbering-at (rncEdn) for endnotes, but ODF doesn't really support it
         QString endnoteConfig("<text:notes-configuration "
                               "text:note-class=\"endnote\" "
-                              //"text:default-style-name=\"Endnote\" "
-                              //"text:citation-style-name=\"Endnote_20_Symbol\" "
-                              //"text:citation-body-style-name=\"Endnote_20_anchor\" "
-                              //"text:master-page-name=\"Endnote\" "
+                              "text:default-style-name=\"Endnote\" "
+                              "text:citation-style-name=\"Endnote_20_Symbol\" "
+                              "text:citation-body-style-name=\"Endnote_20_anchor\" "
+                              "text:master-page-name=\"Endnote\" "
                               "style:num-format=\"%1\" "
                               "text:start-value=\"%2\" "
                               //"text:start-numbering-at=\"%3\" "
