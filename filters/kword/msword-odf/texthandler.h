@@ -112,13 +112,9 @@ public:
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
     //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString namedStyle);
 
-    bool m_writingHeader; //flag for headers & footers, where we write the actual text to styles.xml
-    bool m_writeMasterStyleName; //whether to write the style name or not, since it only needs to be the first one
     bool listIsOpen(); //tell us whether a list is open
     void closeList();
-    KoXmlWriter* m_headerWriter; //for header/footer writing in styles.xml
     QString m_listStyleName; //track the name of the list style
-    QString m_masterStyleName; //need to know what the master style name is so we can write it
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     int m_sectionNumber;
     QString getFont(unsigned fc) const;

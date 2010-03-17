@@ -8076,11 +8076,11 @@ struct SEP : public Shared {
     // Data
     /**
      * break code:
-     * 0 No break
-     * 1 New column
-     * 2 New page
-     * 3 Even page
-     * 4 Odd page
+     * 0 Continuous section break. The next section starts on the next line.
+     * 1 New column section break. The next section starts in the next column.
+     * 2 New page section break. The next section starts on the next page.
+     * 3 Even page section break. The next section starts on an even page.
+     * 4 Odd page section break. The next section starts on an odd page.
      */
     U8 bkc;
 
