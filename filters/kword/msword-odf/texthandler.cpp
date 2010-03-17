@@ -42,6 +42,8 @@
 #include <KoGenStyle.h>
 #include <KoFontFace.h>
 
+#include "document.h"
+
 wvWare::U8 KWordReplacementHandler::hardLineBreak()
 {
     return '\n';
@@ -58,10 +60,7 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 }
 
 KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
-    : m_writingHeader(false)
-    , m_writeMasterStyleName(false)
-    , m_headerWriter(0)
-    , m_mainStyles(0)
+    : m_mainStyles(0)
     , m_sectionNumber(0)
     , m_document(0)
     , m_parser(parser)
@@ -119,7 +118,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //store sep for section end
     m_sep = sep;
 
-    //sep->bkc 0=no break, 1=new column, 2=new page, 3=even page, 4=odd page
+    //break code
     kDebug(30513) << "sep->bkc = " << sep->bkc;
 
     int numColumns = sep->ccolM1 + 1;
@@ -131,9 +130,8 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //check for a column break
     if (sep->bkc == 1) {
     }
-    //check for change in number of columns, too
-    //if sep->bkc isn't 0, just check to see if we have
-    // more than the usual one column
+    //check for change in number of columns, too if sep->bkc isn't 0, just
+    //check to see if we have more than the usual one column
     if (numColumns > 1 || sep->bkc == 0) {
         QString sectionStyleName = "Sect";
         sectionStyleName.append(QString::number(m_sectionNumber));
@@ -188,7 +186,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 void KWordTextHandler::sectionEnd()
 {
     kDebug(30513);
-    if (m_sep->bkc >= 2) {
+    if (m_sep->bkc != 1) {
         emit sectionEnd(m_sep);
     }
     if (m_sep->ccolM1 > 0 || m_sep->bkc == 0) {
@@ -203,7 +201,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
     //only parse headers if we're in a section that can have new headers
     //ie. new sections for columns trigger this function again, but we've
     //already parsed the headers
-    if (m_sep->bkc >= 2) {
+    if (m_sep->bkc != 1) {
         emit headersFound(new wvWare::HeaderFunctor(parseHeaders), 0);
     }
 }
@@ -552,8 +550,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         writer = m_footnoteWriter;
     } else if (m_insideDrawing) {
         writer = m_drawingWriter;
-    } else if (m_writingHeader) {
-        writer = m_headerWriter;
+    } else if (document()->writingHeader()) {
+        writer = document()->headerWriter();
         inStylesDotXml = true;
     }
     else if (m_insideAnnotation) {
@@ -643,9 +641,10 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     }
 
     //check to see if we need a master page name attribute
-    if (m_writeMasterStyleName && !m_writingHeader) {
-        m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name", m_masterStyleName);
-        m_writeMasterStyleName = false;
+    if (document()->writeMasterStyleName() && !document()->writingHeader()) {
+        m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name",
+							  document()->masterStyleName());
+        document()->set_writeMasterStyleName(false);
     }
 } //end paragraphStart()
 
@@ -668,13 +667,13 @@ void KWordTextHandler::paragraphEnd()
     } else if (m_insideDrawing) {
         kDebug(30513) << "writing an drawing";
         m_paragraph->writeToFile(m_drawingWriter);
-    } else if (!m_writingHeader) {
+    } else if (!document()->writingHeader()) {
         kDebug(30513) << "writing to body";
         m_paragraph->writeToFile(m_bodyWriter);
 
     } else {
         kDebug(30513) << "writing a header";
-        m_paragraph->writeToFile(m_headerWriter);
+        m_paragraph->writeToFile(document()->headerWriter());
     }
 
     delete m_paragraph;
@@ -959,7 +958,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 
             // If we're writing to styles.xml, the list style needs to go
             // there as well.
-            if (m_writingHeader)
+            if (document()->writingHeader())
                 listStyle.setAutoStyleInStylesDotXml(true);
 
             // Write styleName to the text:list tag.

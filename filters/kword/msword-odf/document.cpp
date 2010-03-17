@@ -69,12 +69,14 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_metaWriter(0)
         , m_masterStyle(0)
         , m_pageLayoutStyle(0)
-        , m_writer(0)
+        , m_headerWriter(0)
         , m_hasHeader(false)
         , m_hasFooter(false)
         , m_buffer(0)
         , m_bufferEven(0)
         , m_headerCount(0)
+        , m_writeMasterStyleName(false)
+        , m_writingHeader(false)
 {
     kDebug(30513);
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
@@ -83,7 +85,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         m_metaWriter = metaWriter; //pointer for writing to meta.xml
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
-        m_writer = 0;
+        m_headerWriter = 0;
 
         m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
@@ -148,13 +150,12 @@ void Document::finishDocument()
         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
         m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
         m_oddOpen = false;
-        m_textHandler->m_headerWriter = 0;
-        delete m_writer;
-        m_writer = 0;
+        delete m_headerWriter;
+        m_headerWriter = 0;
         delete m_buffer;
         m_buffer = 0;
         //we're done with this header, so reset to false
-        m_textHandler->m_writingHeader = false;
+        m_writingHeader = false;
     }
 
         const wvWare::Word97::DOP& dop = m_parser->dop();
@@ -364,11 +365,9 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
     delete m_masterStyle; //delete the object since we've added it to the collection
 
-    //set master style name in m_textHandler because that's where we'll write it
-    m_textHandler->m_masterStyleName = m_masterStyleName;
     //get a pointer to the object in the collection
     m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
-    m_textHandler->m_writeMasterStyleName = true;
+    m_writeMasterStyleName = true;
 
     // ----------------------
     //create page layout style here
@@ -507,56 +506,54 @@ void Document::headerStart(wvWare::HeaderData::Type type)
     case wvWare::HeaderData::HeaderFirst:
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_buffer);
+        m_headerWriter = new KoXmlWriter(m_buffer);
         break;
     case wvWare::HeaderData::HeaderOdd:
         //set up buffer & writer for odd header
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_buffer);
+        m_headerWriter = new KoXmlWriter(m_buffer);
         m_oddOpen = true;
-        m_writer->startElement("style:header");
+        m_headerWriter->startElement("style:header");
         m_hasHeader = true;
         break;
     case wvWare::HeaderData::HeaderEven:
         //write to the buffer for even headers/footers
         m_bufferEven = new QBuffer();
         m_bufferEven->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_bufferEven);
+        m_headerWriter = new KoXmlWriter(m_bufferEven);
         m_evenOpen = true;
-        m_writer->startElement("style:header-left");
+        m_headerWriter->startElement("style:header-left");
         m_hasHeader = true;
         break;
         //TODO fix first footer
     case wvWare::HeaderData::FooterFirst:
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_buffer);
+        m_headerWriter = new KoXmlWriter(m_buffer);
         break;
     case wvWare::HeaderData::FooterOdd:
         //set up buffer & writer for odd header
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_buffer);
+        m_headerWriter = new KoXmlWriter(m_buffer);
         m_oddOpen = true;
-        m_writer->startElement("style:footer");
+        m_headerWriter->startElement("style:footer");
         m_hasFooter = true;
         break;
     case wvWare::HeaderData::FooterEven:
         //write to the buffer for even headers/footers
         m_bufferEven = new QBuffer();
         m_bufferEven->open(QIODevice::WriteOnly);
-        m_writer = new KoXmlWriter(m_bufferEven);
+        m_headerWriter = new KoXmlWriter(m_bufferEven);
         m_evenOpen = true;
-        m_writer->startElement("style:footer-left");
+        m_headerWriter->startElement("style:footer-left");
         m_hasFooter = true;
         break;
     }
 
-    //tell texthandler we're writing a header
-    m_textHandler->m_writingHeader = true;
-    //and set up the tmp writer so writeFormattedText() writes to styles.xml
-    m_textHandler->m_headerWriter = m_writer;
+    //we're writing a header
+    m_writingHeader = true;
 }
 
 //creates empty frameset element?
@@ -574,17 +571,17 @@ void Document::headerEnd()
     //handle the even flag first, because they'll both be open if the even one is, and
     //  we would want to handle the odd flag when we actually see the odd header/footer
     if (m_evenOpen) {
-        m_writer->endElement(); //style:header/footer-left
+        m_headerWriter->endElement(); //style:header/footer-left
         m_evenOpen = false;
-        delete m_writer;
-        m_writer = 0;
+        delete m_headerWriter;
+        m_headerWriter = 0;
         return;
     }
     if (m_oddOpen) {
-        m_writer->endElement();//style:header/footer
+        m_headerWriter->endElement();//style:header/footer
         //add the even header/footer stuff here
         if (m_bufferEven) {
-            m_writer->addCompleteElement(m_bufferEven);
+            m_headerWriter->addCompleteElement(m_bufferEven);
             delete m_bufferEven;
             m_bufferEven = 0;
         }
@@ -592,13 +589,12 @@ void Document::headerEnd()
         m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
         m_oddOpen = false;
     }
-    m_textHandler->m_headerWriter = 0;
-    delete m_writer;
-    m_writer = 0;
+    delete m_headerWriter;
+    m_headerWriter = 0;
     delete m_buffer;
     m_buffer = 0;
     //we're done with this header, so reset to false
-    m_textHandler->m_writingHeader = false;
+    m_writingHeader = false;
 }
 
 void Document::footnoteStart()

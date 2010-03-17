@@ -107,6 +107,12 @@ public:
         QString extraName;
     };
 
+    // Provide access to those attributes for texthandler.cpp and tablehandler.cpp
+    QString masterStyleName(void) const { return m_masterStyleName; }
+    void set_writeMasterStyleName(bool val) { m_writeMasterStyleName = val; }
+    bool writeMasterStyleName(void) const { return m_writeMasterStyleName; }
+    bool writingHeader(void) const { return m_writingHeader; }
+    KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
@@ -170,7 +176,7 @@ private:
     KoXmlWriter* m_metaWriter;      //for writing to meta.xml
     KoGenStyle*  m_masterStyle;     //for header/footer stuff, at least
     KoGenStyle*  m_pageLayoutStyle; //page layout style
-    KoXmlWriter* m_writer;          //for header/footer tags
+    KoXmlWriter* m_headerWriter;    //for header/footer writing in styles.xml
 
     bool m_hasHeader;
     bool m_hasFooter;
@@ -178,6 +184,8 @@ private:
     QBuffer* m_bufferEven; //for even header/footer tags
     int m_headerCount; //just so we have a unique name for the element we're putting in m_masterStyle
     QString m_masterStyleName; //need to know what the master style name is so we can write it
+    bool m_writeMasterStyleName; //whether to write the master style name or not
+    bool m_writingHeader; //flag for headers/footers, where we write the actual text to styles.xml
 
     int m_footnoteRestart; // rnc/rncFtn 0:document 1:section 2:page
     int m_endnoteRestart; // rnc/rncEdn 0:don't restart, 1:section: 2page

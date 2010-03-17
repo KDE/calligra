@@ -29,12 +29,10 @@
 #include <kdebug.h>
 #include <QList>
 #include <QRectF>
-
 #include <KoGenStyle.h>
 
 #include "document.h"
 #include "texthandler.h"
-
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
@@ -73,6 +71,14 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     KoGenStyle tableStyle(KoGenStyle::StyleAutoTable, "table");
     tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
     tableStyle.addProperty("style:border-model", "collapsing");
+
+    // Check to see if we need a master page name attribute.
+    if (document()->writeMasterStyleName()) {
+      tableStyle.addAttribute("style:master-page-name",
+			      document()->masterStyleName());
+      document()->set_writeMasterStyleName(false);
+    }
+
     QString tableStyleName = m_mainStyles->lookup(tableStyle, QString("Table"), KoGenStyles::AllowDuplicates);
 
     writer->addAttribute("table:style-name", tableStyleName);
@@ -163,8 +169,8 @@ void KWordTableHandler::tableRowEnd()
 
 KoXmlWriter * KWordTableHandler::currentWriter()
 {
-    if (document()->textHandler()->m_writingHeader && document()->textHandler()->m_headerWriter != NULL)
-        return document()->textHandler()->m_headerWriter;
+    if (document()->writingHeader() && document()->headerWriter() != NULL)
+        return document()->headerWriter();
     else
         return m_bodyWriter;
 }
