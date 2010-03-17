@@ -764,7 +764,6 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
 void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                                       const HeadersFootersAtom* hf)
 {
-    qDebug() << "defineDrawingPageStyle " << hf;
     const KoGenStyle::PropertyType dp = KoGenStyle::DrawingPageType;
     // draw:background-size ("border", or "full")
     style.addProperty("draw:background-size", ds.fillUseRect()
@@ -1180,7 +1179,6 @@ const MSO::OfficeArtSpContainer*
 getMasterShape(const MSO::MasterOrSlideContainer* m) {
     const SlideContainer* sc = m->anon.get<SlideContainer>();
     const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-    qDebug() << sc << " " << mm;
     const OfficeArtSpContainer* scp = 0;
     if (sc) {
         if (sc->drawing.OfficeArtDg.shape) {
