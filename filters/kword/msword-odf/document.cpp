@@ -158,20 +158,50 @@ void Document::finishDocument()
         m_writingHeader = false;
     }
 
-        const wvWare::Word97::DOP& dop = m_parser->dop();
+    const wvWare::Word97::DOP& dop = m_parser->dop();
 
-        m_footnoteRestart = dop.rncFtn;
-        m_endnoteRestart = dop.rncEdn;
+    m_initialFootnoteNumber = dop.nFtn;
+    m_initialEndnoteNumber = dop.nEdn;
 
-        m_initialFootnoteNumber = dop.nFtn;
-        m_initialEndnoteNumber = dop.nEdn;
+    //"tabStopValue", (double)dop.dxaTab / 20.0
 
-        m_footnoteType = Conversion::numberFormatCode(dop.nfcFtnRef2);
-        m_endnoteType = Conversion::numberFormatCode(dop.nfcEdnRef2);
+    Q_ASSERT(m_mainStyles);
+    if (m_mainStyles) {
 
-        //"tabStopValue", (double)dop.dxaTab / 20.0
+        QString footnoteConfig("<text:notes-configuration "
+                               "text:note-class=\"footnote\" "
+                               //"text:default-style-name=\"Footnote\" "
+                               //"text:citation-style-name=\"Footnote_20_Symbol\" "
+                               //"text:citation-body-style-name=\"Footnote_20_anchor\" "
+                               //"text:master-page-name=\"Footnote\" "
+                               "style:num-format=\"%1\" "
+                               "text:start-value=\"%2\" "
+                               //"text:footnotes-position=\"page\" "
+                               "text:start-numbering-at=\"%3\" "
+                               "/>");
 
-/*
+        m_mainStyles->addRawOdfDocumentStyles(footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
+                                                            .arg(m_initialFootnoteNumber)
+                                                            .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
+                                                            .toLatin1());
+
+        QString endnoteConfig("<text:notes-configuration "
+                              "text:note-class=\"endnote\" "
+                              //"text:default-style-name=\"Endnote\" "
+                              //"text:citation-style-name=\"Endnote_20_Symbol\" "
+                              //"text:citation-body-style-name=\"Endnote_20_anchor\" "
+                              //"text:master-page-name=\"Endnote\" "
+                              "style:num-format=\"%1\" "
+                              "text:start-value=\"%2\" "
+                              //"text:start-numbering-at=\"%3\" "
+                              "/>");
+
+        m_mainStyles->addRawOdfDocumentStyles(endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
+                                                           .arg(m_initialEndnoteNumber)
+//                                                           .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
+                                                           .toLatin1());
+    }
+    /*
         QDomElement elementDoc = m_mainDocument.documentElement();
 
         QDomElement element;

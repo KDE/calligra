@@ -588,3 +588,16 @@ qreal Conversion::twipsToPt(int twips)
     return pt;
 }
 
+QString Conversion::rncToStartNumberingAt(int rnc) 
+{
+    switch(rnc) {
+    case 0:
+        return "document";
+    case 1:
+        return "section";
+    case 2:
+    default:
+        return "page";
+    }
+}
+
