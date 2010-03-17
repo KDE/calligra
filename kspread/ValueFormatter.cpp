@@ -75,7 +75,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     }
 
     //datetime
-    else if (fmtType == Format::DateTime) {
+    else if (fmtType == Format::DateTime || (Format::isDate(fmtType) && !formatString.isEmpty()) ) {
         Value dateValue = m_converter->asDateTime(value, &ok);
         if (ok) {
             result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType));
