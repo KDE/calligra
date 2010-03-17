@@ -25,6 +25,7 @@
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxImport.h"
+#include "XlsxXmlDrawingReader.h"
 
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -963,48 +964,6 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 
 #undef CURRENT_EL
 #define CURRENT_EL drawing
-
-class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
-{
-public:
-    XlsxXmlDrawingReaderContext() : MSOOXML::MsooXmlReaderContext() {}
-    virtual ~XlsxXmlDrawingReaderContext() {}
-};
-
-class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
-{
-public:
-    XlsxXmlDrawingReader(KoOdfWriters *writers) : MSOOXML::MsooXmlCommonReader(writers) {}
-    virtual ~XlsxXmlDrawingReader() {}
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) {
-        kDebug()<<"XlsxXmlDrawingReader #######################################################";
-        
-        m_context = dynamic_cast<XlsxXmlDrawingReaderContext*>(context);
-        Q_ASSERT(m_context);
-
-        readNext();
-        if (!isStartDocument()) {
-            return KoFilter::WrongFormat;
-        }
-
-        readNext();
-        if(namespaceUri() != "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") {
-            return KoFilter::WrongFormat;
-        }
-        if (!expectEl("xdr:wsDr")) {
-            return KoFilter::WrongFormat;
-        }
-
-        //readNext();
-        //TRY_READ(worksheet)
-
-Q_ASSERT(false);
-        m_context = 0;
-        return KoFilter::OK;
-    }
-private:
-    XlsxXmlDrawingReaderContext *m_context;
-};
 
 //! drawing handler (Drawing)
 /*! ECMA-376, 18.3.1.36, p.1804.
