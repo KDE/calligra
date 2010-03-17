@@ -3,7 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
-   Copyright (C) 2010 Boudewijn Remppt <boud@kogmbh.com>
+   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
