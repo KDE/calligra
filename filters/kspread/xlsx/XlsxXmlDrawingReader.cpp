@@ -188,6 +188,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
     }
 
 
-    Q_ASSERT(false);
+    //Q_ASSERT(false);
     return KoFilter::OK;
 }
