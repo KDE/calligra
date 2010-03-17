@@ -498,7 +498,6 @@ void CalendarEditor::setGuiActive( bool activate )
 
 void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates )
 {
-    qDebug()<<"CalendarEditor::slotContextMenuDate:"<<menu<<dates;
     if ( ! isReadWrite() ) {
         return;
     }

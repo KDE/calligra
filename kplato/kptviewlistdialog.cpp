@@ -144,19 +144,16 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
 void AddViewPanel::viewnameChanged( const QString &text )
 {
     m_viewnameChanged = ! text.isEmpty();
-    qDebug()<<"viewnameChanged:"<<m_viewnameChanged;
 }
 
 void AddViewPanel::viewtipChanged( const QString &text )
 {
     m_viewtipChanged = ! text.isEmpty();
-    qDebug()<<"viewtipChanged:"<<m_viewtipChanged;
 }
 
 void AddViewPanel::viewtypeChanged( int idx )
 {
     ViewInfo vi = m_view->defaultViewInfo( m_viewtypes.value( idx ) );
-    qDebug()<<"viewtypeChanged:"<<idx<<m_viewtypes.value( idx )<<vi.name<<vi.tip;
     if ( widget.viewname->text().isEmpty() ) {
         m_viewnameChanged = false;
     }
@@ -551,19 +548,16 @@ AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, 
 void AddReportsViewPanel::viewnameChanged( const QString &text )
 {
     m_viewnameChanged = ! text.isEmpty();
-    qDebug()<<"viewnameChanged:"<<m_viewnameChanged;
 }
 
 void AddReportsViewPanel::viewtipChanged( const QString &text )
 {
     m_viewtipChanged = ! text.isEmpty();
-    qDebug()<<"viewtipChanged:"<<m_viewtipChanged;
 }
 
 void AddReportsViewPanel::viewtypeChanged( int idx )
 {
     ViewInfo vi = m_view->defaultViewInfo( m_viewtypes.value( idx ) );
-    qDebug()<<"viewtypeChanged:"<<idx<<m_viewtypes.value( idx )<<vi.name<<vi.tip;
     if ( widget.viewname->text().isEmpty() ) {
         m_viewnameChanged = false;
     }

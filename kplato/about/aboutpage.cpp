@@ -47,7 +47,6 @@ QString KPlatoAboutPage::main()
     KIconLoader *iconloader = KIconLoader::global();
     QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/main.html" ));
     if ( res.isEmpty() ) {
-        qDebug()<<"KPlatoAboutPage::intro: main.html result empty";
         return res;
     }
     QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
@@ -83,7 +82,6 @@ QString KPlatoAboutPage::intro()
     KIconLoader *iconloader = KIconLoader::global();
     QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/intro.html" ));
     if ( res.isEmpty() ) {
-        qDebug()<<"KPlatoAboutPage::intro: main.html result empty";
         return res;
     }
     QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
@@ -250,8 +248,6 @@ void KPlatoAboutPage::generatePage( KHTMLPart &part, const KUrl &url)
 
 QString KPlatoAboutPage::loadFile( const QString& file )
 {
-    qDebug()<<"KPlatoAboutPage::loadFile:"<<file;
-
     QString res;
     if ( file.isEmpty() )
     return res;

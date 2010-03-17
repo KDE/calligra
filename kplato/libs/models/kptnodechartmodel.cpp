@@ -172,7 +172,6 @@ int NodeChartModel::dataSetCount( const ChartAxisIndex &index ) const
             if ( m_dataShown.showBCWPEffort ) ++count;
             if ( m_dataShown.showACWPEffort ) ++count;
         }
-        //qDebug()<<"dataSetCount:"<<index<<count;
         return count;
     }
     return 0;
@@ -359,7 +358,6 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
         if ( m_dataShown.showBCWPEffort ) type += 16;
         if ( m_dataShown.showACWPEffort ) type += 32;
     }
-    //qDebug()<<"index"<<number<<":"<<idx<<type;
     if ( m_dataShown.showCost && idx.number() == 0 ) {
         switch ( number ) {
             case 0:

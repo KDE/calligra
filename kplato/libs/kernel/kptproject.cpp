@@ -711,7 +711,6 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
                 l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
             }
-            //qDebug()<<"project load:"<<l->currencySymbol();
         }
     }
     QList<Calendar*> cals;

@@ -41,7 +41,6 @@ ReportPage::ReportPage(QWidget *parent, ORODocument *r)
     : QWidget(parent)
 {
     setAttribute(Qt::WA_NoBackground);
-    //qDebug() << "CREATED PAGE";
     m_reportDocument = r;
 
     QString pageSize = r->pageOptions().getPageSize();
@@ -60,7 +59,6 @@ ReportPage::ReportPage(QWidget *parent, ORODocument *r)
 
     setFixedSize(pageWidth, pageHeight);
 
-    //qDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
 
@@ -77,14 +75,12 @@ ReportPage::~ReportPage()
 
 void ReportPage::paintEvent(QPaintEvent*)
 {
-    //qDebug() << "ReportPage::paintEvent ";
     QPainter painter(this);
     painter.drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
 void ReportPage::renderPage(int p)
 {
-    //qDebug() << "ReportPage::renderPage " << p;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
     if (m_reportDocument) {

@@ -35,28 +35,23 @@ ReportData::ReportData()
     m_project( 0 ),
     m_schedulemanager( 0 )
 {
-    qDebug()<<"ReportData:"<<this;
 }
 
 ReportData::~ReportData()
 {
-    qDebug()<<"~ReportData:"<<this;
 }
 
 bool ReportData::open()
 {
-    qDebug()<<"ReportData::open:"<<&m_model<<m_project<<m_schedulemanager<<recordCount();
     return true;
 }
 
 bool ReportData::close()
 {
-    //qDebug()<<"ReportData::close:";
     return true;
 }
 
 QString ReportData::sourceName() const {
-    qDebug()<<"ReportData::sourceName:";
     return QString();
 }
 
@@ -64,7 +59,6 @@ unsigned int ReportData::fieldNumber ( const QString &fld ) const
 {
     QStringList names = fieldKeys();
     int idx = names.indexOf( fld );
-    //qDebug()<<"ReportData::fieldNumber:"<<fld<<idx;
     return idx;
 }
 
@@ -75,7 +69,6 @@ QStringList ReportData::fieldNames() const
     for ( int i = 0; i < count; ++i ) {
         names << m_model.headerData( i, Qt::Horizontal ).toString();
     }
-    //qDebug()<<"ReportData::fieldNames:"<<recordCount()<<names;
     return names;
 }
 
@@ -86,7 +79,6 @@ QStringList ReportData::fieldKeys() const
     for ( int i = 0; i < count; ++i ) {
         keys << m_model.headerData( i, Qt::Horizontal, Role::ColumnTag ).toString();
     }
-    //qDebug()<<"ReportData::fieldNames:"<<recordCount()<<names;
     return keys;
 }
 
@@ -95,13 +87,11 @@ QVariant ReportData::value ( unsigned int i ) const {
         return QVariant();
     }
     QVariant value = m_model.index( at(), i ).data();
-    //qDebug()<<"ReportData::value"<<i<<value;
     return value;
 }
 
 QVariant ReportData::value ( const QString &fld ) const
 {
-    //qDebug()<<"ReportData::value:"<<fld;
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
@@ -111,9 +101,7 @@ QVariant ReportData::value ( const QString &fld ) const
 
 bool ReportData::moveNext()
 {
-    //qDebug()<<"ReportData::moveNext:";
     if ( m_model.rowCount() <= m_row + 1 ) {
-        qDebug()<<"ReportData::moveNext: failed"<<m_row;
         return false;
     }
     ++m_row;
@@ -122,9 +110,7 @@ bool ReportData::moveNext()
 
 bool ReportData::movePrevious()
 {
-    //qDebug()<<"ReportData::movePrevious:";
     if ( m_row <= 0  ) {
-        qDebug()<<"ReportData::movePrevious: failed";
         return false;
     }
     --m_row;
@@ -134,7 +120,6 @@ bool ReportData::movePrevious()
 bool ReportData::moveFirst()
 {
     if ( m_model.rowCount() == 0  ) {
-        qDebug()<<"ReportData::moveFirst: failed";
         return false;
     }
     m_row = 0;
@@ -143,7 +128,6 @@ bool ReportData::moveFirst()
 
 bool ReportData::moveLast()
 {
-    //qDebug()<<"ReportData::moveLast:";
     if ( m_model.rowCount() == 0  ) {
         return false;
     }
@@ -153,12 +137,10 @@ bool ReportData::moveLast()
 
 long ReportData::at() const
 {
-    //qDebug()<<"ReportData::at:"<<m_row;
     return m_row;
 }
 
 long ReportData::recordCount() const {
-    //qDebug()<<"ReportData::recordCount:";
     return m_model.rowCount();
 }
 
@@ -195,7 +177,6 @@ void ReportData::setSorting(const QList<SortedField>& lst )
 
 KoReportData* ReportData::data(const QString &source)
 {
-    //qDebug()<<"ReportData::data:"<<source;
     KoReportData *rd = 0;
     emit createReportData( source, rd );
     return rd;
@@ -203,7 +184,6 @@ KoReportData* ReportData::data(const QString &source)
 
 void ReportData::setModel( QAbstractItemModel *model )
 {
-    qDebug()<<"ReportData::setModel:"<<model;
     m_model.setSourceModel( model );
 }
 
@@ -230,18 +210,15 @@ void ReportData::setProject( Project *project )
     m_project = project;
     ItemModelBase *m = itemModel();
     if ( m ) {
-        qDebug()<<"ReportData::setProject:"<<m->project()<<m->scheduleManager();
         m->setProject( m_project );
     }
 }
 
 void ReportData::setScheduleManager( ScheduleManager *sm )
 {
-    //qDebug()<<"ReportData::setScheduleManager:"<<sm;
     m_schedulemanager = sm;
     ItemModelBase *m = itemModel();
     if ( m ) {
-        qDebug()<<"ReportData::setScheduleManager:"<<m->project()<<m->scheduleManager();
         m->setScheduleManager( m_schedulemanager );
     }
     emit scheduleManagerChanged( sm );
@@ -256,9 +233,7 @@ ChartReportData::ChartReportData()
 
 bool ChartReportData::moveNext()
 {
-    //qDebug()<<"ReportData::moveNext:";
     if ( recordCount() <= m_row + 1 ) {
-        qDebug()<<"ChartReportData::moveNext: failed"<<m_row;
         return false;
     }
     ++m_row;
@@ -267,9 +242,7 @@ bool ChartReportData::moveNext()
 
 bool ChartReportData::movePrevious()
 {
-    //qDebug()<<"ReportData::movePrevious:";
     if ( m_row == 0  ) {
-        qDebug()<<"ReportData::movePrevious: failed";
         return false;
     }
     --m_row;
@@ -279,7 +252,6 @@ bool ChartReportData::movePrevious()
 bool ChartReportData::moveFirst()
 {
     if ( recordCount() <= 0  ) {
-        qDebug()<<"ChartReportData::moveFirst: failed"<<recordCount();
         return false;
     }
     m_row = 0;
@@ -288,7 +260,6 @@ bool ChartReportData::moveFirst()
 
 bool ChartReportData::moveLast()
 {
-    //qDebug()<<"ReportData::moveLast:";
     if ( recordCount() == 0  ) {
         return false;
     }
@@ -298,7 +269,6 @@ bool ChartReportData::moveLast()
 
 long ChartReportData::recordCount() const
 {
-    //qDebug()<<"ChartReportData::recordCount: model="<<m_model.columnCount();
     return m_model.columnCount() - 4;
 }
 
@@ -311,11 +281,9 @@ QVariant ChartReportData::value ( unsigned int i ) const
     if ( i == 0 ) {
         // x-axis labels
         value = m_model.headerData( m_row + 3, Qt::Horizontal );
-        //qDebug()<<"ChartReportData::value x label"<<m_row+2<<value;
     } else {
         // data
         value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
-        //qDebug()<<"ChartReportData::value data"<<i<<m_row + 2<<value;
     }
     return value;
 }
@@ -323,14 +291,12 @@ QVariant ChartReportData::value ( unsigned int i ) const
 QStringList ChartReportData::fieldNames() const
 {
     // Legends
-    //qDebug()<<"ReportData::fieldNames:";
     QStringList names;
     names << "";
     int count = m_model.rowCount();
     for ( int i = 0; i < count; ++i ) {
         names << m_model.index( i, 0 ).data().toString();
     }
-    //qDebug()<<"ChartReportData::fieldNames:"<<recordCount()<<names;
     return names;
 }
 

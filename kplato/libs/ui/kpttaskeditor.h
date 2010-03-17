@@ -100,6 +100,7 @@ signals:
     void addTask();
     void addMilestone();
     void addSubtask();
+    void addSubMilestone();
     void deleteTaskList( QList<Node*> );
     void moveTaskUp();
     void moveTaskDown();

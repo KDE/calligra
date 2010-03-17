@@ -297,7 +297,6 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
 
 void PertEditor::updateReadWrite( bool rw )
 {
-    qDebug()<<"PertEditor::updateReadWrite:"<<rw;
     m_requiredList->setReadWrite( rw );
     ViewBase::updateReadWrite( rw );
 }

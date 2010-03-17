@@ -1352,9 +1352,6 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 {
     //kDebug()<<project;
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
         disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
         
         disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
@@ -1371,8 +1368,6 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
         
         disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
         
-        disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
-      
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT(  slotProjectCalculated( ScheduleManager* ) ) );
@@ -1387,9 +1382,6 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
         connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
         
         connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
@@ -1405,8 +1397,6 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
         connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
         
         connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-      
-        connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
       
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     
@@ -1641,7 +1631,6 @@ QModelIndex ResourceAppointmentsRowModel::createResourceIndex( int row, int colu
         Q_ASSERT( pg );
         p = new Private( pg, res, OT_Resource );
         m_datamap.insert( res, p );
-        //qDebug()<<"createResourceIndex: new"<<p;
     }
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );
@@ -1668,7 +1657,6 @@ QModelIndex ResourceAppointmentsRowModel::createAppointmentIndex( int row, int c
         Q_ASSERT( pr );
         p = new Private( pr, a, type );
         m_datamap.insert( a, p );
-        //qDebug()<<"createAppointmentIndex: new"<<p;
     }
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );
@@ -1692,7 +1680,6 @@ QModelIndex ResourceAppointmentsRowModel::createIntervalIndex( int row, int colu
         Q_ASSERT( pa );
         p = new Private( pa, new AppointmentInterval( i ), OT_Interval );
         m_datamap.insert( p->ptr, p );
-        //qDebug()<<"createIntervalIndex: new"<<p;
     }
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );
@@ -1987,7 +1974,6 @@ QVariant ResourceAppointmentsGanttModel::data( const Resource *r, int column, in
 
 QVariant ResourceAppointmentsGanttModel::data( const Appointment *a, int column, int role ) const
 {
-    //qDebug()<<"data app:"<<column<<role;
     switch( role ) {
         case KDGantt::ItemTypeRole: return KDGantt::TypeMulti;
         case KDGantt::StartTimeRole: return a->startTime().dateTime();

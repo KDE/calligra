@@ -400,7 +400,6 @@ void TaskEditor::slotAddTask()
 {
     kDebug();
     if ( selectedRowCount() == 0 || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
-        qDebug()<<"None selected or only project selected: insert under main project";
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(),  m_view->project() );
         QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
         Q_ASSERT( idx.isValid() );
@@ -410,10 +409,8 @@ void TaskEditor::slotAddTask()
     }
     Node *sib = selectedNode();
     if ( sib == 0 ) {
-        qDebug()<<"No sibling selected, so abort";
         return;
     }
-    qDebug()<<"Insert after sibling"<<sib->name();
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), sib->parentNode() );
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
@@ -1131,7 +1128,6 @@ void TaskWorkPackageView::slotMailWorkpackage()
 
 void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *resource )
 {
-    qDebug()<<"slotWorkPackageSent:"<<nodes<<resource->name();
     foreach ( Node *n, nodes ) {
         WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );
         wp->setOwnerName( resource->name() );

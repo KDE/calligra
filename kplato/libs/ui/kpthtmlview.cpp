@@ -66,7 +66,6 @@ HtmlView::HtmlView( KoDocument *part, QWidget *parent )
 
 void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments, const KParts::BrowserArguments &browserArguments)
 {
-    qDebug()<<"slotOpenUrlRequest:"<<url<<url.protocol()<<url.path()<<url.fileName();
     emit openUrlRequest( this, url );
 }
 

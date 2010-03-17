@@ -450,19 +450,16 @@ QPointF DependencyConnectorItem::connectorPoint() const
 
 void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
-    //qDebug()<<"DependencyConnectorItem::hoverEnterEvent:"<<node()->name();
     itemScene()->connectorEntered( this, true );
 }
 
 void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
-    //qDebug()<<"DependencyConnectorItem::hoverLeaveEvent:"<<node()->name();
     itemScene()->connectorEntered( this, false );
 }
 
 void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug()<<"DependencyConnectorItem::mousePressEvent:"<<node()->name()<<isEditable();
     if ( ! isEditable() ) {
         event->ignore();
         return;
@@ -476,7 +473,6 @@ void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug()<<"DependencyConnectorItem::mouseReleaseEvent:"<<node()->name()<<m_mousePressPos;
     m_mousePressPos = QPointF();
     if (event->button() != Qt::LeftButton ) { 
         event->ignore();
@@ -484,7 +480,6 @@ void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     if ( rect().contains( event->scenePos() ) ) {
         // user clicked on this item
-        //qDebug()<<"DependencyConnectorItem::mouseReleaseEvent:"<<node()->name()<<"click";
         bool multiSelect = (event->modifiers() & Qt::ControlModifier) != 0;
         if (multiSelect) {
             itemScene()->multiConnectorClicked( this );
@@ -510,7 +505,6 @@ void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void DependencyConnectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton ) {
-        //qDebug()<<"DependencyConnectorItem::mouseMoveEvent:"<<node()->name()<<event->pos();
         if ( ! m_mousePressPos.isNull() ) {
             itemScene()->setFromItem( this );
             m_mousePressPos = QPointF();
@@ -1822,7 +1816,6 @@ void DependencyView::keyPressEvent(QKeyEvent *event)
 
 void DependencyView::mouseMoveEvent( QMouseEvent *mouseEvent )
 {
-    //qDebug()<<"DependencyView::mouseMoveEvent:"<<viewport()->cursor().shape();
     m_cursorPos = mouseEvent->pos();
     if ( itemScene()->connectionMode() && itemScene()->mouseGrabberItem() ) {
         QPointF spos = mapToScene( m_cursorPos );
@@ -1878,7 +1871,6 @@ DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
 
 void DependencyEditor::updateReadWrite( bool on )
 {
-    qDebug()<<"DependencyEditor::updateReadWrite:"<<on;
     m_view->itemScene()->setReadWrite( on );
     ViewBase::updateReadWrite( on );
 }

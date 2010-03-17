@@ -200,7 +200,6 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *res, int role
     if ( m_task == 0 ) {
         return QVariant();
     }
-    //qDebug()<<"ResourceAllocationModel::allocation:"<<res->name()<<role;
     const ResourceGroupRequest *req = m_task->requests().find( res );
     switch ( role ) {
         case Qt::DisplayRole:
@@ -688,7 +687,6 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *res, int 
 
 bool ResourceAllocationItemModel::setAllocation( Resource *res, const QVariant &value, int role )
 {
-    //qDebug()<<"ResourceAllocationItemModel::setAllocation:"<<res->name()<<value<<role;
     switch ( role ) {
         case Qt::EditRole: {
             m_resourceCache[ res ]->setUnits( value.toInt() );

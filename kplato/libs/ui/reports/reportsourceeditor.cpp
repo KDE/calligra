@@ -46,33 +46,28 @@ void ReportSourceEditor::setModel( QAbstractItemModel *model )
 
 void ReportSourceEditor::slotSourceChanged( int index )
 {
-    qDebug()<<"ReportSourceEditor::slotSourceChanged:"<<index;
     emit sourceChanged( index );
 }
 
 void ReportSourceEditor::slotSelectFromChanged( int index )
 {
-    qDebug()<<"ReportSourceEditor::slotSelectFromChanged:"<<index;
     emit selectFromChanged( index );
 }
 
 QString ReportSourceEditor::selectFromTag( const QModelIndex &parent ) const
 {
-    qDebug()<<"ReportSourceEditor::selectFromTag:"<<parent;
     QString tag;
     QAbstractItemModel *m = ui_source->model();
     for ( int row = 0; row < m->rowCount( parent ); ++row ) {
         QModelIndex idx = m->index( row, 0, parent );
         tag =  idx.data( Reports::TagRole ).toString();
         if ( tag == "select-from" ) {
-            qDebug()<<"ReportSourceEditor::selectFromTag: select-from"<<idx;
             tag = checkedTag( idx );
         } else {
             // in case select-from is a child
             tag = selectFromTag( idx );
         }
         if ( ! tag.isEmpty() ) {
-            qDebug()<<"ReportSourceEditor::selectFromTag: tag="<<tag;
             break;
         }
     }
@@ -93,7 +88,6 @@ QString ReportSourceEditor::checkedTag( const QModelIndex &parent ) const
 
 void ReportSourceEditor::setSourceData( const QDomElement &element )
 {
-    qDebug()<<"ReportSourceEditor::setSourceData:"<<element.tagName();
     if ( element.tagName() != "data-source" ) {
         return;
     }
@@ -113,16 +107,13 @@ void ReportSourceEditor::setSourceData( const QDomElement &element, const QModel
     if ( element.isNull() ) {
         return;
     }
-    qDebug()<<"ReportSourceEditor::setSourceData (child):"<<element.tagName();
     QAbstractItemModel *m = ui_source->model();
     for ( int row = 0; row < m->rowCount( parent ); ++row ) {
         QString name = m->index( row, 0, parent ).data( Reports::TagRole ).toString();
-        qDebug()<<"ReportSourceEditor::setSourceData (child): tag name="<<name;
         if ( ! name.isEmpty() && element.hasAttribute( name ) ) {
             QModelIndex value = m->index( row, 1, parent );
             if ( m->flags( value ) & Qt::ItemIsUserCheckable ) {
                 if ( element.attribute( name ) == "checked" ) {
-                    qDebug()<<"ReportSourceEditor::setSourceData (child)"<<value<<"set checked";
                     m->setData( value, Qt::Checked, Qt::CheckStateRole );
                 } // else nothing
             } else {
@@ -141,13 +132,11 @@ void ReportSourceEditor::sourceData( QDomElement &element ) const
     for ( int row = 0; row < m->rowCount(); ++row ) {
         QString attr = m->index( row, 0 ).data( Reports::TagRole ).toString();
         QString value = m->index( row, 1 ).data( Reports::TagRole ).toString();
-        qDebug()<<"ReportSourceEditor::sourceData:"<<m->index( row, 0 )<<attr<<value;
         if ( ! attr.isEmpty() ) {
             e.setAttribute( attr, value );
             sourceData( e, m->index( row, 0 ) );
         }
     }
-    qDebug()<<"ReportSourceEditor::sourceData:"<<e.text();
 }
 
 void ReportSourceEditor::sourceData( QDomElement &element, const QModelIndex &parent ) const

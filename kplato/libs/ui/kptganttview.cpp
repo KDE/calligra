@@ -423,7 +423,6 @@ void MyKDGanttView::removeDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
-    qDebug()<<"removeDependency() "<<model()<<par.model();
     KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
                              static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
                            );
