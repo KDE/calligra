@@ -649,13 +649,51 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
+    const read_p_args args = m_read_DrawingML_p_args;
+    m_read_DrawingML_p_args = 0;
+    m_paragraphStyleNameWritten = false;
+
+    MSOOXML::Utils::XmlWriteBuffer textPBuf;
+
+    if (args & read_p_Skip) {
+        kDebug() << "SKIP!";
+    } else {
+        body = textPBuf.setWriter(body);
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+    }
+
     while (!atEnd()) {
         readNext();
+        kDebug() << "isStartElement:" << isStartElement();
         if (isStartElement()) {
-            TRY_READ_IF(DrawingML_r)
+            if (QUALIFIED_NAME_IS(p)) {
+// CASE #301: avoid nested paragaraphs
+                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
+                TRY_READ_WITH_ARGS(DrawingML_p, read_p_Skip;)
+            }
+//            ELSE_TRY_READ_IF(hyperlink)
+            //ELSE_TRY_READ_IF(commentRangeEnd)
+// CASE #400.1
+            ELSE_TRY_READ_IF(pPr)
+// CASE #400.2
+//! @todo add more conditions testing the parent
+            else if (QUALIFIED_NAME_IS(r)) {
+                TRY_READ(DrawingML_r)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (args & read_p_Skip) {
+        //nothing
+    } else {
+        body = textPBuf.originalWriter();
+        body->startElement("text:p", false);
+        setupParagraphStyle();
+        (void)textPBuf.releaseWriter();
+        body->endElement(); //text:p
+        kDebug() << "/text:p";
     }
     READ_EPILOGUE
 }

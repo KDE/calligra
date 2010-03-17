@@ -129,6 +129,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lang()
 
 #undef CURRENT_EL
 #define CURRENT_EL rPr
+#if __GNUC__
+#warning split read_rPr to DML/WML
+#endif
 //! [1] rPr handler (Run Properties for the Paragraph Mark) WML ECMA-376, 17.3.1.29, p.263,
 //!         This element specifies a set of run properties which shall be applied to the contents
 //!         of the parent run after all style formatting has been applied to the text.
@@ -208,6 +211,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
 #else
         true;
 #endif
+    kDebug() << "setupTextStyle:" << setupTextStyle;
 
     const QXmlStreamAttributes attrs(attributes());
 
@@ -443,7 +447,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rFonts()
 // CASE #1153
     TRY_READ_ATTR(ascii)
     if (!ascii.isEmpty()) {
-        m_currentParagraphStyle.addProperty("style:font-name", ascii, KoGenStyle::TextType);
+        m_currentTextStyle.addProperty("style:font-name", ascii, KoGenStyle::TextType);
     }
 // CASE #1152
     if (ascii.isEmpty()) {
@@ -455,7 +459,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rFonts()
 // CASE #1155
     TRY_READ_ATTR(cs)
     if (!cs.isEmpty()) {
-        m_currentParagraphStyle.addProperty("style:font-name-complex", cs, KoGenStyle::TextType);
+        m_currentTextStyle.addProperty("style:font-name-complex", cs, KoGenStyle::TextType);
     }
 // CASE #1154
     if (cs.isEmpty()) {
@@ -467,7 +471,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rFonts()
 // CASE #1157
     TRY_READ_ATTR(eastAsia)
     if (!eastAsia.isEmpty()) {
-        m_currentParagraphStyle.addProperty("style:font-name-asian", eastAsia, KoGenStyle::TextType);
+        m_currentTextStyle.addProperty("style:font-name-asian", eastAsia, KoGenStyle::TextType);
     }
 // CASE #1156
     if (eastAsia.isEmpty()) {
