@@ -65,6 +65,7 @@ class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
         ViewListItem( const QString &tag, const QStringList &strings, int type = ItemType_Category );
         ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
         ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
+
         void setView( ViewBase *view );
         ViewBase *view() const;
         void setDocument( KoDocument *doc );
@@ -159,15 +160,18 @@ signals:
     void activated( ViewListItem*, ViewListItem* );
     void createView();
     void viewListItemRemoved( ViewListItem *item );
-    void viewListItemInserted( ViewListItem *item );
+    void viewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );
 
     void selectionChanged( ScheduleManager* );
 
     void updateViewInfo( ViewListItem *itm );
 
+    void modified();
+
 public slots:
     void setProject( Project *project );
     void setSelectedSchedule( ScheduleManager *sm );
+    void setModified();
 
 protected slots:
     void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );

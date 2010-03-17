@@ -67,6 +67,7 @@ void SplitterView::addView( ViewBase *view )
     m_splitter->addWidget( view );
     connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
+    connect(view, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
 }
 
 void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &label )
@@ -74,6 +75,7 @@ void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &labe
     tab->addTab( view, label );
     connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
+    connect(view, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
 }
 
 // reimp

@@ -35,6 +35,7 @@
 class QProgressBar;
 class QStackedWidget;
 class QSplitter;
+class QUndoCommand;
 
 class KAction;
 class KToggleAction;
@@ -178,6 +179,9 @@ public slots:
     void slotPopupMenu( const QString& menuname, const QPoint &pos );
     void slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item );
 
+    void addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index );
+    void removeViewListItem( const ViewListItem *item );
+
 protected slots:
     void slotGuiActivated( ViewBase *view, bool );
     void slotViewActivated( ViewListItem*, ViewListItem* );
@@ -234,6 +238,7 @@ protected slots:
     void slotEditReportDesign( ReportView *view );
     void slotCreateReport();
     void slotOpenReportFile();
+    void slotModifyReportDefinition( QUndoCommand *cmd );
 
 #ifndef NDEBUG
     void slotPrintDebug();
@@ -270,7 +275,7 @@ protected:
 private slots:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
-    void slotViewListItemInserted( ViewListItem *item );
+    void slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );
 
     void slotCreateReportView( ReportDesignDialog *dlg );
 
@@ -297,6 +302,7 @@ private slots:
 
 private:
     void createViews();
+    ViewBase *createView( ViewListItem *cat, const QString &type, const QString &tag, const QString &name, const QString &tip, int index = -1 );
 
 private:
     QSplitter *m_sp;

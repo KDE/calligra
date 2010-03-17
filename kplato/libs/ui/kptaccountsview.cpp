@@ -209,9 +209,11 @@ void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
 void AccountsView::slotOptions()
 {
     kDebug();
-    AccountsviewConfigDialog dlg( m_view, this );
-    if ( dlg.exec() == QDialog::Accepted ) {
-    }
+    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( m_view, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void AccountsView::setProject( Project *project )

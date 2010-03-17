@@ -305,6 +305,7 @@ void TaskStatusView::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    emit optionsModified();
 }
 
 void TaskStatusView::slotRefreshView()

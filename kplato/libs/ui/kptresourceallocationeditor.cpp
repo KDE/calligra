@@ -192,6 +192,7 @@ void ResourceAllocationEditor::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    emit optionsModified();
 }
 
 void ResourceAllocationEditor::slotOptions()

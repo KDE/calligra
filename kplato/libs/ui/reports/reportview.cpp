@@ -432,14 +432,13 @@ bool ReportView::loadXML( const QDomDocument &doc )
 
 bool ReportView::loadContext( const KoXmlElement &context )
 {
-    qDebug()<<"ReportView::loadContext:"<<context.tagName();
+    //qDebug()<<"ReportView::loadContext:"<<context.tagName();
     
     QDomDocument doc( "context" );
     QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
     if ( ! e.isNull() ) {
         m_design = QDomDocument( "context" );
         m_design.appendChild( e );
-        qDebug()<<m_design.toString();
     } else qDebug()<<"Invalid context xml";
     refresh();
     return true;
@@ -619,22 +618,31 @@ void ReportDesignDialog::slotSaveToFile()
 
 void ReportDesignDialog::slotSaveToView()
 {
+    qDebug()<<"ReportDesignDialog::slotSaveToView:"<<m_view;
     if ( m_view == 0 ) {
         emit createReportView( this );
         return;
     }
-    m_view->loadXML( document() );
-    m_panel->m_modified = false;
+    if ( m_panel->m_modified ) {
+        saveToView();
+    }
 }
 
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
     m_view = dynamic_cast<ReportView*>( view );
-    //qDebug()<<"ReportDesignDialog::slotViewCreated:"<<view;
+    qDebug()<<"ReportDesignDialog::slotViewCreated:"<<view;
+    saveToView(); // allways save
+}
+
+void ReportDesignDialog::saveToView()
+{
     if ( m_view == 0 ) {
         return;
     }
-    m_view->loadXML( document() );
+    QUndoCommand *cmd = new ModifyReportDefinitionCmd( m_view, document(), i18n( "Modify report definition" ) );
+    qDebug()<<"ReportDesignDialog::saveToView: emit"<<m_view<<cmd;
+    emit modifyReportDefinition( cmd );
     m_panel->m_modified = false;
 }
 
@@ -839,68 +847,68 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
 
 ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
 {
-    ReportSourceModel *m = new ReportSourceModel( 3, 2, parent );
+    ReportSourceModel *m = new ReportSourceModel( 1, 2, parent );
     m->setHorizontalHeaderLabels( QStringList() << "Name" << "Value" );
     QList<QStandardItem*> lst;
-    
-    lst << new QStandardItem( "Source type" );
-    lst.last()->setData( "source-type" );
-    lst << new QStandardItem( "Source" );
-    lst.last()->setData( "source" );
+//     lst << new QStandardItem( "Source type" );
+//     lst.last()->setData( "source-type" );
+//     lst << new QStandardItem( "Source" );
+//     lst.last()->setData( "source" );
 
     QStandardItem *item = new QStandardItem( "Select from" );
     item->setData( "select-from" );
     item->setEditable( false );
+    int sfPos = lst.count();
     lst << item;
-
-    foreach ( QStandardItem *item, lst ) {
-        m->setItem( lst.indexOf( item ), item );
-        item->setEditable( false );
+    
+    foreach ( QStandardItem *i, lst ) {
+        m->setItem( lst.indexOf( i ), i );
+        i->setEditable( false );
     }
     int row = 0;
-    item = new QStandardItem( "KPlato Project" );
+/*    item = new QStandardItem( "KPlato Project" );
     item->setData( "KPlato Project" );
     m->setItem( row++, 1, item );
     item = new QStandardItem( "Internal" );
     item->setData( "Internal" );
-    m->setItem( row++, 1, item );
+    m->setItem( row++, 1, item );*/
     
     // Child items
     QList<QStandardItem*> children;
     children << new QStandardItem( "Tasks" ) << new QStandardItem();
     children[ 0 ]->setData( "tasks", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
+    lst[ sfPos ]->appendRow( children );
     children.clear();
 
     children << new QStandardItem( "Task status" ) << new QStandardItem();
     children[ 0 ]->setData( "taskstatus", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
+    lst[ sfPos ]->appendRow( children );
     children.clear();
 
     children << new QStandardItem( "Resourceassignements" ) << new QStandardItem();
     children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
+    lst[ sfPos ]->appendRow( children );
     children.clear();
 
 //     children << new QStandardItem( "Resources" ) << new QStandardItem();
 //     children[ 0 ]->setData( "resources", Reports::TagRole );
 //     children[ 1 ]->setCheckable( true );
-//     lst[ 2 ]->appendRow( children );
+//     lst[ sfPos ]->appendRow( children );
 //     children.clear();
 // 
 //     children << new QStandardItem( "Resourcegroups" ) << new QStandardItem();
 //     children[ 0 ]->setData( "resourcegroups", Reports::TagRole );
 //     children[ 1 ]->setCheckable( true );
-//     lst[ 2 ]->appendRow( children );
+//     lst[ sfPos ]->appendRow( children );
 //     children.clear();
 
     children << new QStandardItem( "Resources and Groups" ) << new QStandardItem();
     children[ 0 ]->setData( "resourcesandgroups", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
-    lst[ 2 ]->appendRow( children );
+    lst[ sfPos ]->appendRow( children );
     children.clear();
 
     return m;
@@ -962,6 +970,23 @@ void ReportSourceModel::setChecked( const QModelIndex &idx )
     connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
+//-------------------
+ModifyReportDefinitionCmd ::ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString& name )
+    : NamedCommand( name ),
+    m_view( view ),
+    m_newvalue( value.cloneNode().toDocument() ),
+    m_oldvalue( m_view->document().cloneNode().toDocument() )
+{
+    //qDebug()<<"ModifyReportDefinitionCmd:"<<view;
+}
+void ModifyReportDefinitionCmd ::execute()
+{
+    m_view->loadXML( m_newvalue );
+}
+void ModifyReportDefinitionCmd ::unexecute()
+{
+    m_view->loadXML( m_oldvalue );
+}
 
 } // namespace KPlato
 

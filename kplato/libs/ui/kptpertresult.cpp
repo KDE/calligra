@@ -167,6 +167,7 @@ void PertResult::slotSplitView()
 {
     kDebug();
     widget.treeWidgetTaskResult->setViewSplitMode( ! widget.treeWidgetTaskResult->isViewSplit() );
+    emit optionsModified();
 }
 
 Node *PertResult::currentNode() const
@@ -364,6 +365,7 @@ void PertCpmView::slotSplitView()
 {
     kDebug();
     widget.cpmTable->setViewSplitMode( ! widget.cpmTable->isViewSplit() );
+    emit optionsModified();
 }
 
 Node *PertCpmView::currentNode() const

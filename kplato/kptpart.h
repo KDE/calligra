@@ -46,6 +46,8 @@ class Project;
 class Context;
 class GanttView;
 class SchedulerPlugin;
+class ViewListItem;
+class View;
 
 class Package;
 
@@ -110,9 +112,18 @@ public:
 
     KPlatoAboutPage &aboutPage() { return m_aboutPage; }
 
+public slots:
+    /// Inserts an item into all other views than @p view
+    void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
+    /// Removes the view list item from all other views than @p view
+    void removeViewListItem( View *view, const ViewListItem *item );
+    /// View selector has been modified
+    void viewlistModified();
+
 signals:
     void changed();
     void workPackageLoaded();
+    void viewlistModified( bool );
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
@@ -131,6 +142,8 @@ protected slots:
 
     void checkForWorkPackages();
     void checkForWorkPackage();
+
+    void slotModified( bool );
 
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
@@ -153,6 +166,11 @@ private:
     QMap<QString, Project*> m_mergedPackages;
 
     KPlatoAboutPage m_aboutPage;
+
+    QDomDocument m_reports;
+
+    bool m_viewlistModified;
+
 };
 
 

@@ -432,8 +432,10 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     }
     item->setFlags( item->flags() | Qt::ItemIsEditable );
-    category->insertChild( ( index == -1 ? category->childCount() : index ), item );
-    //kDebug() << "added: " << item->tag();
+    insertViewListItem( item, category, index );
+
+    connect(view, SIGNAL(optionsModified()), SLOT(setModified()));
+
     return item;
 }
 
@@ -558,6 +560,7 @@ void ViewListWidget::slotRemoveCategory()
     }
     takeViewListItem( m_contextitem );
     delete m_contextitem;
+    emit modified();
     m_contextitem = 0;
 }
 
@@ -566,6 +569,7 @@ void ViewListWidget::slotRemoveView()
     if ( m_contextitem ) {
         takeViewListItem( m_contextitem );
         delete m_contextitem;
+        emit modified();
     }
 }
 
@@ -576,6 +580,9 @@ void ViewListWidget::slotEditViewTitle()
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem );
+        if ( title != m_contextitem->text( 0 ) ) {
+            emit modified();
+        }
     }
 }
 
@@ -599,8 +606,11 @@ void ViewListWidget::slotConfigureItem()
     }
 }
 
-void ViewListWidget::slotDialogFinished( int )
+void ViewListWidget::slotDialogFinished( int result )
 {
+    if ( result == QDialog::Accepted ) {
+        emit modified();
+    }
     if ( sender() ) {
         sender()->deleteLater();
     }
@@ -625,6 +635,7 @@ int ViewListWidget::removeViewListItem( ViewListItem *item )
     int i = p->indexOfChild( item );
     if ( i != -1 ) {
         p->takeChild( i );
+        emit modified();
     }
     return i;
 }
@@ -639,6 +650,7 @@ void ViewListWidget::addViewListItem( ViewListItem *item, QTreeWidgetItem *paren
         index = p->childCount();
     }
     p->insertChild( index, item );
+    emit modified();
 }
 
 int ViewListWidget::takeViewListItem( ViewListItem *item )
@@ -662,8 +674,9 @@ int ViewListWidget::takeViewListItem( ViewListItem *item )
 
 void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
 {
+    //qDebug()<<"ViewListWidget::insertViewListItem:"<<item->text(0)<<parent<<index;
     addViewListItem( item, parent, index );
-    emit viewListItemInserted( item );
+    emit viewListItemInserted( item, static_cast<ViewListItem*>( parent ), index );
 }
 
 void ViewListWidget::setupContextMenus()
@@ -791,6 +804,11 @@ void ViewListWidget::slotScheduleManagerAdded( ScheduleManager *sm )
         setSelectedSchedule( sm );
         m_temp = 0;
     }
+}
+
+void ViewListWidget::setModified()
+{
+    emit modified();
 }
 
 }  //KPlato namespace

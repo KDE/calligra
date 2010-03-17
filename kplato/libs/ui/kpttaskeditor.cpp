@@ -382,6 +382,7 @@ void TaskEditor::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    emit optionsModified();
 }
 
 
@@ -807,6 +808,7 @@ void TaskView::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    emit optionsModified();
 }
 
 void TaskView::slotOptions()
@@ -1144,6 +1146,7 @@ void TaskWorkPackageView::slotSplitView()
 {
     kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    emit optionsModified();
 }
 
 void TaskWorkPackageView::slotOptions()

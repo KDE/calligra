@@ -42,6 +42,8 @@ public:
     const KoXmlElement &context() const;
     bool isLoaded() const { return m_contextLoaded; }
 
+    bool setContent( const QString &str );
+
     // View
     QString currentView;
     int currentEstimateType;

@@ -850,9 +850,11 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
 void MilestoneGanttView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_gantt->treeView(), true, this );
-    dlg->exec();
-    delete dlg;
+    ItemViewSettupDialog *dlg =  new ItemViewSettupDialog( m_gantt->treeView(), true, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )

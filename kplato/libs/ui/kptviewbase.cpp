@@ -363,8 +363,11 @@ void ViewBase::createOptionAction()
     addContextAction( actionOptions );
 }
 
-void ViewBase::slotOptionsFinished( int )
+void ViewBase::slotOptionsFinished( int result )
 {
+    if ( result == QDialog::Accepted ) {
+        emit optionsModified();
+    }
     if ( sender() ) {
         sender()->deleteLater();
     }

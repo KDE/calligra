@@ -250,6 +250,9 @@ signals:
     /// Request for a context menu popup
     void requestPopupMenu( const QString&, const QPoint & );
     
+    /// Emitted when options are modified
+    void optionsModified();
+
 protected slots:
     virtual void slotOptions() {}
     virtual void slotOptionsFinished( int result );

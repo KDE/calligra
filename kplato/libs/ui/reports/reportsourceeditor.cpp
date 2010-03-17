@@ -23,6 +23,7 @@
 #include "kptnodeitemmodel.h"
 
 #include <QDomElement>
+#include <QTimer>
 
 #include <kdebug.h>
 
@@ -33,6 +34,9 @@ ReportSourceEditor::ReportSourceEditor( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
+
+    QTimer::singleShot( 0, ui_source, SLOT( expandAll() ) ); // HACK how else?
+
 }
 
 void ReportSourceEditor::setModel( QAbstractItemModel *model )
@@ -137,8 +141,11 @@ void ReportSourceEditor::sourceData( QDomElement &element ) const
     for ( int row = 0; row < m->rowCount(); ++row ) {
         QString attr = m->index( row, 0 ).data( Reports::TagRole ).toString();
         QString value = m->index( row, 1 ).data( Reports::TagRole ).toString();
-        e.setAttribute( attr, value );
-        sourceData( e, m->index( row, 0 ) );
+        qDebug()<<"ReportSourceEditor::sourceData:"<<m->index( row, 0 )<<attr<<value;
+        if ( ! attr.isEmpty() ) {
+            e.setAttribute( attr, value );
+            sourceData( e, m->index( row, 0 ) );
+        }
     }
     qDebug()<<"ReportSourceEditor::sourceData:"<<e.text();
 }

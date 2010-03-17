@@ -26,6 +26,8 @@
 
 #include "kptviewbase.h"
 #include "kptsplitterview.h"
+#include "kptcommand.h"
+
 #include "ui_reportnavigator.h"
 
 #include <KoReportRendererBase.h>
@@ -53,6 +55,7 @@ class QScrollArea;
 class QDomElement;
 class QDockWidget;
 class QDomElement;
+class QUndoCommand;
 
 namespace KPlato
 {
@@ -181,6 +184,7 @@ public:
 
 signals:
     void createReportView( ReportDesignDialog *dlg );
+    void modifyReportDefinition( QUndoCommand *cmd );
 
 public slots:
     void slotViewCreated( ViewBase *view );
@@ -190,9 +194,27 @@ protected slots:
     void slotSaveToView();
     virtual void slotButtonClicked(int button);
     void closeEvent ( QCloseEvent * e );
+
+protected:
+    void saveToView();
+
 private:
     ReportDesignPanel *m_panel;
     ReportView *m_view;
+};
+
+//-------------------
+class  KPLATOUI_EXPORT ModifyReportDefinitionCmd : public NamedCommand
+{
+public:
+    ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ReportView *m_view;
+    QDomDocument m_newvalue;
+    QDomDocument m_oldvalue;
 };
 
 } // namespace KPlato

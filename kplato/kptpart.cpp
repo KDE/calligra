@@ -76,7 +76,8 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         : KoDocument( parentWidget, parent, singleViewMode ),
         m_project( 0 ), m_parentWidget( parentWidget ),
         m_context( 0 ), m_xmlLoader(),
-        m_loadingTemplate( false )
+        m_loadingTemplate( false ),
+        m_viewlistModified( false )
 {
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
@@ -98,9 +99,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project ); // register myself
 
-    qDebug()<<"setProject: initial start"<<isReadWrite()<<isEmbedded()<<singleViewMode;
     QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
 
+    connect(this, SIGNAL(modified(bool)), SLOT(slotModified(bool)));
 }
 
 
@@ -160,7 +161,13 @@ void Part::setProject( Project *project )
 
 KoView *Part::createViewInstance( QWidget *parent )
 {
-    View *view = new View( this, parent );
+    // syncronize view selector
+    View *view = dynamic_cast<View*>( views().value( 0 ) );
+    if ( view ) {
+        QDomDocument doc = m_context->save( view );
+        m_context->setContent( doc.toString() );
+    }
+    view = new View( this, parent );
     connect( view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
     return view;
 }
@@ -790,20 +797,19 @@ bool Part::completeLoading( KoStore *store )
 
 bool Part::completeSaving( KoStore *store )
 {
-    delete m_context;
-    m_context = 0;
     // Seems like a hack, but imo the best to do
     View *view = dynamic_cast<View*>( views().value( 0 ) );
     if ( view ) {
-        m_context = new Context();
-        m_context->save( view );
         if ( store->open( "context.xml" ) ) {
             QDomDocument doc = m_context->save( view );
-            KoStoreDevice dev( store );
 
+            KoStoreDevice dev( store );
             QByteArray s = doc.toByteArray(); // this is already Utf8!
             (void)dev.write( s.data(), s.size() );
             (void)store->close();
+
+            m_viewlistModified = false;
+            emit viewlistModified( false );
         }
     }
     return true;
@@ -872,6 +878,47 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
     return true;
 }
 
+void Part::insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index )
+{
+    qDebug()<<"Part::insertViewListItem:"<<view;
+    foreach ( KoView *v, views() ) {
+        View *vv = dynamic_cast<View*>( v );
+        if ( vv == 0 || vv == view ) {
+            continue;
+        }
+        vv->addViewListItem( item, parent, index );
+    }
+    setModified( true );
+    m_viewlistModified = true;
+}
+
+void Part::removeViewListItem( View *view, const ViewListItem *item )
+{
+    foreach ( KoView *v, views() ) {
+        View *vv = dynamic_cast<View*>( v );
+        if ( vv == 0 || vv == view ) {
+            continue;
+        }
+        vv->removeViewListItem( item );
+    }
+    setModified( true );
+    m_viewlistModified = true;
+}
+
+void Part::slotModified( bool mod )
+{
+    if ( ! mod && m_viewlistModified ) {
+        setModified( true );
+    }
+}
+
+void Part::viewlistModified()
+{
+    if ( ! m_viewlistModified ) {
+        m_viewlistModified = true;
+        setModified( true );
+    }
+}
 
 }  //KPlato namespace
 

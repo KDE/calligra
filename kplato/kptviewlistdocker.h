@@ -39,6 +39,11 @@ public:
     View *view();
     void setView(View *view);
     ViewListWidget *viewList() const { return m_viewlist; }
+
+public slots:
+    void slotModified();
+    void updateWindowTitle( bool modified );
+
 private:
     View *m_view;
     ViewListWidget *m_viewlist;

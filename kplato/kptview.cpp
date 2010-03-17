@@ -41,6 +41,7 @@
 #include <QSortFilterProxyModel>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QUndoCommand>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -156,12 +157,13 @@ View::View( Part* part, QWidget* parent )
     layout->setMargin(0);
     layout->addWidget( m_sp );
 
+    ViewListDocker *docker = 0;
     if ( part->isEmbedded() || shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
         ViewListDockerFactory vl(this);
-        ViewListDocker *docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
+        docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
         if (docker->view() != this) docker->setView(this);
         m_viewlist = docker->viewList();
 
@@ -190,9 +192,17 @@ View::View( Part* part, QWidget* parent )
     createViews();
 
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
+    // after createViews() !!
     connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
-    connect( m_viewlist, SIGNAL( viewListItemInserted( ViewListItem* ) ), SLOT( slotViewListItemInserted( ViewListItem* ) ) );
+    // after createViews() !!
+    connect( m_viewlist, SIGNAL( viewListItemInserted(ViewListItem*, ViewListItem*, int) ), SLOT( slotViewListItemInserted(ViewListItem*, ViewListItem*, int) ) );
 
+    if ( docker ) {
+        // after createViews() !!
+        connect( m_viewlist, SIGNAL(modified()), docker, SLOT(slotModified()));
+        connect( m_viewlist, SIGNAL(modified()), part, SLOT(viewlistModified()));
+        connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
+    }
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
     // The menu items
@@ -415,48 +425,7 @@ void View::createViews()
                     QString tag = e1.attribute( "tag" );
                     QString name = e1.attribute( "name" );
                     QString tip = e1.attribute( "tooltip" );
-                    //NOTE: type is the same as classname (so if it is changed...)
-                    if ( type == "CalendarEditor" ) {
-                        v = createCalendarEditor( cat, tag, name, tip );
-                    } else if ( type == "AccountsEditor" ) {
-                        v = createAccountsEditor( cat, tag, name, tip );
-                    } else if ( type == "ResourceEditor" ) {
-                        v = createResourceEditor( cat, tag, name, tip );
-                    } else if ( type == "TaskEditor" ) {
-                        v = createTaskEditor( cat, tag, name, tip );
-                    } else if ( type == "DependencyEditor" ) {
-                        v = createDependencyEditor( cat, tag, name, tip );
-                    } else if ( type == "PertEditor" ) {
-                        v = createPertEditor( cat, tag, name, tip );
-                    } else if ( type == "ScheduleEditor" ) {
-                        v = createScheduleEditor( cat, tag, name, tip );
-                    } else if ( type == "ScheduleHandlerView" ) {
-                        v = createScheduleHandler( cat, tag, name, tip );
-                    } else if ( type == "ProjectStatusView" ) {
-                        v = createProjectStatusView( cat, tag, name, tip );
-                    } else if ( type == "TaskStatusView" ) {
-                        v = createTaskStatusView( cat, tag, name, tip );
-                    } else if ( type == "TaskView" ) {
-                        v = createTaskView( cat, tag, name, tip );
-                    } else if ( type == "TaskWorkPackageView" ) {
-                        v = createTaskWorkPackageView( cat, tag, name, tip );
-                    } else if ( type == "GanttView" ) {
-                        v = createGanttView( cat, tag, name, tip );
-                    } else if ( type == "MilestoneGanttView" ) {
-                        v = createMilestoneGanttView( cat, tag, name, tip );
-                    } else if ( type == "ResourceAppointmentsView" ) {
-                        v = createResourceAppointmentsView( cat, tag, name, tip );
-                    } else if ( type == "ResourceAppointmentsGanttView" ) {
-                        v = createResourceAppointmentsGanttView( cat, tag, name, tip );
-                    } else if ( type == "AccountsView" ) {
-                        v = createAccountsView( cat, tag, name, tip );
-                    } else if ( type == "PerformanceStatusView" ) {
-                        v = createPerformanceStatusView( cat, tag, name, tip );
-                    } else if ( type == "ReportView" ) {
-                        v = createReportView( cat, tag, name, tip );
-                    } else  {
-                        kWarning()<<"Unknown viewtype: "<<type;
-                    }
+                    v = createView( cat, type, tag, name, tip );
                     //KoXmlNode settings = e1.namedItem( "settings " ); ????
                     KoXmlNode settings = e1.firstChild();
                     for ( ; ! settings.isNull(); settings = settings.nextSibling() ) {
@@ -515,6 +484,54 @@ void View::createViews()
         createReportView( cat, "ReportView", QString(), TIP_USE_DEFAULT_TEXT );
 
     }
+}
+
+ViewBase *View::createView( ViewListItem *cat, const QString &type, const QString &tag, const QString &name, const QString &tip, int index )
+{
+    ViewBase *v = 0;
+    //NOTE: type is the same as classname (so if it is changed...)
+    if ( type == "CalendarEditor" ) {
+        v = createCalendarEditor( cat, tag, name, tip, index );
+    } else if ( type == "AccountsEditor" ) {
+        v = createAccountsEditor( cat, tag, name, tip, index );
+    } else if ( type == "ResourceEditor" ) {
+        v = createResourceEditor( cat, tag, name, tip, index );
+    } else if ( type == "TaskEditor" ) {
+        v = createTaskEditor( cat, tag, name, tip, index );
+    } else if ( type == "DependencyEditor" ) {
+        v = createDependencyEditor( cat, tag, name, tip, index );
+    } else if ( type == "PertEditor" ) {
+        v = createPertEditor( cat, tag, name, tip, index );
+    } else if ( type == "ScheduleEditor" ) {
+        v = createScheduleEditor( cat, tag, name, tip, index );
+    } else if ( type == "ScheduleHandlerView" ) {
+        v = createScheduleHandler( cat, tag, name, tip, index );
+    } else if ( type == "ProjectStatusView" ) {
+        v = createProjectStatusView( cat, tag, name, tip, index );
+    } else if ( type == "TaskStatusView" ) {
+        v = createTaskStatusView( cat, tag, name, tip, index );
+    } else if ( type == "TaskView" ) {
+        v = createTaskView( cat, tag, name, tip, index );
+    } else if ( type == "TaskWorkPackageView" ) {
+        v = createTaskWorkPackageView( cat, tag, name, tip, index );
+    } else if ( type == "GanttView" ) {
+        v = createGanttView( cat, tag, name, tip, index );
+    } else if ( type == "MilestoneGanttView" ) {
+        v = createMilestoneGanttView( cat, tag, name, tip, index );
+    } else if ( type == "ResourceAppointmentsView" ) {
+        v = createResourceAppointmentsView( cat, tag, name, tip, index );
+    } else if ( type == "ResourceAppointmentsGanttView" ) {
+        v = createResourceAppointmentsGanttView( cat, tag, name, tip, index );
+    } else if ( type == "AccountsView" ) {
+        v = createAccountsView( cat, tag, name, tip, index );
+    } else if ( type == "PerformanceStatusView" ) {
+        v = createPerformanceStatusView( cat, tag, name, tip, index );
+    } else if ( type == "ReportView" ) {
+        v = createReportView( cat, tag, name, tip, index );
+    } else  {
+        kWarning()<<"Unknown viewtype: "<<type;
+    }
+    return v;
 }
 
 void View::slotUpdateViewInfo( ViewListItem *itm )
@@ -2503,31 +2520,52 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void View::slotViewListItemRemoved( ViewListItem *item )
 {
-    if ( m_reportActionMap.contains( item ) ) {
-        unplugActionList( "reportdesigner_edit_list" );
-        delete m_reportActionMap[ item ];
-        m_reportActionMap.remove( item );
-        plugActionList( "reportdesigner_edit_list", m_reportActionMap.values() );
-    }
-    m_tab->removeWidget( item->view() );
-    if ( item->type() == ViewListItem::ItemType_SubView ) {
-        qDebug()<<"slotViewListItemRemoved:"<<item<<item->text(0);
-        delete item->view();
-    }
+    qDebug()<<"slotViewListItemRemoved:"<<item<<item->text(0);
+    getPart()->removeViewListItem( this, item );
 }
 
-void View::slotViewListItemInserted( ViewListItem *item )
+void View::removeViewListItem( const ViewListItem *item )
 {
-    m_tab->addWidget( item->view() );
-    if ( ! m_reportActionMap.contains( item ) ) {
-        unplugActionList( "reportdesigner_edit_list" );
-        KAction *a =  new KAction( this );
-        a->setText( item->text( 0 ) );
-        a->setIcon(KIcon("edit"));
-        connect(a, SIGNAL(triggered()), this, SLOT(slotEditReport()));
-        m_reportActionMap[item ] = a;
-        plugActionList( "reportdesigner_edit_list", m_reportActionMap.values() );
+    if ( item == 0 ) {
+        return;
     }
+    ViewListItem *itm = m_viewlist->findItem( item->tag() );
+    if ( itm == 0 ) {
+        return;
+    }
+    m_viewlist->removeViewListItem( itm );
+    return;
+}
+
+void View::slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index )
+{
+    qDebug()<<"View::slotViewListItemInserted:"<<this<<item->text(0)<<parent<<index;
+    getPart()->insertViewListItem( this, item, parent, index );
+}
+
+void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index )
+{
+    qDebug()<<"View::addViewListItem:"<<this<<item->text(0)<<parent<<index;
+    if ( item == 0 ) {
+        return;
+    }
+    if ( parent == 0 ) {
+        if ( item->type() != ViewListItem::ItemType_Category ) {
+            return;
+        }
+        m_viewlist->blockSignals( true );
+        ViewListItem *cat = m_viewlist->addCategory( item->tag(), item->text( 0 ) );
+        cat->setToolTip( 0, item->toolTip( 0 ) );
+        m_viewlist->blockSignals( false );
+        return;
+    }
+    ViewListItem *cat = m_viewlist->findCategory( parent->tag() );
+    if ( cat == 0 ) {
+        return;
+    }
+    m_viewlist->blockSignals( true );
+    createView( cat, item->viewType(), item->tag(), item->text( 0 ), item->toolTip( 0 ), index );
+    m_viewlist->blockSignals( false );
 }
 
 void View::slotCreateReport()
@@ -2539,6 +2577,7 @@ void View::slotCreateReport()
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2557,6 +2596,7 @@ void View::slotOpenReportFile()
     qDebug()<<"View::slotOpenReportFile:";
     KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
+    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2599,6 +2639,7 @@ void View::slotEditReportDesign( ReportView *view )
     }
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2609,6 +2650,13 @@ void View::slotReportDesignFinished( int result )
     if ( sender() ) {
         sender()->deleteLater();
     }
+}
+
+void View::slotModifyReportDefinition( QUndoCommand *cmd )
+{
+    cmd->redo();
+    delete cmd; // TODO Maybe add command history to views and/or view selector?
+    m_viewlist->setModified();
 }
 
 void View::slotCreateView()
