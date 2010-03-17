@@ -13,6 +13,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlSharedStringsReader.cpp
     XlsxXmlStylesReader.cpp
     XlsxXmlDrawingReader.cpp
+    XlsxXmlChartReader.cpp
     NumberFormatParser.cpp
 )
 
