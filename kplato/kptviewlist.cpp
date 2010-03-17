@@ -364,7 +364,6 @@ void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
-    qDebug()<<"slotActivated:"<<item<<prev<<m_prev;
     if ( m_prev ) {
         m_prev->setData( 0, Qt::BackgroundRole, QVariant() );
     }
@@ -454,7 +453,6 @@ void ViewListWidget::setSelected( QTreeWidgetItem *item )
 
 void ViewListWidget::setCurrentItem( QTreeWidgetItem *item )
 {
-    qDebug()<<"setCurrentItem:"<<item<<","<<m_viewlist->currentItem();
     m_viewlist->setCurrentItem( item );
     //kDebug()<<item<<","<<m_viewlist->currentItem();
 }
@@ -480,7 +478,6 @@ KoView *ViewListWidget::findView( const QString &tag ) const
 {
     ViewListItem *i = findItem( tag );
     if ( i == 0 ) {
-        qDebug()<<"ViewListWidget::findView: Cannot find view"<<tag;
         return 0;
     }
     return i->view();
@@ -658,7 +655,6 @@ int ViewListWidget::takeViewListItem( ViewListItem *item )
     while ( item->childCount() > 0 ) {
         takeViewListItem( static_cast<ViewListItem*>( item->child( 0 ) ) );
     }
-    //qDebug()<<"takeViewListItem:"<<item<<m_prev;
     int pos = removeViewListItem( item );
     if ( pos != -1 ) {
         emit viewListItemRemoved( item );
@@ -674,7 +670,6 @@ int ViewListWidget::takeViewListItem( ViewListItem *item )
 
 void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
 {
-    //qDebug()<<"ViewListWidget::insertViewListItem:"<<item->text(0)<<parent<<index;
     addViewListItem( item, parent, index );
     emit viewListItemInserted( item, static_cast<ViewListItem*>( parent ), index );
 }

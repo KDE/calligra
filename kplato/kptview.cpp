@@ -292,10 +292,6 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
 
-    actionMailWorkpackage  = new KAction(KIcon( "send-mail" ), i18n("Send Work Package..."), this);
-    actionCollection()->addAction("task_mailworkpackage", actionMailWorkpackage );
-    connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );
-
     actionEditResource  = new KAction(KIcon( "document-edit" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
@@ -618,7 +614,6 @@ ViewInfo View::defaultViewInfo( const QString type ) const
 
 void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
 {
-    qDebug()<<"View::slotOpenUrlRequest:"<<url<<url.protocol()<<url.fileName();
     if ( url.url().startsWith("about:kplato") ) {
         getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
@@ -1250,7 +1245,6 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    //qDebug()<<"View::createReportView:"<<tag<<name<<getPart()<<m_tab;
     ReportView *v = new ReportView( getPart(), m_tab );
     m_tab->addWidget( v );
 
@@ -1336,7 +1330,6 @@ void View::slotViewSelector( bool show )
 
 void View::slotInsertFile()
 {
-    qDebug()<<"View::slotInsertFile:";
     InsertFileDialog *dlg = new InsertFileDialog( getProject(), currentTask(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotInsertFileFinished(int)));
     dlg->show();
@@ -1346,7 +1339,6 @@ void View::slotInsertFile()
 
 void View::slotInsertFileFinished( int result )
 {
-    qDebug()<<"View::slotInsertFile:";
     InsertFileDialog *dlg = qobject_cast<InsertFileDialog*>( sender() );
     if ( dlg == 0 ) {
         return;
@@ -1545,7 +1537,6 @@ void View::slotProgressChanged( int )
 void View::slotProjectCalculated( ScheduleManager *sm )
 {
     // we only get here if current schedule was calculated
-    qDebug()<<"slotProjectCalculated:"<<sm->name()<<sm->isScheduled()<<sm;
     if ( sm->isScheduled() ) {
         slotSelectionChanged( sm );
     }
@@ -1568,8 +1559,6 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    qDebug()<<"slotCalculateSchedule:"<<sm->name();
-
     m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
     addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
@@ -1790,7 +1779,6 @@ void View::slotConfigure()
 
 void View::slotIntroduction()
 {
-    qDebug()<<"slotIntroduction:";
     m_tab->setCurrentIndex( 0 );
 }
 
@@ -1914,7 +1902,6 @@ void View::slotOpenNode( Node *node )
 
 void View::slotProjectEditFinished( int result )
 {
-    qDebug()<<"View::slotProjectEditFinished:"<<result<<sender();
     MainProjectDialog *dia = qobject_cast<MainProjectDialog*>( sender() );
     if ( dia == 0 ) {
         return;
@@ -1930,7 +1917,6 @@ void View::slotProjectEditFinished( int result )
 
 void View::slotTaskEditFinished( int result )
 {
-    qDebug()<<"View::slotTaskEditFinished:"<<result<<sender();
     TaskDialog *dia = qobject_cast<TaskDialog*>( sender() );
     if ( dia == 0 ) {
         return;
@@ -1946,7 +1932,6 @@ void View::slotTaskEditFinished( int result )
 
 void View::slotSummaryTaskEditFinished( int result )
 {
-    qDebug()<<"View::slotSummaryTaskEditFinished:"<<result<<sender();
     SummaryTaskDialog *dia = qobject_cast<SummaryTaskDialog*>( sender() );
     if ( dia == 0 ) {
         return;
@@ -2488,16 +2473,13 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
-    qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
     foreach( const QString &name, view->actionListNames() ) {
-        //qDebug()<<"View::slotGuiActivated:"<<"deactivate"<<name;
         unplugActionList( name );
     }
     if ( activate ) {
         foreach( const QString &name, view->actionListNames() ) {
-            qDebug()<<"View::slotGuiActivated:"<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
         }
     }
@@ -2505,7 +2487,6 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    qDebug()<<"View::guiActivateEvent:"<<ev->activated();
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -2520,7 +2501,6 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void View::slotViewListItemRemoved( ViewListItem *item )
 {
-    qDebug()<<"slotViewListItemRemoved:"<<item<<item->text(0);
     getPart()->removeViewListItem( this, item );
 }
 
@@ -2539,13 +2519,11 @@ void View::removeViewListItem( const ViewListItem *item )
 
 void View::slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index )
 {
-    qDebug()<<"View::slotViewListItemInserted:"<<this<<item->text(0)<<parent<<index;
     getPart()->insertViewListItem( this, item, parent, index );
 }
 
 void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index )
 {
-    qDebug()<<"View::addViewListItem:"<<this<<item->text(0)<<parent<<index;
     if ( item == 0 ) {
         return;
     }
@@ -2570,7 +2548,6 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
 
 void View::slotCreateReport()
 {
-    //qDebug()<<"View::slotCreateReport:";
     ReportView v( getPart(), 0 );
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.reportModels(), this );
     // The ReportDesignDialog can not know how to create and insert views,
@@ -2593,7 +2570,6 @@ void View::slotCreateReportView( ReportDesignDialog *dlg )
 
 void View::slotOpenReportFile()
 {
-    qDebug()<<"View::slotOpenReportFile:";
     KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
     connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
@@ -2604,7 +2580,6 @@ void View::slotOpenReportFile()
 
 void View::slotOpenReportFileFinished( int result )
 {
-    qDebug()<<"View::slotOpenReportFileFinished:"<<result;
     KFileDialog *fdlg = qobject_cast<KFileDialog*>( sender() );
     if ( fdlg == 0 || result != QDialog::Accepted ) {
         return;
@@ -2677,7 +2652,6 @@ void View::slotCreateViewFinished( int )
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
-    qDebug()<<"slotViewActivated:"<<"item=" << item <<","<<prev;
     if ( prev && prev->type() == ViewListItem::ItemType_Category && m_viewlist->previousViewItem() ) {
         // A view is shown anyway...
         ViewBase *v = qobject_cast<ViewBase*>( m_viewlist->previousViewItem()->view() );
@@ -2713,7 +2687,6 @@ QWidget *View::canvas() const
 
 void View::slotCurrentChanged( int )
 {
-    qDebug()<<"slotCurrentChanged:"<<m_tab->currentIndex();
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
     m_viewlist->setCurrentItem( item );
 }
@@ -2783,10 +2756,8 @@ void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListIt
 
 bool View::loadContext()
 {
-    qDebug()<<"View::loadContext:";
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
-        qDebug()<<"View::loadContext: No context to load";
         return true;
     }
     KoXmlElement n = ctx->context();
@@ -2835,7 +2806,7 @@ void View::setLabel( ScheduleManager *sm )
 
 void View::slotWorkPackageLoaded()
 {
-    qDebug()<<"View::slotWorkPackageLoaded:"<<getPart()->workPackages();
+    kDebug()<<getPart()->workPackages();
 }
 
 void View::slotMailWorkpackage( Node *node, Resource *resource )
@@ -2927,7 +2898,6 @@ void View::slotCurrencyConfigFinished( int result )
         if ( c ) {
             getPart()->addCommand( c );
         }
-        qDebug()<<"slotCurrencyConfigFinished:"<<c;
     }
     dlg->deleteLater();
 }

@@ -394,7 +394,6 @@ bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Res
 
 bool Part::loadWorkPackage( Project &project, const KUrl &url )
 {
-    //qDebug()<<"loadWorkPackage:"<<url;
     if ( ! url.isLocalFile() ) {
         kDebug()<<"TODO: download if url not local";
         return false;
@@ -446,11 +445,11 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        qDebug() << "No mime type specified!";
+        kDebug() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        qDebug() << "Unknown mime type " << value;
+        kDebug() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
@@ -520,16 +519,13 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
         ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
         if ( ok && m_mergedPackages.contains( timeTag ) ) {
-            qDebug()<<"loadWorkPackageXML:"<<"Already merged:"<<timeTag<<proj->name()<<proj->childNode( 0 )->name();
             ok = false; // already merged
         }
         if ( ok && ! timeTag.isEmpty() && ! m_mergedPackages.contains( timeTag ) ) {
             m_mergedPackages[ timeTag ] = proj; // register this for next time
-            qDebug()<<"loadWorkPackageXML:"<<"New package:"<<timeTag<<proj->name()<<proj->childNode( 0 )->name();
         }
         if ( ok && timeTag.isEmpty() ) {
             kWarning()<<"Work package is not time tagged";
-            qDebug()<<"loadWorkPackageXML:"<<"Old package format:"<<timeTag<<proj->name()<<proj->childNode( 0 )->name();
             ok = false;
         }
     }
@@ -544,9 +540,7 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
 
 void Part::checkForWorkPackages()
 {
-    //qDebug()<<"checkForWorkPackages:";
     if ( ! isReadWrite() || ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
-        //qDebug()<<"checkForWorkPackages: idle:"<<isReadWrite()<<m_config.checkForWorkPackages()<<m_config.retrieveUrl()<<m_project <<(m_project?m_project->numChildren():0);
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;
     }
@@ -558,7 +552,6 @@ void Part::checkForWorkPackages()
 
 void Part::checkForWorkPackage()
 {
-    qDebug()<<"checkForWorkPackage: files ="<<m_infoList.count();
     if ( ! m_infoList.isEmpty() ) {
         loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
         if ( ! m_infoList.isEmpty() ) {
@@ -590,7 +583,6 @@ void Part::checkForWorkPackage()
             m_workpackages.clear();
         }
     }
-    qDebug()<<"checkForWorkPackage: start again:";
     QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
 }
 
@@ -618,22 +610,19 @@ void Part::mergeWorkPackage( const Package *package )
             return;
         }
         if ( KPlatoSettings::deleteFile() ) {
-            qDebug()<<"mergeWorkPackage: remove file"<<file.fileName();
             file.remove();
         } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl(). isEmpty() ) {
             QDir dir( KPlatoSettings::saveUrl().path() );
             if ( ! dir.exists() ) {
                 if ( ! dir.mkpath( dir.path() ) ) {
                     //TODO message
-                    qDebug()<<"mergeWorkPackage: could not create directory:"<<dir.path();
+                    kDebug()<<"Could not create directory:"<<dir.path();
                     return;
                 }
             }
             QFileInfo from( file );
             QString name = KPlatoSettings::saveUrl().path() + '/' + from.fileName();
-            qDebug()<<"mergeWorkPackage: rename file"<<file.fileName();
             if ( file.rename( name ) ) {
-                qDebug()<<"mergeWorkPackage: Saved"<<file.fileName()<<"to"<<name;
                 return;
             }
             name = KPlatoSettings::saveUrl().path() + '/';
@@ -646,13 +635,10 @@ void Part::mergeWorkPackage( const Package *package )
             while ( ! ok && i < 1000 ) {
                 ++i;
                 ok = QFile::rename( file.fileName(), name.arg( i ) );
-                //qDebug()<<"mergeWorkPackage: tried to save"<<file.fileName()<<"to"<<name.arg(i);
             }
             if ( ! ok ) {
                 //TODO message
-                qDebug()<<"mergeWorkPackage: Failed to save"<<file.fileName();
-            } else {
-                qDebug()<<"mergeWorkPackage: Saved"<<file.fileName()<<"to"<<name.arg(i);
+                kDebug()<<"mergeWorkPackage: Failed to save"<<file.fileName();
             }
         }
     }
@@ -737,7 +723,6 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );
-    qDebug()<<"mergeWorkPackage:"<<from->name()<<to->name()<<cmd->isEmpty();
     if ( cmd->isEmpty() ) {
         KMessageBox::information( 0, i18n( "Nothing to save from this package" ) );
         delete cmd;
@@ -847,19 +832,16 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
 
 void Part::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    qDebug()<<"Part::insertFile:"<<filename<<parent->name()<<(after?after->name():"nil");
     Part part;
     if ( part.openUrl( KUrl( filename ) ) ) {
         part.setReadWrite( false );
         Project &p = part.getProject();
-        qDebug()<<"Part::insertFile:"<<p.name();
         insertProject( p, parent, after );
     }
 }
 
 bool Part::insertProject( Project &project, Node *parent, Node *after )
 {
-    qDebug()<<"Part::insertProject:";
     // make sure node ids in new project is unique also in old project
     QList<QString> existingIds = m_project->nodeDict().keys();
     foreach ( Node *n, project.allNodes() ) {
@@ -868,7 +850,6 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
         project.removeId( oldid ); // remove old id
         project.registerNodeId( n ); // register new id
     }
-    qDebug()<<"Part::insertProject:"<<project.childNodeIterator();
     MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) );
     if ( m->isEmpty() ) {
         delete m;
@@ -880,7 +861,6 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
 
 void Part::insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index )
 {
-    qDebug()<<"Part::insertViewListItem:"<<view;
     foreach ( KoView *v, views() ) {
         View *vv = dynamic_cast<View*>( v );
         if ( vv == 0 || vv == view ) {

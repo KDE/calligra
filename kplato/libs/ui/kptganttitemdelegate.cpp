@@ -642,7 +642,6 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
     QRectF boundingRect = opt.boundingRect;
     boundingRect.setY( itemRect.y() );
     boundingRect.setHeight( itemRect.height() );
-    //qDebug() << "itemRect="<<itemRect<<", boundingRect="<<boundingRect;
 
     painter->save();
 
@@ -712,7 +711,6 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt
         }
         break;
     case KDGantt::TypeEvent: /* TODO */
-        //qDebug() << opt.boundingRect << opt.itemRect;
         if ( opt.boundingRect.isValid() ) {
             const qreal pw = painter->pen().width() / 2. - 1;
             const QRectF r = QRectF( opt.rect ).adjusted( -pw, -pw, pw, pw );

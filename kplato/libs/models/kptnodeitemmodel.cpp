@@ -2051,7 +2051,6 @@ NodeItemModel::~NodeItemModel()
     
 void NodeItemModel::setShowProject( bool on )
 {
-    qDebug()<<this<<"setShowProject:"<<on;
     m_projectshown = on;
     reset();
 }
@@ -3096,7 +3095,6 @@ bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
     QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Node*> lst = nodeList( stream );
-    qDebug()<<this<<on<<lst;
     foreach ( Node *n, lst ) {
         if ( n->type() == Node::Type_Project || on == n || on->isChildOf( n ) ) {
             return false;
@@ -3372,14 +3370,12 @@ void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
 
 void GeneralNodeItemModel::slotWorkPackageToBeAdded( Node *node, int row )
 {
-    qDebug()<<"slotWorkPackageToBeAdded:"<<index( node )<<node->name()<<row;
     beginInsertRows( index( node ), row, row );
     m_objects << new Object( node, Object::Type_WorkPackage, row );
 }
 
 void GeneralNodeItemModel::slotWorkPackageAdded( Node *node )
 {
-    qDebug()<<"slotWorkPackageAdded:"<<node->name();
     endInsertRows();
     //HACK to get both views updated
     emit layoutAboutToBeChanged();
@@ -3541,7 +3537,6 @@ int GeneralNodeItemModel::rowCount( const QModelIndex &parent ) const
         }
     }
     if ( ( m_modus & WorkPackage ) && par && par->isNode() ) {
-        //qDebug()<<"rowCount:"<<par->node->name()<<static_cast<const Task*>( par->node )->workPackageLogCount();
         return static_cast<const Task*>( par->node )->workPackageLogCount();
     }
     return 0;

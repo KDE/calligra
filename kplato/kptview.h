@@ -377,8 +377,6 @@ private:
     KAction *actionEditRelation;
     KAction *actionDeleteRelation;
 
-    KAction *actionMailWorkpackage;
-
     //Test
     KAction *actNoInformation;
 

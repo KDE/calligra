@@ -3245,7 +3245,6 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
 {
     Q_ASSERT( &project != m_project );
 
-    qDebug()<<"InsertProjectCmd: Merge calendars";
     QMap<Calendar*, Calendar*> unusedCalendars;
     foreach ( Calendar *c, project.calendars() ) {
         addCalendars( c, 0, unusedCalendars );
@@ -3256,7 +3255,6 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             r->setCalendar( unusedCalendars[ r->calendar() ] );
         }
     }
-    qDebug()<<"InsertProjectCmd: Get requests:";
     // get all requests before resources are merged
     QMap<ResourceGroupRequest*, QPair<Node *, ResourceGroup*> > greqs;
     QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> > rreqs;
@@ -3266,7 +3264,6 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             continue;
         }
         while ( ResourceGroupRequest *gr = n->requests().requests().value( 0 ) ) {
-            //qDebug()<<"InsertProjectCmd: "<<gr->group()<<existingGroups;
             while ( ResourceRequest *rr = gr->resourceRequests().value( 0 ) ) {
                 rreqs.insertMulti( gr, QPair<ResourceRequest*, Resource*>( rr, rr->resource() ) );
                 // all resource requests shall be reinserted
@@ -3279,45 +3276,33 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             int i = n->requests().takeRequest( gr );
             Q_ASSERT( i >= 0 );
         }
-        qDebug()<<"InsertProjectCmd groupRequest:"<<n->requests().requests().count();
     }
-    qDebug()<<"InsertProjectCmd: Merge resources";
-    //qDebug()<<"InsertProjectCmd: project groups"<<project.resourceGroups();
-    //qDebug()<<"InsertProjectCmd: m_project grps"<<m_project->resourceGroups();
     QMap<ResourceGroup*, ResourceGroup*> existingGroups;
     QMap<Resource*, Resource*> existingResources;
     foreach ( ResourceGroup *g, project.resourceGroups() ) {
         ResourceGroup *gr = m_project->findResourceGroup( g->id() );
         if ( gr == 0 ) {
-            //qDebug()<<"InsertProjectCmd: new group, add to m_project"<<g<<g->name();
             addCommand( new AddResourceGroupCmd( m_project, g, QString("ResourceGroup") ) );
             gr = g;
         } else {
-            //qDebug()<<"InsertProjectCmd: group exists"<<g->name()<<gr->name();
             existingGroups[ gr ] = g;
         }
         foreach ( Resource *r, g->resources() ) {
-            ////qDebug()<<"InsertProjectCmd: res sch"<<r->schedules();
             while ( Schedule *s = r->schedules().values().value( 0 ) ) {
                 r->deleteSchedule( s ); // schedules not handled
             }
             Resource *res = m_project->findResource( r->id() );
             if ( res == 0 ) {
-                //qDebug()<<"InsertProjectCmd: new resource, add to m_project"<<r<<r->name();
                 addCommand( new AddResourceCmd( gr, r, "Resource" ) );
             } else {
-                //qDebug()<<"InsertProjectCmd: resource exists"<<r->name()<<res->name();
                 existingResources[ res ] = r;
             }
         }
     }
-    qDebug()<<"InsertProjectCmd: Insert requests:";
-    //qDebug()<<"InsertProjectCmd: existingGroups"<<existingGroups;
     // Requests: clean up requests to resources already in m_project
     int gi = 0;
     int ri = 0;
     foreach ( ResourceGroupRequest *gr, greqs.keys() ) {
-        //qDebug()<<"InsertProjectCmd: "<<gr->group()<<existingGroups;
         QPair<Node*, ResourceGroup*> pair = greqs[ gr ];
         Node *n = pair.first;
         ResourceGroup *newGroup = pair.second;
@@ -3335,29 +3320,24 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
                 newRes = existingResources.keys().value( existingResources.values().indexOf( newRes ) );
             }
             // all resource requests shall be reinserted
-            qDebug()<<"InsertProjectCmd resourceRequest:"<<n->name()<<rr->resource()->name()<<(newRes==rr->resource()?"keep":"swap");
             rr->setResource( newRes );
             addCommand( new AddResourceRequestCmd( gr, rr, QString("Resource %1").arg( ++ri ) ) );
         }
-        qDebug()<<"InsertProjectCmd groupRequest:"<<n->requests().requests().count();
     }
     // Add nodes ( ids are unique, no need to check )
     Node *node_after = after;
     for ( int i = 0; i < project.numChildren(); ++i ) {
         Node *n = project.childNode( i );
         Q_ASSERT( n );
-        //qDebug()<<"InsertProjectCmd: node sch"<<n->schedules();
         while ( Schedule *s = n->schedules().values().value( 0 ) ) {
             n->takeSchedule( s ); // schedules not handled
             delete s;
         }
         n->setParentNode( 0 );
-        //qDebug()<<"InsertProjectCmd: add"<<project.name()<<"->"<<n->name();
         if ( node_after ) {
             addCommand( new TaskAddCmd( m_project, n, node_after, "Task" ) );
             node_after = n;
         } else {
-            qDebug()<<"InsertProjectCmd: add subtask"<<parent->name()<<"->"<<n->name();
             addCommand( new SubtaskAddCmd( m_project, n, parent, "Subtask" ) );
         }
         addChildNodes( n );
@@ -3370,7 +3350,6 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     }
     // Remove nodes from project so they are not deleted
     while ( Node *ch = project.childNode( 0 ) ) {
-        //qDebug()<<"InsertProjectCmd: remove"<<project.name()<<"->"<<ch->name();
         project.takeChildNode( ch );
     }
     foreach ( Node *n, project.allNodes() ) {
@@ -3415,20 +3394,17 @@ void InsertProjectCmd::addCalendars( Calendar *calendar, Calendar *parent, QMap<
 
 void InsertProjectCmd::addChildNodes( Node *node ) {
     // schedules not handled
-    //qDebug()<<"InsertProjectCmd: node sch"<<node->schedules();
     while ( Schedule *s = node->schedules().values().value( 0 ) ) {
         node->takeSchedule( s ); // schedules not handled
         delete s;
     }
     foreach ( Node *n, node->childNodeIterator() ) {
         n->setParentNode( 0 );
-        //qDebug()<<"addChildNodes: add"<<node->name()<<"->"<<n->name();
         addCommand( new SubtaskAddCmd( m_project, n, node, "Subtask" ) );
         addChildNodes( n );
     }
     // Remove child nodes so they are not added twice
     while ( Node *ch = node->childNode( 0 ) ) {
-        //qDebug()<<"addChildNodes: remove"<<node->name()<<"->"<<ch->name();
         node->takeChildNode( ch );
     }
 }

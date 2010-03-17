@@ -935,7 +935,6 @@ int CostBreakdownItemModel::endMode() const
 void CostBreakdownItemModel::setEndMode( int mode )
 {
     m_endmode = mode;
-    qDebug()<<"setEndMode:"<<mode;
     reset();
 }
 
@@ -991,7 +990,6 @@ QDate CostBreakdownItemModel::endDate() const
 
 void CostBreakdownItemModel::setEndDate( const QDate &date )
 {
-    qDebug()<<"setEndDate:"<<date<<m_endmode;
     m_end = date;
     reset();
 }

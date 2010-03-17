@@ -104,7 +104,7 @@ void ReportPrintingDialog::printPage( int page, QPainter &painter )
 ReportView::ReportView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-//    qDebug()<<"--------------- ReportView ------------------";
+//    kDebug()<<"--------------- ReportView ------------------";
 
     m_preRenderer = 0;
     setObjectName("ReportView");
@@ -125,8 +125,6 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     connect(m_pageSelector->ui_selector, SIGNAL(valueChanged(int)), SLOT(renderPage(int)));
     
     refresh();
-
-//    qDebug()<<"<-------------- ReportView -----------------<";
 }
 
 QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *project, ScheduleManager *manager, QObject *parent ) const
@@ -382,12 +380,11 @@ void ReportView::setReportModels( const QMap<QString, QAbstractItemModel*> &map 
 
 void ReportView::refresh()
 {
-//    qDebug()<<"ReportView::refresh:"<<sender();
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
     if ( ! m_preRenderer->isValid()) {
-        qDebug()<<"ReportView::refresh: Invalid design document";
+        kDebug()<<"Invalid design document";
         return;
     }
     ReportData *rd = createReportData( e );
@@ -432,21 +429,18 @@ bool ReportView::loadXML( const QDomDocument &doc )
 
 bool ReportView::loadContext( const KoXmlElement &context )
 {
-    //qDebug()<<"ReportView::loadContext:"<<context.tagName();
-    
     QDomDocument doc( "context" );
     QDomElement e = KoXml::asQDomElement( doc, context ).firstChildElement( "kplatoreportdefinition" );
     if ( ! e.isNull() ) {
         m_design = QDomDocument( "context" );
         m_design.appendChild( e );
-    } else qDebug()<<"Invalid context xml";
+    } else kDebug()<<"Invalid context xml";
     refresh();
     return true;
 }
 
 void ReportView::saveContext( QDomElement &context ) const
 {
-    qDebug()<<"ReportView::saveContext:"<<m_design.documentElement().tagName();
     context.appendChild( m_design.documentElement().cloneNode() );
 }
 
@@ -492,7 +486,6 @@ void ReportNavigator::slotMaxChanged( int value )
 
 void ReportNavigator::setButtonsEnabled()
 {
-    //qDebug()<<"ReportNavigator::setButtonsEnabled:"<<ui_selector->value()<<ui_selector->minimum()<<ui_selector->maximum();
     bool backw = ui_selector->value() > ui_selector->minimum();
     ui_first->setEnabled( backw );
     ui_prev->setEnabled( backw );
@@ -592,7 +585,6 @@ void ReportDesignDialog::slotButtonClicked( int button )
 
 void ReportDesignDialog::slotSaveToFile()
 {
-    qDebug()<<"ReportDesignDialog::slotSaveToFile:";
     KFileDialog *dialog = new KFileDialog(KUrl(), QString(), this);
     dialog->exec();
     KUrl url(dialog->selectedUrl());
@@ -618,7 +610,6 @@ void ReportDesignDialog::slotSaveToFile()
 
 void ReportDesignDialog::slotSaveToView()
 {
-    qDebug()<<"ReportDesignDialog::slotSaveToView:"<<m_view;
     if ( m_view == 0 ) {
         emit createReportView( this );
         return;
@@ -631,7 +622,6 @@ void ReportDesignDialog::slotSaveToView()
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
     m_view = dynamic_cast<ReportView*>( view );
-    qDebug()<<"ReportDesignDialog::slotViewCreated:"<<view;
     saveToView(); // allways save
 }
 
@@ -641,7 +631,6 @@ void ReportDesignDialog::saveToView()
         return;
     }
     QUndoCommand *cmd = new ModifyReportDefinitionCmd( m_view, document(), i18n( "Modify report definition" ) );
-    qDebug()<<"ReportDesignDialog::saveToView: emit"<<m_view<<cmd;
     emit modifyReportDefinition( cmd );
     m_panel->m_modified = false;
 }
@@ -782,7 +771,6 @@ ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager
 
 void ReportDesignPanel::slotPropertySetChanged()
 {
-    //qDebug()<<"ReportDesignPanel::slotPropertySetChanged:"<<m_designer->itemPropertySet();
     if ( m_propertyeditor ) {
         m_propertyeditor->changeSet( m_designer->itemPropertySet() );
     }
@@ -790,7 +778,6 @@ void ReportDesignPanel::slotPropertySetChanged()
 
 void ReportDesignPanel::slotInsertAction()
 {
-    //qDebug()<<"ReportDesignerView::slotInsertAction:"<<sender();
     emit insertItem( sender()->objectName() );
 }
 
@@ -814,7 +801,7 @@ QDomDocument ReportDesignPanel::document() const
 
     if ( m_sourceeditor ) {
         m_sourceeditor->sourceData( e );
-    } else qDebug()<<"ReportDesignerView::document: source data not available";
+    }
     e.appendChild( m_designer->document() );
 /*    qDebug()<<"ReportDesignerView::document:";
     qDebug()<<document.toString();*/
@@ -837,10 +824,6 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
     }
     connect( r, SIGNAL( createReportData( const QString&, KoReportData* ) ), SLOT( createReportData( const QString&, KoReportData* ) ) );
     r->setModel( m_modelmap.value( type ) );
-    //qDebug()<<"ReportDesignerView::createReportData:"<<type<<r<<r->itemModel();
-    if ( r->itemModel() ) {
-        //qDebug()<<"ReportDesignerView::createReportData:"<<r->itemModel()->project()<<r->itemModel()->scheduleManager();
-    }
     Q_ASSERT( r );
     return r;
 }
@@ -930,7 +913,6 @@ ReportSourceModel::ReportSourceModel( int rows, int columns, QObject *parent )
 
 void ReportSourceModel::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
 {
-    //qDebug()<<"ReportDesignerView::slotSourceChanged:"<<topLeft<<bottomRight;
     QModelIndex parent = topLeft.parent();
     if ( ! parent.isValid() ) {
         return;
@@ -945,7 +927,6 @@ void ReportSourceModel::slotSourceChanged( const QModelIndex &topLeft, const QMo
             setData( idx, tag, Reports::TagRole );
             // update checked mark
             setChecked( topLeft );
-            //qDebug()<<"ReportSourceModel::slotSourceChanged:"<<tag<<m_modelmap[ tag ];
             emit selectFromChanged( tag );
         } else {
             // set checked flag; it's not allowed to be reset by user
@@ -977,7 +958,6 @@ ModifyReportDefinitionCmd ::ModifyReportDefinitionCmd( ReportView *view, const Q
     m_newvalue( value.cloneNode().toDocument() ),
     m_oldvalue( m_view->document().cloneNode().toDocument() )
 {
-    //qDebug()<<"ModifyReportDefinitionCmd:"<<view;
 }
 void ModifyReportDefinitionCmd ::execute()
 {

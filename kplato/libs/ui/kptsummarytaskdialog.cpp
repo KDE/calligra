@@ -55,10 +55,7 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
 void SummaryTaskDialog::slotTaskRemoved( Node *node )
 {
     if ( node == m_node ) {
-        qDebug()<<"SummaryTaskDialog::slotTaskRemoved: This node removed";
         reject();
-    } else {
-        qDebug()<<"SummaryTaskDialog::slotTaskRemoved: Another node removed";
     }
 }
 

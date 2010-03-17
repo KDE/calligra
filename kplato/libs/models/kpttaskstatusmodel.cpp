@@ -189,7 +189,6 @@ void TaskStatusItemModel::setNow()
 
 void TaskStatusItemModel::refresh()
 {
-    qDebug()<<"TaskStatusItemModel::refresh:";
     clear();
     if ( m_project == 0 ) {
         return;

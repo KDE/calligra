@@ -2639,7 +2639,6 @@ uint Task::state( long id ) const
 
 void Task::addWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"addWorkPackage:"<<m_name<<wp->ownerName();
     emit workPackageToBeAdded( this, m_packageLog.count() );
     m_packageLog.append( wp );
     emit workPackageAdded( this );
@@ -2647,7 +2646,6 @@ void Task::addWorkPackage( WorkPackage *wp )
 
 void Task::removeWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"removeWorkPackage:"<<m_name<<wp->ownerName();
     int index = m_packageLog.indexOf( wp );
     if ( index < 0 ) {
         return;
@@ -3126,7 +3124,6 @@ EffortCostMap Completion::actualEffortCost( long id ) const
         lst.append( &m );
         rate.append( r->normalRate() );
     }
-    //qDebug()<<"actualEffortCost:"<<m_node->name()<<start<<end<<lst;
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
@@ -3143,7 +3140,6 @@ EffortCostMap Completion::actualEffortCost( long id ) const
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
-                //qDebug()<<"actualEffortCost: added"<<m_node->name()<<d<<c.hours()<<c.cost();
             }
         }
     } else if ( ! m_entries.isEmpty() ) {
@@ -3474,8 +3470,9 @@ QList<Resource*> WorkPackage::fetchResources( long id )
     //kDebug()<<m_task.name();
     QList<Resource*> lst;
     if ( id == NOTSCHEDULED ) {
-        //qDebug()<<"WorkPackage::fetchResources:"<<"No schedule";
-        if ( m_task ) lst << m_task->requestedResources();
+        if ( m_task ) {
+            lst << m_task->requestedResources();
+        }
     } else {
         if ( m_task ) lst = m_task->assignedResources( id );
         foreach ( const Resource *r, m_completion.resources() ) {
@@ -3484,7 +3481,6 @@ QList<Resource*> WorkPackage::fetchResources( long id )
             }
         }
     }
-    //qDebug()<<"WorkPackage::fetchResources:"<<lst;
     return lst;
 }
 
@@ -3550,7 +3546,6 @@ void WorkPackageSettings::saveXML( QDomElement &element ) const
 
 bool WorkPackageSettings::loadXML( const KoXmlElement &element )
 {
-    //qDebug()<<"WorkPackageSettings::loadXML:";
     usedEffort = (bool)element.attribute( "used-effort" ).toInt();
     progress = (bool)element.attribute( "progress" ).toInt();
     remainingEffort = (bool)element.attribute( "remaining-effort" ).toInt();
