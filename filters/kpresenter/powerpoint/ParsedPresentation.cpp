@@ -303,6 +303,7 @@ ParsedPresentation::parse(POLE::Storage& storage)
 const MSO::MasterOrSlideContainer*
 ParsedPresentation::getMaster(const SlideContainer* slide) const
 {
+    if (!slide) return 0;
     foreach(const MasterPersistAtom& m, documentContainer->masterList.rgMasterPersistAtom) {
         if (m.masterId == slide->slideAtom.masterIdRef) {
             quint32 offset = persistDirectory[m.persistIdRef];
