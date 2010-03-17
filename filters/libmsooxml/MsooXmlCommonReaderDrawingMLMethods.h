@@ -56,6 +56,8 @@ KoFilter::ConversionStatus read_wrapTight();
 KoFilter::ConversionStatus read_wrapThrough();
 
 KoFilter::ConversionStatus read_DrawingML_p();
+read_p_args m_read_DrawingML_p_args;
+
 KoFilter::ConversionStatus read_DrawingML_r();
 
 //! Copies file to destination directory. @a destinationName is set.
