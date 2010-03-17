@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef XLSXXMLDRAWINGREADER_H
-#define XLSXXMLDRAWINGREADER_H
+#ifndef XLSXXMLCHARTREADER_H
+#define XLSXXMLCHARTREADER_H
 
 //#include <KoGenStyle.h>
 //#include <styles/KoCharacterStyle.h>
@@ -42,44 +42,26 @@
 //#include <QRegExp>
 //#include "NumberFormatParser.h"
 
-class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
+class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlDrawingReaderContext();
-    virtual ~XlsxXmlDrawingReaderContext();
+    XlsxXmlChartReaderContext();
+    virtual ~XlsxXmlChartReaderContext();
 };
 
-class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
+class XlsxXmlChartReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    XlsxXmlDrawingReader(KoOdfWriters *writers);
-    virtual ~XlsxXmlDrawingReader();
+    XlsxXmlChartReader(KoOdfWriters *writers);
+    virtual ~XlsxXmlChartReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 protected:
-    KoFilter::ConversionStatus read_from();
-    KoFilter::ConversionStatus read_to();
-    KoFilter::ConversionStatus read_col();
-    KoFilter::ConversionStatus read_row();
-    KoFilter::ConversionStatus read_colOff();
-    KoFilter::ConversionStatus read_rowOff();
-    KoFilter::ConversionStatus read_chart();
+    KoFilter::ConversionStatus read_plotArea();
+    KoFilter::ConversionStatus read_ser();
+    KoFilter::ConversionStatus read_legend();
+    
 private:
-    XlsxXmlDrawingReaderContext *m_context;
-    
-    enum AnchorToken { NoAnchor, FromAnchor, ToAnchor };
-    AnchorToken m_anchorToken;
-    
-    struct Position {
-        int m_row, m_col, m_rowOff, m_colOff;
-        Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
-    };
-
-    QMap<AnchorToken, Position> m_positions;
-
-    typedef KoFilter::ConversionStatus(XlsxXmlDrawingReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-    
-    int m_chartNumber;
+    XlsxXmlChartReaderContext *m_context;
 };
 
 #endif
