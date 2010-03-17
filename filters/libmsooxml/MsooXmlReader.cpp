@@ -187,7 +187,7 @@ void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString& value, con
 
 void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char* elementName)
 {
-    raiseError(i18n("Unexpected second occurence of \"%1\" element", QLatin1String(elementName)));
+    raiseError(i18n("Unexpected second occurrence of \"%1\" element", QLatin1String(elementName)));
 }
 
 bool MsooXmlReader::expectElName(const char* elementName)
