@@ -187,12 +187,8 @@ private:
     bool m_writeMasterStyleName; //whether to write the master style name or not
     bool m_writingHeader; //flag for headers/footers, where we write the actual text to styles.xml
 
-    int m_footnoteRestart; // rnc/rncFtn 0:document 1:section 2:page
-    int m_endnoteRestart; // rnc/rncEdn 0:don't restart, 1:section: 2page
     int m_initialFootnoteNumber;
     int m_initialEndnoteNumber;
-    QString m_footnoteType;
-    QString m_endnoteType;
 };
 
 #endif // DOCUMENT_H

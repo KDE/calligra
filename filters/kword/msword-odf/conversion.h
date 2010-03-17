@@ -110,6 +110,9 @@ bool isHeader(unsigned char type);
 qreal twipsToInch(int twips);
 
 qreal twipsToPt(int twips);
+
+QString rncToStartNumberingAt(int rnc);
+
 }
 
 #endif
