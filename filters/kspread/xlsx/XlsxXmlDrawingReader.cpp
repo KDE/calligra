@@ -130,7 +130,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 #define CURRENT_EL col
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 {
-    m_context->m_positions[m_anchorType].m_col = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_col = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -138,7 +138,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 #define CURRENT_EL row
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 {
-    m_context->m_positions[m_anchorType].m_row = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_row = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 #define CURRENT_EL colOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 {
-    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 #define CURRENT_EL rowOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 {
-    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 

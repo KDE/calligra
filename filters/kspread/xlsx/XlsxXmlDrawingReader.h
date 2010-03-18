@@ -49,6 +49,9 @@ class XlsxXmlWorksheetReaderContext;
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
+    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
+    virtual ~XlsxXmlDrawingReaderContext();
+
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
 
     enum AnchorType {
@@ -63,9 +66,6 @@ public:
     };
 
     QMap<AnchorType, Position> m_positions;
-
-    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
-    virtual ~XlsxXmlDrawingReaderContext();
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader

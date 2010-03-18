@@ -65,8 +65,9 @@ class XlsxXmlChartReader::Private
 public:
     XlsxXmlChartReaderContext *m_context;
     Charting::Chart *m_chart;
+    int chartNumber;
     
-    explicit Private() : m_context(0), m_chart(0) {}
+    explicit Private() : m_context(0), m_chart(0), chartNumber(0) {}
     ~Private() { delete m_chart; }
 };
 
@@ -114,8 +115,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     }
 
     ChartExport c(d->m_chart);
-    static int chartNumber = 0;
-    c.m_href = QString("Chart%1").arg(++chartNumber);
+    c.m_href = QString("Chart%1").arg(++d->chartNumber);
 
     const QString sheetName = d->m_context->drawingReaderContext->worksheetReaderContext->worksheetName;
 
@@ -196,7 +196,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_firstSliceAng()
     if(Charting::PieImpl* pie = dynamic_cast<Charting::PieImpl*>(d->m_chart->m_impl)) {
         const QXmlStreamAttributes attrs(attributes());
         TRY_READ_ATTR(val)
-        pie->m_anStart = val.toInt();
+        pie->m_anStart = val.toInt(); // default value is zero
     }
     return KoFilter::OK;
 }
