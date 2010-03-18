@@ -39,13 +39,17 @@ public:
     //! Constructs empty plain string.
     XlsxSharedString();
 
-    QString plainText() const { return m_isPlainText ? m_data : QString(); }
+    //bool isPlainText() const { return m_isPlainText; }
+    QString data() const { return m_data; }
 
+    //QString plainText() const { return m_isPlainText ? m_data : QString(); }
     void setPlainText(const QString& plainText) { m_data = plainText; m_isPlainText = true; }
 
+    //QString xml() const { return m_isPlainText ? QString() : m_data; }
     void setXml(const QByteArray& xml) { m_data = xml; m_isPlainText = false; }
 
     void saveXml(KoXmlWriter *writer) const;
+
 private:
     QString m_data;
     bool m_isPlainText;
