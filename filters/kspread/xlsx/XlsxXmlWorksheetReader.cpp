@@ -25,8 +25,11 @@
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlDocumentReader.h"
-#include "XlsxImport.h"
 #include "XlsxXmlDrawingReader.h"
+#include "XlsxXmlChartReader.h"
+#include "XlsxImport.h"
+#include "Charting.h"
+#include "ChartExport.h"
 
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -127,6 +130,7 @@ public:
     }
     ~Private() {
         qDeleteAll(rows);
+        qDeleteAll(drawings);
     }
 
     XlsxXmlWorksheetReader* const q;
@@ -134,6 +138,7 @@ public:
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     QList<Row*> rows;
+    QList<XlsxXmlDrawingReaderContext*> drawings;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -339,6 +344,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                 body->endElement(); // text:span
             }
             body->endElement(); // text:p
+            
+            // handle objects like e.g. charts
+            foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
+                foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
+                    // save the index embedded into this cell
+                    chart->m_chartExport->saveIndex(body);
+                    // the embedded object file was written by the XlsxXmlChartReader already
+                    //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
+                }
+            }
             
             body->endElement(); // table:table-cell
         }
@@ -1031,13 +1046,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
         QString filepath = path + "/" + file;
 
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context);
+
         XlsxXmlDrawingReader reader(this);
-        XlsxXmlDrawingReaderContext context(m_context);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
+            delete context;
             return result;
         }
+
+        d->drawings << context;
     }
 
     while (!atEnd()) {

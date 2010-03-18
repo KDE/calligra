@@ -45,6 +45,7 @@
 
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
+class XlsxXmlChartReaderContext;
 
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
@@ -53,6 +54,7 @@ public:
     virtual ~XlsxXmlDrawingReaderContext();
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
+    QList<XlsxXmlChartReaderContext*> charts;
 
     enum AnchorType {
         NoAnchor,

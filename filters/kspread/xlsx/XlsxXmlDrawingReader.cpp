@@ -175,14 +175,17 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
         const QString file = QString("chart%1.xml").arg(++m_chartNumber);
         const QString filepath = path + "/" + file;
 
-        XlsxXmlChartReader reader(this);
-        XlsxXmlChartReaderContext context(m_context);
+        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(m_context);
         
-        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, &context);
+        XlsxXmlChartReader reader(this);
+        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
+            delete context;
             return result;
         }
+
+        m_context->charts << context;
     }
 
     return KoFilter::OK;

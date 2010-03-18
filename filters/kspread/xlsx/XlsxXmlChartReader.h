@@ -43,12 +43,19 @@
 //#include <QRegExp>
 //#include "NumberFormatParser.h"
 
+namespace Charting {
+    class Chart;
+}
+
 class XlsxXmlDrawingReaderContext;
+class ChartExport;
 
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     XlsxXmlDrawingReaderContext* drawingReaderContext;
+    Charting::Chart* m_chart;
+    ChartExport* m_chartExport;
     explicit XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext);
     virtual ~XlsxXmlChartReaderContext();
 };
@@ -68,8 +75,7 @@ protected:
     KoFilter::ConversionStatus read_firstSliceAng();
     
 private:
-    class Private;
-    Private *const d;
+    XlsxXmlChartReaderContext *m_context;
 };
 
 #endif
