@@ -345,6 +345,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             }
             body->endElement(); // text:p
             
+//! @todo make drawingobject logic more generic
             // handle objects like e.g. charts
             foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
                 foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
