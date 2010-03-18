@@ -345,7 +345,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             }
             body->endElement(); // text:p
             
+//! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
 //! @todo make drawingobject logic more generic
+#if 0
             // handle objects like e.g. charts
             foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
                 foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
@@ -355,7 +357,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
                 }
             }
-            
+#endif
+
             body->endElement(); // table:table-cell
         }
         body->endElement(); // table:table-row
