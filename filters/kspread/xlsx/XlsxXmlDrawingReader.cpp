@@ -90,8 +90,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 #define CURRENT_EL from
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 {
-    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     READ_PROLOGUE
+    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -102,16 +102,16 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    READ_EPILOGUE
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL to
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 {
-    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     READ_PROLOGUE
+    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -122,8 +122,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    READ_EPILOGUE
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
