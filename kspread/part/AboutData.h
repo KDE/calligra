@@ -40,6 +40,7 @@ KAboutData * newAboutData()
                                             "http://www.koffice.org/kspread/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "m.kruisselbrink@student.tue.nl");
+    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("ODS and Excel, functions, scripting"), "mail@dipe.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
     aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");
     aboutData->addAuthor(ki18n("Philipp Müller"), KLocalizedString(), "philipp.mueller@gmx.de");
@@ -80,9 +81,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
     aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     aboutData->addAuthor(ki18n("Sascha Pfau"), ki18n("Developer (functions)"), "mrpeacock@gmail.com");
-    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Scripting Plugin"), "mail@dipe.org");
-    // "Thanks to" section
-    aboutData->addCredit(ki18n("Brad Hards"),
+    aboutData->addAuthor(ki18n("Brad Hards"),
                          ki18n("Implemented, reviewed and tested various functions"),
                          "bradh@frogmouth.net");
     return aboutData;
