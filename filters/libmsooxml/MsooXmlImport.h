@@ -53,6 +53,8 @@ public:
     MsooXmlImport(const QString& bodyContentElement, QObject * parent);
 
     virtual ~MsooXmlImport();
+    
+    KoStore* outputStore() const { return m_outputStore; }
 
     //! KoFilter::UsageError is returned if this method is called outside
     //! of the importing process, i.e. not from within parseParts().

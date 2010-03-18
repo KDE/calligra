@@ -15,6 +15,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlDrawingReader.cpp
     XlsxXmlChartReader.cpp
     NumberFormatParser.cpp
+    ChartExport.cpp
 )
 
 kde4_add_plugin(xlsximport WITH_PREFIX ${xlsximport_PART_SRCS})

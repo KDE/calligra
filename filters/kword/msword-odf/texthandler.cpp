@@ -978,17 +978,17 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     } else if (pap.ilvl > m_currentListDepth) {
         //we're going to a new level in the list
         kDebug(30513) << "going to a new level in list" << m_currentListID;
+        //open a new <text:list> or more levels if needed
         m_currentListDepth++;
-        //open a new <text:list>
-        //
-        // TODO: How come we need only open one new level (see above)
         writer->startElement("text:list");
+        for (;m_currentListDepth < pap.ilvl; m_currentListDepth++) {
+            writer->startElement("text:list-item");
+            writer->startElement("text:list");
+        }
         //it's a new level, so we need to configure this level
         newListLevelStyle = true;
     } else if (pap.ilvl < m_currentListDepth) {
         // We're backing out a level in the list.
-        //
-        // TODO: How come we need only close one level (see above)
         kDebug(30513) << "backing out a level in list" << m_currentListID;
         m_currentListDepth--;
         //close the last <text:list-item of the level
@@ -997,6 +997,11 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         writer->endElement();
         //close the <text:list-item> from the surrounding level
         writer->endElement();
+        for (;m_currentListDepth > pap.ilvl; m_currentListDepth--) {
+            //close <text:list> and <text:list-item> for any additional levels
+            writer->endElement();
+            writer->endElement();
+        }
     } else {
         kDebug(30513) << "just another item on the same level in the list";
         //close <text:list-item> from the previous item

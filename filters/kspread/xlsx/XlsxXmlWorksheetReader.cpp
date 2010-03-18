@@ -1,6 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
+ * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
@@ -996,7 +997,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString filepath = path + "/" + file;
 
         XlsxXmlDrawingReader reader(this);
-        XlsxXmlDrawingReaderContext context;
+        XlsxXmlDrawingReaderContext context(m_context);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());

@@ -1,7 +1,8 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -22,6 +23,9 @@
  */
 
 #include "XlsxXmlDrawingReader.h"
+#include "XlsxXmlWorksheetReader.h"
+#include "XlsxXmlChartReader.h"
+#include "XlsxImport.h"
 
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
@@ -30,8 +34,9 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
-XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext()
+XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext)
     : MSOOXML::MsooXmlReaderContext()
+    , worksheetReaderContext(_worksheetReaderContext)
 {
 }
 
@@ -41,7 +46,7 @@ XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_anchorToken(NoAnchor)
+    , m_anchorType(XlsxXmlDrawingReaderContext::NoAnchor)
     , m_chartNumber(0)
 {
 }
@@ -52,8 +57,6 @@ XlsxXmlDrawingReader::~XlsxXmlDrawingReader()
 
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-    kDebug()<<"XlsxXmlDrawingReader #######################################################";
-    
     m_context = dynamic_cast<XlsxXmlDrawingReaderContext*>(context);
     Q_ASSERT(m_context);
 
@@ -63,9 +66,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
     }
 
     readNext();
-    if(namespaceUri() != "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") {
-        return KoFilter::WrongFormat;
-    }
     if (!expectEl("xdr:wsDr")) {
         return KoFilter::WrongFormat;
     }
@@ -74,8 +74,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
         QXmlStreamReader::TokenType tokenType = readNext();
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
         if (isStartElement()) {
-            //kDebug()<<"............................"<<tokenString()<<prefix()<<name();
-
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
@@ -84,7 +82,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
         }
     }
 
-//Q_ASSERT(false);
     m_context = 0;
     return KoFilter::OK;
 }
@@ -93,7 +90,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 #define CURRENT_EL from
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 {
-    m_anchorToken = FromAnchor;
+    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
@@ -106,14 +103,14 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
-    m_anchorToken = NoAnchor;
+    m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL to
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 {
-    m_anchorToken = ToAnchor;
+    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
@@ -126,14 +123,14 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
-    m_anchorToken = NoAnchor;
+    m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL col
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 {
-    m_positions[m_anchorToken].m_col = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_col = readElementText().toInt();
     return KoFilter::OK;
 }
 
@@ -141,7 +138,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 #define CURRENT_EL row
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 {
-    m_positions[m_anchorToken].m_row = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_row = readElementText().toInt();
     return KoFilter::OK;
 }
 
@@ -149,7 +146,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 #define CURRENT_EL colOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 {
-    m_positions[m_anchorToken].m_colOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt();
     return KoFilter::OK;
 }
 
@@ -157,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 #define CURRENT_EL rowOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 {
-    m_positions[m_anchorToken].m_rowOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt();
     return KoFilter::OK;
 }
 
@@ -165,8 +162,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 #define CURRENT_EL chart
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
 {
-    kDebug()<<"3AAAAAAAAAAA"<<text();
-    
+    Q_ASSERT(m_context);
+    Q_ASSERT(m_context->worksheetReaderContext);
+    Q_ASSERT(m_context->worksheetReaderContext->import);
+
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     if(!r_id.isEmpty()) {
@@ -174,20 +173,17 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
 
         const QString path = "/xl/charts";
         const QString file = QString("chart%1.xml").arg(++m_chartNumber);
-        const QString filepath = path + file;
+        const QString filepath = path + "/" + file;
 
-#if 0
         XlsxXmlChartReader reader(this);
-        XlsxXmlChartReaderContext context;
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        XlsxXmlChartReaderContext context(m_context);
+        
+        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, &context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
             return result;
         }
-#endif
     }
 
-
-    //Q_ASSERT(false);
     return KoFilter::OK;
 }
