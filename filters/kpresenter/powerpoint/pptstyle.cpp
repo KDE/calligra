@@ -370,6 +370,7 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
     addStyle(pfs, getDefaultPF(d));
 
     *pf9s = 0;
+    addStyle(pf9s, getLevelPF9(m, tc, 0));
     addStyle(pf9s, getDefaultLevelPF9(d, textType, 0));
     addStyle(pf9s, getDefaultPF9(d));
 }
@@ -398,7 +399,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     *pf9s = 0;
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
-    addStyle(pf9s, getLevelPF9(m, tc, start));
+    addStyle(pf9s, getLevelPF9(m, tc, level));
     addStyle(pf9s, getDefaultLevelPF9(d, tc, level));
     addStyle(pf9s, getDefaultPF9(d));
 
