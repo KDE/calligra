@@ -65,9 +65,8 @@ class XlsxXmlChartReader::Private
 public:
     XlsxXmlChartReaderContext *m_context;
     Charting::Chart *m_chart;
-    int chartNumber;
     
-    explicit Private() : m_context(0), m_chart(0), chartNumber(0) {}
+    explicit Private() : m_context(0), m_chart(0) {}
     ~Private() { delete m_chart; }
 };
 
@@ -115,7 +114,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     }
 
     ChartExport c(d->m_chart);
-    c.m_href = QString("Chart%1").arg(++d->chartNumber);
+
+    // static is fine here cause we only need to take care that that number is unique in the
+    // exported ODS file and do not take if the number is continuous or whatever.
+    static int chartNumber = 0;
+
+    c.m_href = QString("Chart%1").arg(++chartNumber);
 
     const QString sheetName = d->m_context->drawingReaderContext->worksheetReaderContext->worksheetName;
 
