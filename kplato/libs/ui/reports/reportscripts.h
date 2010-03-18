@@ -23,11 +23,12 @@
 #include <QObject>
 #include <QString>
 
+class QVariant;
+
 namespace KPlato
 {
 
 class ReportData;
-
 
 class ProjectAccess : public QObject
 {
@@ -38,7 +39,12 @@ public:
 public slots:
     QString Name() const;
     QString Manager() const;
-    
+    QVariant BCWS() const;
+    QVariant BCWP() const;
+    QVariant ACWP() const;
+    QVariant CPI() const;
+    QVariant SPI() const;
+
 private:
     ReportData *m_reportdata;
 };

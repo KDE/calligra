@@ -161,7 +161,7 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     fm->setSourceModel( m );
     m->setProject( project );
     m->setScheduleManager( manager );
-//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+//    connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "taskstatus", sf );
 
     fm = new FlatProxyModel( parent );
@@ -404,9 +404,9 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     } else {
         r = new ReportData();
     }
+    r->setModel( m_modelmap.value( modelname ) );
     r->setProject( project() );
     r->setScheduleManager( m_schedulemanager );
-    r->setModel( m_modelmap.value( modelname ) );
     return r;
 }
 
