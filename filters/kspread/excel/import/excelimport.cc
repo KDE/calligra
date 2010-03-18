@@ -1212,7 +1212,7 @@ QString cellFormula(Cell* cell)
             // Special case Excel formulas that differ from OpenFormula
             formula.prepend("msoxl:=");
         } else if(!formula.isEmpty()) {
-            formula.prepend("of:=");
+            formula.prepend("=");
         }
     }
     return formula;
