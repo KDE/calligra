@@ -17,20 +17,29 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_REPORT_H
-#define KPLATO_REPORT_H
+#include "reportexportpanel.h"
+#include "report.h"
+
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-namespace Reports
+ReportExportPanel::ReportExportPanel( QWidget *parent )
+    : QWidget( parent )
 {
-    enum ItemRoles { TagRole = Qt::UserRole + 1 };
-    
-    enum ExportFormat { EF_Unknown, EF_Ods, EF_Html, EF_XHtml };
+    setupUi( this );
+    ui_format->insertItem ( 0,  KIcon( "application-vnd.oasis.opendocument.spreadsheet" ), i18n( "Open document spreadsheet" ), (int)Reports::EF_Ods );
+    ui_format->insertItem ( 1, KIcon( "text-html" ), i18n( "HTML" ), (int)Reports::EF_Html );
+    ui_format->insertItem ( 2, KIcon( "application-xhtml+xml" ), i18n( "XHTML" ), (int)Reports::EF_XHtml );
 }
 
+int ReportExportPanel::selectedFormat() const
+{
+    int result = ui_format->itemData( ui_format->currentIndex() ).toInt();
+    return result;
 }
 
-#endif
+} //namespace KPlato
 
+#include "reportexportpanel.moc"

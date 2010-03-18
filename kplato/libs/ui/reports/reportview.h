@@ -85,7 +85,7 @@ public:
 
 protected:
     ORODocument *m_reportDocument;
-    KoReportRendererContext m_cxt;
+    KoReportRendererContext m_context;
     KoReportRendererBase *m_renderer;
 };
 
@@ -132,13 +132,15 @@ private slots:
     void firstPage();
     void lastPage();
     void slotEditReport();
-    void slotExportOds();
-    void slotExportOdsOkClicked();
-    void slotExportHTML();
-    void slotExportHTMLOkClicked();
+
+    void slotExport();
+    void slotExportFinished( int result );
 
 private:
     ReportData *createReportData( const QDomElement &connection );
+    void exportToOds( KoReportRendererContext &context );
+    void exportToHtml( KoReportRendererContext &context );
+    void exportToXHtml( KoReportRendererContext &context );
 
 private:
     KoReportPreRenderer *m_preRenderer;

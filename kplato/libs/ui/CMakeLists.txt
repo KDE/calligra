@@ -33,6 +33,7 @@ set(kplatoui_LIB_SRCS
     reports/reportpage.cpp
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
+    reports/reportexportpanel.cpp
 
     plotting/kplotaxis.cpp
     plotting/kplotwidget.cpp
@@ -102,6 +103,7 @@ set(kplatoui_LIB_SRCS
 kde4_add_ui_files(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
+    reports/reportexportpanel.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui

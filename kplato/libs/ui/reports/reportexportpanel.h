@@ -17,20 +17,29 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_REPORT_H
-#define KPLATO_REPORT_H
+#ifndef KPLATO_REPORTEXPORTPANEL_H
+#define KPLATO_REPORTEXPORTPANEL_H
+
+
+#include "ui_reportexportpanel.h"
+
+#include <QWidget>
+
 
 namespace KPlato
 {
 
-namespace Reports
+class ReportExportPanel : public QWidget, public Ui::ReportExportPanel
 {
-    enum ItemRoles { TagRole = Qt::UserRole + 1 };
-    
-    enum ExportFormat { EF_Unknown, EF_Ods, EF_Html, EF_XHtml };
-}
+    Q_OBJECT
+public:
+    ReportExportPanel( QWidget *parent = 0 );
 
-}
+    int selectedFormat() const;
+
+};
+
+} //namespace KPlato
 
 #endif
 
