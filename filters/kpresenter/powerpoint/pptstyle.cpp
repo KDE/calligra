@@ -37,6 +37,30 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
     }
     return textstyle;
 }
+const TextMasterStyle9Atom*
+getTextMasterStyle9Atom(const PP9SlideBinaryTagExtension* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const TextMasterStyle9Atom* textstyle = 0;
+    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyleAtom) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
+}
+const TextMasterStyle9Atom*
+getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const TextMasterStyle9Atom* textstyle = 0;
+    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
+}
 const TextMasterStyleLevel *
 getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
 {
@@ -184,6 +208,126 @@ const TextCFException* getDefaultCF(const MSO::DocumentContainer* d)
     }
     return 0;
 }
+const MSO::StyleTextProp9*
+getStyleTextProp9(const MSO::DocumentContainer* d, quint32 slideIdRef,
+                  quint32 textType, quint8 pp9rt)
+{
+    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    if (pp9 && pp9->outlineTextPropsContainer) {
+        foreach (const OutlineTextProps9Entry& o,
+                 pp9->outlineTextPropsContainer->rgOutlineTextProps9Entry) {
+            if (o.outlineTextHeaderAtom.slideIdRef == slideIdRef
+                    && o.outlineTextHeaderAtom.txType == textType) {
+                // we assume that pp9rt is the index in this array
+                if (o.styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
+                    return &o.styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+                }
+            }
+        }
+    }
+    return 0;
+}
+const MSO::StyleTextProp9*
+getStyleTextProp9(const PptOfficeArtClientData* pcd, quint8 pp9rt)
+{
+    const PP9ShapeBinaryTagExtension* p = 0;
+    if (pcd) {
+        p = getPP<PP9ShapeBinaryTagExtension>(*pcd);
+    }
+    if (p && p->styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
+        return &p->styleTextProp9Atom.rgStyleTextProp9[pp9rt];
+    }
+    return 0;
+}
+const TextPFException9* getPF9(const MSO::DocumentContainer* d,
+                                    const MSO::SlideListWithTextSubContainerOrAtom* texts,
+                                    const PptOfficeArtClientData* pcd,
+                                    const MSO::TextContainer* tc,
+                                    const int start)
+{
+    // to find the pf9, the cf has to be obtained which contains a pp9rt
+    quint8 pp9rt = 0;
+    const TextCFException* cf = getTextCFException(tc, start);
+    if (cf && cf->fontStyle) {
+        pp9rt = cf->fontStyle->pp9rt;
+    }
+    const StyleTextProp9* stp9 = 0;
+    if (tc) {
+        quint32 textType = tc->textHeaderAtom.textType;
+        stp9 = getStyleTextProp9(pcd, pp9rt);
+        if (!stp9 && texts) {
+            stp9 = getStyleTextProp9(d, texts->slidePersistAtom.slideId.slideId,
+                                     textType, pp9rt);
+        }
+    }
+    return (stp9) ?&stp9->pf9 :0;
+}
+const TextMasterStyle9Level* getMaster9Level(const MasterOrSlideContainer* m,
+                                              quint32 textType,
+                                              quint16 level)
+{
+    const PP9SlideBinaryTagExtension* pp9 = getPP<PP9SlideBinaryTagExtension>(m);
+    if (!pp9) return 0;
+    const TextMasterStyle9Atom* ms = getTextMasterStyle9Atom(pp9, textType);
+    const TextMasterStyle9Level *l = 0;
+    switch (level) {
+    case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
+    case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
+    case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
+    case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
+    case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+    }
+    return l;
+}
+const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
+                                    quint32 textType,
+                                    quint16 level)
+{
+    const TextMasterStyle9Level* ml = getMaster9Level(m, textType, level);
+    return (ml) ?&ml->pf9 :0;
+}
+const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
+                                    const MSO::TextContainer* tc,
+                                    quint16 level)
+{
+    return (tc) ?getLevelPF9(m, tc->textHeaderAtom.textType, level) :0;
+}
+const TextMasterStyle9Level* getDefault9Level(const MSO::DocumentContainer* d,
+                                              quint32 textType,
+                                              quint16 level)
+{
+    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    if (!pp9) return 0;
+    const TextMasterStyle9Atom* ms = getTextMasterStyle9Atom(pp9, textType);
+    if (!ms) return 0;
+    const TextMasterStyle9Level *l = 0;
+    switch (level) {
+    case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
+    case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
+    case 2: if (ms->lstLvl3) l = ms->lstLvl3.data();break;
+    case 3: if (ms->lstLvl4) l = ms->lstLvl4.data();break;
+    case 4: if (ms->lstLvl5) l = ms->lstLvl5.data();break;
+    }
+    return l;
+}
+const TextPFException9* getDefaultLevelPF9(const MSO::DocumentContainer* d,
+                                           quint32 textType,
+                                           quint16 level)
+{
+    const TextMasterStyle9Level* ml = getDefault9Level(d, textType, level);
+    return (ml) ?&ml->pf9 :0;
+}
+const TextPFException9* getDefaultLevelPF9(const MSO::DocumentContainer* d,
+                                           const MSO::TextContainer* tc,
+                                           quint16 level)
+{
+    return (tc) ?getDefaultLevelPF9(d, tc->textHeaderAtom.textType, level) :0;
+}
+const TextPFException9* getDefaultPF9(const MSO::DocumentContainer* d)
+{
+    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
+    return (pp9 && pp9->textDefaultsAtom) ?&pp9->textDefaultsAtom->pf9 :0;
+}
 template <class Style>
 void addStyle(const Style** list, const Style* style)
 {
@@ -195,6 +339,25 @@ void addStyle(const Style** list, const Style* style)
     }
 }
 }
+const TextCFException*
+getTextCFException(const MSO::TextContainer* tc, const int start)
+{
+    if (!tc || !tc->style) return 0;
+    const QList<TextCFRun> &cfs = tc->style->rgTextCFRun;
+    int i = 0;
+    int cfend = 0;
+    while (i < cfs.size()) {
+        cfend += cfs[i].count;
+        if (cfend > start) {
+            break;
+        }
+        i++;
+    }
+    if (i >= cfs.size()) {
+        return 0;
+    }
+    return &cfs[i].cf;
+}
 
 PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
              const MSO::MasterOrSlideContainer* m,
@@ -205,10 +368,16 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
     addStyle(pfs, getLevelPF(m, textType, 0));
     addStyle(pfs, getDefaultLevelPF(d, 0));
     addStyle(pfs, getDefaultPF(d));
+
+    *pf9s = 0;
+    addStyle(pf9s, getDefaultLevelPF9(d, textType, 0));
+    addStyle(pf9s, getDefaultPF9(d));
 }
 
-PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
+PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
+                           const SlideListWithTextSubContainerOrAtom* texts,
                            const MasterOrSlideContainer* m,
+                           const PptOfficeArtClientData* pcd,
                            const TextContainer* tc,
                            quint32 start)
 {
@@ -226,6 +395,12 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
     addStyle(pfs, getBaseLevelPF(m, tc, level));
     addStyle(pfs, getDefaultLevelPF(d, level));
     addStyle(pfs, getDefaultPF(d));
+
+    *pf9s = 0;
+    addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
+    addStyle(pf9s, getLevelPF9(m, tc, start));
+    addStyle(pf9s, getDefaultLevelPF9(d, tc, level));
+    addStyle(pf9s, getDefaultPF9(d));
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
@@ -283,6 +458,47 @@ GETTER(bool,     wrapFlags->,  ,  wordWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #undef GETTER
+
+qint32 PptTextPFRun::bulletBlipRef() const {
+    const MSO::TextPFException9* const * p = pf9s;
+    while (*p) {
+        if ((*p)->masks.bulletBlip) {
+            return (*p)->bulletBlipRef;
+        }
+        ++p;
+    }
+    return 65535;
+}
+qint16 PptTextPFRun::fBulletHasAutoNumber() const {
+    const MSO::TextPFException9* const * p = pf9s;
+    while (*p) {
+        if ((*p)->masks.bulletHasScheme) {
+            return (*p)->fBulletHasAutoNumber;
+        }
+        ++p;
+    }
+    return 0;
+}
+quint16 PptTextPFRun::scheme() const {
+    const MSO::TextPFException9* const * p = pf9s;
+    while (*p) {
+        if ((*p)->masks.bulletScheme) {
+            return (*p)->bulletAutoNumberScheme->scheme;
+        }
+        ++p;
+    }
+    return 0;
+}
+qint16 PptTextPFRun::startNum() const {
+    const MSO::TextPFException9* const * p = pf9s;
+    while (*p) {
+        if ((*p)->masks.bulletScheme) {
+            return (*p)->bulletAutoNumberScheme->startNum;
+        }
+        ++p;
+    }
+    return 1;
+}
 
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextCFRun::NAME() const \
