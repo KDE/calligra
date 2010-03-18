@@ -241,6 +241,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
             ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(highlight)
             ELSE_TRY_READ_IF(lang)
+            ELSE_TRY_READ_IF(latin)
             ELSE_TRY_READ_IF(shd)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(rFonts)
@@ -429,6 +430,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_vertAlign()
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     else if (QString::compare(val, "subscript", Qt::CaseInsensitive) == 0)
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL latin
+/*! latin handler (Latin Font) ECMA-376, 21.1.2.3.7, p.3621.
+ Parent elements:
+ - defRPr (§21.1.2.3)
+ - endParaRPr (§21.1.2.2.3)
+ - font (§20.1.4.2.13)
+ - majorFont (§20.1.4.1.24)
+ - minorFont (§20.1.4.1.25)
+ - rPr (§21.1.2.3.9)
+ No child elements.
+
+ Attributes:
+ - charset (Similar Character Set)
+ - panose (Panose Setting)
+ - [incomplete] pitchFamily (Similar Font Family)
+ - [done] typeface (Text Typeface)
+*/
+
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(typeface)
+    if (!typeface.isEmpty())
+        m_currentTextStyleProperties->setFontFamily(typeface);
+    TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
+    if (!pitchFamily.isEmpty()) {
+        bool ok;
+        const int v = pitchFamily.toInt( &ok );
+        if (ok) {
+            QFont::StyleHint h = QFont::AnyStyle;
+            const int hv = v % 0x10;
+            switch (hv) {
+            case 1: //Roman
+                h = QFont::Times;
+                break;
+            case 2: //Swiss
+                h = QFont::SansSerif;
+                break;
+            case 3: //Modern
+                h = QFont::SansSerif;
+                //TODO
+                break;
+            case 4: //Script
+                //TODO
+                break;
+            case 5: //Decorative
+                h = QFont::Decorative;
+                break;
+            }
+            const bool fixed = v & 0x01; // Fixed Pitch
+
+            m_currentTextStyleProperties->setFontFixedPitch(fixed);
+            m_currentTextStyleProperties->setFontStyleHint(h);
+        }
+    }
     readNext();
     READ_EPILOGUE
 }
