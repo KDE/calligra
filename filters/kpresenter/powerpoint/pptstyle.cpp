@@ -370,7 +370,7 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
     addStyle(pfs, getDefaultPF(d));
 
     *pf9s = 0;
-    addStyle(pf9s, getLevelPF9(m, tc, 0));
+    addStyle(pf9s, getLevelPF9(m, textType, 0));
     addStyle(pf9s, getDefaultLevelPF9(d, textType, 0));
     addStyle(pf9s, getDefaultPF9(d));
 }
