@@ -277,6 +277,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
         } else {
             // empty or "noStrike"
         }
+
+        // from
+        TRY_READ_ATTR_WITHOUT_NS(baseline)
+        if ( !baseline.isEmpty() ) {
+            bool ok;
+            const int v = baseline.toInt( &ok );
+            if ( ok && v != 0 ) {
+                if ( v > 0 )
+                    m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
+                else
+                    m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+            }
+        }
+
         TRY_READ_ATTR_WITHOUT_NS(u)
         if (!u.isEmpty()) {
             MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
