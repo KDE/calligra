@@ -229,7 +229,7 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
-    level_ = (fHasBullet()) ?level + 1 :0;
+    level_ = (level || fHasBullet()) ?level + 1 :0;
 }
 PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
                            const MasterOrSlideContainer* m,
