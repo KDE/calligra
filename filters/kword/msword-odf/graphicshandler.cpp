@@ -25,6 +25,7 @@
 #include <wv2/src/olestream.h>
 #include <wv2/src/ms_odraw.h>
 #include "generated/leinputstream.h"
+#include "drawstyle.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -459,6 +460,18 @@ void KWordDrawingHandler::drawingData(unsigned int globalCP)
 void KWordDrawingHandler::setBodyWriter(KoXmlWriter* writer)
 {
     m_bodyWriter = writer;
+}
+
+DrawStyle KWordDrawingHandler::getDrawingStyle()
+{
+    if(m_pOfficeArtBodyDgContainer != NULL) {
+        if(m_pOfficeArtBodyDgContainer->shape.isNull() == false) {
+            if((*m_pOfficeArtBodyDgContainer->shape).shapePrimaryOptions.isNull() == false ) {
+                return DrawStyle(m_OfficeArtDggContainer,NULL,m_pOfficeArtBodyDgContainer->shape.data());
+                }
+            }
+        }
+    return DrawStyle(m_OfficeArtDggContainer);
 }
 
 void KWordDrawingHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out

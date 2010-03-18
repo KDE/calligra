@@ -38,6 +38,8 @@
 
 #include <vector>
 
+class DrawStyle;
+
 #ifndef IMAGE_IMPORT
 namespace wvWare
 {
@@ -116,7 +118,10 @@ public:
     virtual void drawingData(unsigned int globalCP);
     void setBodyWriter(KoXmlWriter* writer);
 
-    // Communication with Document, without having to know about Document
+    // Gets drawing style for whole document
+    DrawStyle getDrawingStyle();
+
+     // Communication with Document, without having to know about Document
 signals:
 void textBoxFound( uint lid, KoXmlWriter* writer);
 
