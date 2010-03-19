@@ -899,12 +899,15 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     if (pib) {
         url = getPicturePath(pib->pib);
     }
-    //Ima drawObject->getIntProperty("pib"));
     out.xml.startElement("draw:frame");
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
-
+    if (url.isEmpty()) {
+        // if the image cannot be found, just place an empty frame
+        out.xml.endElement(); // frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
