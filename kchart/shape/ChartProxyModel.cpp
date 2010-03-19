@@ -240,7 +240,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions > 1 )
+            if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
             CellRegion yDataRegion( j.value() );
@@ -341,7 +341,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions > 1 )
+            if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
             CellRegion yDataRegion( j.value() );
