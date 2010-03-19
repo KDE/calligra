@@ -618,7 +618,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     else if ( seriesSource == "columns" )
         proxyModel()->setDataDirection( Qt::Vertical );
     else
-        proxyModel()->setDataDirection( cellRangeAddress.orientation() );
+        proxyModel()->setDataDirection( Qt::Vertical );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
