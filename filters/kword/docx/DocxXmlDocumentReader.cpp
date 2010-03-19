@@ -41,9 +41,11 @@
 DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
-    MSOOXML::MsooXmlRelationships& _relationships)
+    MSOOXML::MsooXmlRelationships& _relationships,
+    const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
+        themes(&_themes), 
         m_commentsLoaded(false), m_endnotesLoaded(false), m_footnotesLoaded(false)
 {
 }
@@ -142,6 +144,7 @@ DocxXmlDocumentReader::~DocxXmlDocumentReader()
 void DocxXmlDocumentReader::init()
 {
     initInternal(); // MsooXmlCommonReaderImpl.h
+    initDrawingML();
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 

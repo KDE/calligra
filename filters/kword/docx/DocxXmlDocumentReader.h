@@ -25,6 +25,7 @@
 #define DOCXXMLDOCREADER_H
 
 #include <MsooXmlCommonReader.h>
+#include <MsooXmlThemesReader.h>
 #include "DocxXmlCommentsReader.h"
 #include "DocxXmlNotesReader.h"
 
@@ -139,11 +140,8 @@ public:
     DocxXmlDocumentReaderContext(
         DocxImport& _import,
         const QString& _path, const QString& _file,
-        MSOOXML::MsooXmlRelationships& _relationships
-        /*        uint _slideNumber,
-                const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-                PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
-                MSOOXML::MsooXmlRelationships& _relationships*/
+        MSOOXML::MsooXmlRelationships& _relationships,
+        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes
     );
     DocxImport* import;
     const QString path;
@@ -157,6 +155,8 @@ public:
 
     //! @return footnote for identifier @a id. Use Comment::isNull() to check if the item was found.
     DocxNote footnote(KoOdfWriters *writers, int id);
+
+    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
 private:
     KoFilter::ConversionStatus loadComments(KoOdfWriters *writers);
     KoFilter::ConversionStatus loadEndnotes(KoOdfWriters *writers);

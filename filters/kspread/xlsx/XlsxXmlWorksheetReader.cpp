@@ -160,6 +160,8 @@ XlsxXmlWorksheetReader::~XlsxXmlWorksheetReader()
 
 void XlsxXmlWorksheetReader::init()
 {
+    initInternal(); // MsooXmlCommonReaderImpl.h
+    initDrawingML();
     m_defaultNamespace = "";
     m_columnCount = 0;
     m_currentRow = 0;

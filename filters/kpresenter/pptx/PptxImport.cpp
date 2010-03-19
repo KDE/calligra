@@ -1081,20 +1081,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     // 1. parse themes
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
-
-    {
-        std::auto_ptr<MSOOXML::DrawingMLTheme> theme( new MSOOXML::DrawingMLTheme );
-        MSOOXML::MsooXmlThemesReader themesReader(writers);
-        MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
-        //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context) )
-        if (!theme.get()->name.isEmpty()) {
-            // theme loaded
-            themes.insert(theme.get()->name, theme.get());
-            theme.release();
-        }
-    }
+    RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
     // 2. parse master slides
 #ifdef __GNUC__
 #warning TODO use MsooXmlRelationships; parse all used master slides; now one hardcoded master name is used
