@@ -1069,6 +1069,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(rFonts)
+            ELSE_TRY_READ_IF(caps)
+            ELSE_TRY_READ_IF(smallCaps)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
