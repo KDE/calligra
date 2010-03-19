@@ -81,7 +81,12 @@ ChartProxyModel::Private::Private()
     dataDimensions     = 1;
     automaticDataSetCreation = true;
 
-    dataDirection      = Qt::Vertical; // Apparently the default is columns.
+    // Determines what orientation the data points in a data series
+    // have when multiple data sets are created from one source
+    // region. For example, vertical means that each column in the source
+    // region is assigned to one data series.
+    // Default to Qt::Vertical, as that's what OOo does also.
+    dataDirection      = Qt::Vertical;
 }
 
 ChartProxyModel::Private::~Private()

@@ -618,6 +618,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     else if ( seriesSource == "columns" )
         proxyModel()->setDataDirection( Qt::Vertical );
     else
+        // By default, OOo creates consecutive data series column-wise;
+        // by adopting that behaviour we avoid extra special-handling of
+        // documents created by OOo.
         proxyModel()->setDataDirection( Qt::Vertical );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
