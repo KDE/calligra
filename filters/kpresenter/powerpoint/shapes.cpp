@@ -875,6 +875,60 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
+void PptToOdp::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
+{
+    const QRect rect = getRect(o);
+    out.xml.startElement("draw:custom-shape");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
+    out.xml.addAttribute("draw:type", "quad-arrow");
+    out.xml.addAttribute("draw:modifiers", "6500 8600 4300");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 10800 L ?f0 ?f1 ?f0 ?f2 ?f2 ?f2 ?f2 ?f0 ?f1 ?f0 10800 0 ?f3 ?f0 ?f4 ?f0 ?f4 ?f2 ?f5 ?f2 ?f5 ?f1 21600 10800 ?f5 ?f3 ?f5 ?f4 ?f4 ?f4 ?f4 ?f5 ?f3 ?f5 10800 21600 ?f1 ?f5 ?f2 ?f5 ?f2 ?f4 ?f0 ?f4 ?f0 ?f3 Z N");
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f0");
+    out.xml.addAttribute("draw:formula", "$2");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f1");
+    out.xml.addAttribute("draw:formula", "$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f2");
+    out.xml.addAttribute("draw:formula", "$1");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f3");
+    out.xml.addAttribute("draw:formula", "21600-$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f4");
+    out.xml.addAttribute("draw:formula", "21600-$1");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f5");
+    out.xml.addAttribute("draw:formula", "21600-$2");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$1 $2");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "$0");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
+    out.xml.addAttribute("draw:handle-range-y-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-y-maximum", "$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "$2");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "$1");
+    out.xml.endElement();
+    out.xml.endElement();
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
@@ -949,6 +1003,8 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
         processSmiley(o, out);
     } else if (shapeType == msosptHeart) {
         processHeart(o, out);
+    } else if (shapeType == msosptQuadArrow) {
+        processQuadArrow(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
