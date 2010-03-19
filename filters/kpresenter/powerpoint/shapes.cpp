@@ -929,6 +929,23 @@ void PptToOdp::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:custom-shape
 }
 
+void PptToOdp::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    const QRect rect = getRect(o);
+    out.xml.startElement("draw:custom-shape");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "0 8280 6110 21600");
+    out.xml.addAttribute("draw:type", "mso-spt101");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 21600 L 0 8550 C 0 3540 4370 0 9270 0 13890 0 18570 3230 18600 8300 L 21600 8300 15680 14260 9700 8300 12500 8300 C 12320 6380 10870 5850 9320 5850 7770 5850 6040 6410 6110 8520 L 6110 21600 Z N");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
@@ -1005,6 +1022,8 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
         processHeart(o, out);
     } else if (shapeType == msosptQuadArrow) {
         processQuadArrow(o, out);
+    } else if (shapeType == msosptUturnArrow) {
+        processUturnArrow(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame

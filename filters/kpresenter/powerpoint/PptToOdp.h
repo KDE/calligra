@@ -473,6 +473,7 @@ private:
     void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFreeLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
 
