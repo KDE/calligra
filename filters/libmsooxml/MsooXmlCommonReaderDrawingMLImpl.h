@@ -780,9 +780,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
-{
+{    
     READ_PROLOGUE2(DrawingML_rPr)
+    m_colorType = TextColor;
+
     const QXmlStreamAttributes attrs(attributes());
+
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
 //    delete m_currentTextStyleProperties;
@@ -805,6 +808,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             ELSE_TRY_READ_IF(ln)
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentColor = QColor();
     }
 
     // DrawingML: b, i, strike, u attributes:
@@ -2084,6 +2092,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 {
     READ_PROLOGUE2(DrawingML_highlight)
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -2096,7 +2105,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
     }
 //    m_currentTextStyleProperties->setBackground(m_currentColor);
     // note: paragraph background is unsupported in presentation applications anyway...
-    m_currentParagraphStyle.addProperty("fo:background-color", m_currentColor.name());
+    if (m_currentColor.isValid()) {
+        m_currentParagraphStyle.addProperty("fo:background-color", m_currentColor.name());
+        m_currentColor = QColor();
+    }
     READ_EPILOGUE
 }
 
@@ -2223,13 +2235,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             col = QColor (colorItem->toColorItem()->color);
 
         col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-        if(m_colorType == BackgroundColor) {
-            QBrush brush(col, Qt::SolidPattern);
-            KoOdfGraphicStyles::saveOdfFillStyle(m_currentPageStyle, *mainStyles, brush);
-        }
-        if(m_colorType == OutlineColor) {
-            m_currentPen.setColor(col);
-            KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentPageStyle, *mainStyles, m_currentPen);
+        switch (m_colorType) {
+            case BackgroundColor:
+            {
+                QBrush brush(col, Qt::SolidPattern);
+                KoOdfGraphicStyles::saveOdfFillStyle(m_currentPageStyle, *mainStyles, brush);
+            }
+            break;
+            case OutlineColor:
+            {
+                m_currentPen.setColor(col);
+                KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentPageStyle, *mainStyles, m_currentPen);
+            }
+            break;
+            case TextColor:
+            {
+                m_currentTextStyleProperties->setForeground(col);
+            }
+            break;
         }
     }
 #endif

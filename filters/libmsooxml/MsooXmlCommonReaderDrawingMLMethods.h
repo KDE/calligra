@@ -133,7 +133,8 @@ QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copyin
 //! color is used, ODF does need to know this.
 enum ColorType {
     BackgroundColor,
-    OutlineColor
+    OutlineColor,
+    TextColor
 };
 ColorType m_colorType;
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
