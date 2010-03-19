@@ -795,6 +795,10 @@ public:
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
+        insert("double",
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::DoubleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
         insert("words",
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight, KoCharacterStyle::SkipWhiteSpaceLineMode)
@@ -805,6 +809,10 @@ public:
               );
         insert("dash",
                new UnderlineStyle(KoCharacterStyle::DashLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("dotted",
+               new UnderlineStyle(KoCharacterStyle::DottedLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
         insert("dotDash",

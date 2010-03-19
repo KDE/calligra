@@ -26,7 +26,7 @@
 
 #include <QtCore/QMap>
 
-#include <MsooXmlCommonReader.h>
+#include "DocxXmlDocumentReader.h"
 
 #include <KoGenStyles.h>
 #include <KoCharacterStyle.h>
@@ -34,7 +34,7 @@
 //! A class reading MSOOXML DOCX markup - styles.xml part.
 /*! @todo generalize for other MSOOXML subformats.
  */
-class DocxXmlStylesReader : public MSOOXML::MsooXmlCommonReader
+class DocxXmlStylesReader : public DocxXmlDocumentReader
 {
 public:
     explicit DocxXmlStylesReader(KoOdfWriters *writers);
@@ -66,14 +66,11 @@ protected:
     //! @todo use it
     KoGenStyle m_defaultStyle;
 
-    typedef KoFilter::ConversionStatus(DocxXmlStylesReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     QString m_name; //!< set by read_name()
 
 private:
     void init();
-#include <MsooXmlCommonReaderMethods.h>
+//#include <MsooXmlCommonReaderMethods.h>
 };
 
 #endif

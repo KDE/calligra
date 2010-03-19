@@ -33,10 +33,10 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
+//#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
 
 DocxXmlStylesReader::DocxXmlStylesReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlCommonReader(writers), m_context(NoContext) //, m_characterStyle(0)
+        : DocxXmlDocumentReader(writers), m_context(NoContext) //, m_characterStyle(0)
 {
 }
 
@@ -48,7 +48,7 @@ DocxXmlStylesReader::~DocxXmlStylesReader()
 
 void DocxXmlStylesReader::init()
 {
-    initInternal(); // MsooXmlCommonReaderImpl.h
+//already done in DocxXmlDocumentReader:    initInternal(); // MsooXmlCommonReaderImpl.h
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
@@ -228,7 +228,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(rPr)
+            TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -356,7 +356,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
-            ELSE_TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF_IN_CONTEXT(rPr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
                 READ_ATTR(val)
                 m_currentTextStyle.setParentName(val);

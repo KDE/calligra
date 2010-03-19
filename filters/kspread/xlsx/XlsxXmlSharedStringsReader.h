@@ -56,9 +56,6 @@ protected:
 
     uint m_index;
 
-    typedef KoFilter::ConversionStatus(XlsxXmlSharedStringsReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     XlsxXmlSharedStringsReaderContext* m_context;
 private:
     void init();

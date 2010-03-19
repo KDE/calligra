@@ -24,6 +24,18 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
+#error missing DRAWINGML_NS define!
+#endif
+#if !defined DRAWINGML_PIC_NS && !defined NO_DRAWINGML_PIC_NS
+#error missing DRAWINGML_PIC_NS define!
+#endif
+
+#undef MSOOXML_CURRENT_NS
+#ifndef NO_DRAWINGML_PIC_NS
+#define MSOOXML_CURRENT_NS DRAWINGML_PIC_NS
+#endif
+
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
     QString& destinationName)
 {
@@ -232,7 +244,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(cNvPicPr)
-            ELSE_TRY_READ_IF(cNvPr)
+            ELSE_TRY_READ_IF_IN_CONTEXT(cNvPr)
 #ifdef PPTXXMLSLIDEREADER_H
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
@@ -306,16 +318,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPicPr()
     - [done] name (Name)
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
 {
-    ReadMethod caller = m_calls.top();
     READ_PROLOGUE
 
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
     const QXmlStreamAttributes attrs(attributes());
-    if (CALLER_IS(nvSpPr) || CALLER_IS(nvPicPr)) { // for sanity, p:nvGrpSpPr can be also the caller
+    if (caller == cNvPr_nvSpPr || caller == cNvPr_nvPicPr) { // for sanity, p:nvGrpSpPr can be also the caller
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
         kDebug() << "id:" << m_cNvPrId;
         TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_cNvPrName)
@@ -363,7 +374,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(cNvPr)
+            TRY_READ_IF_IN_CONTEXT(cNvPr)
 #ifdef PPTXXMLSLIDEREADER_H
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
@@ -674,7 +685,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 //            ELSE_TRY_READ_IF(hyperlink)
             //ELSE_TRY_READ_IF(commentRangeEnd)
 // CASE #400.1
-            ELSE_TRY_READ_IF(pPr)
+            else if (QUALIFIED_NAME_IS(pPr)) {
+                TRY_READ(DrawingML_pPr)
+            }
 // CASE #400.2
 //! @todo add more conditions testing the parent
             else if (QUALIFIED_NAME_IS(r)) {
@@ -717,12 +730,171 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(rPr)
+            if (QUALIFIED_NAME_IS(rPr)) {
+                TRY_READ(DrawingML_rPr)
+            }
             ELSE_TRY_READ_IF(t)
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rPr
+//! rPr handler (Text Run Properties) DrawingML ECMA-376, 21.1.2.3.9, p.3624.
+//! This element contains all run level text properties for the text runs within a containing paragraph.
+/*!
+ Parent elements:
+ - br (§21.1.2.2.1)
+ - fld (§21.1.2.2.4)
+ - [done] r (§21.1.2.3.8)
+ Child elements:
+ - [done] blipFill (Picture Fill) §20.1.8.14
+ - cs (Complex Script Font) §21.1.2.3.1
+ - ea (East Asian Font) §21.1.2.3.3
+ - effectDag (Effect Container) §20.1.8.25
+ - effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §20.1.2.2.15
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - highlight (Highlight Color) §21.1.2.3.4
+ - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
+ - [done] latin (Latin Font) §21.1.2.3.7
+ - ln (Outline) §20.1.2.2.24
+ - noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - rtl (Right to Left Run) §21.1.2.2.8
+ - solidFill (Solid Fill) §20.1.8.54
+ - sym (Symbol Font) §21.1.2.3.10
+ - uFill (Underline Fill) §21.1.2.3.12
+ - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
+ - uLn (Underline Stroke) §21.1.2.3.14
+ - uLnTx (Underline Follows Text) §21.1.2.3.15
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
+{
+    READ_PROLOGUE2(DrawingML_rPr)
+    const QXmlStreamAttributes attrs(attributes());
+
+    Q_ASSERT(m_currentTextStyleProperties == 0);
+//    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = new KoCharacterStyle();
+
+    if (!m_currentTextStylePredefined) {
+        m_currentTextStyle = KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+    }
+
+    while (!atEnd()) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(latin)
+            ELSE_TRY_READ_IF(blipFill)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    // DrawingML: b, i, strike, u attributes:
+    if (attrs.hasAttribute("b")) {
+        m_currentTextStyleProperties->setFontWeight(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
+    }
+    if (attrs.hasAttribute("i")) {
+        m_currentTextStyleProperties->setFontItalic(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
+//kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
+        }
+    if (attrs.hasAttribute("sz")) {
+        bool ok = false;
+        const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
+        if (ok) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
+    }
+    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
+    TRY_READ_ATTR_WITHOUT_NS(strike)
+    if (strike == QLatin1String("sngStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else if (strike == QLatin1String("dblStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else {
+        // empty or "noStrike"
+    }
+    // from
+    TRY_READ_ATTR_WITHOUT_NS(baseline)
+    if (!baseline.isEmpty()) {
+        int baselineInt;
+        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
+        if (baselineInt > 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
+        else if (baselineInt < 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(u)
+    if (!u.isEmpty()) {
+        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
+    }
+    // elements
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+
+    READ_EPILOGUE_WITHOUT_RETURN
+    // read 't' in one go and insert the contents into text:span
+    readNext();
+    // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
+    if (QUALIFIED_NAME_IS(t)) {
+        const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+        TRY_READ(t)
+        body->endElement(); //text:span
+    }
+    else {
+        undoReadNext();
+    }
+//kDebug() << "/text:span";
+
+#ifdef __GNUC__
+#warning implement read_DrawingML_rPr
+#endif
+
+//    READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pPr
+//! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
+/*!
+ Parent elements:
+ - fld (§21.1.2.2.4)
+ - p (§21.1.2.2.6)
+
+ Child elements:
+
+TODO....
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
+{
+    READ_PROLOGUE2(DrawingML_pPr)
+    while (!atEnd()) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+#ifdef __GNUC__
+#warning implement read_DrawingML_pPr
+#endif
+
     READ_EPILOGUE
 }
 
@@ -763,13 +935,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     m_rot = 0;
     TRY_READ_ATTR_WITHOUT_NS(rot)
     STRING_TO_INT(rot, m_rot, "xfrm@rot")
-    
+
     bool off_read = false;
     bool ext_read = false;
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        kDebug() << *this;
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(off)) {
                 TRY_READ(off);
@@ -861,7 +1032,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
 
     READ_EPILOGUE
@@ -900,7 +1070,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
 
     READ_EPILOGUE
@@ -1162,7 +1331,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     - grpSpPr (§19.3.1.23)
     - [done] pic (§20.1.2.2.30) - DrawingML
     - [done] pic (§19.3.1.37) - PresentationML
-    - rPr (§21.1.2.3.9)
+    - [done] rPr (§21.1.2.3.9)
     - spPr (§21.2.2.197)
     - spPr (§21.3.2.23)
     - spPr (§21.4.3.7)
@@ -1237,8 +1406,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
 }
 #endif
 
+// ---- namespace like "a" (pptx) or "wp" (docx)
+
 #undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "wp" // wordprocessingDrawing
+#ifndef NO_DRAWINGML_NS
+#define MSOOXML_CURRENT_NS DRAWINGML_NS
+#endif
+
+void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
+{
+    m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
+}
 
 void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString emuValue)
 {
@@ -1248,11 +1426,6 @@ void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString emuValue
     if (!s.isEmpty()) {
         m_currentDrawStyle.addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
     }
-}
-
-void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
-{
-    m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
 }
 
 #undef CURRENT_EL
@@ -1532,8 +1705,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(align)
-            ELSE_TRY_READ_IF(posOffset)
+            TRY_READ_IF_IN_CONTEXT(align)
+            ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1576,8 +1749,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(align)
-            ELSE_TRY_READ_IF(posOffset)
+            TRY_READ_IF_IN_CONTEXT(align)
+            ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1602,11 +1775,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
  No child elements.
 */
 //! CASE #1340
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align(alignCaller caller)
 {
-    ReadMethod caller = m_calls.top();
     READ_PROLOGUE
-    if (CALLER_IS(positionH)) {
+    switch (caller) {
+    case align_positionH:
 //! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
         /*center
         inside
@@ -1614,7 +1787,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
         outside
         right*/
         m_alignH = text().toString();
-    } else if (CALLER_IS(positionV)) {
+        break;
+    case align_positionV:
 //! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
         /*bottom
         center
@@ -1622,6 +1796,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
         outside
         top*/
         m_alignV = text().toString();
+    break;
     }
 
     SKIP_EVERYTHING
@@ -1649,21 +1824,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
  No child elements.
 */
 //! CASE #1360
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset(posOffsetCaller caller)
 {
-    ReadMethod caller = m_calls.top();
     READ_PROLOGUE
 
     readNext();
     if (isCharacters()) {
-        if (CALLER_IS(positionH)) {
+        switch (caller) {
+        case posOffset_positionH:
             STRING_TO_INT(text().toString(), m_posOffsetH, "positionH/posOffset text")
             m_hasPosOffsetH = true;
-        } else if (CALLER_IS(positionV)) {
+            break;
+        case posOffset_positionV:
             STRING_TO_INT(text().toString(), m_posOffsetV, "positionV/posOffset text")
             m_hasPosOffsetV = true;
+            break;
+        default:
+            return KoFilter::WrongFormat;
         }
-        ELSE_WRONG_FORMAT
     }
     ELSE_WRONG_FORMAT
 
@@ -1768,6 +1946,109 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lstStyle
+//! lstStyle handler (Text List Styles) ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
+//!          This element specifies the list of styles associated with this body of text.
+/*!
+ Parent elements:
+ - lnDef (§20.1.4.1.20)
+ - rich (§21.2.2.156)
+ - spDef (§20.1.4.1.27)
+ - t (§21.4.3.8)
+ - txBody (§21.3.2.26)
+ - txBody (§20.1.2.2.40)
+ - txBody (§20.5.2.34)
+ - [done] txBody (§19.3.1.51)
+ - txDef (§20.1.4.1.28)
+ - txPr (§21.2.2.216)
+
+ Child elements:
+ - defPPr (Default Paragraph Style) §21.1.2.2.2
+ - extLst (Extension List) §20.1.2.2.15
+ - lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+ - lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+ - lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+ - lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+ - lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+ - lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+ - lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+ - lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+ - lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
+{
+    READ_PROLOGUE
+    m_lstStyleFound = true;
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL latin
+/*! latin handler (Latin Font) ECMA-376, 21.1.2.3.7, p.3621.
+ Parent elements:
+ - defRPr (§21.1.2.3)
+ - endParaRPr (§21.1.2.2.3)
+ - font (§20.1.4.2.13)
+ - majorFont (§20.1.4.1.24)
+ - minorFont (§20.1.4.1.25)
+ - [done] rPr (§21.1.2.3.9)
+ No child elements.
+
+ Attributes:
+ - charset (Similar Character Set)
+ - panose (Panose Setting)
+ - [incomplete] pitchFamily (Similar Font Family)
+ - [done] typeface (Text Typeface)
+*/
+
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(typeface)
+    if (!typeface.isEmpty())
+        m_currentTextStyleProperties->setFontFamily(typeface);
+    TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
+    if (!pitchFamily.isEmpty()) {
+        int pitchFamilyInt;
+        STRING_TO_INT(pitchFamily, pitchFamilyInt, "latin@pitchFamily")
+        QFont::StyleHint h = QFont::AnyStyle;
+        const int hv = pitchFamilyInt % 0x10;
+        switch (hv) {
+        case 1: //Roman
+            h = QFont::Times;
+            break;
+        case 2: //Swiss
+            h = QFont::SansSerif;
+            break;
+        case 3: //Modern
+            h = QFont::SansSerif;
+            //TODO
+            break;
+        case 4: //Script
+            //TODO
+            break;
+        case 5: //Decorative
+            h = QFont::Decorative;
+            break;
+        }
+        const bool fixed = pitchFamilyInt & 0x01; // Fixed Pitch
+        m_currentTextStyleProperties->setFontFixedPitch(fixed);
+        m_currentTextStyleProperties->setFontStyleHint(h);
+    }
+    readNext();
     READ_EPILOGUE
 }
 

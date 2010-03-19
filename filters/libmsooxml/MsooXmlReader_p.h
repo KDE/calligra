@@ -28,20 +28,6 @@
 #error Please include MsooXmlReader_p.h after defining MSOOXML_CURRENT_CLASS and MSOOXML_CURRENT_NS!
 #endif
 
-#ifndef MSOOXML_CALL_STACK
-#define MSOOXML_CALL_STACK m_calls
-#endif
-
-#define TRY_READ_WITH_ARGS_INTERNAL(name, args) \
-    args \
-    RETURN_IF_ERROR( read_ ## name () )
-
-#define TRY_READ_WITH_ARGS(name, args) \
-    TRY_READ_WITH_ARGS_INTERNAL(name, m_read_ ## name ## _args = args)
-
-#define TRY_READ(name) \
-    TRY_READ_WITH_ARGS_INTERNAL(name,)
-
 #define PASTE2(a, b) a##b
 #define PASTE(a, b) PASTE2( a, b) // indirection needed because only function-like macro parameters can be pasted
 
@@ -53,6 +39,25 @@
 
 #define STRINGIFY(s) JOIN("", s)
 
+//! Used to pass context: creates enum value {el}_{CURRENT_EL}
+#define PASS_CONTEXT(el) PASTE3(el, _, CURRENT_EL)
+
+#define TRY_READ_WITH_ARGS_INTERNAL(name, args, context) \
+    args \
+    RETURN_IF_ERROR( read_ ## name (context) )
+
+#define TRY_READ_WITH_ARGS(name, args) \
+    TRY_READ_WITH_ARGS_INTERNAL(name, m_read_ ## name ## _args = args,)
+
+#define TRY_READ_WITH_ARGS_IN_CONTEXT(name, args) \
+    TRY_READ_WITH_ARGS_INTERNAL(name, m_read_ ## name ## _args = args, PASS_CONTEXT(name))
+
+#define TRY_READ(name) \
+    TRY_READ_WITH_ARGS_INTERNAL(name, ,)
+
+#define TRY_READ_IN_CONTEXT(name) \
+    TRY_READ_WITH_ARGS_INTERNAL(name, , PASS_CONTEXT(name))
+
 #ifdef MSOOXML_CURRENT_NS
 # define QUALIFIED_NAME(name) \
     JOIN(MSOOXML_CURRENT_NS ":",name)
@@ -61,24 +66,26 @@
     STRINGIFY(name)
 #endif
 
-#ifndef NDEBUG
-# define PUSH_NAME \
-    kDebug() << (m_callsNames.isEmpty() ? QByteArray("top level") : m_callsNames.top()).constData() \
-    << "==>" << QUALIFIED_NAME(CURRENT_EL); \
-    m_callsNames.push(STRINGIFY(CURRENT_EL));
-# define POP_NAME \
-    m_callsNames.pop(); \
-    kDebug() << (m_callsNames.isEmpty() ? QByteArray("top level") : m_callsNames.top()).constData() \
-    << "<==" << QUALIFIED_NAME(CURRENT_EL);
-#else
+#ifdef NDEBUG
+# define PUSH_NAME_INTERNAL
+# define POP_NAME_INTERNAL
+#else // DEBUG
+//! returns caller name at the current scope or "top level"
+#define CALL_STACK_TOP_NAME (m_callsNamesDebug.isEmpty() \
+    ? QByteArray("top level") : m_callsNamesDebug.top()).constData()
 # define PUSH_NAME
-# define POP_NAME
+//! put at beginning of each read_*() method on call stack, only in debug mode
+# define PUSH_NAME_INTERNAL \
+    kDebug() << CALL_STACK_TOP_NAME << "==>" << QUALIFIED_NAME(CURRENT_EL); \
+    m_callsNamesDebug.push(STRINGIFY(CURRENT_EL));
+//! put at the end of each read_*() method on call stack, only in debug mode
+# define POP_NAME_INTERNAL \
+    m_callsNamesDebug.pop(); \
+    kDebug() << CALL_STACK_TOP_NAME << "<==" << QUALIFIED_NAME(CURRENT_EL);
 #endif
 
 #define READ_PROLOGUE2(method) \
-    MSOOXML_CALL_STACK.push(PASTE(&MSOOXML_CURRENT_CLASS::read_, method)); \
-    PUSH_NAME \
-    /*kDebug() << *this;*/ \
+    PUSH_NAME_INTERNAL \
     if (!expectEl(QUALIFIED_NAME(CURRENT_EL))) { \
         return KoFilter::WrongFormat; \
     }
@@ -87,9 +94,7 @@
     READ_PROLOGUE2(CURRENT_EL)
 
 #define READ_EPILOGUE_WITHOUT_RETURN \
-    MSOOXML_CALL_STACK.pop(); \
-    POP_NAME \
-    kDebug() << "READ_EPILOGUE_WITHOUT_RETURN"; \
+    POP_NAME_INTERNAL \
     if (!expectElEnd(QUALIFIED_NAME(CURRENT_EL))) { \
         kDebug() << "READ_EPILOGUE:" << QUALIFIED_NAME(CURRENT_EL) << "not found!"; \
         return KoFilter::WrongFormat; \
@@ -97,6 +102,7 @@
     kDebug() << "/READ_EPILOGUE_WITHOUT_RETURN";
 
 #define READ_EPILOGUE \
+    kDebug() << "READ_EPILOGUE"; \
     READ_EPILOGUE_WITHOUT_RETURN \
     return KoFilter::OK;
 
@@ -114,24 +120,34 @@
 #define QUALIFIED_NAME_IS(name) \
     (/*aaaa(STRINGIFY(name)) &&*/ qualifiedName() == QLatin1String(QUALIFIED_NAME(name)))
 
-#define TRY_READ_IF_INTERNAL(name) \
+#define TRY_READ_IF_INTERNAL(name, context) \
     if (QUALIFIED_NAME_IS(name)) { \
+        if (!isStartElement()) { /* sanity check */ \
+            raiseError(i18n("Start element \"%1\" expected, found \"%2\"", \
+                       QLatin1String(STRINGIFY(name)), tokenString())); \
+            return KoFilter::WrongFormat; \
+        } \
         kDebug() << "TRY_READ_IF " STRINGIFY(name) " started"; \
-        TRY_READ(name); \
+        TRY_READ_WITH_ARGS_INTERNAL(name, , context) \
         kDebug() << "TRY_READ_IF " STRINGIFY(name) " finished"; \
     }
 
+#define TRY_READ_IF_IN_CONTEXT_INTERNAL(name, context) \
+    TRY_READ_IF_INTERNAL(name, context)
+
 //! Tries to read element @a name by entering into read_{name} function.
 //! Must be enclosed within if (isStartElement()), otherwise error will be returned.
+#define TRY_READ_IF_IN_CONTEXT(name) \
+    TRY_READ_IF_IN_CONTEXT_INTERNAL(name, PASS_CONTEXT(name))
+
 #define TRY_READ_IF(name) \
-    if (!isStartElement()) { /* sanity check */ \
-        raiseError(i18n("Start element \"%1\" expected, found \"%2\"", QLatin1String(STRINGIFY(name)), tokenString())); \
-        return KoFilter::WrongFormat; \
-    } \
-    TRY_READ_IF_INTERNAL(name)
+    TRY_READ_IF_IN_CONTEXT_INTERNAL(name,)
 
 #define ELSE_TRY_READ_IF(name) \
-    else TRY_READ_IF_INTERNAL(name)
+    else TRY_READ_IF_IN_CONTEXT_INTERNAL(name,)
+
+#define ELSE_TRY_READ_IF_IN_CONTEXT(name) \
+    else TRY_READ_IF_IN_CONTEXT_INTERNAL(name, PASS_CONTEXT(name))
 
 #define TRY_READ_IF_NS_INTERNAL(ns, name) \
     if (qualifiedName() == QLatin1String(JOIN(STRINGIFY(ns) ":", name))) { \
@@ -301,16 +317,13 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 #define TRY_READ_ATTR_QSTRING(atrname) \
     QString atrname( attrs.value(m_defaultNamespace + atrname).toString() );
 
-////! Like @ref READ_ATTR_WITHOUT_NS(atrname) but reads the attribute into the variable @a destination.
-//#define TRY_READ_ATTR_WITH_NS_INTO(ns, atrname, destination)
-//    destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString();
-
 //! Like @ref TRY_READ_ATTR_WITHOUT_NS(atrname) but reads the attribute into the variable @a destination.
 #define TRY_READ_ATTR_WITHOUT_NS_INTO(atrname, destination) \
     destination = attrs.value(STRINGIFY(atrname)).toString();
 
-#define READ_BOOLEAN_ATTR \
-    readBooleanAttr(QUALIFIED_NAME(CURRENT_EL))
+//! reads boolean attribute "val" prefixed with default namespace, defaults to true
+#define READ_BOOLEAN_VAL \
+    readBooleanAttr(QUALIFIED_NAME(val), true)
 
 //! Converts @a string into integer @a destination; returns KoFilter::WrongFormat on failure.
 //! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
@@ -337,22 +350,6 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         } \
         destination = val; \
     }
-
-//! Creates condition that checks what's the calling method (what means parent element)
-//! Example use:
-/*! @code
-    ... read_foo()
-    {
-      ReadMethod caller = m_calls.top(); // <-- needed
-      ...
-      if (CALLER_IS(r)) {
-        ...
-      }
-    }
-    @endcode
-*/
-#define CALLER_IS(name) \
-    (caller == PASTE(&MSOOXML_CURRENT_CLASS::read_, name))
 
 //! Skips everything until end of CURRENT_EL is pulled
 #define SKIP_EVERYTHING \

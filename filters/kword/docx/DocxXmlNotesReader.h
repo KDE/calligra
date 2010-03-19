@@ -57,7 +57,6 @@ protected:
     KoFilter::ConversionStatus read_notes();
     KoFilter::ConversionStatus read_note(const char *noteType);
 
-    typedef KoFilter::ConversionStatus(DocxXmlNotesReader::*ReadMethod)();
     DocxXmlNotesReaderContext* m_context;
 
 private:

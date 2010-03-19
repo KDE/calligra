@@ -27,9 +27,14 @@
 // included by DocxXmlDocumentReader
 
 protected:
+
 KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
-KoFilter::ConversionStatus read_cNvPr();
+enum cNvPrCaller {
+    cNvPr_nvSpPr,
+    cNvPr_nvPicPr
+};
+KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller);
 KoFilter::ConversionStatus read_cNvPicPr();
 KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_cNvSpPr();
@@ -47,8 +52,16 @@ KoFilter::ConversionStatus read_blipFill();
 KoFilter::ConversionStatus read_anchor();
 KoFilter::ConversionStatus read_positionH();
 KoFilter::ConversionStatus read_positionV();
-KoFilter::ConversionStatus read_posOffset();
-KoFilter::ConversionStatus read_align();
+enum posOffsetCaller {
+    posOffset_positionH,
+    posOffset_positionV
+};
+KoFilter::ConversionStatus read_posOffset(posOffsetCaller caller);
+enum alignCaller {
+    align_positionH,
+    align_positionV
+};
+KoFilter::ConversionStatus read_align(alignCaller caller);
 KoFilter::ConversionStatus read_inline();
 KoFilter::ConversionStatus read_docPr();
 KoFilter::ConversionStatus read_wrapSquare();
@@ -58,7 +71,26 @@ KoFilter::ConversionStatus read_wrapThrough();
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
+KoFilter::ConversionStatus read_DrawingML_rPr();
+
+KoFilter::ConversionStatus read_DrawingML_pPr();
+
 KoFilter::ConversionStatus read_DrawingML_r();
+KoFilter::ConversionStatus read_lstStyle();
+KoFilter::ConversionStatus read_latin();
+
+//! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
+void saveStyleWrap(const char * style);
+
+//! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
+void distToODF(const char * odfEl, const QString emuValue);
+
+//! ODF 1.1., 15.14.9 Fill Image Rendering Style
+//! Set by read_stretch()
+bool m_fillImageRenderingStyleStretch;
+
+//! Used by read_wrap*()
+void readWrap();
 
 //! Copies file to destination directory. @a destinationName is set.
 KoFilter::ConversionStatus copyFile(

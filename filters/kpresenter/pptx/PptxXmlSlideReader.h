@@ -101,10 +101,6 @@ protected:
     KoFilter::ConversionStatus read_srgbClr();
     KoFilter::ConversionStatus read_scrgbClr();
 
-
-    typedef KoFilter::ConversionStatus(PptxXmlSlideReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
     double* m_currentDoubleValue;

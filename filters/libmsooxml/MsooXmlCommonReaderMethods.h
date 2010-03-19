@@ -30,44 +30,7 @@ protected:
 void initInternal(); //!< should be called from ctor
 void doneInternal(); //!< sould be called from dtor
 
-KoFilter::ConversionStatus read_pPr();
-KoFilter::ConversionStatus read_rPr();
-KoFilter::ConversionStatus read_lang();
 KoFilter::ConversionStatus read_t();
-KoFilter::ConversionStatus read_i();
-KoFilter::ConversionStatus read_b();
-KoFilter::ConversionStatus read_u();
-KoFilter::ConversionStatus read_sz();
-KoFilter::ConversionStatus read_strike();
-KoFilter::ConversionStatus read_dstrike();
-KoFilter::ConversionStatus read_color();
-KoFilter::ConversionStatus read_highlight();
-KoFilter::ConversionStatus read_lstStyle();
-KoFilter::ConversionStatus read_shd();
-KoFilter::ConversionStatus read_jc();
-KoFilter::ConversionStatus read_spacing();
-KoFilter::ConversionStatus read_vertAlign();
-KoFilter::ConversionStatus read_rFonts();
-KoFilter::ConversionStatus read_pStyle();
-KoFilter::ConversionStatus read_latin();
-
-void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
-
-//! Used by read_strike() and read_dstrike()
-void readStrikeValue(KoCharacterStyle::LineType type);
-
-//! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
-void distToODF(const char * odfEl, const QString emuValue);
-
-//! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
-void saveStyleWrap(const char * style);
-
-//! Used by read_wrap*()
-void readWrap();
-
-//! ODF 1.1., 15.14.9 Fill Image Rendering Style
-//! Set by read_stretch()
-bool m_fillImageRenderingStyleStretch;
 
 QString m_relativeFromV; //!< used by read_positionV()
 QString m_relativeFromH; //!< used by read_positionH()

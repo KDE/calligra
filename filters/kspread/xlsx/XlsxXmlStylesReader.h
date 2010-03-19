@@ -408,9 +408,6 @@ protected:
     uint m_fillStyleIndex;
     uint m_cellFormatIndex;
 
-    typedef KoFilter::ConversionStatus(XlsxXmlStylesReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     XlsxXmlStylesReaderContext* m_context;
 
     XlsxFontStyle *m_currentFontStyle;

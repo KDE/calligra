@@ -127,8 +127,9 @@ protected:
 
     QString m_defaultNamespace; //!< stores namespace (for optimization)
 
-#ifndef NDEBUG
     QStack<QByteArray> m_callsNames;
+#ifndef NDEBUG
+    QStack<QByteArray> m_callsNamesDebug;
 #endif
 
 private:
