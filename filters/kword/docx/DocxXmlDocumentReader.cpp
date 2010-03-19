@@ -988,7 +988,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] b (Bold) §17.3.2.1
  - bCs (Complex Script Bold) §17.3.2.2
  - bdr (Text Border) §17.3.2.4
- - caps (Display All Characters As Capital Letters) §17.3.2.5
+ - [done] caps (Display All Characters As Capital Letters) §17.3.2.5
  - [done] color (Run Content Color) §17.3.2.6
  - cs (Use Complex Script Formatting on Run) §17.3.2.7
  - del (Deleted Paragraph) §17.13.5.15
@@ -1017,7 +1017,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
  - shd (Run Shading) §17.3.2.32
- - smallCaps (Small Caps) §17.3.2.33
+ - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - spacing (Character Spacing Adjustment) §17.3.2.35
  - specVanish (Paragraph Mark Is Always Hidden) §17.3.2.36
@@ -1595,6 +1595,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_dstrike()
 #undef CURRENT_EL
 #define CURRENT_EL caps
 //! caps handler
+/*! Parent elements:
+ - [done] rPr (many)
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 {
     READ_PROLOGUE
@@ -1607,6 +1610,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 #undef CURRENT_EL
 #define CURRENT_EL smallCaps
 //! smallCaps handler
+/*! Parent elements:
+ - [done] rPr (many)
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_smallCaps()
 {
     READ_PROLOGUE
