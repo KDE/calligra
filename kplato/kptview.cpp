@@ -477,8 +477,13 @@ void View::createViews()
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Reports", i18n( "Reports" ) );
-        createReportView( cat, "ReportView", QString(), TIP_USE_DEFAULT_TEXT );
-
+        // A little hack to get the user started...
+        ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
+        if ( rv ) {
+            QDomDocument doc;
+            doc.setContent( standardTaskStatusReport() );
+            rv->loadXML( doc );
+        }
     }
 }
 
@@ -2713,7 +2718,7 @@ void View::slotRenameNode( Node *node, const QString& name )
         QString s = i18n( "Modify name" );
         switch( node->type() ) {
             case Node::Type_Task: s = i18n( "Modify task name" ); break;
-            case Node::Type_Milestone: s = i18n( "Modify milestone mame" ); break;
+            case Node::Type_Milestone: s = i18n( "Modify milestone name" ); break;
             case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
             case Node::Type_Project: s = i18n( "Modify project name" ); break;
         }
@@ -2900,6 +2905,101 @@ void View::slotCurrencyConfigFinished( int result )
         }
     }
     dlg->deleteLater();
+}
+
+QString View::standardTaskStatusReport() const
+{
+    QString s;
+    s = "<kplatoreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.kplato.report.definition\" editor=\"KPlato\" >";
+    s += "<data-source select-from=\"taskstatus\" >";
+    s += "<select-from resourceassignments=\"unchecked\" tasks=\"unchecked\" taskstatus=\"checked\" resourcesandgroups=\"unchecked\" />";
+    s += "</data-source>";
+    s += "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >";
+    s += "<report:title>Report</report:title>";
+    s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
+    s += "<report:grid report:grid-divisions=\"4\" report:grid-snap=\"1\" report:page-unit=\"cm\" report:grid-visible=\"1\" />";
+    s += "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1,00cm\" fo:margin-top=\"1,00cm\" fo:margin-left=\"1,00cm\" fo:margin-right=\"1,00cm\" report:page-size=\"A4\" >predefined</report:page-style>";
+    s += "<report:body>";
+    s += "<report:section svg:height=\"1,75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >";
+    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:control-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"0.9388cm\" report:z-index=\"-2\" >";
+    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:label report:name=\"label16\" report:horizontal-align=\"left\" svg:x=\"13cm\" svg:width=\"2.5cm\" svg:y=\"0cm\" report:caption=\"Manager:\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:control-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"1cm\" report:z-index=\"-1\" >";
+    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"2.5cm\" svg:y=\"0cm\" report:caption=\"Project:\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"18.9715cm\" svg:y2=\"1.2229cm\" svg:x2=\"0cm\" report:z-index=\"0\" >";
+    s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:line>";
+    s += "</report:section>";
+    s += "<report:section svg:height=\"1,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
+    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.25cm\" svg:y=\"0cm\" report:caption=\"Task Status Report\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "</report:section>";
+    s += "<report:section svg:height=\"2,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >";
+    s += "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:control-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:field report:name=\"field11\" report:horizontal-align=\"left\" report:control-source=\"=constants.PageTotal()\" svg:x=\"8.25cm\" svg:width=\"3cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:label report:name=\"label12\" report:horizontal-align=\"center\" svg:x=\"7.5cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:caption=\"of\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "<report:label report:name=\"label13\" report:horizontal-align=\"right\" svg:x=\"5.75cm\" svg:width=\"1cm\" svg:y=\"0.25cm\" report:caption=\"Page\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "<report:line report:name=\"line14\" svg:y1=\"0.2195cm\" svg:x1=\"0cm\" svg:y2=\"0.2195cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >";
+    s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:line>";
+    s += "</report:section>";
+    s += "<report:detail>";
+    s += "<report:group report:group-sort=\"ascending\" report:group-column=\"Parent\" >";
+    s += "<report:section svg:height=\"2,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"group-header\" >";
+    s += "<report:label report:name=\"label6\" report:horizontal-align=\"left\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"1.75cm\" report:caption=\"Name\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+        s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "<report:field report:name=\"field8\" report:horizontal-align=\"left\" report:control-source=\"Parent\" svg:x=\"0.5cm\" svg:width=\"8cm\" svg:y=\"1cm\" report:vertical-align=\"center\" svg:height=\"0.689cm\" report:z-index=\"0\" >";
+        s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:label report:name=\"label8\" report:horizontal-align=\"center\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"1.75cm\" report:caption=\"Completion (%)\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+        s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:label>";
+    s += "</report:section>";
+    s += "</report:group>";
+    s += "<report:section svg:height=\"0,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >";
+    s += "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:control-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "<report:field report:name=\"field9\" report:horizontal-align=\"center\" report:control-source=\"NodeCompleted\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
+    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
+    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
+    s += "</report:field>";
+    s += "</report:section>";
+    s += "</report:detail>";
+    s += "</report:body>";
+    s += "</report:content>";
+    s += "</kplatoreportdefinition>";
+    return s;
 }
 
 #ifndef NDEBUG

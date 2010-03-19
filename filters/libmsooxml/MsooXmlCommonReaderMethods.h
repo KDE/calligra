@@ -49,6 +49,7 @@ KoFilter::ConversionStatus read_spacing();
 KoFilter::ConversionStatus read_vertAlign();
 KoFilter::ConversionStatus read_rFonts();
 KoFilter::ConversionStatus read_pStyle();
+KoFilter::ConversionStatus read_latin();
 
 void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
 

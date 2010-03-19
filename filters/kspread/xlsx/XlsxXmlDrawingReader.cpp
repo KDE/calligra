@@ -90,8 +90,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 #define CURRENT_EL from
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 {
-    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     READ_PROLOGUE
+    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -102,16 +102,16 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    READ_EPILOGUE
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL to
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 {
-    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     READ_PROLOGUE
+    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -122,15 +122,15 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    READ_EPILOGUE
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL col
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 {
-    m_context->m_positions[m_anchorType].m_col = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_col = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -138,7 +138,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 #define CURRENT_EL row
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 {
-    m_context->m_positions[m_anchorType].m_row = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_row = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 #define CURRENT_EL colOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 {
-    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 #define CURRENT_EL rowOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 {
-    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt();
+    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -175,14 +175,17 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
         const QString file = QString("chart%1.xml").arg(++m_chartNumber);
         const QString filepath = path + "/" + file;
 
-        XlsxXmlChartReader reader(this);
-        XlsxXmlChartReaderContext context(m_context);
+        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(m_context);
         
-        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, &context);
+        XlsxXmlChartReader reader(this);
+        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
+            delete context;
             return result;
         }
+
+        m_context->charts << context;
     }
 
     return KoFilter::OK;

@@ -78,7 +78,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     else if (fmtType == Format::DateTime || (Format::isDate(fmtType) && !formatString.isEmpty()) ) {
         Value dateValue = m_converter->asDateTime(value, &ok);
         if (ok) {
-            result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType));
+            result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType, formatString));
             result.setFormat(Value::fmt_DateTime);
         }
     }
@@ -531,8 +531,12 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
     return result;
 }
 
-QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType)
+QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString )
 {
+    if( !formatString.isEmpty() ) {
+        return _dt.toString( formatString );
+    }
+
     Q_UNUSED( fmtType );
     QString result;
     // pretty lame, just asssuming something for the format

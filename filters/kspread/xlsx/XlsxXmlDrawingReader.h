@@ -45,11 +45,16 @@
 
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
+class XlsxXmlChartReaderContext;
 
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
+    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
+    virtual ~XlsxXmlDrawingReaderContext();
+
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
+    QList<XlsxXmlChartReaderContext*> charts;
 
     enum AnchorType {
         NoAnchor,
@@ -63,9 +68,6 @@ public:
     };
 
     QMap<AnchorType, Position> m_positions;
-
-    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
-    virtual ~XlsxXmlDrawingReaderContext();
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader

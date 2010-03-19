@@ -82,7 +82,7 @@ public:
      * Creates a date and time format.
      * \param formatType the value format, e.g. number, date
      */
-    QString dateTimeFormat(const QDateTime& time, Format::Type formatType);
+    QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
 protected:
     /**

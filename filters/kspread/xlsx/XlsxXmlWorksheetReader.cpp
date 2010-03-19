@@ -25,8 +25,11 @@
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlDocumentReader.h"
-#include "XlsxImport.h"
 #include "XlsxXmlDrawingReader.h"
+#include "XlsxXmlChartReader.h"
+#include "XlsxImport.h"
+#include "Charting.h"
+#include "ChartExport.h"
 
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -90,6 +93,32 @@ const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
 const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
+class Cell
+{
+public:
+    int repeated;
+    QString styleName;
+    QString charStyleName;
+    QString text;
+    QString valueType;
+    QByteArray valueAttr;
+    QString valueAttrValue;
+    QString formula;
+    explicit Cell(int cellsRepeated = 1) : repeated(cellsRepeated) {}
+    ~Cell() {}
+};
+
+class Row
+{
+public:
+    int repeated;
+    QString styleName;
+    QList<Cell*> cells;
+    
+    explicit Row() : repeated(1) {}
+    ~Row() { qDeleteAll(cells); }
+};
+
 class XlsxXmlWorksheetReader::Private
 {
 public:
@@ -100,11 +129,16 @@ public:
     {
     }
     ~Private() {
+        qDeleteAll(rows);
+        qDeleteAll(drawings);
     }
+
     XlsxXmlWorksheetReader* const q;
     QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
+    QList<Row*> rows;
+    QList<XlsxXmlDrawingReaderContext*> drawings;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -261,11 +295,73 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         if (isStartElement()) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
-            ELSE_TRY_READ_IF(sheetData)
+            ELSE_TRY_READ_IF(sheetData) // does fill d->rows
             ELSE_TRY_READ_IF(drawing)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    // now we have everything to start writing the actual cells
+    foreach(Row* row, d->rows) {
+        body->startElement("table:table-row");
+
+        if (!row->styleName.isEmpty()) {
+            body->addAttribute("table:style-name", row->styleName);
+        }
+        if (row->repeated > 1) {
+            body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
+        }
+
+        foreach(Cell* cell, row->cells) {
+            body->startElement("table:table-cell");
+
+            if (!cell->styleName.isEmpty()) {
+                body->addAttribute("table:style-name", cell->styleName);
+            }
+            if (cell->repeated > 1) {
+                body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
+            }
+            if (!cell->valueType.isEmpty()) {
+                body->addAttribute("office:value-type", cell->valueType);
+            }
+            if (!cell->valueAttr.isEmpty()) {
+                body->addAttribute(cell->valueAttr, cell->valueAttrValue);
+            }
+            if (!cell->formula.isEmpty()) {
+                body->addAttribute("table:formula", cell->formula);
+            }
+
+            body->startElement("text:p", false);
+            if(!cell->charStyleName.isEmpty()) {
+                body->startElement( "text:span" );
+                body->addAttribute( "text:style-name", cell->charStyleName);
+            }
+            if(!cell->text.isEmpty()) {
+                body->addTextSpan(cell->text);
+            }
+            if(!cell->charStyleName.isEmpty()) {
+                body->endElement(); // text:span
+            }
+            body->endElement(); // text:p
+            
+//! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
+//! @todo make drawingobject logic more generic
+#if 0
+            // handle objects like e.g. charts
+            foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
+                foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
+                    // save the index embedded into this cell
+                    chart->m_chartExport->saveIndex(body);
+                    // the embedded object file was written by the XlsxXmlChartReader already
+                    //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
+                }
+            }
+#endif
+
+            body->endElement(); // table:table-cell
+        }
+        body->endElement(); // table:table-row
     }
 
     body->endElement(); // table:table
@@ -468,7 +564,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     READ_EPILOGUE
 }
 
-KoFilter::ConversionStatus XlsxXmlWorksheetReader::saveRowStyle(const QString& _heightString)
+QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
 {
     QString heightString(_heightString);
     if (heightString.isEmpty()) {
@@ -482,13 +578,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::saveRowStyle(const QString& _
     if (!heightString.isEmpty()) {
         bool ok;
         double height = heightString.toDouble(&ok);
-        if (!ok)
-            return KoFilter::WrongFormat;
-        tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
+        if (ok)
+            tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
     }
     const QString currentTableRowStyleName(mainStyles->lookup(tableRowStyle, "ro"));
-    body->addAttribute("table:style-name", currentTableRowStyleName);
-    return KoFilter::OK;
+    return currentTableRowStyleName;
 }
 
 void XlsxXmlWorksheetReader::appendTableCells(int cells)
@@ -539,19 +633,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         //?
     }
     if ((m_currentRow + 1) < rNumber) {
-        body->startElement("table:table-row");
-        RETURN_IF_ERROR( saveRowStyle(QString()) )
-
-        const uint skipRows = rNumber - (m_currentRow + 1);
-        if (skipRows > 1) {
-            body->addAttribute("table:number-rows-repeated", QString::number(skipRows));
+        Row* r = new Row;
+        d->rows << r;
+        r->styleName = processRowStyle(QString());
+        r->repeated = rNumber - (m_currentRow + 1);
+        if (MSOOXML::maximumSpreadsheetColumns() > 0) {
+            r->cells << new Cell(MSOOXML::maximumSpreadsheetColumns());
         }
-        appendTableCells(MSOOXML::maximumSpreadsheetColumns());
-        body->endElement(); // table:table-row
     }
 
-    body->startElement("table:table-row");
-    RETURN_IF_ERROR( saveRowStyle(ht) )
+    Row* row = new Row;
+    d->rows << row;
+    row->styleName = processRowStyle(ht);
 
     m_currentColumn = -1;
     while (!atEnd()) {
@@ -563,12 +656,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    const int remainingColumns = MSOOXML::maximumSpreadsheetColumns() - m_currentColumn - 1;
-    if (remainingColumns > 0) { // output empty cells after the last filled cell
-        appendTableCells(remainingColumns);
-    }
 
-    body->endElement(); // table:table-row
+    const int remainingColumns = MSOOXML::maximumSpreadsheetColumns() - m_currentColumn - 1;
+    if (remainingColumns > 0) {
+        row->cells << new Cell(remainingColumns);
+    }
 
     m_currentRow = rNumber;
 
@@ -630,6 +722,9 @@ static QString convertFormula(const QString& formula)
 */
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 {
+    Q_ASSERT( ! d->rows.isEmpty());
+    Row* row = d->rows.last();
+
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
@@ -639,7 +734,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         kDebug() << "referencedColumn:" << r << referencedColumn;
         if (m_currentColumn == -1 && referencedColumn > 0) {
             // output empty cells before the first filled cell
-            appendTableCells(referencedColumn);
+            row->cells << new Cell(referencedColumn);
         }
         m_currentColumn = referencedColumn;
     }
@@ -651,12 +746,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     m_value.clear();
     m_formula.clear();
 
-    // buffer this table:table-cell, because we have to compute style
-    // or attributes before details are known
-    MSOOXML::Utils::XmlWriteBuffer tableCellBuf;
-    body = tableCellBuf.setWriter(body);
-//    KoXmlWriter *origBody = body;
-//    body = new KoXmlWriter(&tableCellBuf, origBody->indentLevel()+1);
+    Cell* cell = new Cell;
+    row->cells << cell;
 
     while (!atEnd()) {
         readNext();
@@ -680,14 +771,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
-    QByteArray valueType;
-    QByteArray valueAttr;
-
     if (!m_value.isEmpty()) {
-        if( formattedStyle.isEmpty() ) {
-            body->startElement("text:p", false);
-        }
-
         KoCharacterStyle cellCharacterStyle;
         cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
 
@@ -697,12 +781,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cellCharacterStyle.saveOdf( charStyle );
             charStyleName = mainStyles->lookup( charStyle, "T" );
         }
-        
-        if( !charStyleName.isEmpty() ) {
-            body->startElement( "text:span" );
-            body->addAttribute( "text:style-name", charStyleName );
-        }
 
+        if( !charStyleName.isEmpty() ) {
+            cell->charStyleName = charStyleName;
+        }
  
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean) Cell containing a boolean.
@@ -725,27 +807,27 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!ok || (int)stringIndex >= m_context->sharedStrings->size()) {
                 return KoFilter::WrongFormat;
             }
-            m_context->sharedStrings->at(stringIndex).saveXml(body);
-            valueType = MsooXmlReader::constString;
+            cell->text = m_context->sharedStrings->at(stringIndex).data();
+            cell->valueType = MsooXmlReader::constString;
             // no valueAttr
         } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
 //! @todo handle value properly
-            body->addTextSpan(m_value);
-            valueType = MsooXmlReader::constString;
+            cell->text = m_value;
+            cell->valueType = MsooXmlReader::constString;
             // no valueAttr
         } else if (t == QLatin1String("b")) {
-            body->addTextSpan(m_value);
-            valueType = MsooXmlReader::constBoolean;
-            valueAttr = XlsxXmlWorksheetReader::officeBooleanValue;
+            cell->text = m_value;
+            cell->valueType = MsooXmlReader::constBoolean;
+            cell->valueAttr = XlsxXmlWorksheetReader::officeBooleanValue;
         } else if (t == QLatin1String("d")) {
 //! @todo handle value properly
-            body->addTextSpan(m_value);
-            valueType = MsooXmlReader::constDate;
-            valueAttr = XlsxXmlWorksheetReader::officeDateValue;
+            cell->text = m_value;
+            cell->valueType = MsooXmlReader::constDate;
+            cell->valueAttr = XlsxXmlWorksheetReader::officeDateValue;
         } else if (t == QLatin1String("str")) {
 //! @todo handle value properly
-            body->addTextSpan(m_value);
-            valueType = MsooXmlReader::constString;
+            cell->text = m_value;
+            cell->valueType = MsooXmlReader::constString;
             // no valueAttr
         } else if (t == QLatin1String("n") || t.isEmpty() /* already checked if numeric */) {
             if (!t.isEmpty()) { // sanity check
@@ -757,99 +839,71 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             const KoGenStyle* const style = mainStyles->style( formattedStyle );
             if( style == 0 || valueIsNumeric(m_value) ) {
 //            body->addTextSpan(m_value);
-                valueType = MsooXmlReader::constFloat;
-                valueAttr = XlsxXmlWorksheetReader::officeValue;
+                cell->valueType = MsooXmlReader::constFloat;
+                cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
             } else {
                 switch( style->type() ) {
                 case KoGenStyle::StyleNumericDate:
-                    valueType = MsooXmlReader::constDate;
-                    valueAttr = XlsxXmlWorksheetReader::officeDateValue;
+                    cell->valueType = MsooXmlReader::constDate;
+                    cell->valueAttr = XlsxXmlWorksheetReader::officeDateValue;
                     m_value = QDate( 1899, 12, 30 ).addDays( m_value.toInt() ).toString( Qt::ISODate );
                     break;
                 case KoGenStyle::StyleNumericText:
-                    valueType = MsooXmlReader::constString;
-                    valueAttr = XlsxXmlWorksheetReader::officeStringValue;
+                    cell->valueType = MsooXmlReader::constString;
+                    cell->valueAttr = XlsxXmlWorksheetReader::officeStringValue;
                     break;
                 default:
-                    valueType = MsooXmlReader::constFloat;
-                    valueAttr = XlsxXmlWorksheetReader::officeValue;
+                    cell->valueType = MsooXmlReader::constFloat;
+                    cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
                     break;
                 }
             }
         } else if (t == QLatin1String("e")) {
             if (m_value == QLatin1String("#REF!"))
-                body->addTextSpan("#NAME?");
+                cell->text = "#NAME?";
             else
-                body->addTextSpan(m_value);
+                cell->text = m_value;
 //! @todo full parsing needed to retrieve the type
-            valueType = MsooXmlReader::constFloat;
-            valueAttr = XlsxXmlWorksheetReader::officeValue;
+            cell->valueType = MsooXmlReader::constFloat;
+            cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
             m_value = QLatin1String("0");
         } else {
             raiseUnexpectedAttributeValueError(t, "c@t");
             return KoFilter::WrongFormat;
         }
-
-        if( !charStyleName.isEmpty() ) {
-            body->endElement(); // text:span
-        }
-        if( formattedStyle.isEmpty() ) {
-            body->endElement(); // text:p
-        }
     }
 
-    body = tableCellBuf.originalWriter();
-    {
-        body->startElement("table:table-cell");
+    // cell style
+    if (!s.isEmpty()) {
+        bool ok;
+        const uint styleId = s.toUInt(&ok);
+        kDebug() << "styleId:" << styleId;
+        const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
+        if (!ok || !cellFormat) {
+            raiseUnexpectedAttributeValueError(s, "c@s");
+            return KoFilter::WrongFormat;
+        }
+        KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
 
-        // cell style
-        if (!s.isEmpty()) {
-            bool ok;
-            const uint styleId = s.toUInt(&ok);
-            kDebug() << "styleId:" << styleId;
-            const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
-            if (!ok || !cellFormat) {
-                raiseUnexpectedAttributeValueError(s, "c@s");
-                return KoFilter::WrongFormat;
-            }
-            KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
-
-            if( charStyleName.isEmpty() ) {
-                KoCharacterStyle cellCharacterStyle;
-                cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-                cellCharacterStyle.saveOdf(cellStyle);
-            }
-            if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
-                return KoFilter::WrongFormat;
-            }
-
-            if( !formattedStyle.isEmpty() )
-                cellStyle.addAttribute( "style:data-style-name", formattedStyle );
-
-            const QString cellStyleName = mainStyles->lookup( cellStyle, "ce" );
-            body->addAttribute("table:style-name", cellStyleName );
+        if( charStyleName.isEmpty() ) {
+            KoCharacterStyle cellCharacterStyle;
+            cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
+            cellCharacterStyle.saveOdf(cellStyle);
+        }
+        if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
+            return KoFilter::WrongFormat;
         }
 
-        if (!valueType.isEmpty()) {
-            body->addAttribute("office:value-type", valueType);
-        }
-        if (!valueAttr.isEmpty()) {
-            body->addAttribute(valueAttr, m_value);
-        }
-        if (!m_formula.isEmpty()) {
-            body->addAttribute("table:formula", m_formula);
+        if (!formattedStyle.isEmpty()) {
+            cellStyle.addAttribute( "style:data-style-name", formattedStyle );
         }
 
-        if( formattedStyle.isEmpty() ) {
-        if (m_value.isEmpty()) {
-            tableCellBuf.clear(); // do not output
-        }
-        else {
-            (void)tableCellBuf.releaseWriter();
-        }
-        }
-        body->endElement(); // table:table-cell
+        const QString cellStyleName = mainStyles->lookup( cellStyle, "ce" );
+        cell->styleName = cellStyleName;
     }
+
+    cell->valueAttrValue = m_value;
+    cell->formula = m_formula;
 
     READ_EPILOGUE
 }
@@ -996,13 +1050,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
         QString filepath = path + "/" + file;
 
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context);
+
         XlsxXmlDrawingReader reader(this);
-        XlsxXmlDrawingReaderContext context(m_context);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
+            delete context;
             return result;
         }
+
+        d->drawings << context;
     }
 
     while (!atEnd()) {

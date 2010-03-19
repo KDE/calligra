@@ -97,7 +97,7 @@ private:
 
     void showWarningAboutWorksheetSize();
     void saveColumnStyle(const QString& widthString);
-    KoFilter::ConversionStatus saveRowStyle(const QString& heightString);
+    QString processRowStyle(const QString& heightString = QString());
     void appendTableColumns(int columns, const QString& width = QString());
     void appendTableCells(int cells);
 

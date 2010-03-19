@@ -185,6 +185,11 @@ KoReportData* ReportData::data(const QString &source)
 void ReportData::setModel( QAbstractItemModel *model )
 {
     m_model.setSourceModel( model );
+    ItemModelBase *m = itemModel();
+    if ( m ) {
+        m->setProject( m_project );
+        m->setScheduleManager( m_schedulemanager );
+    }
 }
 
 QAbstractItemModel *ReportData::model() const

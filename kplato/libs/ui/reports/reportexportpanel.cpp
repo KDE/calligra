@@ -17,39 +17,29 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_REPORTSCRIPTS_H
-#define KPLATO_REPORTSCRIPTS_H
+#include "reportexportpanel.h"
+#include "report.h"
 
-#include <QObject>
-#include <QString>
-
-class QVariant;
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-class ReportData;
-
-class ProjectAccess : public QObject
+ReportExportPanel::ReportExportPanel( QWidget *parent )
+    : QWidget( parent )
 {
-    Q_OBJECT
-public:
-    ProjectAccess( ReportData *rd );
+    setupUi( this );
+    ui_format->insertItem ( 0,  KIcon( "application-vnd.oasis.opendocument.spreadsheet" ), i18n( "Open document spreadsheet" ), (int)Reports::EF_Ods );
+    ui_format->insertItem ( 1, KIcon( "text-html" ), i18n( "HTML" ), (int)Reports::EF_Html );
+    ui_format->insertItem ( 2, KIcon( "application-xhtml+xml" ), i18n( "XHTML" ), (int)Reports::EF_XHtml );
+}
 
-public slots:
-    QString Name() const;
-    QString Manager() const;
-    QVariant BCWS() const;
-    QVariant BCWP() const;
-    QVariant ACWP() const;
-    QVariant CPI() const;
-    QVariant SPI() const;
+int ReportExportPanel::selectedFormat() const
+{
+    int result = ui_format->itemData( ui_format->currentIndex() ).toInt();
+    return result;
+}
 
-private:
-    ReportData *m_reportdata;
-};
+} //namespace KPlato
 
-
-} // namespace KPlato
-
-#endif
+#include "reportexportpanel.moc"

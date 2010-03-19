@@ -372,7 +372,7 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
         return;
     }
 
-    QString helpText = desc->helpText()[0];
+    QString helpText = desc->helpText().isEmpty() ? QString() : desc->helpText()[0];
     if (helpText.isEmpty()) {
         d->hintLabel->hide();
         return;

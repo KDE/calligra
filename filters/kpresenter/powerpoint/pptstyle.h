@@ -25,18 +25,21 @@
 class PptTextPFRun {
     quint16 level_;
     const MSO::TextPFException* pfs[6];
+    const MSO::TextPFException9* pf9s[6];
 public:
     PptTextPFRun(const MSO::DocumentContainer* d,
                  const MSO::MasterOrSlideContainer* m,
                  quint32 textType);
     PptTextPFRun(const MSO::DocumentContainer* d = 0,
+                 const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
                  const MSO::MasterOrSlideContainer* m = 0,
+                 const MSO::PptOfficeArtClientData* pcd = 0,
                  const MSO::TextContainer* tc = 0,
                  quint32 start = 0);
 
     quint16 level() const { return level_; }
-    //const MSO::TextPFException* pf() const { return pfs[0]; }
 
+    // TextPFException
     bool fHasBullet() const;
     bool fBulletHasFont() const;
     bool fBulletHasColor() const;
@@ -58,8 +61,13 @@ public:
     bool wordWrap() const;
     bool overflow() const;
     quint16 textDirection() const;
-};
 
+    // TextPFException9
+    qint32 bulletBlipRef() const;
+    qint16 fBulletHasAutoNumber() const;
+    quint16 scheme() const;
+    qint16 startNum() const;
+};
 
 class PptTextCFRun {
     quint16 level_;
@@ -93,5 +101,101 @@ public:
     MSO::ColorIndexStruct color() const;
     qint16 position() const;
 };
+
+const MSO::TextCFException*
+getTextCFException(const MSO::TextContainer* tc, const int start);
+
+template<class T>
+const T*
+getPP(const MSO::DocumentContainer* dc)
+{
+    if (dc == 0 || dc->docInfoList == 0) return 0;
+    foreach (const MSO::DocInfoListSubContainerOrAtom& a,
+                 dc->docInfoList->rgChildRec) {
+        const MSO::DocProgTagsContainer* d
+                = a.anon.get<MSO::DocProgTagsContainer>();
+        if (d) {
+            foreach (const MSO::DocProgTagsSubContainerOrAtom& da,
+                     d->rgChildRec) {
+                const MSO::DocProgBinaryTagContainer* c
+                        = da.anon.get<MSO::DocProgBinaryTagContainer>();
+                if (c) {
+                    const T* t = c->rec.anon.get<T>();
+                    if (t) return t;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+template<class T>
+const T*
+getPP(const MSO::PptOfficeArtClientData& o)
+{
+    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
+             o.rgShapeClientRoundtripData) {
+        const MSO::ShapeProgsTagContainer* p
+                = s.anon.get<MSO::ShapeProgsTagContainer>();
+        if (p) {
+            foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
+                     p->rgChildRec) {
+                const MSO::ShapeProgBinaryTagContainer* a
+                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                if (a) {
+                    const T* pp = a->rec.anon.get<T>();
+                    if (pp) {
+                        return pp;
+                    }
+                }
+            }
+        }
+    }
+    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
+             o.rgShapeClientRoundtripData0) {
+        const MSO::ShapeProgsTagContainer* p
+                = s.anon.get<MSO::ShapeProgsTagContainer>();
+        if (p) {
+            foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
+                     p->rgChildRec) {
+                const MSO::ShapeProgBinaryTagContainer* a
+                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                if (a) {
+                    const T* pp = a->rec.anon.get<T>();
+                    if (pp) {
+                        return pp;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+template<class T, class C>
+const T*
+getPP(const C* c)
+{
+    if (!c) return 0;
+    const MSO::SlideProgTagsContainer* sc = c->slideProgTagsContainer.data();
+    if (!sc) return 0;
+    foreach (const MSO::SlideProgTagsSubContainerOrAtom& a , sc->rgTypeRec) {
+        const MSO::SlideProgBinaryTagContainer* bt
+                = a.anon.get<MSO::SlideProgBinaryTagContainer>();
+        if (bt) {
+            const T* t = bt->rec.anon.get<T>();
+            if (t) return t;
+        }
+    }
+    return 0;
+}
+template<class T>
+const T*
+getPP(const MSO::MasterOrSlideContainer* m) {
+    if (!m) return 0;
+    const MSO::MainMasterContainer* mm = m->anon.get<MSO::MainMasterContainer>();
+    if (mm) return getPP<T>(mm);
+    return getPP<T>(m->anon.get<MSO::SlideContainer>());
+}
 
 #endif

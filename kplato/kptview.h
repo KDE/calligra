@@ -304,6 +304,8 @@ private:
     void createViews();
     ViewBase *createView( ViewListItem *cat, const QString &type, const QString &tag, const QString &name, const QString &tip, int index = -1 );
 
+    QString standardTaskStatusReport() const;
+
 private:
     QSplitter *m_sp;
     QStackedWidget *m_tab;

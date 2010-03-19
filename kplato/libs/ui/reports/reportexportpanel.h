@@ -17,39 +17,29 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_REPORTSCRIPTS_H
-#define KPLATO_REPORTSCRIPTS_H
+#ifndef KPLATO_REPORTEXPORTPANEL_H
+#define KPLATO_REPORTEXPORTPANEL_H
 
-#include <QObject>
-#include <QString>
 
-class QVariant;
+#include "ui_reportexportpanel.h"
+
+#include <QWidget>
+
 
 namespace KPlato
 {
 
-class ReportData;
-
-class ProjectAccess : public QObject
+class ReportExportPanel : public QWidget, public Ui::ReportExportPanel
 {
     Q_OBJECT
 public:
-    ProjectAccess( ReportData *rd );
+    ReportExportPanel( QWidget *parent = 0 );
 
-public slots:
-    QString Name() const;
-    QString Manager() const;
-    QVariant BCWS() const;
-    QVariant BCWP() const;
-    QVariant ACWP() const;
-    QVariant CPI() const;
-    QVariant SPI() const;
+    int selectedFormat() const;
 
-private:
-    ReportData *m_reportdata;
 };
 
-
-} // namespace KPlato
+} //namespace KPlato
 
 #endif
+

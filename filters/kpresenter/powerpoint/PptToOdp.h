@@ -208,13 +208,12 @@ private:
     class ListStyleInput {
     public:
         PptTextPFRun pf;
-        const MSO::TextPFException9* pf9;
         const MSO::TextCFException* cf;
         const MSO::TextCFException9* cf9;
         const MSO::TextCFException10* cf10;
         const MSO::TextSIException* si;
 
-        ListStyleInput() :pf9(0), cf(0), cf9(0), cf10(0), si(0) {}
+        ListStyleInput() :cf(0), cf9(0), cf10(0), si(0) {}
     };
     /* Extract data into the style element style:list */
     void defineListStyle(KoGenStyle& style,
@@ -233,8 +232,7 @@ private:
 
     const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
                                                 quint32 textType, quint8 pp9rt);
-    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf,
-                                const MSO::TextPFException9* pf9);
+    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
 
     quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
                         const MSO::PptOfficeArtClientData* clientData) const;

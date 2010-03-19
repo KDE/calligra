@@ -100,60 +100,6 @@ QString getText(const TextContainer& tc, int start, int count)
     return getText(tc).mid(start,count);
 }
 
-template<class T>
-const T*
-getPP(const DocumentContainer* dc)
-{
-    if (dc == 0 || dc->docInfoList == 0) return 0;
-    foreach (const DocInfoListSubContainerOrAtom& a, dc->docInfoList->rgChildRec) {
-        const DocProgTagsContainer* d = a.anon.get<DocProgTagsContainer>();
-        if (d) {
-            foreach (const DocProgTagsSubContainerOrAtom& da, d->rgChildRec) {
-                const DocProgBinaryTagContainer* c
-                        = da.anon.get<DocProgBinaryTagContainer>();
-                if (c) {
-                    const T* t = c->rec.anon.get<T>();
-                    if (t) return t;
-                }
-            }
-        }
-    }
-    return 0;
-}
-template<class T>
-const T*
-getPP(const MSO::PptOfficeArtClientData& o)
-{
-    foreach (const ShapeClientRoundtripDataSubcontainerOrAtom& s, o.rgShapeClientRoundtripData) {
-        const ShapeProgsTagContainer* p = s.anon.get<ShapeProgsTagContainer>();
-        if (p) {
-            foreach (const ShapeProgTagsSubContainerOrAtom& s, p->rgChildRec) {
-                const ShapeProgBinaryTagContainer* a = s.anon.get<ShapeProgBinaryTagContainer>();
-                if (a) {
-                    const T* pp = a->rec.anon.get<T>();
-                    if (pp) {
-                        return pp;
-                    }
-                }
-            }
-        }
-    }
-    foreach (const ShapeClientRoundtripDataSubcontainerOrAtom& s, o.rgShapeClientRoundtripData0) {
-        const ShapeProgsTagContainer* p = s.anon.get<ShapeProgsTagContainer>();
-        if (p) {
-            foreach (const ShapeProgTagsSubContainerOrAtom& s, p->rgChildRec) {
-                const ShapeProgBinaryTagContainer* a = s.anon.get<ShapeProgBinaryTagContainer>();
-                if (a) {
-                    const T* pp = a->rec.anon.get<T>();
-                    if (pp) {
-                        return pp;
-                    }
-                }
-            }
-        }
-    }
-    return 0;
-}
 
 }//namespace
 
@@ -880,13 +826,9 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                                const TextMasterStyle10Level* level10)
 {
     ListStyleInput parent;
-    //parent.pf = (level) ?&level->pf :0;
     parent.cf = (level) ?&level->cf :0;
-    parent.pf9 = (level9) ?&level9->pf9 :0;
     parent.cf9 = (level9) ?&level9->cf9 :0;
     parent.cf10 = (level10) ?&level10->cf10 :0;
-    //if (info.pf == 0) info.pf = parent.pf;
-    if (info.pf9 == 0) info.pf9 = parent.pf9;
     if (info.cf == 0) info.cf = parent.cf;
     if (info.cf9 == 0) info.cf9 = parent.cf9;
     if (info.cf10 == 0) info.cf10 = parent.cf10;
@@ -944,12 +886,12 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
     }
 
     QString elementName;
-    bool imageBullet = i.pf9 && i.pf9->masks.bulletBlip;
+    bool imageBullet = i.pf.bulletBlipRef() != 65535;
     if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
-                         bulletPictureNames.value(i.pf9->bulletBlipRef));
+                         bulletPictureNames.value(i.pf.bulletBlipRef()));
         if (bulletSize.isNull() || bulletSize.endsWith("%")) {
             if (i.cf && i.cf->masks.size) {
                 bulletSize = pt(i.cf->fontSize);
@@ -962,13 +904,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         }
     } else {
         QString numFormat("1"), numSuffix, numPrefix;
-        if (i.pf9 && i.pf9->bulletAutoNumberScheme) {
-            processTextAutoNumberScheme(i.pf9->bulletAutoNumberScheme->scheme,
-                                        numFormat, numSuffix, numPrefix);
-        } else if (p.pf9 && p.pf9->bulletAutoNumberScheme) {
-            processTextAutoNumberScheme(p.pf9->bulletAutoNumberScheme->scheme,
-                                        numFormat, numSuffix, numPrefix);
-        }
+        processTextAutoNumberScheme(i.pf.scheme(),
+                                    numFormat, numSuffix, numPrefix);
         // if there is a bulletChar in the current pf, then this is a bullet
         // list, otherwise, it is a numbered list
         if (i.pf.bulletChar()) {
@@ -986,10 +923,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 out.addAttribute("style:num-format", numFormat);
             }
             //out.addAttribute("style:display-levels", "TODO");
-            if (i.pf9 && i.pf9->masks.bulletScheme) {
-                out.addAttribute("style:start-value",
-                                 i.pf9->bulletAutoNumberScheme->startNum);
-            }
+            out.addAttribute("style:start-value", i.pf.startNum());
         }
         if (!numPrefix.isNull()) {
             out.addAttribute("style:num-prefix", numPrefix);
@@ -1705,25 +1639,6 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
         // TODO
     }
 }
-const TextCFException*
-getTextCFException(const MSO::TextContainer& tc, const int start)
-{
-    if (!tc.style) return 0;
-    const QList<TextCFRun> &cfs = tc.style->rgTextCFRun;
-    int i = 0;
-    int cfend = 0;
-    while (i < cfs.size()) {
-        cfend += cfs[i].count;
-        if (cfend > start) {
-            break;
-        }
-        i++;
-    }
-    if (i >= cfs.size()) {
-        return 0;
-    }
-    return &cfs[i].cf;
-}
 
 int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
                               const QString& text, const int start,
@@ -1731,7 +1646,7 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
 {
     // find all components that start at position start
     // get the right character run
-    const TextCFException* cf = getTextCFException(tc, start);
+    const TextCFException* cf = getTextCFException(&tc, start);
 
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
@@ -1880,56 +1795,13 @@ int PptToOdp::processTextSpans(const MSO::TextContainer& tc, Writer& out,
     }
     return (pos == end) ?0 :-pos;
 }
-const MSO::StyleTextProp9*
-PptToOdp::getStyleTextProp9(quint32 slideIdRef, quint32 textType, quint8 pp9rt)
-{
-    const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(
-            p->documentContainer);
-    if (pp9) {
-        if (pp9->outlineTextPropsContainer) {
-            foreach (const OutlineTextProps9Entry& o,
-                     pp9->outlineTextPropsContainer->rgOutlineTextProps9Entry) {
-                if (o.outlineTextHeaderAtom.slideIdRef == slideIdRef
-                        && o.outlineTextHeaderAtom.txType == textType) {
-                    // we assume that pp9rt is the index in this array
-                    if (o.styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
-                        return &o.styleTextProp9Atom.rgStyleTextProp9[pp9rt];
-                    }
-                }
-            }
-        }
-    }
-    return 0;
-}
-const MSO::StyleTextProp9*
-getStyleTextProp9(const MSO::OfficeArtSpContainer& o, quint8 pp9rt)
-{
-    if (!o.clientData) return 0;
-    const PptOfficeArtClientData* pcd
-            = o.clientData->anon.get<PptOfficeArtClientData>();
-    const PP9ShapeBinaryTagExtension* p = 0;
-    if (pcd) {
-        p = getPP<PP9ShapeBinaryTagExtension>(*pcd);
-    }
-    if (p && p->styleTextProp9Atom.rgStyleTextProp9.size() > pp9rt) {
-        return &p->styleTextProp9Atom.rgStyleTextProp9[pp9rt];
-    }
-    return 0;
-}
-QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf,
-                   const TextPFException9* pf9)
+
+QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
 {
     KoGenStyle list(KoGenStyle::StyleListAuto);
     ListStyleInput info;
     info.pf = pf;
-    info.pf9 = pf9;
     ListStyleInput parent;
-    /*
-    if (level) {
-        parent.pf = &level->pf;
-        parent.cf = &level->cf;
-    }
-    */
     defineListStyle(list, pf.level(), info, parent);
     return out.styles.lookup(list);
 }
@@ -1939,27 +1811,16 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
                                const QString& text, int start, int end,
                                QStack<QString>& levels)
 {
-    PptTextPFRun pf(p->documentContainer, currentMaster, &tc, start);
-
-    // to find the pf9, the cf has to be obtained which contains a pp9rt
-    quint8 pp9rt = 0;
-    const TextCFException* cf = getTextCFException(tc, start);
-    if (cf && cf->fontStyle) {
-        pp9rt = cf->fontStyle->pp9rt;
+    const PptOfficeArtClientData* pcd = 0;
+    if (o.clientData) {
+        pcd = o.clientData->anon.get<PptOfficeArtClientData>();
     }
-    quint32 textType = tc.textHeaderAtom.textType;
-    const StyleTextProp9* stp9 = ::getStyleTextProp9(o, pp9rt);
-    if (!stp9 && currentSlideTexts) {
-         stp9 = getStyleTextProp9(currentSlideTexts->slidePersistAtom.slideId.slideId,
-                                  textType, pp9rt);
-    }
-    const TextPFException9* pf9 = 0;
-    if (stp9) {
-        pf9 = &stp9->pf9;
-    }
+    PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
+                    &tc, start);
+    // qDebug() << QString(text).mid(start, end-start) << " " << pf.fBulletHasFont() << " " << pf.fBulletHasSize() << " " << pf.indent() << " " << pf.level() << " " << pf.fHasBullet();
     bool islist = pf.level() > 0 && start < end;
     if (islist) {
-        QString listStyle = defineAutoListStyle(out, pf, pf9);
+        QString listStyle = defineAutoListStyle(out, pf);
         // remove levels until the top level is the right indentation
         if ((quint16)levels.size() > pf.level()
                 && levels[pf.level()] == listStyle) {

@@ -1212,7 +1212,7 @@ QString cellFormula(Cell* cell)
             // Special case Excel formulas that differ from OpenFormula
             formula.prepend("msoxl:=");
         } else if(!formula.isEmpty()) {
-            formula.prepend("of:=");
+            formula.prepend("=");
         }
     }
     return formula;
@@ -1382,8 +1382,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
         xmlWriter->addAttribute("table:end-cell", string(cell->sheet()->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
-        xmlWriter->addAttribute("table:table:end-x", QString::number(picture->m_dxR));
-        xmlWriter->addAttribute("table:table:end-y", QString::number(picture->m_dyB));
+        xmlWriter->addAttribute("table:end-x", QString::number(picture->m_dxR));
+        xmlWriter->addAttribute("table:end-y", QString::number(picture->m_dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
         xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),picture->m_colL,picture->m_dxL))+"pt");
         xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),picture->m_rwT,picture->m_dyT))+"pt");
@@ -1416,7 +1416,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_width = QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR)) + "pt";
         c->m_height = QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB)) + "pt";
 
-        c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
+        if (!chart->m_chart->m_cellRangeAddress.isNull() )
+            c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
         string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;

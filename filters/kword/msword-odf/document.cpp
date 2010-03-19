@@ -28,6 +28,7 @@
 #include "texthandler.h"
 #include "graphicshandler.h"
 #include "versionmagic.h"
+#include "drawstyle.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -47,6 +48,7 @@
 
 #include <QList>
 #include <QBuffer>
+#include <QColor>
 
 Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
@@ -388,6 +390,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     kDebug(30513) << "creating master style for this section";
     m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
 
+    // Kword expects that first section has StyleMaster named "Standard"
     QString masterStyleName("Standard");
     if (m_textHandler->m_sectionNumber > 1) {
         masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
@@ -421,6 +424,16 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     // border.  This will be changed below if there are borders defined.
     m_pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     m_pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+
+    DrawStyle ds = m_drawingHandler->getDrawingStyle();
+    // TODO - use ds.fillType to enable fill efects for document background
+
+    // When more complete background color implementation will be added to filter,
+    // PptToOdp::toQColor helper function can be used instead of this conversion
+    MSO::OfficeArtCOLORREF clr = ds.fillColor();
+    QColor color(clr.red,clr.green,clr.blue);
+    m_pageLayoutStyle->addProperty("fo:background-color", color.name());
+
 
     //set the minimum height of header/footer to the full margin minus margin above header
     //TODO the margin between header/footer and text is just hard-coded for now

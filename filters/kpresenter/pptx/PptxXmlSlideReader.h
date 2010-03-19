@@ -98,6 +98,7 @@ protected:
     KoFilter::ConversionStatus read_lumMod();
     KoFilter::ConversionStatus read_lumOff();
     KoFilter::ConversionStatus read_ln();
+    KoFilter::ConversionStatus read_srgbClr();
     KoFilter::ConversionStatus read_scrgbClr();
 
 

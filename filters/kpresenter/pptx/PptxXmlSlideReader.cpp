@@ -39,6 +39,7 @@
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxXmlSlideReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
+#define PPTXXMLSLIDEREADER_CPP
 
 #ifdef __GNUC__
 #warning Using hardcoded presentation:style-name attributes: pr1; pr2
@@ -660,7 +661,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_solidFill()
             ELSE_TRY_READ_IF(scrgbClr)
             //TODO hslClr hue, saturation, luminecence color
             //TODO prstClr preset color
-            //TODO srgbClr rgb hexadecimal
+            ELSE_TRY_READ_IF(srgbClr)
             //TODO stsClr system color
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -904,7 +905,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //! RGB Color Model - Percentage Variant
 //! DrawingML ECMA-376 20.1.2.3.30, p. 3074.
 /*!
-This element especifies a solid color fill.
+This element specifies a solid color fill.
 
  Child elements:
     - alpha (Alpha) §20.1.2.3.1
@@ -957,11 +958,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
                                       qreal(MSOOXML::Utils::ST_Percentage_to_double(b, okB)));
 
     //TODO: all the color transformations
-//     while (true) {
-//         BREAK_IF_END_OF(CURRENT_EL);
-//         readNext();
-//     }
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
 
+//! RGB Color Model -Hex Digit Variant
+//! DrawingML ECMA-376 20.1.2.3.32, p. 3085.
+/*!
+This element specifies a color in RGB notation.
+
+ Child elements:
+    - alpha (Alpha) §20.1.2.3.1
+    - alphaMod (Alpha Modulation) §20.1.2.3.2
+    - alphaOff (Alpha Offset) §20.1.2.3.3
+    - blue (Blue) §20.1.2.3.4
+    - blueMod (Blue Modification) §20.1.2.3.5
+    - blueOff (Blue Offset) §20.1.2.3.6
+    - comp (Complement) §20.1.2.3.7
+    - gamma (Gamma) §20.1.2.3.8
+    - gray (Gray) §20.1.2.3.9
+    - green (Green) §20.1.2.3.10
+    - greenMod (Green Modification) §20.1.2.3.11
+    - greenOff (Green Offset) §20.1.2.3.12
+    - hue (Hue) §20.1.2.3.14
+    - hueMod (Hue Modulate) §20.1.2.3.15
+    - hueOff (Hue Offset) §20.1.2.3.16
+    - inv (Inverse) §20.1.2.3.17
+    - invGamma (Inverse Gamma) §20.1.2.3.18
+    - lum (Luminance) §20.1.2.3.19
+    - lumMod (Luminance Modulation) §20.1.2.3.20
+    - lumOff (Luminance Offset) §20.1.2.3.21
+    - red (Red) §20.1.2.3.23
+    - redMod (Red Modulation) §20.1.2.3.24
+    - redOff (Red Offset) §20.1.2.3.25
+    - sat (Saturation) §20.1.2.3.26
+    - satMod (Saturation Modulation) §20.1.2.3.27
+    - satOff (Saturation Offset) §20.1.2.3.28
+    - shade (Shade) §20.1.2.3.31
+    - tint (Tint) §20.1.2.3.34
+ Attributes:
+    - [done] val ("RRGGBB" hex digits)
+*/
+
+#undef CURRENT_EL
+#define CURRENT_EL srgbClr
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(val)
+
+    m_currentColor = QColor( QLatin1Char('#') + val );
+
+    //TODO: all the color transformations
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
     READ_EPILOGUE
 }
 
