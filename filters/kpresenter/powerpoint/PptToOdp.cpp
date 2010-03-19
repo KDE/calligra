@@ -906,9 +906,17 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         QString numFormat("1"), numSuffix, numPrefix;
         processTextAutoNumberScheme(i.pf.scheme(),
                                     numFormat, numSuffix, numPrefix);
-        // if there is a bulletChar in the current pf, then this is a bullet
-        // list, otherwise, it is a numbered list
-        if (i.pf.bulletChar()) {
+        // if there is no bulletChar or the bullet has autonumbering explicitly
+        // we assume the list is autonumbering
+        if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
+            elementName = "text:list-level-style-number";
+            out.startElement("text:list-level-style-number");
+            if (!numFormat.isNull()) {
+                out.addAttribute("style:num-format", numFormat);
+            }
+            //out.addAttribute("style:display-levels", "TODO");
+            out.addAttribute("text:start-value", i.pf.startNum());
+        } else {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", getBulletChar(i.pf));
@@ -916,14 +924,6 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 qreal relSize = 100.0 * i.pf.bulletSize() / i.cf->fontSize;
                 out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
-        } else {
-            elementName = "text:list-level-style-number";
-            out.startElement("text:list-level-style-number");
-            if (!numFormat.isNull()) {
-                out.addAttribute("style:num-format", numFormat);
-            }
-            //out.addAttribute("style:display-levels", "TODO");
-            out.addAttribute("style:start-value", i.pf.startNum());
         }
         if (!numPrefix.isNull()) {
             out.addAttribute("style:num-prefix", numPrefix);
@@ -1817,7 +1817,8 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
-    // qDebug() << QString(text).mid(start, end-start) << " " << pf.fBulletHasFont() << " " << pf.fBulletHasSize() << " " << pf.indent() << " " << pf.level() << " " << pf.fHasBullet();
+    //qDebug() << QString(text).mid(start, end-start) << " " << pf.fBulletHasFont() << " " << pf.fBulletHasSize() << " " << pf.indent() << " " << pf.level() << " " << pf.fHasBullet();
+    //qDebug() << pf.scheme() << " " << pf.startNum() << " " << pf.fBulletHasAutoNumber();
     bool islist = pf.level() > 0 && start < end;
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf);
