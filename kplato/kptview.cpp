@@ -2718,7 +2718,7 @@ void View::slotRenameNode( Node *node, const QString& name )
         QString s = i18n( "Modify name" );
         switch( node->type() ) {
             case Node::Type_Task: s = i18n( "Modify task name" ); break;
-            case Node::Type_Milestone: s = i18n( "Modify milestone mame" ); break;
+            case Node::Type_Milestone: s = i18n( "Modify milestone name" ); break;
             case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
             case Node::Type_Project: s = i18n( "Modify project name" ); break;
         }
