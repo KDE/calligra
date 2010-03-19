@@ -61,9 +61,6 @@ protected:
     KoFilter::ConversionStatus read_Relationships();
     KoFilter::ConversionStatus read_Relationship();
 
-    typedef KoFilter::ConversionStatus(MsooXmlRelationshipsReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     MsooXmlRelationshipsReaderContext* m_context;
 private:
     void init();

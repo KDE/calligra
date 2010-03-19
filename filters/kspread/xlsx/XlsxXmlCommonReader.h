@@ -45,9 +45,6 @@ protected:
     KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_vertAlign();
 
-    typedef KoFilter::ConversionStatus(XlsxXmlCommonReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     QString m_text; //!< result of read_t() and read_r()
 
     KoCharacterStyle *m_currentTextStyleProperties;

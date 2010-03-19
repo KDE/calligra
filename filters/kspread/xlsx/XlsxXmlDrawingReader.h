@@ -88,10 +88,7 @@ protected:
 private:
     XlsxXmlDrawingReaderContext *m_context;
     XlsxXmlDrawingReaderContext::AnchorType m_anchorType;
-    
-    typedef KoFilter::ConversionStatus(XlsxXmlDrawingReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-    
+
     int m_chartNumber;
 };
 

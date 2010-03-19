@@ -241,8 +241,6 @@ private:
     QHash<QString, QString> m_colorSchemeIndices;
     bool m_clrScheme_initialized;
     bool m_color_initialized;
-
-    QStack<ReadMethod> m_calls;
 };
 
 } // namespace MSOOXML

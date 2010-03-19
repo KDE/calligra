@@ -66,8 +66,6 @@ public:
 protected:
     KoFilter::ConversionStatus read_comments();
     KoFilter::ConversionStatus read_comment();
-    typedef KoFilter::ConversionStatus(DocxXmlCommentsReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
     DocxXmlCommentsReaderContext* m_context;
 
 private:

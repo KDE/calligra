@@ -61,9 +61,6 @@ protected:
     KoFilter::ConversionStatus read_v();
     KoFilter::ConversionStatus read_drawing();
 
-    typedef KoFilter::ConversionStatus(XlsxXmlWorksheetReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     XlsxXmlWorksheetReaderContext* m_context;
 
     KoGenStyle m_tableStyle;

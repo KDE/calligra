@@ -62,9 +62,6 @@ protected:
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
 
-    typedef KoFilter::ConversionStatus(PptxXmlDocumentReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
     PptxXmlDocumentReaderContext* m_context;
 private:
     void init();

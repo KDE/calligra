@@ -58,6 +58,14 @@ protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_r();
+    enum rPrCaller {
+        rPr_r,
+        rPr_pPr,
+        rPr_rPrDefault, // styles
+        rPr_style // styles
+    };
+    KoFilter::ConversionStatus read_rPr(rPrCaller caller);
+    KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_sectPr();
     KoFilter::ConversionStatus read_pgSz();
     KoFilter::ConversionStatus read_pgMar();
@@ -74,9 +82,27 @@ protected:
     KoFilter::ConversionStatus read_footnoteReference();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_drawing();
-
-    typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
+    KoFilter::ConversionStatus read_i();
+    KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_u();
+    KoFilter::ConversionStatus read_sz();
+    KoFilter::ConversionStatus read_jc();
+    KoFilter::ConversionStatus read_spacing();
+    enum shdCaller {
+        shd_rPr,
+        shd_pPr
+    };
+    KoFilter::ConversionStatus read_shd(shdCaller caller);
+    KoFilter::ConversionStatus read_rFonts();
+    KoFilter::ConversionStatus read_pStyle();
+    KoFilter::ConversionStatus read_strike();
+    KoFilter::ConversionStatus read_dstrike();
+    KoFilter::ConversionStatus read_caps();
+    KoFilter::ConversionStatus read_smallCaps();
+    KoFilter::ConversionStatus read_color();
+    KoFilter::ConversionStatus read_highlight();
+    KoFilter::ConversionStatus read_vertAlign();
+    KoFilter::ConversionStatus read_lang();
 
     KoGenStyle m_currentPageStyle;
     enum BorderSide {
@@ -92,6 +118,11 @@ private:
     KoFilter::ConversionStatus read_border(BorderSide borderSide, const char *borderSideName);
     void createBorderStyle(const QString& size, const QString& color,
                            const QString& lineStyle, BorderSide borderSide);
+
+    //! Used by read_strike() and read_dstrike()
+    void readStrikeValue(KoCharacterStyle::LineType type);
+
+    void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>

@@ -587,8 +587,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
 
 #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
 
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "p"
+#define DRAWINGML_NS "a"
+#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
 
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
 

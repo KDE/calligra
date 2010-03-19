@@ -37,20 +37,16 @@
 */
 
 protected:
+    // w namespace:
+    KoFilter::ConversionStatus read_pict();
 
-// w namespace:
-KoFilter::ConversionStatus read_pict();
+    // v namespace:
+    KoFilter::ConversionStatus read_rect();
+    KoFilter::ConversionStatus read_fill();
 
-// v namespace:
-KoFilter::ConversionStatus read_rect();
-KoFilter::ConversionStatus read_fill();
+    // utils:
+    KoFilter::ConversionStatus parseCSS(const QString& style);
 
-// utils:
-KoFilter::ConversionStatus parseCSS(const QString& style);
-
-typedef KoFilter::ConversionStatus(MsooXmlCommonReader::*VmlReadMethod)();
-QStack<VmlReadMethod> m_vmlCalls;
-
-QMap<QByteArray, QString> m_vmlStyle;
+    QMap<QByteArray, QString> m_vmlStyle;
 
 #endif

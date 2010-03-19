@@ -64,6 +64,10 @@
 #include <math.h>
 
 #include <MsooXmlCommonReaderImpl.h> // this adds p, pPr, t, r, etc.
+
+#define NO_DRAWINGML_NS
+#define NO_DRAWINGML_PIC_NS // DrawingML/Picture
+
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic, etc.
 
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(

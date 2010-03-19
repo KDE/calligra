@@ -62,10 +62,6 @@ protected:
     DocxXmlFontTableReaderContext* m_context;
 
     KoFontFace m_currentFontFace;
-
-    typedef KoFilter::ConversionStatus(DocxXmlFontTableReader::*ReadMethod)();
-    QStack<ReadMethod> m_calls;
-
 };
 
 #endif
