@@ -23,7 +23,6 @@
 #include "import/DocumentSectionModel.h"
 
 class RootSection;
-class ModelTest;
 class Section;
 class SectionGroup;
 
@@ -59,7 +58,6 @@ class DocumentModel : public DocumentSectionModel {
     void* dataToIndex(Section* section) const;
   private:
     RootSection* m_document;
-    ModelTest* m_modelTest;
 };
 
 #endif

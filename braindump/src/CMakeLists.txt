@@ -22,7 +22,6 @@ set(braindump_SRCS
   Utils.cpp
   View.cpp
   ViewManager.cpp
-  modeltest.cpp
   # Layouts
   layouts/ColumnLayout.cpp
   layouts/FreeLayout.cpp
