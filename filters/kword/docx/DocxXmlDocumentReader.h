@@ -71,10 +71,6 @@ protected:
     KoFilter::ConversionStatus read_pgSz();
     KoFilter::ConversionStatus read_pgMar();
     KoFilter::ConversionStatus read_pgBorders();
-    KoFilter::ConversionStatus read_top();
-    KoFilter::ConversionStatus read_left();
-    KoFilter::ConversionStatus read_bottom();
-    KoFilter::ConversionStatus read_right();
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_OLEObject();
     //KoFilter::ConversionStatus read_commentRangeEnd();
@@ -104,26 +100,42 @@ protected:
     KoFilter::ConversionStatus read_highlight();
     KoFilter::ConversionStatus read_vertAlign();
     KoFilter::ConversionStatus read_lang();
+    KoFilter::ConversionStatus read_pBdr();
 
     KoGenStyle m_currentPageStyle;
-    enum BorderSide {
-        TopBorder, BottomBorder, LeftBorder, RightBorder
-    };
-    QMap<QString, BorderSide> m_pageBorderStyles; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
-    QMap<QString, BorderSide> m_pageBorderPaddings; //!< reversed map, so detecting duplicates is easy in read_pgBorders()
 
     DocxXmlDocumentReaderContext* m_context;
 
 private:
     void init();
-    KoFilter::ConversionStatus read_border(BorderSide borderSide, const char *borderSideName);
+
+    enum BorderSide {
+        TopBorder, BottomBorder, LeftBorder, RightBorder
+    };
+    //! Used for setting up properties for pages and paragraphs.
+    //! It is reversed map, so detecting duplicates is easy in applyBorders().
+    QMap<QString, BorderSide> m_borderStyles;
+
+    //! Used for setting up properties for pages and paragraphs.
+    //! It is reversed map, so detecting duplicates is easy in applyBorders().
+    QMap<QString, BorderSide> m_borderPaddings;
+
+    //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
+    KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName);
+
+    //! Creates border style for readBorderElement().
+    //! Result is added to m_borderStyles and m_borderPaddings
     void createBorderStyle(const QString& size, const QString& color,
                            const QString& lineStyle, BorderSide borderSide);
 
     //! Used by read_strike() and read_dstrike()
-    void readStrikeValue(KoCharacterStyle::LineType type);
+    void readStrikeElement(KoCharacterStyle::LineType type);
 
     void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
+
+    //! Applies border styles and paddings obtained in readBorderElement()
+    //! to style @a style (paragraph or page...)
+    void applyBorders(KoGenStyle *style);
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
