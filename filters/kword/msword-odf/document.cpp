@@ -45,6 +45,7 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 #include <KoFontFace.h>
+#include <cassert>
 
 #include <QList>
 #include <QBuffer>
@@ -398,10 +399,14 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     m_masterStyle->addAttribute("style:display-name", masterStyleName);
     m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
-    delete m_masterStyle; //delete the object since we've added it to the collection
+    //delete the object since we've added it to the collection
+    delete m_masterStyle;
+    m_masterStyle = 0;
 
-    //get a pointer to the object in the collection
+    //Get a pointer to the object in the collection. TODO: Check
+    //sep->fTitlePage, requires a separate master-page.
     m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
+    assert(!m_masterStyle);
     m_writeMasterStyleName = true;
 
     // ----------------------
@@ -449,11 +454,6 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     footer.append("</style:footer-style>");
     m_pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
     m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
-
-    m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
-
-    pageLayoutStyleName = m_mainStyles->lookup(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
-    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutStyleName);
 
     // Page borders
     // FIXME: check if we can use fo:border instead of fo:border-left, etc.
@@ -503,8 +503,18 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
                                          (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
     }
 
+    m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
-    // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
+    pageLayoutStyleName = m_mainStyles->lookup(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
+    //delete the object since we've added it to the collection
+    delete m_pageLayoutStyle;
+    m_pageLayoutStyle = 0;
+
+    //Get a pointer to the object in the collection.
+    m_pageLayoutStyle = m_mainStyles->styleForModification(pageLayoutStyleName);
+    assert(!m_pageLayoutStyle);
+
+    // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
 void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
@@ -523,12 +533,11 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
     } else if (sep->brcBottom.brcType == 0) {
         m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
     }
-    //insert the page-layout style into the collection,
-    //and get the name it's assigned
-    QString pageLayoutName = m_mainStyles->lookup(*m_pageLayoutStyle, QString("pm"));
-    //set the page-layout-name in the master style
-    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutName);
-    delete m_pageLayoutStyle;
+    //Set the page-layout-name in the master style. TODO: Check
+    //sep->fTitlePage, requires a separate master-page.
+    m_masterStyle->addAttribute("style:page-layout-name", QString("Mpm"));
+
+    //don't need the pointer any more
     m_pageLayoutStyle = 0;
     //reset variables
     m_hasHeader = false;
