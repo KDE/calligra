@@ -25,7 +25,7 @@
 #include <kofficeversion.h>
 
 static const char* BRAINDUMP_DESCRIPTION = I18N_NOOP("BrainDump: directly from your brain to the computer.");
-static const char* BRAINDUMP_VERSION = "0.8.0";
+static const char* BRAINDUMP_VERSION = "0.8.1";
 
 inline KAboutData* newBrainDumpAboutData()
 {
