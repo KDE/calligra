@@ -323,14 +323,20 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             if (strategy->anchor() == anchor)
                 return;
         }
-        TDEBUG << "new anchor";
+        ADEBUG << "new anchor";
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG << "starting layout pass" << ((void*)document()) << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
+    TDEBUG << "starting layout pass" << ((void*)document())
+#ifdef DEBUG_ANCHORS
+     << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
+#else
+    ;
+#endif
+
     QList<Outline*> outlines;
     class End
     {
@@ -510,12 +516,12 @@ void KWTextDocumentLayout::layout()
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
-            TDEBUG << "checking anchor";
+            ADEBUG << "checking anchor";
             QPointF old;
             if (strategy->anchoredShape())
                 old = strategy->anchoredShape()->position();
             if (strategy->checkState(m_state)) {
-                TDEBUG << "  restarting line";
+                ADEBUG << "  restarting line";
                 restartLine = true;
             }
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
@@ -541,7 +547,7 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << " + isFinished?"<< strategy->isFinished();
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
-                TDEBUG << "  is finished";
+                ADEBUG << "  is finished";
                 m_activeAnchors.removeAll(strategy);
                 m_newAnchors.removeAll(strategy);
                 delete strategy;
