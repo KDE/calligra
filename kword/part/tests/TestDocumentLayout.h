@@ -25,6 +25,8 @@ public:
 private slots:
     void initTestCase();
     void placeAnchoredFrame();
+    void placeAnchoredFrame2_data();
+    void placeAnchoredFrame2();
 
 private:
     void initForNewTest(const QString &initText = QString());

@@ -39,11 +39,18 @@
 #include <QTextBlock>
 
 // #define DEBUG_TEXT
+// #define DEBUG_ANCHORS
 
 #ifdef DEBUG_TEXT
 #define TDEBUG kDebug(32002)
 #else
 #define TDEBUG if(0) kDebug(32002)
+#endif
+
+#ifdef DEBUG_ANCHORS
+#define ADEBUG kDebug(32002)
+#else
+#define ADEBUG if(0) kDebug(32002)
 #endif
 
 // helper methods
@@ -121,6 +128,7 @@ public:
     }
 
     void init(const QMatrix &matrix, KoShape *shape, qreal distance) {
+        m_shape = shape;
         QPainterPath path =  matrix.map(shape->outline());
         m_bounds = path.boundingRect();
         if (distance >= 0.0) {
@@ -204,11 +212,14 @@ public:
         return answer;
     }
 
+    KoShape *shape() const { return m_shape; }
+
 private:
     enum Side { None, Left, Right, Empty }; // TODO support Auto and Both
     Side m_side;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
+    KoShape *m_shape;
 };
 
 class KWTextDocumentLayout::DummyShape : public KoShape
@@ -319,7 +330,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG << "starting layout pass";
+    TDEBUG << "starting layout pass" << ((void*)document()) << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
     QList<Outline*> outlines;
     class End
     {
@@ -344,6 +355,14 @@ void KWTextDocumentLayout::layout()
     bool requestFrameResize = false, firstParagraph = true;
     KoShape *currentShape = 0;
     while (m_state->shape) {
+        ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
+#ifndef DEBUG_ANCHORS
+        for (int i = 0; i < m_state->layout->lineCount(); ++i) {
+            QTextLine line = m_state->layout->lineAt(i);
+            ADEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
+        }
+#endif
+
         class Line
         {
         public:
@@ -369,10 +388,12 @@ void KWTextDocumentLayout::layout()
                 }
                 rect = limit(rect);
 
+                qreal movedDown = 0;
+                qreal eligableTop = rect.top();
                 while (true) {
-                    if (m_state->numColumns() > 0)
+                    if (m_state->numColumns() > 0) {
                         line.setNumColumns(m_state->numColumns());
-                    else {
+                    } else {
                         qreal x = rect.x();
                         qreal effectiveLineWidth = rect.width();
                         if (leftIndent < x) { // limit moved the left edge, keep the indent.
@@ -388,15 +409,30 @@ void KWTextDocumentLayout::layout()
                     rect.setHeight(line.height());
 
                     QRectF newLine = limit(rect);
-                    if (newLine.width() <= 0.)
-                        // TODO be more intelligent than just moving down 10 pt
-                        rect = QRectF(leftIndent, rect.top() + 10, width, rect.height());
-                    else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
+                    if (newLine.width() <= 0 || line.textLength() == 0
+                            || line.cursorToX(line.textStart()+1) > newLine.width()) {
+                        const int Move = 10;
+                        movedDown += Move;
+                        if (movedDown > m_state->shape->size().height() * 1.3) {
+                            // TODO the magic number of shape height needs some history
+                            // investigation here.
+                            rect = QRectF(leftIndent, eligableTop, width, rect.height());
+                            break;
+                        }
+                        if (newLine.width() > 0) {
+                            // at least one char fits
+                            eligableTop = rect.top();
+                        }
+
+                        rect = QRectF(leftIndent, rect.top() + Move, width, rect.height());
+                    } else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right()
+                                - rect.right()) < 1E-10) {
                         break;
-                    else if (newLine.isValid())
+                    } else if (newLine.isValid()) {
                         rect = newLine;
-                    else
+                    } else {
                         break;
+                    }
                 }
             }
             void setOutlines(const QList<Outline*> &outlines) {
@@ -475,15 +511,35 @@ void KWTextDocumentLayout::layout()
         bool restartLine = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             TDEBUG << "checking anchor";
+            QPointF old;
+            if (strategy->anchoredShape())
+                old = strategy->anchoredShape()->position();
             if (strategy->checkState(m_state)) {
                 TDEBUG << "  restarting line";
                 restartLine = true;
-                break;
             }
+            if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
+                // refresh outlines in case the shape moved.
+                foreach (Outline *outline, outlines) {
+                    if (outline->shape() == strategy->anchoredShape()) {
+                        ADEBUG << "  refreshing outline";
+                        outlines.removeAll(outline);
+                        QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
+                        matrix.translate(0, m_state->documentOffsetInShape());
+                        outlines.append(new Outline(strategy->anchoredShape(), matrix));
+                        break;
+                    }
+                }
+            }
+            if (restartLine)
+                break;
         }
+
         if (restartLine)
             continue;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+            ADEBUG << " + isFinished?"<< strategy->isFinished();
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
                 TDEBUG << "  is finished";
                 m_activeAnchors.removeAll(strategy);
@@ -491,17 +547,30 @@ void KWTextDocumentLayout::layout()
                 delete strategy;
             }
         }
-
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
-            if (strategy->anchoredShape() != 0) {
+            ADEBUG << "  migrating strategy!";
+            if (strategy->anchoredShape()) {
                 QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
                 matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                 matrix.translate(0, m_state->documentOffsetInShape());
                 outlines.append(new Outline(strategy->anchoredShape(), matrix));
+
+                // if the anchor occupies the first character of our block, create one line for it.
+                if (m_state->layout->lineCount() == 0 && strategy->anchor()->positionInDocument() == m_state->cursorPosition()) {
+                    ADEBUG << "   creating line for anchor";
+                    QTextLine line = m_state->layout->createLine();
+                    line.setNumColumns(1);
+                    line.setPosition(QPointF(m_state->x(), m_state->y()));
+                    m_state->addLine(line);
+                }
+                restartLine = true;
+                ADEBUG << "adding child outline";
             }
             m_activeAnchors.append(strategy);
         }
         m_newAnchors.clear();
+        if (restartLine)
+            continue;
 
         Line line(m_state);
         if (!line.isValid()) { // end of parag
@@ -543,6 +612,7 @@ void KWTextDocumentLayout::layout()
                 }
 
                 m_frameSet->layoutDone();
+                cleanupAnchors();
                 return; // done!
             } else if (m_state->shape == 0) {
                 TDEBUG << "encountered an 'end of page' break, we need an extra page to honor that!";
@@ -563,20 +633,30 @@ void KWTextDocumentLayout::layout()
         }
         newParagraph = false;
         line.setOutlines(outlines);
+        const int anchorCount = m_newAnchors.count();
         line.tryFit();
+        if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
+            // start parag over so we can correctly take the just found anchors into account.
+            m_state->layout->endLayout();
+            m_state->layout->beginLayout();
+            continue;
+        }
 #ifdef DEBUG_TEXT
         if (line.line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
             if (b.isValid()) {
                 TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
                 TDEBUG << "       1 @ " << line.line.position() << " from parag at pos " << b.position();
+                TDEBUG << "         y " << line.line.y() << " h" <<  line.line.height();
             }
         }
 #endif
 
         bottomOfText = line.line.y() + line.line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
+            TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());;
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
+            cleanupAnchors();
             return;
         }
 
@@ -666,4 +746,12 @@ void KWTextDocumentLayout::layout()
         TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());
     }
+}
+
+void KWTextDocumentLayout::cleanupAnchors()
+{
+    qDeleteAll(m_activeAnchors);
+    m_activeAnchors.clear();
+    qDeleteAll(m_newAnchors);
+    m_newAnchors.clear();
 }

@@ -54,6 +54,8 @@ private:
 
     virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
+    void cleanupAnchors();
+
     KWTextFrameSet *m_frameSet;
     class DummyShape;
     DummyShape * const m_dummyShape;

@@ -50,8 +50,12 @@ public:
     qreal docOffsetInShape() const {
         return 0;
     }
-    bool addLine(QTextLine &) {
-        m_y+=14.4;
+    bool addLine(QTextLine &line) {
+        // TODO make offset be from beginning of parag times line count
+        if (line.height() > 20)
+            m_y += line.height();
+        else
+            m_y += 14.4;
         return false;
     }
     bool nextParag() {
@@ -68,8 +72,7 @@ public:
         if (layout)
             layout->endLayout();
         m_currentBlock = m_currentBlock.previous();
-        if (! m_currentBlock.isValid())
-            return false;
+        Q_ASSERT(m_currentBlock.isValid());
         layout = m_currentBlock.layout();
         layout->beginLayout();
         return true;
@@ -84,7 +87,14 @@ public:
     }
     void clearTillEnd() {}
     int cursorPosition() const {
-        return m_currentBlock.position();
+        if (!m_currentBlock.isValid())
+            return 0;
+        int answer = m_currentBlock.position();
+        if (m_currentBlock.layout()->lineCount()) {
+            QTextLine tl = m_currentBlock.layout()->lineAt(m_currentBlock.layout()->lineCount() - 1);
+            answer += tl.textStart() + tl.textLength();
+        }
+        return answer;
     }
     void registerInlineObject(const QTextInlineObject &) {}
     QTextTableCell hitTestTable(QTextTable *, const QPointF &) {
@@ -192,6 +202,65 @@ void TestDocumentLayout::placeAnchoredFrame()
     layout->layout();
     // image is 100 wide, now centered in a parent of 200 so X = 50
     QCOMPARE(picture->position(), QPointF(50, 0));
+}
+
+void TestDocumentLayout::placeAnchoredFrame2_data()
+{
+    QTest::addColumn<int>("horizontalAlignment");
+    QTest::addColumn<int>("verticalAlignment");
+    QTest::addColumn<QPointF>("startPosition");
+    QTest::addColumn<QPointF>("imagePosition");
+
+    QTest::newRow("inline") << int(KoTextAnchor::HorizontalOffset) << int(KoTextAnchor::VerticalOffset)
+        << QPointF() << QPointF();
+    QTest::newRow("top/left") << int(KoTextAnchor::Left) << int(KoTextAnchor::TopOfParagraph)
+        << QPointF() << QPointF();
+    QTest::newRow("top/right") << int(KoTextAnchor::Right) << int(KoTextAnchor::TopOfParagraph)
+        << QPointF() << QPointF(2,0);
+
+    QTest::newRow("inline +") << int(KoTextAnchor::HorizontalOffset) << int(KoTextAnchor::VerticalOffset)
+        << QPointF(100, 100) << QPointF();
+    QTest::newRow("top/left +") << int(KoTextAnchor::Left) << int(KoTextAnchor::TopOfParagraph)
+        << QPointF(123,100) << QPointF();
+    QTest::newRow("top/right +") << int(KoTextAnchor::Right) << int(KoTextAnchor::TopOfParagraph)
+        << QPointF(123,99) << QPointF(2,0);
+}
+
+void TestDocumentLayout::placeAnchoredFrame2()
+{
+    QFETCH(int, horizontalAlignment);
+    QFETCH(int, verticalAlignment);
+    QFETCH(QPointF, startPosition);
+    QFETCH(QPointF, imagePosition);
+
+    initForNewTest(QString(loremIpsum));
+    MockShape *picture = new MockShape();
+    picture->setSize(QSizeF(198, 400));
+    KoTextAnchor *anchor = new KoTextAnchor(picture);
+    anchor->setAlignment(KoTextAnchor::AnchorHorizontal(horizontalAlignment));
+    anchor->setAlignment(KoTextAnchor::AnchorVertical(verticalAlignment));
+    picture->setPosition(startPosition);
+    QTextCursor cursor(doc);
+
+    KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
+    layout->setInlineTextObjectManager(manager);
+    MockLayoutState *state = new MockLayoutState(doc);
+    layout->setLayout(state);
+    state->shape = shape1;
+    manager->insertInlineObject(cursor, anchor);
+    QCOMPARE(cursor.position(), 1);
+    layout->layout();
+
+    QCOMPARE(picture->parent(), shape1);
+    QCOMPARE(picture->position(), imagePosition);
+
+    // test if rest of text is below picture.
+    QTextLayout *lay = doc->begin().layout();
+    QVERIFY(lay->lineCount() >= 1);
+    QTextLine line = lay->lineForTextPosition(1); // the first char of real text.
+    QVERIFY(line.isValid());
+    // qDebug() << line.y() << line.height();
+    QVERIFY(line.y() + line.height() >= 412); // test that text is below image
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
