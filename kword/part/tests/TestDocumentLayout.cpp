@@ -261,6 +261,16 @@ void TestDocumentLayout::placeAnchoredFrame2()
     QVERIFY(line.isValid());
     // qDebug() << line.y() << line.height();
     QVERIFY(line.y() + line.height() >= 412); // test that text is below image
+
+
+/*
+    having a inline frame with an offset currently makes the character really big, I'm wondering
+    if I should instead use an Outline object for anchors with an offset.
+
+    An inline frame all alone on its line seems to have several bugs. The positioning is wrong
+    and the next line is no moved down.
+*/
+
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
