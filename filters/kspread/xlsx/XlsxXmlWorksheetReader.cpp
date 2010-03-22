@@ -165,7 +165,7 @@ void XlsxXmlWorksheetReader::init()
     m_defaultNamespace = "";
     m_columnCount = 0;
     m_currentRow = 0;
-    m_currentColumn = -1;
+    m_currentColumn = 0;
 }
 
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -654,7 +654,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     d->rows << row;
     row->styleName = processRowStyle(ht);
 
-    m_currentColumn = -1;
+    m_currentColumn = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -736,13 +736,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
-    uint referencedColumn = -1;
     if (!r.isEmpty()) {
-        referencedColumn = KSpread::Util::decodeColumnLabelText(r) - 1;
-        kDebug() << "referencedColumn:" << r << referencedColumn;
-        if (m_currentColumn == -1 && referencedColumn > 0) {
-            // output empty cells before the first filled cell
-            row->cells << new Cell(referencedColumn);
+        int referencedColumn = qMax(0, KSpread::Util::decodeColumnLabelText(r));
+        int missingColumns = referencedColumn - m_currentColumn;
+        if (missingColumns >= 2) {
+            row->cells << new Cell(missingColumns - 1);
         }
         m_currentColumn = referencedColumn;
     }
