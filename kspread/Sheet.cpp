@@ -2310,6 +2310,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                         int columnMaximal = loadRowFormat(headerRowNode.toElement(), rowIndex,
                                       tableContext, rowStyleRegions,
                                       cellStyleRegions);
+                        // allow the row to define more columns then defined via table-column
                         maxColumn = qMax(maxColumn, columnMaximal);
                         headerRowNode = headerRowNode.nextSibling();
                     }
@@ -2317,6 +2318,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
                                   rowStyleRegions, cellStyleRegions);
+                    // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
                 } else if (rowElement.localName() == "shapes") {
