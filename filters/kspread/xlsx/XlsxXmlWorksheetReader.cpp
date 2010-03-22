@@ -338,19 +338,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                 body->addAttribute("table:formula", cell->formula);
             }
 
-            body->startElement("text:p", false);
-            if(!cell->charStyleName.isEmpty()) {
-                body->startElement( "text:span" );
-                body->addAttribute( "text:style-name", cell->charStyleName);
+            if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
+                body->startElement("text:p", false);
+                if(!cell->charStyleName.isEmpty()) {
+                    body->startElement( "text:span" );
+                    body->addAttribute( "text:style-name", cell->charStyleName);
+                }
+                if(!cell->text.isEmpty()) {
+                    body->addTextSpan(cell->text);
+                }
+                if(!cell->charStyleName.isEmpty()) {
+                    body->endElement(); // text:span
+                }
+                body->endElement(); // text:p
             }
-            if(!cell->text.isEmpty()) {
-                body->addTextSpan(cell->text);
-            }
-            if(!cell->charStyleName.isEmpty()) {
-                body->endElement(); // text:span
-            }
-            body->endElement(); // text:p
-            
+        
 //! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
 //! @todo make drawingobject logic more generic
 #if 0
