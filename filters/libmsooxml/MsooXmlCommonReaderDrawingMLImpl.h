@@ -1454,10 +1454,8 @@ void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)
     else if (ov == QLatin1String("ctr"))
         v = QLatin1String("center");
     //@todo handle thaiDist, justLow, dist
-#if 0 //@todo Right now the following would duplicate the style entry hardcoded in PptxImport.cpp, and would be ignored by kpresenter
     if (!v.isEmpty())
         m_currentParagraphStyle.addProperty(odfEl, v);
-#endif
 }
 
 void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString& emuValue)
