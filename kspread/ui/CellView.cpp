@@ -1137,8 +1137,8 @@ void CellView::paintText(QPainter& painter,
     const QFontMetricsF fontMetrics(font, &device);
     qreal fontOffset = 0.0;
 
-    if ((style().valign() == Style::Bottom || style().valign() == Style::VAlignUndefined) && style().underline())
-        fontOffset = fontMetrics.underlinePos() + 1;
+    if (style().valign() == Style::Bottom || style().valign() == Style::VAlignUndefined)
+        fontOffset = fontMetrics.descent();
 
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
