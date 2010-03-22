@@ -510,8 +510,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
                     for (uint i = 0; i <= m_pPr_lvl; i++) {
                         body->startElement("text:list");
                         if (i == 0) {
-//! @todo L2 hardcoded
-                            body->addAttribute("text:style-name", "L2");
+//! @todo Lpredef2 hardcoded
+                            body->addAttribute("text:style-name", "Lpredef2");
                         }
                         body->startElement("text:list-item");
                     }

@@ -142,8 +142,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         QString currentDrawStyleName(mainStyles->lookup(m_currentDrawStyle, "gr"));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
-//! @todo hardcoded draw:style-name = gr1
-        QString currentDrawStyleName("gr1");
+//! @todo hardcoded draw:style-name = grpredef1
+        QString currentDrawStyleName("grpredef1");
 #endif
 #if defined(DOCXXMLDOCREADER_H) || defined(HARDCODED_PRESENTATIONSTYLENAME)
         kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
