@@ -2307,15 +2307,17 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     while (!headerRowNode.isNull()) {
                         // NOTE Handle header rows as ordinary ones
                         //      as long as they're not supported.
-                        loadRowFormat(headerRowNode.toElement(), rowIndex,
+                        int columnMaximal = loadRowFormat(headerRowNode.toElement(), rowIndex,
                                       tableContext, rowStyleRegions,
                                       cellStyleRegions);
+                        maxColumn = qMax(maxColumn, columnMaximal);
                         headerRowNode = headerRowNode.nextSibling();
                     }
                 } else if (rowElement.localName() == "table-row") {
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
-                    loadRowFormat(rowElement, rowIndex, tableContext,
+                    int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
                                   rowStyleRegions, cellStyleRegions);
+                    maxColumn = qMax(maxColumn, columnMaximal);
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
                 } else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
@@ -2609,7 +2611,7 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
     }
 }
 
-bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
+int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           OdfLoadingContext& tableContext,
                           QHash<QString, QRegion>& rowStyleRegions,
                           QHash<QString, QRegion>& cellStyleRegions)
@@ -2689,6 +2691,7 @@ bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     }
 
     int columnIndex = 1;
+    int columnMaximal = 0;
     const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
 
     KoXmlElement cellElement;
@@ -2707,6 +2710,7 @@ bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         // KSpread so limit the number of repeated columns.
         // FIXME POSSIBLE DATA LOSS!
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
+        columnMaximal = qMax(numberColumns, columnMaximal);
 
         // Styles are inserted at the end of the loading process, so check the XML directly here.
         const QString styleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
@@ -2736,7 +2740,7 @@ bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         columnIndex += numberColumns;
     }
     rowIndex += number;
-    return true;
+    return columnMaximal;
 }
 
 QRect Sheet::usedArea() const
