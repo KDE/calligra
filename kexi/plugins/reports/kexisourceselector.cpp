@@ -43,13 +43,13 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     m_internalSource->addItems(queryList());
 
-    m_layout->addWidget(new QLabel("Source Type:", this));
+    m_layout->addWidget(new QLabel(i18n("Source Type:"), this));
     m_layout->addWidget(m_sourceType);
     m_layout->addSpacing(10);
-    m_layout->addWidget(new QLabel("Internal Source:", this));
+    m_layout->addWidget(new QLabel(i18n("Internal Source:"), this));
     m_layout->addWidget(m_internalSource);
     m_layout->addSpacing(10);
-    m_layout->addWidget(new QLabel("External Source:", this));
+    m_layout->addWidget(new QLabel(i18n("External Source:"), this));
     m_layout->addWidget(m_externalSource);
     m_layout->addSpacing(20);
     m_layout->addWidget(m_setData);
