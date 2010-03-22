@@ -1,4 +1,9 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  ${CMAKE_SOURCE_DIR}/kpresenter/part ${PHONON_INCLUDE_DIR}/phonon)
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  ${CMAKE_SOURCE_DIR}/kpresenter/part)
+if(NOT QT_MAC_USE_COCOA)
+    include_directories(${PHONON_INCLUDE_DIR}/phonon)
+else(NOT QT_MAC_USE_COCOA)
+    include_directories(${PHONON_INCLUDE_DIR})
+endif(NOT QT_MAC_USE_COCOA)
 
 set(kpresentereventactions_PART_SRCS
     sound/KPrSoundEventAction.cpp

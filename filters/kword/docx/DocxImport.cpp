@@ -240,18 +240,22 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(
             MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context) )
     }
-    // 2. parse styles
+    // 2. parse themes
+    QMap<QString, MSOOXML::DrawingMLTheme*> themes;
+    MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
+    RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
+    // 3. parse styles
     {
         DocxXmlStylesReader stylesReader(writers);
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(
             MSOOXML::ContentTypes::wordStyles, &stylesReader, writers, errorMessage) )
     }
-    // 3. parse document
+    // 4. parse document
     {
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
         DocxXmlDocumentReaderContext context(
             *this, QLatin1String("word"), QLatin1String("document.xml"),
-            *relationships);
+            *relationships, themes);
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

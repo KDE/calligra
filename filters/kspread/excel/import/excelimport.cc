@@ -1241,7 +1241,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     else
         xmlWriter->startElement("table:table-cell");
 
-    Q_ASSERT(cellFormatIndex < cellStyles.count());
+    Q_ASSERT(cellFormatIndex >= 0 && cellFormatIndex < cellStyles.count());
     xmlWriter->addAttribute("table:style-name", cellStyles[cellFormatIndex]);
     cellFormatIndex++;
 
@@ -1355,8 +1355,9 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         if (!linkName.isEmpty()) {
             xmlWriter->startElement("text:a");
             xmlWriter->addAttribute("xlink:href", linkLocation);
-            if (! cell->hyperlinkTargetFrameName().isEmpty())
-                xmlWriter->addAttribute("office:target-frame-name", string(cell->hyperlinkTargetFrameName()));
+            const QString targetFrameName = string(cell->hyperlinkTargetFrameName());
+            if (! targetFrameName.isEmpty())
+                xmlWriter->addAttribute("office:target-frame-name", targetFrameName);
             xmlWriter->addTextNode(linkName);
             xmlWriter->endElement(); // text:a
         }

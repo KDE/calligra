@@ -69,7 +69,7 @@ if (NOT TINY)
     add_subdirectory( docbook )
 
     #html FIXME: export dialog is Qt 3 version ui file
-    if(NOT WIN32 AND NOT APPLE)
+    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
         add_subdirectory( html )
 #        if (TARGET kowmf)
 #            add_subdirectory( mswrite )
@@ -78,7 +78,7 @@ if (NOT TINY)
         add_subdirectory( hancomword )
         message(STATUS "When latex is reactivated (if?) also port it to GraphicsMagick, to make life easy for Isaac.")
         #add_subdirectory( latex )
-    endif(NOT WIN32 AND NOT APPLE)
+    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
 
     add_subdirectory( oowriter )
     add_subdirectory( palmdoc )

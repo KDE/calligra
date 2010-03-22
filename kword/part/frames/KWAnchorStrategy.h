@@ -52,6 +52,7 @@ public:
      * placed shape.
      * @param state the state of the layout.
      * @return will return true if the layout state has been changed.
+     * @see isFinished()
      */
     bool checkState(KoTextDocumentLayout::LayoutState *state);
 
@@ -64,7 +65,7 @@ public:
     /**
      * @return the anchored shape that we will reposition.
      */
-    KoShape * anchoredShape() const;
+    KoShape *anchoredShape() const;
 
     /**
      * Return the text anchor this strategy works for.

@@ -69,10 +69,9 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         m_pass = 0;
     }
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
-    // kDebug() << m_anchor->positionInDocument() << "pass:" << m_pass <<"pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
+    // kDebug() << m_anchor->positionInDocument() << "pass:" << m_pass <<"pos:" << state->cursorPosition() <<" (need;" << m_knowledgePoint << (m_finished?") Already finished!":")");
     // exit when finished or when we can expect another call with a higher cursor position
-    if (m_finished || (m_knowledgePoint > state->cursorPosition()
-                && m_knowledgePoint > block.length() + block.position() - 1))
+    if (m_finished || (m_knowledgePoint > state->cursorPosition()))
         return false;
 
     // *** alter 'state' to relayout the part we want.
@@ -113,8 +112,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         if (m_anchor->positionInDocument() == block.position()) {
             // at first position of parag.
             x = state->x();
-        }
-        else {
+        } else {
             Q_ASSERT(layout->lineCount());
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
@@ -176,9 +174,10 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
             m_finished = true;
         }
         else if (block.length() == 2) { // the anchor is the only thing in the block
-            y = state->y() - boundingRect.height();
+            y = state->y()/* - boundingRect.height()*/;
         } else {
-            return true; // lets go for a second round.
+            m_finished = false;
+            return false; // lets go for a second round.
         }
         newPosition.setY(y - data->documentOffset());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
@@ -197,10 +196,12 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
+    // kDebug() << "anchor positioned" << newPosition << "/" << m_anchor->shape()->position();
+    // kDebug() << "finished" << m_finished;
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    if (m_finished && qAbs(m_anchor->offset().x()) < 0.1) // no second pass needed
+    if (m_finished || qAbs(m_anchor->offset().x()) < 0.1) // no second pass needed
         return false;
 
     do { // move the layout class back a couple of paragraphs.

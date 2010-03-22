@@ -875,6 +875,77 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
+void PptToOdp::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
+{
+    const QRect rect = getRect(o);
+    out.xml.startElement("draw:custom-shape");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
+    out.xml.addAttribute("draw:type", "quad-arrow");
+    out.xml.addAttribute("draw:modifiers", "6500 8600 4300");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 10800 L ?f0 ?f1 ?f0 ?f2 ?f2 ?f2 ?f2 ?f0 ?f1 ?f0 10800 0 ?f3 ?f0 ?f4 ?f0 ?f4 ?f2 ?f5 ?f2 ?f5 ?f1 21600 10800 ?f5 ?f3 ?f5 ?f4 ?f4 ?f4 ?f4 ?f5 ?f3 ?f5 10800 21600 ?f1 ?f5 ?f2 ?f5 ?f2 ?f4 ?f0 ?f4 ?f0 ?f3 Z N");
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f0");
+    out.xml.addAttribute("draw:formula", "$2");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f1");
+    out.xml.addAttribute("draw:formula", "$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f2");
+    out.xml.addAttribute("draw:formula", "$1");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f3");
+    out.xml.addAttribute("draw:formula", "21600-$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f4");
+    out.xml.addAttribute("draw:formula", "21600-$1");
+    out.xml.endElement();
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", "f5");
+    out.xml.addAttribute("draw:formula", "21600-$2");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$1 $2");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "$0");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
+    out.xml.addAttribute("draw:handle-range-y-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-y-maximum", "$0");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "$2");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "$1");
+    out.xml.endElement();
+    out.xml.endElement();
+    out.xml.endElement(); // draw:custom-shape
+}
+
+void PptToOdp::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    const QRect rect = getRect(o);
+    out.xml.startElement("draw:custom-shape");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "0 8280 6110 21600");
+    out.xml.addAttribute("draw:type", "mso-spt101");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 21600 L 0 8550 C 0 3540 4370 0 9270 0 13890 0 18570 3230 18600 8300 L 21600 8300 15680 14260 9700 8300 12500 8300 C 12320 6380 10870 5850 9320 5850 7770 5850 6040 6410 6110 8520 L 6110 21600 Z N");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
@@ -899,12 +970,15 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     if (pib) {
         url = getPicturePath(pib->pib);
     }
-    //Ima drawObject->getIntProperty("pib"));
     out.xml.startElement("draw:frame");
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
-
+    if (url.isEmpty()) {
+        // if the image cannot be found, just place an empty frame
+        out.xml.endElement(); // frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
@@ -946,6 +1020,10 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
         processSmiley(o, out);
     } else if (shapeType == msosptHeart) {
         processHeart(o, out);
+    } else if (shapeType == msosptQuadArrow) {
+        processQuadArrow(o, out);
+    } else if (shapeType == msosptUturnArrow) {
+        processUturnArrow(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame

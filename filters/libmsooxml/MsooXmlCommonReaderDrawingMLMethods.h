@@ -28,6 +28,8 @@
 
 protected:
 
+void initDrawingML();
+
 KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
 enum cNvPrCaller {
@@ -76,8 +78,16 @@ KoFilter::ConversionStatus read_DrawingML_rPr();
 KoFilter::ConversionStatus read_DrawingML_pPr();
 
 KoFilter::ConversionStatus read_DrawingML_r();
+KoFilter::ConversionStatus read_DrawingML_highlight();
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
+KoFilter::ConversionStatus read_solidFill();
+KoFilter::ConversionStatus read_schemeClr();
+KoFilter::ConversionStatus read_lumMod();
+KoFilter::ConversionStatus read_lumOff();
+KoFilter::ConversionStatus read_ln();
+KoFilter::ConversionStatus read_srgbClr();
+KoFilter::ConversionStatus read_scrgbClr();
 
 //! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
 void saveStyleWrap(const char * style);
@@ -117,5 +127,20 @@ QString m_cNvPrName; //!< set by read_cNvPr()
 QString m_cNvPrDescr; //!< set by read_cNvPr()
 
 QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
+
+//! When dealing with colors there's no way to know what type of attribute
+//! we are setting. While MSOOXML doesn't need to know the context in which a
+//! color is used, ODF does need to know this.
+enum ColorType {
+    BackgroundColor,
+    OutlineColor,
+    TextColor
+};
+ColorType m_colorType;
+//! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
+QColor m_currentColor;
+QPen m_currentPen;
+
+double* m_currentDoubleValue;
 
 #endif

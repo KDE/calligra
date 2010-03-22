@@ -906,9 +906,17 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         QString numFormat("1"), numSuffix, numPrefix;
         processTextAutoNumberScheme(i.pf.scheme(),
                                     numFormat, numSuffix, numPrefix);
-        // if there is a bulletChar in the current pf, then this is a bullet
-        // list, otherwise, it is a numbered list
-        if (i.pf.bulletChar()) {
+        // if there is no bulletChar or the bullet has autonumbering explicitly
+        // we assume the list is autonumbering
+        if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
+            elementName = "text:list-level-style-number";
+            out.startElement("text:list-level-style-number");
+            if (!numFormat.isNull()) {
+                out.addAttribute("style:num-format", numFormat);
+            }
+            //out.addAttribute("style:display-levels", "TODO");
+            out.addAttribute("text:start-value", i.pf.startNum());
+        } else {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", getBulletChar(i.pf));
@@ -916,14 +924,6 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 qreal relSize = 100.0 * i.pf.bulletSize() / i.cf->fontSize;
                 out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
-        } else {
-            elementName = "text:list-level-style-number";
-            out.startElement("text:list-level-style-number");
-            if (!numFormat.isNull()) {
-                out.addAttribute("style:num-format", numFormat);
-            }
-            //out.addAttribute("style:display-levels", "TODO");
-            out.addAttribute("style:start-value", i.pf.startNum());
         }
         if (!numPrefix.isNull()) {
             out.addAttribute("style:num-prefix", numPrefix);
@@ -1517,11 +1517,21 @@ const TextPFRun *findTextPFRun(const StyleTextPropAtom& style, unsigned int pos)
     }
     return 0;
 }
-
-void PptToOdp::writeTextObjectDeIndent(KoXmlWriter& xmlWriter,
-                                       const unsigned int count, QStack<QString>& levels)
+namespace
 {
-    while ((unsigned int)levels.size() > count) {
+/**
+* @brief Write text deindentations the specified amount. Actually it just
+* closes elements.
+*
+* Doesn't close the last text:list-item though.
+* @param xmlWriter XML writer to write closing tags
+* @param count how many lists and list items to leave open
+* @param levels the list of levels to remove from
+*/
+void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
+                             QStack<QString>& levels)
+{
+    while (levels.size() > count) {
         xmlWriter.endElement(); // text:list
         levels.pop();
         if (levels.size()) {
@@ -1529,8 +1539,6 @@ void PptToOdp::writeTextObjectDeIndent(KoXmlWriter& xmlWriter,
         }
     }
 }
-namespace
-{
 void addListElement(KoXmlWriter& xmlWriter, QStack<QString>& levels,
                     const QString& listStyle)
 {
@@ -1817,23 +1825,22 @@ void PptToOdp::processTextLine(Writer& out, const OfficeArtSpContainer& o,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
-    // qDebug() << QString(text).mid(start, end-start) << " " << pf.fBulletHasFont() << " " << pf.fBulletHasSize() << " " << pf.indent() << " " << pf.level() << " " << pf.fHasBullet();
     bool islist = pf.level() > 0 && start < end;
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf);
+        int level = pf.level() - 1;
         // remove levels until the top level is the right indentation
-        if ((quint16)levels.size() > pf.level()
-                && levels[pf.level()] == listStyle) {
-            writeTextObjectDeIndent(out.xml, pf.level() + 1, levels);
+        if (levels.size() > level && levels[level] == listStyle) {
+            writeTextObjectDeIndent(out.xml, level + 1, levels);
         } else {
-            writeTextObjectDeIndent(out.xml, pf.level(), levels);
+            writeTextObjectDeIndent(out.xml, level, levels);
         }
         // add styleless levels up to the current level of indentation
-        while ((quint16)levels.size() < pf.level()) {
+        while (levels.size() < level) {
             addListElement(out.xml, levels, "");
         }
         // at this point, levels.size() == paragraphIndent
-        if (pf.level() + 1 != levels.size()) {
+        if (level + 1 != levels.size()) {
             addListElement(out.xml, levels, listStyle);
         }
         out.xml.startElement("text:list-item");

@@ -81,7 +81,12 @@ ChartProxyModel::Private::Private()
     dataDimensions     = 1;
     automaticDataSetCreation = true;
 
-    dataDirection      = Qt::Vertical; // Apparently the default is columns.
+    // Determines what orientation the data points in a data series
+    // have when multiple data sets are created from one source
+    // region. For example, vertical means that each column in the source
+    // region is assigned to one data series.
+    // Default to Qt::Vertical, as that's what OOo does also.
+    dataDirection      = Qt::Vertical;
 }
 
 ChartProxyModel::Private::~Private()
@@ -235,7 +240,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions > 1 )
+            if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
             CellRegion yDataRegion( j.value() );
@@ -336,7 +341,7 @@ QList<DataSet*> ChartProxyModel::createDataSetsFromRegion( QList<DataSet*> dataS
                 labelDataRegion = CellRegion( labelDataPoint );
             }
 
-            if ( d->dataDimensions > 1 )
+            if ( d->dataDimensions > 1 && j.hasNext() )
                 j.next();
             
             CellRegion yDataRegion( j.value() );

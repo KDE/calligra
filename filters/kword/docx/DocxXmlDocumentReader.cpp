@@ -41,9 +41,11 @@
 DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
-    MSOOXML::MsooXmlRelationships& _relationships)
+    MSOOXML::MsooXmlRelationships& _relationships,
+    const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
+        themes(&_themes), 
         m_commentsLoaded(false), m_endnotesLoaded(false), m_footnotesLoaded(false)
 {
 }
@@ -142,6 +144,7 @@ DocxXmlDocumentReader::~DocxXmlDocumentReader()
 void DocxXmlDocumentReader::init()
 {
     initInternal(); // MsooXmlCommonReaderImpl.h
+    initDrawingML();
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
@@ -209,12 +212,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
 {
     READ_PROLOGUE
-
-    QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
+/*    QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
     for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
-    }
-
+    }*/
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -391,53 +392,85 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
 {
     READ_PROLOGUE
+    m_borderStyles.clear();
+    m_borderPaddings.clear();
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(top)
-            ELSE_TRY_READ_IF(left)
-            ELSE_TRY_READ_IF(bottom)
-            ELSE_TRY_READ_IF(right)
+            if (QUALIFIED_NAME_IS(top)) {
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+            }
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
-    if (m_pageBorderStyles.count(m_pageBorderStyles.key(TopBorder)) == 4)
-        m_currentPageStyle.addProperty("fo:border", m_pageBorderStyles.key(TopBorder)); // all sides the same
-    else {
-        if (!m_pageBorderStyles.key(TopBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:border-top", m_pageBorderStyles.key(TopBorder));
-        if (!m_pageBorderStyles.key(LeftBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:border-left", m_pageBorderStyles.key(LeftBorder));
-        if (!m_pageBorderStyles.key(BottomBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:border-bottom", m_pageBorderStyles.key(BottomBorder));
-        if (!m_pageBorderStyles.key(RightBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:border-right", m_pageBorderStyles.key(RightBorder));
-    }
-    m_pageBorderStyles.clear();
-
-    if (m_pageBorderPaddings.count(m_pageBorderPaddings.key(TopBorder)) == 4)
-        m_currentPageStyle.addProperty("fo:padding", m_pageBorderPaddings.key(TopBorder)); // all sides the same
-    else {
-        if (!m_pageBorderPaddings.key(TopBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:padding-top", m_pageBorderPaddings.key(TopBorder));
-        if (!m_pageBorderPaddings.key(LeftBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:padding-left", m_pageBorderPaddings.key(LeftBorder));
-        if (!m_pageBorderPaddings.key(BottomBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:padding-bottom", m_pageBorderPaddings.key(BottomBorder));
-        if (!m_pageBorderPaddings.key(RightBorder).isEmpty())
-            m_currentPageStyle.addProperty("fo:padding-right", m_pageBorderPaddings.key(RightBorder));
-    }
-    m_pageBorderPaddings.clear();
-
+    applyBorders(&m_currentPageStyle);
     READ_EPILOGUE
 }
 
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_border(BorderSide borderSide, const char *borderSideName)
+void DocxXmlDocumentReader::applyBorders(KoGenStyle *style)
+{
+    if (m_borderStyles.count(m_borderStyles.key(TopBorder)) == 4) {
+        style->addProperty("fo:border", m_borderStyles.key(TopBorder)); // all sides the same
+    }
+    else {
+        if (!m_borderStyles.key(TopBorder).isEmpty())
+            style->addProperty("fo:border-top", m_borderStyles.key(TopBorder));
+        if (!m_borderStyles.key(LeftBorder).isEmpty())
+            style->addProperty("fo:border-left", m_borderStyles.key(LeftBorder));
+        if (!m_borderStyles.key(BottomBorder).isEmpty())
+            style->addProperty("fo:border-bottom", m_borderStyles.key(BottomBorder));
+        if (!m_borderStyles.key(RightBorder).isEmpty())
+            style->addProperty("fo:border-right", m_borderStyles.key(RightBorder));
+    }
+    m_borderStyles.clear();
+
+    if (m_borderPaddings.count(m_borderPaddings.key(TopBorder)) == 4) {
+        style->addProperty("fo:padding", m_borderPaddings.key(TopBorder)); // all sides the same
+    }
+    else {
+        if (!m_borderPaddings.key(TopBorder).isEmpty())
+            style->addProperty("fo:padding-top", m_borderPaddings.key(TopBorder));
+        if (!m_borderPaddings.key(LeftBorder).isEmpty())
+            style->addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder));
+        if (!m_borderPaddings.key(BottomBorder).isEmpty())
+            style->addProperty("fo:padding-bottom", m_borderPaddings.key(BottomBorder));
+        if (!m_borderPaddings.key(RightBorder).isEmpty())
+            style->addProperty("fo:padding-right", m_borderPaddings.key(RightBorder));
+    }
+    m_borderPaddings.clear();
+}
+
+//! Converts 17.18.2 ST_Border (Border Styles, p. 1462, 4357) value to W3C CSS2 border-style value
+//! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-style
+//! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-width
+static QString ST_Border_to_ODF(const QString& s)
+{
+    if (s == "nil" || s == "none" || s.isEmpty())
+        return QString();
+    else if (s == "thick")
+        return QLatin1String("solid thick");
+    else if (s == "single")
+        return QLatin1String("solid");
+    else if (s == "dashed" || s == "dotted" || s == "double")
+        return s;
+    return QLatin1String("solid");
+}
+
+KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(
+    BorderSide borderSide, const char *borderSideName)
 {
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(val)
+    READ_ATTR(val)
     TRY_READ_ATTR(sz)
     TRY_READ_ATTR(color)
     createBorderStyle(sz, color, val, borderSide);
@@ -445,78 +478,35 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_border(BorderSide borderS
     if (!space.isEmpty()) {
         int sp;
         STRING_TO_INT(space, sp, QString("w:%1@space").arg(borderSideName));
-        m_pageBorderPaddings.insertMulti(QString::number(sp) + "pt", borderSide);
+        m_borderPaddings.insertMulti(QString::number(sp) + "pt", borderSide);
     }
     readNext();
     return KoFilter::OK;
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL top
-//! w:top handler (Top Border)
-/*! ECMA-376, 17.6.21, p. 676.
-
- Parent elements:
- - [done] pgBorders (§17.6.10)
-
- No child elements.
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_top()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_border(TopBorder, "top"));
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL left
-//! left page border
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_left()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_border(LeftBorder, "left"));
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL bottom
-//! bottom page border
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_bottom()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_border(BottomBorder, "bottom"));
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL right
-//! right page border
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_right()
-{
-    READ_PROLOGUE
-    RETURN_IF_ERROR(read_border(RightBorder, "right"));
-    READ_EPILOGUE
-}
-
 void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString& color,
     const QString& lineStyle, BorderSide borderSide)
 {
-    if (lineStyle.isEmpty())
+    const QString odfLineStyle(ST_Border_to_ODF(lineStyle));
+    if (odfLineStyle.isEmpty())
         return;
 
     QString border;
     if (!size.isEmpty())
         border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + " ";
 
-    border.append(lineStyle + " ");
+    border.append(odfLineStyle + " ");
 
-    if (color.startsWith('#'))
+/*    if (color ==  MsooXmlReader::constAuto) { // default
+    }
+    else*/ if (color.startsWith('#')) {
         border.append(color);
-    else
+    }
+    else {
         border.append(QLatin1String("#000000"));
+    }
 
-    m_pageBorderStyles.insertMulti(border, borderSide);
+    m_borderStyles.insertMulti(border, borderSide);
 }
 
 #undef CURRENT_EL
@@ -985,7 +975,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] b (Bold) §17.3.2.1
  - bCs (Complex Script Bold) §17.3.2.2
  - bdr (Text Border) §17.3.2.4
- - caps (Display All Characters As Capital Letters) §17.3.2.5
+ - [done] caps (Display All Characters As Capital Letters) §17.3.2.5
  - [done] color (Run Content Color) §17.3.2.6
  - cs (Use Complex Script Formatting on Run) §17.3.2.7
  - del (Deleted Paragraph) §17.13.5.15
@@ -1014,7 +1004,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
  - shd (Run Shading) §17.3.2.32
- - smallCaps (Small Caps) §17.3.2.33
+ - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - spacing (Character Spacing Adjustment) §17.3.2.35
  - specVanish (Paragraph Mark Is Always Hidden) §17.3.2.36
@@ -1066,6 +1056,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(rFonts)
+            ELSE_TRY_READ_IF(caps)
+            ELSE_TRY_READ_IF(smallCaps)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1168,7 +1160,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - outlineLvl (Associated Outline Level) §17.3.1.20
  - overflowPunct (Allow Punctuation to Extend Past Text Extents) §17.3.1.21
  - pageBreakBefore (Start Paragraph on Next Page) §17.3.1.23
- - pBdr (Paragraph Borders) §17.3.1.24
+ - [done] pBdr (Paragraph Borders) §17.3.1.24
  - pPrChange (Revision Information for Paragraph Properties) §17.13.5.29
  - [done] pStyle (Referenced Paragraph Style) §17.3.1.27
  - [done] rPr (Run Properties for the Paragraph Mark) §17.3.1.29
@@ -1207,6 +1199,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(jc)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
+            ELSE_TRY_READ_IF(pBdr)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1367,12 +1360,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
  to the contents of this paragraph when it is displayed by a consumer.
 
  Parent elements:
- - pPr (§17.3.1.26)
- - pPr (§17.3.1.25)
- - pPr (§17.7.5.2)
- - pPr (§17.7.6.1)
- - pPr (§17.9.23)
- - pPr (§17.7.8.2)
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
 
  No child elements.
 
@@ -1530,8 +1523,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
  level in the hierarchy.
 
  Parent elements:
- - pPr (§17.3.1.26)
- - pPr (§17.3.1.25)
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
  - [done] pPr (§17.7.5.2)
  - [done] pPr (§17.7.6.1)
  - [done] pPr (§17.9.23)
@@ -1550,7 +1543,61 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     READ_EPILOGUE
 }
 
-void DocxXmlDocumentReader::readStrikeValue(KoCharacterStyle::LineType type)
+#undef CURRENT_EL
+#define CURRENT_EL pBdr
+//! pBdr handler (Paragraph Borders)
+/*! ECMA-376, WML, 17.3.1.24, p.256.
+
+ This element specifies the borders for the parent paragraph. Each child element shall specify a specific kind
+ of border (left, right, bottom, top, and between).
+
+ Parent elements:
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
+
+ Child elements:
+ - bar (Paragraph Border Between Facing Pages) §17.3.1.4
+ - between (Paragraph Border Between Identical Paragraphs) §17.3.1.5
+ - [done] bottom (Paragraph Border Below Identical Paragraphs) §17.3.1.7
+ - [done] left (Left Paragraph Border) §17.3.1.17
+ - [done] right (Right Paragraph Border) §17.3.1.28
+ - [done] top (Paragraph Border Above Identical Paragraphs) §17.3.1.42
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
+{
+    READ_PROLOGUE
+    m_borderStyles.clear();
+    m_borderPaddings.clear();
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+            }
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    applyBorders(&m_currentParagraphStyle);
+    READ_EPILOGUE
+}
+
+void DocxXmlDocumentReader::readStrikeElement(KoCharacterStyle::LineType type)
 {
     const QXmlStreamAttributes attrs(attributes());
     if (READ_BOOLEAN_VAL) {
@@ -1570,7 +1617,7 @@ void DocxXmlDocumentReader::readStrikeValue(KoCharacterStyle::LineType type)
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_strike()
 {
     READ_PROLOGUE
-    readStrikeValue(KoCharacterStyle::SingleLine);
+    readStrikeElement(KoCharacterStyle::SingleLine);
     readNext();
     READ_EPILOGUE
 }
@@ -1582,7 +1629,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_strike()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_dstrike()
 {
     READ_PROLOGUE
-    readStrikeValue(KoCharacterStyle::DoubleLine);
+    readStrikeElement(KoCharacterStyle::DoubleLine);
     readNext();
     READ_EPILOGUE
 }
@@ -1590,6 +1637,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_dstrike()
 #undef CURRENT_EL
 #define CURRENT_EL caps
 //! caps handler
+/*! Parent elements:
+ - [done] rPr (many)
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 {
     READ_PROLOGUE
@@ -1602,6 +1652,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 #undef CURRENT_EL
 #define CURRENT_EL smallCaps
 //! smallCaps handler
+/*! Parent elements:
+ - [done] rPr (many)
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_smallCaps()
 {
     READ_PROLOGUE

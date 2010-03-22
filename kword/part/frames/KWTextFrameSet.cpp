@@ -190,7 +190,8 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
     } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
-    } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
+    } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior
+            && lastFrame->canAutoGrow() && qAbs(textHeight) > 2) {
         // enlarge last shape
         KoShape *shape = lastFrame->shape();
         if (shape->isGeometryProtected()) { // don't alter a locked shape.

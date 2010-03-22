@@ -44,6 +44,7 @@ namespace MSOOXML
 class MsooXmlReader;
 class MsooXmlReaderContext;
 class MsooXmlRelationships;
+class DrawingMLTheme;
 
 //! A base class for MSOOXML-to-ODF import filters
 class MSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
@@ -53,7 +54,7 @@ public:
     MsooXmlImport(const QString& bodyContentElement, QObject * parent);
 
     virtual ~MsooXmlImport();
-    
+
     KoStore* outputStore() const { return m_outputStore; }
 
     //! KoFilter::UsageError is returned if this method is called outside
@@ -93,6 +94,9 @@ protected:
     KoFilter::ConversionStatus loadAndParseDocumentIfExists(
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context = 0);
+
+    KoFilter::ConversionStatus parseThemes(QMap<QString, MSOOXML::DrawingMLTheme*>& themes,
+        KoOdfWriters *writers, QString& errorMessage);
 
 private:
     //! Opens file for converting and performs convertions.

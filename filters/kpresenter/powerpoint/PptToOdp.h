@@ -343,19 +343,6 @@ private:
     QPair<QString, QString> findHyperlink(const quint32 id);
 
     /**
-    * @brief Write text deindentations the specified amount. Actually it just
-    * closes elements.
-    *
-    * Doesn't close the last text:list-item though.
-    * @param xmlWriter XML writer to write closing tags
-    * @param count how many lists and list items to leave open
-    * @param levels the list of levels to remove from
-    */
-    void writeTextObjectDeIndent(KoXmlWriter& xmlWriter,
-                                 const unsigned int count,
-                                 QStack<QString>& levels);
-
-    /**
     * @brief Convert paraspacing value to centimeters
     *
     * ParaSpacing is a 2-byte signed integer that specifies text paragraph
@@ -485,6 +472,8 @@ private:
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFreeLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
 

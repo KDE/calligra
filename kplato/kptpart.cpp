@@ -786,6 +786,7 @@ bool Part::completeSaving( KoStore *store )
     View *view = dynamic_cast<View*>( views().value( 0 ) );
     if ( view ) {
         if ( store->open( "context.xml" ) ) {
+            if ( m_context == 0 ) m_context = new Context();
             QDomDocument doc = m_context->save( view );
 
             KoStoreDevice dev( store );
