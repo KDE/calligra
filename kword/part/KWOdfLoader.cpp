@@ -4,6 +4,7 @@
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 KO GmbH <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,9 +42,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
+#include <KoInlineNote.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
+#include <QTextDocumentFragment>
 #include <KDebug>
 
 #include <rdf/KoDocumentRdfBase.h>
@@ -192,8 +196,9 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     }
 
     KoTextShapeData textShapeData;
+    KWTextFrameSet *mainFs = 0;
     if (hasMainText) {
-        KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
+        mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
         mainFs->setAllowLayout(false);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
@@ -205,6 +210,37 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     // Grab weak references to all the Rdf stuff that was loaded
     if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
         rdf->updateInlineRdfStatements(textShapeData.document());
+    }
+
+    // Append the endnote text to the main document. This would probably be better
+    // as a separate document for every endnote, with a separate frameset of a different
+    // type, but KWord cannot handle more than one body text frameset.
+    if (mainFs) {
+        QList<KoInlineNote*> endNotes = m_document->inlineTextObjectManager()->endNotes();
+
+        if (endNotes.count() > 0 ) {
+
+            // OOo starts endnotes on a new page, let's do the same
+            QTextCursor cursor(mainFs->document());
+            cursor.movePosition(QTextCursor::End);
+            QTextBlockFormat textBlockFormat;
+            textBlockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+            cursor.insertBlock(textBlockFormat);
+
+            foreach(KoInlineNote* note, endNotes) {
+                QTextCharFormat charFormat;
+                charFormat.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                cursor.mergeCharFormat(charFormat);
+
+                cursor.insertText(note->label() + ' ');
+                charFormat.setVerticalAlignment(QTextCharFormat::AlignNormal);
+                cursor.mergeCharFormat(charFormat);
+                cursor.insertFragment(note->text());
+                cursor.insertText(QString("\n"));
+
+            }
+        }
+
     }
 
     loadSettings(odfStore.settingsDoc());
