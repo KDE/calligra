@@ -21,6 +21,7 @@
 #include "sheet.h"
 #include "workbook.h"
 #include "ustring.h"
+#include "utils.h"
 
 #include <iostream>
 #include <map>
@@ -148,7 +149,7 @@ void Sheet::setName(const UString& name)
 
 Cell* Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
 {
-    unsigned hashed = (rowIndex + 1) * 1024 + columnIndex + 1;
+    const unsigned hashed = (rowIndex + 1) * maximalColumnCount + columnIndex + 1;
     Cell* c = d->cells[ hashed ];
 
     // create cell if necessary
