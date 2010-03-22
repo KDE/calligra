@@ -45,7 +45,6 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 #include <KoFontFace.h>
-#include <cassert>
 
 #include <QList>
 #include <QBuffer>
@@ -406,7 +405,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //Get a pointer to the object in the collection. TODO: Check
     //sep->fTitlePage, requires a separate master-page.
     m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
-    assert(!m_masterStyle);
+    Q_ASSERT(m_masterStyle);
     m_writeMasterStyleName = true;
 
     // ----------------------
@@ -512,7 +511,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     //Get a pointer to the object in the collection.
     m_pageLayoutStyle = m_mainStyles->styleForModification(pageLayoutStyleName);
-    assert(!m_pageLayoutStyle);
+    Q_ASSERT(m_pageLayoutStyle);
 
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
