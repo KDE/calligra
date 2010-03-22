@@ -898,11 +898,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
  Child elements:
 
 TODO....
+ Attributes:
+ - [incomplete] algn (Alignment)
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 {
     READ_PROLOGUE2(DrawingML_pPr)
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(algn)
+    algnToODF("fo:text-align", algn);
     while (!atEnd()) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -1435,7 +1440,27 @@ void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
     m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
 }
 
-void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString emuValue)
+void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)
+{
+    if (ov.isEmpty())
+        return;
+    QString v;
+    if (ov == QLatin1String("l"))
+        v = QLatin1String("start");
+    else if (ov == QLatin1String("r"))
+        v = QLatin1String("end");
+    else if (ov == QLatin1String("just"))
+        v = QLatin1String("justify");
+    else if (ov == QLatin1String("ctr"))
+        v = QLatin1String("center");
+    //@todo handle thaiDist, justLow, dist
+#if 0 //@todo Right now the following would duplicate the style entry hardcoded in PptxImport.cpp, and would be ignored by kpresenter
+    if (!v.isEmpty())
+        m_currentParagraphStyle.addProperty(odfEl, v);
+#endif
+}
+
+void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString& emuValue)
 {
     if (emuValue.isEmpty() || emuValue == "0") // skip 0cm which is the default
         return;
