@@ -623,7 +623,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
-    TRY_READ_ATTR_WITHOUT_NS(spans)
+    //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
 
@@ -636,9 +636,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     }
     if (rNumber > MSOOXML::maximumSpreadsheetRows()) {
         showWarningAboutWorksheetSize();
-    }
-    if (!spans.isEmpty()) {
-        //?
     }
     if ((m_currentRow + 1) < rNumber) {
         Row* r = new Row;
