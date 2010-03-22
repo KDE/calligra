@@ -484,8 +484,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
     m_columnCount++;
 //moved    body->startElement("table:table-column"); // CASE #S2500?
-    uint minCol = m_columnCount;
-    uint maxCol = m_columnCount;
+    int minCol = m_columnCount;
+    int maxCol = m_columnCount;
     QString minStr, maxStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(min, minStr)
     STRING_TO_INT(minStr, minCol, "col@min")
@@ -627,10 +627,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
 
-    uint rNumber = 0;
+    int rNumber = 0;
     if (!r.isEmpty()) {
         bool ok;
-        rNumber = r.toUInt(&ok);
+        rNumber = r.toInt(&ok);
         if (!ok)
             return KoFilter::WrongFormat;
     }
