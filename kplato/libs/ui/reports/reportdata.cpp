@@ -43,6 +43,10 @@ ReportData::~ReportData()
 
 bool ReportData::open()
 {
+    ItemModelBase *m = itemModel();
+    if ( m ) {
+        m->setScheduleManager( m_schedulemanager );
+    }
     return true;
 }
 
