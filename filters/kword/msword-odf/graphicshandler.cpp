@@ -681,10 +681,29 @@ void KWordDrawingHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Drawi
 {
     out.xml.startElement("draw:frame");
 
-    out.xml.addAttribute("svg:width", out.hLength());
-    out.xml.addAttribute("svg:height", out.vLength());
-    out.xml.addAttribute("svg:x", out.hOffset());
-    out.xml.addAttribute("svg:y", out.vOffset());
+    DrawStyle drawStyle(m_OfficeArtDggContainer,NULL,&o);
+
+    switch(drawStyle.txflTextFlow()) {
+    case 1: //msotxflTtoBA up-down
+    case 3: //msotxflTtoBN up-down
+    case 5: //msotxflVertN up-down
+        out.xml.addAttribute("svg:width", out.vLength());
+        out.xml.addAttribute("svg:height",out.hLength());
+        out.xml.addAttribute("draw:transform","matrix(0 1 -1 0 " +
+                ((Writer *)&out)->hOffset(out.xRight) + " " + out.vOffset() + ")");
+        break;
+    case 2: //msotxflBtoT down-up
+        out.xml.addAttribute("svg:width", out.vLength());
+        out.xml.addAttribute("svg:height",out.hLength());
+        out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
+               out.hOffset() + " " + ((Writer *)&out)->vOffset(out.yBottom) + ")");
+         break;
+    default : //standard text flow
+        out.xml.addAttribute("svg:width", out.hLength());
+        out.xml.addAttribute("svg:height", out.vLength());
+        out.xml.addAttribute("svg:x", out.hOffset());
+        out.xml.addAttribute("svg:y", out.vOffset());
+    }
 
     out.xml.startElement("draw:text-box");
 

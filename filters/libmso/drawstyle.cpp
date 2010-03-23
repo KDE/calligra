@@ -76,6 +76,7 @@ GETTER(MSO::FixedPoint,        ShadowOpacity,       shadowOpacity,      one())
 GETTER(quint32,                LineDashing,         lineDashing,        0)
 GETTER(MSO::OfficeArtCOLORREF, LineColor,           lineColor,          black())
 GETTER(qint32,                 LineOpacity,         lineOpacity,        0x10000)
+GETTER(qint32,                 TxflTextFlow,        txflTextFlow,       0)
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
