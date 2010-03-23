@@ -1140,11 +1140,12 @@ void CellView::paintText(QPainter& painter,
     if (style().valign() == Style::Bottom || style().valign() == Style::VAlignUndefined) {
         // The descent can be bigger then the underlinePos which seems to be the case at least
         // with thai characters. So, to be sure we are not losing the bottom characters we are
-        // using the descent() rather then the underlinePos() to make sure we do not cut anything
-        // off. According to the docs this is still not perfect cause some unusual character in
+        // using either the underlinePos() (plus 1 for the underline itself) or the descent()
+        // whatever is bigger to be sure we do not but of anything, neither parts of the font
+        // nor the an optional displayed underline.
+        // According to the docs this is still not perfect cause some unusual character in
         // an exotic language can still be bigger but we ignore that here.
-        //fontOffset = fontMetrics.underlinePos();
-        fontOffset = fontMetrics.descent();
+        fontOffset = qMax(fontMetrics.underlinePos() + 1, fontMetrics.descent());
     }
 
     const int tmpAngle = d->style.angle();
