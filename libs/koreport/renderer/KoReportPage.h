@@ -26,14 +26,17 @@ class ORODocument;
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
+ Provides a widget that renderes a specific page of
+ and ORODocument
+ The widget is sized to the document size in pixels.
 */
-class KexiReportPage : public QWidget
+class KOREPORT_EXPORT KoReportPage : public QWidget
 {
     Q_OBJECT
 public:
-    KexiReportPage(QWidget *parent, ORODocument *document);
+    KoReportPage(QWidget *parent, ORODocument *document);
 
-    ~KexiReportPage();
+    ~KoReportPage();
 
     void renderPage(int page);
 

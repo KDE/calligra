@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kexireportpage.h"
+#include "KoReportPage.h"
 #include <qwidget.h>
 #include <kdebug.h>
 #include <qcolor.h>
@@ -28,7 +28,7 @@
 #include <renderobjects.h>
 #include <QPainter>
 
-KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *document)
+KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         : QWidget(parent)
 {
     setAttribute(Qt::WA_NoBackground);
@@ -65,19 +65,19 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *document)
     renderPage(1);
 }
 
-KexiReportPage::~KexiReportPage()
+KoReportPage::~KoReportPage()
 {
     delete m_renderer;
     m_renderer = 0;
 }
 
-void KexiReportPage::paintEvent(QPaintEvent*)
+void KoReportPage::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
-void KexiReportPage::renderPage(int page)
+void KoReportPage::renderPage(int page)
 {
     kDebug() << page;
 //js: is m_page needed?
@@ -93,4 +93,4 @@ void KexiReportPage::renderPage(int page)
     repaint();
 }
 
-#include "kexireportpage.moc"
+#include "KoReportPage.moc"
