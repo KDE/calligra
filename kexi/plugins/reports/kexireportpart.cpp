@@ -63,6 +63,7 @@ KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
 
 KexiReportPart::~KexiReportPart()
 {
+    delete d;
 }
 
 KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
