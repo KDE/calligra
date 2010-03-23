@@ -165,7 +165,7 @@ void XlsxXmlWorksheetReader::init()
     m_defaultNamespace = "";
     m_columnCount = 0;
     m_currentRow = 0;
-    m_currentColumn = -1;
+    m_currentColumn = 0;
 }
 
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -338,19 +338,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                 body->addAttribute("table:formula", cell->formula);
             }
 
-            body->startElement("text:p", false);
-            if(!cell->charStyleName.isEmpty()) {
-                body->startElement( "text:span" );
-                body->addAttribute( "text:style-name", cell->charStyleName);
+            if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
+                body->startElement("text:p", false);
+                if(!cell->charStyleName.isEmpty()) {
+                    body->startElement( "text:span" );
+                    body->addAttribute( "text:style-name", cell->charStyleName);
+                }
+                if(!cell->text.isEmpty()) {
+                    body->addTextSpan(cell->text);
+                }
+                if(!cell->charStyleName.isEmpty()) {
+                    body->endElement(); // text:span
+                }
+                body->endElement(); // text:p
             }
-            if(!cell->text.isEmpty()) {
-                body->addTextSpan(cell->text);
-            }
-            if(!cell->charStyleName.isEmpty()) {
-                body->endElement(); // text:span
-            }
-            body->endElement(); // text:p
-            
+        
 //! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
 //! @todo make drawingobject logic more generic
 #if 0
@@ -482,8 +484,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
     m_columnCount++;
 //moved    body->startElement("table:table-column"); // CASE #S2500?
-    uint minCol = m_columnCount;
-    uint maxCol = m_columnCount;
+    int minCol = m_columnCount;
+    int maxCol = m_columnCount;
     QString minStr, maxStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(min, minStr)
     STRING_TO_INT(minStr, minCol, "col@min")
@@ -621,22 +623,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
-    TRY_READ_ATTR_WITHOUT_NS(spans)
+    //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
 
-    uint rNumber = 0;
+    int rNumber = 0;
     if (!r.isEmpty()) {
         bool ok;
-        rNumber = r.toUInt(&ok);
+        rNumber = r.toInt(&ok);
         if (!ok)
             return KoFilter::WrongFormat;
     }
     if (rNumber > MSOOXML::maximumSpreadsheetRows()) {
         showWarningAboutWorksheetSize();
-    }
-    if (!spans.isEmpty()) {
-        //?
     }
     if ((m_currentRow + 1) < rNumber) {
         Row* r = new Row;
@@ -652,7 +651,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     d->rows << row;
     row->styleName = processRowStyle(ht);
 
-    m_currentColumn = -1;
+    m_currentColumn = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -734,13 +733,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
-    uint referencedColumn = -1;
     if (!r.isEmpty()) {
-        referencedColumn = KSpread::Util::decodeColumnLabelText(r) - 1;
-        kDebug() << "referencedColumn:" << r << referencedColumn;
-        if (m_currentColumn == -1 && referencedColumn > 0) {
-            // output empty cells before the first filled cell
-            row->cells << new Cell(referencedColumn);
+        int referencedColumn = qMax(0, KSpread::Util::decodeColumnLabelText(r));
+        int missingColumns = referencedColumn - m_currentColumn;
+        if (missingColumns >= 2) {
+            row->cells << new Cell(missingColumns - 1);
         }
         m_currentColumn = referencedColumn;
     }

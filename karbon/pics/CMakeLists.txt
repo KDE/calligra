@@ -1,3 +1,4 @@
-kde4_install_icons(${DATA_INSTALL_DIR}/karbon/icons  )
+add_subdirectory(action)
+add_subdirectory(app)
 
 

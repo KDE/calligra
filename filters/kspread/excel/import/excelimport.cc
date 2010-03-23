@@ -54,17 +54,6 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
 
-// The minimal number of rows and columns. This is used to fill remaming rows and columns with the
-// default style what is needed cause Excel does always define the default for all rows and columns
-// while ODF does only for those that are explicit defined.
-static const uint minimumColumnCount = 1024;
-static const uint minimumRowCount = 32768;
-
-// The maximal number of rows and columns. This allows us to cut rows and columns away that would
-// not be handled by the consumer application anyway cause they reached the applications limited.
-static const uint maximalColumnCount = 32768;
-static const uint maximalRowCount = 32768; //65536
-
 namespace Swinder {
 
 // qHash function to support hashing by Swinder::FormatFont instances.

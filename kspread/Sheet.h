@@ -885,7 +885,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    bool loadRowFormat(const KoXmlElement& row, int &rowIndex,
+    int loadRowFormat(const KoXmlElement& row, int &rowIndex,
                        OdfLoadingContext& odfContext,
                        QHash<QString, QRegion>& rowStyleRegions,
                        QHash<QString, QRegion>& cellStyleRegions);

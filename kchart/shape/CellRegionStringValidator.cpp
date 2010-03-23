@@ -36,9 +36,13 @@ public:
     ~Private();
 
     KoChart::ChartModel* model;
+    // A regular expression that characterizes any possible
+    // intermediate state of a valid cell region string
+    QRegExp intermediatelyCorrectRegion;
 };
 
 CellRegionStringValidator::Private::Private()
+    : intermediatelyCorrectRegion( "[a-zA-Z0-9$.:;]*")
 {
 }
 
@@ -63,7 +67,11 @@ QValidator::State CellRegionStringValidator::validate( QString &string,
 {
     Q_UNUSED( pos );
 
-    return d->model->isCellRegionValid(string) 
-        ? QValidator::Acceptable
-        : QValidator::Invalid;
+    if ( !d->intermediatelyCorrectRegion.exactMatch( string ) )
+        return QValidator::Invalid;
+
+    if ( d->model->isCellRegionValid(string) )
+       return QValidator::Acceptable;
+
+    return QValidator::Intermediate;
 }

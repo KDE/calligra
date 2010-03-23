@@ -65,9 +65,9 @@ protected:
 
     KoGenStyle m_tableStyle;
     //! for table:table-column
-    uint m_columnCount;
+    int m_columnCount;
     //! for table:table-row
-    uint m_currentRow;
+    int m_currentRow;
     //! for table:table-cell
     int m_currentColumn;
     //! Used in read_f() and read_v()

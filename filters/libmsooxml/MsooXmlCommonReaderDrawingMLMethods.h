@@ -92,8 +92,10 @@ KoFilter::ConversionStatus read_scrgbClr();
 //! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
 void saveStyleWrap(const char * style);
 
+void algnToODF(const char * odfEl, const QString& emuValue);
+
 //! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
-void distToODF(const char * odfEl, const QString emuValue);
+void distToODF(const char * odfEl, const QString& emuValue);
 
 //! ODF 1.1., 15.14.9 Fill Image Rendering Style
 //! Set by read_stretch()
