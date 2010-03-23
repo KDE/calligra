@@ -399,6 +399,7 @@ void KWTextDocumentLayout::layout()
                 while (true) {
                     if (m_state->numColumns() > 0) {
                         line.setNumColumns(m_state->numColumns());
+                        line.setPosition(QPointF(line.x(), rect.y()));
                     } else {
                         qreal x = rect.x();
                         qreal effectiveLineWidth = rect.width();
@@ -409,7 +410,7 @@ void KWTextDocumentLayout::layout()
                         if (leftIndent + width > rect.right()) // limit moved the right edge, keep the indent.
                             effectiveLineWidth = rect.width() - rightIndent;
 
-                        line.setLineWidth(effectiveLineWidth);
+                       line.setLineWidth(effectiveLineWidth);
                         line.setPosition(QPointF(x, rect.y()));
                     }
                     rect.setHeight(line.height());
