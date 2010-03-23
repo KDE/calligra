@@ -410,7 +410,7 @@ void KWTextDocumentLayout::layout()
                         if (leftIndent + width > rect.right()) // limit moved the right edge, keep the indent.
                             effectiveLineWidth = rect.width() - rightIndent;
 
-                       line.setLineWidth(effectiveLineWidth);
+                        line.setLineWidth(effectiveLineWidth);
                         line.setPosition(QPointF(x, rect.y()));
                     }
                     rect.setHeight(line.height());
