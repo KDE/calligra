@@ -190,7 +190,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(body)
-//! @todo TRY_READ_IF(background)
+            TRY_READ_IF(background)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(document)
@@ -273,6 +273,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     m_currentPageStyle.addProperty("style:writing-mode", "lr-tb");
 //! @todo handle all valued of style:print-orientation
     m_currentPageStyle.addProperty("style:print-orientation", "portrait");
+    if (m_backgroundColor.isValid())
+        m_currentPageStyle.addProperty("fo:background-color", m_backgroundColor.name());
 
     while (!atEnd()) {
         readNext();
@@ -1786,6 +1788,43 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL background
+
+//! w:background handler (Document Background)
+/*! ECMA-376, 17.2.1, p. 189.
+ This element specifies the background for every page of the document
+ containing the background element.
+
+ Child element:
+ - drawing (§17.3.3.9)
+ Attributes:
+ - [done] color (Background Color)
+ - themeColor (Background Theme Color)
+ - themeTint (Border Theme Color Tint)
+ - themeShade (Border Theme Color Shade)
+*/
+
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(color)
+
+    QColor tmpColor(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
+    if (tmpColor.isValid())
+        m_backgroundColor = tmpColor;
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(drawing)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"
