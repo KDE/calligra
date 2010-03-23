@@ -89,7 +89,7 @@ void AlterSchemaWidget::setData(const QList<KexiDB::RecordData>& data)
 void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     m_selectedColumn = idx.column();
-    m_columnNumLabel->setText(QString("Column %1").arg(m_selectedColumn + 1));
+    m_columnNumLabel->setText(i18n("Column %1",QString::number(m_selectedColumn + 1)));
     if (m_newSchema) {
         kDebug() << m_newSchema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName());
         m_columnType->setCurrentIndex(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName()));
