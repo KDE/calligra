@@ -39,7 +39,7 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_columnType = new QComboBox(this);
     m_columnPKey = new QCheckBox(this);
 
-    m_columnNumLabel = new QLabel(i18n("Column %1").arg(1), this);
+    m_columnNumLabel = new QLabel(i18n("Column %1",QString::number(1)), this);
     m_columnTypeLabel = new QLabel(i18n("Type"), this);
     m_columnPKeyLabel = new QLabel(i18n("Primary Key"), this);
 
