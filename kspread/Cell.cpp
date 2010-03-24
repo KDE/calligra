@@ -1577,7 +1577,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
     QString cellText;
 
     bool multipleTextParagraphsFound = false;
-    bool hasRichText = false;
+    const bool hasRichText = KoTextLoader::containsRichtext(parent);
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
@@ -1590,14 +1590,6 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
                 cellText += '\n' + textParagraphElement.text();
                 multipleTextParagraphsFound = true;
             }
-
-            // if any of this nodes children are elements, we're dealing with richtext
-            if (!hasRichText)
-                for (KoXmlNode n = textParagraphElement.firstChild(); !n.isNull(); n = n.nextSibling())
-                    if (n.isElement()) {
-                        hasRichText = true;
-                        break;
-                    }
 
             // the text:a link could be located within a text:span element
             KoXmlElement textA = namedItemNSWithSpan(textParagraphElement, KoXmlNS::text, "a");
@@ -1612,8 +1604,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
                     setLink(link);
                 }
             }
-        } else
-            hasRichText = true;
+        }
     }
 
     if (!cellText.isNull()) {
