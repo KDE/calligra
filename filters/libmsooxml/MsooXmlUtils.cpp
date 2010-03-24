@@ -86,10 +86,14 @@ const char* const MSOOXML::ContentTypes::spreadsheetCalcChain =       "applicati
 const char* const MSOOXML::ContentTypes::spreadsheetSharedStrings =   "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetTemplate =        "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
 
+//generic namespaces
+const char* const MSOOXML::Schemas::dublin_core =                                "http://purl.org/dc/elements/1.1/";
+
 // common namespaces
 const char* const MSOOXML::Schemas::contentTypes =                               "http://schemas.openxmlformats.org/package/2006/content-types";
 
 const char* const MSOOXML::Schemas::relationships =                              "http://schemas.openxmlformats.org/package/2006/relationships";
+const char* const MSOOXML::Schemas::core_properties =                            "http://schemas.openxmlformats.org/package/2006/metadata/core-properties";
 
 // ISO/IEC 29500-1:2008(E), Annex A. (normative), p. 4355
 // See also: specs/all.xsd

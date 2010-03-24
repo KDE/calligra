@@ -39,6 +39,13 @@ public:
     //! Relationships
     static const char* const relationships;
 
+    //! Core properties (document properties)
+    static const char* const core_properties;
+
+    //! Dublin Core vocabulary
+    //@todo generic, move somewhere else?
+    static const char* const dublin_core;
+
     //! A.1 WordprocessingML
     static const char* const wordprocessingml;
 
