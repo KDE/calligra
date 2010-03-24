@@ -402,29 +402,33 @@ void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter,
     // NOTE Stefan: the borders of the adjacent cells are taken for the case,
     //              that the cell is located on the edge of the cell range,
     //              that is painted.
+    // NOTE Sebsauer: this won't work for merged cells
     if (col == 1)
         paintBorder |= LeftBorder;
     else if (d->style.leftPenValue() < sheetView->cellView(col - 1, row).style().rightPenValue())
         d->style.setLeftBorderPen(sheetView->cellView(col - 1, row).style().rightBorderPen());
     else // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
         paintBorder |= LeftBorder;
+
     if (col == KS_colMax)
         paintBorder |= CellView::RightBorder;
     else if (d->style.rightPenValue() < sheetView->cellView(col + 1, row).style().leftPenValue())
         d->style.setRightBorderPen(sheetView->cellView(col + 1, row).style().leftBorderPen());
-    else if (d->style.rightPenValue() > sheetView->cellView(col + 1, row).style().leftPenValue())
+    else // if (d->style.rightPenValue() > sheetView->cellView(col + 1, row).style().leftPenValue())
         paintBorder |= CellView::RightBorder;
+
     if (row == 1)
         paintBorder |= TopBorder;
     else if (d->style.topPenValue() < sheetView->cellView(col, row - 1).style().bottomPenValue())
         d->style.setTopBorderPen(sheetView->cellView(col, row - 1).style().bottomBorderPen());
     else // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
         paintBorder |= TopBorder;
+
     if (row == KS_rowMax)
         paintBorder |= BottomBorder;
     else if (d->style.bottomPenValue() < sheetView->cellView(col, row + 1).style().topPenValue())
         d->style.setBottomBorderPen(sheetView->cellView(col, row + 1).style().topBorderPen());
-    else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + 1).style().topPenValue())
+    else // if (d->style.bottomPenValue() >= sheetView->cellView(col, row + 1).style().topPenValue())
         paintBorder |= BottomBorder;
 
     // Paint border if outermost cell or if the pen is more "worth"
