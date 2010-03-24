@@ -860,7 +860,7 @@ ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
     lst[ sfPos ]->appendRow( children );
     children.clear();
 
-    children << new QStandardItem( i18n( "Resource assignements" ) ) << new QStandardItem();
+    children << new QStandardItem( i18n( "Resource assignments" ) ) << new QStandardItem();
     children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
     lst[ sfPos ]->appendRow( children );
