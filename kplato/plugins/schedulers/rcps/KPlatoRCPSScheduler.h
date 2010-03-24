@@ -27,6 +27,7 @@
 #include <QThread>
 #include <QObject>
 #include <QMap>
+#include <QMutex>
 
 class ProgressInfo;
 
@@ -84,12 +85,15 @@ public:
     /// The scheduling is stopping
     bool isStopped() const { return m_stopScheduling; }
 
+    QStringList missingFunctions() const;
+
 signals:
     void jobStarted( KPlatoRCPSScheduler *job );
     void jobFinished( KPlatoRCPSScheduler *job );
     
     void maxProgress( int, ScheduleManager* );
     void sigProgress( int, ScheduleManager* );
+    void sigCalculationStarted( Project*, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
 
     void logError( KPlato::Schedule*, QString, int = -1 );
@@ -102,12 +106,11 @@ public slots:
     void stopScheduling() { m_stopScheduling = true; }
     /// Halt scheduling. Use only when plugin (owner) is deleted.
     void haltScheduling() { m_haltScheduling = true; }
-    
-protected slots:
+
     void solve();
     void slotStarted();
     void slotFinished();
-    
+
 protected:
     void run();
 
@@ -152,7 +155,11 @@ private:
     
     ProgressInfo *m_progressinfo;
     bool m_stopScheduling; // Stop next time progress is called
-    bool m_haltScheduling; // Do not access project structure anymore !
+    bool m_haltScheduling; // Do not access kplato project structure anymore !
+    
+    // unsupported functions
+    bool m_timeconstraint;
+    bool m_alap;
 };
 
 #endif // KPLATORCPSPSCHEDULER_H

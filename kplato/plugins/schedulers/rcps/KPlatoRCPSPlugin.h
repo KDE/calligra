@@ -47,6 +47,9 @@ public:
 
     void stopCalculation( KPlato::ScheduleManager *sm );
 
+signals:
+    void stopScheduling();
+
 public slots:
     void stopAllCalculations();
     void stopCalculation( KPlatoRCPSScheduler *sch );

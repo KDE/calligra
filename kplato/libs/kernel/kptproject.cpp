@@ -205,6 +205,7 @@ void Project::calculate( const DateTime &dt )
 
 void Project::calculate( ScheduleManager &sm )
 {
+    emit sigCalculationStarted( this, &sm );
     sm.setScheduling( true );
     m_progress = 0;
     int nodes = 0;

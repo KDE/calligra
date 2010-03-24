@@ -31,6 +31,7 @@
 #include <KDebug>
 
 #include <QApplication>
+#include <KMessageBox>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
@@ -38,6 +39,10 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
     kDebug()<<rcps_version();
+    KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        locale->insertCatalog( "kplatorcpsplugin" );
+    }
 }
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
@@ -66,9 +71,18 @@ void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleMana
     int result = job->kplatoToRCPS();
     if ( result != 0 ) {
         sm->expected()->logError( i18n( "Failed to build a valid RCPS project: %1", result, 0 ) );
-        delete job;
-        sm->setScheduling( false );
+        sm->setCalculationResult( ScheduleManager::CalculationError );
+        job->slotFinished();
         return;
+    }
+    QStringList lst = job->missingFunctions();
+    if ( ! lst.isEmpty() ) {
+        result = KMessageBox::warningContinueCancelList( 0, i18nc( "@info", "<b>This scheduler does not support all the requested scheduling functionality.<b>" ), lst );
+        if ( result == KMessageBox::Cancel ) {
+            sm->setCalculationResult( ScheduleManager::CalculationCanceled );
+            job->slotFinished();
+            return;
+        }
     }
     m_jobs << job;
     connect( job, SIGNAL( jobStarted( KPlatoRCPSScheduler* ) ), SLOT( slotStarted( KPlatoRCPSScheduler* ) ) );
@@ -81,7 +95,8 @@ void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleMana
     connect(&project, SIGNAL(nodeToBeRemoved(Node*)), SLOT(stopAllCalculations()));
     connect(&project, SIGNAL(nodeToBeRemoved(Node*)), SLOT(stopAllCalculations()));
 
-    if ( nothread ) {
+    //FIXME
+    if ( true /*nothread*/ ) {
         job->doRun();
     } else {
         job->start();
@@ -127,7 +142,8 @@ void KPlatoRCPSPlugin::stopCalculation( KPlatoRCPSScheduler *sch )
 {
     if ( sch ) {
         disconnect( sch, SIGNAL( jobFinished( KPlatoRCPSScheduler* ) ), this, SLOT( slotFinished( KPlatoRCPSScheduler* ) ) );
-        sch->stopScheduling();
+        connect(this, SIGNAL(stopScheduling()), sch, SLOT(stopScheduling()));
+        emit stopScheduling();
         sch->wait( 20000 ); // wait max 20 seconds. FIXME: if it fails, what to do?
         slotFinished( sch );
     }
@@ -138,6 +154,7 @@ void KPlatoRCPSPlugin::stopCalculation( ScheduleManager *sm )
     KPlatoRCPSScheduler *s = 0;
     foreach ( s, m_jobs ) {
         if ( s->manager() == sm ) {
+            sm->setCalculationResult( ScheduleManager::CalculationStopped );
             stopCalculation( s );
             break;
         }
@@ -151,10 +168,11 @@ void KPlatoRCPSPlugin::slotStarted( KPlatoRCPSScheduler *job )
 
 void KPlatoRCPSPlugin::slotFinished( KPlatoRCPSScheduler *job )
 {
-//    qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<job->manager();
-    if ( ! job->isStopped() ) {
+    //qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<job->manager()<<job->manager()->calculationResult();
+    if ( job->manager()->calculationResult() == ScheduleManager::CalculationRunning ) {
         QApplication::setOverrideCursor( Qt::WaitCursor );
         job->kplatoFromRCPS();
+        job->manager()->setCalculationResult( ScheduleManager::CalculationDone );
         QApplication::restoreOverrideCursor();
     }
     m_jobs.removeAt( m_jobs.indexOf( job ) );
