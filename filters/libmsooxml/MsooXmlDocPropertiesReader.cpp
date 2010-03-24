@@ -98,8 +98,8 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
             while (!isEndElement() && !isCharacters())
                 readNext();
 
-            const QMap<QString,QString>::ConstIterator it = elemMap.find(qn);
-            if (it == elemMap.end()) {
+            const QMap<QString,QString>::ConstIterator it = elemMap.constFind(qn);
+            if (it == elemMap.constEnd()) {
                 kDebug() << "Unknown metadata ignored:" << qn;
                 while (!isEndElement())
                     readNext();
