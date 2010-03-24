@@ -298,7 +298,7 @@ class ST_UnderlineValue_fromStringMap : public QMap<QString, XlsxFontStyle::ST_U
 public:
     ST_UnderlineValue_fromStringMap() {
         insert(QLatin1String("single"), XlsxFontStyle::SingleUnderline);
-        insert(QLatin1String("double"), XlsxFontStyle::SingleUnderline);
+        insert(QLatin1String("double"), XlsxFontStyle::DoubleUnderline);
         insert(QLatin1String("singleAccounting"), XlsxFontStyle::SingleAccountingUnderline);
         insert(QLatin1String("doubleAccounting"), XlsxFontStyle::DoubleAccountingUnderline);
         insert(QLatin1String("none"), XlsxFontStyle::NoUnderline);
