@@ -892,11 +892,12 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ROUNDDOWN
 Value func_rounddown(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
+    if (args.count() == 2) {
         if (calc->greater(args[0], 0.0))
             return calc->roundDown(args[0], args[1]);
         else
             return calc->roundUp(args[0], args[1]);
+    }
 
     if (calc->greater(args[0], 0.0))
         return calc->roundDown(args[0], 0);
@@ -907,11 +908,12 @@ Value func_rounddown(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ROUNDUP
 Value func_roundup(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
+    if (args.count() == 2) {
         if (calc->greater(args[0], 0.0))
             return calc->roundUp(args[0], args[1]);
         else
             return calc->roundDown(args[0], args[1]);
+    }
 
     if (calc->greater(args[0], 0.0))
         return calc->roundUp(args[0], 0);
