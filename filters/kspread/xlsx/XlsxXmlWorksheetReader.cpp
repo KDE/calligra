@@ -114,7 +114,7 @@ public:
     QString valueAttrValue;
     QString formula;
 
-    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(columnIndex), rowsMerged(1), columnsMerged(1) {}
+    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() {}
 };
 
