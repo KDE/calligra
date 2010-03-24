@@ -348,7 +348,7 @@ bool ScheduleItemModel::setName( const QModelIndex &index, const QVariant &value
     }
     switch ( role ) {
         case Qt::EditRole:
-            emit executeCommand(new ModifyScheduleManagerNameCmd( *sm, value.toString(), "Modify Schedule Name" ) );
+            emit executeCommand( new ModifyScheduleManagerNameCmd( *sm, value.toString(), i18n( "Modify schedule name" ) ) );
             return true;
     }
     return false;
@@ -437,7 +437,7 @@ bool ScheduleItemModel::setAllowOverbooking( const QModelIndex &index, const QVa
     }
     switch ( role ) {
         case Qt::EditRole:
-            emit executeCommand(new ModifyScheduleManagerAllowOverbookingCmd( *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
+            emit executeCommand( new ModifyScheduleManagerAllowOverbookingCmd( *sm, value.toBool(), i18n( "Modify allow overbooking" ) ) );
             return true;
     }
     return false;
@@ -477,7 +477,7 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
     }
     switch ( role ) {
         case Qt::EditRole:
-            emit executeCommand(new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), "Modify Schedule Distribution" ) );
+            emit executeCommand( new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), i18n( "Modify scheduling distribution" ) ) );
             emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
             return true;
     }
@@ -517,7 +517,8 @@ bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVarian
     }
     switch ( role ) {
         case Qt::EditRole:
-            emit executeCommand(new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify Schedule Calculate" ) );
+            //FIXME remove?
+            emit executeCommand( new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify schedule calculate" ) );
             return true;
     }
     return false;
@@ -602,7 +603,7 @@ bool ScheduleItemModel::setSchedulingDirection( const QModelIndex &index, const 
     }
     switch ( role ) {
         case Qt::EditRole:
-            emit executeCommand(new ModifyScheduleManagerSchedulingDirectionCmd( *sm, value.toBool(), "Modify Scheduling Direction" ) );
+            emit executeCommand(new ModifyScheduleManagerSchedulingDirectionCmd( *sm, value.toBool(), i18n( "Modify scheduling direction" ) ) );
             emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
             return true;
     }
@@ -641,7 +642,7 @@ bool ScheduleItemModel::setScheduler( const QModelIndex &index, const QVariant &
     if ( sm != 0 ) {
         switch ( role ) {
             case Qt::EditRole: {
-                emit executeCommand(new ModifyScheduleManagerSchedulerCmd( *sm, value.toInt(), "Modify Scheduling Direction" ) );
+                emit executeCommand( new ModifyScheduleManagerSchedulerCmd( *sm, value.toInt(), i18n( "Modify scheduler" ) ) );
                 return true;
             }
         }
@@ -681,7 +682,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleDirection: result = schedulingDirection( index, role ); break;
         case ScheduleModel::ScheduleOverbooking: result = allowOverbooking( index, role ); break;
         case ScheduleModel::ScheduleDistribution: result = usePert( index, role ); break;
-        case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
+//        case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
@@ -714,7 +715,7 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         case ScheduleModel::ScheduleDirection: return setSchedulingDirection( index, value, role );
         case ScheduleModel::ScheduleOverbooking: return setAllowOverbooking( index, value, role );
         case ScheduleModel::ScheduleDistribution: return setUsePert( index, value, role );
-        case ScheduleModel::ScheduleCalculate: return setCalculateAll( index, value, role );
+//        case ScheduleModel::ScheduleCalculate: return setCalculateAll( index, value, role );
         case ScheduleModel::SchedulePlannedStart: return false;
         case ScheduleModel::SchedulePlannedFinish: return false;
         case ScheduleModel::ScheduleScheduler: return setScheduler( index, value, role ); break;
@@ -736,7 +737,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::ScheduleDirection: return i18n( "Direction" );
                 case ScheduleModel::ScheduleOverbooking: return i18n( "Overbooking" );
                 case ScheduleModel::ScheduleDistribution: return i18n( "Distribution" );
-                case ScheduleModel::ScheduleCalculate: return i18n( "Calculate" );
+//                case ScheduleModel::ScheduleCalculate: return i18n( "Calculate" );
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
                 case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
@@ -756,7 +757,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             case ScheduleModel::ScheduleDirection: return ToolTip::schedulingDirection();
             case ScheduleModel::ScheduleOverbooking: return ToolTip::scheduleOverbooking();
             case ScheduleModel::ScheduleDistribution: return ToolTip::scheduleDistribution();
-            case ScheduleModel::ScheduleCalculate: return ToolTip::scheduleCalculate();
+//            case ScheduleModel::ScheduleCalculate: return ToolTip::scheduleCalculate();
             case ScheduleModel::SchedulePlannedStart: return ToolTip::scheduleStart();
             case ScheduleModel::SchedulePlannedFinish: return ToolTip::scheduleFinish();
             case ScheduleModel::ScheduleScheduler: return ToolTip::scheduleScheduler();
@@ -783,7 +784,7 @@ QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *p
         case ScheduleModel::ScheduleDirection: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleOverbooking: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleDistribution: return new EnumDelegate( parent );
-        case ScheduleModel::ScheduleCalculate: return new EnumDelegate( parent );
+//        case ScheduleModel::ScheduleCalculate: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleScheduler: return new EnumDelegate( parent );
     }
     return 0;

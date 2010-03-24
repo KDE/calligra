@@ -50,7 +50,7 @@ public:
         ScheduleDirection,
         ScheduleOverbooking,
         ScheduleDistribution,
-        ScheduleCalculate,
+//        ScheduleCalculate,
         SchedulePlannedStart,
         SchedulePlannedFinish,
         ScheduleScheduler,

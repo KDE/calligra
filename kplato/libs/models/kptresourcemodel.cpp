@@ -338,6 +338,9 @@ QVariant ResourceModel::account( const Resource *resource, int role ) const
 
 QVariant ResourceModel::data( const Resource *resource, int property, int role ) const
 {
+    if ( role == Role::ObjectType ) {
+        return OT_Resource;
+    }
     QVariant result;
     if ( resource == 0 ) {
         return result;
@@ -363,6 +366,9 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
 
 QVariant ResourceModel::data( const ResourceGroup *group, int property, int role ) const
 {
+    if ( role == Role::ObjectType ) {
+        return OT_ResourceGroup;
+    }
     QVariant result;
     if ( group == 0 ) {
         return result;
