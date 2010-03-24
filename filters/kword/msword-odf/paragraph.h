@@ -57,7 +57,7 @@ public:
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle);
-    static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle);
+    static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false);
 
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;

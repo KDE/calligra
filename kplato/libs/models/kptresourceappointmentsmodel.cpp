@@ -57,7 +57,6 @@ ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_group( 0 ),
     m_resource( 0 ),
-    m_manager( 0 ),
     m_showInternal( true ),
     m_showExternal( true )
 {
@@ -1338,8 +1337,7 @@ ResourceAppointmentsRowModel::Private *ResourceAppointmentsRowModel::find( void 
 }
 
 ResourceAppointmentsRowModel::ResourceAppointmentsRowModel( QObject *parent )
-    : ItemModelBase( parent ),
-    m_manager( 0 )
+    : ItemModelBase( parent )
 {
 }
 
@@ -1415,7 +1413,7 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 
 void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<sm;
+    qDebug()<<"ResourceAppointmentsRowModel::setScheduleManager:"<<sm;
     m_manager = sm;
     qDeleteAll( m_datamap );
     m_datamap.clear();

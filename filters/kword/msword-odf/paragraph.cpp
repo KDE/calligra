@@ -102,11 +102,16 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         kWarning() << "Couldn't retrieve style for modification!";
     }
 
+    bool suppresFontSize = false;
+    if (m_textStyles.size() == 0 && m_paragraphProperties->pap().dcs.lines > 1) {
+        suppresFontSize = true;
+    }
+
     // Modify the character style if we detect any diff between the
     // chp of the paragraph and the summed chp.
     const wvWare::Style* parentStyle = styles.styleByIndex(msTextStyle->m_std->istdBase);
     if (parentStyle) {
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle);
+        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize);
         //if we have a new font, process that
         const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
@@ -122,7 +127,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         if (!fontName.isEmpty()) {
             textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
         }
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle);
+        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize);
     }
 
     //add text style to list
@@ -361,11 +366,11 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             // that will be provided for lines in the paragraph in twips.
             //
             // See sprmPDyaLine in generator_wword8.htm
-            double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
+            qreal value = qAbs((qreal)pap.lspd.dyaLine / (qreal)20.0); // twip -> pt
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if (pap.lspd.dyaLine > 0)
                 style->addPropertyPt("fo:line-height-at-least", value, KoGenStyle::ParagraphType);
-            else if (pap.lspd.dyaLine < 0)
+            else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
                 style->addPropertyPt("fo:line-height", value, KoGenStyle::ParagraphType);
         } else
             kWarning(30513) << "Unhandled LSPD::fMultLinespace value: "
@@ -420,6 +425,20 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addProperty("fo:border-right", Conversion::setBorderAttributes(pap.brcRight), KoGenStyle::ParagraphType);
     }
 
+    if (!refPap || refPap->dcs.fdct != pap.dcs.fdct || refPap->dcs.lines != pap.dcs.lines) {
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter tmpWriter(&buf, 3);
+        tmpWriter.startElement("style:drop-cap");
+        tmpWriter.addAttribute("style:lines", pap.dcs.lines);
+        tmpWriter.addAttributePt("style:distance", (qreal)pap.dxaFromText / (qreal)20.0);
+        tmpWriter.addAttribute("style:length", pap.dcs.fdct > 0 ? 1 : 0);
+        tmpWriter.endElement();//style:drop-cap
+        buf.close();
+        QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        style->addChildElement("style:drop-cap", contents);
+    }
+
 //TODO introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators
@@ -471,7 +490,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 } //end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
@@ -487,7 +506,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //hps = font size in half points
-    if (!refChp || refChp->hps != chp->hps) {
+    if (!suppressFontSize && (!refChp || refChp->hps != chp->hps)) {
         style->addPropertyPt(QString("fo:font-size"), (int)(chp->hps / 2), KoGenStyle::TextType);
     }
 

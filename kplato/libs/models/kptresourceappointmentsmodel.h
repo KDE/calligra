@@ -154,7 +154,6 @@ private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
     
-    ScheduleManager *m_manager;
     bool m_showInternal;
     bool m_showExternal;
 };
@@ -180,7 +179,6 @@ public:
     ~ResourceAppointmentsRowModel();
 
     virtual void setProject( Project *project );
-    virtual void setScheduleManager( ScheduleManager *sm );
     long id() const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -216,6 +214,9 @@ public:
     
     class Private;
 
+public slots:
+    virtual void setScheduleManager( ScheduleManager *sm );
+
 protected slots:
     void slotResourceToBeInserted( const ResourceGroup *group, int row );
     void slotResourceInserted( const Resource *r );
@@ -241,7 +242,6 @@ protected:
     Private *find( void *ptr ) const;
 
 protected:
-    ScheduleManager *m_manager;
     QMap<void*, Private*> m_datamap;
 };
 

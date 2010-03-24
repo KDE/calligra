@@ -164,21 +164,35 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
 //    connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "taskstatus", sf );
 
-    fm = new FlatProxyModel( parent );
+    QRegExp rrex( QString( "^(%1)$" ).arg( (int)OT_Appointment ) );
+    sf = new QSortFilterProxyModel( parent );
+    sf->setFilterKeyColumn( 0 );
+    sf->setFilterRole( Role::ObjectType );
+    sf->setFilterRegExp( rrex );
+    sf->setDynamicSortFilter( true );
+    fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
     m = new ResourceAppointmentsRowModel( fm );
     fm->setSourceModel( m );
     m->setProject( project );
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resourceassignments", fm );
+    map.insert( "resourceassignments", sf );
 
-    fm = new FlatProxyModel( parent );
+    rex.setPattern( QString( "^(%1)$" ).arg( (int)OT_Resource ) );
+    sf = new QSortFilterProxyModel( parent );
+    sf->setFilterKeyColumn( 0 );
+    sf->setFilterRole( Role::ObjectType );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
     m = new ResourceItemModel( fm );
     fm->setSourceModel( m );
     m->setProject( project );
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resourcesandgroups", fm );
+    map.insert( "resources", fm );
 
     fm = new FlatProxyModel( parent );
     m = new CostBreakdownItemModel( fm );
@@ -187,20 +201,6 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "costbreakdown", fm  );
-
-//     QRegExp px( QString( "^(%1)$" ).arg( (int)Node::Type_Project ) );
-//     sf = new QSortFilterProxyModel( parent );
-//     sf->setFilterKeyColumn( NodeModel::NodeType );
-//     sf->setFilterRole( Qt::EditRole );
-//     sf->setFilterRegExp( px );
-//     sf->setDynamicSortFilter( true );
-//     NodeItemModel *n = new NodeItemModel( fm );
-//     sf->setSourceModel( n );
-//     n->setShowProject( true );
-//     n->setProject( project );
-//     n->setScheduleManager( manager );
-////     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), n, SLOT( setScheduleManager( ScheduleManager* ) ) );
-//     map.insert( "project", sf );
 
     return map;
 }
@@ -848,19 +848,19 @@ ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
     
     // Child items
     QList<QStandardItem*> children;
-    children << new QStandardItem( "Tasks" ) << new QStandardItem();
+    children << new QStandardItem( i18n( "Tasks" ) ) << new QStandardItem();
     children[ 0 ]->setData( "tasks", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
     lst[ sfPos ]->appendRow( children );
     children.clear();
 
-    children << new QStandardItem( "Task status" ) << new QStandardItem();
+    children << new QStandardItem( i18n( "Task status" ) ) << new QStandardItem();
     children[ 0 ]->setData( "taskstatus", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
     lst[ sfPos ]->appendRow( children );
     children.clear();
 
-    children << new QStandardItem( "Resourceassignements" ) << new QStandardItem();
+    children << new QStandardItem( i18n( "Resource assignments" ) ) << new QStandardItem();
     children[ 0 ]->setData( "resourceassignments", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
     lst[ sfPos ]->appendRow( children );
@@ -878,8 +878,8 @@ ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
 //     lst[ sfPos ]->appendRow( children );
 //     children.clear();
 
-    children << new QStandardItem( "Resources and Groups" ) << new QStandardItem();
-    children[ 0 ]->setData( "resourcesandgroups", Reports::TagRole );
+    children << new QStandardItem( i18n( "Resources" ) ) << new QStandardItem();
+    children[ 0 ]->setData( "resources", Reports::TagRole );
     children[ 1 ]->setCheckable( true );
     lst[ sfPos ]->appendRow( children );
     children.clear();

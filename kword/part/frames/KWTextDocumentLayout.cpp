@@ -399,6 +399,7 @@ void KWTextDocumentLayout::layout()
                 while (true) {
                     if (m_state->numColumns() > 0) {
                         line.setNumColumns(m_state->numColumns());
+                        line.setPosition(QPointF(line.x(), rect.y()));
                     } else {
                         qreal x = rect.x();
                         qreal effectiveLineWidth = rect.width();

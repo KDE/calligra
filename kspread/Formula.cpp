@@ -1666,7 +1666,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             // function name as string value
             val1 = converter->asString(stack.pop().val);
             if (val1.isError())
-                return Value::errorVALUE();
+                return val1;
             function = FunctionRepository::self()->function(val1.asString());
             if (!function)
                 return Value::errorNAME(); // no such function

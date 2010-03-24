@@ -158,6 +158,7 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
 void ChartSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
+    if (!m_chart) return;
     const unsigned type = record->rtti();
 
     if (type == BOFRecord::id)

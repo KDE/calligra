@@ -157,7 +157,7 @@ void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
     connect(sourceModel(), SIGNAL(layoutChanged()),
             this, SLOT(initiateMaps()));
 
-    connect(sourceModel(), SIGNAL(modelReset()), this, SLOT(initiateMaps()));
+    connect(sourceModel(), SIGNAL(modelReset()), this, SLOT(sourceReset()));
 
     initiateMaps();
     reset();

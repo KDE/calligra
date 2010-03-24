@@ -80,6 +80,8 @@ public:
     MSO::OfficeArtCOLORREF lineColor() const;
     // LineOpacity
     qint32 lineOpacity() const;
+    // TxflTextFlow
+    qint32 txflTextFlow() const;
 };
 
 /**

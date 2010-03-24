@@ -100,6 +100,7 @@ protected:
     KoFilter::ConversionStatus read_highlight();
     KoFilter::ConversionStatus read_vertAlign();
     KoFilter::ConversionStatus read_lang();
+    KoFilter::ConversionStatus read_background();
     KoFilter::ConversionStatus read_pBdr();
 
     KoGenStyle m_currentPageStyle;
@@ -115,6 +116,7 @@ private:
     //! Used for setting up properties for pages and paragraphs.
     //! It is reversed map, so detecting duplicates is easy in applyBorders().
     QMap<QString, BorderSide> m_borderStyles;
+    QColor m_backgroundColor; //Documet background color
 
     //! Used for setting up properties for pages and paragraphs.
     //! It is reversed map, so detecting duplicates is easy in applyBorders().

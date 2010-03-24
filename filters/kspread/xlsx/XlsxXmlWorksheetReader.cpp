@@ -680,32 +680,43 @@ static bool valueIsNumeric(const QString& v)
     return ok;
 }
 
-//<SIMPLE SUPPORT FOR FORMULAS>
-//! @todo improve support for formulas
-
-//! @return formula with 2-dimentional range
-static QString printFormula(const QString& formula, const QString& from, const QString& to)
-{
-    return QString("=%1([.%2:.%3])").arg(formula).arg(from).arg(to);
-}
-
 static QString convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();
-    QRegExp re("([0-9a-zA-Z]+)\\(([A-Z]+[0-9]+):([A-Z]+[0-9]+)\\)"); // e.g. SUM(B2:B4)
-    kDebug() << formula;
-    if (re.exactMatch(formula)) {
-        kDebug() << re.cap(1) << re.cap(2) << re.cap(3);
-        return printFormula(re.cap(1).toLatin1(), re.cap(2).toLatin1(), re.cap(3).toLatin1());
-    }
-    QString res(QLatin1String("=") + formula);
-    res.replace(QRegExp("([A-Z]+[0-9]+)"), "[.\\1]");
-    return res;
-//    qDebug() << "Parsing of formula" << formula << "not implemented";
-//    return QString();
+
+    enum { Start, InArguments, InString, InSheetOrAreaName } state;
+    state = Start;
+    QString result = '=' + formula;
+
+    for(int i = 1; i < result.length(); ++i) {
+        QChar ch = result[i];
+        switch (state) {
+        case Start:
+            if(ch == '(')
+                state = InArguments;
+            break;
+        case InArguments:
+            if (ch == '"')
+                state = InString;
+            else if (ch.unicode() == '\'')
+                state = InSheetOrAreaName;
+            else if (ch == ',')
+                result[i] = ';'; // replace argument delimiter
+            break;
+        case InString:
+            if (ch == '"')
+                state = InArguments;
+            break;
+        case InSheetOrAreaName:
+            if (ch == '\'')
+                state = InArguments;
+            break;
+        };
+    };
+
+    return result;
 }
-//</SIMPLE SUPPORT FOR FORMULAS>
 
 #undef CURRENT_EL
 #define CURRENT_EL c
