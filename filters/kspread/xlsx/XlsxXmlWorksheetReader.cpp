@@ -104,6 +104,7 @@ class Cell
 public:
     int column;
     int row;
+    int rowsMerged, columnsMerged;
     //int repeated;
     QString styleName;
     QString charStyleName;
@@ -113,7 +114,7 @@ public:
     QString valueAttrValue;
     QString formula;
 
-    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(columnIndex) {}
+    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(columnIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() {}
 };
 
@@ -358,6 +359,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill d->rows
+            ELSE_TRY_READ_IF(mergeCells)
             ELSE_TRY_READ_IF(drawing)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -393,7 +395,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     if (!cell->formula.isEmpty()) {
                         body->addAttribute("table:formula", cell->formula);
                     }
-
+                    if (cell->rowsMerged > 1) {
+                        body->addAttribute("table:number-rows-spanned", cell->rowsMerged);
+                    }
+                    if (cell->columnsMerged > 1) {
+                        body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
+                    }
                     if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
                         body->startElement("text:p", false);
                         if(!cell->charStyleName.isEmpty()) {
@@ -408,7 +415,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                         body->endElement(); // text:p
                     }
-        
+
 //! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
 //! @todo make drawingobject logic more generic
 #if 0
@@ -1069,6 +1076,60 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
         return QString();
 
     return q->mainStyles->lookup( style, "N" );
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL mergeCell
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+    QStringList refList = ref.split(':');
+    if (refList.count() >= 2) {
+        const QString fromCell = refList[0];
+        const QString toCell = refList[1];
+
+        QRegExp rx("([A-Za-z]+)([0-9]+)");
+        if(rx.exactMatch(fromCell)) {
+            const int fromRow = rx.cap(2).toInt() - 1;
+            const int fromCol = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
+            if(rx.exactMatch(toCell)) {
+                Cell* cell = d->sheet->cell(fromCol, fromRow, true);
+                cell->rowsMerged = rx.cap(2).toInt() - fromRow;
+                cell->columnsMerged = KSpread::Util::decodeColumnLabelText(toCell) - fromCol;
+            }
+        }
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL mergeCells
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(mergeCell)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
