@@ -32,8 +32,9 @@
 
 class KoDocument;
 
-class QPoint;
+class KToggleAction;
 
+class QPoint;
 class QKeyEvent;
 
 namespace KPlato
@@ -170,8 +171,12 @@ protected slots:
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
 
+    void slotShowDebug( bool );
+
 private:
     QSortFilterProxyModel *m_model;
+    
+    KToggleAction *actionShowDebug;
 };
 
 //----------------------------------------------
