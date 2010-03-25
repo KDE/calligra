@@ -88,6 +88,8 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                           o.clientData.data(), out, style);
 }
 
+namespace
+{
 const char* dashses[11] = {
     "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
     "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
@@ -96,8 +98,6 @@ const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
-namespace
-{
 QString format(double v) {
     static const QString f("%1");
     static const QString e("");

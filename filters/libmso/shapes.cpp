@@ -28,6 +28,7 @@
 
 using namespace MSO;
 
+namespace {
 enum {
     msosptMin = 0,
     msosptNotPrimitive = msosptMin,
@@ -237,6 +238,15 @@ enum {
     msosptNil = 0x0FFF
 };
 
+void equation(Writer& out, const char* name, const char* formula)
+{
+    out.xml.startElement("draw:equation");
+    out.xml.addAttribute("draw:name", name);
+    out.xml.addAttribute("draw:formula", formula);
+    out.xml.endElement();
+}
+}
+
 /**
  * Return the bounding rectangle for this object.
  **/
@@ -276,26 +286,11 @@ void ODrawToOdf::processRoundRectangle(const OfficeArtSpContainer& o, Writer& ou
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "round-rectangle");
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 /3");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "right-?f0 ");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "bottom-?f0 ");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "left+?f0 ");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "top+?f0 ");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement(); // draw:equation
+    equation(out, "f0", "$0 /3");
+    equation(out, "f1", "right-?f0");
+    equation(out, "f2", "bottom-?f0");
+    equation(out, "f3", "left+?f0");
+    equation(out, "f4", "top+?f0");
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
 }
@@ -331,38 +326,14 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("draw:type", "right-triangle");
     } else if (o.shapeProp.rh.recInstance == msosptIsoscelesTriangle) {
         out.xml.addAttribute("draw:type", "isosceles-triangle");
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "$0 ");
-        out.xml.addAttribute("draw:name", "f0");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "$0 /2");
-        out.xml.addAttribute("draw:name", "f1");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "?f1 +10800");
-        out.xml.addAttribute("draw:name", "f2");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "$0 *2/3");
-        out.xml.addAttribute("draw:name", "f3");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "?f3 +7200");
-        out.xml.addAttribute("draw:name", "f4");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "21600-?f0 ");
-        out.xml.addAttribute("draw:name", "f5");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "?f5 /2");
-        out.xml.addAttribute("draw:name", "f6");
-        out.xml.endElement();
-        out.xml.startElement("draw:equation");
-        out.xml.addAttribute("draw:formula", "21600-?f6 ");
-        out.xml.addAttribute("draw:name", "f7");
-        out.xml.endElement();
+        equation(out, "f0", "$0");
+        equation(out, "f1", "$0 /2");
+        equation(out, "f2", "?f1 +10800");
+        equation(out, "f3", "$0 *2/3");
+        equation(out, "f4", "?f3 +7200");
+        equation(out, "f5", "21600-?f0");
+        equation(out, "f6", "?f5 /2");
+        equation(out, "f7", "21600-?f6");
         out.xml.startElement("draw:handle");
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
         out.xml.addAttribute("draw:handle-range-x-minimum", 0);
@@ -388,34 +359,13 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     if (o.shapeProp.fFlipH) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
     }
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-$0 ");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 *10/18");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f2 +1750");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f3");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 /2");
-    out.xml.addAttribute("draw:name", "f5");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f5");
-    out.xml.addAttribute("draw:name", "f6");
-    out.xml.endElement();
+    equation(out, "f0", "21600-$0");
+    equation(out, "f1", "$0");
+    equation(out, "f2", "$0 *10/18");
+    equation(out, "f3", "?f2 +1750");
+    equation(out, "f4", "21600-?f3");
+    equation(out, "f5", "$0 /2");
+    equation(out, "f6", "21600-?f5");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
@@ -439,62 +389,20 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
     if (o.shapeProp.fFlipH) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
     }
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 ");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-$0");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 *10/24");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f2 +1750");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f3");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f0 /2");
-    out.xml.addAttribute("draw:name", "f5");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "10800+?f5");
-    out.xml.addAttribute("draw:name", "f6");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f0-10800 ");
-    out.xml.addAttribute("draw:name", "f7");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "if(?f7,?f12,0");
-    out.xml.addAttribute("draw:name", "f8");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "10800-?f5");
-    out.xml.addAttribute("draw:name", "f9");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "if(?f7, ?f12, 21600");
-    out.xml.addAttribute("draw:name", "f10");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f5");
-    out.xml.addAttribute("draw:name", "f11");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600*10800/?f0");
-    out.xml.addAttribute("draw:name", "f12");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f12");
-    out.xml.addAttribute("draw:name", "f13");
-    out.xml.endElement();
+    equation(out, "f0", "$0");
+    equation(out, "f1", "21600-$0");
+    equation(out, "f2", "$0 *10/24");
+    equation(out, "f3", "?f2 +1750");
+    equation(out, "f4", "21600-?f3");
+    equation(out, "f5", "?f0 /2");
+    equation(out, "f6", "10800+?f5");
+    equation(out, "f7", "?f0-10800");
+    equation(out, "f8", "if(?f7,?f12,0");
+    equation(out, "f9", "10800-?f5");
+    equation(out, "f10", "if(?f7, ?f12, 21600");
+    equation(out, "f11", "21600-?f5");
+    equation(out, "f12", "21600*10800/?f0");
+    equation(out, "f13", "21600-?f12");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
@@ -512,26 +420,11 @@ void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "hexagon");
     out.xml.addAttribute("draw:glue-points", "5 0 0 5 5 10 10 5");
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 ");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-$0");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 *100/234");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f2 +1700");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f3");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement();
+    equation(out, "f0", "$0");
+    equation(out, "f1", "21600-$0");
+    equation(out, "f2", "$0 *100/234");
+    equation(out, "f3", "?f2 +1700");
+    equation(out, "f4", "21600-?f3");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
@@ -549,42 +442,15 @@ void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "octagon");
     out.xml.addAttribute("draw:glue-points", "5 0 0 4.782 5 10 10 4.782");
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "left+$0 ");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "top+$0 ");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "right-$0 ");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "bottom-$0 ");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0 /2");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "left+?f4 ");
-    out.xml.addAttribute("draw:name", "f5");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "top+?f4 ");
-    out.xml.addAttribute("draw:name", "f6");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "right-?f4 ");
-    out.xml.addAttribute("draw:name", "f7");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "bottom-?f4 ");
-    out.xml.addAttribute("draw:name", "f8");
-    out.xml.endElement();
+    equation(out, "f0", "left+$0");
+    equation(out, "f1", "top+$0");
+    equation(out, "f2", "right-$0");
+    equation(out, "f3", "bottom-$0");
+    equation(out, "f4", "$0 /2");
+    equation(out, "f5", "left+?f4");
+    equation(out, "f6", "top+?f4");
+    equation(out, "f7", "right-?f4");
+    equation(out, "f8", "bottom-?f4");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
@@ -606,42 +472,19 @@ void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
             out.xml.addAttribute("draw:type", "right-arrow");
         else
             out.xml.addAttribute("draw:type", "left-arrow");
-    } else if (o.shapeProp.rh.recInstance == msosptUpArrow)
+    } else if (o.shapeProp.rh.recInstance == msosptUpArrow) {
         out.xml.addAttribute("draw:type", "up-arrow");
-    else if (o.shapeProp.rh.recInstance == msosptDownArrow)
+    } else if (o.shapeProp.rh.recInstance == msosptDownArrow) {
         out.xml.addAttribute("draw:type", "down-arrow");
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$1");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-$1");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "21600-?f1");
-    out.xml.addAttribute("draw:name", "f3");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f3 *?f0 /10800");
-    out.xml.addAttribute("draw:name", "f4");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f1 +?f4 ");
-    out.xml.addAttribute("draw:name", "f5");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f1 *?f0 /10800");
-    out.xml.addAttribute("draw:name", "f6");
-    out.xml.endElement(); // draw:equation
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "?f1 -?f6 ");
-    out.xml.addAttribute("draw:name", "f7");
-    out.xml.endElement(); // draw:equation
+    }
+    equation(out, "f0", "$1");
+    equation(out, "f1", "$0");
+    equation(out, "f2", "21600-$1");
+    equation(out, "f3", "21600-?f1");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4");
+    equation(out, "f6", "?f1 *?f0 /10800");
+    equation(out, "f7", "?f1 -?f6");
     out.xml.startElement("draw:handle");
     if (o.shapeProp.rh.recInstance == msosptLeftRightArrow || o.shapeProp.rh.recInstance == msosptLeftArrow) {
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
@@ -694,18 +537,9 @@ void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "smiley");
     out.xml.addAttribute("draw:glue-points", "5 0 1.461 1.461 0 5 1.461 8.536 10 5 8.536 1.461");
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "$0-15510 ");
-    out.xml.addAttribute("draw:name", "f0");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "17520-?f0");
-    out.xml.addAttribute("draw:name", "f1");
-    out.xml.endElement();
-    out.xml.startElement("draw:equation");
-    out.xml.addAttribute("draw:formula", "15510+?f0");
-    out.xml.addAttribute("draw:name", "f2");
-    out.xml.endElement();
+    equation(out, "f0", "$0-15510");
+    equation(out, "f1", "17520-?f0");
+    equation(out, "f2", "15510+?f0");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:position", 10800);
     out.xml.addAttribute("draw:handle-range-y-maximum", 17520);
@@ -731,17 +565,105 @@ void ODrawToOdf::processHeart(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    qDebug() << "PROCESSWEDGERECT";
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "rectangular-callout");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800 ?f40 ?f41");
+    out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
+    out.xml.addAttribute("draw:modifiers", "514 25920");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 0 3590 ?f2 ?f3 0 8970 0 12630 ?f4 ?f5 0 18010 0 21600 3590 21600 ?f6 ?f7 8970 21600 12630 21600 ?f8 ?f9 18010 21600 21600 21600 21600 18010 ?f10 ?f11 21600 12630 21600 8970 ?f12 ?f13 21600 3590 21600 0 18010 0 ?f14 ?f15 12630 0 8970 0 ?f16 ?f17 3590 0 0 0 Z N");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "if(?f18 ,$0 ,0)");
+    equation(out, "f3", "if(?f18 ,$1 ,6280)");
+    equation(out, "f4", "if(?f23 ,$0 ,0)");
+    equation(out, "f5", "if(?f23 ,$1 ,15320)");
+    equation(out, "f6", "if(?f26 ,$0 ,6280)");
+    equation(out, "f7", "if(?f26 ,$1 ,21600)");
+    equation(out, "f8", "if(?f29 ,$0 ,15320)");
+    equation(out, "f9", "if(?f29 ,$1 ,21600)");
+    equation(out, "f10", "if(?f32 ,$0 ,21600)");
+    equation(out, "f11", "if(?f32 ,$1 ,15320)");
+    equation(out, "f12", "if(?f34 ,$0 ,21600)");
+    equation(out, "f13", "if(?f34 ,$1 ,6280)");
+    equation(out, "f14", "if(?f36 ,$0 ,15320)");
+    equation(out, "f15", "if(?f36 ,$1 ,0)");
+    equation(out, "f16", "if(?f38 ,$0 ,6280)");
+    equation(out, "f17", "if(?f38 ,$1 ,0)");
+    equation(out, "f18", "if($0 ,-1,?f19 )");
+    equation(out, "f19", "if(?f1 ,-1,?f22 )");
+    equation(out, "f20", "abs(?f0 )");
+    equation(out, "f21", "abs(?f1 )");
+    equation(out, "f22", "?f20 -?f21");
+    equation(out, "f23", "if($0 ,-1,?f24 )");
+    equation(out, "f24", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f25", "$1 -21600");
+    equation(out, "f26", "if(?f25 ,?f27 ,-1)");
+    equation(out, "f27", "if(?f0 ,-1,?f28 )");
+    equation(out, "f28", "?f21 -?f20 ");
+    equation(out, "f29", "if(?f25 ,?f30 ,-1)");
+    equation(out, "f30", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f31", "$0 -21600");
+    equation(out, "f32", "if(?f31 ,?f33 ,-1)");
+    equation(out, "f33", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f34", "if(?f31 ,?f35 ,-1)");
+    equation(out, "f35", "if(?f1 ,-1,?f22 )");
+    equation(out, "f36", "if($1 ,-1,?f37 )");
+    equation(out, "f37", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f38", "if($1 ,-1,?f39 )");
+    equation(out, "f39", "if(?f0 ,-1,?f28 )");
+    equation(out, "f40", "$0");
+    equation(out, "f41", "$1");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 $1");
+    out.xml.endElement();
+    out.xml.endElement();
     out.xml.endElement(); // custom-shape
 }
 
 void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    qDebug() << "PROCESSWEDGEELLIPSE";
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "round-callout");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 3160 3160 0 10800 3160 18440 10800 21600 18440 18440 21600 10800 18440 3160 ?f14 ?f15");
+    out.xml.addAttribute("draw:text-areas", "3200 3200 18400 18400");
+    out.xml.addAttribute("draw:modifiers", "0 11500");
+    out.xml.addAttribute("draw:enhanced-path", "W 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "?f0 *?f0");
+    equation(out, "f3", "?f1 *?f1");
+    equation(out, "f4", "?f2 +?f3");
+    equation(out, "f5", "sqrt(?f4 )");
+    equation(out, "f6", "?f5 -10800");
+    equation(out, "f7", "atan2(?f1 ,?f0 )/(pi/180)");
+    equation(out, "f8", "?f7 -10");
+    equation(out, "f9", "?f7 +10");
+    equation(out, "f10", "10800*cos(?f7 *(pi/180))");
+    equation(out, "f11", "10800*sin(?f7 *(pi/180))");
+    equation(out, "f12", "?f10 +10800");
+    equation(out, "f13", "?f11 +10800");
+    equation(out, "f14", "if(?f6 ,$0 ,?f12 )");
+    equation(out, "f15", "if(?f6 ,$1 ,?f13 )");
+    equation(out, "f16", "10800*cos(?f8 *(pi/180))");
+    equation(out, "f17", "10800*sin(?f8 *(pi/180))");
+    equation(out, "f18", "?f16 +10800");
+    equation(out, "f19", "?f17 +10800");
+    equation(out, "f20", "10800*cos(?f9 *(pi/180))");
+    equation(out, "f21", "10800*sin(?f9 *(pi/180))");
+    equation(out, "f22", "?f20 +10800");
+    equation(out, "f23", "?f21 +10800");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 $1");
+    out.xml.endElement();
+    out.xml.endElement();
     out.xml.endElement(); // custom-shape
 }
 
