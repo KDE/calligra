@@ -146,11 +146,16 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         }
     }
 
-    //m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_cellRangeAddress;
-    //m_context->m_chartExport->m_cellRangeAddress = m_cellRangeAddress;
-    m_context->m_chartExport->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
-    m_context->m_chartExport->m_cellRangeAddress = "Sheet1.D2:Sheet1.F2";//string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
 
+    if (!m_context->m_chart->m_cellRangeAddress.isNull() ) {
+        m_context->m_chartExport->m_cellRangeAddress.clear();
+        if (!sheetName.isEmpty()) m_context->m_chartExport->m_cellRangeAddress += sheetName + '.';
+        m_context->m_chartExport->m_cellRangeAddress += columnName(m_context->m_chart->m_cellRangeAddress.left()) + QString::number(m_context->m_chart->m_cellRangeAddress.top()) + ":" +
+                                                        columnName(m_context->m_chart->m_cellRangeAddress.right()) + QString::number(m_context->m_chart->m_cellRangeAddress.bottom());
+    }
+
+    m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
+    
     // the index will by written by the XlsxXmlWorksheetReader
     //m_context->m_chartExport->saveIndex(body);
 
@@ -215,7 +220,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
         if (isStartElement()) {
             TRY_READ_IF(numCache)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
-                //m_cellRangeAddress = readElementText();
                 m_currentSeries->m_valuesCellRangeAddress = readElementText();
             }
         }

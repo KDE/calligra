@@ -1408,7 +1408,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
-        string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
+                                    string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 
