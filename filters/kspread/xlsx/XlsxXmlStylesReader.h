@@ -295,6 +295,10 @@ public:
     //! Indicates whether if the text in the cell should be line-wrapped with the cell.
     bool wrapText;
 
+    //! Text rotation in cells, expressed in degrees. (Undocumented? special case: 255 means
+    //! vertical top-to-bottom-text without rotated characters
+    uint textRotation;
+
     void setHorizontalAlignment(const QString& alignment);
     void setVerticalAlignment(const QString& alignment);
 

@@ -488,7 +488,8 @@ XlsxCellFormat::XlsxCellFormat()
    pivotButton(false), quotePrefix(false), xfId(-1),
    horizontalAlignment(GeneralHorizontalAlignment),
    verticalAlignment(NoVerticalAlignment),
-   wrapText(false)
+   wrapText(false),
+   textRotation(0)
 {
 }
 
@@ -555,6 +556,14 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     int wrapOption = -1; // "don't know"
     if (wrapText)
         wrapOption = 1;
+    //special case: 255 indicates vertical rotation without rotated characters (I couldn't find that documented though)
+    const bool verticalTtb = textRotation == 255;
+    if (verticalTtb)
+        cellStyle->addProperty("style:direction", "ttb");
+    else if (textRotation != 0) {
+        //@todo map other cases (to style:text-rotate-angle? that one only allows 0, 90, 270)
+    }
+
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
     case CenterContinuousHorizontalAlignment:
@@ -564,6 +573,8 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
             wrapOption = 1;
         break;
     case GeneralHorizontalAlignment: // ok?
+        if (verticalTtb) // Excel centers vertical text by default, so mimic that
+            cellStyle->addProperty("fo:text-align", "center", KoGenStyle::ParagraphType);
         break;
     case LeftHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "start", KoGenStyle::ParagraphType);
@@ -1329,6 +1340,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     kDebug() << "verticalAlignment:" << m_currentCellFormat->verticalAlignment;
     const bool wrap = readBooleanAttr("wrapText", false);
     m_currentCellFormat->wrapText = wrap;
+    const uint textRotation = attributes().value("textRotation").toString().toUInt();
+    m_currentCellFormat->textRotation = textRotation;
 
 //! @todo more attributes
 
