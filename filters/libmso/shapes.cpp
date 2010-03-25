@@ -1,4 +1,5 @@
-#include "PptToOdp.h"
+#include "ODrawToOdf.h"
+#include "drawstyle.h"
 
 #include <KoXmlWriter.h>
 #include <kdebug.h>
@@ -218,7 +219,22 @@ enum {
     msosptNil = 0x0FFF
 };
 
-void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
+/**
+ * Return the bounding rectangle for this object.
+ **/
+QRect
+ODrawToOdf::getRect(const OfficeArtSpContainer &o)
+{
+    if (o.childAnchor) {
+        const OfficeArtChildAnchor& r = *o.childAnchor;
+        return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+    } else if (o.clientAnchor && client) {
+        return client->getRect(*o.clientAnchor);
+    }
+    return QRect(0, 0, 1, 1);
+}
+
+void ODrawToOdf::processEllipse(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:ellipse");
@@ -228,7 +244,7 @@ void PptToOdp::processEllipse(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:ellipse
 }
 
-void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:rect");
@@ -239,7 +255,7 @@ void PptToOdp::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:rect
 }
 
-void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -273,7 +289,7 @@ void PptToOdp::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:custom-shape
 }
 
-void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processDiamond(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -303,7 +319,7 @@ void PptToOdp::processDiamond(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement();
 }
 
-void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     /* draw IsocelesTriangle or RightTriangle */
@@ -392,7 +408,7 @@ void PptToOdp::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -461,7 +477,7 @@ void PptToOdp::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -566,7 +582,7 @@ void PptToOdp::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processHexagon(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -621,7 +637,7 @@ void PptToOdp::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processOctagon(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -692,7 +708,7 @@ void PptToOdp::processOctagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -762,7 +778,7 @@ void PptToOdp::processArrow(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:custom-shape
 }
 
-void PptToOdp::processLine(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     qreal x1 = rect.x();
@@ -788,7 +804,7 @@ void PptToOdp::processLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement();
 }
 
-void PptToOdp::processSmiley(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -844,7 +860,7 @@ void PptToOdp::processSmiley(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processHeart(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -875,7 +891,17 @@ void PptToOdp::processHeart(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
-void PptToOdp::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    qDebug() << "PROCESSWEDGERECT";
+}
+
+void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    qDebug() << "PROCESSWEDGEELLIPSE";
+}
+
+void ODrawToOdf::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -929,7 +955,7 @@ void PptToOdp::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:custom-shape
 }
 
-void PptToOdp::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
@@ -946,7 +972,7 @@ void PptToOdp::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // draw:custom-shape
 }
 
-void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
     out.xml.startElement("draw:path");
@@ -956,19 +982,12 @@ void PptToOdp::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // path
 }
 
-QString PptToOdp::getPicturePath(int pib) const
-{
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(picturePosition);
-    return rgbUid.length() ? "Pictures/" + pictureNames[rgbUid] : "";
-}
-
-void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
     QString url;
     const Pib* pib = get<Pib>(o);
-    if (pib) {
-        url = getPicturePath(pib->pib);
+    if (pib && client) {
+        url = client->getPicturePath(pib->pib);
     }
     out.xml.startElement("draw:frame");
     addGraphicStyleToDrawElement(out, o);
@@ -987,8 +1006,22 @@ void PptToOdp::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // image
     out.xml.endElement(); // frame
 }
-
-void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer& out)
+/*
+void ODrawToOdf::processTextObjectForBody(const OfficeArtSpContainer& o,
+                                        const MSO::TextContainer& tc,
+                                        Writer& out)
+{
+    out.xml.startElement("draw:frame");
+    addGraphicStyleToDrawElement(out, o);
+    set2dGeometry(o, out);
+    if (client) {
+        client->addTextFrameAttributes(o, out);
+        client->processTextForBody(o.clientData.data(), tc, out);
+    }
+    out.xml.endElement(); // draw:frame
+}
+*/
+void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
     if (shapeType == msosptEllipse) {
@@ -1016,6 +1049,10 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
         processArrow(o, out);
     } else if (shapeType == msosptLine) {
         processLine(o, out);
+    } else if (shapeType == msosptWedgeRectCallout) {
+        processWedgeRectCallout(o, out);
+    } else if (shapeType == msosptWedgeEllipseCallout) {
+        processWedgeEllipseCallout(o, out);
     } else if (shapeType == msosptSmileyFace) {
         processSmiley(o, out);
     } else if (shapeType == msosptHeart) {
@@ -1030,14 +1067,14 @@ void PptToOdp::processDrawingObjectForBody(const OfficeArtSpContainer& o, Writer
                || shapeType == msosptHostControl) {
         processPictureFrame(o, out);
     } else if (shapeType == msosptTextBox) {
-        qDebug() << "what's my name!' " << o.shapeProp.rh.recInstance;
+        qDebug() << "what's my name!' " << shapeType;
         //processTextObjectForBody(o, , out);
     } else {
-        qDebug() << "cannot handle object of type " << o.shapeProp.rh.recInstance;
+        qDebug() << "cannot handle object of type " << shapeType;
     }
 }
 
-void PptToOdp::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRect rect = getRect(o);
 
