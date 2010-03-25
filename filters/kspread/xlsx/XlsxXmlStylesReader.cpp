@@ -487,7 +487,8 @@ XlsxCellFormat::XlsxCellFormat()
    borderId(-1), fillId(-1), fontId(-1), numFmtId(-1),
    pivotButton(false), quotePrefix(false), xfId(-1),
    horizontalAlignment(GeneralHorizontalAlignment),
-   verticalAlignment(NoVerticalAlignment)
+   verticalAlignment(NoVerticalAlignment),
+   wrapText(false)
 {
 }
 
@@ -552,6 +553,8 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 {
 //! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
     int wrapOption = -1; // "don't know"
+    if (wrapText)
+        wrapOption = 1;
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
     case CenterContinuousHorizontalAlignment:
@@ -591,7 +594,6 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     default:;
     }
 
-//! @todo take alignment/@wrapText into account
     if (wrapOption == 0 || wrapOption == 1)
         cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
 }
@@ -602,7 +604,7 @@ bool XlsxCellFormat::setupCellStyle(
     const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,
     KoGenStyle* cellStyle) const
 {
-kDebug() << "fontId:" << fontId << "fillId:" << fillId;
+    kDebug() << "fontId:" << fontId << "fillId:" << fillId;
     if (applyAlignment) {
         setupCellStyleAlignment(cellStyle);
     }
@@ -1325,6 +1327,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     kDebug() << "horizontalAlignment:" << m_currentCellFormat->horizontalAlignment;
     m_currentCellFormat->setVerticalAlignment(attrs.value("vertical").toString());
     kDebug() << "verticalAlignment:" << m_currentCellFormat->verticalAlignment;
+    const bool wrap = readBooleanAttr("wrapText", false);
+    m_currentCellFormat->wrapText = wrap;
+
 //! @todo more attributes
 
     while (true) {
