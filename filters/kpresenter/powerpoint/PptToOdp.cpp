@@ -101,10 +101,6 @@ private:
 
     QRect getRect(const MSO::OfficeArtClientAnchor&);
     QString getPicturePath(int pib);
-    void addTextFrameAttributes(const MSO::OfficeArtSpContainer& o,
-                                Writer& out);
-    void processTextForBody(const MSO::OfficeArtClientData* clientData,
-                                const MSO::TextContainer& tc, Writer& out);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientData& clientData,
                                    Writer& out);
@@ -134,32 +130,6 @@ QRect PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
 QString PptToOdp::DrawClient::getPicturePath(int pib)
 {
     return ppttoodp->getPicturePath(pib);
-}
-void PptToOdp::DrawClient::addTextFrameAttributes(
-        const MSO::OfficeArtSpContainer& o, Writer& out)
-{
-    const PlaceholderAtom* p = 0;
-    if (o.clientData) {
-        const PptOfficeArtClientData* pcd
-                = o.clientData->anon.get<PptOfficeArtClientData>();
-        if (pcd) {
-            p = pcd->placeholderAtom.data();
-        }
-    }
-    if (p) {
-        if (p->placementId >= 1 && p->placementId <= 6) {
-            out.xml.addAttribute("presentation:placeholder", "true");
-        } else if (p->placementId >= 0xB) {
-            out.xml.addAttribute("presentation:user-transformed", "true");
-        }
-    }
-}
-
-void PptToOdp::DrawClient::processTextForBody(
-        const MSO::OfficeArtClientData* clientData,
-        const MSO::TextContainer& tc, Writer& out)
-{
-   ppttoodp->processTextForBody(clientData, tc, out);
 }
 bool PptToOdp::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {
@@ -1475,7 +1445,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         ODrawToOdf odrawtoodf(drawclient);
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
-            odrawtoodf.processObject(co, out);
+            odrawtoodf.processDrawing(co, out);
         }
         writer.endElement();
     }
@@ -1501,7 +1471,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         ODrawToOdf odrawtoodf(drawclient);
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 drawing->OfficeArtDg.groupShape.rgfb) {
-            odrawtoodf.processObject(co, out);
+            odrawtoodf.processDrawing(co, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
                                                      buffer.buffer().size()));
@@ -2049,7 +2019,6 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
         }
     }
 
-    out.xml.startElement("draw:text-box");
     const MSO::MasterOrSlideContainer* tmpMaster = currentMaster;
     // if this is not a presentation frame, set master to 0, to avoid the
     // text style from inheriting from the master style
@@ -2074,7 +2043,6 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
     }
     // close all open text:list elements
     writeTextObjectDeIndent(out.xml, 0, levels);
-    out.xml.endElement(); // draw:text-box
     currentMaster = tmpMaster;
 }
 
@@ -2156,7 +2124,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     ODrawToOdf odrawtoodf(drawclient);
     foreach(const OfficeArtSpgrContainerFileBlock& co,
             slide->drawing.OfficeArtDg.groupShape.rgfb) {
-        odrawtoodf.processObject(co, out);
+        odrawtoodf.processDrawing(co, out);
     }
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
@@ -2174,7 +2142,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         }
         foreach(const OfficeArtSpgrContainerFileBlock& co,
                 nc->drawing.OfficeArtDg.groupShape.rgfb) {
-            odrawtoodf.processObject(co, out);
+            odrawtoodf.processDrawing(co, out);
         }
         out.xml.endElement();
     }

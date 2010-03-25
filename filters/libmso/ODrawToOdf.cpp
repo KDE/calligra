@@ -34,15 +34,16 @@ ODrawToOdf::getRect(const OfficeArtFSPGR &r)
     return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
 }
 
-void ODrawToOdf::processObject(const OfficeArtSpgrContainerFileBlock& of, Writer& out)
+void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
+                                Writer& out)
 {
     if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processObject(*of.anon.get<OfficeArtSpgrContainer>(), out);
+        processGroup(*of.anon.get<OfficeArtSpgrContainer>(), out);
     } else { // OfficeArtSpContainer
-        processObject(*of.anon.get<OfficeArtSpContainer>(), out);
+        processDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
     }
 }
-void ODrawToOdf::processObject(const MSO::OfficeArtSpgrContainer& o, Writer& out)
+void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
 {
     if (o.rgfb.size() < 2) return;
     out.xml.startElement("draw:g");
@@ -59,33 +60,14 @@ void ODrawToOdf::processObject(const MSO::OfficeArtSpgrContainer& o, Writer& out
         QRect newCoords = getRect(*first->shapeGroup);
         Writer transformedOut = out.transform(oldCoords, newCoords);
         for (int i = 1; i < o.rgfb.size(); ++i) {
-            processObject(o.rgfb[i], transformedOut);
+            processDrawing(o.rgfb[i], transformedOut);
         }
     } else {
         for (int i = 1; i < o.rgfb.size(); ++i) {
-            processObject(o.rgfb[i], out);
+            processDrawing(o.rgfb[i], out);
         }
     }
     out.xml.endElement(); // draw:g
-}
-void ODrawToOdf::processObject(const MSO::OfficeArtSpContainer& o, Writer& out)
-{
-    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
-        out.xml.startElement("draw:frame");
-        set2dGeometry(o, out);
-        addGraphicStyleToDrawElement(out, o);
-        client->processClientData(*o.clientData, out);
-        out.xml.endElement(); // draw:frame
-    } else if (o.clientTextbox && client) {
-        out.xml.startElement("draw:frame");
-        set2dGeometry(o, out);
-        addGraphicStyleToDrawElement(out, o);
-        client->processClientTextBox(*o.clientTextbox,
-                                     o.clientData.data(), out);
-        out.xml.endElement(); // draw:frame
-    } else {
-        processDrawingObject(o, out);
-    }
 }
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                                             const OfficeArtSpContainer& o)

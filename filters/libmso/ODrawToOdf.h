@@ -108,9 +108,10 @@ private:
     void processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
-
-    void processObject(const MSO::OfficeArtSpgrContainer& o, Writer& out);
-    void processObject(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
+    void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
     /**
     * @brief set the width, height rotation and starting point for the given container
     */
@@ -118,7 +119,7 @@ private:
 
 public:
     ODrawToOdf(Client& c) :client(&c) {}
-    void processObject(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
+    void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
                                            const QString& listStyle=QString());
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);

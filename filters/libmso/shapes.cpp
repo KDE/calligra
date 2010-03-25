@@ -254,32 +254,25 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 
 void ODrawToOdf::processEllipse(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:ellipse");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
     out.xml.endElement(); // draw:ellipse
 }
 
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
-    out.xml.startElement("draw:rect");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
-
-    out.xml.endElement(); // draw:rect
+    out.xml.startElement("draw:frame");
+    processStyle(o, out);
+    out.xml.startElement("draw:text-box");
+    processText(o, out);
+    out.xml.endElement(); // draw:text-box
+    out.xml.endElement(); // draw:frame
 }
 
 void ODrawToOdf::processRoundRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "round-rectangle");
@@ -309,69 +302,24 @@ void ODrawToOdf::processRoundRectangle(const OfficeArtSpContainer& o, Writer& ou
 
 void ODrawToOdf::processDiamond(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    set2dGeometry(o, out);
-    out.xml.addAttribute("draw:layer", "layout");
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 10);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "diamond");
+    out.xml.addAttribute("draw:glue-points", "5 0 0 5 5 10 10 5");
     out.xml.endElement();
     out.xml.endElement();
 }
 
 void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     /* draw IsocelesTriangle or RightTriangle */
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
-
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 2.5);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 10);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 7.5);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
+    processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10 10 10 7.5 5");
 
     if (o.shapeProp.fFlipV) {
         out.xml.addAttribute("draw:mirror-vertical", "true");
@@ -428,36 +376,18 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 2.5);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "trapezoid");
+    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10");
     if (o.shapeProp.fFlipV) {
         out.xml.addAttribute("draw:mirror-vertical", "true");
     }
     if (o.shapeProp.fFlipH) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
     }
-    out.xml.addAttribute("draw:type", "trapezoid");
     out.xml.startElement("draw:equation");
     out.xml.addAttribute("draw:formula", "21600-$0 ");
     out.xml.addAttribute("draw:name", "f0");
@@ -497,44 +427,18 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 6.25);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 4.5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 8.75);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 3.75);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 1.25);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "parallelogram");
+    out.xml.addAttribute("draw:glue-points", "6.25 0 4.5 0 8.75 5 3.75 10 5 10 1.25 5");
     if (o.shapeProp.fFlipV) {
         out.xml.addAttribute("draw:mirror-vertical", "true");
     }
     if (o.shapeProp.fFlipH) {
         out.xml.addAttribute("draw:mirror-horizontal", "true");
     }
-    out.xml.addAttribute("draw:type", "parallelogram");
     out.xml.startElement("draw:equation");
     out.xml.addAttribute("draw:formula", "$0 ");
     out.xml.addAttribute("draw:name", "f0");
@@ -602,30 +506,12 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
 
 void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 10);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "hexagon");
+    out.xml.addAttribute("draw:glue-points", "5 0 0 5 5 10 10 5");
     out.xml.startElement("draw:equation");
     out.xml.addAttribute("draw:formula", "$0 ");
     out.xml.addAttribute("draw:name", "f0");
@@ -657,30 +543,12 @@ void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 4.782);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 10);
-    out.xml.addAttribute("svg:y", 4.782);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "octagon");
+    out.xml.addAttribute("draw:glue-points", "5 0 0 4.782 5 10 10 4.782");
     out.xml.startElement("draw:equation");
     out.xml.addAttribute("draw:formula", "left+$0 ");
     out.xml.addAttribute("draw:name", "f0");
@@ -728,11 +596,8 @@ void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
 
@@ -812,50 +677,23 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     }
 
     out.xml.startElement("draw:line");
-    addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("svg:y1", out.vOffset(y1));
     out.xml.addAttribute("svg:y2", out.vOffset(y2));
     out.xml.addAttribute("svg:x1", out.hOffset(x1));
     out.xml.addAttribute("svg:x2", out.hOffset(x2));
-    out.xml.addAttribute("draw:layer", "layout");
+    processStyleAndText(o, out);
 
     out.xml.endElement();
 }
 
 void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 0);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 1.461);
-    out.xml.addAttribute("svg:y", 1.461);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 0);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 1.461);
-    out.xml.addAttribute("svg:y", 8.536);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 10);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 8.536);
-    out.xml.addAttribute("svg:y", 1.461);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "smiley");
+    out.xml.addAttribute("draw:glue-points", "5 0 1.461 1.461 0 5 1.461 8.536 10 5 8.536 1.461");
     out.xml.startElement("draw:equation");
     out.xml.addAttribute("draw:formula", "$0-15510 ");
     out.xml.addAttribute("draw:name", "f0");
@@ -880,30 +718,12 @@ void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processHeart(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 1);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 1.43);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 5);
-    out.xml.addAttribute("svg:y", 10);
-    out.xml.endElement();
-    out.xml.startElement("draw:glue-point");
-    out.xml.addAttribute("svg:x", 8.553);
-    out.xml.addAttribute("svg:y", 5);
-    out.xml.endElement();
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "heart");
+    out.xml.addAttribute("draw:glue-points", "5 1 1.43 5 5 10 8.553 5");
 
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
@@ -912,20 +732,23 @@ void ODrawToOdf::processHeart(const OfficeArtSpContainer& o, Writer& out)
 void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
     qDebug() << "PROCESSWEDGERECT";
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+    out.xml.endElement(); // custom-shape
 }
 
 void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
     qDebug() << "PROCESSWEDGEELLIPSE";
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+    out.xml.endElement(); // custom-shape
 }
 
 void ODrawToOdf::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
@@ -975,11 +798,8 @@ void ODrawToOdf::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:custom-shape");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
@@ -992,11 +812,8 @@ void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& o
 
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
     out.xml.startElement("draw:path");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
     out.xml.endElement(); // path
 }
 
@@ -1008,9 +825,7 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
         url = client->getPicturePath(pib->pib);
     }
     out.xml.startElement("draw:frame");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    set2dGeometry(o, out);
+    processStyleAndText(o, out);
     if (url.isEmpty()) {
         // if the image cannot be found, just place an empty frame
         out.xml.endElement(); // frame
@@ -1074,6 +889,30 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         //processTextObjectForBody(o, , out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
+    }
+}
+void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
+                                     Writer& out)
+{
+    processStyle(o, out);
+    processText(o, out);
+}
+void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
+                                     Writer& out)
+{
+    const QRect rect = getRect(o);
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    set2dGeometry(o, out);
+}
+void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
+                                         Writer& out)
+{
+    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
+        client->processClientData(*o.clientData, out);
+    } else if (o.clientTextbox) {
+        client->processClientTextBox(*o.clientTextbox,
+                                 o.clientData.data(), out);
     }
 }
 
