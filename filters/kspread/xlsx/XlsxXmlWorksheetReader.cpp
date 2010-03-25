@@ -102,8 +102,7 @@ class Sheet;
 class Cell
 {
 public:
-    int column;
-    int row;
+    int column, row;
     int rowsMerged, columnsMerged;
     //int repeated;
     QString styleName;
@@ -123,11 +122,22 @@ class Row
 public:
     Sheet* sheet;
     int rowIndex;
-    //int repeated;
+    bool hidden;
     QString styleName;
 
-    Row(Sheet* s, int index) : sheet(s), rowIndex(index) {}
+    Row(Sheet* s, int index) : sheet(s), rowIndex(index), hidden(false) {}
     ~Row() {}
+};
+
+class Column
+{
+public:
+    Sheet* sheet;
+    int columnIndex;
+    bool hidden;
+
+    Column(Sheet* s, int index) : sheet(s), columnIndex(index), hidden(false) {}
+    ~Column() {}
 };
 
 class Sheet
@@ -147,6 +157,17 @@ public:
         return r;
     }
 
+    Column* column(unsigned columnIndex, bool autoCreate)
+    {
+        Column* c = m_columns[ columnIndex ];
+        if (!c && autoCreate) {
+            c = new Column(this, columnIndex);
+            m_columns[ columnIndex ] = c;
+            if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
+        }
+        return c;
+    }
+
     Cell* cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
     {
         const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
@@ -154,7 +175,7 @@ public:
         if (!c && autoCreate) {
             c = new Cell(this, columnIndex, rowIndex);
             m_cells[ hashed ] = c;
-            //this->column(columnIndex, true);
+            this->column(columnIndex, true);
             this->row(rowIndex, true);
             if (rowIndex > m_maxRow) m_maxRow = rowIndex;
             if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
@@ -173,6 +194,7 @@ public:
     
 private:
     QHash<unsigned, Row*> m_rows;
+    QHash<unsigned, Column*> m_columns;
     QHash<unsigned, Cell*> m_cells;
     QList<XlsxXmlDrawingReaderContext*> m_drawings;
     int m_maxRow;
@@ -367,6 +389,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     }
 
     // now we have everything to start writing the actual cells
+    for(int c = 0; c <= d->sheet->maxColumn(); ++c) {
+        body->startElement("table:table-column");
+        if (Column* column = d->sheet->column(c, false)) {
+            //xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
+            if (column->hidden) {
+                body->addAttribute("table:visibility", "collapse");
+            }
+            //xmlWriter->addAttribute("table:number-columns-repeated", );
+            //xmlWriter->addAttribute("table:style-name", styleName);
+        }
+        body->endElement();  // table:table-column
+    }
     const int rowCount = d->sheet->maxRow();
     for(int r = 0; r <= rowCount; ++r) {
         body->startElement("table:table-row");
@@ -375,9 +409,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
             }
+            if (row->hidden) {
+                body->addAttribute("table:visibility", "collapse");
+            }
             //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
-            const int columnCount = d->sheet->maxColumn(); //TODO sheet->maxCellsInRow(r);
+            const int columnCount = d->sheet->maxCellsInRow(r);
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
@@ -547,7 +584,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_columnCount++;
+    Column* column = d->sheet->column(m_columnCount, true);
+    ++m_columnCount;
+
 //moved    body->startElement("table:table-column"); // CASE #S2500?
     int minCol = m_columnCount;
     int maxCol = m_columnCount;
@@ -594,7 +633,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 //moved        body->addAttribute("table:default-cell-style-name", "Excel_20_Built-in_20_Normal");
     }
     // we apparently don't need "customWidth" attr
-//! @todo more attrs
+
+    TRY_READ_ATTR_WITHOUT_NS(hidden)
+    if (!hidden.isEmpty()) {
+        column->hidden = hidden.toInt() > 0;
+    }
 
     SKIP_EVERYTHING
 
@@ -691,6 +734,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
+    TRY_READ_ATTR_WITHOUT_NS(hidden)
 
     if (!r.isEmpty()) {
         bool ok;
@@ -705,6 +749,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     m_currentColumn = 0;
     Row* row = d->sheet->row(m_currentRow, true);
     row->styleName = processRowStyle(ht);
+    
+    if (!hidden.isEmpty()) {
+        row->hidden = hidden.toInt() > 0;
+    }
 
     while (!atEnd()) {
         readNext();
