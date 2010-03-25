@@ -1577,7 +1577,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
     QString cellText;
 
     bool multipleTextParagraphsFound = false;
-    const bool hasRichText = KoTextLoader::containsRichtext(parent);
+    const bool hasRichText = KoTextLoader::containsRichText(parent);
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
