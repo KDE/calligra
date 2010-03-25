@@ -489,6 +489,7 @@ XlsxCellFormat::XlsxCellFormat()
    horizontalAlignment(GeneralHorizontalAlignment),
    verticalAlignment(NoVerticalAlignment),
    wrapText(false),
+   shrinkToFit(false),
    textRotation(0)
 {
 }
@@ -563,6 +564,9 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     else if (textRotation != 0) {
         //@todo map other cases (to style:text-rotate-angle? that one only allows 0, 90, 270)
     }
+
+    if (shrinkToFit)
+        cellStyle->addProperty("style:shrink-to-fit", "true");
 
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
@@ -1340,6 +1344,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     kDebug() << "verticalAlignment:" << m_currentCellFormat->verticalAlignment;
     const bool wrap = readBooleanAttr("wrapText", false);
     m_currentCellFormat->wrapText = wrap;
+    const bool shrinkToFit = readBooleanAttr("shrinkToFit", false);
+    m_currentCellFormat->shrinkToFit = shrinkToFit;
     const uint textRotation = attributes().value("textRotation").toString().toUInt();
     m_currentCellFormat->textRotation = textRotation;
 
