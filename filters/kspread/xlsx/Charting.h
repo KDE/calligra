@@ -129,7 +129,7 @@ namespace Charting
         /// List of text records attached to the series.
         //QHash<QList<Text*> > texts;
 
-        explicit Series() {}
+        explicit Series() : m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0) {}
         ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
     };
 

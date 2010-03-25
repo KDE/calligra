@@ -37,6 +37,23 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
+#include <QFontMetricsF>
+
+// calculates the column width in pixels
+int columnWidth(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {
+    QFont font("Arial", 10);
+    QFontMetricsF fm(font);
+    const qreal characterWidth = fm.width("h");
+    defaultColumnWidth *= characterWidth;
+    return (defaultColumnWidth * col) + (dx / 1024.0 * defaultColumnWidth);
+}
+
+// calculates the row height in pixels
+int rowHeight(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75)
+{
+    return defaultRowHeight * row + dy;
+}
+
 // Returns A for 1, B for 2, C for 3, etc.
 QString columnName(uint column)
 {
@@ -66,6 +83,7 @@ XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
     , m_context(0)
+    , m_currentSeries(0)
 {
 }
 
@@ -101,10 +119,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
         if (isStartElement()) {
             TRY_READ_IF(plotArea)
-            ELSE_TRY_READ_IF(ser)
             ELSE_TRY_READ_IF(legend)
-            ELSE_TRY_READ_IF(pieChart)
-            ELSE_TRY_READ_IF(firstSliceAng)
         }
     }
 
@@ -113,30 +128,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     static int chartNumber = 0;
 
     m_context->m_chartExport->m_href = QString("Chart%1").arg(++chartNumber);
-
-    const QString sheetName = m_context->drawingReaderContext->worksheetReaderContext->worksheetName;
-
-    //struct Position {
-    //    int m_row, m_col, m_rowOff, m_colOff;
-    //enum AnchorToken { NoAnchor, FromAnchor, ToAnchor };
     QMap<XlsxXmlDrawingReaderContext::AnchorType, XlsxXmlDrawingReaderContext::Position> positions = m_context->drawingReaderContext->m_positions;
-
+    const QString sheetName = m_context->drawingReaderContext->worksheetReaderContext->worksheetName;
     if(! sheetName.isEmpty()) {
         m_context->m_chartExport->m_endCellAddress += sheetName + '.';
     }
 
     if(positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-        XlsxXmlDrawingReaderContext::Position pos = positions[XlsxXmlDrawingReaderContext::FromAnchor];
-        m_context->m_chartExport->m_endCellAddress += columnName(pos.m_col) + QString::number(pos.m_row);
-        m_context->m_chartExport->m_x = "0pt"; //QString::number(columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL)) + "pt";
-        m_context->m_chartExport->m_y = "0pt"; //QString::number(rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT)) + "pt";
-        m_context->m_chartExport->m_width = "100pt"; //QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR)) + "pt";
-        m_context->m_chartExport->m_height = "100pt"; //QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB)) + "pt";
+        XlsxXmlDrawingReaderContext::Position f = positions[XlsxXmlDrawingReaderContext::FromAnchor];
+        m_context->m_chartExport->m_endCellAddress += columnName(f.m_col) + QString::number(f.m_row);
+        m_context->m_chartExport->m_x = QString::number(columnWidth(f.m_col-1, 0 /*f.m_colOff*/)) + "pt";
+        m_context->m_chartExport->m_y = QString::number(rowHeight(f.m_row-1, 0 /*f.m_rowOff*/)) + "pt";
+        if(positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
+            XlsxXmlDrawingReaderContext::Position t = positions[XlsxXmlDrawingReaderContext::ToAnchor];
+            m_context->m_chartExport->m_width = QString::number(columnWidth( t.m_col - f.m_col - 1, 0 /*t.m_colOff*/)) + "pt";
+            m_context->m_chartExport->m_height = QString::number(rowHeight( t.m_row - f.m_row - 1, 0 /*t.m_rowOff*/)) + "pt";
+        }
     }
 
+    //m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_cellRangeAddress;
+    //m_context->m_chartExport->m_cellRangeAddress = m_cellRangeAddress;
     m_context->m_chartExport->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
     m_context->m_chartExport->m_cellRangeAddress = "Sheet1.D2:Sheet1.F2";//string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
-    //string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
 
     // the index will by written by the XlsxXmlWorksheetReader
     //m_context->m_chartExport->saveIndex(body);
@@ -153,16 +166,83 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
 #define CURRENT_EL plotArea
 KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
 {
-    //TODO
-    return KoFilter::OK;
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(ser)
+            ELSE_TRY_READ_IF(pieChart)
+            ELSE_TRY_READ_IF(firstSliceAng)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL ser
 KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
 {
-    //TODO
-    return KoFilter::OK;
+    READ_PROLOGUE
+    
+    m_currentSeries = new Charting::Series;
+    m_context->m_chart->m_series << m_currentSeries;
+    //m_currentSeries->m_dataTypeX = record->dataTypeX();
+    //m_currentSeries->m_countXValues = record->countXValues();
+    //m_currentSeries->m_countYValues = record->countYValues();
+    //m_currentSeries->m_countBubbleSizeValues = record->countBubbleSizeValues();
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(val)
+            //ELSE_TRY_READ_IF(idx)
+            //ELSE_TRY_READ_IF(order)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL val
+KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(numCache)
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
+                //m_cellRangeAddress = readElementText();
+                m_currentSeries->m_valuesCellRangeAddress = readElementText();
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numCache
+KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(ptCount))) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                m_currentSeries->m_countYValues = val.toInt();
+            }
+            //else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(pt)))
+            //else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(formatCode)))
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
