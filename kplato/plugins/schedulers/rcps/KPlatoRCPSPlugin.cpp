@@ -77,7 +77,7 @@ void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleMana
     }
     QStringList lst = job->missingFunctions();
     if ( ! lst.isEmpty() ) {
-        result = KMessageBox::warningContinueCancelList( 0, i18nc( "@info", "<b>This scheduler does not support all the requested scheduling functionality.<b>" ), lst );
+        result = KMessageBox::warningContinueCancelList( 0, i18nc( "@info", "<b>This scheduler does not support all the requested scheduling functionality.</b>" ), lst );
         if ( result == KMessageBox::Cancel ) {
             sm->setCalculationResult( ScheduleManager::CalculationCanceled );
             job->slotFinished();
