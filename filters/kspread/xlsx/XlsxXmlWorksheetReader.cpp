@@ -112,9 +112,10 @@ public:
     QByteArray valueAttr;
     QString valueAttrValue;
     QString formula;
+    QList<XlsxXmlDrawingReaderContext*> drawings;
 
     Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
-    ~Cell() {}
+    ~Cell() { qDeleteAll(drawings); }
 };
 
 class Row
@@ -144,7 +145,7 @@ class Sheet
 {
 public:
     explicit Sheet() : m_maxRow(0), m_maxColumn(0) {}
-    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); qDeleteAll(m_drawings); }
+    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); }
 
     Row* row(unsigned rowIndex, bool autoCreate)
     {
@@ -185,9 +186,6 @@ public:
         return c;
     }
 
-    QList<XlsxXmlDrawingReaderContext*> drawings() const { return m_drawings; }
-    void addDrawing(XlsxXmlDrawingReaderContext* c) { m_drawings << c; }
-
     int maxRow() const { return m_maxRow; }
     int maxColumn() const { return m_maxColumn; }
     unsigned maxCellsInRow(unsigned rowIndex) const { return m_maxCellsInRow[rowIndex]; }
@@ -196,7 +194,6 @@ private:
     QHash<unsigned, Row*> m_rows;
     QHash<unsigned, Column*> m_columns;
     QHash<unsigned, Cell*> m_cells;
-    QList<XlsxXmlDrawingReaderContext*> m_drawings;
     int m_maxRow;
     int m_maxColumn;
     QHash<unsigned, unsigned> m_maxCellsInRow;
@@ -453,11 +450,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->endElement(); // text:p
                     }
 
-//! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
-//! @todo make drawingobject logic more generic
-#if 0
                     // handle objects like e.g. charts
-                    foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
+                    foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
                         foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
                             // save the index embedded into this cell
                             chart->m_chartExport->saveIndex(body);
@@ -465,8 +459,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
                         }
                     }
-#endif
-
                 }
                 body->endElement(); // table:table-cell
             }
@@ -1222,8 +1214,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             delete context;
             return result;
         }
-
-        d->sheet->addDrawing(context);
+        
+        if (context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
+            XlsxXmlDrawingReaderContext::Position pos = context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+            Cell* cell = d->sheet->cell(pos.m_col, pos.m_row, true);
+            cell->drawings << context;
+        }
     }
 
     while (!atEnd()) {

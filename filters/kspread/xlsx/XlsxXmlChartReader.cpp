@@ -54,6 +54,7 @@ XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext
     : MSOOXML::MsooXmlReaderContext()
     , drawingReaderContext(_drawingReaderContext)
     , m_chart(0)
+    , m_chartExport(0)
 {
 }
 
