@@ -368,7 +368,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
     // now we have everything to start writing the actual cells
     const int rowCount = d->sheet->maxRow();
-    for(int r = 0; r < rowCount; ++r) {
+    for(int r = 0; r <= rowCount; ++r) {
         body->startElement("table:table-row");
         if (Row* row = d->sheet->row(r, false)) {
 
@@ -378,7 +378,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
             const int columnCount = d->sheet->maxColumn(); //TODO sheet->maxCellsInRow(r);
-            for(int c = 0; c < columnCount; ++c) {
+            for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
 
