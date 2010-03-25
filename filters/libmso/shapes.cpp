@@ -1,3 +1,21 @@
+/* This file is part of the KDE project
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 
@@ -1006,21 +1024,6 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // image
     out.xml.endElement(); // frame
 }
-/*
-void ODrawToOdf::processTextObjectForBody(const OfficeArtSpContainer& o,
-                                        const MSO::TextContainer& tc,
-                                        Writer& out)
-{
-    out.xml.startElement("draw:frame");
-    addGraphicStyleToDrawElement(out, o);
-    set2dGeometry(o, out);
-    if (client) {
-        client->addTextFrameAttributes(o, out);
-        client->processTextForBody(o.clientData.data(), tc, out);
-    }
-    out.xml.endElement(); // draw:frame
-}
-*/
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
