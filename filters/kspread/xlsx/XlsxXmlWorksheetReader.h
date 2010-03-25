@@ -59,6 +59,8 @@ protected:
     KoFilter::ConversionStatus read_c();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_v();
+    KoFilter::ConversionStatus read_mergeCell();
+    KoFilter::ConversionStatus read_mergeCells();
     KoFilter::ConversionStatus read_drawing();
 
     XlsxXmlWorksheetReaderContext* m_context;

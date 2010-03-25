@@ -50,6 +50,8 @@
 #include <kactioncollection.h>
 #include <KTabWidget>
 
+#include <KMenu>
+#include <KToggleAction>
 #include <kdebug.h>
 
 namespace KPlato
@@ -409,6 +411,9 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
+    
+    actionShowDebug = new KToggleAction( i18nc( "@action", "Show Debug Information" ), this );
+    connect( actionShowDebug, SIGNAL(toggled(bool)), SLOT(slotShowDebug(bool)));
 }
 
 void ScheduleLogTreeView::setFilterWildcard( const QString &filter )
@@ -421,9 +426,18 @@ QRegExp ScheduleLogTreeView::filterRegExp() const
     return m_model->filterRegExp();
 }
 
+void ScheduleLogTreeView::slotShowDebug( bool on )
+{
+    on ? setFilterWildcard( QString() ) : setFilterWildcard("[^0]" );
+}
+
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    //kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    KMenu *m = new KMenu( this );
+    m->addAction( actionShowDebug );
+    m->exec( mapToGlobal( pos ) );
+    delete m;
 }
 
 void ScheduleLogTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
@@ -516,7 +530,7 @@ void ScheduleLogView::setGuiActive( bool activate )
 
 void ScheduleLogView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    qDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     slotHeaderContextMenuRequested( pos );
 }
 

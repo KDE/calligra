@@ -97,10 +97,15 @@ const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
 const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
+class Sheet;
+
 class Cell
 {
 public:
-    int repeated;
+    int column;
+    int row;
+    int rowsMerged, columnsMerged;
+    //int repeated;
     QString styleName;
     QString charStyleName;
     QString text;
@@ -108,19 +113,71 @@ public:
     QByteArray valueAttr;
     QString valueAttrValue;
     QString formula;
-    explicit Cell(int cellsRepeated = 1) : repeated(cellsRepeated) {}
+
+    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() {}
 };
 
 class Row
 {
 public:
-    int repeated;
+    Sheet* sheet;
+    int rowIndex;
+    //int repeated;
     QString styleName;
-    QList<Cell*> cells;
+
+    Row(Sheet* s, int index) : sheet(s), rowIndex(index) {}
+    ~Row() {}
+};
+
+class Sheet
+{
+public:
+    explicit Sheet() : m_maxRow(0), m_maxColumn(0) {}
+    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); qDeleteAll(m_drawings); }
+
+    Row* row(unsigned rowIndex, bool autoCreate)
+    {
+        Row* r = m_rows[ rowIndex ];
+        if (!r && autoCreate) {
+            r = new Row(this, rowIndex);
+            m_rows[ rowIndex ] = r;
+            if (rowIndex > m_maxRow) m_maxRow = rowIndex;
+        }
+        return r;
+    }
+
+    Cell* cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
+    {
+        const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
+        Cell* c = m_cells[ hashed ];
+        if (!c && autoCreate) {
+            c = new Cell(this, columnIndex, rowIndex);
+            m_cells[ hashed ] = c;
+            //this->column(columnIndex, true);
+            this->row(rowIndex, true);
+            if (rowIndex > m_maxRow) m_maxRow = rowIndex;
+            if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
+            if(!m_maxCellsInRow.contains(rowIndex) || columnIndex > m_maxCellsInRow[rowIndex])
+                m_maxCellsInRow[rowIndex] = columnIndex;
+        }
+        return c;
+    }
+
+    QList<XlsxXmlDrawingReaderContext*> drawings() const { return m_drawings; }
+    void addDrawing(XlsxXmlDrawingReaderContext* c) { m_drawings << c; }
+
+    int maxRow() const { return m_maxRow; }
+    int maxColumn() const { return m_maxColumn; }
+    unsigned maxCellsInRow(unsigned rowIndex) const { return m_maxCellsInRow[rowIndex]; }
     
-    explicit Row() : repeated(1) {}
-    ~Row() { qDeleteAll(cells); }
+private:
+    QHash<unsigned, Row*> m_rows;
+    QHash<unsigned, Cell*> m_cells;
+    QList<XlsxXmlDrawingReaderContext*> m_drawings;
+    int m_maxRow;
+    int m_maxColumn;
+    QHash<unsigned, unsigned> m_maxCellsInRow;
 };
 
 class XlsxXmlWorksheetReader::Private
@@ -129,20 +186,20 @@ public:
     Private( XlsxXmlWorksheetReader* qq )
      : q( qq ),
        warningAboutWorksheetSizeDisplayed(false),
-       drawingNumber(0)
+       drawingNumber(0),
+       sheet(new Sheet)
     {
     }
-    ~Private() {
-        qDeleteAll(rows);
-        qDeleteAll(drawings);
+    ~Private()
+    {
+        delete sheet;
     }
 
     XlsxXmlWorksheetReader* const q;
     QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
-    QList<Row*> rows;
-    QList<XlsxXmlDrawingReaderContext*> drawings;
+    Sheet* sheet;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -302,6 +359,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill d->rows
+            ELSE_TRY_READ_IF(mergeCells)
             ELSE_TRY_READ_IF(drawing)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -309,65 +367,72 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     }
 
     // now we have everything to start writing the actual cells
-    foreach(Row* row, d->rows) {
+    const int rowCount = d->sheet->maxRow();
+    for(int r = 0; r < rowCount; ++r) {
         body->startElement("table:table-row");
+        if (Row* row = d->sheet->row(r, false)) {
 
-        if (!row->styleName.isEmpty()) {
-            body->addAttribute("table:style-name", row->styleName);
-        }
-        if (row->repeated > 1) {
-            body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
-        }
+            if (!row->styleName.isEmpty()) {
+                body->addAttribute("table:style-name", row->styleName);
+            }
+            //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
-        foreach(Cell* cell, row->cells) {
-            body->startElement("table:table-cell");
+            const int columnCount = d->sheet->maxColumn(); //TODO sheet->maxCellsInRow(r);
+            for(int c = 0; c < columnCount; ++c) {
+                body->startElement("table:table-cell");
+                if (Cell* cell = d->sheet->cell(c, r, false)) {
 
-            if (!cell->styleName.isEmpty()) {
-                body->addAttribute("table:style-name", cell->styleName);
-            }
-            if (cell->repeated > 1) {
-                body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
-            }
-            if (!cell->valueType.isEmpty()) {
-                body->addAttribute("office:value-type", cell->valueType);
-            }
-            if (!cell->valueAttr.isEmpty()) {
-                body->addAttribute(cell->valueAttr, cell->valueAttrValue);
-            }
-            if (!cell->formula.isEmpty()) {
-                body->addAttribute("table:formula", cell->formula);
-            }
+                    if (!cell->styleName.isEmpty()) {
+                        body->addAttribute("table:style-name", cell->styleName);
+                    }
+                    //body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
+                    if (!cell->valueType.isEmpty()) {
+                        body->addAttribute("office:value-type", cell->valueType);
+                    }
+                    if (!cell->valueAttr.isEmpty()) {
+                        body->addAttribute(cell->valueAttr, cell->valueAttrValue);
+                    }
+                    if (!cell->formula.isEmpty()) {
+                        body->addAttribute("table:formula", cell->formula);
+                    }
+                    if (cell->rowsMerged > 1) {
+                        body->addAttribute("table:number-rows-spanned", cell->rowsMerged);
+                    }
+                    if (cell->columnsMerged > 1) {
+                        body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
+                    }
+                    if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
+                        body->startElement("text:p", false);
+                        if(!cell->charStyleName.isEmpty()) {
+                            body->startElement( "text:span" );
+                            body->addAttribute( "text:style-name", cell->charStyleName);
+                        }
+                        if(!cell->text.isEmpty()) {
+                            body->addTextSpan(cell->text);
+                        }
+                        if(!cell->charStyleName.isEmpty()) {
+                            body->endElement(); // text:span
+                        }
+                        body->endElement(); // text:p
+                    }
 
-            if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
-                body->startElement("text:p", false);
-                if(!cell->charStyleName.isEmpty()) {
-                    body->startElement( "text:span" );
-                    body->addAttribute( "text:style-name", cell->charStyleName);
-                }
-                if(!cell->text.isEmpty()) {
-                    body->addTextSpan(cell->text);
-                }
-                if(!cell->charStyleName.isEmpty()) {
-                    body->endElement(); // text:span
-                }
-                body->endElement(); // text:p
-            }
-        
 //! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
 //! @todo make drawingobject logic more generic
 #if 0
-            // handle objects like e.g. charts
-            foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
-                foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
-                    // save the index embedded into this cell
-                    chart->m_chartExport->saveIndex(body);
-                    // the embedded object file was written by the XlsxXmlChartReader already
-                    //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
-                }
-            }
+                    // handle objects like e.g. charts
+                    foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
+                        foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
+                            // save the index embedded into this cell
+                            chart->m_chartExport->saveIndex(body);
+                            // the embedded object file was written by the XlsxXmlChartReader already
+                            //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
+                        }
+                    }
 #endif
 
-            body->endElement(); // table:table-cell
+                }
+                body->endElement(); // table:table-cell
+            }
         }
         body->endElement(); // table:table-row
     }
@@ -627,31 +692,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
 
-    int rNumber = 0;
     if (!r.isEmpty()) {
         bool ok;
-        rNumber = r.toInt(&ok);
-        if (!ok)
+        m_currentRow = r.toInt(&ok) - 1;
+        if (!ok || m_currentRow < 0)
             return KoFilter::WrongFormat;
     }
-    if (rNumber > MSOOXML::maximumSpreadsheetRows()) {
+    if (m_currentRow > MSOOXML::maximumSpreadsheetRows()) {
         showWarningAboutWorksheetSize();
     }
-    if ((m_currentRow + 1) < rNumber) {
-        Row* r = new Row;
-        d->rows << r;
-        r->styleName = processRowStyle(QString());
-        r->repeated = rNumber - (m_currentRow + 1);
-        if (MSOOXML::maximumSpreadsheetColumns() > 0) {
-            r->cells << new Cell(MSOOXML::maximumSpreadsheetColumns());
-        }
-    }
-
-    Row* row = new Row;
-    d->rows << row;
-    row->styleName = processRowStyle(ht);
 
     m_currentColumn = 0;
+    Row* row = d->sheet->row(m_currentRow, true);
+    row->styleName = processRowStyle(ht);
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -662,12 +716,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    const int remainingColumns = MSOOXML::maximumSpreadsheetColumns() - m_currentColumn - 1;
-    if (remainingColumns > 0) {
-        row->cells << new Cell(remainingColumns);
-    }
-
-    m_currentRow = rNumber;
+    ++m_currentRow; // This row is done now. Select the next row.
 
     READ_EPILOGUE
 }
@@ -738,19 +787,16 @@ static QString convertFormula(const QString& formula)
 */
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 {
-    Q_ASSERT( ! d->rows.isEmpty());
-    Row* row = d->rows.last();
+    Row* row = d->sheet->row(m_currentRow, false);
+    Q_ASSERT(row);
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
     if (!r.isEmpty()) {
-        int referencedColumn = qMax(0, KSpread::Util::decodeColumnLabelText(r));
-        int missingColumns = referencedColumn - m_currentColumn;
-        if (missingColumns >= 2) {
-            row->cells << new Cell(missingColumns - 1);
-        }
-        m_currentColumn = referencedColumn;
+        m_currentColumn = KSpread::Util::decodeColumnLabelText(r) - 1;
+        if (m_currentColumn < 0)
+            return KoFilter::WrongFormat;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(s)
@@ -760,8 +806,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     m_value.clear();
     m_formula.clear();
 
-    Cell* cell = new Cell;
-    row->cells << cell;
+    Cell* cell = d->sheet->cell(m_currentColumn, m_currentRow, true);
 
     while (!atEnd()) {
         readNext();
@@ -919,6 +964,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     cell->valueAttrValue = m_value;
     cell->formula = m_formula;
 
+    ++m_currentColumn; // This cell is done now. Select the next cell.
+
     READ_EPILOGUE
 }
 
@@ -1032,6 +1079,60 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL mergeCell
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+    QStringList refList = ref.split(':');
+    if (refList.count() >= 2) {
+        const QString fromCell = refList[0];
+        const QString toCell = refList[1];
+
+        QRegExp rx("([A-Za-z]+)([0-9]+)");
+        if(rx.exactMatch(fromCell)) {
+            const int fromRow = rx.cap(2).toInt() - 1;
+            const int fromCol = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
+            if(rx.exactMatch(toCell)) {
+                Cell* cell = d->sheet->cell(fromCol, fromRow, true);
+                cell->rowsMerged = rx.cap(2).toInt() - fromRow;
+                cell->columnsMerged = KSpread::Util::decodeColumnLabelText(toCell) - fromCol;
+            }
+        }
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL mergeCells
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(mergeCell)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL drawing
 
 //! drawing handler (Drawing)
@@ -1074,7 +1175,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             return result;
         }
 
-        d->drawings << context;
+        d->sheet->addDrawing(context);
     }
 
     while (!atEnd()) {

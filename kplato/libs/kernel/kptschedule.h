@@ -517,9 +517,12 @@ public:
  * Expected-, Optimistic- and Pessimistic schedules.
  * A ScheduleManager can also have child manager(s).
  */
-class KPLATOKERNEL_EXPORT ScheduleManager
+class KPLATOKERNEL_EXPORT ScheduleManager : public QObject
 {
+    Q_OBJECT
 public:
+    enum CalculationResult { CalculationRunning = 0, CalculationDone, CalculationStopped, CalculationCanceled, CalculationError };
+
     explicit ScheduleManager( Project &project, const QString name = QString() );
     ~ScheduleManager();
     
@@ -615,6 +618,8 @@ public:
 
     void stopCalculation();
     void calculateSchedule();
+    int calculationResult() const { return m_calculationresult; }
+    void setCalculationResult( int r ) { m_calculationresult = r; }
 
     int progress() const { return m_progress; }
     void setProgress( int progress );
@@ -646,6 +651,8 @@ protected:
     QList<ScheduleManager*> m_children;
 
     QString m_schedulerPluginId;
+    
+    int m_calculationresult;
 };
 
 

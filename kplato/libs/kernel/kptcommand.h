@@ -23,6 +23,7 @@
 #include "kplatokernel_export.h"
 
 #include <QUndoCommand>
+#include <QPointer>
 
 #include "kptappointment.h"
 #include "kptnode.h"
@@ -1516,13 +1517,13 @@ private:
 class KPLATOKERNEL_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
-    CalculateScheduleCmd( Project &project, ScheduleManager &sm, const QString& name = 0 );
+    CalculateScheduleCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
     void execute();
     void unexecute();
 
 private:
     Project &m_node;
-    ScheduleManager &m_sm;
+    QPointer<ScheduleManager> m_sm;
     bool m_first;
     MainSchedule *m_oldexpected;
     MainSchedule *m_oldoptimistic;

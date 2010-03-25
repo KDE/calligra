@@ -523,7 +523,11 @@ signals:
     void currentScheduleChanged();
     /// Use to show progress during calculation
     void sigProgress( int );
+    /// Use to set the maximum progress (minimum always 0)
     void maxProgress( int );
+    /// Emitted when calculation starts
+    void sigCalculationStarted( Project *project, ScheduleManager *sm );
+    /// Emitted when calculation is finished
     void sigCalculationFinished( Project *project, ScheduleManager *sm );
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );

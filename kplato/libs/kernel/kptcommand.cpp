@@ -2944,14 +2944,14 @@ void ModifyScheduleManagerSchedulerCmd::unexecute()
     m_sm.setSchedulerPlugin( oldvalue );
 }
 
-CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager &sm, const QString& name )
+CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, const QString& name )
     : NamedCommand( name ),
     m_node( node ),
     m_sm( sm ),
     m_first( true ),
-    m_oldexpected( m_sm.expected() ),
-    m_oldoptimistic( m_sm.optimistic() ),
-    m_oldpessimistic( m_sm.pessimistic() ),
+    m_oldexpected( m_sm->expected() ),
+    m_oldoptimistic( m_sm->optimistic() ),
+    m_oldpessimistic( m_sm->pessimistic() ),
     m_newexpected( 0 ),
     m_newoptimistic( 0 ),
     m_newpessimistic( 0 )
@@ -2961,31 +2961,36 @@ CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager &sm, 
 void CalculateScheduleCmd::execute()
 {
     if ( m_first ) {
-        m_first = false;
-        m_sm.calculateSchedule();
-        m_newexpected = m_sm.expected();
-        m_newoptimistic = m_sm.optimistic();
-        m_newpessimistic = m_sm.pessimistic();
+        QApplication::setOverrideCursor( Qt::WaitCursor );
+        m_sm->calculateSchedule();
+        Q_ASSERT( m_sm );
+        if ( m_sm->calculationResult() != ScheduleManager::CalculationCanceled ) {
+            m_first = false;
+            m_newexpected = m_sm->expected();
+            m_newoptimistic = m_sm->optimistic();
+            m_newpessimistic = m_sm->pessimistic();
+        }
+        QApplication::restoreOverrideCursor();
         return;
     }
-    m_sm.setExpected( m_newexpected );
-    m_sm.setOptimistic( m_newoptimistic );
-    m_sm.setPessimistic( m_newpessimistic );
+    m_sm->setExpected( m_newexpected );
+    m_sm->setOptimistic( m_newoptimistic );
+    m_sm->setPessimistic( m_newpessimistic );
 }
 
 void CalculateScheduleCmd::unexecute()
 {
-    if ( m_sm.scheduling() ) {
+    if ( m_sm->scheduling() ) {
         // terminate scheduling
         QApplication::setOverrideCursor( Qt::WaitCursor );
-        m_sm.stopCalculation();
+        m_sm->stopCalculation();
         m_first = true;
         QApplication::restoreOverrideCursor();
 
     }
-    m_sm.setExpected( m_oldexpected );
-    m_sm.setOptimistic( m_oldoptimistic );
-    m_sm.setPessimistic( m_oldpessimistic );
+    m_sm->setExpected( m_oldexpected );
+    m_sm->setOptimistic( m_oldoptimistic );
+    m_sm->setPessimistic( m_oldpessimistic );
 
 }
 

@@ -13,7 +13,7 @@ set(msooxml_LIB_SRCS
     MsooXmlRelationshipsReader.cpp
     MsooXmlRelationships.cpp
     MsooXmlImport.cpp
-
+    MsooXmlDocPropertiesReader.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )
@@ -48,6 +48,7 @@ install( FILES
     MsooXmlRelationships.h
     MsooXmlImport.h
     MsooXmlCommentsReader.h
+    MsooXmlDocPropertiesReader.h
     MsooXmlNotesReader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )

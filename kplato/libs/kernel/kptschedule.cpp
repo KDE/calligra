@@ -1608,6 +1608,7 @@ void ScheduleManager::setSchedulerPlugin( int index )
 
 void ScheduleManager::calculateSchedule()
 {
+    m_calculationresult = CalculationRunning;
     schedulerPlugin()->calculate( m_project, this );
 }
 
@@ -1997,3 +1998,4 @@ void MainSchedule::printDebug( const QString& _indent )
 
 } //namespace KPlato
 
+#include "kptschedule.moc"

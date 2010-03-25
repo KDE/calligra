@@ -30,6 +30,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
+#include <MsooXmlDocPropertiesReader.h>
 
 #include <QColor>
 #include <QFile>
@@ -136,7 +137,21 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage)
 {
     // more here...
-    // 0. temporary styles
+    // 0. Document properties
+    {
+        MSOOXML::MsooXmlDocPropertiesReader docPropsReader(writers);
+
+        const KoFilter::ConversionStatus status = loadAndParseDocument(
+                                                      &docPropsReader,
+                                                      QLatin1String("docProps/core.xml"),
+                                                      errorMessage, 0 );
+        if (status != KoFilter::OK) {
+            kDebug() << docPropsReader.errorString();
+            return status;
+        }
+    }
+
+    // 1. temporary styles
 //! @todo create styles in PptxXmlDocumentReader (PPTX defines styles in presentation.xml)
 
     writers->mainStyles->addRawOdfDocumentStyles(
@@ -1078,11 +1093,11 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->",
         true // styles.xml
     );
-    // 1. parse themes
+    // 2. parse themes
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
-    // 2. parse master slides
+    // 3. parse master slides
 #ifdef __GNUC__
 #warning TODO use MsooXmlRelationships; parse all used master slides; now one hardcoded master name is used
 #else
@@ -1117,7 +1132,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
             return status;
         }
     }
-    // 3. parse document
+    // 4. parse document
     {
         PptxXmlDocumentReaderContext context(
             *this, themes,

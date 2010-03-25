@@ -60,7 +60,7 @@ class TaskEditor;
 class CalendarEditor;
 class ScheduleEditor;
 class ScheduleManager;
-
+class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
 class Calendar;
@@ -195,6 +195,7 @@ protected slots:
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotCalculateSchedule( Project*, ScheduleManager* );
+    void slotCalculationStarted( Project *project, ScheduleManager *sm );
     void slotCalculationFinished( Project *project, ScheduleManager *sm );
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
     void slotProgressChanged( int value );
@@ -300,6 +301,8 @@ private slots:
     void slotOpenReportFileFinished( int result );
     void slotCreateViewFinished( int result );
 
+    void slotRemoveCommands();
+
 private:
     void createViews();
     ViewBase *createView( ViewListItem *cat, const QString &type, const QString &tag, const QString &name, const QString &tip, int index = -1 );
@@ -332,6 +335,9 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
+
+    QMultiMap<ScheduleManager*, CalculateScheduleCmd*> m_calculationcommands;
+    QList<QUndoCommand*> m_undocommands;
 
     bool m_readWrite;
 
