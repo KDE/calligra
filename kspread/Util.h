@@ -56,6 +56,12 @@ namespace Util {
 KSPREAD_EXPORT int decodeColumnLabelText(const QString &labelText);
 
 /**
+ * Call this function to decode the text of a row label to an integer,
+ * e.g. B7 is translated to 7.
+ */
+KSPREAD_EXPORT int decodeRowLabelText(const QString &labelText);
+
+/**
  * Call this function to encode an integer to the text of the column label
  * i.e. 27->AA
  */
