@@ -818,6 +818,11 @@ static QString convertFormula(const QString& formula)
     return result;
 }
 
+static bool isCellnameCharacter(const QChar &c)
+{
+    return c.isDigit() || c.isLetter() || c == '$' || c == '_';
+}
+
 static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
 {
     QString result = referencedCell->formula;
@@ -840,7 +845,7 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
                 state = InString;
             else if (ch.unicode() == '\'')
                 state = InSheetOrAreaName;
-            else if (ch.isLetter()) {
+            else if (isCellnameCharacter(ch)) {
                 state = InCellReference;
                 cellReferenceStart = i;
             }
@@ -854,16 +859,19 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
                 state = InArguments;
             break;
         case InCellReference:
-            if (!ch.isLetterOrNumber()) {
+            if (!isCellnameCharacter(ch)) {
                 // We need to update cell-references according to the position of the referenced cell and this
                 // cell. This means that if the referenced cell is for example at C5 and contains the formula
                 // "=SUM(K22)" and if thisCell is at E6 then thisCell will get the formula "=SUM(L23)".
                 const QString ref = result.mid(cellReferenceStart, i - cellReferenceStart);
-                const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
-                const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
-                const QString newRef = KSpread::Util::encodeColumnLabelText(c) + QString::number(r);
-                result = result.replace(cellReferenceStart, i - cellReferenceStart, newRef);
-                state = InArguments;
+                QRegExp rx("(|\\$)[A-Za-Z]+[0-9]+");
+                if (rx.exactMatch(ref)) {
+                    const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
+                    const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
+                    const QString newRef = KSpread::Util::encodeColumnLabelText(c) + QString::number(r);
+                    result = result.replace(cellReferenceStart, i - cellReferenceStart, newRef);
+                    state = InArguments;
+                }
             }
             break;
         };
