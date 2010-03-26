@@ -44,6 +44,7 @@
 //#include "NumberFormatParser.h"
 
 namespace Charting {
+    class Series;
     class Chart;
 }
 
@@ -70,12 +71,15 @@ protected:
     KoFilter::ConversionStatus read_plotArea();
     KoFilter::ConversionStatus read_ser();
     KoFilter::ConversionStatus read_legend();
-
     KoFilter::ConversionStatus read_pieChart();
+    KoFilter::ConversionStatus read_val();
+    KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
     
 private:
     XlsxXmlChartReaderContext *m_context;
+    Charting::Series *m_currentSeries;
+    QString m_cellRangeAddress;
 };
 
 #endif

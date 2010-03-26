@@ -311,7 +311,7 @@ QVariant AttributesModel::headerData ( int section,
   // Default values if nothing else matches
   switch ( role ) {
   case Qt::DisplayRole:
-      return QLatin1String( orientation == Qt::Vertical ?  "Series " : "Item " ) + QString::number( section ) ;
+      return /* QLatin1String( orientation == Qt::Vertical ?  "Series " : "Item " ) + */ QString::number( section + 1 );
 
   case KDChart::DatasetBrushRole: {
       if ( paletteType() == PaletteTypeSubdued )

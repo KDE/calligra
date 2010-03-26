@@ -821,14 +821,50 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
         return result;
     }
     CalendarDay *d = day( index );
-    if ( d ) {
-        switch ( d->state() ) {
-            case CalendarDay::Working:
-                result = workDuration( d, role );
-                break;
-            default:
-                result = dayState( d, role );
-                break;
+    if ( d == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            switch ( d->state() ) {
+                case CalendarDay::Working:
+                    result = workDuration( d, role );
+                    break;
+                case CalendarDay::NonWorking:
+                    result = dayState( d, role );
+                    break;
+                default: {
+                    // Return parent value (if any)
+                    for ( Calendar *c = m_calendar->parentCal(); c != 0; c = c->parentCal() ) {
+                        d = c->weekday( index.column() + 1 );
+                        Q_ASSERT( d );
+                        if ( d->state() == CalendarDay::Working ) {
+                            return workDuration( d, role );
+                        }
+                        if ( d->state() == CalendarDay::NonWorking ) {
+                           return  dayState( d, role );
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case Qt::FontRole: {
+            if ( d->state() != CalendarDay::Undefined ) {
+                return QVariant();
+            }
+            // If defined in parent, return italic
+            for ( Calendar *c = m_calendar->parentCal(); c != 0; c = c->parentCal() ) {
+                d = c->weekday( index.column() + 1 );
+                Q_ASSERT( d );
+                if ( d->state() != CalendarDay::Undefined ) {
+                    QFont f;
+                    f.setItalic( true );
+                    return f;
+                }
+            }
+            break;
         }
     }
     if ( result.isValid() ) {
@@ -912,6 +948,47 @@ void DateTableDataModel::setCalendar( Calendar *calendar )
     emit reset();
 }
 
+QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            CalendarDay *day = cal.findDay( date );
+            if ( day == 0 || day->state() == CalendarDay::Undefined ) {
+                if ( cal.parentCal() ) {
+                    return data( *( cal.parentCal() ), date, role );
+                }
+                return "";
+            }
+            if ( day->state() == CalendarDay::NonWorking ) {
+                return i18nc( "NonWorking", "NW" );
+            }
+            double v;
+            v = day->workDuration().toDouble( Duration::Unit_h );
+            return KGlobal::locale()->formatNumber( v, 1 );
+        }
+        case Qt::TextAlignmentRole:
+            return (uint)( Qt::AlignHCenter | Qt::AlignBottom );
+        case Qt::FontRole: {
+            CalendarDay *day = cal.findDay( date );
+            if ( day && day->state() != CalendarDay::Undefined ) {
+                if ( &cal != m_calendar ) {
+                    QFont f;
+                    f.setItalic( true );
+                    return f;
+                }
+                return QVariant();
+            }
+            if ( cal.parentCal() ) {
+                return data( *( cal.parentCal() ), date, role );
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return QVariant();
+}
+
 QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
     //kDebug()<<date<<role<<dataType;
@@ -952,28 +1029,10 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
             break;
         }
         case 0: {
-            switch ( role ) {
-                case Qt::DisplayRole: {
-                    if ( m_calendar == 0 ) {
-                        return "";
-                    }
-                    CalendarDay *day = m_calendar->findDay( date );
-                    if ( day == 0 || day->state() == CalendarDay::Undefined ) {
-                        return "";
-                    }
-                    if ( day->state() == CalendarDay::NonWorking ) {
-                        return i18nc( "NonWorking", "NW" );
-                    }
-                    double v;
-                    v = day->workDuration().toDouble( Duration::Unit_h );
-                    return KGlobal::locale()->formatNumber( v, 1 );
-                }
-                case Qt::TextAlignmentRole:
-                    return (uint)( Qt::AlignHCenter | Qt::AlignBottom );
-                default:
-                    break;
+            if ( m_calendar == 0 ) {
+                return "";
             }
-            break;
+            return data( *m_calendar, date, role );
         }
         default:
             break;
@@ -1017,6 +1076,12 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
 
     QString text = model->data( date, Qt::DisplayRole, 0 ).toString();
     int align = model->data( date, Qt::TextAlignmentRole, 0 ).toInt();
+    QFont f = option.font;
+    QVariant v = model->data( date, Qt::FontRole, 0 );
+    if ( v.isValid() ) {
+        f = v.value<QFont>();
+    }
+    painter->setFont( f );
     painter->setPen( option.palette.color( QPalette::Text ) );
     painter->drawText(rect, align, text, &r);
 

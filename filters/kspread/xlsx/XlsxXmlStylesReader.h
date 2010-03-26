@@ -292,11 +292,21 @@ public:
 //! @todo should be saved as metadata in ODF if applyAlignment false
     ST_VerticalAlignment verticalAlignment;
 
+    //! Indicates whether if the text in the cell should be line-wrapped with the cell.
+    bool wrapText;
+
+    //! Inidicates whether the displayed text in a cell should be shrunk to fit the cell width.
+    bool shrinkToFit;
+
+    //! Text rotation in cells, expressed in degrees. (Undocumented? special case: 255 means
+    //! vertical top-to-bottom-text without rotated characters
+    uint textRotation;
+
     void setHorizontalAlignment(const QString& alignment);
     void setVerticalAlignment(const QString& alignment);
 
     //! Sets up @a cellStyle to match this cell style.
-//! @todo implement more styling
+    //! @todo implement more styling
     bool setupCellStyle(
         const XlsxStyles *styles,
         const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,

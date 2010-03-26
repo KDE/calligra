@@ -26,6 +26,7 @@
 #include "generated/simpleParser.h"
 #include "pptstyle.h"
 #include "drawstyle.h"
+#include "writer.h"
 #include "DateTimeFormat.h"
 #include "ParsedPresentation.h"
 
@@ -49,6 +50,8 @@
  */
 class PptToOdp
 {
+private:
+    class DrawClient;
 public:
     /**
      * Constructs a converter.
@@ -80,6 +83,7 @@ public:
                                        KoStore* output);
     QString getPicturePath(int pib) const;
 private:
+
     /**
      * Function that does the actual conversion.
      *
@@ -90,73 +94,6 @@ private:
      */
     KoFilter::ConversionStatus doConversion(POLE::Storage& input,
                                             KoStore* output);
-
-    /**
-     * Helper class that for writing xml.
-     *
-     * Besides containing KoXmlWriter, this class keeps track of the coordinate
-     * system. It has convenience functions for writing lengths in physical
-     * dimensions (currently only mm).
-     */
-    class Writer
-    {
-    private:
-        qreal xOffset;
-        qreal yOffset;
-        qreal scaleX;
-        qreal scaleY;
-    public:
-        /**
-         * Xml writer that writes into content.xml.
-         */
-        KoXmlWriter& xml;
-        /**
-         * Styles for the document that is being created.
-         **/
-        KoGenStyles& styles;
-        /**
-         * Tells if the current output is for styles.xml or content.xml
-         **/
-        bool stylesxml;
-
-        /**
-         * Construct a new Writer.
-         *
-         * @param xmlWriter The xml writer that writes content.xml
-         */
-        Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-               bool stylexml = false);
-        /**
-         * Create a new writer with a new coordinate system.
-         *
-         * In different contexts in drawings in PPT files, different coordinate
-         * systems are used. These are defined by specifying a rectangle in the
-         * old coordinate system and the equivalent in the new coordinate
-         * system.
-         */
-        Writer transform(const QRectF& oldCoords, const QRectF &newCoords) const;
-        /**
-         * Convert local length to global length string.
-         *
-         * A length without unit in the local coordinate system is converted
-         * to a global length with a unit.
-         * @param length a local length.
-         * @return string of the global length with "mm" appended.
-         */
-        QString vLength(qreal length);
-        /**
-         * @see vLength
-         */
-        QString hLength(qreal length);
-        /**
-         * @see vLength
-         */
-        QString vOffset(qreal offset);
-        /**
-         * @see vLength
-         */
-        QString hOffset(qreal offset);
-    };
 
     void createMainStyles(KoGenStyles& styles);
     void defineDefaultTextStyle(KoGenStyles& styles);
@@ -196,10 +133,6 @@ private:
     void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                                 const MSO::HeadersFootersAtom* hf);
 
-    /* Extract data into the style */
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
-                                 const QString& listStyle = QString());
-
     /**
      * Structure that influences all information that affects the style of a
      * text:style.
@@ -236,26 +169,20 @@ private:
 
     quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
                         const MSO::PptOfficeArtClientData* clientData) const;
-    void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);
     void processSlideForBody(unsigned slideNo, Writer& out);
-    void processObjectForBody(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
-    void processObjectForBody(const MSO::OfficeArtSpgrContainer& o, Writer& out);
-    void processObjectForBody(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processDrawingObjectForBody(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processTextForBody(const MSO::OfficeArtSpContainer& o,
+    void processTextForBody(const MSO::OfficeArtClientData* o,
                             const MSO::TextContainer& tc, Writer& out);
-    void processTextObjectForBody(const MSO::OfficeArtSpContainer& o, const MSO::TextContainer& tc, Writer& out);
 
     int processTextSpan(const MSO::TextContainer& tc, Writer& out,
                         const QString& text, const int start, int end);
     int processTextSpans(const MSO::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
-    void processTextLine(Writer& out, const MSO::OfficeArtSpContainer& o,
+    void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
                          const MSO::TextContainer& tc, const QString& text,
-                        int start, int end, QStack<QString>& levels);
+                         int start, int end, QStack<QString>& levels);
 
      /**
      * @brief Write declaration in the content body presentation
@@ -458,25 +385,6 @@ private:
     */
     void processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix);
 
-
-    void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
-    void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processDiamond(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processTriangle(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processTrapezoid(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processParallelogram(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processFreeLine(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
-
     /**
     * @brief Struct that contains precalculated style names based on
     * TextCFException and TextPFException combinations.
@@ -599,7 +507,6 @@ private:
         }
         return 0;
     }
-    QRect getRect(const MSO::OfficeArtSpContainer &o);
 
     QMap<const void*, QString> presentationPageLayouts;
     QMap<const void*, QString> drawingPageStyles;
@@ -663,20 +570,8 @@ private:
     * @param QString notes text to displayed.
     */
     void insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text);
-
-    /**
-    * @brief set the width, height rotation and starting point for the given container
-    */
-    void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
 };
 
-/**
- * Convert FixedPoint to a qreal
- */
-inline qreal toQReal(const MSO::FixedPoint& f)
-{
-    return f.integral + f.fractional / 65536.0;
-}
 /**
  * Define the standard arrows used in PPT files.
  */

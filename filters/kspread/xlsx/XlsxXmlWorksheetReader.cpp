@@ -102,8 +102,7 @@ class Sheet;
 class Cell
 {
 public:
-    int column;
-    int row;
+    int column, row;
     int rowsMerged, columnsMerged;
     //int repeated;
     QString styleName;
@@ -113,9 +112,10 @@ public:
     QByteArray valueAttr;
     QString valueAttrValue;
     QString formula;
+    QList<XlsxXmlDrawingReaderContext*> drawings;
 
     Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
-    ~Cell() {}
+    ~Cell() { qDeleteAll(drawings); }
 };
 
 class Row
@@ -123,18 +123,29 @@ class Row
 public:
     Sheet* sheet;
     int rowIndex;
-    //int repeated;
+    bool hidden;
     QString styleName;
 
-    Row(Sheet* s, int index) : sheet(s), rowIndex(index) {}
+    Row(Sheet* s, int index) : sheet(s), rowIndex(index), hidden(false) {}
     ~Row() {}
+};
+
+class Column
+{
+public:
+    Sheet* sheet;
+    int columnIndex;
+    bool hidden;
+
+    Column(Sheet* s, int index) : sheet(s), columnIndex(index), hidden(false) {}
+    ~Column() {}
 };
 
 class Sheet
 {
 public:
     explicit Sheet() : m_maxRow(0), m_maxColumn(0) {}
-    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); qDeleteAll(m_drawings); }
+    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); }
 
     Row* row(unsigned rowIndex, bool autoCreate)
     {
@@ -147,6 +158,17 @@ public:
         return r;
     }
 
+    Column* column(unsigned columnIndex, bool autoCreate)
+    {
+        Column* c = m_columns[ columnIndex ];
+        if (!c && autoCreate) {
+            c = new Column(this, columnIndex);
+            m_columns[ columnIndex ] = c;
+            if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
+        }
+        return c;
+    }
+
     Cell* cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
     {
         const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
@@ -154,7 +176,7 @@ public:
         if (!c && autoCreate) {
             c = new Cell(this, columnIndex, rowIndex);
             m_cells[ hashed ] = c;
-            //this->column(columnIndex, true);
+            this->column(columnIndex, true);
             this->row(rowIndex, true);
             if (rowIndex > m_maxRow) m_maxRow = rowIndex;
             if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
@@ -164,17 +186,14 @@ public:
         return c;
     }
 
-    QList<XlsxXmlDrawingReaderContext*> drawings() const { return m_drawings; }
-    void addDrawing(XlsxXmlDrawingReaderContext* c) { m_drawings << c; }
-
     int maxRow() const { return m_maxRow; }
     int maxColumn() const { return m_maxColumn; }
     unsigned maxCellsInRow(unsigned rowIndex) const { return m_maxCellsInRow[rowIndex]; }
     
 private:
     QHash<unsigned, Row*> m_rows;
+    QHash<unsigned, Column*> m_columns;
     QHash<unsigned, Cell*> m_cells;
-    QList<XlsxXmlDrawingReaderContext*> m_drawings;
     int m_maxRow;
     int m_maxColumn;
     QHash<unsigned, unsigned> m_maxCellsInRow;
@@ -367,18 +386,33 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     }
 
     // now we have everything to start writing the actual cells
+    for(int c = 0; c <= d->sheet->maxColumn(); ++c) {
+        body->startElement("table:table-column");
+        if (Column* column = d->sheet->column(c, false)) {
+            //xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
+            if (column->hidden) {
+                body->addAttribute("table:visibility", "collapse");
+            }
+            //xmlWriter->addAttribute("table:number-columns-repeated", );
+            //xmlWriter->addAttribute("table:style-name", styleName);
+        }
+        body->endElement();  // table:table-column
+    }
     const int rowCount = d->sheet->maxRow();
-    for(int r = 0; r < rowCount; ++r) {
+    for(int r = 0; r <= rowCount; ++r) {
         body->startElement("table:table-row");
         if (Row* row = d->sheet->row(r, false)) {
 
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
             }
+            if (row->hidden) {
+                body->addAttribute("table:visibility", "collapse");
+            }
             //body->addAttribute("table:number-rows-repeated", QByteArray::number(row->repeated));
 
-            const int columnCount = d->sheet->maxColumn(); //TODO sheet->maxCellsInRow(r);
-            for(int c = 0; c < columnCount; ++c) {
+            const int columnCount = d->sheet->maxCellsInRow(r);
+            for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
 
@@ -416,11 +450,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->endElement(); // text:p
                     }
 
-//! @todo do create Row/Cell for drawing objects cause we need to add them explicit to prevent to have them within number-rows-repeated/number-columns-repeated
-//! @todo make drawingobject logic more generic
-#if 0
                     // handle objects like e.g. charts
-                    foreach(XlsxXmlDrawingReaderContext* drawing, d->drawings) {
+                    foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
                         foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
                             // save the index embedded into this cell
                             chart->m_chartExport->saveIndex(body);
@@ -428,8 +459,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
                         }
                     }
-#endif
-
                 }
                 body->endElement(); // table:table-cell
             }
@@ -547,7 +576,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_columnCount++;
+    Column* column = d->sheet->column(m_columnCount, true);
+    ++m_columnCount;
+
 //moved    body->startElement("table:table-column"); // CASE #S2500?
     int minCol = m_columnCount;
     int maxCol = m_columnCount;
@@ -594,7 +625,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 //moved        body->addAttribute("table:default-cell-style-name", "Excel_20_Built-in_20_Normal");
     }
     // we apparently don't need "customWidth" attr
-//! @todo more attrs
+
+    TRY_READ_ATTR_WITHOUT_NS(hidden)
+    if (!hidden.isEmpty()) {
+        column->hidden = hidden.toInt() > 0;
+    }
 
     SKIP_EVERYTHING
 
@@ -691,6 +726,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
     TRY_READ_ATTR_WITHOUT_NS(customHeight)
+    TRY_READ_ATTR_WITHOUT_NS(hidden)
 
     if (!r.isEmpty()) {
         bool ok;
@@ -705,6 +741,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     m_currentColumn = 0;
     Row* row = d->sheet->row(m_currentRow, true);
     row->styleName = processRowStyle(ht);
+    
+    if (!hidden.isEmpty()) {
+        row->hidden = hidden.toInt() > 0;
+    }
 
     while (!atEnd()) {
         readNext();
@@ -1174,8 +1214,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             delete context;
             return result;
         }
-
-        d->sheet->addDrawing(context);
+        
+        if (context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
+            XlsxXmlDrawingReaderContext::Position pos = context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+            Cell* cell = d->sheet->cell(pos.m_col, pos.m_row, true);
+            cell->drawings << context;
+        }
     }
 
     while (!atEnd()) {
