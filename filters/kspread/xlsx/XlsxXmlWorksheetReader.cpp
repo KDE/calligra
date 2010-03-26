@@ -77,9 +77,10 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
     const XlsxStyles& _styles,
+    MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import
     )
-        : MSOOXML::MsooXmlReaderContext()
+        : MSOOXML::MsooXmlReaderContext(&_relationships)
         , worksheetNumber(_worksheetNumber)
         , worksheetName(_worksheetName)
         , themes(&_themes)
@@ -112,6 +113,7 @@ public:
     QByteArray valueAttr;
     QString valueAttrValue;
     QString formula;
+    QString hyperlink;
     QList<XlsxXmlDrawingReaderContext*> drawings;
 
     Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
@@ -380,6 +382,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(sheetData) // does fill d->rows
             ELSE_TRY_READ_IF(mergeCells)
             ELSE_TRY_READ_IF(drawing)
+            ELSE_TRY_READ_IF(hyperlinks)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -415,12 +418,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
-
+                    const bool hasHyperlink = ! cell->hyperlink.isEmpty();
+                    
                     if (!cell->styleName.isEmpty()) {
                         body->addAttribute("table:style-name", cell->styleName);
                     }
                     //body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
-                    if (!cell->valueType.isEmpty()) {
+                    if (!hasHyperlink && !cell->valueType.isEmpty()) {
                         body->addAttribute("office:value-type", cell->valueType);
                     }
                     if (!cell->valueAttr.isEmpty()) {
@@ -435,13 +439,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     if (cell->columnsMerged > 1) {
                         body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
                     }
-                    if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
+                    
+                    if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty() || hasHyperlink) {
                         body->startElement("text:p", false);
                         if(!cell->charStyleName.isEmpty()) {
                             body->startElement( "text:span" );
                             body->addAttribute( "text:style-name", cell->charStyleName);
                         }
-                        if(!cell->text.isEmpty()) {
+                        if (hasHyperlink) {
+                            body->startElement("text:a");
+                            body->addAttribute("xlink:href", cell->hyperlink);
+                            //body->addAttribute("office:target-frame-name", targetFrameName);
+                            body->addTextNode(cell->text.isEmpty() ? cell->hyperlink : cell->text);
+                            body->endElement(); // text:a
+                        } else if(!cell->text.isEmpty()) {
                             body->addTextSpan(cell->text);
                         }
                         if(!cell->charStyleName.isEmpty()) {
@@ -449,7 +460,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                         body->endElement(); // text:p
                     }
-
+                        
                     // handle objects like e.g. charts
                     foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
                         foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
@@ -1226,6 +1237,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         readNext();
         if (isStartElement()) {
 //! @todo
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL hyperlink
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (!ref.isEmpty() && !r_id.isEmpty()) {
+        const int col = KSpread::Util::decodeColumnLabelText(ref) - 1;
+        const int row = KSpread::Util::decodeRowLabelText(ref) - 1;
+        if(col >= 0 && row >= 0) {
+            QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
+            // it follows a hack to get right of the prepended m_context->path...
+            if (link.startsWith(m_context->path))
+                link = link.mid(m_context->path.length()+1);
+                
+            Cell* cell = d->sheet->cell(col, row, true);
+            cell->hyperlink = link;
+        }
+    }
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL hyperlinks
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(hyperlink)
+            ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

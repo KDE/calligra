@@ -62,6 +62,8 @@ protected:
     KoFilter::ConversionStatus read_mergeCell();
     KoFilter::ConversionStatus read_mergeCells();
     KoFilter::ConversionStatus read_drawing();
+    KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_hyperlinks();
 
     XlsxXmlWorksheetReaderContext* m_context;
 
@@ -118,6 +120,7 @@ public:
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         const XlsxSharedStringVector& _sharedStrings,
         const XlsxStyles& _styles,
+        MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import);
 
     const uint worksheetNumber;

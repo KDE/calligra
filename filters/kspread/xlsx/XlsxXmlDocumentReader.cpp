@@ -257,7 +257,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     }
 
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, path, file,
-                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles, m_context->import );
+                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles,
+                                          *m_context->relationships, m_context->import );
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
                 d->worksheetReader, filepath, &context);
     if (result != KoFilter::OK) {
