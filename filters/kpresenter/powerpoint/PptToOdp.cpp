@@ -1777,6 +1777,21 @@ getMeta(const TextContainerMeta& m, KoXmlWriter& out)
     }
 }
 
+template <class T>
+int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
+        const int start, int& end)
+{
+    const T* a = m.meta.get<T>();
+    if (a) {
+        if (a->position == start) {
+            meta = &m;
+        } else if (a->position > start && end > a->position) {
+            end = a->position;
+        }
+    }
+    return end;
+}
+
 int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
                               const QString& text, const int start,
                               int end)
@@ -1810,18 +1825,12 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
     const TextContainerMeta* meta = 0;
     for (i = 0; i<tc.meta.size(); ++i) {
         const TextContainerMeta& m = tc.meta[i];
-        const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
-        const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
-        const GenericDateMCAtom* c = m.meta.get<GenericDateMCAtom>();
-        const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
-        const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
-        const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
-        if (a && a->position == start) meta = &m;
-        if (b && b->position == start) meta = &m;
-        if (c && c->position == start) meta = &m;
-        if (d && d->position == start) meta = &m;
-        if (e && e->position == start) meta = &m;
-        if (f && f->position == start) meta = &m;
+        end = getMeta<SlideNumberMCAtom>(m, meta, start, end);
+        end = getMeta<DateTimeMCAtom>(m, meta, start, end);
+        end = getMeta<GenericDateMCAtom>(m, meta, start, end);
+        end = getMeta<HeaderMCAtom>(m, meta, start, end);
+        end = getMeta<FooterMCAtom>(m, meta, start, end);
+        end = getMeta<RTFDateTimeMCAtom>(m, meta, start, end);
     }
 
     // find the right bookmark
