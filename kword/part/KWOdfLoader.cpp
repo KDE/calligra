@@ -223,9 +223,15 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
             // OOo starts endnotes on a new page, let's do the same
             QTextCursor cursor(mainFs->document());
             cursor.movePosition(QTextCursor::End);
-            QTextBlockFormat textBlockFormat;
-            textBlockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-            cursor.insertBlock(textBlockFormat);
+
+            cursor.insertText(QString("\n"));
+            QTextCharFormat underline;
+            underline.setFontStrikeOut(true);
+            cursor.mergeCharFormat(underline);
+            cursor.insertText(QString("                       "));
+            underline.setFontStrikeOut(false);
+            cursor.mergeCharFormat(underline);
+            cursor.insertText(QString("\n"));
 
             foreach(KoInlineNote* note, endNotes) {
                 QTextCharFormat charFormat;
@@ -237,7 +243,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
                 cursor.mergeCharFormat(charFormat);
                 cursor.insertFragment(note->text());
                 cursor.insertText(QString("\n"));
-
             }
         }
 
