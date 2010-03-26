@@ -818,6 +818,60 @@ static QString convertFormula(const QString& formula)
     return result;
 }
 
+static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
+{
+    QString result = referencedCell->formula;
+    if (result.isEmpty())
+        return QString();
+
+    enum { Start, InArguments, InCellReference, InString, InSheetOrAreaName } state;
+    state = Start;
+
+    int cellReferenceStart = 0;
+    for(int i = 1; i < result.length(); ++i) {
+        QChar ch = result[i];
+        switch (state) {
+        case Start:
+            if(ch == '(')
+                state = InArguments;
+            break;
+        case InArguments:
+            if (ch == '"')
+                state = InString;
+            else if (ch.unicode() == '\'')
+                state = InSheetOrAreaName;
+            else if (ch.isLetter()) {
+                state = InCellReference;
+                cellReferenceStart = i;
+            }
+            break;
+        case InString:
+            if (ch == '"')
+                state = InArguments;
+            break;
+        case InSheetOrAreaName:
+            if (ch == '\'')
+                state = InArguments;
+            break;
+        case InCellReference:
+            if (!ch.isLetterOrNumber()) {
+                // We need to update cell-references according to the position of the referenced cell and this
+                // cell. This means that if the referenced cell is for example at C5 and contains the formula
+                // "=SUM(K22)" and if thisCell is at E6 then thisCell will get the formula "=SUM(L23)".
+                const QString ref = result.mid(cellReferenceStart, i - cellReferenceStart);
+                const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
+                const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
+                const QString newRef = KSpread::Util::encodeColumnLabelText(c) + QString::number(r);
+                result = result.replace(cellReferenceStart, i - cellReferenceStart, newRef);
+                state = InArguments;
+            }
+            break;
+        };
+    };
+
+    return result;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL c
 //! c handler (Cell)
@@ -852,10 +906,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     TRY_READ_ATTR_WITHOUT_NS(s)
     TRY_READ_ATTR_WITHOUT_NS(t)
-    m_convertFormula = true; // t != QLatin1String("e");
 
     m_value.clear();
-    m_formula.clear();
 
     Cell* cell = d->sheet->cell(m_currentColumn, m_currentRow, true);
 
@@ -1013,7 +1065,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     }
 
     cell->valueAttrValue = m_value;
-    cell->formula = m_formula;
 
     ++m_currentColumn; // This cell is done now. Select the next cell.
 
@@ -1022,6 +1073,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
 #undef CURRENT_EL
 #define CURRENT_EL f
+
 //! f handler (Formula)
 /*! ECMA-376, 18.3.1.40, p. 1813.
  Formula for the cell. The formula expression is contained in the character node of this element.
@@ -1036,11 +1088,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 */
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 {
+    Cell* cell = d->sheet->cell(m_currentColumn, m_currentRow, false);
+    Q_ASSERT(cell);
+
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
+    // Range of cells which the formula applies to. Only required for shared formula, array
+    // formula or data table. Only written on the master formula, not subsequent formula's
+    // belonging to the same shared group, array, or data table.
+    TRY_READ_ATTR(ref)
+    
     // Type of formula. The possible values defined by the ST_CellFormulaType (§18.18.6), p. 2677
-    TRY_READ_ATTR(t)
+    TRY_READ_ATTR(t)    
     if (!t.isEmpty()) {
         if (t == QLatin1String("shared")) {
             /* Shared Group Index, p. 1815
@@ -1053,16 +1113,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             formula expression should be based on the cell's relative location to the master formula
             cell.
             */
-            TRY_READ_ATTR(si)
-            int sharedGroupIndex;
-            STRING_TO_INT(si, sharedGroupIndex, "f@si")
-
-            /* Range of Cells
-            Range of cells which the formula applies to. Only required for shared formula, array
-            formula or data table. Only written on the master formula, not subsequent formulas
-            belonging to the same shared group, array, or data table. */
-            TRY_READ_ATTR(ref)
-            //! @todo handle shared group
+            //TRY_READ_ATTR(si)
+            //int sharedGroupIndex;
+            //STRING_TO_INT(si, sharedGroupIndex, "f@si")
         }
         else if (t == QLatin1String("normal")) { // Formula is a regular cell formula
             
@@ -1074,16 +1127,39 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             //! @todo dataTable
         }
     }
-    //! @todo more attrs
 
     while (!atEnd() && !hasError()) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         if (isCharacters()) {
-            m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
-            kDebug() << m_formula;
+            const QString f = convertFormula(text().toString());
+            if (!f.isEmpty())
+                cell->formula = f;
         }
     }
+
+    if(!ref.isEmpty()) {
+        const int pos = ref.indexOf(':');
+        if (pos > 0) {
+            const QString fromCell = ref.left(pos);
+            const QString toCell = ref.mid(pos + 1);
+            const int c1 = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
+            const int r1 = KSpread::Util::decodeRowLabelText(fromCell) - 1;
+            const int c2 = KSpread::Util::decodeColumnLabelText(toCell) - 1;
+            const int r2 = KSpread::Util::decodeRowLabelText(toCell) - 1;
+            if (c1 >= 0 && r1 >= 0 && c2 >= c1 && r2 >= r1) {
+                for(int col = c1; col <= c2; ++col) {
+                    for(int row = r1; row <= r2; ++row) {
+                        if (col != m_currentColumn || row != m_currentRow) {
+                            Cell* c = d->sheet->cell(col, row, true);
+                            c->formula = convertFormulaReference(cell, c);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 
