@@ -62,6 +62,8 @@ protected:
     KoFilter::ConversionStatus read_mergeCell();
     KoFilter::ConversionStatus read_mergeCells();
     KoFilter::ConversionStatus read_drawing();
+    KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_hyperlinks();
 
     XlsxXmlWorksheetReaderContext* m_context;
 
@@ -74,13 +76,6 @@ protected:
     int m_currentColumn;
     //! Used in read_f() and read_v()
     QString m_value;
-
-    //! Affects read_f(), set in read_c()
-    bool m_convertFormula;
-
-    //! Set in read_f() and used in read_c()
-    QString m_formula;
-
     //! Filled by read_sheetFormatPr(), measured in pt
     QString m_defaultRowHeight;
 
@@ -118,6 +113,7 @@ public:
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         const XlsxSharedStringVector& _sharedStrings,
         const XlsxStyles& _styles,
+        MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import);
 
     const uint worksheetNumber;

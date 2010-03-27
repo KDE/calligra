@@ -77,9 +77,10 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
     const XlsxStyles& _styles,
+    MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import
     )
-        : MSOOXML::MsooXmlReaderContext()
+        : MSOOXML::MsooXmlReaderContext(&_relationships)
         , worksheetNumber(_worksheetNumber)
         , worksheetName(_worksheetName)
         , themes(&_themes)
@@ -97,14 +98,16 @@ const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
 const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
+//! @todo the workboot was designed after filters/kspread/excel/sidewinder to allow to shared as much
+//!       logic as possible. Goal is to let them both share the same structures and OpenDocument logic.
 class Sheet;
 
 class Cell
 {
 public:
+    Sheet* sheet;
     int column, row;
     int rowsMerged, columnsMerged;
-    //int repeated;
     QString styleName;
     QString charStyleName;
     QString text;
@@ -112,9 +115,10 @@ public:
     QByteArray valueAttr;
     QString valueAttrValue;
     QString formula;
+    QString hyperlink;
     QList<XlsxXmlDrawingReaderContext*> drawings;
 
-    Cell(Sheet* s, int columnIndex, int rowIndex) : column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
+    Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() { qDeleteAll(drawings); }
 };
 
@@ -145,9 +149,9 @@ class Sheet
 {
 public:
     explicit Sheet() : m_maxRow(0), m_maxColumn(0) {}
-    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_cells); }
+    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
 
-    Row* row(unsigned rowIndex, bool autoCreate)
+    Row* row(int rowIndex, bool autoCreate)
     {
         Row* r = m_rows[ rowIndex ];
         if (!r && autoCreate) {
@@ -158,7 +162,7 @@ public:
         return r;
     }
 
-    Column* column(unsigned columnIndex, bool autoCreate)
+    Column* column(int columnIndex, bool autoCreate)
     {
         Column* c = m_columns[ columnIndex ];
         if (!c && autoCreate) {
@@ -169,7 +173,7 @@ public:
         return c;
     }
 
-    Cell* cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
+    Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
     {
         const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
         Cell* c = m_cells[ hashed ];
@@ -180,7 +184,7 @@ public:
             this->row(rowIndex, true);
             if (rowIndex > m_maxRow) m_maxRow = rowIndex;
             if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
-            if(!m_maxCellsInRow.contains(rowIndex) || columnIndex > m_maxCellsInRow[rowIndex])
+            if (!m_maxCellsInRow.contains(rowIndex) || columnIndex > m_maxCellsInRow[rowIndex])
                 m_maxCellsInRow[rowIndex] = columnIndex;
         }
         return c;
@@ -188,15 +192,15 @@ public:
 
     int maxRow() const { return m_maxRow; }
     int maxColumn() const { return m_maxColumn; }
-    unsigned maxCellsInRow(unsigned rowIndex) const { return m_maxCellsInRow[rowIndex]; }
+    int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
     
 private:
-    QHash<unsigned, Row*> m_rows;
-    QHash<unsigned, Column*> m_columns;
+    QHash<int, Row*> m_rows;
+    QHash<int, Column*> m_columns;
     QHash<unsigned, Cell*> m_cells;
     int m_maxRow;
     int m_maxColumn;
-    QHash<unsigned, unsigned> m_maxCellsInRow;
+    QHash<int, int> m_maxCellsInRow;
 };
 
 class XlsxXmlWorksheetReader::Private
@@ -266,7 +270,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 
     // worksheet
     readNext();
-    kDebug() << *this << namespaceUri();
+    //kDebug() << *this << namespaceUri();
 
     if (!expectEl("worksheet")) {
         return KoFilter::WrongFormat;
@@ -274,11 +278,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
         return KoFilter::WrongFormat;
     }
-    /*
-        const QXmlStreamAttributes attrs( attributes() );
-        for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-        }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
@@ -377,10 +376,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         if (isStartElement()) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
-            ELSE_TRY_READ_IF(sheetData) // does fill d->rows
+            ELSE_TRY_READ_IF(sheetData) // does fill the d->sheet
             ELSE_TRY_READ_IF(mergeCells)
             ELSE_TRY_READ_IF(drawing)
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(hyperlinks)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -415,12 +414,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
-
+                    const bool hasHyperlink = ! cell->hyperlink.isEmpty();
+                    
                     if (!cell->styleName.isEmpty()) {
                         body->addAttribute("table:style-name", cell->styleName);
                     }
                     //body->addAttribute("table:number-columns-repeated", QByteArray::number(cell->repeated));
-                    if (!cell->valueType.isEmpty()) {
+                    if (!hasHyperlink && !cell->valueType.isEmpty()) {
                         body->addAttribute("office:value-type", cell->valueType);
                     }
                     if (!cell->valueAttr.isEmpty()) {
@@ -435,13 +435,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     if (cell->columnsMerged > 1) {
                         body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
                     }
-                    if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty()) {
+                    
+                    if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty() || hasHyperlink) {
                         body->startElement("text:p", false);
                         if(!cell->charStyleName.isEmpty()) {
                             body->startElement( "text:span" );
                             body->addAttribute( "text:style-name", cell->charStyleName);
                         }
-                        if(!cell->text.isEmpty()) {
+                        if (hasHyperlink) {
+                            body->startElement("text:a");
+                            body->addAttribute("xlink:href", cell->hyperlink);
+                            //body->addAttribute("office:target-frame-name", targetFrameName);
+                            body->addTextNode(cell->text.isEmpty() ? cell->hyperlink : cell->text);
+                            body->endElement(); // text:a
+                        } else if(!cell->text.isEmpty()) {
                             body->addTextSpan(cell->text);
                         }
                         if(!cell->charStyleName.isEmpty()) {
@@ -449,7 +456,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                         body->endElement(); // text:p
                     }
-
+                        
                     // handle objects like e.g. charts
                     foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
                         foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
@@ -487,7 +494,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(defaultRowHeight, m_defaultRowHeight) // in pt
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -638,7 +644,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 
     m_columnCount += (maxCol - minCol);
 
-    if (m_columnCount > MSOOXML::maximumSpreadsheetColumns()) {
+    if (m_columnCount > (int)MSOOXML::maximumSpreadsheetColumns()) {
         showWarningAboutWorksheetSize();
     }
 
@@ -734,7 +740,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         if (!ok || m_currentRow < 0)
             return KoFilter::WrongFormat;
     }
-    if (m_currentRow > MSOOXML::maximumSpreadsheetRows()) {
+    if (m_currentRow > (int)MSOOXML::maximumSpreadsheetRows()) {
         showWarningAboutWorksheetSize();
     }
 
@@ -773,11 +779,9 @@ static QString convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();
-
     enum { Start, InArguments, InString, InSheetOrAreaName } state;
     state = Start;
     QString result = '=' + formula;
-
     for(int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
@@ -803,7 +807,64 @@ static QString convertFormula(const QString& formula)
             break;
         };
     };
+    return result;
+}
 
+static bool isCellnameCharacter(const QChar &c)
+{
+    return c.isDigit() || c.isLetter() || c == '$';
+}
+
+static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
+{
+    QString result = referencedCell->formula;
+    if (result.isEmpty())
+        return QString();
+    enum { Start, InArguments, InCellReference, InString, InSheetOrAreaName } state;
+    state = Start;
+    int cellReferenceStart = 0;
+    for(int i = 1; i < result.length(); ++i) {
+        QChar ch = result[i];
+        switch (state) {
+        case Start:
+            if(ch == '(')
+                state = InArguments;
+            break;
+        case InArguments:
+            if (ch == '"')
+                state = InString;
+            else if (ch.unicode() == '\'')
+                state = InSheetOrAreaName;
+            else if (isCellnameCharacter(ch)) {
+                state = InCellReference;
+                cellReferenceStart = i;
+            }
+            break;
+        case InString:
+            if (ch == '"')
+                state = InArguments;
+            break;
+        case InSheetOrAreaName:
+            if (ch == '\'')
+                state = InArguments;
+            break;
+        case InCellReference:
+            if (!isCellnameCharacter(ch)) {
+                // We need to update cell-references according to the position of the referenced cell and this
+                // cell. This means that if the referenced cell is for example at C5 and contains the formula
+                // "=SUM(K22)" and if thisCell is at E6 then thisCell will get the formula "=SUM(L23)".
+                const QString ref = result.mid(cellReferenceStart, i - cellReferenceStart);
+                QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
+                if (rx.exactMatch(ref)) {
+                    const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
+                    const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
+                    result = result.replace(cellReferenceStart, i - cellReferenceStart, KSpread::Util::encodeColumnLabelText(c) + QString::number(r));
+                    state = InArguments;
+                }
+            }
+            break;
+        };
+    };
     return result;
 }
 
@@ -841,10 +902,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     TRY_READ_ATTR_WITHOUT_NS(s)
     TRY_READ_ATTR_WITHOUT_NS(t)
-    m_convertFormula = true; // t != QLatin1String("e");
 
     m_value.clear();
-    m_formula.clear();
 
     Cell* cell = d->sheet->cell(m_currentColumn, m_currentRow, true);
 
@@ -859,7 +918,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    bool ok = false;
+    bool ok;
     uint styleId = s.toUInt(&ok);
     kDebug() << "styleId:" << styleId;
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
@@ -902,8 +961,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
        
         if (t == QLatin1String("s")) {
             bool ok;
-            const uint stringIndex = m_value.toUInt(&ok);
-            if (!ok || (int)stringIndex >= m_context->sharedStrings->size()) {
+            const int stringIndex = m_value.toInt(&ok);
+            if (!ok || stringIndex >= m_context->sharedStrings->size()) {
                 return KoFilter::WrongFormat;
             }
             cell->text = m_context->sharedStrings->at(stringIndex).data();
@@ -1002,7 +1061,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     }
 
     cell->valueAttrValue = m_value;
-    cell->formula = m_formula;
 
     ++m_currentColumn; // This cell is done now. Select the next cell.
 
@@ -1011,6 +1069,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
 #undef CURRENT_EL
 #define CURRENT_EL f
+
 //! f handler (Formula)
 /*! ECMA-376, 18.3.1.40, p. 1813.
  Formula for the cell. The formula expression is contained in the character node of this element.
@@ -1025,11 +1084,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 */
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 {
+    Cell* cell = d->sheet->cell(m_currentColumn, m_currentRow, false);
+    Q_ASSERT(cell);
+
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
+    // Range of cells which the formula applies to. Only required for shared formula, array
+    // formula or data table. Only written on the master formula, not subsequent formula's
+    // belonging to the same shared group, array, or data table.
+    TRY_READ_ATTR(ref)
+    
     // Type of formula. The possible values defined by the ST_CellFormulaType (§18.18.6), p. 2677
-    TRY_READ_ATTR(t)
+    TRY_READ_ATTR(t)    
     if (!t.isEmpty()) {
         if (t == QLatin1String("shared")) {
             /* Shared Group Index, p. 1815
@@ -1042,16 +1109,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             formula expression should be based on the cell's relative location to the master formula
             cell.
             */
-            TRY_READ_ATTR(si)
-            int sharedGroupIndex;
-            STRING_TO_INT(si, sharedGroupIndex, "f@si")
-
-            /* Range of Cells
-            Range of cells which the formula applies to. Only required for shared formula, array
-            formula or data table. Only written on the master formula, not subsequent formulas
-            belonging to the same shared group, array, or data table. */
-            TRY_READ_ATTR(ref)
-            //! @todo handle shared group
+            //TRY_READ_ATTR(si)
+            //int sharedGroupIndex;
+            //STRING_TO_INT(si, sharedGroupIndex, "f@si")
         }
         else if (t == QLatin1String("normal")) { // Formula is a regular cell formula
             
@@ -1063,16 +1123,37 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             //! @todo dataTable
         }
     }
-    //! @todo more attrs
 
     while (!atEnd() && !hasError()) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         if (isCharacters()) {
-            m_formula = m_convertFormula ? convertFormula(text().toString()) : text().toString();
-            kDebug() << m_formula;
+            cell->formula = convertFormula(text().toString());
         }
     }
+
+    if (!ref.isEmpty()) {
+        const int pos = ref.indexOf(':');
+        if (pos > 0) {
+            const QString fromCell = ref.left(pos);
+            const QString toCell = ref.mid(pos + 1);
+            const int c1 = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
+            const int r1 = KSpread::Util::decodeRowLabelText(fromCell) - 1;
+            const int c2 = KSpread::Util::decodeColumnLabelText(toCell) - 1;
+            const int r2 = KSpread::Util::decodeRowLabelText(toCell) - 1;
+            if (c1 >= 0 && r1 >= 0 && c2 >= c1 && r2 >= r1) {
+                for (int col = c1; col <= c2; ++col) {
+                    for (int row = r1; row <= r2; ++row) {
+                        if (col != m_currentColumn || row != m_currentRow) {
+                            Cell* c = d->sheet->cell(col, row, true);
+                            c->formula = convertFormulaReference(cell, c);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -1097,8 +1178,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     READ_PROLOGUE
     readNext();
     m_value = text().toString();
-    kDebug() << m_value;
-
+    //kDebug() << m_value;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1124,14 +1204,12 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
 {
     READ_PROLOGUE
-
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(ref)
     QStringList refList = ref.split(':');
     if (refList.count() >= 2) {
         const QString fromCell = refList[0];
         const QString toCell = refList[1];
-
         QRegExp rx("([A-Za-z]+)([0-9]+)");
         if(rx.exactMatch(fromCell)) {
             const int fromRow = rx.cap(2).toInt() - 1;
@@ -1143,12 +1221,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
             }
         }
     }
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
     READ_EPILOGUE
 }
 
@@ -1158,17 +1234,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
 {
     READ_PROLOGUE
-
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(mergeCell)
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
     READ_EPILOGUE
 }
 
@@ -1192,7 +1265,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
 {
     READ_PROLOGUE
-    
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     if(!r_id.isEmpty() && !this->m_context->path.isEmpty()) {
@@ -1221,11 +1293,53 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             cell->drawings << context;
         }
     }
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
 
+#undef CURRENT_EL
+#define CURRENT_EL hyperlink
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (!ref.isEmpty() && !r_id.isEmpty()) {
+        const int col = KSpread::Util::decodeColumnLabelText(ref) - 1;
+        const int row = KSpread::Util::decodeRowLabelText(ref) - 1;
+        if(col >= 0 && row >= 0) {
+            QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
+            // it follows a hack to get right of the prepended m_context->path...
+            if (link.startsWith(m_context->path))
+                link = link.mid(m_context->path.length()+1);
+                
+            Cell* cell = d->sheet->cell(col, row, true);
+            cell->hyperlink = link;
+        }
+    }
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL hyperlinks
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
+{
+    READ_PROLOGUE
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-//! @todo
+            TRY_READ_IF(hyperlink)
+            ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

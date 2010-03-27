@@ -68,6 +68,19 @@ int KSpread::Util::decodeColumnLabelText(const QString &labelText)
     return col;
 }
 
+int KSpread::Util::decodeRowLabelText(const QString &labelText)
+{
+    QRegExp rx("([A-Za-z]+)([0-9]+)");
+    if(rx.exactMatch(labelText))
+        return rx.cap(2).toInt();
+    return 0;
+}
+
+QString KSpread::Util::encodeColumnLabelText(int column)
+{
+    return Cell::columnName(column);
+}
+
 QDomElement KSpread::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagName));
