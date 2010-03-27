@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2010 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -116,8 +117,6 @@ Legend::Legend( ChartShape *parent )
     
     d->shape = parent;
 
-    // FIXME: Shall we delete this in the destructor or does KDChart
-    //        do that itself?
     d->kdLegend = new KDChart::Legend();
     
     setTitleFontSize( 10 );
@@ -401,8 +400,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
     }*/
 
     // Paint the background
-    if( background() )
-    {
+    if ( background() ) {
         QPainterPath p;
         p.addRect( paintRect );
         background()->paint( painter, p );

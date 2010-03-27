@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2007, 2010  Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -485,14 +485,7 @@ void ChartTool::setShowTitle( bool show )
     if ( !d->shape )
         return;
 
-    // FIXME: Is this the reason why the plotarea doesn't grow again
-    //        if the title checkbox is unchecked?  I think it is.
-    //        Solve this by making showTitle take a bool.
-    //        Similar for the subtitle and footer below.
-    if ( show )
-        d->shape->showTitle();
-    else
-        d->shape->title()->setVisible( false );
+    d->shape->showTitle(show);
     d->shape->update();
 }
 
@@ -502,10 +495,7 @@ void ChartTool::setShowSubTitle( bool show )
     if ( !d->shape )
         return;
 
-    if ( show )
-        d->shape->showSubTitle();
-    else
-        d->shape->subTitle()->setVisible( false );
+    d->shape->showSubTitle(show);
     d->shape->update();
 }
 
@@ -515,10 +505,7 @@ void ChartTool::setShowFooter( bool show )
     if ( !d->shape )
         return;
 
-    if ( show )
-        d->shape->showFooter();
-    else
-        d->shape->footer()->setVisible( false );
+    d->shape->showFooter(show);
     d->shape->update();
 }
 

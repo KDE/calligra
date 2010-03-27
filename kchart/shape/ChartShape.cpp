@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007-2009 Inge Wallin    <inge@lysator.liu.se>
+   Copyright 2007-2010 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -261,7 +261,7 @@ public:
     Private( ChartShape *shape );
     ~Private();
 
-    void showLabel( KoShape *label );
+    void showLabel( KoShape *label, bool doShow );
     QPointF relativePosition( KoShape *shape );
     void setRelativePosition( KoShape *shape, const QPointF &relPos );
 
@@ -314,56 +314,46 @@ ChartShape::Private::~Private()
 //
 // If there is too little room, then make space by shrinking the Plotarea.
 //
-// FIXME: Make it take a bool parameter to show / hide the label in
-//        question and then also grow the Plotarea again if the label
-//        is hidden.
-void ChartShape::Private::showLabel( KoShape *label )
+void ChartShape::Private::showLabel( KoShape *label, bool doShow )
 {
     Q_ASSERT( label );
 
-    const QSizeF  plotAreaSize = plotArea->size();
-    if ( label->position().y() + label->size().height() / 2.0
-         < shape->size().height() / 2.0 )
-    {
-        const qreal verticalSpaceRemaining = plotArea->position().y();
-        const qreal spaceToExpand          = ( label->position().y() + label->size().height() ) - verticalSpaceRemaining;
+    label->setVisible( doShow );
 
-        if ( spaceToExpand > 0.0 ) {
-            plotArea->setSize( QSizeF( plotAreaSize.width(),
-                                       plotAreaSize.height() - spaceToExpand ) );
-            plotArea->setPosition( QPointF( plotArea->position().x(),
-                                            plotArea->position().y() + spaceToExpand ) );
-        }
+    // The bounds of the space that is left for the plotarea.
+    qreal yTop = 0;
+    qreal yBottom = shape->size().height();
+
+    // Start calculate the available space for the plotarea.  First
+    // remove the space for the title/subtitle/footer
+    if (title->isVisible()) {
+        yTop = title->position().y() + title->size().height();
     }
-    else {
-        const qreal verticalSpaceRemaining = label->position().y() - plotArea->position().y() - plotArea->size().height();
-        qreal spaceToExpand = ( shape->size().height() - label->position().y() - label->size().height() ) - verticalSpaceRemaining;
-
-        if ( spaceToExpand < 0.0 )
-            spaceToExpand = 0.0;
-
-        foreach ( Axis *axis, plotArea->axes() ) {
-            if ( axis->position() != BottomAxisPosition )
-                continue;
-
-            qreal _spaceToExpand = ( label->size().height()
-                                      - ( shape->size().height()
-                                          - axis->title()->position().y()
-                                          - axis->title()->size().height() ) );
-            if ( _spaceToExpand > 0.0 ) {
-                axis->title()->setPosition( axis->title()->position()
-                                            - QPointF( 0.0, _spaceToExpand ) );
-                spaceToExpand += _spaceToExpand;
-            }
-        }
-
-        if ( spaceToExpand > 0.0 ) {
-            plotArea->setSize( QSizeF( plotAreaSize.width(),
-				       plotAreaSize.height() - spaceToExpand ) );
-        }
+    if (subTitle->isVisible()) {
+        // Here we assume that the subtitle is below the title.
+        yTop = subTitle->position().y() + subTitle->size().height();
+    }
+    if (footer->isVisible()) {
+        yBottom = footer->position().y();
     }
 
-    label->setVisible( true );
+    // Then remove the space that is taken by the axis titles.
+    foreach ( Axis *axis, plotArea->axes() ) {
+        if ( axis->position() != BottomAxisPosition )
+            continue;
+
+        // Make room for the Axis titles.
+        // FIXME: They should only be allocated space if they are visible.
+        yBottom -= axis->title()->size().height();
+        axis->title()->setPosition( QPointF(axis->title()->position().x(), yBottom) );
+    }
+
+    // Check if there is any room left for the plotarea.
+    // Maybe we should use a minimal size?
+    if (yTop < yBottom) {
+        plotArea->setPosition(QPointF(plotArea->position().x(), yTop));
+        plotArea->setSize(QSizeF(plotArea->size().width(), yBottom - yTop));
+    }
 }
 
 
@@ -426,6 +416,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     font.setPointSizeF( 12.0 );
     titleData()->document()->setDefaultFont( font );
     titleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Title" ) + "</font></div>" );
+    // Position the title center at the very top.
     d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.7 ) ) );
     d->title->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, 0.0 ) );
     d->title->setVisible( false );
@@ -446,6 +437,8 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     font.setPointSizeF( 10.0 );
     subTitleData()->document()->setDefaultFont( font );
     subTitleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Subtitle" ) + "</div>" );
+
+    // Position it in the center, just below the title.
     d->subTitle->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.6 ) ) );
     d->subTitle->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0,
                                        d->title->size().height() ) );
@@ -467,8 +460,11 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     font.setPointSizeF( 10.0 );
     footerData()->document()->setDefaultFont( font );
     footerData()->document()->setHtml( "<div align=\"center\">" + i18n( "Footer" ) + "</div>" );
+
+    // Position the footer in the center, at the bottom.
     d->footer->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.6 ) ) );
-    d->footer->setPosition( QPointF( size().width() / 2.0 - d->footer->size().width() / 2.0, size().height() - d->footer->size().height() ) );
+    d->footer->setPosition( QPointF( size().width() / 2.0 - d->footer->size().width() / 2.0,
+                                     size().height() - d->footer->size().height() ) );
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
     setClipping( d->footer, true );
@@ -560,19 +556,19 @@ PlotArea *ChartShape::plotArea() const
 }
 
 
-void ChartShape::showTitle()
+void ChartShape::showTitle(bool doShow)
 {
-    d->showLabel( d->title );
+    d->showLabel( d->title, doShow );
 }
 
-void ChartShape::showSubTitle()
+void ChartShape::showSubTitle(bool doShow)
 {
-    d->showLabel( d->subTitle );
+    d->showLabel( d->subTitle, doShow );
 }
 
-void ChartShape::showFooter()
+void ChartShape::showFooter(bool doShow)
 {
-    d->showLabel( d->footer );
+    d->showLabel( d->footer, doShow );
 }
 
 void ChartShape::setModel( QAbstractItemModel *model,
@@ -1167,7 +1163,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     if ( !titleElem.isNull() ) {
         if ( !loadOdfLabel( d->title, titleElem, context) )
             return false;
-        d->showLabel(d->title);
+        d->showLabel(d->title, true);
     }
 
     // 5. Load the subtitle.
@@ -1176,7 +1172,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     if ( !subTitleElem.isNull() ) {
         if ( !loadOdfLabel( d->subTitle, subTitleElem, context) )
             return false;
-        d->showLabel(d->subTitle);
+        d->showLabel(d->subTitle, true);
     }
 
     // 6. Load the footer.
@@ -1185,7 +1181,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     if ( !footerElem.isNull() ) {
         if ( !loadOdfLabel( d->footer, footerElem, context ) )
             return false;
-        d->showLabel(d->footer);
+        d->showLabel(d->footer, true);
     }
 
     // 7. Load the legend.

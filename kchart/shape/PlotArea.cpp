@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
-   Copyright 2009      Inge Wallin <inge@lysator.liu.se>
+   Copyright 2009-2010 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -837,7 +837,7 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
         switch( d->chartSubtype ) {
         case NoChartSubtype:
         case NormalChartSubtype:
-        break;
+            break;
         case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
@@ -850,8 +850,7 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
             // FIXME: Save all 3D attributes too.
         }
-
-    break;
+        break;
 
     case CircleChartType:
         // FIXME
