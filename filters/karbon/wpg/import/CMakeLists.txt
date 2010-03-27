@@ -1,6 +1,6 @@
 
 
-include_directories(${CMAKE_BINARY_DIR}/filters/ ${WPD_INCLUDE_DIR} ${LIBWPG_INCLUDE_DIR}/libwpg-0.1)
+include_directories(${CMAKE_BINARY_DIR}/filters/ ${WPD_INCLUDE_DIR} ${LIBWPG_INCLUDE_DIR}/)
 
 set(wpgimport_PART_SRCS 
 WPGImport.cpp 
