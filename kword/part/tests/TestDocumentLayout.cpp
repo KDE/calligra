@@ -51,7 +51,6 @@ public:
         return 0;
     }
     bool addLine(QTextLine &line) {
-        // TODO make offset be from beginning of parag times line count
         if (line.height() > 20)
             m_y += line.height();
         else
@@ -69,11 +68,18 @@ public:
         return true;
     }
     bool previousParag() {
-        if (layout)
-            layout->endLayout();
-        m_currentBlock = m_currentBlock.previous();
-        Q_ASSERT(m_currentBlock.isValid());
-        layout = m_currentBlock.layout();
+        if (m_currentBlock.position() == 0 && layout->lineCount() == 0)
+            return false;
+
+        layout->endLayout();
+        if (layout->lineCount() == 0) {
+            m_currentBlock = m_currentBlock.previous();
+            layout = m_currentBlock.layout();
+        }
+        QTextLine tl = layout->lineAt(0);
+        Q_ASSERT(tl.isValid());
+        m_y = tl.y();
+
         layout->beginLayout();
         return true;
     }
@@ -261,16 +267,59 @@ void TestDocumentLayout::placeAnchoredFrame2()
     QVERIFY(line.isValid());
     // qDebug() << line.y() << line.height();
     QVERIFY(line.y() + line.height() >= 412); // test that text is below image
+}
 
+void TestDocumentLayout::placeAnchoredFrame3()
+{
+    // basic inline frame that acts like a really big character
+    initForNewTest(QString(loremIpsum));
+    MockShape *picture = new MockShape();
+    picture->setSize(QSizeF(100, 100));
+    KoTextAnchor *anchor = new KoTextAnchor(picture);
+    anchor->setAlignment(KoTextAnchor::VerticalOffset);
+    anchor->setAlignment(KoTextAnchor::HorizontalOffset);
+    QTextCursor cursor(doc);
+    KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
+    layout->setInlineTextObjectManager(manager);
+    MockLayoutState *state = new MockLayoutState(doc);
+    layout->setLayout(state);
+    state->shape = shape1;
+    manager->insertInlineObject(cursor, anchor);
+    layout->layout();
 
 /*
-    having a inline frame with an offset currently makes the character really big, I'm wondering
-    if I should instead use an Outline object for anchors with an offset.
+    I have two goals with 'offset'.
+    One is that I want to be able to change the baseline of my anchored object.
+    The other is that OOo / ODF allows me to have an arbitairy distance from my anchor
+    so I can place something at the center of my page or whatever.
 
-    An inline frame all alone on its line seems to have several bugs. The positioning is wrong
-    and the next line is no moved down.
+    So what about I switch from the first to the latter based on the font height.
+        If my offset 'x' != 0,  make the image floating.
+        If my offset 'y' is such that it would be above or below my line; make floating.
 */
 
+    QTextLayout *lay = doc->begin().layout();
+    QVERIFY(lay->lineCount() >= 2);
+    QTextLine line = lay->lineAt(0);
+    QCOMPARE(line.descent(), (qreal) 100);
+    QCOMPARE(line.position(), QPointF());
+    line = lay->lineAt(1);
+    QVERIFY(line.height() < 20);
+
+    // now move the character which makes it a shape to run around and no longer
+    // a big character.
+    anchor->setOffset(QPointF(50, 20));
+    layout->layout();
+
+    lay = doc->begin().layout();
+    QVERIFY(lay->lineCount() >= 2);
+    line = lay->lineAt(0);
+    QVERIFY(line.height() < 20);
+    QCOMPARE(line.position(), QPointF());
+    line = lay->lineAt(1);
+    QVERIFY(line.height() < 20);
+    QCOMPARE(line.position().x(), 0.);
+    QVERIFY(qAbs(line.position().y() - 14.4) <  0.125);
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

@@ -51,10 +51,12 @@ public:
      * The layout state is reverted to an earlier paragraph if needed to account for the newly
      * placed shape.
      * @param state the state of the layout.
+     * @param startOfBlock the position in the document of the first character in a block.
+     * @part startOfBlockText the position in the document of the first non-anchor character in a block
      * @return will return true if the layout state has been changed.
      * @see isFinished()
      */
-    bool checkState(KoTextDocumentLayout::LayoutState *state);
+    bool checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText);
 
     /**
      * @return if the anchor is placed properly and no more changes are required.

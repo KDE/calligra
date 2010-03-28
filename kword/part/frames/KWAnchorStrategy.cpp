@@ -43,7 +43,7 @@ KWAnchorStrategy::~KWAnchorStrategy()
 {
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
+bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText)
 {
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
         KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
@@ -78,7 +78,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
     QTextLayout *layout = block.layout();
     int recalcFrom = state->cursorPosition(); // the position from which we will restart layout.
 
-// TODO rewrite the below to account for rotation etc.
     QRectF boundingRect = m_anchor->shape()->boundingRect();
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QPointF newPosition;
@@ -133,8 +132,10 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         recalcFrom = qMax(recalcFrom, data->position());
         break;
     case KoTextAnchor::TopOfParagraph: {
-        if (layout->lineCount() == 0)
+        if (layout->lineCount() == 0) {
+            m_finished = false;
             return false;
+        }
         qreal topOfParagraph = layout->lineAt(0).y();
         newPosition.setY(topOfParagraph - data->documentOffset());
         recalcFrom = qMax(recalcFrom, block.position());
@@ -174,7 +175,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
             m_finished = true;
         }
         else if (block.length() == 2) { // the anchor is the only thing in the block
-            y = state->y()/* - boundingRect.height()*/;
+            y = state->y();
         } else {
             m_finished = false;
             return false; // lets go for a second round.
@@ -187,24 +188,32 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         Q_ASSERT(false); // new enum added?
     }
     newPosition = newPosition + m_anchor->offset();
+    QPointF diff = newPosition - m_anchor->shape()->position();
+    const bool moved = qAbs(diff.x()) > 0.5 || qAbs(diff.y()) > 0.5;
     if (!m_finished && m_pass > 0) { // already been here
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
-        QPointF diff = newPosition - m_anchor->shape()->position();
-        m_finished = qAbs(diff.x()) < 2.0 && qAbs(diff.y()) < 2.0;
+        m_finished = !moved;
+    } else if (!m_finished && m_pass == 0 && m_anchor->isPositionedInline()) {
+        // inline chars are 'run around' already by the qt text flow. Only one pass needed
+        m_finished = true;
     }
     m_pass++;
 
-    // set the shape to the proper position based on the data
-    m_anchor->shape()->update();
-    // kDebug() << "anchor positioned" << newPosition << "/" << m_anchor->shape()->position();
-    // kDebug() << "finished" << m_finished;
-    m_anchor->shape()->setPosition(newPosition);
-    m_anchor->shape()->update();
+    if (moved) {
+        // set the shape to the proper position based on the data
+        m_anchor->shape()->update();
+        //kDebug() << "anchor positioned" << newPosition << "/" << m_anchor->shape()->position();
+        //kDebug() << "finished" << m_finished;
+        m_anchor->shape()->setPosition(newPosition);
+        m_anchor->shape()->update();
+    }
 
-    if (m_finished || qAbs(m_anchor->offset().x()) < 0.1) // no second pass needed
+    if (m_finished) // no second pass needed
         return false;
 
     do { // move the layout class back a couple of paragraphs.
+        if (recalcFrom >= startOfBlock && recalcFrom < startOfBlockText)
+            break;
         if (state->cursorPosition() <= recalcFrom)
             break;
     } while (state->previousParag());
@@ -217,10 +226,9 @@ bool KWAnchorStrategy::isFinished()
     return m_finished;
 }
 
-KoShape * KWAnchorStrategy::anchoredShape() const
+KoShape *KWAnchorStrategy::anchoredShape() const
 {
-    if (m_anchor->horizontalAlignment() == KoTextAnchor::HorizontalOffset &&
-            m_anchor->verticalAlignment() == KoTextAnchor::VerticalOffset)
+    if (m_anchor->isPositionedInline())
         return 0;
     return m_anchor->shape();
 }
