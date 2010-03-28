@@ -318,9 +318,13 @@ void ChartShape::Private::showLabel( KoShape *label, bool doShow )
 {
     Q_ASSERT( label );
 
+    if (label->isVisible() == doShow)
+        return;
+
     label->setVisible( doShow );
 
     // The bounds of the space that is left for the plotarea.
+    // Start with the full height of the shape.
     qreal yTop = 0;
     qreal yBottom = shape->size().height();
 
