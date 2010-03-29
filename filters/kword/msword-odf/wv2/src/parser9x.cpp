@@ -881,7 +881,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
 }
 }
 
-void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
+void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
@@ -896,7 +896,7 @@ void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<cons
         m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
 }
 
-void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
+void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
     for (int i = 0; i < characters.length(); ++i) {
         wvlog << characters[i].unicode();
@@ -1199,7 +1199,6 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
   U16 opid, opidOpid;
   U8 fBid, fComplex;
   S32 op;
-  float hrHeight = 0.0f;
 
   while (dataSize >= 6) {
       opid = stream->readU16();
