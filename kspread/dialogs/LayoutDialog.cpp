@@ -2014,6 +2014,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     multi->setChecked(dlg->bMultiRow);
 
     vertical->setChecked(dlg->bVerticalText);
+    
     shrinkToFit->setChecked(dlg->bShrinkToFit);
 
     angleRotation->setValue(-dlg->textRotation);//annma
@@ -2265,6 +2266,13 @@ void CellFormatPagePosition::apply(StyleCommand* _obj)
             _obj->setVerticalText(vertical->isChecked());
         else
             _obj->setVerticalText(false);
+    }
+
+    if (m_bOptionText) {
+        if (shrinkToFit->isEnabled())
+            _obj->setShrinkToFit(shrinkToFit->isChecked());
+        else
+            _obj->setShrinkToFit(false);
     }
 
     if (dlg->textRotation != angleRotation->value())
