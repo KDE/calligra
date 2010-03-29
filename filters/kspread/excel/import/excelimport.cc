@@ -1289,9 +1289,10 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
                 str.clear(); // at Excel cells with links don't have additional text content
             }
         }
-        if (linkLocation.isEmpty() && value.isString() && !(cell->format().font().subscript() || cell->format().font().superscript())) {
+        if (linkLocation.isEmpty() && value.isString()) {
             xmlWriter->addAttribute("office:value-type", "string");
-            xmlWriter->addAttribute("office:string-value", str);
+             if (!(cell->format().font().subscript() || cell->format().font().superscript()))
+                 xmlWriter->addAttribute("office:string-value", str);
         }
 
         xmlWriter->startElement("text:p", false);
