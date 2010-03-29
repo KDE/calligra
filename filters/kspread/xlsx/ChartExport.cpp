@@ -48,10 +48,8 @@ QString normalizeCellRange(const QString &range)
 
 bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
 {
-    Q_ASSERT(chart());
-    Q_ASSERT(!m_href.isEmpty());
-    Q_ASSERT(!m_endCellAddress.isEmpty());
-    Q_ASSERT(!m_notifyOnUpdateOfRanges.isEmpty());
+    if(!chart() || !m_href.isEmpty() || !m_endCellAddress.isEmpty() || !m_notifyOnUpdateOfRanges.isEmpty())
+        return false;
 
     xmlWriter->startElement("draw:frame");
     //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H20");
@@ -76,10 +74,8 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
 
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
-    Q_ASSERT(chart());
-    Q_ASSERT(!m_href.isEmpty());
-    //Q_ASSERT(!m_endCellAddress.isEmpty());
-    //Q_ASSERT(!m_notifyOnUpdateOfRanges.isEmpty());
+    if(!chart() || !chart()->m_impl || !m_href.isEmpty())
+        return false;
 
     KoGenStyles styles;
     KoGenStyles mainStyles;
@@ -95,9 +91,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->startElement("office:chart");
     bodyWriter->startElement("chart:chart"); //<chart:chart svg:width="8cm" svg:height="7cm" chart:class="chart:circle" chart:style-name="ch1">
 
-    const QByteArray className = qstrlen(chart()->m_impl->name())>=1 ? QByteArray("chart:") + chart()->m_impl->name() : QByteArray();
-    if(!className.isEmpty())
-        bodyWriter->addAttribute("chart:class", className);
+    if (!chart()->m_impl->name().isEmpty())
+        bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
     //bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
     //bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
@@ -208,8 +203,6 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
         }
         bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
-
-        //if(!className.isEmpty()) bodyWriter->addAttribute("chart:class", className);
 
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
