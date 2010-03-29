@@ -284,6 +284,7 @@ public slots:
     void slotStateChanged(int);
     void slotChangeVerticalState();
     void slotChangeMultiState();
+    void slotChangeShrinkToFitState();
 
 protected:
     KoUnitDoubleSpinBox *width;
@@ -607,6 +608,7 @@ public:
 
     bool bMultiRow;
     bool bVerticalText;
+    bool bShrinkToFit;
 
     bool bDontPrintText;
     bool bHideFormula;
