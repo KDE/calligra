@@ -163,6 +163,8 @@ void DependencyManager::updateAllDependencies(const Map* map)
                 int depth = d->computeDepth(cell);
                 d->depths.insert(cell , depth);
             }
+            if (!sheet->formulaStorage()->data(c).isValid())
+                cell.setValue(Value::errorPARSE());
         }
     }
 }
