@@ -112,6 +112,7 @@ public:
     
     QRect boundingRect() const;
     
+    bool   hasPointAtIndex( int index ) const;    
     QPoint pointAtIndex( int index ) const;
     int    indexAtPoint( const QPoint &point ) const;
     

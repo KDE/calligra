@@ -398,6 +398,11 @@ QRect CellRegion::boundingRect() const
     return d->boundingRect;
 }
 
+bool CellRegion::hasPointAtIndex( int index ) const
+{
+    return pointAtIndex( index ) != QPoint( -1, -1 );
+}
+
 QPoint CellRegion::pointAtIndex( int index ) const
 {
     // sum of all previous rectangle indices
