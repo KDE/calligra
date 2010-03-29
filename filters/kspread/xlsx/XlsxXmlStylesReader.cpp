@@ -601,11 +601,13 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
         cellStyle->addProperty("style:vertical-align", "top");
         break;
     case NoVerticalAlignment:
-    case JustifyVerticalAlignment: // ok?
+    case JustifyVerticalAlignment: // ok?        
     case DistributedVerticalAlignment:
+        cellStyle->addProperty("style:vertical-align", "top");
+        cellStyle->addProperty("koffice:vertical-distributed", "distributed");
+        wrapOption = 1;
+        break;
     case BottomVerticalAlignment:
-        if (verticalAlignment == DistributedVerticalAlignment)
-            wrapOption = 1;
     default:;
     }
 

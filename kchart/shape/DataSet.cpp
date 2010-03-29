@@ -696,7 +696,17 @@ QVariant DataSet::customData( int index ) const
 
 QVariant DataSet::categoryData( int index ) const
 {
-    return d->data( d->categoryDataRegion, index );
+    // There's no cell that holds this category's data
+    // (i.e., the region is either too short or simply empty)
+    if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
+        return QString::number( index + 1 );
+ 
+    const QVariant data = d->data( d->categoryDataRegion, index );
+    // The cell contains valid data 
+    if ( data.isValid() )
+        return data;
+    // The cell is empty
+    return QString( "" );
 }
 
 QVariant DataSet::labelData() const

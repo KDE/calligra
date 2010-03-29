@@ -2364,7 +2364,7 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
 
     unsigned align = data[6];
     setHorizontalAlignment(align & 0x07);
-    setVerticalAlignment(align >> 4);
+    setVerticalAlignment((align >> 4) + 1/*enum starts at 1*/);
     setTextWrap(align & 0x08);
 
     unsigned angle = data[7];
