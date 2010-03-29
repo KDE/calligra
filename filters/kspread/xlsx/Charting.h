@@ -74,7 +74,7 @@ namespace Charting
     public:
         ChartImpl() {}
         virtual ~ChartImpl() {}
-        virtual const char* name() const = 0;
+        virtual QByteArray name() const = 0;
     };
 
     class PieImpl : public ChartImpl
@@ -84,13 +84,13 @@ namespace Charting
         int m_anStart;
         unsigned int m_pcDonut;
         PieImpl(int anStart = 0, unsigned int pcDonut = 0) : ChartImpl(), m_anStart(anStart), m_pcDonut(pcDonut) {}
-        virtual const char* name() const { return "circle"; }
+        virtual QByteArray name() const { return "circle"; }
     };
 
     class BarImpl : public ChartImpl
     {
     public:
-        virtual const char* name() const { return "bar"; }
+        virtual QByteArray name() const { return "bar"; }
     };
 
     class Obj
