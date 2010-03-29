@@ -48,7 +48,7 @@ QString normalizeCellRange(const QString &range)
 
 bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
 {
-    if(!chart() || !m_href.isEmpty() || !m_endCellAddress.isEmpty() || !m_notifyOnUpdateOfRanges.isEmpty())
+    if(!chart() || m_href.isEmpty() || m_endCellAddress.isEmpty() || m_notifyOnUpdateOfRanges.isEmpty())
         return false;
 
     xmlWriter->startElement("draw:frame");
@@ -74,7 +74,7 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
 
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
-    if(!chart() || !chart()->m_impl || !m_href.isEmpty())
+    if(!chart() || !chart()->m_impl || m_href.isEmpty())
         return false;
 
     KoGenStyles styles;
