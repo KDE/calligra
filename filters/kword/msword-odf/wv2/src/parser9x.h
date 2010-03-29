@@ -77,11 +77,19 @@ namespace wvWare
     class Parser9x : public Parser
     {
     public:
+        /**
+         * Generally, the Word file format contains pointers to all the primary
+         * structures in the FIB. It can be useful to read some of these initially
+         * (and the results "cached" if needed) so that the main parse can proceed
+         * with these already in place.
+         *
+         * @see parse, init
+         */
         Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib );
         virtual ~Parser9x();
 
         /**
-         * The main parsing method
+         * The main parsing method.
          */
         virtual bool parse();
 
@@ -184,6 +192,12 @@ namespace wvWare
 
         // Private helper methods
         std::string tableStream() const;
+
+        /**
+         * Convenience method to separate heavyweight initialisation away from the
+         * constructor itself. Typically used to read in any FIB structures needed
+         * during the parse().
+         */
         void init();
         bool readPieceTable();
         void fakePieceTable();

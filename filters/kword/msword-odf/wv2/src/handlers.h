@@ -194,7 +194,7 @@ namespace wvWare {
     };
 
 
-    class WV2_EXPORT OLEImageReader;
+    class OLEImageReader;
 
     /**
      * The PictureHandler class is the interface for all image related
