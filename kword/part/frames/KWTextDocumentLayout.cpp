@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -359,6 +358,8 @@ void KWTextDocumentLayout::layout()
     qreal bottomOfText = 0.0;
     bool newParagraph = true;
     bool requestFrameResize = false, firstParagraph = true;
+    int startOfBlock = -1; // the first position in a block (aka paragraph)
+    int startOfBlockText = -1; // the first position of text in a block. Will be different only if anchors preceed text.
     KoShape *currentShape = 0;
     while (m_state->shape) {
         ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
@@ -368,6 +369,10 @@ void KWTextDocumentLayout::layout()
             ADEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
         }
 #endif
+        if (m_state->layout->lineCount() == 0 && startOfBlock != m_state->cursorPosition()) {  // new paragraph
+            startOfBlock = m_state->cursorPosition();
+            startOfBlockText = m_state->cursorPosition();
+        }
 
         class Line
         {
@@ -521,7 +526,7 @@ void KWTextDocumentLayout::layout()
             QPointF old;
             if (strategy->anchoredShape())
                 old = strategy->anchoredShape()->position();
-            if (strategy->checkState(m_state)) {
+            if (strategy->checkState(m_state, startOfBlock, startOfBlockText)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
             }
@@ -563,12 +568,14 @@ void KWTextDocumentLayout::layout()
                 outlines.append(new Outline(strategy->anchoredShape(), matrix));
 
                 // if the anchor occupies the first character of our block, create one line for it.
-                if (m_state->layout->lineCount() == 0 && strategy->anchor()->positionInDocument() == m_state->cursorPosition()) {
+                const int cursorPosition = m_state->cursorPosition();
+                if (cursorPosition == startOfBlockText && strategy->anchor()->positionInDocument() == cursorPosition) {
                     ADEBUG << "   creating line for anchor";
                     QTextLine line = m_state->layout->createLine();
                     line.setNumColumns(1);
                     line.setPosition(QPointF(m_state->x(), m_state->y()));
                     m_state->addLine(line);
+                    ++startOfBlockText;
                 }
                 restartLine = true;
                 ADEBUG << "adding child outline";

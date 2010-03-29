@@ -61,7 +61,7 @@ using namespace KChart;
 class Surface::Private
 {
 public:
-    Private();
+    Private(PlotArea *parent);
     ~Private();
 
     PlotArea *plotArea;
@@ -75,7 +75,8 @@ public:
     KDChart::AbstractCoordinatePlane *kdPlane;
 };
 
-Surface::Private::Private()
+Surface::Private::Private(PlotArea *parent)
+    : plotArea(parent)
 {
 }
 
@@ -88,12 +89,9 @@ Surface::Private::~Private()
 
 
 Surface::Surface( PlotArea *parent )
-    : d( new Private )
+    : d( new Private(parent) )
 {
     Q_ASSERT( parent );
-    
-    // FIXME: init in private's constructor
-    d->plotArea = parent;
 
     // FIXME: Make this class capable of storing floor-specific
     // attributes as well. Right now, it's really only used

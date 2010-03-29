@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007-2009 Inge Wallin         <inge@lysator.liu.se>
+   Copyright 2007-2010 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -119,9 +119,9 @@ public:
     Legend         *legend() const;
     PlotArea       *plotArea() const;
 
-    void showTitle();
-    void showSubTitle();
-    void showFooter();
+    void showTitle(bool doShow);
+    void showSubTitle(bool doShow);
+    void showFooter(bool doShow);
 
     // Setter methods
     void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
