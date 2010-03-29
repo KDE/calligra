@@ -4656,18 +4656,18 @@ public:
 };
 class SlideProgBinaryTagSubContainerOrAtom : public StreamOffset {
 public:
-    class choice2884387559 : public QSharedPointer<StreamOffset> {
+    class choice4024872665 : public QSharedPointer<StreamOffset> {
     public:
-        choice2884387559() {}
-        explicit choice2884387559(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2884387559(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
+        choice4024872665() {}
+        explicit choice4024872665(PP9SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4024872665(PP12SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4024872665(PP10SlideBinaryTagExtension* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4024872665(UnknownBinaryTag* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice2884387559 anon;
+    choice4024872665 anon;
     SlideProgBinaryTagSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class DrawingGroupContainer : public StreamOffset {
