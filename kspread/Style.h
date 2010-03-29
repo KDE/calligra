@@ -123,7 +123,6 @@ public:
         MultiRow,
         VerticalText,
         Angle,
-        ShrinkToFit,
         Indentation,
         // content format
         Prefix,
@@ -217,7 +216,6 @@ public:
     int    precision()    const;
     int    angle()        const;
     double indentation()  const;
-    bool   shrinkToFit()  const;
     bool   verticalText() const;
     bool   wrapText()     const;
     bool   printText()    const;
@@ -274,7 +272,6 @@ public:
     void setNotProtected(bool enable);
     void setDontPrintText(bool enable);
     void setVerticalText(bool enable);
-    void setShrinkToFit(bool enable);
     void setBackgroundColor(QColor const & color);
     void setDefault();
     void clear();
