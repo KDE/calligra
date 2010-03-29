@@ -1646,6 +1646,10 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
         if (align.stackedLetters()) {
             style.addProperty("style:direction", "ttb");
         }
+
+        if (align.shrinkToFit()) {
+            style.addProperty("style:shrink-to-fit", "true");
+        }
     }
 
     if (!borders.isNull()) {
