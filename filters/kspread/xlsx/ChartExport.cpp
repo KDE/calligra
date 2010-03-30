@@ -143,6 +143,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //chartstyle.addProperty("chart:include-hidden-cells", "false");
     chartstyle.addProperty("chart:auto-position", "true");
     chartstyle.addProperty("chart:auto-size", "true");
+    chartstyle.addProperty("chart:angle-offset", chart()->m_angleOffset);
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:sort-by-x-values", "false");
     //chartstyle.addProperty("chart:right-angled-axes", "true");

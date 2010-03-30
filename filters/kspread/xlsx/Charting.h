@@ -144,6 +144,8 @@ namespace Charting
 
         /// If true then the chart is a 3d chart else teh chart is 2d.
         bool m_is3d;
+        /// Specifies a counter clockwise rotation of a polar coordinate in a circle, ring or polar chart.
+        int m_angleOffset;
         //int anRot, anElv, pcDist;
         /// Margins around the chart object
         int m_leftMargin, m_topMargin, m_rightMargin, m_bottomMargin;
@@ -158,7 +160,7 @@ namespace Charting
         /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
         ChartImpl *m_impl;
 
-        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0) {}
+        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0) {}
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; }
         
         void addRange(const QRect& range)
