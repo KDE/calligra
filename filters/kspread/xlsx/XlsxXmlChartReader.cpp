@@ -290,7 +290,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
             case InStrRef:
                 if (isStartElement()) {
                     if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
-                        //TODO handle formula that references to the text cell (does ODF support that?)
+                        //TODO handle formulas that references to a cell that contains the text. Such
+                        //functionality is not supported by ODF 1.2.
                     } else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(v))) {
                         //TODO handle other text's then the title text too
                         Charting::Text* t = new Charting::Text;
