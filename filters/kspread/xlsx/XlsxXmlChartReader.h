@@ -75,6 +75,7 @@ protected:
     KoFilter::ConversionStatus read_pie3DChart();
     KoFilter::ConversionStatus read_val();
     KoFilter::ConversionStatus read_cat();
+    KoFilter::ConversionStatus read_tx();
     KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
     
@@ -82,6 +83,7 @@ private:
     XlsxXmlChartReaderContext *m_context;
     Charting::Series *m_currentSeries;
     QString m_cellRangeAddress;
+    bool m_autoTitleDeleted;
 };
 
 #endif
