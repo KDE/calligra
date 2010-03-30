@@ -825,6 +825,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
         }
+    if (attrs.hasAttribute("cap")) {
+        if (attrs.value("cap").toString() == "small") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);   
+        }
+    }
     if (attrs.hasAttribute("sz")) {
         bool ok = false;
         const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
