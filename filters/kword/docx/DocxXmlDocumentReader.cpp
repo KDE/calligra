@@ -1058,6 +1058,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(rFonts)
+            ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(caps)
             ELSE_TRY_READ_IF(smallCaps)
 //! @todo add ELSE_WRONG_FORMAT
@@ -1202,6 +1203,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
             ELSE_TRY_READ_IF(pBdr)
+            ELSE_TRY_READ_IF(ind)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1252,6 +1254,32 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
     m_drawing_anchor = false;
     m_drawing_inline = false;
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ind
+//! ind handler
+//! CASE
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(left)
+    bool ok = false;
+    const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
+    }
+
+    TRY_READ_ATTR(right)
+    const int rightInd = qreal(TWIP_TO_POINT(right.toDouble(&ok)));
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", rightInd);
+    }
+//! @todo more attributes
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1389,7 +1417,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
         m_currentParagraphStyle.addAttribute("fo:margin-top", marginTop);
     }
 
+    // for rPr
+    TRY_READ_ATTR(val)
+
+    bool ok;
+    const qreal pointSize = qreal(TWIP_TO_POINT(val.toInt(&ok)));
+
+    if (ok) {
+        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
+    }
+
     TRY_READ_ATTR(line)
+    const qreal lineSpace = qreal(TWIP_TO_POINT(line.toDouble(&ok)));
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
+    }
+
     TRY_READ_ATTR(lineRule)
 
     SKIP_EVERYTHING
