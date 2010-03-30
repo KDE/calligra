@@ -65,7 +65,7 @@ void MilestoneProgressDialog::slotChanged() {
 }
 
 MacroCommand *MilestoneProgressDialog::buildCommand() {
-    return m_panel->buildCommand();;
+    return m_panel->buildCommand();
 }
 
 

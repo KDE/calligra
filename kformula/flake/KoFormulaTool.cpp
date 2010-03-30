@@ -245,13 +245,13 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
     {
         case Qt::Key_Backspace:
             m_formulaShape->update();
-            command=m_formulaEditor->remove( true );;
+            command=m_formulaEditor->remove( true );
             m_formulaShape->updateLayout();
             m_formulaShape->update();
             break;
         case Qt::Key_Delete:
             m_formulaShape->update();
-            command=m_formulaEditor->remove( false );;
+            command=m_formulaEditor->remove( false );
             m_formulaShape->updateLayout();
             m_formulaShape->update();
             break;

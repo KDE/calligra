@@ -688,7 +688,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
         case ScheduleModel::ScheduleScheduled: result = isScheduled( index, role ); break;
         default:
-            kDebug()<<"data: invalid display value column"<<index.column();;
+            kDebug()<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
     if ( result.isValid() ) {

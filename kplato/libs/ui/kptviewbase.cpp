@@ -446,7 +446,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     m_firstRow = firstRow( page );
     
     QHeaderView *mh = m_tree->header();
-    int length = mh->length();;
+    int length = mh->length();
     int height = mh->height();
     QRect hRect = headerRect();
     QRect fRect = footerRect();

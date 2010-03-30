@@ -176,7 +176,7 @@ void SlideView::layout() {
     int slidesPerRow = (zoomfactor > 1) ?1 :1/zoomfactor;
 
     if (zoomfactor <= 1) {
-        view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);;
+        view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     } else {
         view.setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }

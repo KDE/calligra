@@ -58,7 +58,7 @@ WorkPackage::WorkPackage( bool fromProjectStore )
     m_fromProjectStore( fromProjectStore ),
     m_modified( false)
 {
-    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );;
+    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );
     m_project->setConfig( &m_config );
 }
 

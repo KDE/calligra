@@ -384,7 +384,7 @@ QDomElement ColumnFormat::save(QDomDocument& doc, int xshift) const
     const Style style = d->sheet->cellStorage()->style(QRect(d->column, 1, 1, KS_rowMax));
     if (!style.isEmpty()) {
         kDebug(36003) << "saving cell style of column" << d->column;
-        QDomElement format(doc.createElement("format"));;
+        QDomElement format(doc.createElement("format"));
         style.saveXML(doc, format, d->sheet->map()->styleManager());
         col.appendChild(format);
     }
