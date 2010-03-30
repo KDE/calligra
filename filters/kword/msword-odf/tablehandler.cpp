@@ -68,7 +68,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     writer->startElement("table:table");
 
     // Start a table style.
-    KoGenStyle tableStyle(KoGenStyle::StyleAutoTable, "table");
+    KoGenStyle tableStyle(KoGenStyle::TableAutoStyle, "table");
     tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
     tableStyle.addProperty("style:border-model", "collapsing");
 
@@ -79,21 +79,21 @@ void KWordTableHandler::tableStart(KWord::Table* table)
       document()->set_writeMasterStyleName(false);
     }
 
-    QString tableStyleName = m_mainStyles->lookup(tableStyle, QString("Table"), KoGenStyles::AllowDuplicates);
+    QString tableStyleName = m_mainStyles->insert(tableStyle, QLatin1String("Table"), KoGenStyles::AllowDuplicates);
 
     writer->addAttribute("table:style-name", tableStyleName);
 
     // Write the table:table-column descriptions.
     for (int r = 0; r < table->m_cellEdges.size() - 1; r++) {
-        KoGenStyle tableColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
+        KoGenStyle tableColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
         tableColumnStyle.addPropertyPt("style:column-width",
                                        (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
 
         QString tableColumnStyleName;
         if (r >= 26)
-            tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + ".A" + QChar('A' + r - 26), KoGenStyles::DontForceNumbering);
+            tableColumnStyleName = m_mainStyles->insert(tableColumnStyle, tableStyleName + ".A" + QChar('A' + r - 26), KoGenStyles::DontAddNumberToName);
         else
-            tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + '.' + QChar('A' + r), KoGenStyles::DontForceNumbering);
+            tableColumnStyleName = m_mainStyles->insert(tableColumnStyle, tableStyleName + '.' + QChar('A' + r), KoGenStyles::DontAddNumberToName);
 
         writer->startElement("table:table-column");
         writer->addAttribute("table:style-name", tableColumnStyleName);
@@ -126,7 +126,7 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     //kDebug(30513) << "tableRowStart row=" << m_row
     //            << ", number of cells: " << tap->itcMac;
 
-    KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
+    KoGenStyle rowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
 
     // The 6 BRC objects are for top, left, bottom, right,
     // insidehorizontal, insidevertical (default values).
@@ -151,7 +151,7 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
         rowStyle.addProperty("style:keep-together", "always");
     }
 
-    QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
+    QString rowStyleName = m_mainStyles->insert(rowStyle, QLatin1String("row"));
 
     //start table row in content
     writer->startElement("table:table-row");
@@ -345,7 +345,7 @@ void KWordTableHandler::tableCellStart()
                                           brcWinner(tc.brcRight, m_tap->rgbrcTable[5]) :
                                           brcWinner(tc.brcRight, m_tap->rgbrcTable[3]);
 
-    KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
+    KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
     //set borders for the four edges of the cell
     if (brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
@@ -401,7 +401,7 @@ void KWordTableHandler::tableCellStart()
         cellStyle.addProperty("style:vertical-align", "bottom");
     }
 
-    QString cellStyleName = m_mainStyles->lookup(cellStyle, QString("cell"));
+    QString cellStyleName = m_mainStyles->insert(cellStyle, QLatin1String("cell"));
 
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
 

@@ -1148,14 +1148,14 @@ QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
     QSet<Key> keysToStore;
 
     if (isDefault()) {
-        if (style.type() == 0) {
-            style = KoGenStyle(KoGenStyle::StyleTableCell, "table-cell");
+        if (style.isEmpty()) {
+            style = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
             style.setDefaultStyle(true);
             // don't i18n'ize "Default" in this case
-            return "Default"; // mainStyles.lookup( style, "Default", KoGenStyles::DontForceNumbering );
+            return "Default"; // mainStyles.insert( style, "Default", KoGenStyles::DontAddNumberToName );
         }
         // no attributes to store here
-        return mainStyles.lookup(style, "ce");
+        return mainStyles.insert(style, "ce");
     } else if (hasAttribute(NamedStyleKey)) {
         // it's not really the parent name in this case
         CustomStyle* namedStyle = manager->style(parentName());
@@ -1163,7 +1163,7 @@ QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
         if (namedStyle)
             keysToStore = difference(*namedStyle);
         // no differences and not an automatic style yet
-        if (style.type() == 0 &&
+        if (style.isEmpty() &&
                 (keysToStore.count() == 0 ||
                  (keysToStore.count() == 1 && keysToStore.toList().first() == NamedStyleKey))) {
             return manager->openDocumentName(parentName());
@@ -1173,12 +1173,12 @@ QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
 
     // KSpread::Style is definitly an OASIS auto style,
     // but don't overwrite it, if it already exists
-    if (style.type() == 0)
-        style = KoGenStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
+    if (style.isEmpty())
+        style = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
     // doing the real work
     saveOdfStyle(keysToStore, style, mainStyles, manager);
-    return mainStyles.lookup(style, "ce");
+    return mainStyles.insert(style, "ce");
 }
 
 void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
@@ -1407,9 +1407,9 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 
 QString Style::saveOdfBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush)
 {
-    KoGenStyle styleobjectauto = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+    KoGenStyle styleobjectauto = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     KoOdfGraphicStyles::saveOdfFillStyle(styleobjectauto, mainStyles, brush);
-    return mainStyles.lookup(styleobjectauto, "gr");
+    return mainStyles.insert(styleobjectauto, "gr");
 }
 
 void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const
@@ -2674,11 +2674,11 @@ QString CustomStyle::saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
     if (isDefault()) {
         style.setDefaultStyle(true);
         // don't i18n'ize "Default" in this case
-        return mainStyles.lookup(style, "Default", KoGenStyles::DontForceNumbering);
+        return mainStyles.insert(style, "Default", KoGenStyles::DontAddNumberToName);
     }
 
     // this is a custom style
-    return mainStyles.lookup(style, "custom-style");
+    return mainStyles.insert(style, "custom-style");
 }
 
 void CustomStyle::loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,

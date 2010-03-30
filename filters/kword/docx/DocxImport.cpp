@@ -126,7 +126,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     // 0. temporary styles
 
     //office:styles
-    writers->mainStyles->addRawOdfDocumentStyles(
+    writers->mainStyles->insertRawOdfStyles(
+        KoGenStyles::DocumentStyles,
         "    <!-- COPIED -->"
         "\n    <style:default-style style:family=\"graphic\">"
         "\n      <style:graphic-properties draw:shadow-offset-x=\"0.3cm\" draw:shadow-offset-y=\"0.3cm\" draw:start-line-spacing-horizontal=\"0.283cm\" draw:start-line-spacing-vertical=\"0.283cm\" draw:end-line-spacing-horizontal=\"0.283cm\" draw:end-line-spacing-vertical=\"0.283cm\" style:flow-with-text=\"false\"/>"

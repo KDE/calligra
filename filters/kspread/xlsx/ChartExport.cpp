@@ -100,11 +100,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("svg:width", m_width);
     bodyWriter->addAttribute("svg:height", m_height);
 
-    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "chart");
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     //style.addProperty("draw:stroke", "none");
     //style.addProperty("draw:stroke", "solid");
     //style.addProperty("draw:fill-color", "#ff0000");
-    bodyWriter->addAttribute("chart:style-name", styles.lookup(style, "ch"));
+    bodyWriter->addAttribute("chart:style-name", styles.insert(style, "ch"));
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
@@ -138,7 +138,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //bodyWriter->addAttribute("dr3d:lighting-mode", "true");
     }
 
-    KoGenStyle chartstyle(KoGenStyle::StyleChartAuto, "chart");
+    KoGenStyle chartstyle(KoGenStyle::ChartAutoStyle, "chart");
     //chartstyle.addProperty("chart:connect-bars", "false");
     //chartstyle.addProperty("chart:include-hidden-cells", "false");
     chartstyle.addProperty("chart:auto-position", "true");
@@ -151,7 +151,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //chartstyle.addProperty("chart:angle-offset", "90");
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:right-angled-axes", "false");
-    bodyWriter->addAttribute("chart:style-name", styles.lookup(chartstyle, "ch"));
+    bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
     if(!m_cellRangeAddress.isEmpty()) {
@@ -193,7 +193,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
-        KoGenStyle seriesstyle(KoGenStyle::StyleGraphicAuto, "chart");
+        KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
         foreach(Charting::Format* f, series->m_datasetFormat) {
@@ -202,7 +202,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     seriesstyle.addProperty("chart:pie-offset", 5 /*FIXME m_width/100.0*pieformat->m_pcExplode*/, KoGenStyle::ChartType);
                 }
         }
-        bodyWriter->addAttribute("chart:style-name", styles.lookup(seriesstyle, "ch"));
+        bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
@@ -210,10 +210,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         for(uint j=0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
-            KoGenStyle gs(KoGenStyle::StyleGraphicAuto, "chart");
+            KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
-            bodyWriter->addAttribute("chart-style-name", styles.lookup(gs, "ch"));
+            bodyWriter->addAttribute("chart-style-name", styles.insert(gs, "ch"));
             bodyWriter->endElement();
         }
 
@@ -229,7 +229,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
 
-    styles.saveOdfAutomaticStyles(contentWriter, false);
+    styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     s.closeContentWriter();
 
     if (store->open("styles.xml")) {
@@ -253,9 +253,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
         stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
         stylesWriter->addAttribute("office:version", "1.2");
-        mainStyles.saveOdfMasterStyles(stylesWriter);
-        mainStyles.saveOdfDocumentStyles(stylesWriter); // office:style
-        mainStyles.saveOdfAutomaticStyles(stylesWriter, false); // office:automatic-styles
+        mainStyles.saveOdfStyles(KoGenStyles::MasterStyles, stylesWriter);
+        mainStyles.saveOdfStyles(KoGenStyles::DocumentStyles, stylesWriter); // office:style
+        mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesWriter); // office:automatic-styles
         stylesWriter->endElement();  // office:document-styles
         stylesWriter->endDocument();
         delete stylesWriter;

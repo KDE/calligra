@@ -60,44 +60,44 @@ void NumberFormatParser::setStyles(KoGenStyles* styles)
 }
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \
-if( type == KoGenStyle::StyleNumericDate && TYPE == KoGenStyle::StyleNumericTime )               \
+if( type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericTimeStyle )               \
 {                                                                                                \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericTime && TYPE == KoGenStyle::StyleNumericDate )          \
+else if( type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericDateStyle )          \
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericPercentage && TYPE == KoGenStyle::StyleNumericNumber )  \
+else if( type == KoGenStyle::NumericPercentageStyle && TYPE == KoGenStyle::NumericNumberStyle )  \
 {                                                                                                \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericPercentage )  \
+else if( type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericPercentageStyle )  \
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericCurrency && TYPE == KoGenStyle::StyleNumericNumber )    \
+else if( type == KoGenStyle::NumericCurrencyStyle && TYPE == KoGenStyle::NumericNumberStyle )    \
 {                                                                                                \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericCurrency )    \
+else if( type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericCurrencyStyle )    \
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericFraction && TYPE == KoGenStyle::StyleNumericNumber )    \
+else if( type == KoGenStyle::NumericFractionStyle && TYPE == KoGenStyle::NumericNumberStyle )    \
 {                                                                                                \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericFraction )    \
+else if( type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericFractionStyle )    \
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericScientific && TYPE == KoGenStyle::StyleNumericNumber )  \
+else if( type == KoGenStyle::NumericScientificStyle && TYPE == KoGenStyle::NumericNumberStyle )  \
 {                                                                                                \
 }                                                                                                \
-else if( type == KoGenStyle::StyleNumericNumber && TYPE == KoGenStyle::StyleNumericScientific )  \
+else if( type == KoGenStyle::NumericNumberStyle && TYPE == KoGenStyle::NumericScientificStyle )  \
 {                                                                                                \
     type = TYPE;                                                                                 \
 }                                                                                                \
-else if( type != KoGenStyle::StyleAuto && type != TYPE )                                         \
+else if( type != KoGenStyle::ParagraphAutoStyle && type != TYPE )                                         \
 {                                                                                                \
-    return KoGenStyle( KoGenStyle::StyleAuto );                                                  \
+    return KoGenStyle( KoGenStyle::ParagraphAutoStyle );                                                  \
 }                                                                                                \
 else                                                                                             \
 {                                                                                                \
@@ -132,7 +132,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
-    KoGenStyle::Type type = KoGenStyle::StyleAuto;
+    KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle;
 
     QString plainText;
 
@@ -172,7 +172,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                     xmlWriter.endElement();
                 }
             } else if (ch == '$' && i < numberFormat.length() - 2 && numberFormat[ i + 1 ].toLatin1() != '-') {
-                SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericCurrency);
+                SET_TYPE_OR_RETURN(KoGenStyle::NumericCurrencyStyle);
                 ++i;
                 // currency code
                 QString currency;
@@ -228,7 +228,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
             // percentage
         case '%':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericPercentage);
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericPercentageStyle);
             FINISH_PLAIN_TEXT_PART
             xmlWriter.startElement("number:text");
             xmlWriter.addTextNode("%");
@@ -241,7 +241,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
         case '#':
         case '0':
         case '?':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericNumber)
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
             FINISH_PLAIN_TEXT_PART {
                 bool grouping = false;
                 bool gotDot = false;
@@ -260,7 +260,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                     } else if (ch == ',') {
                         grouping = true;
                     } else if (ch == 'E' || ch == 'e') {
-                        SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericScientific);
+                        SET_TYPE_OR_RETURN(KoGenStyle::NumericScientificStyle);
 
                         if (i >= numberFormat.length() - 1) break;
                         const char chN = numberFormat[ i + 1 ].toLatin1();
@@ -279,7 +279,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                     } else if (ch == '?' && gotFraction) {
                         ++denominatorDigits;
                     } else if (ch == '/') {
-                        SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericFraction);
+                        SET_TYPE_OR_RETURN(KoGenStyle::NumericFractionStyle);
                         if (gotDot)
                             return KoGenStyle();
 
@@ -331,7 +331,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
         case 'a':
             if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm") ||
                     numberFormat.mid(i, 3).toLower() == QLatin1String("a/p")) {
-                SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericTime)
+                SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                 FINISH_PLAIN_TEXT_PART;
                 xmlWriter.startElement("number:am-pm");
                 xmlWriter.endElement();
@@ -345,7 +345,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // hours, long or short
         case 'H':
         case 'h':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericTime)
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
             FINISH_PLAIN_TEXT_PART;
             xmlWriter.startElement("number:hours");
             if (isLong) {
@@ -361,7 +361,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
         case 'm':
             // must be month, then, at least three M
             if (isLonger) {
-                SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericDate)
+                SET_TYPE_OR_RETURN(KoGenStyle::NumericDateStyle)
                 FINISH_PLAIN_TEXT_PART;
                 xmlWriter.startElement("number:month");
                 const bool isReallyReallyLong = isWayTooLong && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
@@ -378,7 +378,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // otherwise it's the month
             else {
                 if (justHadHours) {
-                    SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericTime)
+                    SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                     FINISH_PLAIN_TEXT_PART;
                     xmlWriter.startElement("number:minutes");
                     if (isLong)
@@ -400,9 +400,9 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                         break;
                     }
                     if (minutes) {
-                        SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericTime)
+                        SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                     } else {
-                        SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericDate)
+                        SET_TYPE_OR_RETURN(KoGenStyle::NumericDateStyle)
                         FINISH_PLAIN_TEXT_PART;
                     }
                     if (minutes) {
@@ -425,7 +425,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // day (of week)
         case 'D':
         case 'd':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericDate)
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericDateStyle)
             FINISH_PLAIN_TEXT_PART;
             if (!isLonger) {
                 xmlWriter.startElement("number:day");
@@ -454,7 +454,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // seconds, long or short
         case 'S':
         case 's':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericTime)
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
             FINISH_PLAIN_TEXT_PART;
             xmlWriter.startElement("number:seconds");
             if (isLong) {
@@ -467,7 +467,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // year, long or short
         case 'Y':
         case 'y':
-            SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericDate)
+            SET_TYPE_OR_RETURN(KoGenStyle::NumericDateStyle)
             FINISH_PLAIN_TEXT_PART;
             xmlWriter.startElement("number:year");
             if (isLongest) {
@@ -487,7 +487,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
             // conditional style with the current format
             KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
             result.addAttribute("style:volatile", "true");
-            const QString styleName = NumberFormatParser::styles->lookup(result, "N");
+            const QString styleName = NumberFormatParser::styles->insert(result, "N");
             // start a new style
             buffer.setData(QByteArray());
             buffer.open(QIODevice::WriteOnly);
@@ -533,15 +533,15 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
     FINISH_PLAIN_TEXT_PART;
 
-    if (type == KoGenStyle::StyleAuto && hadPlainText) {
-        SET_TYPE_OR_RETURN(KoGenStyle::StyleNumericText)
+    if (type == KoGenStyle::ParagraphAutoStyle && hadPlainText) {
+        SET_TYPE_OR_RETURN(KoGenStyle::NumericTextStyle)
     }
 
     if (!condition.isEmpty()) {
         // conditional style with the current format
         KoGenStyle result = styleFromTypeAndBuffer(type, buffer);
         result.addAttribute("style:volatile", "true");
-        const QString styleName = NumberFormatParser::styles->lookup(result, "N");
+        const QString styleName = NumberFormatParser::styles->insert(result, "N");
         // start a new style
         buffer.setData(QByteArray());
         buffer.open(QIODevice::WriteOnly);
@@ -562,7 +562,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
     // add conditional styles:
     for (QMap< QString, QString >::const_iterator it = conditions.constBegin(); it != conditions.constEnd(); ++it) {
         // conditional styles are always numbers
-        type = KoGenStyle::StyleNumericNumber;
+        type = KoGenStyle::NumericNumberStyle;
 
         xmlWriter.startElement("style:map");
         xmlWriter.addAttribute("style:condition", it.key().isEmpty() ? autoConditions.takeLast() : it.key());
@@ -573,5 +573,5 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
     buffer.close();
 
     // conditional style with the current format
-    return styleFromTypeAndBuffer(conditions.isEmpty() ? type : KoGenStyle::StyleNumericText, buffer);
+    return styleFromTypeAndBuffer(conditions.isEmpty() ? type : KoGenStyle::NumericTextStyle, buffer);
 }

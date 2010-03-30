@@ -982,7 +982,7 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, 
                                        KoGenStyles& mainStyles ) const
 {
-    QList<KoGenStyles::NamedStyle>  styles = mainStyles.styles( KoGenStyle::StyleAuto );
+    QList<KoGenStyles::NamedStyle>  styles = mainStyles.styles( KoGenStyle::ParagraphAutoStyle );
     QList<KoGenStyles::NamedStyle>::const_iterator  it;
     for ( it = styles.constBegin(); it != styles.constEnd(); ++it ) {
         kDebug(35001) << "Style: " << (*it).name;

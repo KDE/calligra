@@ -128,7 +128,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
                 if (m_currentFontFace.isNull())
                     return KoFilter::WrongFormat;
                 kDebug() << "added font face:" << m_currentFontFace.name();
-                m_context->styles->addFontFace(m_currentFontFace);
+                m_context->styles->insertFontFace(m_currentFontFace);
                 m_currentFontFace = KoFontFace();
             }
             ELSE_WRONG_FORMAT

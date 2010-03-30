@@ -132,9 +132,9 @@ bool HTMLImport::createStyle()
     stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     stylesWriter->addAttribute("office:version", "1.0");
 
-    m_mainStyles->saveOdfMasterStyles(stylesWriter);
-    m_mainStyles->saveOdfDocumentStyles(stylesWriter); // office:style
-    m_mainStyles->saveOdfAutomaticStyles(stylesWriter, false); // office:automatic-styles
+    m_mainStyles->saveOdfStyles(KoGenStyles::MasterStyles, stylesWriter);
+    m_mainStyles->saveOdfStyles(KoGenStyles::DocumentStyles, stylesWriter); // office:style
+    m_mainStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesWriter); // office:automatic-styles
 
     stylesWriter->endElement();  // office:document-styles
     stylesWriter->endDocument();

@@ -1055,7 +1055,7 @@ QString Cell::saveOdfCellStyle(KoGenStyle &currentCellStyle, KoGenStyles &mainSt
     const Conditions conditions = this->conditions();
     if (!conditions.isEmpty()) {
         // this has to be an automatic style
-        currentCellStyle = KoGenStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
+        currentCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
         conditions.saveOdfConditions(currentCellStyle);
     }
     return style().saveOdf(currentCellStyle, mainStyles, d->sheet->map()->styleManager());
@@ -1146,7 +1146,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     Validity validity = Cell(sheet(), column, row).validity();
     if (!validity.isEmpty()) {
         GenValidationStyle styleVal(&validity);
-        xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.lookup(styleVal));
+        xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.insert(styleVal));
     }
     if (isFormula()) {
         //kDebug(36003) <<"Formula found";

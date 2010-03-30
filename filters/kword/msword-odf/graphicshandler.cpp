@@ -170,7 +170,7 @@ void KWordPictureHandler::officeArtLine(wvWare::OfficeArtProperties *artProperti
     QString styleName("gr");
     m_officeArtCount++;
     
-    KoGenStyle *style = new KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic", "Graphics");
+    KoGenStyle *style = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic", "Graphics");
 
     style->addProperty("draw:fill","solid");
     
@@ -183,7 +183,7 @@ void KWordPictureHandler::officeArtLine(wvWare::OfficeArtProperties *artProperti
     style->addProperty("draw:shadow","hidden");
     style->addProperty("style:run-through","foreground");
     
-    styleName = m_mainStyles->lookup(*style, styleName);
+    styleName = m_mainStyles->insert(*style, styleName);
     delete style;
     //--------------------
     // create a custom shape
@@ -239,8 +239,8 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
     //create style
     QString styleName("fr");
     styleName.append(QString::number(m_pictureCount));
-    KoGenStyle* style = new KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic", "Graphics");
-    styleName = m_mainStyles->lookup(*style, styleName);
+    KoGenStyle* style = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic", "Graphics");
+    styleName = m_mainStyles->insert(*style, styleName);
     delete style;
 
     //start frame tag for the picture
@@ -414,13 +414,13 @@ void KWordDrawingHandler::init(Drawings * pDrawings, wvWare::OLEStreamReader* ta
     parseOfficeArtContainer(table,fib);
 
 //     create default draw style
-//    KoGenStyle style(KoGenStyle::StyleGraphic, "graphic");
+//    KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
 //    style.setDefaultStyle(true);
 //
 //    defineDefaultGraphicProperties(&style,pDrawings);
 //
 //    //add default draw style to styles
-//    m_mainStyles->lookup(style, "");
+//    m_mainStyles->insert(style, "");
 
     m_drawings = pDrawings;
 }

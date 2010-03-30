@@ -25,7 +25,7 @@
 #include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
-    KoGenStyle style(KoGenStyle::StyleDrawingPage, "drawing-page");
+    KoGenStyle style(KoGenStyle::DrawingPageStyle, "drawing-page");
 
     bool useMasterBackground = false;
     if (page.nodeName() == "PAGE") {
@@ -45,7 +45,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
     style.setAutoStyleInStylesDotXml(m_sticky);
 
     if (!page.hasChildNodes()) { //we check if this is an empty page
-        return m_styles.lookup(style, "dp");
+        return m_styles.insert(style, "dp");
     }
 
     if (!useMasterBackground) {
@@ -74,7 +74,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             style.addProperty("draw:fill", "bitmap");
 
             //The image is specified by a draw:fill-image style in draw:fill-image-name
-            KoGenStyle drawFillImage(KoGenStyle::StyleFillImage);
+            KoGenStyle drawFillImage(KoGenStyle::FillImageStyle);
 
             //default values
             drawFillImage.addAttribute("xlink:href", "Pictures/" + m_pictures[ pictureName ]);
@@ -94,7 +94,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             }
             style.addProperty("style:repeat", repeat);
 
-            style.addProperty("draw:fill-image-name", m_styles.lookup(drawFillImage, "picture"));
+            style.addProperty("draw:fill-image-name", m_styles.insert(drawFillImage, "picture"));
         }
     }
 
@@ -263,12 +263,12 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             style.addChildElement("presentationSound", elementContents);
         }
     }//if pageEfect is null
-    return m_styles.lookup(style, "dp");
+    return m_styles.insert(style, "dp");
 }
 
 const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientElement)
 {
-    KoGenStyle style(KoGenStyle::StyleGradient);
+    KoGenStyle style(KoGenStyle::GradientStyle);
 
     //KPresenter didn't allow to customize those attributes
     style.addAttribute("draw:start-intensity", "100%");
@@ -361,7 +361,7 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
     style.addAttribute("draw:style", typeString);
     style.addAttribute("draw:angle", angle);
 
-    return m_styles.lookup(style, "gr");
+    return m_styles.insert(style, "gr");
 }
 
 const QString Filterkpr2odf::createPageLayout()
@@ -371,7 +371,7 @@ const QString Filterkpr2odf::createPageLayout()
     KoXmlElement paperBorders = paper.namedItem("PAPERBORDERS").toElement();
 
     //page-layout-properties
-    KoGenStyle style(KoGenStyle::StylePageLayout);
+    KoGenStyle style(KoGenStyle::PageLayoutStyle);
     style.setAutoStyleInStylesDotXml(true);
 
     if (paperBorders.hasAttribute("ptTop")) {
@@ -396,7 +396,7 @@ const QString Filterkpr2odf::createPageLayout()
 
     //NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
 
-    return m_styles.lookup(style, "pm");
+    return m_styles.insert(style, "pm");
 }
 
 const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, const KoXmlElement & masterBackground)
@@ -407,7 +407,7 @@ const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, co
     // set that we work on master
     m_sticky = true;
 
-    KoGenStyle style(KoGenStyle::StyleMaster, "");
+    KoGenStyle style(KoGenStyle::MasterPageStyle, "");
     style.addAttribute("style:page-layout-name", createPageLayout());
 
     style.addAttribute("draw:style-name", createPageStyle(masterBackground));
@@ -423,13 +423,13 @@ const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, co
     QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("master", contentElement);
 
-    return m_styles.lookup(style, "Default");
+    return m_styles.insert(style, "Default");
 }
 //TODO: load the tags still missing
 const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
 {
     //A graphic style is wiely used by a broad type of objects, hence can have many different properties
-    KoGenStyle style(KoGenStyle::StyleGraphicAuto, "graphic");
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     KoXmlElement textObject(element.namedItem("TEXTOBJ").toElement());
     if (!textObject.isNull()) {
         if (textObject.hasAttribute("verticalAlign")) {
@@ -650,22 +650,22 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
 //     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
     style.setAutoStyleInStylesDotXml(m_sticky);
 
-    return m_styles.lookup(style, "gr");
+    return m_styles.insert(style, "gr");
 }
 
 const QString Filterkpr2odf::createOpacityGradientStyle(int opacity)
 {
     //Opacity wasn't a gradient in KPR so we go from and to the same value
-    KoGenStyle style(KoGenStyle::StyleOpacity);
+    KoGenStyle style(KoGenStyle::OpacityStyle);
     QString opacityString = QString("%1%").arg(opacity);
     style.addAttribute("draw:start", opacityString);
     style.addAttribute("draw:end", opacityString);
-    return m_styles.lookup(style, "op");
+    return m_styles.insert(style, "op");
 }
 
 const QString Filterkpr2odf::createMarkerStyle(int markerType)
 {
-    KoGenStyle style(KoGenStyle::StyleMarker);
+    KoGenStyle style(KoGenStyle::MarkerStyle);
 
     QString displayName;
     QString viewBox;
@@ -717,12 +717,12 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
     style.addAttribute("draw:viewBox", viewBox);
     style.addAttribute("draw:d", d);
 
-    return m_styles.lookup(style, "mks");;
+    return m_styles.insert(style, "mks");;
 }
 
 const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
 {
-    KoGenStyle style(KoGenStyle::StyleStrokeDash);
+    KoGenStyle style(KoGenStyle::StrokeDashStyle);
 
     //"Containment" strings, filled according to the type of the strokeStyle
     QString displayName;
@@ -784,12 +784,12 @@ const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
         style.addAttribute("draw:dots2-length", dots2_length);
     }
 
-    return m_styles.lookup(style, "stroke");
+    return m_styles.insert(style, "stroke");
 }
 
 const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
 {
-    KoGenStyle style(KoGenStyle::StyleHatch);
+    KoGenStyle style(KoGenStyle::HatchStyle);
 
     //"Contaimnet" strings
     QString displayName;
@@ -843,12 +843,12 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
     style.addAttribute("draw:distance", distance);
     style.addAttribute("draw:rotation", rotation);
 
-    return m_styles.lookup(style, "hs");
+    return m_styles.insert(style, "hs");
 }
 
 const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
 {
-    KoGenStyle style(KoGenStyle::StyleAuto, "paragraph");
+    KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
     QString textAlign;
     if (element.hasAttribute("align")) {
@@ -947,7 +947,7 @@ const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
         style.addProperty("fo:border-left", convertBorder(bottomBorder));
     }
 
-    return m_styles.lookup(style, "P");
+    return m_styles.insert(style, "P");
 }
 
 QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
@@ -968,7 +968,7 @@ QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
 
 const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
 {
-    KoGenStyle style(KoGenStyle::StyleTextAuto, "text");
+    KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
 
     if (element.hasAttribute("family")) {
         style.addProperty("style:font-name", element.attribute("family"));
@@ -1058,12 +1058,12 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
         style.addProperty("fo:text-shadow", shadow);
     }
 
-    return m_styles.lookup(style, "T");
+    return m_styles.insert(style, "T");
 }
 
 const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
 {
-    KoGenStyle style(KoGenStyle::StyleListAuto);
+    KoGenStyle style(KoGenStyle::ListAutoStyle);
 
     static const int s_oasisCounterTypes[] = { '\0', '1', 'a', 'A', 'i', 'I',
             '\0', '\0', // custombullet, custom
@@ -1137,5 +1137,5 @@ const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
     QString elementContent = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("listLevelStyle", elementContent);
 
-    return m_styles.lookup(style, "L");
+    return m_styles.insert(style, "L");
 }

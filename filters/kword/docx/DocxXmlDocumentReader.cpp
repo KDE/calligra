@@ -268,7 +268,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 {
     READ_PROLOGUE
 
-    m_currentPageStyle = KoGenStyle(KoGenStyle::StylePageLayout);
+    m_currentPageStyle = KoGenStyle(KoGenStyle::PageLayoutStyle);
     m_currentPageStyle.setAutoStyleInStylesDotXml(true);
     m_currentPageStyle.addProperty("style:writing-mode", "lr-tb");
 //! @todo handle all valued of style:print-orientation
@@ -286,16 +286,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->lookup(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
+    pageLayoutStyleName = mainStyles->insert(
+        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+    KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
 //! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
 //! @todo style:display-name
 //    masterStyle->addAttribute("style:display-name", masterStyleName);
     masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    /*masterStyleName =*/ mainStyles->lookup(masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
+    /*masterStyleName =*/ mainStyles->insert(masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
 //    masterStyle = mainStyles->styleForModification(masterStyleName);
 
     READ_EPILOGUE
@@ -824,7 +824,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     while (!atEnd()) {
@@ -1034,7 +1034,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
     m_currentTextStyleProperties = new KoCharacterStyle();
 
     if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
     MSOOXML::Utils::XmlWriteBuffer textSpanBuf;
@@ -1074,7 +1074,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         readNext();
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
-            const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
+            const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
             body->startElement("text:span", false);
             body->addAttribute("text:style-name", currentTextStyleName);
             TRY_READ(t)
@@ -1238,7 +1238,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
-    m_currentDrawStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
 
     m_drawing_anchor = false;

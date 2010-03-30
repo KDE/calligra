@@ -109,11 +109,11 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
 void KPrPlaceholderTextStrategy::saveOdf( KoShapeSavingContext & context )
 {
     if ( m_paragraphStyle ) {
-        KoGenStyle style( KoGenStyle::StyleUser, "presentation" );
+        KoGenStyle style( KoGenStyle::ParagraphStyle, "presentation" );
         m_paragraphStyle->saveOdf( style, context.mainStyles() );
         QString displayName = m_paragraphStyle->name();
         QString internalName = QString( QUrl::toPercentEncoding( displayName, "", " " ) ).replace( '%', '_' );
-        QString styleName = context.mainStyles().lookup( style, internalName, KoGenStyles::DontForceNumbering );
+        QString styleName = context.mainStyles().insert( style, internalName, KoGenStyles::DontAddNumberToName );
         context.xmlWriter().addAttribute( "presentation:style-name", styleName );
     }
     KPrPlaceholderStrategy::saveOdf( context );

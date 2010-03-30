@@ -135,9 +135,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
 
 //! @todo hardcoded font face list; look at fonts used by theme
     ;
-    mainStyles->addFontFace(KoFontFace("Calibri"));
-    mainStyles->addFontFace(KoFontFace("Arial"));
-    mainStyles->addFontFace(KoFontFace("Tahoma"));
+    mainStyles->insertFontFace(KoFontFace("Calibri"));
+    mainStyles->insertFontFace(KoFontFace("Arial"));
+    mainStyles->insertFontFace(KoFontFace("Tahoma"));
 
     kDebug() << "===========finished============";
     return KoFilter::OK;

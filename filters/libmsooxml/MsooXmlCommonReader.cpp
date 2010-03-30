@@ -72,7 +72,7 @@ bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
 
 void MsooXmlCommonReader::setupParagraphStyle()
 {
-    QString currentParagraphStyleName(mainStyles->lookup(m_currentParagraphStyle));
+    QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
     if (currentParagraphStyleName.isEmpty()) {
         currentParagraphStyleName = QLatin1String("Standard");
     }

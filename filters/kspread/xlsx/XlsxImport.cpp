@@ -129,7 +129,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     // 0. temporary styles
 //! @todo create styles in XlsxXmlDocumentReader (XLSX defines styles in workbook.xml)
 
-    writers->mainStyles->addRawOdfDocumentStyles(
+    writers->mainStyles->insertRawOdfStyles(
+        KoGenStyles::DocumentStyles,
         "    <!-- COPIED -->"
         "\n    <style:default-style style:family=\"table-cell\">"
         "\n      <style:table-cell-properties style:decimal-places=\"2\"/>"
@@ -447,7 +448,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->"
     );
 
-    writers->mainStyles->addRawOdfMasterStyles(
+    writers->mainStyles->insertRawOdfStyles(
+        KoGenStyles::MasterStyles,
         "    <!-- COPIED -->"
         "\n    <style:master-page style:name=\"Default\" style:page-layout-name=\"pm1\">"
         "\n      <style:header>"
@@ -491,7 +493,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- COPIED -->"
     );
 
-    writers->mainStyles->addRawOdfAutomaticStyles(
+    writers->mainStyles->insertRawOdfStyles(
+        KoGenStyles::StylesXmlAutomaticStyles,
         "    <!-- COPIED -->"
         "\n    <style:page-layout style:name=\"pm1\">"
         "\n      <style:page-layout-properties style:first-page-number=\"continue\" style:writing-mode=\"lr-tb\"/>"
@@ -533,8 +536,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n        <style:header-footer-properties fo:min-height=\"0.75cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.25cm\"/>"
         "\n      </style:footer-style>"
         "\n    </style:page-layout>"
-        "\n    <!-- /COPIED -->",
-        true // styles.xml
+        "\n    <!-- /COPIED -->"
     );
 
     // 1. parse themes

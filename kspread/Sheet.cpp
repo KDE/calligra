@@ -3110,9 +3110,9 @@ void Sheet::saveOdfPrintStyleLayout(KoGenStyle &style) const
 
 QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 {
-    KoGenStyle pageStyle(KoGenStyle::StyleAutoTable, "table"/*FIXME I don't know if name is sheet*/);
+    KoGenStyle pageStyle(KoGenStyle::TableAutoStyle, "table"/*FIXME I don't know if name is sheet*/);
 
-    KoGenStyle pageMaster(KoGenStyle::StyleMaster);
+    KoGenStyle pageMaster(KoGenStyle::MasterPageStyle);
     pageMaster.addAttribute("style:page-layout-name", print()->saveOdfSheetStyleLayout(mainStyles));
 
     QBuffer buffer;
@@ -3122,10 +3122,10 @@ QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     pageMaster.addChildElement("headerfooter", elementContents);
-    pageStyle.addAttribute("style:master-page-name", mainStyles.lookup(pageMaster, "Standard"));
+    pageStyle.addAttribute("style:master-page-name", mainStyles.insert(pageMaster, "Standard"));
 
     pageStyle.addProperty("table:display", !isHidden());
-    return mainStyles.lookup(pageStyle, "ta");
+    return mainStyles.insert(pageStyle, "ta");
 }
 
 
@@ -3204,10 +3204,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
 
         xmlWriter.startElement("table:table-column");
         if (!column->isDefault()) {
-            KoGenStyle currentColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
+            KoGenStyle currentColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
             currentColumnStyle.addPropertyPt("style:column-width", column->width());
             currentColumnStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
-            xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentColumnStyle, "co"));
+            xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentColumnStyle, "co"));
         }
         if (!column->isDefault() || !style.isDefault()) {
             if (!style.isDefault()) {
@@ -3243,10 +3243,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         xmlWriter.startElement("table:table-row");
 
         if (!row->isDefault()) {
-            KoGenStyle currentRowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
+            KoGenStyle currentRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
             currentRowStyle.addPropertyPt("style:row-height", row->height());
             currentRowStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
-            xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentRowStyle, "ro"));
+            xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
         int repeated = 1;

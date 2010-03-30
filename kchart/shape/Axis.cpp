@@ -1521,10 +1521,10 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     KoGenStyles &mainStyles = context.mainStyles();
     bodyWriter.startElement( "chart:axis" );
 
-    KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
+    KoGenStyle axisStyle( KoGenStyle::ParagraphAutoStyle, "chart" );
     axisStyle.addProperty( "chart:display-label", "true" );
 
-    const QString styleName = mainStyles.lookup( axisStyle, "ch" );
+    const QString styleName = mainStyles.insert( axisStyle, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
     // TODO scale: logarithmic/linear
@@ -1583,7 +1583,7 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
     KoXmlWriter &bodyWriter = context.xmlWriter();
     KoGenStyles &mainStyles = context.mainStyles();
     
-    KoGenStyle gridStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+    KoGenStyle gridStyle( KoGenStyle::GraphicAutoStyle, "chart" );
     
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
     QPen gridPen = (gridClass == OdfMinorGrid ? attributes.subGridPen() : attributes.gridPen());
@@ -1594,7 +1594,7 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
 
     // FIXME: For some reason, major and minor grid both get the same
     //        style name assigned
-    bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( gridStyle, "ch" ) );
+    bodyWriter.addAttribute( "chart:style-name", mainStyles.insert( gridStyle, "ch" ) );
     bodyWriter.endElement(); // chart:grid
 }
 

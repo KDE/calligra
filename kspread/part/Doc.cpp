@@ -369,7 +369,7 @@ bool Doc::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     bodyWriter->endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     documentContext.odfStore.closeContentWriter();
 

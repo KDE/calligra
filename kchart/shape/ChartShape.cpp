@@ -164,7 +164,7 @@ QString saveOdfFont( KoGenStyles& mainStyles,
                      const QColor& color )
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    KoGenStyle autoStyle( KoGenStyle::StyleAuto, "chart", 0 );
+    KoGenStyle autoStyle( KoGenStyle::ParagraphAutoStyle, "chart", 0 );
     autoStyle.addProperty( "fo:font-family", font.family(), tt );
     autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
     autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
@@ -172,7 +172,7 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
     autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
 
-    return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
+    return mainStyles.insert( autoStyle, "ch" );
 }
 
 bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
@@ -1263,7 +1263,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfAttributes( context, OdfAllAttributes ^ OdfMandatories );
 
     KoGenStyle style;
-    style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+    style = KoGenStyle( KoGenStyle::GraphicAutoStyle, "chart" );
     bodyWriter.addAttribute( "chart:style-name", saveStyle( style, context ) );
 
     // 1. Write the chart type.

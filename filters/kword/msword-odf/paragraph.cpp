@@ -39,7 +39,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
-    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     if (inStylesDotXml) {
         kDebug(30513) << "this paragraph is in styles.xml";
         m_inStylesDotXml = true;
@@ -120,7 +120,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
             }
         }
     } else {
-        textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+        textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
@@ -153,7 +153,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513) << "adding paragraphStyle";
     //add the attribute for our style in <text:p>
     QString styleName("P");
-    styleName = m_mainStyles->lookup(*m_odfParagraphStyle, styleName);
+    styleName = m_mainStyles->insert(*m_odfParagraphStyle, styleName);
     writer->addAttribute("text:style-name", styleName.toUtf8());
 
     //just close the paragraph if there's no content
@@ -179,7 +179,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             //put style into m_mainStyles & get its name
             //kDebug(30513) << m_textStyles[i]->type();
             styleName = 'T';
-            styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
+            styleName = m_mainStyles->insert(*m_textStyles[i], styleName);
 
             if (oldStyleName != styleName) {
                 if (startedSpan) {
@@ -235,7 +235,7 @@ void Paragraph::openInnerParagraph()
 
     //copy parent and paragraph styles
     m_odfParagraphStyle2 = m_odfParagraphStyle;
-    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_paragraphStyle2 = m_paragraphStyle;
     m_paragraphProperties2 = m_paragraphProperties;
     m_paragraphProperties = 0;

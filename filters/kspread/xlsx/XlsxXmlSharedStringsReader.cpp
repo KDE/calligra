@@ -218,7 +218,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
                     body->addTextSpan(m_text);
                 }
                 else {
-                    const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
+                    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
                     body->startElement("text:span", false);
                     body->addAttribute("text:style-name", currentTextStyleName);
                     body->addTextSpan(m_text);

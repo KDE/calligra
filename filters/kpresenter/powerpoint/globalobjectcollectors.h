@@ -146,11 +146,11 @@ public:
     QString add(const MSO::OfficeArtFOPTEChoice& t) {
         const MSO::FillBlip* fb = t.anon.get<MSO::FillBlip>();
         if (!fb || fb->opid.fComplex || fb->fillBlip == 0) return QString();
-        KoGenStyle fillImage(KoGenStyle::StyleFillImage);
+        KoGenStyle fillImage(KoGenStyle::FillImageStyle);
         fillImage.addAttribute("xlink:href", pto.getPicturePath(fb->fillBlip));
-        return styles.lookup(fillImage,
+        return styles.insert(fillImage,
                              QString("fillImage%1").arg(fb->fillBlip),
-                             KoGenStyles::DontForceNumbering);
+                             KoGenStyles::DontAddNumberToName);
     }
 };
 /**
@@ -191,7 +191,7 @@ public:
         if (lineDashing <= 0 || lineDashing > 10) return QString();
 
         //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>();
-        KoGenStyle strokeDash(KoGenStyle::StyleStrokeDash);
+        KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
         switch (lineDashing) {
         case 0: // msolineSolid, not a real stroke dash
             break;
@@ -252,7 +252,7 @@ public:
         } else {
             strokeDash.addAttribute("draw:distance", "300%");
         }
-        return styles.lookup(strokeDash, "strokeDash");
+        return styles.insert(strokeDash, "strokeDash");
     }
 };
 

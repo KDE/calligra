@@ -135,7 +135,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     if (numColumns > 1 || sep->bkc == 0) {
         QString sectionStyleName = "Sect";
         sectionStyleName.append(QString::number(m_sectionNumber));
-        KoGenStyle sectionStyle(KoGenStyle::StyleSectionAuto, "section");
+        KoGenStyle sectionStyle(KoGenStyle::SectionAutoStyle, "section");
         //parse column info
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
@@ -172,8 +172,8 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
                 sectionStyle.addChildElement("text:notes-configuration", footconfig);
         */
         //add style to the collection
-        sectionStyleName = m_mainStyles->lookup(sectionStyle, sectionStyleName,
-                                                KoGenStyles::DontForceNumbering);
+        sectionStyleName = m_mainStyles->insert(sectionStyle, sectionStyleName,
+                                                KoGenStyles::DontAddNumberToName);
         //put necessary tags in the content
         m_bodyWriter->startElement("text:section");
         QString sectionName = "Section";
@@ -634,7 +634,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         m_paragraph->setParagraphStyle(paragraphStyle);
 
         //write the paragraph formatting
-        //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+        //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
         //writeLayout(*paragraphProperties, paragraphStyle, m_currentStyle, true, namedStyleName);
     } else {
         kWarning() << "paragraphProperties was NOT set";
@@ -851,7 +851,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     // ftcAscii = (rgftc[0]) font for ASCII text
     QString fontName = getFont(chp->ftcAscii);
     if (!fontName.isEmpty()) {
-        m_mainStyles->addFontFace(KoFontFace(fontName));
+        m_mainStyles->insertFontFace(KoFontFace(fontName));
     }
 
     if(chp->fVanish != 1) { // only show text that is not hidden
@@ -954,7 +954,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             m_listStyleName = m_previousListStyleName;
         } else {
             //need to create a style for this list
-            KoGenStyle listStyle(KoGenStyle::StyleListAuto);
+            KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
 
             // If we're writing to styles.xml, the list style needs to go
             // there as well.
@@ -962,7 +962,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 listStyle.setAutoStyleInStylesDotXml(true);
 
             // Write styleName to the text:list tag.
-            m_listStyleName = m_mainStyles->lookup(listStyle);
+            m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
         }
 

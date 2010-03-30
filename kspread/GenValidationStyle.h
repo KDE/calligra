@@ -82,7 +82,7 @@ class KSPREAD_EXPORT GenValidationStyles
 public:
     GenValidationStyles();
     ~GenValidationStyles();
-    QString lookup(const GenValidationStyle& style);
+    QString insert(const GenValidationStyle& style);
 
     typedef QMap<GenValidationStyle, QString> StyleMap;
     void writeStyle(KoXmlWriter& writer);
