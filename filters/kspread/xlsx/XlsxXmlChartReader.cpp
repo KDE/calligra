@@ -205,6 +205,13 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         if (isStartElement()) {
             TRY_READ_IF(val)
             ELSE_TRY_READ_IF(cat)
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                const int explosion = val.toInt();
+                if(Charting::PieImpl* pie = dynamic_cast<Charting::PieImpl*>(m_context->m_chart->m_impl))
+                    m_currentSeries->m_datasetFormat << new Charting::PieFormat(explosion);
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
