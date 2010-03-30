@@ -97,31 +97,31 @@ bool KexiRelationDesignShape::loadOdf ( const KoXmlElement& element, KoShapeLoad
 
 bool KexiRelationDesignShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
+    Q_UNUSED(context);
+    KoXmlElement relation = KoXml::namedItemNS(element, "http://www.koffice.org/kexirelationdesign", "relation");
+    if (relation.isNull()) {
+        kWarning() << "no relation element as first child";
+        return false;
+    }
 
-KoXmlElement relation = KoXml::namedItemNS(element, "http://www.koffice.org/kexirelationdesign", "relation");
-if (relation.isNull()) {
-    kWarning() << "no relation element as first child";
-    return false;
-}
+    kDebug() << relation.attributeNames();
 
-kDebug() << relation.attributeNames();
+    m_database = relation.attribute("database");
+    m_relation = relation.attribute("relation");
 
-m_database = relation.attribute("database");
-m_relation = relation.attribute("relation");
+    KoXmlElement e;
+    m_fieldData.clear();
 
-KoXmlElement e;
-m_fieldData.clear();
-
-forEachElement(e, relation) {
-    SimpleField *sf = new SimpleField();
-    sf->name = e.attribute("name");
-    sf->type = e.attribute("type");
-    sf->pkey = e.attribute("primarykey").toInt();
-    sf->notnull = e.attribute("notnull").toInt();
-    m_fieldData.append(sf);
-}
-addConnectionPoints();
-return true;
+    forEachElement(e, relation) {
+        SimpleField *sf = new SimpleField();
+        sf->name = e.attribute("name");
+        sf->type = e.attribute("type");
+        sf->pkey = e.attribute("primarykey").toInt();
+        sf->notnull = e.attribute("notnull").toInt();
+        m_fieldData.append(sf);
+    }
+    addConnectionPoints();
+    return true;
 }
 
 void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
@@ -236,11 +236,9 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
         }
         if (m_relationSchema) { //We have the schema, so lets lets paint it
             KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
-            uint i = 0;
             foreach(KexiDB::QueryColumnInfo *column, columns) {
                 m_fieldData.append(new SimpleField(column));
             }
-            
         }
         addConnectionPoints();
         update();
@@ -249,21 +247,20 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
 
 void KexiRelationDesignShape::addConnectionPoints()
 {
-    uint i = 0;
-    int offset = 0;
-
-    int point_count = connectionPoints().count();
+    const int point_count = connectionPoints().count();
 
     for (int j = 0; j < point_count; ++j) {
         removeConnectionPoint(0);
     }
-    
+
+    uint i = 0;
+    int offset = 0;
     foreach (SimpleField *column, m_fieldData) {
+        Q_UNUSED(column);
         ++i;
         offset = (13.0*i) + 15;
         addConnectionPoint(QPointF(0,offset));
         addConnectionPoint(QPointF(boundingRect().width(), offset));
-
     }
 }
 

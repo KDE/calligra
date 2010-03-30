@@ -33,25 +33,30 @@
 #include <kdebug.h>
 #include <KComboBox>
 
-KexiRelationDesignTool::KexiRelationDesignTool ( KoCanvasBase* canvas ) : KoToolBase ( canvas ) {
+KexiRelationDesignTool::KexiRelationDesignTool ( KoCanvasBase* canvas ) : KoToolBase ( canvas )
+{
     m_dbDialog = 0;
-    
 }
 
-void KexiRelationDesignTool::mouseReleaseEvent ( KoPointerEvent* event ) {
-
+void KexiRelationDesignTool::mouseReleaseEvent ( KoPointerEvent* event )
+{
+    Q_UNUSED(event);
 }
 
-void KexiRelationDesignTool::mouseMoveEvent ( KoPointerEvent* event ) {
-
+void KexiRelationDesignTool::mouseMoveEvent ( KoPointerEvent* event )
+{
+    Q_UNUSED(event);
 }
 
-void KexiRelationDesignTool::mousePressEvent ( KoPointerEvent* event ) {
-
+void KexiRelationDesignTool::mousePressEvent ( KoPointerEvent* event )
+{
+    Q_UNUSED(event);
 }
 
-void KexiRelationDesignTool::paint ( QPainter& painter, const KoViewConverter& converter ) {
-
+void KexiRelationDesignTool::paint ( QPainter& painter, const KoViewConverter& converter )
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KexiRelationDesignTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -70,11 +75,12 @@ void KexiRelationDesignTool::activate(ToolActivation toolActivation, const QSet<
     useCursor(Qt::ArrowCursor);
 }
 
-void KexiRelationDesignTool::deactivate ( ) {
-    
+void KexiRelationDesignTool::deactivate()
+{
 }
 
-QWidget* KexiRelationDesignTool::createOptionWidget() {
+QWidget* KexiRelationDesignTool::createOptionWidget()
+{
     QWidget *optionWidget = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(optionWidget);
     
