@@ -55,14 +55,11 @@ class XlsxXmlDocumentReader::Private
 {
 public:
     Private()
-            : worksheetNumber(0)
-            , worksheetReader(0) {
+            : worksheetNumber(0) {
     }
     ~Private() {
-        delete worksheetReader;
     }
     uint worksheetNumber;
-    XlsxXmlWorksheetReader *worksheetReader;
 private:
 };
 
@@ -252,17 +249,15 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     QString file = QString("sheet%1.xml").arg(d->worksheetNumber);
     QString filepath = path + "/" + file;
     kDebug() << "path:" << path << "file:" << file;
-    if (!d->worksheetReader) {
-        d->worksheetReader = new XlsxXmlWorksheetReader(this);
-    }
 
+    XlsxXmlWorksheetReader worksheetReader(this);
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, path, file,
                                           *m_context->themes, *m_context->sharedStrings, *m_context->styles,
                                           *m_context->relationships, m_context->import );
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                d->worksheetReader, filepath, &context);
+                &worksheetReader, filepath, &context);
     if (result != KoFilter::OK) {
-        raiseError(d->worksheetReader->errorString());
+        raiseError(worksheetReader.errorString());
         return result;
     }
 
