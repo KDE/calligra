@@ -162,9 +162,20 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
     return a;
 }
 
-bool AppointmentInterval::operator ==(const AppointmentInterval &interval ) const
+bool AppointmentInterval::operator==( const AppointmentInterval &interval ) const
 {
     return m_start == interval.m_start && m_end == interval.m_end && m_load == interval.m_load;
+}
+
+bool AppointmentInterval::operator<( const AppointmentInterval &other ) const
+{
+    if ( m_start < other.m_start ) {
+        return true;
+    } else if ( other.m_start < m_start ) {
+        return false;
+    }
+    // Start is assumed equal
+    return m_end < other.m_end;
 }
 
 //-----------------------
@@ -195,7 +206,7 @@ void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, doubl
     } else {
         // see if we have overlapping intervals
         AppointmentIntervalList lst;
-        QMutableMapIterator<QString, AppointmentInterval> it( *this );
+        QMutableMapIterator<AppointmentInterval, AppointmentInterval> it( *this );
         while ( it.hasNext() ) {
             AppointmentInterval &ai = it.next().value();
             DateTime ist = ai.startTime();
@@ -285,7 +296,7 @@ void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, doubl
 void AppointmentIntervalList::inSort(const AppointmentInterval &a)
 {
     Q_ASSERT( a.startTime() < a.endTime() );
-    insert( a.startTime().toString( KDateTime::ISODate ) + a.endTime().toString( KDateTime::ISODate ), a );
+    insert( a, a );
 }
 
 void AppointmentIntervalList::saveXML( QDomElement &element ) const

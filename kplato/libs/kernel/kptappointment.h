@@ -76,10 +76,9 @@ public:
     bool isValid() const;
     AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
 
-    bool operator ==(const AppointmentInterval &interval ) const;
+    bool operator==( const AppointmentInterval &interval ) const;
+    bool operator<( const AppointmentInterval &interval ) const;
 
-    //void inSort(AppointmentInterval *a);
-    //bool operator<( AppointmentInterval &interval ) const;
 private:
     DateTime m_start;
     DateTime m_end;
@@ -92,7 +91,7 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<QString, AppointmentInterval> {
+class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<AppointmentInterval, AppointmentInterval> {
 public:
     /// Add @p interval to the list. Handle overlapping with existsing intervals.
     void add( const AppointmentInterval &interval );
