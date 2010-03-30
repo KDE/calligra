@@ -21,49 +21,12 @@
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
 
-#include <math.h>
-
 #include <QRegExp>
 #include <QDebug>
 
+#include <Utils.h>
+
 namespace Swinder {
-
-// translate the range-character to a number
-int rangeCharToInt(char c)
-{
-    return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;
-}
-
-// translates the range-string into a number
-int rangeStringToInt(const QString &string)
-{
-    int result = 0;
-    const int size = string.size();
-    for ( int i = 0; i < size; i++ )
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
-    return result;
-}
-
-// splits a given cellrange like Sheet1.D2:Sheet1.F2, Sheet1.D2:F2, D2:F2 or D2 into its parts
-QPair<QString,QRect> splitCellRange(QString range)
-{
-    range.remove( "$" ); // remove "fixed" character
-    if(range.startsWith('[') && range.endsWith(']')) range = range.mid(1, range.length() - 2); // remove []
-    QPair<QString,QRect> result;
-    const bool isPoint = !range.contains( ':' );
-    QRegExp regEx = isPoint ? QRegExp( "(.*)\\.([A-Z]+)([0-9]+)" ) : QRegExp ( "(.*)\\.([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
-    if ( regEx.indexIn( range ) >= 0 ) {
-        const QString sheetName = regEx.cap( 1 );
-        QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
-        if ( isPoint ) {
-            result = QPair<QString,QRect>(sheetName, QRect(topLeft,QSize(1,1)));
-        } else {
-            QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
-            result = QPair<QString,QRect>(sheetName, QRect(topLeft,bottomRight));
-        }
-    }
-    return result;
-}
 
 class BRAIRecord : public Record
 {
@@ -401,18 +364,10 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
                 m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
             else if(record->m_value->m_dataId == Charting::Value::VerticalValues)
                 m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
-
+            
             //FIXME we are ignoring the sheetname here but we probably should handle the case where a series is made from different sheets...
             QPair<QString,QRect> result = splitCellRange( record->m_value->m_formula );
-            QRect r = result.second;
-            if(r.isValid() && m_chart->m_cellRangeAddress.isValid()) {
-                if(r.left() < m_chart->m_cellRangeAddress.left()) m_chart->m_cellRangeAddress.setLeft(r.left());
-                if(r.top() < m_chart->m_cellRangeAddress.top()) m_chart->m_cellRangeAddress.setTop(r.top());
-                if(r.right() > m_chart->m_cellRangeAddress.right()) m_chart->m_cellRangeAddress.setRight(r.right());
-                if(r.bottom() > m_chart->m_cellRangeAddress.bottom()) m_chart->m_cellRangeAddress.setBottom(r.bottom());
-            } else {
-                m_chart->m_cellRangeAddress = r;
-            }
+            m_chart->addRange(result.second);
         }
     }
 
