@@ -1845,6 +1845,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
 {
+    d->plotAreaChartSubType = subType;
+
     switch ( d->plotAreaChartType ) {
     case BarChartType:
         if ( d->kdBarDiagram ) {
