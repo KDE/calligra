@@ -2499,11 +2499,11 @@ void MSO::parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s) {
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x2EE6)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE6");
+    if (!(_s.rh.recType == 0x2EE7)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE7");
     }
-    if (!(_s.rh.recLen == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
+    if (!(_s.rh.recLen == 8)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
     }
     _s.linkedSlideIdRef = in.readuint32();
     _s.clinkedShapes = in.readint32();
@@ -2517,8 +2517,8 @@ void MSO::parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s) {
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x2EE7)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE7");
+    if (!(_s.rh.recType == 0x2EE6)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE6");
     }
     if (!(_s.rh.recLen == 8)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
@@ -9443,7 +9443,7 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE6)&&(_optionCheck.recLen == 0);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE7)&&(_optionCheck.recLen == 8);
     } catch(EOFException _e) {
         _possiblyPresent = false;
     }
