@@ -223,6 +223,7 @@ public:
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     Sheet* sheet;
+    QHash<int, Cell*> sharedFormulas;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -1093,35 +1094,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
     // Range of cells which the formula applies to. Only required for shared formula, array
     // formula or data table. Only written on the master formula, not subsequent formula's
     // belonging to the same shared group, array, or data table.
-    TRY_READ_ATTR(ref)
-    
+    //TRY_READ_ATTR(ref)
+
     // Type of formula. The possible values defined by the ST_CellFormulaType (§18.18.6), p. 2677
-    TRY_READ_ATTR(t)    
-    if (!t.isEmpty()) {
-        if (t == QLatin1String("shared")) {
-            /* Shared Group Index, p. 1815
-            Optional attribute to optimize load performance by sharing formulas.
-            When a formula is a shared formula (t value is shared) then this value indicates the
-            group to which this particular cell's formula belongs. The first formula in a group of
-            shared formulas is saved in the f element. This is considered the 'master' formula cell.
-            Subsequent cells sharing this formula need not have the formula written in their f
-            element. Instead, the attribute si value for a particular cell is used to figure what the
-            formula expression should be based on the cell's relative location to the master formula
-            cell.
-            */
-            //TRY_READ_ATTR(si)
-            //int sharedGroupIndex;
-            //STRING_TO_INT(si, sharedGroupIndex, "f@si")
-        }
-        else if (t == QLatin1String("normal")) { // Formula is a regular cell formula
-            
-        }
-        else if (t == QLatin1String("array")) { // Formula is an array formula
-            //! @todo array
-        }
-        else if (t == QLatin1String("dataTable")) { // Formula is a data table formula
-            //! @todo dataTable
-        }
+    TRY_READ_ATTR(t)
+
+    // Shared formula groups.
+    int sharedGroupIndex = -1;
+    if (t == QLatin1String("shared")) {
+        TRY_READ_ATTR(si)
+        STRING_TO_INT(si, sharedGroupIndex, "f@si")
     }
 
     while (!atEnd() && !hasError()) {
@@ -1131,7 +1113,31 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             cell->formula = convertFormula(text().toString());
         }
     }
+    
+    if (!t.isEmpty()) {
+        if (t == QLatin1String("shared")) {
+            if (sharedGroupIndex >= 0) {
+                /* Shared Group Index, p. 1815
+                Optional attribute to optimize load performance by sharing formulas.
+                When a formula is a shared formula (t value is shared) then this value indicates the
+                group to which this particular cell's formula belongs. The first formula in a group of
+                shared formulas is saved in the f element. This is considered the 'master' formula cell.
+                Subsequent cells sharing this formula need not have the formula written in their f
+                element. Instead, the attribute si value for a particular cell is used to figure what the
+                formula expression should be based on the cell's relative location to the master formula
+                cell.
+                */
+                if (d->sharedFormulas.contains(sharedGroupIndex)) {
+                    if (cell->formula.isEmpty()) // don't do anything if the cell already defines a formula
+                        cell->formula = convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell);
+                } else if (!cell->formula.isEmpty()) { // is this cell the master cell?
+                    d->sharedFormulas[sharedGroupIndex] = cell;
+                }
+            }
+        }
+    }
 
+    /*
     if (!ref.isEmpty()) {
         const int pos = ref.indexOf(':');
         if (pos > 0) {
@@ -1145,14 +1151,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
                 for (int col = c1; col <= c2; ++col) {
                     for (int row = r1; row <= r2; ++row) {
                         if (col != m_currentColumn || row != m_currentRow) {
-                            Cell* c = d->sheet->cell(col, row, true);
-                            c->formula = convertFormulaReference(cell, c);
+                            if (Cell* c = d->sheet->cell(col, row, true))
+                                c->formula = convertFormulaReference(cell, c);
                         }
                     }
                 }
             }
         }
     }
+    */
 
     READ_EPILOGUE
 }
