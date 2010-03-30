@@ -457,6 +457,7 @@ OrderByColumnList::OrderByColumnList()
 }
 
 OrderByColumnList::OrderByColumnList(const OrderByColumnList& other)
+        : OrderByColumnListBase()
 {
     for (QList<OrderByColumn*>::ConstIterator it(other.constBegin()); it != other.constEnd(); ++it) {
         appendColumn(**it);
