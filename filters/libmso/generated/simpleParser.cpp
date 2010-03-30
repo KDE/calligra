@@ -636,8 +636,8 @@ void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s)
 void MSO::parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s) {
     _s.streamOffset = in.getPosition();
     _s.scheme = in.readuint16();
-    if (!(((quint16)_s.scheme) == 0x0000 || ((quint16)_s.scheme) == 0x0001 || ((quint16)_s.scheme) == 0x0002 || ((quint16)_s.scheme) == 0x0003 || ((quint16)_s.scheme) == 0x0004 || ((quint16)_s.scheme) == 0x0005 || ((quint16)_s.scheme) == 0x0006 || ((quint16)_s.scheme) == 0x0007 || ((quint16)_s.scheme) == 0x0008)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.scheme) == 0x0000 || ((quint16)_s.scheme) == 0x0001 || ((quint16)_s.scheme) == 0x0002 || ((quint16)_s.scheme) == 0x0003 || ((quint16)_s.scheme) == 0x0004 || ((quint16)_s.scheme) == 0x0005 || ((quint16)_s.scheme) == 0x0006 || ((quint16)_s.scheme) == 0x0007 || ((quint16)_s.scheme) == 0x0008");
+    if (!(((quint16)_s.scheme)<=40)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.scheme)<=40");
     }
     _s.startNum = in.readuint16();
     if (!(((quint16)_s.startNum)>=1)) {
@@ -2499,11 +2499,11 @@ void MSO::parseLinkedSlide10Atom(LEInputStream& in, LinkedSlide10Atom& _s) {
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x2EE6)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE6");
+    if (!(_s.rh.recType == 0x2EE7)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE7");
     }
-    if (!(_s.rh.recLen == 0)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0");
+    if (!(_s.rh.recLen == 8)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
     }
     _s.linkedSlideIdRef = in.readuint32();
     _s.clinkedShapes = in.readint32();
@@ -2517,8 +2517,8 @@ void MSO::parseLinkedShape10Atom(LEInputStream& in, LinkedShape10Atom& _s) {
     if (!(_s.rh.recInstance == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
-    if (!(_s.rh.recType == 0x2EE7)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE7");
+    if (!(_s.rh.recType == 0x2EE6)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x2EE6");
     }
     if (!(_s.rh.recLen == 8)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 8");
@@ -6368,7 +6368,6 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
-    bool _possiblyPresent;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
@@ -6379,8 +6378,8 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     if (!(_s.rh.recType == 0xFBA)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
-    if (!(_s.rh.recLen == 0xE)) {
-        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0xE");
+    if (!(_s.rh.recLen == 0x10)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x10");
     }
     _c = 8;
     _s.tagName.resize(_c);
@@ -6397,27 +6396,9 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     if (!(_s.rhData.recType == 0x138B)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recType == 0x138B");
     }
-    _m = in.setMark();
-    try {
-        RecordHeader _optionCheck(&_s);
-        parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0424)&&(_optionCheck.recLen == 1);
-    } catch(EOFException _e) {
-        _possiblyPresent = false;
-    }
-    in.rewind(_m);
-    _m = in.setMark();
-    if (_possiblyPresent) {
-        try {
-            _s.roundTripHeaderFooterDefaultsAtom = QSharedPointer<RoundTripHeaderFooterDefaults12Atom>(new RoundTripHeaderFooterDefaults12Atom(&_s));
-            parseRoundTripHeaderFooterDefaults12Atom(in, *_s.roundTripHeaderFooterDefaultsAtom.data());
-        } catch(IncorrectValueException _e) {
-            _s.roundTripHeaderFooterDefaultsAtom.clear();
-            in.rewind(_m);
-        } catch(EOFException _e) {
-            _s.roundTripHeaderFooterDefaultsAtom.clear();
-            in.rewind(_m);
-        }
+    if (_s.rhData.recLen > 8) {
+        _s.roundTripHeaderFooterDefaultsAtom = QSharedPointer<RoundTripHeaderFooterDefaults12Atom>(new RoundTripHeaderFooterDefaults12Atom(&_s));
+        parseRoundTripHeaderFooterDefaults12Atom(in, *_s.roundTripHeaderFooterDefaultsAtom.data());
     }
 }
 void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer& _s) {
@@ -9462,7 +9443,7 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
-        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE6)&&(_optionCheck.recLen == 0);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2EE7)&&(_optionCheck.recLen == 8);
     } catch(EOFException _e) {
         _possiblyPresent = false;
     }
@@ -10702,24 +10683,24 @@ void MSO::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProg
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP9SlideBinaryTagExtension(&_s));
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP9SlideBinaryTagExtension(&_s));
         parsePP9SlideBinaryTagExtension(in, *(PP9SlideBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _x) {
         _s.anon.clear();
         in.rewind(_m);
     try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP10SlideBinaryTagExtension(&_s));
-        parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension*)_s.anon.data());
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP12SlideBinaryTagExtension(&_s));
+        parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _xx) {
         _s.anon.clear();
         in.rewind(_m);
     try {
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new PP12SlideBinaryTagExtension(&_s));
-        parsePP12SlideBinaryTagExtension(in, *(PP12SlideBinaryTagExtension*)_s.anon.data());
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new PP10SlideBinaryTagExtension(&_s));
+        parsePP10SlideBinaryTagExtension(in, *(PP10SlideBinaryTagExtension*)_s.anon.data());
     } catch (IncorrectValueException _xxx) {
         _s.anon.clear();
         in.rewind(_m);
-        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice2884387559(new UnknownBinaryTag(&_s));
+        _s.anon = SlideProgBinaryTagSubContainerOrAtom::choice4024872665(new UnknownBinaryTag(&_s));
         parseUnknownBinaryTag(in, *(UnknownBinaryTag*)_s.anon.data());
     }}}
 }
