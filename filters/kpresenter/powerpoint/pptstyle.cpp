@@ -270,6 +270,7 @@ const TextMasterStyle9Level* getMaster9Level(const MasterOrSlideContainer* m,
     if (!pp9) return 0;
     const TextMasterStyle9Atom* ms = getTextMasterStyle9Atom(pp9, textType);
     const TextMasterStyle9Level *l = 0;
+    if (!ms) return l;
     switch (level) {
     case 0: if (ms->lstLvl1) l = ms->lstLvl1.data();break;
     case 1: if (ms->lstLvl2) l = ms->lstLvl2.data();break;
