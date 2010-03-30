@@ -108,10 +108,10 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
         if (data.contains(pageStyle))
             continue;
 
-        KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+        KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
-        masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
-        QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+        masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
+        QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);
     }
 
@@ -123,10 +123,10 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
           << KWord::EvenPagesFooterTextFrameSet;
 
     foreach (KWPageStyle pageStyle, data.keys()) {
-        KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+        KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
-        masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+        masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
 
         QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
         int index = 0;
@@ -147,12 +147,12 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
         }
         // append the headerfooter-style to the main-style
         if (! masterStyle.isEmpty()) {
-            QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+            QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
             m_masterPages.insert(pageStyle, name);
         }
     }
 
-    //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
+    //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::ParagraphAutoStyle))
     //    mainStyles.markStyleForStylesXml(s.name);
 
     //kDebug(32001) << "END saveHeaderFooter ############################################";
@@ -373,7 +373,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     }
 
     //we save the changes before starting the page sequence element because odf validator insist on having <tracked-changes> right after the <office:text> tag
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     changes.saveOdfChanges(changeWriter);
 

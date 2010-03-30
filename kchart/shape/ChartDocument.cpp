@@ -141,7 +141,7 @@ bool ChartDocument::saveOdf( SavingContext &context )
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
     odfStore.closeContentWriter();
 
     // Add manifest line for content.xml and styles.xml

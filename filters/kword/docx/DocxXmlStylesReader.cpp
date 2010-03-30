@@ -101,11 +101,11 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     qDeleteAll(m_defaultStyles);
     m_defaultStyles.clear();
 
-    createDefaultStyle(KoGenStyle::StyleUser, "paragraph");
-    createDefaultStyle(KoGenStyle::StyleText, "text");
-    createDefaultStyle(KoGenStyle::StyleTable, "table");
-    //createDefaultStyle(KoGenStyle::StyleGraphic, "graphic");
-    //createDefaultStyle(KoGenStyle::StyleTableRow, "table-row");
+    createDefaultStyle(KoGenStyle::ParagraphStyle, "paragraph");
+    createDefaultStyle(KoGenStyle::TextStyle, "text");
+    createDefaultStyle(KoGenStyle::TableStyle, "table");
+    //createDefaultStyle(KoGenStyle::GraphicStyle, "graphic");
+    //createDefaultStyle(KoGenStyle::TableRowStyle, "table-row");
     //createDefaultStyle("numbering");
 
     while (!atEnd()) {
@@ -131,7 +131,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
          it!=m_defaultStyles.constEnd(); ++it)
     {
         kDebug() << it.key();
-        mainStyles->lookup(*it.value());
+        mainStyles->insert(*it.value());
     }
     qDeleteAll(m_defaultStyles);
     m_defaultStyles.clear();
@@ -344,7 +344,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         m_currentTextStyle = *m_defaultStyles.value(odfType.toLatin1());
     }
     else {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::StyleUser, odfType.toLatin1());
+        m_currentTextStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
     }
     MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
     m_currentTextStylePredefined = true;
@@ -368,13 +368,13 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    int lookupFlags = KoGenStyles::DontForceNumbering;
+    KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName;
     if (styleName.isEmpty()) {
         styleName = m_name.replace(" ", "_");
         if (styleName.isEmpty()) {
             // allow for numbering for generated style names
             styleName = odfType;
-            lookupFlags = KoGenStyles::NoFlag;
+            insertionFlags = KoGenStyles::NoFlag;
         }
     }
 
@@ -394,7 +394,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         //! @todo oo.o converter defines these classes: list, extra, index, chapter
         m_currentTextStyle.addAttribute("style:class", "text");
 
-        styleName = mainStyles->lookup(m_currentTextStyle, styleName, lookupFlags);
+        styleName = mainStyles->insert(m_currentTextStyle, styleName, insertionFlags);
         if (!nextStyleName.isEmpty()) {
             mainStyles->insertStyleRelation(styleName, nextStyleName, "style:next-style-name");
         }

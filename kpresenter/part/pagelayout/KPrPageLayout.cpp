@@ -104,7 +104,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
 
 QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 {
-    KoGenStyle style( KoGenStyle::StylePresentationPageLayout );
+    KoGenStyle style( KoGenStyle::PresentationPageLayoutStyle );
 
     style.addAttribute( "style:display-name", m_name );
 
@@ -121,7 +121,7 @@ QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
     style.addChildElement( "placeholders", placeholders );
 
     // return the style name so we can save the ptr -> style in the saving context so the pages can use it during saving
-    return context.mainStyles().lookup( style, "pl" );
+    return context.mainStyles().insert( style, "pl" );
 }
 
 QList<KPrPlaceholder *> KPrPageLayout::placeholders() const

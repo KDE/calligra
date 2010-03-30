@@ -249,7 +249,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
 
     if (m_context->type == Slide) {
-        m_currentPageStyle = KoGenStyle(KoGenStyle::StyleDrawingPage, "drawing-page"); // CASE #P109
+        m_currentPageStyle = KoGenStyle(KoGenStyle::DrawingPageStyle, "drawing-page"); // CASE #P109
         m_currentPageStyle.addProperty("presentation:background-visible", true);   // CASE #P111
         m_currentPageStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
     }
@@ -290,7 +290,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 //! @todo presentation:use-date-time-name //optional; CASE #P304
                 //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
 
-                const QString currentPageStyleName(mainStyles->lookup(m_currentPageStyle));
+                const QString currentPageStyleName(mainStyles->insert(m_currentPageStyle));
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
 

@@ -724,7 +724,7 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     
     // FIXME: Somehow this style gets the name gr2 instead of ch2.
     //        Fix that as well.
-    KoGenStyle plotAreaStyle( KoGenStyle::StyleChartAuto, "chart" );
+    KoGenStyle plotAreaStyle( KoGenStyle::ChartAutoStyle, "chart" );
     
     // Data direction
     const Qt::Orientation direction = proxyModel()->dataDirection();

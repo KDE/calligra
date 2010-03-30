@@ -327,10 +327,10 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
     page.height = pageSize().height();
 
     KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.lookup(pageLayout, "PL");
-    KoGenStyle masterPage(KoGenStyle::StyleMaster);
+    QString layoutName = mainStyles.insert(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::MasterPageStyle);
     masterPage.addAttribute("style:page-layout-name", layoutName);
-    mainStyles.lookup(masterPage, "Default", KoGenStyles::DontForceNumbering);
+    mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);
 
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:drawing");
@@ -340,7 +340,7 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
     bodyWriter->endElement(); // office:drawing
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     documentContext.odfStore.closeContentWriter();
 

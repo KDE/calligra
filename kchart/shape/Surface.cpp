@@ -232,7 +232,7 @@ void Surface::saveOdf( KoShapeSavingContext &context,
 {
     KoXmlWriter  &bodyWriter = context.xmlWriter();
     KoGenStyles  &mainStyles = context.mainStyles();
-    KoGenStyle    style      = KoGenStyle( KoGenStyle::StyleGraphicAuto, 
+    KoGenStyle    style      = KoGenStyle( KoGenStyle::GraphicAutoStyle, 
                                            "chart" );
 
     // elementName is chart:floor or chart:wall
@@ -244,7 +244,7 @@ void Surface::saveOdf( KoShapeSavingContext &context,
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );
 
-    bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( style, "ch" ) );
+    bodyWriter.addAttribute( "chart:style-name", mainStyles.insert( style, "ch" ) );
 
     bodyWriter.endElement(); // chart:floor or chart:wall
 }

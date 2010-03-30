@@ -423,16 +423,16 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     d->styleManager->saveOdf(savingContext.mainStyles());
 
     // Saving the default column style
-    KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
+    KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
     defaultColumnStyle.addPropertyPt("style:column-width", d->defaultColumnFormat->width());
     defaultColumnStyle.setDefaultStyle(true);
-    savingContext.mainStyles().lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
+    savingContext.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     // Saving the default row style
-    KoGenStyle defaultRowStyle(KoGenStyle::StyleTableRow, "table-row");
+    KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
     defaultRowStyle.addPropertyPt("style:row-height", d->defaultRowFormat->height());
     defaultRowStyle.setDefaultStyle(true);
-    savingContext.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
+    savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     if (!d->strPassword.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");

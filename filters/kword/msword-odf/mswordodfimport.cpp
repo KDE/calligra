@@ -172,8 +172,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     kDebug(30513) << "finished parsing.";
 
     //save the office:automatic-styles & and fonts in content.xml
-    mainStyles->saveOdfFontFaceDecls(contentWriter);
-    mainStyles->saveOdfAutomaticStyles(contentWriter, false);
+    mainStyles->saveOdfStyles(KoGenStyles::FontFaceDecls, contentWriter);
+    mainStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
     //close tags in bodyWriter
     bodyWriter->endElement();//office:text

@@ -121,8 +121,8 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     RETURN_IF_ERROR( createDocument(outputStore.get(), &writers) )
 
     //save the office:automatic-styles & and fonts in content.xml
-    mainStyles.saveOdfFontFaceDecls(&contentWriter);
-    mainStyles.saveOdfAutomaticStyles(&contentWriter, false);
+    mainStyles.saveOdfStyles(KoGenStyles::FontFaceDecls, &contentWriter);
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
 
     //close tags in body
     bodyWriter.endElement();//office:*

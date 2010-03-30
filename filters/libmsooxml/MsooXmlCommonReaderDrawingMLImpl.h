@@ -134,12 +134,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
 //todo        body->addAttribute("presentation:style-name", styleName);
-//! @todo for pptx: maybe use KoGenStyle::StylePresentationAuto?
+//! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
         if (m_noFill)
             m_currentDrawStyle.addAttribute("style:fill", constNone);
 
 #ifdef DOCXXMLDOCREADER_H
-        QString currentDrawStyleName(mainStyles->lookup(m_currentDrawStyle, "gr"));
+        QString currentDrawStyleName(mainStyles->insert(m_currentDrawStyle, "gr"));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
 //! @todo hardcoded draw:style-name = grpredef1
@@ -674,7 +674,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     while (!atEnd()) {
@@ -792,7 +792,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     m_currentTextStyleProperties = new KoCharacterStyle();
 
     if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
     while (!atEnd()) {
@@ -825,6 +825,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
         }
+    if (attrs.hasAttribute("cap")) {
+        if (attrs.value("cap").toString() == "small") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);   
+        }
+    }
     if (attrs.hasAttribute("sz")) {
         bool ok = false;
         const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
@@ -868,7 +873,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     readNext();
     // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
     if (QUALIFIED_NAME_IS(t)) {
-        const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
+        const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
         body->startElement("text:span", false);
         body->addAttribute("text:style-name", currentTextStyleName);
         TRY_READ(t)

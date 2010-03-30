@@ -159,7 +159,7 @@ QString SheetPrint::saveOdfSheetStyleLayout(KoGenStyles &mainStyles)
     // the style has to be in the styles.xml file and only there
     pageLayout.setAutoStyleInStylesDotXml(true);
 
-    return mainStyles.lookup(pageLayout, "pm");
+    return mainStyles.insert(pageLayout, "pm");
 }
 
 

@@ -428,7 +428,7 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
     foreach ( DataSet *dataSet, d->dataSets ) {
         bodyWriter.startElement( "chart:series" );
         
-        KoGenStyle style( KoGenStyle::StyleGraphicAuto, "chart" );
+        KoGenStyle style( KoGenStyle::GraphicAutoStyle, "chart" );
         
         if ( dataSet->chartType() != LastChartType )
             style.addProperty( "chart:family", ODF_CHARTTYPES[ dataSet->chartType() ] );
@@ -443,7 +443,7 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
         bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + dataSet->yDataRegionString() );
         bodyWriter.addAttribute( "chart:label-cell-address", prefix + dataSet->labelDataRegionString() );
         
-        const QString styleName = mainStyles.lookup( style, "ch", KoGenStyles::ForceNumbering );
+        const QString styleName = mainStyles.insert( style, "ch" );
         bodyWriter.addAttribute( "chart:style-name", styleName );
         
         bodyWriter.endElement(); // chart:series

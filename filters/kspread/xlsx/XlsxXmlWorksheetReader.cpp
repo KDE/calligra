@@ -360,14 +360,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 //! @todo implement CASE #S202 for fixing the name
     body->addAttribute("table:name", m_context->worksheetName);
 
-    m_tableStyle = KoGenStyle(KoGenStyle::StyleAutoTable, "table");
+    m_tableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
 //! @todo hardcoded master page name
     m_tableStyle.addAttribute("style:master-page-name",
                               QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
 //! @todo table:display="true" hardcoded
     m_tableStyle.addProperty("table:display", XlsxXmlWorksheetReader::constTrue);
 
-    const QString currentTableStyleName(mainStyles->lookup(m_tableStyle, "ta"));
+    const QString currentTableStyleName(mainStyles->insert(m_tableStyle, "ta"));
     body->addAttribute("table:style-name", currentTableStyleName);
 
     while (!atEnd()) {
@@ -534,11 +534,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
 //! Saves information about column style
 void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
 {
-    KoGenStyle tableColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
+    KoGenStyle tableColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
     tableColumnStyle.addProperty("style:column-width", widthString);
     tableColumnStyle.addProperty("fo:break-before", "auto");
 
-    const QString currentTableColumnStyleName(mainStyles->lookup(tableColumnStyle, "co"));
+    const QString currentTableColumnStyleName(mainStyles->insert(tableColumnStyle, "co"));
     body->addAttribute("table:style-name", currentTableColumnStyleName);
 }
 
@@ -684,7 +684,7 @@ QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
     if (heightString.isEmpty()) {
         heightString = m_defaultRowHeight;
     }
-    KoGenStyle tableRowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
+    KoGenStyle tableRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
 //! @todo alter fo:break-before?
     tableRowStyle.addProperty("fo:break-before", MsooXmlReader::constAuto);
 //! @todo alter style:use-optimal-row-height?
@@ -695,7 +695,7 @@ QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
         if (ok)
             tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
     }
-    const QString currentTableRowStyleName(mainStyles->lookup(tableRowStyle, "ro"));
+    const QString currentTableRowStyleName(mainStyles->insert(tableRowStyle, "ro"));
     return currentTableRowStyleName;
 }
 
@@ -935,9 +935,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
         if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript ||
                 cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
-            KoGenStyle charStyle( KoGenStyle::StyleText, "text" );
+            KoGenStyle charStyle( KoGenStyle::TextStyle, "text" );
             cellCharacterStyle.saveOdf( charStyle );
-            charStyleName = mainStyles->lookup( charStyle, "T" );
+            charStyleName = mainStyles->insert( charStyle, "T" );
         }
 
         if( !charStyleName.isEmpty() ) {
@@ -1001,12 +1001,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 cell->valueAttr = XlsxXmlWorksheetReader::officeValue;
             } else {
                 switch( style->type() ) {
-                case KoGenStyle::StyleNumericDate:
+                case KoGenStyle::NumericDateStyle:
                     cell->valueType = MsooXmlReader::constDate;
                     cell->valueAttr = XlsxXmlWorksheetReader::officeDateValue;
                     m_value = QDate( 1899, 12, 30 ).addDays( m_value.toInt() ).toString( Qt::ISODate );
                     break;
-                case KoGenStyle::StyleNumericText:
+                case KoGenStyle::NumericTextStyle:
                     cell->valueType = MsooXmlReader::constString;
                     cell->valueAttr = XlsxXmlWorksheetReader::officeStringValue;
                     break;
@@ -1041,7 +1041,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             raiseUnexpectedAttributeValueError(s, "c@s");
             return KoFilter::WrongFormat;
         }
-        KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
+        KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
         if( charStyleName.isEmpty() ) {
             KoCharacterStyle cellCharacterStyle;
@@ -1056,7 +1056,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cellStyle.addAttribute( "style:data-style-name", formattedStyle );
         }
 
-        const QString cellStyleName = mainStyles->lookup( cellStyle, "ce" );
+        const QString cellStyleName = mainStyles->insert( cellStyle, "ce" );
         cell->styleName = cellStyleName;
     }
 
@@ -1192,10 +1192,10 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 {
     NumberFormatParser::setStyles( q->mainStyles );
     const KoGenStyle style = NumberFormatParser::parse( valueFormat );
-    if( style.type() == KoGenStyle::StyleAuto )
+    if( style.type() == KoGenStyle::ParagraphAutoStyle )
         return QString();
 
-    return q->mainStyles->lookup( style, "N" );
+    return q->mainStyles->insert( style, "N" );
 }
 
 #undef CURRENT_EL

@@ -212,16 +212,16 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
     map->styleManager()->saveOdf(context.mainStyles());
 
     // Saving the default column style
-    KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
+    KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
     defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
     defaultColumnStyle.setDefaultStyle(true);
-    context.mainStyles().lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
+    context.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     // Saving the default row style
-    KoGenStyle defaultRowStyle(KoGenStyle::StyleTableRow, "table-row");
+    KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
     defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
     defaultRowStyle.setDefaultStyle(true);
-    context.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
+    context.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     OdfSavingContext tableContext(context);
     sheet()->saveOdf(tableContext);

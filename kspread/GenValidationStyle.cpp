@@ -39,7 +39,7 @@ GenValidationStyles::~GenValidationStyles()
 
 }
 
-QString GenValidationStyles::lookup(const GenValidationStyle& style)
+QString GenValidationStyles::insert(const GenValidationStyle& style)
 {
     StyleMap::iterator it = m_styles.find(style);
     if (it == m_styles.end()) {

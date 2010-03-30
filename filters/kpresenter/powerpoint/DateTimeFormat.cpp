@@ -50,7 +50,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
-    KoGenStyle dt(KoGenStyle::StyleNumericDate);
+    KoGenStyle dt(KoGenStyle::NumericDateStyle);
     dt.setAutoStyleInStylesDotXml(true);
     if (dayofweek == true) {
         xmlWriter.startElement("number:day-of-week");
@@ -90,8 +90,8 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
     dt.addChildElement("number:date-style",
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
-    styles.lookup(dt, "DT");
-    setDateStyleName(styles.lookup(dt));
+    styles.insert(dt, "DT");
+    setDateStyleName(styles.insert(dt));
 
 }
 
@@ -103,7 +103,7 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
-    KoGenStyle tm(KoGenStyle::StyleNumericTime);
+    KoGenStyle tm(KoGenStyle::NumericTimeStyle);
     tm.setAutoStyleInStylesDotXml(true);
 
     xmlWriter.startElement("number:hours");
@@ -132,8 +132,8 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
     tm.addChildElement("number:date-style",
 
                        QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
-    styles.lookup(tm, "TM");
-    setTimeStyleName(styles.lookup(tm));
+    styles.insert(tm, "TM");
+    setTimeStyleName(styles.insert(tm));
 
 }
 

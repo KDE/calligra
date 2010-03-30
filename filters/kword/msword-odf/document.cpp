@@ -183,10 +183,11 @@ void Document::finishDocument()
                                "text:start-numbering-at=\"%3\" "
                                "/>");
 
-        m_mainStyles->addRawOdfDocumentStyles(footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
-                                                            .arg(m_initialFootnoteNumber)
-                                                            .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
-                                                            .toLatin1());
+        m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
+                                         footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
+                                                       .arg(m_initialFootnoteNumber)
+                                                       .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
+                                                       .toLatin1());
 
         // ms-word has start-numbering-at (rncEdn) for endnotes, but ODF doesn't really support it
         QString endnoteConfig("<text:notes-configuration "
@@ -200,10 +201,11 @@ void Document::finishDocument()
                               //"text:start-numbering-at=\"%3\" "
                               "/>");
 
-        m_mainStyles->addRawOdfDocumentStyles(endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
-                                                           .arg(m_initialEndnoteNumber)
+        m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
+                                         endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
+                                                      .arg(m_initialEndnoteNumber)
 //                                                           .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
-                                                           .toLatin1());
+                                                      .toLatin1());
     }
     /*
         QDomElement elementDoc = m_mainDocument.documentElement();
@@ -298,7 +300,7 @@ void Document::processStyles()
 
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
-            KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
+            KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -310,7 +312,7 @@ void Document::processStyles()
             //set font name in style
             QString fontName = m_textHandler->getFont(style->chp().ftcAscii);
             if (!fontName.isEmpty()) {
-                m_mainStyles->addFontFace(KoFontFace(fontName));
+                m_mainStyles->insertFontFace(KoFontFace(fontName));
                 userStyle.addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
 
@@ -322,12 +324,12 @@ void Document::processStyles()
 
             // Add style to main collection, using the name that it
             // had in the .doc.
-            QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+            QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
             kDebug(30513) << "added style " << actualName;
         } else if (style && style->type() == wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
-            KoGenStyle userStyle(KoGenStyle::StyleUser, "text");
+            KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
             userStyle.addAttribute("style:display-name", displayName);
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -340,7 +342,7 @@ void Document::processStyles()
             // the design is such that the styles are modified during processing of text runs
 
             //add style to main collection, using the name that it had in the .doc
-            QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+            QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
             kDebug(30513) << "added style " << actualName;
         }
     }
@@ -388,7 +390,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     kDebug(30513) ;
     //need to add master style to m_mainStyle
     kDebug(30513) << "creating master style for this section";
-    m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
+    m_masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle); //for header/footer stuff
 
     // Kword expects that first section has StyleMaster named "Standard"
     QString masterStyleName("Standard");
@@ -397,7 +399,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     }
 
     m_masterStyle->addAttribute("style:display-name", masterStyleName);
-    m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
+    m_masterStyleName = m_mainStyles->insert(*m_masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
     //delete the object since we've added it to the collection
     delete m_masterStyle;
     m_masterStyle = 0;
@@ -410,7 +412,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     // ----------------------
     //create page layout style here
-    m_pageLayoutStyle = new KoGenStyle(KoGenStyle::StylePageLayout);
+    m_pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
     QString pageLayoutStyleName("Mpm");
 
     //get width & height in points
@@ -504,7 +506,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
-    pageLayoutStyleName = m_mainStyles->lookup(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
+    pageLayoutStyleName = m_mainStyles->insert(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
     //delete the object since we've added it to the collection
     delete m_pageLayoutStyle;
     m_pageLayoutStyle = 0;
