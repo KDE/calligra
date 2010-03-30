@@ -815,6 +815,10 @@ public:
                new UnderlineStyle(KoCharacterStyle::DashLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
+        insert("dashDotHeavy",
+               new UnderlineStyle(KoCharacterStyle::DotDashLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::BoldLineWeight)
+              );
         insert("dotted",
                new UnderlineStyle(KoCharacterStyle::DottedLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight)
@@ -829,6 +833,10 @@ public:
               );
         insert("wave",
                new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("wavyDouble",
+               new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::DoubleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
         insert("wavyHeavy",
