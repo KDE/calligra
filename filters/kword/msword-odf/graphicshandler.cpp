@@ -550,6 +550,10 @@ void KWordDrawingHandler::processObjectForBody(const MSO::OfficeArtSpContainer& 
             kDebug(30513)<< "processing picture frame";
             processPictureFrame(o, out);
             break;
+        case msosptHostControl:
+            kDebug(30513)<< "processing host control";
+            parseTextBox(o, out);
+            break;
     }
 }
 
