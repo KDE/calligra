@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -349,12 +349,12 @@ void KexiFormView::initForm()
                 m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
         connect(form, SIGNAL(childAdded(ObjectTreeItem*)), m_treeview, SLOT(addItem(ObjectTreeItem*)));
         connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
-    }
-    connect(m_propSet, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
-            form, SLOT(changeName(const QByteArray&, const QByteArray&)));
-*/
+    }*/
+        connect(form(), SIGNAL(widgetNameChanged(const QByteArray&,const QByteArray&)),
+                this, SLOT(slotWidgetNameChanged(const QByteArray&,const QByteArray&)));
+
 //2.0    form->setSelectedWidget(form->widget());
-    form()->selectWidget(form()->widget()); //added in 2.0
+        form()->selectWidget(form()->widget()); //added in 2.0
 //2.0    windowChanged(form->widget());
         //end of: from FormManager::initForm(Form *form)
     }
@@ -656,7 +656,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
             KexiUtils::unsetFocusWithReason(QApplication::focusWidget(), Qt::TabFocusReason);
             //}
 
-            QWidget *widget;
+            QWidget *widget = 0;
             foreach(widget, *orderedFocusWidgets) {
                 KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(widget);
                 if (iface)
@@ -1333,9 +1333,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
             //1. resize by hand
             m_dbform->setGeometry(newFormRect);
             //2. store information about resize
-            KFormDesigner::PropertyCommand *resizeFormCommand = new KFormDesigner::PropertyCommand(
-                *form(), m_dbform->objectName().toLatin1(), oldFormRect, newFormRect, "geometry",
-                group);
+            (void)new KFormDesigner::PropertyCommand( *form(), m_dbform->objectName().toLatin1(),
+                oldFormRect, newFormRect, "geometry", group);
 //2.0            group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
         }
 
@@ -1416,5 +1415,13 @@ void KexiFormView::parentDialogAttached(KMdiChildFrm *)
   m_dbform->updateTabStopsOrder(form());
 }*/
 
-#include "kexiformview.moc"
+void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname)
+{
+    Q_UNUSED(oldname);
+    Q_UNUSED(newname);
+    //kDebug() << oldname << newname << form()->propertySet().propertyValue("objectName").toString();
+    KexiMainWindowIface::global()->updatePropertyEditorInfoLabel();
+    formPart()->dataSourcePage()->updateInfoLabelForPropertySet(&form()->propertySet());
+}
 
+#include "kexiformview.moc"

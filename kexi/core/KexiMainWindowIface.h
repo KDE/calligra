@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -270,6 +270,15 @@ public:
 
 //! @todo replace with the final Actions API
     virtual void addToolBarAction(const QString& toolBarName, QAction *action) = 0;
+
+    /*! Updates info label of the property editor by reusing properties provided
+     by the current property set.
+     Read documentation of KexiPropertyEditorView class for information about accepted properties.
+     If the current property is 0 and @a textToDisplayForNullSet string is not empty, this string is displayed
+     (without icon or any other additional part).
+     If the current property is 0 and @a textToDisplayForNullSet string is empty, the info label widget becomes
+     hidden. */
+    virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;

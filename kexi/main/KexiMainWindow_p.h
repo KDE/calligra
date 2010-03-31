@@ -955,7 +955,7 @@ public:
     QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
     QMap<KexiPart::Part*, int> recentlySelectedPropertyPanelPages;
     QPointer<KexiPropertyEditorView> propEditor;
-    QPointer<KoProperty::Set> propBuffer;
+    QPointer<KoProperty::Set> propertySet;
 
     KXMLGUIClient *curWindowGUIClient, *curWindowViewGUIClient,
     *closedWindowGUIClient, *closedWindowViewGUIClient;
