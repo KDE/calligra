@@ -545,13 +545,14 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
         m_chart->m_impl = new Charting::PieImpl(record->anStart());
 }
 
-// specifies that the chartgroup is a pie chart
+// specifies that the chartgroup is a bar chart
 void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
     if(!record) return;
     m_chart->m_impl = new Charting::BarImpl();
 }
 
+// specifies that the chartgroup is a area chart
 void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if(!record) return;
