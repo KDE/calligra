@@ -146,6 +146,8 @@ void DocxXmlDocumentReader::init()
     initInternal(); // MsooXmlCommonReaderImpl.h
     initDrawingML();
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
+    m_complexCharType = None;
+    m_complexCharStatus = NoneAllowed;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -662,6 +664,75 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL fldChar
+//! fldChar handler
+/* Complex field character
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+//! @todo support all attributes etc.
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(fldCharType)
+
+    if (!fldCharType.isEmpty()) {
+       if (fldCharType == "begin") {
+           m_complexCharStatus = InstrAllowed;
+       }
+       else if (fldCharType == "separate") {
+           m_complexCharStatus = InstrExecute;
+       }
+       else if (fldCharType == "end") {
+           m_complexCharStatus = NoneAllowed;
+           m_complexCharType = None;
+       }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL instrText
+//! instrText handler
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+//! @todo support all attributes etc.
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    while (!atEnd()) {
+        readNext();
+        if (m_complexCharStatus == InstrAllowed) {
+            QString instruction = text().toString().trimmed();
+
+            if (instruction.startsWith("HYPERLINK")) {
+                // Removes hyperlink, spaces and extra " chars
+                instruction.remove(0, 11);
+                instruction.truncate(instruction.size() - 1);
+                m_complexCharType = Hyperlink;
+                m_complexCharValue = instruction;
+            }
+            //! @todo: Add rest of the instructions
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL hyperlink
 //! hyperlink handler (Hyperlink)
 /*! ECMA-376, 17.3.3.31, p.1431.
@@ -722,12 +793,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     body = linkBuf.setWriter(body);
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(id)
-    if (id.isEmpty()) {
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (r_id.isEmpty()) {
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(id);
+        link_target = m_context->relationships->linkTarget(r_id);
     }
     kDebug() << "link_target:" << link_target;
 
@@ -946,6 +1017,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
             ELSE_TRY_READ_IF(pict)
+            ELSE_TRY_READ_IF(instrText)
+            ELSE_TRY_READ_IF(fldChar)
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
 //kDebug() <<"[1.5]";
@@ -1075,10 +1148,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
             const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == Hyperlink) {
+                body->startElement("text:a");
+                body->addAttribute("xlink:type", "simple");
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+            }
             body->startElement("text:span", false);
             body->addAttribute("text:style-name", currentTextStyleName);
             TRY_READ(t)
             body->endElement(); //text:span
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == Hyperlink) {
+                body->endElement(); // text:a
+            }
         }
 //kDebug() << "currentTextStyleName:" << currentTextStyleName;
         else {

@@ -93,6 +93,8 @@ protected:
     KoFilter::ConversionStatus read_shd(shdCaller caller);
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
+    KoFilter::ConversionStatus read_instrText();
+    KoFilter::ConversionStatus read_fldChar();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_dstrike();
     KoFilter::ConversionStatus read_caps();
@@ -139,6 +141,21 @@ private:
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style);
+
+    enum ComplexFieldChar {
+       None, Hyperlink
+    };
+    //! Type of complex field characters we have
+    ComplexFieldChar m_complexCharType;
+
+    //! Value of the complex field char if applicable
+    QString m_complexCharValue;
+
+    enum ComplexCharStatus {
+       NoneAllowed, InstrAllowed, InstrExecute
+    };
+    //! State of fldChar
+    ComplexCharStatus m_complexCharStatus;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
