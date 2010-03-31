@@ -717,7 +717,7 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
     style.addAttribute("draw:viewBox", viewBox);
     style.addAttribute("draw:d", d);
 
-    return m_styles.insert(style, "mks");;
+    return m_styles.insert(style, "mks");
 }
 
 const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)

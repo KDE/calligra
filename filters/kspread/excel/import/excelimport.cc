@@ -635,7 +635,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
         contentElement = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         buf.close();
         QString childElementName = QString::number(i).append("master-style");
-        KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);;
+        KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         masterStyle.addChildElement(childElementName, contentElement);
         masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
 

@@ -376,7 +376,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
         case 0: result = name( a, role ); break;
         case 1: result = timeZone( a, role ); break;
         default:
-            kDebug()<<"data: invalid display value column"<<index.column();;
+            kDebug()<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
     if ( result.isValid() ) {

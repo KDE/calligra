@@ -78,6 +78,7 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
             KColorScheme(QPalette::Active, KColorScheme::View).background(KColorScheme::AlternateBackground).color())
 {
+    Q_UNUSED(widget)
     //set defaults
     if (qApp) {
         baseColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
@@ -584,6 +585,8 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
                                     QPainter *pb, int r, int rowp, int cx, int cy,
                                     int colfirst, int collast, int maxwc)
 {
+    Q_UNUSED(cx);
+    Q_UNUSED(cy);
     if (!record)
         return;
     
@@ -2126,7 +2129,7 @@ void KexiTableView::slotAutoScroll()
 
 #ifndef KEXI_NO_PRINT
 void
-KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
+KexiTableView::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog*/)
 {
 // printer.setFullPage(true);
 #if 0

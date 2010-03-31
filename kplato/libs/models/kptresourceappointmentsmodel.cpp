@@ -1432,7 +1432,7 @@ const QMetaEnum ResourceAppointmentsRowModel::columnMap() const
 
 int ResourceAppointmentsRowModel::columnCount( const QModelIndex & parent ) const
 {
-    return columnMap().keyCount();;
+    return columnMap().keyCount();
 }
 
 int ResourceAppointmentsRowModel::rowCount( const QModelIndex & parent ) const

@@ -668,7 +668,7 @@ void KWTextDocumentLayout::layout()
 
         bottomOfText = line.line.y() + line.line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
-            TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());;
+            TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
             cleanupAnchors();
             return;

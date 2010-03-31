@@ -982,7 +982,7 @@ void ResourceAppointmentsGanttView::slotOptions()
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
-    return treeView()->loadContext( m_model->columnMap(), settings );;
+    return treeView()->loadContext( m_model->columnMap(), settings );
 }
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const

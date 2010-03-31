@@ -49,7 +49,7 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
     btn->setFixedWidth(QFontMetrics(btn->font()).width(" ... "));
     btn->setPopupDelay(1); //1 ms
 
-    m_timeEdit = new Q3TimeEdit(datetime.time(), this);;
+    m_timeEdit = new Q3TimeEdit(datetime.time(), this);
     m_timeEdit->setAutoAdvance(true);
     m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
     connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));

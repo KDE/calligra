@@ -67,7 +67,7 @@ void AppointmentIntervalTester::addInterval()
     
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt1, i.value().startTime() );
     QCOMPARE( dt2, i.value().endTime() );
@@ -87,7 +87,7 @@ void AppointmentIntervalTester::addInterval()
     
     lst.add( dt7, dt8, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt7, i.value().startTime() );
     QCOMPARE( dt1, i.value().endTime() );
@@ -111,7 +111,7 @@ void AppointmentIntervalTester::addInterval()
     
     lst.add( dt9, dt10, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt7, i.value().startTime() );
     QCOMPARE( dt9, i.value().endTime() );
@@ -139,7 +139,7 @@ void AppointmentIntervalTester::addInterval()
     
     lst.add( dt11, dt12, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt7, i.value().startTime() );
     QCOMPARE( dt9, i.value().endTime() );
@@ -176,7 +176,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt1, dt4, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt1, i.value().startTime() );
     QCOMPARE( dt2, i.value().endTime() );
@@ -197,7 +197,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt4, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt5, i.value().startTime() );
     QCOMPARE( dt1, i.value().endTime() );
@@ -223,7 +223,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt5, i.value().startTime() );
     QCOMPARE( dt1, i.value().endTime() );
@@ -253,7 +253,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt5, i.value().startTime() );
     QCOMPARE( dt1, i.value().endTime() );
@@ -283,7 +283,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt1, i.value().startTime() );
     QCOMPARE( dt5, i.value().endTime() );
@@ -313,7 +313,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt1, i.value().startTime() );
     QCOMPARE( dt5, i.value().endTime() );
@@ -339,7 +339,7 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
 {
-    QMutableMapIterator<QString, AppointmentInterval> i( lst );
+    QMutableMapIterator<AppointmentInterval, AppointmentInterval> i( lst );
     i.next();
     QCOMPARE( dt1, i.value().startTime() );
     QCOMPARE( dt5, i.value().endTime() );

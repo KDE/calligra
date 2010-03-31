@@ -242,7 +242,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
 
 void PreferenceDialog::Private::applyOpenSaveOptions()
 {
-    KSharedConfigPtr config = Factory::global().config();;
+    KSharedConfigPtr config = Factory::global().config();
     KConfigGroup parameterGroup = config->group("Parameters");
     Doc* doc = view->doc();
 

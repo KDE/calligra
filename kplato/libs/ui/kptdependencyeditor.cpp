@@ -1319,7 +1319,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                 return;
             }
             if ( fitem->type() == DependencyConnectorItem::Type ) {
-                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );;
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );
                 if ( citem->ctype() == DependencyNodeItem::Start ) {
                     //Goto prev nodes finishConnector
                     DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );
@@ -1354,7 +1354,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                 return;
             }
             if ( fitem->type() == DependencyConnectorItem::Type ) {
-                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );;
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );
                 if ( citem->ctype() == DependencyNodeItem::Finish ) {
                     //Goto prev nodes startConnector
                     DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );

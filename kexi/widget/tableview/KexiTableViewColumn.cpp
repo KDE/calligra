@@ -51,9 +51,9 @@ public:
 //------------------------
 
 KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
-        : m_columnInfo(0)
+        : m_field(&f)
+        , m_columnInfo(0)
         , m_visibleLookupColumnInfo(0)
-        , m_field(&f)
         , d(new Private)
 {
     m_isDBAware = false;
