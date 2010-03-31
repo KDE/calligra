@@ -198,6 +198,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handlePie(static_cast<PieRecord*>(record));
     else if (type == BarRecord::id)
         handleBar(static_cast<BarRecord*>(record));
+    else if (type == AreaRecord::id)
+        handleArea(static_cast<AreaRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -550,6 +552,12 @@ void ChartSubStreamHandler::handleBar(BarRecord *record)
     m_chart->m_impl = new Charting::BarImpl();
 }
 
+void ChartSubStreamHandler::handleArea(AreaRecord* record)
+{
+    if(!record) return;
+    m_chart->m_impl = new Charting::AreaImpl();
+}
+
 // type of data contained in the Number records following
 void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 {
@@ -599,7 +607,7 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
         case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
         case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
         case ObjectLinkRecord::SeriesOrDatapoints: {
-            if(record->wLinkVar1() >= (int)m_chart->m_series.count()) return;
+            if((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
             //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
             if(record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;

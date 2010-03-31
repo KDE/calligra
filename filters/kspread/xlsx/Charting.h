@@ -101,6 +101,13 @@ namespace Charting
         virtual QByteArray name() const { return "bar"; }
     };
 
+    class AreaImpl : public ChartImpl
+    {
+    public:
+        AreaImpl() : ChartImpl() {}
+        virtual QByteArray name() const { return "area"; }
+    };
+
     class Obj
     {
     public:
