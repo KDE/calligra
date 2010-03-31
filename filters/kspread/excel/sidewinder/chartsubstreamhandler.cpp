@@ -538,7 +538,10 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
     if(!record) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
-    m_chart->m_impl = new Charting::PieImpl(record->anStart(), record->pcDonut());
+    if(record->pcDonut() > 0)
+        m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
+    else
+        m_chart->m_impl = new Charting::PieImpl(record->anStart());
 }
 
 // type of data contained in the Number records following
@@ -590,7 +593,7 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
         case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
         case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
         case ObjectLinkRecord::SeriesOrDatapoints: {
-            if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->m_series.count()) return;
+            if(record->wLinkVar1() >= (int)m_chart->m_series.count()) return;
             //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
             if(record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;

@@ -73,11 +73,13 @@ protected:
     KoFilter::ConversionStatus read_legend();
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
+    KoFilter::ConversionStatus read_doughnutChart();
     KoFilter::ConversionStatus read_val();
     KoFilter::ConversionStatus read_cat();
     KoFilter::ConversionStatus read_tx();
     KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
+    KoFilter::ConversionStatus read_holeSize();
     
 private:
     XlsxXmlChartReaderContext *m_context;
