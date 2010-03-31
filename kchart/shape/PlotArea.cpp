@@ -547,7 +547,16 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.
-    d->initAxes();
+
+    //remove the default axes first
+    while( !d->axes.isEmpty() ) {
+        Axis *axis = d->axes.takeLast();
+        Q_ASSERT( axis );
+        if ( axis->title() )
+            d->automaticallyHiddenAxisTitles.removeAll( axis->title() );
+        delete axis;
+    }
+
     KoXmlElement n;
     forEachElement ( n, plotAreaElement ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
@@ -558,6 +567,20 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             axis->loadOdf( n, context );
             addAxis( axis );
         }
+    }
+
+    //2 axes are mandatory, check that we have them
+    if( !xAxis() ) {
+        Axis *xAxis = new Axis( this );
+        xAxis->setPosition( BottomAxisPosition );
+        xAxis->setVisible( false );
+        addAxis( xAxis );
+    }
+    if( !yAxis() ) {
+        Axis *yAxis = new Axis( this );
+        yAxis->setPosition( LeftAxisPosition );
+        yAxis->setVisible( false );
+        addAxis( yAxis );
     }
 
     CellRegion cellRangeAddress;
