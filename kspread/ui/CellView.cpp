@@ -86,7 +86,7 @@ public:
             , textWidth(0.0)
             , textHeight(0.0)
             , textLinesCount(0)
-            , shrinkToFitFontSize(0)
+            , shrinkToFitFontSize(0.0)
             , hidden(false)
             , merged(false)
             , obscured(false)
@@ -111,7 +111,7 @@ public:
     qreal  textHeight;
 
     int    textLinesCount;
-    int shrinkToFitFontSize;
+    qreal shrinkToFitFontSize;
 
     bool hidden         : 1;
     bool merged         : 1;
@@ -152,8 +152,8 @@ public:
 QFont CellView::Private::calculateFont() const
 {
     QFont f = style.font();
-    if (shrinkToFitFontSize > 0)
-        f.setPointSize(shrinkToFitFontSize);
+    if (shrinkToFitFontSize > 0.0)
+        f.setPointSizeF(shrinkToFitFontSize);
     return f;
 }
 
@@ -1032,6 +1032,8 @@ void CellView::paintMatrixElementIndicator(QPainter& painter,
 //
 void CellView::paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate)
 {
+    if (d->style.shrinkToFit())
+        return;
     // Show a red triangle when it's not possible to write all text in cell.
     // Don't print the red triangle if we're printing.
     if (!d->fittingWidth &&
@@ -1865,16 +1867,16 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
     // and check whether the text fits into the cell dimension by the way.
 
     d->calculateTextSize(font, fontMetrics);
-    d->shrinkToFitFontSize = 0;
+    d->shrinkToFitFontSize = 0.0;
 
-    //if shrink-to-fit is enabled, try to find a font size so that the string
+    //if shrink-to-fit is enabled, try to find a font size so that the string fits into the cell
     if (d->style.shrinkToFit()) {
         int lower = 1;
-        int upper = font.pointSize();
+        int upper = font.pointSize() * 2;
         int siz = 0;
         while (lower != upper) {
             siz = static_cast<int>( std::ceil( lower + ( upper - lower ) / 2. ) );
-            font.setPointSize(siz);
+            font.setPointSizeF(siz / 2.);
             fontMetrics = QFontMetricsF(font, &device);
             d->calculateTextSize(font, fontMetrics);
             if (d->fittingWidth)\
@@ -1882,11 +1884,13 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
             else
                 upper = siz - 1;
         }
-        d->shrinkToFitFontSize = upper;
-        font.setPointSize(upper);
+        d->shrinkToFitFontSize = upper / 2.0;
+        font.setPointSizeF(upper / 2.0);
         fontMetrics = QFontMetricsF(font, &device);
         d->calculateTextSize(font, fontMetrics); // update fittingWidth et al
+        d->fittingWidth = true;
     }
+
     // Obscure horizontal cells, if necessary.
     if (!d->fittingWidth) {
         obscureHorizontalCells(sheetView, cell);
@@ -1909,7 +1913,6 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
 //         // Recalculate the text dimensions and check whether the text fits.
 //         d->calculateTextSize(font, fontMetrics);
     }
-
     // Recalculate the text offset.
     textOffset(fontMetrics, cell);
 }
