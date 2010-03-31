@@ -196,6 +196,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleBRAI(static_cast<BRAIRecord*>(record));
     else if (type == PieRecord::id)
         handlePie(static_cast<PieRecord*>(record));
+    else if (type == BarRecord::id)
+        handleBar(static_cast<BarRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -386,9 +388,7 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
 {
     if(!record) return;
     DEBUG << std::endl;
-
-    if (m_chart->m_impl == 0 )
-        m_chart->m_impl = new Charting::BarImpl;//(record->anStart(), record->pcDonut());
+    //TODO
 }
 
 // specifies that chart is rendered in 3d scene
@@ -411,7 +411,6 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
-    //TODO
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
@@ -542,6 +541,13 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
         m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
     else
         m_chart->m_impl = new Charting::PieImpl(record->anStart());
+}
+
+// specifies that the chartgroup is a pie chart
+void ChartSubStreamHandler::handleBar(BarRecord *record)
+{
+    if(!record) return;
+    m_chart->m_impl = new Charting::BarImpl();
 }
 
 // type of data contained in the Number records following

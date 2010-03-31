@@ -105,6 +105,7 @@ private:
     void handleAxesUsed(AxesUsedRecord *);
     void handleAxisParent(AxisParentRecord *);
     void handlePie(PieRecord *record);
+    void handleBar(BarRecord *record);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);
