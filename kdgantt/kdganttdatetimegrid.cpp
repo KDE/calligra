@@ -591,7 +591,13 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()/24., headerRect.height()/2. ).toRect();
         opt.text = dt.time().toString( QString::fromAscii( "hh" ) );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 
     dt = d->chartXtoDateTime( offset+exposedRect.left() );
@@ -604,7 +610,13 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth(), headerRect.height()/2. ).toRect();
         opt.text = QDate::longDayName( dt.date().dayOfWeek() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 }
 
@@ -627,7 +639,13 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth(), headerRect.height()/2. ).toRect();
         opt.text = dt.toString( QString::fromAscii( "ddd" ) ).left( 1 );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 
     dt = d->chartXtoDateTime( offset+exposedRect.left() );
@@ -642,7 +660,13 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*7., headerRect.height()/2. ).toRect();
         opt.text = QString::number( dt.date().weekNumber() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 }
 
@@ -667,7 +691,13 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()*7, headerRect.height()/2. ).toRect();
         opt.text = QString::number( dt.date().weekNumber() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 
     // Paint a section for each month
@@ -682,7 +712,13 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*dt.date().daysTo( next ), headerRect.height()/2. ).toRect();
         opt.text = QDate::longMonthName( dt.date().month() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
         
         dt.setDate( next );
     }
@@ -708,7 +744,13 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()*dt.date().daysInMonth(), headerRect.height()/2. ).toRect();
         opt.text = QDate::shortMonthName( dt.date().month() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
     }
 
     // Paint a section for each year
@@ -723,7 +765,13 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*dt.date().daysTo( next ), headerRect.height()/2. ).toRect();
         opt.text = QString::number( dt.date().year() );
         opt.textAlignment = Qt::AlignCenter;
-        style->drawControl(QStyle::CE_Header, &opt, painter, widget);
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
         
         dt.setDate( next );
     }

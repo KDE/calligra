@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -2058,7 +2058,7 @@ void Form::createPropertiesForWidget(QWidget *w)
 
     // iterate over the property list, and create Property objects
     foreach(const QByteArray& propName, propNames) {
-        kDebug() << ">> " << propName;
+        //kDebug() << ">> " << propName;
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
         const QMetaProperty meta = subMeta.isValid() ? subMeta
@@ -3548,6 +3548,7 @@ void Form::setInlineEditorText(const QString& text)
 
 void Form::disableFilter(QWidget *w, Container *container)
 {
+    Q_UNUSED(container);
     ObjectTreeItem *tree = objectTree()->lookup(w->objectName());
     if (!tree)
         return;

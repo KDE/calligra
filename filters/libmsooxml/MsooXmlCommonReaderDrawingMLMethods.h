@@ -75,6 +75,8 @@ read_p_args m_read_DrawingML_p_args;
 
 KoFilter::ConversionStatus read_DrawingML_rPr();
 
+KoFilter::ConversionStatus read_hlinkClick();
+
 KoFilter::ConversionStatus read_DrawingML_pPr();
 
 KoFilter::ConversionStatus read_DrawingML_r();
@@ -144,5 +146,8 @@ QColor m_currentColor;
 QPen m_currentPen;
 
 double* m_currentDoubleValue;
+
+bool m_hyperLink;
+QString m_hyperLinkTarget;
 
 #endif

@@ -146,6 +146,8 @@ void DocxXmlDocumentReader::init()
     initInternal(); // MsooXmlCommonReaderImpl.h
     initDrawingML();
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
+    m_complexCharType = NoComplexFieldCharType;
+    m_complexCharStatus = NoneAllowed;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -662,6 +664,91 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL fldChar
+//! fldChar handler
+/* Complex field character
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+//! @todo support all attributes etc.
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(fldCharType)
+
+    if (!fldCharType.isEmpty()) {
+       if (fldCharType == "begin") {
+           m_complexCharStatus = InstrAllowed;
+       }
+       else if (fldCharType == "separate") {
+           m_complexCharStatus = InstrExecute;
+       }
+       else if (fldCharType == "end") {
+           m_complexCharStatus = NoneAllowed;
+           m_complexCharType = NoComplexFieldCharType;
+       }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lastRenderedPageBreak
+//! lastRenderedPageBreak handler
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_lastRenderedPageBreak()
+{
+    READ_PROLOGUE
+    m_currentParagraphStyle.addProperty("fo:break-before", "page");
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL instrText
+//! instrText handler
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+//! @todo support all attributes etc.
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    while (!atEnd()) {
+        readNext();
+        if (m_complexCharStatus == InstrAllowed) {
+            QString instruction = text().toString().trimmed();
+
+            if (instruction.startsWith("HYPERLINK")) {
+                // Removes hyperlink, spaces and extra " chars
+                instruction.remove(0, 11);
+                instruction.truncate(instruction.size() - 1);
+                m_complexCharType = HyperlinkComplexFieldCharType;
+                m_complexCharValue = instruction;
+            }
+            //! @todo: Add rest of the instructions
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL hyperlink
 //! hyperlink handler (Hyperlink)
 /*! ECMA-376, 17.3.3.31, p.1431.
@@ -722,12 +809,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     body = linkBuf.setWriter(body);
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(id)
-    if (id.isEmpty()) {
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (r_id.isEmpty()) {
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(id);
+        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
     }
     kDebug() << "link_target:" << link_target;
 
@@ -905,11 +992,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] drawing (DrawingML Object) §17.3.3.9
  - endnoteRef (Endnote Reference Mark) §17.11.6
  - [done] endnoteReference (Endnote Reference) §17.11.7
- - fldChar (Complex Field Character) §17.16.18
+ - [done] fldChar (Complex Field Character) §17.16.18
  - footnoteRef (Footnote Reference Mark) §17.11.13
  - [done] footnoteReference (Footnote Reference) §17.11.14
- - instrText (Field Code) §17.16.23
- - lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
+ - [done] instrText (Field Code) §17.16.23
+ - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
  - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
@@ -946,6 +1033,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(footnoteReference)
             ELSE_TRY_READ_IF(object)
             ELSE_TRY_READ_IF(pict)
+            ELSE_TRY_READ_IF(instrText)
+            ELSE_TRY_READ_IF(fldChar)
+            ELSE_TRY_READ_IF(lastRenderedPageBreak)
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
 //kDebug() <<"[1.5]";
@@ -1075,10 +1165,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
             const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->startElement("text:a");
+                body->addAttribute("xlink:type", "simple");
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+            }
             body->startElement("text:span", false);
             body->addAttribute("text:style-name", currentTextStyleName);
             TRY_READ(t)
             body->endElement(); //text:span
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->endElement(); // text:a
+            }
         }
 //kDebug() << "currentTextStyleName:" << currentTextStyleName;
         else {
@@ -1406,29 +1504,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(after)
-    const QString marginBottom(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(after));
-    if (!marginBottom.isEmpty()) {
-        m_currentParagraphStyle.addAttribute("fo:margin-bottom", marginBottom);
+    bool ok;
+    const int marginBottom = (TWIP_TO_POINT(after.toDouble(&ok)));
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", marginBottom);
     }
 
     TRY_READ_ATTR(before)
-    const QString marginTop(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(before));
-    if (!marginTop.isEmpty()) {
-        m_currentParagraphStyle.addAttribute("fo:margin-top", marginTop);
+    const int marginTop = (TWIP_TO_POINT(before.toDouble(&ok)));
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop);
     }
 
     // for rPr
     TRY_READ_ATTR(val)
 
-    bool ok;
-    const qreal pointSize = qreal(TWIP_TO_POINT(val.toInt(&ok)));
+    const int pointSize = (TWIP_TO_POINT(val.toInt(&ok)));
 
     if (ok) {
         m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
     }
 
     TRY_READ_ATTR(line)
-    const qreal lineSpace = qreal(TWIP_TO_POINT(line.toDouble(&ok)));
+    const int lineSpace = (TWIP_TO_POINT(line.toDouble(&ok)));
 
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);

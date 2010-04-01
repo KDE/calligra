@@ -72,16 +72,16 @@ MsooXmlRelationships::~MsooXmlRelationships()
     delete d;
 }
 
-QString MsooXmlRelationships::linkTarget(const QString& id)
+QString MsooXmlRelationships::linkTarget(const QString& id, const QString path, const QString file)
 {
-    if (!d->loadedFiles.contains("word/document.xml"))
-        d->loadRels("word", "document.xml");
+    if (!d->loadedFiles.contains(path + '/' + file)) {
+        d->loadRels(path, file);
+    }
 
     // try to find link target from rels. Only data at right side of target is needed.
     for (QMap<QString, QString>::ConstIterator it(d->rels.constBegin()); it!=d->rels.constEnd(); ++it) {
         if (it.key().endsWith(id)) {
-//! @todo is this hardcoded offset?
-            const int from_right = it.value().length() - 5;
+            const int from_right = it.value().length() - (path.size() + 1);
             return it.value().right(from_right);
         }
     }

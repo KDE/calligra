@@ -148,6 +148,7 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
         return KoFilter::UsageError;
     }
     const QString path = m_contentTypes.value(contentType);
+
     kDebug() << contentType << " path=" << path;
     if (path.isEmpty()) {
         errorMessage = i18n("Could not find path for type %1", QString(contentType));

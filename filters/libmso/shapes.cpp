@@ -524,7 +524,9 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("svg:y2", out.vOffset(y2));
     out.xml.addAttribute("svg:x1", out.hOffset(x1));
     out.xml.addAttribute("svg:x2", out.hOffset(x2));
-    processStyleAndText(o, out);
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    processText(o, out);
 
     out.xml.endElement();
 }

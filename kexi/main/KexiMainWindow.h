@@ -477,6 +477,17 @@ protected:
     /*! Used in openProject when running another Kexi process is required. */
     tristate openProjectInExternalKexiInstance(const QString& aFileName, const QString& fileNameForConnectionData, const QString& dbName);
 
+    /*! Updates info label of the property editor by reusing properties provided
+     by the current property set.
+     Read documentation of KexiPropertyEditorView class for information about accepted properties.
+     If the current property is 0 and @a textToDisplayForNullSet string is not empty, this string is displayed
+     (without icon or any other additional part).
+     If the current property is 0 and @a textToDisplayForNullSet string is empty, the info label widget becomes
+     hidden.
+     Implemented for KexiMainWindow.
+     @see KexiPropertyPaneViewBase::updateInfoLabelForPropertySet() */
+    virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
+
 protected slots:
 
     /*! Called once after timeout (after ctors are executed). */

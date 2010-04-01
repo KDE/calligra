@@ -67,6 +67,15 @@ KexiDB
 Reports
 *batch mode: generates output from data and design or shows report in data mode with minimal gui; add appropriate startup options and alter main window
 
+~~~~~~~~~~~~~~~~ 2.2 beta 1 ~~~~~~~~~~~~~~~~
+
+2010-03-30
+Reports
+*We're using term "item" instead of "control" in reports. So change report:control-source to report:item-data-source.
+Forms
+*Update info label when selected object's name changes
+TODO: properly reset name when renaming to "" fails
+
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 2010-03-07
 Utils

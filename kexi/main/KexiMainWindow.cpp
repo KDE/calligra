@@ -3698,7 +3698,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     if (window == currentWindow() && !window->isAttached()) {
         if (d->propEditor) {
             // ah, closing detached window - better switch off property buffer right now...
-            d->propBuffer = 0;
+            d->propertySet = 0;
             d->propEditor->editor()->changeSet(0);
         }
     }
@@ -4437,13 +4437,13 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
     << (_currentWindow ? _currentWindow->windowTitle() : QString("NULL"))
     << " window: " << (window ? window->windowTitle() : QString("NULL"));
     if (_currentWindow && _currentWindow != window) {
-        d->propBuffer = 0; //we'll need to move to another prop. set
+        d->propertySet = 0; //we'll need to move to another prop. set
         return;
     }
     if (d->propEditor) {
-        KoProperty::Set *newBuf = _currentWindow ? _currentWindow->propertySet() : 0;
-        if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
-            d->propBuffer = newBuf;
+        KoProperty::Set *newSet = _currentWindow ? _currentWindow->propertySet() : 0;
+        if (!newSet || (force || static_cast<KoProperty::Set*>(d->propertySet) != newSet)) {
+            d->propertySet = newSet;
             if (preservePrevSelection || force) {
                 KoProperty::EditorView::SetOptions options = KoProperty::EditorView::ExpandChildItems;
                 if (preservePrevSelection) {
@@ -4454,17 +4454,17 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
                 }
 
                 if (propertyToSelect.isEmpty()) {
-                    d->propEditor->editor()->changeSet(d->propBuffer, options);
+                    d->propEditor->editor()->changeSet(d->propertySet, options);
                 }
                 else {
-                    d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect, options);
+                    d->propEditor->editor()->changeSet(d->propertySet, propertyToSelect, options);
                 }
             }
         }
 /*moved to d->updatePropEditorVisibility()
         const bool inDesignMode = _currentWindow && _currentWindow->currentViewMode() == Kexi::DesignViewMode;
-        if (   (newBuf && inDesignMode)
-            || (!newBuf && inDesignMode && _currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode()))
+        if (   (newSet && inDesignMode)
+            || (!newSet && inDesignMode && _currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode()))
         {
             d->propEditorDockWidget->setVisible(true);
         }
@@ -5243,6 +5243,11 @@ void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
 void KexiMainWindow::addToolBarAction(const QString& toolBarName, QAction *action)
 {
     d->tabbedToolBar->addAction(toolBarName, action);
+}
+
+void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet)
+{
+    d->propEditor->updateInfoLabelForPropertySet(d->propertySet, textToDisplayForNullSet);
 }
 
 #include "KexiMainWindow.moc"

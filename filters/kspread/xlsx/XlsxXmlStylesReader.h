@@ -25,6 +25,7 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlThemesReader.h>
+#include <QtCore/QFlags>
 #include <QColor>
 
 class KoCharacterStyle;
@@ -35,16 +36,20 @@ class XlsxCellFormat;
 class XlsxXmlStylesReader;
 
 //! Color information. Used by background and foregound color for XlsxFillStyle, by color of XlsxFontStyle
+//! See MSOOXML's CT_Color content model
 class XlsxColorStyle
 {
 public:
     XlsxColorStyle();
 
+    //! Clears the style to default values.
+    void clear();
+
     //! @return true if this color style is valid
     bool isValid(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
 
     //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
-//! @todo use indexed, theme
+//! @todo use indexed
     QColor value(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
 
     KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const char* debugElement);
@@ -199,6 +204,47 @@ private:
     mutable XlsxColorStyle* cachedRealBackgroundColor;
 };
 
+//! Single XLSX border style definition
+/*! @see XlsxXmlStylesReader::read_borders() */
+class XlsxBorderStyle
+{
+public:
+    XlsxBorderStyle();
+
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs);
+
+    QString setupCellStyle(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+
+    XlsxColorStyle color;
+private:
+    QString style;
+};
+
+//! Four XLSX border styles definition
+/*! @see XlsxXmlStylesReader::read_borders() */
+class XlsxBorderStyles
+{
+public:
+    XlsxBorderStyles();
+
+    void setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+
+    XlsxBorderStyle top;
+    XlsxBorderStyle right;
+    XlsxBorderStyle bottom;
+    XlsxBorderStyle left;
+    enum DiagonalDirection {
+        DiagonalUp = 1,
+        DiagonalDown = 2
+    };
+    Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
+    DiagonalDirections diagonalDirections;
+
+    XlsxBorderStyle diagonal;
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxBorderStyles::DiagonalDirections)
+
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
 /*! @see XlsxXmlStylesReader::read_cellXfs() */
 class XlsxCellFormat
@@ -341,6 +387,13 @@ public:
         return fillStyles[id];
     }
 
+    //! @return border style for id @a id (counted from 0)
+    XlsxBorderStyles* borderStyle(int id) const {
+        if (id < 0 || id >= borderStyles.size())
+            return 0;
+        return borderStyles[id];
+    }
+
     //! @return cell format for id @a id (counted from 0)
     XlsxCellFormat* cellFormat(int id) const {
         if (id < 0 || id >= cellFormats.size())
@@ -359,6 +412,7 @@ protected:
 
     QVector<XlsxFontStyle*> fontStyles;
     QVector<XlsxFillStyle*> fillStyles;
+    QVector<XlsxBorderStyles*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
 
@@ -412,17 +466,26 @@ protected:
 //! @todo implement read_gradientFill
     KoFilter::ConversionStatus read_gradientFill();
 //! @todo implement read_stop()
-//! @todo implement read_color()
+    KoFilter::ConversionStatus read_borders();
+    KoFilter::ConversionStatus read_border();
+    KoFilter::ConversionStatus read_top();
+    KoFilter::ConversionStatus read_bottom();
+    KoFilter::ConversionStatus read_left();
+    KoFilter::ConversionStatus read_right();
+    KoFilter::ConversionStatus read_diagonal();
 
     uint m_fontStyleIndex;
     uint m_fillStyleIndex;
     uint m_cellFormatIndex;
+    uint m_borderStyleIndex;
 
     XlsxXmlStylesReaderContext* m_context;
 
+    XlsxColorStyle *m_currentColorStyle; //!< set by read_color()
     XlsxFontStyle *m_currentFontStyle;
     XlsxFillStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
+    XlsxBorderStyles *m_currentBorderStyle;
 
 private:
     void init();
