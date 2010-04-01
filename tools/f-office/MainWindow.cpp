@@ -408,6 +408,9 @@ void MainWindow::openDocument(const QString &fileName)
     setCentralWidget(m_controller);
     QTimer::singleShot(250, this, SLOT(updateUI()));
 
+    // We need to get the page count again after layout rounds.
+    connect(m_doc, SIGNAL(void finishedLayout()), this, SLOT( updateUI()));
+
     KoCanvasBase *canvas = m_controller->canvas();
     connect(canvas->resourceManager(),
             SIGNAL(resourceChanged(int, const QVariant &)),

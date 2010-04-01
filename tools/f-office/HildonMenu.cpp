@@ -69,7 +69,6 @@ void HildonMenu::addMenuItem(QAction* action)
         m_layout->setRowMinimumHeight(m_row, 64);
     }
     QPushButton *b = new QPushButton(action->text(), this);
-    b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(b, SIGNAL(clicked(bool)), SLOT(accept()));
     connect(b, SIGNAL(clicked(bool)), action, SIGNAL(triggered()));
     m_layout->addWidget(b, m_row, m_col);
