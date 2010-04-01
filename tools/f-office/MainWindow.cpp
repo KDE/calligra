@@ -136,7 +136,6 @@ void MainWindow::init()
     connect(m_ui->actionNextPage, SIGNAL(triggered()), this, SLOT(nextPage()));
     connect(m_ui->actionPrevPage, SIGNAL(triggered()), this, SLOT(prevPage()));
 
-    connect(m_ui->actionPanningOn, SIGNAL(triggered()), this, SLOT(toggleSelection()));
     m_ui->actionCopy->setEnabled(false);
     connect(m_ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
 
@@ -391,6 +390,8 @@ void MainWindow::openDocument(const QString &fileName)
 
     if (!QString::compare(ext, EXT_ODP, Qt::CaseInsensitive) ||
             !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
             !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive)) {
         m_type = Presentation;
     } else if (!QString::compare(ext, EXT_ODS, Qt::CaseInsensitive) ||
@@ -433,8 +434,8 @@ bool MainWindow::checkFiletype(const QString &fileName)
     QList<QString> extensions;
     //Add Txt extension after adding ascii filter to koffice package
     /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
-    extensions << EXT_DOC << EXT_DOCX << EXT_ODT  \
-    << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_RTF \
+    extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \
+    << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX \
     << EXT_ODS << EXT_XLS << EXT_XLSX;
     QString ext = KMimeType::extractKnownExtension(fileName);
 
@@ -900,9 +901,7 @@ void MainWindow::updateActions()
     m_ui->actionZoomLevel->setEnabled(docLoaded);
     m_ui->actionNextPage->setEnabled(docLoaded);
     m_ui->actionPrevPage->setEnabled(docLoaded);
-    m_ui->actionPanningOn->setEnabled(docLoaded);
 }
-
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
@@ -1020,7 +1019,6 @@ void MainWindow::activeToolChanged(KoCanvasController* canvas, int)
 
     canvas->setProperty("FingerScrollable", true);
     m_ui->actionCopy->setEnabled(newTool == TextTool_ID);
-    m_ui->actionPanningOn->setChecked(newTool == TextTool_ID);
 }
 
 void MainWindow::setShowProgressIndicator(bool visible)
