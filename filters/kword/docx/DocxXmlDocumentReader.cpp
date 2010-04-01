@@ -699,6 +699,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL lastRenderedPageBreak
+//! lastRenderedPageBreak handler
+/*
+ Parent elements:
+ - r (§17.3.2.25)
+ - r (§22.1.2.87)
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_lastRenderedPageBreak()
+{
+    READ_PROLOGUE
+    m_currentParagraphStyle.addProperty("fo:break-before", "page");
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL instrText
 //! instrText handler
 /*
@@ -976,11 +992,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] drawing (DrawingML Object) §17.3.3.9
  - endnoteRef (Endnote Reference Mark) §17.11.6
  - [done] endnoteReference (Endnote Reference) §17.11.7
- - fldChar (Complex Field Character) §17.16.18
+ - [done] fldChar (Complex Field Character) §17.16.18
  - footnoteRef (Footnote Reference Mark) §17.11.13
  - [done] footnoteReference (Footnote Reference) §17.11.14
- - instrText (Field Code) §17.16.23
- - lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
+ - [done] instrText (Field Code) §17.16.23
+ - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
  - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
@@ -1019,6 +1035,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(pict)
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
+            ELSE_TRY_READ_IF(lastRenderedPageBreak)
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
 //kDebug() <<"[1.5]";
