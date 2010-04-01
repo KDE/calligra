@@ -142,11 +142,11 @@ private:
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style);
 
-    enum ComplexFieldChar {
-       None, Hyperlink
+    enum ComplexFieldCharType {
+       NoComplexFieldCharType, HyperlinkComplexFieldCharType
     };
     //! Type of complex field characters we have
-    ComplexFieldChar m_complexCharType;
+    ComplexFieldCharType m_complexCharType;
 
     //! Value of the complex field char if applicable
     QString m_complexCharValue;

@@ -146,7 +146,7 @@ void DocxXmlDocumentReader::init()
     initInternal(); // MsooXmlCommonReaderImpl.h
     initDrawingML();
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
-    m_complexCharType = None;
+    m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
 }
 
@@ -690,7 +690,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
        }
        else if (fldCharType == "end") {
            m_complexCharStatus = NoneAllowed;
-           m_complexCharType = None;
+           m_complexCharType = NoComplexFieldCharType;
        }
     }
 
@@ -722,7 +722,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 // Removes hyperlink, spaces and extra " chars
                 instruction.remove(0, 11);
                 instruction.truncate(instruction.size() - 1);
-                m_complexCharType = Hyperlink;
+                m_complexCharType = HyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
             //! @todo: Add rest of the instructions
@@ -1148,7 +1148,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
             const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-            if (m_complexCharStatus == InstrExecute && m_complexCharType == Hyperlink) {
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
                 body->addAttribute("xlink:type", "simple");
                 body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
@@ -1157,7 +1157,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             body->addAttribute("text:style-name", currentTextStyleName);
             TRY_READ(t)
             body->endElement(); //text:span
-            if (m_complexCharStatus == InstrExecute && m_complexCharType == Hyperlink) {
+            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->endElement(); // text:a
             }
         }
