@@ -768,7 +768,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     quint16 shapeType = o.shapeProp.rh.recInstance;
     if (shapeType == msosptEllipse) {
         processEllipse(o, out);
-    } else if (shapeType == msosptRectangle) {
+    } else if (shapeType == msosptRectangle
+               || shapeType == msosptTextBox) {
         processRectangle(o, out);
     } else if (shapeType == msosptRoundRectangle) {
         processRoundRectangle(o, out);
@@ -808,9 +809,6 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     } else if (shapeType == msosptPictureFrame
                || shapeType == msosptHostControl) {
         processPictureFrame(o, out);
-    } else if (shapeType == msosptTextBox) {
-        qDebug() << "what's my name!' " << shapeType;
-        //processTextObjectForBody(o, , out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
