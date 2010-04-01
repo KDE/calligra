@@ -40,6 +40,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
     m_colorType = BackgroundColor;
+    m_hyperLink = false;
 }
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
@@ -764,7 +765,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
  - gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
  - [done] highlight (Highlight Color) §21.1.2.3.4
- - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
  - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
  - [done] latin (Latin Font) §21.1.2.3.7
  - [done] ln (Outline) §20.1.2.2.24
@@ -784,8 +785,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     READ_PROLOGUE2(DrawingML_rPr)
     m_colorType = TextColor;
 
-    const QXmlStreamAttributes attrs(attributes());
+    m_hyperLink = false;
 
+    const QXmlStreamAttributes attrs(attributes());
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
 //    delete m_currentTextStyleProperties;
@@ -806,6 +808,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
                 TRY_READ(DrawingML_highlight)
             }
             ELSE_TRY_READ_IF(ln)
+            ELSE_TRY_READ_IF(hlinkClick)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -874,10 +877,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
     if (QUALIFIED_NAME_IS(t)) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+        if (m_hyperLink) {
+            body->startElement("text:a");
+            body->addAttribute("xlink:type", "simple");
+            body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
+        }
         body->startElement("text:span", false);
         body->addAttribute("text:style-name", currentTextStyleName);
         TRY_READ(t)
         body->endElement(); //text:span
+        if (m_hyperLink) {
+            body->endElement(); // text:a
+        }   
     }
     else {
         undoReadNext();
@@ -890,6 +901,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
 //    READ_EPILOGUE
     return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL hlinkClick
+//! hlinkClick handler
+/*!
+ Parent elements:
+ - cNvPr (§21.3.2.7)
+ - cNvPr (§20.1.2.2.8)
+ - cNvPr (§20.2.2.3) 
+ - cNvPr (§20.5.2.8) 
+ - cNvPr (§19.3.1.12)
+ - defRPr (§21.1.2.3.2)
+ - docPr (§20.4.2.5) 
+ - endParaRPr (§21.1.2.2.3)
+ - [done] rPr (§21.1.2.3.9)
+
+ Child elements:
+ - extLst (§20.1.2.2.15)
+ - snd (§20.1.2.2.32)
+
+TODO....
+ Attributes..
+ Children..
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+
+    if (r_id.isEmpty()) {
+        m_hyperLinkTarget.clear();
+    }
+    else {
+        m_hyperLink = true;
+        m_hyperLinkTarget = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+    }
+
+    while (!atEnd()) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL

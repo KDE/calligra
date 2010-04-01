@@ -814,7 +814,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(r_id);
+        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
     }
     kDebug() << "link_target:" << link_target;
 
