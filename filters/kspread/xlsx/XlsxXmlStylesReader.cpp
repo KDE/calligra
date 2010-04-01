@@ -108,8 +108,16 @@ kDebug() << tint << tintValue;
 //----------------------------------------------------------
 
 XlsxColorStyle::XlsxColorStyle()
-        : automatic(false), indexed(-1), tint(0.0), theme(-1)
 {
+    clear();
+}
+
+void XlsxColorStyle::clear()
+{
+    automatic = false;
+    indexed = -1;
+    tint = 0.0;
+    theme = -1;
 }
 
 bool XlsxColorStyle::isValid(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
@@ -124,6 +132,7 @@ kDebug() << themeColor(themes).isValid();
 
 QColor XlsxColorStyle::themeColor(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
 {
+    Q_ASSERT(themes);
 //! @todo find proper theme, not just any
     MSOOXML::DrawingMLTheme *themeObject = themes->constBegin().value();
 kDebug() << themeObject;
@@ -194,6 +203,75 @@ XlsxFillStyle::XlsxFillStyle()
 XlsxFillStyle::~XlsxFillStyle()
 {
     delete cachedRealBackgroundColor;
+}
+
+XlsxBorderStyle::XlsxBorderStyle()
+{
+}
+
+QString XlsxBorderStyle::setupCellStyle(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+{
+    QString styleString = this->style;
+
+    QColor c;
+    if (color.isValid(themes)) {
+        c = color.value(themes);
+    }
+    else if (!this->style.isEmpty()) {
+        c = Qt::black;
+    }
+    if (c.isValid()) {
+        if (!styleString.isEmpty())
+            styleString.append(' ');
+        styleString.append(c.name());
+    }
+    return styleString;
+}
+
+//! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-style
+//! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-width
+KoFilter::ConversionStatus XlsxBorderStyle::readAttributes(
+    const QXmlStreamAttributes& attrs)
+{
+    QString s;
+//! @todo more styles
+    TRY_READ_ATTR_WITHOUT_NS_INTO(style, s)
+    if (s == QLatin1String("dashed") || s == QLatin1String("dotted") || s == QLatin1String("double")) {
+        style = s;
+    }
+    else if (s == QLatin1String("medium") || s == QLatin1String("thick")
+             || s == QLatin1String("thin"))
+    {
+        style = s + " solid";
+    }
+    else if (s == QLatin1String("none"))
+        style = QLatin1String("hidden");
+    else
+        style = QLatin1String("solid");
+    kDebug() << "style:" << s << "set to:" << style;
+    return KoFilter::OK;
+}
+
+XlsxBorderStyles::XlsxBorderStyles()
+{
+}
+
+void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+{
+//! @todo simplify if 2 or 4 sides are the same
+    QString s;
+    s = top.setupCellStyle(themes);
+    if (!s.isEmpty())
+        cellStyle->addProperty("fo:border-top", s);
+    s = right.setupCellStyle(themes);
+    if (!s.isEmpty())
+        cellStyle->addProperty("fo:border-right", s);
+    s = bottom.setupCellStyle(themes);
+    if (!s.isEmpty())
+        cellStyle->addProperty("fo:border-bottom", s);
+    s = left.setupCellStyle(themes);
+    if (!s.isEmpty())
+        cellStyle->addProperty("fo:border-left", s);
 }
 
 static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes )
@@ -621,7 +699,7 @@ bool XlsxCellFormat::setupCellStyle(
     const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,
     KoGenStyle* cellStyle) const
 {
-    kDebug() << "fontId:" << fontId << "fillId:" << fillId;
+    kDebug() << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;
     if (applyAlignment) {
         setupCellStyleAlignment(cellStyle);
     }
@@ -640,6 +718,12 @@ bool XlsxCellFormat::setupCellStyle(
             return false;
         }
         fillStyle->setupCellStyle(cellStyle, themes);
+    }
+    if (applyBorder && borderId >= 0) {
+        XlsxBorderStyles *borderStyles = styles->borderStyle(borderId);
+        if (borderStyles) {
+            borderStyles->setupCellStyle(cellStyle, themes);
+        }
     }
     return true;
 }
@@ -683,6 +767,8 @@ void XlsxXmlStylesReader::init()
     m_fontStyleIndex = 0;
     m_fillStyleIndex = 0;
     m_cellFormatIndex = 0;
+    m_borderStyleIndex = 0;
+    m_currentColorStyle = 0;
     m_currentFontStyle = 0;
     m_currentFillStyle = 0;
     m_currentCellFormat = 0;
@@ -766,6 +852,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
             ELSE_TRY_READ_IF(fills)
             ELSE_TRY_READ_IF(numFmts)
             ELSE_TRY_READ_IF(cellXfs)
+            ELSE_TRY_READ_IF(borders)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -877,7 +964,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
     {
         BREAK_IF_END_OF( CURRENT_EL );
         readNext();
-        break;
     }
 
     READ_EPILOGUE
@@ -936,7 +1022,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(i)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
-            ELSE_TRY_READ_IF(color)
+            else if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentFontStyle->color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
             ELSE_TRY_READ_IF(vertAlign)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -983,7 +1073,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_sz()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1009,7 +1098,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_vertAlign()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1034,7 +1122,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1061,7 +1148,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_b()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1088,7 +1174,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_i()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1115,7 +1200,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_strike()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1142,7 +1226,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1157,7 +1240,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
  Child elements:
  - stop (Gradient Stop) §18.8.38
  Parent elements:
- - bottom (§18.8.6)
+ - [done] bottom (§18.8.6)
  - colorScale (§18.3.1.16)
  - dataBar (§18.3.1.28)
  - diagonal (§18.8.13)
@@ -1168,22 +1251,22 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
  - rPr (§18.4.7)
  - start (§18.8.37)
  - stop (§18.8.38)
- - top (§18.8.43)
+ - [done] top (§18.8.43)
  - vertical (§18.8.44)
 
  @todo support all elements
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
 {
-    Q_ASSERT(m_currentFontStyle);
+    Q_ASSERT(m_currentColorStyle);
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentFontStyle->color.readAttributes(attrs, "color") )
+    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, "color") )
+
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1251,7 +1334,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
  - applyFont
  - applyNumberFormat
  - applyProtection
- - borderId
+ - [done] borderId
  - fillId
  - [done] fontId
  - numFmtId
@@ -1356,7 +1439,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1577,7 +1659,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1606,7 +1687,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-        break;
     }
     READ_EPILOGUE
 }
@@ -1637,6 +1717,173 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
         if (isStartElement()) {
 //! @todo            TRY_READ_IF(stop)
 //todo            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL borders
+//! 18.8.5 borders (Borders), p. 1951
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
+{
+    READ_PROLOGUE
+    if (!m_context->styles->borderStyles.isEmpty()) {
+        raiseUnexpectedSecondOccurenceOfElError(STRINGIFY(CURRENT_EL));
+    }
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(count)
+    uint countNumber = 0;
+    STRING_TO_INT(count, countNumber, "styleSheet/borders@count")
+    m_context->styles->borderStyles.resize(countNumber);
+    m_borderStyleIndex = 0;
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(border)
+//todo            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL border
+//! 18.8.4 border (Border), p. 1949
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
+{
+    READ_PROLOGUE
+    if (m_borderStyleIndex >= (uint)m_context->styles->borderStyles.size()) {
+        raiseError(i18n("Declared number of border styles too small (%1)", m_context->styles->borderStyles.size()));
+        return KoFilter::WrongFormat;
+    }
+
+    kDebug() << "border #" << m_borderStyleIndex;
+    m_currentBorderStyle = new XlsxBorderStyles;
+    MSOOXML::Utils::AutoPtrSetter<XlsxBorderStyles> currentBorderStyleSetter(m_currentBorderStyle);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(bottom)
+//! @todo         ELSE_TRY_READ_IF(diagonal)
+//! @todo            ELSE_TRY_READ_IF(end)
+//! @todo (dxf only)            ELSE_TRY_READ_IF(horizontal)
+            ELSE_TRY_READ_IF(left)
+//! @todo            ELSE_TRY_READ_IF(start)
+            ELSE_TRY_READ_IF(right)
+            ELSE_TRY_READ_IF(top)
+//! @todo (dxf only)            ELSE_TRY_READ_IF(vertical)
+//todo            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    currentBorderStyleSetter.release();
+    m_context->styles->borderStyles[m_borderStyleIndex] = m_currentBorderStyle;
+    m_currentBorderStyle = 0;
+    m_borderStyleIndex++;
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bottom
+//! 18.8.6 bottom (Bottom Border), p. 1952
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    RETURN_IF_ERROR( m_currentBorderStyle->bottom.readAttributes(attrs) )
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentBorderStyle->bottom.color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL top
+//! 18.8.6 bottom (Bottom Border), p. 1952
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    RETURN_IF_ERROR( m_currentBorderStyle->top.readAttributes(attrs) )
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentBorderStyle->top.color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL left
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    RETURN_IF_ERROR( m_currentBorderStyle->left.readAttributes(attrs) )
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentBorderStyle->left.color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL right
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    RETURN_IF_ERROR( m_currentBorderStyle->right.readAttributes(attrs) )
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentBorderStyle->right.color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
+            ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
