@@ -286,10 +286,6 @@ void PptToOdp::DrawClient::addTextStyles(
         listStyle = getTextMasterStyleAtom(ppttoodp->currentMaster,
                                                      textType);
     }
-    // small workaround to avoid presenation frames from having borders,
-    // even though the ppt file seems to specify that they should have one
-    style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
-    //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     if (listStyle && listStyle->lstLvl1) {
         PptTextPFRun pf(ppttoodp->p->documentContainer,
                         ppttoodp->currentMaster,
@@ -297,8 +293,14 @@ void PptToOdp::DrawClient::addTextStyles(
         ppttoodp->defineParagraphProperties(style, pf);
         ppttoodp->defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
-    const QString styleName = out.styles.insert(style);
     bool isPlaceholder = cd && cd->placeholderAtom;
+    if (isPlaceholder) {
+        // small workaround to avoid presenation frames from having borders,
+        // even though the ppt file seems to specify that they should have one
+        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
+        //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
+    }
+    const QString styleName = out.styles.insert(style);
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
     } else {
