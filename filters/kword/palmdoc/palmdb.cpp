@@ -159,14 +159,14 @@ bool PalmDB::load(const char* filename)
 
     // debugging
 #ifdef PDB_DEBUG
-    qDebug("name: \"%s\"", m_name.toLatin1());
-    qDebug("type: \"%s\"", m_type.toLatin1());
-    qDebug("creator: \"%s\"", m_creator.toLatin1());
+    qDebug("name: \"%s\"", qPrintable(m_name));
+    qDebug("type: \"%s\"", qPrintable(m_type));
+    qDebug("creator: \"%s\"", qPrintable(m_creator));
     qDebug("attributes: 0x%04X", m_attributes);
     qDebug("version: 0x%04X", m_version);
-    qDebug("creation date: %s", m_creationDate.toString().toLatin1());
-    qDebug("modification date: %s", m_modificationDate.toString().toLatin1());
-    qDebug("last backup date: %s", m_lastBackupDate.toString().toLatin1());
+    qDebug("creation date: %s", qPrintable(m_creationDate.toString()));
+    qDebug("modification date: %s", qPrintable(m_modificationDate.toString()));
+    qDebug("last backup date: %s", qPrintable(m_lastBackupDate.toString()));
     qDebug("number of records: %d", numrec);
     for (int r = 0; r < numrec; r++)
         qDebug("  rec %d at 0x%X size %d", r, recpos[r], recsize[r]);
