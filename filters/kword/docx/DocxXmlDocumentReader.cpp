@@ -1504,29 +1504,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(after)
-    const QString marginBottom(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(after));
-    if (!marginBottom.isEmpty()) {
-        m_currentParagraphStyle.addAttribute("fo:margin-bottom", marginBottom);
+    bool ok;
+    const int marginBottom = (TWIP_TO_POINT(after.toDouble(&ok)));
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", marginBottom);
     }
 
     TRY_READ_ATTR(before)
-    const QString marginTop(MSOOXML::Utils::ST_TwipsMeasure_to_ODF(before));
-    if (!marginTop.isEmpty()) {
-        m_currentParagraphStyle.addAttribute("fo:margin-top", marginTop);
+    const int marginTop = (TWIP_TO_POINT(before.toDouble(&ok)));
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop);
     }
 
     // for rPr
     TRY_READ_ATTR(val)
 
-    bool ok;
-    const qreal pointSize = qreal(TWIP_TO_POINT(val.toInt(&ok)));
+    const int pointSize = (TWIP_TO_POINT(val.toInt(&ok)));
 
     if (ok) {
         m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
     }
 
     TRY_READ_ATTR(line)
-    const qreal lineSpace = qreal(TWIP_TO_POINT(line.toDouble(&ok)));
+    const int lineSpace = (TWIP_TO_POINT(line.toDouble(&ok)));
 
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
