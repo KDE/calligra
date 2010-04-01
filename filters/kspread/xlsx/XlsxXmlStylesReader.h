@@ -25,6 +25,7 @@
 #define XLSXXMLSTYLESREADER_H
 
 #include <MsooXmlThemesReader.h>
+#include <QtCore/QFlags>
 #include <QColor>
 
 class KoCharacterStyle;
@@ -232,7 +233,17 @@ public:
     XlsxBorderStyle right;
     XlsxBorderStyle bottom;
     XlsxBorderStyle left;
+    enum DiagonalDirection {
+        DiagonalUp = 1,
+        DiagonalDown = 2
+    };
+    Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
+    DiagonalDirections diagonalDirections;
+
+    XlsxBorderStyle diagonal;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxBorderStyles::DiagonalDirections)
 
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
 /*! @see XlsxXmlStylesReader::read_cellXfs() */
@@ -461,6 +472,7 @@ protected:
     KoFilter::ConversionStatus read_bottom();
     KoFilter::ConversionStatus read_left();
     KoFilter::ConversionStatus read_right();
+    KoFilter::ConversionStatus read_diagonal();
 
     uint m_fontStyleIndex;
     uint m_fillStyleIndex;

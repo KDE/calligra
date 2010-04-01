@@ -272,6 +272,15 @@ void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString,
     s = left.setupCellStyle(themes);
     if (!s.isEmpty())
         cellStyle->addProperty("fo:border-left", s);
+    if (diagonalDirections) {
+        s = diagonal.setupCellStyle(themes);
+        if (diagonalDirections & DiagonalUp) {
+            cellStyle->addProperty("style:diagonal-bl-tr", s);
+        }
+        if (diagonalDirections & DiagonalDown) {
+            cellStyle->addProperty("style:diagonal-tl-br", s);
+        }
+    }
 }
 
 static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes )
@@ -1243,7 +1252,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
  - [done] bottom (§18.8.6)
  - colorScale (§18.3.1.16)
  - dataBar (§18.3.1.28)
- - diagonal (§18.8.13)
+ - [done] diagonal (§18.8.13)
  - end (§18.8.16)
  - [done] font (§18.8.22)
  - horizontal (§18.8.25)
@@ -1253,6 +1262,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
  - stop (§18.8.38)
  - [done] top (§18.8.43)
  - vertical (§18.8.44)
+ - [done] left
+ - [done] right
 
  @todo support all elements
 */
@@ -1767,11 +1778,18 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
     m_currentBorderStyle = new XlsxBorderStyles;
     MSOOXML::Utils::AutoPtrSetter<XlsxBorderStyles> currentBorderStyleSetter(m_currentBorderStyle);
 
+    if (readBooleanAttr("diagonalUp")) {
+        m_currentBorderStyle->diagonalDirections |= XlsxBorderStyles::DiagonalUp;
+    }
+    if (readBooleanAttr("diagonalDown")) {
+        m_currentBorderStyle->diagonalDirections |= XlsxBorderStyles::DiagonalDown;
+    }
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(bottom)
-//! @todo         ELSE_TRY_READ_IF(diagonal)
+            ELSE_TRY_READ_IF(diagonal)
 //! @todo            ELSE_TRY_READ_IF(end)
 //! @todo (dxf only)            ELSE_TRY_READ_IF(horizontal)
             ELSE_TRY_READ_IF(left)
@@ -1880,6 +1898,30 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->right.color;
+                TRY_READ(color)
+                m_currentColorStyle = 0;
+            }
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL diagonal
+//! @todo support all elements
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    RETURN_IF_ERROR( m_currentBorderStyle->diagonal.readAttributes(attrs) )
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(color)) {
+                m_currentColorStyle = &m_currentBorderStyle->diagonal.color;
                 TRY_READ(color)
                 m_currentColorStyle = 0;
             }
