@@ -174,8 +174,10 @@ namespace Charting
         QString m_verticalCellRangeAddress;
         /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
         ChartImpl *m_impl;
+        /// Whether the chart is vertical or not
+        bool m_transpose;
 
-        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0) {}
+        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false) {}
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; }
         
         void addRange(const QRect& range)

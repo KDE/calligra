@@ -550,6 +550,7 @@ void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
     if(!record || m_chart->m_impl) return;
     m_chart->m_impl = new Charting::BarImpl();
+    m_chart->m_transpose = record->isFTranspose();
 }
 
 // specifies that the chartgroup is a area chart
