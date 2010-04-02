@@ -96,6 +96,7 @@ GenericName[x-test]=xxSpreadsheetxx
 GenericName[zh_CN]=电子表格
 GenericName[zh_TW]=工作表
 Comment=Write spreadsheet documents
+Comment[ca]=Escriu documents de full de càlcul
 Comment[da]=Skriv regnearksdokumenter
 Comment[en_GB]=Write spreadsheet documents
 Comment[et]=Tabelidokumentide kirjutamine

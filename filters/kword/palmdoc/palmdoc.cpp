@@ -43,14 +43,14 @@ bool PalmDoc::load(const char* filename)
     }
 
     if (type() != "TEXt") {
-        qDebug("Type is \"%s\", not \"TEXt\", so this is not Palm DOC!", type().toLatin1());
+        qDebug("Type is \"%s\", not \"TEXt\", so this is not Palm DOC!", qPrintable(type()));
         m_result = PalmDoc::InvalidFormat;
         return false;
     }
 
     if (creator() != "REAd") {
         qDebug("Creator is \"%s\", not \"REAd\", so this is not Palm DOC!",
-               creator().toLatin1());
+               qPrintable(creator()));
         m_result = PalmDoc::InvalidFormat;
         return false;
     }

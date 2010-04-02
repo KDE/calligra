@@ -66,14 +66,15 @@ const QString ABOUT_DIALOG_NOKIA_PIXMAP("/usr/share/icons/hicolor/scalable/hildo
 /*!
 * extensions
 */
+const QString EXT_PPS("pps");
 const QString EXT_PPT("ppt");
+const QString EXT_PPSX("ppsx");
 const QString EXT_PPTX("pptx");
 const QString EXT_ODP("odp");
 const QString EXT_DOC("doc");
 const QString EXT_DOCX("docx");
 const QString EXT_ODT("odt");
 const QString EXT_TXT("txt");
-const QString EXT_RTF("rtf");
 const QString EXT_ODS("ods");
 const QString EXT_XLS("xls");
 const QString EXT_XLSX("xlsx");
@@ -94,7 +95,7 @@ const QString FREOFFICE_PATH("/com/nokia/FreOffice");
  */
 const QString FREOFFICE_SERVICE_NAME("com.nokia.FreOffice");
 
-const QString FILE_CHOOSER_FILTER("Document(*.doc *.docx *.odt *.txt);;Presentation(*.ppt *.pptx *.odp);;Spreadsheet(*.xls *.xlsx *.ods)");
+const QString FILE_CHOOSER_FILTER("File(*.doc *.docx *.odt *.txt *.ppt *.pps *.pptx *.ppsx *.odp *.xls *.xlsx *.ods)");
 
 const QString FREOFFICE_APPLICATION_PATH("/usr/bin/FreOffice");
 #endif // COMMON_H

@@ -246,8 +246,8 @@ KoFilter::ConversionStatus XlsxBorderStyle::readAttributes(
     }
     else if (s == QLatin1String("none"))
         style = QLatin1String("hidden");
-    else
-        style = QLatin1String("solid");
+    else if (!s.isEmpty())
+        style = QLatin1String("solid"); // fallback
     kDebug() << "style:" << s << "set to:" << style;
     return KoFilter::OK;
 }

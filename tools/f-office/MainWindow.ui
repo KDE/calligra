@@ -55,7 +55,6 @@
    <addaction name="actionZoomLevel"/>
    <addaction name="actionZoomIn"/>
    <addaction name="separator"/>
-   <addaction name="actionPanningOn"/>
    <addaction name="actionCopy"/>
    <addaction name="separator"/>
    <addaction name="actionFullScreen"/>
@@ -102,15 +101,6 @@
    <property name="icon">
     <iconset>
      <normaloff>/usr/share/icons/hicolor/48x48/hildon/general_search.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/general_search.png</iconset>
-   </property>
-  </action>
-  <action name="actionPanningOn">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>/usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</normaloff>/usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</iconset>
    </property>
   </action>
   <action name="actionPrevPage">
