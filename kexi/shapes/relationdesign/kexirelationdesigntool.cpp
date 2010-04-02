@@ -27,6 +27,7 @@
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
+#include <QPainter>
 #include <KUrl>
 #include <KFileDialog>
 #include <KIO/Job>

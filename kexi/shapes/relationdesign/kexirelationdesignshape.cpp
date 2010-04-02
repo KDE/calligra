@@ -29,6 +29,7 @@
 #include <KoXmlReader.h>
 #include <KoShapeBackground.h>
 #include <KoZoomHandler.h>
+#include <KoShapeLoadingContext.h>
 
 KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.koffice.org/kexirelationdesign", "shape"){
     m_connection = 0;
