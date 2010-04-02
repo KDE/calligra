@@ -400,6 +400,8 @@ void MainWindow::openDocument(const QString &fileName)
         m_type = Spreadsheet;
     } else {
         m_type = Text;
+        // We need to get the page count again after layout rounds.
+        connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
     }
 
     setWindowTitle(QString("%1 - %2").arg(i18n("Office Viewer"), fname));
@@ -407,9 +409,6 @@ void MainWindow::openDocument(const QString &fileName)
     m_controller->setProperty("FingerScrollable", true);
     setCentralWidget(m_controller);
     QTimer::singleShot(250, this, SLOT(updateUI()));
-
-    // We need to get the page count again after layout rounds.
-    connect(m_doc, SIGNAL(void finishedLayout()), this, SLOT( updateUI()));
 
     KoCanvasBase *canvas = m_controller->canvas();
     connect(canvas->resourceManager(),
