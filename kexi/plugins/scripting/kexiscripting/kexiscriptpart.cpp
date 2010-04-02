@@ -97,7 +97,8 @@ KexiScriptPart::~KexiScriptPart()
 
 bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
-    if (! item) {
+    Q_UNUSED(sender);
+    if (!item) {
         kWarning() << "KexiScriptPart::execute: Invalid item.";
         return false;
     }
@@ -240,6 +241,8 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
                                      QMap<QString, QVariant>* staticObjectArgs)
 //QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
+    Q_UNUSED(window);
+    Q_UNUSED(staticObjectArgs);
     kDebug() << "............. createView";
     QString partname = item.name();
     if (! partname.isNull()) {

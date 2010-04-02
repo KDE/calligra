@@ -163,6 +163,8 @@ KexiDBForm::drawRect(const QRect& r, int type)
 void
 KexiDBForm::drawRects(const QList<QRect> &list, int type)
 {
+    Q_UNUSED(list);
+    Q_UNUSED(type);
 #if 0 // 2.0
     QPainter p;
     p.begin(this);
@@ -240,6 +242,8 @@ KexiDBForm::clearForm()
 void
 KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
 #if 0 //2.0
     QPoint fromPoint, toPoint;
     if (from && from->parentWidget() && (from != this))
@@ -541,7 +545,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 kDebug() << realWidget->objectName();
 
                 // find next/prev widget to focus
-                QWidget *widgetToUnfocus = realWidget;
+                //QWidget *widgetToUnfocus = realWidget;
                 QWidget *widgetToFocus = 0;
                 bool wasAtFirstWidget = false; //used to protect against infinite loop
                 while (true) {

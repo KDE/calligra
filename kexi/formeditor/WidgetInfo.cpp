@@ -31,11 +31,11 @@ class WidgetInfo::Private
 {
 public:
     Private (WidgetFactory *f)
-        : inheritedClass(0)
-        , overriddenAlternateNames(0)
+        : overriddenAlternateNames(0)
         , factory(f)
         , propertiesWithDisabledAutoSync(0)
         , customTypesForProperty(0)
+        , inheritedClass(0)
     {
     }
 

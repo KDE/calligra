@@ -527,7 +527,7 @@ KexiFormView::slotPropertySetSwitched()
         return; //this is not the current form view
 //2.0    m_propertySet = set;
 #endif
-    QWidgetList* widgets = form()->selectedWidgets();
+    //QWidgetList* widgets = form()->selectedWidgets();
 //    delete m_propertySet;
 //2.0    m_propertySet = 0;
     //todo
@@ -1154,6 +1154,7 @@ KexiFormView::show()
 void
 KexiFormView::slotFocus(bool in)
 {
+    Q_UNUSED(in);
 #ifdef __GNUC__
 #warning "Port this.."
 #else

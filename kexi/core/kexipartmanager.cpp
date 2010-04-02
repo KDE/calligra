@@ -71,9 +71,8 @@ bool Manager::lookup()
                            "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
-    QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
+    const QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
     QVector<KService::Ptr> ordered(sl_order.count());
-    int offset = sl_order.count(); //we will insert not described parts from #offset
 
     //compute order
     foreach(KService::Ptr ptr, tlist) {
