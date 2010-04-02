@@ -113,7 +113,7 @@ public:
 //========================
 
 KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject)
-        : KexiDBFormBase(parent)
+        : QWidget(parent)
         , KexiFormDataItemInterface()
         , d(new Private())
 {
@@ -670,7 +670,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 //  kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name();
 //  UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
     }
-    return KexiDBFormBase::eventFilter(watched, e);
+    return QWidget::eventFilter(watched, e);
 }
 
 bool KexiDBForm::valueIsNull()
@@ -725,13 +725,13 @@ bool KexiDBForm::preview() const
 
 void KexiDBForm::dragMoveEvent(QDragMoveEvent *e)
 {
-    KexiDBFormBase::dragMoveEvent(e);
+    QWidget::dragMoveEvent(e);
     emit handleDragMoveEvent(e);
 }
 
 void KexiDBForm::dropEvent(QDropEvent *e)
 {
-    KexiDBFormBase::dropEvent(e);
+    QWidget::dropEvent(e);
     emit handleDropEvent(e);
 }
 
@@ -741,7 +741,7 @@ void KexiDBForm::dropEvent(QDropEvent *e)
     //! @todo?
         
     if (form() && form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
-        KexiDBFormBase::setCursor(cursor);
+        QWidget::setCursor(cursor);
     }
 }*/
 
@@ -761,7 +761,7 @@ void KexiDBForm::paintEvent( QPaintEvent *e )
   if (!unclipped)
     clearWFlags( WPaintUnclipped );
   p.end();
-  KexiDBFormBase::paintEvent(e);
+  QWidget::paintEvent(e);
 }
 */
 
