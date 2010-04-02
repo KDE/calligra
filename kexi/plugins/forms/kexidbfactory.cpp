@@ -59,7 +59,9 @@
 #include "widgets/kexidbcombobox.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
-#include "widgets/kexidbsubform.h"
+#ifndef KEXI_NO_SUBFORM
+# include "widgets/kexidbsubform.h"
+#endif
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
