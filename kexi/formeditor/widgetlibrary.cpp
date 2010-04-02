@@ -364,18 +364,15 @@ void WidgetLibrary::createWidgetActions(ActionGroup *group)
 //2.0    return actions;
 }
 
-/* 2.0
 void
 WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
 {
     if (!col)
         return;
     foreach (WidgetFactory *factory, d->factories) {
-        factory->createCustomActions(
-            factory->m_guiClient
-            ? factory->m_guiClient->actionCollection() : col);
+        factory->createCustomActions(col);
     }
-}*/
+}
 
 QWidget*
 WidgetLibrary::createWidget(const QByteArray &classname, QWidget *parent, const char *name, Container *c,

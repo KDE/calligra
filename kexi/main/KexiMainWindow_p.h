@@ -856,7 +856,7 @@ public:
             m_findDialog = new KexiFindDialog(wnd);
             m_findDialog->setActions(action_edit_findnext, action_edit_findprev,
                                      action_edit_replace, action_edit_replace_all);
-            /*   connect(m_findDialog, SIGNAL(findNext()), action_edit_findnext, SLOT(activate()));
+            /*   connect(m_findDialog, SIGNAL(findNext()), action_edit_findnext, SLOT(trigger()));
                   connect(m_findDialog, SIGNAL(find()), wnd, SLOT(slotEditFindNext()));
                   connect(m_findDialog, SIGNAL(replace()), wnd, SLOT(slotEditReplaceNext()));
                   connect(m_findDialog, SIGNAL(replaceAll()), wnd, SLOT(slotEditReplaceAll()));*/

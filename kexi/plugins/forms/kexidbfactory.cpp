@@ -72,6 +72,7 @@
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "kexidb")
+        , m_assignAction(0)
 {
     {
         KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
@@ -443,6 +444,7 @@ KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, QMenu 
 {
     if (classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton") {
         /*! @todo also call createMenuActions() for inherited factory! */
+kDebug() << m_assignAction;
         menu->addAction(m_assignAction);
         return true;
     } else if (classname == "KexiDBImageBox") {

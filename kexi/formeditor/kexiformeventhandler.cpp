@@ -79,8 +79,9 @@ KexiFormEventAction::~KexiFormEventAction()
 {
 }
 
-void KexiFormEventAction::activate()
+void KexiFormEventAction::trigger()
 {
+kDebug() << m_actionName << m_objectName;
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
@@ -164,18 +165,19 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
         KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
         if (!ok)
             continue;
+kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
         if (actionType == "kaction" || actionType == "currentForm") {
             QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
                                   actionArg);
             if (!action)
                 continue;
-            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(activate()));   //safety
-            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(activate()));
+            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(trigger()));   //safety
+            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(trigger()));
         } else if (partInfo) { //'open or execute' action
             KexiFormEventAction* action = new KexiFormEventAction(widget, actionType, actionArg,
                     data.option);
-            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(activate()));
-            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(activate()));
+            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(trigger()));
+            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(trigger()));
         }
     }
 }

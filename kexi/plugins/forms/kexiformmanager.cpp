@@ -164,8 +164,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
 //2.0    d->lib->createWidgetActions(client, d->collection,
 //2.0                                this, SLOT(insertWidget(const QByteArray &)));
 
-    if (false) {
-    }
 #ifdef KFD_SIGSLOTS
     if (d->features & KFormDesigner::Form::EnableConnections) {
         // nothing
@@ -222,7 +220,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     styleAction->setMenuAccelsEnabled(true);
 #endif
 
-//2.0    d->lib->addCustomWidgetActions(d->collection);
+    d->lib->addCustomWidgetActions(d->collection);
 
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KGlobal::config()->group("General"));
