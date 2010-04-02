@@ -50,7 +50,9 @@
 #include "objecttree.h"
 //unused #include "formmanager.h"
 #include "widgetlibrary.h"
-#include "spring.h"
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
+# include "spring.h"
+#endif
 #include "events.h"
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
@@ -927,12 +929,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
         return;
     kDebug() << item->className() << item->widget()->objectName();
     bool savedAlignment = false;
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
     // we let Spring class handle saving itself
     if (item->className() == "Spring") {
         Spring::saveSpring(item, parent, domDoc, insideGridLayout);
         return;
     }
-
+#endif
     bool resetCurrentForm = false;
     m_currentItem = item;
     if (!m_currentForm) { // copying widget

@@ -54,7 +54,9 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#include "spring.h"
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
+# include "spring.h"
+#endif
 #include "formIO.h"
 #include "form.h"
 #include "widgetlibrary.h"
@@ -230,6 +232,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLineEdit->setDescription(i18n("A widget to input text"));
     addClass(wLineEdit);
 
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
     KFormDesigner::WidgetInfo *wSpring = new KFormDesigner::WidgetInfo(this);
     wSpring->setPixmap("spring");
     wSpring->setClassName("Spring");
@@ -244,6 +247,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wSpring->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Spring"));
     wSpring->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Spring"));
     addClass(wSpring);
+#endif
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
     wPushButton->setPixmap("button");
@@ -540,6 +544,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new Line(options & WidgetFactory::VerticalOrientation
                      ? Qt::Vertical : Qt::Horizontal, p);
 
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
     else if (c == "Spring") {
         w = new Spring(p);
         if (0 == (options & WidgetFactory::AnyOrientation))
@@ -547,6 +552,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                 (options & WidgetFactory::VerticalOrientation)
                 ? Qt::Vertical : Qt::Horizontal);
     }
+#endif
 
     if (w) {
         w->setObjectName(n);
@@ -958,9 +964,13 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
                 || property == "geometry" /*nonsense for toplevel widget*/)
             return false;
     } else if (classname == "CustomWidget") {
-    } else if (classname == "Spring") {
+    }
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
+    else if (classname == "Spring") {
         return Spring::isPropertyVisible(property);
-    } else if (classname == "KexiPictureLabel") {
+    }
+#endif
+    else if (classname == "KexiPictureLabel") {
         if ((property == "text") || (property == "indent") || (property == "textFormat") || (property == "font") || (property == "alignment"))
             return false;
     } else if (classname == "QLabel") {
