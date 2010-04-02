@@ -167,6 +167,9 @@ private:
                                                 quint32 textType, quint8 pp9rt);
     QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
 
+    const MSO::TextContainer* getTextContainer(
+            const MSO::PptOfficeArtClientTextBox* clientTextbox,
+            const MSO::PptOfficeArtClientData* clientData) const;
     quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
                         const MSO::PptOfficeArtClientData* clientData) const;
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
@@ -184,24 +187,11 @@ private:
                          const MSO::TextContainer& tc, const QString& text,
                          int start, int end, QStack<QString>& levels);
 
-     /**
+    /**
      * @brief Write declaration in the content body presentation
      * @param xmlWriter XML writer to write
      */
-     void processDeclaration(KoXmlWriter* xmlWriter);
-
-     /**
-     * @brief Write Frame element.
-     * @param KoGenStyle& style To represent the style
-     * @param Writer& out writer xml.
-     * @param presentatonName represent the class for ex: page-number etc
-     * @param QRect -  co-ordinates of the frame
-     * @param mStyle - presentation style
-     * @param pStyle - paragraph style
-     * @param tStyle - text style
-     */
-     void addFrame(KoGenStyle& style, Writer& out, const char* presentationName,
-            const QRect& rect, QString mStyle, QString pStyle, QString tStyle);
+    void processDeclaration(KoXmlWriter* xmlWriter);
 
     /**
       * @brief An enumeration that specifies an action that can be performed
