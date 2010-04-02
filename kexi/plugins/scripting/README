@@ -6,7 +6,7 @@ Kexi. The Kross Scripting Framework located at koffice/libs/kross
 is used to embed scripting interpreters and access Kexi
 functionality from within those interpreters.
 
-See also http://www.kexi-project.org/wiki/wikiview/index.php?Scripting
+See also http://www.kexi-project.org/wiki/wikiview/index.php@Scripting.html
 
 /kexiscripting/
 The scripting-plugin which will be loaded by Kexi at startup to

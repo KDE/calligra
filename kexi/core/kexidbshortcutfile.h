@@ -33,7 +33,7 @@ class ConnectionData;
 /*! Loads and saves information for a "shortcut to a connection" file containing
  connection information with database name (i.e. ProjectData).
  This is implementation for handling .KEXIS files.
- See http://www.kexi-project.org/wiki/wikiview/index.php?KexiMimeTypes_DataSaving_Loading
+ See http://www.kexi-project.org/wiki/wikiview/index.php@KexiMimeTypes_DataSaving_Loading.html
 */
 class KEXICORE_EXPORT KexiDBShortcutFile
 {
@@ -72,7 +72,7 @@ protected:
 /*! Loads and saves information for a "shortcut" file containing
  connection information (i.e. KexiDB::ConnectionData).
  This is implementation for handling .KEXIC files.
- See http://www.kexi-project.org/wiki/wikiview/index.php?KexiMimeTypes_DataSaving_Loading
+ See http://www.kexi-project.org/wiki/wikiview/index.php@KexiMimeTypes_DataSaving_Loading.html
 */
 class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 {
