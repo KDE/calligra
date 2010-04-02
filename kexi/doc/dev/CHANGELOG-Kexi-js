@@ -69,6 +69,9 @@ Reports
 
 ~~~~~~~~~~~~~~~~ 2.2 beta 1 ~~~~~~~~~~~~~~~~
 
+2010-04-02
+*remove bundled, unused sqlite2 and 3
+
 2010-03-30
 Reports
 *We're using term "item" instead of "control" in reports. So change report:control-source to report:item-data-source.
@@ -1335,7 +1338,7 @@ Kexi 2.0
 - * Kexi source code compiles with Qt4 *
 - ported plugins: forms/, relations/, migration/, importexport/, queries/
 - updated widget/, formeditor/, main/
-  More info at http://kexi-project.org/wiki/wikiview/index.php?Porting%20to%20Qt4
+  More info at http://kexi-project.org/wiki/wikiview/index.php@Porting%20to%20Qt4.html
 - mimetype icons moved to KDE4-compatible hicolor
 
 2007-05-29
@@ -1591,7 +1594,7 @@ Kexi 2.0
 = formeditor lib ported to KDE4 (not tested)
 Startup, Main Window
 - "User Mode" implemented; command line option --final-mode replaced with --user-mode
-  as described at http://kexi-project.org/wiki/wikiview/index.php?UserMode;
+  as described at http://kexi-project.org/wiki/wikiview/index.php@UserMode.html
   all actions related to design are hidden as well as property editor and navigator panes
 2.0: merged
 General
@@ -4010,7 +4013,7 @@ Widgets
 - KexiTableRM moved to KexiRecordMarker in libguiutils
 Forms
 - "pen" icon is displayed on editing within a standard form, see:
- www.kexi-project.org/wiki/wikiview/index.php?Forms%20embedded%20inside%20Kexi#3.5._
+ www.kexi-project.org/wiki/wikiview/index.php@Forms%20embedded%20inside%20Kexi.html#3.5._
 - fixed Tab/BackTab ordering when there're widgets without TabFocus focus policy set
 - TabOrder dialog: "dirty" flag is always set to the curent form when the dialog is accepted
 KexiDB
@@ -4201,7 +4204,7 @@ Form Plugin
 - after switching to/from form in data view mode, its contents position is preserved
 - fixed form's size setting in data view mode
 - two form's resize modes introduced, see 
-  http://www.kexi-project.org/wiki/wikiview/index.php?Forms#Form_Resize_Modes_for_form_windows_inside_Kexi
+  http://www.kexi-project.org/wiki/wikiview/index.php@Forms#Form_Resize_Modes_for_form_windows_inside_Kexi.html
 - in data view mode, scrollview is properly resized to avoid showing 
    outer area and without scrollbars flickering
 General
@@ -4660,7 +4663,7 @@ Kexi Startup
   (usable since gui is not yet ready): 
   --createdb, --dropdb, --dbdriver command line options added
 - db creation and dropping from command line works without starting entire gui
-  see http://www.kexi-project.org/wiki/wikiview/index.php?CommandLineOptions
+  see http://www.kexi-project.org/wiki/wikiview/index.php@CommandLineOptions.html
 Core
 - KexiMessageHandler introduced: receives messages e.g. from KexiProject
 - KexiGUIMessageHandler added
