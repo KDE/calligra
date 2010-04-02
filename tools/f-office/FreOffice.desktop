@@ -3,6 +3,7 @@ Encoding=UTF-8
 Version=1.0
 Type=Application
 Name=Office Viewer
+Name[ca]=Visualitzador d'oficina
 Name[da]=Office Viewer
 Name[en_GB]=Office Viewer
 Name[et]=Office'i näitaja
