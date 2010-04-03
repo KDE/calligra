@@ -98,6 +98,7 @@ Forms
 *hide Spring element and autofield widget (will be back in 2.3)
 *hide the Object Tree tab (will be back in 2.3)
 *"Assign action" feature ported
+*make group box widget show properties
 
 2010-03-30
 Reports
