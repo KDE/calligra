@@ -677,6 +677,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
     wGroupBox->setPixmap("groupbox");
     wGroupBox->setClassName("QGroupBox");
+    wGroupBox->addAlternateClassName("GroupBox");
     wGroupBox->setName(i18n("Group Box"));
     wGroupBox->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "groupBox"));
