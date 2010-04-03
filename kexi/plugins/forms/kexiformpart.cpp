@@ -65,14 +65,17 @@ class KexiFormPart::Private
 {
 public:
     Private() {
+#ifndef KEXI_NO_OBJECTTREEVIEW
         objectTreeView = new KFormDesigner::ObjectTreeView(0);
         objectTreeView->setObjectName("KexiFormPart:ObjectTreeView");
+#endif
     }
     ~Private() {
+#ifndef KEXI_NO_OBJECTTREEVIEW
         delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
+#endif
         delete static_cast<KexiDataSourcePage*>(dataSourcePage);
     }
-//  QPointer<KFormDesigner::FormManager> manager;
     QPointer<KFormDesigner::ObjectTreeView> objectTreeView;
     QPointer<KexiDataSourcePage> dataSourcePage;
     KexiDataSourceComboBox *dataSourceCombo;
@@ -487,8 +490,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     tab->addTab(d->dataSourcePage, KIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
+#if 0
     tab->addTab(d->objectTreeView, KIcon("widgets"), QString());
     tab->setTabToolTip(tab->indexOf(d->objectTreeView), i18n("Widgets"));
+#else
+#warning
+#endif
 }
 
 //----------------

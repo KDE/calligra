@@ -87,6 +87,8 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         , m_KAction_setEnabled_helper(new KAction_setEnabled_Helper(this))
         , m_focusedChild(0)
 {
+kDebug() << this;
+kBacktrace();
     m_signal_parent.setObjectName("signal_parent");
     //m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
     //m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
@@ -95,6 +97,7 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
 
 KexiActionProxy::~KexiActionProxy()
 {
+kDebug() << this;
     qDeleteAll(m_signals);
     m_signals.clear();
     //detach myself from every child
@@ -184,7 +187,7 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, 
     QAction *a = client->action(action_name.toLatin1().constData());
     if (!a)
         return;
-    plugSharedAction(a->objectName(), a, SLOT(activate()));
+    plugSharedAction(a->objectName(), a, SLOT(trigger()));
 
     //update availability
     setAvailable(a->objectName(), a->isEnabled());
@@ -276,6 +279,7 @@ void KexiActionProxy::addActionProxyChild(KexiActionProxy* child)
 
 void KexiActionProxy::takeActionProxyChild(KexiActionProxy* child)
 {
+kDebug() << child;
     const int index = m_sharedActionChildren.indexOf(child);
     if (index != -1)
         m_sharedActionChildren.removeAt(index);

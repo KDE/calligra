@@ -40,6 +40,9 @@ Spring::Spring(QWidget *parent)
 {
     m_orient = Qt::Horizontal;
     setSizeType(QSizePolicy::Expanding);
+    QPalette pal(palette());
+    pal.setColor(backgroundRole(), Qt::transparent);
+    setPalette(pal);
 }
 
 Spring::~Spring()
@@ -80,8 +83,9 @@ Spring::paintEvent(QPaintEvent *ev)
         return;
 
     QPainter p(this);
-    if (!ev->erased())
-        p.eraseRect(0, 0, width(), height());
+    p.setRenderHint(QPainter::Antialiasing, true);
+//2.x    if (!ev->erased())
+//2.x        p.eraseRect(0, 0, width(), height());
 //todo?    p.setPen(QPen(Qt::white, 1));
 //todo?    p.setCompositionMode(QPainter::CompositionMode_Xor);
     if (m_orient == Qt::Vertical) {

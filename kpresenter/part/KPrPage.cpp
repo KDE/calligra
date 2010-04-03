@@ -171,10 +171,22 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
 
     int pageProperties = m_pageProperties & UseMasterBackground;
     if ( styleStack.property( KoXmlNS::presentation, "background-objects-visible" ) == "true" ) {
-        pageProperties = pageProperties | DisplayMasterShapes;
+        pageProperties |= DisplayMasterShapes;
     }
     if ( styleStack.property( KoXmlNS::presentation, "background-visible" ) == "true" ) {
-        pageProperties = pageProperties | DisplayMasterBackground;
+        pageProperties |= DisplayMasterBackground;
+    }
+    if ( styleStack.property( KoXmlNS::presentation, "display-header" ) == "true" ) {
+        pageProperties |= DisplayHeader;
+    }
+    if ( styleStack.property( KoXmlNS::presentation, "display-footer" ) == "true" ) {
+        pageProperties |= DisplayFooter;
+    }
+    if ( styleStack.property( KoXmlNS::presentation, "display-page-number" ) == "true" ) {
+        pageProperties |= DisplayPageNumber;
+    }
+    if ( styleStack.property( KoXmlNS::presentation, "display-date-time" ) == "true" ) {
+        pageProperties |= DisplayDateTime;
     }
     m_pageProperties = pageProperties;
 

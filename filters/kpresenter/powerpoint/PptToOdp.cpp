@@ -93,6 +93,63 @@ QString getText(const TextContainer& tc, int start, int count)
     return getText(tc).mid(start,count);
 }
 
+/* The placementId is mapped to one of
+   "chart", "date-time", "footer", "graphic", "handout", "header", "notes",
+   "object", "orgchart", "outline", "page", "page-number", "subtitle", "table",
+   "text" or "title" */
+/* Note: we use 'outline' for  PT_MasterBody, PT_Body and PT_VerticalBody types
+   to be compatible with OpenOffice. OpenOffice <= 3.2 does not render lists
+   properly if the presentation class is not 'outline', 'subtitle', or 'notes'.
+   */
+const char*
+getPresentationClass(const PlaceholderAtom* p)
+{
+    if (p == 0) return 0;
+    switch (p->placementId) {
+    case 0x01: return "title";       // PT_MasterTitle
+    case 0x02: return "outline";     // PT_MasterBody
+    case 0x03: return "title";       // PT_MasterCenterTitle
+    case 0x04: return "subtitle";    // PT_MasterSubTitle
+    case 0x05: return "graphic";     // PT_MasterNotesSlideImage
+    case 0x06: return "notes";       // PT_MasterNotesBody
+    case 0x07: return "date-time";   // PT_MasterDate
+    case 0x08: return "page-number"; // PT_MasterSlideNumber
+    case 0x09: return "footer";      // PT_MasterFooter
+    case 0x0A: return "header";      // PT_MasterHeader
+    case 0x0B: return "page";        // PT_NotesSlideImage
+    case 0x0C: return "notes";       // PT_NotesBody
+    case 0x0D: return "title";       // PT_Title
+    case 0x0E: return "outline";     // PT_Body
+    case 0x0F: return "title";       // PT_CenterTitle
+    case 0x10: return "subtitle";    // PT_SubTitle
+    case 0x11: return "title";       // PT_VerticalTitle
+    case 0x12: return "outline";     // PT_VerticalBody
+    case 0x13: return "object";      // PT_Object
+    case 0x14: return "chart";       // PT_Graph
+    case 0x15: return "table";       // PT_Table
+    case 0x16: return "object";      // PT_ClipArt
+    case 0x17: return "orgchart";    // PT_OrgChart
+    case 0x18: return "object";      // PT_Media
+    case 0x19: return "object";      // PT_VerticalObject
+    case 0x1A: return "graphic";     // PT_Picture
+    default: return 0;
+    }
+}
+
+QString getPresentationClass(const MSO::TextContainer* tc)
+{
+    if (!tc) return QString();
+    for (int i = 0; i<tc->meta.size(); ++i) {
+        const TextContainerMeta& m = tc->meta[i];
+        if (m.meta.get<SlideNumberMCAtom>()) return "page-number";
+        if (m.meta.get<DateTimeMCAtom>()) return "date-time";
+        if (m.meta.get<GenericDateMCAtom>()) return "date-time";
+        if (m.meta.get<HeaderMCAtom>()) return "header";
+        if (m.meta.get<FooterMCAtom>()) return "footer";
+    }
+    return QString();
+}
+
 }//namespace
 
 class PptToOdp::DrawClient : public ODrawToOdf::Client {
@@ -267,6 +324,7 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 
     return style;
 }
+
 void PptToOdp::DrawClient::addTextStyles(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
@@ -303,6 +361,17 @@ void PptToOdp::DrawClient::addTextStyles(
     const QString styleName = out.styles.insert(style);
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
+        QString className = getPresentationClass(cd->placeholderAtom.data());
+        if (className.isEmpty()) {
+            const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
+            className = getPresentationClass(tc);
+            out.xml.addAttribute("presentation:placeholder", "false");
+        } else {
+            out.xml.addAttribute("presentation:placeholder", "true");
+        }
+        if (!className.isEmpty()) {
+            out.xml.addAttribute("presentation:class", className);
+        }
     } else {
         out.xml.addAttribute("draw:style-name", styleName);
     }
@@ -887,6 +956,7 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
     // draw:secondary-fill-color
     // draw:tile-repeat-offset
     // presentation:background-objects-visible
+    style.addProperty("presentation:background-objects-visible", true);
     // presentation:background-visible
     style.addProperty("presentation:background-visible", true);
     // presentation:display-date-time
@@ -1496,62 +1566,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     }
 }
 
-void PptToOdp::addFrame(KoGenStyle& style, Writer& out, const char* presentationClass,
-                 const QRect &rect, QString mStyle, QString pStyle, QString tStyle)
-{
-    QBuffer buffer;
-
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter xmlWriter(&buffer);
-
-    xmlWriter.startElement("draw:frame");
-    xmlWriter.addAttribute("presentation:style-name", mStyle);
-    xmlWriter.addAttribute("draw:layer", "layout");
-    xmlWriter.addAttribute("svg:width", out.hLength(rect.width()));
-    xmlWriter.addAttribute("svg:height", out.vLength(rect.height()));
-    xmlWriter.addAttribute("svg:x", out.hOffset(rect.x()));
-    xmlWriter.addAttribute("svg:y", out.vOffset(rect.y()));
-    xmlWriter.addAttribute("presentation:class", presentationClass);
-    xmlWriter.startElement("draw:text-box");
-    xmlWriter.startElement("text:p");
-    xmlWriter.addAttribute("text:style-name", pStyle);
-    if (strcmp(presentationClass, "page-number") == 0) {
-        xmlWriter.startElement("text:span");
-        xmlWriter.addAttribute("text:style-name", tStyle);
-        xmlWriter.startElement("text:page-number");
-        xmlWriter.addTextNode("<number>");
-        xmlWriter.endElement();//text:page-number
-        xmlWriter.endElement(); // text:span
-    }
-
-    if (strcmp(presentationClass, "date-time") == 0) {
-        //Same DateTime object so no need to pass style name for date time
-        if (getSlideHF()) {
-            if (getSlideHF()->hfAtom.fHasTodayDate) {
-                dateTime.addMasterDateTimeSection(xmlWriter, tStyle);
-            } else if (getSlideHF()->hfAtom.fHasUserDate) {
-                //Future FixedDate format
-            }
-        }
-    }
-    if (strcmp(presentationClass, "footer") == 0) {
-        xmlWriter.startElement("presentation:footer");
-        xmlWriter.endElement(); // presentation:footer
-    }
-    if (strcmp(presentationClass, "header") == 0) {
-        xmlWriter.startElement("presentation:header");
-        xmlWriter.endElement(); // presentation:header
-    }
-
-
-    xmlWriter.endElement(); // text:p
-
-    xmlWriter.endElement(); // draw:text-box
-    xmlWriter.endElement(); // draw:frame
-    style.addChildElement("draw:frame",
-                          QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
-}
-
 QByteArray PptToOdp::createContent(KoGenStyles& styles)
 {
     QBuffer presentationBuffer;
@@ -1702,48 +1716,6 @@ enum {
 
 }
 
-/* The placementId is mapped to one of
-   "chart", "date-time", "footer", "graphic", "handout", "header", "notes",
-   "object", "orgchart", "outline", "page", "page-number", "subtitle", "table",
-   "text" or "title" */
-/* Note: we use 'outline' for  PT_MasterBody, PT_Body and PT_VerticalBody types
-   to be compatible with OpenOffice. OpenOffice <= 3.2 does not render lists
-   properly if the presentation class is not 'outline', 'subtitle', or 'notes'.
-   */
-const char*
-getPresentationClass(const PlaceholderAtom* p)
-{
-    if (p == 0) return 0;
-    switch (p->placementId) {
-    case 0x01: return "title";       // PT_MasterTitle
-    case 0x02: return "outline";     // PT_MasterBody
-    case 0x03: return "title";       // PT_MasterCenterTitle
-    case 0x04: return "subtitle";    // PT_MasterSubTitle
-    case 0x05: return "graphic";     // PT_MasterNotesSlideImage
-    case 0x06: return "notes";       // PT_MasterNotesBody
-    case 0x07: return "date-time";   // PT_MasterDate
-    case 0x08: return "page-number"; // PT_MasterSlideNumber
-    case 0x09: return "footer";      // PT_MasterFooter
-    case 0x0A: return "header";      // PT_MasterHeader
-    case 0x0B: return "page";        // PT_NotesSlideImage
-    case 0x0C: return "notes";       // PT_NotesBody
-    case 0x0D: return "title";       // PT_Title
-    case 0x0E: return "outline";     // PT_Body
-    case 0x0F: return "title";       // PT_CenterTitle
-    case 0x10: return "subtitle";    // PT_SubTitle
-    case 0x11: return "title";       // PT_VerticalTitle
-    case 0x12: return "outline";     // PT_VerticalBody
-    case 0x13: return "object";      // PT_Object
-    case 0x14: return "chart";       // PT_Graph
-    case 0x15: return "table";       // PT_Table
-    case 0x16: return "object";      // PT_ClipArt
-    case 0x17: return "orgchart";    // PT_OrgChart
-    case 0x18: return "object";      // PT_Media
-    case 0x19: return "object";      // PT_VerticalObject
-    case 0x1A: return "graphic";     // PT_Picture
-    default: return 0;
-    }
-}
 void
 getMeta(const TextContainerMeta& m, KoXmlWriter& out)
 {
@@ -2383,14 +2355,14 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
     }
 }
 
-quint32 PptToOdp::getTextType(const PptOfficeArtClientTextBox* clientTextbox,
+const TextContainer* PptToOdp::getTextContainer(
+            const PptOfficeArtClientTextBox* clientTextbox,
             const PptOfficeArtClientData* clientData) const
 {
     if (clientData && clientData->placeholderAtom && currentSlideTexts) {
         const PlaceholderAtom* p = clientData->placeholderAtom.data();
         if (p->position >= 0 && p->position < currentSlideTexts->atoms.size()) {
-            const TextContainer& tc = currentSlideTexts->atoms[p->position];
-            return tc.textHeaderAtom.textType;
+            return &currentSlideTexts->atoms[p->position];
         }
     }
     if (clientTextbox) {
@@ -2398,120 +2370,20 @@ quint32 PptToOdp::getTextType(const PptOfficeArtClientTextBox* clientTextbox,
         foreach (const TextClientDataSubContainerOrAtom& a, clientTextbox->rgChildRec) {
             const TextContainer* tc = a.anon.get<TextContainer>();
             if (tc) {
-                return tc->textHeaderAtom.textType;
+                return tc;
             }
         }
     }
+    return 0;
+}
+
+quint32 PptToOdp::getTextType(const PptOfficeArtClientTextBox* clientTextbox,
+            const PptOfficeArtClientData* clientData) const
+{
+    const TextContainer* tc = getTextContainer(clientTextbox, clientData);
+    if (tc) return tc->textHeaderAtom.textType;
     return 99; // 99 means it is undefined here
 }
-
-/*
-void PptToOdp::addPresentationStyleToDrawElement(Writer& out,
-                                            const OfficeArtSpContainer& o)
-{
-    const PptOfficeArtClientTextBox* tb = 0;
-    if (o.clientTextbox) {
-        tb = o.clientTextbox->anon.get<PptOfficeArtClientTextBox>();
-    }
-    const PptOfficeArtClientData* cd = 0;
-    if (o.clientData) {
-        cd = o.clientData->anon.get<PptOfficeArtClientData>();
-    }
-    quint32 textType = getTextType(tb, cd);
-    bool canBeParentStyle = textType != 99 && out.stylesxml && currentMaster;
-    bool isAutomatic = !canBeParentStyle;
-
-    // if this object has a placeholder type, it defines a presentation style,
-    // otherwise, it defines a graphic style
-    // A graphic style is always automatic
-    KoGenStyle::Type type = KoGenStyle::PresentationStyle;
-    if (isAutomatic) {
-        type = KoGenStyle::PresentationAutoStyle;
-    }
-    KoGenStyle style(type, "presentation");
-    if (isAutomatic) {
-        style.setAutoStyleInStylesDotXml(out.stylesxml);
-    }
-
-    QString parent;
-    // for now we only set parent styles on presentation styled elements
-    if (currentMaster) {
-        parent = getMasterStyle(masterPresentationStyles[currentMaster],
-                                textType);
-    }
-    if (!parent.isEmpty()) {
-        style.setParentName(parent);
-    }
-    const TextMasterStyleAtom* listStyle = 0;
-    if (out.stylesxml) {
-        listStyle = getTextMasterStyleAtom(currentMaster, textType);
-    }
-    QString listStyleName;
-    if (listStyle) {
-        KoGenStyle list(KoGenStyle::ListStyle);
-        defineListStyle(list, *listStyle);
-        listStyleName = out.styles.insert(list);
-    }
-    const OfficeArtDggContainer& drawingGroup
-        = p->documentContainer->drawingGroup.OfficeArtDgg;
-    const DrawStyle ds(drawingGroup, &o);
-    defineGraphicProperties(style, ds, listStyleName);
-    // small workaround to avoid presenation frames from having borders,
-    // even though the ppt file seems to specify that they should have one
-    style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
-    if (listStyle && listStyle->lstLvl1) {
-        PptTextPFRun pf(p->documentContainer, currentMaster, textType);
-        defineParagraphProperties(style, pf);
-        defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
-    }
-    const QString styleName = out.styles.insert(style);
-    out.xml.addAttribute("presentation:style-name", styleName);
-    if (canBeParentStyle) {
-        masterPresentationStyles[currentMaster][textType] = styleName;
-    }
-}
-void PptToOdp::addGraphicStyleToDrawElement(Writer& out,
-                                            const OfficeArtSpContainer& o)
-{
-    const PptOfficeArtClientData* cd = 0;
-    if (o.clientData) {
-        cd = o.clientData->anon.get<PptOfficeArtClientData>();
-    }
-    bool isPlaceholder = cd && cd->placeholderAtom;
-    if (isPlaceholder) {
-        PptToOdp::addPresentationStyleToDrawElement(out, o);
-        return;
-    }
-
-    const PptOfficeArtClientTextBox* tb = 0;
-    if (o.clientTextbox) {
-        tb = o.clientTextbox->anon.get<PptOfficeArtClientTextBox>();
-    }
-    quint32 textType = getTextType(tb, cd);
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-    style.setAutoStyleInStylesDotXml(out.stylesxml);
-
-    const TextMasterStyleAtom* listStyle = 0;
-    listStyle = getTextMasterStyleAtom(currentMaster, textType);
-    QString listStyleName;
-    if (listStyle) {
-        KoGenStyle list(KoGenStyle::ListStyle);
-        defineListStyle(list, *listStyle);
-        listStyleName = out.styles.insert(list);
-    }
-    const OfficeArtDggContainer& drawingGroup
-        = p->documentContainer->drawingGroup.OfficeArtDgg;
-    const DrawStyle ds(drawingGroup, &o);
-    defineGraphicProperties(style, ds, listStyleName);
-    if (listStyle && listStyle->lstLvl1) {
-        PptTextPFRun pf(p->documentContainer, currentMaster, textType);
-        defineParagraphProperties(style, pf);
-        defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
-    }
-    const QString styleName = out.styles.insert(style);
-    out.xml.addAttribute("draw:style-name", styleName);
-}
-*/
 
 void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
 {

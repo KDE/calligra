@@ -110,7 +110,7 @@ KexiDBSubForm::setFormName(const QString &name)
 
     // we create the container widget
     delete m_widget;
-    m_widget = new KexiDBFormBase(viewport());
+    m_widget = new QWidget(viewport());
     m_widget->setObjectName("KexiDBSubForm_widget");
     m_widget->show();
     addChild(m_widget);

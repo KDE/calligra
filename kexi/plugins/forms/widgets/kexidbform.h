@@ -31,18 +31,11 @@
 #include <formeditor/FormWidgetInterface.h>
 #include "kexiformdataiteminterface.h"
 
-#ifdef KEXI_USE_GRADIENT_WIDGET
-#include <kexigradientwidget.h>
-# define KexiDBFormBase KexiGradientWidget
-#else
-# define KexiDBFormBase QWidget
-#endif
-
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
 
 //! @short A DB-aware form widget, acting as form's toplevel widget
-class KEXIFORMUTILS_EXPORT KexiDBForm : public KexiDBFormBase,
+class KEXIFORMUTILS_EXPORT KexiDBForm : public QWidget,
                                         public KFormDesigner::FormWidget,
                                         public KexiFormDataItemInterface,
                                         public KFormDesigner::FormWidgetInterface
@@ -119,12 +112,12 @@ public slots:
 
     //! @internal for sizeInternal property
     QSize sizeInternal() const {
-        return KexiDBFormBase::size();
+        return QWidget::size();
     }
 
     //! @internal for sizeInternal property
     void resizeInternal(const QSize& s) {
-        KexiDBFormBase::resize(s);
+        QWidget::resize(s);
     }
 
 signals:

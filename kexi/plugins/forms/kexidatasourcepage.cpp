@@ -325,7 +325,11 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
         const QString& fieldName)
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    Q_UNUSED(sourcePartClass);
+    Q_UNUSED(sourceName);
+    Q_UNUSED(fieldName);
+#else
     QStringList selectedFields;
     selectedFields.append(fieldName);
     emit insertAutoFields(sourcePartClass, sourceName, selectedFields);

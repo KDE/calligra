@@ -642,7 +642,7 @@ static QPixmap *scaledImageBoxIcon(const KexiUtils::WidgetMargins& margins, cons
 {
     const int realHeight = size.height() - margins.top - margins.bottom;
     const int realWidth = size.width() - margins.left - margins.right;
-    const bool tooLarge = (size.height() - margins.top - margins.bottom) <= KexiDBImageBox_static->pixmap->height();
+    //const bool tooLarge = (size.height() - margins.top - margins.bottom) <= KexiDBImageBox_static->pixmap->height();
     if (   realHeight <= KexiDBImageBox_static->pixmap->height()
         || realWidth <= KexiDBImageBox_static->pixmap->width())
     {

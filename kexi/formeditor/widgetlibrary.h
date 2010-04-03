@@ -78,7 +78,7 @@ public:
 //prev    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
 //prev                                   QObject *receiver, const char *slot);
 
-//2.0    void addCustomWidgetActions(KActionCollection *col);
+    void addCustomWidgetActions(KActionCollection *col);
 
 //old  /**
 //old   * creates the XML for widget actions

@@ -113,7 +113,7 @@ public:
 //========================
 
 KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject)
-        : KexiDBFormBase(parent)
+        : QWidget(parent)
         , KexiFormDataItemInterface()
         , d(new Private())
 {
@@ -163,6 +163,8 @@ KexiDBForm::drawRect(const QRect& r, int type)
 void
 KexiDBForm::drawRects(const QList<QRect> &list, int type)
 {
+    Q_UNUSED(list);
+    Q_UNUSED(type);
 #if 0 // 2.0
     QPainter p;
     p.begin(this);
@@ -240,6 +242,8 @@ KexiDBForm::clearForm()
 void
 KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
 #if 0 //2.0
     QPoint fromPoint, toPoint;
     if (from && from->parentWidget() && (from != this))
@@ -541,7 +545,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 kDebug() << realWidget->objectName();
 
                 // find next/prev widget to focus
-                QWidget *widgetToUnfocus = realWidget;
+                //QWidget *widgetToUnfocus = realWidget;
                 QWidget *widgetToFocus = 0;
                 bool wasAtFirstWidget = false; //used to protect against infinite loop
                 while (true) {
@@ -670,7 +674,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 //  kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name();
 //  UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
     }
-    return KexiDBFormBase::eventFilter(watched, e);
+    return QWidget::eventFilter(watched, e);
 }
 
 bool KexiDBForm::valueIsNull()
@@ -725,13 +729,13 @@ bool KexiDBForm::preview() const
 
 void KexiDBForm::dragMoveEvent(QDragMoveEvent *e)
 {
-    KexiDBFormBase::dragMoveEvent(e);
+    QWidget::dragMoveEvent(e);
     emit handleDragMoveEvent(e);
 }
 
 void KexiDBForm::dropEvent(QDropEvent *e)
 {
-    KexiDBFormBase::dropEvent(e);
+    QWidget::dropEvent(e);
     emit handleDropEvent(e);
 }
 
@@ -741,7 +745,7 @@ void KexiDBForm::dropEvent(QDropEvent *e)
     //! @todo?
         
     if (form() && form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
-        KexiDBFormBase::setCursor(cursor);
+        QWidget::setCursor(cursor);
     }
 }*/
 
@@ -761,7 +765,7 @@ void KexiDBForm::paintEvent( QPaintEvent *e )
   if (!unclipped)
     clearWFlags( WPaintUnclipped );
   p.end();
-  KexiDBFormBase::paintEvent(e);
+  QWidget::paintEvent(e);
 }
 */
 

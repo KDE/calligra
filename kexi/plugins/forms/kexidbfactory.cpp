@@ -59,7 +59,9 @@
 #include "widgets/kexidbcombobox.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
-#include "widgets/kexidbsubform.h"
+#ifndef KEXI_NO_SUBFORM
+# include "widgets/kexidbsubform.h"
+#endif
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
@@ -70,6 +72,7 @@
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "kexidb")
+        , m_assignAction(0)
 {
     {
         KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
@@ -380,14 +383,18 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
     bool createContainer = false;
 
-    if (c == "KexiDBSubForm")
-        w = new KexiDBSubForm(container->form(), p);
-    else if (c == "KexiDBLineEdit") {
+    if (c == "KexiDBLineEdit") {
         w = new KexiDBLineEdit(p);
 //2.0 moved to FormWidgetInterface
 //        if (designMode)
 //            w->setCursor(QCursor(Qt::ArrowCursor));
-    } else if (c == "KexiDBTextEdit") {
+    }
+#ifndef KEXI_NO_SUBFORM
+    if (c == "KexiDBSubForm") {
+        w = new KexiDBSubForm(container->form(), p);
+    }
+#endif
+    else if (c == "KexiDBTextEdit") {
         w = new KexiDBTextEdit(p);
 //2.0 moved to FormWidgetInterface
 //        if (designMode)
@@ -437,6 +444,7 @@ KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, QMenu 
 {
     if (classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton") {
         /*! @todo also call createMenuActions() for inherited factory! */
+kDebug() << m_assignAction;
         menu->addAction(m_assignAction);
         return true;
     } else if (classname == "KexiDBImageBox") {
@@ -548,6 +556,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         }
         return true;
     }
+#ifndef KEXI_NO_SUBFORM
     else if (args.classname == "KexiDBSubForm") {
 //! @todo
         // open the form in design mode
@@ -561,6 +570,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         }
         return true;
     }
+#endif
 #if 0
     else if (   args.classname == "KexiDBDateEdit" || args.classname == "KexiDBDateTimeEdit"
              || args.classname == "KexiDBTimeEdit" /*|| classname == "KexiDBIntSpinBox" || classname == "KexiDBDoubleSpinBox"*/)
@@ -672,10 +682,12 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "textInteractionFlags"
 //! @todo support textInteractionFlags property of QLabel and QTextEdit
              ;
+#ifndef KEXI_NO_SUBFORM
     else if (classname == "KexiDBSubForm")
         ok = property != "dragAutoScroll"
              && property != "resizePolicy"
              && property != "focusPolicy";
+#endif
     else if (classname == "KexiDBForm")
         ok = property != "iconText"
              && property != "geometry" /*nonsense for toplevel widget; for size, "size" property is used*/;

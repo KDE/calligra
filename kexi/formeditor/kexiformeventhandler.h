@@ -91,7 +91,7 @@ public:
 public slots:
     //! Activates the action. If the object supports executing (macro, script),
     //! it is executed; otherwise (table, query, form,...) it is opened in its data view.
-    virtual void activate();
+    virtual void trigger();
 
 private:
     QString m_actionName, m_objectName, m_actionOption;
