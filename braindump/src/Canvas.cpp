@@ -272,6 +272,7 @@ void Canvas::updateOriginAndSize()
     if(rect != m_oldDocumentRect) {
       m_oldDocumentRect = rect;
       emit(documentRect(rect));
+      update();
     }
     QRect viewRect = viewConverter()->documentToView( rect ).toRect();
     if( m_oldViewDocumentRect != viewRect )
