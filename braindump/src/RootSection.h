@@ -21,6 +21,7 @@
 #define _ROOT_SECTION_H_
 
 #include <QObject>
+#include <QMap>
 #include "SectionGroup.h"
 
 class KActionCollection;
@@ -38,14 +39,19 @@ class RootSection : public QObject, public SectionGroup {
     SectionsIO* sectionsIO();
     void addCommand(Section* , QUndoCommand* command);
     void createActions(KActionCollection* );
-    KoUndoStack* undoStack();
+    KoUndoStack* undoStack(); // TODO remove when it is again possible to hide the undo stack
+    void setCurrentSection(Section* ); // TODO when the command statck is hidden again, remove
   signals:
     /// This signal is emited when a command is executed in the undo stack
     void commandExecuted();
+  private slots:
+    void undoIndexChanged(int idx);
   private:
     KoUndoStack* m_undoStack;
     ViewManager* m_viewManager;
     SectionsIO* m_sectionsSaver;
+    QMap<const QUndoCommand*, Section* > m_commandsMap;
+    Section* m_currentSection; // TODO when the command statck is hidden again, remove
 };
 
 #endif

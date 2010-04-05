@@ -25,13 +25,13 @@
 #include <kofficeversion.h>
 
 static const char* BRAINDUMP_DESCRIPTION = I18N_NOOP("BrainDump: directly from your brain to the computer.");
-static const char* BRAINDUMP_VERSION = "0.9.0";
+static const char* BRAINDUMP_VERSION = "0.8.1";
 
 inline KAboutData* newBrainDumpAboutData()
 {
   KAboutData* aboutData = new KAboutData("braindump", 0, ki18n("BrainDump"),
                                 BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(c) 2009, Cyrille Berger"), KLocalizedString(),
+                                ki18n("(c) 2009, 2010, Cyrille Berger"), KLocalizedString(),
                                 "");
   aboutData->addAuthor(ki18n("Cyrille Berger"), ki18n("Maintainer"), "cberger@cberger.net");
 

@@ -289,7 +289,8 @@ void View::setActiveSection( Section* page )
 {
   m_activeSection = page;
 
-
+  m_doc->setCurrentSection(page);
+  
   if(m_activeSection)
   {
     QList<KoShape*> shapes;
@@ -429,7 +430,7 @@ void View::ungroupSelection() {
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
     {
-      new KoShapeUngroupCommand( container, container->childShapes(), cmd );
+      new KoShapeUngroupCommand( container, container->childShapes(), QList<KoShape*>(), cmd );
       new KoShapeDeleteCommand( m_doc->viewManager(), container, cmd );
       new RememberPositionCommand( container->childShapes(), cmd );
     }

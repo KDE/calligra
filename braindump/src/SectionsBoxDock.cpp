@@ -34,7 +34,7 @@
 SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
-  setWindowTitle("Dumps");
+  setWindowTitle("Whiteboards");
 
   m_wdgSectionsBox.setupUi(mainWidget);
   
@@ -75,9 +75,9 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
   m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
   m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
   connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));
-  newSectionMenu->addAction(i18n("Add new section bellow current."), this, SLOT(slotNewSectionBellowCurrent()));
-  newSectionMenu->addAction(i18n("Add new section above current."), this, SLOT(slotNewSectionAboveCurrent()));
-  m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new section as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
+  newSectionMenu->addAction(i18n("Add new whiteboard below current."), this, SLOT(slotNewSectionBellowCurrent()));
+  newSectionMenu->addAction(i18n("Add new whiteboard above current."), this, SLOT(slotNewSectionAboveCurrent()));
+  m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new whiteboard as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
       
   // Setup the delete button
   m_wdgSectionsBox.bnDelete->setIcon(SmallIcon("list-remove"));

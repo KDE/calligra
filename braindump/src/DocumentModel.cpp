@@ -26,20 +26,18 @@
 #include <KoShapeRenameCommand.h>
 
 #include "RootSection.h"
-#include "modeltest.h"
 #include "Section.h"
 #include "commands/RenameSectionCommand.h"
 #include "commands/InsertSectionCommand.h"
 #include "commands/MoveSectionCommand.h"
 
-DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
+DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document)
 {
   Q_ASSERT(m_document);
 }
 
 DocumentModel::~DocumentModel()
 {
-  delete m_modelTest;
 }
 
 int DocumentModel::rowCount(const QModelIndex &parent) const
