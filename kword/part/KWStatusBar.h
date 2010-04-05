@@ -83,7 +83,6 @@ private:
     KStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;
     QMap<KWView*, QWidget*> m_zoomWidgets;
-    KWDocument *const m_document;
     QPointer<KoCanvasController> m_controller;
     int m_currentPageNumber;
     QAction *m_zoomAction;
