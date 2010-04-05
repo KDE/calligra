@@ -2123,12 +2123,13 @@ void Form::createPropertiesForWidget(QWidget *w)
                 }
             }
 
-            d->propertySet.addProperty(newProp);
             if (!isPropertyVisible(propertyName, isTopLevel))
                 newProp->setVisible(false);
 //! @todo
             if (newProp->type() == 0) // invalid type == null pixmap ?
                 newProp->setType(KoProperty::Pixmap);
+
+            d->propertySet.addProperty(newProp);
         }
 
 //  if(0==qstrcmp(propertyName, "objectName"))

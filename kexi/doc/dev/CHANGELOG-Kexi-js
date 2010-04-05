@@ -14,7 +14,7 @@ CCMAIL:danny@commit-digest.org
 TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
 TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
 
-===================== Kexi 2.0 Alpha =====================
+===================== Kexi 2.2  =====================
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -22,7 +22,8 @@ TODO KoProperty:
 -- "revert" button should appear
 -- if the property has parent, the item for the parent should be repainted
 - (??) fix or reimplement spin box widgets: look bad with oxygen and probably other styles
-- fix setting font values: in form designer we need to leave andreenter the item to apply the changes
+- fix setting font values: in form designer we need to leave and reenter the item to apply the changes
+- SetPrivate::m_visiblePropertiesCount should be altered also when Property::setVisible() is called on added property
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
@@ -89,7 +90,13 @@ TODO: crashes on app exit:
 #20 0xb7b65b50 in ~KexiWindowContainer (this=0x8280058) at koffice/kexi/main/KexiMainWindow_p.h:79
 #21 0xb7b52ea9 in KexiMainWindow::closeWindow (this=0x8198090, window=0x83e1b90, layoutTaskBar=true, doNotSaveChanges=false)
 
-~~~~~~~~~~~~~~~~ 2.2 beta 1 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.2 beta 2 ~~~~~~~~~~~~~~~~
+
+2010-04-03
+KoProperty
+*skip items unacceptable by selector also after changing the sort order
+**this fixes the visibility issues in kexi's propeditor
 
 2010-04-02
 *remove bundled, unused sqlite2 and 3
@@ -98,6 +105,9 @@ Forms
 *hide Spring element and autofield widget (will be back in 2.3)
 *hide the Object Tree tab (will be back in 2.3)
 *"Assign action" feature ported
+*make group box widget show properties
+
+~~~~~~~~~~~~~~~~ 2.2 beta 1 ~~~~~~~~~~~~~~~~
 
 2010-03-30
 Reports
