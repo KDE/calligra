@@ -329,11 +329,11 @@ QAction* KexiFormManager::action(const char* name)
     QAction *a = col->action(n);
     if (a)
         return a;
-    if (!activeFormViewWidget())
-        return 0;
-    a = KexiMainWindowIface::global()->actionCollection()->action(n);
-    if (a)
-        return a;
+    if (activeFormViewWidget()) {
+        a = KexiMainWindowIface::global()->actionCollection()->action(n);
+        if (a)
+            return a;p
+    }
     return d->collection->action(name);
 }
 
