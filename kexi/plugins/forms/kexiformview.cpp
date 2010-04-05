@@ -352,6 +352,8 @@ void KexiFormView::initForm()
     }*/
         connect(form(), SIGNAL(widgetNameChanged(const QByteArray&,const QByteArray&)),
                 this, SLOT(slotWidgetNameChanged(const QByteArray&,const QByteArray&)));
+        connect(form(), SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
+                this, SLOT(slotWidgetSelectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
 
 //2.0    form->setSelectedWidget(form->widget());
         form()->selectWidget(form()->widget()); //added in 2.0
@@ -1403,6 +1405,7 @@ void KexiFormView::updateActions(bool activated)
     } */
   }
   KexiDataAwareView::updateActions(activated);
+  updateActions();
 }
 
 /*
@@ -1423,6 +1426,29 @@ void KexiFormView::slotWidgetNameChanged(const QByteArray& oldname, const QByteA
     //kDebug() << oldname << newname << form()->propertySet().propertyValue("objectName").toString();
     KexiMainWindowIface::global()->updatePropertyEditorInfoLabel();
     formPart()->dataSourcePage()->updateInfoLabelForPropertySet(&form()->propertySet());
+}
+
+void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
+{
+    Q_UNUSED(w)
+    Q_UNUSED(flags)
+    updateActions();
+}
+
+void KexiFormView::updateActions()
+{
+    const QWidget* selectedWidget = form()->selectedWidget();
+    QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
+    if (widget_assign_action) {
+        QByteArray wClass;
+        if (selectedWidget) {
+            wClass = selectedWidget->metaObject()->className();
+        }
+        widget_assign_action->setEnabled(
+               selectedWidget
+            && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
+        );
+    }
 }
 
 #include "kexiformview.moc"
