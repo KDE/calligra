@@ -293,6 +293,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     win->restoreSettings();
 #ifdef KEXI_DEBUG_GUI
     win->raise();
+    static_cast<QWidget*>(win)->activateWindow();
 #endif
 //#ifdef KEXI_DEBUG_GUI
 // delete debugWindow;
