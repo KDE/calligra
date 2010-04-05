@@ -90,6 +90,7 @@ void SectionContainer::initContainer(Section* _section, KUndoStack* _stack) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
+  m_resourceManager = new KoResourceManager;
   m_resourceManager->setUndoStack(_stack);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactoryBase* shapeFactory = KoShapeRegistry::instance()->value(id);
