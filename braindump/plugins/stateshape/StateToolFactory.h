@@ -20,16 +20,16 @@
 #ifndef _STATETOOLFACTORY_H_
 #define _STATETOOLFACTORY_H_
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class StateToolFactory : public KoToolFactory
+class StateToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
     public:
         explicit StateToolFactory( QObject *parent );
         ~StateToolFactory();
 
-        KoTool * createTool( KoCanvasBase *canvas );
+        KoToolBase * createTool( KoCanvasBase *canvas );
 };
 
 #endif

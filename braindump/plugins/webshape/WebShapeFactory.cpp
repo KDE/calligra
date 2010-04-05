@@ -29,7 +29,7 @@
 #include "WebShape.h"
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
-   : KoShapeFactory( parent, WEBSHAPEID,
+   : KoShapeFactoryBase( parent, WEBSHAPEID,
                      i18n("Web Shape") )
 {
   setToolTip( i18n("A web shape") );
@@ -37,7 +37,7 @@ WebShapeFactory::WebShapeFactory(QObject* parent)
   setOdfElementNames( "http://kde.org/braindump", QStringList( "web" ) );
 }
 
-KoShape* WebShapeFactory::createDefaultShape() const
+KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
   WebShape* fooShape = new WebShape();
   fooShape->setShapeId(WEBSHAPEID);
@@ -45,8 +45,7 @@ KoShape* WebShapeFactory::createDefaultShape() const
   return fooShape;
 }
 
-KoShape* WebShapeFactory::createShape(
-                            const KoProperties* params ) const
+KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
   WebShape* fooShape = new WebShape();
   if(params->contains("url"))

@@ -27,7 +27,6 @@
 #include <QClipboard>
 
 #include <KoCanvasController.h>
-#include <KoCanvasResourceProvider.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -118,7 +117,7 @@ void View::initGUI()
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
       kDebug() << "Creating docker: " << docker;
-      KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
+      KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
       m_mainWindow->createDockWidget(factory);
     }
     

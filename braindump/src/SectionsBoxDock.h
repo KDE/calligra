@@ -29,7 +29,7 @@ class TreeSortFilter;
 class View;
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 class SectionsBoxDock : public QDockWidget {
     Q_OBJECT
@@ -67,7 +67,7 @@ class SectionsBoxDock : public QDockWidget {
 };
 
 
-class SectionsBoxDockFactory : public KoDockFactory
+class SectionsBoxDockFactory : public KoDockFactoryBase
 {
 
 public:

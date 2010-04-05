@@ -20,12 +20,12 @@
 #ifndef _STATETOOL_H_
 #define _STATETOOL_H_
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class StateShape;
 class KoShape;
 
-class StateTool : public KoTool 
+class StateTool : public KoToolBase
 {
     Q_OBJECT
   public:
@@ -33,7 +33,7 @@ class StateTool : public KoTool
     ~StateTool();
     
     /// reimplemented
-    void activate( bool );
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) ;
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );

@@ -20,12 +20,12 @@
 #ifndef _KO_TOOLBOX_H_
 #define _KO_TOOLBOX_H_
 
-#include <KoCanvasObserver.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
+#include <KoCanvasObserverBase.h>
 
 class QToolButton;
 class KoCanvasController;
@@ -101,7 +101,7 @@ private:
     Private * const d;
 };
 
-class ToolBoxDocker : public QDockWidget, public KoCanvasObserver
+class ToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
 public:
     ToolBoxDocker(ToolBox *toolBox);

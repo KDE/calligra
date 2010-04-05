@@ -135,7 +135,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   bodyWriter->endElement(); // office:element
   bodyWriter->endElement(); // office:body
   
-  mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+  mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
   odfStore.closeContentWriter();
 
@@ -211,7 +211,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Text, false));
   
   KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-  KoShapeLoadingContext context(loadingContext, section->sectionContainer()->dataCenterMap());
+  KoShapeLoadingContext context(loadingContext, section->sectionContainer()->resourceManager());
 
   KoXmlElement element;
   QList<KoShape*> shapes;
@@ -298,7 +298,7 @@ void SectionsIO::save()
   }
 }
 
-void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root, KoUndoStack* _stack)
+void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root, KUndoStack* _stack)
 {
   QDomNode n = elt.firstChild();
   while(!n.isNull()) {

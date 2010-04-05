@@ -33,13 +33,13 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoShapeLoadingContext.h>
-#include <KoUndoStack.h>
 
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
 #include "Layout.h"
+#include <KoResourceManager.h>
 
-SectionContainer::SectionContainer(Section* section, KoUndoStack* _stack) : m_section(0), m_layer(0)
+SectionContainer::SectionContainer(Section* section, KUndoStack* _stack) : m_section(0), m_layer(0)
 {
   initContainer(section, _stack);
 }
@@ -58,7 +58,7 @@ class SectionContainerShapePaste : public KoOdfPaste
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     {
       KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-      KoShapeLoadingContext context(loadingContext, m_container->dataCenterMap());
+      KoShapeLoadingContext context(loadingContext, m_container->resourceManager());
       QList<KoShape*> shapes;
       m_container->loadOdf(body, context, shapes);
       m_layout->addShapes(shapes);
@@ -71,7 +71,7 @@ class SectionContainerShapePaste : public KoOdfPaste
 };
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
-  initContainer(_section, dynamic_cast<KoUndoStack*>(_rhs.m_dataCenterMap["UndoStack"]));
+  initContainer(_section, _rhs.resourceManager()->undoStack());
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->childShapes());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
@@ -86,14 +86,14 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
   delete mimeData;
 }
 
-void SectionContainer::initContainer(Section* _section, KoUndoStack* _stack) {
+void SectionContainer::initContainer(Section* _section, KUndoStack* _stack) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
-  m_dataCenterMap["UndoStack"] = _stack;
+  m_resourceManager->setUndoStack(_stack);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
-    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-    shapeFactory->populateDataCenterMap(m_dataCenterMap);
+    KoShapeFactoryBase* shapeFactory = KoShapeRegistry::instance()->value(id);
+    shapeFactory->newDocumentResourceManager(m_resourceManager);
   }
 }
 
@@ -134,9 +134,9 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
   context.xmlWriter().endElement();
 }
 
-QMap<QString, KoDataCenter* > SectionContainer::dataCenterMap() const
+KoResourceManager* SectionContainer::resourceManager() const
 {
-  return m_dataCenterMap;
+  return m_resourceManager;
 }
 
 QRectF SectionContainer::containerBound() const

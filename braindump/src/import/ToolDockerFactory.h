@@ -22,12 +22,12 @@
 #define KO_TOOL_DOCKER_FACTORY_H
 
 #include "ToolDocker.h"
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 /**
  * The factory class for the KoToolDocker.
  */
-class ToolDockerFactory : public KoDockFactory
+class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
     ToolDockerFactory( QString dockWidgetId = 0 );

@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 WebToolFactory::WebToolFactory( QObject *parent )
-    : KoToolFactory(parent, "WebToolFactoryID", i18n("State Tool"))
+    : KoToolFactoryBase(parent, "WebToolFactoryID")
 {
     setToolTip( i18n("State Tool") );
     setToolType( dynamicToolType() );
@@ -37,7 +37,7 @@ WebToolFactory::~WebToolFactory()
 {
 }
 
-KoTool * WebToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase* WebToolFactory::createTool( KoCanvasBase * canvas )
 {
     return new WebTool( canvas );
 }

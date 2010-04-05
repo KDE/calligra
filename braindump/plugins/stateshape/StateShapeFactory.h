@@ -17,14 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeFactory.h"
+#include "KoShapeFactoryBase.h"
 
-class StateShapeFactory : public KoShapeFactory {
+class StateShapeFactory : public KoShapeFactoryBase {
   public:
     StateShapeFactory( QObject *parent );
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape(const KoProperties* params) const;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement & e) const;
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

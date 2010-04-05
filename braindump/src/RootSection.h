@@ -25,7 +25,7 @@
 #include "SectionGroup.h"
 
 class KActionCollection;
-class KoUndoStack;
+class KUndoStack;
 class QUndoCommand;
 class ViewManager;
 class SectionsIO;
@@ -39,7 +39,7 @@ class RootSection : public QObject, public SectionGroup {
     SectionsIO* sectionsIO();
     void addCommand(Section* , QUndoCommand* command);
     void createActions(KActionCollection* );
-    KoUndoStack* undoStack(); // TODO remove when it is again possible to hide the undo stack
+    KUndoStack* undoStack(); // TODO remove when it is again possible to hide the undo stack
     void setCurrentSection(Section* ); // TODO when the command statck is hidden again, remove
   signals:
     /// This signal is emited when a command is executed in the undo stack
@@ -47,7 +47,7 @@ class RootSection : public QObject, public SectionGroup {
   private slots:
     void undoIndexChanged(int idx);
   private:
-    KoUndoStack* m_undoStack;
+    KUndoStack* m_undoStack;
     ViewManager* m_viewManager;
     SectionsIO* m_sectionsSaver;
     QMap<const QUndoCommand*, Section* > m_commandsMap;

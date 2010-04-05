@@ -72,7 +72,7 @@ private:
   qreal m_oldZoom;
 };
 
-WebTool::WebTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0), m_dragMode(NO_DRAG)
+WebTool::WebTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_tmpShape(0), m_dragMode(NO_DRAG)
 {
 }
 
@@ -80,10 +80,10 @@ WebTool::~WebTool()
 {
 }
 
-void WebTool::activate( bool v )
+void WebTool::activate( ToolActivation /*toolActivation*/, const QSet<KoShape*> &/*shapes*/ )
 {
   Q_ASSERT(m_dragMode == NO_DRAG);
-  KoSelection *selection = m_canvas->shapeManager()->selection();
+  KoSelection *selection = canvas()->shapeManager()->selection();
   foreach( KoShape *shape, selection->selectedShapes() ) 
   {
     m_currentShape = dynamic_cast<WebShape*>( shape );
@@ -97,7 +97,6 @@ void WebTool::activate( bool v )
     emit done();
     return;
   }
-  KoTool::activate(v);
 }
 
 void WebTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -110,8 +109,8 @@ void WebTool::mousePressEvent( KoPointerEvent *event )
 {
   WebShape *hit = 0;
   QRectF roi( event->point, QSizeF(1,1) );
-  QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
-  KoSelection *selection = m_canvas->shapeManager()->selection();
+  QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
+  KoSelection *selection = canvas()->shapeManager()->selection();
   foreach( KoShape *shape, shapes ) 
   {
     hit = dynamic_cast<WebShape*>( shape );

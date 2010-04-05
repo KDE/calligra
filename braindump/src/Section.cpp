@@ -23,7 +23,7 @@
 #include "LayoutFactoryRegistry.h"
 #include "Layout.h"
 
-Section::Section(KoUndoStack* _stack) : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout")), m_sectionContainer(new SectionContainer(this, _stack))
+Section::Section(KUndoStack* _stack) : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout")), m_sectionContainer(new SectionContainer(this, _stack))
 {
 }
 

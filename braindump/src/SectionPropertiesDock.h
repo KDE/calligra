@@ -26,7 +26,7 @@ class RootSection;
 class Section;
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 class SectionPropertiesDock : public QDockWidget {
     Q_OBJECT
@@ -44,7 +44,7 @@ class SectionPropertiesDock : public QDockWidget {
     RootSection* m_rootSection;
 };
 
-class SectionPropertiesDockFactory : public KoDockFactory
+class SectionPropertiesDockFactory : public KoDockFactoryBase
 {
 
 public:

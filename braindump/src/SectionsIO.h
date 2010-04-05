@@ -29,7 +29,7 @@ class QTimer;
 class RootSection;
 class Section;
 class SectionGroup;
-class KoUndoStack;
+class KUndoStack;
 
 class SectionsIO : public QObject {
   Q_OBJECT
@@ -63,7 +63,7 @@ class SectionsIO : public QObject {
      *                        associated files
      */
     void saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove);
-    void loadTheStructure(QDomElement& elt, SectionGroup* root, KoUndoStack* _stack);
+    void loadTheStructure(QDomElement& elt, SectionGroup* root, KUndoStack* _stack);
     QString generateFileName();
     bool usedFileName(const QString&);
     QString structureFileName();

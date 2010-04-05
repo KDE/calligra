@@ -26,7 +26,7 @@
 #include "StateShape.h"
 
 StateShapeFactory::StateShapeFactory(QObject* parent) 
-   : KoShapeFactory( parent, STATESHAPEID,
+   : KoShapeFactoryBase( parent, STATESHAPEID,
                      i18n("State Shape") )
 {
   setToolTip( i18n("A state shape") );
@@ -34,7 +34,7 @@ StateShapeFactory::StateShapeFactory(QObject* parent)
   setOdfElementNames( "http://kde.org/braindump", QStringList( "state" ) );
 }
 
-KoShape* StateShapeFactory::createDefaultShape() const
+KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentResources*/ ) const
 {
   StateShape* fooShape = new StateShape();
   fooShape->setShapeId(STATESHAPEID);
@@ -42,8 +42,7 @@ KoShape* StateShapeFactory::createDefaultShape() const
   return fooShape;
 }
 
-KoShape* StateShapeFactory::createShape(
-                            const KoProperties* params ) const
+KoShape *StateShapeFactory::createShape(const KoProperties *params, KoResourceManager */*documentResources*/ ) const
 {
   Q_UNUSED(params);
   StateShape* fooShape = new StateShape();

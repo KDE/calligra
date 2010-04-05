@@ -34,8 +34,8 @@
 #include <kstandardaction.h>
 #include <kundostack.h>
 
-#include <KoDockFactory.h>
-#include <KoCanvasObserver.h>
+#include <KoDockFactoryBase.h>
+#include <KoCanvasObserverBase.h>
 
 #include "RootSection.h"
 #include "View.h"
@@ -110,7 +110,7 @@ void MainWindow::setupActions()
   m_dockWidgetMenu->setVisible(false);
 }
 
-QDockWidget* MainWindow::createDockWidget(KoDockFactory* factory)
+QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
 
@@ -132,18 +132,18 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactory* factory)
         bool visible = true;
 
         switch (factory->defaultDockPosition()) {
-        case KoDockFactory::DockTornOff:
+        case KoDockFactoryBase::DockTornOff:
             dockWidget->setFloating(true); // position nicely?
             break;
-        case KoDockFactory::DockTop:
+        case KoDockFactoryBase::DockTop:
             side = Qt::TopDockWidgetArea; break;
-        case KoDockFactory::DockLeft:
+        case KoDockFactoryBase::DockLeft:
             side = Qt::LeftDockWidgetArea; break;
-        case KoDockFactory::DockBottom:
+        case KoDockFactoryBase::DockBottom:
             side = Qt::BottomDockWidgetArea; break;
-        case KoDockFactory::DockRight:
+        case KoDockFactoryBase::DockRight:
             side = Qt::RightDockWidgetArea; break;
-        case KoDockFactory::DockMinimized:
+        case KoDockFactoryBase::DockMinimized:
             visible = false; break;
         default:;
         }
@@ -251,12 +251,12 @@ void MainWindow::removeStatusBarItem(QWidget* _widget)
   kWarning() << "Widget " << _widget << " not found in the status bar";
 }
 
-QList<KoCanvasObserver*> MainWindow::canvasObservers()
+QList<KoCanvasObserverBase*> MainWindow::canvasObservers()
 {
-    QList<KoCanvasObserver*> observers;
+    QList<KoCanvasObserverBase*> observers;
 
     foreach(QDockWidget *docker, m_dockWidgets) {
-        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
             observers << observer;
         }

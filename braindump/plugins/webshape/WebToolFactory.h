@@ -20,16 +20,16 @@
 #ifndef _WEB_TOOL_FACTORY_H_
 #define _WEB_TOOL_FACTORY_H_
 
-#include <KoToolFactory.h>
+#include <KoToolFactoryBase.h>
 
-class WebToolFactory : public KoToolFactory
+class WebToolFactory : public KoToolFactoryBase
 {
     Q_OBJECT
     public:
         explicit WebToolFactory( QObject *parent );
         ~WebToolFactory();
 
-        KoTool * createTool( KoCanvasBase *canvas );
+        KoToolBase * createTool( KoCanvasBase *canvas );
 };
 
 #endif

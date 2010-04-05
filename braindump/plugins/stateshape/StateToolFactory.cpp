@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 StateToolFactory::StateToolFactory( QObject *parent )
-    : KoToolFactory(parent, "StateToolFactoryID", i18n("State Tool"))
+    : KoToolFactoryBase(parent, "StateToolFactoryID")
 {
     setToolTip( i18n("State Tool") );
     setToolType( dynamicToolType() );
@@ -37,7 +37,7 @@ StateToolFactory::~StateToolFactory()
 {
 }
 
-KoTool * StateToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase* StateToolFactory::createTool( KoCanvasBase * canvas )
 {
     return new StateTool( canvas );
 }

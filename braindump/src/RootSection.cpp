@@ -19,7 +19,7 @@
 
 #include "RootSection.h"
 
-#include <KoUndoStack.h>
+#include <KUndoStack>
 
 #include "Section.h"
 #include "SectionsIO.h"
@@ -28,7 +28,7 @@
 
 #include <KDebug>
 
-RootSection::RootSection() : SectionGroup(0), m_undoStack(new KoUndoStack(0)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
+RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndoStack(this)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
 {
   connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
   connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
@@ -36,7 +36,6 @@ RootSection::RootSection() : SectionGroup(0), m_undoStack(new KoUndoStack(0)), m
 
 RootSection::~RootSection()
 {
-  delete m_undoStack;
 }
 
 ViewManager* RootSection::viewManager()
@@ -61,7 +60,7 @@ void RootSection::createActions(KActionCollection* _actionCollection) {
   m_undoStack->createRedoAction(_actionCollection);
 }
 
-KoUndoStack* RootSection::undoStack()
+KUndoStack* RootSection::undoStack()
 {
   return m_undoStack;
 }

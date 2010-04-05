@@ -25,11 +25,11 @@
 
 class Layout;
 class SectionContainer;
-class KoUndoStack;
+class KUndoStack;
 
 class Section :  public SectionGroup {
   public:
-    Section(KoUndoStack* _stack);
+    Section(KUndoStack* _stack);
     Section(const Section& _rhs);
   public:
     SectionContainer* sectionContainer();

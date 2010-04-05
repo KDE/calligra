@@ -20,9 +20,8 @@ kde4_add_plugin(webshape ${webshape_LIB_SRCS})
 target_link_libraries(
     webshape
     ${KOMAIN_LIBRARY}
+    ${KOODF_LIBRARY}
     ${FLAKE_LIBRARY}
-    ${KOBASE_LIBRARY}
-    kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBRARY}

@@ -24,8 +24,7 @@ target_link_libraries(
     stateshape
     ${KOMAIN_LIBRARY}
     ${FLAKE_LIBRARY}
-    kostore
-    ${KOBASE_LIBRARY}
+    ${KOODF_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBRARY}

@@ -22,29 +22,30 @@
 
 #include <KoShapeContainer.h>
 
+class KoResourceManager;
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
-class KoUndoStack;
+class KUndoStack;
 
 class SectionContainer {
   public:
-    SectionContainer(Section* , KoUndoStack* _stack );
+    SectionContainer(Section* , KUndoStack* _stack );
     SectionContainer(const SectionContainer& _rhs, Section* );
   private:
-    void initContainer(Section* , KoUndoStack* _stack );
+    void initContainer(Section* , KUndoStack* _stack );
   public:
     Section* section();
     KoShapeLayer* layer();
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);
     void saveOdf(KoShapeSavingContext & context) const;
-    QMap<QString, KoDataCenter *> dataCenterMap() const;
+    KoResourceManager* resourceManager() const;
     QRectF containerBound() const;
   private:
     SectionContainer(const SectionContainer& _rhs);
   private:
     Section* m_section;
-    QMap<QString, KoDataCenter *> m_dataCenterMap;
+    KoResourceManager* m_resourceManager;
     KoShapeLayer* m_layer;
     SectionShapeContainerModel* m_sectionModel;
 };

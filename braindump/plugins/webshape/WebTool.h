@@ -20,12 +20,12 @@
 #ifndef _WEB_TOOL_H_
 #define _WEB_TOOL_H_
 
-#include <KoTool.h>
+#include <KoToolBase.h>
 
 class WebShape;
 class KoShape;
 
-class WebTool : public KoTool 
+class WebTool : public KoToolBase
 {
     Q_OBJECT
   public:
@@ -33,7 +33,7 @@ class WebTool : public KoTool
     ~WebTool();
     
     /// reimplemented
-    void activate( bool );
+    void activate( ToolActivation toolActivation, const QSet<KoShape*> &shapes );
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
