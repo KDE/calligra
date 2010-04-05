@@ -332,7 +332,7 @@ QAction* KexiFormManager::action(const char* name)
     if (activeFormViewWidget()) {
         a = KexiMainWindowIface::global()->actionCollection()->action(n);
         if (a)
-            return a;p
+            return a;
     }
     return d->collection->action(name);
 }

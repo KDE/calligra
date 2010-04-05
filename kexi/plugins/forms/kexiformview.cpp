@@ -691,7 +691,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 //  emit KFormDesigner::FormManager::self()->propertySetSwitched( KFormDesigner::FormManager::self()->propertySet()->set(), true );
     }
 
-    updateActions();
+    updateActionsInternal();
     return true;
 }
 
@@ -1406,7 +1406,7 @@ void KexiFormView::updateActions(bool activated)
     } */
   }
   KexiDataAwareView::updateActions(activated);
-  updateActions();
+  updateActionsInternal();
 }
 
 /*
@@ -1433,10 +1433,10 @@ void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::W
 {
     Q_UNUSED(w)
     Q_UNUSED(flags)
-    updateActions();
+    updateActionsInternal();
 }
 
-void KexiFormView::updateActions()
+void KexiFormView::updateActionsInternal()
 {
     const QWidget* selectedWidget = form()->selectedWidget();
     QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
