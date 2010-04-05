@@ -190,16 +190,31 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch4"/>
     //<chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch5"><chart:grid chart:style-name="ch6" chart:class="major"/></chart:axis>
 
+    //NOTE the XLS format specifies that if an explodeFactor that is > 100 is found,
+    //we should find the biggest and make it 100, then scale all the other factors accordingly
+    //see 2.4.195 PieFormat
+    int maxExplode = 100;
+    foreach(Charting::Series* series, chart()->m_series) {
+        foreach(Charting::Format* f, series->m_datasetFormat) {
+            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
+                if(pieformat->m_pcExplode > 0)
+                    maxExplode = qMax(maxExplode, pieformat->m_pcExplode);
+        }
+    }
+
     foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
+
         foreach(Charting::Format* f, series->m_datasetFormat) {
             if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
                 if(pieformat->m_pcExplode > 0) {
-                    seriesstyle.addProperty("chart:pie-offset", 5 /*FIXME m_width/100.0*pieformat->m_pcExplode*/, KoGenStyle::ChartType);
+                    //Note that 100.0/maxExplode will yield 1.0 most of the time, that's why do that division first
+                    const int pcExplode = (int)((float)pieformat->m_pcExplode * (100.0 / (float)maxExplode));
+                    seriesstyle.addProperty("chart:pie-offset", pcExplode, KoGenStyle::ChartType);
                 }
         }
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
