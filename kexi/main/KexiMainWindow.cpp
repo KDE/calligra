@@ -291,7 +291,9 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     win->show();
     app->processEvents();//allow refresh our app
     win->restoreSettings();
-
+#ifdef KEXI_DEBUG_GUI
+    win->raise();
+#endif
 //#ifdef KEXI_DEBUG_GUI
 // delete debugWindow;
 //#endif
