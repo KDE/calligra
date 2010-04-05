@@ -438,13 +438,11 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     return w;
 }
 
-bool
-KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
-                                 KFormDesigner::Container *)
+bool KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
+                                      KFormDesigner::Container *)
 {
-    if (classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton") {
+    if (m_assignAction->isEnabled()) {
         /*! @todo also call createMenuActions() for inherited factory! */
-kDebug() << m_assignAction;
         menu->addAction(m_assignAction);
         return true;
     } else if (classname == "KexiDBImageBox") {

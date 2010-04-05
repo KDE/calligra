@@ -135,6 +135,8 @@ protected slots:
     //! @see insertAutoFields()
     void slotHandleDropEvent(QDropEvent* e);
 
+    void slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags);
+
 //moved to formmanager  void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
 //moved to formmanager  void slotFormWidgetSelected(KFormDesigner::Form *form);
 //moved to formmanager  void slotNoFormSelected();
@@ -203,6 +205,8 @@ protected:
     /*! Reimplemented after KexiView.
      Updates actions (e.g. availability). */
     virtual void updateActions(bool activated);
+
+    void updateActions();
 
     KexiDBForm *m_dbform;
     KexiFormScrollView *m_scrollView;
