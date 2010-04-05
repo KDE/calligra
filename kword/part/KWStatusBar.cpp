@@ -267,6 +267,19 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
 //static
 void KWStatusBar::addViewControls(KStatusBar *statusBar, KWView *view)
 {
+    /**
+     * Life time of a KWStatusBar is tricky...
+     * One main window has one KStatusBar.  But it can be re-used by different
+     *  documents and thus by many different KWView instances.
+     * So;  open a document in a window creates a KWView. That creates a KWStatusBar
+     *      split the view creates a new KWView in the same mainwindow, this reuses
+     *      the already existing KWStatusBar
+     *      Create a new view (new MainWindow) also creates a new KWStatusBar
+     *      Close all your views (deletes all KWViews) but not your Mainwindow will
+     *      still destroy all your KWStatusBar instances.  Note that KStatusBar is not
+     *      destructed in that case.
+     */
+
     QVariant variant = statusBar->property(KWSTATUSBAR);
     if (variant.isValid()) // already exists!
         return;
