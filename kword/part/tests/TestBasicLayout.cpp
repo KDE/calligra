@@ -10,6 +10,9 @@
 #include "../KWDocument.h"
 #include "../KWord.h"
 
+#include <KoTextDocumentLayout.h>
+#include <QTextCursor>
+
 #include <kcomponentdata.h>
 
 class Helper
@@ -362,6 +365,44 @@ void TestBasicLayout::testCreateNewFrameForPage()
     foreach(KWFrame *frame, tfs.frames()) {
         QVERIFY (page.rect().contains(frame->shape()->position()));
     }
+}
+
+void TestBasicLayout::testLargeHeaders()
+{
+    // create a header with waaaaaaay to much text and do one page layout.
+    // Check if the header has been trunkated and no new page has been requested.
+    Helper helper;
+    m_frames.clear();
+    KWPage page = helper.pageManager->begin();
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeUniform);
+
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWTextFrameSet *fs = bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page);
+    QVERIFY(fs);
+    QCOMPARE(fs->frameCount(), 0);
+    bfl.createNewFramesForPage(page.pageNumber());
+    QCOMPARE(fs->frameCount(), 1);
+
+    // now we have to make sure the header looks pretty full
+    KWTextFrame *tf = dynamic_cast<KWTextFrame*>(fs->frames().at(0));
+    QVERIFY(tf);
+    tf->setMinimumFrameHeight(300);
+    bfl.layoutFramesOnPage(page.pageNumber());
+    QCOMPARE(fs->frameCount(), 1);
+
+    KoShape *shape = fs->frames()[0]->shape();
+    QVERIFY(shape->size().width() <= 200);
+    // the header can never be bigger than a page.
+    QVERIFY(shape->size().height() < 180);
+
+    // the header can never force the main text fs to get too small
+    KWTextFrameSet *mfs = bfl.getOrCreate(KWord::MainTextFrameSet, page);
+    QVERIFY(mfs);
+    QCOMPARE(mfs->frameCount(), 1);
+    shape = mfs->frames()[0]->shape();
+    QVERIFY(shape->size().height() >= 10);
 }
 
 // helper method (slot)
