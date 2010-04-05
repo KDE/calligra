@@ -1439,20 +1439,24 @@ void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::W
 void KexiFormView::updateActionsInternal()
 {
     const QWidget* selectedWidget = form()->selectedWidget();
-    QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
     //kDebug() << selectedWidget << (viewMode()==Kexi::DesignViewMode) << widget_assign_action;
+    QByteArray wClass;
+    if (selectedWidget) {
+        wClass = selectedWidget->metaObject()->className();
+        //kDebug() << wClass;
+    }
+    QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
     if (widget_assign_action) {
-        QByteArray wClass;
-        if (selectedWidget) {
-            wClass = selectedWidget->metaObject()->className();
-            //kDebug() << wClass;
-        }
         widget_assign_action->setEnabled(
                viewMode()==Kexi::DesignViewMode
             && selectedWidget
             && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
         );
     }
+#ifdef KEXI_DEBUG_GUI
+    QAction *show_form_ui_action = KexiFormManager::self()->action("show_form_ui");
+    show_form_ui_action->setEnabled(viewMode()==Kexi::DesignViewMode);
+#endif
 }
 
 #include "kexiformview.moc"

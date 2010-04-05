@@ -204,6 +204,9 @@ public:
     // see KexiMainWindowIface
     virtual void addToolBarAction(const QString& toolBarName, QAction *action);
 
+    // see KexiMainWindowIface
+    virtual KToolBar *toolBar(const QString& name) const;
+
 public slots:
     /*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
       Just calls closeWindow(). Use closeWindow() if you need, not this one. */

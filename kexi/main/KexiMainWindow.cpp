@@ -5233,6 +5233,11 @@ void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
     Q_UNUSED(item);
 }
 
+KToolBar *KexiMainWindow::toolBar(const QString& name) const
+{
+    return d->tabbedToolBar->toolBar(name);
+}
+
 void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
 {
     d->tabbedToolBar->appendWidgetToToolbar(name, widget);

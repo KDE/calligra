@@ -24,11 +24,13 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
+#include <QToolButton>
 #include <KAction>
 #include <KToggleAction>
 #include <KActionCollection>
 #include <KPageDialog>
 #include <KTextEdit>
+#include <KToolBar>
 
 //2.0 #include <formeditor/formmanager.h>
 //2.0 #include <formeditor/widgetpropertyset.h>
@@ -44,13 +46,11 @@
 #include <koproperty/Property.h>
 #include <widget/kexicustompropertyfactory.h>
 #include <core/KexiMainWindowIface.h>
+#include <kexiutils/SmallToolButton.h>
 
 class KexiFormManagerPrivate {
 public:
     KexiFormManagerPrivate() : part(0)
-#ifdef KEXI_DEBUG_GUI
-        , uiCodeDialog(0)
-#endif
         , q(this)
     {
         features = KFormDesigner::Form::NoFeatures;
@@ -63,7 +63,7 @@ public:
     }
     ~KexiFormManagerPrivate() {
 #ifdef KEXI_DEBUG_GUI
-        delete uiCodeDialog;
+        delete static_cast<QObject*>(uiCodeDialog);
 #endif
     }
     KexiFormPart* part;
@@ -72,7 +72,7 @@ public:
     KFormDesigner::ObjectTreeView *treeView;
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
-    KPageDialog *uiCodeDialog;
+    QPointer<KPageDialog> uiCodeDialog;
     KTextEdit *currentUICodeDialogEditor;
     KTextEdit *originalUICodeDialogEditor;
 #endif
@@ -239,29 +239,32 @@ void KexiFormManager::createActions(KActionCollection* collection)
         formActions
             << "edit_pointer"
             << QString() //sep
-            << "library_widget_KexiDBAutoField"
-            << "library_widget_KexiDBLabel"
-            << "library_widget_KexiPictureLabel"
-            << "library_widget_KexiDBImageBox"
-            << "library_widget_KexiDBLineEdit"
-            << "library_widget_KexiDBTextEdit"
-            << "library_widget_KPushButton"
-            << "library_widget_KexiDBComboBox"
-            << "library_widget_KexiDBCheckBox"
-            << "library_widget_Spacer"
-            << "library_widget_Line"
-            << "library_widget_KexiFrame"
-            << "library_widget_QGroupBox"
-            << "library_widget_KFDTabWidget"
-            << "library_widget_Spring"
-            << QString() //sep
-#ifdef KEXI_DEBUG_GUI
-            << "show_form_ui"
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
+            << ":library_widget_KexiDBAutoField"
 #endif
+            << ":library_widget_KexiDBLabel"
+            << ":library_widget_KexiDBImageBox"
+            << ":library_widget_KexiDBLineEdit"
+            << ":library_widget_KexiDBTextEdit"
+            << ":library_widget_KPushButton"
+            << ":library_widget_KexiDBComboBox"
+            << ":library_widget_KexiDBCheckBox"
+#ifndef KEXI_NO_FORM_LAYOUTS
+            << ":library_widget_Spacer"
+#endif
+            << ":library_widget_Line"
+            << ":library_widget_KexiFrame"
+            << ":library_widget_QGroupBox"
+            << ":library_widget_KFDTabWidget"
+#ifndef KEXI_NO_FORM_SPRING_ELEMENT
+            << ":library_widget_Spring"
+#endif
+            << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
-        foreach( const QString& actionName, formActions ) {
+        foreach( const QString& actionName_, formActions ) {
             QAction *a;
+            const QString actionName(actionName_.startsWith(':') ? actionName_.mid(1) : actionName_);
             if (actionName.isEmpty()) {
                 a = new QAction(this);
                 a->setSeparator(true);
@@ -269,11 +272,28 @@ void KexiFormManager::createActions(KActionCollection* collection)
             else {
                 a = d->widgetActionGroup->action(actionName);
             }
-            win->addToolBarAction("form", a);
+            if (actionName_.startsWith(':')) {  // icon only
+                KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
+                btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+                win->appendWidgetToToolbar("form", btn);
+            }
+            else {
+                win->addToolBarAction("form", a);
+            }
         }
+
+        QSet<QString> iconOnlyActions;
+        iconOnlyActions << "widget_assign_action" << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
-            win->addToolBarAction("form", a);
+            if (iconOnlyActions.contains(a->objectName())) { // icon only
+                KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
+                btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+                win->appendWidgetToToolbar("form", btn);
+            }
+            else {
+                win->addToolBarAction("form", a);
+            }
         }
     }
 }
