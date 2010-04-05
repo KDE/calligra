@@ -69,6 +69,11 @@ Type: defined/undefined, temporary
 Default: undefined
 Description: If defined, image box (KexiImageBox) widget will not be available
 
+* KEXI_NO_FORM_LAYOUTS
+Type: defined/undefined, temporary
+Default: undefined for 2.x
+Description: If defined, layouts (and spacers) for forms will not be available
+
 * CUSTOM_VERSION
 Type: defined/undefined
 Default: undefined

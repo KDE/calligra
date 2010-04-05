@@ -42,7 +42,8 @@ TODO Form editor:
  - clicking too many time on undo CRASHES
  - fix syncing form geometry with properties in the propeditor
  - show Spring element and autofield widget for 2.3
-
+ - disable 'assign action' when no button is selected
+  
 TODO: setting "enabled" property to false does not work
 TODO: inserting tab widget does not work
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
@@ -92,6 +93,13 @@ TODO: crashes on app exit:
 
 
 ~~~~~~~~~~~~~~~~ 2.2 beta 2 ~~~~~~~~~~~~~~~~
+
+2010-04-05
+Forms
+*availability of selection-sensitive actions (like "Assign action") is properly updated
+**also use internal manager's action collection when searching for actions: this allows access to "assign action" action
+**look at internal action also when !activeFormViewWidget()
+*make the form's toolbar take less space - most buttons have no labels
 
 2010-04-03
 KoProperty
