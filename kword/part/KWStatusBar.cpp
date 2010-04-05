@@ -42,7 +42,7 @@ const KLocalizedString i18nPage = ki18n("Page: %1/%2");
 #define KWSTATUSBAR "KWStatusBarPointer"
 
 KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
-    : QObject(view),
+    : QObject(statusBar),
     m_statusbar(statusBar),
     m_document(view->kwdocument()),
     m_controller(0),
@@ -264,6 +264,16 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
     m_mousePosLabel->setText(QString("%1:%2").arg(pos.x()).arg(pos.y()));
 }
 
+void KWStatusBar::removeView(QObject *object)
+{
+    KWView *view = static_cast<KWView*>(object);
+    QWidget *widget = m_zoomWidgets.value(view);
+    if (widget) {
+        widget->deleteLater();
+        m_zoomWidgets.remove(view);
+    }
+}
+
 //static
 void KWStatusBar::addViewControls(KStatusBar *statusBar, KWView *view)
 {
@@ -281,11 +291,15 @@ void KWStatusBar::addViewControls(KStatusBar *statusBar, KWView *view)
      */
 
     QVariant variant = statusBar->property(KWSTATUSBAR);
-    if (variant.isValid()) // already exists!
+    if (variant.isValid()) { // already exists!
+        KWStatusBar *decorator = static_cast<KWStatusBar*>(variant.value<void*>());
+        if (decorator)
+            decorator->connect(view, SIGNAL(destroyed(QObject*)), SLOT(removeView(QObject*)));
         return;
+    }
     KWStatusBar *decorator = new KWStatusBar(statusBar, view);
+    decorator->connect(view, SIGNAL(destroyed(QObject*)), SLOT(removeView(QObject*)));
     variant.setValue<void*>(decorator);
     statusBar->setProperty(KWSTATUSBAR, variant);
 }
-
 

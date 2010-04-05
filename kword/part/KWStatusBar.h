@@ -65,6 +65,7 @@ private slots:
     void showModified(bool visible);
     void showMouse(bool visible);
     void showZoom(bool visible);
+    void removeView(QObject *);
 
 private:
     /**
