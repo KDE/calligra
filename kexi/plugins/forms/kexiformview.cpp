@@ -691,6 +691,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 //  emit KFormDesigner::FormManager::self()->propertySetSwitched( KFormDesigner::FormManager::self()->propertySet()->set(), true );
     }
 
+    updateActions();
     return true;
 }
 
@@ -1439,13 +1440,16 @@ void KexiFormView::updateActions()
 {
     const QWidget* selectedWidget = form()->selectedWidget();
     QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
+    //kDebug() << selectedWidget << (viewMode()==Kexi::DesignViewMode) << widget_assign_action;
     if (widget_assign_action) {
         QByteArray wClass;
         if (selectedWidget) {
             wClass = selectedWidget->metaObject()->className();
+            //kDebug() << wClass;
         }
         widget_assign_action->setEnabled(
-               selectedWidget
+               viewMode()==Kexi::DesignViewMode
+            && selectedWidget
             && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
         );
     }
