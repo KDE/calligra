@@ -78,6 +78,7 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
+#include <KoTextDocumentLayout.h>
 #include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoOdfStylesReader.h>
@@ -518,7 +519,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     if ( !d->footer ) {
         d->footer = new TextLabelDummy;
     }
-    if ( dynamic_cast<TextLabelData*>( d->subTitle->userData() ) == 0 ) {
+    if ( dynamic_cast<TextLabelData*>( d->footer->userData() ) == 0 ) {
         TextLabelData *dataDummy = new TextLabelData;
         d->footer->setUserData( dataDummy );
     }
@@ -535,6 +536,13 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
     setClipping( d->footer, true );
+
+    // Enable auto-resizing of chart labels
+    foreach( KoShape *label, labels() ) {
+        TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
+        KoTextDocument doc( labelData->document() );
+        doc.setResizeMethod( KoTextDocument::AutoResize );
+    }
 
     KoColorBackground *background = new KoColorBackground( Qt::white );
     setBackground( background );
@@ -608,6 +616,18 @@ TextLabelData *ChartShape::footerData() const
 {
     TextLabelData *data = qobject_cast<TextLabelData*>( d->footer->userData() );
     return data;
+}
+
+QList<KoShape*> ChartShape::labels() const
+{
+    QList<KoShape*> labels;
+    labels.append( d->title );
+    labels.append( d->footer );
+    labels.append( d->subTitle );
+    foreach( Axis *axis, plotArea()->axes() ) {
+        labels.append( axis->title() );
+    }
+    return labels;
 }
 
 Legend *ChartShape::legend() const

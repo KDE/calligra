@@ -119,6 +119,13 @@ public:
     Legend         *legend() const;
     PlotArea       *plotArea() const;
 
+    /**
+     * Returns a list of all labels in this chart, visible and hidden.
+     * Use this method with caution, as it re-creates the list every
+     * time you call it.
+     */
+    QList<KoShape*> labels() const;
+
     void showTitle(bool doShow);
     void showSubTitle(bool doShow);
     void showFooter(bool doShow);
