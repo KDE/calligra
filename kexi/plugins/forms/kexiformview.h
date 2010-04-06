@@ -206,7 +206,9 @@ protected:
      Updates actions (e.g. availability). */
     virtual void updateActions(bool activated);
 
-    void updateActions();
+    //! Updates internal actions specific to forms.
+    //! @todo merge with other "update" routines?
+    void updateActionsInternal();
 
     KexiDBForm *m_dbform;
     KexiFormScrollView *m_scrollView;

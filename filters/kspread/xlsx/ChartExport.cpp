@@ -56,10 +56,10 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     //xmlWriter->addAttribute("table:end-x", "0.2953in");
     //xmlWriter->addAttribute("table:end-y", "0.0232in");
     xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
-    xmlWriter->addAttribute("svg:x", m_x);
-    xmlWriter->addAttribute("svg:y", m_y);
-    xmlWriter->addAttribute("svg:width", m_width);
-    xmlWriter->addAttribute("svg:height", m_height);
+    xmlWriter->addAttributePt("svg:x", (float)m_x);
+    xmlWriter->addAttributePt("svg:y", (float)m_y);
+    xmlWriter->addAttributePt("svg:width", (float)m_width);
+    xmlWriter->addAttributePt("svg:height", (float)m_height);
     xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
@@ -97,8 +97,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
     //bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
 
-    bodyWriter->addAttribute("svg:width", m_width);
-    bodyWriter->addAttribute("svg:height", m_height);
+    bodyWriter->addAttributePt("svg:width", (float)m_width);
+    bodyWriter->addAttributePt("svg:height", (float)m_height);
 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     //style.addProperty("draw:stroke", "none");
@@ -109,8 +109,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
         bodyWriter->startElement("chart:title");
-        //bodyWriter->addAttribute("svg:x", );
-        //bodyWriter->addAttribute("svg:y", );
+        bodyWriter->addAttributePt("svg:x", sprcToPt(t->m_x1, vertical));
+        bodyWriter->addAttributePt("svg:y", sprcToPt(t->m_y1, horizontal));
+        bodyWriter->addAttributePt("svg:width", sprcToPt(t->m_x2, vertical));
+        bodyWriter->addAttributePt("svg:height", sprcToPt(t->m_y2, horizontal));
         bodyWriter->startElement("text:p");
         bodyWriter->addTextNode(t->m_text);
         bodyWriter->endElement(); // text:p
@@ -193,16 +195,31 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch4"/>
     //<chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch5"><chart:grid chart:style-name="ch6" chart:class="major"/></chart:axis>
 
+    //NOTE the XLS format specifies that if an explodeFactor that is > 100 is found,
+    //we should find the biggest and make it 100, then scale all the other factors accordingly
+    //see 2.4.195 PieFormat
+    int maxExplode = 100;
+    foreach(Charting::Series* series, chart()->m_series) {
+        foreach(Charting::Format* f, series->m_datasetFormat) {
+            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
+                if(pieformat->m_pcExplode > 0)
+                    maxExplode = qMax(maxExplode, pieformat->m_pcExplode);
+        }
+    }
+
     foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
+
         foreach(Charting::Format* f, series->m_datasetFormat) {
             if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
                 if(pieformat->m_pcExplode > 0) {
-                    seriesstyle.addProperty("chart:pie-offset", 5 /*FIXME m_width/100.0*pieformat->m_pcExplode*/, KoGenStyle::ChartType);
+                    //Note that 100.0/maxExplode will yield 1.0 most of the time, that's why do that division first
+                    const int pcExplode = (int)((float)pieformat->m_pcExplode * (100.0 / (float)maxExplode));
+                    seriesstyle.addProperty("chart:pie-offset", pcExplode, KoGenStyle::ChartType);
                 }
         }
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
@@ -271,4 +288,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
     store->popDirectory();
     return true;
+}
+
+float ChartExport::sprcToPt( int sprc, Orientation orientation )
+{
+    if( orientation & vertical )
+        return (float)sprc * ( (float)m_width / 4000.0);
+
+    return (float)sprc * ( (float)m_height / 4000.0);
 }

@@ -1402,10 +1402,10 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = string(cell->sheet()->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
-        c->m_x = QString::number(columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL)) + "pt";
-        c->m_y = QString::number(rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT)) + "pt";
-        c->m_width = QString::number(columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR)) + "pt";
-        c->m_height = QString::number(rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB)) + "pt";
+        c->m_x = columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL);
+        c->m_y = rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT);
+        c->m_width = columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR);
+        c->m_height = rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +

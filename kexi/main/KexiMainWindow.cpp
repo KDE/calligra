@@ -291,7 +291,10 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     win->show();
     app->processEvents();//allow refresh our app
     win->restoreSettings();
-
+#ifdef KEXI_DEBUG_GUI
+    win->raise();
+    static_cast<QWidget*>(win)->activateWindow();
+#endif
 //#ifdef KEXI_DEBUG_GUI
 // delete debugWindow;
 //#endif
@@ -5228,6 +5231,11 @@ void KexiMainWindow::highlightObject(const QString& partClass, const QString& na
 void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
 {
     Q_UNUSED(item);
+}
+
+KToolBar *KexiMainWindow::toolBar(const QString& name) const
+{
+    return d->tabbedToolBar->toolBar(name);
 }
 
 void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)

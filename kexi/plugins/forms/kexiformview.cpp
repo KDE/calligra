@@ -691,6 +691,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 //  emit KFormDesigner::FormManager::self()->propertySetSwitched( KFormDesigner::FormManager::self()->propertySet()->set(), true );
     }
 
+    updateActionsInternal();
     return true;
 }
 
@@ -1405,7 +1406,7 @@ void KexiFormView::updateActions(bool activated)
     } */
   }
   KexiDataAwareView::updateActions(activated);
-  updateActions();
+  updateActionsInternal();
 }
 
 /*
@@ -1432,23 +1433,30 @@ void KexiFormView::slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::W
 {
     Q_UNUSED(w)
     Q_UNUSED(flags)
-    updateActions();
+    updateActionsInternal();
 }
 
-void KexiFormView::updateActions()
+void KexiFormView::updateActionsInternal()
 {
     const QWidget* selectedWidget = form()->selectedWidget();
+    //kDebug() << selectedWidget << (viewMode()==Kexi::DesignViewMode) << widget_assign_action;
+    QByteArray wClass;
+    if (selectedWidget) {
+        wClass = selectedWidget->metaObject()->className();
+        //kDebug() << wClass;
+    }
     QAction *widget_assign_action = KexiFormManager::self()->action("widget_assign_action");
     if (widget_assign_action) {
-        QByteArray wClass;
-        if (selectedWidget) {
-            wClass = selectedWidget->metaObject()->className();
-        }
         widget_assign_action->setEnabled(
-               selectedWidget
+               viewMode()==Kexi::DesignViewMode
+            && selectedWidget
             && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
         );
     }
+#ifdef KEXI_DEBUG_GUI
+    QAction *show_form_ui_action = KexiFormManager::self()->action("show_form_ui");
+    show_form_ui_action->setEnabled(viewMode()==Kexi::DesignViewMode);
+#endif
 }
 
 #include "kexiformview.moc"

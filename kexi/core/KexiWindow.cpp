@@ -662,7 +662,7 @@ tristate KexiWindow::switchToViewMode(
     res = newView->afterSwitchFrom(
               designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
     proposeOpeningInTextViewModeBecauseOfProblems
-    = data()->proposeOpeningInTextViewModeBecauseOfProblems;
+        = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);
         delete newView;

@@ -271,6 +271,9 @@ public:
 //! @todo replace with the final Actions API
     virtual void addToolBarAction(const QString& toolBarName, QAction *action) = 0;
 
+//! @todo replace with the final Actions API
+    virtual KToolBar *toolBar(const QString& name) const = 0;
+
     /*! Updates info label of the property editor by reusing properties provided
      by the current property set.
      Read documentation of KexiPropertyEditorView class for information about accepted properties.
