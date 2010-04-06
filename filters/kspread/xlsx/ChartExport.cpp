@@ -221,11 +221,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
     }
 
-    // Walk through the series. We inverse them to have the series in http://websvn.kde.org/trunk/tests/kofficetests/interoperability/kspread/MSExcel2007/me07_area_chart.xlsx
-    // in the correct order to be sure the one area does not hide the other. The question here is if just reversing them is enough/correct or if we need to proper order them.
-    for(int i = chart()->m_series.count() - 1; i >= 0; --i) {
-        Charting::Series* series = chart()->m_series[i];
-
+    //FIXME make positions work, see http://websvn.kde.org/trunk/tests/kofficetests/interoperability/kspread/MSExcel2007/me07_area_chart.xlsx
+    foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
         
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
