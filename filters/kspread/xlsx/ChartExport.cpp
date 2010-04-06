@@ -53,7 +53,7 @@ QString normalizeCellRange(QString range)
         if(sheetName.endsWith('.') || sheetName.endsWith('!'))
             sheetName = sheetName.left(sheetName.length() - 1);
         if(!sheetName.isEmpty())
-            range = sheetName + '!';
+            range = sheetName + '.';
         range += regEx.cap(2);
         if(!isPoint)
             range += ':' + regEx.cap(4);
@@ -171,7 +171,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if( chart()->m_transpose )
         chartstyle.addProperty("chart:vertical", "true");
     bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
-    
+
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
     if(!m_cellRangeAddress.isEmpty()) {
         bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
@@ -241,21 +241,38 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
         }
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
-            //bodyWriter->addAttribute("chart:label-cell-address", );
 
+        // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
+        // and to point to a valid cell to be able to display custom labels.
+        if(series->m_datasetValue.contains(Charting::Value::SeriesLegendOrTrendlineName)) {
+            Charting::Value* v = series->m_datasetValue[Charting::Value::SeriesLegendOrTrendlineName];
+            if(!v->m_formula.isEmpty()) {
+                bodyWriter->addAttribute("chart:label-cell-address", v->m_type == Charting::Value::CellRange ? normalizeCellRange(v->m_formula) : v->m_formula);
+            }
+        }
+        
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
             bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
 
-        for(uint j=0; j < series->m_countYValues; ++j) {
+        for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart-style-name", styles.insert(gs, "ch"));
+            
+            foreach(Charting::Text* t, series->m_texts) {
+                bodyWriter->startElement("chart:data-label");
+                bodyWriter->startElement("text:p");
+                bodyWriter->addTextNode("BlaGaGa");//t->m_text);
+                bodyWriter->endElement();
+                bodyWriter->endElement();
+            }
+
             bodyWriter->endElement();
         }
-
+        
         bodyWriter->endElement(); // chart:series
     }
 

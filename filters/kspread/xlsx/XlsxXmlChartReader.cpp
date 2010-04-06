@@ -154,7 +154,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         }
     }
 
-
     if (!m_context->m_chart->m_cellRangeAddress.isNull() ) {
         m_context->m_chartExport->m_cellRangeAddress.clear();
         if (!sheetName.isEmpty()) m_context->m_chartExport->m_cellRangeAddress += sheetName + '.';

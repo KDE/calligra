@@ -124,17 +124,17 @@ namespace Charting
         virtual ~Text() {}
     };
 
-    class Series
+    class Series : public Obj
     {
     public:
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
-        uint m_dataTypeX;
+        int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
-        uint m_countXValues;
+        int m_countXValues;
         /// the count of values, or vertical values on bubble and scatter chart groups, in the series.
-        uint m_countYValues;
+        int m_countYValues;
         /// the count of bubble size values in the series.
-        uint m_countBubbleSizeValues;
+        int m_countBubbleSizeValues;
         /// Range that contains the values that should be visualized by the dataSeries.
         QString m_valuesCellRangeAddress;
         /// The referenced values used in the chart
@@ -144,8 +144,15 @@ namespace Charting
         /// List of text records attached to the series.
         QList<Text*> m_texts;
 
-        explicit Series() : m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0) {}
-        ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0) {}
+        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
+    };
+    
+    class Legend : public Obj
+    {
+    public:
+        explicit Legend() : Obj() {}
+        virtual ~Legend() {}
     };
 
     /// The main charting class that represents a single chart.
