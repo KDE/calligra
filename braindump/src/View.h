@@ -31,7 +31,6 @@ class KAction;
 class KToggleAction;
 class ZoomAction;
 class KoCanvasController;
-class KoShapeManager;
 class KoViewConverter;
 class ZoomController;
 class RootSection;
@@ -66,9 +65,6 @@ public:
     /// Set page shown in the canvas to @p page
     void setActiveSection( Section * page );
 
-    /// @return the shape manager used for this view
-    KoShapeManager* shapeManager() const;
-
 private:
     /// creates the widgets (called from the constructor)
     void initGUI();
@@ -85,9 +81,6 @@ protected slots:
 
     /// Called when the mouse position changes on the canvas
     virtual void updateMousePosition(const QPoint& position);
-
-    /// Called when the selection changed
-    virtual void selectionChanged();
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();

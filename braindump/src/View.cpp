@@ -157,8 +157,6 @@ void View::initGUI()
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
-    connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
     Q_ASSERT(m_sectionsBoxDock);
@@ -254,8 +252,6 @@ void View::editSelectAll()
     selection->select( layerShape );
     layerShape->update();
   }
-
-  selectionChanged();
 }
 
 void View::editDeselectAll()
@@ -264,7 +260,6 @@ void View::editDeselectAll()
   if( selection )
     selection->deselectAll();
 
-  selectionChanged();
   canvas()->update();
 }
 
@@ -274,11 +269,6 @@ void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
   Q_UNUSED(zoom);
   canvas()->updateOriginAndSize();
   canvas()->update();
-}
-
-KoShapeManager* View::shapeManager() const
-{
-  return m_canvas->shapeManager();
 }
 
 void View::createCanvas(Section* _currentSection)
@@ -321,10 +311,6 @@ void View::updateMousePosition(const QPoint& position)
   canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
   canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
   QPoint viewPos = position - canvasOffset;
-}
-
-void View::selectionChanged()
-{
 }
 
 void View::clipboardDataChanged()
