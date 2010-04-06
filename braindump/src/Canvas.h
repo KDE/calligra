@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ *  Copyright (c) 2009,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -38,10 +38,12 @@
 #include "Utils.h"
 #include "Layout.h"
 #include <KoResourceManager.h>
+#include "RootSection.h"
+#include "ViewManager.h"
 
-SectionContainer::SectionContainer(Section* section, KUndoStack* _stack) : m_section(0), m_layer(0)
+SectionContainer::SectionContainer(Section* section, RootSection* _rootSection) : m_section(0), m_layer(0), m_rootSection(_rootSection)
 {
-  initContainer(section, _stack);
+  initContainer(section, _rootSection);
 }
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs)
@@ -71,7 +73,7 @@ class SectionContainerShapePaste : public KoOdfPaste
 };
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
-  initContainer(_section, _rhs.resourceManager()->undoStack());
+  initContainer(_section, _rhs.m_rootSection);
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->childShapes());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
@@ -86,21 +88,21 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
   delete mimeData;
 }
 
-void SectionContainer::initContainer(Section* _section, KUndoStack* _stack) {
+void SectionContainer::initContainer(Section* _section, RootSection* _rootSection) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
-  resourceManager()->setUndoStack(_stack);
+  resourceManager()->setUndoStack(_rootSection->undoStack());
 }
 
 void SectionContainer::addShape(KoShape* shape)
 {
-  qFatal("Unimplemented");
+  m_rootSection->viewManager()->addShape(m_section, shape);
 }
 
 void SectionContainer::removeShape(KoShape* shape)
 {
-  qFatal("Unimplemented");
+  m_rootSection->viewManager()->removeShape(m_section, shape);
 }
 
 Section* SectionContainer::section()

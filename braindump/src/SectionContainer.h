@@ -28,14 +28,14 @@ class KoResourceManager;
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
-class KUndoStack;
+class RootSection;
 
 class SectionContainer : public KoShapeControllerBase {
   public:
-    SectionContainer(Section* , KUndoStack* _stack );
+    SectionContainer(Section* , RootSection* _rootSection );
     SectionContainer(const SectionContainer& _rhs, Section* );
   private:
-    void initContainer(Section* , KUndoStack* _stack );
+    void initContainer(Section* , RootSection* _rootSection );
   public:
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
@@ -50,6 +50,7 @@ class SectionContainer : public KoShapeControllerBase {
   private:
     Section* m_section;
     KoShapeLayer* m_layer;
+    RootSection* m_rootSection;
     SectionShapeContainerModel* m_sectionModel;
 };
 

@@ -72,7 +72,7 @@ Section* SectionGroup::newSection( Section* before )
 {
   SectionGroup* root = this;
   while(root->sectionParent()) root = root->sectionParent();
-  Section* section = new Section( dynamic_cast<RootSection*>(root)->undoStack()) ;
+  Section* section = new Section( dynamic_cast<RootSection*>(root)) ;
   insertSection(section, before);
   section->setName(nextName());
   return section;

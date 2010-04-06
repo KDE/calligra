@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
+ *  Copyright (c) 2009,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@
 
 Canvas::Canvas( View* view, RootSection* doc, Section* currentSection )
 : QWidget( view )
-, KoCanvasBase( doc->viewManager() )
+, KoCanvasBase( currentSection ? currentSection->sectionContainer() : 0 )
 , m_origin(0, 0)
 , m_view( view )
 , m_doc( doc )

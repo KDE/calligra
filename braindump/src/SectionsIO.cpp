@@ -298,25 +298,25 @@ void SectionsIO::save()
   }
 }
 
-void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root, KUndoStack* _stack)
+void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* parent, RootSection* _rootSection)
 {
   QDomNode n = elt.firstChild();
   while(!n.isNull()) {
     QDomElement e = n.toElement(); // try to convert the node to an element.
     if(!e.isNull() and e.nodeName() == "Section" ) {
-      Section* section = new Section(_stack);
+      Section* section = new Section(_rootSection);
       QString name = e.attribute("name", "");
       if(name.isEmpty())
       {
         name = SectionGroup::nextName();
       }
       section->setName(name);
-      root->insertSection(section);
+      parent->insertSection(section);
       SaveContext* context = new SaveContext;
       context->filename = e.attribute("filename", "");
       context->section = section;
       m_contextes[section] = context;
-      loadTheStructure(e, section, _stack);
+      loadTheStructure(e, section, _rootSection);
     }
     n = n.nextSibling();
   }
@@ -337,7 +337,7 @@ void SectionsIO::load()
   QDomElement docElem = doc.documentElement();
   if(docElem.nodeName() != "RootElement") return;
 
-  loadTheStructure(docElem, m_rootSection, m_rootSection->undoStack());
+  loadTheStructure(docElem, m_rootSection, m_rootSection);
   
   // Second: load each section
   foreach(SaveContext* saveContext, m_contextes)

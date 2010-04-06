@@ -33,58 +33,34 @@ ViewManager::ViewManager(RootSection* _rootSection) : m_lastViewInFocus(0), m_ro
 {
 }
 
-void ViewManager::addShape(KoShape* shape)
+void ViewManager::addShape(Section* section, KoShape* shape)
 {
   if(!shape)
     return;
-  Section * page( sectionByShape( shape ) );
-  if( not page) {
+  if( not section) {
     return;
   }
   foreach( View *view, m_views )
   {
-    if ( page == view->activeSection() ) {
+    if ( section == view->activeSection() ) {
       view->canvas()->shapeManager()->add( shape );
     }
   }
 }
 
-void ViewManager::removeShape(KoShape* shape)
+void ViewManager::removeShape(Section* section, KoShape* shape)
 {
   if(!shape)
     return;
-  Section * page = sectionByShape( shape );
-  if( not page) {
+  if( not section) {
     return;
   }
   foreach( View *view, m_views )
   {
-    if ( page == view->activeSection() ) {
+    if ( section == view->activeSection() ) {
       view->canvas()->shapeManager()->remove( shape );
     }
   }
-}
-
-KoResourceManager* ViewManager::resourceManager() const
-{
-  Q_ASSERT(m_lastViewInFocus);
-  if(m_lastViewInFocus->activeSection())
-  {
-    return m_lastViewInFocus->activeSection()->sectionContainer()->resourceManager();
-  }
-  return 0;
-}
-
-Section* ViewManager::sectionByShape( KoShape * shape ) const
-{
-  KoShape * parent = shape;
-  while( ( parent = parent->parent() ) )
-  {
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( parent );
-    Section* section = Utils::sectionForLayer(layer, m_rootSection);
-    if(section) return section;
-  }
-  return 0;
 }
 
 void ViewManager::addView(View* view)

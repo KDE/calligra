@@ -25,18 +25,16 @@ class RootSection;
 class Section;
 class View;
 
-class ViewManager : public KoShapeControllerBase {
+class ViewManager {
   public:
     ViewManager(RootSection*);
-    virtual void addShape(KoShape* shape);
-    virtual void removeShape(KoShape* shape);
-    virtual KoResourceManager *resourceManager() const;
+    void addShape(Section* section, KoShape* shape);
+    void removeShape(Section* section, KoShape* shape);
     void addView(View*);
     void removeView(View*);
     void viewHasFocus(View* view);
   private:
     View* m_lastViewInFocus;
-    Section* sectionByShape( KoShape * shape ) const;
     QList<View*> m_views;
     RootSection* m_rootSection;
 };

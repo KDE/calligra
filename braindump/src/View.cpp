@@ -384,7 +384,7 @@ void View::groupSelection() {
     if( selection->activeLayer() )
         selection->activeLayer()->addChild( group );
     QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
-    new KoShapeCreateCommand( m_doc->viewManager(), group, cmd );
+    new KoShapeCreateCommand( m_activeSection->sectionContainer(), group, cmd );
     new KoShapeGroupCommand( group, groupedShapes, cmd );
     m_canvas->addCommand( cmd );  
 }
@@ -414,7 +414,7 @@ void View::ungroupSelection() {
     if( container )
     {
       new KoShapeUngroupCommand( container, container->childShapes(), QList<KoShape*>(), cmd );
-      new KoShapeDeleteCommand( m_doc->viewManager(), container, cmd );
+      new KoShapeDeleteCommand( m_activeSection->sectionContainer(), container, cmd );
       new RememberPositionCommand( container->childShapes(), cmd );
     }
   }

@@ -63,7 +63,7 @@ class SectionsIO : public QObject {
      *                        associated files
      */
     void saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove);
-    void loadTheStructure(QDomElement& elt, SectionGroup* root, KUndoStack* _stack);
+    void loadTheStructure(QDomElement& elt, SectionGroup* root, RootSection* _rootSection);
     QString generateFileName();
     bool usedFileName(const QString&);
     QString structureFileName();

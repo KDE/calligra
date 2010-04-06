@@ -26,10 +26,11 @@
 class Layout;
 class SectionContainer;
 class KUndoStack;
+class RootSection;
 
 class Section :  public SectionGroup {
   public:
-    Section(KUndoStack* _stack);
+    Section(RootSection* _rootSection);
     Section(const Section& _rhs);
   public:
     SectionContainer* sectionContainer();
