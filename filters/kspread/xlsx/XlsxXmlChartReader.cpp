@@ -137,12 +137,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     if(positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
         XlsxXmlDrawingReaderContext::Position f = positions[XlsxXmlDrawingReaderContext::FromAnchor];
         m_context->m_chartExport->m_endCellAddress += columnName(f.m_col) + QString::number(f.m_row);
-        m_context->m_chartExport->m_x = QString::number(columnWidth(f.m_col-1, 0 /*f.m_colOff*/)) + "pt";
-        m_context->m_chartExport->m_y = QString::number(rowHeight(f.m_row-1, 0 /*f.m_rowOff*/)) + "pt";
+        m_context->m_chartExport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
+        m_context->m_chartExport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
         if(positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
             XlsxXmlDrawingReaderContext::Position t = positions[XlsxXmlDrawingReaderContext::ToAnchor];
-            m_context->m_chartExport->m_width = QString::number(columnWidth( t.m_col - f.m_col - 1, 0 /*t.m_colOff*/)) + "pt";
-            m_context->m_chartExport->m_height = QString::number(rowHeight( t.m_row - f.m_row - 1, 0 /*t.m_rowOff*/)) + "pt";
+            m_context->m_chartExport->m_width = columnWidth( t.m_col - f.m_col - 1, 0 /*t.m_colOff*/);
+            m_context->m_chartExport->m_height = rowHeight( t.m_row - f.m_row - 1, 0 /*t.m_rowOff*/);
         }
     }
 

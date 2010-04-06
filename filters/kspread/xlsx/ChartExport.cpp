@@ -56,10 +56,10 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     //xmlWriter->addAttribute("table:end-x", "0.2953in");
     //xmlWriter->addAttribute("table:end-y", "0.0232in");
     xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
-    xmlWriter->addAttribute("svg:x", m_x);
-    xmlWriter->addAttribute("svg:y", m_y);
-    xmlWriter->addAttribute("svg:width", m_width);
-    xmlWriter->addAttribute("svg:height", m_height);
+    xmlWriter->addAttributePt("svg:x", (float)m_x);
+    xmlWriter->addAttributePt("svg:y", (float)m_y);
+    xmlWriter->addAttributePt("svg:width", (float)m_width);
+    xmlWriter->addAttributePt("svg:height", (float)m_height);
     xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
@@ -97,8 +97,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
     //bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
 
-    bodyWriter->addAttribute("svg:width", m_width);
-    bodyWriter->addAttribute("svg:height", m_height);
+    bodyWriter->addAttributePt("svg:width", (float)m_width);
+    bodyWriter->addAttributePt("svg:height", (float)m_height);
 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     //style.addProperty("draw:stroke", "none");
@@ -109,8 +109,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
         bodyWriter->startElement("chart:title");
-        //bodyWriter->addAttribute("svg:x", );
-        //bodyWriter->addAttribute("svg:y", );
+        bodyWriter->addAttributePt("svg:x", sprcToPt(t->m_x1, vertical));
+        bodyWriter->addAttributePt("svg:y", sprcToPt(t->m_y1, horizontal));
+        bodyWriter->addAttributePt("svg:width", sprcToPt(t->m_x2, vertical));
+        bodyWriter->addAttributePt("svg:height", sprcToPt(t->m_y2, horizontal));
         bodyWriter->startElement("text:p");
         bodyWriter->addTextNode(t->m_text);
         bodyWriter->endElement(); // text:p
@@ -283,4 +285,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
     store->popDirectory();
     return true;
+}
+
+float ChartExport::sprcToPt( int sprc, Orientation orientation )
+{
+    if( orientation & vertical )
+        return (float)sprc * ( (float)m_width / 4000.0);
+
+    return (float)sprc * ( (float)m_height / 4000.0);
 }

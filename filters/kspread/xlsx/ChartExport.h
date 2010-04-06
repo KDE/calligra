@@ -48,12 +48,18 @@ public:
     /// anchored to cell
     //unsigned long m_colL, m_rwT;
 #endif
-    QString m_x, m_y, m_width, m_height;
+    int m_x, m_y, m_width, m_height; //in pt
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
 
 private:
+    QString toPtString( int number );
+    enum Orientation {
+        vertical,
+        horizontal
+    };
+    float sprcToPt( int sprc, Orientation orientation );
     Charting::Chart* m_chart;
 };
 
