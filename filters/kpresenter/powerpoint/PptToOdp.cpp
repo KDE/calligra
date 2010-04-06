@@ -351,7 +351,7 @@ void PptToOdp::DrawClient::addTextStyles(
         ppttoodp->defineParagraphProperties(style, pf);
         ppttoodp->defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
-    bool isPlaceholder = cd && cd->placeholderAtom;
+    bool isPlaceholder = out.stylesxml && cd && cd->placeholderAtom;
     if (isPlaceholder) {
         // small workaround to avoid presenation frames from having borders,
         // even though the ppt file seems to specify that they should have one
