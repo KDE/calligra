@@ -20,6 +20,8 @@ class TODOS;
 void parseTODOS(LEInputStream& in, TODOS& _s);
 class Byte;
 void parseByte(LEInputStream& in, Byte& _s);
+class ZeroByte;
+void parseZeroByte(LEInputStream& in, ZeroByte& _s);
 class CurrentUserStream;
 void parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s);
 class OfficeArtBStoreDelay;
@@ -880,6 +882,11 @@ class Byte : public StreamOffset {
 public:
     quint8 b;
     Byte(void* /*dummy*/ = 0) {}
+};
+class ZeroByte : public StreamOffset {
+public:
+    quint8 b;
+    ZeroByte(void* /*dummy*/ = 0) {}
 };
 class CurrentUserStream : public StreamOffset {
 public:
@@ -1853,6 +1860,7 @@ public:
     quint16 lastView;
     quint16 unused;
     quint32 encryptSessionPersistIdRef;
+    QList<ZeroByte> zeroPadding;
     UserEditAtom(void* /*dummy*/ = 0) {}
 };
 class VbaProjectStg : public StreamOffset {
@@ -4566,7 +4574,7 @@ class SlideViewInfoInstance : public StreamOffset {
 public:
     RecordHeader rh;
     SlideViewInfoAtom slideViewInfoAtom;
-    ZoomViewInfoAtom zoomViewInfoAtom;
+    QSharedPointer<ZoomViewInfoAtom> zoomViewInfoAtom;
     QList<GuideAtom> rgGuideAtom;
     SlideViewInfoInstance(void* /*dummy*/ = 0) {}
 };
