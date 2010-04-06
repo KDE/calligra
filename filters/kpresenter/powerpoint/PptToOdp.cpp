@@ -351,7 +351,7 @@ void PptToOdp::DrawClient::addTextStyles(
         ppttoodp->defineParagraphProperties(style, pf);
         ppttoodp->defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
-    bool isPlaceholder = out.stylesxml && cd && cd->placeholderAtom;
+    bool isPlaceholder = cd && cd->placeholderAtom;
     if (isPlaceholder) {
         // small workaround to avoid presenation frames from having borders,
         // even though the ppt file seems to specify that they should have one
@@ -362,7 +362,7 @@ void PptToOdp::DrawClient::addTextStyles(
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
         QString className = getPresentationClass(cd->placeholderAtom.data());
-        if (className.isEmpty()) {
+        if (className.isEmpty() || !out.stylesxml) {
             const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
             className = getPresentationClass(tc);
             out.xml.addAttribute("presentation:placeholder", "false");
