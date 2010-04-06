@@ -200,6 +200,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleBar(static_cast<BarRecord*>(record));
     else if (type == AreaRecord::id)
         handleArea(static_cast<AreaRecord*>(record));
+    else if (type == AxisRecord::id)
+        handleAxis(static_cast<AxisRecord*>(record));
+    else if (type == AxisLineRecord::id)
+        handleAxisLine(static_cast<AxisLineRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -396,7 +400,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
 void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record)
 {
     if(!record) return;
-    DEBUG << std::endl;
+    DEBUG << "riser=" << record->riser() << " taper=" << record->taper() << std::endl;
     //TODO
 }
 
@@ -576,6 +580,20 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if(!record || m_chart->m_impl) return;
     m_chart->m_impl = new Charting::AreaImpl();
+}
+
+void ChartSubStreamHandler::handleAxis(AxisRecord* record)
+{
+    if(!record) return;
+    DEBUG << "wType=" << record->wType() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
+{
+    if(!record) return;
+    DEBUG << "identifier=" << record->identifier() << std::endl;
+    //TODO
 }
 
 // type of data contained in the Number records following

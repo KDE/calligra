@@ -113,6 +113,8 @@ private:
     void handlePie(PieRecord *);
     void handleBar(BarRecord *);
     void handleArea(AreaRecord *);
+    void handleAxis(AxisRecord* record);
+    void handleAxisLine(AxisLineRecord* record);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);
