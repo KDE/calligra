@@ -99,6 +99,13 @@ void MSO::parseByte(LEInputStream& in, Byte& _s) {
     _s.streamOffset = in.getPosition();
     _s.b = in.readuint8();
 }
+void MSO::parseZeroByte(LEInputStream& in, ZeroByte& _s) {
+    _s.streamOffset = in.getPosition();
+    _s.b = in.readuint8();
+    if (!(((quint8)_s.b) == 0)) {
+        throw IncorrectValueException(in.getPosition(), "((quint8)_s.b) == 0");
+    }
+}
 void MSO::parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
@@ -2798,6 +2805,8 @@ void MSO::parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s) {
 }
 void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
     _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _atend;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
@@ -2836,6 +2845,22 @@ void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
     _s._has_encryptSessionPersistIdRef = _s.rh.recLen==32;
     if (_s._has_encryptSessionPersistIdRef) {
         _s.encryptSessionPersistIdRef = in.readuint32();
+    }
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.zeroPadding.append(ZeroByte(&_s));
+            parseZeroByte(in, _s.zeroPadding.last());
+        } catch(IncorrectValueException _e) {
+            _s.zeroPadding.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.zeroPadding.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        }
     }
 }
 void MSO::parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s) {
@@ -10339,6 +10364,7 @@ void MSO::parseOfficeArtBStoreContainerFileBlock(LEInputStream& in, OfficeArtBSt
 void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _s) {
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
+    bool _possiblyPresent;
     bool _atend;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -10351,7 +10377,28 @@ void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x3FA");
     }
     parseSlideViewInfoAtom(in, _s.slideViewInfoAtom);
-    parseZoomViewInfoAtom(in, _s.zoomViewInfoAtom);
+    _m = in.setMark();
+    try {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x3FD)&&(_optionCheck.recLen == 0x34);
+    } catch(EOFException _e) {
+        _possiblyPresent = false;
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.zoomViewInfoAtom = QSharedPointer<ZoomViewInfoAtom>(new ZoomViewInfoAtom(&_s));
+            parseZoomViewInfoAtom(in, *_s.zoomViewInfoAtom.data());
+        } catch(IncorrectValueException _e) {
+            _s.zoomViewInfoAtom.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.zoomViewInfoAtom.clear();
+            in.rewind(_m);
+        }
+    }
     _atend = false;
     while (!_atend) {
         _m = in.setMark();
