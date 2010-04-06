@@ -121,8 +121,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
         if (isStartElement()) {
             TRY_READ_IF(plotArea)
+            ELSE_TRY_READ_IF(title)
             ELSE_TRY_READ_IF(legend)
-
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -215,8 +215,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         if (isStartElement()) {
             TRY_READ_IF(val)
             ELSE_TRY_READ_IF(cat)
-            if  (!m_autoTitleDeleted)
-                TRY_READ_IF(tx)
+            TRY_READ_IF(serTx)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -228,6 +227,23 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL title
+/*! Read the horizontal value. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if(!m_autoTitleDeleted)            
+                TRY_READ_IF(chartTx)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
     READ_EPILOGUE
 }
 
@@ -274,13 +290,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
 
 #undef CURRENT_EL
 #define CURRENT_EL tx
-/*! This element specifies text to use on a chart, including rich text formatting. */
-KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
+/*! This method is used in the \p read_seriesTx and \p read_chartTx methods to read a tx element */
+QString XlsxXmlChartReader::readText()
 {
+    QString result;
     enum State { Start, InStrRef, InRichText } state;
     state = Start;
-
-    READ_PROLOGUE
     while (!atEnd()) {
         readNext();
         switch(state) {
@@ -297,9 +312,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                         //functionality is not supported by ODF 1.2.
                     } else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(v))) {
                         //TODO handle other text's then the title text too
-                        Charting::Text* t = new Charting::Text;
-                        t->m_text = readElementText();
-                        m_context->m_chart->m_texts << t;
+                        result = readElementText();
                     }
                 }
                 break;
@@ -308,6 +321,32 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+    return result;
+}
+
+/*! This element specifies text to use on a chart, including rich text formatting. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_serTx()
+{
+    READ_PROLOGUE
+    const QString text = readText();
+    if(!text.isEmpty()) {
+        Charting::Text* t = new Charting::Text;
+        t->m_text = text;
+        m_currentSeries->m_texts << t;
+    }
+    READ_EPILOGUE
+}
+
+/*! This element specifies text to use on a chart, including rich text formatting. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_chartTx()
+{
+    READ_PROLOGUE
+    const QString text = readText();
+    if(!text.isEmpty()) {
+        Charting::Text* t = new Charting::Text;
+        t->m_text = text;
+        m_context->m_chart->m_texts << t;
     }
     READ_EPILOGUE
 }

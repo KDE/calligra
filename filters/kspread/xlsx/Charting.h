@@ -120,7 +120,7 @@ namespace Charting
     {
     public:
         QString m_text;
-        explicit Text() : Obj() {}
+        explicit Text(const QString &text = QString()) : Obj(), m_text(text) {}
         virtual ~Text() {}
     };
 
@@ -142,7 +142,7 @@ namespace Charting
         /// The formatting for the referenced values
         QList<Format*> m_datasetFormat;
         /// List of text records attached to the series.
-        //QHash<QList<Text*> > texts;
+        QList<Text*> m_texts;
 
         explicit Series() : m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0) {}
         ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
