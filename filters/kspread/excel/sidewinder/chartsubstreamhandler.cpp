@@ -314,7 +314,6 @@ void ChartSubStreamHandler::handleChart(ChartRecord *record)
     m_chart->m_total_height = record->height();
 }
 
-
 // secifies the begin of a collection of records
 void ChartSubStreamHandler::handleBegin(BeginRecord *)
 {
@@ -354,6 +353,7 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
     m_currentSeries->m_countYValues = record->countYValues();
     m_currentSeries->m_countBubbleSizeValues = record->countBubbleSizeValues();
     m_chart->m_series << m_currentSeries;
+    m_currentObj = m_currentSeries;
 }
 
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
@@ -378,13 +378,11 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
             }
         }
 
-        // be sure we don't leak instances even if this should not happen
-        if(m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
-            std::cout << "Warning: The series in the chart already defines dataId=" << record->m_value->m_dataId << std::endl;
-            delete m_currentSeries->m_datasetValue.take(record->m_value->m_dataId);
+        //FIXME is it ok to only accept the first or should we merge them somehow?
+        if(!m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
+            m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
+            record->m_value = 0; // take over ownership
         }
-        m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
-        record->m_value = 0; // take over ownership
     }
 }
 
@@ -492,7 +490,7 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
     DEBUG << "at=" << record->at() << " vat=" << record->vat() << " x=" << record->x() << " y=" << record->y() << " dx=" << record->dx() << " dy=" << record->dy() << " fShowKey=" << record->isFShowKey() << " fShowValue=" << record->isFShowValue() << std::endl;
     m_currentObj = new Charting::Text;
     if(m_defaultTextId >= 0) {  
-        //m_defaultObjects[m_currentObj] = m_defaultTextId;
+        m_defaultObjects[m_currentObj] = m_defaultTextId;
         m_defaultTextId = -1;
     }
 }
