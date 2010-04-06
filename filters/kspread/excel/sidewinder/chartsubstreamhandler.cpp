@@ -490,7 +490,7 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
     DEBUG << "at=" << record->at() << " vat=" << record->vat() << " x=" << record->x() << " y=" << record->y() << " dx=" << record->dx() << " dy=" << record->dy() << " fShowKey=" << record->isFShowKey() << " fShowValue=" << record->isFShowValue() << std::endl;
     m_currentObj = new Charting::Text;
     if(m_defaultTextId >= 0) {  
-        m_defaultObjects[m_currentObj] = m_defaultTextId;
+        //m_defaultObjects[m_currentObj] = m_defaultTextId;
         m_defaultTextId = -1;
     }
 }
