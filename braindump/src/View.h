@@ -100,7 +100,9 @@ protected slots:
     void ungroupSelection();
   protected:
     virtual void focusInEvent(QFocusEvent * event);
-private:
+  private:
+    void createCanvas();
+  private:
     RootSection* m_doc;
     Canvas* m_canvas;
     Section* m_activeSection;

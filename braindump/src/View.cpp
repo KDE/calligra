@@ -78,12 +78,14 @@
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
 , m_doc( document )
+, m_canvas( 0 )
 , m_activeSection( 0 )
 , m_mainWindow(parent)
 {
   
   m_doc->viewManager()->addView(this);
   
+  m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
   initGUI();
   initActions();
   loadExtensions();
@@ -127,13 +129,12 @@ void View::initGUI()
     gridLayout->setSpacing( 0 );
     setLayout( gridLayout );
 
-    m_canvas = new Canvas( this, m_doc );
-    connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
-    connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
     
     m_canvasController = new KoCanvasController( this );
-    m_canvasController->setCanvas( m_canvas );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
+    
+    createCanvas();
+    
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
@@ -157,8 +158,6 @@ void View::initGUI()
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
-            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
@@ -181,9 +180,7 @@ void View::initActions()
   new KoCutController(canvas(), action);
   action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
   new KoCopyController(canvas(), action);
-  m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
-  connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
   clipboardDataChanged();
   actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
   actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
@@ -284,14 +281,30 @@ KoShapeManager* View::shapeManager() const
   return m_canvas->shapeManager();
 }
 
+void View::createCanvas()
+{
+  Canvas* canvas = new Canvas( this, m_doc );
+  connect(canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
+  connect(canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
+  m_canvasController->setCanvas( canvas );
+  connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+          canvas, SLOT(setDocumentOffset(const QPoint&)));
+  connect(canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+  
+  delete m_canvas;
+  m_canvas = canvas;
+}
+
 void View::setActiveSection( Section* page )
 {
+  
   m_activeSection = page;
 
   m_doc->setCurrentSection(page);
   
   if(m_activeSection)
   {
+    
     QList<KoShape*> shapes;
     shapes.push_back(page->sectionContainer()->layer());
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
@@ -299,19 +312,17 @@ void View::setActiveSection( Section* page )
     KoShapeLayer* layer = page->sectionContainer()->layer();
     shapeManager()->selection()->setActiveLayer( layer );
 
-
     // Make sure the canvas is enabled
     canvas()->setEnabled(true);
     documentRectChanged(m_activeSection->layout()->boundingBox());
+    m_canvas->sectionChanged(activeSection());
+
+    m_canvas->update();
   } else {
     shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
     shapeManager()->selection()->setActiveLayer( 0 );
-    canvas()->setEnabled(false);
   }
 
-  m_canvas->sectionChanged(activeSection());
-
-  m_canvas->update();
   m_sectionsBoxDock->updateGUI();
   m_sectionPropertiesDock->setSection(m_activeSection);
 }
