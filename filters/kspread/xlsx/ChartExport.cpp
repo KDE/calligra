@@ -221,7 +221,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
     }
 
-    //FIXME make positions work, see http://websvn.kde.org/trunk/tests/kofficetests/interoperability/kspread/MSExcel2007/me07_area_chart.xlsx
+    // area diagrams are special in that Excel does display the areas in another order then OpenOffice.org and
+    // KSpread. To be sure the same areas are visible we do the same OpenOffice.org does and reverse the order.
+    if(chart()->m_impl->name() == "area") {
+        for(int i = chart()->m_series.count() - 1; i >= 0; --i)
+            chart()->m_series.append( chart()->m_series.takeAt(i) );
+    }
+    
     foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
         
