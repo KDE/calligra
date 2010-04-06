@@ -35,7 +35,7 @@ class Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
   public:
-    explicit Canvas( View * view, RootSection * doc );
+    explicit Canvas( View * view, RootSection * doc, Section* currentSection );
     ~Canvas();
 
     /// Returns pointer to the KoPADocument
@@ -69,7 +69,6 @@ class Canvas : public QWidget, public KoCanvasBase
     void updateOriginAndSize();
 
     void setDocumentOffset(const QPoint &offset);
-    void sectionChanged(Section* section);
 
   protected:
     virtual void focusInEvent(QFocusEvent * event);

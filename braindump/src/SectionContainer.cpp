@@ -90,12 +90,17 @@ void SectionContainer::initContainer(Section* _section, KUndoStack* _stack) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
-  m_resourceManager = new KoResourceManager;
-  m_resourceManager->setUndoStack(_stack);
-  foreach (QString id, KoShapeRegistry::instance()->keys()) {
-    KoShapeFactoryBase* shapeFactory = KoShapeRegistry::instance()->value(id);
-    shapeFactory->newDocumentResourceManager(m_resourceManager);
-  }
+  resourceManager()->setUndoStack(_stack);
+}
+
+void SectionContainer::addShape(KoShape* shape)
+{
+  qFatal("Unimplemented");
+}
+
+void SectionContainer::removeShape(KoShape* shape)
+{
+  qFatal("Unimplemented");
 }
 
 Section* SectionContainer::section()
@@ -133,11 +138,6 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
   }
 
   context.xmlWriter().endElement();
-}
-
-KoResourceManager* SectionContainer::resourceManager() const
-{
-  return m_resourceManager;
 }
 
 QRectF SectionContainer::containerBound() const

@@ -133,7 +133,7 @@ void View::initGUI()
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     
-    createCanvas();
+    createCanvas(0);
     
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
@@ -281,18 +281,19 @@ KoShapeManager* View::shapeManager() const
   return m_canvas->shapeManager();
 }
 
-void View::createCanvas()
+void View::createCanvas(Section* _currentSection)
 {
-  Canvas* canvas = new Canvas( this, m_doc );
-  connect(canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
-  connect(canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
+  Canvas* canvas = new Canvas( this, m_doc, _currentSection );
   m_canvasController->setCanvas( canvas );
-  connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
-          canvas, SLOT(setDocumentOffset(const QPoint&)));
-  connect(canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
-  
-  delete m_canvas;
   m_canvas = canvas;
+
+  connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
+  connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
+  connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+          m_canvas, SLOT(setDocumentOffset(const QPoint&)));
+  connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+  
+  m_canvas->updateOriginAndSize();
 }
 
 void View::setActiveSection( Section* page )
@@ -302,27 +303,13 @@ void View::setActiveSection( Section* page )
 
   m_doc->setCurrentSection(page);
   
+  createCanvas(m_activeSection);
+  
   if(m_activeSection)
   {
-    
-    QList<KoShape*> shapes;
-    shapes.push_back(page->sectionContainer()->layer());
-    shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
-
-    KoShapeLayer* layer = page->sectionContainer()->layer();
-    shapeManager()->selection()->setActiveLayer( layer );
-
-    // Make sure the canvas is enabled
-    canvas()->setEnabled(true);
     documentRectChanged(m_activeSection->layout()->boundingBox());
-    m_canvas->sectionChanged(activeSection());
-
-    m_canvas->update();
-  } else {
-    shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
-    shapeManager()->selection()->setActiveLayer( 0 );
   }
-
+  
   m_sectionsBoxDock->updateGUI();
   m_sectionPropertiesDock->setSection(m_activeSection);
 }

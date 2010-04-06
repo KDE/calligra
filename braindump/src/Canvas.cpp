@@ -20,10 +20,17 @@
 
 #include "Canvas.h"
 
-#include "kundostack.h"
+#include <QMenu>
+#include <QMouseEvent>
 
+#include <kxmlguifactory.h>
+#include <KAction>
+#include <kundostack.h>
+
+#include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoShapeLayer.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 
@@ -31,16 +38,10 @@
 #include "View.h"
 #include "ViewManager.h"
 #include "Section.h"
-
-#include <kxmlguifactory.h>
-
-#include <KAction>
-#include <QMenu>
-#include <QMouseEvent>
 #include "Layout.h"
-#include <KoCanvasController.h>
+#include "SectionContainer.h"
 
-Canvas::Canvas( View * view, RootSection* doc )
+Canvas::Canvas( View* view, RootSection* doc, Section* currentSection )
 : QWidget( view )
 , KoCanvasBase( doc->viewManager() )
 , m_origin(0, 0)
@@ -59,6 +60,24 @@ Canvas::Canvas( View * view, RootSection* doc )
   setBackgroundRole(QPalette::Base);
   setAutoFillBackground( true );
   setAttribute(Qt::WA_InputMethodEnabled, true);
+  
+  if(currentSection)
+  {
+    
+    QList<KoShape*> shapes;
+    shapes.push_back(currentSection->sectionContainer()->layer());
+    shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
+
+    KoShapeLayer* layer = currentSection->sectionContainer()->layer();
+    shapeManager()->selection()->setActiveLayer( layer );
+
+    // Make sure the canvas is enabled
+    setEnabled(true);
+
+    update();
+  } else {
+    setEnabled(false);
+  }
 }
 
 Canvas::~Canvas()
@@ -259,12 +278,6 @@ void Canvas::setBackgroundColor( const QColor &color )
   setPalette( pal );
 }
 
-void Canvas::sectionChanged(Section* section)
-{
-  Q_ASSERT(m_view->activeSection() == section );
-  updateOriginAndSize();
-}
-
 void Canvas::updateOriginAndSize()
 {
   if( m_view->activeSection() ) {
@@ -280,14 +293,16 @@ void Canvas::updateOriginAndSize()
       m_oldViewDocumentRect = viewRect;
       m_origin = -viewRect.topLeft();
       KoCanvasController* controller = canvasController();
-      Q_ASSERT( controller );
-      // tell canvas controller the new document size in pixel
-      controller->setDocumentSize( viewRect.size() );
-      // make sure the actual selection is visible
-      KoSelection * selection = m_shapeManager->selection();
-      if( selection->count() )
-          controller->ensureVisible( selection->boundingRect() );
-      updateOffset();
+      if( controller )
+      {
+        // tell canvas controller the new document size in pixel
+        controller->setDocumentSize( viewRect.size() );
+        // make sure the actual selection is visible
+        KoSelection * selection = m_shapeManager->selection();
+        if( selection->count() )
+            controller->ensureVisible( selection->boundingRect() );
+        updateOffset();
+      }
     }
   }
 }

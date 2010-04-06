@@ -101,7 +101,7 @@ protected slots:
   protected:
     virtual void focusInEvent(QFocusEvent * event);
   private:
-    void createCanvas();
+    void createCanvas(Section* _currentSection);
   private:
     RootSection* m_doc;
     Canvas* m_canvas;
