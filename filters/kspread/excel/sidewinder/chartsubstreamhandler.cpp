@@ -69,7 +69,7 @@ public:
         }
 
         if(m_value) delete m_value;
-        m_value = new Charting::Value(dataId, type, isUnlinkedFormat, numberFormat, string(formula));
+        m_value = new Charting::Value(dataId, type, string(formula), isUnlinkedFormat, numberFormat);
     }
 
 private:

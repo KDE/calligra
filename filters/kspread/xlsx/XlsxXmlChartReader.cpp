@@ -214,7 +214,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         if (isStartElement()) {
             TRY_READ_IF(val)
             ELSE_TRY_READ_IF(cat)
-            TRY_READ_IF(serTx)
+            ELSE_TRY_READ_IF(tx)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -239,7 +239,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
         readNext();
         if (isStartElement()) {
             if(!m_autoTitleDeleted)            
-                TRY_READ_IF(chartTx)
+                TRY_READ_IF(tx)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -289,10 +289,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
 
 #undef CURRENT_EL
 #define CURRENT_EL tx
-/*! This method is used in the \p read_seriesTx and \p read_chartTx methods to read a tx element */
-QString XlsxXmlChartReader::readText()
+
+/*! This element specifies text to use on a chart, including rich text formatting. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
 {
-    QString result;
+    READ_PROLOGUE
     enum State { Start, InStrRef, InRichText } state;
     state = Start;
     while (!atEnd()) {
@@ -304,48 +305,22 @@ QString XlsxXmlChartReader::readText()
                 else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(rich)))
                     state = isStartElement() ? InRichText : Start;
                 break;
-            case InStrRef:
-                if (isStartElement()) {
+            case InStrRef: // plaintext within a series
+                if (isStartElement() && !m_currentSeries->m_datasetValue.contains(Charting::Value::SeriesLegendOrTrendlineName)) {
                     if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
-                        //TODO handle formulas that references to a cell that contains the text. Such
-                        //functionality is not supported by ODF 1.2.
+                        Charting::Value* v = new Charting::Value(Charting::Value::SeriesLegendOrTrendlineName, Charting::Value::CellRange, readElementText());
+                        m_currentSeries->m_datasetValue[v->m_dataId] = v;
                     } else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(v))) {
-                        //TODO handle other text's then the title text too
-                        result = readElementText();
+                        Charting::Value* v = new Charting::Value(Charting::Value::SeriesLegendOrTrendlineName, Charting::Value::TextOrValue, readElementText());
+                        m_currentSeries->m_datasetValue[v->m_dataId] = v;
                     }
                 }
                 break;
-            case InRichText:
-                //TODO
+            case InRichText: // richtext means the title text
+                m_currentSeries->m_texts << new Charting::Text(readElementText());
                 break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
-    }
-    return result;
-}
-
-/*! This element specifies text to use on a chart, including rich text formatting. */
-KoFilter::ConversionStatus XlsxXmlChartReader::read_serTx()
-{
-    READ_PROLOGUE
-    const QString text = readText();
-    if(!text.isEmpty()) {
-        Charting::Text* t = new Charting::Text;
-        t->m_text = text;
-        m_currentSeries->m_texts << t;
-    }
-    READ_EPILOGUE
-}
-
-/*! This element specifies text to use on a chart, including rich text formatting. */
-KoFilter::ConversionStatus XlsxXmlChartReader::read_chartTx()
-{
-    READ_PROLOGUE
-    const QString text = readText();
-    if(!text.isEmpty()) {
-        Charting::Text* t = new Charting::Text;
-        t->m_text = text;
-        m_context->m_chart->m_texts << t;
     }
     READ_EPILOGUE
 }

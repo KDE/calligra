@@ -51,7 +51,7 @@ namespace Charting
         unsigned m_numberFormat; ///< specifies the numnber format to use for the data.
         QString m_formula; ///< the optional formula. could be for example "[Sheet1.$D$2:$F$2]"
 
-        Value(DataId dataId, DataType type, bool isUnlinkedFormat, unsigned numberFormat, const QString& formula) : m_dataId(dataId), m_type(type), m_isUnlinkedFormat(isUnlinkedFormat), m_numberFormat(numberFormat), m_formula(formula) {}
+        Value(DataId dataId, DataType type, const QString& formula = QString(), bool isUnlinkedFormat = false, unsigned numberFormat = 0) : m_dataId(dataId), m_type(type), m_isUnlinkedFormat(isUnlinkedFormat), m_numberFormat(numberFormat), m_formula(formula) {}
         virtual ~Value() {}
     };
 
