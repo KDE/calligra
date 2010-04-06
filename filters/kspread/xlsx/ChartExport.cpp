@@ -39,10 +39,26 @@ ChartExport::~ChartExport()
 }
 
 // Takes a Excel cellrange and translates it into a ODF cellrange
-QString normalizeCellRange(const QString &range)
+QString normalizeCellRange(QString range)
 {
     if(range.startsWith('[') && range.endsWith(']'))
-        return range.mid(1, range.length() - 2);
+        range = range.mid(1, range.length() - 2);
+    range = range.remove('$');
+
+    const bool isPoint = !range.contains( ':' );
+    QRegExp regEx(isPoint ? "(|.*\\.|.*\\!)([A-Z0-9]+)" : "(|.*\\.|.*\\!)([A-Z]+[0-9]+)\\:(|.*\\.|.*\\!)([A-Z0-9]+)");
+    if(regEx.indexIn(range) >= 0) {
+        range.clear();
+        QString sheetName = regEx.cap(1);
+        if(sheetName.endsWith('.') || sheetName.endsWith('!'))
+            sheetName = sheetName.left(sheetName.length() - 1);
+        if(!sheetName.isEmpty())
+            range = sheetName + '!';
+        range += regEx.cap(2);
+        if(!isPoint)
+            range += ':' + regEx.cap(4);
+    }
+
     return range;
 }
 
@@ -94,9 +110,6 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if (!chart()->m_impl->name().isEmpty())
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
-    //bodyWriter->addAttribute("svg:width", "8cm"); //FIXME
-    //bodyWriter->addAttribute("svg:height", "7cm"); //FIXME
-
     bodyWriter->addAttributePt("svg:width", (float)m_width);
     bodyWriter->addAttributePt("svg:height", (float)m_height);
 
@@ -146,6 +159,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     chartstyle.addProperty("chart:auto-position", "true");
     chartstyle.addProperty("chart:auto-size", "true");
     chartstyle.addProperty("chart:angle-offset", chart()->m_angleOffset);
+
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:sort-by-x-values", "false");
     //chartstyle.addProperty("chart:right-angled-axes", "true");
@@ -157,7 +171,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if( chart()->m_transpose )
         chartstyle.addProperty("chart:vertical", "true");
     bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
-
+    
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
     if(!m_cellRangeAddress.isEmpty()) {
         bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
@@ -207,9 +221,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
     }
 
-    foreach(Charting::Series* series, chart()->m_series) {
-        bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
+    // Walk through the series. We inverse them to have the series in http://websvn.kde.org/trunk/tests/kofficetests/interoperability/kspread/MSExcel2007/me07_area_chart.xlsx
+    // in the correct order to be sure the one area does not hide the other. The question here is if just reversing them is enough/correct or if we need to proper order them.
+    for(int i = chart()->m_series.count() - 1; i >= 0; --i) {
+        Charting::Series* series = chart()->m_series[i];
 
+        bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
+        
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
@@ -223,6 +241,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 }
         }
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
+            //bodyWriter->addAttribute("chart:label-cell-address", );
 
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
@@ -240,9 +259,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->endElement(); // chart:series
     }
 
+    bodyWriter->startElement("chart:wall");
+    bodyWriter->endElement(); // chart:wall
 
-    //<chart:wall chart:style-name="ch11"/>
-    //<chart:floor chart:style-name="ch12"/>
+    bodyWriter->startElement("chart:floor");
+    bodyWriter->endElement(); // chart:floor
+
     bodyWriter->endElement(); // chart:plot-area
 
     bodyWriter->endElement(); // chart:chart
