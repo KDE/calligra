@@ -122,10 +122,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
         bodyWriter->startElement("chart:title");
+        /*TODO
         bodyWriter->addAttributePt("svg:x", sprcToPt(t->m_x1, vertical));
         bodyWriter->addAttributePt("svg:y", sprcToPt(t->m_y1, horizontal));
         bodyWriter->addAttributePt("svg:width", sprcToPt(t->m_x2, vertical));
         bodyWriter->addAttributePt("svg:height", sprcToPt(t->m_y2, horizontal));
+        */
         bodyWriter->startElement("text:p");
         bodyWriter->addTextNode(t->m_text);
         bodyWriter->endElement(); // text:p
