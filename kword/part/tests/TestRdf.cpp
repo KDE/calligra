@@ -175,6 +175,8 @@ void TestRdf::findStatements()
     }
 }
 
+#ifdef KDEPIMLIBS_FOUND
+
 void TestRdf::foaf()
 {
     RDEBUG << "";
@@ -292,6 +294,8 @@ void TestRdf::calendarEvents()
     QCOMPARE (expectedNames.size(),1);
     QVERIFY (expectedNames.contains (nameThatRemains));
 }
+
+#endif // KDEPIMLIBS_FOUND
 
 void TestRdf::locations()
 {

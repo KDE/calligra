@@ -39,8 +39,10 @@ private slots:
 
     void basicload();
     void findStatements();
+#ifdef KDEPIMLIBS_FOUND
     void foaf();
     void calendarEvents();
+#endif
     void locations();
     void prefixMapping();
     void addAndSage();
