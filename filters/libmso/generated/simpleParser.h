@@ -222,6 +222,8 @@ class UnknownOfficeArtClientDataChild;
 void parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s);
 class UnknownSlideContainerChild;
 void parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContainerChild& _s);
+class UnknownTextContainerChild;
+void parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainerChild& _s);
 class PersistDirectoryEntry;
 void parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _s);
 class PersistIdRef;
@@ -1660,20 +1662,26 @@ public:
 class UnknownDocumentContainerChild : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray todo;
+    QByteArray unknown;
     UnknownDocumentContainerChild(void* /*dummy*/ = 0) {}
 };
 class UnknownOfficeArtClientDataChild : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray todo;
+    QByteArray unknown;
     UnknownOfficeArtClientDataChild(void* /*dummy*/ = 0) {}
 };
 class UnknownSlideContainerChild : public StreamOffset {
 public:
     RecordHeader rh;
-    QByteArray todo;
+    QByteArray unknown;
     UnknownSlideContainerChild(void* /*dummy*/ = 0) {}
+};
+class UnknownTextContainerChild : public StreamOffset {
+public:
+    RecordHeader rh;
+    QByteArray unknown;
+    UnknownTextContainerChild(void* /*dummy*/ = 0) {}
 };
 class PersistDirectoryEntry : public StreamOffset {
 public:
@@ -4255,6 +4263,7 @@ public:
     QSharedPointer<MasterTextPropAtom> master;
     QList<TextBookmarkAtom> bookmark;
     QSharedPointer<TextRulerAtom> textRuler;
+    QSharedPointer<UnknownTextContainerChild> unknown;
     QSharedPointer<TextSpecialInfoAtom> specialinfo;
     QList<TextContainerInteractiveInfo> interactive;
     QSharedPointer<TextSpecialInfoAtom> specialinfo2;
