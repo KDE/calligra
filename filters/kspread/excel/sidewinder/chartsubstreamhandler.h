@@ -70,6 +70,7 @@ private:
 
     //QMap<Charting::Obj*, int> m_defaultObjects;
     int m_defaultTextId;
+    int m_axisId;
     
     void handleBOF(BOFRecord*);
     void handleEOF(EOFRecord *);
@@ -120,6 +121,7 @@ private:
     void handleShapePropsStream(ShapePropsStreamRecord *);
     void handleTextPropsStream(TextPropsStreamRecord *);
     void handleObjectLink(ObjectLinkRecord *);
+    void handlePlotArea(PlotAreaRecord *);
 
 };
 
