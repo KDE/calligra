@@ -61,7 +61,7 @@ Paragraph::~Paragraph()
     m_odfParagraphStyle = 0;
 }
 
-void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles)
+void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement)
 {
     // Check for column break in this text string
     int colBreak = text.indexOf(QChar(0xE));
@@ -79,6 +79,10 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         // Remove character that signaled a column break
         text.remove(QChar(0xE));
     }
+
+    // if it's inner paragraph, push back true
+    // this is an m_textStyles.push_back(NULL) complement if we still need the style applied
+    m_addCompleteElement.push_back(addCompleteElement);
 
     // Add text string to list.
     m_textStrings.push_back(QString(text));
@@ -196,7 +200,12 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             //write text string to writer
             //now I just need to write the text:span to the header tag
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
-            writer->addTextSpan(m_textStrings[i]);
+            if (m_addCompleteElement[i] == false) {
+                writer->addTextSpan(m_textStrings[i]);
+            } else {            // special case we need style applied and complete element added
+                writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
+            }
+
             //cleanup
             //delete m_textStyles[i];
             m_textStyles[i] = 0;
@@ -244,8 +253,10 @@ void Paragraph::openInnerParagraph()
     //m_textStyles2 and m_textStrings2
     m_textStyles2 = m_textStyles;
     m_textStrings2 = m_textStrings;
+    m_addCompleteElement2 = m_addCompleteElement;
     m_textStyles.clear();
     m_textStrings.clear();
+    m_addCompleteElement.clear();
 }
 
 void Paragraph::closeInnerParagraph()
@@ -262,10 +273,13 @@ void Paragraph::closeInnerParagraph()
     m_paragraphProperties2 = 0;
     m_textStyles.clear();
     m_textStrings.clear();
+    m_addCompleteElement.clear();
     m_textStyles = m_textStyles2;
     m_textStrings = m_textStrings2;
+    m_addCompleteElement = m_addCompleteElement2;
     m_textStyles2.clear();
     m_textStrings2.clear();
+    m_addCompleteElement2.clear();
 }
 
 void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties)
