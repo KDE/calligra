@@ -598,14 +598,18 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
     if(!record || m_chart->m_impl) return;
+    DEBUG << "pcOverlap=" << record->pcOverlap() << " pcGap=" << record->pcGap() << " fTranspose=" << record->isFTranspose() << " fStacked=" << record->isFStacked() << " f100=" << record->isF100() << std::endl;
     m_chart->m_impl = new Charting::BarImpl();
     m_chart->m_transpose = record->isFTranspose();
+    m_chart->m_stacked = record->isFStacked();
+    m_chart->m_f100 = record->isF100();
 }
 
 // specifies that the chartgroup is a area chart
 void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if(!record || m_chart->m_impl) return;
+    DEBUG << std::endl;
     m_chart->m_impl = new Charting::AreaImpl();
 }
 
