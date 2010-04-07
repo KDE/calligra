@@ -137,7 +137,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->addAttributePt("svg:y", height);
         */
 
-        //NOTE don't load widht or height, the record MUST be ignored and determined by the application
+        //NOTE don't load width or height, the record MUST be ignored and determined by the application
         //see [MS-XLS] p. 362
 
         bodyWriter->startElement("text:p");
