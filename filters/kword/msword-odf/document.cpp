@@ -291,6 +291,10 @@ void Document::processStyles()
         QString displayName = Conversion::string(style->name());
         QString name = Conversion::styleNameString(style->name());
 
+        if (style->sti() == 40) {           // if the invariant style identifier says it's a style used for line numbers
+            m_lineNumbersStyleName = name;  // store the name of that style
+        }
+
         // Process paragraph styles.
         if (style && style->type() == wvWare::Style::sgcPara) {
             const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());

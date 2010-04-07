@@ -114,6 +114,8 @@ public:
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
+    // get the style name used for line numbers
+    QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -189,6 +191,8 @@ private:
 
     int m_initialFootnoteNumber;
     int m_initialEndnoteNumber;
+
+    QString m_lineNumbersStyleName;
 };
 
 #endif // DOCUMENT_H
