@@ -76,6 +76,7 @@ protected:
     KoFilter::ConversionStatus read_pie3DChart();
     KoFilter::ConversionStatus read_doughnutChart();
     KoFilter::ConversionStatus read_areaChart();
+    KoFilter::ConversionStatus read_barChart();
     KoFilter::ConversionStatus read_val();
     KoFilter::ConversionStatus read_cat();
     KoFilter::ConversionStatus read_tx();

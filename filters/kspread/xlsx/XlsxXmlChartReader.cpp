@@ -187,6 +187,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(pie3DChart)
             ELSE_TRY_READ_IF(doughnutChart)
             ELSE_TRY_READ_IF(areaChart)
+            ELSE_TRY_READ_IF(barChart)
             ELSE_TRY_READ_IF(firstSliceAng)
             ELSE_TRY_READ_IF(holeSize)
         }
@@ -391,6 +392,16 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
 {
     if(!m_context->m_chart->m_impl) {
         m_context->m_chart->m_impl = new Charting::AreaImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL barChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::BarImpl();
     }
     return KoFilter::OK;
 }
