@@ -718,7 +718,7 @@ QVariant DataSet::labelData() const
         label += d->data( d->labelDataRegion, i ).toString();
     
     if ( label.isEmpty() )
-        label = i18n( "Series %1", number() );
+        label = i18n( "Series %1", number() + 1 );
 
     return QVariant( label );
 }
