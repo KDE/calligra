@@ -503,7 +503,15 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if(!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
-    m_currentSeries->m_texts << new Charting::Text(string(record->text()));
+    if(Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
+        t->m_text = string(record->text());
+    } else if(Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
+        //TODO
+    } else if(Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
+        series->m_texts << new Charting::Text(string(record->text()));
+    } else {
+        //m_currentSeries->m_texts << new Charting::Text(string(record->text()));
+    }
 }
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
