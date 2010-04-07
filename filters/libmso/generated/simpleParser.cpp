@@ -2267,8 +2267,8 @@ void MSO::parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentC
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x416 || _s.rh.recType == 0x41A || _s.rh.recType == 0x101A || _s.rh.recType == 0x1773 || _s.rh.recType == 0x1788 || _s.rh.recType == 0x178c || _s.rh.recType == 0x178d");
     }
     _c = _s.rh.recLen;
-    _s.todo.resize(_c);
-    in.readBytes(_s.todo);
+    _s.unknown.resize(_c);
+    in.readBytes(_s.unknown);
 }
 void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s) {
     _s.streamOffset = in.getPosition();
@@ -2285,8 +2285,8 @@ void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeA
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFE8 || _s.rh.recType == 0x1019");
     }
     _c = _s.rh.recLen;
-    _s.todo.resize(_c);
-    in.readBytes(_s.todo);
+    _s.unknown.resize(_c);
+    in.readBytes(_s.unknown);
 }
 void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContainerChild& _s) {
     _s.streamOffset = in.getPosition();
@@ -2303,8 +2303,26 @@ void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContain
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x101D");
     }
     _c = _s.rh.recLen;
-    _s.todo.resize(_c);
-    in.readBytes(_s.todo);
+    _s.unknown.resize(_c);
+    in.readBytes(_s.unknown);
+}
+void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainerChild& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    parseRecordHeader(in, _s.rh);
+    if (!(_s.rh.recVer == 3)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 3");
+    }
+    if (!(_s.rh.recInstance == 9)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 9");
+    }
+    if (!(_s.rh.recType == 0)) {
+        throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0");
+    }
+    _c = _s.rh.recLen;
+    _s.unknown.resize(_c);
+    in.readBytes(_s.unknown);
 }
 void MSO::parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _s) {
     _s.streamOffset = in.getPosition();
@@ -9107,6 +9125,28 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
             in.rewind(_m);
         } catch(EOFException _e) {
             _s.textRuler.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    try {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recInstance == 9)&&(_optionCheck.recType == 0);
+    } catch(EOFException _e) {
+        _possiblyPresent = false;
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.unknown = QSharedPointer<UnknownTextContainerChild>(new UnknownTextContainerChild(&_s));
+            parseUnknownTextContainerChild(in, *_s.unknown.data());
+        } catch(IncorrectValueException _e) {
+            _s.unknown.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.unknown.clear();
             in.rewind(_m);
         }
     }
