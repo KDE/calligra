@@ -110,14 +110,14 @@ void KexiTableViewHeader::styleChanged()
 
 int KexiTableViewHeader::addLabel(const QString & s, int size)
 {
-    //m_toolTips += "";
+    m_toolTips += "";
     slotSizeChange(0, 0, 0);//refresh
     return Q3Header::addLabel(s, size);
 }
 
 int KexiTableViewHeader::addLabel(const QIcon & icon, const QString & s, int size)
 {
-    //m_toolTips += "";
+    m_toolTips += "";
     slotSizeChange(0, 0, 0);//refresh
     return Q3Header::addLabel(icon, s, size);
 }
@@ -127,8 +127,10 @@ void KexiTableViewHeader::removeLabel(int section)
     if (section < 0 || section >= count())
         return;
     QStringList::Iterator it = m_toolTips.begin();
-    it += section;
-    it = m_toolTips.erase(it);
+    if (it!=m_toolTips.end()) {
+        it += section;
+        it = m_toolTips.erase(it);
+    }
     slotSizeChange(0, 0, 0);//refresh
     Q3Header::removeLabel(section);
 }
