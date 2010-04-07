@@ -4363,6 +4363,7 @@ public:
     QList<LinkedShape10Atom> rgLinkedShape10Atom;
     QSharedPointer<SlideFlags10Atom> slideFlagsAtom;
     QSharedPointer<SlideTime10Atom> slideTimeAtom;
+    QSharedPointer<UnknownSlideContainerChild> unknown;
     QSharedPointer<HashCode10Atom> hashCodeAtom;
     QSharedPointer<ExtTimeNodeContainer> extTimeNodeContainer;
     QSharedPointer<BuildListContainer> buildListContainer;

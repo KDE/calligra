@@ -9550,6 +9550,28 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     try {
         RecordHeader _optionCheck(&_s);
         parseRecordHeader(in, _optionCheck);
+        _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x101D);
+    } catch(EOFException _e) {
+        _possiblyPresent = false;
+    }
+    in.rewind(_m);
+    _m = in.setMark();
+    if (_possiblyPresent) {
+        try {
+            _s.unknown = QSharedPointer<UnknownSlideContainerChild>(new UnknownSlideContainerChild(&_s));
+            parseUnknownSlideContainerChild(in, *_s.unknown.data());
+        } catch(IncorrectValueException _e) {
+            _s.unknown.clear();
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.unknown.clear();
+            in.rewind(_m);
+        }
+    }
+    _m = in.setMark();
+    try {
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
         _possiblyPresent = (_optionCheck.recVer == 0)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x2B00)&&(_optionCheck.recLen == 4);
     } catch(EOFException _e) {
         _possiblyPresent = false;
