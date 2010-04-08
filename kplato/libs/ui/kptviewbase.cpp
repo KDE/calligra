@@ -29,6 +29,9 @@
 
 #include <KoDocument.h>
 #include <KoShape.h>
+#include <KoPageLayoutWidget.h>
+#include <KoPagePreviewWidget.h>
+#include <KoPageLayoutDialog.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -97,6 +100,15 @@ PrintingDialog::PrintingDialog( ViewBase *view )
     m_view( view ),
     m_widget( 0 )
 {
+    setPrinterPageLayout();
+}
+
+QAbstractPrintDialog::PrintDialogOptions PrintingDialog::printDialogOptions() const
+{
+    return QAbstractPrintDialog::PrintToFile |
+           QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCollateCopies |
+           QAbstractPrintDialog::DontUseSheet;
 }
 
 PrintingOptions PrintingDialog::printingOptions() const
@@ -109,6 +121,21 @@ void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
     return m_view->setPrintingOptions( opt );
 }
 
+void PrintingDialog::setPrinterPageLayout()
+{
+    QPrinter &p = printer();
+    KoPageLayout l = m_view->pageLayout();
+    QPrinter::Orientation o;
+    switch ( l.orientation ) {
+        case KoPageFormat::Portrait: o = QPrinter::Portrait; break;
+        case KoPageFormat::Landscape: o = QPrinter::Landscape; break;
+        default: o = QPrinter::Portrait; break;
+    }
+    p.setOrientation( o );
+    p.setPaperSize( KoPageFormat::printerPageSize( l.format ) );
+    p.setPageMargins( l.leftMargin, l.topMargin, l.rightMargin, l.bottomMargin, QPrinter::Point );
+}
+
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
     PrintingOptions opt;
@@ -116,7 +143,36 @@ void PrintingDialog::startPrinting(RemovePolicy removePolicy )
         opt = m_widget->options();
     }
     setPrintingOptions( opt );
+    setPrinterPageLayout();
     KoPrintingDialog::startPrinting( removePolicy );
+}
+
+QWidget *PrintingDialog::createPageLayoutWidget() const
+{
+    QWidget *widget = new QWidget();
+    //FIXME change when allowed by i18n (also #include)
+    //widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+    KoPageLayoutDialog dummy( 0, m_view->pageLayout() );
+    widget->setWindowTitle( dummy.windowTitle() );
+    
+    QHBoxLayout *lay = new QHBoxLayout(widget);
+    lay->setMargin(0);
+    widget->setLayout(lay);
+
+    KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
+    w->showPageSpread( false );
+    w->layout()->setMargin( 0 );
+    lay->addWidget( w );
+
+    KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
+    prev->setPageLayout( m_view->pageLayout() );
+    lay->addWidget( prev );
+
+    connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
+
+    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+
+    return widget;
 }
 
 QList<QWidget*> PrintingDialog::createOptionWidgets() const
@@ -439,6 +495,14 @@ int TreeViewPrintingDialog::firstRow( int page ) const
     return row;
 }
 
+QList<QWidget*> TreeViewPrintingDialog::createOptionWidgets() const
+{
+    QList<QWidget*> lst;
+    lst << createPageLayoutWidget();
+    lst += PrintingDialog::createOptionWidgets();
+    return  lst;
+}
+
 void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
@@ -451,6 +515,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect hRect = headerRect();
     QRect fRect = footerRect();
     QRect pageRect = printer().pageRect();
+    pageRect.moveTo( 0, 0 );
     QRect paperRect = printer().paperRect();
     
     QAbstractItemModel *model = m_tree->model();
@@ -1227,6 +1292,14 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
     return row;
 }
 
+QList<QWidget*> DoubleTreeViewPrintingDialog::createOptionWidgets() const
+{
+    QList<QWidget*> lst;
+    lst << createPageLayoutWidget();
+    lst += PrintingDialog::createOptionWidgets();
+    return  lst;
+}
+
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
@@ -1240,6 +1313,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect hRect = headerRect();
     QRect fRect = footerRect();
     QRect pageRect = printer().pageRect();
+    pageRect.moveTo( 0, 0 );
     QRect paperRect = printer().paperRect();
     
     QAbstractItemModel *model = m_tree->model();

@@ -125,7 +125,6 @@ protected:
     GanttPrintingOptions *m_options;
     bool m_singlePage;
     bool m_printRowLabels;
-    QRectF m_pageRect;
 };
 
 class GanttTreeView : public TreeViewBase

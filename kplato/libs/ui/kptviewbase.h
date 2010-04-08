@@ -28,6 +28,7 @@
 
 #include <KoView.h>
 #include <KoPrintingDialog.h>
+#include <KoPageLayout.h>
 
 #include <QMap>
 #include <QTreeView>
@@ -43,6 +44,7 @@ class QAbstractItemModel;
 
 class KoDocument;
 class KoPrintJob;
+class KoPageLayoutWidget;
 
 /// The main namespace
 namespace KPlato
@@ -124,6 +126,9 @@ public:
     PrintingOptions printingOptions() const;
     void setPrintingOptions( const PrintingOptions &opt);
     
+    QWidget *createPageLayoutWidget() const;
+    QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
+
 signals:
     void changed ( const PrintingOptions &opt );
     
@@ -134,6 +139,8 @@ protected:
     virtual void paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project );
     int headerFooterHeight( const PrintingOptions::Data &options ) const;
     void drawBottomRect( QPainter &p, const QRect &r );
+
+    void setPrinterPageLayout();
 
 protected:
     ViewBase *m_view;
@@ -232,6 +239,8 @@ public:
     
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
+    KoPageLayout pageLayout() const { return m_pagelayout; }
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -244,6 +253,8 @@ public slots:
     virtual void slotEditPaste() {}
     virtual void slotRefreshView() {}
     
+    void setPageLayout( const KoPageLayout &layout ) { m_pagelayout = layout; }
+
 signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
@@ -265,6 +276,8 @@ protected:
     
     Project *m_proj;
     ScheduleManager *m_schedulemanager;
+    
+    KoPageLayout m_pagelayout;
 };
 
 //------------------
@@ -277,6 +290,8 @@ public:
 
     virtual int documentFirstPage() const { return 1; }
     virtual int documentLastPage() const;
+
+    QList<QWidget*> createOptionWidgets() const;
 
 protected:
     virtual void printPage( int pageNumber, QPainter &painter );
@@ -421,6 +436,8 @@ public:
 
     virtual int documentFirstPage() const { return 1; }
     virtual int documentLastPage() const;
+
+    QList<QWidget*> createOptionWidgets() const;
 
 protected:
     virtual void printPage( int pageNumber, QPainter &painter );

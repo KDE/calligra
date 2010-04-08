@@ -66,6 +66,14 @@ int DependecyViewPrintingDialog::documentLastPage() const
     return documentFirstPage();
 }
 
+QList<QWidget*> DependecyViewPrintingDialog::createOptionWidgets() const
+{
+    QList<QWidget*> lst;
+    lst << createPageLayoutWidget();
+    lst += PrintingDialog::createOptionWidgets();
+    return  lst;
+}
+
 void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
@@ -73,7 +81,7 @@ void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect hRect = headerRect();
     QRect fRect = footerRect();
     QRect pageRect = printer().pageRect();
-
+    pageRect.moveTo( 0, 0 );
     kDebug()<<pageRect<<hRect<<fRect;
 
     painter.translate( pageRect.topLeft() );
