@@ -42,6 +42,7 @@
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
+#include <KoPageLayoutWidget.h>
 
 #include <kdebug.h>
 
@@ -141,22 +142,21 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
     m_singlePage( true ),
     m_printRowLabels( true )
 {
-    m_pageRect = printer().pageRect();
     m_headerHeight = gantt->graphicsView()->headerHeight();
     m_sceneRect = m_gantt->graphicsView()->printRect();
     m_horPages = 1;
-    qreal c = m_sceneRect.width() - m_pageRect.width();
+    qreal c = m_sceneRect.width() - printer().pageRect().width();
     while ( c > 0 ) {
         ++m_horPages;
-        c -= m_pageRect.width();
+        c -= printer().pageRect().width();
     }
     m_vertPages = 1;
-    c = m_sceneRect.height() - m_pageRect.height() - m_headerHeight;
+    c = m_sceneRect.height() - printer().pageRect().height() - m_headerHeight;
     while ( c > 0 ) {
         ++m_vertPages;
-        c -= m_pageRect.height();
+        c -= printer().pageRect().height();
     }
-    kDebug()<<m_sceneRect<<m_pageRect<<m_horPages<<m_vertPages;
+    kDebug()<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
     printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
@@ -166,7 +166,7 @@ void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
         m_singlePage = m_options->singlePage();
         //m_printRowLabels = m_options->printRowLabels();
     }
-    KoPrintingDialog::startPrinting( removePolicy );
+    PrintingDialog::startPrinting( removePolicy );
 }
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
@@ -178,7 +178,7 @@ QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
     
     const_cast<GanttPrintingDialog*>( this )->m_options = w;
     
-    return QList<QWidget*>() << m_options;
+    return QList<QWidget*>() << createPageLayoutWidget() << m_options;
 }
 
 int GanttPrintingDialog::documentLastPage() const
@@ -192,7 +192,8 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
     QRectF sourceRect = m_sceneRect;
     int p = page - documentFirstPage();
-    QRectF pageRect = m_pageRect;
+    QRectF pageRect = printer().pageRect();
+    pageRect.moveTo( 0, 0 );
     int vert = m_singlePage ? 0 : p / m_horPages;
     int hor = m_singlePage ? 0 : p % m_horPages;
     if ( ! m_singlePage && documentLastPage() > documentFirstPage() ) {
@@ -204,7 +205,6 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
     }
     m_gantt->print( &painter, pageRect, sourceRect, m_printRowLabels, vert == 0 );
 }
-
 
 //---------------------
 class HeaderView : public QHeaderView

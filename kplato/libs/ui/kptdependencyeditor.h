@@ -65,6 +65,8 @@ public:
     int documentLastPage() const;
     void printPage( int page, QPainter &painter );
     
+    QList<QWidget*> createOptionWidgets() const;
+
 private:
     DependencyView *m_depview;
 };
