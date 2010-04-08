@@ -48,7 +48,7 @@ public:
     /// anchored to cell
     //unsigned long m_colL, m_rwT;
 #endif
-    int m_x, m_y, m_width, m_height; //in pt
+    float m_x, m_y, m_width, m_height; //in pt
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);

@@ -63,14 +63,18 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
 }
 
-int columnStart(Sheet* sheet, unsigned long col) {
+float offset( unsigned long dimension, unsigned long offset ) {
+    return (float)dimension * (float)offset / 1024.0;
+}
+
+float columnStart(Sheet* sheet, unsigned long col) {
     double columnStart = 0;
     for( int i = 0; i < col; ++i )
         columnStart += sheet->column(i)->width();
     return columnStart;
 }
 
-int rowStart(Sheet* sheet, unsigned long row) {
+float rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
     for( int i = 0; i < row; ++i )
         rowStart += sheet->row(i)->height();
@@ -78,21 +82,16 @@ int rowStart(Sheet* sheet, unsigned long row) {
 }
 
 int columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
-    kDebug()<<"column distance"<<col1<<col2;
     double columnDistance = 0.0;
     for( unsigned long i = col1; i <= col2; ++i )
         columnDistance += sheet->column(i)->width();
-
-    kDebug()<<"column distance"<<columnDistance;
     return columnDistance;
 }
 
 int rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
-    kDebug()<<"row distance"<<row1<<row2;
     double rowDistance = 0.0;
     for( unsigned long i = row1; i <= row2; ++i )
         rowDistance += sheet->row(i)->height();
-    kDebug()<<"row distance"<<rowDistance;
     return rowDistance;
 }
 
@@ -903,7 +902,7 @@ void ExcelImport::Private::processColumnForStyle(Sheet* sheet, int columnIndex, 
 
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
     style.addProperty("fo:break-before", "auto");
-    style.addProperty("style:column-width", QString("%1in").arg(column->width() / 27));
+    style.addPropertyPt("style:column-width", column->width());
 
     QString styleName = styles->insert(style, "co");
     colStyles.append(styleName);
@@ -1410,9 +1409,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("table:end-x", QString::number(picture->m_dxR));
         xmlWriter->addAttribute("table:end-y", QString::number(picture->m_dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
-        //TODO find out how is m_dxL and m_dyT taken into account
-        xmlWriter->addAttributePt("svg:x", (float)columnStart(cell->sheet(),picture->m_colL) /*picture->m_dxL*/);
-        xmlWriter->addAttributePt("svg:y", (float)rowStart(cell->sheet(),picture->m_rwT) /*picture->m_dyT*/);
+        xmlWriter->addAttributePt("svg:x", columnStart(cell->sheet(),picture->m_colL) + offset(cell->sheet()->column(picture->m_colL)->width(),picture->m_dxL));
+        xmlWriter->addAttributePt("svg:y", rowStart(cell->sheet(),picture->m_rwT) + offset(cell->sheet()->row(picture->m_rwT)->height(),picture->m_dyT));
 //         xmlWriter->addAttributePt("svg:width", (float)columnDistance(cell->sheet(),picture->m_colL,picture->m_colR) /*picture->m_dxR*/);
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),picture->m_colR-picture->m_colL,picture->m_dxR))+"pt");
         //NOTE this call introduces a crash when we load ms03_intranet_picture_pos.xls
@@ -1441,13 +1439,14 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_endCellAddress = string(cell->sheet()->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
-        //TODO find out how is m_dxL and m_dyT taken into account
-        c->m_x = columnStart(cell->sheet(),drawobj->m_colL) /*drawobj->m_dxL */;
-        c->m_y = rowStart(cell->sheet(),drawobj->m_rwT) /*+ drawobj->m_dyT*/;
-        //TODO columnDistance seems wrong, find out why
-//         c->m_width = columnDistance(cell->sheet(),drawobj->m_colL,drawobj->m_colR);//drawobj->m_dxR
-        c->m_width = columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR);
-        c->m_height = rowDistance(cell->sheet(),drawobj->m_rwT,drawobj->m_rwB); //drawobj->m_dyB
+        c->m_x = columnStart(cell->sheet(),drawobj->m_colL) + offset(cell->sheet()->column(drawobj->m_colL)->width(),drawobj->m_dxL);
+        c->m_y = rowStart(cell->sheet(),drawobj->m_rwT) + offset(cell->sheet()->row(drawobj->m_rwT)->height(),drawobj->m_dyT);
+        c->m_width = columnDistance(cell->sheet(),drawobj->m_colL,drawobj->m_colR) 
+                        - offset(cell->sheet()->column(drawobj->m_colL)->width(),drawobj->m_dxL)
+                        + offset(cell->sheet()->column(drawobj->m_colR)->width(),drawobj->m_dxR);
+        c->m_height = rowDistance(cell->sheet(),drawobj->m_rwT,drawobj->m_rwB)
+                        - offset(cell->sheet()->row(drawobj->m_rwT)->height(),drawobj->m_dyT)
+                        + offset(cell->sheet()->row(drawobj->m_rwB)->height(),drawobj->m_dyB);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
