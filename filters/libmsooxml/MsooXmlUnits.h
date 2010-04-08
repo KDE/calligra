@@ -77,9 +77,16 @@ namespace Utils {
 //! Converts EMU Unit of Measurement to cm.
 /*! Converts value expressed in EMU (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
     to ODF-compliant "0.000cm" unit.
+    "0" and "" is converted to "0cm".
     @return empty string on error. */
 //! CASE #P505
 MSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
+
+//! Converts TWIP Unit of Measurement to cm.
+/*! Converts value expressed in TWIPs  to ODF-compliant "0.000cm" unit.
+    "0" and "" is converted to "0cm".
+    @return empty string on error. */
+MSOOXML_EXPORT QString TWIP_to_ODF(const QString& twipValue);
 
 //! ECMA-376, 17.18.23 ST_EighthPointMeasure (Measurement in Eighths of a Point), p. 1540
 /*! Converts eighths of a point (equivalent to 1/576th of an inch) to point

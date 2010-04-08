@@ -323,17 +323,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
 {
     READ_PROLOGUE
-    bool ok;
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(w)
-    const qreal pageWidth = qreal(TWIP_TO_POINT(w.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:page-width", pageWidth);
-
+    if (!w.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(w));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:page-width", s);
+    }
     TRY_READ_ATTR(h)
-    const qreal pageHeight = qreal(TWIP_TO_POINT(h.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:page-height", pageHeight);
+    if (!h.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(h));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:page-height", s);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -354,28 +356,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 {
     READ_PROLOGUE
-    bool ok;
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(top)
-    const qreal marginTop = qreal(TWIP_TO_POINT(top.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-top", marginTop);
-
+    if (!top.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(top));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-top", s);
+    }
     TRY_READ_ATTR(right)
-    const qreal marginRight = qreal(TWIP_TO_POINT(right.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-right", marginRight);
-
+    if (!right.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(right));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-right", s);
+    }
     TRY_READ_ATTR(bottom)
-    const qreal marginBottom = qreal(TWIP_TO_POINT(bottom.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-bottom", marginBottom);
-
+    if (!bottom.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(bottom));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-bottom", s);
+    }
     TRY_READ_ATTR(left)
-    const qreal marginLeft = qreal(TWIP_TO_POINT(left.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-left", marginLeft);
-
+    if (!left.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(left));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-left", s);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -715,8 +720,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 #undef CURRENT_EL
 #define CURRENT_EL fldChar
 //! fldChar handler
-/* Complex field character
-/*
+/*! Complex field character
+
  Parent elements:
  - r (§17.3.2.25)
  - r (§22.1.2.87)
