@@ -187,10 +187,15 @@ void KarbonDocument::saveOasis(KoShapeSavingContext & context) const
     context.xmlWriter().addAttribute("draw:id", "page1");
     context.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
-    foreach(KoShapeLayer * layer, d->layers)
-    layer->saveOdf(context);
-
+    foreach(KoShapeLayer * layer, d->layers) {
+        context.addLayerForSaving(layer);
+    }
     context.saveLayerSet(context.xmlWriter());
+
+    foreach(KoShapeLayer * layer, d->layers) {
+        layer->saveOdf(context);
+    }
+
     context.xmlWriter().endElement(); // draw:page
 }
 
