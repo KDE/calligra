@@ -1415,7 +1415,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttributePt("svg:y", (float)rowStart(cell->sheet(),picture->m_rwT) /*picture->m_dyT*/);
 //         xmlWriter->addAttributePt("svg:width", (float)columnDistance(cell->sheet(),picture->m_colL,picture->m_colR) /*picture->m_dxR*/);
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),picture->m_colR-picture->m_colL,picture->m_dxR))+"pt");
-        //NOTE this call introduces a crash when me_clustered_bar_chart.xls
+        //NOTE this call introduces a crash when we load ms03_intranet_picture_pos.xls
 //         xmlWriter->addAttributePt("svg:height", (float)rowDistance(cell->sheet(),picture->m_rwT,picture->m_rwB) /*picture->m_dyB*/);
         xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),picture->m_rwB-picture->m_rwT,picture->m_dyB))+"pt");
         xmlWriter->startElement("draw:image");
