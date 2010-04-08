@@ -301,7 +301,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
 {
     READ_PROLOGUE
-    enum State { Start, InStrRef, InRichText } state;
+    enum { Start, InStrRef, InRichText } state;
     state = Start;
     while (!atEnd()) {
         readNext();
@@ -324,7 +324,35 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 }
                 break;
             case InRichText: // richtext means the title text
-                //FIXME m_currentSeries->m_texts << new Charting::Text(readElementText());
+                // we extract the text from the richtext cause we cannot handle all of the richtext anyway
+                QString result;
+                enum { Rich, Paragraph, TextRun } s;
+                s = Rich;
+                while (!atEnd()) {
+                    readNext();
+                    switch(s) {
+                        case Rich:
+                            if (isStartElement() && qualifiedName() == QLatin1String("a:p")) s = Paragraph;
+                            break;
+                        case Paragraph:
+                            if (qualifiedName() == QLatin1String("a:r")) // text run
+                            s = isStartElement() ? TextRun : Rich;
+                        break;
+                        case TextRun:
+                            if (qualifiedName() == QLatin1String("a:t")) {
+                                if(isStartElement()) {
+                                    if(!result.isEmpty()) result += ' '; //concat multiple strings into one result
+                                    result += readElementText();
+                                } else
+                                    s = Paragraph;
+                            }
+                            break;
+                    }
+                    BREAK_IF_END_OF(rich);
+                }
+                if(!result.isEmpty())
+                    m_context->m_chart->m_texts << new Charting::Text(result);
+                state = Start;
                 break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
