@@ -934,18 +934,31 @@ void Utils::XmlWriteBuffer::clear()
 
 // <units> -------------------
 
-QString Utils::EMU_to_ODF(const QString& emuValue)
+QString Utils::EMU_to_ODF(const QString& twipValue)
 {
-    if (emuValue.isEmpty())
+    if (twipValue.isEmpty())
         return QLatin1String("0cm");
     bool ok;
-    const int emu = emuValue.toInt(&ok);
+    const int emu = twipValue.toInt(&ok);
     if (!ok)
         return QString();
     if (emu == 0)
         return QLatin1String("0cm");
     return EMU_TO_CM_STRING(emu);
-//    return QString::number(, 'g', 3) + QLatin1String("cm");
+}
+
+QString Utils::TWIP_to_ODF(const QString& twipValue)
+{
+    if (twipValue.isEmpty())
+        return QLatin1String("0cm");
+    bool ok;
+    const int twip = twipValue.toInt(&ok);
+    if (!ok)
+        return QString();
+    if (twip == 0)
+        return QLatin1String("0cm");
+    QString res;
+    return res.sprintf("%3.3fcm", TWIP_TO_CM(double(twip)));
 }
 
 QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)

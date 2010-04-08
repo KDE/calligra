@@ -23,6 +23,7 @@
 
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlNotesReader.h"
+#include "DocxXmlHeaderReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -249,7 +250,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - footerReference (Footer Reference) §17.10.2
  - footnotePr (Section-Wide Footnote Properties) §17.11.11
  - formProt (Only Allow Editing of Form Fields) §17.6.6
- - headerReference (Header Reference) §17.10.5
+ - [done] headerReference (Header Reference) §17.10.5
  - lnNumType (Line Numbering Settings) §17.6.8
  - noEndnote (Suppress Endnotes In Document) §17.11.16
  - paperSrc (Paper Source Information) §17.6.9
@@ -278,26 +279,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     if (m_backgroundColor.isValid())
         m_currentPageStyle.addProperty("fo:background-color", m_backgroundColor.name());
 
+    QString pageLayoutStyleName("Mpm");
+    pageLayoutStyleName = mainStyles->insert(
+        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
+
+    m_masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
+  
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(pgSz)
             ELSE_TRY_READ_IF(pgMar)
             ELSE_TRY_READ_IF(pgBorders)
+            ELSE_TRY_READ_IF(headerReference)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->insert(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
 //! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
 //! @todo style:display-name
 //    masterStyle->addAttribute("style:display-name", masterStyleName);
-    masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    /*masterStyleName =*/ mainStyles->insert(masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
+    m_masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
+    /*masterStyleName =*/ mainStyles->insert(m_masterPageStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
 //    masterStyle = mainStyles->styleForModification(masterStyleName);
 
     READ_EPILOGUE
@@ -319,17 +323,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
 {
     READ_PROLOGUE
-    bool ok;
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(w)
-    const qreal pageWidth = qreal(TWIP_TO_POINT(w.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:page-width", pageWidth);
-
+    if (!w.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(w));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:page-width", s);
+    }
     TRY_READ_ATTR(h)
-    const qreal pageHeight = qreal(TWIP_TO_POINT(h.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:page-height", pageHeight);
+    if (!h.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(h));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:page-height", s);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -350,27 +356,75 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 {
     READ_PROLOGUE
-    bool ok;
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(top)
-    const qreal marginTop = qreal(TWIP_TO_POINT(top.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-top", marginTop);
-
+    if (!top.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(top));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-top", s);
+    }
     TRY_READ_ATTR(right)
-    const qreal marginRight = qreal(TWIP_TO_POINT(right.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-right", marginRight);
-
+    if (!right.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(right));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-right", s);
+    }
     TRY_READ_ATTR(bottom)
-    const qreal marginBottom = qreal(TWIP_TO_POINT(bottom.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-bottom", marginBottom);
-
+    if (!bottom.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(bottom));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-bottom", s);
+    }
     TRY_READ_ATTR(left)
-    const qreal marginLeft = qreal(TWIP_TO_POINT(left.toUInt(&ok)));
-    if (ok)
-        m_currentPageStyle.addPropertyPt("fo:margin-left", marginLeft);
+    if (!left.isEmpty()) {
+        const QString s(MSOOXML::Utils::TWIP_to_ODF(left));
+        if (!s.isEmpty())
+            m_currentPageStyle.addProperty("fo:margin-left", s);
+    }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL headerReference
+//! w:headerReference handler (Header Reference)
+/*!
+
+ Parent elements:
+ -[done] sectPr (§17.6.17)
+ - sectPr (§17.6.8)
+
+ Child elements:
+ - None
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    QString link_target;
+
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (r_id.isEmpty()) {
+        link_target.clear();
+    }
+    else {
+        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+    }
+
+    DocxXmlHeaderReader reader(this);
+
+    QString errorMessage;
+    const KoFilter::ConversionStatus status
+        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, m_context);
+    if (status != KoFilter::OK) {
+        reader.raiseError(errorMessage);
+    }
+
+//! @todo: support type attribute
+
+    m_masterPageStyle.addChildElement("style:header", reader.content());
 
     readNext();
     READ_EPILOGUE
@@ -666,8 +720,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 #undef CURRENT_EL
 #define CURRENT_EL fldChar
 //! fldChar handler
-/* Complex field character
-/*
+/*! Complex field character
+
  Parent elements:
  - r (§17.3.2.25)
  - r (§22.1.2.87)
@@ -1002,7 +1056,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
  - pgNum (Page Number Block) §17.3.3.22
- - ptab (Absolute Position Tab Character) §17.3.3.23
+ - [done] ptab (Absolute Position Tab Character) §17.3.3.23
  - [done] rPr (Run Properties) §17.3.2.28
  - ruby (Phonetic Guide) §17.3.3.25
  - separator (Footnote/Endnote Separator Mark) §17.11.23
@@ -1028,6 +1082,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(ptab)   
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
@@ -1165,6 +1220,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
             const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+            if (m_moveToStylesXml) {
+                mainStyles->markStyleForStylesXml(currentTextStyleName);
+            }
             if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
                 body->addAttribute("xlink:type", "simple");
@@ -1272,7 +1330,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - suppressAutoHyphens (Suppress Hyphenation for Paragraph) §17.3.1.34
  - suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
  - suppressOverlap (Prevent Text Frames From Overlapping) §17.3.1.36
- - tabs (Set of Custom Tab Stops) §17.3.1.38
+ - [done] tabs (Set of Custom Tab Stops) §17.3.1.38
  - textAlignment (Vertical Character Alignment on Line) §17.3.1.39
  - textboxTightWrap (Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents) §17.3.1.40
  - textDirection (Paragraph Text Flow Direction) §17.3.1.41
@@ -1684,8 +1742,127 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR_INTO(val, m_currentStyleName)
+    TRY_READ_ATTR(val)
+
+    m_currentParagraphStyle.setParentName(val);
+
+    //READ_ATTR_INTO(val, m_currentStyleName)
     SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tabs
+//! tabs handler (Set of Custom Tab Stops)
+/*!
+
+ Parent elements:
+ - pPr (§17.3.1.26)
+ - pPr (§17.3.1.25)
+ - pPr (§17.7.5.2)
+ - pPr (§17.7.6.1)
+ - pPr (§17.9.23)
+ - pPr (§17.7.8.2)
+
+ Child elements:
+ - [done] tab (§17.3.137)
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
+{
+    READ_PROLOGUE
+
+    QBuffer tabs;
+    tabs.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&tabs);
+    elementWriter.startElement("style:tab-stops");
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter *oldBody = body;
+    body = new KoXmlWriter(&buffer);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(tab)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    elementWriter.addCompleteElement(&buffer);
+
+    delete body;
+    body = oldBody;
+ 
+    elementWriter.endElement(); // style-tab-stops
+
+    QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());
+    m_currentParagraphStyle.addChildElement("style:tab-stops", tabStops);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tab
+//! tab handler (Custom Tab Stop)
+/*!
+
+ Parent elements:
+ - [done] tabs (§17.3.1.38)
+
+ Child elements:
+ - None
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(leader)
+    TRY_READ_ATTR(pos)
+    TRY_READ_ATTR(val)
+
+    body->startElement("style:tab-stop");
+    body->addAttribute("style:position", 20);
+    bool ok = false;
+    const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
+    if (ok) {
+        body->addAttributePt("style:type", value);
+    }
+    body->endElement(); // style:tab-stop
+
+//! @todo: support leader attribute
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ptab
+//! ptab handler (absolute tab)
+/*!
+
+ Parent elements:
+ - r (§22.1.2.87);
+ - r (§17.3.2.25)
+
+ Child elements:
+ - none
+
+ @todo support all attributes
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_ptab()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo: support all attributes properly
+
+    body->startElement("text:tab");
+    body->endElement(); // text:tab
+
+    readNext();
     READ_EPILOGUE
 }
 
