@@ -10,6 +10,7 @@ set(docximport_PART_SRCS
     DocxXmlCommentsReader.cpp
     DocxXmlNotesReader.cpp
     DocxXmlDocumentReader.cpp
+    DocxXmlHeaderReader.cpp
     DocxImport.cpp
 )
 

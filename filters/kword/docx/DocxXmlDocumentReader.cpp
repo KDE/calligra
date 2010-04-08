@@ -23,6 +23,7 @@
 
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlNotesReader.h"
+#include "DocxXmlHeaderReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -249,7 +250,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - footerReference (Footer Reference) §17.10.2
  - footnotePr (Section-Wide Footnote Properties) §17.11.11
  - formProt (Only Allow Editing of Form Fields) §17.6.6
- - headerReference (Header Reference) §17.10.5
+ - [done] headerReference (Header Reference) §17.10.5
  - lnNumType (Line Numbering Settings) §17.6.8
  - noEndnote (Suppress Endnotes In Document) §17.11.16
  - paperSrc (Paper Source Information) §17.6.9
@@ -278,26 +279,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     if (m_backgroundColor.isValid())
         m_currentPageStyle.addProperty("fo:background-color", m_backgroundColor.name());
 
+    QString pageLayoutStyleName("Mpm");
+    pageLayoutStyleName = mainStyles->insert(
+        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
+
+    m_masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
+  
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(pgSz)
             ELSE_TRY_READ_IF(pgMar)
             ELSE_TRY_READ_IF(pgBorders)
+            ELSE_TRY_READ_IF(headerReference)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->insert(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
 //! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
 //! @todo style:display-name
 //    masterStyle->addAttribute("style:display-name", masterStyleName);
-    masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    /*masterStyleName =*/ mainStyles->insert(masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
+    m_masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
+    /*masterStyleName =*/ mainStyles->insert(m_masterPageStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
 //    masterStyle = mainStyles->styleForModification(masterStyleName);
 
     READ_EPILOGUE
@@ -371,6 +375,51 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     const qreal marginLeft = qreal(TWIP_TO_POINT(left.toUInt(&ok)));
     if (ok)
         m_currentPageStyle.addPropertyPt("fo:margin-left", marginLeft);
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL headerReference
+//! w:headerReference handler (Header Reference)
+/*!
+
+ Parent elements:
+ -[done] sectPr (§17.6.17)
+ - sectPr (§17.6.8)
+
+ Child elements:
+ - None
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    QString link_target;
+
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (r_id.isEmpty()) {
+        link_target.clear();
+    }
+    else {
+        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+    }
+
+    DocxXmlHeaderReader reader(this);
+
+    QString errorMessage;
+    const KoFilter::ConversionStatus status
+        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, m_context);
+    if (status != KoFilter::OK) {
+        reader.raiseError(errorMessage);
+    }
+
+//! @todo: support type attribute
+
+    m_masterPageStyle.addChildElement("style:header", reader.content());
 
     readNext();
     READ_EPILOGUE
@@ -1165,6 +1214,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
             const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+            if (m_moveToStylesXml) {
+                mainStyles->markStyleForStylesXml(currentTextStyleName);
+            }
             if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
                 body->addAttribute("xlink:type", "simple");
@@ -1684,7 +1736,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR_INTO(val, m_currentStyleName)
+    TRY_READ_ATTR(val)
+
+    m_currentParagraphStyle.setParentName(val);
+
+    //READ_ATTR_INTO(val, m_currentStyleName)
     SKIP_EVERYTHING
     READ_EPILOGUE
 }

@@ -82,6 +82,8 @@ protected:
 
     bool m_addManifestEntryForPicturesDirExecuted;
 
+    bool m_moveToStylesXml;
+
 //    //! Used for creating style names (style:style/@style:name attr)
 //    //! To achieve this, in XSLT it generate-id(.) for w:p is used.
 //    ////! Starts with 1. Updated in read_p();

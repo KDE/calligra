@@ -55,6 +55,7 @@ void MsooXmlCommonReader::init()
     m_lstStyleFound = false;
     m_pPr_lvl = 0;
     m_addManifestEntryForPicturesDirExecuted = false;
+    m_moveToStylesXml = false;
 }
 
 //! CASE #420
@@ -73,6 +74,10 @@ bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
 void MsooXmlCommonReader::setupParagraphStyle()
 {
     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+    }
+
     if (currentParagraphStyleName.isEmpty()) {
         currentParagraphStyleName = QLatin1String("Standard");
     }
