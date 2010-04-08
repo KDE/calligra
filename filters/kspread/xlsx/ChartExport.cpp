@@ -210,6 +210,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int countXAxis = 0;
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
+        //TODO handle series-axis
+        if(axis->m_type == Charting::Axis::SeriesAxis) continue;
+
         bodyWriter->startElement("chart:axis");
         bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
         switch(axis->m_type) {
@@ -225,9 +228,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     bodyWriter->endElement();
                 }
                 break;
-            case Charting::Axis::SeriesAxis:
-                //TODO what is a series-axis / how does it differ to the other axes?
-                break;
+            default: break;
         }
         if(axis->m_majorGridlines.m_format.m_style != Charting::LineFormat::None) {
             bodyWriter->startElement("chart:grid");
