@@ -324,7 +324,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 }
                 break;
             case InRichText: // richtext means the title text
-                // we extract the text from the richtext cause we cannot handle all of the richtext anyway
+                // we extract the text from the richtext cause we cannot handle the richtext formattings anyway
                 QString result;
                 enum { Rich, Paragraph, TextRun } s;
                 s = Rich;
