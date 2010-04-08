@@ -436,10 +436,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_grouping()
 {
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(val)
-    if(val == "stacked")
+    if(val == "stacked") {
         m_context->m_chart->m_stacked = true;
-    if(val == "percentStacked")
+    } else if(val == "percentStacked") {
+        m_context->m_chart->m_stacked = true;
         m_context->m_chart->m_f100 = true;
+    } else if(val == "clustered") {
+        //TODO
+    } // else if(val == "standard") is not needed cause that's the default anyway
     return KoFilter::OK;
 }
 
