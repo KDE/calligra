@@ -320,7 +320,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 }
                 break;
             case InRichText: // richtext means the title text
-                m_currentSeries->m_texts << new Charting::Text(readElementText());
+                //FIXME m_currentSeries->m_texts << new Charting::Text(readElementText());
                 break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
