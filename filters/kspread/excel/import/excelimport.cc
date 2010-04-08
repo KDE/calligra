@@ -81,16 +81,16 @@ float rowStart(Sheet* sheet, unsigned long row) {
     return rowStart;
 }
 
-int columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
+float columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
-    for( unsigned long i = col1; i <= col2; ++i )
+    for( unsigned long i = col1; i < col2; ++i )
         columnDistance += sheet->column(i)->width();
     return columnDistance;
 }
 
-int rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
+float rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
     double rowDistance = 0.0;
-    for( unsigned long i = row1; i <= row2; ++i )
+    for( unsigned long i = row1; i < row2; ++i )
         rowDistance += sheet->row(i)->height();
     return rowDistance;
 }
