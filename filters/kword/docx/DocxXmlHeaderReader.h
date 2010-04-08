@@ -26,6 +26,12 @@
 
 #include <DocxXmlDocumentReader.h>
 
+/*! We're deriving from DocxXmlDocumentReader because within the hdr
+element, the content of the element is similar to the content of the
+body (§17.2.2) element, and contains what is referred to as
+block-level markup - markup which can exist as a sibling element to
+paragraphs in a WordprocessingML document.
+*/
 //! A class reading headers
 class DocxXmlHeaderReader : public DocxXmlDocumentReader
 {

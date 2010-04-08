@@ -81,6 +81,9 @@ protected:
     KoFilter::ConversionStatus read_footnoteReference();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_drawing();
+    KoFilter::ConversionStatus read_ptab();
+    KoFilter::ConversionStatus read_tabs();
+    KoFilter::ConversionStatus read_tab();
     KoFilter::ConversionStatus read_i();
     KoFilter::ConversionStatus read_b();
     KoFilter::ConversionStatus read_u();

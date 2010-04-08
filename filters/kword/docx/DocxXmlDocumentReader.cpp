@@ -1056,7 +1056,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
  - pgNum (Page Number Block) §17.3.3.22
- - ptab (Absolute Position Tab Character) §17.3.3.23
+ - [done] ptab (Absolute Position Tab Character) §17.3.3.23
  - [done] rPr (Run Properties) §17.3.2.28
  - ruby (Phonetic Guide) §17.3.3.25
  - separator (Footnote/Endnote Separator Mark) §17.11.23
@@ -1082,6 +1082,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(ptab)   
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
@@ -1329,7 +1330,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - suppressAutoHyphens (Suppress Hyphenation for Paragraph) §17.3.1.34
  - suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
  - suppressOverlap (Prevent Text Frames From Overlapping) §17.3.1.36
- - tabs (Set of Custom Tab Stops) §17.3.1.38
+ - [done] tabs (Set of Custom Tab Stops) §17.3.1.38
  - textAlignment (Vertical Character Alignment on Line) §17.3.1.39
  - textboxTightWrap (Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents) §17.3.1.40
  - textDirection (Paragraph Text Flow Direction) §17.3.1.41
@@ -1747,6 +1748,121 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 
     //READ_ATTR_INTO(val, m_currentStyleName)
     SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tabs
+//! tabs handler (Set of Custom Tab Stops)
+/*!
+
+ Parent elements:
+ - pPr (§17.3.1.26)
+ - pPr (§17.3.1.25)
+ - pPr (§17.7.5.2)
+ - pPr (§17.7.6.1)
+ - pPr (§17.9.23)
+ - pPr (§17.7.8.2)
+
+ Child elements:
+ - [done] tab (§17.3.137)
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
+{
+    READ_PROLOGUE
+
+    QBuffer tabs;
+    tabs.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&tabs);
+    elementWriter.startElement("style:tab-stops");
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter *oldBody = body;
+    body = new KoXmlWriter(&buffer);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(tab)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    elementWriter.addCompleteElement(&buffer);
+
+    delete body;
+    body = oldBody;
+ 
+    elementWriter.endElement(); // style-tab-stops
+
+    QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());
+    m_currentParagraphStyle.addChildElement("style:tab-stops", tabStops);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tab
+//! tab handler (Custom Tab Stop)
+/*!
+
+ Parent elements:
+ - [done] tabs (§17.3.1.38)
+
+ Child elements:
+ - None
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(leader)
+    TRY_READ_ATTR(pos)
+    TRY_READ_ATTR(val)
+
+    body->startElement("style:tab-stop");
+    body->addAttribute("style:position", 20);
+    bool ok = false;
+    const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
+    if (ok) {
+        body->addAttributePt("style:type", value);
+    }
+    body->endElement(); // style:tab-stop
+
+//! @todo: support leader attribute
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ptab
+//! ptab handler (absolute tab)
+/*!
+
+ Parent elements:
+ - r (§22.1.2.87);
+ - r (§17.3.2.25)
+
+ Child elements:
+ - none
+
+ @todo support all attributes
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_ptab()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo: support all attributes properly
+
+    body->startElement("text:tab");
+    body->endElement(); // text:tab
+
+    readNext();
     READ_EPILOGUE
 }
 
