@@ -61,6 +61,7 @@ namespace wvWare
     class Footnotes97;
     class Annotations;
     class Drawings;
+    class Bookmarks;
     template<class T> class PLCF;
 
     // Helper structures for the Functor-based approach
@@ -69,7 +70,7 @@ namespace wvWare
     struct AnnotationData;
     struct TableRowData;
     struct PictureData;
-
+    struct BookmarkData;
     /**
      * This class should contain all the common functionality shared
      * among the Word9[5|7] parsers.
@@ -127,6 +128,7 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
+        void parseBookmark( const BookmarkData& data );
         //I can't create Functor for textbox in advance because i don't know lid
         virtual void parseTextBox( uint lid);
 
@@ -148,6 +150,7 @@ namespace wvWare
 
     private:
         UString m_customFootnote;
+        UString m_bookmarkText;
         // Don't copy or assign us
         Parser9x( const Parser9x& rhs );
         Parser9x& operator=( const Parser9x& rhs );
@@ -248,6 +251,8 @@ namespace wvWare
         void emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
         void emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
         void emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
+        void emitBookmark( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
+
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
         void emitDrawnObject( U32 globalCP );
@@ -283,6 +288,7 @@ namespace wvWare
         Annotations* m_annotations;
         FontCollection* m_fonts;
         Drawings* m_drawings;
+        Bookmarks* m_bookmark;
 
         PLCF<Word97::PCD>* m_plcfpcd;     // piece table
 

@@ -91,6 +91,7 @@ namespace wvWare
         PLCF<FLD>* m_endnote;
         PLCF<FLD>* m_textbox;
         PLCF<FLD>* m_headerTextbox;
+        PLCF<FLD>* m_bookmark;
     };
 
 } // namespace wvWare

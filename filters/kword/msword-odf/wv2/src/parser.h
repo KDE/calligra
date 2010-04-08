@@ -51,6 +51,7 @@ class OLEStreamReader;
 class StyleSheet;
 class AssociatedStrings;
 class Drawings;
+class Bookmark;
 
 /**
  * This class is the heart of the filter:
@@ -86,7 +87,7 @@ public:
      * handle footnote references differently while parsing footnotes. It's a bit
      * hacky, but needed.
      */
-    enum SubDocument { None, Main, Footnote, Header, Macro, Annotation, Endnote, TextBox, HeaderTextBox };
+    enum SubDocument { None, Main, Footnote, Header, Macro, Annotation, Endnote, TextBox, HeaderTextBox, Bookmark };
 
     /**
      * Construct a parser. The reason that we get the "open" storage

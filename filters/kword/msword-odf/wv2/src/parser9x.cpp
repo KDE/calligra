@@ -26,6 +26,7 @@
 #include "handlers.h"
 #include "footnotes97.h"
 #include "annotations.h"
+#include "bookmark.h"
 #include "headers.h"
 #include "fonts.h"
 #include "textconverter.h"
@@ -69,7 +70,7 @@ Parser9x::Position::Position( U32 cp, const PLCF<Word97::PCD>* plcfpcd ) :
 Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib ) :
         Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ), m_properties( 0 ),
         m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ), m_footnotes( 0 ), m_annotations( 0 ),
-        m_fonts( 0 ), m_drawings( 0 ), m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ),
+        m_fonts( 0 ), m_drawings( 0 ), m_bookmark(0), m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ),
         m_cellMarkFound( false ), m_remainingCells( 0 ), m_currentParagraph( new Paragraph ),
         m_remainingChars( 0 ), m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
 {
@@ -242,6 +243,30 @@ void Parser9x::parseFootnote( const FootnoteData& data )
 #endif
 }
 
+void Parser9x::parseBookmark( const BookmarkData& data )
+{
+#ifdef WV2_DEBUG_BOOKMARK
+    wvlog << "Parser9x::parseBookmark()" << endl;
+#endif
+    if ( data.startCP == 0 ) // shouldn't happen, but well...
+        return;
+
+    saveState( data.limCP - data.startCP, Bookmark );
+    m_subDocumentHandler->bookmarkStart();
+
+
+    U32 offset = data.startCP;
+
+    parseHelper( Position( offset, m_plcfpcd ) );
+
+    m_subDocumentHandler->bookmarkEnd();
+    restoreState();
+#ifdef WV2_DEBUG_BOOKMARK
+    wvlog << "Parser9x::parseBookmark() done" << endl;
+#endif
+}
+
+
 void Parser9x::parseAnnotation( const AnnotationData& data )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
@@ -380,6 +405,9 @@ void Parser9x::init()
 
     if (( m_fib.ccpFtn != 0 ) || ( m_fib.ccpEdn != 0 ))
         m_footnotes = new Footnotes97( m_table, m_fib );
+
+    if (( m_fib.fcPlcfbkf != 0 ) || ( m_fib.fcPlcfbkl != 0 ))
+        m_bookmark = new Bookmarks( m_table, m_fib );
 
     if ( m_fib.ccpAtn != 0 ) {
         m_annotations = new Annotations( m_table, m_fib );
@@ -758,6 +786,14 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd << " disruption="
                     << disruption << " length=" << length << endl;
 #endif
+        } else if ( m_bookmark ) {
+            U32 nextBkf = m_bookmark->nextBookmarkStart();
+            U32 nextBkl = m_bookmark->nextBookmarkEnd();
+            disruption = nextBkf < nextBkl ? nextBkf : nextBkl;
+#ifdef WV2_DEBUG_BOOKMARK
+            wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << " disruption="
+                    << disruption << " length=" << length << endl;
+#endif
         }
         U32 startCP = currentStart + chunk.m_position.offset + index;
 
@@ -765,22 +801,40 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
 #endif
+
+#ifdef WV2_DEBUG_BOOKMARK
+            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
+#endif
             U32 disLen = disruption - startCP;
             if ( disLen != 0 )
                 processRun( chunk, chp, disLen, index, currentStart );
             length -= disLen;
             index += disLen;
-            m_customFootnote = chunk.m_text.substr(index, length);
-            emitFootnote( m_customFootnote, disruption, chp, length );
+
+            if ( m_footnotes ) {
+                m_customFootnote = chunk.m_text.substr(index, length);
+                emitFootnote( m_customFootnote, disruption, chp, length );
+                m_customFootnote = "";
+            } else if ( m_bookmark ) {
+                m_bookmarkText = chunk.m_text.substr(index, length);
+                emitBookmark( m_bookmarkText, disruption, chp, length );
+                m_bookmarkText = "";
+            }
             index+=length;
             length=0;
-            m_customFootnote = "";
         }
         else {
+
             // common case, no disruption at all (or the end of a disrupted chunk)
             //In case of custom footnotes do not add label to footnote body.
-            if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0)
-                processRun( chunk, chp, length, index, currentStart );
+            if ( m_footnotes ) {
+                if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0)
+                    processRun( chunk, chp, length, index, currentStart );
+            } else if ( m_bookmark ) {
+                if (m_bookmarkText.find(chunk.m_text.substr(index, length), 0) != 0)
+                    processRun( chunk, chp, length, index, currentStart );
+            }
+
             break;   // should be faster than messing with length...
         }
     }
@@ -894,6 +948,24 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
     if ( ok )
         m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
+}
+
+void Parser9x::emitBookmark( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length )
+{
+    if ( !m_bookmark ) {
+        wvlog << "Bug: Found a bookmark, but m_bookmark == 0!" << endl;
+        return;
+    }
+#ifdef WV2_DEBUG_BOOKMARK
+    wvlog << "Bookmark found: CP=" << globalCP << endl;
+#endif
+    bool ok;
+    BookmarkData data( m_bookmark->bookmark( globalCP, ok ) );
+
+    if (ok) {
+        // We introduce the name of the bookmark here with data.name
+        m_textHandler->bookmarkFound( characters, data.name, chp, make_functor( *this, &Parser9x::parseBookmark, data ));
+    }
 }
 
 void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )

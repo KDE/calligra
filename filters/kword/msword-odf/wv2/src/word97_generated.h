@@ -827,7 +827,7 @@ struct WV2_EXPORT BRC {
     static const unsigned int sizeOf97;
 
     // Data
-    
+
     /**
      *  24-bit border color
      */
@@ -2213,6 +2213,9 @@ struct BKF {
      */
     void clear();
 
+    // Size of the structure
+    static const unsigned int sizeOf;
+
     // Data
     /**
      * index to <b>BKL</b> entry in <b>plcfbkl</b> that describes the ending
@@ -2280,6 +2283,9 @@ struct BKL {
      * Set all the fields to the inital value (default is 0)
      */
     void clear();
+
+    // Size of the structure
+    static const unsigned int sizeOf;
 
     // Data
     /**
@@ -2677,9 +2683,9 @@ struct CHP : public Shared {
      * 15 DkGray
      * 16 LtGray
      */
-    
+
     U8 icoObsolete:5;
-    
+
     /**
      * reserved
      */

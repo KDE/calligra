@@ -75,6 +75,8 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_insideFootnote(false)
     , m_footnoteWriter(0)
     , m_footnoteBuffer(0)
+    , m_insideBookmark(false)
+    , m_bookmarkWriter(0)
     , m_insideAnnotation(false)
     , m_annotationWriter(0)
     , m_annotationBuffer(0)
@@ -369,6 +371,61 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //varElem.appendChild( footnoteElem );
 }
 
+void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UString name, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                      const wvWare::BookmarkFunctor& parseBookmark)
+{
+    // Get the text between the bookmark-start and the bookmark-end
+    QString bookmarkText;
+    int textIndex = 0;
+    int length = characters.length();
+    while (textIndex != length) {
+        bookmarkText.append(characters[textIndex].unicode());
+        ++textIndex;
+    }
+
+    // Get the name of the bookmark
+    QString bookmarkName;
+    int nameIndex = 0;
+    int nameLength = name.length();
+    while (nameIndex != nameLength) {
+        bookmarkName.append(name[nameIndex].unicode());
+        ++nameIndex;
+    }
+
+    m_insideBookmark = true;
+
+    //create temp writer for bookmark content that we'll add to m_paragraph
+    m_bookmarkBuffer = new QBuffer();
+    m_bookmarkBuffer->open(QIODevice::WriteOnly);
+    m_bookmarkWriter = new KoXmlWriter(m_bookmarkBuffer);
+
+    // bookmark-start
+    m_bookmarkWriter->startElement("text:bookmark-start");
+    m_bookmarkWriter->addAttribute("text:name", bookmarkName);
+    m_bookmarkWriter->endElement();
+
+    // Text
+    m_bookmarkWriter->addTextNode(bookmarkText);
+
+    // bookmark-end
+    m_bookmarkWriter->startElement("text:bookmark-end");
+    m_bookmarkWriter->addAttribute("text:name", bookmarkName);
+    m_bookmarkWriter->endElement();
+
+    emit bookmarkFound(new wvWare::BookmarkFunctor(parseBookmark));
+
+    m_insideBookmark = false;
+
+    QString contents = QString::fromUtf8(m_bookmarkBuffer->buffer(), m_bookmarkBuffer->buffer().size());
+    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+
+    //cleanup
+    delete m_bookmarkWriter;
+    m_bookmarkWriter = 0;
+    delete m_bookmarkBuffer;
+    m_bookmarkBuffer = 0;
+}
+
 
 void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
@@ -411,7 +468,6 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     delete m_annotationBuffer;
     m_annotationBuffer = 0;
 }
-
 
 //create an element for the variable
 QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
@@ -581,6 +637,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     bool inStylesDotXml = false;
     if (m_insideFootnote) {
         writer = m_footnoteWriter;
+    } else if (m_insideBookmark) {
+        writer = m_bookmarkWriter;
     } else if (m_insideDrawing) {
         writer = m_drawingWriter;
     } else if (document()->writingHeader()) {
@@ -694,6 +752,9 @@ void KWordTextHandler::paragraphEnd()
     if (m_insideFootnote) {
         kDebug(30513) << "writing a footnote";
         m_paragraph->writeToFile(m_footnoteWriter);
+    } else if (m_insideBookmark) {
+        kDebug(30513) << "writing an bookmark";
+        m_paragraph->writeToFile(m_bookmarkWriter);
     } else if (m_insideAnnotation) {
         kDebug(30513) << "writing an annotation";
         m_paragraph->writeToFile(m_annotationWriter);
@@ -778,6 +839,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         QString hyperlink;
 
         for (int i = 0; i < fullList.size(); i++) {
+            fullList[i].replace("\\l","");
             if (fullList[i].contains("PAGEREF")) {
                 fullList.removeAt(i);
             }

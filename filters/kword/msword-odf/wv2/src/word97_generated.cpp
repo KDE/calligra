@@ -2523,6 +2523,8 @@ bool operator!=(const BKD &lhs, const BKD &rhs) {
 
 // BKF implementation
 
+const unsigned int BKF::sizeOf = 4;
+
 BKF::BKF() {
     clear();
 }
@@ -2596,6 +2598,8 @@ bool operator!=(const BKF &lhs, const BKF &rhs) {
 
 
 // BKL implementation
+
+const unsigned int BKL::sizeOf = 2;
 
 BKL::BKL() {
     clear();

@@ -83,6 +83,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
 {
     kDebug(30513);
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
+
         m_bodyWriter = bodyWriter; //pointer for writing to the body
         m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
         m_metaWriter = metaWriter; //pointer for writing to meta.xml
@@ -98,6 +99,8 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
+        connect(m_textHandler, SIGNAL(bookmarkFound(const wvWare::FunctorBase*, int)),
+                this, SLOT(slotBookmarkFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(annotationFound(const wvWare::FunctorBase*,int)),
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
@@ -675,6 +678,13 @@ void Document::annotationEnd()
 {
 }
 
+void Document::bookmarkStart()
+{
+}
+
+void Document::bookmarkEnd()
+{
+}
 
 //disable this for now - we should be able to do everything in TableHandler
 //create frame for the table cell?
@@ -777,6 +787,14 @@ void Document::slotSubDocFound(const wvWare::FunctorBase* functor, int data)
 }
 
 void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
+{
+    kDebug(30513) ;
+    SubDocument subdoc(functor, data, QString(), QString());
+    (*subdoc.functorPtr)();
+    delete subdoc.functorPtr;
+}
+
+void Document::slotBookmarkFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
     SubDocument subdoc(functor, data, QString(), QString());
