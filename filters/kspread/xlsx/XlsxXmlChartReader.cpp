@@ -190,6 +190,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(area3DChart)
             ELSE_TRY_READ_IF(barChart)
             ELSE_TRY_READ_IF(bar3DChart)
+            ELSE_TRY_READ_IF(lineChart)
+            ELSE_TRY_READ_IF(line3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
@@ -427,6 +429,27 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
 {
     if(!m_context->m_chart->m_impl) {
         m_context->m_chart->m_impl = new Charting::BarImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lineChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::LineImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL line3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::LineImpl();
         m_context->m_chart->m_is3d = true;
     }
     return KoFilter::OK;

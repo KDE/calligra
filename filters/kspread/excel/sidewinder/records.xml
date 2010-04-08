@@ -605,6 +605,10 @@
 </record>
 
 <record name="Line" id="0x1018">
+  <field name="fStacked" type="bool" size="1" />
+  <field name="f100" type="bool" size="1" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="reserved12" type="unsigned" size="13" />
 </record>
 
 <record name="Area" id="0x101a">
