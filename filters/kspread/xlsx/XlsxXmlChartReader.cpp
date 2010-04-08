@@ -188,6 +188,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(doughnutChart)
             ELSE_TRY_READ_IF(areaChart)
             ELSE_TRY_READ_IF(barChart)
+            ELSE_TRY_READ_IF(bar3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
@@ -409,6 +410,17 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL bar3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::BarImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL barDir
 KoFilter::ConversionStatus XlsxXmlChartReader::read_barDir()
 {
@@ -424,8 +436,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_grouping()
 {
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(val)
-    m_context->m_chart->m_stacked = (val == "stacked");
-    m_context->m_chart->m_f100 = (val == "percentStacked");
+    if(val == "stacked")
+        m_context->m_chart->m_stacked = true;
+    if(val == "percentStacked")
+        m_context->m_chart->m_f100 = true;
     return KoFilter::OK;
 }
 
