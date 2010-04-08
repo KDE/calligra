@@ -611,6 +611,8 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
     if(!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::AreaImpl();
+    m_chart->m_stacked = record->isFStacked();
+    m_chart->m_f100 = record->isF100();
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)
