@@ -211,6 +211,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
         bodyWriter->startElement("chart:axis");
+        bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
         switch(axis->m_type) {
             case Charting::Axis::HorizontalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "y");
@@ -223,7 +224,6 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
                     bodyWriter->endElement();
                 }
-                bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
                 break;
             case Charting::Axis::SeriesAxis:
                 //TODO what is a series-axis / how does it differ to the other axes?
