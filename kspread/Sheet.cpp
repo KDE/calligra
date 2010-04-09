@@ -2555,7 +2555,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     }
 
     for (int i = 0; i < number; ++i) {
-        kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
+        //kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
 
         const ColumnFormat* columnFormat;
         if (isNonDefaultColumn) {
