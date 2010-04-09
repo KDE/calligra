@@ -128,8 +128,8 @@ void Sheet::clear()
     d->topMargin    = 72;  // 1 inch
     d->bottomMargin = 72;  // 1 inch
     d->autoCalc = true;
-    d->defaultRowHeight = -1;
-    d->defaultColWidth = -1;
+    d->defaultRowHeight = 12;
+    d->defaultColWidth = 2640.0*Column::COLUMN_UNITS_TO_PTS;
     d->zoomLevel = 1.0; // 100%
     d->showGrid = true;
     d->showZeroValues = true;

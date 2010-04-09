@@ -913,7 +913,8 @@ void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* r
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultRowHeight(record->miyRw());
+    if( record->miyRw() != 0.0 )
+        d->sheet->setDefaultRowHeight(record->miyRw());
 }
 
 void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* record)
