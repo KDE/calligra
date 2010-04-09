@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Sebastian Sauer <sebsauer@kdab.com>
+ *  Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published
