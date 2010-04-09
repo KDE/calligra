@@ -341,13 +341,25 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             return KoFilter::WrongFormat;
         }
         kDebug() << "Setting default style of family" << odfType << "...";
-        m_currentTextStyle = *m_defaultStyles.value(odfType.toLatin1());
+        if (type == "character") {
+            m_currentTextStyle = *m_defaultStyles.value(odfType.toLatin1());
+        }
+        else if (type == "paragraph") {
+            m_currentParagraphStyle = *m_defaultStyles.value(odfType.toLatin1());
+        }
     }
     else {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
+        if (type == "character") {
+            m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, odfType.toLatin1());
+        }
+        else if (type == "paragraph") {
+            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
+        }
     }
     MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
+    MSOOXML::Utils::Setter<bool> currentParagraphStylePredefinedSetter(&m_currentParagraphStylePredefined, false);
     m_currentTextStylePredefined = true;
+    m_currentParagraphStylePredefined = true;
 
     QString nextStyleName;
 
@@ -357,9 +369,15 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
             ELSE_TRY_READ_IF_IN_CONTEXT(rPr)
+            ELSE_TRY_READ_IF(pPr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
                 READ_ATTR(val)
-                m_currentTextStyle.setParentName(val);
+                if (type == "character") {
+                    m_currentTextStyle.setParentName(val);
+                }
+                else if (type == "paragraph") {
+                    m_currentParagraphStyle.setParentName(val);
+                }
             }
             else if (QUALIFIED_NAME_IS(next)) {
                 READ_ATTR_INTO(val, nextStyleName)
@@ -379,12 +397,18 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
     }
 
     m_currentTextStylePredefined = false;
+    m_currentParagraphStylePredefined = false;
 
     // insert style
     if (isDefault) {
         // do not insert, will be inserted at the end
         kDebug() << "Default style of family" << odfType << "created";
-        *m_defaultStyles.value(odfType.toLatin1()) = m_currentTextStyle;
+        if (type == "character") {
+            *m_defaultStyles.value(odfType.toLatin1()) = m_currentTextStyle;
+        }
+        else if (type == "paragraph") {
+            *m_defaultStyles.value(odfType.toLatin1()) = m_currentParagraphStyle;
+        }
     }
     else {
         // Style class: A style may belong to an arbitrary class of styles.
@@ -392,14 +416,26 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         // but it can for instance be evaluated by user interfaces to show a list of styles where
         // the styles are grouped by its name.
         //! @todo oo.o converter defines these classes: list, extra, index, chapter
-        m_currentTextStyle.addAttribute("style:class", "text");
+        if (type == "character") {
+            m_currentTextStyle.addAttribute("style:class", "text");
 
-        styleName = mainStyles->insert(m_currentTextStyle, styleName, insertionFlags);
+            styleName = mainStyles->insert(m_currentTextStyle, styleName, insertionFlags);
+        }
+        else if (type == "paragraph") {
+            m_currentParagraphStyle.addAttribute("style:class", "text");
+
+            styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
+        }
         if (!nextStyleName.isEmpty()) {
             mainStyles->insertStyleRelation(styleName, nextStyleName, "style:next-style-name");
         }
     }
-    m_currentTextStyle = KoGenStyle();
+    if (type == "character") {
+        m_currentTextStyle = KoGenStyle();
+    }
+    else if (type == "paragraph") {
+        m_currentParagraphStyle = KoGenStyle();
+    }
 
     READ_EPILOGUE
 }

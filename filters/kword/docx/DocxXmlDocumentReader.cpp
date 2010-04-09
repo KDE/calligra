@@ -279,10 +279,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     if (m_backgroundColor.isValid())
         m_currentPageStyle.addProperty("fo:background-color", m_backgroundColor.name());
 
-    QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->insert(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
-
     m_masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
   
     while (!atEnd()) {
@@ -295,6 +291,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    QString pageLayoutStyleName("Mpm");
+    pageLayoutStyleName = mainStyles->insert(
+        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
 //! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
@@ -1346,6 +1346,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     const QXmlStreamAttributes attrs(attributes());
     setParentParagraphStyleName(attrs);
 
+    if (!m_currentParagraphStylePredefined) {
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
 
@@ -1356,6 +1360,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
             ELSE_TRY_READ_IF(pBdr)
@@ -1825,11 +1830,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
     TRY_READ_ATTR(val)
 
     body->startElement("style:tab-stop");
-    body->addAttribute("style:position", 20);
+    body->addAttribute("style:type", val);
     bool ok = false;
     const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
     if (ok) {
-        body->addAttributePt("style:type", value);
+        body->addAttributePt("style:position", value);
     }
     body->endElement(); // style:tab-stop
 
