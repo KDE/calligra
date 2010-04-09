@@ -1749,9 +1749,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentParagraphStyle.setParentName(val);
+    //m_currentParagraphStyle.setParentName(val);
 
-    //READ_ATTR_INTO(val, m_currentStyleName)
+    READ_ATTR_INTO(val, m_currentStyleName)
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
