@@ -51,6 +51,7 @@ protected:
 
     //! Used for creating style in w:pPr (style:style/@style:name attr)
     KoGenStyle m_currentParagraphStyle;
+    bool m_currentParagraphStylePredefined; //!< true if m_currentParagraphStyle shouldn't be created in read_pPr
 
     void setupParagraphStyle();
 

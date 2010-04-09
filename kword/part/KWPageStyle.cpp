@@ -26,6 +26,9 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <KoColorBackground.h>
+#include <KoPatternBackground.h>
+#include <KoImageCollection.h>
+#include <KoOdfLoadingContext.h>
 
 #include <kdebug.h>
 #include <QBuffer>
@@ -33,8 +36,8 @@
 
 KWPageStylePrivate::~KWPageStylePrivate()
 {
-    if (background && !background->deref()) {
-        delete background;
+    if (fullPageBackground && !fullPageBackground->deref()) {
+        delete fullPageBackground;
     }
 }
 
@@ -57,10 +60,10 @@ void KWPageStylePrivate::clear()
     pageLayout = KoPageLayout::standardLayout();
     direction = KoText::AutoDirection;
 
-    if (background && !background->deref()) {
-        delete background;
+    if (fullPageBackground && !fullPageBackground->deref()) {
+        delete fullPageBackground;
     }
-    background = 0;
+    fullPageBackground = 0;
     nextStyleName.clear();
 }
 
@@ -239,18 +242,18 @@ QString KWPageStyle::name() const
 
 KoShapeBackground *KWPageStyle::background() const
 {
-    return d->background;
+    return d->fullPageBackground;
 }
 
 void KWPageStyle::setBackground(KoShapeBackground *background)
 {
-    if (d->background) {
-        if (!d->background->deref())
-            delete d->background;
+    if (d->fullPageBackground) {
+        if (!d->fullPageBackground->deref())
+            delete d->fullPageBackground;
     }
-    d->background = background;
-    if (d->background)
-        d->background->ref();
+    d->fullPageBackground = background;
+    if (d->fullPageBackground)
+        d->fullPageBackground->ref();
 }
 
 KoGenStyle KWPageStyle::saveOdf() const
@@ -278,6 +281,8 @@ KoGenStyle KWPageStyle::saveOdf() const
     //writer.addAttribute("style:rel-width",)
     //writer.addAttribute("style:line-style",)
     //writer.endElement();
+
+    // TODO save background
 
     QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     pageLayout.addChildElement("columnsEnzo", contentElement);
@@ -311,7 +316,7 @@ KoGenStyle KWPageStyle::saveOdf() const
     return pageLayout;
 }
 
-void KWPageStyle::loadOdf(const KoXmlElement &masterNode, const KoXmlElement &style)
+void KWPageStyle::loadOdf(KoOdfLoadingContext &context, KoOdfLoadingContext &context, const KoXmlElement &style, KoResourceManager *documentResources)
 {
     d->pageLayout.loadOdf(style);
     KoXmlElement props = KoXml::namedItemNS(style, KoXmlNS::style, "page-layout-properties");
@@ -347,16 +352,34 @@ void KWPageStyle::loadOdf(const KoXmlElement &masterNode, const KoXmlElement &st
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 
+    // Load background picture
+    KoXmlElement propBackgroundImage = KoXml::namedItemNS(props, KoXmlNS::style, "background-image");
+    if (!propBackgroundImage.isNull()) {
+        KoPatternBackground *background = new KoPatternBackground(documentResources->imageCollection());
+        d->fullPageBackground = background;
+        d->fullPageBackground->ref();
+
+        const QString href = propBackgroundImage.attributeNS(KoXmlNS::xlink, "href", QString());
+        if (!href.isEmpty()) {
+            KoImageCollection *imageCollection = documentResources->imageCollection();
+            if (imageCollection != 0) {
+                KoImageData *imageData = imageCollection->createImageData(href,context.store());
+                background->setPattern(imageData);
+            }
+        }
+        // TODO load another possible attributes
+    }
+
     // Load background color
     QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString::null);
-    if (!backgroundColor.isNull()) {
+    if (!backgroundColor.isNull() && d->fullPageBackground == 0) {
 
         if (backgroundColor == "transparent") {
-            d->background = 0;
+            d->fullPageBackground = 0;
         }
         else {
-            d->background = new KoColorBackground(QColor(backgroundColor));
-            d->background->ref();
+            d->fullPageBackground = new KoColorBackground(QColor(backgroundColor));
+            d->fullPageBackground->ref();
         }
     }
 

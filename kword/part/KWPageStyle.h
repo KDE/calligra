@@ -199,7 +199,7 @@ public:
     /**
      * Load this page style from ODF
      */
-    void loadOdf(const KoXmlElement &masterNode, const KoXmlElement &style);
+    void loadOdf(const KoXmlElement &masterNode, KoOdfLoadingContext &context, const KoXmlElement &style, KoResourceManager *documentResources);
 
     bool operator==(const KWPageStyle &other) const;
     inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }

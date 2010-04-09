@@ -31,7 +31,6 @@
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
-#include <KoPageLayoutDialog.h>
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
@@ -150,11 +149,8 @@ void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 QWidget *PrintingDialog::createPageLayoutWidget() const
 {
     QWidget *widget = new QWidget();
-    //FIXME change when allowed by i18n (also #include)
-    //widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
-    KoPageLayoutDialog dummy( 0, m_view->pageLayout() );
-    widget->setWindowTitle( dummy.windowTitle() );
-    
+    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+
     QHBoxLayout *lay = new QHBoxLayout(widget);
     lay->setMargin(0);
     widget->setLayout(lay);

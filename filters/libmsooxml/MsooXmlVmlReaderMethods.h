@@ -43,10 +43,13 @@ protected:
     // v namespace:
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
+    KoFilter::ConversionStatus read_VML_background();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
 
     QMap<QByteArray, QString> m_vmlStyle;
 
+    //writer where style:background-image is stored for style:page-layout-properties
+    KoXmlWriter* m_pDocBkgImageWriter;
 #endif

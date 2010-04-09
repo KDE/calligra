@@ -131,6 +131,7 @@ public:
 
 DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
         : MSOOXML::MsooXmlCommonReader(writers)
+        , m_pDocBkgImageWriter(0)
         , d(new Private)
 {
     init();
@@ -138,6 +139,10 @@ DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
 
 DocxXmlDocumentReader::~DocxXmlDocumentReader()
 {
+    if (m_pDocBkgImageWriter) {
+        delete m_pDocBkgImageWriter->device();
+        delete m_pDocBkgImageWriter;
+    }
     doneInternal(); // MsooXmlCommonReaderImpl.h
     delete d;
 }
@@ -278,10 +283,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     m_currentPageStyle.addProperty("style:print-orientation", "portrait");
     if (m_backgroundColor.isValid())
         m_currentPageStyle.addProperty("fo:background-color", m_backgroundColor.name());
-
-    QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->insert(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
+    if (m_pDocBkgImageWriter) {
+        QString contents = QString::fromUtf8(((QBuffer*)m_pDocBkgImageWriter->device())->buffer(),
+                                     ((QBuffer*)m_pDocBkgImageWriter->device())->buffer().size());
+        m_currentPageStyle.addChildElement("0", contents);
+    }
 
     m_masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
   
@@ -295,6 +301,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    QString pageLayoutStyleName("Mpm");
+    pageLayoutStyleName = mainStyles->insert(
+        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
 //! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
@@ -1346,6 +1356,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     const QXmlStreamAttributes attrs(attributes());
     setParentParagraphStyleName(attrs);
 
+    if (!m_currentParagraphStylePredefined) {
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
 
@@ -1356,6 +1370,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
+            ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
             ELSE_TRY_READ_IF(pBdr)
@@ -1744,9 +1759,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentParagraphStyle.setParentName(val);
+    //m_currentParagraphStyle.setParentName(val);
 
-    //READ_ATTR_INTO(val, m_currentStyleName)
+    READ_ATTR_INTO(val, m_currentStyleName)
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -1825,11 +1840,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
     TRY_READ_ATTR(val)
 
     body->startElement("style:tab-stop");
-    body->addAttribute("style:position", 20);
+    body->addAttribute("style:type", val);
     bool ok = false;
     const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
     if (ok) {
-        body->addAttributePt("style:type", value);
+        body->addAttributePt("style:position", value);
     }
     body->endElement(); // style:tab-stop
 
@@ -2140,7 +2155,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(drawing)
+            if (qualifiedName() == "v:background") {
+                TRY_READ(VML_background)
+            }
+            ELSE_TRY_READ_IF(drawing)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
