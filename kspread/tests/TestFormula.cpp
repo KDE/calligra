@@ -202,6 +202,15 @@ void TestFormula::testConstant()
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
 }
 
+void TestFormula::testWhitespace()
+{
+    CHECK_EVAL("=ROUND(  10.1  ;  0  )", Value(10));
+    CHECK_EVAL("= ROUND(10.1;0)", Value(10));
+    CHECK_EVAL(" =ROUND(10.1;0)", Value::errorPARSE());
+    CHECK_EVAL("= ( ROUND( 9.8 ; 0 )  +  ROUND( 9.8 ; 0 ) ) ", Value(20));
+    CHECK_EVAL("=(ROUND(9.8;0) ROUND(9.8;0))", Value::errorPARSE());
+}
+
 void TestFormula::testInvalid()
 {
     // Basic operations always throw errors if one of the values
