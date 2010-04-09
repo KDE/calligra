@@ -1824,7 +1824,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 void ExcelImport::Private::createDefaultColumnStyle() {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
     style.addProperty("fo:break-before", "auto");
-    //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+    //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
     //it's not completely accurate (for that we need to know 256 of the width of the current font),
     //but seems to be good enough
     style.addPropertyPt("style:column-width", 2560.0 / 120.0 / 31.0 * 72.0 );
