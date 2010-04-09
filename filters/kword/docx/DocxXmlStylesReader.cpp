@@ -424,6 +424,41 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle.addAttribute("style:class", "text");
 
+            QBuffer buffer;
+            buffer.open(QIODevice::WriteOnly);
+            KoXmlWriter *tempWriter = new KoXmlWriter(&buffer);
+            m_currentTextStyle.writeStyleProperties(tempWriter, KoGenStyle::TextType);
+
+            QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+            delete tempWriter;
+
+            // We have to add the properties in a loop
+            // This works as long as text-properties don't have children
+            // Currenty KoGenStyle doesn't support adding this in other ways.             
+
+            int separatorLocation = content.indexOf(' ');
+            content = content.right(content.size() - (separatorLocation + 1));
+            separatorLocation = content.indexOf(' ');
+            if (separatorLocation < 0) {
+                separatorLocation = content.indexOf('/');
+            }
+            while (separatorLocation > 0) {
+                int equalSignLocation = content.indexOf('=');
+                if (equalSignLocation < 0) {
+                    break;
+                }
+                QString propertyName = content.left(equalSignLocation);
+                content = content.right(content.size() - (equalSignLocation + 1));
+                separatorLocation = content.indexOf(' ');
+                if (separatorLocation < 0) {
+                    separatorLocation = content.indexOf('/');
+                }
+                QString propertyValue = content.left(separatorLocation);
+                propertyValue = propertyValue.remove("\""); // removing quotas
+                content = content.right(content.size() - (separatorLocation + 1));
+                m_currentParagraphStyle.addProperty(propertyName, propertyValue, KoGenStyle::TextType);
+            }
+
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
         }
         if (!nextStyleName.isEmpty()) {
