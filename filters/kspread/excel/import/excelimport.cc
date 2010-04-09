@@ -76,11 +76,8 @@ qreal columnStart(Sheet* sheet, unsigned long col) {
 
 qreal rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
-    for( int i = 0; i < row; ++i ) {
-        kDebug()<<"row"<<i<<sheet->row(i)->height();
+    for( int i = 0; i < row; ++i )
         rowStart += sheet->row(i)->height();
-    }
-    kDebug()<<"rowStart"<<rowStart;
     return rowStart;
 }
 
