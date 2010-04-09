@@ -185,6 +185,9 @@ public:
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
     void processCharts(KoXmlWriter* manifestWriter);
+
+    void createDefaultColumnStyle();
+    QString defaultColumnStyleName;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -706,6 +709,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
     if (columnCount < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
         xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - columnCount);
         xmlWriter->endElement();
     }
@@ -741,6 +745,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     QString styleName = styles->insert(style, "ta");
     sheetStyles.append(styleName);
 
+    createDefaultColumnStyle();
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForStyle(sheet, i, xmlWriter);
@@ -876,6 +881,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     if (!xmlWriter) return;
     if (!column) {
         xmlWriter->startElement("table:table-column");
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
         xmlWriter->endElement();
         return;
     }
@@ -1813,4 +1819,15 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     }
 
     return styles->insert( style, "N" );
+}
+
+void ExcelImport::Private::createDefaultColumnStyle() {
+    KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
+    style.addProperty("fo:break-before", "auto");
+    //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+    //it's not completely accurate (for that we need to know 256 of the width of the current font),
+    //but seems to be good enough
+    style.addPropertyPt("style:column-width", 2560.0 / 120.0 / 27.0 * 72.0 );
+
+    defaultColumnStyleName = styles->insert(style, "co");
 }
