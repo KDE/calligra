@@ -522,7 +522,7 @@ Row::Row(Sheet* sheet, unsigned index)
     d = new Row::Private;
     d->sheet   = sheet;
     d->index   = index;
-    d->height  = 10;
+    d->height  = 12;
     d->visible = true;
 }
 

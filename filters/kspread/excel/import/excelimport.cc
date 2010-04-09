@@ -76,8 +76,11 @@ qreal columnStart(Sheet* sheet, unsigned long col) {
 
 qreal rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
-    for( int i = 0; i < row; ++i )
+    for( int i = 0; i < row; ++i ) {
+        kDebug()<<"row"<<i<<sheet->row(i)->height();
         rowStart += sheet->row(i)->height();
+    }
+    kDebug()<<"rowStart"<<rowStart;
     return rowStart;
 }
 
@@ -180,7 +183,7 @@ public:
     void processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
     QString processCellFormat(Format* format, const QString& formula = QString());
-    QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, int rowHeight = -1);
+    QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, double rowHeight = -1);
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
@@ -1559,7 +1562,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
 }
 
 // Processes styles for a row within a sheet.
-QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, int rowHeight)
+QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, double rowHeight)
 {
     QString refName;
     QString valueFormat = string(format->valueFormat());
