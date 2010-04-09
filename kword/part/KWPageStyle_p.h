@@ -26,7 +26,7 @@
 class KWPageStylePrivate : public QSharedData
 {
 public:
-    KWPageStylePrivate() : background(0) { clear(); }
+    KWPageStylePrivate() : fullPageBackground(0) { clear(); }
     ~KWPageStylePrivate();
     void clear();
 
@@ -44,7 +44,7 @@ public:
 
     // See parag 16.2 for all the ODF features.
     KoText::Direction direction;
-    KoShapeBackground *background;
+    KoShapeBackground *fullPageBackground;
 };
 
 #endif

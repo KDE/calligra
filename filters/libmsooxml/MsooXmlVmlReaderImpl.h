@@ -236,4 +236,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL background
+
+//! fill handlet (Document Background)
+/*! ECMA-376 Part 4, 14.1.2.2, p.235.
+ This element describes the fill of the background of a page using vector graphics fills.
+
+ Parent elements:
+ - background (Part 1, §17.2.1)
+ - object (Part 1, §17.3.3.19)
+ - pict (§9.2.2.2)
+ - pict (§9.5.1)
+
+ Child elements:
+ - [Done]fill (Shape Fill Properties) §14.1.2.5
+
+ Attributes:
+ - bwmode (Blackand- White Mode)
+ - bwnormal (Normal Black-and-White Mode)
+ - bwpure (Pure Black-and-White Mode)
+ - fillcolor (Fill Color)
+ - filled (Shape Fill Toggle)
+ - id (Unique Identifier)
+ - targetscreensize (Target Screen Size)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
+{
+    READ_PROLOGUE2(VML_background)
+    //const QXmlStreamAttributes attrs(attributes());
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(fill)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    const QString rId(m_vmlStyle.value("v:fill@r:id"));
+    if (!rId.isEmpty()) {
+        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
+        kDebug() << "sourceName:" << sourceName;
+        if (sourceName.isEmpty()) {
+            return KoFilter::FileNotFound;
+        }
+        QString destinationName;
+        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        addManifestEntryForPicturesDir();
+        if (m_pDocBkgImageWriter) {
+            delete m_pDocBkgImageWriter->device();
+            delete m_pDocBkgImageWriter;
+            m_pDocBkgImageWriter = NULL;
+        }
+        QBuffer* buffer = new QBuffer();
+        m_pDocBkgImageWriter = new KoXmlWriter(buffer);
+
+        m_pDocBkgImageWriter->startElement("style:background-image");
+        m_pDocBkgImageWriter->addAttribute("xlink:href", destinationName);
+        m_pDocBkgImageWriter->addAttribute("xlink:type", "simple");
+        m_pDocBkgImageWriter->addAttribute("xlink:actuate", "onLoad");
+        m_pDocBkgImageWriter->endElement(); //style:background-image
+    }
+    READ_EPILOGUE
+}
+
 #endif // MSOOXMLVMLREADER_IMPL_H
