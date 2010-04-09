@@ -718,9 +718,9 @@ void TestMathFunctions::testRANDBETWEEN()
 void TestMathFunctions::testROUND()
 {
     // ODF-tests
-    CHECK_EVAL("=ROUND(10.1;0)",   Value(10));
+    CHECK_EVAL("=ROUND(10.1; 0)",   Value(10));
     CHECK_EVAL("=ROUND(9.8;0)",     Value(10));
-    CHECK_EVAL("=ROUND(0.5;0)",    Value(1));
+    CHECK_EVAL("=ROUND(0.5; 0)",    Value(1));
     CHECK_EVAL("=ROUND(1/3;0) ",    Value(0));
     CHECK_EVAL("=ROUND(1/3;1)",     Value(0.3));
     CHECK_EVAL("=ROUND(1/3;2)",     Value(0.33));
@@ -736,7 +736,7 @@ void TestMathFunctions::testROUND()
 void TestMathFunctions::testROUNDDOWN()
 {
     // ODF-tests
-    CHECK_EVAL("=ROUNDDOWN(1.45673;2)",    Value(1.45));
+    CHECK_EVAL("=ROUNDDOWN(1.45673; 2)",    Value(1.45));
     CHECK_EVAL("=ROUNDDOWN(1;0)",           Value(1));
     CHECK_EVAL("=ROUNDDOWN(1)",             Value(1));
     CHECK_EVAL("=ROUNDDOWN(9;-1)",          Value(0));
@@ -749,7 +749,7 @@ void TestMathFunctions::testROUNDDOWN()
 void TestMathFunctions::testROUNDUP()
 {
     // ODF-tests
-    CHECK_EVAL("=ROUNDUP(1.45673;2)",  Value(1.46));
+    CHECK_EVAL("=ROUNDUP(1.45673; 2)",  Value(1.46));
     CHECK_EVAL("=ROUNDUP(1.1;0)",       Value(2));
     CHECK_EVAL("=ROUNDUP(1.9;0)",       Value(2));
     CHECK_EVAL("=ROUNDUP(1)",           Value(1));
