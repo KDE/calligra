@@ -63,32 +63,32 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
 }
 
-float offset( unsigned long dimension, unsigned long offset ) {
+qreal offset( unsigned long dimension, unsigned long offset ) {
     return (float)dimension * (float)offset / 1024.0;
 }
 
-float columnStart(Sheet* sheet, unsigned long col) {
+qreal columnStart(Sheet* sheet, unsigned long col) {
     double columnStart = 0;
     for( int i = 0; i < col; ++i )
         columnStart += sheet->column(i)->width();
     return columnStart;
 }
 
-float rowStart(Sheet* sheet, unsigned long row) {
+qreal rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
     for( int i = 0; i < row; ++i )
         rowStart += sheet->row(i)->height();
     return rowStart;
 }
 
-float columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
+qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
     for( unsigned long i = col1; i < col2; ++i )
         columnDistance += sheet->column(i)->width();
     return columnDistance;
 }
 
-float rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
+qreal rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
     double rowDistance = 0.0;
     for( unsigned long i = row1; i < row2; ++i )
         rowDistance += sheet->row(i)->height();
