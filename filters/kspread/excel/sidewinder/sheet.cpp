@@ -446,7 +446,7 @@ Column::Column(Sheet* sheet, unsigned index)
     //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
     //it's not completely accurate (for that we need to know 256 of the width of the current font),
     //but seems to be good enough
-    d->width   = 2560.0 / 120.0 / 27.0 * 72.0;
+    d->width   = 2560.0 / 120.0 / 31.0 * 72.0;
     d->visible = true;
 }
 
