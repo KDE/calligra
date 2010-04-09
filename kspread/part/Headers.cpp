@@ -1135,7 +1135,7 @@ void ColumnHeader::paintSizeIndicator(int mouseX)
     m_rubberband->move(m_iResizePos, 0);
 
     QString tmpSize;
-    double ww = (sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x;
+    double ww = m_pView->zoomHandler()->unzoomItX((sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x);
     double wu = m_pView->doc()->unit().toUserValue(ww);
     if (wu > 0.01)
         tmpSize = i18n("Width: %1 %2", wu, KoUnit::unitName(m_pView->doc()->unit()));
