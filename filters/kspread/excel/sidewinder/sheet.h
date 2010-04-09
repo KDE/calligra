@@ -174,6 +174,11 @@ private:
 class Column
 {
 public:
+    //factor to convert from column units to pts
+    //It's a magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
+    //it's not completely accurate (for that we need to know 256 of the width of the current font),
+    //but seems to be good enough
+    static const double COLUMN_UNITS_TO_PTS = 72.0 / ( 120.0 * 31.0 );
 
     Column(Sheet* sheet, unsigned index);
     virtual ~Column();
