@@ -1131,6 +1131,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
 //kDebug() <<"[0]";
         readNext();
@@ -1204,7 +1205,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - position (Vertically Raised or Lowered Text) §17.3.2.24
  - [done] rFonts (Run Fonts) §17.3.2.26
  - rPrChange (Revision Information for Run Properties on the Paragraph Mark) §17.13.5.30
- - rStyle (Referenced Character Style) §17.3.2.29
+ - [done] rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
  - shd (Run Shading) §17.3.2.32
@@ -1239,6 +1240,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
+    m_currentRunStyleName.clear();
+
     MSOOXML::Utils::XmlWriteBuffer textSpanBuf;
     if (setupTextStyle) {
 //kDebug() << "text:span...";
@@ -1254,6 +1257,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(sz)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(dstrike)
+            ELSE_TRY_READ_IF(rStyle)
             ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(highlight)
             ELSE_TRY_READ_IF(lang)
@@ -1276,9 +1280,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         readNext();
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
-            const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-            if (m_moveToStylesXml) {
-                mainStyles->markStyleForStylesXml(currentTextStyleName);
+
+            QString currentTextStyleName;
+            if (!m_currentRunStyleName.isEmpty()) {
+                currentTextStyleName = m_currentRunStyleName;
+            }
+            else {
+                currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+                if (m_moveToStylesXml) {
+                    mainStyles->markStyleForStylesXml(currentTextStyleName);
+                }
             }
             if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
@@ -1806,9 +1817,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    //m_currentParagraphStyle.setParentName(val);
-
     READ_ATTR_INTO(val, m_currentStyleName)
+    SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rStyle
+//! rStyle handler (Referenced run Style)
+/*!
+
+ Parent elements:
+ - 
+
+ No child elements.
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    READ_ATTR_INTO(val, m_currentRunStyleName)
     SKIP_EVERYTHING
     READ_EPILOGUE
 }

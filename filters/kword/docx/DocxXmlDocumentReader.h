@@ -98,6 +98,7 @@ protected:
     KoFilter::ConversionStatus read_shd(shdCaller caller);
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
+    KoFilter::ConversionStatus read_rStyle();
     KoFilter::ConversionStatus read_lastRenderedPageBreak();
     KoFilter::ConversionStatus read_instrText();
     KoFilter::ConversionStatus read_fldChar();
