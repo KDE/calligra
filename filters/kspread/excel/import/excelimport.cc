@@ -68,66 +68,62 @@ qreal offset( unsigned long dimension, unsigned long offset ) {
     return (float)dimension * (float)offset / 1024.0;
 }
 
+qreal columnWidth(Sheet* sheet, unsigned long col) {
+    if( sheet->column(col, false) )
+        return sheet->column(col)->width();
+
+    return sheet->defaultColWidth();
+}
+
+qreal rowHeight(Sheet* sheet, unsigned long row) {
+    if( sheet->row(row, false) )
+        return sheet->row(row)->height();
+
+    return sheet->defaultRowHeight();
+}
+
+qreal heightOffset( Sheet* sheet, qreal rwT, qreal dyT, qreal rwB, qreal dyB ) {
+    return - offset( rowHeight(sheet, rwT), dyT)
+           + offset( rowHeight(sheet, rwB), dyB);
+}
+
+qreal widthOffset( Sheet* sheet, qreal colL, qreal dxL, qreal colR, qreal dxR  ) {
+    return - offset(columnWidth(sheet, colL), dxL)
+           + offset(columnWidth(sheet, colR), dxR);
+}
+
 qreal columnStart(Sheet* sheet, unsigned long col) {
-    double columnStart = 0;
-    for( int i = 0; i < col; ++i )
-        if( sheet->column(i) )
-            columnStart += sheet->column(i)->width();
-        else
-            columnStart += sheet->defaultColWidth();
+    double columnStart = 0.0;
+    for( unsigned long i = 0; i < col; ++i )
+        columnStart += columnWidth(sheet, i);
+
     return columnStart;
 }
 
 qreal rowStart(Sheet* sheet, unsigned long row) {
-    double rowStart = 0;
-    for( int i = 0; i < row; ++i )
-        if( sheet->row(i) )
-            rowStart += sheet->row(i)->height();
-        else
-            rowStart += sheet->defaultRowHeight();
+    double rowStart = 0.0;
+    for( unsigned long i = 0; i < row; ++i )
+        rowStart += rowHeight(sheet, i);
 
     return rowStart;
 }
 
 qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
-    for( unsigned long i = col1; i < col2; ++i )
-        if( sheet->column(i) )
-            columnDistance += sheet->column(i)->width();
-        else
-            columnDistance += sheet->defaultColWidth();
+    for( unsigned long i = 0; i < col2; ++i )
+        columnDistance += columnWidth(sheet, i);
+
     return columnDistance;
 }
 
 qreal rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
     double rowDistance = 0.0;
     for( unsigned long i = row1; i < row2; ++i )
-        if( sheet->row(i) )
-            rowDistance += sheet->row(i)->height();
-        else
-            rowDistance += sheet->defaultRowHeight();
+        rowDistance += rowHeight(sheet, i);
 
     return rowDistance;
 }
 
-// calculates the column width in pts
-int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx = 0) {
-    QFont font("Arial",10);
-    QFontMetricsF fm(font);
-    const qreal characterWidth = fm.width("h");
-    qreal defColWidth = sheet->defaultColWidth();
-    if(defColWidth <= 0) defColWidth = 8.43;
-    defColWidth *= characterWidth;
-    return (defColWidth * col) + (dx / 1024.0 * defColWidth);
-}
-
-// calculates the row height in pts
-int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy = 0)
-{
-    qreal defRowHeight = sheet->defaultRowHeight();
-    if(defRowHeight <= 0) defRowHeight = 12.75; // 12.75 points (a point is 1/72 of an inch)
-    return defRowHeight * row + dy;
-}
 }
 
 // Returns A for 1, B for 2, C for 3, etc.
@@ -568,9 +564,9 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         QPoint point = sheet->firstVisibleCell();
         settingsWriter->addConfigItem("CursorPositionX", point.x());
         settingsWriter->addConfigItem("CursorPositionY", point.y());
-        //TODO replace with rowStart and columnStart?
-        settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
-        settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
+        //TODO how should we replace these settings? 
+//         settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
+//         settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
         settingsWriter->addConfigItem("ShowZeroValues", sheet->showZeroValues());
         settingsWriter->addConfigItem("ShowGrid", sheet->showGrid());
         settingsWriter->addConfigItem("FirstLetterUpper", false);
@@ -1424,19 +1420,27 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     
     // handle pictures
     foreach(Picture *picture, cell->pictures()) {
+        Sheet* const sheet = cell->sheet();
+        const unsigned long colL = picture->m_colL;
+        const unsigned long dxL = picture->m_dxL;
+        const unsigned long colR = picture->m_colR;
+        const unsigned long dxR = picture->m_dxR;
+        const unsigned long rwB = picture->m_rwB;
+        const unsigned long dyT = picture->m_dyT;
+        const unsigned long rwT = picture->m_rwT;
+        const unsigned long dyB = picture->m_dyB;
+
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell", string(cell->sheet()->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
-        xmlWriter->addAttribute("table:end-x", QString::number(picture->m_dxR));
-        xmlWriter->addAttribute("table:end-y", QString::number(picture->m_dyB));
+        xmlWriter->addAttribute("table:end-cell", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
+        xmlWriter->addAttribute("table:end-x", QString::number(dxR));
+        xmlWriter->addAttribute("table:end-y", QString::number(dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttributePt("svg:x", columnStart(cell->sheet(),picture->m_colL) + offset(cell->sheet()->column(picture->m_colL)->width(),picture->m_dxL));
-        xmlWriter->addAttributePt("svg:y", rowStart(cell->sheet(),picture->m_rwT) + offset(cell->sheet()->row(picture->m_rwT)->height(),picture->m_dyT));
-//         xmlWriter->addAttributePt("svg:width", (float)columnDistance(cell->sheet(),picture->m_colL,picture->m_colR) /*picture->m_dxR*/);
-        xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),picture->m_colR-picture->m_colL,picture->m_dxR))+"pt");
-        //NOTE this call introduces a crash when we load ms03_intranet_picture_pos.xls
-//         xmlWriter->addAttributePt("svg:height", (float)rowDistance(cell->sheet(),picture->m_rwT,picture->m_rwB) /*picture->m_dyB*/);
-        xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),picture->m_rwB-picture->m_rwT,picture->m_dyB))+"pt");
+        xmlWriter->addAttributePt("svg:x", columnStart(sheet, colL) + offset(columnWidth(sheet, colL), dxL) );
+        xmlWriter->addAttributePt("svg:y", rowStart(sheet, rwT) + offset(rowHeight(sheet, rwT), dyT));
+        xmlWriter->addAttributePt("svg:width", columnDistance(sheet, colL, colR) + widthOffset(sheet, colL, dxL, colR, dxR) );
+        xmlWriter->addAttributePt("svg:height", rowDistance(sheet, rwT, rwB) + heightOffset(sheet, rwT, dyT, rwB, dyB) );
+
         xmlWriter->startElement("draw:image");
         xmlWriter->addAttribute("xlink:href", picture->m_filename.c_str());
         xmlWriter->addAttribute("xlink:type", "simple");
@@ -1449,6 +1453,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     // handle charts
     foreach(ChartObject *chart, cell->charts()) {
         DrawingObject* drawobj = chart->drawingObject();
+        Sheet* const sheet = cell->sheet();
         if(!drawobj) continue;
         if(chart->m_chart->m_impl==0) {
             kDebug() << "Invalid chart to be created, no implementation.";
@@ -1457,21 +1462,26 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         ChartExport *c = new ChartExport(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = string(cell->sheet()->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
+        c->m_endCellAddress = string(sheet->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
-        c->m_x = columnStart(cell->sheet(),drawobj->m_colL) + offset(cell->sheet()->column(drawobj->m_colL)->width(),drawobj->m_dxL);
-        c->m_y = rowStart(cell->sheet(),drawobj->m_rwT) + offset(cell->sheet()->row(drawobj->m_rwT)->height(),drawobj->m_dyT);
-        c->m_width = columnDistance(cell->sheet(),drawobj->m_colL,drawobj->m_colR) 
-                        - offset(cell->sheet()->column(drawobj->m_colL)->width(),drawobj->m_dxL)
-                        + offset(cell->sheet()->column(drawobj->m_colR)->width(),drawobj->m_dxR);
-        c->m_height = rowDistance(cell->sheet(),drawobj->m_rwT,drawobj->m_rwB)
-                        - offset(cell->sheet()->row(drawobj->m_rwT)->height(),drawobj->m_dyT)
-                        + offset(cell->sheet()->row(drawobj->m_rwB)->height(),drawobj->m_dyB);
+        const unsigned long colL = drawobj->m_colL;
+        const unsigned long dxL = drawobj->m_dxL;
+        const unsigned long colR = drawobj->m_colR;
+        const unsigned long dxR = drawobj->m_dxR;
+        const unsigned long rwB = drawobj->m_rwB;
+        const unsigned long dyT = drawobj->m_dyT;
+        const unsigned long rwT = drawobj->m_rwT;
+        const unsigned long dyB = drawobj->m_dyB;
+
+        c->m_x = columnStart(sheet, colL) + offset(columnWidth(sheet, colL), dxL);
+        c->m_y = rowStart(sheet, rwT) + offset(rowHeight(sheet, rwT), dyT);
+        c->m_width = columnDistance(sheet, colL, colR) + widthOffset(sheet, colL, dxL, colR, dxR);
+        c->m_height = rowDistance(sheet, rwT, rwB) + heightOffset(sheet, rwT, dyT, rwB, dyB);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
-                                    string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
+            c->m_cellRangeAddress = string(sheet->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    string(sheet->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 
