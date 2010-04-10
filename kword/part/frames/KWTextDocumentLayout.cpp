@@ -36,6 +36,7 @@
 #include <QList>
 #include <QPainterPath>
 #include <QTextBlock>
+#include <qnumeric.h>
 
 // #define DEBUG_TEXT
 // #define DEBUG_ANCHORS
@@ -133,8 +134,14 @@ public:
         if (distance >= 0.0) {
             QMatrix grow = matrix;
             grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-            const qreal scaleX = (m_bounds.width() + distance) / m_bounds.width();
-            const qreal scaleY = (m_bounds.height() + distance) / m_bounds.height();
+            qreal scaleX = distance;
+            if (m_bounds.width() > 0)
+                scaleX = (m_bounds.width() + distance) / m_bounds.width();
+            qreal scaleY = distance;
+            if (m_bounds.height() > 0)
+                scaleY = (m_bounds.height() + distance) / m_bounds.height();
+            Q_ASSERT(!qIsNaN(scaleY));
+            Q_ASSERT(!qIsNaN(scaleX));
             grow.scale(scaleX, scaleY);
             grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 

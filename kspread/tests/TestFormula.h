@@ -35,6 +35,7 @@ private Q_SLOTS:
     void initTestCase();
     void testTokenizer();
     void testConstant();
+    void testWhitespace();
     void testInvalid();
     void testUnary();
     void testBinary();

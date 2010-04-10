@@ -572,8 +572,11 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
 
             tokenStart = i;
 
-            // don't just skip whitespaces cause they could also be used to intersect two arrays
-            //if (ch.isSpace()) { i++; break; }
+            // Whitespaces can be used as intersect-operator for two arrays.
+            if (ch.isSpace()) { //TODO && (tokens.isEmpty() || !tokens.last().isRange())) {
+                i++;
+                break;
+            }
 
             // check for number
             if (ch.isDigit()) {
@@ -890,7 +893,7 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
             break;
         };
     };
-
+    
     // parse error if any text remains
     if (state != Finish) {
         tokens.append(Token(Token::Unknown, ex.mid(tokenStart, ex.length() - tokenStart - 1), tokenStart));

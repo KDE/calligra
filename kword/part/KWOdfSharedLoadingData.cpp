@@ -159,8 +159,7 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
         margin = properties.attributeNS(KoXmlNS::fo, "margin-right");
     frame->setRunAroundDistance(KoUnit::parseValue(margin));
 
-    frame->setTextRunAround(KWord::RunThrough); // Default
-    QString wrap = properties.attributeNS(KoXmlNS::style, "wrap");
+    QString wrap = properties.attributeNS(KoXmlNS::style, "wrap", "none");
     if (wrap == "none") {
         frame->setTextRunAround(KWord::NoRunAround);
     } else if (wrap == "run-through") {
