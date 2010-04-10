@@ -24,6 +24,7 @@
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
+#include "DocxXmlFooterReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -252,7 +253,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - cols (Column Definitions) §17.6.4
  - docGrid (Document Grid) §17.6.5
  - endnotePr (Section-Wide Endnote Properties) §17.11.5
- - footerReference (Footer Reference) §17.10.2
+ - [done] footerReference (Footer Reference) §17.10.2
  - footnotePr (Section-Wide Footnote Properties) §17.11.11
  - formProt (Only Allow Editing of Form Fields) §17.6.6
  - [done] headerReference (Header Reference) §17.10.5
@@ -298,6 +299,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(pgMar)
             ELSE_TRY_READ_IF(pgBorders)
             ELSE_TRY_READ_IF(headerReference)
+            ELSE_TRY_READ_IF(footerReference)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -391,6 +393,51 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
         if (!s.isEmpty())
             m_currentPageStyle.addProperty("fo:margin-left", s);
     }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL footerReference
+//! w:footerReference handler (Footer Reference)
+/*!
+
+ Parent elements:
+ -[done] sectPr (§17.6.17)
+ - sectPr (§17.6.8)
+
+ Child elements:
+ - None
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    QString link_target;
+
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (r_id.isEmpty()) {
+        link_target.clear();
+    }
+    else {
+        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+    }
+
+    DocxXmlFooterReader reader(this);
+
+    QString errorMessage;
+    const KoFilter::ConversionStatus status
+        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, m_context);
+    if (status != KoFilter::OK) {
+        reader.raiseError(errorMessage);
+    }
+
+//! @todo: support type attribute
+
+    m_masterPageStyle.addChildElement("style:footer", reader.content());
+
     readNext();
     READ_EPILOGUE
 }

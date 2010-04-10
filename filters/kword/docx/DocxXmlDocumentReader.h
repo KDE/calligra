@@ -68,6 +68,7 @@ protected:
     KoFilter::ConversionStatus read_rPr(rPrCaller caller);
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_sectPr();
+    KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_pgSz();
     KoFilter::ConversionStatus read_pgMar();
