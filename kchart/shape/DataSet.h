@@ -184,6 +184,12 @@ public:
 
     bool loadOdf( const KoXmlElement &n,
                   KoShapeLoadingContext &context );
+    /**
+     * Saves a series to ODF. Assumes that seriesStyle has been created already
+     * and that the caller saves it and adds the style name accordingly. Also
+     * assumes that an XML element named "chart:series" has been opened already.
+     */
+    void saveOdf( KoShapeSavingContext &context, KoGenStyle &seriesStyle ) const;
 
 private:
     class Private;

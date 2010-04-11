@@ -55,7 +55,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfWorkaround.h>
-
+#include <KoGenStyle.h>
 
 using namespace KChart;
 
@@ -1068,6 +1068,10 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegionString( region );
     }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
+        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
+        setShowLabels( enable == "true" );
+    }
 
     // load data points
     KoXmlElement m;
@@ -1099,4 +1103,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     }
 
     return true;
+}
+
+void DataSet::saveOdf( KoShapeSavingContext &context, KoGenStyle &seriesStyle ) const
+{
+    seriesStyle.addProperty( "data-label-text", showLabels() ? "true" : "false"  );
 }
