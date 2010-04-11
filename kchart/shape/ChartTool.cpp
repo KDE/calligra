@@ -455,7 +455,7 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
     if ( !dataSet )
         return;
 
-    dataSet->setShowValues( b );
+    dataSet->setValueLabelType( b ? DataSet::RealValueLabel : DataSet::NoValueLabel );
     d->shape->update();
 }
 

@@ -133,6 +133,23 @@ public:
   MarkerAttributes markerAttributes() const;
 
   /**
+   * Specify whether to use percentages instead of actual data point values when no
+   * specific label is set. In a bar or cartesian diagram, this means that the value
+   * will be shown in % in relation to the sum of all values in the same category, in
+   * a polar diagram in relation to the sum of all values in a data set.
+   *
+   * When this is turned on, the value will \b not automatically have the '%' postfix.
+   * \param enable Whether to enable percentage values
+   */
+  void setUsePercentage( bool enable );
+
+  /**
+   * \return Whether to use percentage values
+   * \see setUsePercentage
+   */
+  bool usePercentage() const;
+
+  /**
    * Set how  many decimal digits to display when rendering the data value
    * labels. If there are no decimal digits it will not be displayed.
    * \param digits The number of decimal digits to use.
