@@ -982,38 +982,39 @@ void DataSet::blockSignals( bool block )
 
 bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded)
 {
-    if ( ! n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-        return false;
+    if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+        KoStyleStack &styleStack = odfLoadingContext.styleStack();
+        styleStack.save();
+        styleStack.clear();
+        odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
-    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-    KoStyleStack &styleStack = odfLoadingContext.styleStack();
-    styleStack.save();
-    styleStack.clear();
-    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+        brushLoaded = false;
+        penLoaded = false;
 
-    brushLoaded = false;                                                                                                                                                 
-    penLoaded = false; 
+        styleStack.setTypeProperties( "graphic" );
 
-    styleStack.setTypeProperties( "graphic" );
-
-    if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
-        QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-        pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
-        penLoaded = true;
-    }
-
-    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-        QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-        if ( fill == "solid" || fill == "hatch" ) {
-            brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
-            brushLoaded = true;
-        } else if ( fill == "gradient" ) {
-            brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
-            brushLoaded = true;
-        } else if ( fill == "bitmap" ) {
-            brush = Surface::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
-            brushLoaded = true;
+        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
+            QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+            pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
+            penLoaded = true;
         }
+
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+            QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+            if ( fill == "solid" || fill == "hatch" ) {
+                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
+                brushLoaded = true;
+            } else if ( fill == "gradient" ) {
+                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
+                brushLoaded = true;
+            } else if ( fill == "bitmap" ) {
+                brush = Surface::loadOdfPatternStyle( styleStack, odfLoadingContext, QSizeF( 5.0, 60.0 ) );
+                brushLoaded = true;
+            }
+        }
+
+        styleStack.restore();
     }
     
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1032,8 +1033,6 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
         }
     }
 #endif
-
-    styleStack.restore();
     return true;
 }
 
