@@ -457,8 +457,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
         
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-expansion" ) ) {
-            QString lexpansion = legendElement.attributeNS( KoXmlNS::koffice, "legend-expansion", QString() );
+        if ( legendElement.hasAttributeNS( KoXmlNS::style, "legend-expansion" ) ) {
+            QString lexpansion = legendElement.attributeNS( KoXmlNS::style, "legend-expansion", QString() );
             if ( lexpansion == "wide" )
                 setExpansion( WideLegendExpansion );
             else if ( lexpansion == "high" )
