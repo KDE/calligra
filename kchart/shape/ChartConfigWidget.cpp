@@ -1086,7 +1086,7 @@ void ChartConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
     //emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
 }
 
-void ChartConfigWidget::updateFixedPosition( LegendPosition position )
+void ChartConfigWidget::updateFixedPosition( Position position )
 {
     Q_UNUSED(position);
 /*

@@ -330,8 +330,8 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( legendAlignmentChanged( Qt::Alignment ) ),
              this,   SLOT( setLegendAlignment( Qt::Alignment ) ) );
 
-    connect( widget, SIGNAL( legendFixedPositionChanged( LegendPosition ) ),
-             this,   SLOT( setLegendFixedPosition( LegendPosition ) ) );
+    connect( widget, SIGNAL( legendFixedPositionChanged( Position ) ),
+             this,   SLOT( setLegendFixedPosition( Position ) ) );
     
     connect( widget, SIGNAL( legendBackgroundColorChanged( const QColor& ) ) ,
              this,   SLOT( setLegendBackgroundColor( const QColor& ) ) );
@@ -583,7 +583,7 @@ void ChartTool::setLegendAlignment( Qt::Alignment alignment )
     d->shape->legend()->update();
 }
 
-void ChartTool::setLegendFixedPosition( LegendPosition position )
+void ChartTool::setLegendFixedPosition( Position position )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
@@ -634,7 +634,6 @@ void ChartTool::addAxis( AxisPosition position, const QString& title )
     axis->setTitleText( title );
     
     d->shape->plotArea()->addAxis( axis );
-    d->shape->updateChildrenPositions();
     d->shape->update();
 }
 

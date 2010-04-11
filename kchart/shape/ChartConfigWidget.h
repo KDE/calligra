@@ -94,7 +94,7 @@ public slots:
     void setLegendAlignment( int boxEntryIndex );
     void setLegendFixedPosition( int buttonGroupIndex );
     //void setLegendShowTitle( bool toggled );
-    void updateFixedPosition( LegendPosition position );
+    void updateFixedPosition( Position position );
     void selectDataset( int dataset );
     
     void ui_axisSelectionChanged( int index );
@@ -159,7 +159,7 @@ signals:
     void legendShowLinesToggled( bool toggled );
     void legendOrientationChanged( Qt::Orientation orientation );
     void legendAlignmentChanged( Qt::Alignment alignment );
-    void legendFixedPositionChanged( LegendPosition position );
+    void legendFixedPositionChanged( Position position );
     void legendBackgroundColorChanged( const QColor& color );
     void legendFrameColorChanged( const QColor& color );
     void legendShowFrameChanged( bool show );

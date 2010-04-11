@@ -112,7 +112,7 @@ private slots:
     void setLegendFontSize( int size );
     void setLegendOrientation( Qt::Orientation );
     void setLegendAlignment( Qt::Alignment );
-    void setLegendFixedPosition( LegendPosition position );
+    void setLegendFixedPosition( Position position );
     void setLegendBackgroundColor( const QColor& color );
     void setLegendFrameColor( const QColor& color );
     void setLegendShowFrame( bool show );

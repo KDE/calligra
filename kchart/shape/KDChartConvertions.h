@@ -36,9 +36,9 @@ namespace KChart
 extern KDChart::CartesianAxis::Position AxisPositionToKDChartAxisPosition( AxisPosition position );
 extern AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position position );
 
-extern QString LegendPositionToString( LegendPosition position );
-extern KDChartEnums::PositionValue LegendPositionToKDChartPositionValue( LegendPosition position );
-extern LegendPosition KDChartPositionValueToLegendPosition( KDChartEnums::PositionValue position );
+extern QString PositionToString( Position position );
+extern KDChartEnums::PositionValue PositionToKDChartPositionValue( Position position );
+extern Position KDChartPositionValueToPosition( KDChartEnums::PositionValue position );
 
 extern Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion );
 extern LegendExpansion QtOrientationToLegendExpansion( Qt::Orientation orientation );
