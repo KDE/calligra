@@ -1061,7 +1061,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     body->addAttribute("text:style-name", "Standard");
                 }*/
         (void)textPBuf.releaseWriter();
-        body->endElement(); //text:p
+        body->endElement(); //text:p 
         kDebug() << "/text:p";
     }
     m_currentStyleName.clear();
@@ -1376,7 +1376,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - cnfStyle (Paragraph Conditional Formatting) §17.3.1.8
  - contextualSpacing (Ignore Spacing Above and Below When Using Identical Styles) §17.3.1.9
  - divId (Associated HTML div ID) §17.3.1.10
- - framePr (Text Frame Properties) §17.3.1.11
+ - [done] framePr (Text Frame Properties) §17.3.1.11
  - ind (Paragraph Indentation) §17.3.1.12
  - [done] jc (Paragraph Alignment) §17.3.1.13
  - keepLines (Keep All Lines On One Page) §17.3.1.14
@@ -1415,7 +1415,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     setParentParagraphStyleName(attrs);
 
     if (!m_currentParagraphStylePredefined) {
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
@@ -1432,6 +1432,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
             ELSE_TRY_READ_IF(pBdr)
+            ELSE_TRY_READ_IF(framePr)
             ELSE_TRY_READ_IF(ind)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1483,6 +1484,56 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
     m_drawing_anchor = false;
     m_drawing_inline = false;
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL framePr
+//! framePr handler (Text Frame Properties)
+/*!
+ Parent elements:
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
+
+ No child elements.
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(dropCap)
+    TRY_READ_ATTR(lines)
+    TRY_READ_ATTR(hSpace)
+
+    QBuffer frameBuffer;
+    frameBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&frameBuffer);
+    elementWriter.startElement("style:drop-cap");
+    elementWriter.addAttribute("style:lines", lines);
+
+    qDebug() << "hspace is " << hSpace;
+
+    if (!hSpace.isEmpty()) {
+        bool ok;
+        const qreal distance = qreal(TWIP_TO_POINT(hSpace.toDouble(&ok)));
+
+        if (ok) {
+            elementWriter.addAttributePt("style:distance", distance);
+        }
+    }
+
+    elementWriter.endElement(); // style-drop-cap
+
+    QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
+    m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
+
+//! @todo more attributes
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1658,19 +1709,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
         m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
     }
 
+    TRY_READ_ATTR(lineRule)
     TRY_READ_ATTR(line)
     qreal lineSpace = line.toDouble(&ok);
 
     if (ok) {
-        lineSpace = lineSpace / 2.4; // converting to percentage
-        QString space = "%1";
-        space = space.arg(lineSpace);
-        space.append('%');
-        
-        m_currentParagraphStyle.addProperty("fo:line-height", space);
-    }
+        if (lineRule == "atLeast" || lineRule == "exact") {
+            lineSpace = TWIP_TO_POINT(lineSpace);
+            m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
+        }
+        else {
+            lineSpace = lineSpace / 2.4; // converting to percentage
+            QString space = "%1";
+            space = space.arg(lineSpace);
+            space.append('%');
 
-    TRY_READ_ATTR(lineRule)
+            m_currentParagraphStyle.addProperty("fo:line-height", space);
+        }
+    }
 
     SKIP_EVERYTHING
     READ_EPILOGUE

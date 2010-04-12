@@ -75,6 +75,7 @@ protected:
     KoFilter::ConversionStatus read_pgBorders();
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_ind();
+    KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
     //KoFilter::ConversionStatus read_commentRangeEnd();
     KoFilter::ConversionStatus read_commentRangeStart();
