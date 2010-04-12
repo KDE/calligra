@@ -612,9 +612,8 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     border.append(odfLineStyle + " ");
 
-/*    if (color ==  MsooXmlReader::constAuto) { // default
-    }
-    else*/ if (color.startsWith('#')) {
+    if (!color.isEmpty()) {
+        border.append('#');
         border.append(color);
     }
     else {
