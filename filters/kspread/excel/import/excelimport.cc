@@ -110,7 +110,8 @@ qreal rowStart(Sheet* sheet, unsigned long row) {
 
 qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
-    for( unsigned long i = 0; i < col2; ++i )
+
+    for( unsigned long i = col1; i < col2; ++i )
         columnDistance += columnWidth(sheet, i);
 
     return columnDistance;
@@ -197,7 +198,7 @@ public:
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
     void processCharts(KoXmlWriter* manifestWriter);
 
-    void createDefaultColumnStyle();
+    inline void createDefaultColumnStyle( Sheet* sheet );
     QString defaultColumnStyleName;
 };
 
@@ -756,7 +757,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     QString styleName = styles->insert(style, "ta");
     sheetStyles.append(styleName);
 
-    createDefaultColumnStyle();
+    createDefaultColumnStyle( sheet );
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForStyle(sheet, i, xmlWriter);
@@ -1846,12 +1847,11 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     return styles->insert( style, "N" );
 }
 
-void ExcelImport::Private::createDefaultColumnStyle() {
+void ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
     style.addProperty("fo:break-before", "auto");
 
-    const double defaultColumnWidth = 2560.0;
-    style.addPropertyPt("style:column-width", defaultColumnWidth * Column::COLUMN_UNITS_TO_PTS );
+    style.addPropertyPt("style:column-width", sheet->defaultColWidth() );
 
     defaultColumnStyleName = styles->insert(style, "co");
 }
