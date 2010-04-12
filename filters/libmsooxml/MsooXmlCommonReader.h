@@ -62,6 +62,9 @@ protected:
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;
 
+    //! Set by rStyle
+    QString m_currentRunStyleName;
+
     bool isDefaultTocStyle(const QString& name) const;
 
     //! Adds reference to a file in the ODF document to manifest.xml

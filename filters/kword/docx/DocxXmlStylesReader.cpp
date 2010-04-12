@@ -396,6 +396,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         }
     }
 
+    // When reading from styles, we allow duplicates
+    insertionFlags = insertionFlags | KoGenStyles::AllowDuplicates;
+
     m_currentTextStylePredefined = false;
     m_currentParagraphStylePredefined = false;
 
@@ -460,17 +463,15 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             }
 
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
+
         }
         if (!nextStyleName.isEmpty()) {
             mainStyles->insertStyleRelation(styleName, nextStyleName, "style:next-style-name");
         }
     }
-    if (type == "character") {
-        m_currentTextStyle = KoGenStyle();
-    }
-    else if (type == "paragraph") {
-        m_currentParagraphStyle = KoGenStyle();
-    }
+
+    m_currentParagraphStyle = KoGenStyle();
+    m_currentTextStyle = KoGenStyle();
 
     READ_EPILOGUE
 }

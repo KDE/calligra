@@ -11,6 +11,7 @@ set(docximport_PART_SRCS
     DocxXmlNotesReader.cpp
     DocxXmlDocumentReader.cpp
     DocxXmlHeaderReader.cpp
+    DocxXmlFooterReader.cpp
     DocxImport.cpp
 )
 

@@ -68,6 +68,7 @@ protected:
     KoFilter::ConversionStatus read_rPr(rPrCaller caller);
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_sectPr();
+    KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_pgSz();
     KoFilter::ConversionStatus read_pgMar();
@@ -97,6 +98,7 @@ protected:
     KoFilter::ConversionStatus read_shd(shdCaller caller);
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
+    KoFilter::ConversionStatus read_rStyle();
     KoFilter::ConversionStatus read_lastRenderedPageBreak();
     KoFilter::ConversionStatus read_instrText();
     KoFilter::ConversionStatus read_fldChar();
