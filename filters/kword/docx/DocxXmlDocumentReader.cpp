@@ -1659,10 +1659,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     }
 
     TRY_READ_ATTR(line)
-    const int lineSpace = (TWIP_TO_POINT(line.toDouble(&ok)));
+    qreal lineSpace = line.toDouble(&ok);
 
     if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
+        lineSpace = lineSpace / 2.4; // converting to percentage
+        QString space = "%1";
+        space = space.arg(lineSpace);
+        space.append('%');
+        
+        m_currentParagraphStyle.addProperty("fo:line-height", space);
     }
 
     TRY_READ_ATTR(lineRule)
