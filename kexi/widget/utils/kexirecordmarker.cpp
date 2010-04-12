@@ -201,7 +201,6 @@ void KexiRecordMarker::paintEvent(QPaintEvent *)
             QStyle::CE_Header,
             &optionHeader,
             &p,
-            //! @todo 'this' shouldn't be needed here but Oxygen crashes otherwise! Fix Oxygen first.
             this);
     }
     p.restore();
