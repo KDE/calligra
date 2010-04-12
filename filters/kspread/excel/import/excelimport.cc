@@ -198,8 +198,9 @@ public:
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
     void processCharts(KoXmlWriter* manifestWriter);
 
-    inline void createDefaultColumnStyle( Sheet* sheet );
-    QString defaultColumnStyleName;
+    QString createDefaultColumnStyle( Sheet* sheet );
+    QList<QString> defaultColumnStyles;
+    int defaultColumnStyleIndex;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -401,6 +402,8 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     contentWriter->endElement(); // style:font-face
     contentWriter->endElement(); // office:font-face-decls
 
+
+    defaultColumnStyleIndex = 0;
     // office:automatic-styles
     processWorkbookForStyle(workbook, contentWriter);
     styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
@@ -410,6 +413,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     columnFormatIndex = 0;
     rowFormatIndex = 0;
     cellFormatIndex = 0;
+    
 
     // office:body
     bodyWriter->startElement("office:body");
@@ -703,8 +707,8 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     xmlWriter->addAttribute("table:name", string(sheet->name()));
     xmlWriter->addAttribute("table:print", "false");
     xmlWriter->addAttribute("table:style-name", sheetStyles[sheetFormatIndex]);
-    sheetFormatIndex++;
-    
+    ++sheetFormatIndex;
+
     if(sheet->password() != 0) {
         //TODO
        //xmlWriter->addAttribute("table:protected", "true");
@@ -721,7 +725,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
     if (columnCount < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
-        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyles[defaultColumnStyleIndex]);
         xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - columnCount);
         xmlWriter->endElement();
     }
@@ -740,6 +744,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     }
 
     xmlWriter->endElement();  // table:table
+    ++defaultColumnStyleIndex;
 }
 
 // Processes styles for a sheet.
@@ -758,6 +763,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     sheetStyles.append(styleName);
 
     createDefaultColumnStyle( sheet );
+
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForStyle(sheet, i, xmlWriter);
@@ -893,7 +899,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     if (!xmlWriter) return;
     if (!column) {
         xmlWriter->startElement("table:table-column");
-        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyles[defaultColumnStyleIndex] );
         xmlWriter->endElement();
         return;
     }
@@ -1847,11 +1853,12 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     return styles->insert( style, "N" );
 }
 
-void ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
+QString ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
-    style.addProperty("fo:break-before", "auto");
 
+    style.addProperty("fo:break-before", "auto");
     style.addPropertyPt("style:column-width", sheet->defaultColWidth() );
 
-    defaultColumnStyleName = styles->insert(style, "co");
+    const QString styleName = styles->insert(style, "co");
+    defaultColumnStyles.append( styleName );
 }
