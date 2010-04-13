@@ -484,7 +484,7 @@ void PlotArea::setChartType( ChartType type )
 
     // Set the dimensionality of the data points.
     int dimensions = 1;
-    switch ( d->chartType ) {
+    switch ( type ) {
         case BarChartType:
         case LineChartType:
         case AreaChartType:
