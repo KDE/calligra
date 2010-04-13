@@ -130,8 +130,17 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     //now create real content/body writers & dump the information there
     KoXmlWriter* realContentWriter = oasisStore.contentWriter();
+    if (!realContentWriter) {
+        kWarning(30003) << "Error creating the content writer.";
+        return KoFilter::CreationError;
+    }
     realContentWriter->addCompleteElement(&contentBuf);
+
     KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
+    if (!realBodyWriter) {
+        kWarning(30003) << "Error creating the body writer.";
+        return KoFilter::CreationError;
+    }
     realBodyWriter->addCompleteElement(&bodyBuf);
 
     //now close content & body writers
