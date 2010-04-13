@@ -74,6 +74,7 @@
 #include "DataSet.h"
 #include "ThreeDScene.h"
 #include "ChartProxyModel.h"
+#include "ScreenConversions.h"
 
 
 using namespace KChart;
@@ -1078,7 +1079,11 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
         d->lastSize      = size();
     }*/
     painter.setRenderHint( QPainter::Antialiasing, false );
-    d->kdChart->paint( &painter, paintRect.toRect() );
+
+    // KDChart thinks in pixels, KOffice in pt
+    ScreenConversions::scaleFromPtToPx( painter );
+
+    d->kdChart->paint( &painter, ScreenConversions::scaleFromPtToPx( paintRect ) );
     //painter.restore();
 
     // Paint the cached pixmap if we got a GO from paintPixmap()
