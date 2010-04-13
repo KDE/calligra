@@ -75,6 +75,7 @@ protected:
     KoFilter::ConversionStatus read_pgBorders();
     KoFilter::ConversionStatus read_object();
     KoFilter::ConversionStatus read_ind();
+    KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
     //KoFilter::ConversionStatus read_commentRangeEnd();
     KoFilter::ConversionStatus read_commentRangeStart();
@@ -99,6 +100,7 @@ protected:
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
     KoFilter::ConversionStatus read_rStyle();
+    KoFilter::ConversionStatus read_fldSimple();
     KoFilter::ConversionStatus read_lastRenderedPageBreak();
     KoFilter::ConversionStatus read_instrText();
     KoFilter::ConversionStatus read_fldChar();

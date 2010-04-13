@@ -494,7 +494,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     tab->addTab(d->objectTreeView, KIcon("widgets"), QString());
     tab->setTabToolTip(tab->indexOf(d->objectTreeView), i18n("Widgets"));
 #else
+#ifdef __GNUC__
 #warning
+#endif
 #endif
 }
 

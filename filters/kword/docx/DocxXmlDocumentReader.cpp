@@ -612,9 +612,8 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     border.append(odfLineStyle + " ");
 
-/*    if (color ==  MsooXmlReader::constAuto) { // default
-    }
-    else*/ if (color.startsWith('#')) {
+    if (!color.isEmpty()) {
+        border.append('#');
         border.append(color);
     }
     else {
@@ -987,7 +986,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
  - del (Deleted Run Content) §17.13.5.14
  - dir (Bidirectional Embedding Level) §17.3.2.8
- - fldSimple (Simple Field) §17.16.19
+ - [done] fldSimple (Simple Field) §17.16.19
  - [done] hyperlink (Hyperlink) §17.16.22 - WML only
  - ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
@@ -1040,6 +1039,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(pPr) // CASE #400.1
 //! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
+            ELSE_TRY_READ_IF(fldSimple)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1061,7 +1061,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     body->addAttribute("text:style-name", "Standard");
                 }*/
         (void)textPBuf.releaseWriter();
-        body->endElement(); //text:p
+        body->endElement(); //text:p 
         kDebug() << "/text:p";
     }
     m_currentStyleName.clear();
@@ -1376,7 +1376,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - cnfStyle (Paragraph Conditional Formatting) §17.3.1.8
  - contextualSpacing (Ignore Spacing Above and Below When Using Identical Styles) §17.3.1.9
  - divId (Associated HTML div ID) §17.3.1.10
- - framePr (Text Frame Properties) §17.3.1.11
+ - [done] framePr (Text Frame Properties) §17.3.1.11
  - ind (Paragraph Indentation) §17.3.1.12
  - [done] jc (Paragraph Alignment) §17.3.1.13
  - keepLines (Keep All Lines On One Page) §17.3.1.14
@@ -1415,7 +1415,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     setParentParagraphStyleName(attrs);
 
     if (!m_currentParagraphStylePredefined) {
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
@@ -1432,6 +1432,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
             ELSE_TRY_READ_IF(pBdr)
+            ELSE_TRY_READ_IF(framePr)
             ELSE_TRY_READ_IF(ind)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1483,6 +1484,56 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
     m_drawing_anchor = false;
     m_drawing_inline = false;
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL framePr
+//! framePr handler (Text Frame Properties)
+/*!
+ Parent elements:
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
+
+ No child elements.
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(dropCap)
+    TRY_READ_ATTR(lines)
+    TRY_READ_ATTR(hSpace)
+
+    QBuffer frameBuffer;
+    frameBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&frameBuffer);
+    elementWriter.startElement("style:drop-cap");
+    elementWriter.addAttribute("style:lines", lines);
+
+    qDebug() << "hspace is " << hSpace;
+
+    if (!hSpace.isEmpty()) {
+        bool ok;
+        const qreal distance = qreal(TWIP_TO_POINT(hSpace.toDouble(&ok)));
+
+        if (ok) {
+            elementWriter.addAttributePt("style:distance", distance);
+        }
+    }
+
+    elementWriter.endElement(); // style-drop-cap
+
+    QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
+    m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
+
+//! @todo more attributes
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1658,14 +1709,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
         m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
     }
 
+    TRY_READ_ATTR(lineRule)
     TRY_READ_ATTR(line)
-    const int lineSpace = (TWIP_TO_POINT(line.toDouble(&ok)));
+    qreal lineSpace = line.toDouble(&ok);
 
     if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
-    }
+        if (lineRule == "atLeast" || lineRule == "exact") {
+            lineSpace = TWIP_TO_POINT(lineSpace);
+            m_currentParagraphStyle.addPropertyPt("fo:line-height", lineSpace);
+        }
+        else {
+            lineSpace = lineSpace / 2.4; // converting to percentage
+            QString space = "%1";
+            space = space.arg(lineSpace);
+            space.append('%');
 
-    TRY_READ_ATTR(lineRule)
+            m_currentParagraphStyle.addProperty("fo:line-height", space);
+        }
+    }
 
     SKIP_EVERYTHING
     READ_EPILOGUE
@@ -1828,7 +1889,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 /*!
 
  Parent elements:
- - 
+ - rPr (§17.3.1.29)
+ - rPr (§17.3.1.30)
+ - rPr (§17.5.2.28)
+ - rPr (§17.9.25)
+ - rPr (§17.7.9.1)
+ - rPr (§17.7.5.4)
+ - rPr (§17.3.2.28)
+ - rPr (§17.5.2.27)
+ - rPr (§17.7.6.2)
+ - rPr (§17.3.2.27)
 
  No child elements.
 
@@ -1842,6 +1912,91 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
 
     READ_ATTR_INTO(val, m_currentRunStyleName)
     SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fldSimple
+//! fldSimple handler (Simple Field)
+/*!
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - customXml (§17.5.1.3)
+ - dir (§17.3.2.8)
+ - [done] fldSimple (§17.16.19)
+ - hyperlink (§17.16.22)
+ - [done] p (§17.3.1.22)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+
+ Child elements:
+
+ - bdo (Bidirectional Override) §17.3.2.3
+ - bookmarkEnd (Bookmark End)   §17.13.6.1
+ - bookmarkStart (Bookmark Start)                                                §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End)                                    §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start)                                §17.13.4.4
+ - customXml (Inline-Level Custom XML Element)                                   §17.5.1.3
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End)                         §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start)                     §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End)                        §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start)                    §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End)                 §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start)             §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End)     §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content)                                                     §17.13.5.14
+ - dir (Bidirectional Embedding Level)                                           §17.3.2.8
+ - [done] fldSimple (Simple Field)                                               §17.16.19
+ - [done] hyperlink (Hyperlink)                                                  §17.16.22
+ - ins (Inserted Run Content)                                                    §17.13.5.18
+ - moveFrom (Move Source Run Content)                                            §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End)                       §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start)                   §17.13.5.24
+ - moveTo (Move Destination Run Content)                                         §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
+ - oMath (Office Math)                                                           §22.1.2.77
+ - oMathPara (Office Math Paragraph)                                             §22.1.2.78
+ - permEnd (Range Permission End)                                                §17.13.7.1
+ - permStart (Range Permission Start)                                            §17.13.7.2
+ - proofErr (Proofing Error Anchor)                                              §17.13.8.1
+ - [done] r (Text Run)                                                           §17.3.2.25
+ - sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
+ - smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
+ - subDoc (Anchor for Subdocument Location)                                      §17.17.1.1
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(instr)
+    instr = instr.trimmed();
+
+    if (instr.startsWith("PAGE ")) {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+    }
+
+// @todo support all attributes
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(hyperlink)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (instr.startsWith("PAGE ")) {
+        body->endElement(); // text:page-number
+    }
+
     READ_EPILOGUE
 }
 

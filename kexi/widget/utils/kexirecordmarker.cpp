@@ -197,7 +197,11 @@ void KexiRecordMarker::paintEvent(QPaintEvent *)
             optionHeader.palette.setBrush(QPalette::Window, d->selectionBackgroundBrush);
             optionHeader.palette.setColor(QPalette::Window, alteredColor);
         }
-        style()->drawControl(QStyle::CE_Header, &optionHeader, &p);
+        style()->drawControl(
+            QStyle::CE_Header,
+            &optionHeader,
+            &p,
+            this);
     }
     p.restore();
 
