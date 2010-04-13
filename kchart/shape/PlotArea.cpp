@@ -482,16 +482,29 @@ void PlotArea::setChartType( ChartType type )
         d->automaticallyHiddenAxisTitles.clear();
     }
 
-    // FIXME BUG: This seems buggy.
-    // FIXME NOW: Make this a switch (see comment below)
     // Set the dimensionality of the data points.
-    if ( d->chartType != ScatterChartType && type == ScatterChartType ) {
-        d->shape->proxyModel()->setDataDimensions( 2 );
+    int dimensions = 1;
+    switch ( d->chartType ) {
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+        case CircleChartType:
+        case RingChartType:
+        case RadarChartType:
+        case StockChartType:
+        case GanttChartType:
+            dimensions = 1;
+            break;
+        case ScatterChartType:
+        case SurfaceChartType:
+            dimensions = 2;
+            break;
+        case BubbleChartType:
+            dimensions = 3;
+            break;
     }
-    // FIXME: This is not really true.  Could also be 3 (bubble charts)
-    else if ( d->chartType == ScatterChartType && type != ScatterChartType ) {
-        d->shape->proxyModel()->setDataDimensions( 1 );
-    }
+
+    d->shape->proxyModel()->setDataDimensions( dimensions );
     
     d->chartType = type;
     
