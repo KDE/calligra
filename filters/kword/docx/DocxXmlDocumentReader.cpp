@@ -121,12 +121,30 @@ DocxNote DocxXmlDocumentReaderContext::footnote(KoOdfWriters *writers, int id)
 
 // ---------------------------------------------------------------------
 
+//! Column style info, allows to keep information about repeated columns
+class ColumnStyleInfo
+{
+public:
+    ColumnStyleInfo(KoGenStyle *s = 0) : count(0), style(s) {}
+    uint count;
+    KoGenStyle* style; //!< not owned
+};
+
 class DocxXmlDocumentReader::Private
 {
 public:
     Private() {
     }
     ~Private() {
+    }
+
+    QList<ColumnStyleInfo> columnStyles; //!< for collecting column styles
+
+    void clearColumnStyles() {
+        foreach (const ColumnStyleInfo& info, columnStyles) {
+            delete info.style;
+        }
+        columnStyles.clear();
     }
 };
 
@@ -155,6 +173,7 @@ void DocxXmlDocumentReader::init()
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
     m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
+    m_tablesCount = 0;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -216,6 +235,43 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 #define CURRENT_EL body
 //! w:body handler (Document Body)
 /*! ECMA-376, 17.2.2, p. 204.
+ This element specifies the contents of a main document part in a WordprocessingML document.
+
+ Parent elements:
+ - [done] document (§17.2.3)
+
+ Child elements:
+ - altChunk (Anchor for Imported External Content) §17.17.2.1
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Block-Level Custom XML Element) §17.5.1.6
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - [done] p (Paragraph) §17.3.1.22
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - sdt (Block-Level Structured Document Tag) §17.5.2.29
+ - [done] sectPr (Document Final Section Properties) §17.6.17
+ - [done] tbl (Table) §17.4.38
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
@@ -231,6 +287,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sectPr)
+            ELSE_TRY_READ_IF(tbl)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2398,6 +2455,430 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
     }
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL tbl
+//! tbl handler (Table)
+/*! ECMA-376, 17.4.38, p. 460.
+ This element specifies the contents of a table present in the document. A table is a set of paragraphs
+ (and other block-level content) arranged in rows and columns.
+
+ Parent elements:
+ - [done] body (§17.2.2)
+ - comment (§17.13.4.2)
+ - customXml (§17.5.1.6)
+ - docPartBody (§17.12.6)
+ - endnote (§17.11.2);footnote (§17.11.10)
+ - ftr (§17.10.3)
+ - hdr (§17.10.4)
+ - sdtContent (§17.5.2.34)
+ - [done] tc (§17.4.66)
+
+ Child elements:
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Row-Level Custom XML Element) §17.5.1.5
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - sdt (Row-Level Structured Document Tag) §17.5.2.30
+ - [done] tblGrid (Table Grid) §17.4.49
+ - [done] tblPr (Table Properties) §17.4.60
+ - [done] tr (Table Row) §17.4.79
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
+{
+    READ_PROLOGUE
+    MSOOXML::Utils::XmlWriteBuffer tableBuf;
+    body = tableBuf.setWriter(body);
+
+    //const QXmlStreamAttributes attrs(attributes());
+    d->clearColumnStyles();
+    m_currentTableName = QLatin1String("Table") + QString::number(m_tablesCount+1);
+    m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
+    m_currentTableWidth = 0.0;
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(tblPr)
+            ELSE_TRY_READ_IF(tblGrid)
+            ELSE_TRY_READ_IF(tr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body = tableBuf.originalWriter();
+    body->startElement("table:table");
+    body->addAttribute("table:name", m_currentTableName);
+    m_currentTableStyle.addProperty(
+        "style:width", QString::number(m_currentTableWidth) + QLatin1String("cm"),
+        KoGenStyle::TableType);
+
+    //! @todo fix hardcoded style:master-page-name
+    m_currentTableStyle.addAttribute("style:master-page-name", "Standard");
+    const QString tableStyleName(
+        mainStyles->insert(
+            m_currentTableStyle,
+            m_currentTableName,
+            KoGenStyles::DontAddNumberToName)
+    );
+    body->addAttribute("table:style-name", tableStyleName);
+    uint column = 0;
+    foreach (const ColumnStyleInfo& columnStyle, d->columnStyles) {
+        body->startElement("table:table-column");
+        const QString columnStyleName(
+            mainStyles->insert(
+                *columnStyle.style,
+                m_currentTableName + '.' + MSOOXML::Utils::columnName(column),
+                KoGenStyles::DontAddNumberToName)
+        );
+        body->addAttribute("table:style-name", columnStyleName);
+        if (columnStyle.count > 1) {
+            body->addAttribute("table:number-columns-repeated", columnStyle.count);
+        }
+        body->endElement(); // table:table-column
+        column += columnStyle.count;
+    }
+    d->clearColumnStyles();
+
+    (void)tableBuf.releaseWriter();
+    body->endElement(); // table:table
+
+    m_tablesCount++;
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblPr
+//! tblPr handler (Table Properties)
+/*! ECMA-376, 17.4.60, p. 492.
+ This element specifies the set of table-wide properties applied to the current table.
+ These properties affect the appearance of all rows and cells within the parent table,
+ but can be overridden by individual table-level exception, row, and cell level properties
+ as defined by each property.
+
+ Parent elements:
+ - [done] tbl (§17.4.38)
+
+ Child elements:
+ - bidiVisual (Visually Right to Left Table) §17.4.1
+ - jc (Table Alignment) §17.4.29
+ - shd (Table Shading) §17.4.32
+ - tblBorders (Table Borders) §17.4.39
+ - tblCaption (Table Caption) §17.4.41
+ - tblCellMar (Table Cell Margin Defaults) §17.4.43
+ - tblCellSpacing (Table Cell Spacing Default) §17.4.46
+ - tblDescription (Table Description) §17.4.47
+ - tblInd (Table Indent from Leading Margin) §17.4.51
+ - tblLayout (Table Layout) §17.4.53
+ - tblLook (Table Style Conditional Formatting Settings) §17.4.56
+ - tblOverlap (Floating Table Allows Other Tables to Overlap) §17.4.57
+ - tblpPr (Floating Table Positioning) §17.4.58
+ - tblPrChange (Revision Information for Table Properties) §17.13.5.34
+ - tblStyle (Referenced Table Style) §17.4.63
+ - tblStyleColBandSize (Number of Columns in Column Band) §17.7.6.5
+ - tblStyleRowBandSize (Number of Rows in Row Band) §17.7.6.7
+ - tblW (Preferred Table Width) §17.4.64
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//            TRY_READ_IF(..)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblGrid
+//! tblGrid handler (Table Grid)
+/*! ECMA-376, 17.4.49, p. 474.
+ This element specifies the table grid for the current table. The table grid is a definition
+ of the set of grid columns which define all of the shared vertical edges of the table,
+ as well as default widths for each of these grid columns. These grid column widths are then
+ used to determine the size of the table based on the table layout algorithm used (§17.4.53;§17.4.54).
+
+ Parent elements:
+ - [done] tbl (§17.4.38)
+
+ Child elements:
+ - [done] gridCol (Grid Column Definition) §17.4.16
+ - tblGridChange (Revision Information for Table Grid Column Definitions) §17.13.5.33
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(gridCol)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL gridCol
+//! gridCol handler (Grid Column Definition)
+/*! ECMA-376, 17.4.16, p. 433.
+ This element specifies the presence and details about a single grid column within a table grid.
+ A grid column is a logical column in a table used to specify the presence of a shared vertical
+ edge in the table. When table cells are then added to this table, these shared edges
+ (or grid columns, looking at the column between those shared edges) determine how table cells
+ are placed into the table grid.
+
+ Parent elements:
+ - tblGrid (§17.4.48)
+ - [done] tblGrid (§17.4.49)
+
+ No child elements.
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(w)
+    const QString widthCm(MSOOXML::Utils::ST_TwipsMeasure_to_cm(w));
+    KoGenStyle *columnStyle = new KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
+    if (!widthCm.isEmpty()) {
+        columnStyle->addProperty("style:column-width", widthCm, KoGenStyle::TableColumnType);
+        m_currentTableWidth += widthCm.left(widthCm.length()-2).toFloat();
+    }
+    // only add the style if it different than the previous; else just increate the counter
+    if (d->columnStyles.isEmpty() || !(*d->columnStyles.last().style == *columnStyle)) {
+        d->columnStyles.append(ColumnStyleInfo(columnStyle));
+    }
+    d->columnStyles.last().count++;
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tr
+//! tr handler (Table Row)
+/*! ECMA-376, 17.4.79, p. 492.
+ This element specifies a single table row, which contains the table’s cells.
+ Table rows in WordprocessingML are analogous to HTML tr elements.
+
+ Parent elements:
+ - customXml (§17.5.1.5)
+ - sdtContent (§17.5.2.35)
+ - [done] tbl (§17.4.38)
+
+ Child elements:
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Cell-Level Custom XML Element) §17.5.1.4
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - sdt (Cell-Level Structured Document Tag) §17.5.2.32
+ - tblPrEx (Table-Level Property Exceptions) §17.4.61
+ - tc (Table Cell) §17.4.66
+ - trPr (Table Row Properties) §17.4.82
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
+{
+    READ_PROLOGUE
+    MSOOXML::Utils::XmlWriteBuffer rowBuf;
+    body = rowBuf.setWriter(body);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(tc)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body = rowBuf.originalWriter();
+    body->startElement("table:table-row");
+    (void)rowBuf.releaseWriter();
+    body->endElement(); // table:table-row
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tc
+//! tc handler (Table Cell)
+/*! ECMA-376, 17.4.66, p. 502.
+ This element specifies a single cell in a table row, which contains the table’s content.
+ Table cells in WordprocessingML are analogous to HTML td elements.
+
+ Parent elements:
+ - customXml (§17.5.1.4)
+ - sdtContent (§17.5.2.33)
+ - [done] tr (§17.4.79)
+
+ Child elements:
+ - altChunk (Anchor for Imported External Content) §17.17.2.1
+ - bookmarkEnd (Bookmark End) §17.13.6.1
+ - bookmarkStart (Bookmark Start) §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
+ - customXml (Block-Level Custom XML Element) §17.5.1.6
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End) §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End) §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start) §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
+ - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
+ - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
+ - del (Deleted Run Content) §17.13.5.14
+ - ins (Inserted Run Content) §17.13.5.18
+ - moveFrom (Move Source Run Content) §17.13.5.22
+ - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
+ - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
+ - moveTo (Move Destination Run Content) §17.13.5.25
+ - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
+ - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
+ - oMath (Office Math) §22.1.2.77
+ - oMathPara (Office Math Paragraph) §22.1.2.78
+ - [done] p (Paragraph) §17.3.1.22
+ - permEnd (Range Permission End) §17.13.7.1
+ - permStart (Range Permission Start) §17.13.7.2
+ - proofErr (Proofing Error Anchor) §17.13.8.1
+ - sdt (Block-Level Structured Document Tag) §17.5.2.29
+ - [done] tbl (Table) §17.4.38
+ - [done] tcPr (Table Cell Properties) §17.4.70
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
+{
+    READ_PROLOGUE
+    MSOOXML::Utils::XmlWriteBuffer cellBuf;
+    body = cellBuf.setWriter(body);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(tcPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body = cellBuf.originalWriter();
+    body->startElement("table:table-cell");
+    //would be needed because of poor table handling of KWord:    body->addAttribute("rowSpan", "1");
+    //would be needed because of poor table handling of KWord:    body->addAttribute("columnSpan", "1");
+    (void)cellBuf.releaseWriter();
+    body->endElement(); // table:table-cell
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tcPr
+//! tcPr handler  (Table Cell Properties)
+/*! ECMA-376, 17.4.70, p. 510.
+ This element specifies the set of properties which shall be applied a specific table cell.
+ Each unique property is specified by a child element of this element. In any instance where there
+ is a conflict between the table level, table-level exception, or row level properties with
+ a corresponding table cell property, these properties shall overwrite the table or row wide properties.
+
+ Parent elements:
+ - [done] tc (§17.4.66)
+
+ Child elements:
+ - cellDel (Table Cell Deletion) §17.13.5.1
+ - cellIns (Table Cell Insertion) §17.13.5.2
+ - cellMerge (Vertically Merged/Split Table Cells) §17.13.5.3
+ - cnfStyle (Table Cell Conditional Formatting) §17.4.8
+ - gridSpan (Grid Columns Spanned by Current Table Cell) §17.4.17
+ - headers (Header Cells Associated With Table Cell) §17.4.19
+ - hideMark (Ignore End Of Cell Marker In Row Height Calculation) §17.4.21
+ - hMerge (Horizontally Merged Cell) §17.4.22
+ - noWrap (Don't Wrap Cell Content) §17.4.30
+ - shd (Table Cell Shading) §17.4.33
+ - tcBorders (Table Cell Borders) §17.4.67
+ - tcFitText (Fit Text Within Cell) §17.4.68
+ - tcMar (Single Table Cell Margins) §17.4.69
+ - tcPrChange (Revision Information for Table Cell Properties) §17.13.5.36
+ - tcW (Preferred Table Cell Width) §17.4.72
+ - textDirection (Table Cell Text Flow Direction) §17.4.73
+ - vAlign (Table Cell Vertical Alignment) §17.4.84
+ - vMerge (Vertically Merged Cell) §17.4.85
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//            TRY_READ_IF(..)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"

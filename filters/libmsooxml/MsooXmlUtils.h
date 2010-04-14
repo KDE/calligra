@@ -250,6 +250,10 @@ MSOOXML_EXPORT QByteArray ST_PlaceholderType_to_ODF(const QByteArray& ecmaType);
 //! and on 20.1.10.82 ST_TextUnderlineType (Text Underline Types), DrawingML ECMA-376 p.3450 (merged)
 MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
 
+//! @return the symbolic name of column @a column (counted from 0)
+//! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
+MSOOXML_EXPORT QString columnName(uint column);
+
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based
     on XML elements parsed later. In such case the information cannot be saved in one pass.
