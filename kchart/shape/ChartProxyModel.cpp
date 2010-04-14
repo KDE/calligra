@@ -715,9 +715,10 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
-    beginResetModel();
     if ( b == d->firstRowIsLabel )
         return;
+
+    beginResetModel();
     
     d->firstRowIsLabel = b;
     
