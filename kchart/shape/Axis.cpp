@@ -1567,6 +1567,12 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     bodyWriter.addAttribute( "chart:name", name );
     
     bodyWriter.startElement( "chart:title" );
+
+    bodyWriter.addAttributePt( "svg:x", d->title->position().x() );
+    bodyWriter.addAttributePt( "svg:y", d->title->position().y() );
+    bodyWriter.addAttributePt( "svg:width", d->title->size().width() );
+    bodyWriter.addAttributePt( "svg:height", d->title->size().height() );
+
     bodyWriter.startElement( "text:p" );
     bodyWriter.addTextNode( d->titleData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p

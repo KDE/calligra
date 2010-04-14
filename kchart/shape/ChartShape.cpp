@@ -216,6 +216,8 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
 
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
     bodyWriter.addAttributePt( "svg:y", label->position().y() );
+    bodyWriter.addAttributePt( "svg:width", label->size().width() );
+    bodyWriter.addAttributePt( "svg:height", label->size().height() );
     // TODO: Save text label color
     bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, labelData->document()->defaultFont(), QColor() ) );
 
