@@ -605,9 +605,7 @@ void Legend::slotKdLegendChanged()
     // in KDChartModel. Right now, only yDataChanged() is implemented.
     //d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
-    // FIXME: Scale size from px to pt?
-    setSize( size );
-    //d->shape->setLegendSize( ScreenConversions::scaleFromPxToPt( size ) );
+    setSize( ScreenConversions::scaleFromPxToPt( size ) );
     update();
 }
 
