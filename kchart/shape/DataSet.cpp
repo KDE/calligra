@@ -53,9 +53,12 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfWorkaround.h>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 
 using namespace KChart;
 
@@ -1104,7 +1107,30 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     return true;
 }
 
-void DataSet::saveOdf( KoShapeSavingContext &context, KoGenStyle &seriesStyle ) const
+void DataSet::saveOdf( KoShapeSavingContext &context ) const
 {
-    seriesStyle.addProperty( "data-label-text", showLabels() ? "true" : "false"  );
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+
+    bodyWriter.startElement( "chart:series" );
+
+    KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
+
+    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false"  );
+    style.addProperty( "chart:family", ODF_CHARTTYPES[ chartType() ] );
+
+    KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, brush() );
+    KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, pen() );
+
+    const QString styleName = mainStyles.insert( style, "ch" );
+    bodyWriter.addAttribute( "chart:style-name", styleName );
+
+    // TODO: Save external data sources also
+    const QString prefix( "local-table." );
+
+    // Save cell regions
+    bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + yDataRegionString() );
+    bodyWriter.addAttribute( "chart:label-cell-address", prefix + labelDataRegionString() );
+
+    bodyWriter.endElement(); // chart:series
 }

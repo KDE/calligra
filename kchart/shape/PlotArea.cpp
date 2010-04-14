@@ -815,13 +815,6 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     //if ( d->floor )
     //    d->floor->saveOdf( context, "chart:floor" );
 
-    foreach ( DataSet *dataSet, dataSets() ) {
-        bodyWriter.startElement( "chart:series" );
-        KoGenStyle seriesStyle( KoGenStyle::ChartAutoStyle, "chart" );
-        dataSet->saveOdf( context, seriesStyle );
-        bodyWriter.addAttribute( "chart:style-name", saveStyle( seriesStyle, context ) );
-        bodyWriter.endElement();
-    }
     // TODO chart:grid
     
     bodyWriter.endElement(); // chart:plot-area
