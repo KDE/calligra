@@ -1069,12 +1069,18 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
     proxyModel()->invalidateDataSets();
 
     // When loading from ODF, all data sets are added explicitly.
+    bool autoCreation = proxyModel()->automaticDataSetCreation();
     proxyModel()->setAutomaticDataSetCreation( false );
 
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );
-    return loadOdfFrame( element, context );
+    bool result = loadOdfFrame( element, context );
+
+    // Restore previous setting
+    proxyModel()->setAutomaticDataSetCreation( autoCreation );
+
+    return result;
 }
 
 // Used to load the actual contents from the ODF frame that surrounds
