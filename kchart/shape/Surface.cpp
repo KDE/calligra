@@ -238,8 +238,12 @@ void Surface::saveOdf( KoShapeSavingContext &context,
     // elementName is chart:floor or chart:wall
     bodyWriter.startElement( elementName );
 
-    QBrush  backgroundBrush = d->kdPlane->backgroundAttributes().brush();
-    QPen    framePen        = d->kdPlane->frameAttributes().pen();
+    QBrush backgroundBrush;
+    if ( d->kdPlane->backgroundAttributes().isVisible() )
+        backgroundBrush = d->kdPlane->backgroundAttributes().brush();
+    QPen framePen( Qt::NoPen );
+    if ( d->kdPlane->frameAttributes().isVisible() )
+        framePen = d->kdPlane->frameAttributes().pen();
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );
