@@ -1600,8 +1600,6 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
     bodyWriter.startElement( "chart:grid" );
     bodyWriter.addAttribute( "chart:class", gridClass == OdfMinorGrid ? "minor" : "major" );
 
-    // FIXME: For some reason, major and minor grid both get the same
-    //        style name assigned
     bodyWriter.addAttribute( "chart:style-name", mainStyles.insert( gridStyle, "ch" ) );
     bodyWriter.endElement(); // chart:grid
 }
