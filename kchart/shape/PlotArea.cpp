@@ -815,8 +815,6 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     //if ( d->floor )
     //    d->floor->saveOdf( context, "chart:floor" );
 
-    // TODO chart:grid
-    
     bodyWriter.endElement(); // chart:plot-area
 }
 
