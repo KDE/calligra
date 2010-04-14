@@ -1290,12 +1290,12 @@ void Axis::setShowMajorGrid( bool showGrid )
 
 bool Axis::showMinorGrid() const
 {
-    return d->showMajorGrid;
+    return d->showMinorGrid;
 }
 
 void Axis::setShowMinorGrid( bool showGrid )
 {
-    d->showMajorGrid = showGrid;
+    d->showMinorGrid = showGrid;
 
     // KDChart
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
