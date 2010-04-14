@@ -650,5 +650,24 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addPropertyPt("fo:letter-spacing", value, KoGenStyle::TextType);
     }
     //pctCharwidth = pct stretch doesn't seem to have an ODF ccounterpart but Qt could support it
+
+    //fTNY = 1 when text is vertical
+    if (!refChp || refChp->fTNY != chp->fTNY) {
+        if (chp->fTNY) {
+            style->addProperty("style:text-rotation-angle", 90);
+            if (chp->fTNYCompress) {
+                style->addProperty("style:text-rotation-scale", "fixed");
+            } else {
+                style->addProperty("style:text-rotation-scale", "line-height");
+            }
+        }
+    }
+
+    //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
+    if (!refChp || refChp->wCharScale != chp->wCharScale) {
+        if (chp->wCharScale) {
+            style->addProperty("style:text-scale", chp->wCharScale);
+        }
+    }
 }
 

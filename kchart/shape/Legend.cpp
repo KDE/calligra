@@ -56,6 +56,7 @@
 // Kchart
 #include "PlotArea.h"
 #include "Layout.h"
+#include "ScreenConversions.h"
 
 using namespace KChart;
 
@@ -346,8 +347,9 @@ void Legend::setLegendPosition( Position position )
 
 void Legend::setSize( const QSizeF &newSize )
 {
-    d->kdLegend->resize( newSize.toSize() );
-    d->kdLegend->resizeLayout( newSize.toSize() );
+    QSize newSizePx = ScreenConversions::scaleFromPtToPx( newSize );
+    d->kdLegend->resize( newSizePx );
+    d->kdLegend->resizeLayout( newSizePx );
     KoShape::setSize( newSize );
 }
 
@@ -408,6 +410,9 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
         p.addRect( paintRect );
         background()->paint( painter, p );
     }
+
+    // KDChart thinks in pixels, KOffice in pt
+    ScreenConversions::scaleFromPtToPx( painter );
     
     d->kdLegend->paint( &painter );
     
@@ -602,6 +607,7 @@ void Legend::slotKdLegendChanged()
     QSize size = d->kdLegend->sizeHint();
     // FIXME: Scale size from px to pt?
     setSize( size );
+    d->shape->setLegendSize( ScreenConversions::scaleFromPxToPt( size ) );
     update();
 }
 

@@ -3024,6 +3024,16 @@ struct CHP : public Shared {
      */
     BRC brc;
 
+    /**
+     * specifies if the text is vertical or horizontal
+     */
+    U16 fTNY:1;
+
+    /**
+     * specifies if the text is scaled to fit the line
+     */
+    U16 fTNYCompress:1;
+
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);

@@ -3104,6 +3104,8 @@ void CHP::clear() {
     shd.clear();
     brc.clear();
     cv=0;
+    fTNY=0;
+    fTNYCompress=0;
 }
 
 void CHP::dump() const
@@ -3268,6 +3270,10 @@ std::string CHP::toString() const
     s += int2string( ibstDispFldRMark );
     s += "\ndttmDispFldRMark=";
     s += uint2string( dttmDispFldRMark );
+    s += "\nfTNY=";
+    s += uint2string( fTNY );
+    s += "\nfTNYCompress=";
+    s += uint2string( fTNYCompress );
     for(int _i=0; _i<(16); ++_i) {
         s += "\nxstDispFldRMark[" + int2string( _i ) + "]=";
     s += uint2string( xstDispFldRMark[_i] );
@@ -3366,6 +3372,8 @@ bool operator==(const CHP &lhs, const CHP &rhs) {
            lhs.dttmDispFldRMark==rhs.dttmDispFldRMark &&
            lhs.shd==rhs.shd &&
            lhs.brc==rhs.brc;
+           lhs.fTNY==rhs.fTNY;
+           lhs.fTNYCompress==rhs.fTNYCompress;
 }
 
 bool operator!=(const CHP &lhs, const CHP &rhs) {

@@ -1690,6 +1690,9 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, KoOdfLoadingContext& odfCo
 
         // The position is relative to the upper left sheet corner until now. Move it.
         QPointF position = shape->position();
+        // Remember how far we're off from the top-left corner of this cell
+        double offsetX = position.x();
+        double offsetY = position.y();
         for (int col = 1; col < column(); ++col)
             position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
         for (int row = 1; row < this->row(); ++row)
@@ -1699,7 +1702,9 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, KoOdfLoadingContext& odfCo
         // The column dimensions are already the final ones, but not the row dimensions.
         // The default height is used for the not yet loaded rows.
         // TODO Stefan: Honor non-default row heights later!
-        QSizeF size = QSizeF(endX, endY);
+        // subtract offset because the accumulated width and height we calculate below starts
+        // at the top-left corner of this cell, but the shape can have an offset to that corner
+        QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
         for (int col = column(); col < endCell.firstRange().left(); ++col)
             size += QSizeF(d->sheet->columnFormat(col)->width(), 0.0);
         for (int row = this->row(); row < endCell.firstRange().top(); ++row)

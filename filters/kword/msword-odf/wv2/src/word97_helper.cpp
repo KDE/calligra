@@ -288,6 +288,7 @@ typedef enum
     sprmCPropRMark = 0xCA57,
     sprmCDispFldRMark = 0xCA62,
     sprmCShd = 0xCA71,
+    sprmCFELayout = 0xCA78,
     sprmPicScale = 0xCE01,
     sprmSOlstAnm = 0xD202,
     sprmSPropRMark = 0xD227,
@@ -1571,6 +1572,16 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         case SPRM::sprmCUndocumented1:
         case SPRM::sprmCUndocumented2:
             break;  // They are not documented but they are skipped correctly
+        case SPRM::sprmCFELayout:
+        {
+            //skipping cb
+            U16 ufel = readU16( ptr + sizeof(U8) );
+            fTNY = ufel;
+            //skip to compress;
+            ufel >>= 12;
+            fTNYCompress = ufel;
+            break;
+        }
         default:
             wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
             break;

@@ -29,6 +29,7 @@ SET (chartshape_LIB_SRCS
     ChartConfigWidget.cpp
     ChartTableView.cpp
     Layout.cpp
+    ScreenConversions.cpp
     dialogs/TableEditorDialog.cpp
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
