@@ -172,11 +172,11 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
             frameAttributes.setVisible( true );
 
             QString  stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-            if ( stroke == "solid" || stroke == "dash" ) {
-                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+            QPen pen( Qt::NoPen );
+            if ( stroke == "solid" || stroke == "dash" )
+                pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
 
-                frameAttributes.setPen( pen );
-            }
+            frameAttributes.setPen( pen );
         }
         
         // If there is a "fill" property, then get the fill style, and
