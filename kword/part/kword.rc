@@ -74,6 +74,7 @@
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
   <Action name="insert_table"/>
+  <Action name="insert_toc"/>
   <Action name="insert_picture"/>
   <Action name="tools_createtext"/>
   <Action name="tools_formula"/>
@@ -391,6 +392,7 @@
 </Menu>
 <Menu name="action_popup">
   <Action name="insert_table"/>
+  <Action name="insert_toc"/>
   <Action name="insert_picture"/>
   <Separator />
   <Action name="tools_createtext"/>
@@ -401,7 +403,7 @@
 </Menu>
 <Menu name="frame_popup">
  <Action name="edit_delframe"/>
- <Separator/> 
+ <Separator/>
  <Action name="create_framestyle"/>
  <Action name="border_backgroundcolor"/>
  <Separator/>

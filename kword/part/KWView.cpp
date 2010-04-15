@@ -198,6 +198,8 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_toc");
+    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("insert_picture");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
@@ -315,6 +317,11 @@ void KWView::setupActions()
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
+
+    action = new KAction(i18n("Insert Table of Contents"), this);
+    action->setToolTip(i18n("Insert a table of contents into document"));
+    actionCollection()->addAction("insert_toc", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertToC()));
 
     action = new KAction(i18n("Insert Picture..."), this);
     action->setToolTip(i18n("Insert a picture into document"));
@@ -1314,6 +1321,37 @@ void KWView::insertImage()
         selection->select(shape);
         m_document->addCommand(cmd);
     }
+}
+
+void KWView::insertToC()
+{
+    // Add a frame to the current layout
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::TableOfContents, true);
+    KoTextDocument doc(m_document->mainFrameSet()->document());
+    QTextDocument *document;
+
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    if (handler) {
+        // this means we have the text tool selected right now.
+        document = handler->document();
+    } else if (m_document->mainFrameSet()) {
+        // lets just add one to the main text frameset
+        document = doc.textEditor()->document();
+    }
+
+    QTextCursor cursor(document);
+
+    if (handler) {
+        cursor.setPosition(handler->position());
+    } else if (m_document->mainFrameSet()) {
+        cursor.setPosition(doc.textEditor()->position());
+    }
+
+    cursor.insertFrame(tocFormat);
+    // Insert a useless text to trigger the ToC generation
+    cursor.insertText("ToC");
+    cursor.movePosition(QTextCursor::EndOfBlock);
 }
 
 void KWView::setGuideVisibility(bool on)
