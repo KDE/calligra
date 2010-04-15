@@ -1182,12 +1182,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - yearShort (Date Block - Short Year Format) §17.3.3.34
 
  VML child elements (see Part 4):
- - pict (VML Object) §9.2.2.2
+ - [done] pict (VML Object) §9.2.2.2
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 {
     READ_PROLOGUE
+
+    m_currentRunStyleName.clear();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
 
     while (!atEnd()) {
 //kDebug() <<"[0]";
@@ -1208,13 +1214,44 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
-//kDebug() <<"[1.5]";
         }
-//kDebug() <<"[2]";
         BREAK_IF_END_OF(CURRENT_EL);
-//kDebug() <<"[2.5]";
     }
-//kDebug() <<"[3]";
+    
+    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || m_complexCharType != NoComplexFieldCharType) {
+        // We want to write to the higher body level
+        body = buffer.originalWriter();
+        QString currentTextStyleName;
+        if (!m_currentRunStyleName.isEmpty()) {
+            currentTextStyleName = m_currentRunStyleName;
+        }
+        else {
+            currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+            if (m_moveToStylesXml) {
+                mainStyles->markStyleForStylesXml(currentTextStyleName);
+            }
+        }
+        if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
+            body->startElement("text:a");
+            body->addAttribute("xlink:type", "simple");
+            body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+        }
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+
+        // Writing the internal body of read_t now
+        body = buffer.releaseWriter();
+
+        body->endElement(); //text:span
+        if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
+            body->endElement(); // text:a
+        }
+    }
+    else {
+        // Writing the internal body of read_t now 
+        body = buffer.releaseWriter();
+    }
+
     READ_EPILOGUE
 }
 
@@ -1284,26 +1321,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
 {
     READ_PROLOGUE
 
-    const bool setupTextStyle = caller == rPr_r;
-    kDebug() << "setupTextStyle:" << setupTextStyle;
-
     const QXmlStreamAttributes attrs(attributes());
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
-//    delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = new KoCharacterStyle();
 
     if (!m_currentTextStylePredefined) {
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
-    m_currentRunStyleName.clear();
-
-    MSOOXML::Utils::XmlWriteBuffer textSpanBuf;
-    if (setupTextStyle) {
-//kDebug() << "text:span...";
-        body = textSpanBuf.setWriter(body);
-    }
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1329,54 +1355,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    if (setupTextStyle) {
-        m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
-        READ_EPILOGUE_WITHOUT_RETURN
-        // read 't' in one go and insert the contents into text:span
-        readNext();
-        // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
-        if (QUALIFIED_NAME_IS(t)) {
-
-            QString currentTextStyleName;
-            if (!m_currentRunStyleName.isEmpty()) {
-                currentTextStyleName = m_currentRunStyleName;
-            }
-            else {
-                currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-                if (m_moveToStylesXml) {
-                    mainStyles->markStyleForStylesXml(currentTextStyleName);
-                }
-            }
-            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
-                body->startElement("text:a");
-                body->addAttribute("xlink:type", "simple");
-                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
-            }
-            body->startElement("text:span", false);
-            body->addAttribute("text:style-name", currentTextStyleName);
-            TRY_READ(t)
-            body->endElement(); //text:span
-            if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
-                body->endElement(); // text:a
-            }
-        }
-//kDebug() << "currentTextStyleName:" << currentTextStyleName;
-        else {
-            undoReadNext();
-        }
-        //already checked expectElEnd(MSOOXML_CURRENT_NS ":t");
-//kDebug() << "/text:span";
-        body = textSpanBuf.releaseWriter();
-    }
-
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
-    if (setupTextStyle) {
-        return KoFilter::OK;
-    }
     READ_EPILOGUE
 }
 
@@ -1571,8 +1554,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
     KoXmlWriter elementWriter(&frameBuffer);
     elementWriter.startElement("style:drop-cap");
     elementWriter.addAttribute("style:lines", lines);
-
-    qDebug() << "hspace is " << hSpace;
 
     if (!hSpace.isEmpty()) {
         bool ok;
