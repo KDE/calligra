@@ -448,8 +448,9 @@ Column::Column(Sheet* sheet, unsigned index)
     d = new Column::Private;
     d->sheet   = sheet;
     d->index   = index;
-    d->width   = Column::columnUnitsToPts(8.43 * 256.0);
+    d->width   = 0.0;
     d->visible = true;
+    d->personalizedWidth = false;
 }
 
 Column::~Column()
@@ -469,6 +470,9 @@ unsigned Column::index() const
 
 double Column::width() const
 {
+    if( d->width == 0.0)
+        return d->sheet->defaultColWidth();
+
     return d->width;
 }
 
@@ -523,7 +527,7 @@ double Column::columnUnitsToPts(const double columnUnits)
 
     QWidget widget;
     width /= widget.physicalDpiX(); //in
-    width *= 72; //pt
+    width *= 72.0; //pt
     return width;
 }
 
