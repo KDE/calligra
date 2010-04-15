@@ -450,7 +450,6 @@ Column::Column(Sheet* sheet, unsigned index)
     d->index   = index;
     d->width   = 0.0;
     d->visible = true;
-    d->personalizedWidth = false;
 }
 
 Column::~Column()
