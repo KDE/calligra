@@ -97,11 +97,14 @@ MSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
 //! ECMA-376, 22.9.2.14 ST_TwipsMeasure (Measurement in Twentieths of a Point), p. 4339
 /*! Converts:
     * Case 1: a positive number in twips (twentieths of a point, equivalent to 1/1440th of an inch), or
-    * Case 2: a positive decimal number immediately following by a unit identifier.
+    * Case 2: a positive decimal number immediately followed by a unit identifier.
     The conversion's target is ODF-compliant "0.000xx" unit, where xx is "mm", "cm", "pt", etc.
     For case 1 it is always "pt".
     @return empty string on error. */
-MSOOXML_EXPORT QString ST_TwipsMeasure_to_ODF(const QString& value);
+MSOOXML_EXPORT QString ST_TwipsMeasure_to_pt(const QString& value);
+
+//! Like ST_TwipsMeasure_to_pt() but for case 1 always converts to "cm".
+MSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
 
 //! ECMA-376, 22.9.2.12 ST_PositiveUniversalMeasure (Positive Universal Measurement), p. 4340
 /*! Converts number+unit of measurement into ODF-compliant number+unit.

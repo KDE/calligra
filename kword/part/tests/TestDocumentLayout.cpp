@@ -32,7 +32,7 @@ public:
     }
     void end() {}
     void reset() {}
-    bool interrupted() {
+    bool isInterrupted() const {
         return false;
     }
     int numColumns() {

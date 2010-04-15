@@ -7,6 +7,23 @@
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
+ * Utils::columnName() based on Cell::columnName() from koffice/kspread/Utils.cpp:
+ * Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * Copyright 2004 Tomas Mecir <mecirt@gmail.com>
+ * Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
+ * Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
+ * Copyright 2002-2003 Norbert Andres <nandres@web.de>
+ * Copyright 2003 Stefan Hetzl <shetzl@chello.at>
+ * Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+ * Copyright 2002 Harri Porten <porten@kde.org>
+ * Copyright 2002 John Dailey <dailey@vt.edu>
+ * Copyright 1999-2001 David Faure <faure@kde.org>
+ * Copyright 2000-2001 Werner Trobin <trobin@kde.org>
+ * Copyright 2000 Simon Hausmann <hausmann@kde.org
+ * Copyright 1998-1999 Torben Weis <weis@kde.org>
+ * Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
+ * Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -932,6 +949,21 @@ void Utils::XmlWriteBuffer::clear()
     m_origWriter = 0;
 }
 
+QString Utils::columnName(uint column)
+{
+    uint digits = 1;
+    uint offset = 0;
+
+    for (uint limit = 26; column >= limit + offset; limit *= 26, digits++)
+        offset += limit;
+
+    QString str;
+    for (uint col = column - offset; digits > 0; --digits, col /= 26)
+        str.prepend(QChar('A' + (col % 26)));
+
+    return str;
+}
+
 // <units> -------------------
 
 QString Utils::EMU_to_ODF(const QString& twipValue)
@@ -973,7 +1005,7 @@ QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)
 }
 
 //! @return true if @a string is non-negative integer number
-static bool isNumber(const QString& string)
+static bool isPositiveIntegerNumber(const QString& string)
 {
     for (const QChar *c = string.constData(); !c->isNull(); c++) {
         if (!c->isNumber())
@@ -1017,19 +1049,40 @@ static bool isUnitAcceptable(const QString& unit)
            || unit == QString::fromLatin1("pi");
 }
 
-MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_ODF(const QString& value)
+static QString ST_TwipsMeasure_to_ODF_with_unit(const QString& value,
+                                                double (*convertFromTwips)(double), const char* unit)
 {
     if (value.isEmpty())
         return QString();
-    if (isNumber(value)) {
+    if (isPositiveIntegerNumber(value)) {
         // a positive number in twips (twentieths of a point, equivalent to 1/1440th of an inch)
         bool ok;
-        const qreal point = TWIP_TO_POINT( qreal(value.toFloat(&ok)) );
+        const qreal point = convertFromTwips( qreal(value.toFloat(&ok)) );
         if (!ok)
             return QString();
-        return QString::number(point, 'g', 2) + QLatin1String("pt");
+        return QString::number(point, 'g', 2) + QLatin1String(unit);
     }
     return Utils::ST_PositiveUniversalMeasure_to_ODF(value);
+}
+
+qreal twipToPt(qreal v)
+{
+    return TWIP_TO_POINT(v);
+}
+
+MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_pt(const QString& value)
+{
+    return ST_TwipsMeasure_to_ODF_with_unit(value, twipToPt, "pt");
+}
+
+qreal twipToCm(qreal v)
+{
+    return TWIP_TO_CM(v);
+}
+
+MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
+{
+    return ST_TwipsMeasure_to_ODF_with_unit(value, twipToCm, "cm");
 }
 
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)

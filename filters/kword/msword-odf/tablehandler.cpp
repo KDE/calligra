@@ -73,10 +73,10 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     tableStyle.addProperty("style:border-model", "collapsing");
 
     // Check to see if we need a master page name attribute.
-    if (document()->writeMasterStyleName()) {
+    if (document()->writeMasterPageName()) {
       tableStyle.addAttribute("style:master-page-name",
-			      document()->masterStyleName());
-      document()->set_writeMasterStyleName(false);
+			      document()->masterPageName());
+      document()->set_writeMasterPageName(false);
     }
 
     QString tableStyleName = m_mainStyles->insert(tableStyle, QLatin1String("Table"), KoGenStyles::AllowDuplicates);

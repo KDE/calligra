@@ -46,7 +46,6 @@
 #include <KoFilterChain.h>
 #include <KoFontFace.h>
 
-#include <QList>
 #include <QBuffer>
 #include <QColor>
 
@@ -61,25 +60,22 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_drawingHandler(new KWordDrawingHandler(this,mainStyles,bodyWriter))
         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
-        , m_headerFooters(0)
+	  //        , m_headerFooters(0)
         , m_bodyFound(false)
-        , m_evenOpen(false)
-        , m_oddOpen(false)
         , m_footNoteNumber(0)
         , m_endNoteNumber(0)
         , m_bodyWriter(0)
         , m_mainStyles(0)
         , m_metaWriter(0)
-        , m_masterStyle(0)
-        , m_pageLayoutStyle(0)
         , m_headerWriter(0)
-        , m_hasHeader(false)
-        , m_hasFooter(false)
+        , m_headerCount(0)
+        , m_writingHeader(false)
+        , m_evenOpen(false)
+	  //        , m_oddOpen(false)
+	, m_firstOpen(false)
         , m_buffer(0)
         , m_bufferEven(0)
-        , m_headerCount(0)
-        , m_writeMasterStyleName(false)
-        , m_writingHeader(false)
+        , m_writeMasterPageName(false)
 {
     kDebug(30513);
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
@@ -151,18 +147,20 @@ void Document::finishDocument()
 {
     kDebug(30513);
 
-    //finish a header if we need to - this should only be necessary if there's an even header w/o an odd header
-    if (m_oddOpen) {
-        QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
-        m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
-        m_oddOpen = false;
-        delete m_headerWriter;
-        m_headerWriter = 0;
-        delete m_buffer;
-        m_buffer = 0;
-        //we're done with this header, so reset to false
-        m_writingHeader = false;
-    }
+    //finish a header if we need to - this should only be necessary if there's
+    //an even header w/o an odd header
+//     if (m_oddOpen) {
+//         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
+//         m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
+
+//         m_oddOpen = false;
+//         delete m_headerWriter;
+//         m_headerWriter = 0;
+//         delete m_buffer;
+//         m_buffer = 0;
+//         //we're done with this header, so reset to false
+//         m_writingHeader = false;
+//     }
 
     const wvWare::Word97::DOP& dop = m_parser->dop();
 
@@ -210,45 +208,42 @@ void Document::finishDocument()
 //                                                           .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
                                                       .toLatin1());
     }
-    /*
-        QDomElement elementDoc = m_mainDocument.documentElement();
+//     QDomElement elementDoc = m_mainDocument.documentElement();
+//     QDomElement element;
+//     element = m_mainDocument.createElement("ATTRIBUTES");
+//     element.setAttribute("processing",0); // WP
+//     char allHeaders = ( wvWare::HeaderData::HeaderEven |
+//                         wvWare::HeaderData::HeaderOdd |
+//                         wvWare::HeaderData::HeaderFirst );
+//     element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
+//     char allFooters = ( wvWare::HeaderData::FooterEven |
+//                         wvWare::HeaderData::FooterOdd |
+//                         wvWare::HeaderData::FooterFirst );
+//     element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
+//     //element.setAttribute("unit","mm"); // How to figure out the unit to use?
 
-        QDomElement element;
-        element = m_mainDocument.createElement("ATTRIBUTES");
-        element.setAttribute("processing",0); // WP
-        char allHeaders = ( wvWare::HeaderData::HeaderEven |
-                            wvWare::HeaderData::HeaderOdd |
-                            wvWare::HeaderData::HeaderFirst );
-        element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
-        char allFooters = ( wvWare::HeaderData::FooterEven |
-                            wvWare::HeaderData::FooterOdd |
-                            wvWare::HeaderData::FooterFirst );
-        element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
-        //element.setAttribute("unit","mm"); // How to figure out the unit to use?
+//     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
+//     elementDoc.appendChild(element);
 
-        element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
-        elementDoc.appendChild(element);
+//     // Done at the end: write the type of headers/footers,
+//     // depending on which kind of headers and footers we received.
+//     QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
+//     Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
+//     if ( !paperElement.isNull() ) {
+//         kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
+//         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
+//         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
+//     }
 
-        // Done at the end: write the type of headers/footers,
-        // depending on which kind of headers and footers we received.
-        QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
-        Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
-        if ( !paperElement.isNull() )
-        {
-            kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
-            paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
-            paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
-        }
-
-        // Write out <PICTURES> tag
-        QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
-        elementDoc.appendChild( picturesElem );
-        for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
-            QDomElement keyElem = m_mainDocument.createElement("KEY");
-            picturesElem.appendChild( keyElem );
-            keyElem.setAttribute( "filename", *it );
-            keyElem.setAttribute( "name", *it );
-        }*/
+//     // Write out <PICTURES> tag
+//     QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
+//     elementDoc.appendChild( picturesElem );
+//     for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
+//         QDomElement keyElem = m_mainDocument.createElement("KEY");
+//         picturesElem.appendChild( keyElem );
+//         keyElem.setAttribute( "filename", *it );
+//         keyElem.setAttribute( "name", *it );
+//     }
 }
 
 //write document info, author, fullname, title, about
@@ -395,161 +390,139 @@ void Document::bodyEnd()
 void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
-    //need to add master style to m_mainStyle
-    kDebug(30513) << "creating master style for this section";
-    m_masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle); //for header/footer stuff
+    // does this section require a specific first page
+    bool firstPage = sep->fTitlePage || sep->pgbApplyTo;
 
-    // Kword expects that first section has StyleMaster named "Standard"
-    QString masterStyleName("Standard");
-    if (m_textHandler->m_sectionNumber > 1) {
-        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
-    }
+    // *******************************
+    // page-layout style
+    // *******************************
+    kDebug(30513) << "creating page-layout styles for this section";
 
-    m_masterStyle->addAttribute("style:display-name", masterStyleName);
-    m_masterStyleName = m_mainStyles->insert(*m_masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
-    //delete the object since we've added it to the collection
-    delete m_masterStyle;
-    m_masterStyle = 0;
-
-    //Get a pointer to the object in the collection. TODO: Check
-    //sep->fTitlePage, requires a separate master-page.
-    m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
-    Q_ASSERT(m_masterStyle);
-    m_writeMasterStyleName = true;
-
-    // ----------------------
-    //create page layout style here
-    m_pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
+    KoGenStyle* pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
     QString pageLayoutStyleName("Mpm");
-
-    //get width & height in points
-    double width = (double)sep->xaPage / 20.0;
-    double height = (double)sep->yaPage / 20.0;
-    m_pageLayoutStyle->addPropertyPt("fo:page-width", width);
-    m_pageLayoutStyle->addPropertyPt("fo:page-height", height);
-    m_pageLayoutStyle->addProperty("style:footnote-max-height", "0in");
-    m_pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
-    bool landscape = (sep->dmOrientPage == 2);
-    m_pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
-    m_pageLayoutStyle->addProperty("style:num-format", "1");
-
-    // Set default left/right margins for the case when there is no
-    // border.  This will be changed below if there are borders defined.
-    m_pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
-    m_pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
-
-    DrawStyle ds = m_drawingHandler->getDrawingStyle();
-    // TODO - use ds.fillType to enable fill efects for document background
-
-    // When more complete background color implementation will be added to filter,
-    // PptToOdp::toQColor helper function can be used instead of this conversion
-    MSO::OfficeArtCOLORREF clr = ds.fillColor();
-    QColor color(clr.red,clr.green,clr.blue);
-    m_pageLayoutStyle->addProperty("fo:background-color", color.name());
-
-
-    //set the minimum height of header/footer to the full margin minus margin above header
-    //TODO the margin between header/footer and text is just hard-coded for now
-    QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
-    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
-    header.append("pt\"/>");
-    header.append("</style:header-style>");
-    QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"20pt\" fo:min-height=\"");
-    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
-    footer.append("pt\"/>");
-    footer.append("</style:footer-style>");
-    m_pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
-    m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
-
-    // Page borders
-    // FIXME: check if we can use fo:border instead of fo:border-left, etc.
-    if (sep->brcLeft.brcType != 0) {
-        m_pageLayoutStyle->addProperty("fo:border-left",
-                                       Conversion::setBorderAttributes(sep->brcLeft));
-
-    }
-    if (sep->brcTop.brcType != 0) {
-        m_pageLayoutStyle->addProperty("fo:border-top",
-                                       Conversion::setBorderAttributes(sep->brcTop));
-    }
-    if (sep->brcRight.brcType != 0) {
-        m_pageLayoutStyle->addProperty("fo:border-right",
-                                       Conversion::setBorderAttributes(sep->brcRight));
-    }
-    if (sep->brcBottom.brcType != 0) {
-        m_pageLayoutStyle->addProperty("fo:border-bottom",
-                                       Conversion::setBorderAttributes(sep->brcBottom));
+    if (m_textHandler->m_sectionNumber > 1) {
+        pageLayoutStyleName.append(QString::number(m_textHandler->m_sectionNumber));
     }
 
-    // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
-    if (sep->pgbOffsetFrom == 0) {
-        // page border offset is from the text
-        m_pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
-        // FIXME: How should fo:margin be created in this case?
-    } else {
-        // page border offset is from the edge of the page
+    // set page-layout attributes
+    setPageLayoutStyle(pageLayoutStyle, sep, 0);
+    pageLayoutStyle->setAutoStyleInStylesDotXml(true);
+    pageLayoutStyleName = m_mainStyles->insert(*pageLayoutStyle, pageLayoutStyleName,
+                                               KoGenStyles::DontAddNumberToName);
+    // add the name into the list
+    m_pageLayoutName_list.prepend(pageLayoutStyleName);
 
-        // Add margin. This value is fetched directly from the BRC's.
-        m_pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:margin-right",  sep->brcRight.dptSpace);
-        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->brcBottom.dptSpace);
+    // delete the object, we've added it to the collection
+    delete pageLayoutStyle;
+    pageLayoutStyle = 0;
 
-        // The *20 and /20 below is the conversion between twips (1/20th of a point) and points.
-        m_pageLayoutStyle->addPropertyPt("fo:padding-left",
-                                         (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-top",
-                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-right",
-                                         (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
-        m_pageLayoutStyle->addPropertyPt("fo:padding-bottom",
-                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+    // check if a first-page specific page-layout has to be created
+    if (firstPage) {
+       pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
+
+       QString fPageLayoutStyleName("FMpm");
+       if (m_textHandler->m_sectionNumber > 1) {
+          fPageLayoutStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+       }
+       // set page-layout attributes for the first page
+       setPageLayoutStyle(pageLayoutStyle, sep, 1);
+       pageLayoutStyle->setAutoStyleInStylesDotXml(true);
+       fPageLayoutStyleName = m_mainStyles->insert(*pageLayoutStyle, fPageLayoutStyleName,
+                                                   KoGenStyles::DontAddNumberToName);
+       // add the name into the list
+       m_pageLayoutName_list.prepend(fPageLayoutStyleName);
+
+       // delete the object, we've added it to the collection
+       delete pageLayoutStyle;
+       pageLayoutStyle = 0;
     }
 
-    m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
+    // *******************************
+    // master-page style
+    // *******************************
+    kDebug(30513) << "creating master-page styles for this section";
 
-    pageLayoutStyleName = m_mainStyles->insert(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
-    //delete the object since we've added it to the collection
-    delete m_pageLayoutStyle;
-    m_pageLayoutStyle = 0;
+    KoGenStyle* masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
+    QString masterStyleName("Standard");
 
-    //Get a pointer to the object in the collection.
-    m_pageLayoutStyle = m_mainStyles->styleForModification(pageLayoutStyleName);
-    Q_ASSERT(m_pageLayoutStyle);
+    if (m_textHandler->m_sectionNumber > 1) {
+        masterStyleName.prepend(QString::number(m_textHandler->m_sectionNumber));
+    }
+    masterStyle->addAttribute("style:display-name", masterStyleName);
+    masterStyleName = m_mainStyles->insert(*masterStyle, masterStyleName,
+                                           KoGenStyles::DontAddNumberToName);
+    // delete the object, we've added it to the collection
+    delete masterStyle;
+    masterStyle = 0;
 
-    // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
+    // add the name into the list
+    m_masterPageName_list.prepend(masterStyleName);
+
+    // initialize the header/footer list
+    m_hasHeader_list.prepend(false);
+    m_hasFooter_list.prepend(false);
+
+    // check if a first-page specific master-page has to be created
+    if (firstPage) {
+        masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
+
+        QString fMasterStyleName("First_page");
+        if (m_textHandler->m_sectionNumber > 1) {
+            fMasterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+        }
+        masterStyle->addAttribute("style:display-name", fMasterStyleName);
+        masterStyle->addAttribute("style:next-style-name", m_masterPageName_list.last());
+        fMasterStyleName = m_mainStyles->insert(*masterStyle, fMasterStyleName,
+                                                KoGenStyles::DontAddNumberToName);
+        // add the name into the list
+        m_masterPageName_list.prepend(fMasterStyleName);
+
+        // delete the object, we've added it to the collection
+        delete masterStyle;
+        masterStyle = 0;
+
+        //initialize the header/footer list
+        m_hasHeader_list.prepend(false);
+        m_hasFooter_list.prepend(false);
+    }
+    // required by handlers
+    m_writeMasterPageName = true;
 }
 
 void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513);
-    //set the margins - depends on whether a header/footer is present
-    if (m_hasHeader) {
-        kDebug(30513) << "setting margin for header...";
-        m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
-    } else if (sep->brcTop.brcType == 0) {
-        kDebug(30513) << "setting margin for no header and no top border...";
-        m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
-    }
-    if (m_hasFooter) {
-        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
-    } else if (sep->brcBottom.brcType == 0) {
-        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
-    }
-    //Set the page-layout-name in the master style. TODO: Check
-    //sep->fTitlePage, requires a separate master-page.
-    m_masterStyle->addAttribute("style:page-layout-name", QString("Mpm"));
+    KoGenStyle* masterPageStyle = 0;
+    KoGenStyle* pageLayoutStyle = 0;
 
-    //don't need the pointer any more
-    m_pageLayoutStyle = 0;
-    //reset variables
-    m_hasHeader = false;
-    m_hasFooter = false;
+    for (int i = 0; i < m_masterPageName_list.size(); i++) {
+        //get a pointer to the object in the collection.
+        masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list[i]);
+        Q_ASSERT(masterPageStyle);
+        pageLayoutStyle = m_mainStyles->styleForModification(m_pageLayoutName_list[i]);
+        Q_ASSERT(pageLayoutStyle);
+
+        //set the margins - depends on whether a header/footer is present
+        if (m_hasHeader_list[i]) {
+            kDebug(30513) << "setting margin for header...";
+            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
+        } else if (sep->brcTop.brcType == 0) {
+            kDebug(30513) << "setting margin for no header and no top border...";
+            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+        }
+        if (m_hasFooter_list[i]) {
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
+        } else if (sep->brcBottom.brcType == 0) {
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+        }
+        //set the page-layout-name attribute in the master-page style
+        masterPageStyle->addAttribute("style:page-layout-name", m_pageLayoutName_list[i]);
+    }
+    //clear lists
+    m_pageLayoutName_list.clear();
+    m_masterPageName_list.clear();
+    m_hasHeader_list.clear();
+    m_hasFooter_list.clear();
     //reset header data
     m_headerCount = 0;
 }
@@ -558,27 +531,18 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 void Document::headerStart(wvWare::HeaderData::Type type)
 {
     kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName(type) << ")";
-    // Werner says the headers are always emitted in the order of the Type enum.
-    //  Header Even, Header Odd, Footer Even, Footer Odd, Header First, Footer First
+    // NOTE: According to "Word Binary File Format (.doc) Structure
+    // Specification", headers are stored and therefore emitted in the
+    // following order: Header Even, Header Odd, Footer Even, Footer Odd,
+    // Header First, Footer First.
 
     m_headerCount++;
+    int i = m_hasHeader_list.size() - 1; //index of the last item
+
+    // NOTE: We are assuming in the parser code that odd header/footer is
+    // present by default if m_headers is not empty.
 
     switch (type) {
-        //TODO fix first header
-    case wvWare::HeaderData::HeaderFirst:
-        m_buffer = new QBuffer();
-        m_buffer->open(QIODevice::WriteOnly);
-        m_headerWriter = new KoXmlWriter(m_buffer);
-        break;
-    case wvWare::HeaderData::HeaderOdd:
-        //set up buffer & writer for odd header
-        m_buffer = new QBuffer();
-        m_buffer->open(QIODevice::WriteOnly);
-        m_headerWriter = new KoXmlWriter(m_buffer);
-        m_oddOpen = true;
-        m_headerWriter->startElement("style:header");
-        m_hasHeader = true;
-        break;
     case wvWare::HeaderData::HeaderEven:
         //write to the buffer for even headers/footers
         m_bufferEven = new QBuffer();
@@ -586,22 +550,14 @@ void Document::headerStart(wvWare::HeaderData::Type type)
         m_headerWriter = new KoXmlWriter(m_bufferEven);
         m_evenOpen = true;
         m_headerWriter->startElement("style:header-left");
-        m_hasHeader = true;
         break;
-        //TODO fix first footer
-    case wvWare::HeaderData::FooterFirst:
-        m_buffer = new QBuffer();
-        m_buffer->open(QIODevice::WriteOnly);
-        m_headerWriter = new KoXmlWriter(m_buffer);
-        break;
-    case wvWare::HeaderData::FooterOdd:
+    case wvWare::HeaderData::HeaderOdd:
         //set up buffer & writer for odd header
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
         m_headerWriter = new KoXmlWriter(m_buffer);
-        m_oddOpen = true;
-        m_headerWriter->startElement("style:footer");
-        m_hasFooter = true;
+        m_headerWriter->startElement("style:header");
+        m_hasHeader_list.replace(i, true);
         break;
     case wvWare::HeaderData::FooterEven:
         //write to the buffer for even headers/footers
@@ -610,11 +566,33 @@ void Document::headerStart(wvWare::HeaderData::Type type)
         m_headerWriter = new KoXmlWriter(m_bufferEven);
         m_evenOpen = true;
         m_headerWriter->startElement("style:footer-left");
-        m_hasFooter = true;
+        break;
+    case wvWare::HeaderData::FooterOdd:
+        //set up buffer & writer for odd header
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_headerWriter = new KoXmlWriter(m_buffer);
+        m_headerWriter->startElement("style:footer");
+        m_hasFooter_list.replace(i, true);
+        break;
+    case wvWare::HeaderData::HeaderFirst:
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_headerWriter = new KoXmlWriter(m_buffer);
+	m_firstOpen = true;
+        m_headerWriter->startElement("style:header");
+        m_hasHeader_list.replace(0, true);
+        break;
+    case wvWare::HeaderData::FooterFirst:
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_headerWriter = new KoXmlWriter(m_buffer);
+	m_firstOpen = true;
+        m_headerWriter->startElement("style:footer");
+	m_hasFooter_list.replace(0, true);
         break;
     }
-
-    //we're writing a header
+    //tell other handlers we're writing a header
     m_writingHeader = true;
 }
 
@@ -627,20 +605,31 @@ void Document::headerEnd()
         kDebug(30513) << "closing a list in a header/footer";
         m_textHandler->closeList();
     }
+    // NOTE: We are assuming in the parser code that odd header/footer is
+    // present by default if the m_headers variable is not empty.  It helps us
+    // now to write the even header/footer content.
 
-    //close writer & add to m_masterStyle
-    //if it was a first header/footer, we wrote to this writer, but we won't do anything with it
-    //handle the even flag first, because they'll both be open if the even one is, and
-    //  we would want to handle the odd flag when we actually see the odd header/footer
+    // Close writer & add the header/footer content into the appropriate
+    // master-page.
+
+    // If it was an even header/footer, we wrote to this writer, but we won't
+    // do anything with it.
+
     if (m_evenOpen) {
-        m_headerWriter->endElement(); //style:header/footer-left
+        m_headerWriter->endElement(); //style:header-left/footer-left
         m_evenOpen = false;
-        delete m_headerWriter;
-        m_headerWriter = 0;
-        return;
     }
-    if (m_oddOpen) {
+    else {
+        KoGenStyle* masterPageStyle = 0;
+        if (m_firstOpen) {
+	    masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list.first());
+	}
+	else {
+	    masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list.last());
+	}
+	Q_ASSERT(masterPageStyle);
         m_headerWriter->endElement();//style:header/footer
+
         //add the even header/footer stuff here
         if (m_bufferEven) {
             m_headerWriter->addCompleteElement(m_bufferEven);
@@ -648,15 +637,18 @@ void Document::headerEnd()
             m_bufferEven = 0;
         }
         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
-        m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
-        m_oddOpen = false;
+        masterPageStyle->addChildElement(QString::number(m_headerCount), contents);
+
+	delete m_buffer;
+	m_buffer = 0;
     }
+
     delete m_headerWriter;
     m_headerWriter = 0;
-    delete m_buffer;
-    m_buffer = 0;
+
     //we're done with this header, so reset to false
     m_writingHeader = false;
+    return;
 }
 
 void Document::footnoteStart()
@@ -732,14 +724,14 @@ void Document::bookmarkEnd()
 
 //figure out what this is supposed to do!
 
-/*if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
-    Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
-if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
-    Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
-if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
-    Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
-if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-    Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );*/
+// if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
+//     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+// if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
+//     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+// if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
+//     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+// if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
+//     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
 
 // Frame background brush (color and fill style)
 //if ( shd.icoFore != 0 || shd.icoBack != 0 )
@@ -907,6 +899,103 @@ void Document::processSubDocQueue()
             m_tableQueue.pop();
         }*/
     }
+}
+
+void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
+				  wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
+				  bool firstPage)
+{
+    // TODO: Check page-layout attributes specific for the first page.
+    kDebug(30513) << "sep->pgbApplyTo: " << sep->pgbApplyTo;
+
+    //get width & height in points
+    double width = (double)sep->xaPage / 20.0;
+    double height = (double)sep->yaPage / 20.0;
+    pageLayoutStyle->addPropertyPt("fo:page-width", width);
+    pageLayoutStyle->addPropertyPt("fo:page-height", height);
+    pageLayoutStyle->addProperty("style:footnote-max-height", "0in");
+    pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
+    bool landscape = (sep->dmOrientPage == 2);
+    pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
+    pageLayoutStyle->addProperty("style:num-format", "1");
+
+    // Set default left/right margins for the case when there is no
+    // border.  This will be changed below if there are borders defined.
+    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
+    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+
+    //set the minimum height of header/footer to the full margin minus margin above header
+    //TODO the margin between header/footer and text is just hard-coded for now
+    QString header("<style:header-style>");
+    header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
+    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
+    header.append("pt\"/>");
+    header.append("</style:header-style>");
+    QString footer("<style:footer-style>");
+    footer.append("<style:header-footer-properties fo:margin-top=\"20pt\" fo:min-height=\"");
+    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
+    footer.append("pt\"/>");
+    footer.append("</style:footer-style>");
+    pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
+    pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
+
+    // Page borders. Check to which page-layout the border information has to
+    // be applied: 0 - all pages, 1 - first page only, 2 - all but first.
+
+    // NOTE: 3 - whole document - not mentioned in the "Word Binary File Format
+    // (.doc) Structure Specification", but mentiond in word97_generated.h
+    if ( (sep->pgbApplyTo == 0) ||
+	((sep->pgbApplyTo == 1) && firstPage) ||
+	((sep->pgbApplyTo == 2) && !firstPage))
+    {
+        // FIXME: check if we can use fo:border instead of fo:border-left, etc.
+        if (sep->brcLeft.brcType != 0) {
+            pageLayoutStyle->addProperty("fo:border-left",
+					 Conversion::setBorderAttributes(sep->brcLeft));
+        }
+        if (sep->brcTop.brcType != 0) {
+            pageLayoutStyle->addProperty("fo:border-top",
+					 Conversion::setBorderAttributes(sep->brcTop));
+        }
+        if (sep->brcRight.brcType != 0) {
+            pageLayoutStyle->addProperty("fo:border-right",
+					 Conversion::setBorderAttributes(sep->brcRight));
+	}
+        if (sep->brcBottom.brcType != 0) {
+            pageLayoutStyle->addProperty("fo:border-bottom",
+					 Conversion::setBorderAttributes(sep->brcBottom));
+        }
+    }
+    // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
+    if (sep->pgbOffsetFrom == 0) {
+        // page border offset is from the text
+        pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
+        // FIXME: How should fo:margin be created in this case?
+    } else {
+        // page border offset is from the edge of the page
+
+        // Add margin. This value is fetched directly from the BRC's.
+        pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:margin-right",  sep->brcRight.dptSpace);
+        pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->brcBottom.dptSpace);
+
+        // The *20 and /20 below is the conversion between twips (1/20th of a point) and points.
+        pageLayoutStyle->addPropertyPt("fo:padding-left",
+                                         (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
+        pageLayoutStyle->addPropertyPt("fo:padding-top",
+                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
+        pageLayoutStyle->addPropertyPt("fo:padding-right",
+                                         (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
+        pageLayoutStyle->addPropertyPt("fo:padding-bottom",
+                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+    }
+    // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
+
+    return;
 }
 
 #include "document.moc"

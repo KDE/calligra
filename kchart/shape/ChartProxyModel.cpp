@@ -120,22 +120,6 @@ bool ChartProxyModel::automaticDataSetCreation() const
     return d->automaticDataSetCreation;
 }
 
-void ChartProxyModel::beginResetModel()
-{
-#if QT_VERSION  >= 0x040600
-    QAbstractItemModel::beginResetModel();
-#endif
-}
-
-void ChartProxyModel::endResetModel()
-{
-#if QT_VERSION  >= 0x040600
-    QAbstractItemModel::endResetModel();
-#else
-    reset();
-#endif
-}
-
 void ChartProxyModel::rebuildDataMap()
 {
     if ( !d->automaticDataSetCreation )
@@ -422,32 +406,8 @@ void ChartProxyModel::setSelection( const QVector<QRect> &selection )
 
 void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 {
-    KoXmlWriter &bodyWriter = context.xmlWriter();
-    KoGenStyles &mainStyles = context.mainStyles();
-    
-    foreach ( DataSet *dataSet, d->dataSets ) {
-        bodyWriter.startElement( "chart:series" );
-        
-        KoGenStyle style( KoGenStyle::GraphicAutoStyle, "chart" );
-        
-        if ( dataSet->chartType() != LastChartType )
-            style.addProperty( "chart:family", ODF_CHARTTYPES[ dataSet->chartType() ] );
-            
-        KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, dataSet->brush() );
-        KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, dataSet->pen() );
-            
-        // TODO: Save external data sources also
-        const QString prefix( "local-table." );
-        
-        // Save cell regions
-        bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + dataSet->yDataRegionString() );
-        bodyWriter.addAttribute( "chart:label-cell-address", prefix + dataSet->labelDataRegionString() );
-        
-        const QString styleName = mainStyles.insert( style, "ch" );
-        bodyWriter.addAttribute( "chart:style-name", styleName );
-        
-        bodyWriter.endElement(); // chart:series
-    }
+    foreach ( DataSet *dataSet, d->dataSets )
+        dataSet->saveOdf( context );
 }
 
 // This loads the properties of the datasets (chart:series).
@@ -739,9 +699,10 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
-    beginResetModel();
     if ( b == d->firstRowIsLabel )
         return;
+
+    beginResetModel();
     
     d->firstRowIsLabel = b;
     

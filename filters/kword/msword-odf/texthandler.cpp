@@ -732,10 +732,10 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     }
 
     //check to see if we need a master page name attribute
-    if (document()->writeMasterStyleName() && !document()->writingHeader()) {
+    if (document()->writeMasterPageName() && !document()->writingHeader()) {
         m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name",
-							  document()->masterStyleName());
-        document()->set_writeMasterStyleName(false);
+							  document()->masterPageName());
+        document()->set_writeMasterPageName(false);
     }
 } //end paragraphStart()
 

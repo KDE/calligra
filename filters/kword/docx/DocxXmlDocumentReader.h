@@ -114,6 +114,13 @@ protected:
     KoFilter::ConversionStatus read_lang();
     KoFilter::ConversionStatus read_background();
     KoFilter::ConversionStatus read_pBdr();
+    KoFilter::ConversionStatus read_tbl();
+    KoFilter::ConversionStatus read_tblPr();
+    KoFilter::ConversionStatus read_tblGrid();
+    KoFilter::ConversionStatus read_gridCol();
+    KoFilter::ConversionStatus read_tr();
+    KoFilter::ConversionStatus read_tc();
+    KoFilter::ConversionStatus read_tcPr();
 
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;
@@ -167,6 +174,11 @@ private:
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
 
+    uint m_tablesCount; //!< table counter, from 0
+    KoGenStyle m_currentTableStyle;
+    QString m_currentTableName;
+    qreal m_currentTableWidth; //!< in cm
+    
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 

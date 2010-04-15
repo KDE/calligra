@@ -201,7 +201,7 @@ bool KexiDBReportData::moveLast()
 
 long KexiDBReportData::at() const
 {
-    if ( !m_cursor )
+    if ( m_cursor )
         return m_cursor->at();
 
     return 0;

@@ -172,11 +172,11 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
             frameAttributes.setVisible( true );
 
             QString  stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-            if ( stroke == "solid" || stroke == "dash" ) {
-                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+            QPen pen( Qt::NoPen );
+            if ( stroke == "solid" || stroke == "dash" )
+                pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
 
-                frameAttributes.setPen( pen );
-            }
+            frameAttributes.setPen( pen );
         }
         
         // If there is a "fill" property, then get the fill style, and
@@ -238,8 +238,12 @@ void Surface::saveOdf( KoShapeSavingContext &context,
     // elementName is chart:floor or chart:wall
     bodyWriter.startElement( elementName );
 
-    QBrush  backgroundBrush = d->kdPlane->backgroundAttributes().brush();
-    QPen    framePen        = d->kdPlane->frameAttributes().pen();
+    QBrush backgroundBrush;
+    if ( d->kdPlane->backgroundAttributes().isVisible() )
+        backgroundBrush = d->kdPlane->backgroundAttributes().brush();
+    QPen framePen( Qt::NoPen );
+    if ( d->kdPlane->frameAttributes().isVisible() )
+        framePen = d->kdPlane->frameAttributes().pen();
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );

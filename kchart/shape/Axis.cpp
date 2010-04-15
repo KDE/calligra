@@ -1101,6 +1101,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 
 bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 {
+    qDebug() << "detaching " << dataSet;
     Q_ASSERT( d->dataSets.contains( dataSet ) );
     if ( !d->dataSets.contains( dataSet ) )
         return false;
@@ -1140,6 +1141,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                 if ( d->plotArea->parent()->legend()->kdLegend() ) {
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
                 }
+                qDebug() << "deleting diagram";
                 d->deleteDiagram( chartType );
             }
             else
@@ -1308,12 +1310,12 @@ void Axis::setShowMajorGrid( bool showGrid )
 
 bool Axis::showMinorGrid() const
 {
-    return d->showMajorGrid;
+    return d->showMinorGrid;
 }
 
 void Axis::setShowMinorGrid( bool showGrid )
 {
-    d->showMajorGrid = showGrid;
+    d->showMinorGrid = showGrid;
 
     // KDChart
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
@@ -1585,6 +1587,12 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     bodyWriter.addAttribute( "chart:name", name );
     
     bodyWriter.startElement( "chart:title" );
+
+    bodyWriter.addAttributePt( "svg:x", d->title->position().x() );
+    bodyWriter.addAttributePt( "svg:y", d->title->position().y() );
+    bodyWriter.addAttributePt( "svg:width", d->title->size().width() );
+    bodyWriter.addAttributePt( "svg:height", d->title->size().height() );
+
     bodyWriter.startElement( "text:p" );
     bodyWriter.addTextNode( d->titleData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
@@ -1612,8 +1620,6 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
     bodyWriter.startElement( "chart:grid" );
     bodyWriter.addAttribute( "chart:class", gridClass == OdfMinorGrid ? "minor" : "major" );
 
-    // FIXME: For some reason, major and minor grid both get the same
-    //        style name assigned
     bodyWriter.addAttribute( "chart:style-name", mainStyles.insert( gridStyle, "ch" ) );
     bodyWriter.endElement(); // chart:grid
 }

@@ -36,6 +36,7 @@
 #include <QRectF>
 #include <queue>
 #include <string>
+#include <QList>
 #include <QBuffer>
 #include <QDomElement>
 
@@ -111,9 +112,9 @@ public:
     };
 
     // Provide access to those attributes for texthandler.cpp and tablehandler.cpp
-    QString masterStyleName(void) const { return m_masterStyleName; }
-    void set_writeMasterStyleName(bool val) { m_writeMasterStyleName = val; }
-    bool writeMasterStyleName(void) const { return m_writeMasterStyleName; }
+    QString masterPageName(void) const { return m_masterPageName_list.first(); }
+    void set_writeMasterPageName(bool val) { m_writeMasterPageName = val; }
+    bool writeMasterPageName(void) const { return m_writeMasterPageName; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
@@ -158,6 +159,8 @@ private:
     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 };
     void generateFrameBorder(QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd);
 
+    void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep, bool firstPage);
+
     // Handlers for different data types in the document.
     KWordTextHandler*        m_textHandler;
     KWordTableHandler*       m_tableHandler;
@@ -170,10 +173,9 @@ private:
     std::queue<SubDocument> m_subdocQueue;
     std::queue<KWord::Table> m_tableQueue;
     QStringList m_pictureList; // for <PICTURES>
-    unsigned char m_headerFooters; // a mask of HeaderData::Type bits
+
     bool m_bodyFound;
-    bool m_evenOpen; //we're processing an even header or footer
-    bool m_oddOpen; //we're processing an odd header or footer
+
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
 
@@ -181,18 +183,21 @@ private:
     KoXmlWriter* m_bodyWriter;      //for writing to the body of content.xml
     KoGenStyles* m_mainStyles;      //for collecting styles
     KoXmlWriter* m_metaWriter;      //for writing to meta.xml
-    KoGenStyle*  m_masterStyle;     //for header/footer stuff, at least
-    KoGenStyle*  m_pageLayoutStyle; //page layout style
     KoXmlWriter* m_headerWriter;    //for header/footer writing in styles.xml
 
-    bool m_hasHeader;
-    bool m_hasFooter;
-    QBuffer* m_buffer; //for header/footer tags
-    QBuffer* m_bufferEven; //for even header/footer tags
-    int m_headerCount; //just so we have a unique name for the element we're putting in m_masterStyle
-    QString m_masterStyleName; //need to know what the master style name is so we can write it
-    bool m_writeMasterStyleName; //whether to write the master style name or not
+    //    unsigned char m_headerFooters; // a mask of HeaderData::Type bits
+    int m_headerCount; //to have a unique name for element we're putting into an masterPageStyle
     bool m_writingHeader; //flag for headers/footers, where we write the actual text to styles.xml
+    bool m_evenOpen;  //processing an even header/footer
+    bool m_firstOpen; //processing a first page header/footer
+    QBuffer* m_buffer; //for odd and first page header/footer tags
+    QBuffer* m_bufferEven; //for even header/footer tags
+    QList<bool> m_hasHeader_list; //does master-page/page-layout require a header element
+    QList<bool> m_hasFooter_list; //does master-page/page-layout require a footer element
+
+    QStringList m_masterPageName_list; //master-page names
+    QStringList m_pageLayoutName_list; //page-layout names
+    bool m_writeMasterPageName; //whether to write the master-page name into a paragraph/table
 
     int m_initialFootnoteNumber;
     int m_initialEndnoteNumber;

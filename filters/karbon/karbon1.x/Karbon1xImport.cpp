@@ -1151,9 +1151,15 @@ KoShape * KarbonImport::loadImage(const KoXmlElement &element)
               element.attribute("dx", "0.0").toDouble(),
               element.attribute("dy", "0.0").toDouble());
 
-    QImage img(fname);
+    QImage img;
+    if (!img.load(fname)) {
+        kWarning() << "Could not load image " << fname;
+        return 0;
+    }
 
-    KoImageData * data = m_document->imageCollection()->createImageData(QImage(fname).mirrored(false, true));
+    KoImageData * data = m_document->imageCollection()->createImageData(img.mirrored(false, true));
+    if (! data)
+        return 0;
 
     PictureShape * picture = new PictureShape();
     picture->setUserData(data);

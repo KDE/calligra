@@ -8289,11 +8289,13 @@ struct SEP : public Shared {
 
     /**
      * pgbProp page border properties. page border applies to:
-     * 0 all pages in this section
-     * 1 first page in this section
-     * 2 all pages in this section but first
-     * 3 whole document (all sections)
+     * 0 - The page border applies to all pages in the section.
+     * 1 - The page border applies only to the first page of the section.
+     * 2 - The page border applies to all but the first page of the section.
+     * 3 - whole document (all sections)
      */
+    /* NOTE: 3 - whole document (all sections) - not mentioned in the "Word
+       Binary File Format (.doc) Structure Specification"*/
     U16 pgbApplyTo:3;
 
     /**
