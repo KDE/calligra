@@ -62,8 +62,8 @@ public:
     virtual bool moveFirst();
     virtual bool moveLast();
 
-    virtual long at() const;
-    virtual long recordCount() const;
+    virtual qint64 at() const;
+    virtual qint64 recordCount() const;
 
     //Utility Functions
     virtual QStringList scriptList(const QString& language) const;

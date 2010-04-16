@@ -36,6 +36,7 @@ private:
     KexiDB::TableSchema m_TableSchema;
     KexiDB::TableOrQuerySchema *m_schema;
     KexiMigration::KexiMigrate *m_KexiMigrate;
+    qint64 m_position;
 
 public:
     KexiMigrateReportData(const QString &);
@@ -59,9 +60,9 @@ public:
     virtual bool moveFirst();
     virtual bool moveLast();
 
-    virtual long at() const;
+    virtual qint64 at() const;
 
-    virtual long recordCount() const;
+    virtual qint64 recordCount() const;
 };
 
 #endif
