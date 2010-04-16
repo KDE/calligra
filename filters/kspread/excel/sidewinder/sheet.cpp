@@ -522,10 +522,11 @@ double Column::columnUnitsToPts(const double columnUnits)
     qMax(fontMetrics.width("6"),qMax(fontMetrics.width("7"),
     qMax(fontMetrics.width("8"),fontMetrics.width("9"))))))))));
 
-    double width = characterWidth / 256.0 * columnUnits; //px
+    double width = characterWidth * columnUnits / 256.0; //px
+    width = qRound(width / 8.0 + 0.5) * 8.0;
 
     QWidget widget;
-    width /= widget.physicalDpiX(); //in
+    width /= (double)widget.physicalDpiX(); //in
     width *= 72.0; //pt
     return width;
 }
