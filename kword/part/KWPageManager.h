@@ -183,7 +183,7 @@ public:
      * masterpage-name that are NOT already registered because those names need
      * to be unique.
      *
-     * \param pageStyle The \a KWPageStyle instance that should be added. The
+     * \param name The \a KWPageStyle instance that should be added. The
      * document will take over ownership and takes care of deleting the instance
      * one the document itself got deleted.
      */
