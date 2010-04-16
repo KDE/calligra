@@ -1403,8 +1403,9 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
         } else if (valuetype == "date") {
             QString value = element.attributeNS(KoXmlNS::office, "date-value", QString());
 
-            // "1980-10-15"
-            int year = 0, month = 0, day = 0;
+            // "1980-10-15" or "2001-01-01T19:27:41"
+            int year = 0, month = 0, day = 0, hours = 0, minutes = 0, seconds = 0;
+            bool hasTime = false;
             bool ok = false;
 
             int p1 = value.indexOf('-');
@@ -1413,13 +1414,34 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                 if (ok) {
                     int p2 = value.indexOf('-', ++p1);
                     month = value.mid(p1, p2 - p1).toInt(&ok);
-                    if (ok)
-                        day = value.right(value.length() - p2 - 1).toInt(&ok);
+                    if (ok) {
+                        // the date can optionally have a time attached
+                        int p3 = value.indexOf('T', ++p2);
+                        if (p3 > 0) {
+                            hasTime = true;
+                            day = value.mid(p2, p3 - p2).toInt(&ok);
+                            if (ok) {
+                                int p4 = value.indexOf(':', ++p3);
+                                hours = value.mid(p3, p4 - p3).toInt(&ok);
+                                if (ok) {
+                                    int p5 = value.indexOf(':', ++p4);
+                                    minutes = value.mid(p4, p5 - p4).toInt(&ok);
+                                    if (ok)
+                                        seconds = value.right(value.length() - p5 - 1).toInt(&ok);
+                                }
+                            }
+                        } else {
+                            day = value.right(value.length() - p2).toInt(&ok);
+                        }
+                    }
                 }
             }
 
             if (ok) {
-                setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
+                if (hasTime)
+                    setValue(Value(QDateTime(QDate(year, month, day), QTime(hours, minutes, seconds)), sheet()->map()->calculationSettings()));
+                else
+                    setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 //Sebsauer: Fixed now. Value::Format handles it correct.
 #if 0
