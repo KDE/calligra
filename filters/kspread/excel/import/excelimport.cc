@@ -904,10 +904,13 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
         xmlWriter->endElement();
         return;
     }
-    
+
+    Q_ASSERT(colStyles.contains(columnFormatIndex));
     const QString styleName = colStyles[columnFormatIndex];
-    const QString defaultStyleName = defaultColumnStyles[columnFormatIndex];
     columnFormatIndex++;
+
+    Q_ASSERT(defaultColumnStyles.contains(defaultColumnStyleIndex));
+    const QString defaultStyleName = defaultColumnStyles[defaultColumnStyleIndex];
 
     xmlWriter->startElement("table:table-column");
     xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
