@@ -198,7 +198,7 @@ public:
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
     void processCharts(KoXmlWriter* manifestWriter);
 
-    QString createDefaultColumnStyle( Sheet* sheet );
+    void createDefaultColumnStyle( Sheet* sheet );
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
 };
@@ -906,7 +906,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     }
     
     const QString styleName = colStyles[columnFormatIndex];
-    const QString defaultStyleName = colCellStyles[columnFormatIndex];
+    const QString defaultStyleName = defaultColumnStyles[columnFormatIndex];
     columnFormatIndex++;
 
     xmlWriter->startElement("table:table-column");
@@ -1854,7 +1854,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     return styles->insert( style, "N" );
 }
 
-QString ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
+void ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
 
     style.addProperty("fo:break-before", "auto");
