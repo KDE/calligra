@@ -25,6 +25,7 @@
 #include <KoShapeBorderModel.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
+#include <KoShapeContainer.h>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -59,11 +60,43 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         }
     }
 
+    //paint the original shape
     painter.save();
     m_original->paint(painter, converter);
     painter.restore();
-    if (m_original->border())
+    if (m_original->border()) {
         m_original->border()->paint(m_original, painter, converter);
+    }
+
+    //paint all child shapes
+    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
+    if (container) {
+        if (!container->childCount()) {
+            return;
+	}
+
+        QList<KoShape*> sortedObjects = container->childShapes();
+        qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
+
+        // Do the following to revert the absolute transformation of the
+        // container that is re-applied in shape->absoluteTransformation()
+        // later on.  The transformation matrix of the container has already
+        // been applied once before this function is called.
+        QMatrix baseMatrix = container->absoluteTransformation(&converter).inverted() * painter.matrix();
+
+        foreach(KoShape *shape, sortedObjects) {
+            painter.save();
+            painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+            shape->paint(painter, converter);
+            painter.restore();
+            if (shape->border()) {
+                painter.save();
+                painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+                shape->border()->paint(shape, painter, converter);
+                painter.restore();
+            }
+        }
+    }
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)

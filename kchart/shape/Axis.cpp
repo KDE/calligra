@@ -1101,7 +1101,6 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 
 bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 {
-    qDebug() << "detaching " << dataSet;
     Q_ASSERT( d->dataSets.contains( dataSet ) );
     if ( !d->dataSets.contains( dataSet ) )
         return false;
@@ -1141,7 +1140,6 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                 if ( d->plotArea->parent()->legend()->kdLegend() ) {
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
                 }
-                qDebug() << "deleting diagram";
                 d->deleteDiagram( chartType );
             }
             else
