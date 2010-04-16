@@ -77,7 +77,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     //create output files
     std::auto_ptr<KoStore> outputStore(
         KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip));
-    if (!outputStore.get()) {
+    if (!outputStore.get() || outputStore->bad()) {
         kWarning(30003) << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }

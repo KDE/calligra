@@ -191,9 +191,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // create output store
     d->storeout = KoStore::createStore(d->outputFile, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
-    if (!d->storeout) {
+    if (!d->storeout || d->storeout->bad()) {
         kWarning() << "Couldn't open the requested file.";
         delete d->workbook;
+        delete d->storeout;
         return KoFilter::FileNotFound;
     }
 
