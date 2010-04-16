@@ -46,7 +46,7 @@ KSPREAD_EXPORT int daysBetweenDates(QDate const & date1, QDate const & date2, in
 
 // ODF
 KSPREAD_EXPORT int days360(const QDate& _date1, const QDate& _date2, bool european);
-KSPREAD_EXPORT int days360(int day1, int month1, int year1, bool leapYear1, int  day2, int month2, int year2, bool usa);
+KSPREAD_EXPORT int days360(int day1, int month1, int year1, bool leapYear1, int  day2, int month2, int year2, bool leapYear2, bool usa);
 KSPREAD_EXPORT long double yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis);
 KSPREAD_EXPORT long double duration(const QDate& refDate, const QDate& settlement, const QDate& maturity, const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups);
 KSPREAD_EXPORT long double pow1p(const long double& x, const long double& y);
