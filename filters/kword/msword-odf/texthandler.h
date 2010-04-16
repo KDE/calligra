@@ -220,6 +220,7 @@ private:
 
     QList<QString> m_hyperLinkList;
     bool m_hyperLinkActive;
+    QList<QString> m_bookmarkRef;
 };
 
 #endif // TEXTHANDLER_H

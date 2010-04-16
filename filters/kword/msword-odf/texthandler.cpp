@@ -787,13 +787,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     switch (m_fieldType) {
     case 26:
     case 33:
-    case 37: // TAB
-        if (m_hyperLinkActive) {
-            m_fieldType = 88;
-        } else {
-            kDebug(30513) << "can't process field, just outputting text into document...";
-            m_fieldType = -1; //set m_fieldType for unprocessed field
-        }
+    case 37: // PAGEREF
         break;
     case 88:  // HyperLink
         kDebug(30513) << "processing field...";
@@ -832,6 +826,33 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.startElement("text:page-number");
         writer.addAttribute("text:select-page", "current");
         writer.endElement();
+        break;
+    case 37:
+        kDebug()<<"m_bookmarkRef.length() = " << m_bookmarkRef.length();
+        foreach(QString st, m_bookmarkRef) {
+            kDebug()<<st;
+        }
+        if (m_bookmarkRef.length() == 2) {
+            if (m_bookmarkRef[0].contains("PAGEREF")) {
+                m_bookmarkRef[0].remove("PAGEREF");
+
+                int pos = 0;
+                while (pos != -1)
+                {
+                    pos = m_bookmarkRef[0].indexOf('\\');
+                    m_bookmarkRef[0].replace(pos, 2, "");
+                }
+
+                m_bookmarkRef[0].remove(' ');
+                m_bookmarkRef[1].remove(' ');
+
+                writer.startElement("text:bookmark-ref");
+                writer.addAttribute("text:reference-format","page");
+                writer.addAttribute("text:ref-name",m_bookmarkRef[0]);
+                writer.addTextNode(m_bookmarkRef[1]);
+                writer.endElement();
+            }
+        }
         break;
     case 88:  // HyperLink
         QList<QString> fullList(m_hyperLinkList);
@@ -927,9 +948,19 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         return;
     }
 
+    // This method is called twice for each pageref (bookmark-ref). Save link
+    // data to m_bookmarkRef to handle it later in fieldEnd -method.
+    if (m_insideField && m_fieldType == 37) {
+
+        kDebug() << "m_bookmarkRef ........." <<newText;
+        m_bookmarkRef.append(newText);
+        return;
+    }
+
     // text after fieldStart and before fieldSeparator is useless
     if (m_insideField && !m_fieldAfterSeparator) {
         kDebug(30513) << "Ignoring this text in first part of field.";
+        kDebug()<<"m_fieldType = "<<m_fieldType;
         return;
     }
 
