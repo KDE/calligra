@@ -135,26 +135,34 @@ int KSpread::daysBetweenDates(QDate const & date1, QDate const & date2, int basi
     return -1;
 }
 
+// the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
 int KSpread::days360(int day1, int month1, int year1, bool leapYear1,
-                     int day2, int month2, int year2,
+                     int day2, int month2, int year2, bool leapYear2,
                      bool usaMethod)
 {
-    if (day1 == 31)
-        day1--;
-    else if (usaMethod && (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))))
-        day1 = 30;
-
-    if (day2 == 31) {
-        if (usaMethod && day1 != 30) {
-            // date2 += 1
-            day2 = 1;
-            if (month2 == 12) {
-                year2++;
-                month2 = 1;
-            } else
-                month2++;
-        } else
+    if (usaMethod) { // US method
+        if (day1 == 31) {
+            day1 = 30;
+            if (day2 == 31) {
+                day2 = 30;
+            }
+        }
+        else if (day1 == 30 && day2 == 31) {
             day2 = 30;
+        }
+        else if (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))) {
+            day1 = 30;
+            if (month2 == 2 && (day2 == 29 || (day2 == 28 && ! leapYear2))) {
+                day2 = 30;
+            }
+        }
+    } else { // European method
+        if (day1 == 31) {
+            day1 = 30;
+        }
+        if (day2 == 31) {
+            day2 = 30;
+        }
     }
     return day2 + month2 * 30 + year2 * 360 - day1 - month1 * 30 - year1 * 360;
 }
@@ -173,7 +181,7 @@ int KSpread::days360(const QDate& _date1, const QDate& _date2, bool european)
     month2 = _date2.month();
     year2 = _date2.year();
 
-    return days360(day1, month1, year1, QDate::isLeapYear(_date1.year()), day2, month2, year2, !european);
+    return days360(day1, month1, year1, QDate::isLeapYear(_date1.year()), day2, month2, year2, QDate::isLeapYear(_date2.year()), !european);
 }
 
 
