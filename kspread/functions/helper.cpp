@@ -270,13 +270,13 @@ long double KSpread::yearFrac(const QDate& refDate, const QDate& startDate, cons
         if (QDate(date1.year() + 1, date1.month(), date1.day()) >= date2) {
             nYears = 1;
             peryear = 365;
-            if (QDate::isLeapYear(date1.year()) && (date1.month() <= 2)) peryear = 366;
-            if (QDate::isLeapYear(date2.year()) && (date2.month() > 2)) peryear = 366;
+            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2) peryear = 366;
+            else if (QDate::isLeapYear(date2.year()) && date2.month() > 2) peryear = 366;
+            else if (date2.month() == 2 && date2.day() == 29) peryear = 366;
         }
         peryear = peryear / (long double) nYears;
         nYears = 0;
         break;
-
     }
     case 2: {
         // Actual/360
