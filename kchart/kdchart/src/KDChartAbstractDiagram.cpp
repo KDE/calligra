@@ -480,7 +480,7 @@ DataValueAttributes AbstractDiagram::dataValueAttributes( int dataset ) const
     const int column = dataset * datasetDimension();
 
     const QVariant headerAttrs(
-            attributesModel()->headerData( column, Qt::Vertical,
+            attributesModel()->headerData( column, Qt::Horizontal,
                 KDChart::DataValueLabelAttributesRole ) );
     if( headerAttrs.isValid() )
         return qVariantValue< DataValueAttributes >( headerAttrs );
