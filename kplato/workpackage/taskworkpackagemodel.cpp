@@ -95,7 +95,7 @@ void TaskWorkPackageModel::slotNodeToBeInserted( Node *parent, int row )
     beginInsertRows( indexForNode( parent ), row, row );
 }
 
-void TaskWorkPackageModel::slotNodeInserted( Node *node )
+void TaskWorkPackageModel::slotNodeInserted( Node */*node*/ )
 {
     //kDebug()<<node->parentNode()->name()<<"-->"<<node->name();
     endInsertRows();
@@ -108,7 +108,7 @@ void TaskWorkPackageModel::slotNodeToBeRemoved( Node *node )
     beginRemoveRows( indexForNode( node->parentNode() ), row, row );
 }
 
-void TaskWorkPackageModel::slotNodeRemoved( Node *node )
+void TaskWorkPackageModel::slotNodeRemoved( Node */*node*/ )
 {
     //kDebug()<<node->name();
     endRemoveRows();

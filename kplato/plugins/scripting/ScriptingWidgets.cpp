@@ -101,7 +101,7 @@ ScriptingNodePropertyListView::ScriptingNodePropertyListView(Scripting::Module* 
       m_module(module)
 {
     kDebug()<<this<<parent;
-    
+
     KPlato::NodeModel m;
     const QMetaEnum e = m.columnMap();
     if ( e.keyCount() > 0 ) {
@@ -140,7 +140,7 @@ ScriptingDataQueryView::ScriptingDataQueryView(Scripting::Module* module, QWidge
     kDebug()<<this<<parent;
     setupUi( this );
     setup();
-    
+
     connect( ui_objectType, SIGNAL( currentIndexChanged( int ) ), SLOT( slotObjectTypeChanged( int  ) ) );
 }
 
@@ -161,11 +161,11 @@ void ScriptingDataQueryView::setupLists( QListWidget *list, const QString &tag, 
     list->addItem( item );
 }
 
-void ScriptingDataQueryView::slotObjectTypeChanged( int index )
+void ScriptingDataQueryView::slotObjectTypeChanged( int /*index*/ )
 {
     ui_properties->availableListWidget()->clear();
     ui_properties->selectedListWidget()->clear();
-    
+
     QMetaEnum e;
     switch ( objectType().toInt() ) {
         case 0: {

@@ -113,9 +113,9 @@ QVariant ResourceModel::type( const Resource *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return res->typeToStringList( true );
-        case Role::EnumListValue: 
+        case Role::EnumListValue:
             return (int)res->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -133,9 +133,9 @@ QVariant ResourceModel::type( const ResourceGroup *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return res->typeToStringList( true );
-        case Role::EnumListValue: 
+        case Role::EnumListValue:
             return (int)res->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -523,23 +523,23 @@ void ResourceItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-        
+
         disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
     m_project = project;
@@ -547,23 +547,23 @@ void ResourceItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-    
+
         connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
     m_model.setProject( m_project );
@@ -612,7 +612,7 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
         int row = m_project->indexOf(  r->parentGroup() );
         return createIndex( row, 0, r->parentGroup() );
     }
-    
+
     return QModelIndex();
 }
 
@@ -734,9 +734,9 @@ QVariant ResourceItemModel::type( const ResourceGroup *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return res->typeToStringList( true );
-        case Role::EnumListValue: 
+        case Role::EnumListValue:
             return (int)res->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -849,7 +849,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
     }
     return false;
 }
-    
+
 bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -976,7 +976,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
                 qWarning("data: invalid display value column %d", index.column());
                 return false;
         }
-    } else { 
+    } else {
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             switch (index.column()) {
@@ -1072,6 +1072,7 @@ Qt::DropActions ResourceItemModel::supportedDropActions() const
 
 bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
+    Q_UNUSED(data);
     //kDebug()<<index;
     // TODO: if internal, don't allow dropping on my own parent
     // TODO: if internal, only MoveAction is allowed, but there is no indication...
@@ -1086,7 +1087,7 @@ bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
 
 QStringList ResourceItemModel::mimeTypes() const
 {
-    return QStringList() 
+    return QStringList()
             << "text/x-vcard"
             << "text/directory"
             << "application/x-vnd.kde.kplato.resourceitemmodel.internal";

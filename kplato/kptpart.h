@@ -63,7 +63,7 @@ public:
 
     void setReadWrite( bool rw );
     void configChanged();
-    
+
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
     void setProject( Project *project );
@@ -82,20 +82,20 @@ public:
     virtual QDomDocument saveXML();
     /// Save a workpackage file containing @p node with schedule identity @p id, owned by @p resource
     QDomDocument saveWorkPackageXML( const Node *node, long id, Resource *resource = 0 );
-    
-    bool saveOdf( SavingContext &documentContext ) { return false; }
+
+    bool saveOdf( SavingContext &/*documentContext */) { return false; }
     bool loadOdf( KoOdfReadStore & odfStore );
 
     Config &config() { return m_config; }
     Context *context() const { return m_context; }
-    
+
     WBSDefinition &wbsDefinition() { return m_project->wbsDefinition(); }
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
-    
+
     void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
-    
+
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
@@ -127,7 +127,7 @@ signals:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
-     
+
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
@@ -148,7 +148,7 @@ protected slots:
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
 
-    void loadSchedulerPlugins();    
+    void loadSchedulerPlugins();
 
 private:
     Project *m_project;

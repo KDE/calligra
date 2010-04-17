@@ -31,7 +31,7 @@ namespace KPlato {
 namespace Scripting {
     class Project;
     class Resource;
-    
+
     /**
     * The Resource class represents a resource in a project.
     */
@@ -43,17 +43,17 @@ namespace Scripting {
             Resource( Project *project, KPlato::Resource *resource, QObject *parent );
             /// Destructor
             virtual ~Resource() {}
-        
+
             KPlato::Resource *kplatoResource() const { return m_resource; }
-            
+
         public Q_SLOTS:
             /// Return type of resource
             QVariant type();
             /// Return type of resource
             QString id() const;
-            
+
             /// Add external appointments
-            void addExternalAppointment( const KPlato::Resource *resource, const QString &start, const QString &end, int load ) {}
+            void addExternalAppointment( const KPlato::Resource */*resource*/, const QString &/*start*/, const QString &/*end*/, int /*load */) {}
 
             /**
              * Return all internal appointments the resource has
@@ -72,7 +72,7 @@ namespace Scripting {
             int childCount() const;
             /// Return resource at @index. Child resources is not supported. Always returns 0.
             QObject *childAt( int index ) const;
-            
+
         private:
             Project *m_project;
             KPlato::Resource *m_resource;

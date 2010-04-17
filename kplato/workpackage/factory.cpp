@@ -51,7 +51,7 @@ Factory::~Factory()
 
 KParts::Part *Factory::createPartObject(QWidget *parentWidget,
                                         QObject* parent,
-                                        const char* classname,
+                                        const char* /*classname*/,
                                         const QStringList &)
 {
     Part *part = new Part( parentWidget, parent );
@@ -75,12 +75,12 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("kplatowork_template", "data", "kplatowork/templates/");
         s_global->dirs()->addResourceType("expression", "data", "kplatowork/expression/");
         s_global->dirs()->addResourceType("projects", "data", "kplatowork/projects/");
-        
+
 //        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
-        
+
     }
     return *s_global;
 }

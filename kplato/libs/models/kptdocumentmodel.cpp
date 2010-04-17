@@ -44,24 +44,24 @@ QVariant DocumentModel::url( const Document *doc, int role ) const
     }
     return QVariant();
 }
-    
+
 QVariant DocumentModel::type( const Document *doc, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return Document::typeToString( doc->type(), true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return Document::typeList( true );
-        case Qt::EditRole: 
-        case Role::EnumListValue: 
+        case Qt::EditRole:
+        case Role::EnumListValue:
             return (int)doc->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
-        default: 
+        default:
             break;
     }
     return QVariant();
@@ -73,7 +73,7 @@ bool DocumentModel::setType( Document *doc, const QVariant &value, int role )
         case Qt::EditRole:
             doc->setType( static_cast<Document::Type>( value.toInt() ) );
             return true;
-        default: 
+        default:
             break;
     }
     return false;
@@ -100,17 +100,17 @@ QVariant DocumentModel::sendAs( const Document *doc, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return Document::sendAsToString( doc->sendAs(), true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return Document::sendAsList( true );
-        case Qt::EditRole: 
-        case Role::EnumListValue: 
+        case Qt::EditRole:
+        case Role::EnumListValue:
             return (int)doc->sendAs();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
-        default: 
+        default:
             break;
     }
     return QVariant();
@@ -122,7 +122,7 @@ bool DocumentModel::setSendAs( Document *doc, const QVariant &value, int role )
         case Qt::EditRole:
             doc->setSendAs( static_cast<Document::SendAs>( value.toInt() ) );
             return true;
-        default: 
+        default:
             break;
     }
     return false;
@@ -150,6 +150,9 @@ int DocumentModel::propertyCount()
 
 bool DocumentModel::setData( Document *doc, int property, const QVariant & value, int role )
 {
+    Q_UNUSED(doc);
+    Q_UNUSED(property);
+    Q_UNUSED(role);
     switch ( property ) {
         //case 0: result = url( doc, role ); break;
         //case 1: return setType( doc, value, role );
@@ -169,7 +172,7 @@ QVariant DocumentModel::headerData( int section, int role )
             case 1: return i18n( "Type" );
             case 2: return i18n( "Status" );
             case 3: return i18n( "Send As" );
-    
+
             default: return QVariant();
         }
     }
@@ -196,7 +199,7 @@ DocumentItemModel::DocumentItemModel( QObject *parent )
 DocumentItemModel::~DocumentItemModel()
 {
 }
-    
+
 void DocumentItemModel::slotDocumentToBeInserted( Documents *parent, int row )
 {
     if ( parent == m_documents ) {
@@ -221,6 +224,7 @@ void DocumentItemModel::slotDocumentToBeRemoved( Document *doc )
 
 void DocumentItemModel::slotDocumentRemoved( Document *doc )
 {
+    Q_UNUSED(doc);
     //FIXME
     endRemoveRows();
 }
@@ -266,7 +270,7 @@ Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
             case 3: // sendAs
                 flags |= Qt::ItemIsEditable;
                 break;
-            default: 
+            default:
                 flags &= ~Qt::ItemIsEditable;
         }
     }
@@ -374,7 +378,7 @@ bool DocumentItemModel::setData( const QModelIndex &index, const QVariant &value
     bool result = false;
     Document *doc = document( index );
     switch (index.column()) {
-        case 0: 
+        case 0:
             result = setUrl( doc, value, role );
             break;
         case 1:
@@ -454,9 +458,10 @@ QMimeData *DocumentItemModel::mimeData( const QModelIndexList & indexes ) const
 {
     QMimeData *m = new QMimeData();
     QByteArray encodedData;
-    QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    QList<int> rows;
+    //QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    //QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
+        Q_UNUSED(index);
         m->setData("application/x-vnd.kde.kplato.documentitemmodel.internal", encodedData);
     }
     return m;
@@ -464,12 +469,16 @@ QMimeData *DocumentItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool DocumentItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
+    Q_UNUSED(index);
+    Q_UNUSED(dropIndicatorPosition);
+    Q_UNUSED(data);
     //kDebug();
     return true;
 }
 
 bool DocumentItemModel::dropAllowed( Document *on, const QMimeData *data )
 {
+    Q_UNUSED(on)
     if ( !data->hasFormat("application/x-vnd.kde.kplato.documentitemmodel.internal") ) {
         return false;
     }
@@ -478,6 +487,8 @@ bool DocumentItemModel::dropAllowed( Document *on, const QMimeData *data )
 
 bool DocumentItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
+    Q_UNUSED(row);
+    Q_UNUSED(parent);
     //kDebug()<<action;
     if (action == Qt::IgnoreAction) {
         return true;
@@ -510,6 +521,7 @@ void DocumentItemModel::slotDocumentChanged( Document *doc )
 
 QModelIndex DocumentItemModel::insertDocument( Document *doc, Document *after )
 {
+    Q_UNUSED(after);
 //    m_part->addCommand( new DocumentAddCmd( doc, after, i18n( "Add Document") ) );
     int row = m_documents->indexOf( doc );
     if ( row == -1 ) {

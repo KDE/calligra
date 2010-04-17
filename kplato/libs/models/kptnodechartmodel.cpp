@@ -30,7 +30,7 @@
 
 namespace KPlato
 {
-    
+
 NodeChartModel::NodeChartModel( QObject *parent )
     : AbstractChartModel( parent ),
     m_project( 0 ),
@@ -179,6 +179,7 @@ int NodeChartModel::dataSetCount( const ChartAxisIndex &index ) const
 
 int NodeChartModel::childCount( const ChartDataIndex &index ) const
 {
+    Q_UNUSED(index);
     return 0;
 }
 
@@ -392,9 +393,10 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
     }
     return ChartDataIndex();
 }
-    
+
 ChartDataIndex NodeChartModel::index( int number, const ChartDataIndex &idx ) const
 {
+    Q_UNUSED(number);
     if ( ! idx.isValid() ) {
         return ChartDataIndex();
     }
@@ -518,7 +520,7 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
         }
         return QDate();
     }
-    
+
     return QVariant();
 }
 

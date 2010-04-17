@@ -42,7 +42,7 @@
 namespace KPlato
 {
 
-Task::Task(Node *parent) 
+Task::Task(Node *parent)
     : Node(parent),
       m_resource(),
       m_workPackage( this )
@@ -54,13 +54,13 @@ Task::Task(Node *parent)
     m_estimate->setOptimisticRatio(-10);
     m_estimate->setPessimisticRatio(20);
     m_estimate->setParentNode( this );
-    
+
     if (m_parent)
         m_leader = m_parent->leader();
 }
 
-Task::Task(const Task &task, Node *parent) 
-    : Node(task, parent), 
+Task::Task(const Task &task, Node *parent)
+    : Node(task, parent),
       m_resource(),
       m_workPackage( this )
 {
@@ -285,7 +285,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     QString s;
     bool ok = false;
     m_id = element.attribute("id");
-    
+
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
@@ -303,10 +303,10 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     s = element.attribute("constraint-endtime");
     if (!s.isEmpty())
         m_constraintEndTime = DateTime::fromString(s, status.projectSpec());
-    
+
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
-    
+
     // Load the task children
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -338,7 +338,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             }
         } else if (e.tagName() == "resource") {
             // TODO: Load the resource (projects don't have resources yet)
-        } else if (e.tagName() == "estimate" || 
+        } else if (e.tagName() == "estimate" ||
                    ( /*status.version() < "0.6" &&*/ e.tagName() == "effort" ) ) {
             //  Load the estimate
             m_estimate->load(e, status);
@@ -418,17 +418,17 @@ void Task::save(QDomElement &element)  const {
 
     me.setAttribute("scheduling",constraintToString());
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));    
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
-    
+
     me.setAttribute("wbs", wbsCode()); //NOTE: included for information
-    
+
     m_estimate->save(me);
     m_workPackage.saveXML(me);
     completion().saveXML( me );
-    
+
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
         me.appendChild(schs);
@@ -441,9 +441,9 @@ void Task::save(QDomElement &element)  const {
     if ( ! m_requests.isEmpty() ) {
         m_requests.save(me);
     }
-    
+
     m_documents.save( me );
-    
+
     // The workpackage log
     if (!m_packageLog.isEmpty()) {
         QDomElement log = me.ownerDocument().createElement("workpackage-log");
@@ -481,17 +481,17 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
 
     me.setAttribute("scheduling",constraintToString());
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));    
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
-    
+
     me.setAttribute("wbs", wbsCode()); // NOTE: included for information
-    
+
     m_estimate->save(me);
 
     completion().saveXML( me );
-    
+
     if ( m_schedules.contains( id ) && ! m_schedules[ id ]->isDeleted() ) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
         me.appendChild(schs);
@@ -572,7 +572,7 @@ EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate 
     return EffortCostMap();
 }
 
-// Returns the total planned effort for this task (or subtasks) 
+// Returns the total planned effort for this task (or subtasks)
 Duration Task::plannedEffort( long id ) const {
    //kDebug();
     Duration eff;
@@ -623,7 +623,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
     return eff;
 }
 
-// Returns the total actual effort for this task (or subtasks) 
+// Returns the total actual effort for this task (or subtasks)
 Duration Task::actualEffort() const {
    //kDebug();
     Duration eff;
@@ -795,7 +795,7 @@ Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
         }
         return e;
     }
-    
+
     e = plannedEffort( id ) * (double)completion().percentFinished( date ) / 100.0;
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
     return e;
@@ -811,7 +811,7 @@ double Task::budgetedCostPerformed( const QDate &date, long id ) const
         }
         return c;
     }
-    
+
     c = plannedCost( id ).cost() * (double)completion().percentFinished( date ) / 100.0;
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
     return c;
@@ -902,7 +902,7 @@ double Task::effortPerformanceIndex( const QDate &date, long id ) const {
 double Task::costPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
     double ac = actualCostTo(date).cost();
-    
+
     bool e = (ac == 0.0 || completion().percentFinished() == 0);
     if (error) {
         *error = e;
@@ -1090,7 +1090,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                 if ( !cs->allowOverbooking() ) {
                     cs->endTime = cs->startTime + m_durationForward;
                     makeAppointments();
-                    
+
                     // calculate duration wo checking booking = the earliest finish possible
                     cs->setAllowOverbooking( true );
                     m_durationForward = duration(cs->earlyStart, use, false);
@@ -2132,7 +2132,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
 
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
     //kDebug()<<"--------> calcDuration"<<(backward?"(B)":"(F)")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day);
-    
+
     // Already checked: m_currentSchedule and time.
     Duration dur = effort; // use effort as default duration
     if (m_estimate->type() == Estimate::Type_Effort) {
@@ -2163,7 +2163,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
 
 Duration Task::length(const DateTime &time, const Duration &duration, Schedule *sch, bool backward) {
     //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_name<<""<<time.toString()<<": duration:"<<duration.toString(Duration::Format_Day)<<" ("<<duration.milliseconds()<<")";
-    
+
     Duration l;
     if ( duration == Duration::zeroDuration ) {
 #ifndef NDEBUG
@@ -2339,7 +2339,7 @@ void Task::addParentProxyRelations( const QList<Relation*> &list )
         foreach (Node *n, m_nodes) {
             n->addParentProxyRelations(list);
             n->addParentProxyRelations(dependParentNodes());
-        }        
+        }
     } else {
         // add 'this' as child relation to the relations parent
         //kDebug()<<m_name<<" is not summary task";
@@ -2359,7 +2359,7 @@ void Task::addChildProxyRelations( const QList<Relation*> &list) {
         foreach (Node *n, m_nodes) {
             n->addChildProxyRelations(list);
             n->addChildProxyRelations(dependChildNodes());
-        }        
+        }
     } else {
         // add 'this' as parent relation to the relations child
         //kDebug()<<m_name<<" is not summary task";
@@ -2700,11 +2700,11 @@ Completion::Completion( const Completion &c )
 }
 
 Completion::~Completion()
-{ 
+{
     qDeleteAll( m_entries );
     qDeleteAll( m_usedEffort );
 }
-    
+
 void Completion::copy( const Completion &p )
 {
     m_node = 0; //NOTE
@@ -2808,7 +2808,7 @@ void Completion::addEntry( const QDate &date, Entry *entry )
      //kDebug()<<m_entries.count()<<" added:"<<date;
      changed();
 }
-    
+
 QDate Completion::entryDate() const
 {
     return m_entries.isEmpty() ? QDate() : m_entries.keys().last();
@@ -2993,6 +2993,7 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, 
 
 EffortCostMap Completion::effortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const
 {
+    Q_UNUSED(id);
     //kDebug()<<m_node->name()<<start<<end;
     EffortCostMap ec;
     if ( ! isStarted() ) {
@@ -3505,7 +3506,7 @@ QString WorkPackage::transmitionStatusToString( WorkPackage::WPTransmitionStatus
 {
     QString s = trans ? i18n( "None" ) : "None";
     switch ( sts ) {
-        case TS_Send: 
+        case TS_Send:
             s = trans ? i18n( "Send" ) : "Send";
             break;
         case TS_Receive:
@@ -3575,9 +3576,9 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
     indent += "!  ";
     qDebug()<<indent<<"Requested resources (work):"<<workUnits()<<"%";
     m_requests.printDebug(indent);
-    
+
     completion().printDebug( indent );
-    
+
     Node::printDebug(children, indent);
 
 }

@@ -130,20 +130,20 @@ void CalendarItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project , SIGNAL( calendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
-        
+
         disconnect( m_project, SIGNAL( calendarAdded( const Calendar* ) ), this, SLOT( slotCalendarInserted( const Calendar* ) ) );
         disconnect( m_project, SIGNAL( calendarToBeAdded( const Calendar*, int ) ), this, SLOT( slotCalendarToBeInserted( const Calendar*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( calendarRemoved( const Calendar* ) ), this, SLOT( slotCalendarRemoved( const Calendar* ) ) );
         disconnect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
     }
     m_project = project;
     if ( project ) {
         connect( m_project, SIGNAL( calendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
-        
+
         connect( m_project, SIGNAL( calendarAdded( const Calendar* ) ), this, SLOT( slotCalendarInserted( const Calendar* ) ) );
         connect( m_project, SIGNAL( calendarToBeAdded( const Calendar*, int ) ), this, SLOT( slotCalendarToBeInserted( const Calendar*, int ) ) );
-        
+
         connect( m_project, SIGNAL( calendarRemoved( const Calendar* ) ), this, SLOT( slotCalendarRemoved( const Calendar* ) ) );
         connect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
     }
@@ -166,14 +166,14 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
             case 0:/*Name*/
                 flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
                 break;
-            case 1: 
+            case 1:
                 if ( parent( index ).isValid() ) {
                     flags &= ~Qt::ItemIsEditable;
                 } else {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            default: 
+            default:
                 flags |= Qt::ItemIsEditable;
                 break;
         }
@@ -494,7 +494,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     }
     if ( action == Qt::MoveAction ) {
         kDebug()<<"MoveAction";
-        
+
         QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.calendarid.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         Calendar *par = 0;
@@ -597,6 +597,7 @@ CalendarDayItemModel::~CalendarDayItemModel()
 
 void CalendarDayItemModel::slotWorkIntervalAdded( CalendarDay *day, TimeInterval *ti )
 {
+    Q_UNUSED(ti);
     //kDebug()<<day<<","<<ti;
     int c = m_calendar->indexOfWeekday( day );
     if ( c == -1 ) {
@@ -607,6 +608,7 @@ void CalendarDayItemModel::slotWorkIntervalAdded( CalendarDay *day, TimeInterval
 
 void CalendarDayItemModel::slotWorkIntervalRemoved( CalendarDay *day, TimeInterval *ti )
 {
+    Q_UNUSED(ti);
     int c = m_calendar->indexOfWeekday( day );
     if ( c == -1 ) {
         return;
@@ -626,6 +628,7 @@ void CalendarDayItemModel::slotDayChanged( CalendarDay *day )
 
 void CalendarDayItemModel::slotTimeIntervalChanged( TimeInterval *ti )
 {
+    Q_UNUSED(ti);
 /*    CalendarDay *d = parentDay( ti );
     if ( d == 0 ) {
         return;
@@ -666,6 +669,7 @@ Qt::ItemFlags CalendarDayItemModel::flags( const QModelIndex &index ) const
 
 QModelIndex CalendarDayItemModel::parent( const QModelIndex &index ) const
 {
+    Q_UNUSED(index);
     return QModelIndex();
 }
 
@@ -919,6 +923,7 @@ CalendarDay *CalendarDayItemModel::day( const QModelIndex &index ) const
 
 QAbstractItemDelegate *CalendarDayItemModel::createDelegate( int column, QWidget *parent ) const
 {
+    Q_UNUSED(parent);
     switch ( column ) {
         default: return 0;
     }
@@ -1042,11 +1047,15 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
 
 QVariant DateTableDataModel::weekDayData( int day, int role ) const
 {
+    Q_UNUSED(day);
+    Q_UNUSED(role);
     return QVariant();
 }
 
 QVariant DateTableDataModel::weekNumberData( int week, int role ) const
 {
+    Q_UNUSED(week);
+    Q_UNUSED(role);
     return QVariant();
 }
 
@@ -1068,7 +1077,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
         return r;
     }
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    //const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );

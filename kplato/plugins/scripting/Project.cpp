@@ -171,7 +171,7 @@ QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
     return m_groups[ group ];
 }
 
-QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long schedule )
+QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long /*schedule*/ )
 {
 //    m.setManager( project()->scheduleManager( schedule ) );
     return m_resourceModel.data( group, resourceColumnNumber( property ), stringToRole( role ) );
@@ -218,7 +218,7 @@ QObject *Scripting::Project::resource( KPlato::Resource *resource )
     return m_resources[ resource ];
 }
 
-QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long schedule )
+QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long /*schedule*/ )
 {
     //m_resourceModel.setManager( project()->scheduleManager( schedule.toLong() ) );
     return m_resourceModel.data( resource, resourceColumnNumber( property ), stringToRole( role ) ).toString();

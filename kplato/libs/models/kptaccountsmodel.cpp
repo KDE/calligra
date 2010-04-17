@@ -189,10 +189,10 @@ void AccountItemModel::setProject( Project *project )
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
         disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-        
+
         disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
-        
+
         disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
     }
@@ -201,10 +201,10 @@ void AccountItemModel::setProject( Project *project )
         Accounts *acc = &( project->accounts() );
         kDebug()<<acc;
         connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-        
+
         connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
-        
+
         connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
     }
@@ -482,12 +482,14 @@ void CostBreakdownItemModel::slotAccountToBeInserted( const Account *parent, int
 
 void CostBreakdownItemModel::slotAccountInserted( const Account *account )
 {
+    Q_UNUSED(account);
     //kDebug()<<account->name();
     endInsertRows();
 }
 
 void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
 {
+
     //kDebug()<<account->name();
     int row = index( account ).row();
     beginRemoveRows( index( account->parent() ), row, row );
@@ -495,12 +497,14 @@ void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
 
 void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
 {
+    Q_UNUSED(account);
     //kDebug()<<account->name();
     endRemoveRows();
 }
 
 void CostBreakdownItemModel::slotNodeChanged( Node *node )
 {
+    Q_UNUSED(node);
     fetchData();
     foreach ( Account *a, m_plannedCostMap.keys() ) {
         QModelIndex idx1 = index( a );
@@ -515,13 +519,13 @@ void CostBreakdownItemModel::setProject( Project *project )
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
         disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-        
+
         disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
-        
+
         disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
-    
+
         disconnect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
@@ -531,13 +535,13 @@ void CostBreakdownItemModel::setProject( Project *project )
         Accounts *acc = &( project->accounts() );
         kDebug()<<acc;
         connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-        
+
         connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
-        
+
         connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
-    
+
         connect( project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
@@ -1077,6 +1081,7 @@ Account *CostBreakdownItemModel::account( const QModelIndex &index ) const
 
 void CostBreakdownItemModel::slotAccountChanged( Account *account )
 {
+    Q_UNUSED(account);
     fetchData();
     foreach ( Account *a, m_plannedCostMap.keys() ) {
         QModelIndex idx1 = index( a );

@@ -111,7 +111,7 @@ int KPlatoWork_Application::newInstance()
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
     if ( argsCount > 0 ) {
-        short int n=0; // number of documents open
+        //short int n=0; // number of documents open
         for(int i=0; i < argsCount; i++ ) {
             // For now create an empty document
             if ( ! m_mainwindow->openDocument( args->url(i) ) ) {

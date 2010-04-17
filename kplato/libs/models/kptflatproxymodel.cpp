@@ -73,12 +73,19 @@ void FlatProxyModel::sourceLayoutChanged()
 void FlatProxyModel::sourceRowsAboutToBeInserted(
     const QModelIndex &source_parent, int start, int end)
 {
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
     m_sourceIndexList.clear();
     m_sourceIndexMap.clear();
 }
 
 void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int start, int end)
 {
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+
     if ( sourceModel() == 0 ) {
         kDebug()<<"No source model";
         return;
@@ -89,10 +96,17 @@ void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int st
 
 void FlatProxyModel::sourceRowsAboutToBeRemoved( const QModelIndex &source_parent, int start, int end )
 {
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
 }
 
 void FlatProxyModel::sourceRowsRemoved( const QModelIndex &source_parent, int start, int end )
 {
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+
     initiateMaps();
     reset();
 }
@@ -173,16 +187,19 @@ QModelIndex FlatProxyModel::index(int row, int column, const QModelIndex &parent
 
 QModelIndex FlatProxyModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
     return QModelIndex();
 }
 
 int FlatProxyModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_sourceIndexList.count();
 }
 
 int FlatProxyModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     if ( sourceModel() == 0 ) {
         return 0;
     }
@@ -191,6 +208,7 @@ int FlatProxyModel::columnCount(const QModelIndex &parent) const
 
 bool FlatProxyModel::hasChildren(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return false;
 }
 
@@ -322,11 +340,17 @@ bool FlatProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
 bool FlatProxyModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 
 bool FlatProxyModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     //TODO
     return false;
 }

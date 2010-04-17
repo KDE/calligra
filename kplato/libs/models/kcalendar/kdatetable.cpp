@@ -66,7 +66,7 @@
 
 namespace KPlato
 {
-    
+
 Frame::Frame( QWidget *parent )
     : QFrame( parent )
 {
@@ -87,6 +87,7 @@ void Frame::updateFocus(QFocusEvent *e)
 
 void Frame::paintEvent(QPaintEvent *e)
 {
+    Q_UNUSED(e);
     //kDebug()<<e;
     QPainter paint(this);
     drawFrame(&paint);
@@ -201,7 +202,7 @@ public:
    void endOfMonth();
    void beginningOfWeek();
    void endOfWeek();
-  
+
    KDateTable *q;
 
    /**
@@ -228,25 +229,25 @@ public:
     * Save the size of the largest used cell content.
     */
    QRectF maxCell;
-  
+
    bool popupMenuEnabled;
-   
+
     //----->
     QHash <QString, KDateTableDateDelegate*> customPaintingModes;
 
     KDateTableDataModel *m_model;
-    
+
     KDateTableDateDelegate *m_dateDelegate;
     KDateTableWeekDayDelegate *m_weekDayDelegate;
     KDateTableWeekNumberDelegate *m_weekNumberDelegate;
-    
+
     StyleOptionViewItem m_styleOptionDate;
     StyleOptionHeader m_styleOptionWeekDay;
     StyleOptionHeader m_styleOptionWeekNumber;
-    
+
     QList<QDate> m_selectedDates;
     SelectionMode m_selectionmode;
-   
+
     bool m_paintweeknumbers;
     bool m_grid;
 };
@@ -258,9 +259,9 @@ public:
     q(q),
     result(0), // rejected
     main(0) {}
-  
+
   KPopupFrame *q;
-  
+
   /**
    * The result. It is returned from exec() when the popup window closes.
    */
@@ -321,7 +322,7 @@ KDateTable::KDateTable(const QDate& date_, QWidget* parent)
   else
     setDate(date_); // this initializes firstday, numdays, numDaysPrevMonth
   initAccels();
-  
+
   init();
 }
 
@@ -335,7 +336,7 @@ KDateTable::KDateTable(QWidget *parent)
   setPalette(palette);
   setDate(QDate::currentDate()); // this initializes firstday, numdays, numDaysPrevMonth
   initAccels();
-  
+
   init();
 }
 
@@ -349,16 +350,16 @@ void KDateTable::init()
     d->m_dateDelegate = new KDateTableDateDelegate( this );
     d->m_weekDayDelegate = new KDateTableWeekDayDelegate( this );
     d->m_weekNumberDelegate = new KDateTableWeekNumberDelegate( this );
-    
+
     d->m_styleOptionDate.initFrom( this );
     d->m_styleOptionDate.displayAlignment = Qt::AlignCenter;
-    
+
     d->m_styleOptionWeekDay.initFrom( this );
     d->m_styleOptionWeekDay.textAlignment = Qt::AlignCenter;
-    
+
     d->m_styleOptionWeekNumber.initFrom( this );
     d->m_styleOptionWeekNumber.textAlignment = Qt::AlignCenter;
-    
+
     //setModel( new KDateTableDataModel( this ) );
 }
 
@@ -384,6 +385,8 @@ void KDateTable::slotReset()
 
 void KDateTable::slotDataChanged( const QDate &start, const QDate &end )
 {
+    Q_UNUSED(start);
+    Q_UNUSED(end);
     update();
 }
 
@@ -571,7 +574,7 @@ void KDateTable::paintEvent(QPaintEvent *e)
       paintCell(&p, j, i);
       p.translate(0, cellHeight);
     }
-    
+
     p.translate(cellWidth, 0);
     p.translate(0, -cellHeight * (bottomRow - topRow + 1));
   }
@@ -581,7 +584,7 @@ void
 KDateTable::paintCell(QPainter *painter, int row, int column)
 {
   //kDebug();
-  
+
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
   QSizeF size;
@@ -603,7 +606,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
   { // we are drawing the headline (weekdays)
     d->m_styleOptionWeekDay.rectF = rect;
     d->m_styleOptionWeekDay.state = QStyle::State_None;
-    
+
     int col = d->m_paintweeknumbers ? column - 1 : column;
     int firstWeekDay = KGlobal::locale()->weekStartDay();
     int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
@@ -616,7 +619,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
   {
     d->m_styleOptionWeekNumber.rectF = rect;
     d->m_styleOptionWeekNumber.state = QStyle::State_None;
-    
+
     int pos=7*(row-1);
     QDate pCellDate = dateFromPos( pos );
     if ( d->m_weekNumberDelegate )
@@ -649,11 +652,11 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
         painter->restore();
         //kDebug()<<d->m_grid<<" "<<pw<<" "<<rect;
     }
-    
+
     d->m_styleOptionDate.rectF = rect;
     d->m_styleOptionDate.state = QStyle::State_None;
 
-    
+
     QDate pCellDate = dateFromPos( pos );
     if( calendar->month(pCellDate) == calendar->month(d->mDate) )
     {
@@ -1260,16 +1263,23 @@ KDateTableDataModel::~KDateTableDataModel()
 
 QVariant KDateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
+    Q_UNUSED(data);
+    Q_UNUSED(role);
+    Q_UNUSED(dataType);
     return QVariant();
 }
 
 QVariant KDateTableDataModel::weekDayData( int day, int role ) const
 {
+    Q_UNUSED(day);
+    Q_UNUSED(role);
     return QVariant();
 }
 
 QVariant KDateTableDataModel::weekNumberData( int week, int role ) const
 {
+    Q_UNUSED(week);
+    Q_UNUSED(role);
     return QVariant();
 }
 
@@ -1294,7 +1304,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     painter->save();
     const KCalendarSystem * calendar = KGlobal::locale()->calendar();
     QRectF r;
-    
+
     QPalette palette = option.palette;
     if ( option.state & QStyle::State_Enabled && option.state & QStyle::State_Active ) {
         palette.setCurrentColorGroup( QPalette::Active );
@@ -1307,7 +1317,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     QBrush bg( palette.base() );
     Qt::Alignment align = option.displayAlignment;
     QString text = calendar->dayString(date, KCalendarSystem::ShortFormat);
-    
+
     if ( model )
     {
         QVariant v = model->data( date, Qt::ForegroundRole );
@@ -1339,14 +1349,14 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
 
     QPen pen = painter->pen();
     pen.setColor( textColor );
-    
+
     if ( option.state & QStyle::State_Selected ) {
         bg = palette.highlight();
     }
     painter->fillRect( option.rectF, bg );
     painter->setBrush( bg );
-    
-    
+
+
     if ( option.state & QStyle::State_HasFocus ) {
         painter->setPen( palette.text() );
         painter->setPen( Qt::DotLine );
@@ -1362,7 +1372,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     painter->setFont( font );
     painter->setPen( pen );
     painter->drawText( option.rectF, align, text, &r );
-    
+
     painter->restore();
     return r;
 }
@@ -1410,7 +1420,7 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
         paintRect=false;
         }
       painter->setPen( fgColor );
-        
+
       QPen pen=painter->pen();
       if ( option.state & QStyle::State_Selected )
       {
@@ -1481,7 +1491,7 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
     //kDebug()<<daynum;
     painter->save();
     const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-    
+
     QPalette palette = option.palette;
     if ( option.state & QStyle::State_Active ) {
         palette.setCurrentColorGroup( QPalette::Active );
@@ -1492,14 +1502,14 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
     QFont font = KGlobalSettings::generalFont();
 //    font.setBold(true);
     painter->setFont(font);
-    
+
     QColor titleColor( palette.button() );
     QColor textColor( palette.buttonText() );
 
     painter->setPen(titleColor);
     painter->setBrush(titleColor);
     painter->drawRect(option.rectF);
-    
+
     QString value = calendar->weekDayName( daynum, KCalendarSystem::ShortDayName );
     //kDebug()<<daynum<<": "<<value;
     if ( model ) {
@@ -1510,7 +1520,7 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
     }
     painter->setPen( textColor );
     painter->drawText(option.rectF, option.textAlignment, value, &rect);
-    
+
 //     painter->setPen( palette.color(QPalette::Text) );
 //     painter->drawLine(QPointF(0, option.rectF.height()), QPointF(option.rectF.width(), option.rectF.height()));
 
@@ -1557,7 +1567,7 @@ QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOption
         }
     }
     painter->drawText(option.rectF, option.textAlignment, value, &result);
-    
+
 //     painter->setPen(option.palette.color(QPalette::Text));
 //     painter->drawLine(QPointF(option.rectF.width(), 0), QPointF(option.rectF.width(), option.rectF.height()));
 

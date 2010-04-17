@@ -116,7 +116,7 @@ DocumentChild::~DocumentChild()
     kDebug();
     disconnect( KDirWatch::self(), SIGNAL( dirty( const QString & ) ), this, SLOT( slotDirty( const QString &) ) );
     KDirWatch::self()->removeFile( filePath() );
-    
+
     if ( m_type == Type_KOffice || m_type == Type_KParts ) {
         delete m_editor;
     }
@@ -250,7 +250,7 @@ bool DocumentChild::isFileModified() const
     return m_filemodified;
 }
 
-void DocumentChild::slotEditFinished( int par,  QProcess::ExitStatus )
+void DocumentChild::slotEditFinished( int /*par*/,  QProcess::ExitStatus )
 {
     //qDebug()<<"DocumentChild::slotEditFinished:"<<par<<filePath();
     delete m_process;
@@ -655,6 +655,7 @@ bool Part::viewDocument( const KUrl &filename )
         return false;
     }
     KRun *run = new KRun( filename, 0 );
+    Q_UNUSED(run); // XXX: shouldn't run be deleted?
     return true;
 }
 
@@ -684,7 +685,7 @@ void Part::setModified( bool mod )
     emit captionChanged( QString(), mod );
 }
 
-bool Part::saveAs( const KUrl &url )
+bool Part::saveAs( const KUrl &/*url*/ )
 {
     return false;
 }
@@ -699,7 +700,7 @@ bool Part::saveWorkPackages( bool silent )
     return true;
 }
 
-bool Part::completeSaving( KoStore *store )
+bool Part::completeSaving( KoStore */*store*/ )
 {
     return true;
 }
