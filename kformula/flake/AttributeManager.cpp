@@ -26,29 +26,29 @@
 #include <QFontMetricsF>
 #include <QColor>
 #include <kdebug.h>
-// Copied from koffice KoUnit.h
-
-// 1 inch ^= 72 pt
-// 1 inch ^= 25.399956 mm (-pedantic ;p)
-// 1 pt = 1/12 pi
-// 1 pt ^= 0.0077880997 cc
-// 1 cc = 12 dd
-// Note: I don't use division but multiplication with the inverse value
-// because it's faster ;p (Werner)
-#define POINT_TO_MM(px) ((px)*0.352777167)
-#define MM_TO_POINT(mm) ((mm)*2.83465058)
-#define POINT_TO_CM(px) ((px)*0.0352777167)
-#define CM_TO_POINT(cm) ((cm)*28.3465058)
-#define POINT_TO_DM(px) ((px)*0.00352777167)
-#define DM_TO_POINT(dm) ((dm)*283.465058)
-#define POINT_TO_INCH(px) ((px)*0.01388888888889)
-#define INCH_TO_POINT(inch) ((inch)*72.0)
-#define MM_TO_INCH(mm) ((mm)*0.039370147)
-#define INCH_TO_MM(inch) ((inch)*25.399956)
-#define POINT_TO_PI(px)((px)*0.083333333)
-#define POINT_TO_CC(px)((px)*0.077880997)
-#define PI_TO_POINT(pi)((pi)*12)
-#define CC_TO_POINT(cc)((cc)*12.840103)
+//// Copied from koffice KoUnit.h
+//
+//// 1 inch ^= 72 pt
+//// 1 inch ^= 25.399956 mm (-pedantic ;p)
+//// 1 pt = 1/12 pi
+//// 1 pt ^= 0.0077880997 cc
+//// 1 cc = 12 dd
+//// Note: I don't use division but multiplication with the inverse value
+//// because it's faster ;p (Werner)
+//#define POINT_TO_MM(px) ((px)*0.352777167)
+//#define MM_TO_POINT(mm) ((mm)*2.83465058)
+//#define POINT_TO_CM(px) ((px)*0.0352777167)
+//#define CM_TO_POINT(cm) ((cm)*28.3465058)
+//#define POINT_TO_DM(px) ((px)*0.00352777167)
+//#define DM_TO_POINT(dm) ((dm)*283.465058)
+//#define POINT_TO_INCH(px) ((px)*0.01388888888889)
+//#define INCH_TO_POINT(inch) ((inch)*72.0)
+//#define MM_TO_INCH(mm) ((mm)*0.039370147)
+//#define INCH_TO_MM(inch) ((inch)*25.399956)
+//#define POINT_TO_PI(px)((px)*0.083333333)
+//#define POINT_TO_CC(px)((px)*0.077880997)
+//#define PI_TO_POINT(pi)((pi)*12)
+//#define CC_TO_POINT(cc)((cc)*12.840103)
 
 AttributeManager::AttributeManager()
 {
@@ -168,50 +168,50 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
         case Fraction:
             if( parent->displayStyle() == false )
                 return current_scaleLevel+1;
-	    else
-		return current_scaleLevel;
-	case Style: {
+            else
+                return current_scaleLevel;
+        case Style: {
             QString tmp = parent->attribute( "scriptlevel" );
             if( tmp.startsWith( '+' ) )
-		    return current_scaleLevel + tmp.remove(0,1).toInt();
-	    if( tmp.startsWith( '-' ) )
-		    return current_scaleLevel - tmp.remove(0,1).toInt();
+                    return current_scaleLevel + tmp.remove(0,1).toInt();
+            if( tmp.startsWith( '-' ) )
+                    return current_scaleLevel - tmp.remove(0,1).toInt();
             return tmp.toInt();
-	}
-	case MultiScript:
-	    return current_scaleLevel + 1;
-	case Table:
-	    return current_scaleLevel + 1;
-	default:
-	    break;
+        }
+        case MultiScript:
+            return current_scaleLevel + 1;
+        case Table:
+            return current_scaleLevel + 1;
+        default:
+            break;
     }
     if( index == 0) return current_scaleLevel;
     /** Now check for types where the first child isn't scaled, but the rest are */
     switch(parentType) {
-	    case SubScript:
-	    case SupScript:
-	    case SubSupScript:
-        	return current_scaleLevel + 1;
-	    case Under:
-		if( boolOf("accentunder", parent) )
-	    	    return current_scaleLevel + 1;
-		else
-	    	    return current_scaleLevel;
-	    case Over:
-		if( boolOf("accent", parent) )
-	    	    return current_scaleLevel + 1;
-		else
-	    	    return current_scaleLevel;
-	    case UnderOver:
-		if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) )
-	    	    return current_scaleLevel + 1;
-		else
-	    	    return current_scaleLevel;
-	    case Root:
-		/* second argument to root is the base */
-	        return current_scaleLevel + 1;
+            case SubScript:
+            case SupScript:
+            case SubSupScript:
+                return current_scaleLevel + 1;
+            case Under:
+                if( boolOf("accentunder", parent) )
+                    return current_scaleLevel + 1;
+                else
+                    return current_scaleLevel;
+            case Over:
+                if( boolOf("accent", parent) )
+                    return current_scaleLevel + 1;
+                else
+                    return current_scaleLevel;
+            case UnderOver:
+                if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) )
+                    return current_scaleLevel + 1;
+                else
+                    return current_scaleLevel;
+            case Root:
+                /* second argument to root is the base */
+                return current_scaleLevel + 1;
             default:
-	    	return current_scaleLevel;
+                return current_scaleLevel;
     }
 }
 

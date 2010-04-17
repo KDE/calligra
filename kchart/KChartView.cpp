@@ -116,7 +116,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     m_canvas = new KChartCanvas( this, part );
 
     connect( m_canvas, SIGNAL( documentViewRectChanged( const QRectF& ) ),
-	     this,     SLOT( documentViewRectChanged( const QRectF& ) ) );
+             this,     SLOT( documentViewRectChanged( const QRectF& ) ) );
 
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
@@ -160,7 +160,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     //    loadConfig();
 
     //KChartPart *part = (KChartPart*)koDocument();
-    
+
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
@@ -172,7 +172,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
         KoToolBoxFactory toolBoxFactory( m_canvasController, i18n("Tools") );
         shell()->createDockWidget( &toolBoxFactory );
     }
-	
+
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.
     if ( !part->canChangeValue() ) {
@@ -182,7 +182,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     m_canvas->shapeManager()->add( part->chart() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-    
+
     m_canvasController->show();
 }
 
@@ -204,7 +204,7 @@ ViewAdaptor* KChartView::dbusObject()
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 {
     //QPainter painter( this );
-    //QRect clipRect = 
+    //QRect clipRect =
 
     // ### TODO: Scaling
 
@@ -218,7 +218,7 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 void KChartView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
-#warning TODO
+    #warning TODO: implement updateReadWrite
 #endif
 }
 
@@ -304,24 +304,24 @@ void KChartView::print(QPrinter &printer, QPrintDialog &printDialog)
     int  height;
     int  width;
     if ( !printer.previewOnly() ) {
-	int const scalex = printer.option("kde-kchart-printsizex").toInt();
-	int const scaley = printer.option("kde-kchart-printsizey").toInt();
+        int const scalex = printer.option("kde-kchart-printsizex").toInt();
+        int const scaley = printer.option("kde-kchart-printsizey").toInt();
 
-	width  = printer.width()  * scalex / 100;
-	height = printer.height() * scaley / 100;
+        width  = printer.width()  * scalex / 100;
+        height = printer.height() * scaley / 100;
     }
     else {
-	// Fill the whole page.
-	width  = printer.width();
-	height = printer.height();
+        // Fill the whole page.
+        width  = printer.width();
+        height = printer.height();
     }
 
     QRect  rect(0, 0, width, height);
     KDChart::print(&painter,
-		   ((KChartPart*)koDocument())->params(),
-		   ((KChartPart*)koDocument())->data(),
-		   0, 		// regions
-		   &rect);
+                   ((KChartPart*)koDocument())->params(),
+                   ((KChartPart*)koDocument())->data(),
+                   0, 		// regions
+                   &rect);
     painter.end();
 }
 #endif
@@ -334,9 +334,9 @@ void KChartView::importData()
 {
     // Get the name of the file to open.
     QString filename = KFileDialog::getOpenFileName(KUrl(QString()),// startDir
-						    QString(),// filter
-						    0,
-						    i18n("Import Data"));
+                                                    QString(),// filter
+                                                    0,
+                                                    i18n("Import Data"));
     kDebug(35001) <<"Filename = <" << filename <<">";
     if (filename.isEmpty())
       return;
@@ -344,10 +344,10 @@ void KChartView::importData()
     // Check to see if we can read the file.
     QFile  inFile(filename);
     if (!inFile.open(QIODevice::ReadOnly)) {
-	KMessageBox::sorry( 0, i18n("The file %1 could not be read.",
+        KMessageBox::sorry( 0, i18n("The file %1 could not be read.",
                                     filename) );
-	inFile.close();
-	return;
+        inFile.close();
+        return;
     }
 
     // Let the CSV dialog structure the data in the file.
@@ -357,8 +357,8 @@ void KChartView::importData()
     dialog->setData(inData);
 
     if ( !dialog->exec() ) {
-	// kDebug(35001) <<"Cancel was pressed";
-	return;
+        // kDebug(35001) <<"Cancel was pressed";
+        return;
     }
 
     //kDebug(35001) <<"OK was pressed";
@@ -376,35 +376,35 @@ void KChartView::importData()
     data.setUsedRows( rows );
     data.setUsedCols( cols );
     for (uint row = 0; row < rows; row++) {
-	for (uint col = 0; col < cols; col++) {
-	    bool     ok;
-	    QString  tmp;
-	    qreal   val;
+        for (uint col = 0; col < cols; col++) {
+            bool     ok;
+            QString  tmp;
+            qreal   val;
 
-	    // Get the text and convert to qreal unless in the headers.
-	    tmp = dialog->text( row, col );
-	    if ( ( row == 0 && hasRowHeaders )
-		 || ( col == 0 && hasColHeaders ) ) {
-		kDebug(35001) <<"Setting header (" << row <<"," << col
-			       << ") to value " << tmp << endl;
-		data.setCell( row, col, tmp );
-	    }
-	    else {
-		val = tmp.toDouble(&ok);
-		if (!ok)
-		    val = 0.0;
+            // Get the text and convert to qreal unless in the headers.
+            tmp = dialog->text( row, col );
+            if ( ( row == 0 && hasRowHeaders )
+                 || ( col == 0 && hasColHeaders ) ) {
+                kDebug(35001) <<"Setting header (" << row <<"," << col
+                               << ") to value " << tmp << endl;
+                data.setCell( row, col, tmp );
+            }
+            else {
+                val = tmp.toDouble(&ok);
+                if (!ok)
+                    val = 0.0;
 
-		kDebug(35001) <<"Setting (" << row <<"," << col
-			       << ") to value " << val << endl;
+                kDebug(35001) <<"Setting (" << row <<"," << col
+                               << ") to value " << val << endl;
 
-		// and do the actual setting.
-		data.setCell( row, col, val );
-	    }
-	}
+                // and do the actual setting.
+                data.setCell( row, col, val );
+            }
+        }
     }
 
     ((KChartPart*)koDocument())->doSetData( data,
-					    hasRowHeaders, hasColHeaders );
+                                            hasRowHeaders, hasColHeaders );
 #else
 //js 2008-03-19
 //?? warning C4930: 'QStandardItemModel data(void)': prototyped function not called (was a variable definition intended?)

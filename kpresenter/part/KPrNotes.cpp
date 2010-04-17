@@ -72,7 +72,6 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     m_textShape = factory->createDefaultShape(m_doc->resourceManager());
     m_textShape->setGeometryProtected(true);
     m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
-    m_pageLayout = KoPageLayout::standardLayout();
     m_textShape->setPosition(QPointF(62.22, 374.46));
     m_textShape->setSize(QSizeF(489.57, 356.37));
 

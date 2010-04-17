@@ -2384,7 +2384,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
 
 void Sheet::loadOdfMasterLayoutPage(KoStyleStack &styleStack)
 {
-    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    KoPageLayout pageLayout;
 
     if (styleStack.hasProperty(KoXmlNS::fo, "page-width")) {
         pageLayout.width = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "page-width"));
@@ -3555,7 +3555,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     // Load the paper layout
     KoXmlElement paper = sheet.namedItem("paper").toElement();
     if (!paper.isNull()) {
-        KoPageLayout pageLayout = KoPageLayout::standardLayout();
+        KoPageLayout pageLayout;
         pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
         pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
                                  ? KoPageFormat::Portrait : KoPageFormat::Landscape;
@@ -3836,6 +3836,7 @@ void Sheet::hideSheet(bool _hide)
 
 bool Sheet::setSheetName(const QString& name, bool init)
 {
+    Q_UNUSED(init);
     if (map()->findSheet(name))
         return false;
 

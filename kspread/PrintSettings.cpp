@@ -72,7 +72,6 @@ void PrintSettings::Private::calculatePageDimensions()
 PrintSettings::PrintSettings()
         : d(new Private)
 {
-    d->pageLayout = KoPageLayout::standardLayout();
     d->printGrid = false;
     d->printCharts = true;
     d->printObjects = true;

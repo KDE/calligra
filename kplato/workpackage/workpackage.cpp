@@ -101,7 +101,7 @@ void WorkPackage::projectChanged()
     setModified( true );
 }
 
-bool WorkPackage::addChild( Part *part, const Document *doc )
+bool WorkPackage::addChild( Part */*part*/, const Document *doc )
 {
     DocumentChild *ch = findChild( doc );
     if ( ch ) {
@@ -233,7 +233,7 @@ bool WorkPackage::saveToStream( QIODevice * dev )
     return nwritten == (int)s.size();
 }
 
-bool WorkPackage::saveNativeFormat( Part *part, const QString &path )
+bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
 {
     if ( path.isEmpty() ) {
         KMessageBox::error( 0, i18n("Cannot save to empty filename") );
@@ -474,7 +474,7 @@ int WorkPackage::queryClose( Part *part )
     }
     if ( ! lst.isEmpty() ) {
         int result = KMessageBox::warningContinueCancelList( 0,
-                    i18np( 
+                    i18np(
                         "<p>The work package <b>'%2'</b> has an open document.</p><p>Data may be lost if you continue.</p>",
                         "<p>The work package <b>'%2'</b> has open documents.</p><p>Data may be lost if you continue.</p>",
                         lst.count(),

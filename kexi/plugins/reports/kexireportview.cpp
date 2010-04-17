@@ -46,6 +46,8 @@ KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent)
 {
     m_preRenderer = 0;
+    m_reportDocument = 0;
+    
     setObjectName("KexiReportDesigner_DataView");
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setBackgroundRole(QPalette::Dark);
@@ -239,11 +241,11 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
     kDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
-	kDebug() << "Schema changed";
+        kDebug() << "Schema changed";
         delete m_preRenderer;
 
-	kDebug() << tempData()->reportDefinition.tagName();
-	
+        kDebug() << tempData()->reportDefinition.tagName();
+
         m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
@@ -267,6 +269,9 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
+
+            if (m_reportDocument)
+                delete m_reportDocument;
             
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {

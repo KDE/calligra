@@ -52,7 +52,7 @@ public:
      * placed shape.
      * @param state the state of the layout.
      * @param startOfBlock the position in the document of the first character in a block.
-     * @part startOfBlockText the position in the document of the first non-anchor character in a block
+     * @param startOfBlockText the position in the document of the first non-anchor character in a block
      * @return will return true if the layout state has been changed.
      * @see isFinished()
      */

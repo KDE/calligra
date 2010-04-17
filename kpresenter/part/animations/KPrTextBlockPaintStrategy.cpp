@@ -45,6 +45,7 @@ QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
 
 void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
 {
+    Q_UNUSED(painter);
 }
 
 bool KPrTextBlockPaintStrategy::isVisible()

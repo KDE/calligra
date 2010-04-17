@@ -40,7 +40,6 @@ class KoToolProxy;
 
 
 /**
- * Class: KWCanvas
  * This class is responsible for the rendering of the frames to
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.

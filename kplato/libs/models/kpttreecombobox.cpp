@@ -39,9 +39,9 @@ TreeComboBox::TreeComboBox( QWidget *parent )
 {
     m_showcolumns << 0;
     m_showheader = false;
-    
+
     updateView();
-    
+
     connect( this, SIGNAL( activated( int ) ), SLOT( slotSelectionChanged() ) );
 }
 
@@ -108,6 +108,7 @@ void TreeComboBox::showPopup()
 
 void TreeComboBox::paintEvent( QPaintEvent *event )
 {
+    Q_UNUSED(event);
     QStylePainter painter(this);
     painter.setPen(palette().color(QPalette::Text));
 

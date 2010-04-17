@@ -34,7 +34,7 @@
 
 namespace KPlato
 {
-  
+
 class Project;
 class Node;
 class Task;
@@ -52,7 +52,7 @@ CriticalPathItemModel::CriticalPathItemModel( QObject *parent )
 CriticalPathItemModel::~CriticalPathItemModel()
 {
 }
-    
+
 void CriticalPathItemModel::slotNodeToBeInserted( Node *, int )
 {
     //kDebug()<<node->name();
@@ -65,6 +65,7 @@ void CriticalPathItemModel::slotNodeInserted( Node * /*node*/ )
 
 void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
 {
+    Q_UNUSED(node);
     //kDebug()<<node->name();
 /*    if ( m_path.contains( node ) ) {
     }*/
@@ -72,6 +73,7 @@ void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
 
 void CriticalPathItemModel::slotNodeRemoved( Node *node )
 {
+    Q_UNUSED(node);
     //kDebug()<<node->name();
 }
 
@@ -82,7 +84,7 @@ void CriticalPathItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
+
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
@@ -94,7 +96,7 @@ void CriticalPathItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
+
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
@@ -313,7 +315,7 @@ PertResultItemModel::PertResultItemModel( QObject *parent )
 PertResultItemModel::~PertResultItemModel()
 {
 }
-    
+
 void PertResultItemModel::slotAboutToBeReset()
 {
     kDebug();
@@ -358,7 +360,7 @@ void PertResultItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
+
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
@@ -370,7 +372,7 @@ void PertResultItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
+
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
@@ -473,7 +475,7 @@ Qt::ItemFlags PertResultItemModel::flags( const QModelIndex &index ) const
     return flags;
 }
 
-    
+
 QModelIndex PertResultItemModel::parent( const QModelIndex &index ) const
 {
     if ( !index.isValid() ) {
@@ -547,7 +549,7 @@ QModelIndex PertResultItemModel::index( const NodeList *lst ) const
 
 QVariant PertResultItemModel::name( int row, int role ) const
 {
-    
+
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -732,7 +734,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
         result = m_nodemodel.data( n, index.column(), role );
     }
     if ( n->type() == Node::Type_Project ) {
-        Project *p = static_cast<Project*>( n );
+        //Project *p = static_cast<Project*>( n );
         switch ( index.column() ) {
             case NodeModel::NodeName: result = name( NodeModel::NodeName, role ); break;
             default:

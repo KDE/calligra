@@ -47,6 +47,7 @@ KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
         if (m_valid && names.contains(extConn[2])) {
             m_valid = m_KexiMigrate->readFromTable(extConn[2]);
         }
+        m_position = 0;
     }
 }
 
@@ -113,6 +114,8 @@ bool KexiMigrateReportData::moveNext()
     if (!m_valid)
         return false;
 
+    m_position++;
+    
     return m_KexiMigrate->moveNext();
 
 }
@@ -122,6 +125,8 @@ bool KexiMigrateReportData::movePrevious()
     if (!m_valid)
         return false;
 
+    if (m_position > 0) m_position--;
+
     return m_KexiMigrate->movePrevious();
 }
 
@@ -129,6 +134,8 @@ bool KexiMigrateReportData::moveFirst()
 {
     if (!m_valid)
         return false;
+
+    m_position = 1;
 
     return m_KexiMigrate->moveFirst();
 
@@ -142,12 +149,12 @@ bool KexiMigrateReportData::moveLast()
     return m_KexiMigrate->moveLast();
 }
 
-long KexiMigrateReportData::at() const
+qint64 KexiMigrateReportData::at() const
 {
-    return 0;
+    return m_position;
 }
 
-long KexiMigrateReportData::recordCount() const
+qint64 KexiMigrateReportData::recordCount() const
 {
     return 1;
 }

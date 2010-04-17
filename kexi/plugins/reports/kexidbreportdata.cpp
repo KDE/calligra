@@ -199,7 +199,7 @@ bool KexiDBReportData::moveLast()
     return false;
 }
 
-long KexiDBReportData::at() const
+qint64 KexiDBReportData::at() const
 {
     if ( m_cursor )
         return m_cursor->at();
@@ -207,7 +207,7 @@ long KexiDBReportData::at() const
     return 0;
 }
 
-long KexiDBReportData::recordCount() const
+qint64 KexiDBReportData::recordCount() const
 {
     if ( m_schema )
     {

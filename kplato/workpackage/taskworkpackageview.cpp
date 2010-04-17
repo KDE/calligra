@@ -74,9 +74,9 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
-    
+
     createItemDelegates( m );
-    
+
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
@@ -89,7 +89,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
             << TaskWorkPackageModel::ProjectName
             << TaskWorkPackageModel::ProjectManager;
 
-    QList<int> lst2; 
+    QList<int> lst2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
             lst2 << i;
@@ -132,7 +132,7 @@ void TaskWorkPackageTreeView::slotActivated( const QModelIndex index )
     kDebug()<<index.column();
 }
 
-void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent *event)
+void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 {
 /*    if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
@@ -188,7 +188,7 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
-    
+
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), SLOT( slotSelectionChanged( const QModelIndexList ) ) );
@@ -199,7 +199,7 @@ void TaskWorkPackageView::updateReadWrite( bool rw )
     m_view->setReadWrite( rw );
 }
 
-void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList lst )
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList /*lst*/ )
 {
     emit selectionChanged();
 }
@@ -209,12 +209,12 @@ QList<Node*> TaskWorkPackageView::selectedNodes() const
     return m_view->selectedNodes();
 }
 
-Node *TaskWorkPackageView::currentNode() const 
+Node *TaskWorkPackageView::currentNode() const
 {
     return m_view->model()->nodeForIndex( m_view->selectionModel()->currentIndex() );
 }
 
-Document *TaskWorkPackageView::currentDocument() const 
+Document *TaskWorkPackageView::currentDocument() const
 {
     return m_view->model()->documentForIndex( m_view->selectionModel()->currentIndex() );
 }
@@ -297,7 +297,7 @@ void TaskWorkPackageView::setupGui()
     // Add the context menu actions for the view options
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
-    
+
     actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
@@ -322,9 +322,9 @@ bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
 {
     kDebug();
 //     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
-//     
+//
 //     m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
-//     
+//
 //     m_view->setWeekday( context.attribute( "weekday", QString("%1").arg( m_view->defaultWeekday() ) ).toInt() );
     return m_view->loadContext( model()->columnMap(), context );
 }

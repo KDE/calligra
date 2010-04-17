@@ -43,9 +43,9 @@ public:
     ~KWPageRemoveCommand();
 
     /// (re)do the command
-    void redo();
+    virtual void redo();
     /// revert the actions done in redo
-    void undo();
+    virtual void undo();
 
 private:
     KWDocument *m_document;

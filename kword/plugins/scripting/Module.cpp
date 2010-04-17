@@ -193,7 +193,8 @@ QObject* Module::findFrameSet(KWord::TextFrameSetType type)
 
 QObject* Module::standardPageLayout()
 {
-    return new PageLayout(this, KoPageLayout::standardLayout());
+    KoPageLayout layout;
+    return new PageLayout(this, layout);
 }
 
 QObject* Module::defaultParagraphStyle()

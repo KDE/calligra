@@ -627,6 +627,7 @@ QVariant ItemModelBase::data( const QModelIndex &index, int role ) const
 
 QVariant ItemModelBase::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+    Q_UNUSED(orientation);
     if ( role == Role::ColumnTag ) {
         return columnMap().key( section );
     }
@@ -635,6 +636,7 @@ QVariant ItemModelBase::headerData( int section, Qt::Orientation orientation, in
 
 bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    Q_UNUSED(index);
     if ( role == Role::ReadWrite ) {
         setReadWrite( value.toBool() );
         return true;

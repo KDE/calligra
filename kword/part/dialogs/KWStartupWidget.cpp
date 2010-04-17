@@ -34,7 +34,6 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     // TODO get unit from config and set it on m_unit
 
     m_columns = columns;
-    m_layout = KoPageLayout::standardLayout();
     m_layout.leftMargin = MM_TO_POINT(30);
     m_layout.rightMargin = MM_TO_POINT(30);
     m_layout.topMargin = MM_TO_POINT(25);

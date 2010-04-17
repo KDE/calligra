@@ -30,8 +30,6 @@ class KWStatisticsDialog : public KDialog
 public:
     /**
      * Constructor.
-     * @param selectedFrames all frames that this dialog will show for user modification
-     * @param document the parent document where the frames belong to
      * @param parent a parent widget for the purpose of centering the dialog
      */
     KWStatisticsDialog(KWView *parent);

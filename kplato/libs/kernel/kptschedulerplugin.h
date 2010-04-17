@@ -30,7 +30,7 @@ namespace KPlato
 
 class Project;
 class ScheduleManager;
- 
+
 class KPLATOKERNEL_EXPORT SchedulerPlugin : public QObject
 {
     Q_OBJECT
@@ -39,7 +39,7 @@ public:
     virtual ~SchedulerPlugin();
 
     /// Stop calculation of the schedule @p sm
-    virtual void stopCalculation( ScheduleManager *sm ) {}
+    virtual void stopCalculation( ScheduleManager *sm ) {Q_UNUSED(sm);}
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
 

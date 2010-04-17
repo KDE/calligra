@@ -36,6 +36,7 @@ FilterRegionEditStrategy::FilterRegionEditStrategy(KoToolBase* parent, KoShape *
 
 void FilterRegionEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers);
     QPointF shapePoint = m_shape->documentToShape(mouseLocation);
     if (m_lastPosition.isNull()) {
         m_lastPosition = shapePoint;
@@ -79,10 +80,12 @@ QUndoCommand *FilterRegionEditStrategy::createCommand()
 
 void FilterRegionEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers);
 }
 
 void FilterRegionEditStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     // paint the filter subregion rect
     painter.setBrush(Qt::NoBrush);
     painter.setPen(Qt::red);

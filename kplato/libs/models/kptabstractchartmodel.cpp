@@ -22,7 +22,7 @@
 
 namespace KPlato
 {
-    
+
 ChartDataIndex::ChartDataIndex()
     : userData( 0 ),
       m_number( -1 )
@@ -144,6 +144,7 @@ ChartDataIndex AbstractChartModel::createDataIndex( int number, const ChartDataI
 
 ChartAxisIndex AbstractChartModel::createAxisIndex( int number, const ChartAxisIndex &parent, int userdata, int parentId ) const
 {
+    Q_UNUSED(parent);
     ChartAxisIndex idx( number, userdata );
     idx.parentId = parentId;
     //kDebug()<<"Created"<<idx;

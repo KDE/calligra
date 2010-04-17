@@ -262,7 +262,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     int columnsCount = columns;
     KWTextFrame **main, *footer = 0, *endnote = 0, *header = 0, *footnote = 0;
     main = new KWTextFrame*[columnsCount];
-    main[0] = 0;
+    if (columns > 0)
+        main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     foreach (KWFrame *frame, framesInPage(pageRect)) {
         KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
@@ -354,7 +355,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
 
     // actually move / size the frames.
-    if (main[0]) {
+    if (columns > 0 && main[0]) {
         const qreal columnWidth = textWidth / columns;
         QPointF *points = new QPointF[columns];
         for (int i = columns - 1; i >= 0; i--)

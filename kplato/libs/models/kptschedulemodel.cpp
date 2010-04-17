@@ -154,45 +154,45 @@ void ScheduleItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerToBeInserted( const ScheduleManager*, int) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerToBeInserted( const ScheduleManager*, int) ) );
-        
+
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
     setFlat( m_flat ); // update m_managerlist
@@ -372,7 +372,7 @@ QVariant ScheduleItemModel::state( const QModelIndex &index, int role ) const
             }
             return l.first();
         }
-        case Qt::EditRole: 
+        case Qt::EditRole:
         {
             QStringList l = sm->state();
             if ( l.isEmpty() ) {
@@ -411,7 +411,7 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->allowOverbooking();
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -451,7 +451,7 @@ QVariant ScheduleItemModel::usePert( const QModelIndex &index, int role ) const
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->usePert();
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -491,7 +491,7 @@ QVariant ScheduleItemModel::calculateAll( const QModelIndex &index, int role ) c
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->calculateAll();
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -531,7 +531,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
@@ -554,7 +554,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
@@ -577,7 +577,7 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->schedulingDirection();
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -617,7 +617,7 @@ QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) cons
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->schedulerPluginId();
         case Qt::DisplayRole:
             return sm->schedulerPlugin()->name();
@@ -657,7 +657,7 @@ QVariant ScheduleItemModel::isScheduled( const QModelIndex &index, int role ) co
         return QVariant();
     }
     switch ( role ) {
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return sm->isScheduled();
         case Qt::DisplayRole:
             return sm->isScheduled() ? i18n( "Scheduled" ) : i18n( "Not scheduled" );
@@ -792,6 +792,8 @@ QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *p
 
 void ScheduleItemModel::sort( int column, Qt::SortOrder order )
 {
+    Q_UNUSED(column);
+    Q_UNUSED(order);
 }
 
 QMimeData * ScheduleItemModel::mimeData( const QModelIndexList & ) const
@@ -868,6 +870,8 @@ void ScheduleLogItemModel::slotScheduleManagerRemoved( const ScheduleManager *ma
 
 void ScheduleLogItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
 {
+    Q_UNUSED(manager);
+    Q_UNUSED(row);
     if ( m_manager && m_manager->expected() /*== ??*/ ) {
         //TODO
     }
@@ -901,37 +905,37 @@ void ScheduleLogItemModel::setProject( Project *project )
     kDebug()<<m_project<<"->"<<project;
     if ( m_project ) {
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
-    
+
         disconnect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
-        
+
         disconnect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
-    
+
         connect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
-        
+
         connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
 }
@@ -956,7 +960,7 @@ void ScheduleLogItemModel::refresh()
     QStringList lst;
     lst << i18n( "Name" ) << i18n( "Phase" ) << i18n( "Severity" ) << i18n( "Message" );
     setHorizontalHeaderLabels( lst );
-    
+
     if ( m_schedule == 0 ) {
         kDebug()<<"No main schedule";
         return;
@@ -1005,6 +1009,7 @@ void ScheduleLogItemModel::slotScheduleChanged( MainSchedule *sch )
 
 Qt::ItemFlags ScheduleLogItemModel::flags( const QModelIndex &index ) const
 {
+    Q_UNUSED(index);
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 

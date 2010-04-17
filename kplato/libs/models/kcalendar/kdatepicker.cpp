@@ -149,14 +149,14 @@ void KDatePicker::init( const QDate &dt )
   d->navigationLayout->setMargin(0);
   topLayout->addLayout(d->navigationLayout);
   d->navigationLayout->addStretch();
-  
+
   d->yearBackward = new QPushButton(this);
   //d->yearBackward->setAutoRaise(true);
   d->yearBackward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
   d->yearBackward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->yearBackward);
   d->yearBackward->installEventFilter( this );
-  
+
   d->monthBackward = new QPushButton(this);
   //d->monthBackward ->setAutoRaise(true);
   d->monthBackward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -186,7 +186,7 @@ void KDatePicker::init( const QDate &dt )
   d->monthForward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
   d->monthForward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->monthForward);
-  
+
   d->yearForward = new QPushButton(this);
   //d->yearForward ->setFlat(true);
   d->yearForward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -198,17 +198,17 @@ void KDatePicker::init( const QDate &dt )
 
   d->line = new KLineEdit(this);
   d->val = new KDateValidator(this);
-  
+
   Frame *f = new Frame( this );
   topLayout->addWidget( f );
   QVBoxLayout *l = new QVBoxLayout( f );
-  
+
   d->table = new KDateTable(f);
   connect( d->table, SIGNAL( focusChanged( QFocusEvent* ) ), f, SLOT( updateFocus( QFocusEvent* ) ) );
   l->addWidget( d->table );
   f->setFocusProxy( d->table );
   d->table->installEventFilter( this );
-  
+
   d->fontsize = KGlobalSettings::generalFont().pointSize();
   if (d->fontsize == -1)
      d->fontsize = QFontInfo(KGlobalSettings::generalFont()).pointSize();
@@ -217,7 +217,7 @@ void KDatePicker::init( const QDate &dt )
 
   d->selectWeek = new QComboBox(this);  // read only week selection
   d->selectWeek->installEventFilter( this );
-  
+
   d->todayButton = new QPushButton(this);
   d->todayButton->setIcon(KIcon("go-jump-today"));
   d->todayButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -315,6 +315,7 @@ KDatePicker::resizeEvent(QResizeEvent* e)
 void
 KDatePicker::paintEvent(QPaintEvent *e)
 {
+    Q_UNUSED(e);
     //kDebug()<<e;
     QPainter paint(this);
     drawFrame(&paint);

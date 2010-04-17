@@ -187,6 +187,7 @@ View::~View()
 void View::createViews()
 {
     TaskWorkPackageView * v = createTaskWorkPackageView();
+    Q_UNUSED(v); // XXX: shouldn't v be deleted?
 }
 
 TaskWorkPackageView *View::createTaskWorkPackageView()
@@ -201,12 +202,12 @@ TaskWorkPackageView *View::createTaskWorkPackageView()
     return v;
 }
 
-void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
+void View::setupPrinter( QPrinter &/*printer*/, QPrintDialog &/*printDialog */)
 {
     //kDebug();
 }
 
-void View::print( QPrinter &printer, QPrintDialog &printDialog )
+void View::print( QPrinter &/*printer*/, QPrintDialog &/*printDialog*/ )
 {
 }
 
@@ -292,7 +293,7 @@ bool View::loadContext()
     return true;
 }
 
-void View::saveContext( QDomElement &me ) const
+void View::saveContext( QDomElement &/*me*/ ) const
 {
     //kDebug()<<endl;
 }

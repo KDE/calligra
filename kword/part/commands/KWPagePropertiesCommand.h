@@ -49,9 +49,9 @@ public:
     explicit KWPagePropertiesCommand(KWDocument *document, const KWPage &page, const KoPageLayout &newLayout, KoText::Direction direction, const KoColumns &columns, QUndoCommand *parent = 0);
 
     /// redo the command
-    void redo();
+    virtual void redo();
     /// revert the actions done in redo
-    void undo();
+    virtual void undo();
 
 private:
     void setLayout(const KoPageLayout &layout);

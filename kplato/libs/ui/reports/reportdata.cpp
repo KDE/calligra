@@ -139,12 +139,12 @@ bool ReportData::moveLast()
     return true;
 }
 
-long ReportData::at() const
+qint64 ReportData::at() const
 {
     return m_row;
 }
 
-long ReportData::recordCount() const {
+qint64 ReportData::recordCount() const {
     return m_model.rowCount();
 }
 
@@ -276,7 +276,7 @@ bool ChartReportData::moveLast()
     return true;
 }
 
-long ChartReportData::recordCount() const
+qint64 ChartReportData::recordCount() const
 {
     return m_model.columnCount() - 4;
 }

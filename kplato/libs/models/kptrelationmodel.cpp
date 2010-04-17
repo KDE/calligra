@@ -53,7 +53,7 @@ QVariant RelationModel::parentName( const Relation *r, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return r->parent()->name();
         case Qt::TextAlignmentRole:
         case Qt::StatusTipRole:
@@ -69,7 +69,7 @@ QVariant RelationModel::childName( const Relation *r, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-        case Qt::EditRole: 
+        case Qt::EditRole:
             return r->child()->name();
         case Qt::TextAlignmentRole:
         case Qt::StatusTipRole:
@@ -86,10 +86,10 @@ QVariant RelationModel::type( const Relation *r, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return r->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return r->typeList( true );
-        case Qt::EditRole: 
-        case Role::EnumListValue: 
+        case Qt::EditRole:
+        case Role::EnumListValue:
             return (int)r->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -235,6 +235,7 @@ void RelationItemModel::slotNodeToBeRemoved( Node *node )
 
 void RelationItemModel::slotNodeRemoved( Node *node )
 {
+    Q_UNUSED(node);
 }
 
 void RelationItemModel::slotLayoutChanged()
@@ -249,26 +250,26 @@ void RelationItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        
+
         disconnect( m_project, SIGNAL( relationToBeAdded( Relation*, int, int ) ), this, SLOT( slotRelationToBeAdded( Relation*, int, int ) ) );
         disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
-    
+
         disconnect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( slotRelationToBeRemoved( Relation* ) ) );
         disconnect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
-        
+
         disconnect( m_project, SIGNAL( relationModified( Relation* ) ), this, SLOT( slotRelationModified( Relation* ) ) );
     }
     m_project = project;
     if ( project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        
+
         connect( m_project, SIGNAL( relationToBeAdded( Relation*, int, int ) ), this, SLOT( slotRelationToBeAdded( Relation*, int, int ) ) );
         connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
-    
+
         connect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( slotRelationToBeRemoved( Relation* ) ) );
         connect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
-        
+
         connect( m_project, SIGNAL( relationModified( Relation* ) ), this, SLOT( slotRelationModified( Relation* ) ) );
     }
     reset();
@@ -298,7 +299,7 @@ Qt::ItemFlags RelationItemModel::flags( const QModelIndex &index ) const
             case 3: // lag
                 flags |= Qt::ItemIsEditable;
                 break;
-            default: 
+            default:
                 flags &= ~Qt::ItemIsEditable;
                 break;
         }
@@ -306,7 +307,7 @@ Qt::ItemFlags RelationItemModel::flags( const QModelIndex &index ) const
     return flags;
 }
 
-    
+
 QModelIndex RelationItemModel::parent( const QModelIndex &/*index*/ ) const
 {
     return QModelIndex(); // flat model
@@ -451,6 +452,7 @@ Relation *RelationItemModel::relation( const QModelIndex &index ) const
 
 void RelationItemModel::slotNodeChanged( Node *node )
 {
+    Q_UNUSED(node);
     reset();
 }
 
