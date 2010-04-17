@@ -1263,7 +1263,7 @@ KDateTableDataModel::~KDateTableDataModel()
 
 QVariant KDateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
-    Q_UNUSED(data);
+    Q_UNUSED(date);
     Q_UNUSED(role);
     Q_UNUSED(dataType);
     return QVariant();
