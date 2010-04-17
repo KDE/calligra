@@ -76,7 +76,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedS
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
-    shapedata->saveOdf(context, 0, -1);
+    shapedata->saveOdf(context, 0, -1, m_document->documentRdf());
     writer.endElement();
 
     return content;
@@ -367,7 +367,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
                     tbf.setProperty(KoParagraphStyle::MasterPageName, m_masterPages.value(style));
                     cursor.mergeBlockFormat(tbf);
                 }
-                shapeData->saveOdf(context);
+                shapeData->saveOdf(context, 0, -1, m_document->documentRdf());
             }
         }
     }
