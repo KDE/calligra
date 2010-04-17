@@ -212,7 +212,7 @@ void TestPageCommands::testInsertPageCommand3() // restore all properties
     KWPageStyle style = page.pageStyle();
     style.setHasMainTextFrame(false);
     style.setFootnoteDistance(10);
-    KoPageLayout layout = KoPageLayout::standardLayout();
+    KoPageLayout layout;
     layout.width = 400;
     layout.height = 300;
     layout.leftMargin = 4;
@@ -358,7 +358,7 @@ void TestPageCommands::testRemovePageCommand3() // test restore all properties
     KWPageStyle style = page.pageStyle();
     style.setHasMainTextFrame(false);
     style.setFootnoteDistance(10);
-    KoPageLayout layout = KoPageLayout::standardLayout();
+    KoPageLayout layout;
     layout.width = 400;
     layout.height = 300;
     layout.leftMargin = 4;
@@ -437,7 +437,7 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     KWPageManager *manager = document.pageManager();
 
     KWPageStyle style("pagestyle1");
-    KoPageLayout oldLayout = KoPageLayout::standardLayout();
+    KoPageLayout oldLayout;
     oldLayout.format = KoPageFormat::IsoA4Size;
     oldLayout.width = 101;
     oldLayout.height = 102;
@@ -464,7 +464,7 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     QCOMPARE(page1.pageSide(), KWPage::Right);
 
     // new ;)
-    KoPageLayout newLayout = KoPageLayout::standardLayout();
+    KoPageLayout newLayout;
     newLayout.width = 401;
     newLayout.height = 405;
     newLayout.leftMargin = 11;

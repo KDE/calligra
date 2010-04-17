@@ -57,7 +57,6 @@ void KWPageStylePrivate::clear()
     footers = KWord::HFTypeNone;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
-    pageLayout = KoPageLayout::standardLayout();
     direction = KoText::AutoDirection;
 
     if (fullPageBackground && !fullPageBackground->deref()) {

@@ -893,7 +893,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     if (!size.isNull())
         paperSize = size.text();
 
-    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(paperSize);
     pageLayout.orientation = (orientation == "Portrait")
                              ? KoPageFormat::Portrait : KoPageFormat::Landscape;

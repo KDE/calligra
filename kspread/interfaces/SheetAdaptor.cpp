@@ -413,7 +413,7 @@ void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder,
                                   float rightBorder, float bottomBoder,
                                   const QString& format, const QString& orientation)
 {
-    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(format);
     pageLayout.orientation = (orientation  == "Portrait")
                              ? KoPageFormat::Portrait : KoPageFormat::Landscape;

@@ -48,7 +48,6 @@
 
 KexiSimplePrintingSettings::KexiSimplePrintingSettings()
 {
-    pageLayout = KoPageLayout::standardLayout();
     addPageNumbers = true;
     addDateAndTime = true;
     addTableBorders = false;

@@ -504,7 +504,7 @@ void TestPageManager::testSetPageStyle()
     KWPage page = manager.appendPage();
 
     KWPageStyle style("myStyle");
-    KoPageLayout layout = KoPageLayout::standardLayout();
+    KoPageLayout layout;
     layout.height = 100;
     style.setPageLayout(layout);
     page.setPageStyle(style);

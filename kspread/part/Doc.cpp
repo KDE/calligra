@@ -638,7 +638,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 
 void Doc::loadPaper(KoXmlElement const & paper)
 {
-    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
     pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
                              ? KoPageFormat::Portrait : KoPageFormat::Landscape;
