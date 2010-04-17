@@ -417,6 +417,7 @@ QDomElement Conditions::saveConditions(QDomDocument & doc) const
 
 Conditional Conditions::loadOdfCondition(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName)
 {
+    Q_UNUSED(styleManager);
     kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
     loadOdfConditionValue(conditionValue, newCondition);
@@ -537,6 +538,7 @@ void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional 
 
 void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlElement & element)
 {
+    Q_UNUSED(styleManager);
     Conditional newCondition;
 
     KoXmlElement conditionElement;
@@ -549,7 +551,7 @@ void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlEle
 
         if (!conditionElement.hasAttribute("cond"))
             continue;
-        
+
         bool ok = true;
         newCondition.cond = (Conditional::Type) conditionElement.attribute("cond").toInt(&ok);
         if(!ok)

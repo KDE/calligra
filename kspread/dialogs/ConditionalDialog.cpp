@@ -601,7 +601,7 @@ void ConditionalDialog::slotOk()
 
     kDebug() << "Input data is valid";
 
-    StyleManager * manager = m_selection->activeSheet()->map()->styleManager();
+    //StyleManager * manager = m_selection->activeSheet()->map()->styleManager();
 
     QLinkedList<Conditional> newList;
 

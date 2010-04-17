@@ -3836,6 +3836,7 @@ void Sheet::hideSheet(bool _hide)
 
 bool Sheet::setSheetName(const QString& name, bool init)
 {
+    Q_UNUSED(init);
     if (map()->findSheet(name))
         return false;
 
