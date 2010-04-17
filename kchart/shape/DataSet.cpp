@@ -1022,11 +1022,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     
 #ifndef NWORKAROUND_ODF_BUGS
     if( ! penLoaded) {
-        QColor fixedColor = KoOdfWorkaround::fixMissingStrokeColor( n, context );
-        if ( fixedColor.isValid() ) {
-            pen = fixedColor;
-            penLoaded = true;
-        }
+        penLoaded = KoOdfWorkaround::fixMissingStroke( pen, n, context );
     }
     if( ! brushLoaded) {
         QColor fixedColor = KoOdfWorkaround::fixMissingFillColor( n, context );
