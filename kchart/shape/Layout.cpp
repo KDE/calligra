@@ -42,11 +42,13 @@ public:
     Position pos;
     int weight;
     bool clipped;
+    bool scaleOnly;
 
     LayoutData( Position _pos, int _weight )
-        : pos( _pos ),
-          weight( _weight ),
-          clipped( true ) {};
+        : pos( _pos )
+        , weight( _weight )
+        , clipped( true )
+        , scaleOnly( false ) {};
 };
 
 Layout::Layout()
@@ -85,6 +87,18 @@ void Layout::remove( KoShape *shape )
     }
 }
 
+void Layout::setScaleOnly( const KoShape *shape, bool scaleOnly )
+{
+    Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
+    m_layoutItems.value( const_cast<KoShape*>(shape) )->scaleOnly = scaleOnly;
+}
+
+bool Layout::scaleOnly( const KoShape *shape ) const
+{
+    Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
+    return m_layoutItems.value( const_cast<KoShape*>(shape) )->scaleOnly;
+}
+
 void Layout::setClipping( const KoShape *shape, bool clipping )
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
@@ -113,6 +127,8 @@ void Layout::containerChanged( KoShapeContainer *container )
     if ( container->size() != m_containerSize ) {
         QSizeF oldSize = m_containerSize;
         m_containerSize = container->size();
+        if ( oldSize.isValid() )
+            scaleLayout( oldSize, container->size() );
         scheduleRelayout();
     }
     // Container was moved
@@ -186,9 +202,9 @@ void Layout::layout()
     while ( it.hasNext() ) {
         it.next();
         KoShape *shape = it.key();
-        if ( !shape->isVisible() )
-            continue;
         LayoutData *data = it.value();
+        if ( !shape->isVisible() || data->scaleOnly )
+            continue;
         switch ( data->pos ) {
         case TopPosition:
             top.insert( data->weight, shape );
@@ -246,6 +262,44 @@ void Layout::layout()
 /// Private Methods
 
 
+
+void Layout::scaleLayout( const QSizeF &oldSize, const QSizeF &newSize )
+{
+    Q_ASSERT( !m_doingLayout );
+    m_doingLayout = true;
+
+    const QSizeF diff = newSize - oldSize;
+    const qreal dx = diff.width();
+    const qreal dy = diff.height();
+    QMapIterator<KoShape*, LayoutData*> it( m_layoutItems );
+    while ( it.hasNext() )
+    {
+        it.next();
+        KoShape *shape = it.key();
+        LayoutData *data = it.value();
+        // If scaleOnly is not set for this layout item, it will be laid out as usual by layout().
+        if ( !data->scaleOnly )
+            continue;
+        switch( data->pos ) {
+        case TopPosition:
+            setItemPosition( shape, itemPosition( shape ) + QPointF( dx / 2.0, 0.0 ) );
+            break;
+        case BottomPosition:
+            setItemPosition( shape, itemPosition( shape ) + QPointF( dx / 2.0, dy ) );
+            break;
+        case StartPosition:
+            setItemPosition( shape, itemPosition( shape ) + QPointF( 0.0, dy / 2.0 ) );
+            break;
+        case EndPosition:
+            setItemPosition( shape, itemPosition( shape ) + QPointF( dx, dy / 2.0 ) );
+            break;
+        case CenterPosition:
+            shape->setSize( itemSize( shape ) + diff );
+        }
+    }
+
+    m_doingLayout = false;
+}
 
 qreal Layout::layoutTop( const QMap<int, KoShape*>& shapes )
 {

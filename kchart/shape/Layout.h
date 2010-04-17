@@ -92,6 +92,32 @@ public:
     void remove( KoShape *shape );
 
     /**
+     * If \a scaleOnly is true, \a shape will not be laid out as usual but its position
+     * and size will only be adjusted if the container's size changes (in other words,
+     * the item will only be scaled with the container).
+     * Thus it will not make room for other shapes that are added (e.g. by making them
+     * visible) to this layout.
+     *
+     * This is useful for loading from ODF: At one point, we set the pos/size of a shape A
+     * as specfied in ODF. Later we set another position and size of a different shape B in the same
+     * layout as specified for it in ODF. We do not, however, want B to effect the size or position
+     * of the previous shape A. Then, why not just remove them from the layout? The point is: When the
+     * container's size changes, we still want the layout items to have a resonable position in this layout.
+     * In that case, we set this property for these shapes.
+     *
+     * In short, the layout will still obey the layout position of \a shape, but \a shape won't effect
+     * other shapes in this layout and the other way around.
+     */
+    void setScaleOnly( const KoShape *shape, bool scaleOnly );
+
+    /**
+     * Returns whether this \a shape will only be scaled with the layout.
+     *
+     * \see setScaleOnly
+     */
+    bool scaleOnly( const KoShape *shape ) const;
+
+    /**
      * Turns clipping of a shape on or off.
      */
     void setClipping( const KoShape *shape, bool clipping );
@@ -153,6 +179,14 @@ public:
     void scheduleRelayout();
 
 private:
+    /**
+     * Scales the relative position (and size of center item) of all items
+     * in this layout for which the scaleOnly property is set.
+     *
+     * \see setScaleOnly
+     */
+    void scaleLayout( const QSizeF &oldSize, const QSizeF &newSize );
+
     /**
      * Lays out all items in TopPosition, and returns the y value of
      * the bottom-most item's bottom.
