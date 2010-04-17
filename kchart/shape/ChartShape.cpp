@@ -177,6 +177,7 @@ QString saveOdfFont( KoGenStyles& mainStyles,
 
 bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
 {
+    Q_UNUSED(context);
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
         return false;
@@ -738,6 +739,7 @@ void ChartShape::setSize( const QSizeF &newSize )
     case BottomStartLegendPosition:
     case TopEndLegendPosition:
     case BottomEndLegendPosition:
+    case FloatingLegendPosition:
         // FIXME: These are not handled.
         break;
     }
@@ -752,7 +754,7 @@ void ChartShape::setSize( const QSizeF &newSize )
 
     // Finally, resize the plotarea.
     const QSizeF plotAreaSize = d->plotArea->size();
-    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(), 
+    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(),
                                   plotAreaSize.height() + newSize.height() - size().height() ) );
 
     // Oh yeah, the whole shape needs resizing too.
@@ -928,8 +930,8 @@ void ChartShape::paintDecorations( QPainter &painter,
 //                         Loading and Saving
 
 
-bool ChartShape::loadEmbeddedDocument( KoStore *store, 
-                                       const KoXmlElement &objectElement, 
+bool ChartShape::loadEmbeddedDocument( KoStore *store,
+                                       const KoXmlElement &objectElement,
                                        const KoXmlDocument &manifestDocument )
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
@@ -1249,7 +1251,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     //        if it works there too.
     //
     QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
-    if ( tagHierarchy.isEmpty() 
+    if ( tagHierarchy.isEmpty()
          || QString( tagHierarchy.last() ) != "office:chart" )
     {
         bodyWriter.startElement( "draw:frame" );

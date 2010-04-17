@@ -91,41 +91,41 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
     QStandardItemModel  *m_chartData = new QStandardItemModel();
     m_chartData->setRowCount( 4 );
     m_chartData->setColumnCount( 5 );
-    
+
     // Vertical header data
     m_chartData->setData( m_chartData->index( 1, 0 ), i18n( "January" ) );
     m_chartData->setData( m_chartData->index( 2, 0 ), i18n( "July" ) );
     m_chartData->setData( m_chartData->index( 3, 0 ), i18n( "December" ) );
-    
+
     // Horizontal header data
     m_chartData->setData( m_chartData->index( 0, 1 ), i18n( "Column %1", 1 ) );
     m_chartData->setData( m_chartData->index( 0, 2 ), i18n( "Column %1", 2 ) );
     m_chartData->setData( m_chartData->index( 0, 3 ), i18n( "Column %1", 3 ) );
     m_chartData->setData( m_chartData->index( 0, 4 ), i18n( "Column %1", 4 ) );
-    
+
     // First row
     m_chartData->setData( m_chartData->index( 1, 1 ), 5.7 );
     m_chartData->setData( m_chartData->index( 1, 2 ), 3.4 );
     m_chartData->setData( m_chartData->index( 1, 3 ), 1.2 );
     m_chartData->setData( m_chartData->index( 1, 4 ), 8.4 );
-    
+
     // Second row
     m_chartData->setData( m_chartData->index( 2, 1 ), 2.1 );
     m_chartData->setData( m_chartData->index( 2, 2 ), 6.5 );
     m_chartData->setData( m_chartData->index( 2, 3 ), 0.9 );
     m_chartData->setData( m_chartData->index( 2, 4 ), 1.5 );
-    
+
     // Third row
     m_chartData->setData( m_chartData->index( 3, 1 ), 7.9 );
     m_chartData->setData( m_chartData->index( 3, 2 ), 3.5 );
     m_chartData->setData( m_chartData->index( 3, 3 ), 8.6 );
     m_chartData->setData( m_chartData->index( 3, 4 ), 4.3 );
-    
+
     // We want the chart shape to take over and handle this model itself
     shape->setModel( m_chartData, true );
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
-    
+
     const QSizeF shapeSize = shape->size();
 
     QPointF  plotAreaPos( 0.0, 0.0 );
@@ -148,7 +148,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
                                           shapeSize.height() - xAxisTitle->size().height() ) );
         plotAreaSize.rheight() -= xAxisTitle->size().height();
     }
-    
+
     Axis    *yAxis      = shape->plotArea()->yAxis();
     KoShape *yAxisTitle = yAxis->title();
     if ( yAxis ) {
@@ -160,12 +160,12 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
         legendPos.rx() += yAxisTitle->size().height();
         plotAreaSize.rwidth() -= yAxisTitle->size().height();
     }
-    
+
     if ( legend ) {
         legendPos.rx() += plotAreaSize.width();
         legend->setPosition( legendPos );
     }
-    
+
     shape->plotArea()->setPosition( plotAreaPos );
     shape->plotArea()->setSize( plotAreaSize );
 
@@ -179,7 +179,7 @@ QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 
 void ChartShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
-    
+    Q_UNUSED(manager);
 }
 
 #include "ChartShapeFactory.moc"

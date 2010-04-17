@@ -41,7 +41,7 @@ using std::pow;
 using namespace KChart;
 
 static QString columnName( uint column );
-static int rangeCharToInt( char c );
+//static int rangeCharToInt( char c );
 
 class CellRegion::Private
 {
@@ -50,7 +50,7 @@ public:
     ~Private();
 
     QString pointToString( const QPoint &point ) const;
-    
+
     // These are actually one-dimensional, but can have different
     // orientations (hor / vert).
     QVector<QRect> rects;
@@ -93,7 +93,7 @@ CellRegion::CellRegion()
 CellRegion::CellRegion( const CellRegion &region )
     : d( new Private() )
 {
-    // Use operator=(); 
+    // Use operator=();
     *this = region;
 }
 
@@ -252,7 +252,7 @@ bool CellRegion::contains( const QPoint &point, bool proper ) const
         if ( rect.contains( point, proper ) )
             return true;
     }
-    
+
     return false;
 }
 
@@ -262,7 +262,7 @@ bool CellRegion::contains( const QRect &rect, bool proper ) const
         if ( r.contains( rect, proper ) )
             return true;
     }
-    
+
     return false;
 }
 
@@ -272,31 +272,31 @@ bool CellRegion::intersects( const QRect &rect ) const
         if ( r.intersects( rect ) )
             return true;
     }
-    
+
     return false;
 }
 
 CellRegion CellRegion::intersected( const QRect &rect ) const
 {
     CellRegion intersections;
-    
+
     foreach ( const QRect &r, d->rects ) {
         if ( r.intersects( rect ) )
             intersections.add( r.intersected( rect ) );
     }
-    
+
     return intersections;
 }
 
 Qt::Orientation CellRegion::orientation() const
 {
     foreach ( const QRect &rect, d->rects ) {
-    	if ( rect.width() > 1 )
-    		return Qt::Horizontal;
-    	if ( rect.height() > 1 )
-    		return Qt::Vertical;
+        if ( rect.width() > 1 )
+                return Qt::Horizontal;
+        if ( rect.height() > 1 )
+                return Qt::Vertical;
     }
-    
+
     // Default if region is only one cell
     return Qt::Vertical;
 }
@@ -312,7 +312,7 @@ int CellRegion::cellCount() const
         foreach( const QRect &rect, d->rects )
             count += rect.height();
     }
-    
+
     return count;
 }
 
@@ -335,13 +335,13 @@ void CellRegion::add( const QRect &rect )
         qWarning() << "CellRegion::add():" << rect;
         return;
     }
-    
+
     if ( rect.width() > 1 && rect.height() > 1 ) {
         qWarning() << "CellRegion::add() Attempt to add rectangle with height AND width > 1";
         qWarning() << "CellRegion::add():" << rect;
         return;
     }
-    
+
     d->rects.append( rect );
     d->boundingRect |= rect;
 }
@@ -407,7 +407,7 @@ QPoint CellRegion::pointAtIndex( int index ) const
 {
     // sum of all previous rectangle indices
     int i = 0;
-    
+
     foreach ( const QRect &rect, d->rects ) {
         // Rectangle is horizontal
         if ( rect.width() > 1 ) {
@@ -435,7 +435,7 @@ QPoint CellRegion::pointAtIndex( int index ) const
             i += rect.height();
         }
     }
-    
+
     // Invalid index!
     return QPoint( -1, -1 );
 }
@@ -444,7 +444,7 @@ int CellRegion::indexAtPoint( const QPoint &point ) const
 {
     int indicesLeftToPoint = 0;
     bool found = false;
-    
+
     foreach ( const QRect &rect, d->rects ) {
         if ( !rect.contains( point ) ) {
             indicesLeftToPoint += rect.width() > 1 ? rect.width() : rect.height();
@@ -457,7 +457,7 @@ int CellRegion::indexAtPoint( const QPoint &point ) const
         else
             indicesLeftToPoint += point.y() - rect.topLeft().y();
     }
-    
+
     return found ? indicesLeftToPoint : -1;
 }
 
@@ -496,30 +496,30 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     return CellRegion( string ).rects();
 }
 
-int CellRegion::rangeCharToInt( char c )     
-{   
-    return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;     
-}   
-     
-int CellRegion::rangeStringToInt( const QString &string )   
-{   
-    int result = 0;     
-    const int size = string.size();     
-    for ( int i = 0; i < size; i++ ) {     
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );      
-    } 
+int CellRegion::rangeCharToInt( char c )
+{
+    return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;
+}
 
-    return result;      
-}   
-     
-QString CellRegion::rangeIntToString( int i )   
-{   
-    QString tmp = QString::number( i );     
-    for( int j = 0; j < tmp.size(); j++ ) {   
-        tmp[j] = 'A' + tmp[j].toAscii() - '1';      
+int CellRegion::rangeStringToInt( const QString &string )
+{
+    int result = 0;
+    const int size = string.size();
+    for ( int i = 0; i < size; i++ ) {
+        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
     }
 
-    return tmp;     
+    return result;
+}
+
+QString CellRegion::rangeIntToString( int i )
+{
+    QString tmp = QString::number( i );
+    for( int j = 0; j < tmp.size(); j++ ) {
+        tmp[j] = 'A' + tmp[j].toAscii() - '1';
+    }
+
+    return tmp;
 }
 
 // Return the symbolic name of any column.

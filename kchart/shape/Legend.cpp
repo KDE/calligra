@@ -63,7 +63,7 @@ class Legend::Private {
 public:
     Private();
     ~Private();
-    
+
     ChartShape *shape;
 
     // Properties of the Legend
@@ -81,9 +81,9 @@ public:
 
     // The connection to KDChart
     KDChart::Legend *kdLegend;
-    
+
     QImage image;
-    
+
     mutable bool pixmapRepaintRequested;
     QSizeF lastSize;
     QPointF lastZoomLevel;
@@ -109,23 +109,23 @@ Legend::Private::~Private()
 
 
 Legend::Legend( ChartShape *parent )
-    : d( new Private() )
-    , QObject( parent )
+    : QObject( parent )
+    , d( new Private() )
 {
     Q_ASSERT( parent );
-    
+
     setShapeId( ChartShapeId );
-    
+
     d->shape = parent;
 
     d->kdLegend = new KDChart::Legend();
-    
+
     setTitleFontSize( 10 );
     setTitle( QString() );
     setFontSize( 8 );
 
     update();
-    
+
     parent->addChild( this );
 
     connect ( d->kdLegend, SIGNAL( propertiesChanged() ),
@@ -172,7 +172,7 @@ QPen Legend::framePen() const
 void Legend::setFramePen( const QPen &pen )
 {
     d->framePen = pen;
-    
+
     // KDChart
     KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setPen( pen  );
@@ -189,7 +189,7 @@ QColor Legend::frameColor() const
 void Legend::setFrameColor( const QColor &color )
 {
     d->framePen.setColor( color );
-    
+
     // KDChart
     KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setVisible( true );
@@ -357,7 +357,7 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
     const QSize paintRectSize = converter.documentToView( d->lastSize ).toSize();
     const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
     d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
-    
+
     QPainter pixmapPainter( &d->image );
     pixmapPainter.setRenderHints( painter.renderHints() );
     pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
@@ -373,7 +373,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 
     // First of all, scale the painter's coordinate system to fit the current zoom level
     applyConversion( painter, converter );
-    
+
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
     //clipRect.intersect( paintRect );
@@ -397,7 +397,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
         d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
         d->lastSize      = size();
-        
+
         paintPixmap( painter, converter );
     }*/
 
@@ -410,9 +410,9 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 
     // KDChart thinks in pixels, KOffice in pt
     ScreenConversions::scaleFromPtToPx( painter );
-    
+
     d->kdLegend->paint( &painter );
-    
+
     //painter.restore();
     // Paint the cached pixmap
     //painter.drawImage( 0, 0, d->image );
@@ -420,7 +420,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 
 
 // Only reimplemented because pure virtual in KoShape, but not needed
-bool Legend::loadOdf( const KoXmlElement &legendElement, 
+bool Legend::loadOdf( const KoXmlElement &legendElement,
                       KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -451,7 +451,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) ) {
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
-        
+
         if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-expansion" ) ) {
             QString lexpansion = legendElement.attributeNS( KoXmlNS::koffice, "legend-expansion", QString() );
             if ( lexpansion == "wide" )
@@ -496,18 +496,18 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
         else {
             setLegendPosition( EndLegendPosition );
         }
-        
+
         if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) ) {
-            setTitle( legendElement.attributeNS( KoXmlNS::koffice, 
+            setTitle( legendElement.attributeNS( KoXmlNS::koffice,
                                                        "title", QString() ) );
         }
-        
+
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
             styleStack.clear();
             context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
-            
+
             styleStack.setTypeProperties( "text" );
-            
+
             if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
                 setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
             }
@@ -519,9 +519,9 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
         setLegendPosition( TopLegendPosition );
         setAlignment( Qt::AlignCenter );
     }
-    
+
     //d->chart->replaceLegend( d->legend, oldLegend );
-    
+
     d->pixmapRepaintRequested = true;
 
     styleStack.restore();
@@ -533,13 +533,13 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
     KoGenStyles &mainStyles = context.mainStyles();
-    
+
     bodyWriter.startElement( "chart:legend" );
 
     saveOdfAttributes( context, (OdfMandatories ^ OdfStyle) | OdfPosition );
 
     QString lp = LegendPositionToString( d->position );
-    
+
     QString lalign;
 
     if ( !lp.isEmpty() ) {
@@ -548,15 +548,15 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     if ( !lalign.isEmpty() ) {
         bodyWriter.addAttribute( "chart:legend-align", lalign );
     }
-    
+
     QString styleName = saveOdfFont( mainStyles, d->font, d->fontColor );
     bodyWriter.addAttribute( "chart:style-name", styleName );
-    
+
     KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
     Q_ASSERT( style );
     if ( style )
         saveStyle( *style, context );
-    
+
     QString  lexpansion;
     switch ( expansion() ) {
     case WideLegendExpansion:
@@ -569,7 +569,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
         lexpansion = "balanced";
         break;
     };
-    
+
     bodyWriter.addAttribute( "office:legend-expansion", lexpansion );
     if ( !title().isEmpty() )
         bodyWriter.addAttribute( "office:title", title() );

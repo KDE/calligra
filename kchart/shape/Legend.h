@@ -69,15 +69,16 @@ public:
     void setAlignment( Qt::Alignment alignment );
     void setLegendPosition( LegendPosition position );
     void setSize( const QSizeF &size );
-    
+
     void paint( QPainter &painter, const KoViewConverter &converter );
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
-    
+
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
     void saveOdf( KoShapeSavingContext &context ) const;
-    
+
     KDChart::Legend *kdLegend() const;
-    
+
+    using KoShape::update;
     void update() const;
 
 private slots:

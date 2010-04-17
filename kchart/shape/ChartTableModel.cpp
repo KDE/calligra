@@ -70,7 +70,7 @@ bool ChartTableModel::setCellRegion( const QString& regionName )
 
     const int size = regionName.size();
     for ( int i = 0; i < size; i++ ) {
-        result += ( CellRegion::rangeCharToInt( regionName[i].toAscii() ) 
+        result += ( CellRegion::rangeCharToInt( regionName[i].toAscii() )
                     * std::pow( 10.0, ( size - i - 1 ) ) );
     }
 
@@ -91,12 +91,12 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 
     setRowCount( 0 );
     setColumnCount( 0 );
-    
+
     ///const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
 
     //QTextStream stream(stdout);
     //stream << node;
-    
+
     // FIXME: Rewrite this without the for loop.  I think there can
     //        only be one table-rows and one table-header-rows element
     //        in each table.
@@ -107,10 +107,11 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
 
-        if ( n.localName() == "table-rows" 
+        if ( n.localName() == "table-rows"
              || n.localName() == "table-header-rows" )
         {
             const bool isHeader = n.localName() == "table-header-rows";
+            Q_UNUSED(isHeader);
 
             found = true;
 
@@ -118,7 +119,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
             forEachElement ( _n, n ) {
 
                 // Must be a table:table-row, else go to next element.
-                if ( _n.namespaceURI() != KoXmlNS::table 
+                if ( _n.namespaceURI() != KoXmlNS::table
                      || _n.localName() != "table-row" )
                     continue;
 
@@ -133,11 +134,11 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     // Must be a table:table-cell, otherwise go to
                     // next element.
                     if ( __n.namespaceURI() != KoXmlNS::table
-                         || __n.localName() != "table-cell" ) 
+                         || __n.localName() != "table-cell" )
                         continue;
 
                     // If this row is wider than any previous one,
-                    // then add another column.  
+                    // then add another column.
                     // Is this efficient enough?
                     if ( column >= columnCount() )
                         setColumnCount( columnCount() + 1 );
