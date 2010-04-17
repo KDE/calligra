@@ -31,14 +31,18 @@ KPrAnimateMotion::~KPrAnimateMotion()
 
 bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return false;
 }
 
 void KPrAnimateMotion::saveOdf( KoShapeSavingContext &context ) const
 {
+    Q_UNUSED(context);
 }
 
 
 void KPrAnimateMotion::init(KPrAnimationCache *animationCache) const
 {
+    Q_UNUSED(animationCache);
 }

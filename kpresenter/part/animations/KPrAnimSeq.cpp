@@ -45,6 +45,7 @@ bool KPrAnimSeq::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 void KPrAnimSeq::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
 }
 
 void KPrAnimSeq::init(KPrAnimationCache *animationCache) const
