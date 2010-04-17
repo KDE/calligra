@@ -104,8 +104,8 @@ public:
     Private() : sheet(0), column(0), row(0) {}
 
     Sheet*  sheet;
-uint    column  : 16; // KS_colMax
-uint    row     : 16; // KS_rowMax
+uint    column  : 17; // KS_colMax
+uint    row     : 17; // KS_rowMax
 };
 
 

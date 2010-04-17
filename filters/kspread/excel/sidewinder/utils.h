@@ -38,7 +38,7 @@ static const uint minimumRowCount = 32768;
 // The maximal number of rows and columns. This allows us to cut rows and columns away that would
 // not be handled by the consumer application anyway cause they reached the applications limited.
 static const uint maximalColumnCount = 32768;
-static const uint maximalRowCount = 32768; //65536
+static const uint maximalRowCount = 65536;
 
 class Workbook;
 
