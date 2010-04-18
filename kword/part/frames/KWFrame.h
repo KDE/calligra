@@ -198,9 +198,6 @@ public:
     }
     void setOutlineShape(KWOutlineShape *outline);
 
-    void attachAnchor(KoTextAnchor *anchor);
-    KoTextAnchor *getAnchor();
-
 private:
     KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;
@@ -209,7 +206,6 @@ private:
     KWord::RunAroundSide m_runAroundSide;
     KWord::TextRunAround m_runAround;
     qreal m_runAroundDistance;
-    KoTextAnchor *m_anchor;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.

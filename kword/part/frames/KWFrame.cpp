@@ -36,7 +36,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_runAroundSide(KWord::BiggestRunAroundSide),
         m_runAround(KWord::RunAround),
         m_runAroundDistance(1.0),
-        m_anchor(0),
         m_anchoredPageNumber(pageNumber),
         m_frameSet(parent),
         m_outline(0)
@@ -85,11 +84,6 @@ void KWFrame::copySettings(const KWFrame *frame)
 
 void KWFrame::saveOdf(KoShapeSavingContext & context)
 {
-    if (m_anchor)
-        return;
-
-    // TODO I think a anchor-type needs to be added to the shape
-    // but I'm not sure how kword does handle that stuff.
     shape()->saveOdf(context);
 }
 
@@ -101,14 +95,4 @@ bool KWFrame::isCopy() const
 void KWFrame::setOutlineShape(KWOutlineShape *outline)
 {
     m_outline = outline;
-}
-
-void KWFrame::attachAnchor(KoTextAnchor *anchor)
-{
-    m_anchor = anchor;
-}
-
-KoTextAnchor *KWFrame::getAnchor()
-{
-    return m_anchor;
 }
