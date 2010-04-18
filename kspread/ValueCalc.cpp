@@ -19,6 +19,7 @@
 
 #include "ValueCalc.h"
 
+#include "Cell.h"
 #include "Number.h"
 #include "ValueConverter.h"
 
@@ -912,7 +913,7 @@ Value ValueCalc::acos(const Value &number)
     const double d = numToDouble(n);
     if (d < -1.0 || d > 1.0 )
         return Value::errorVALUE();
-    
+
     errno = 0;
     Value res = Value(::acos(n));
     if (errno)
@@ -1871,16 +1872,13 @@ Value ValueCalc::sumsq(const Value &range, bool full)
     return res;
 }
 
-Value ValueCalc::sumIf(const Value &range,
-                       const Value &checkRange, const Condition &cond)
+Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 {
     if(range.isError())
         return range;
-    if(checkRange.isError())
-        return checkRange;
 
     if (!range.isArray()) {
-        if (matches(cond, checkRange.element(0, 0))) {
+        if (matches(cond, range.element(0, 0))) {
             //kDebug()<<"return non array value "<<range;
             return range;
         }
@@ -1896,21 +1894,56 @@ Value ValueCalc::sumIf(const Value &range,
     for (unsigned int r = 0; r < rows; r++)
         for (unsigned int c = 0; c < cols; c++) {
             Value v = range.element(c, r);
-            Value newcheck = v;
-            if ((c < checkRange.columns()) && (r < checkRange.rows()))
-                newcheck = checkRange.element(c, r);
 
             if (v.isArray())
-                tmp = sumIf(v, newcheck, cond);
+                tmp = sumIf(v, cond);
             if (tmp.isNumber()) {// only add numbers, no conversion from string allowed
                 res = add(res, tmp);
             } else
-                if (matches(cond, newcheck)) {
+                if (matches(cond, v)) {
                     if (v.isNumber()) {// only add numbers, no conversion from string allowed
                         //kDebug()<<"add "<<v;
                         res = add(res, v);
                     }
                 }
+        }
+
+    return res;
+}
+
+Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Condition &cond)
+{
+    if(range.isError())
+        return range;
+
+    if (!range.isArray()) {
+        if (matches(cond, range.element(0, 0))) {
+            //kDebug()<<"return non array value "<<range;
+            return sumRangeStart.value();
+        }
+        return Value(0.0);
+    }
+
+    //if we are here, we have an array
+    Value res(0);
+    Value tmp;
+
+    unsigned int rows = range.rows();
+    unsigned int cols = range.columns();
+    for (unsigned int r = 0; r < rows; r++)
+        for (unsigned int c = 0; c < cols; c++) {
+            Value v = range.element(c, r);
+
+            if (v.isArray())
+                return Value::errorVALUE();
+
+            if (matches(cond, v)) {
+                Value val = Cell(sumRangeStart.sheet(), sumRangeStart.column() + c, sumRangeStart.row() + r).value();
+                if (val.isNumber()) {// only add numbers, no conversion from string allowed
+                    //kDebug()<<"add "<<val;
+                    res = add(res, val);
+                }
+            }
         }
 
     return res;

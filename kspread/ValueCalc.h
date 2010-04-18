@@ -38,6 +38,7 @@
 
 namespace KSpread
 {
+class Cell;
 class Doc;
 class ValueCalc;
 class ValueConverter;
@@ -264,7 +265,8 @@ public:
     // if full is true, A-version is used (means string/bool values included)
     Value sum(const Value &range, bool full = true);
     Value sumsq(const Value &range, bool full = true);
-    Value sumIf(const Value &range,
+    Value sumIf(const Value &range, const Condition &cond);
+    Value sumIf(const Cell &sumRangeStart,
                 const Value &checkRange, const Condition &cond);
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
