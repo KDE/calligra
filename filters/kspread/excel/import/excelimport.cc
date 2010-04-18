@@ -1657,7 +1657,7 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
         convertBorder("fo:border-top", "fo:border-line-width-top", borders.topBorder(), style);
         convertBorder("fo:border-bottom", "fo:border-line-width-bottom", borders.bottomBorder(), style);
         convertBorder("style:diagonal-tl-br", "style:diagonal-tl-br-widths", borders.topLeftBorder(), style);
-        convertBorder("style:diagonal-tr-bl", "style:diagonal-tr-bl-widths", borders.bottomLeftBorder(), style);
+        convertBorder("style:diagonal-bl-tr", "style:diagonal-bl-tr-widths", borders.bottomLeftBorder(), style);
     }
 
     if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {
