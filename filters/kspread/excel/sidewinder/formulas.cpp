@@ -71,7 +71,7 @@ void FormulaToken::operator=(const FormulaToken& token)
     d = new Private;
     d->ver = token.d->ver;
     d->id = token.id();
-    
+
     d->data.resize(token.d->data.size());
     for (unsigned i = 0; i < d->data.size(); i++)
         d->data[i] = token.d->data[i];
@@ -1165,8 +1165,8 @@ UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /
     return result;
 }
 
-UString FormulaToken::array(unsigned row, unsigned col) const                                                                           
-{   
+UString FormulaToken::array(unsigned row, unsigned col) const
+{
     /*
     unsigned char buf[2];
     buf[0] = d->data[1]; // specs say this should be at the first byte but seems its not true...
@@ -1203,9 +1203,9 @@ UString FormulaToken::array(unsigned row, unsigned col) const
 std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
 {
     if (version() == Excel97) {
-        return std::make_pair(readU16(&d->data[1]), readU16(&d->data[3]));
+        return std::make_pair(readU16(&d->data[0]), readU16(&d->data[2]));
     } else {
-        return std::make_pair(readU16(&d->data[1]), (unsigned)d->data[3]);
+        return std::make_pair(readU16(&d->data[0]), (unsigned)d->data[2]);
     }
 }
 
@@ -1562,14 +1562,14 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         case FormulaToken::RefErr3d:
             stack.push_back(UString("#REF!"));
             break;
-            
+
         case FormulaToken::MemErr: // specifies that the result is an error-code
             break;
 
         case FormulaToken::ErrorCode:
             stack.push_back(token.value().asString());
             break;
-            
+
         case 0: break; // NOPE
 
         case FormulaToken::NatFormula:
