@@ -118,7 +118,7 @@ public:
     QString subScriptStyle, superScriptStyle;
 
     QList<ChartExport*> charts;
-    
+
     QHash<int,int> rowsRepeatedHash;
     int rowsRepeated(Row* row, int rowIndex);
 
@@ -493,7 +493,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
 {
     if (!store->store()->open("settings.xml"))
         return false;
-    
+
     KoStoreDevice dev(store->store());
     KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
     settingsWriter->startElement("office:settings");
@@ -501,7 +501,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
     settingsWriter->addAttribute("config:name", "view-settings");
 
     // units...
-    
+
     // settings
     settingsWriter->startElement("config:config-item-map-indexed");
     settingsWriter->addAttribute("config:name", "Views");
@@ -533,7 +533,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         settingsWriter->endElement();
     }
     settingsWriter->endElement(); // config:config-item-map-named
-    
+
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
     settingsWriter->endElement(); // config:config-item-set
@@ -559,13 +559,13 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
         Sheet* sheet = workbook->sheet(i);
         rowsCountTotal += qMin(maximalRowCount, sheet->maxRow()) * 2; // double cause we will count them 2 times, once for styles and once for content
     }
-    
+
     // now start the whole work
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForBody(store, sheet, xmlWriter);
     }
-    
+
     std::map<UString, UString> &namedAreas = workbook->namedAreas();
     if(namedAreas.size() > 0) {
         xmlWriter->startElement("table:named-expressions");
@@ -657,7 +657,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     xmlWriter->addAttribute("table:print", "false");
     xmlWriter->addAttribute("table:style-name", sheetStyles[sheetFormatIndex]);
     sheetFormatIndex++;
-    
+
     if(sheet->password() != 0) {
         //TODO
        //xmlWriter->addAttribute("table:protected", "true");
@@ -839,7 +839,7 @@ void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* 
 // Processes a column in a sheet.
 void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter)
 {
-    Column* column = sheet->column(columnIndex, false);    
+    Column* column = sheet->column(columnIndex, false);
 
     if (!xmlWriter) return;
     if (!column) {
@@ -847,7 +847,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
         xmlWriter->endElement();
         return;
     }
-    
+
     const QString styleName = colStyles[columnFormatIndex];
     const QString defaultStyleName = colCellStyles[columnFormatIndex];
     columnFormatIndex++;
@@ -863,7 +863,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
 // Processes the style of a column in a sheet.
 void ExcelImport::Private::processColumnForStyle(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter)
 {
-    Column* column = sheet->column(columnIndex, false);    
+    Column* column = sheet->column(columnIndex, false);
 
     if (!xmlWriter) return;
     if (!column) return;
@@ -902,7 +902,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     xmlWriter->startElement("table:table-row");
     xmlWriter->addAttribute("table:visibility", row->visible() ? "visible" : "collapse");
     xmlWriter->addAttribute("table:style-name", styleName);
-    
+
     if(repeat > 1)
         xmlWriter->addAttribute("table:number-rows-repeated", repeat);
 
@@ -910,17 +910,18 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     int i = 0;
     while(i <= lastCol) {
+        kDebug() << i << lastCol;
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(store, cell, repeat, xmlWriter);
-            i += cell->columnRepeat() * repeat;
+            i += cell->columnRepeat();
         } else { // empty cell
             xmlWriter->startElement("table:table-cell");
             xmlWriter->endElement();
             ++i;
         }
     }
-    
+
     xmlWriter->endElement();  // table:table-row
     addProgress(repeat);
     return repeat;
@@ -947,7 +948,7 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForStyle(cell, xmlWriter);
-            i += cell->columnRepeat() * repeat;
+            i += cell->columnRepeat();
         } else { // row has no style
             ++i;
         }
@@ -1241,7 +1242,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("table:number-rows-spanned", cell->rowSpan());
     if (cell->columnRepeat() > 1)
         xmlWriter->addAttribute("table:number-columns-repeated", cell->columnRepeat());
-    
+
     const QString formula = cellFormula(cell);
     if (!formula.isEmpty())
         xmlWriter->addAttribute("table:formula", formula);
@@ -1280,7 +1281,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     } else if (value.isText() || value.isError()) {
         QString str = string(value.asString());
         QString linkName, linkLocation;
-        
+
         if (cell->hasHyperlink()) {
             linkLocation = string(cell->hyperlinkLocation());
             if(!linkLocation.isEmpty()) {
@@ -1368,7 +1369,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->endElement(); // text:p
         xmlWriter->endElement(); // office:annotation
     }
-    
+
     // handle pictures
     foreach(Picture *picture, cell->pictures()) {
         xmlWriter->startElement("draw:frame");
