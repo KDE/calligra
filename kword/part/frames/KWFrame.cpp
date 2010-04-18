@@ -93,17 +93,6 @@ void KWFrame::saveOdf(KoShapeSavingContext & context)
     shape()->saveOdf(context);
 }
 
-void KWFrame::setShape(KoShape *shape)
-{
-    if (m_shape == shape) return;
-    shape->copySettings(m_shape);
-    m_shape->setApplicationData(0);
-    m_shape->deleteLater();
-    m_shape = shape;
-    m_shape->setApplicationData(this);
-    emit m_frameSet->frameAdded(this);
-}
-
 bool KWFrame::isCopy() const
 {
     return dynamic_cast<KWCopyShape*>(shape());

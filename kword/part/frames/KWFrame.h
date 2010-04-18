@@ -200,9 +200,6 @@ public:
 
     void attachAnchor(KoTextAnchor *anchor);
     KoTextAnchor *getAnchor();
-protected:
-    /// replace the current set shape with the argument one.
-    void setShape(KoShape *shape);
 
 private:
     KoShape *m_shape;
