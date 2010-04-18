@@ -147,12 +147,12 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
     for (int i = 0; i < numberFormat.length(); ++i) {
         const char c = numberFormat[ i ].toLatin1();
+        bool isSpecial = true;
 
         const bool isLong = i < numberFormat.length() - 1 && numberFormat[ i + 1 ] == c;
         const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
         const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
         const bool isWayTooLong = isLongest && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
-        
 
         switch (c) {
             // condition or color or locale...
@@ -506,12 +506,14 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
             // quote - plain text block
         case '"':
+            isSpecial = false;
             while (i < numberFormat.length() - 1 && numberFormat[ ++i ] != QLatin1Char('"'))
                 plainText += numberFormat[ i ];
             break;
 
             // backslash escapes the next char
         case '\\':
+            isSpecial = false;
             if (i < numberFormat.length() - 1) {
                 plainText += numberFormat[ ++i ];
             }
@@ -519,16 +521,15 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
 
             // every other char is just passed
         default:
+            isSpecial = false;
             plainText += c;
             break;
         }
 
-
-        // for the context-sensitive 'M'
-        if (plainText.isEmpty()) {
+        // for the context-sensitive 'M' which can mean either minutes or months
+        if (isSpecial) {
             justHadHours = (c == 'h' || c == 'H');
         }
-
     }
 
     FINISH_PLAIN_TEXT_PART;
