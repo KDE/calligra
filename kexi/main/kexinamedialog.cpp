@@ -18,7 +18,6 @@
 */
 
 #include "kexinamedialog.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include <QGridLayout>
 #include <QLabel>
@@ -51,7 +50,7 @@ KexiNameDialog::~KexiNameDialog()
 void KexiNameDialog::init()
 {
     setButtons(Ok | Cancel | Help);
-    QGridLayout *lyr = new QGridLayout(mainWidget(), 2, 3);
+    QGridLayout *lyr = new QGridLayout(mainWidget());
     m_icon = new QLabel(mainWidget());
     m_icon->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Preferred);
