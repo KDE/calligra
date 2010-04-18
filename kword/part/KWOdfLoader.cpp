@@ -205,7 +205,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         textShapeData.setDocument(mainFs->document(), false);
     }
     // Let the TextShape handle loading the body element.
-    textShapeData.loadOdf(body, sc, m_document->documentRdf());
+    textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
 
     // Grab weak references to all the Rdf stuff that was loaded
     if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
