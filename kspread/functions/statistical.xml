@@ -944,6 +944,25 @@
     </Function>
 
     <Function>
+      <Name>PERCENTILE</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Range of values</Comment>
+        <Type range="true">Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>The percentile value between 0 and 1, inclusive.</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The PERCENTILE() function returns the x-th sample percentile of data values in Data. A percentile returns the scale value for a data series which goes from the smallest (alpha=0) to the largest value (alpha=1) of a data series. For alpha = 25%, the percentile means the first quartile; alpha = 50% is the MEDIAN. Blank cells will be considered as a zero, and cells with text will be ignored.</Text>
+        <Syntax>PERCENTILE(data;alpha)</Syntax>
+        <Related>MEDIAN</Related>
+        <Related>QUARTILE</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PHI</Name>
       <Type>Float</Type>
       <Parameter>
@@ -1198,7 +1217,7 @@
         <Example>STDEVA(6; 7; A1; 8) equals 1, if A1 is empty</Example>
         <Example>STDEVA(6; 7; A1; 8) equals 3.109, if A1 is TRUE</Example>
         <Related>STDEV</Related>
-        <Related>STDEVP</Related> 
+        <Related>STDEVP</Related>
       </Help>
     </Function>
 
@@ -1229,10 +1248,10 @@
         <Text>The STDEVP() function returns the standard deviation based on an entire population</Text>
         <Syntax>STDEVP(value;value;...)</Syntax>
         <Example>STDEVP(6;7;8) equals 0.816497...</Example>
-        <Related>STDEV</Related> 
+        <Related>STDEV</Related>
       </Help>
     </Function>
-    
+
     <Function>
       <Name>STDEVPA</Name>
       <Type>Float</Type>
@@ -1262,8 +1281,8 @@
         <Example>STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty</Example>
         <Example>STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE</Example>
         <Example>STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE</Example>
-        <Related>STDEV</Related> 
-        <Related>STDEVP</Related> 
+        <Related>STDEV</Related>
+        <Related>STDEVP</Related>
       </Help>
     </Function>
 

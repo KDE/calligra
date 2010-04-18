@@ -911,6 +911,19 @@ void TestStatisticalFunctions::testPEARSON()
     CHECK_EVAL("PEARSON(C51:C57;D51:D56)", Value::errorNUM());     //
 }
 
+void TestStatisticalFunctions::testPERCENTILE()
+{
+    // ODF-tests
+    CHECK_EVAL("PERCENTILE(A19:A31;0.38)",          Value(24.96));        //
+    CHECK_EVAL("PERCENTILE(A19:A31;0.95)",          Value(2867.2));       //
+    CHECK_EVAL("PERCENTILE(A19:A31;0.05)",          Value(1.6));          //
+
+    // my tests
+    CHECK_EVAL("PERCENTILE(A10:A15;-0.1)",          Value::errorVALUE()); //
+    CHECK_EVAL("PERCENTILE(A19:A25;1.1)",           Value::errorVALUE()); //
+
+}
+
 void TestStatisticalFunctions::testPERMUT()
 {
     // ODF-tests
