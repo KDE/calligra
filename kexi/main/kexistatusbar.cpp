@@ -48,6 +48,7 @@ protected:
 
 void Menu::mouseReleaseEvent(QMouseEvent* e)
 {
+    Q_UNUSED(e);
     if (activeAction())
         activeAction()->trigger();
 }
