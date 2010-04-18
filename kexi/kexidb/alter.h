@@ -144,8 +144,10 @@ public:
     //! For collecting actions related to a single field
     typedef KexiUtils::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
     typedef KexiUtils::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
-    typedef QHash<QByteArray, ActionBase*>::ConstIterator ActionDictIterator;
-    typedef QHash<int, ActionDict*>::ConstIterator ActionDictDictIterator;
+    typedef QHash<QByteArray, ActionBase*>::Iterator ActionDictIterator;
+    typedef QHash<QByteArray, ActionBase*>::ConstIterator ActionDictConstIterator;
+    typedef QHash<int, ActionDict*>::Iterator ActionDictDictIterator;
+    typedef QHash<int, ActionDict*>::ConstIterator ActionDictDictConstIterator;
     typedef QVector<ActionBase*> ActionsVector; //!< for collecting actions related to a single field
 
     //! Defines a type for action list.
