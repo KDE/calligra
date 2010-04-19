@@ -910,7 +910,6 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     const int lastCol = row->sheet()->maxCellsInRow(rowIndex);
     int i = 0;
     while(i <= lastCol) {
-        kDebug() << i << lastCol;
         Cell* cell = row->sheet()->cell(i, row->index(), false);
         if (cell) {
             processCellForBody(store, cell, repeat, xmlWriter);
@@ -1140,7 +1139,7 @@ static QString convertDate(double serialNo, const QString& valueFormat)
     // reference is midnight 30 Dec 1899
     QDateTime dt(QDate(1899, 12, 30));
     dt = dt.addMSecs((qint64)(serialNo * 86400 * 1000)); // TODO: we probably need double precision here
-    
+
     //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with KSpread but probably not with other customers...
     //return dd.toString("yyyy-MM-dd");
     return dt.toString("yyyy-MM-ddThh:mm:ss");
