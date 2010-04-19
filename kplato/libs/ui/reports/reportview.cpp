@@ -82,11 +82,33 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     m_context.painter = 0;
     KoReportRendererFactory factory;
     m_renderer = factory.createInstance( "print" );
+
+    //FIXME: This should be done by KoReportPrintRender but setupPrinter() is private
+    QPrinter *pPrinter = &printer();
+    pPrinter->setCreator("KPlato");
+    pPrinter->setDocName(reportDocument->title());
+    pPrinter->setFullPage(true);
+    pPrinter->setOrientation((reportDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape));
+    pPrinter->setPageOrder(QPrinter::FirstPageFirst);
+
+    if (reportDocument->pageOptions().getPageSize().isEmpty())
+        pPrinter->setPageSize(QPrinter::Custom);
+    else
+        pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(reportDocument->pageOptions().getPageSize())));
+
 }
 
 ReportPrintingDialog::~ReportPrintingDialog()
 {
     delete m_renderer;
+}
+
+void ReportPrintingDialog::startPrinting( RemovePolicy removePolicy )
+{
+     //HACK fix when KoRreportPrinter can print single pages
+    setPageRange( QList<int>() << printer().fromPage() );
+
+    KoPrintingDialog::startPrinting( removePolicy );
 }
 
 int ReportPrintingDialog::documentLastPage() const
@@ -99,6 +121,14 @@ void ReportPrintingDialog::printPage( int page, QPainter &painter )
 {
     m_context.painter = &painter;
     m_renderer->render( m_context, m_reportDocument, page );
+}
+
+QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOptions() const
+{
+    return QAbstractPrintDialog::PrintToFile |
+           QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCollateCopies |
+           QAbstractPrintDialog::DontUseSheet;
 }
 
 //---------------------

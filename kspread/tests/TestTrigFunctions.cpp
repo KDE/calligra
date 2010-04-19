@@ -209,6 +209,12 @@ void TestTrigFunctions::testCOS()
     CHECK_EVAL("COS( 125*2*PI()/128 )", 0.989176509964781);
     CHECK_EVAL("COS( 126*2*PI()/128 )", 0.995184726672197);
     CHECK_EVAL("COS( 127*2*PI()/128 )", 0.998795456205172);
+
+    // Cosinus needs to be a numeric value
+    CHECK_EVAL("COS(raghu)", Value::errorVALUE());
+    CHECK_EVAL("COS()", Value::errorVALUE());
+
+    CHECK_EVAL("1+COS(0.2)", Value(1.980066578));
 }
 
 // hyperbolic cosine

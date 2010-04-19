@@ -74,6 +74,9 @@ void TestLogicFunctions::testAND()
     // single parameter
     CHECK_EVAL("AND(TRUE())", Value(true));
     CHECK_EVAL("AND(FALSE())", Value(false));
+
+    // literal non-convertable text should give an error
+    //CHECK_EVAL("AND(FALSE();\"a\")", Value::errorVALUE());
 }
 
 void TestLogicFunctions::testFALSE()
@@ -100,9 +103,9 @@ void TestLogicFunctions::testIF()
     CHECK_EVAL("IF(0;7;8)", Value(8));
     // there are a couple of indirect references in the spec test
     // vectors here. Sorry
-    CHECK_EVAL("IF(\"x\";7;8)", Value::errorNA());
-    CHECK_EVAL("IF(\"1\";7;8)", Value::errorNA());
-    CHECK_EVAL("IF(\"\";7;8)", Value::errorNA());
+    CHECK_EVAL("IF(\"x\";7;8)", Value::errorVALUE());
+    CHECK_EVAL("IF(\"1\";7;8)", Value::errorVALUE());
+    CHECK_EVAL("IF(\"\";7;8)", Value::errorVALUE());
     CHECK_EVAL("IF(FALSE();7)", Value(false));
     CHECK_EVAL("IF(FALSE();7;)", Value(0));
     CHECK_EVAL("IF(TRUE();4;1/0)", Value(4));
@@ -113,7 +116,8 @@ void TestLogicFunctions::testNOT()
 {
     CHECK_EVAL("NOT(FALSE())", Value(true));
     CHECK_EVAL("NOT(TRUE())", Value(false));
-    CHECK_EVAL("NOT(1/0)", Value::errorNA());
+    CHECK_EVAL("NOT(1/0)", Value::errorDIV0());
+    CHECK_EVAL("NOT(\"a\")", Value::errorVALUE());
 }
 
 void TestLogicFunctions::testOR()
@@ -142,6 +146,9 @@ void TestLogicFunctions::testOR()
     // single parameter
     CHECK_EVAL("OR(TRUE())", Value(true));
     CHECK_EVAL("OR(FALSE())", Value(false));
+
+    // literal non-convertable text should give an error
+    //CHECK_EVAL("OR(TRUE();\"a\")", Value::errorVALUE());
 }
 
 void TestLogicFunctions::testTRUE()
@@ -189,6 +196,9 @@ void TestLogicFunctions::testXOR()
     // single parameter
     CHECK_EVAL("XOR(TRUE())", Value(true));
     CHECK_EVAL("XOR(FALSE())", Value(false));
+
+    // literal non-convertable text should give an error
+    //CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
 }
 
 QTEST_KDEMAIN(TestLogicFunctions, GUI)

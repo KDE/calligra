@@ -324,7 +324,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - printerSettings (Reference to Printer Settings Data) §17.6.14
  - rtlGutter (Gutter on Right Side of Page) §17.6.16
  - sectPrChange (Revision Information for Section Properties) §17.13.5.32
- - textDirection (Text Flow Direction) §17.6.20
+ - [done] textDirection (Text Flow Direction) §17.6.20
  - titlePg (Different First Page Headers and Footers) §17.10.6
  - type (Section Type) §17.6.22
  - vAlign (Vertical Text Alignment on Page) §17.6.23
@@ -355,6 +355,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             TRY_READ_IF(pgSz)
             ELSE_TRY_READ_IF(pgMar)
             ELSE_TRY_READ_IF(pgBorders)
+            ELSE_TRY_READ_IF(textDirection)
             ELSE_TRY_READ_IF(headerReference)
             ELSE_TRY_READ_IF(footerReference)
         }
@@ -405,6 +406,35 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
         if (!s.isEmpty())
             m_currentPageStyle.addProperty("fo:page-height", s);
     }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL textDirection
+//! w:textDirection handler (Text Direction)
+/*!
+
+ Parent elements:
+ - [done] sectPr (§17.6.17)
+ - sectPr (§17.6.18)
+ - sectPr (§17.6.19)
+
+ No child elements.
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirection()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty() && val.size() == 4) {
+        const QString left = val.left(2).toLower();
+        const QString right = val.right(2).toLower();
+        m_currentPageStyle.addProperty("style:writing-mode", left + "-" + right);
+    }
+
     readNext();
     READ_EPILOGUE
 }
