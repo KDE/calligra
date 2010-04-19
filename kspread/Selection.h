@@ -337,6 +337,11 @@ protected:
     /**
      * @internal used to create derived Ranges
      */
+    virtual Region::Range* createRange(const Region::Point&, const Region::Point&) const;
+
+    /**
+     * @internal used to create derived Ranges
+     */
     virtual Region::Range* createRange(const QString&) const;
 
     /**
@@ -399,6 +404,7 @@ class Selection::Range : public Region::Range
 {
 public:
     Range(const QRect& rect);
+    Range(const KSpread::Region::Point& tl, const KSpread::Region::Point& br);
     Range(const QString& string);
     Range(const Region::Range& range);
 

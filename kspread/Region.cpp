@@ -87,34 +87,50 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
             continue;
         }
 
-        Sheet* sheet = map ? filterSheetName(sRegion) : 0;
-        // Still has the sheet name separator?
-        if (sRegion.contains('!'))
-            return;
-        if (!sheet)
-            sheet = fallbackSheet;
-
+        // Single cell or cell range
         int delimiterPos = sRegion.indexOf(':');
         if (delimiterPos > -1) {
             // range
-            Point ul(sRegion.left(delimiterPos));
-            Point lr(sRegion.mid(delimiterPos + 1));
+            QString sUL = sRegion.left(delimiterPos);
+            QString sLR = sRegion.mid(delimiterPos + 1);
+
+            Sheet* firstSheet = map ? filterSheetName(sUL) : 0;
+            Sheet* lastSheet = map ? filterSheetName(sLR) : 0;
+            // TODO: lastSheet is silently ignored if it is different from firstSheet
+
+            // Still has the sheet name separator?
+            if (sUL.contains('!') || sLR.contains('!'))
+                return;
+
+            if (!firstSheet)
+                firstSheet = fallbackSheet;
+            if (!lastSheet)
+                lastSheet = fallbackSheet;
+
+            Point ul(sUL);
+            Point lr(sLR);
 
             if (ul.isValid() && lr.isValid()) {
-                Range* range = createRange(sRegion);
-                if(sheet) range->setSheet(sheet);
+                Range* range = createRange(ul, lr);
+                if (firstSheet) range->setSheet(firstSheet);
                 d->cells.append(range);
             } else if (ul.isValid()) {
-                Point* point = createPoint(sRegion.left(delimiterPos));
-                if(sheet) point->setSheet(sheet);
+                Point* point = createPoint(ul);
+                if (firstSheet) point->setSheet(firstSheet);
                 d->cells.append(point);
             } else { // lr.isValid()
-                Point* point = createPoint(sRegion.right(delimiterPos + 1));
-                if(sheet) point->setSheet(sheet);
+                Point* point = createPoint(lr);
+                if (firstSheet) point->setSheet(firstSheet);
                 d->cells.append(point);
             }
         } else {
             // single cell
+            Sheet* sheet = map ? filterSheetName(sRegion) : 0;
+            // Still has the sheet name separator?
+            if (sRegion.contains('!'))
+                return;
+            if (!sheet)
+                sheet = fallbackSheet;
             Point* point = createPoint(sRegion);
             if(sheet) point->setSheet(sheet);
             d->cells.append(point);
@@ -950,6 +966,11 @@ Region::Range* Region::createRange(const QRect& rect) const
     return new Range(rect);
 }
 
+Region::Range* Region::createRange(const Point& tl, const Point& br) const
+{
+    return new Range(tl, br);
+}
+
 Region::Range* Region::createRange(const QString& string) const
 {
     return new Range(string);
@@ -1119,6 +1140,22 @@ Region::Range::Range(const QRect& rect)
         m_range.setRight(KS_colMax);
     if (m_range.bottom() > KS_rowMax)
         m_range.setBottom(KS_rowMax);
+}
+
+Region::Range::Range(const KSpread::Region::Point& ul, const KSpread::Region::Point& lr)
+        : Region::Element()
+        , m_fixedTop(false)
+        , m_fixedLeft(false)
+        , m_fixedBottom(false)
+        , m_fixedRight(false)
+{
+    if (!ul.isValid() || !lr.isValid())
+        return;
+    m_range = QRect(ul.pos(), lr.pos());
+    m_fixedTop    = ul.isRowFixed();
+    m_fixedLeft   = ul.isColumnFixed();
+    m_fixedBottom = lr.isRowFixed();
+    m_fixedRight  = lr.isColumnFixed();
 }
 
 Region::Range::Range(const QString& sRange)
