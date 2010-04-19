@@ -352,6 +352,7 @@ void MathModule::registerFunctions()
     f = new Function("SUMIF",         func_sumif);
     f->setParamCount(2, 3);
     f->setAcceptArray();
+    f->setNeedsExtra(true);
     repo->add(f);
     f = new Function("SUMSQ",         func_sumsq);
     f->setParamCount(1, -1);
@@ -553,18 +554,19 @@ Value func_suma(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: SUMIF
-Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     Value checkRange = args[0];
     QString condition = calc->conv()->asString(args[1]).asString();
-    Value sumRange = checkRange;
-    if (args.count() == 3)
-        sumRange = args[2];
-
     Condition cond;
     calc->getCond(cond, Value(condition));
 
-    return calc->sumIf(sumRange, checkRange, cond);
+    if (args.count() == 3) {
+        Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+        return calc->sumIf(sumRangeStart, checkRange, cond);
+    } else {
+        return calc->sumIf(checkRange, cond);
+    }
 }
 
 // Function: product

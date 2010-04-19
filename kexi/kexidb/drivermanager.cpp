@@ -176,7 +176,7 @@ bool DriverManagerInternal::lookupDrivers()
 
 KexiDB::Driver::Info DriverManagerInternal::driverInfo(const QString &name)
 {
-    KexiDB::Driver::Info i = m_driversInfo[name.toLower()];
+    KexiDB::Driver::Info i = m_driversInfo.value(name.toLower());
     if (!error() && i.name.isEmpty())
         setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".", name));
     return i;
