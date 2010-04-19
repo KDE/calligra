@@ -83,6 +83,11 @@ public:
     virtual QList<QWidget*> createOptionWidgets() const { return QList<QWidget*>(); }
     virtual QList<KoShape*> shapesOnPage(int) { return QList<KoShape*>(); }
 
+    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
+
+public slots:
+    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+
 protected:
     ORODocument *m_reportDocument;
     KoReportRendererContext m_context;
