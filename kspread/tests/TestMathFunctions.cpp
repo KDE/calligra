@@ -154,6 +154,14 @@ void TestMathFunctions::testACOS()
     CHECK_EVAL("ACOS(TRUE())",           Value(0.0));     // TRUE() is 1 if inline.
     CHECK_EVAL("ACOS(-1.0)/PI()",        Value(1.0));     // The result must be between 0.0 and PI().
     CHECK_EVAL("ACOS(2.0)",       Value::errorVALUE());   // The argument must be between -1.0 and 1.0.
+
+    // ACosinus needs to be a numeric value between >=-1.0 and <=1.0
+    CHECK_EVAL("ACOS()", Value::errorVALUE());
+    CHECK_EVAL("ACOS(-1.1)", Value::errorVALUE());
+    CHECK_EVAL("ACOS(1.1)", Value::errorVALUE());
+
+    CHECK_EVAL("ACOS(1.0)", Value(0));
+    CHECK_EVAL_SHORT("2-ACOS(-1.0)", Value(-1.14159265));
 }
 
 void TestMathFunctions::testACOSH()
@@ -182,6 +190,13 @@ void TestMathFunctions::testASIN()
     CHECK_EVAL("ASIN(TRUE())*2/PI()",     Value(1.0));      // TRUE() is 1 if inline.
     CHECK_EVAL("ASIN(-1)*2/PI()",         Value(-1.0));     // The result must be between -PI()/2 and PI()/2.
     CHECK_EVAL("ASIN(2)",           Value::errorVALUE());   // The argument must be between -1.0 and 1.0.
+
+    // ASinus needs to be a numeric value between >=-1.0 and <=1.0
+    CHECK_EVAL("ASIN(1.2)", Value::errorVALUE());
+    CHECK_EVAL("ASIN(-99)", Value::errorVALUE());
+
+    CHECK_EVAL_SHORT("1-ASIN(1)", Value(-0.57079633));
+    CHECK_EVAL_SHORT("1+ASIN(-1.0)", Value(-0.57079633));
 }
 
 void TestMathFunctions::testASINH()

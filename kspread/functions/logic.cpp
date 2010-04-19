@@ -108,9 +108,9 @@ void LogicModule::removeFunctions()
 
 
 // helper for most logical functions
-bool asBool(Value val, ValueCalc *calc)
+static bool asBool(Value val, ValueCalc *calc, bool* ok = 0)
 {
-    return calc->conv()->asBoolean(val).asBoolean();
+    return calc->conv()->asBoolean(val, ok).asBoolean();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ void awAnd(ValueCalc *calc, Value &res, Value value, Value)
 //
 void awOr(ValueCalc *calc, Value &res, Value value, Value)
 {
-    if (! res.asBoolean())
+    if (!res.asBoolean())
         res = Value(asBool(value, calc));
 }
 
@@ -186,7 +186,11 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if ((args[0].isError()))
         return args[0];
-    if (asBool(args[0], calc))
+    bool ok = true;
+    bool guard = asBool(args[0], calc, &ok);
+    if (!ok)
+        return Value::errorVALUE();
+    if (guard)
         return args[1];
     // evaluated to false
     if (args.count() == 3) {
@@ -230,7 +234,9 @@ Value func_not(valVector args, ValueCalc *calc, FuncExtra *)
     if (args[0].isError())
         return args[0];
 
-    bool val = asBool(args[0], calc) ? false : true;
+    bool ok = true;
+    bool val = !asBool(args[0], calc, &ok);
+    if (!ok) return Value::errorVALUE();
     return Value(val);
 }
 

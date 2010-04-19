@@ -848,7 +848,12 @@ Value ValueCalc::fromBase(const Value &val, int base)
 
 Value ValueCalc::sin(const Value &number)
 {
-    Value res = Value(::sin(converter->toFloat(number)));
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
+        return Value::errorVALUE();
+
+    Value res = Value(::sin(n));
 
     if (number.isNumber() || number.isEmpty())
         res.setFormat(number.format());
@@ -858,11 +863,15 @@ Value ValueCalc::sin(const Value &number)
 
 Value ValueCalc::cos(const Value &number)
 {
-    if (!number.isNumber())
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
         return Value::errorVALUE();
 
-    Value res = Value(::cos(converter->toFloat(number)));
-    res.setFormat(number.format());
+    Value res = Value(::cos(n));
+
+    if (number.isNumber() || number.isEmpty())
+        res.setFormat(number.format());
 
     return res;
 }
@@ -889,9 +898,10 @@ Value ValueCalc::cotg(const Value &number)
 
 Value ValueCalc::asin(const Value &number)
 {
-    if (!number.isNumber())
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
         return Value::errorVALUE();
-    Number n = converter->toFloat(number);
     const double d = numToDouble(n);
     if (d < -1.0 || d > 1.0 )
         return Value::errorVALUE();
@@ -901,15 +911,17 @@ Value ValueCalc::asin(const Value &number)
     if (errno)
         return Value::errorVALUE();
 
-    res.setFormat(number.format());
+    if (number.isNumber() || number.isEmpty())
+        res.setFormat(number.format());
     return res;
 }
 
 Value ValueCalc::acos(const Value &number)
 {
-    if (!number.isNumber())
+    bool ok = true;
+    Number n = converter->asFloat(number, &ok).asFloat();
+    if (!ok)
         return Value::errorVALUE();
-    Number n = converter->toFloat(number);
     const double d = numToDouble(n);
     if (d < -1.0 || d > 1.0 )
         return Value::errorVALUE();
@@ -919,7 +931,8 @@ Value ValueCalc::acos(const Value &number)
     if (errno)
         return Value::errorVALUE();
 
-    res.setFormat(number.format());
+    if (number.isNumber() || number.isEmpty())
+        res.setFormat(number.format());
     return res;
 }
 

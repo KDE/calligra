@@ -112,7 +112,7 @@ void TestTextFunctions::testFIND()
 {
     CHECK_EVAL("FIND(\"b\";\"abcabc\")", Value(2));
     CHECK_EVAL("FIND(\"b\";\"abcabcabc\"; 3)", Value(5));
-    CHECK_EVAL("FIND(\"b\";\"ABC\";1)", Value::errorNA());
+    CHECK_EVAL("FIND(\"b\";\"ABC\";1)", Value::errorVALUE());
     CHECK_EVAL("FIND(\"b\";\"bbbb\")", Value(1));
     CHECK_EVAL("FIND(\"b\";\"bbbb\";2)", Value(2));
     CHECK_EVAL("FIND(\"b\";\"bbbb\";2.9)", Value(2));
