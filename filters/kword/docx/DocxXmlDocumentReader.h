@@ -71,6 +71,7 @@ protected:
     KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_pgSz();
+    KoFilter::ConversionStatus read_textDirection();
     KoFilter::ConversionStatus read_pgMar();
     KoFilter::ConversionStatus read_pgBorders();
     KoFilter::ConversionStatus read_object();
