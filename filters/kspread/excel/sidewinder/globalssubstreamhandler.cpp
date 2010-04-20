@@ -72,7 +72,7 @@ public:
 
     // table of Xformat
     std::vector<XFRecord> xfTable;
-    
+
     // table blib items
     std::vector< MsoDrawingBlibItem* > drawingTable;
 };
@@ -176,8 +176,9 @@ XFRecord GlobalsSubStreamHandler::xformat(unsigned index) const
 
 UString GlobalsSubStreamHandler::valueFormat(unsigned index) const
 {
-    if (index < d->formatsTable.size())
-        return d->formatsTable[index];
+    std::map<unsigned, UString>::iterator it = d->formatsTable.find(index);
+    if (it != d->formatsTable.end())
+        return it->second;
     else
         return UString();
 }
@@ -490,7 +491,7 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
         pen.color = convertedColor(xf.diagonalColor());
         borders.setBottomLeftBorder(pen);
     }
-    
+
     format.setBorders(borders);
 
     FormatBackground background;
@@ -676,7 +677,7 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
     if (!record) return;
 
     d->nameTable.push_back(record->definedName());
-    
+
     if(record->m_formula.id() != FormulaToken::Unused) {
         FormulaTokens tokens;
         tokens.push_back(record->m_formula);
@@ -749,7 +750,7 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
     if (!record) return;
     printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
     Q_ASSERT(d->drawingTable.size() == 0); // if this asserts then multiple MsoDrawingGroupRecord can exist what we need to handle!
-    d->drawingTable = record->m_items; 
+    d->drawingTable = record->m_items;
 }
 
 MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const

@@ -951,6 +951,7 @@ void MulRKRecord::dump(std::ostream& out) const
     for (unsigned c = firstColumn(); c <= lastColumn(); c++) {
         out << "          Column  " << c << " : " << asFloat(c - firstColumn());
         out << "  Encoded: " << std::hex << encodedRK(c - firstColumn());
+        out << "  Xf: " << std::dec << xfIndex(c - firstColumn());
         out << std::endl;
     }
 }
@@ -1072,8 +1073,8 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     } else {
         setIsValid(false);
     }
-    
-    // rgce, NamedParsedFormula 
+
+    // rgce, NamedParsedFormula
     if(cce >= 1) {
         /*
         FormulaDecoder decoder;
@@ -1088,7 +1089,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         t.setData(cce - 1, startNamedParsedFormula + 1);
         m_formula = t;
     }
-        
+
     std::cout << "NameRecord name=" << d->definedName << " iTab=" << iTab << " fBuiltin=" << fBuiltin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
 }
 
@@ -1678,12 +1679,12 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     //const unsigned int hAlignment = opts1 & 0x000e; // 3 bits
     //const unsigned int vAlignment = opts1 & 0x0070; // 3 bits
     //const unsigned long rot = readU16(data + 2);
-    // 4 bytes reserved    
+    // 4 bytes reserved
 
     // controlInfo (6 bytes): An optional ControlInfo structure that specifies the properties for some
     // form controls. The field MUST exist if and only if the value of cmo.ot in the preceding Obj
     // record is 0, 5, 7, 11, 12, or 14.
-    
+
     const unsigned long cchText = readU16(data + 14);
     const unsigned char* startPict = data + 16;
     if(cchText > 0) {
@@ -1694,10 +1695,10 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
         startPict += 2;
     }
-    
+
     const unsigned opts = readU8(startPict);
     const bool fHighByte = opts & 0x01;
-    
+
     // this seems to assert with some documents...
     //Q_ASSERT((opts << 1) == 0x0);
 
@@ -1735,7 +1736,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
     }
 
     //printf("MsoDrawingRecord: START_POS %i\n",data+0);
-    
+
     // rh
     unsigned recType = 0;
     unsigned long recLen = 0;
@@ -1745,7 +1746,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
         setIsValid(false);
         return;
     }
-    
+
     unsigned long offset = 8;
     while(offset + 8 <= size) {
         offset += handleObject(size, data + offset);
@@ -1784,7 +1785,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         setIsValid(false);
         return;
     }
-    
+
     // drawingGroup
     readHeader(data + 8, &recVer, &recInstance, &recType, &recLen);
     Q_ASSERT(recType == 0xF006);
@@ -1798,7 +1799,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         unsigned long cspidCur = readU32(data + 36 + (i * 8));
         std::cout << "dgid=" << dgid << " cspidCur=" << cspidCur << std::endl;
     }
-    
+
     // blipStore
     const unsigned char* blipStoreOffset = data + 16 + recLen;
     if(blipStoreOffset-data-size < 8) {
@@ -1862,7 +1863,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
             for(int i = 0; i < 16; ++i)
                 rgbUid[i] = readU8(blipItemOffset + i);
-            
+
             MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
             m_items.push_back(item);
 
@@ -2803,7 +2804,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     while (stream->tell() < stream_size) {
         const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
         workbook->emitProgress(percent);
-        
+
         // this is set by FILEPASS record
         // subsequent records will need to be decrypted
         // since we do not support it yet, we have to bail out
