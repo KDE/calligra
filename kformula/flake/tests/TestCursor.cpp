@@ -79,7 +79,7 @@ public:
 void TestCursor::moveCursor()
 {
     MockCanvas* canvas=new MockCanvas();
-    KoFormulaShape* shape = new KoFormulaShape();
+    KoFormulaShape* shape = new KoFormulaShape(NULL); // FIXME: Do we need a real resourceManager here?
     canvas->shapeManager()->add(shape);
     canvas->shapeManager()->selection()->select(shape);
     QCOMPARE(canvas->shapeManager()->selection()->count(),1);

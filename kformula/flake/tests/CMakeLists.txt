@@ -30,6 +30,7 @@ target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})
 set(TestCursor_SRCS
 TestCursor.cpp
    ../KoFormulaShape.cpp
+   ../FormulaDocument.cpp
    ../FormulaToolWidget.cpp
    ../FormulaCommandUpdate.cpp
    ../KoFormulaShapeFactory.cpp
