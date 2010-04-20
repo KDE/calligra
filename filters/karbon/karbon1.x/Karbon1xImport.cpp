@@ -387,10 +387,11 @@ QBrush KarbonImport::loadGradient(KoShape * shape, const KoXmlElement &element)
     vector.setX(element.attribute("vectorX", "0.0").toDouble());
     vector.setY(element.attribute("vectorY", "0.0").toDouble());
 
+    QSizeF shapeSize = shape->size();
     QMatrix shapeMatrix = m_mirrorMatrix * shape->absoluteTransformation(0).inverted();
-    origin = shapeMatrix.map(origin);
-    focal = shapeMatrix.map(focal);
-    vector = shapeMatrix.map(vector);
+    origin = KoFlake::toRelative(shapeMatrix.map(origin), shapeSize);
+    focal = KoFlake::toRelative(shapeMatrix.map(focal), shapeSize);
+    vector = KoFlake::toRelative(shapeMatrix.map(vector), shapeSize);
 
     int type = element.attribute("type", 0).toInt();
     int spread = element.attribute("repeatMethod", 0).toInt();
@@ -441,7 +442,7 @@ QBrush KarbonImport::loadGradient(KoShape * shape, const KoXmlElement &element)
         }
     }
     gradient->setStops(stops);
-
+    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     switch (spread) {
     case reflect:
         gradient->setSpread(QGradient::ReflectSpread);

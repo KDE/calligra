@@ -729,8 +729,8 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
 
         case InRange:
 
-            // consume as long as alpha, dollar sign, underscore, or digit
-            if (isIdentifier(ch)  || ch.isDigit()) tokenText.append(ex[i++]);
+            // consume as long as alpha, dollar sign, underscore, or digit or !
+            if (isIdentifier(ch) || ch.isDigit() || ch == '!') tokenText.append(ex[i++]);
 
             // we're done with range reference
             else {
@@ -893,7 +893,7 @@ Tokens Formula::scan(const QString& expr, const KLocale* locale) const
             break;
         };
     };
-    
+
     // parse error if any text remains
     if (state != Finish) {
         tokens.append(Token(Token::Unknown, ex.mid(tokenStart, ex.length() - tokenStart - 1), tokenStart));

@@ -250,11 +250,13 @@ unsigned FormulaToken::size() const
     case 0: // NOPE
         s = 0; break;
 
+    case MemFunc:
+        s = 2; break;
+
     case NatFormula:
     case Sheet:
     case EndSheet:
     case MemNoMem:
-    case MemFunc:
     case MemAreaN:
     case MemNoMemN:
     default:
@@ -1381,7 +1383,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
 
         case FormulaToken::Range:
-            mergeTokens(&stack, 2, UString(";"));
+            mergeTokens(&stack, 2, UString(":"));
             break;
 
         case FormulaToken::UPlus: {
@@ -1572,11 +1574,14 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case 0: break; // NOPE
 
+        case FormulaToken::MemFunc:
+            // as far as I can tell this is only meta-data
+            break;
+
         case FormulaToken::NatFormula:
         case FormulaToken::Sheet:
         case FormulaToken::EndSheet:
         case FormulaToken::MemNoMem:
-        case FormulaToken::MemFunc:
         case FormulaToken::MemAreaN:
         case FormulaToken::MemNoMemN:
         default:

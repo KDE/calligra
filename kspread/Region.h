@@ -269,7 +269,7 @@ public:
      * returns the result of the intersection as a new Region.
      */
     Region intersected(const Region& region);
-    
+
     /**
      * @param point the point's location
      * @param sheet the sheet the point belongs to
@@ -381,6 +381,11 @@ protected:
      * @internal used to create derived Ranges
      */
     virtual Range* createRange(const QRect&) const;
+
+    /**
+     * @internal used to create derived Ranges
+     */
+    virtual Range* createRange(const Point&, const Point&) const;
 
     /**
      * @internal used to create derived Ranges
@@ -584,6 +589,7 @@ class Region::Range : public Region::Element
 {
 public:
     Range(const QRect&);
+    Range(const Region::Point&, const Region::Point&);
     Range(const QString&);
     virtual ~Range();
 

@@ -965,6 +965,11 @@ KSpread::Region::Range* Selection::createRange(const QRect& rect) const
     return new Range(rect);
 }
 
+KSpread::Region::Range* Selection::createRange(const KSpread::Region::Point& tl, const KSpread::Region::Point& br) const
+{
+    return new Range(tl, br);
+}
+
 KSpread::Region::Range* Selection::createRange(const QString& string) const
 {
     return new Range(string);
@@ -1084,6 +1089,12 @@ Selection::Point::Point(const Region::Point& point)
 
 Selection::Range::Range(const QRect& range)
         : Region::Range(range),
+        m_color(Qt::black)
+{
+}
+
+Selection::Range::Range(const KSpread::Region::Point& tl, const KSpread::Region::Point& br)
+        : Region::Range(tl, br),
         m_color(Qt::black)
 {
 }
