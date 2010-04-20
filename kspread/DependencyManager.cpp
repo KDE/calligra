@@ -109,11 +109,18 @@ void DependencyManager::regionChanged(const Region& region)
         if (bottom > cells->rows()) bottom = cells->rows();
         for (int row = range.top(); row <= bottom; ++row) {
             int col = range.left();
+            bool first = true;
             while (1) {
-                const Cell cell = cells->nextInRow(col, row);
-                if (cell.isNull()) break;
-                col = cell.column();
-                if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+                Cell cell;
+                if (first) {
+                    cell = Cell(sheet, col, row);
+                    first = false;
+                } else {
+                    cell = cells->nextInRow(col, row);
+                    if (cell.isNull()) break;
+                    col = cell.column();
+                    if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+                }
 
                 const Formula formula = cell.formula();
 
