@@ -119,7 +119,7 @@ public:
 
     QList<ChartExport*> charts;
 
-    QHash<int,int> rowsRepeatedHash;
+    QHash<Row*,int> rowsRepeatedHash;
     int rowsRepeated(Row* row, int rowIndex);
 
     int rowsCountTotal, rowsCountDone;
@@ -300,8 +300,8 @@ void ExcelImport::Private::addProgress(int addValue)
 
 int ExcelImport::Private::rowsRepeated(Row* row, int rowIndex)
 {
-    if(rowsRepeatedHash.contains(rowIndex))
-        return rowsRepeatedHash[rowIndex];
+    if(rowsRepeatedHash.contains(row))
+        return rowsRepeatedHash[row];
     // a row does usually at least repeat itself
     int repeat = 1;
     // find the column of the rightmost cell (if any)
@@ -326,7 +326,7 @@ int ExcelImport::Private::rowsRepeated(Row* row, int rowIndex)
         if (!cellsAreSame) break;
         ++repeat;
     }
-    rowsRepeatedHash[rowIndex] = repeat; // cache the result
+    rowsRepeatedHash[row] = repeat; // cache the result
     return repeat;
 }
 
