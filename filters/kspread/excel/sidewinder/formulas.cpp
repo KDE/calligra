@@ -243,7 +243,8 @@ unsigned FormulaToken::size() const
         s = (d->ver == Excel97) ? 10 : 20; break;
 
     case MemArea:
-        s = 7; break;
+        s = 6; break;
+
     case MemErr:
         s = 6; break;
 
@@ -1552,11 +1553,9 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
         }
 
-        case FormulaToken::MemArea: {
-            UString s = token.areaMap(row, col);
-            stack.push_back(s);
+        case FormulaToken::MemArea:
+            // does nothing
             break;
-        }
 
         case FormulaToken::AreaErr:
         case FormulaToken::AreaErr3d:
