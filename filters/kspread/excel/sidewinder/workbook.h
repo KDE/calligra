@@ -25,6 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
+#include <QtCore/QRect>
 #include <string>
 #include <map>
 
@@ -36,7 +37,7 @@ class Store
 public:
     explicit Store() {}
     virtual ~Store() {}
-    
+
     virtual bool open(const std::string& filename) = 0;
     virtual bool write(const char *data, int size) = 0;
     virtual bool close() = 0;
@@ -51,7 +52,7 @@ public:
 
     /**
      * Constructs a new workbook.
-     * 
+     *
      * @a store An optional implementation of the Store class
      * that is used to write content like images to.
      */
@@ -66,7 +67,7 @@ public:
      * Returns the used KoStore or NULL if not KoStore was set.
     /*/
     Store* store() const;
-    
+
     /**
      * Clears the workbook, i.e. makes it as if it is just constructed.
      */
@@ -114,9 +115,12 @@ public:
     QVariant property(PropertyType type, const QVariant &defaultValue = QVariant()) const;
     void setProperty(PropertyType type, const QVariant &value);
 
-    std::map<UString, UString>& namedAreas();
-    void setNamedArea(UString name, UString formula);
-    
+    std::map<std::pair<unsigned, UString>, UString>& namedAreas();
+    void setNamedArea(unsigned sheet, UString name, UString formula);
+
+    QList<QRect> filterRanges(unsigned sheet) const;
+    void addFilterRange(unsigned sheet, const QRect& range);
+
     int activeTab() const;
     void setActiveTab(int tab);
 
@@ -127,7 +131,7 @@ public:
     void setPassword(unsigned long hash);
 
     void emitProgress(int value);
-    
+
 signals:
     void sigProgress(int value);
 

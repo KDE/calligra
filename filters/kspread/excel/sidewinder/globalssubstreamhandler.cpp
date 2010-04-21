@@ -679,12 +679,21 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
     d->nameTable.push_back(record->definedName());
 
     if(record->m_formula.id() != FormulaToken::Unused) {
-        FormulaTokens tokens;
-        tokens.push_back(record->m_formula);
-        UString f = decodeFormula(0, 0, false, tokens);
-        if(!f.isEmpty()) {
-            UString n = record->definedName();
-            d->workbook->setNamedArea(n, f);
+        if (record->isBuiltin()) {
+            if (record->definedName() == "_FilterDatabase") {
+                if (record->m_formula.id() == FormulaToken::Area3d) {
+                    std::pair<unsigned, QRect> area = record->m_formula.filterArea3d();
+                    d->workbook->addFilterRange(area.first, area.second);
+                }
+            }
+        } else {
+            FormulaTokens tokens;
+            tokens.push_back(record->m_formula);
+            UString f = decodeFormula(0, 0, false, tokens);
+            if(!f.isEmpty()) {
+                UString n = record->definedName();
+                d->workbook->setNamedArea(record->sheetIndex(), n, f);
+            }
         }
     }
 }

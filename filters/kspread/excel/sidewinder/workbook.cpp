@@ -33,7 +33,8 @@ public:
     Store* store;
     std::vector<Sheet*> sheets;
     QHash<PropertyType, QVariant> properties;
-    std::map<UString, UString> namedAreas;
+    std::map<std::pair<unsigned, UString>, UString> namedAreas;
+    std::map<unsigned, QList<QRect> > filterRanges;
     int activeTab;
     bool passwordProtected;
     unsigned long passwd;
@@ -109,14 +110,24 @@ void Workbook::setProperty(PropertyType type, const QVariant &value)
     d->properties[ type ] = value;
 }
 
-std::map<UString, UString>& Workbook::namedAreas()
+std::map<std::pair<unsigned, UString>, UString>& Workbook::namedAreas()
 {
     return d->namedAreas;
 }
 
-void Workbook::setNamedArea(UString name, UString formula)
+void Workbook::setNamedArea(unsigned sheet, UString name, UString formula)
 {
-    d->namedAreas[name] = formula;
+    d->namedAreas[std::make_pair(sheet, name)] = formula;
+}
+
+QList<QRect> Workbook::filterRanges(unsigned sheet) const
+{
+    return d->filterRanges[sheet];
+}
+
+void Workbook::addFilterRange(unsigned sheet, const QRect& range)
+{
+    d->filterRanges[sheet].push_back(range);
 }
 
 int Workbook::activeTab() const

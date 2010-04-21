@@ -620,6 +620,10 @@ public:
 
     void setDefinedName(const UString& name);
 
+    unsigned sheetIndex() const;
+
+    bool isBuiltin() const;
+
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
     virtual const char* name() const {

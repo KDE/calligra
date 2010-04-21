@@ -566,12 +566,12 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
         processSheetForBody(store, sheet, xmlWriter);
     }
 
-    std::map<UString, UString> &namedAreas = workbook->namedAreas();
+    std::map<std::pair<unsigned, UString>, UString> &namedAreas = workbook->namedAreas();
     if(namedAreas.size() > 0) {
         xmlWriter->startElement("table:named-expressions");
-        for(std::map<UString, UString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
+        for(std::map<std::pair<unsigned, UString>, UString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
             xmlWriter->startElement("table:named-range");
-            xmlWriter->addAttribute("table:name", string((*it).first) ); // e.g. "My Named Range"
+            xmlWriter->addAttribute("table:name", string((*it).first.second) ); // e.g. "My Named Range"
             QString range = string((*it).second);
             if(range.startsWith('[') && range.endsWith(']'))
                 range = range.mid(1, range.length() - 2);
@@ -580,6 +580,35 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
         }
         xmlWriter->endElement();
     }
+
+    bool openedDBRanges = false;
+    int rangeId = 1;
+    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
+        QList<QRect> filters = workbook->filterRanges(i);
+        QString sheetName = string(workbook->sheet(i)->name());
+        if (filters.size()) {
+            if (!openedDBRanges) xmlWriter->startElement("table:database-ranges");
+            openedDBRanges = true;
+
+            foreach (const QRect& filter, filters) {
+                QString sRange(sheetName);
+                sRange.append(".");
+                sRange.append(columnName(filter.left()));
+                sRange.append(QString::number(filter.top()+1));
+                sRange.append(":");
+                sRange.append(sheetName);
+                sRange.append(".");
+                sRange.append(columnName(filter.right()));
+                sRange.append(QString::number(workbook->sheet(i)->maxRow()));
+                xmlWriter->startElement("table:database-range");
+                xmlWriter->addAttribute("table:name", QString("database-%1").arg(rangeId++));
+                xmlWriter->addAttribute("table:display-filter-buttons", "true");
+                xmlWriter->addAttribute("table:target-range-address", sRange);
+                xmlWriter->endElement(); // table:database-range
+            }
+        }
+    }
+    if (openedDBRanges) xmlWriter->endElement(); // table:database-ranges
 
     xmlWriter->endElement();  // office:spreadsheet
 }

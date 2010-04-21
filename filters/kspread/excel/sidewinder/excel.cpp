@@ -965,6 +965,8 @@ class NameRecord::Private
 public:
     unsigned optionFlags;
     UString definedName;
+    int sheetIndex; // 0 for global
+    bool builtin;
 };
 
 
@@ -990,6 +992,16 @@ UString NameRecord::definedName() const
     return d->definedName;
 }
 
+unsigned NameRecord::sheetIndex() const
+{
+    return d->sheetIndex;
+}
+
+bool NameRecord::isBuiltin() const
+{
+    return d->builtin;
+}
+
 void NameRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
 {
     if (size < 14) {
@@ -1003,7 +1015,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     //const bool fOB = d->optionFlags & 0x04;
     //const bool fProc = d->optionFlags & 0x08;
     //const bool fCalcExp = d->optionFlags & 0x10;
-    const bool fBuiltin = d->optionFlags & 0x20;
+    d->builtin = d->optionFlags & 0x20;
     // 6 bits fGrp
     //const bool reserved1 = d->optionFlags & 0x1800;
     //const bool fPublished = d->optionFlags & 0x3000;
@@ -1013,7 +1025,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     const unsigned len = readU8(data + 3); // cch
     const unsigned cce = readU16(data + 4); // len of rgce
     // 2 bytes reserved
-    const unsigned iTab = readU16(data + 8); // if !=0 then its a local name
+    d->sheetIndex = readU16(data + 8); // if !=0 then its a local name
     // 4 bytes reserved
 
     if (version() == Excel95) {
@@ -1023,7 +1035,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         d->definedName = UString(buffer);
         delete[] buffer;
     } else  if (version() == Excel97) {
-        if( fBuiltin ) { // field is for a build-in name
+        if( d->builtin ) { // field is for a build-in name
             const unsigned opts = readU8(data + 14);
             const bool fHighByte = opts & 0x01;
             const unsigned id = fHighByte ? readU16(data + 15) : readU8(data + 15) + 0x0*256;
@@ -1041,6 +1053,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
                 case 0x0A: d->definedName = "Auto_Activate"; break;
                 case 0x0B: d->definedName = "Auto_Deactivate"; break;
                 case 0x0C: d->definedName = "Sheet_Title"; break;
+                case 0x0D: d->definedName = "_FilterDatabase"; break;
                 default: break;
             }
         } else { // must satisfy same restrictions then name field on XLNameUnicodeString
@@ -1090,7 +1103,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         m_formula = t;
     }
 
-    std::cout << "NameRecord name=" << d->definedName << " iTab=" << iTab << " fBuiltin=" << fBuiltin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
+    std::cout << "NameRecord name=" << d->definedName << " iTab=" << d->sheetIndex << " fBuiltin=" << d->builtin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
 }
 
 void NameRecord::dump(std::ostream& /*out*/) const

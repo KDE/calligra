@@ -957,5 +957,28 @@
 <record name="CompressPictures" id="0x089b">
 </record>
 
+<record name="AutoFilter" id="0x009e">
+  <field name="entry"           type="unsigned" size="16" />
+  <field name="join"            type="unsigned" size="2">
+    <enum name="JoinAnd" value="0" />
+    <enum name="JoinOr"  value="1" />
+  </field>
+  <field name="simple1"         type="bool"     size="1" />
+  <field name="simple2"         type="bool"     size="1" />
+  <field name="topN"            type="bool"     size="1" />
+  <field name="topDirection"    type="unsigned" size="1">
+    <enum name="TopNBottom" value="0" />
+    <enum name="TopNTop"    value="1" />
+  </field>
+  <field name="topPercentage"   type="bool"     size="1" />
+  <field name="topNCount"       type="unsigned" size="9" />
+</record>
+
+<record name="AutoFilter12" id="0x087e">
+</record>
+
+<record name="AutoFilterInfo" id="0x009d">
+  <field name="entries"     type="unsigned" size="16" />
+</record>
 
 </records>

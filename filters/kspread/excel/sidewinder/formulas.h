@@ -26,6 +26,8 @@
 
 #include <vector>
 
+#include <QtCore/QRect>
+
 namespace Swinder
 {
 
@@ -129,6 +131,8 @@ public:
     UString area(unsigned row, unsigned col, bool relative = false) const;
     // only when id is Area3d
     UString area3d(const std::vector<UString>& externSheets, unsigned row, unsigned col) const;
+    // only when id is Area3d, assumes all references to be absolute
+    std::pair<unsigned, QRect> filterArea3d() const;
     // only when id is MemArea
     UString areaMap(unsigned row, unsigned col);
 
@@ -144,7 +148,7 @@ public:
     std::pair<unsigned, unsigned> baseFormulaRecord() const;
 
     void operator=(const FormulaToken& token);
-    
+
 private:
     class Private;
     Private *d;
@@ -167,7 +171,7 @@ public:
     FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version);
 
     UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
-    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);    
+    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
 
     virtual const std::vector<UString>& externSheets() const { return m_externSheets; }
     virtual UString nameFromIndex(unsigned /*index*/) const { return UString(); }
