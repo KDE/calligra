@@ -884,7 +884,6 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 				  bool firstPage)
 {
     // TODO: Check page-layout attributes specific for the first page.
-    kDebug(30513) << "sep->pgbApplyTo: " << sep->pgbApplyTo;
 
     //get width & height in points
     double width = (double)sep->xaPage / 20.0;
@@ -902,8 +901,17 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
 
+    DrawStyle ds = m_drawingHandler->getDrawingStyle();
+    // TODO: use ds.fillType to enable fill efects for document background
+
+    // When more complete background color implementation will be added to filter,
+    // PptToOdp::toQColor helper function can be used instead of this conversion
+    MSO::OfficeArtCOLORREF clr = ds.fillColor();
+    QColor color(clr.red,clr.green,clr.blue);
+    pageLayoutStyle->addProperty("fo:background-color", color.name());
+
     //set the minimum height of header/footer to the full margin minus margin above header
-    //TODO the margin between header/footer and text is just hard-coded for now
+    //TODO: the margin between header/footer and text is just hard-coded for now
     QString header("<style:header-style>");
     header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
     header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
@@ -917,11 +925,11 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
     pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
 
-    // Page borders. Check to which page-layout the border information has to
-    // be applied: 0 - all pages, 1 - first page only, 2 - all but first.
+    //Page borders, check to which page-layout the border information has to be
+    //applied: 0 - all pages, 1 - first page only, 2 - all but first.
 
-    // NOTE: 3 - whole document - not mentioned in the "Word Binary File Format
-    // (.doc) Structure Specification", but mentiond in word97_generated.h
+    //NOTE: 3 - whole document, not mentioned in the "Word Binary File Format
+    //(.doc) Structure Specification", but mentiond in word97_generated.h
     if ( (sep->pgbApplyTo == 0) ||
 	((sep->pgbApplyTo == 1) && firstPage) ||
 	((sep->pgbApplyTo == 2) && !firstPage))
