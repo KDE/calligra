@@ -193,7 +193,7 @@ public:
     int maxRow() const { return m_maxRow; }
     int maxColumn() const { return m_maxColumn; }
     int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
-    
+
 private:
     QHash<int, Row*> m_rows;
     QHash<int, Column*> m_columns;
@@ -415,7 +415,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                 body->startElement("table:table-cell");
                 if (Cell* cell = d->sheet->cell(c, r, false)) {
                     const bool hasHyperlink = ! cell->hyperlink.isEmpty();
-                    
+
                     if (!cell->styleName.isEmpty()) {
                         body->addAttribute("table:style-name", cell->styleName);
                     }
@@ -435,7 +435,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     if (cell->columnsMerged > 1) {
                         body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
                     }
-                    
+
                     if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty() || hasHyperlink) {
                         body->startElement("text:p", false);
                         if(!cell->charStyleName.isEmpty()) {
@@ -456,7 +456,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                         body->endElement(); // text:p
                     }
-                        
+
                     // handle objects like e.g. charts
                     foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
                         foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
@@ -747,7 +747,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     m_currentColumn = 0;
     Row* row = d->sheet->row(m_currentRow, true);
     row->styleName = processRowStyle(ht);
-    
+
     if (!hidden.isEmpty()) {
         row->hidden = hidden.toInt() > 0;
     }
@@ -779,7 +779,7 @@ static QString convertFormula(const QString& formula)
 {
     if (formula.isEmpty())
         return QString();
-    enum { Start, InArguments, InString, InSheetOrAreaName } state;
+    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
     state = Start;
     QString result = '=' + formula;
     for(int i = 1; i < result.length(); ++i) {
@@ -796,6 +796,14 @@ static QString convertFormula(const QString& formula)
                 state = InSheetOrAreaName;
             else if (ch == ',')
                 result[i] = ';'; // replace argument delimiter
+            else if (ch == '(')
+                state = InParenthesizedArgument;
+            break;
+        case InParenthesizedArgument:
+            if (ch == ',')
+                result[i] = '~'; // union operator
+            else if (ch == ')')
+                state = InArguments;
             break;
         case InString:
             if (ch == '"')
@@ -923,7 +931,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     kDebug() << "styleId:" << styleId;
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
     const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
-    
+
     const QString formattedStyle = d->processValueFormat( numberFormat );
     QString charStyleName;
 
@@ -943,7 +951,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         if( !charStyleName.isEmpty() ) {
             cell->charStyleName = charStyleName;
         }
- 
+
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean) Cell containing a boolean.
             d (Date) Cell contains a date in the ISO 8601 format.
@@ -958,7 +966,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
             Converting into values described in ODF1.1: "6.7.1. Variable Value Types and Values".
         */
-       
+
         if (t == QLatin1String("s")) {
             bool ok;
             const int stringIndex = m_value.toInt(&ok);
@@ -1094,9 +1102,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
     // formula or data table. Only written on the master formula, not subsequent formula's
     // belonging to the same shared group, array, or data table.
     TRY_READ_ATTR(ref)
-    
+
     // Type of formula. The possible values defined by the ST_CellFormulaType (§18.18.6), p. 2677
-    TRY_READ_ATTR(t)    
+    TRY_READ_ATTR(t)
     if (!t.isEmpty()) {
         if (t == QLatin1String("shared")) {
             /* Shared Group Index, p. 1815
@@ -1114,7 +1122,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
             //STRING_TO_INT(si, sharedGroupIndex, "f@si")
         }
         else if (t == QLatin1String("normal")) { // Formula is a regular cell formula
-            
+
         }
         else if (t == QLatin1String("array")) { // Formula is an array formula
             //! @todo array
@@ -1286,7 +1294,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             delete context;
             return result;
         }
-        
+
         if (context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
             XlsxXmlDrawingReaderContext::Position pos = context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
             Cell* cell = d->sheet->cell(pos.m_col, pos.m_row, true);
@@ -1317,7 +1325,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
             // it follows a hack to get right of the prepended m_context->path...
             if (link.startsWith(m_context->path))
                 link = link.mid(m_context->path.length()+1);
-                
+
             Cell* cell = d->sheet->cell(col, row, true);
             cell->hyperlink = link;
         }
