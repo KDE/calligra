@@ -28,6 +28,11 @@ static inline QString ucFirst(QString s)
     return s[0].toUpper() + s.mid(1);
 }
 
+static inline QString lcFirst(QString s)
+{
+    return s[0].toLower() + s.mid(1);
+}
+
 struct Field {
     QString name;
     QString type;
@@ -51,7 +56,7 @@ struct Field {
     }
 };
 
-static QString getFieldType(QString xmlType, unsigned bits, QString otherType = QString())
+static QString getFieldType(QString xmlType, unsigned bits, QString otherType, const QMap<QString, QString>& extraTypes)
 {
     Q_UNUSED(bits);
     Q_UNUSED(otherType);
@@ -60,18 +65,26 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType = 
     else if (xmlType == "float" || xmlType == "fixed") return "double";
     else if (xmlType == "bool") return "bool";
     else if (xmlType == "bytestring" || xmlType == "unicodestring") return "UString";
+    else if (extraTypes.contains(xmlType)) return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
     return "ERROR";
 }
 
 static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0)
 {
+    QDomNodeList types = record.elementsByTagName("type");
+    QMap<QString, QString> extraTypes;
+    for (int i = 0; i < types.size(); i++) {
+        QDomElement e = types.at(i).toElement();
+        extraTypes[e.attribute("name")] = e.attribute("type");
+    }
+
     QDomNodeList fields = record.elementsByTagName("field");
     QMap<QString, Field> map;
     for (int i = 0; i < fields.size(); i++) {
         QDomElement e = fields.at(i).toElement();
         QString name = e.attribute("name");
         if (!name.startsWith("reserved")) {
-            map[name] = Field(name, getFieldType(e.attribute("type"), e.attribute("size").toUInt(), map[name].type));
+            map[name] = Field(name, getFieldType(e.attribute("type"), e.attribute("size").toUInt(), map[name].type, extraTypes));
             if (foundStrings && map[name].type == "UString") *foundStrings = true;
             if (e.parentNode().nodeName() == "array") {
                 map[name].isArray = true;
@@ -79,6 +92,10 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
             if (e.elementsByTagName("enum").size() > 0) {
                 map[name].isEnum = true;
                 map[name].type = ucFirst(name);
+            }
+            if (extraTypes.contains(e.attribute("type"))) {
+                map[name].isEnum = true;
+                map[name].type = e.attribute("type");
             }
         }
     }
@@ -126,7 +143,7 @@ void processEnumsForHeader(QDomNodeList fieldList, QTextStream& out)
                 out << "\n";
             }
             out << "    };\n\n"
-            << "    static UString " << f.attribute("name") << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
+            << "    static UString " << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
         }
     }
 }
@@ -154,6 +171,8 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     processEnumsForHeader(fieldNodes, out);
     QDomNodeList cfieldNodes = e.elementsByTagName("computedField");
     processEnumsForHeader(cfieldNodes, out);
+    QDomNodeList typeNodes = e.elementsByTagName("type");
+    processEnumsForHeader(typeNodes, out);
 
     // getters and setters
     foreach(const Field& f, fields) {
@@ -217,8 +236,8 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         unsigned bits = field.attribute("size").toUInt();
         QString name = field.attribute("name");
         if (!name.startsWith("reserved")) {
-            if (bits >= 8 && offset % 8 != 0)
-                qFatal("Unaligned byte-or-larger field");
+            //if (bits >= 8 && offset % 8 != 0)
+            //    qFatal("Unaligned byte-or-larger field");
             if (bits >= 16 && bits % 8 != 0)
                 qFatal("Fields of 16 bits and larger must always be an exact number of bytes");
 
@@ -381,7 +400,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
                     out << " \" << std::setw(3) << " << getterArgs << " <<\" : \" << ";
                 }
                 if (f.isEnum)
-                    out << name << "ToString(" << f.getterName() << "(" << getterArgs << "))";
+                    out << lcFirst(f.type) << "ToString(" << f.getterName() << "(" << getterArgs << "))";
                 else
                     out << f.getterName() << "(" << getterArgs << ")";
                 out << " << std::endl;\n";
@@ -413,7 +432,7 @@ void processEnumsForImplementation(QDomNodeList fieldList, QString className, QT
         QDomNodeList enumNodes = f.elementsByTagName("enum");
         if (enumNodes.size()) {
             QString name = ucFirst(f.attribute("name"));
-            out << "UString " << className << "::" << f.attribute("name") << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
+            out << "UString " << className << "::" << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
             << "    switch (" << f.attribute("name") << ") {\n";
             for (int j = 0; j < enumNodes.size(); j++) {
                 QDomElement en = enumNodes.at(j).toElement();
@@ -481,6 +500,8 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     processEnumsForImplementation(fieldNodes, className, out);
     QDomNodeList cfieldNodes = e.elementsByTagName("computedField");
     processEnumsForImplementation(cfieldNodes, className, out);
+    QDomNodeList typeNodes = e.elementsByTagName("type");
+    processEnumsForImplementation(typeNodes, className, out);
 
     // getters and setters
     foreach(const Field& f, fields) {
