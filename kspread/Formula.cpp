@@ -928,7 +928,7 @@ void Formula::compile(const Tokens& tokens) const
         // helper token: InvalidOp is end-of-formula
         Token token = (i < tokens.count()) ? tokens[i] : Token(Token::Operator);
         Token::Type tokenType = token.type();
-kDebug() << "Token" << i << "type:" << tokenType << "text:" << token.text();
+
         // unknown token is invalid
         if (tokenType == Token::Unknown) break;
 
@@ -1703,7 +1703,6 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             if (val1.isError())
                 return val1;
             function = FunctionRepository::self()->function(val1.asString());
-            kDebug() << val1.asString() << function;
             if (!function)
                 return Value::errorNAME(); // no such function
 
