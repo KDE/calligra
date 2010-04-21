@@ -53,7 +53,7 @@ public:
         GT          = 0x0d,
         NE          = 0x0e,
         Intersect   = 0x0f,
-        List        = 0x10,
+        Union       = 0x10,
         Range       = 0x11,
         UPlus       = 0x12,
         UMinus      = 0x13,

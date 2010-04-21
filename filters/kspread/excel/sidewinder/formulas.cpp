@@ -117,7 +117,7 @@ const char* FormulaToken::idAsString() const
     case GT:           s = "GT"; break;
     case NE:           s = "NE"; break;
     case Intersect:    s = "Intersect"; break;
-    case List:         s = "List"; break;
+    case Union:        s = "Union"; break;
     case Range:        s = "Range"; break;
     case UPlus:        s = "UPlus"; break;
     case UMinus:       s = "UMinus"; break;
@@ -183,7 +183,7 @@ unsigned FormulaToken::size() const
     case GT:
     case NE:
     case Intersect:
-    case List:
+    case Union:
     case Range:
     case UPlus:
     case UMinus:
@@ -1414,8 +1414,8 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             mergeTokens(&stack, 2, UString(" "));
             break;
 
-        case FormulaToken::List:
-            mergeTokens(&stack, 2, UString(";"));
+        case FormulaToken::Union:
+            mergeTokens(&stack, 2, UString("~"));
             break;
 
         case FormulaToken::Range:
