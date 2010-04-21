@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QVector>
 #include "kspread_export.h"
+#include "Region.h"
 
 class QDomElement;
 
@@ -51,6 +52,7 @@ struct FuncExtra {
     // here we'll add all the extras a function may need
     Function* function;
     QVector<rangeInfo> ranges;
+    QVector<Region> regions;
     Sheet *sheet;
     int myrow, mycol;
 };

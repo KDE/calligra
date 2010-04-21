@@ -85,7 +85,7 @@ class Opcode
 public:
 
     enum { Nop = 0, Load, Ref, Cell, Range, Function, Add, Sub, Neg, Mul, Div,
-           Pow, Concat, Intersect, Not, Equal, Less, Greater, Array
+           Pow, Concat, Intersect, Not, Equal, Less, Greater, Array, Union
          };
 
     unsigned type;
@@ -156,6 +156,7 @@ Token::Op KSpread::matchOperator(const QString& text)
         case '<': result = Token::Less; break;
         case '>': result = Token::Greater; break;
         case '%': result = Token::Percent; break;
+        case '~': result = Token::Union; break;
 #ifdef KSPREAD_INLINE_ARRAYS
         case '{': result = Token::CurlyBra; break;
         case '}': result = Token::CurlyKet; break;
@@ -194,6 +195,7 @@ static int opPrecedence(Token::Op op)
     case Token::Slash        : prec = 6; break;
     case Token::Plus         : prec = 3; break;
     case Token::Minus        : prec = 3; break;
+    case Token::Union        : prec = 2; break;
     case Token::Ampersand    : prec = 2; break;
     case Token::Intersect    : prec = 2; break;
     case Token::Equal        : prec = 1; break;
@@ -926,7 +928,7 @@ void Formula::compile(const Tokens& tokens) const
         // helper token: InvalidOp is end-of-formula
         Token token = (i < tokens.count()) ? tokens[i] : Token(Token::Operator);
         Token::Type tokenType = token.type();
-
+kDebug() << "Token" << i << "type:" << tokenType << "text:" << token.text();
         // unknown token is invalid
         if (tokenType == Token::Unknown) break;
 
@@ -1204,6 +1206,7 @@ void Formula::compile(const Tokens& tokens) const
                                                 case Token::Caret:        d->codes.append(Opcode::Pow); break;
                                                 case Token::Ampersand:    d->codes.append(Opcode::Concat); break;
                                                 case Token::Intersect:    d->codes.append(Opcode::Intersect); break;
+                                                case Token::Union:        d->codes.append(Opcode::Union); break;
 
                                                     // simple value comparisons
                                                 case Token::Equal:        d->codes.append(Opcode::Equal); break;
@@ -1312,8 +1315,10 @@ bool Formula::isNamedArea(const QString& expr) const
 struct stackEntry {
     void reset() {
         row1 = col1 = row2 = col2 = -1;
+        reg = KSpread::Region();
     }
     Value val;
+    KSpread::Region reg;
     int row1, col1, row2, col2;
 };
 
@@ -1514,6 +1519,28 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             stack.push(entry);
         } break;
 
+          // region union
+        case Opcode::Union: {
+            Region r = stack.pop().reg;
+            Region r2 = stack.pop().reg;
+            entry.reset();
+            if (!r.isValid() || !r2.isValid()) {
+                val1 = Value::errorVALUE();
+                r = Region();
+            } else {
+                r.add(r2);
+                r.firstSheet()->cellStorage()->valueRegion(r);
+                // store the reference, so we can use it within functions (not entirely correct)
+                entry.col1 = r.boundingRect().left();
+                entry.row1 = r.boundingRect().top();
+                entry.col2 = r.boundingRect().right();
+                entry.row2 = r.boundingRect().bottom();
+            }
+            entry.val = val1;
+            entry.reg = r;
+            stack.push(entry);
+        } break;
+
             // logical not
         case Opcode::Not:
             val1 = converter->asBoolean(d->valueOrElement(map, index, fe, stack.pop().val));
@@ -1608,6 +1635,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 // store the reference, so we can use it within functions
                 entry.col1 = entry.col2 = position.x();
                 entry.row1 = entry.row2 = position.y();
+                entry.reg = region;
             } else {
                 kWarning() << "Unhandled non singular region in Opcode::Cell with rects=" << region.rects();
             }
@@ -1630,6 +1658,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 entry.row1 = region.firstRange().top();
                 entry.col2 = region.firstRange().right();
                 entry.row2 = region.firstRange().bottom();
+                entry.reg = region;
             }
 
             entry.val = val1; // any array is valid here
@@ -1655,6 +1684,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             args.clear();
             fe.ranges.clear();
             fe.ranges.resize(index);
+            fe.regions.clear();
+            fe.regions.resize(index);
             fe.sheet = d->sheet;
             for (; index; index--) {
                 stackEntry e = stack.pop();
@@ -1664,6 +1695,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 fe.ranges[index - 1].row1 = e.row1;
                 fe.ranges[index - 1].col2 = e.col2;
                 fe.ranges[index - 1].row2 = e.row2;
+                fe.regions[index - 1] = e.reg;
             }
 
             // function name as string value
@@ -1671,6 +1703,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             if (val1.isError())
                 return val1;
             function = FunctionRepository::self()->function(val1.asString());
+            kDebug() << val1.asString() << function;
             if (!function)
                 return Value::errorNAME(); // no such function
 
@@ -1778,6 +1811,9 @@ QString Formula::dump() const
         case Opcode::Less:      ctext = "Less"; break;
         case Opcode::Greater:   ctext = "Greater"; break;
         case Opcode::Array:     ctext = QString("Array (%1x%2)").arg(d->constants[d->codes[i].index].asInteger()).arg(d->constants[d->codes[i].index+1].asInteger()); break;
+        case Opcode::Nop:       ctext = "Nop"; break;
+        case Opcode::Cell:      ctext = "Cell"; break;
+        case Opcode::Range:     ctext = "Range"; break;
         default: ctext = "Unknown"; break;
         }
         result.append("   ").append(ctext).append("\n");

@@ -219,6 +219,9 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     if (e) {
+        if (e->regions[0].isValid())
+            return Value(e->regions[0].rects().size());
+
         if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) &&
                 (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
             // we have a range reference - return 1

@@ -87,7 +87,8 @@ public:
         Percent,        ///<  %
         CurlyBra,       ///<  { (array start)
         CurlyKet,       ///<  } (array end)
-        Pipe            ///<  | (array row separator)
+        Pipe,           ///<  | (array row separator)
+        Union           ///<  ~ (union of ranges)
     };
 
     /**
