@@ -500,30 +500,41 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
         return;
 
     Sheet* sheet = cell.sheet();
+    int inAreasCall = 0;
     Region providingRegion;
     for (int i = 0; i < tokens.count(); i++) {
         const Token token = tokens[i];
 
-        //parse each cell/range and put it to our Region
-        if (token.type() == Token::Cell || token.type() == Token::Range) {
-            // check for named area
-            if (sheet->map()->namedAreaManager()->contains(token.text())) {
-                // add cell as consumer of the named area
-                namedAreaConsumers[token.text()].append(cell);
-            }
+        if (inAreasCall) {
+            if (token.isOperator() && token.asOperator() == Token::LeftPar)
+                inAreasCall++;
+            else if (token.isOperator() && token.asOperator() == Token::RightPar)
+                inAreasCall--;
+        } else {
+            if (i > 0 && token.isOperator() && token.asOperator() == Token::LeftPar && tokens[i-1].isIdentifier() && QString::compare(tokens[i-1].text(), "AREAS", Qt::CaseInsensitive) == 0)
+                inAreasCall = 1;
 
-            // check if valid cell/range
-            const Region region(token.text(), sheet->map(), sheet);
-            if (region.isValid()) {
-                // add it to the providers
-                providingRegion.add(region);
+            //parse each cell/range and put it to our Region
+            if (token.type() == Token::Cell || token.type() == Token::Range) {
+                // check for named area
+                if (sheet->map()->namedAreaManager()->contains(token.text())) {
+                    // add cell as consumer of the named area
+                    namedAreaConsumers[token.text()].append(cell);
+                }
 
-                Sheet* sheet = region.firstSheet();
+                // check if valid cell/range
+                const Region region(token.text(), sheet->map(), sheet);
+                if (region.isValid()) {
+                    // add it to the providers
+                    providingRegion.add(region);
 
-                // create consumer tree, if not existing yet
-                if (!consumers.contains(sheet)) consumers.insert(sheet, new RTree<Cell>());
-                // add cell as consumer of the range
-                consumers[sheet]->insert(region.firstRange(), cell);
+                    Sheet* sheet = region.firstSheet();
+
+                    // create consumer tree, if not existing yet
+                    if (!consumers.contains(sheet)) consumers.insert(sheet, new RTree<Cell>());
+                    // add cell as consumer of the range
+                    consumers[sheet]->insert(region.firstRange(), cell);
+                }
             }
         }
     }
