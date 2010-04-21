@@ -217,7 +217,10 @@ void SheetPrint::generateThumbnail(QPainter &painter)
 {
     painter.scale(m_zoomHandler->zoomedResolutionX(), m_zoomHandler->zoomedResolutionY());
     painter.setClipRect(0, 0, (int)paperLayout().width, (int)paperLayout().height);
-    printPage(painter, cellsPrintRange(), QRect(0, 0, paperLayout().width, paperLayout().height), QPointF(0,0));
+    QRect range = cellsPrintRange();
+    if (range.height() > 100) range.setHeight(100);
+    if (range.width() > 100) range.setWidth(100);
+    printPage(painter, range, QRect(0, 0, paperLayout().width, paperLayout().height), QPointF(0,0));
 }
 
 bool SheetPrint::print(QPainter &painter, QPrinter *_printer)
