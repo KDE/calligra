@@ -25,6 +25,7 @@
 #include "conversion.h"
 
 #include <wv2/src/word97_generated.h>
+#include <wv2/src/ms_odraw.h>
 
 #include <kdebug.h>
 #include <QList>
@@ -33,6 +34,8 @@
 
 #include "document.h"
 #include "texthandler.h"
+
+using Conversion::twipsToPt;
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
@@ -64,28 +67,60 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_row = -1;
     m_currentY = 0;
 
-    //start table in content
-    writer->startElement("table:table");
-
-    // Start a table style.
+    //table style
     KoGenStyle tableStyle(KoGenStyle::TableAutoStyle, "table");
+
+    //in case a header or footer is processed, save the style into styles.xml
+    if (document()->writingHeader()) {
+        tableStyle.setAutoStyleInStylesDotXml(true);
+    }
+
+    //process horizontal align information
+    QString align;
+    switch (table->tap->jc) {
+    case wvWare::hAlignLeft:
+        align = QString("left");
+        break;
+    case wvWare::hAlignCenter:
+        align = QString("center");
+        break;
+    case wvWare::hAlignRight:
+        align = QString("right");
+        break;
+    }
+
     tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
+    tableStyle.addProperty("table:align", align);
     tableStyle.addProperty("style:border-model", "collapsing");
 
-    // Check to see if we need a master page name attribute.
-    if (document()->writeMasterPageName()) {
-      tableStyle.addAttribute("style:master-page-name",
-			      document()->masterPageName());
-      document()->set_writeMasterPageName(false);
+    //process margin information, note that if a table in word 2000/2003 is
+    //aligned to left, there may be a left margin
+    if (table->tap->widthIndent) {
+	qreal margin = twipsToPt(table->tap->widthIndent);
+        tableStyle.addPropertyPt("fo:margin-left", margin);
+    }
+
+    //check if we need a master page name attribute.
+    if (document()->writeMasterPageName() && !document()->writingHeader()) {
+        tableStyle.addAttribute("style:master-page-name", document()->masterPageName());
+        document()->set_writeMasterPageName(false);
     }
 
     QString tableStyleName = m_mainStyles->insert(tableStyle, QLatin1String("Table"), KoGenStyles::AllowDuplicates);
 
+    //start table in content
+    writer->startElement("table:table");
     writer->addAttribute("table:style-name", tableStyleName);
 
     // Write the table:table-column descriptions.
     for (int r = 0; r < table->m_cellEdges.size() - 1; r++) {
         KoGenStyle tableColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
+
+        //in case a header or footer is processed, save the style into styles.xml
+        if (document()->writingHeader()) {
+            tableColumnStyle.setAutoStyleInStylesDotXml(true);
+        }
+
         tableColumnStyle.addPropertyPt("style:column-width",
                                        (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
 
@@ -127,6 +162,11 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     //            << ", number of cells: " << tap->itcMac;
 
     KoGenStyle rowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
+
+    //in case a header or footer is processed, save the style into styles.xml
+    if (document()->writingHeader()) {
+        rowStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     // The 6 BRC objects are for top, left, bottom, right,
     // insidehorizontal, insidevertical (default values).
@@ -346,6 +386,12 @@ void KWordTableHandler::tableCellStart()
                                           brcWinner(tc.brcRight, m_tap->rgbrcTable[3]);
 
     KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+
+    //in case a header or footer is processed, save the style into styles.xml
+    if (document()->writingHeader()) {
+        cellStyle.setAutoStyleInStylesDotXml(true);
+    }
+
     //set borders for the four edges of the cell
     if (brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
@@ -392,14 +438,22 @@ void KWordTableHandler::tableCellStart()
     //    cellStyle.addProperty("style:direction", "ttb");
     //}
 
-    //vertical alignment
-    if (tc.vertAlign == 0) {
-        cellStyle.addProperty("style:vertical-align", "top");
-    } else if (tc.vertAlign == 1) {
-        cellStyle.addProperty("style:vertical-align", "middle");
-    } else if (tc.vertAlign == 2) {
-        cellStyle.addProperty("style:vertical-align", "bottom");
+    //process vertical alignment information 
+    QString align;
+    switch (tc.vertAlign) {
+    case wvWare::vAlignTop:
+        align = QString("top");
+        break;
+    case wvWare::vAlignMiddle:
+        align = QString("middle");
+        break;
+    case wvWare::vAlignBottom:
+        align = QString("bottom");
+        break;
     }
+    cellStyle.addProperty("style:vertical-align", align);
+
+    //TODO: parse and process cell padding information
 
     QString cellStyleName = m_mainStyles->insert(cellStyle, QLatin1String("cell"));
 

@@ -277,12 +277,21 @@ typedef enum
     msofillBackground       = 0x09
 } MSOFILLTYPE;              // MSOFILLTYPE enumeration according MS-ODRAW, page 512 of 621
 
+//horizontal alignment
 typedef enum
 {
-    hrAlignLeft = 0,
-    hrAlignCenter = 1,
-    hrAlignRight = 2
-} HRALIGN;
+    hAlignLeft = 0,
+    hAlignCenter = 1,
+    hAlignRight = 2
+} H_ALIGN;
+
+//vertical alignment
+typedef enum
+{
+    vAlignTop = 0,
+    vAlignMiddle = 1,
+    vAlignBottom = 2
+} V_ALIGN;
 
 typedef struct
 {
@@ -294,9 +303,8 @@ typedef struct
 typedef struct
 {
     MSOSPT                  shapeType;
-
     OfficeArtCOLORREF       color;
-    HRALIGN                 align;
+    H_ALIGN                 align;
     float                   height;
     float                   width;
 } OfficeArtProperties;

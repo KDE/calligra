@@ -1375,7 +1375,9 @@ bool TAP::read(OLEStreamReader *stream, bool preservePos) {
         stream->push();
 
     jc=stream->readS16();
-    dxaGapHalf=stream->readS32();
+    dxaLeft=stream->readS16();
+    dxaGapHalf=stream->readS16();
+    widthIndent=stream->readS16();
     dyaRowHeight=stream->readS32();
     fCantSplit=stream->readU8();
     fTableHeader=stream->readU8();
@@ -1415,7 +1417,9 @@ bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
         stream->push();
 
     stream->write(jc);
+    stream->write(dxaLeft);
     stream->write(dxaGapHalf);
+    stream->write(widthIndent);
     stream->write(dyaRowHeight);
     stream->write(fCantSplit);
     stream->write(fTableHeader);
@@ -1445,7 +1449,9 @@ bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
 
 void TAP::clear() {
     jc=0;
+    dxaLeft=0;
     dxaGapHalf=0;
+    widthIndent=0;
     dyaRowHeight=0;
     fCantSplit=0;
     fTableHeader=0;
@@ -1480,8 +1486,12 @@ std::string TAP::toString() const
     std::string s( "TAP:" );
     s += "\njc=";
     s += int2string( jc );
+    s += "\ndxaLeft=";
+    s += int2string( dxaLeft );
     s += "\ndxaGapHalf=";
     s += int2string( dxaGapHalf );
+    s += "\nwidthIndent=";
+    s += int2string( widthIndent );
     s += "\ndyaRowHeight=";
     s += int2string( dyaRowHeight );
     s += "\nfCantSplit=";
@@ -1534,7 +1544,9 @@ bool operator==(const TAP &lhs, const TAP &rhs) {
     }
 
     return lhs.jc==rhs.jc &&
+           lhs.dxaLeft==rhs.dxaLeft &&
            lhs.dxaGapHalf==rhs.dxaGapHalf &&
+           lhs.widthIndent==rhs.widthIndent &&
            lhs.dyaRowHeight==rhs.dyaRowHeight &&
            lhs.fCantSplit==rhs.fCantSplit &&
            lhs.fTableHeader==rhs.fTableHeader &&

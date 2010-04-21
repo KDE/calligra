@@ -40,7 +40,6 @@
 #include "convert.h"
 #include "zcodec.hxx"
 #include "wvlog.h"
-
 #include "ms_odraw.h"
 
 #include <gsf/gsf-input.h>
@@ -666,6 +665,9 @@ void Parser9x::processParagraph( U32 fc )
         if ( props->pap().fTtp ) {
             // Restore the table properties of this row
             Word97::TAP* tap = m_properties->fullSavedTap( fc, m_data );
+#ifdef WV2_DEBUG_TABLES
+            tap->dump();
+#endif
             m_properties->applyClxGrpprl( m_plcfpcd->at( m_currentParagraph->back().m_position.piece ).current(),
                                           m_fib.fcClx, tap, m_properties->styleByIndex( props->pap().istd ) );
 
@@ -1087,7 +1089,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
 #ifdef WV2_DEBUG_PICTURES
                 wvlog << "  starting new inner record: " << endl;
                 h.dump();
-                wvlog << h.getRecordType() << endl;
+                wvlog << h.getRecordType().c_str() << endl;
 #endif
                 //process record
                 if (h.isAtom()) {
@@ -1221,7 +1223,7 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
               break;
 
           case opidAlignHR:
-              artProperties->align = (wvWare::HRALIGN) op;
+              artProperties->align = (wvWare::H_ALIGN) op;
               break;
 
           case opidDxHeightHR:

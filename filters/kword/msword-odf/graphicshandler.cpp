@@ -145,28 +145,28 @@ void KWordPictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
 }
 
 #endif // IMAGE_IMPORT
-	
+
 void KWordPictureHandler::officeArtLine(wvWare::OfficeArtProperties *artProperties)
 {
-    QString hrAlign = QString("left");
+    QString hrAlign;
     QString xPos = QString::number(0.0f).append("in");
-    
+
     switch (artProperties->align) {
-    	case wvWare::hrAlignLeft:	
-    		hrAlign = QString("left");		
-    		xPos = QString::number(0.0f).append("in");
-    		break;
-    	case wvWare::hrAlignCenter:	
-    		hrAlign = QString("center");	
-    		xPos = QString::number((6.1378f/2.0f) - ((artProperties->width * 6.1378f) / 200.0f)).append("in");		
-    		break;
-    	case wvWare::hrAlignRight:	
-    		hrAlign = QString("right");		
-    		xPos = QString::number(6.1378f - (artProperties->width * 6.1378f) / 100.0f).append("in");	
-    		break;
+    case wvWare::hAlignLeft:
+        hrAlign = QString("left");
+        xPos = QString::number(0.0f).append("in");
+        break;
+    case wvWare::hAlignCenter:
+        hrAlign = QString("center");
+        xPos = QString::number((6.1378f/2.0f) - ((artProperties->width * 6.1378f) / 200.0f)).append("in");
+        break;
+    case wvWare::hAlignRight:
+        hrAlign = QString("right");
+        xPos = QString::number(6.1378f - (artProperties->width * 6.1378f) / 100.0f).append("in");
+        break;
     }
     //--------------------
-	// create (or find) a graphic style
+    // create (or find) a graphic style
     QString styleName("gr");
     m_officeArtCount++;
     

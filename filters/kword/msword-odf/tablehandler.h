@@ -76,6 +76,9 @@ struct Table {
     // Important: don't use unsigned int. Value can be negative (relative to margin...).
     QList<int> m_cellEdges;
 
+    // table properties
+    TAPptr tap;
+
     void cacheCellEdge(int cellEdge);
     int columnNumber(int cellEdge) const;
 };

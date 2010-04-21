@@ -412,6 +412,7 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
+        m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
     }
 
@@ -640,7 +641,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         kWarning() << "paragraphProperties was NOT set";
     }
 
-    //check to see if we need a master page name attribute
+    //check if we need a master page name attribute
     if (document()->writeMasterPageName() && !document()->writingHeader()) {
         m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name",
 							  document()->masterPageName());

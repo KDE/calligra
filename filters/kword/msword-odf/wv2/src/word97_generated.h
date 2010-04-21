@@ -1264,20 +1264,32 @@ struct TAP : public Shared {
 
     // Data
     /**
-     * justification code. specifies how table row should be justified within
-     * its column.
+     * Specifies the physical justification of the table.  Valid values are:
      * 0 left justify
      * 1 center
      * 2 right justify
      */
-    S16 jc;
+    U16 jc;
+
+    /**
+     * Combined with dxaGapHalf, specified the location of the horizontal
+     * origin of the table relative to the logical left margin.  That is, the
+     * origin is the logical left margin, indented by this value minus the
+     * value of dxaGapHalf.
+     */
+    S16 dxaLeft;
 
     /**
      * measures half of the white space that will be maintained between text
      * in adjacent columns of a table row. A dxaGapHalf width of white space will
      * be maintained on both sides of a column boundary.
      */
-    S32 dxaGapHalf;
+    S16 dxaGapHalf;
+
+    /**
+     * The preferred leading indent of the table where the row resides.
+     */
+    S16 widthIndent;
 
     /**
      * when greater than 0. guarantees that the height of the table will be

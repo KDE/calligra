@@ -321,7 +321,7 @@ typedef enum
     sprmTUndocumented10 = 0xF614,
     sprmTUndocumented11 = 0xF617,
     sprmTUndocumented12 = 0xF618,
-    sprmTUndocumented13 = 0xF661
+    sprmTWidthIndent = 0xF661
 } opcodes;
 
 // The length of the SPRM parameter
@@ -1904,6 +1904,10 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     U16 sprmLength;
     const U16 sprm( getSPRM( &ptr, version, sprmLength ) );
 
+#ifdef WV2_DEBUG_SPRMS
+    wvlog << "sprm to process: " << hex << sprm << dec << endl;
+    wvlog << "sprmLength: " << hex << sprmLength << dec << endl;
+#endif
     // Is it a TAP sprm? Not really an error if it's none, as all TAP sprms live
     // inside PAP grpprls
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 5 && sprm != SPRM::sprmPHugePapx && sprm != SPRM::sprmPHugePapx2 ) {
@@ -2315,8 +2319,23 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmTUndocumented10:
         case SPRM::sprmTUndocumented11:
         case SPRM::sprmTUndocumented12:
-        case SPRM::sprmTUndocumented13:
             break;
+        case SPRM::sprmTWidthIndent:
+	{
+            //MS-DOC, page 363 of 609
+            const U8 ftsWidth = *ptr;
+            const S16 wWidth = readS16( ptr + 1 );
+
+            //TODO: value is expressed in percentage of page/table, etc.
+            if (ftsWidth == 2) {
+
+	    }
+            //value in twipspx
+            else if (ftsWidth == 3) {
+                widthIndent = wWidth;
+	    }
+            break;
+	}
         // These are needed in case there are table properties inside the huge papx
         case SPRM::sprmPHugePapx:
         case SPRM::sprmPHugePapx2:
