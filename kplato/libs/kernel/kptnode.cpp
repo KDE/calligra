@@ -1231,6 +1231,8 @@ void Node::slotStandardWorktimeChanged( StandardWorktime* )
 Estimate::Estimate( Node *parent )
     : m_parent( parent )
 {
+    m_pertCached = false;
+
     setUnit( Duration::Unit_h );
     setExpectedEstimate( 8.0 );
     setPessimisticEstimate( 8.0 );
@@ -1253,6 +1255,8 @@ Estimate::~Estimate()
 
 void Estimate::clear()
 {
+    m_pertCached = false;
+
     setExpectedEstimate( 0.0 );
     setPessimisticEstimate( 0.0 );
     setOptimisticEstimate( 0.0 );
@@ -1285,6 +1289,9 @@ void Estimate::copy( const Estimate &estimate )
     m_optimisticCached = estimate.m_optimisticCached;
     m_pessimisticCached = estimate.m_pessimisticCached;
     
+    m_pertExpected = estimate.m_pertExpected;
+    m_pertCached = estimate.m_pertCached;
+
     m_type = estimate.m_type;
     m_calendar = estimate.m_calendar;
     m_risktype = estimate.m_risktype;
@@ -1322,9 +1329,17 @@ double Estimate::deviation( Duration::Unit unit ) const
 
 Duration Estimate::pertExpected() const {
     if (m_risktype == Risk_Low) {
-        return (optimisticValue() + pessimisticValue() + (expectedValue()*4))/6;
+        if ( ! m_pertCached ) {
+            m_pertExpected = (optimisticValue() + pessimisticValue() + (expectedValue()*4))/6;
+            m_pertCached = true;
+        }
+        return m_pertExpected;
     } else if (m_risktype == Risk_High) {
-        return (optimisticValue() + (pessimisticValue()*2) + (expectedValue()*4))/7;
+        if ( ! m_pertCached ) {
+            m_pertExpected = (optimisticValue() + (pessimisticValue()*2) + (expectedValue()*4))/7;
+            m_pertCached = true;
+        }
+        return m_pertExpected;
     }
     return expectedValue(); // risk==none
 }
@@ -1360,6 +1375,7 @@ void Estimate::setUnit( Duration::Unit unit )
     m_expectedCached = false;
     m_optimisticCached = false;
     m_pessimisticCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1418,6 +1434,7 @@ void Estimate::setType(Type type)
     m_expectedCached = false;
     m_optimisticCached = false;
     m_pessimisticCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1454,12 +1471,20 @@ void Estimate::setRisktype(const QString& type) {
         setRisktype(Risk_None); // default
 }
 
+void Estimate::setRisktype(Risktype type)
+{
+    m_pertCached = false;
+    m_risktype = type;
+    changed();
+}
+
 void Estimate::setCalendar( Calendar *calendar )
 {
     m_calendar = calendar;
     m_expectedCached = false;
     m_optimisticCached = false;
     m_pessimisticCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1467,6 +1492,7 @@ void Estimate::setExpectedEstimate( double value)
 {
     m_expectedEstimate = value;
     m_expectedCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1474,6 +1500,7 @@ void Estimate::setOptimisticEstimate( double value )
 {
     m_optimisticEstimate = value;
     m_optimisticCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1481,6 +1508,7 @@ void Estimate::setPessimisticEstimate( double value )
 {
     m_pessimisticEstimate = value;
     m_pessimisticCached = false;
+    m_pertCached = false;
     changed();
 }
 
@@ -1490,6 +1518,7 @@ void Estimate::setOptimisticRatio(int percent)
     m_optimisticValue = expectedValue()*(100+p)/100;
     m_optimisticEstimate = scale( m_optimisticValue, m_unit, scales() );
     m_optimisticCached = true;
+    m_pertCached = false;
     changed();
 }
 
@@ -1505,6 +1534,7 @@ void Estimate::setPessimisticRatio(int percent)
     m_pessimisticValue = expectedValue()*(100+p)/100;
     m_pessimisticEstimate = scale( m_pessimisticValue, m_unit, scales() );
     m_pessimisticCached = true;
+    m_pertCached = false;
     changed();
 }
 
@@ -1519,6 +1549,7 @@ void Estimate::setOptimisticValue()
 {
     m_optimisticValue = scale( m_optimisticEstimate, m_unit, scales() );
     m_optimisticCached = true;
+    m_pertCached = false;
 }
 
 // internal
@@ -1526,6 +1557,7 @@ void Estimate::setExpectedValue()
 {
     m_expectedValue = scale( m_expectedEstimate, m_unit, scales() );
     m_expectedCached = true;
+    m_pertCached = false;
 }
 
 // internal
@@ -1533,6 +1565,7 @@ void Estimate::setPessimisticValue()
 {
     m_pessimisticValue = scale( m_pessimisticEstimate, m_unit, scales() );
     m_pessimisticCached = true;
+    m_pertCached = false;
 }
 
 Duration Estimate::optimisticValue() const

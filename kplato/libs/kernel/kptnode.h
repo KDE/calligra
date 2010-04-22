@@ -702,7 +702,7 @@ public:
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }
-    void setRisktype(Risktype type) { m_risktype = type; changed(); }
+    void setRisktype(Risktype type);
     void setRisktype(const QString& type);
     QString risktypeToString( bool trans=false ) const;
     static QStringList risktypeToStringList( bool trans=false );
@@ -825,13 +825,15 @@ private:
     /// Holds the value entered by user, in unit m_unit
     double m_pessimisticEstimate;
 
-    bool m_expectedCached, m_optimisticCached, m_pessimisticCached;
+    mutable bool m_expectedCached, m_optimisticCached, m_pessimisticCached, m_pertCached;
     /// Cached value in base unit (milliseconds)
     Duration m_expectedValue;
     /// Cached value in base unit (milliseconds)
     Duration m_optimisticValue;
     /// Cached value in base unit (milliseconds)
     Duration m_pessimisticValue;
+    /// Cached pert expected value
+    mutable Duration m_pertExpected;
 
     Type m_type;
     Risktype m_risktype;
