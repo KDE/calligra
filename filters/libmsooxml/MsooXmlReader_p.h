@@ -330,12 +330,12 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 #define STRING_TO_INT(string, destination, debugElement) \
     if (string.isEmpty()) {} else { \
         bool ok; \
-        const int val = string.toInt(&ok); \
+        const int val_tmp = string.toInt(&ok); \
         if (!ok) { \
             kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
-        destination = val; \
+        destination = val_tmp; \
     }
 
 //! Converts @a string into a qreal value in @a destination; returns KoFilter::WrongFormat on failure.
@@ -343,12 +343,12 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 #define STRING_TO_QREAL(string, destination, debugElement) \
     if (string.isEmpty()) {} else { \
         bool ok; \
-        const qreal val = string.toDouble(&ok); \
+        const qreal val_tmp = string.toDouble(&ok); \
         if (!ok) { \
             kDebug() << "STRING_TO_DOUBLE: error converting" << string << "to qreal (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
-        destination = val; \
+        destination = val_tmp; \
     }
 
 //! Skips everything until end of CURRENT_EL is pulled

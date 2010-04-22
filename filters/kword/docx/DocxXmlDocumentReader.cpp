@@ -1420,6 +1420,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(caps)
             ELSE_TRY_READ_IF(smallCaps)
+            ELSE_TRY_READ_IF(w)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2342,6 +2343,42 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_smallCaps()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL)
         m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL w
+//! w handler (Expanded/Compressed Text)
+/*! ECMA-376, 17.3.2.43, p.350
+ This element specifies the amount by which each character shall be expanded or when the character
+ is rendered in the document.
+
+ Parent elements:
+ - [done] rPr (§17.3.1.29)
+ - rPr (§17.3.1.30)
+ - rPr (§17.5.2.28)
+ - rPr (§17.9.25)
+ - rPr (§17.7.9.1)
+ - rPr (§17.7.5.4)
+ - [done] rPr (§17.3.2.28)
+ - rPr (§17.5.2.27)
+ - rPr (§17.7.6.2)
+ - rPr (§17.3.2.27)
+
+ No child elements.
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_w()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(val)
+    if (!val.isEmpty()) {
+        int wNumber;
+        STRING_TO_INT(val, wNumber, "w@val")
+        m_currentTextStyleProperties->setFontLetterSpacing(qreal(wNumber)/100.0);
+    }
     readNext();
     READ_EPILOGUE
 }
