@@ -211,6 +211,7 @@ void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first, i
         last = rows - 1;
     // 'last' defaults to -1, which means only one column was changed
     if ( last == -1 )
+        last = first;
     // 'first' can be negative either cause rowCount()==0 or cause it still contains the default value of -1. In both cases we abort
     // and don't progress the update-request future. Same is true for last which should at this point contain a valid row index too.
     if ( first < 0 || last < 0 )
