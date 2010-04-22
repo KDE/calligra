@@ -51,24 +51,6 @@ KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
 KoFilter::ConversionStatus read_blipFill();
-KoFilter::ConversionStatus read_anchor();
-KoFilter::ConversionStatus read_positionH();
-KoFilter::ConversionStatus read_positionV();
-enum posOffsetCaller {
-    posOffset_positionH,
-    posOffset_positionV
-};
-KoFilter::ConversionStatus read_posOffset(posOffsetCaller caller);
-enum alignCaller {
-    align_positionH,
-    align_positionV
-};
-KoFilter::ConversionStatus read_align(alignCaller caller);
-KoFilter::ConversionStatus read_inline();
-KoFilter::ConversionStatus read_docPr();
-KoFilter::ConversionStatus read_wrapSquare();
-KoFilter::ConversionStatus read_wrapTight();
-KoFilter::ConversionStatus read_wrapThrough();
 
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;

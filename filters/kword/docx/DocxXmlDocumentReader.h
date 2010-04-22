@@ -124,6 +124,27 @@ protected:
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
 
+    enum posOffsetCaller {
+        posOffset_positionH,
+        posOffset_positionV
+    };
+
+    enum alignCaller {
+        align_positionH,
+        align_positionV
+    };
+    KoFilter::ConversionStatus read_align(alignCaller caller);
+
+    KoFilter::ConversionStatus read_inline();
+    KoFilter::ConversionStatus read_docPr();
+    KoFilter::ConversionStatus read_anchor();
+    KoFilter::ConversionStatus read_positionH();
+    KoFilter::ConversionStatus read_positionV();
+    KoFilter::ConversionStatus read_posOffset(posOffsetCaller caller);
+    KoFilter::ConversionStatus read_wrapSquare();
+    KoFilter::ConversionStatus read_wrapTight();
+    KoFilter::ConversionStatus read_wrapThrough();
+
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;
 

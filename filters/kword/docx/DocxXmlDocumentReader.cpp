@@ -907,6 +907,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
  Parent elements:
  - r (§17.3.2.25)
  - r (§22.1.2.87)
+
+ Child elements:
+ - ffData (Form Field Properties) §17.16.17
+
 */
 //! @todo support all attributes etc.
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
@@ -930,7 +934,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
        }
     }
 
-    readNext();
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
     READ_EPILOGUE
 }
 
@@ -3096,7 +3104,517 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
     READ_EPILOGUE
 }
 
-#define DRAWINGML_NS "wp"
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "wp"
+
+#undef CURRENT_EL
+#define CURRENT_EL anchor
+//! anchor handler (Anchor for Floating DrawingML Object)
+/*! ECMA-376, 20.4.2.3, p.3469.
+
+ This element specifies that the DrawingML object located at this position
+ in the document is a floating object.
+ Within a WordprocessingML document, drawing objects can exist in two states:
+ - Inline - The drawing object is in line with the text, and affects the line
+   height and layout of its line (like a character glyph of similar size).
+ - Floating - The drawing object is anchored within the text, but can be
+   absolutely positioned in the document relative to the page.
+
+ When this element encapsulates the DrawingML object's information,
+ then all child elements shall dictate the positioning of this object
+ as a floating object on the page.
+
+ Parent elements:
+ - [done] drawing (§17.3.3.9)
+
+ Child elements:
+ - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
+ - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
+ - effectExtent (Object Extents Including Effects) §20.4.2.6
+ - extent (Drawing Object Size) §20.4.2.7
+ - [done] graphic (Graphic Object) §20.1.2.2.16
+ - [done] positionH (Horizontal Positioning) §20.4.2.10
+ - [done] positionV (Vertical Positioning) §20.4.2.11
+ - simplePos (Simple Positioning Coordinates) §20.4.2.13
+ - [done] wrapNone (No Text Wrapping) §20.4.2.15
+ - [done] wrapSquare (Square Wrapping) §20.4.2.17
+ - [done] wrapThrough (Through Wrapping) §20.4.2.18
+ - [done] wrapTight (Tight Wrapping) §20.4.2.19
+ - [done] wrapTopAndBottom (Top and Bottom Wrapping) §20.4.2.20
+
+ Attributes:
+ - allowOverlap (Allow Objects to Overlap)
+ - [done] behindDoc (Display Behind Document Text)
+ - [done] distB (Distance From Text on Bottom Edge) (see also: inline)
+ - [done] distL (Distance From Text on Left Edge) (see also: inline)
+ - [done] distR (Distance From Text on Right Edge) (see also: inline)
+ - [done] distT (Distance From Text on Top Edge) (see also: inline)
+ - hidden (Hidden)
+ - layoutInCell (Layout In Table Cell)
+ - locked (Lock Anchor)
+ - relativeHeight (Relative Z-Ordering Position)
+ - simplePos (Page Positioning)
+*/
+//! @todo support all elements
+//! CASE #1340
+//! CASE #1410
+//! CASE #1420
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
+{
+    READ_PROLOGUE
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    m_docPrName.clear();
+    m_docPrDescr.clear();
+    m_drawing_anchor = true; // for pic:pic
+
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
+    READ_ATTR_WITHOUT_NS(distT)
+    distToODF("fo:margin-top", distT);
+    READ_ATTR_WITHOUT_NS(distB)
+    distToODF("fo:margin-bottom", distB);
+    READ_ATTR_WITHOUT_NS(distL)
+    distToODF("fo:margin-left", distL);
+    READ_ATTR_WITHOUT_NS(distR)
+    distToODF("fo:margin-right", distR);
+
+    const bool behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF(positionH)
+            ELSE_TRY_READ_IF(positionV)
+            ELSE_TRY_READ_IF(docPr)
+            ELSE_TRY_READ_IF(wrapSquare)
+            ELSE_TRY_READ_IF(wrapTight)
+            ELSE_TRY_READ_IF(wrapThrough)
+            else if (QUALIFIED_NAME_IS(wrapNone)) {
+                // wrapNone (No Text Wrapping), ECMA-376, 20.4.2.15
+                // This element specifies that the parent DrawingML object shall
+                // not cause any text wrapping within the contents of the host
+                // WordprocessingML document based on its display location.
+                // CASE #1410
+                readNext();
+                if (!expectElEnd(QUALIFIED_NAME(wrapNone)))
+                    return KoFilter::WrongFormat;
+                saveStyleWrap("run-through");
+                m_currentDrawStyle.addProperty(QLatin1String("style:run-through"),
+                                               (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
+                                               KoGenStyle::GraphicType);
+            } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
+                // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
+                // This element specifies that text shall wrap around the top
+                // and bottom of this object, but not its left or right edges.
+                // CASE #1410
+                readNext();
+                if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom)))
+                    return KoFilter::WrongFormat;
+                saveStyleWrap("none");
+            }
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+    READ_EPILOGUE
+}
+
+
+#undef CURRENT_EL
+#define CURRENT_EL inline
+//! inline handler (Inline DrawingML Object)
+/*! ECMA-376, 20.4.2.8, p.3485.
+
+ This element specifies that the DrawingML object located at this position
+ in the document is a floating object.
+ Within a WordprocessingML document, drawing objects can exist in two states:
+ - Inline - The drawing object is in line with the text, and affects the line
+   height and layout of its line (like a character glyph of similar size).
+ - Floating - The drawing object is anchored within the text, but can be
+   absolutely positioned in the document relative to the page.
+
+ When this element encapsulates the DrawingML object's information,
+ then all child elements shall dictate the positioning of this object
+ as a floating object on the page.
+
+ Parent elements:
+ - [done] drawing (§17.3.3.9)
+
+ Child elements:
+ - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
+ - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
+ - effectExtent (Object Extents Including Effects) §20.4.2.6
+ - extent (Drawing Object Size) §20.4.2.7
+ - [done] graphic (Graphic Object) §20.1.2.2.16
+
+ Attributes:
+ - distB (Distance From Text on Bottom Edge)
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - distT (Distance From Text on Top Edge)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
+{
+    READ_PROLOGUE
+    m_docPrName.clear();
+    m_docPrDescr.clear();
+    m_drawing_inline = true; // for pic
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF(docPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL docPr
+//! docPr handler (Drawing Object Non-Visual Properties)
+/*! ECMA-376, 20.4.2.5, p.3478.
+
+ This element specifies non-visual object properties for the parent DrawingML object.
+ These properties are specified as child elements of this element.
+
+ Parent elements:
+ - [done]anchor (§20.4.2.3)
+ - inline (§20.4.2.8)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+ - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
+
+ Attributes:
+ - descr (Alternative Text for Object)
+ - hidden (Hidden)
+ - id (Unique Identifier)
+ - name (Name)
+*/
+//! CASE #1340
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_docPrName)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_docPrDescr)
+//! @todo support docPr/@hidden (maybe to style:text-properties/@text:display)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL positionH
+//! positionH handler (Horizontal Positioning)
+/*! ECMA-376, 20.4.2.10, p.3490.
+ This element specifies the horizontal positioning of a floating
+ DrawingML object within a WordprocessingML document.
+ This positioning is specified in two parts:
+
+ - Positioning Base - The relativeFrom attribute on this element
+   specifies the part of the document from which the positioning
+   shall be calculated.
+ - Positioning - The child element of this element (align
+   or posOffset) specifies how the object is positioned relative
+   to that base.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - [done] align (Relative Horizontal Alignment) §20.4.2.1
+ - [done] posOffset (Absolute Position Offset) §20.4.2.12
+
+ Attributes:
+ - [done] relativeFrom (Horizontal Position Relative Base)
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
+    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromH)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_IN_CONTEXT(align)
+            ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL positionV
+//! positionV handler (Vertical Positioning)
+/*! ECMA-376, 20.4.2.11, p.3491.
+ This element specifies the vertical positioning of a floating
+ DrawingML object within a WordprocessingML document.
+ This positioning is specified in two parts:
+
+ - Positioning Base - The relativeFrom attribute on this element
+   specifies the part of the document from which the positioning
+   shall be calculated.
+ - Positioning - The child element of this element (align
+   or posOffset) specifies how the object is positioned relative
+   to that base.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - [done] align (Relative Vertical Alignment) §20.4.2.2
+ - [done] posOffset (Absolute Position Offset) §20.4.2.12
+
+ Attributes:
+ - [done] relativeFrom (Horizontal Position Relative Base)
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo parse 20.4.3.5 ST_RelFromV (Vertical Relative Positioning), p. 3512
+    READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromV)
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_IN_CONTEXT(align)
+            ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL posOffset
+//! posOffset handler (Absolute Position Offset)
+/*! ECMA-376, 20.4.2.12, p.3492.
+ This element specifies an absolute measurement for the positioning
+ of a floating DrawingML object within a WordprocessingML document.
+ This measurement shall be calculated relative to the top left edge
+ of the positioning base specified by the parent element's
+ relativeFrom attribute.
+
+ Parent elements:
+ - [done] positionH (§20.4.2.10)
+ - [done] positionV (§20.4.2.11)
+
+ No child elements.
+*/
+//! CASE #1360
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset(posOffsetCaller caller)
+{
+    READ_PROLOGUE
+
+    readNext();
+    if (isCharacters()) {
+        switch (caller) {
+        case posOffset_positionH:
+            STRING_TO_INT(text().toString(), m_posOffsetH, "positionH/posOffset text")
+            m_hasPosOffsetH = true;
+            break;
+        case posOffset_positionV:
+            STRING_TO_INT(text().toString(), m_posOffsetV, "positionV/posOffset text")
+            m_hasPosOffsetV = true;
+            break;
+        default:
+            return KoFilter::WrongFormat;
+        }
+    }
+    ELSE_WRONG_FORMAT
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapSquare
+//! wrapSquare handler (Square Wrapping)
+/*! ECMA-376, 20.4.2.17, p.3497.
+ This element specifies that text shall wrap around a virtual rectangle bounding
+ this object. The bounds of the wrapping rectangle shall be dictated by the extents
+ including the addition of the effectExtent element as a child of this element
+ (if present) or the effectExtent present on the parent element.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - effectExtent (Object Extents Including Effects)
+
+ Attributes:
+ - distB (Distance From Text on Bottom Edge)
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - distT (Distance From Text (Top))
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapSquare()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapTight
+//! wrapTight handler (Tight Wrapping)
+/*! ECMA-376, 20.4.2.17, p.3497.
+ This element specifies that text shall wrap around the wrapping polygon
+ bounding this object as defined by the child wrapPolygon element.
+ When this element specifies a wrapping polygon, it shall not allow text
+ to wrap within the object's maximum left and right extents.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - wrapPolygon (Wrapping Polygon)
+
+ Attributes:
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapTight()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL wrapThrough
+//! wrapThrough handler (Through Wrapping)
+/*! ECMA-376, 20.4.2.18, p.3500.
+ This element specifies that text shall wrap around the wrapping polygon
+ bounding this object as defined by the child wrapPolygon element.
+ When this element specifies a wrapping polygon, it shall allow text
+ to wrap within the object's maximum left and right extents.
+
+ Parent elements:
+ - [done] anchor (§20.4.2.3)
+
+ Child elements:
+ - wrapPolygon (Wrapping Polygon)
+
+ Attributes:
+ - distL (Distance From Text on Left Edge)
+ - distR (Distance From Text on Right Edge)
+ - [done] wrapText (Text Wrapping Location)
+*/
+//! CASE #1410
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
+{
+    READ_PROLOGUE
+    readWrap();
+
+    while (!atEnd()) {
+        readNext();
+//        if (isStartElement()) {
+//! @todo effectExtent
+//        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL align
+//! align handler (Relative Horizontal Alignment, Relative Vertical Alignment)
+/*! ECMA-376, 20.4.2.1, 20.4.2.2, p.3468, 3469.
+ This element specifies how a DrawingML object shall be horizontally/vertically
+ aligned relative to the horizontal alignment base defined
+ by the parent element. Once an alignment base is defined,
+ this element shall determine how the DrawingML object shall
+ be aligned relative to that location.
+
+ Parent elements:
+ - [done] positionH (§20.4.2.10)
+ - [done] positionV (§20.4.2.11)
+
+ No child elements.
+*/
+//! CASE #1340
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align(alignCaller caller)
+{
+    READ_PROLOGUE
+    switch (caller) {
+    case align_positionH:
+//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
+        /*center
+        inside
+        left
+        outside
+        right*/
+        m_alignH = text().toString();
+        break;
+    case align_positionV:
+//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
+        /*bottom
+        center
+        inside
+        outside
+        top*/
+        m_alignV = text().toString();
+    break;
+    }
+
+    SKIP_EVERYTHING
+    /*    while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL);
+        }*/
+    READ_EPILOGUE
+}
+
+#define DRAWINGML_NS "a"
 #define DRAWINGML_PIC_NS "pic" // DrawingML/Picture
 
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic:pic, etc.
