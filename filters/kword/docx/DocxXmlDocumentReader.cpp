@@ -173,7 +173,7 @@ void DocxXmlDocumentReader::init()
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
     m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
-    m_tablesCount = 0;
+    m_currentTableNumber = 0;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -2526,9 +2526,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     //const QXmlStreamAttributes attrs(attributes());
     d->clearColumnStyles();
-    m_currentTableName = QLatin1String("Table") + QString::number(m_tablesCount+1);
+    m_currentTableName = QLatin1String("Table") + QString::number(m_currentTableNumber + 1);
     m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
     m_currentTableWidth = 0.0;
+    m_currentTableRowNumber = 0;
 
     while (!atEnd()) {
         readNext();
@@ -2547,6 +2548,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableStyle.addProperty(
         "style:width", QString::number(m_currentTableWidth) + QLatin1String("cm"),
         KoGenStyle::TableType);
+    //! @todo fix hardcoded table:align
+    m_currentTableStyle.addProperty("table:align", "left");
 
     //! @todo fix hardcoded style:master-page-name
     m_currentTableStyle.addAttribute("style:master-page-name", "Standard");
@@ -2578,7 +2581,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     (void)tableBuf.releaseWriter();
     body->endElement(); // table:table
 
-    m_tablesCount++;
+    m_currentTableNumber++;
 
     READ_EPILOGUE
 }
@@ -2622,6 +2625,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
+//! @todo add tblStyle to get parent table style
 //            TRY_READ_IF(..)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -2752,6 +2756,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
     READ_PROLOGUE
     MSOOXML::Utils::XmlWriteBuffer rowBuf;
     body = rowBuf.setWriter(body);
+    m_currentTableColumnNumber = 0;
+    m_currentTableRowStyle = KoGenStyle(KoGenStyle::TableRowAutoStyle, "table-row");
 
     while (!atEnd()) {
         readNext();
@@ -2764,8 +2770,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 
     body = rowBuf.originalWriter();
     body->startElement("table:table-row");
+
+    //! @todo add style:keep-together property
+    //! @todo add fo:keep-together
+    const QString tableRowStyleName(
+        mainStyles->insert(
+            m_currentTableRowStyle,
+            m_currentTableName + '.' + QString::number(m_currentTableRowNumber + 1),
+            KoGenStyles::DontAddNumberToName)
+    );
+    body->addAttribute("table:style-name", tableRowStyleName);
+
+
     (void)rowBuf.releaseWriter();
     body->endElement(); // table:table-row
+
+    m_currentTableRowNumber++;
 
     READ_EPILOGUE
 }
@@ -2821,6 +2841,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
     READ_PROLOGUE
     MSOOXML::Utils::XmlWriteBuffer cellBuf;
     body = cellBuf.setWriter(body);
+    m_currentTableCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
     while (!atEnd()) {
         readNext();
@@ -2835,10 +2856,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
     body = cellBuf.originalWriter();
     body->startElement("table:table-cell");
-    //would be needed because of poor table handling of KWord:    body->addAttribute("rowSpan", "1");
-    //would be needed because of poor table handling of KWord:    body->addAttribute("columnSpan", "1");
+
+    //! @todo real border style get from w:tblPr/w:tblStyle@w:val
+    m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
+
+    const QString tableCellStyleName(
+        mainStyles->insert(
+            m_currentTableCellStyle,
+            m_currentTableName + '.' + MSOOXML::Utils::columnName(m_currentTableColumnNumber)
+                + QString::number(m_currentTableRowNumber + 1),
+            KoGenStyles::DontAddNumberToName)
+    );
+    body->addAttribute("table:style-name", tableCellStyleName);
+    //! @todo import various cell types
+    body->addAttribute("office:value-type", "string");
+
     (void)cellBuf.releaseWriter();
     body->endElement(); // table:table-cell
+
+    m_currentTableColumnNumber++;
 
     READ_EPILOGUE
 }
