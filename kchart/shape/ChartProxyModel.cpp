@@ -120,6 +120,17 @@ bool ChartProxyModel::automaticDataSetCreation() const
     return d->automaticDataSetCreation;
 }
 
+#if QT_VERSION < 0x040600
+void ChartProxyModel::beginResetModel()
+{
+}
+
+void ChartProxyModel::endResetModel()
+{
+    reset();
+}
+#endif
+
 void ChartProxyModel::rebuildDataMap()
 {
     if ( !d->automaticDataSetCreation )
