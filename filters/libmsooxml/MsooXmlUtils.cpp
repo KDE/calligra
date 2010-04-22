@@ -1015,12 +1015,12 @@ static bool isPositiveIntegerNumber(const QString& string)
 }
 
 //! Splits number and unit
-static bool splitNumberAndUnit(const QString& _string, int *number, QString* unit)
+static bool splitNumberAndUnit(const QString& _string, qreal *number, QString* unit)
 {
     int unitIndex = 0;
     QString string(_string);
     for (const QChar *c = string.constData(); !c->isNull(); c++, unitIndex++) {
-        if (!c->isNumber())
+        if (!c->isNumber() && *c != '.')
             break;
     }
     *unit = string.mid(unitIndex);
@@ -1030,7 +1030,7 @@ static bool splitNumberAndUnit(const QString& _string, int *number, QString* uni
         return false;
     }
     bool ok;
-    *number = string.toUInt(&ok);
+    *number = string.toFloat(&ok);
     if (!ok)
         kWarning() << "Invalid number in" << _string;
     return ok;
@@ -1088,7 +1088,7 @@ MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
 {
     // a positive decimal number immediately following by a unit identifier.
-    int number;
+    qreal number;
     QString unit;
     if (!splitNumberAndUnit(value, &number, &unit))
         return QString();
@@ -1101,6 +1101,15 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
         return QString();
     }
     return value; // the original is OK
+}
+
+MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
+{
+    QString v(ST_PositiveUniversalMeasure_to_ODF(value));
+    if (v.isEmpty())
+        return QString();
+    QString res;
+    return res.sprintf("%3.3fcm", POINT_TO_CM(KoUnit::parseValue(v)));
 }
 
 // </units> -------------------

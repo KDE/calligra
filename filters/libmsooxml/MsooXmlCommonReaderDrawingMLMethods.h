@@ -110,7 +110,7 @@ void readWrap();
 KoFilter::ConversionStatus copyFile(
     const QString& sourceName, const QString& destinationDir, QString& destinationName);
 
-KoGenStyle m_currentDrawStyle; //!< set by read_drawing(), used by read_pic()
+KoGenStyle m_currentDrawStyle; //!< set by read_drawing() and read_object(), used by read_pic() and read_object()
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
 

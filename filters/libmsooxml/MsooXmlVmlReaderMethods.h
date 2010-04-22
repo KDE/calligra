@@ -44,6 +44,9 @@ protected:
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
     KoFilter::ConversionStatus read_VML_background();
+    KoFilter::ConversionStatus read_shapetype();
+    KoFilter::ConversionStatus read_shape();
+    KoFilter::ConversionStatus read_imagedata();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -52,4 +55,9 @@ protected:
 
     //writer where style:background-image is stored for style:page-layout-properties
     KoXmlWriter* m_pDocBkgImageWriter;
+
+    QString m_imagedataPath; //!< set in read_shape()
+    QString m_imagedataFile; //!< set in read_shape()
+    QString m_shapeAltText; //!< set in read_shape()
+    QString m_shapeTitle; //!< set in read_shape()
 #endif

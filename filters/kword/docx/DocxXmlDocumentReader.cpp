@@ -174,6 +174,7 @@ void DocxXmlDocumentReader::init()
     m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
     m_currentTableNumber = 0;
+    m_objectRectInitialized = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -720,17 +721,55 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-//! @todo    TRY_READ_ATTR(dxaOrig)?
-//! @todo    TRY_READ_ATTR(dyaOrig)?
+    TRY_READ_ATTR(dxaOrig)
+    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
+    kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
+    TRY_READ_ATTR(dyaOrig)
+    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    //! @todo try to get position from object tag...
+    m_currentObjectXCm = "0cm";
+    m_currentObjectYCm = "0cm";
+    m_objectRectInitialized = false;
+    m_imagedataPath.clear();
+    m_shapeAltText.clear();
+
+    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             //! @todo support VML here
-            TRY_READ_IF_NS(o, OLEObject)
+            TRY_READ_IF_NS(v, shapetype)
+            ELSE_TRY_READ_IF_NS(v, shape)
+            ELSE_TRY_READ_IF_NS(o, OLEObject)
             //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    if (m_objectRectInitialized) {
+        m_currentDrawStyle.addProperty("draw:fill", "bitmap");
+        if (!m_imagedataPath.isEmpty()) {
+            // create bitmap fill-style for styles.xml
+            KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
+            fillImageStyle.addAttribute("xlink:href", m_imagedataPath);
+            QString displayName = m_shapeAltText;
+            //! @todo use m_shapeTitle for mouse-over text
+            if (displayName.isEmpty()) {
+                displayName = m_shapeTitle;
+            }
+            if (!displayName.isEmpty()) {
+                fillImageStyle.addAttribute("draw:display-name", displayName);
+            }
+            fillImageStyle.addAttribute("xlink:type", "simple");
+            fillImageStyle.addAttribute("xlink:show", "embed");
+            fillImageStyle.addAttribute("xlink:actuate", "onLoad");
+            const QString fillImageStyleName(mainStyles->insert(fillImageStyle, "FillImage"));
+            m_currentDrawStyle.addProperty("draw:fill-image-name", fillImageStyleName);
+        }
+        writeRect();
+    }
+
+    m_currentDrawStyle = KoGenStyle();
     READ_EPILOGUE
 }
 
@@ -1349,6 +1388,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
 {
+    Q_UNUSED(caller);
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
@@ -1581,7 +1621,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
 
     QBuffer frameBuffer;
     frameBuffer.open(QIODevice::WriteOnly);
-    KoXmlWriter elementWriter(&frameBuffer);
+    KoXmlWriter elementWriter(&frameBuffer, 4 /*proper indentation*/);
     elementWriter.startElement("style:drop-cap");
     elementWriter.addAttribute("style:lines", lines);
 
@@ -1597,6 +1637,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
     elementWriter.endElement(); // style-drop-cap
 
     QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
+    kDebug() << drop;
     m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
 
 //! @todo more attributes
@@ -2091,7 +2132,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
     QBuffer tabs;
     tabs.open(QIODevice::WriteOnly);
-    KoXmlWriter elementWriter(&tabs);
+    KoXmlWriter elementWriter(&tabs, 4 /*proper indentation*/);
     elementWriter.startElement("style:tab-stops");
 
     QBuffer buffer;
@@ -2115,6 +2156,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
     elementWriter.endElement(); // style-tab-stops
 
     QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());
+    kDebug() << tabStops;
     m_currentParagraphStyle.addChildElement("style:tab-stops", tabStops);
 
     READ_EPILOGUE
@@ -2934,6 +2976,58 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 
 // ---------------------------------------------------------------------------
 
+void DocxXmlDocumentReader::writeRect()
+{
+    //body->startElement("text:p");
+    // //! @todo fix hardcoded text:style-name=Standard?
+    //body->addAttribute("text:style-name", "Standard");
+    body->startElement("draw:rect");
+    if (!m_currentDrawStyle.isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(
+            m_currentDrawStyle, "gr") );
+        body->addAttribute("draw:style-name", drawStyleName);
+    }
+
+    //! @todo fix hardcoded text:anchor-type=paragraph?
+    body->addAttribute("text:anchor-type", "paragraph");
+    //! @todo fix hardcoded draw:z-index=0?
+    body->addAttribute("draw:z-index", "0");
+//! todo    body->addAttribute"draw:style-name", styleName);
+/*eg.
+   <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties svg:stroke-color="#000023" draw:fill="bitmap" draw:fill-color="#ffffff" draw:fill-image-name="Bitmape_20_1"
+       style:repeat="no-repeat" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:run-through="foreground".
+       style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left".
+       style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" style:flow-with-text="false"/>
+    </style:style>*/
+    QString x(m_currentObjectXCm);
+    if (x.isEmpty()) {
+        x = "0cm";
+        kWarning() << "No x pos specified! Defaulting to" << x;
+    }
+    QString y(m_currentObjectYCm);
+    if (y.isEmpty()) {
+        y = "0cm";
+        kWarning() << "No y pos specified! Defaulting to" << y;
+    }
+    QString width(m_currentObjectWidthCm);
+    if (width.isEmpty()) {
+        width = "2cm";
+        kWarning() << "No width specified! Defaulting to" << width;
+    }
+    QString height(m_currentObjectHeightCm);
+    if (height.isEmpty()) {
+        height = "2cm";
+        kWarning() << "No height specified! Defaulting to" << height;
+    }
+    body->addAttribute("svg:x", x);
+    body->addAttribute("svg:y", y);
+    body->addAttribute("svg:width", width);
+    body->addAttribute("svg:height", height);
+    body->endElement(); //draw:rect
+    //body->endElement(); //text:p
+}
+
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "o" // urn:schemas-microsoft-com:office:office
 #undef CURRENT_EL
@@ -2955,28 +3049,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //! @todo ooo saves binaries to the root dir; should we?
     RETURN_IF_ERROR( copyFile(oleName, QString(), destinationName) )
 
-    body->startElement("text:p");
-    body->startElement("draw:rect");
-    body->addAttribute("text:anchor-type", "paragraph");
-    body->addAttribute("draw:z-index", "0");
-//! todo    body->addAttribute"draw:style-name", styleName);
-/*eg.
-   <style:style style:name="gr1" style:family="graphic">
-      <style:graphic-properties svg:stroke-color="#000023" draw:fill="bitmap" draw:fill-color="#ffffff" draw:fill-image-name="Bitmape_20_1"
-       style:repeat="no-repeat" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:run-through="foreground".
-       style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left".
-       style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" style:flow-with-text="false"/>
-    </style:style>*/
-//! todo size!
-    body->addAttribute("svg:width", "14.179cm");
-    body->addAttribute("svg:height", "10.97cm");
-    body->endElement(); //draw:rect
-    body->endElement(); //text:p
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
     }
+
+    m_objectRectInitialized = true;
+
     READ_EPILOGUE
 }
 

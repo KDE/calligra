@@ -114,6 +114,9 @@ MSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
     @return empty string on error. */
 MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString& value);
 
+//! Like ST_PositiveUniversalMeasure_to_ODF(const QString&) but always converts to cm.
+MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
+
 } // Utils
 } // MSOOXML
 
