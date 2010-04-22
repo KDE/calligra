@@ -2052,6 +2052,14 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
     }
+    // FIXME: better solution
+    // If effort to match is reasonably large, accept a match if deviation <= 1 min
+    if ( ! match && _effort > 5 * 60000 ) {
+        if ( ( _effort - e ) <= 60000 ){
+            match = true;
+            if ( ns ) ns->logDebug( "Deviation match:" + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+        }
+    }
     if ( ! match ) {
 #ifndef NDEBUG
         if ( ns ) ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
