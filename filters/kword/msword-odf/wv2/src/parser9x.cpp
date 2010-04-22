@@ -1052,6 +1052,9 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
             << "\n  endOfPicf = " << endOfPicf << endl;
 #endif
 
+    // which BLIP to display in the picture shape
+    U32 pib = 0;
+
     OfficeArtProperties artProps;
     memset(&artProps, 0, sizeof(artProps));
     artProps.width = 100.0f;                    // default is 100% width
@@ -1094,13 +1097,14 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                 //process record
                 if (h.isAtom()) {
                     U8 alreadyProcessed = 0;
-
-                    if (h.getRecordType() == "msofbtSp") {          // is it 'OfficeArtFSP'? (MS-ODRAW, page 80/621)
+                    // is it 'OfficeArtFSP'? (MS-ODRAW, page 80/621)
+                    if (h.getRecordType() == "msofbtSp") {
 
                     }
-
-                    if (h.getRecordType() == "msofbtOPT" || h.getRecordType() == "msofbtTerOPT") { // is it 'OfficeArtFOPT' or 'OfficeArtTertiaryFOPT'?
-                        parseOfficeArtFOPT(stream, h.recordSize(), &artProps);
+                    // is it 'OfficeArtFOPT' or 'OfficeArtTertiaryFOPT'?
+                    if (h.getRecordType() == "msofbtOPT" ||
+                        h.getRecordType() == "msofbtTerOPT") {
+                        parseOfficeArtFOPT(stream, h.recordSize(), &artProps, &pib);
                         alreadyProcessed = 1;
                     }
 
@@ -1159,7 +1163,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
 #endif
                     z.EndCompression(&outBuffer);
                     //pass vector to escherData instead of OLEImageReader
-                    m_pictureHandler->escherData(outBuffer, data.picf, fbse.getBlipType());
+                    m_pictureHandler->escherData(outBuffer, data.picf, fbse.getBlipType(), pib);
                 }
                 //normal data, just create an OLEImageReader to be read
                 else
@@ -1167,7 +1171,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                     int start = stream->tell();
                     int limit = endOfPicf; //TODO is it possible that it wouldn't go all the way to the end?
                     OLEImageReader reader( *stream, start, limit);
-                    m_pictureHandler->escherData(reader, data.picf, fbse.getBlipType());
+                    m_pictureHandler->escherData(reader, data.picf, fbse.getBlipType(), pib);
                     //we've read the data in OLEImageReader, so advance stream to the
                     //end of OLEImageReader
                     stream->seek( endOfPicf, G_SEEK_SET );
@@ -1192,7 +1196,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
     } while (stream->tell() != endOfPicf); //end of record
 }
 
-void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties)
+void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib)
 {
 #ifdef WV2_DEBUG_PICTURES
   wvlog << "parseOfficeArtFOPT - processing bytes: " << dataSize << endl;
@@ -1210,12 +1214,15 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
       fComplex  = (opid >> 15) & 0x01;          // get bit 15
       opidOpid  = opid & 0x3fff;                // leave only lowest 14 bits
 
+#ifdef WV2_DEBUG_PICTURES
+      wvlog << "opidOpid" <<  hex << (int) opidOpid << dec << endl;
+#endif
+
       switch (opidOpid) {
           case opidGroupShapeProps:
               if ((op & ((1<<11) | (1<<27))) == ((1<<11) | (1<<27))) {  // if true, it's a horizontal rule
                   artProperties->shapeType = msosptLine;
               }
-
               break;
 
           case opidPctHR:
@@ -1234,7 +1241,14 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
               artProperties->color.r = (op      ) & 0xff;
               artProperties->color.g = (op >>  8) & 0xff;
               artProperties->color.b = (op >> 16) & 0xff;
+              break;
 
+          case opidPib:
+#ifdef WV2_DEBUG_PICTURES
+	      wvlog << "parseOfficeArtFOPT - BLIP to display: " << (U32) op << endl;
+#endif
+	      *pib = (U32) op;
+	      artProperties->pib = 1;
               break;
 
           default:

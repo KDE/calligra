@@ -238,8 +238,8 @@ namespace wvWare {
         /**
          * This method is called when the image is escher data.
          */
-        virtual void escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type );
-        virtual void escherData( std::vector<U8> data, SharedPtr<const Word97::PICF> picf, int type );
+        virtual void escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type, U32 pib);
+        virtual void escherData( std::vector<U8> data, SharedPtr<const Word97::PICF> picf, int type, U32 pib);
         /**
          * This method is called when you invoke a PictureFunctor and the embedded
          * image is a .wmf file. The data can be accessed using the OLEImageReader.

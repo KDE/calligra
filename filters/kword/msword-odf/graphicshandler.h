@@ -28,6 +28,7 @@
 #include "wv2/src/graphics.h"
 
 #include <QObject>
+#include <QHash>
 #include "document.h"
 #include "versionmagic.h"
 #include "generated/simpleParser.h"
@@ -59,10 +60,8 @@ public:
 #ifdef IMAGE_IMPORT
     //////// PictureHandler interface
     virtual void bitmapData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
-    virtual void escherData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                            int type);
-    virtual void escherData(std::vector<wvWare::U8> data, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                            int type);
+    virtual void escherData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, wvWare::U32 pib);
+    virtual void escherData(std::vector<wvWare::U8> data, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, wvWare::U32 pib);
     virtual void wmfData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
     virtual void externalImage(const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
 
@@ -79,8 +78,9 @@ private:
     KoXmlWriter* m_manifestWriter;
     KoStore* m_store;
     KoGenStyles* m_mainStyles;
+    QHash<wvWare::U32, QString> m_pictureName;
 
-    void ODTProcessing(QString* picName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type);
+    void ODTProcessing(QString* picName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, wvWare::U32 pib);
     int m_pictureCount;
     int m_officeArtCount;
 

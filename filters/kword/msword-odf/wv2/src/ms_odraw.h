@@ -253,6 +253,8 @@ typedef enum
 
 typedef enum
 {
+    opidPib               = 0x0104,       // MS-ODRAW, page 438 of 621
+    opidPibName           = 0x0105,       // MS-ODRAW, page 439 of 621
     opidFillCollor        = 0x0181,       // MS-ODRAW, page 193 of 621
     opidFillStyle         = 0x01bf,       // MS-ODRAW, page 218 of 621
     opidLineStyle         = 0x01ff,       // MS-ODRAW, page 240 of 621
@@ -307,6 +309,7 @@ typedef struct
     H_ALIGN                 align;
     float                   height;
     float                   width;
+    bool                    pib; //a BLIP has to be displayed in the picture shape
 } OfficeArtProperties;
 
 }

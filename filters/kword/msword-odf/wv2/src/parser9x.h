@@ -235,7 +235,7 @@ namespace wvWare
         void parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream );
         void parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream );
 
-        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties);
+        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib);
 
         void saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode = Default );
         void restoreState();
