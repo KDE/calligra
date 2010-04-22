@@ -61,13 +61,6 @@ set(kwordprivate_LIB_SRCS
     commands/KWFrameCreateCommand.cpp
     commands/KWCreateOutlineCommand.cpp
 )
-if( Soprano_FOUND )
-    set(kwordprivate_LIB_SRCS ${kwordprivate_LIB_SRCS}
-        dockers/KWRdfDocker.cpp
-        dockers/KWRdfDockerFactory.cpp
-        dockers/KWRdfDockerTree.cpp
-    )
-endif( Soprano_FOUND )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui

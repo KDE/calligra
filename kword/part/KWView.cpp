@@ -27,7 +27,6 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
-#include "dockers/KWRdfDockerFactory.h"
 #endif
 #include "KWCanvas.h"
 #include "KWViewMode.h"
@@ -133,11 +132,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         KWStatisticsDockerFactory statisticsFactory(this);
         KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(shell()->createDockWidget(&statisticsFactory));
         if (docker && docker->view() != this) docker->setView(this);
-
-#ifdef SHOULD_BUILD_RDF
-        KWRdfDockerFactory factory(this);
-        shell()->createDockWidget(&factory);
-#endif
     }
 
     if (statusBar())
