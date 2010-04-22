@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, int outlineLevel)
+Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeader, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
         m_odfParagraphStyle(0),
@@ -35,7 +35,10 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_paragraphStyle2(0),
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
-        m_outlineLevel(0)
+        m_outlineLevel(0),
+        m_inHeader(inHeader),
+        m_containsPageNumberField(false)/*,
+        m_alignSet(false)*/
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
@@ -143,7 +146,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513);
 
     // Set up the paragraph style.
-    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle);
+    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeader && m_containsPageNumberField);
 
     // Open paragraph or heading tag.
     if (m_isHeading) {
@@ -288,7 +291,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
 }
 
 void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-        KoGenStyle* style, const wvWare::Style* parentStyle)
+        KoGenStyle* style, const wvWare::Style* parentStyle, bool setDefaultAlign)
 {
     kDebug(30513);
 
@@ -315,9 +318,12 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("fo:text-align", "justify", KoGenStyle::ParagraphType);
         else //0 = left justify
             style->addProperty("fo:text-align", "start", KoGenStyle::ParagraphType);
+    } else if (setDefaultAlign) {
+        // Set default align for page number field in header or footer
+        kDebug(30513) << "setting default align for page number field in header or footer";
+        style->addProperty("fo:text-align", "center", KoGenStyle::ParagraphType);
     }
 
-    //
     if (!refPap || refPap->fBiDi != pap.fBiDi) {
         if (pap.fBiDi == 1)   //1 = right to left
             style->addProperty("style:writing-mode", "rl-tb", KoGenStyle::ParagraphType);

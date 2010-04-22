@@ -40,7 +40,7 @@
 class Paragraph
 {
 public:
-    explicit Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0);
+    explicit Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, bool inHeader = false, int outlineLevel = 0);
     ~Paragraph();
 
     void writeToFile(KoXmlWriter* writer);
@@ -52,11 +52,17 @@ public:
     // Set the general named style that applies to this paragraph
     void setParagraphStyle(const wvWare::Style* paragraphStyle);
     KoGenStyle* getOdfParagraphStyle();
+    bool containsPageNumberField() const {
+        return m_containsPageNumberField;
+    }
+    void setContainsPageNumberField(bool containsPageNumberField) {
+        m_containsPageNumberField = containsPageNumberField;
+    }
 
     // Static functions for parsing wvWare properties and applying
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-                                         KoGenStyle* style, const wvWare::Style* parentStyle);
+                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool setDefaultAlign=false);
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false);
 
 private:
@@ -83,6 +89,8 @@ private:
     bool m_isHeading; //information for writing a heading instead of a paragraph
     // (odt looks formats them similarly)
     int m_outlineLevel;
+    bool m_inHeader;
+    bool m_containsPageNumberField;
 }; //end class Paragraph
 
 #endif //PARAGRAPH_H

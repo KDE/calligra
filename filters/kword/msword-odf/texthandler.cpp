@@ -616,7 +616,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     // Now that the bookkeeping is taken care of for old paragraphs,
     // then actually create the new one.
     kDebug(30513) << "create new Paragraph";
-    m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, outlineLevel);
+    m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
     //if ( m_bInParagraph )
     //    paragraphEnd();
@@ -694,6 +694,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     switch (m_fieldType) {
     case 26:
     case 33:
+        m_paragraph->setContainsPageNumberField(true);
+        break;
     case 37: // TAB
         if (m_hyperLinkActive) {
             m_fieldType = 88;
@@ -843,7 +845,6 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     if (m_insideField && m_fieldAfterSeparator && (m_fieldType > 0)) {
         kDebug(30513) << "adding this text to field value.";
         m_fieldValue.append(newText);
-        m_fieldType = 0;
         return;
     }
 

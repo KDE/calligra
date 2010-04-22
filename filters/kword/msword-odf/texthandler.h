@@ -104,6 +104,9 @@ public:
     void setDocument(Document * document) {
         m_document = document;
     }
+    bool pageNumberFieldType() const {
+        return m_fieldType == 33;
+    }
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
