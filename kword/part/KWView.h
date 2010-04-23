@@ -179,6 +179,10 @@ private slots:
     void editDeleteSelection();
     /// create a KWOutlineShape for the selected frame(s).
     void createCustomOutline();
+    /// Wrap the selected frames into a clipping shape container.
+    void createFrameClipping();
+    /// unwrap the selected frames into a clipping shape container.
+    void removeFrameClipping();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
     void handleDeletePageAction();
     /// set the status of the show-statusbar action to reflect the current setting.

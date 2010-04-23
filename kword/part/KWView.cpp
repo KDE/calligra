@@ -47,6 +47,8 @@
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWCreateOutlineCommand.h"
+#include "commands/KWClipFrameCommand.h"
+#include "commands/KWRemoveFrameClipCommand.h"
 
 // koffice libs includes
 #include <KoCopyController.h>
@@ -96,10 +98,17 @@
 
 static KWFrame *frameForShape(KoShape *shape)
 {
-    KoShape *parent = shape;
-    while (parent->parent())
-        parent = parent->parent();
-    return dynamic_cast<KWFrame*>(parent->applicationData());
+    while (shape->parent()) {
+        shape = shape->parent();
+    }
+    KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+    if (answer == 0) { // this may be a clipping shape containing the frame-shape
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container && container->childCount() == 1) {
+            answer = dynamic_cast<KWFrame*>(container->childShapes()[0]->applicationData());
+        }
+    }
+    return answer;
 }
 
 KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
@@ -425,6 +434,13 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setWhatsThis(i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools"));
     connect(action, SIGNAL(triggered()), this, SLOT(createCustomOutline()));
 
+    action = new KAction(i18n("Create Frame-clip"), this);
+    actionCollection()->addAction("create_clipped_frame", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(createFrameClipping()));
+
+    action = new KAction(i18n("Remove Frame-clip"), this);
+    actionCollection()->addAction("remove_clipped_frame", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
 
     //------------------------ Settings menu
     action = new KToggleAction(i18n("Status Bar"), this);
@@ -1275,6 +1291,36 @@ void KWView::createCustomOutline()
     }
 
     KoToolManager::instance()->switchToolRequested("PathToolFactoryId");
+}
+
+void KWView::createFrameClipping()
+{
+    QSet<KWFrame *> clipFrames;
+    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KWFrame *frame = frameForShape(shape);
+        Q_ASSERT(frame);
+        if (frame->shape()->parent() == 0)
+            clipFrames << frame;
+    }
+    if (!clipFrames.isEmpty()) {
+        KWClipFrameCommand *cmd = new KWClipFrameCommand(clipFrames.toList(), m_document);
+        m_document->addCommand(cmd);
+    }
+}
+
+void KWView::removeFrameClipping()
+{
+    QSet<KWFrame *> unClipFrames;
+    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KWFrame *frame = frameForShape(shape);
+        Q_ASSERT(frame);
+        if (frame->shape()->parent())
+            unClipFrames << frame;
+    }
+    if (!unClipFrames.isEmpty()) {
+        KWRemoveFrameClipCommand *cmd = new KWRemoveFrameClipCommand(unClipFrames.toList(), m_document);
+        m_document->addCommand(cmd);
+    }
 }
 
 void KWView::insertImage()

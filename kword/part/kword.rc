@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="119">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="120">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -105,6 +105,8 @@
   <Separator/>
   <Action name="create_linked_frame"/>
   <Action name="create_custom_outline"/>
+  <Action name="create_clipped_frame"/>
+  <Action name="remove_clipped_frame"/>
   <Action name="convert_to_text_box"/>
   <Separator/>
   <Action name="frame_stylist"/>
