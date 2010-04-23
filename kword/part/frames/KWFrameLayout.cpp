@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -218,23 +218,21 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
        |  3  [ maintxt ] |
        |  4              | <- m_pageStyle->endNoteDistance()
        |  5  [ endnote ] |
-       |  6              | <- m_pageStyle->footnoteDistance()
-       |  7 [ footnote ] |
-       |  8              | <- m_pageStyle->footerDistance()
-       |  9  [ footer ]  |
-       | 10               | <- m_pageStyle->pageLayout()->bottomMargin + d:o->bottomPadding
+       |  6              | <- m_pageStyle->footerDistance()
+       |  7  [ footer ]  |
+       |  8              | <- m_pageStyle->pageLayout()->bottomMargin + d:o->bottomPadding
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
     int minZIndex = INT_MAX;
-    qreal requestedHeight[11], minimumHeight[11], resultingPositions[11];
-    for (int i = 0; i < 11; i++) { // zero fill.
+    qreal requestedHeight[8], minimumHeight[8], resultingPositions[8];
+    for (int i = 0; i < 9; i++) { // zero fill.
         requestedHeight[i] = 0;
         minimumHeight[i] = 0;
         resultingPositions[i] = 0;
     }
     minimumHeight[0] = page.topMargin() + page.topPadding();
-    minimumHeight[10] = page.bottomMargin() + page.bottomPadding();
+    minimumHeight[8] = page.bottomMargin() + page.bottomPadding();
 
     KoPageLayout layout = page.pageStyle().pageLayout();
     layout.leftMargin = page.leftMargin();
@@ -260,7 +258,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     KWPageStyle pageStyle = page.pageStyle();
     const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2 : 1) : 0;
     int columnsCount = columns;
-    KWTextFrame **main, *footer = 0, *endnote = 0, *header = 0, *footnote = 0;
+    KWTextFrame **main, *footer = 0, *endnote = 0, *header = 0;
     main = new KWTextFrame*[columnsCount];
     if (columns > 0)
         main[0] = 0;
@@ -282,9 +280,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
-            minimumHeight[9] = 10;
-            requestedHeight[9] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
-            minimumHeight[8] = page.pageStyle().headerDistance();
+            minimumHeight[7] = 10;
+            requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
+            minimumHeight[6] = page.pageStyle().headerDistance();
             break;
         }
         case KWord::MainTextFrameSet: {
@@ -317,13 +315,11 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             endnote->shape()->setZIndex(minZIndex);
         if (header)
             header->shape()->setZIndex(minZIndex);
-        if (footnote)
-            footnote->shape()->setZIndex(minZIndex);
     }
 
     // spread space across items.
     qreal heightLeft = page.height();
-    for (int i = 0; i < 11; i++)
+    for (int i = 0; i < 9; i++)
         heightLeft -= qMax(minimumHeight[i], requestedHeight[i]);
     if (heightLeft >= 0) { // easy; plenty of space
         if (minimumHeight[5] > 0) // if we have an endnote
@@ -331,7 +327,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         else
             minimumHeight[3] += heightLeft; // add space to main text frame
         qreal y = page.offsetInDocument();
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 9; i++) {
             resultingPositions[i] = y;
             y += qMax(minimumHeight[i], requestedHeight[i]);
         }
@@ -339,12 +335,11 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         // for situations where the header + footer are too big to fit together with a
         // minimum sized main text frame.
         minimumHeight[5] = 0; // no end note
-        minimumHeight[7] = 0; // no footnote
         heightLeft = page.height();
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 9; i++)
             heightLeft -= minimumHeight[i];
         qreal y = page.offsetInDocument();
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 9; i++) {
             resultingPositions[i] = y;
             qreal row = minimumHeight[i];
             if (requestedHeight[i] > row) {
@@ -384,14 +379,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         delete[] points;
     }
-#ifdef __GNUC__
-#warning can never reach that code as footnote is a constant 0
-#endif
-    if (footnote) {
-        footnote->shape()->setPosition(
-            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[7]));
-        footnote->shape()->setSize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
-    }
     if (endnote) {
         endnote->shape()->setPosition(
             QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[5]));
@@ -404,8 +391,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
     if (footer) {
         footer->shape()->setPosition(
-            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[9]));
-        footer->shape()->setSize(QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
+            QPointF(left + layout.leftMargin + layout.leftPadding, resultingPositions[7]));
+        footer->shape()->setSize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
     }
     delete [] main;
 // TODO footnotes, endnotes
