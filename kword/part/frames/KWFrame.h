@@ -185,13 +185,13 @@ public:
      * Copy all the settings from the parameter frame and apply them to this frame.
      * @param frame the frame to use as original
      */
-    virtual void copySettings(const KWFrame *frame);
+    void copySettings(const KWFrame *frame);
 
     /**
      * Save the frame as ODF
      * @param context the context for saving.
      */
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
 
     KWOutlineShape *outlineShape() const {
         return m_outline;
