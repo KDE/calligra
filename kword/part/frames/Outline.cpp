@@ -20,13 +20,25 @@
 #include "Outline.h"
 #include "KWFrame.h"
 #include "KWOutlineShape.h"
+#include <KoShapeContainer.h>
 
 #include <qnumeric.h>
 
 Outline::Outline(KWFrame *frame, const QMatrix &matrix)
-    : m_side(None)
+    : m_side(None),
+    m_shape(frame->shape())
 {
-    init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
+    KoShape *shape = frame->outlineShape();
+    if (shape == 0)
+        shape = frame->shape();
+    QPainterPath path = shape->outline();
+    if (frame->shape()->parent() && frame->shape()->parent()->childClipped(frame->shape())) {
+        path = shape->transformation().map(path);
+        path = frame->shape()->parent()->outline().intersected(path);
+        path = shape->transformation().inverted().map(path);
+    }
+
+    init(matrix, path, frame->runAroundDistance());
     if (frame->textRunAround() == KWord::NoRunAround)
         m_side = Empty;
     else if (frame->runAroundSide() == KWord::LeftRunAroundSide)
@@ -35,15 +47,16 @@ Outline::Outline(KWFrame *frame, const QMatrix &matrix)
         m_side = Left;
 }
 
-Outline::Outline(KoShape *shape, const QMatrix &matrix) : m_side(None)
+Outline::Outline(KoShape *shape, const QMatrix &matrix)
+    : m_side(None),
+    m_shape(shape)
 {
-    init(matrix, shape, 0);
+    init(matrix, shape->outline(), 0);
 }
 
-void Outline::init(const QMatrix &matrix, KoShape *shape, qreal distance)
+void Outline::init(const QMatrix &matrix, const QPainterPath &outline, qreal distance)
 {
-    m_shape = shape;
-    QPainterPath path =  matrix.map(shape->outline());
+    QPainterPath path =  matrix.map(outline);
     m_bounds = path.boundingRect();
     if (distance >= 0.0) {
         QMatrix grow = matrix;
@@ -59,7 +72,7 @@ void Outline::init(const QMatrix &matrix, KoShape *shape, qreal distance)
         grow.scale(scaleX, scaleY);
         grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 
-        path =  grow.map(shape->outline());
+        path =  grow.map(outline);
         // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
         m_bounds = path.boundingRect();
     }

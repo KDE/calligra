@@ -22,6 +22,7 @@
 
 #include <QMatrix>
 #include <QMultiMap>
+#include <QPainterPath>
 
 class KoShape;
 class KWFrame;
@@ -33,7 +34,7 @@ public:
     Outline(KWFrame *frame, const QMatrix &matrix);
     Outline(KoShape *shape, const QMatrix &matrix);
 
-    void init(const QMatrix &matrix, KoShape *shape, qreal distance);
+    void init(const QMatrix &matrix, const QPainterPath &outline, qreal distance);
 
     QRectF limit(const QRectF &content);
 
