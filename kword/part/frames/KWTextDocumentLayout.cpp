@@ -21,11 +21,12 @@
 #include "KWTextFrameSet.h"
 #include "KWTextFrame.h"
 #include "KWCopyShape.h"
-#include "KWDocument.h"
-#include "KWPage.h"
-#include "KWPageTextInfo.h"
-#include "frames/KWAnchorStrategy.h"
-#include "frames/KWOutlineShape.h"
+#include "../KWDocument.h"
+#include "../KWPage.h"
+#include "../KWPageTextInfo.h"
+#include "KWAnchorStrategy.h"
+#include "KWOutlineShape.h"
+#include "Outline.h"
 
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
@@ -36,7 +37,6 @@
 #include <QList>
 #include <QPainterPath>
 #include <QTextBlock>
-#include <qnumeric.h>
 
 // #define DEBUG_TEXT
 // #define DEBUG_ANCHORS
@@ -54,12 +54,6 @@
 #endif
 
 // helper methods
-static qreal xAtY(const QLineF &line, qreal y)
-{
-    if (line.dx() == 0)
-        return line.x1();
-    return line.x1() + (y - line.y1()) / line.dy() * line.dx();
-}
 
 static qreal yAtX(const QLineF &line, qreal x)
 {
@@ -77,7 +71,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // top edge
     if ((startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top()) ||
             (startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top())) {
-        qreal x = xAtY(line, rect.top());
+        qreal x = Outline::xAtY(line, rect.top());
         if (x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
@@ -93,7 +87,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // bottom edge
     if ((startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom()) ||
             (startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom())) {
-        qreal x = xAtY(line, rect.bottom());
+        qreal x = Outline::xAtY(line, rect.bottom());
         if (x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
@@ -108,125 +102,6 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
 
     return answer;
 }
-
-// ----------------- Class that allows us with the runaround of QPainterPaths ----------------
-class Outline
-{
-public:
-    Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None) {
-        init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
-        if (frame->textRunAround() == KWord::NoRunAround)
-            m_side = Empty;
-        else if (frame->runAroundSide() == KWord::LeftRunAroundSide)
-            m_side = Right;
-        else if (frame->runAroundSide() == KWord::RightRunAroundSide)
-            m_side = Left;
-    }
-
-    Outline(KoShape *shape, const QMatrix &matrix) : m_side(None) {
-        init(matrix, shape, 0);
-    }
-
-    void init(const QMatrix &matrix, KoShape *shape, qreal distance) {
-        m_shape = shape;
-        QPainterPath path =  matrix.map(shape->outline());
-        m_bounds = path.boundingRect();
-        if (distance >= 0.0) {
-            QMatrix grow = matrix;
-            grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-            qreal scaleX = distance;
-            if (m_bounds.width() > 0)
-                scaleX = (m_bounds.width() + distance) / m_bounds.width();
-            qreal scaleY = distance;
-            if (m_bounds.height() > 0)
-                scaleY = (m_bounds.height() + distance) / m_bounds.height();
-            Q_ASSERT(!qIsNaN(scaleY));
-            Q_ASSERT(!qIsNaN(scaleX));
-            grow.scale(scaleX, scaleY);
-            grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
-
-            path =  grow.map(shape->outline());
-            // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
-            m_bounds = path.boundingRect();
-        }
-
-        QPolygonF poly = path.toFillPolygon();
-
-        QPointF prev = *(poly.begin());
-        foreach (const QPointF &vtx, poly) { //initialized edges
-            if (vtx.x() == prev.x() && vtx.y() == prev.y())
-                continue;
-            QLineF line;
-            if (prev.y() < vtx.y()) // Make sure the vector lines all point downwards.
-                line = QLineF(prev, vtx);
-            else
-                line = QLineF(vtx, prev);
-            m_edges.insert(line.y1(), line);
-            prev = vtx;
-        }
-    }
-
-    QRectF limit(const QRectF &content) {
-        if (m_side == Empty) {
-            if (content.intersects(m_bounds))
-                return QRectF();
-            return content;
-        }
-
-        if (m_side == None) { // first time for this text;
-            qreal insetLeft = m_bounds.right() - content.left();
-            qreal insetRight = content.right() - m_bounds.left();
-
-            if (insetLeft < insetRight)
-                m_side = Left;
-            else
-                m_side = Right;
-        }
-        if (!m_bounds.intersects(content))
-            return content;
-
-        // two points, as we are checking a rect, not a line.
-        qreal points[2] = { content.top(), content.bottom() };
-        QRectF answer = content;
-        for (int i = 0; i < 2; i++) {
-            const qreal y = points[i];
-            qreal x = m_side == Left ? answer.left() : answer.right();
-            bool first = true;
-            QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
-            for (;iter != m_edges.constEnd(); ++iter) {
-                QLineF line = iter.value();
-                if (line.y2() < y) // not a section that will intersect with ou Y yet
-                    continue;
-                if (line.y1() > y) // section is below our Y, so abort loop
-                    break;
-                if (qAbs(line.dy()) < 1E-10)  // horizontal lines don't concern us.
-                    continue;
-
-                qreal intersect = xAtY(iter.value(), y);
-                if (first) {
-                    x = intersect;
-                    first = false;
-                } else if ((m_side == Left && intersect > x) || (m_side == Right && intersect < x))
-                    x = intersect;
-            }
-            if (m_side == Left)
-                answer.setLeft(qMax(answer.left(), x));
-            else
-                answer.setRight(qMin(answer.right(), x));
-        }
-
-        return answer;
-    }
-
-    KoShape *shape() const { return m_shape; }
-
-private:
-    enum Side { None, Left, Right, Empty }; // TODO support Auto and Both
-    Side m_side;
-    QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
-    QRectF m_bounds;
-    KoShape *m_shape;
-};
 
 class KWTextDocumentLayout::DummyShape : public KoShape
 {
@@ -495,8 +370,9 @@ void KWTextDocumentLayout::layout()
                         if (frame->outlineShape()) {
                             if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
                                 continue;
-                        } else if (frame->shape()->zIndex() <= currentShape->zIndex())
+                        } else if (frame->shape()->zIndex() <= currentShape->zIndex()) {
                             continue;
+                        }
                         if (! bounds.intersects(frame->shape()->boundingRect()))
                             continue;
                         bool isChild = false;
