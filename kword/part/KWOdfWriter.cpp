@@ -23,10 +23,7 @@
 
 #include "KWOdfWriter.h"
 #include "KWDocument.h"
-#include <rdf/KoDocumentRdfBase.h>
 #include "KWPage.h"
-
-#include <ktemporaryfile.h>
 
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
@@ -44,10 +41,12 @@
 #include <KoTextSharedSavingData.h>
 
 #include <KoStoreDevice.h>
+#include <rdf/KoDocumentRdfBase.h>
 
 #include <QBuffer>
 #include <QTextCursor>
 #include <KDebug>
+#include <ktemporaryfile.h>
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges  &changes, KWTextFrameSet *fs)
 {
@@ -241,8 +240,13 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         //  3) frames that are not anchored but freely positioned somewhere on the page.
         //     in ODF terms those frames are page-anchored.
 
-        if (fs->frameCount() == 1 && fs->frames().first()->shape()->parent())
-            continue; // is a frame that is anchored to text, don't save those here.
+        if (fs->frameCount() == 1) {
+            KoShape *shape = fs->frames().first()->shape();
+            // may be a frame that is anchored to text, don't save those here.
+            // but first check since clipped shapes look similar, but are not anchored to text
+            if (shape->parent() && !shape->parent()->childClipped(shape))
+                continue;
+        }
 
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
