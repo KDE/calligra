@@ -419,7 +419,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
-    action = new KAction(i18n("Create custom outline"), this);
+    action = new KAction(i18n("Create Custom Outline"), this);
     actionCollection()->addAction("create_custom_outline", action);
     action->setToolTip(i18n("Create a custom vector outline that text will run around"));
     action->setWhatsThis(i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools"));
