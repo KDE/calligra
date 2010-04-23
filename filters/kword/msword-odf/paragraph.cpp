@@ -37,8 +37,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_isHeading(isHeading),
         m_outlineLevel(0),
         m_inHeaderFooter(inHeaderFooter),
-        m_containsPageNumberField(false)/*,
-        m_alignSet(false)*/
+        m_containsPageNumberField(false)
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
