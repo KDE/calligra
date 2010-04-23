@@ -63,6 +63,7 @@ void KWClipFrameCommand::redo()
             container->setPosition(frame->shape()->position());
             container->setSize(frame->shape()->size());
             container->setTransformation(frame->shape()->transformation());
+            container->setZIndex(frame->shape()->zIndex());
         } else {
             container = m_clipShapes.at(i);
         }
