@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeader, int outlineLevel)
+Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
         m_odfParagraphStyle(0),
@@ -36,7 +36,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
         m_outlineLevel(0),
-        m_inHeader(inHeader),
+        m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false)/*,
         m_alignSet(false)*/
 {
@@ -146,7 +146,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513);
 
     // Set up the paragraph style.
-    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeader && m_containsPageNumberField);
+    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeaderFooter && m_containsPageNumberField);
 
     // Open paragraph or heading tag.
     if (m_isHeading) {

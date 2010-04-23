@@ -89,7 +89,7 @@ private:
     bool m_isHeading; //information for writing a heading instead of a paragraph
     // (odt looks formats them similarly)
     int m_outlineLevel;
-    bool m_inHeader;
+    bool m_inHeaderFooter;
     bool m_containsPageNumberField;
 }; //end class Paragraph
 
