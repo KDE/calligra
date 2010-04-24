@@ -22,6 +22,7 @@
 
 #include <q3header.h>
 #include <qlayout.h>
+#include <QThread>
 
 #include <ktabwidget.h>
 #include <k3listview.h>
@@ -29,6 +30,7 @@
 #include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
+#include <KDebug>
 
 #ifdef KEXI_DEBUG_GUI
 
@@ -58,6 +60,11 @@ void KexiUtils::addKexiDBDebug(const QString& text)
     // (this is internal code - do not use i18n() here)
     if (!debugWindowTab)
         return;
+    if (QThread::currentThread() != debugWindowTab->thread()) {
+//! @todo send debug using async. signal
+        kDebug() << "Debuging from different thread not supported.";
+        return;
+    }
     if (!kexiDBDebugPage) {
         QWidget *page = new QWidget(debugWindowTab);
         QVBoxLayout *vbox = new QVBoxLayout(page);
