@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="120">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="121">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -118,7 +118,7 @@
  <Menu name="tools"><text>&amp;Tools</text>
   <Menu name="SpellCheck"><text>Spellcheck</text>
       <Action name="tool_auto_spellcheck"/>
-      <Action name="extra_spellcheck"/>
+      <Action name="apply_spellcheck"/>
       <Action name="tool_configure_spellcheck"/>
   </Menu>
   <Menu name="AutoFormat"><text>Autocorrection</text>
