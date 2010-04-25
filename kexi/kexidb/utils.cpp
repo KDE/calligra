@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,13 +31,15 @@
 #include <qpixmap.h>
 #include <QMutex>
 #include <QSet>
+#include <QProgressBar>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <qprogressbar.h>
+
+#include <memory>
 
 #include "utils_p.h"
 
@@ -334,54 +336,55 @@ Connection* TableOrQuerySchema::connection() const
 
 //------------------------------------------
 
-class ConnectionTestThread : public QThread
-{
-public:
-    ConnectionTestThread(ConnectionTestDialog *dlg, const KexiDB::ConnectionData& connData);
-    virtual void run();
-protected:
-    ConnectionTestDialog* m_dlg;
-    KexiDB::ConnectionData m_connData;
-};
-
 ConnectionTestThread::ConnectionTestThread(ConnectionTestDialog* dlg, const KexiDB::ConnectionData& connData)
         : m_dlg(dlg), m_connData(connData)
 {
+    connect(this, SIGNAL(error(const QString&,const QString&)),
+            dlg, SLOT(error(const QString&,const QString&)), Qt::QueuedConnection);
+
+    // try to load driver now because it's not supported in different thread
+    KexiDB::DriverManager manager;
+    m_driver = manager.driver(m_connData.driverName);
+    if (manager.error()) {
+        emitError(&manager);
+        m_driver = 0;
+    }
+}
+
+void ConnectionTestThread::emitError(KexiDB::Object* object)
+{
+    QString msg;
+    QString details;
+    KexiDB::getHTMLErrorMesage(object, msg, details);
+    emit error(msg, details);
 }
 
 void ConnectionTestThread::run()
 {
-    KexiDB::DriverManager manager;
-    KexiDB::Driver* drv = manager.driver(m_connData.driverName);
-// KexiGUIMessageHandler msghdr;
-    if (!drv || manager.error()) {
-//move  msghdr.showErrorMessage(&Kexi::driverManager());
-        m_dlg->error(&manager);
+    if (!m_driver) {
         return;
     }
-    KexiDB::Connection * conn = drv->createConnection(m_connData);
-    if (!conn || drv->error()) {
-//move  msghdr.showErrorMessage(drv);
-        delete conn;
-        m_dlg->error(drv);
+    std::auto_ptr<KexiDB::Connection> conn(m_driver->createConnection(m_connData));
+    if (!conn.get() || m_driver->error()) {
+        //kDebug() << "err 1";
+        emitError(m_driver);
         return;
     }
-    if (!conn->connect() || conn->error()) {
-//move  msghdr.showErrorMessage(conn);
-        m_dlg->error(conn);
-        delete conn;
+    if (!conn.get()->connect() || conn.get()->error()) {
+        //kDebug() << "err 2";
+        emitError(conn.get());
         return;
     }
     // SQL database backends like PostgreSQL require executing "USE database"
     // if we really want to know connection to the server succeeded.
     QString tmpDbName;
     if (!conn->useTemporaryDatabaseIfNeeded(tmpDbName)) {
-        m_dlg->error(conn);
-        delete conn;
+        //kDebug() << "err 3";
+        emitError(conn.get());
         return;
     }
-    delete conn;
-    m_dlg->error(0);
+    //kDebug() << "emitError(0)";
+    emitError(0);
 }
 
 ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
@@ -396,7 +399,7 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
         , m_connData(data)
         , m_msgHandler(&msgHandler)
         , m_elapsedTime(0)
-        , m_errorObj(0)
+        , m_error(false)
         , m_stopWaiting(false)
 {
     setModal(true);
@@ -417,6 +420,7 @@ ConnectionTestDialog::~ConnectionTestDialog()
 
 int ConnectionTestDialog::exec()
 {
+    //kDebug() << "tid:" << QThread::currentThread() << "this_thread:" << thread();
     m_timer.start(20);
     m_thread->start();
     const int res = KProgressDialog::exec();
@@ -427,20 +431,26 @@ int ConnectionTestDialog::exec()
 
 void ConnectionTestDialog::slotTimeout()
 {
-// KexiDBDbg << "ConnectionTestDialog::slotTimeout() " << m_errorObj;
+    //kDebug() << "tid:" << QThread::currentThread() << "this_thread:" << thread();
+    KexiDBDbg << m_error;
     bool notResponding = false;
     if (m_elapsedTime >= 1000*5) {//5 seconds
         m_stopWaiting = true;
         notResponding = true;
     }
+    KexiDBDbg << m_elapsedTime << m_stopWaiting << notResponding;
     if (m_stopWaiting) {
         m_timer.disconnect(this);
         m_timer.stop();
         reject();
+        KexiDBDbg << "after reject";
 //  close();
-        if (m_errorObj) {
-            m_msgHandler->showErrorMessage(m_errorObj);
-            m_errorObj = 0;
+        if (m_error) {
+            KexiDBDbg << "show?";
+            m_msgHandler->showErrorMessage(m_msg, m_details);
+            //m_msgHandler->showErrorMessage(m_errorObj);
+            KexiDBDbg << "shown";
+            m_error = false;
         } else if (notResponding) {
             KMessageBox::sorry(0,
                                i18n("<qt>Test connection to <b>%1</b> database server failed. The server is not responding.</qt>", m_connData.serverInfoString(true)),
@@ -460,27 +470,18 @@ void ConnectionTestDialog::slotTimeout()
     progressBar()->setValue(m_elapsedTime);
 }
 
-void ConnectionTestDialog::error(KexiDB::Object *obj)
+void ConnectionTestDialog::error(const QString& msg, const QString& details)
 {
-    KexiDBDbg << "ConnectionTestDialog::error()";
+    //kDebug() << "tid:" << QThread::currentThread() << "this_thread:" << thread();
+    kDebug() << msg << details;
     m_stopWaiting = true;
-    m_errorObj = obj;
-    /*  reject();
-        m_msgHandler->showErrorMessage(obj);
-      if (obj) {
-      }
-      else {
-        accept();
-      }*/
-    QMutex mutex;
-    mutex.lock();
-#ifdef __GNUC__
-#warning QWaitCondition::wait() OK?
-#else
-#pragma WARNING( QWaitCondition::wait() OK? )
-#endif
-    m_wait.wait(&mutex);
-    mutex.unlock();
+    if (!msg.isEmpty() || !details.isEmpty()) {
+        m_error = true;
+        m_msg = msg;
+        m_details = details;
+        kDebug() << "ERR!";
+//        m_msgHandler->showErrorMessage(msg, details);
+    }
 }
 
 void ConnectionTestDialog::reject()

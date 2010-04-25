@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,23 @@
 
 #include "msghandler.h"
 
-class ConnectionTestThread;
+class ConnectionTestDialog;
+
+class ConnectionTestThread : public QThread
+{
+    Q_OBJECT
+public:
+    ConnectionTestThread(ConnectionTestDialog *dlg, const KexiDB::ConnectionData& connData);
+    virtual void run();
+signals:
+    void error(const QString& msg, const QString& details);
+protected:
+    void emitError(KexiDB::Object* object);
+
+    ConnectionTestDialog* m_dlg;
+    KexiDB::ConnectionData m_connData;
+    KexiDB::Driver *m_driver;
+};
 
 class ConnectionTestDialog : protected KProgressDialog
 {
@@ -39,7 +55,8 @@ public:
 
     int exec();
 
-    void error(KexiDB::Object *obj);
+public slots:
+    void error(const QString& msg, const QString& details);
 
 protected slots:
     void slotTimeout();
@@ -51,9 +68,11 @@ protected:
     QTimer m_timer;
     KexiDB::MessageHandler* m_msgHandler;
     uint m_elapsedTime;
-    KexiDB::Object *m_errorObj;
+    bool m_error;
+    QString m_msg;
+    QString m_details;
     QWaitCondition m_wait;
-    bool m_stopWaiting : 1;
+    bool m_stopWaiting;
 };
 
 #endif
