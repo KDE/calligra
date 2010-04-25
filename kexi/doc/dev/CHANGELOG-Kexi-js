@@ -91,8 +91,49 @@ TODO: crashes on app exit:
 #20 0xb7b65b50 in ~KexiWindowContainer (this=0x8280058) at koffice/kexi/main/KexiMainWindow_p.h:79
 #21 0xb7b52ea9 in KexiMainWindow::closeWindow (this=0x8198090, window=0x83e1b90, layoutTaskBar=true, doNotSaveChanges=false)
 
+Display object data using sqlite:
+<sql>
+.hea on
+.mode column
+select ob.o_id, o_sub_id, o_type, o_name, substr(o_data, 0, 40) from kexi__objectdata, kexi__objects ob where kexi__objectdata.o_id=ob.o_id order by ob.o_type, ob.o_id;
+</sql>
+
+Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
+
+~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-04-25
+KexiDB
+*fix crash or freeze for testing database connection on error or timeout
+BUG:124959
+CCBUG:234536
+*******TODO: port to Predicate
+
+2010-04-24
+KexiDB
+*fixed crash in connection data handling
+BUG:234536
+*fix crash when testing database connection and debug gui is enabled (related to using gui in different thread)
+CCBUG:234194
+*******TODO: port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.2 beta 2 ~~~~~~~~~~~~~~~~
+
+2010-04-19
+KexiDB
+*fix possible crash when adding two or more new columns to a table at once
+BUG:234194
+
+Table View
+*BUG:234192 Workaroud for possible Oxygen bug
+
+2010-04-06
+Table View
+*fix possible crash in tooltips handling
+Forms
+*fix display of comboboxes
 
 2010-04-05
 Forms
