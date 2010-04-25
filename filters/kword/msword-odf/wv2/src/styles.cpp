@@ -292,7 +292,7 @@ void STD::readStyleName( U16 baseSize, OLEStreamReader* stream )
         delete [] name;
     }
     else {
-        // Word versions older than Word97 have a plain lenght byte and
+        // Word versions older than Word97 have a plain length byte and
         // a char* string as name
         U8 length = stream->readU8();
 #ifdef WV2_DEBUG_STYLESHEET
