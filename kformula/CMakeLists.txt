@@ -58,7 +58,7 @@ set_target_properties(kdeinit_kformula_bin PROPERTIES OUTPUT_NAME kdeinit_kformu
 target_link_libraries( kformula_bin kdeinit_kformula_bin )
 set_target_properties( kformula_bin PROPERTIES OUTPUT_NAME kformula)
 
-install(TARGETS kformula_bin  ${INSTALL_TARGETS_DEFAULT_ARGS})
+# install(TARGETS kformula_bin  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
