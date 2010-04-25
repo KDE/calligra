@@ -90,5 +90,5 @@ Type=Application
 Icon=kplatowork
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato.work
 X-DocPath=kplatowork/index.html
-Categories=Qt;KDE;
+Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
