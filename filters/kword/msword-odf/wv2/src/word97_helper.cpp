@@ -987,7 +987,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             break;
         case SPRM::sprmPAnld:
             if ( version == Word8 )
-                anld.readPtr( ptr + 1 ); // variable length, skip lenght byte
+                anld.readPtr( ptr + 1 ); // variable length, skip length byte
             else
                 anld = toWord97( Word95::ANLD( ptr + 1 ) );
             break;
@@ -1412,7 +1412,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCHpsNew50:
             if ( *ptr != 2 )
-                wvlog << "Warning: sprmCHpsNew50 has a different lenght than 2" << endl;
+                wvlog << "Warning: sprmCHpsNew50 has a different length than 2" << endl;
             else
                 hps = readU16( ptr + 1 );
             break;
@@ -1521,7 +1521,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         case SPRM::sprmCDispFldRMark:
         {
             if ( *ptr != 39 )
-                wvlog << "Warning: sprmCDispFldRMark has a different lenght than 39" << endl;
+                wvlog << "Warning: sprmCDispFldRMark has a different length than 39" << endl;
             else {
                 fDispFldRMark = *( ptr + 1 ) == 1;
                 ibstDispFldRMark = readS16( ptr + 2 );

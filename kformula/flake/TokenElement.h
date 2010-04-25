@@ -69,7 +69,7 @@ public:
 
     /**
      * Insert @p text at @p position
-     * @return true, if the insert was succesfull
+     * @return true, if the insert was successful
      */
     virtual bool insertText( int position, const QString &text );
     

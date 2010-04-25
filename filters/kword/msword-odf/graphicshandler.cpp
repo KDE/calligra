@@ -622,7 +622,7 @@ void KWordDrawingHandler::parseOfficeArtContainer(wvWare::OLEStreamReader* table
             kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
             return;
         }
-        kDebug(30513) << "OfficeArtDggContainer parsed succesful " ;
+        kDebug(30513) << "OfficeArtDggContainer parsed successful " ;
 
 
         // parse drawingsVariable from msdoc
