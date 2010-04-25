@@ -63,6 +63,7 @@ private slots:
     void finishedRun();
     void configureSpellCheck();
     void runQueue();
+    void documentChanged(int from, int min, int plus);
 
 private:
     Sonnet::Speller m_speller;
