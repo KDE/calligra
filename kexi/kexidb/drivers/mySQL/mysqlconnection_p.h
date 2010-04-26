@@ -83,6 +83,8 @@ public:
     bool mysql_owned; //!< true if mysql pointer should be freed on destruction
     QString errmsg; //!< server-specific message of last operation
     int res; //!< result code of last operation on server
+    //! Get lower_case_table_name variable value so we know if there's case sensitivity supported for table and database names
+    bool lowerCaseTableNames;
 };
 
 
