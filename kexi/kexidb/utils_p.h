@@ -45,7 +45,7 @@ protected:
     KexiDB::Driver *m_driver;
 };
 
-class ConnectionTestDialog : protected KProgressDialog
+class ConnectionTestDialog : public KProgressDialog
 {
     Q_OBJECT
 public:
