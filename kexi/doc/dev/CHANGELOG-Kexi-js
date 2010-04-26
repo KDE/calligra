@@ -104,12 +104,19 @@ Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-04-26
+KexiDB
+*MySQL Driver: Fix "DB created but cannot open" error appearing on creating a new database for mysql backend.
+ See http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html (complex!) for logic of otherwise simple thing.
+ The solution is to execute SHOW VARIABLES LIKE 'lower_case_table_name' to get the flag and make the table and database names lowercase if needed.
+BUG:235507
+*******TODO: port to Predicate
+
 2010-04-25
 KexiDB
 *fix crash or freeze for testing database connection on error or timeout
 BUG:124959
 CCBUG:234536
-*******TODO: port to Predicate
 
 2010-04-24
 KexiDB
@@ -117,7 +124,6 @@ KexiDB
 BUG:234536
 *fix crash when testing database connection and debug gui is enabled (related to using gui in different thread)
 CCBUG:234194
-*******TODO: port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.2 beta 2 ~~~~~~~~~~~~~~~~
 
