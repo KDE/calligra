@@ -1372,7 +1372,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - moveTo (Move Destination Paragraph) §17.13.5.26
  - noProof (Do Not Check Spelling or Grammar) §17.3.2.21
  - oMath (Office Open XML Math) §17.3.2.22
- - outline (Display Character Outline) §17.3.2.23
+ - [done] outline (Display Character Outline) §17.3.2.23
  - position (Vertically Raised or Lowered Text) §17.3.2.24
  - [done] rFonts (Run Fonts) §17.3.2.26
  - rPrChange (Revision Information for Run Properties on the Paragraph Mark) §17.13.5.30
@@ -1426,6 +1426,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(rFonts)
             ELSE_TRY_READ_IF(spacing)
+            ELSE_TRY_READ_IF(outline)
             ELSE_TRY_READ_IF(caps)
             ELSE_TRY_READ_IF(smallCaps)
             ELSE_TRY_READ_IF(w)
@@ -2336,6 +2337,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
     READ_PROLOGUE
     if (READ_BOOLEAN_VAL)
         m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL outline
+//! outline handler
+/*! Parent Elements:
+ - [done] rPr (many)
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_outline()
+{
+    READ_PROLOGUE
+    m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
     readNext();
     READ_EPILOGUE
 }

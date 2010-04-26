@@ -451,14 +451,14 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
                     break;
                 }
                 QString propertyName = content.left(equalSignLocation);
-                content = content.right(content.size() - (equalSignLocation + 1));
-                separatorLocation = content.indexOf(' ');
+                // Removing equal and one quota
+                content = content.right(content.size() - (equalSignLocation) - 2);
+                separatorLocation = content.indexOf('\"');
                 if (separatorLocation < 0) {
                     separatorLocation = content.indexOf('/');
                 }
                 QString propertyValue = content.left(separatorLocation);
-                propertyValue = propertyValue.remove("\""); // removing quotas
-                content = content.right(content.size() - (separatorLocation + 1));
+                content = content.right(content.size() - (separatorLocation + 2));
                 m_currentParagraphStyle.addProperty(propertyName, propertyValue, KoGenStyle::TextType);
             }
 
