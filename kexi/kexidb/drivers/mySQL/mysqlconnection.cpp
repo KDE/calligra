@@ -70,7 +70,7 @@ bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 #else //better way to get the version info: use 'version' built-in variable:
 //! @todo this is hardcoded for now; define api for retrieving variables and use this API...
     QString versionString;
-    const tristate res = querySingleString("SELECT @@version", versionString, /*column*/0, false /*!addLimitTo1*/);
+    tristate res = querySingleString("SELECT @@version", versionString, /*column*/0, false /*!addLimitTo1*/);
     QRegExp versionRe("(\\d+)\\.(\\d+)\\.(\\d+)");
     if (res == true && versionRe.exactMatch(versionString)) { // (if querySingleString failed, the version will be 0.0.0...
         version.major = versionRe.cap(1).toInt();
@@ -78,6 +78,15 @@ bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
         version.release = versionRe.cap(3).toInt();
     }
 #endif
+    // Get lower_case_table_name value so we know if there's case sensitivity supported
+    // See http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html
+    int intLowerCaseTableNames = 0;
+    res = querySingleNumber(QLatin1String("SHOW VARIABLES LIKE 'lower_case_table_name'"), intLowerCaseTableNames,
+                            0/*col*/, false/* !addLimitTo1 */);
+    if (res == false) // sanity
+        return false;
+    kDebug() << (res == true) << "lower_case_table_name:" << intLowerCaseTableNames;
+    d->lowerCaseTableNames = intLowerCaseTableNames > 0;
     return true;
 }
 
@@ -119,12 +128,14 @@ bool MySqlConnection::drv_getDatabasesList(QStringList &list)
 bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreErrors)
 {
     bool success;
+    /* db names can be lower case in mysql */
+    const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
     bool exists = resultExists(
       QString::fromLatin1("SHOW DATABASES LIKE %1")
-          .arg(driver()->escapeString(dbName.toLower()/* db names are lower case in mysql */)), success);
+          .arg(driver()->escapeString(storedDbName)), success);
     if (!exists || !success) {
         if (!ignoreErrors)
-            setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.", dbName));
+            setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.", storedDbName));
         return false;
     }
     return true;
@@ -132,9 +143,11 @@ bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreError
 
 bool MySqlConnection::drv_createDatabase(const QString &dbName)
 {
-    KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName;
+    const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
+    KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << storedDbName;
     // mysql_create_db deprecated, use SQL here.
-    if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(dbName))))
+    // db names are lower case in mysql
+    if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(storedDbName))))
         return true;
     d->storeResult();
     return false;
@@ -145,7 +158,8 @@ bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, Me
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
 //TODO is here escaping needed?
-    return d->useDatabase(dbName);
+    const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
+    return d->useDatabase(storedDbName);
 }
 
 bool MySqlConnection::drv_closeDatabase()
@@ -158,7 +172,8 @@ bool MySqlConnection::drv_closeDatabase()
 bool MySqlConnection::drv_dropDatabase(const QString &dbName)
 {
 //TODO is here escaping needed
-    return drv_executeSQL(QString::fromLatin1("DROP DATABASE %1").arg(escapeIdentifier(dbName)));
+    const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
+    return drv_executeSQL(QString::fromLatin1("DROP DATABASE %1").arg(escapeIdentifier(storedDbName)));
 }
 
 bool MySqlConnection::drv_executeSQL(const QString& statement)

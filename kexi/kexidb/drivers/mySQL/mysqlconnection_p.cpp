@@ -43,6 +43,7 @@ MySqlConnectionInternal::MySqlConnectionInternal(KexiDB::Connection* connection)
         , mysql(0)
         , mysql_owned(true)
         , res(0)
+        , lowerCaseTableNames(false)
 {
 }
 
@@ -131,7 +132,7 @@ bool MySqlConnectionInternal::db_disconnect()
 bool MySqlConnectionInternal::useDatabase(const QString &dbName)
 {
 //TODO is here escaping needed?
-    return executeSQL("USE " + dbName);
+    return executeSQL(QLatin1String("USE ") + escapeIdentifier(dbName));
 }
 
 /*! Executes the given SQL statement on the server.
