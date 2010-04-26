@@ -829,8 +829,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
         }
     if (attrs.hasAttribute("cap")) {
-        if (attrs.value("cap").toString() == "small") {
-            m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);   
+        const QString capValue = attrs.value("cap").toString();
+        if (capValue == "small") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);
+        }
+        else if (capValue == "all") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
         }
     }
     if (attrs.hasAttribute("sz")) {
