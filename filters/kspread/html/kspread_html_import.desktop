@@ -2,6 +2,7 @@
 Type=Service
 Name=HTML Import Filter for KSpread
 Name[ca]=Filtre d'importació HTML per al KSpread
+Name[ca@valencia]=Filtre d'importació HTML per al KSpread
 Name[da]=HTML-importfilter til KSpread
 Name[de]=KSpread HTML-Importfilter
 Name[en_GB]=HTML Import Filter for KSpread

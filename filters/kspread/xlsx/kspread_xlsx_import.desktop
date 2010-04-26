@@ -2,6 +2,7 @@
 Type=Service
 Name=MS Excel 2007 Import Filter for KSpread
 Name[ca]=Filtre d'importació MS Excel 2007 per al KSpread
+Name[ca@valencia]=Filtre d'importació MS Excel 2007 per al KSpread
 Name[cs]=Importní filtr MS Excel 2007 pro KSpread
 Name[da]=MS Excel 2007 importfilter til KSpread
 Name[de]=KSpread MS-Excel-2007-Exportfilter

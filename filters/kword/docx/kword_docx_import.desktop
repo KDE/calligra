@@ -2,6 +2,7 @@
 Type=Service
 Name=MS Word 2007 Import Filter for KWord
 Name[ca]=Filtre d'importació MS Word per al KWord
+Name[ca@valencia]=Filtre d'importació MS Word per al KWord
 Name[cs]=Importní filtr MS Word 2007 pro KWord
 Name[da]=MS Word 2007 importfilter til KWord
 Name[de]=KWord MS-Word-2007-Importfilter
