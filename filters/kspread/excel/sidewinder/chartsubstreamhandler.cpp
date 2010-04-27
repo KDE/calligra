@@ -84,7 +84,7 @@ const unsigned BRAIRecord::id = 0x1051;
 using namespace Swinder;
 
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_defaultTextId(-1)
+    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_defaultTextId(-1), m_axisId(-1)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
@@ -117,6 +117,16 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
 {
     RecordRegistry::unregisterRecordClass(BRAIRecord::id);
 }
+
+std::string whitespaces(int number)
+{
+    std::string s;
+    for(int i = 0; i < number; ++i) s += " ";
+    return s;
+}
+
+#define DEBUG \
+    std::cout << whitespaces(m_stack.count()) << "ChartSubStreamHandler::" << __FUNCTION__ << " "
 
 void ChartSubStreamHandler::handleRecord(Record* record)
 {
@@ -222,6 +232,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleTextPropsStream(static_cast<TextPropsStreamRecord*>(record));
     else if (type == ObjectLinkRecord::id)
         handleObjectLink(static_cast<ObjectLinkRecord*>(record));
+    else if (type == PlotAreaRecord::id)
+        handlePlotArea(static_cast<PlotAreaRecord*>(record));
     else if (type == CrtLinkRecord::id)
         {} // written but unused record
     else if (type == UnitsRecord::id)
@@ -229,20 +241,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
     else if (type == StartBlockRecord::id || type == EndBlockRecord::id)
         {} // not evaluated atm
     else {
-        std::cout << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
+        DEBUG << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
         //record->dump(std::cout);
     }
 }
-
-std::string whitespaces(int number)
-{
-    std::string s;
-    for(int i = 0; i < number; ++i) s += " ";
-    return s;
-}
-
-#define DEBUG \
-    std::cout << whitespaces(m_stack.count()) << "ChartSubStreamHandler::" << __FUNCTION__ << " "
 
 void ChartSubStreamHandler::handleBOF(BOFRecord*)
 {
@@ -416,8 +418,25 @@ void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
 {
     if(!record) return;
-    DEBUG << std::endl;
-    //TODO
+    DEBUG << "lns=" << record->lns() << " we=" << record->we() << " fAxisOn=" << record->isFAxisOn() << std::endl;
+    if(Charting::Axis* axis = dynamic_cast<Charting::Axis*>(m_currentObj)) {
+        Charting::LineFormat format(Charting::LineFormat::Style(record->lns()), Charting::LineFormat::Tickness(record->we()));
+        switch(m_axisId) {
+            case 0x0000: // The axis line itself
+                axis->m_format = format;
+                break;
+            case 0x0001: // The major gridlines along the axis
+                axis->m_majorGridlines = Charting::Axis::Gridline(format);
+                break;
+            case 0x0002: // The minor gridlines along the axis
+                axis->m_minorGridlines = Charting::Axis::Gridline(format);
+                break;
+            case 0x0003: // The walls or floor of a 3-D chart
+                //TODO
+                break;
+        }
+        m_axisId = -1;
+    }
 }
 
 void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
@@ -503,7 +522,15 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if(!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
-    m_currentSeries->m_texts << new Charting::Text(string(record->text()));
+    if(Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
+        t->m_text = string(record->text());
+    } else if(Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
+        //TODO
+    } else if(Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
+        series->m_texts << new Charting::Text(string(record->text()));
+    } else {
+        //m_currentSeries->m_texts << new Charting::Text(string(record->text()));
+    }
 }
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
@@ -586,14 +613,17 @@ void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 {
     if(!record) return;
     DEBUG << "wType=" << record->wType() << std::endl;
-    //TODO
+    Charting::Axis* axis = new Charting::Axis(Charting::Axis::Type(record->wType()));
+    m_chart->m_axes << axis;
+    m_currentObj = axis;
 }
 
+// This record specifies which part of the axis is specified by the LineFormat record that follows.
 void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
 {
     if(!record) return;
     DEBUG << "identifier=" << record->identifier() << std::endl;
-    //TODO
+    m_axisId = record->identifier();
 }
 
 // type of data contained in the Number records following
@@ -660,4 +690,12 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
         case ObjectLinkRecord::SeriesAxis: break; //TODO
         case ObjectLinkRecord::DisplayUnitsLabelsOfAxis: break; //TODO
     }
+}
+
+// This empty record specifies that the Frame record that immediately follows this record specifies
+// properties of the plot area.
+void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
+{
+    if(!record) return;
+    DEBUG << std::endl;
 }

@@ -122,10 +122,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
         bodyWriter->startElement("chart:title");
+        /*TODO
         bodyWriter->addAttributePt("svg:x", sprcToPt(t->m_x1, vertical));
         bodyWriter->addAttributePt("svg:y", sprcToPt(t->m_y1, horizontal));
         bodyWriter->addAttributePt("svg:width", sprcToPt(t->m_x2, vertical));
         bodyWriter->addAttributePt("svg:height", sprcToPt(t->m_y2, horizontal));
+        */
         bodyWriter->startElement("text:p");
         bodyWriter->addTextNode(t->m_text);
         bodyWriter->endElement(); // text:p
@@ -189,22 +191,57 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //bodyWriter->addAttribute("svg:width", "6.712cm"); //FIXME
     //bodyWriter->addAttribute("svg:height", "6.58cm"); //FIXME
 
-    // First axis
-    bodyWriter->startElement("chart:axis");
-    bodyWriter->addAttribute("chart:dimension", "x");
-    bodyWriter->addAttribute("chart:name", "primary-x");
-    if(!verticalCellRangeAddress.isEmpty()) {
-        bodyWriter->startElement("chart:categories");
-        bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
-        bodyWriter->endElement();
+    int countXAxis = 0;
+    int countYAxis = 0;
+    foreach(Charting::Axis* axis, chart()->m_axes) {
+        bodyWriter->startElement("chart:axis");
+        switch(axis->m_type) {
+            case Charting::Axis::HorizontalValueAxis:
+                bodyWriter->addAttribute("chart:dimension", "y");
+                bodyWriter->addAttribute("chart:name", QString("y%1").arg(++countYAxis));
+                break;
+            case Charting::Axis::VerticalValueAxis:
+                bodyWriter->addAttribute("chart:dimension", "x");
+                if(countXAxis == 0 && !verticalCellRangeAddress.isEmpty()) {
+                    bodyWriter->startElement("chart:categories");
+                    bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+                    bodyWriter->endElement();
+                }
+                bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
+                break;
+            case Charting::Axis::SeriesAxis:
+                //TODO what is a series-axis / how does it differ to the other axes?
+                break;
+        }
+        if(axis->m_majorGridlines.m_format.m_style != Charting::LineFormat::None) {
+            bodyWriter->startElement("chart:grid");
+            bodyWriter->addAttribute("chart:class", "major");
+            bodyWriter->endElement(); // chart:grid
+        }
+        if(axis->m_minorGridlines.m_format.m_style != Charting::LineFormat::None) {
+            bodyWriter->startElement("chart:grid");
+            bodyWriter->addAttribute("chart:class", "minor");
+            bodyWriter->endElement(); // chart:grid
+        }
+        bodyWriter->endElement(); // chart:axis
     }
-    bodyWriter->endElement(); // chart:axis
-
-    // Second axis
-    bodyWriter->startElement("chart:axis");
-    bodyWriter->addAttribute("chart:dimension", "y");
-    bodyWriter->addAttribute("chart:name", "primary-y");
-    bodyWriter->endElement(); // chart:axis
+    if(countXAxis == 0) { // add at least one x-axis
+        bodyWriter->startElement("chart:axis");
+        bodyWriter->addAttribute("chart:dimension", "x");
+        bodyWriter->addAttribute("chart:name", "primary-x");
+        if(!verticalCellRangeAddress.isEmpty()) {
+            bodyWriter->startElement("chart:categories");
+            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+            bodyWriter->endElement();
+        }
+        bodyWriter->endElement(); // chart:axis
+    }
+    if(countYAxis == 0) { // add at least one y-axis
+        bodyWriter->startElement("chart:axis");
+        bodyWriter->addAttribute("chart:dimension", "y");
+        bodyWriter->addAttribute("chart:name", "primary-y");
+        bodyWriter->endElement(); // chart:axis
+    }
 
     //<chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch4"/>
     //<chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch5"><chart:grid chart:style-name="ch6" chart:class="major"/></chart:axis>

@@ -62,6 +62,31 @@ namespace Charting
         virtual ~Format() {}
     };
 
+    class LineFormat : public Format
+    {
+    public:
+        enum Style {
+            Solid = 0x0000,
+            Dash = 0x0001,
+            Dot = 0x0002,
+            DashDot = 0x0003,
+            DashDotDot = 0x0004,
+            None = 0x0005,
+            DarkGrayPattern = 0x0006,
+            MediumGrayPattern = 0x0007,
+            LightGrayPattern = 0x0008,
+        };
+        enum Tickness {
+            Hairline = 0xFFFF,
+            NarrowSingle = 0x0000,
+            MediumDouble = 0x0001,
+            WideTriple = 0x0002,
+        };
+        Style m_style;
+        Tickness m_tickness;
+        LineFormat(const Style& style = None, const Tickness& tickness = Hairline) : Format(), m_style(style), m_tickness(tickness) {} 
+    };
+    
     class PieFormat : public Format
     {
     public:
@@ -123,6 +148,31 @@ namespace Charting
         explicit Text(const QString &text = QString()) : Obj(), m_text(text) {}
         virtual ~Text() {}
     };
+    
+    class Axis : public Obj
+    {
+    public:
+        enum Type {
+            HorizontalValueAxis = 0x0000,
+            VerticalValueAxis = 0x0001,
+            SeriesAxis = 0x0002,
+        };
+        Type m_type;
+
+        class Gridline
+        {
+        public:
+            LineFormat m_format;
+            Gridline(const LineFormat &format = LineFormat()) : m_format(format) {} 
+        };
+        Gridline m_majorGridlines;
+        Gridline m_minorGridlines;
+
+        LineFormat m_format;
+
+        Axis(Type type) : Obj(), m_type(type) {}
+        virtual ~Axis() {}
+    };
 
     class Series : public Obj
     {
@@ -183,6 +233,8 @@ namespace Charting
         ChartImpl *m_impl;
         /// Whether the chart is vertical or not
         bool m_transpose;
+        /// List of defined axes.
+        QList<Axis*> m_axes;
 
         explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false) {}
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; }

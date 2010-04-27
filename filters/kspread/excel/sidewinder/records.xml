@@ -512,7 +512,6 @@
    <field name="green" type="unsigned" size="8" />
    <field name="blue" type="unsigned" size="8" />
    <field name="reserved" type="bool" size="8" />
-   <field name="red" type="unsigned" size="8" />
    <field name="lns" type="unsigned" size="16">
         <enum name="Solid" value="0x0000" />
         <enum name="Dash" value="0x0001" />
@@ -524,7 +523,7 @@
         <enum name="MediumGrayPattern" value="0x0007" />
         <enum name="LightGrayPattern" value="0x0008" />
    </field>
-   <field name="we" type="unsigned" size="16">
+   <field name="we" type="signed" size="16">
         <enum name="Hairline" value="0xFFFF" />
         <enum name="NarrowSingle" value="0x0000" />
         <enum name="MediumDouble" value="0x0001" />
@@ -710,8 +709,7 @@
   <field name="wLinkVar2" type="unsigned" size="16" />
 </record>
 
-<record name="PlotArea" id="0x1035">
-</record>
+<record name="PlotArea" id="0x1035" />
 
 <record name="MsoDrawingSelection" id="0x00ed">
   <!-- an OfficeArtFDGSL structure -->
