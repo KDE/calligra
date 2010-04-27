@@ -172,6 +172,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //chartstyle.addProperty("chart:right-angled-axes", "false");
     if( chart()->m_transpose )
         chartstyle.addProperty("chart:vertical", "true");
+    if( chart()->m_stacked )
+        chartstyle.addProperty("chart:stacked", "true");
+    if( chart()->m_f100 )
+       chartstyle.addProperty("chart:percentage", "true");
     bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
