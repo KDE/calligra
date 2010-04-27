@@ -537,7 +537,7 @@ void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 // specifies that the chartgroup is a pie chart
 void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
-    if(!record) return;
+    if(!record || m_chart->m_impl) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
     if(record->pcDonut() > 0)
         m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
@@ -548,14 +548,15 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 // specifies that the chartgroup is a bar chart
 void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
-    if(!record) return;
+    if(!record || m_chart->m_impl) return;
     m_chart->m_impl = new Charting::BarImpl();
+    m_chart->m_transpose = record->isFTranspose();
 }
 
 // specifies that the chartgroup is a area chart
 void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
-    if(!record) return;
+    if(!record || m_chart->m_impl) return;
     m_chart->m_impl = new Charting::AreaImpl();
 }
 

@@ -154,6 +154,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //chartstyle.addProperty("chart:angle-offset", "90");
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:right-angled-axes", "false");
+    if( chart()->m_transpose )
+        chartstyle.addProperty("chart:vertical", "true");
     bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
