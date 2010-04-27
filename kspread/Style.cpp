@@ -102,6 +102,7 @@ QString SubStyle::name(Style::Key key)
     case Style::VerticalText:           name = "Vertical text"; break;
     case Style::Angle:                  name = "Angle"; break;
     case Style::Indentation:            name = "Indentation"; break;
+    case Style::ShrinkToFit:            name = "Shrink to Fit"; break;
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
@@ -393,6 +394,10 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     if (styleStack.hasProperty(KoXmlNS::style, "print-content") &&
             (styleStack.property(KoXmlNS::style, "print-content") == "false")) {
         setDontPrintText(true);
+    }
+    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit") &&
+            (styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true")) {
+        setShrinkToFit(true);
     }
     if (styleStack.hasProperty(KoXmlNS::style, "direction") &&
             (styleStack.property(KoXmlNS::style, "direction") == "ttb")) {
@@ -1256,6 +1261,10 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         style.addProperty("style:rotation-angle", "0");
         style.addProperty("style:rotation-align", "none");
     }
+
+    if (keysToStore.contains(ShrinkToFit) && shrinkToFit())
+        style.addProperty("style:shrink-to-fit", "true");
+
 #if 0
     if (keysToStore.contains(FloatFormat))
         format.setAttribute("float", (int) floatFormat());
@@ -1452,6 +1461,9 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
     if (keysToStore.contains(VerticalText) && verticalText())
         format.setAttribute("verticaltext", "yes");
 
+    if (keysToStore.contains(ShrinkToFit) && shrinkToFit())
+        format.setAttribute("shrinktofit", "yes");
+
     if (keysToStore.contains(Precision))
         format.setAttribute("precision", precision());
 
@@ -1609,8 +1621,8 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         setWrapText(true);
     }
 
-    if (format.hasAttribute("verticaltext")) {
-        setVerticalText(true);
+    if (format.hasAttribute("shrinktofit")) {
+        setShrinkToFit(true);
     }
 
     if (format.hasAttribute("precision")) {
@@ -2041,6 +2053,13 @@ double Style::indentation() const
     return static_cast<const SubStyleOne<Indentation, int>*>(d->subStyles[Indentation].data())->value1;
 }
 
+bool Style::shrinkToFit() const
+{
+    if (!d->subStyles.contains(ShrinkToFit))
+        return SubStyleOne<ShrinkToFit, bool>().value1;
+    return static_cast<const SubStyleOne<ShrinkToFit, bool>*>(d->subStyles[ShrinkToFit].data())->value1;
+}
+
 bool Style::verticalText() const
 {
     if (!d->subStyles.contains(VerticalText))
@@ -2270,6 +2289,11 @@ void Style::setVerticalText(bool enable)
     insertSubStyle(VerticalText, enable);
 }
 
+void Style::setShrinkToFit(bool enable)
+{
+    insertSubStyle(ShrinkToFit, enable);
+}
+
 void Style::setDefault()
 {
     insertSubStyle(DefaultStyleKey, true);
@@ -2325,6 +2349,8 @@ bool Style::compare(const SubStyle* one, const SubStyle* two)
         return static_cast<const SubStyleOne<MultiRow, bool>*>(one)->value1 == static_cast<const SubStyleOne<MultiRow, bool>*>(two)->value1;
     case VerticalText:
         return static_cast<const SubStyleOne<VerticalText, bool>*>(one)->value1 == static_cast<const SubStyleOne<VerticalText, bool>*>(two)->value1;
+    case ShrinkToFit:
+        return static_cast<const SubStyleOne<ShrinkToFit, bool>*>(one)->value1 == static_cast<const SubStyleOne<ShrinkToFit, bool>*>(two)->value1;
     case Angle:
         return static_cast<const SubStyleOne<Angle, int>*>(one)->value1 == static_cast<const SubStyleOne<Angle, int>*>(two)->value1;
     case Indentation:
@@ -2497,6 +2523,9 @@ SharedSubStyle Style::createSubStyle(Key key, const QVariant& value)
         break;
     case Indentation:
         newSubStyle = new SubStyleOne<Indentation, int>(value.value<int>());
+        break;
+    case ShrinkToFit:
+        newSubStyle = new SubStyleOne<ShrinkToFit,bool>(value.value<bool>());
         break;
         // content format
     case Prefix:

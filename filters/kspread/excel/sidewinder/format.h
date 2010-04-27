@@ -390,6 +390,20 @@ public:
     void setRotationAngle(unsigned r);
 
     /**
+     * Returns true if the font size should be decreased to make text fit its cell.
+     *
+     * \sa setShrinkToFit
+     */
+    bool shrinkToFit() const;
+
+    /**
+     * Sets whether the font size should be decreased to make text fit its cell.
+     *
+     * \sa shrinkToFit
+     */
+    void setShrinkToFit(bool b);
+
+    /**
      * Returns true if the text should be shown in stacked letters.
      *
      * \sa setStackedLetters

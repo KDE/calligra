@@ -458,6 +458,7 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     alignment.setRotationAngle(angle);
 
     alignment.setStackedLetters(xf.stackedLetters());
+    alignment.setShrinkToFit(xf.shrinkContent());
 
     format.setAlignment(alignment);
 

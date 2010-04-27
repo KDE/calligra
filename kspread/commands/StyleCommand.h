@@ -118,6 +118,9 @@ public:
     void setVerticalText(bool verticalText) {
         m_style->setVerticalText(verticalText);
     }
+    void setShrinkToFit(bool shrink) {
+        m_style->setShrinkToFit(shrink);
+    }
     void setDontPrintText(bool dontPrintText) {
         m_style->setDontPrintText(dontPrintText);
     }

@@ -236,6 +236,7 @@ public:
     unsigned indentLevel;
     unsigned rotationAngle;
     bool stackedLetters;
+    bool shrinkToFit;
 };
 
 FormatAlignment::FormatAlignment()
@@ -248,6 +249,7 @@ FormatAlignment::FormatAlignment()
     d->indentLevel   = 0;
     d->rotationAngle = 0;
     d->stackedLetters = false;
+    d->shrinkToFit = false;
 }
 
 // destructor
@@ -279,6 +281,7 @@ FormatAlignment& FormatAlignment::assign(const FormatAlignment& align)
     d->indentLevel   = align.indentLevel();
     d->rotationAngle = align.rotationAngle();
     d->stackedLetters = align.stackedLetters();
+    d->shrinkToFit = align.shrinkToFit();
     return *this;
 }
 
@@ -348,6 +351,17 @@ void FormatAlignment::setStackedLetters(bool b)
     d->null = false;
 }
 
+bool FormatAlignment::shrinkToFit() const
+{
+    return d->shrinkToFit;
+}
+
+void FormatAlignment::setShrinkToFit(bool b)
+{
+    d->shrinkToFit = b;
+    d->null = false;
+}
+
 bool FormatAlignment::operator==(const FormatAlignment& font) const
 {
     return
@@ -356,7 +370,8 @@ bool FormatAlignment::operator==(const FormatAlignment& font) const
         d->wrap == font.d->wrap &&
         d->indentLevel == font.d->indentLevel &&
         d->rotationAngle == font.d->rotationAngle &&
-        d->stackedLetters == font.d->stackedLetters;
+        d->stackedLetters == font.d->stackedLetters &&
+        d->shrinkToFit == font.d->shrinkToFit;
 }
 
 bool FormatAlignment::operator!=(const FormatAlignment& font) const
@@ -367,7 +382,8 @@ bool FormatAlignment::operator!=(const FormatAlignment& font) const
         d->wrap != font.d->wrap ||
         d->indentLevel != font.d->indentLevel ||
         d->rotationAngle != font.d->rotationAngle ||
-        d->stackedLetters != font.d->stackedLetters;
+        d->stackedLetters != font.d->stackedLetters ||
+        d->shrinkToFit != font.d->shrinkToFit;
 }
 
 class FormatBackground::Private

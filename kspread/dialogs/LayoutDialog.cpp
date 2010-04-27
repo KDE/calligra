@@ -414,6 +414,7 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
 
     bMultiRow = styleTopLeft.wrapText();
     bVerticalText = styleTopLeft.verticalText();
+    bShrinkToFit = styleTopLeft.shrinkToFit();
     textRotation = styleTopLeft.angle();
     formatType = styleTopLeft.formatType();
 
@@ -557,6 +558,7 @@ void CellFormatDialog::initGUI()
 
     bMultiRow      = m_style->wrapText();
     bVerticalText  = m_style->verticalText();
+    bShrinkToFit   = m_style->shrinkToFit();
     textRotation   = m_style->angle();
     formatType     = m_style->formatType();
     indent         = m_style->indentation();
@@ -729,6 +731,8 @@ void CellFormatDialog::initParameters(const Style& style)
         bMultiRow = false;
     if (bVerticalText != style.verticalText())
         bVerticalText = false;
+    if (bShrinkToFit != style.shrinkToFit())
+        bShrinkToFit = false;
     if (!bDontPrintText != style.printText())
         bDontPrintText = false;
 
@@ -2010,12 +2014,15 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     multi->setChecked(dlg->bMultiRow);
 
     vertical->setChecked(dlg->bVerticalText);
+    
+    shrinkToFit->setChecked(dlg->bShrinkToFit);
 
     angleRotation->setValue(-dlg->textRotation);//annma
     spinBox3->setValue(-dlg->textRotation);
     if (dlg->textRotation != 0) {
         multi->setEnabled(false);
         vertical->setEnabled(false);
+        shrinkToFit->setEnabled(false);
     }
 
     mergeCell->setChecked(dlg->isMerged);
@@ -2078,6 +2085,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     connect(defaultWidth , SIGNAL(clicked()), this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked()), this, SLOT(slotChangeHeightState()));
     connect(vertical , SIGNAL(clicked()), this, SLOT(slotChangeVerticalState()));
+    connect(shrinkToFit, SIGNAL(clicked()), this, SLOT(slotChangeShrinkToFitState()));
     connect(multi , SIGNAL(clicked()), this, SLOT(slotChangeMultiState()));
     connect(angleRotation, SIGNAL(valueChanged(int)), this, SLOT(slotChangeAngle(int)));
 
@@ -2100,7 +2108,21 @@ void CellFormatPagePosition::slotChangeVerticalState()
     if (multi->isChecked()) {
         multi->setChecked(false);
     }
+    if (shrinkToFit->isChecked()) {
+        shrinkToFit->setChecked(false);
+    }
+}
 
+
+void CellFormatPagePosition::slotChangeShrinkToFitState()
+{
+    m_bOptionText = true;
+    if (vertical->isChecked()) {
+        vertical->setChecked(false);
+    }
+    if (multi->isChecked()) {
+        multi->setChecked(false);
+    }
 }
 
 void CellFormatPagePosition::slotStateChanged(int)
@@ -2165,11 +2187,11 @@ void CellFormatPagePosition::apply(CustomStyle * style)
         if (multi->isEnabled()) {
             style->setWrapText(multi->isChecked());
         }
-    }
-
-    if (m_bOptionText) {
         if (vertical->isEnabled()) {
             style->setVerticalText(vertical->isChecked());
+        }
+        if (shrinkToFit->isEnabled()) {
+            style->setShrinkToFit(shrinkToFit->isChecked());
         }
     }
 
@@ -2244,6 +2266,13 @@ void CellFormatPagePosition::apply(StyleCommand* _obj)
             _obj->setVerticalText(vertical->isChecked());
         else
             _obj->setVerticalText(false);
+    }
+
+    if (m_bOptionText) {
+        if (shrinkToFit->isEnabled())
+            _obj->setShrinkToFit(shrinkToFit->isChecked());
+        else
+            _obj->setShrinkToFit(false);
     }
 
     if (dlg->textRotation != angleRotation->value())

@@ -86,6 +86,7 @@ public:
             , textWidth(0.0)
             , textHeight(0.0)
             , textLinesCount(0)
+            , shrinkToFitFontSize(0.0)
             , hidden(false)
             , merged(false)
             , obscured(false)
@@ -110,13 +111,14 @@ public:
     qreal  textHeight;
 
     int    textLinesCount;
+    qreal shrinkToFitFontSize;
 
-bool hidden         : 1;
-bool merged         : 1;
-bool obscured       : 1;
-bool fittingHeight  : 1;
-bool fittingWidth   : 1;
-bool filterButton   : 1;
+    bool hidden         : 1;
+    bool merged         : 1;
+    bool obscured       : 1;
+    bool fittingHeight  : 1;
+    bool fittingWidth   : 1;
+    bool filterButton   : 1;
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
     union {
@@ -143,9 +145,17 @@ public:
     void truncateHorizontalText(const QFont& font, const QFontMetricsF& fontMetrics);
     void truncateVerticalText(const QFont& font, const QFontMetricsF& fontMetrics);
     void truncateAngledText(const QFont& font, const QFontMetricsF& fontMetrics);
+    QFont calculateFont() const;
     QTextOption textOptions() const;
 };
 
+QFont CellView::Private::calculateFont() const
+{
+    QFont f = style.font();
+    if (shrinkToFitFontSize > 0.0)
+        f.setPointSizeF(shrinkToFitFontSize);
+    return f;
+}
 
 CellView::CellView(SheetView* sheetView)
         : d(new Private(sheetView->sheet()->map()->styleManager()->defaultStyle(),
@@ -1022,6 +1032,8 @@ void CellView::paintMatrixElementIndicator(QPainter& painter,
 //
 void CellView::paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate)
 {
+    if (d->style.shrinkToFit())
+        return;
     // Show a red triangle when it's not possible to write all text in cell.
     // Don't print the red triangle if we're printing.
     if (!d->fittingWidth &&
@@ -1079,7 +1091,7 @@ void CellView::paintText(QPainter& painter,
     }
 
     QPen tmpPen(textColorPrint);
-    QFont font = d->style.font();
+    QFont font = d->calculateFont();
 
     // Check for red font color for negative values.
     if (cell.value().isNumber()
@@ -1848,12 +1860,36 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
 
     // First, create a device independent font and its metrics.
     KoPostscriptPaintDevice device;
-    const QFont font(d->style.font(), &device);
-    const QFontMetricsF fontMetrics(font, &device);
+    QFont font(d->style.font(), &device);
+    QFontMetricsF fontMetrics(font, &device);
 
     // Then calculate text dimensions, i.e. d->textWidth and d->textHeight,
     // and check whether the text fits into the cell dimension by the way.
+
     d->calculateTextSize(font, fontMetrics);
+    d->shrinkToFitFontSize = 0.0;
+
+    //if shrink-to-fit is enabled, try to find a font size so that the string fits into the cell
+    if (d->style.shrinkToFit()) {
+        int lower = 1;
+        int upper = font.pointSize() * 2;
+        int siz = 0;
+        while (lower != upper) {
+            siz = static_cast<int>( std::ceil( lower + ( upper - lower ) / 2. ) );
+            font.setPointSizeF(siz / 2.);
+            fontMetrics = QFontMetricsF(font, &device);
+            d->calculateTextSize(font, fontMetrics);
+            if (d->fittingWidth)\
+                lower = siz;
+            else
+                upper = siz - 1;
+        }
+        d->shrinkToFitFontSize = upper / 2.0;
+        font.setPointSizeF(upper / 2.0);
+        fontMetrics = QFontMetricsF(font, &device);
+        d->calculateTextSize(font, fontMetrics); // update fittingWidth et al
+        d->fittingWidth = true;
+    }
 
     // Obscure horizontal cells, if necessary.
     if (!d->fittingWidth) {
@@ -1877,7 +1913,6 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
 //         // Recalculate the text dimensions and check whether the text fits.
 //         d->calculateTextSize(font, fontMetrics);
     }
-
     // Recalculate the text offset.
     textOffset(fontMetrics, cell);
 }
@@ -2187,7 +2222,7 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
     Q_UNUSED(cell)
 
     KoPostscriptPaintDevice device;
-    const QFont font(d->style.font(), &device);
+    const QFont font(d->calculateFont(), &device);
     const QFontMetricsF fontMetrics(font, &device);
 
     const qreal leading = fontMetrics.leading();
