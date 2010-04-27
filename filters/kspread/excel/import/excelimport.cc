@@ -71,28 +71,42 @@ qreal offset( unsigned long dimension, unsigned long offset ) {
 qreal columnStart(Sheet* sheet, unsigned long col) {
     double columnStart = 0;
     for( int i = 0; i < col; ++i )
-        columnStart += sheet->column(i)->width();
+        if( sheet->column(i) )
+            columnStart += sheet->column(i)->width();
+        else
+            columnStart += sheet->defaultColWidth();
     return columnStart;
 }
 
 qreal rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
     for( int i = 0; i < row; ++i )
-        rowStart += sheet->row(i)->height();
+        if( sheet->row(i) )
+            rowStart += sheet->row(i)->height();
+        else
+            rowStart += sheet->defaultRowHeight();
+
     return rowStart;
 }
 
 qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
     for( unsigned long i = col1; i < col2; ++i )
-        columnDistance += sheet->column(i)->width();
+        if( sheet->column(i) )
+            columnDistance += sheet->column(i)->width();
+        else
+            columnDistance += sheet->defaultColWidth();
     return columnDistance;
 }
 
 qreal rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
     double rowDistance = 0.0;
     for( unsigned long i = row1; i < row2; ++i )
-        rowDistance += sheet->row(i)->height();
+        if( sheet->row(i) )
+            rowDistance += sheet->row(i)->height();
+        else
+            rowDistance += sheet->defaultRowHeight();
+
     return rowDistance;
 }
 
@@ -1822,10 +1836,9 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 void ExcelImport::Private::createDefaultColumnStyle() {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
     style.addProperty("fo:break-before", "auto");
-    //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
-    //it's not completely accurate (for that we need to know 256 of the width of the current font),
-    //but seems to be good enough
-    style.addPropertyPt("style:column-width", 2560.0 / 120.0 / 31.0 * 72.0 );
+
+    const double defaultColumnWidth = 2560.0;
+    style.addPropertyPt("style:column-width", defaultColumnWidth * Column::COLUMN_UNITS_TO_PTS );
 
     defaultColumnStyleName = styles->insert(style, "co");
 }

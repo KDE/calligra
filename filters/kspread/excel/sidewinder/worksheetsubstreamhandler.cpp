@@ -437,10 +437,7 @@ void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
     for (unsigned i = firstColumn; i <= lastColumn; i++) {
         Column* column = d->sheet->column(i, true);
         if (column) {
-            //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
-            //it's not completely accurate (for that we need to know 256 of the width of the current font),
-            //but seems to be good enough
-            column->setWidth((double)width / 120.0 / 31.0 * 72.0);
+            column->setWidth((double)width * Column::COLUMN_UNITS_TO_PTS);
             column->setFormat(d->globals->convertedFormat(xfIndex));
             column->setVisible(!hidden);
         }
@@ -916,7 +913,8 @@ void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* r
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultRowHeight(record->miyRw());
+    if( record->miyRw() != 0.0 )
+        d->sheet->setDefaultRowHeight(record->miyRw());
 }
 
 void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* record)
