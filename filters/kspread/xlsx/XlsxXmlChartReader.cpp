@@ -177,6 +177,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
         if (isStartElement()) {
             TRY_READ_IF(ser)
             ELSE_TRY_READ_IF(pieChart)
+            ELSE_TRY_READ_IF(pie3DChart)
             ELSE_TRY_READ_IF(firstSliceAng)
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -263,6 +264,17 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart()
 {
     if(!m_context->m_chart->m_impl) {
         m_context->m_chart->m_impl = new Charting::PieImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pie3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::PieImpl();
+        m_context->m_chart->m_is3d = true;
     }
     return KoFilter::OK;
 }
