@@ -25,6 +25,7 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 //#include <KoOdfNumberStyles.h>
+#include <KDebug>
 
 using namespace Charting;
 
@@ -122,12 +123,23 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     foreach(Charting::Text* t, chart()->m_texts) {
         bodyWriter->startElement("chart:title");
-        /*TODO
-        bodyWriter->addAttributePt("svg:x", sprcToPt(t->m_x1, vertical));
-        bodyWriter->addAttributePt("svg:y", sprcToPt(t->m_y1, horizontal));
-        bodyWriter->addAttributePt("svg:width", sprcToPt(t->m_x2, vertical));
-        bodyWriter->addAttributePt("svg:height", sprcToPt(t->m_y2, horizontal));
+        /* TODO we can't determine this because by default we need to center the title,
+        in order to center it we need to know the textbox size, and to do that we need
+        the used font metrics. 
+
+        Also, for now, the defualt implementation of KChart centers
+        the title, so we get close to the expected behavior. We ignore any offset though.
+
+        Nonetheless, the formula should be something like this:
+        const int widht = m_width/2 - textWidth/2 + sprcToPt(t->m_x1, vertical);
+        const int height = m_height/2 - textHeight/2 + sprcToPt(t->m_y1, horizontal);
+        bodyWriter->addAttributePt("svg:x", width );
+        bodyWriter->addAttributePt("svg:y", height);
         */
+
+        //NOTE don't load width or height, the record MUST be ignored and determined by the application
+        //see [MS-XLS] p. 362
+
         bodyWriter->startElement("text:p");
         bodyWriter->addTextNode(t->m_text);
         bodyWriter->endElement(); // text:p

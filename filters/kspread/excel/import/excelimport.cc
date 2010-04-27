@@ -63,7 +63,40 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
 }
 
-// calculates the column width in pixels
+int columnStart(Sheet* sheet, unsigned long col) {
+    double columnStart = 0;
+    for( int i = 0; i < col; ++i )
+        columnStart += sheet->column(i)->width();
+    return columnStart;
+}
+
+int rowStart(Sheet* sheet, unsigned long row) {
+    double rowStart = 0;
+    for( int i = 0; i < row; ++i )
+        rowStart += sheet->row(i)->height();
+    return rowStart;
+}
+
+int columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
+    kDebug()<<"column distance"<<col1<<col2;
+    double columnDistance = 0.0;
+    for( unsigned long i = col1; i <= col2; ++i )
+        columnDistance += sheet->column(i)->width();
+
+    kDebug()<<"column distance"<<columnDistance;
+    return columnDistance;
+}
+
+int rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
+    kDebug()<<"row distance"<<row1<<row2;
+    double rowDistance = 0.0;
+    for( unsigned long i = row1; i <= row2; ++i )
+        rowDistance += sheet->row(i)->height();
+    kDebug()<<"row distance"<<rowDistance;
+    return rowDistance;
+}
+
+// calculates the column width in pts
 int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx = 0) {
     QFont font("Arial",10);
     QFontMetricsF fm(font);
@@ -74,7 +107,7 @@ int columnWidth(Sheet* sheet, unsigned long col, unsigned long dx = 0) {
     return (defColWidth * col) + (dx / 1024.0 * defColWidth);
 }
 
-// calculates the row height in pixels
+// calculates the row height in pts
 int rowHeight(Sheet* sheet, unsigned long row, unsigned long dy = 0)
 {
     qreal defRowHeight = sheet->defaultRowHeight();
@@ -519,6 +552,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         QPoint point = sheet->firstVisibleCell();
         settingsWriter->addConfigItem("CursorPositionX", point.x());
         settingsWriter->addConfigItem("CursorPositionY", point.y());
+        //TODO replace with rowStart and columnStart?
         settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
         settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
         settingsWriter->addConfigItem("ShowZeroValues", sheet->showZeroValues());
@@ -1373,9 +1407,13 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("table:end-x", QString::number(picture->m_dxR));
         xmlWriter->addAttribute("table:end-y", QString::number(picture->m_dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttribute("svg:x", QString::number(columnWidth(cell->sheet(),picture->m_colL,picture->m_dxL))+"pt");
-        xmlWriter->addAttribute("svg:y", QString::number(rowHeight(cell->sheet(),picture->m_rwT,picture->m_dyT))+"pt");
+        //TODO find out how is m_dxL and m_dyT taken into account
+        xmlWriter->addAttributePt("svg:x", (float)columnStart(cell->sheet(),picture->m_colL) /*picture->m_dxL*/);
+        xmlWriter->addAttributePt("svg:y", (float)rowStart(cell->sheet(),picture->m_rwT) /*picture->m_dyT*/);
+//         xmlWriter->addAttributePt("svg:width", (float)columnDistance(cell->sheet(),picture->m_colL,picture->m_colR) /*picture->m_dxR*/);
         xmlWriter->addAttribute("svg:width", QString::number(columnWidth(cell->sheet(),picture->m_colR-picture->m_colL,picture->m_dxR))+"pt");
+        //NOTE this call introduces a crash when we load ms03_intranet_picture_pos.xls
+//         xmlWriter->addAttributePt("svg:height", (float)rowDistance(cell->sheet(),picture->m_rwT,picture->m_rwB) /*picture->m_dyB*/);
         xmlWriter->addAttribute("svg:height", QString::number(rowHeight(cell->sheet(),picture->m_rwB-picture->m_rwT,picture->m_dyB))+"pt");
         xmlWriter->startElement("draw:image");
         xmlWriter->addAttribute("xlink:href", picture->m_filename.c_str());
@@ -1399,10 +1437,14 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = string(cell->sheet()->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
-        c->m_x = columnWidth(cell->sheet(),drawobj->m_colL,drawobj->m_dxL);
-        c->m_y = rowHeight(cell->sheet(),drawobj->m_rwT,drawobj->m_dyT);
+
+        //TODO find out how is m_dxL and m_dyT taken into account
+        c->m_x = columnStart(cell->sheet(),drawobj->m_colL) /*drawobj->m_dxL */;
+        c->m_y = rowStart(cell->sheet(),drawobj->m_rwT) /*+ drawobj->m_dyT*/;
+        //TODO columnDistance seems wrong, find out why
+//         c->m_width = columnDistance(cell->sheet(),drawobj->m_colL,drawobj->m_colR);//drawobj->m_dxR
         c->m_width = columnWidth(cell->sheet(),drawobj->m_colR-drawobj->m_colL,drawobj->m_dxR);
-        c->m_height = rowHeight(cell->sheet(),drawobj->m_rwB-drawobj->m_rwT,drawobj->m_dyB);
+        c->m_height = rowDistance(cell->sheet(),drawobj->m_rwT,drawobj->m_rwB); //drawobj->m_dyB
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = string(cell->sheet()->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
