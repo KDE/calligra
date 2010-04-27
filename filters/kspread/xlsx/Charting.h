@@ -80,17 +80,32 @@ namespace Charting
     class PieImpl : public ChartImpl
     {
     public:
-        /// starting angle of the first data point clockwise from the top of the circle
+        /// Starting angle of the first data point clockwise from the top of the circle.
         int m_anStart;
-        unsigned int m_pcDonut;
-        PieImpl(int anStart = 0, unsigned int pcDonut = 0) : ChartImpl(), m_anStart(anStart), m_pcDonut(pcDonut) {}
+        PieImpl(int anStart = 0) : ChartImpl(), m_anStart(anStart) {}
         virtual QByteArray name() const { return "circle"; }
+    };
+
+    class RingImpl : public PieImpl
+    {
+    public:
+        /// Size of the center hole in a doughnut chart group as a percentage of the plot area size.
+        int m_pcDonut;
+        RingImpl(int anStart = 0, int pcDonut = 0) : PieImpl(anStart), m_pcDonut(pcDonut) {}
+        virtual QByteArray name() const { return "ring"; }
     };
 
     class BarImpl : public ChartImpl
     {
     public:
         virtual QByteArray name() const { return "bar"; }
+    };
+
+    class AreaImpl : public ChartImpl
+    {
+    public:
+        AreaImpl() : ChartImpl() {}
+        virtual QByteArray name() const { return "area"; }
     };
 
     class Obj

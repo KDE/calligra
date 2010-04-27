@@ -104,7 +104,9 @@ private:
     void handleLegend(LegendRecord *);
     void handleAxesUsed(AxesUsedRecord *);
     void handleAxisParent(AxisParentRecord *);
-    void handlePie(PieRecord *record);
+    void handlePie(PieRecord *);
+    void handleBar(BarRecord *);
+    void handleArea(AreaRecord *);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);

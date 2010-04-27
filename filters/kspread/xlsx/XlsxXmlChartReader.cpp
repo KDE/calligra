@@ -186,7 +186,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             TRY_READ_IF(ser)
             ELSE_TRY_READ_IF(pieChart)
             ELSE_TRY_READ_IF(pie3DChart)
+            ELSE_TRY_READ_IF(doughnutChart)
+            ELSE_TRY_READ_IF(areaChart)
             ELSE_TRY_READ_IF(firstSliceAng)
+            ELSE_TRY_READ_IF(holeSize)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -359,12 +362,46 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
     return KoFilter::OK;
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL doughnutChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_doughnutChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::RingImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL areaChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::AreaImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL firstSliceAng
 KoFilter::ConversionStatus XlsxXmlChartReader::read_firstSliceAng()
 {
     if(Charting::PieImpl* pie = dynamic_cast<Charting::PieImpl*>(m_context->m_chart->m_impl)) {
         const QXmlStreamAttributes attrs(attributes());
         TRY_READ_ATTR(val)
         pie->m_anStart = val.toInt(); // default value is zero
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL holeSize
+KoFilter::ConversionStatus XlsxXmlChartReader::read_holeSize()
+{
+    if(Charting::RingImpl* ring = dynamic_cast<Charting::RingImpl*>(m_context->m_chart->m_impl)) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR(val)
+        ring->m_pcDonut = val.toInt(); // default value is zero
     }
     return KoFilter::OK;
 }

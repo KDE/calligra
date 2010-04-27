@@ -196,6 +196,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleBRAI(static_cast<BRAIRecord*>(record));
     else if (type == PieRecord::id)
         handlePie(static_cast<PieRecord*>(record));
+    else if (type == BarRecord::id)
+        handleBar(static_cast<BarRecord*>(record));
+    else if (type == AreaRecord::id)
+        handleArea(static_cast<AreaRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -386,9 +390,7 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
 {
     if(!record) return;
     DEBUG << std::endl;
-
-    if (m_chart->m_impl == 0 )
-        m_chart->m_impl = new Charting::BarImpl;//(record->anStart(), record->pcDonut());
+    //TODO
 }
 
 // specifies that chart is rendered in 3d scene
@@ -411,7 +413,6 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
-    //TODO
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
@@ -538,7 +539,24 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
     if(!record) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
-    m_chart->m_impl = new Charting::PieImpl(record->anStart(), record->pcDonut());
+    if(record->pcDonut() > 0)
+        m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
+    else
+        m_chart->m_impl = new Charting::PieImpl(record->anStart());
+}
+
+// specifies that the chartgroup is a bar chart
+void ChartSubStreamHandler::handleBar(BarRecord *record)
+{
+    if(!record) return;
+    m_chart->m_impl = new Charting::BarImpl();
+}
+
+// specifies that the chartgroup is a area chart
+void ChartSubStreamHandler::handleArea(AreaRecord* record)
+{
+    if(!record) return;
+    m_chart->m_impl = new Charting::AreaImpl();
 }
 
 // type of data contained in the Number records following
@@ -590,7 +608,7 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
         case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
         case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
         case ObjectLinkRecord::SeriesOrDatapoints: {
-            if(record->wLinkVar1() < 0 || record->wLinkVar1() >= m_chart->m_series.count()) return;
+            if((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
             //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
             if(record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;
