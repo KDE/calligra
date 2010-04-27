@@ -73,10 +73,10 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     //xmlWriter->addAttribute("table:end-x", "0.2953in");
     //xmlWriter->addAttribute("table:end-y", "0.0232in");
     xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
-    xmlWriter->addAttributePt("svg:x", (float)m_x);
-    xmlWriter->addAttributePt("svg:y", (float)m_y);
-    xmlWriter->addAttributePt("svg:width", (float)m_width);
-    xmlWriter->addAttributePt("svg:height", (float)m_height);
+    xmlWriter->addAttributePt("svg:x", m_x);
+    xmlWriter->addAttributePt("svg:y", m_y);
+    xmlWriter->addAttributePt("svg:width", m_width);
+    xmlWriter->addAttributePt("svg:height", m_height);
     xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
@@ -111,8 +111,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if (!chart()->m_impl->name().isEmpty())
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
-    bodyWriter->addAttributePt("svg:width", (float)m_width);
-    bodyWriter->addAttributePt("svg:height", (float)m_height);
+    bodyWriter->addAttributePt("svg:width", m_width);
+    bodyWriter->addAttributePt("svg:height", m_height);
 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     //style.addProperty("draw:stroke", "none");
