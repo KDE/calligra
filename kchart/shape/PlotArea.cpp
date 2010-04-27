@@ -614,6 +614,13 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
 
+        if ( styleStack.hasProperty( KoXmlNS::chart, "angle-offset" ) ) {
+            bool ok;
+            const int angleOffset = styleStack.property( KoXmlNS::chart, "angle-offset" ).toInt(&ok);
+            if (ok)
+                setPieAngleOffset( angleOffset );
+        }
+
         if ( styleStack.hasProperty( KoXmlNS::chart, "three-dimensional" ) )
             setThreeD( styleStack.property( KoXmlNS::chart, "three-dimensional" ) == "true" );
 
