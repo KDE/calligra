@@ -113,7 +113,7 @@ are available.</para>
 <title>The &wordnet; tab</title>
 
 <para>The <guilabel>&wordnet;</guilabel> tab provides a user interface
-to a local installation of <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; 1.7</ulink>.
+to a local installation of <ulink url="http://wordnet.princeton.edu/">&wordnet;</ulink>.
 &wordnet; is <quote>an online lexical reference
 system whose design is inspired by current psycholinguistic theories
 of human lexical memory.</quote> The &kthesaurus; user interface offers nearly all options
@@ -121,7 +121,7 @@ which are available on the command line. It calls the <command>wn</command> bina
 which has to be in your <envar>PATH</envar>.</para>
 
 <para>To learn more about &wordnet;, please see the &wordnet; <command>man</command> pages
-or have a look at the <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; homepage</ulink>.
+or have a look at the <ulink url="http://wordnet.princeton.edu/">&wordnet; homepage</ulink>.
 </para>
 
 </chapter>
