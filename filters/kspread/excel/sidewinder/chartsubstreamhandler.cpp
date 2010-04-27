@@ -478,11 +478,9 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
-    if(!record) return;
+    if(!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
-    if(Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
-        t->m_text = string(record->text());
-    }
+    m_currentSeries->m_texts << new Charting::Text(string(record->text()));
 }
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
