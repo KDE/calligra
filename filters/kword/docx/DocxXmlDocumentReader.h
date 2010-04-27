@@ -24,11 +24,15 @@
 #ifndef DOCXXMLDOCREADER_H
 #define DOCXXMLDOCREADER_H
 
+#include <QBuffer>
+#include <QString>
+
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
 #include "DocxXmlCommentsReader.h"
 #include "DocxXmlNotesReader.h"
 
+#include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 
@@ -197,10 +201,22 @@ private:
     QString m_complexCharValue;
 
     enum ComplexCharStatus {
-       NoneAllowed, InstrAllowed, InstrExecute
+        NoneAllowed, InstrAllowed, InstrExecute
     };
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
+
+    enum DropCapStatus {
+        NoDropCap, DropCapRead, DropCapDone
+    };
+    //! State of dropCap
+    DropCapStatus m_dropCapStatus;
+
+    //! Buffer where first letters of drop cap are read
+    QBuffer m_dropCapBuffer;
+    KoXmlWriter* m_dropCapWriter;
+    QString m_dropCapLines;
+    qreal   m_dropCapDistance;
 
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()

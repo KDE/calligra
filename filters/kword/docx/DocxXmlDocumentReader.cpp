@@ -22,6 +22,7 @@
  */
 
 #include "DocxXmlDocumentReader.h"
+
 #include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
@@ -164,6 +165,9 @@ DocxXmlDocumentReader::~DocxXmlDocumentReader()
     }
     doneInternal(); // MsooXmlCommonReaderImpl.h
     delete d;
+
+    delete m_dropCapWriter;
+    m_dropCapWriter = 0;
 }
 
 void DocxXmlDocumentReader::init()
@@ -173,6 +177,8 @@ void DocxXmlDocumentReader::init()
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
     m_complexCharType = NoComplexFieldCharType;
     m_complexCharStatus = NoneAllowed;
+    m_dropCapStatus = NoDropCap;
+    m_dropCapWriter = 0;
     m_currentTableNumber = 0;
     m_objectRectInitialized = false;
 }
@@ -1156,6 +1162,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+
+        // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
+        // here we apply the status to current paragraph if previous one had dropCap
+        if (m_dropCapStatus == DropCapDone) {
+            QBuffer frameBuffer;
+            frameBuffer.open(QIODevice::WriteOnly);
+            KoXmlWriter elementWriter(&frameBuffer);
+            elementWriter.startElement("style:drop-cap");
+            elementWriter.addAttribute("style:lines", m_dropCapLines);
+            elementWriter.addAttributePt("style:distance", m_dropCapDistance);
+            elementWriter.endElement(); // style-drop-cap
+            QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
+            m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
+        }
     }
 
     while (!atEnd()) {
@@ -1272,6 +1292,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     MSOOXML::Utils::XmlWriteBuffer buffer;
     body = buffer.setWriter(body);
 
+    KoXmlWriter* oldWriter = body;
+
+    if (m_dropCapStatus == DropCapRead) {
+       m_dropCapBuffer.open(QIODevice::ReadWrite);
+       m_dropCapWriter = new KoXmlWriter(&m_dropCapBuffer);
+       body = m_dropCapWriter;
+    }
+    else if (m_dropCapStatus == DropCapDone) {
+        body->addCompleteElement(&m_dropCapBuffer);
+        delete m_dropCapWriter;
+        m_dropCapWriter = 0;
+        m_dropCapStatus = NoDropCap;
+    }
+
     while (!atEnd()) {
 //kDebug() <<"[0]";
         readNext();
@@ -1294,7 +1328,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    
+
+    if (m_dropCapStatus == DropCapRead) {
+        m_dropCapStatus = DropCapDone;
+        body = oldWriter;
+    }
+
     if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || m_complexCharType != NoComplexFieldCharType) {
         // We want to write to the higher body level
         body = buffer.originalWriter();
@@ -1629,26 +1668,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
     TRY_READ_ATTR(lines)
     TRY_READ_ATTR(hSpace)
 
-    QBuffer frameBuffer;
-    frameBuffer.open(QIODevice::WriteOnly);
-    KoXmlWriter elementWriter(&frameBuffer, 4 /*proper indentation*/);
-    elementWriter.startElement("style:drop-cap");
-    elementWriter.addAttribute("style:lines", lines);
+    // MS 2007 behaves so that it ignores text and paragraph styles
+    // in case of drop cap for the first letter(s), here we mark a variable
+    // to show we have encountered drop cap
+    if (!dropCap.isEmpty()) {
+        m_dropCapStatus = DropCapRead;
+        m_dropCapDistance = 0;
+        m_dropCapLines.clear();
+        if (!lines.isEmpty()) {
+            m_dropCapLines = lines;
+        }
 
-    if (!hSpace.isEmpty()) {
-        bool ok;
-        const qreal distance = qreal(TWIP_TO_POINT(hSpace.toDouble(&ok)));
+        if (!hSpace.isEmpty()) {
+            bool ok;
+            const qreal distance = qreal(TWIP_TO_POINT(hSpace.toDouble(&ok)));
 
-        if (ok) {
-            elementWriter.addAttributePt("style:distance", distance);
+            if (ok) {
+                m_dropCapDistance = distance;
+            }
         }
     }
-
-    elementWriter.endElement(); // style-drop-cap
-
-    QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
-    kDebug() << drop;
-    m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
 
 //! @todo more attributes
 
