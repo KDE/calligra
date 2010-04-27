@@ -29,6 +29,8 @@
 //#include "sheet.h"
 //#include <map>
 
+#include <QStack>
+
 namespace Charting
 {
     class Chart;
@@ -61,9 +63,13 @@ private:
     Sheet* m_sheet;
     ChartObject* m_chartObject;
     Charting::Chart* m_chart;
+
     Charting::Series* m_currentSeries;
     Charting::Obj* m_currentObj;
-    int m_level;
+    QStack<Charting::Obj*> m_stack;
+
+    //QMap<Charting::Obj*, int> m_defaultObjects;
+    int m_defaultTextId;
     
     void handleBOF(BOFRecord*);
     void handleEOF(EOFRecord *);
@@ -107,6 +113,8 @@ private:
     void handlePie(PieRecord *);
     void handleBar(BarRecord *);
     void handleArea(AreaRecord *);
+    void handleAxis(AxisRecord* record);
+    void handleAxisLine(AxisLineRecord* record);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);

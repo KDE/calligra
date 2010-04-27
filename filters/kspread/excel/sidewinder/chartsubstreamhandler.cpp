@@ -69,7 +69,7 @@ public:
         }
 
         if(m_value) delete m_value;
-        m_value = new Charting::Value(dataId, type, isUnlinkedFormat, numberFormat, string(formula));
+        m_value = new Charting::Value(dataId, type, string(formula), isUnlinkedFormat, numberFormat);
     }
 
 private:
@@ -84,7 +84,7 @@ const unsigned BRAIRecord::id = 0x1051;
 using namespace Swinder;
 
 ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_level(0)
+    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_defaultTextId(-1)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
@@ -200,6 +200,10 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleBar(static_cast<BarRecord*>(record));
     else if (type == AreaRecord::id)
         handleArea(static_cast<AreaRecord*>(record));
+    else if (type == AxisRecord::id)
+        handleAxis(static_cast<AxisRecord*>(record));
+    else if (type == AxisLineRecord::id)
+        handleAxisLine(static_cast<AxisLineRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -238,7 +242,7 @@ std::string whitespaces(int number)
 }
 
 #define DEBUG \
-    std::cout << whitespaces(m_level) << "ChartSubStreamHandler::" << __FUNCTION__ << " "
+    std::cout << whitespaces(m_stack.count()) << "ChartSubStreamHandler::" << __FUNCTION__ << " "
 
 void ChartSubStreamHandler::handleBOF(BOFRecord*)
 {
@@ -314,17 +318,18 @@ void ChartSubStreamHandler::handleChart(ChartRecord *record)
     m_chart->m_total_height = record->height();
 }
 
-
 // secifies the begin of a collection of records
 void ChartSubStreamHandler::handleBegin(BeginRecord *)
 {
-    ++m_level;
+    m_stack.push(m_currentObj);
 }
 
 // sepcified the end of a collection of records
 void ChartSubStreamHandler::handleEnd(EndRecord *)
 {
-    --m_level;
+    m_currentObj = m_stack.pop();
+    if(Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj))
+        m_currentSeries = series;
 }
 
 void ChartSubStreamHandler::handleFrame(FrameRecord *record)
@@ -345,38 +350,44 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
     if(!record) return;
     DEBUG << "dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
+    
     m_currentSeries = new Charting::Series;
     m_currentSeries->m_dataTypeX = record->dataTypeX();
     m_currentSeries->m_countXValues = record->countXValues();
     m_currentSeries->m_countYValues = record->countYValues();
     m_currentSeries->m_countBubbleSizeValues = record->countBubbleSizeValues();
     m_chart->m_series << m_currentSeries;
+    m_currentObj = m_currentSeries;
 }
 
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
 void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 {
     if(!record) return;
-    if(!m_currentSeries) return;
     DEBUG << "dataId=" << record->m_value->m_dataId << " type=" << record->m_value->m_type << " isUnlinkedNumberFormat=" << record->m_value->m_isUnlinkedFormat << " numberFormat=" << record->m_value->m_numberFormat << " formula=" << record->m_value->m_formula.toUtf8().constData() << std::endl;
 
-    //FIXME is that correct or do we need to take the series somehow into account to provide one cellRangeAddress per series similar to valuesCellRangeAddress?
-    //FIXME handle VerticalValues and BubbleSizeValues
-    if(!record->m_value->m_formula.isEmpty()) {
-        if(record->m_value->m_type == Charting::Value::TextOrValue || record->m_value->m_type == Charting::Value::CellRange) {
-            if(record->m_value->m_dataId == Charting::Value::HorizontalValues)
-                m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
-            else if(record->m_value->m_dataId == Charting::Value::VerticalValues)
-                m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
-            
-            //FIXME we are ignoring the sheetname here but we probably should handle the case where a series is made from different sheets...
-            QPair<QString,QRect> result = splitCellRange( record->m_value->m_formula );
-            m_chart->addRange(result.second);
+    if(m_currentSeries) {
+        //FIXME is that correct or do we need to take the series somehow into account to provide one cellRangeAddress per series similar to valuesCellRangeAddress?
+        //FIXME handle VerticalValues and BubbleSizeValues
+        if(!record->m_value->m_formula.isEmpty()) {
+            if(record->m_value->m_type == Charting::Value::TextOrValue || record->m_value->m_type == Charting::Value::CellRange) {
+                if(record->m_value->m_dataId == Charting::Value::HorizontalValues)
+                    m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
+                else if(record->m_value->m_dataId == Charting::Value::VerticalValues)
+                    m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
+                
+                //FIXME we are ignoring the sheetname here but we probably should handle the case where a series is made from different sheets...
+                QPair<QString,QRect> result = splitCellRange( record->m_value->m_formula );
+                m_chart->addRange(result.second);
+            }
+        }
+
+        //FIXME is it ok to only accept the first or should we merge them somehow?
+        if(!m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
+            m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
+            record->m_value = 0; // take over ownership
         }
     }
-
-    m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
-    record->m_value = 0; //take over ownership
 }
 
 void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
@@ -389,7 +400,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
 void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record)
 {
     if(!record) return;
-    DEBUG << std::endl;
+    DEBUG << "riser=" << record->riser() << " taper=" << record->taper() << std::endl;
     //TODO
 }
 
@@ -460,20 +471,32 @@ void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 }
 
 // specifies the text elements that are formatted using the information specified by the Text record
-// immediately following this record.
+// immediately following this record. The identifier is one of;
+//   * 0x0000 Format all Text records in the chart group where fShowPercent is equal to 0 or
+//     fShowValue is equal to 0.
+//   * 0x0001 Format all Text records in the chart group where fShowPercent is equal to 1 or
+//     fShowValue is equal to 1.
+//   * 0x0002 Format all Text records in the chart where the value of fScalable of the associated
+//     FontInfo structure is equal to 0.
+//   * 0x0003 Format all Text records in the chart where the value of fScalable of the associated
+//     FontInfo structure is equal to 1.
 void ChartSubStreamHandler::handleDefaultText(DefaultTextRecord *record)
 {
     if(!record) return;
     DEBUG << "id=" << record->identifier() << std::endl;
-    //TODO
+    m_defaultTextId = record->identifier();
 }
 
 // specifies the properties of an attached label
 void ChartSubStreamHandler::handleText(TextRecord *record)
 {
-    if(!record) return;
-    DEBUG << std::endl;
+    if(!record || record->isFDeleted()) return;
+    DEBUG << "at=" << record->at() << " vat=" << record->vat() << " x=" << record->x() << " y=" << record->y() << " dx=" << record->dx() << " dy=" << record->dy() << " fShowKey=" << record->isFShowKey() << " fShowValue=" << record->isFShowValue() << std::endl;
     m_currentObj = new Charting::Text;
+    if(m_defaultTextId >= 0) {  
+        //m_defaultObjects[m_currentObj] = m_defaultTextId;
+        m_defaultTextId = -1;
+    }
 }
 
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
@@ -515,6 +538,7 @@ void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
+    m_currentObj = new Charting::Legend();
     //TODO
 }
 
@@ -556,6 +580,20 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if(!record || m_chart->m_impl) return;
     m_chart->m_impl = new Charting::AreaImpl();
+}
+
+void ChartSubStreamHandler::handleAxis(AxisRecord* record)
+{
+    if(!record) return;
+    DEBUG << "wType=" << record->wType() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
+{
+    if(!record) return;
+    DEBUG << "identifier=" << record->identifier() << std::endl;
+    //TODO
 }
 
 // type of data contained in the Number records following
@@ -604,8 +642,12 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
         case ObjectLinkRecord::EntireChart: {
             m_chart->m_texts << t;
         } break;
-        case ObjectLinkRecord::ValueOrVerticalAxis: break; //TODO
-        case ObjectLinkRecord::CategoryOrHorizontalAxis: break; //TODO
+        case ObjectLinkRecord::ValueOrVerticalAxis:
+            //TODO
+            break;
+        case ObjectLinkRecord::CategoryOrHorizontalAxis:
+            //TODO
+            break;
         case ObjectLinkRecord::SeriesOrDatapoints: {
             if((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
             //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];

@@ -62,7 +62,27 @@
 -->
 
 <!-- future record info -->
-<record name="ChartFrtInfo" id="0x089e"/>
+<!-- <record name="ChartFrtInfo" id="0x089e"/> -->
+<record name="ChartFrtInfo" id="0x850"/>
+
+<record name="DataLabelExtContents" id="0x86B">
+  <field name="rt" type="unsigned" size="16" />
+  <field name="grbitFrt" type="unsigned" size="16" />
+  <field name="reserved" type="unsigned" size="64" />
+  <field name="fSerName" type="bool" size="1" />
+  <field name="fCatName" type="bool" size="1" />
+  <field name="fValue" type="bool" size="1" />
+  <field name="fPercent" type="bool" size="1" />
+  <field name="fBubSize" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="11" />
+  <!--TODO
+  rgchSep (variable): A case-sensitive XLUnicodeStringMin2 structure that specifies the string
+    that is inserted between every data value to form the extended data label. For example, if
+    fCatName and fValue are set to 1, the labels will look like ―Category Name<value of
+    rgchSep>Data Value‖. The length of the string is contained in the cch field of the
+    XLUnicodeStringMin2 structure.
+  -->
+</record>
 
 <record name="ChartLayout12A" id="0x08a7">
   <field name="rt" type="unsigned" size="16" />
@@ -488,6 +508,34 @@
 </record>
 
 <record name="LineFormat" id="0x1007">
+   <field name="red" type="unsigned" size="8" />
+   <field name="green" type="unsigned" size="8" />
+   <field name="blue" type="unsigned" size="8" />
+   <field name="reserved" type="bool" size="8" />
+   <field name="red" type="unsigned" size="8" />
+   <field name="lns" type="unsigned" size="16">
+        <enum name="Solid" value="0x0000" />
+        <enum name="Dash" value="0x0001" />
+        <enum name="Dot" value="0x0002" />
+        <enum name="DashDot" value="0x0003" />
+        <enum name="DashDotDot" value="0x0004" />
+        <enum name="None" value="0x0005" />
+        <enum name="DarkGrayPattern" value="0x0006" />
+        <enum name="MediumGrayPattern" value="0x0007" />
+        <enum name="LightGrayPattern" value="0x0008" />
+   </field>
+   <field name="we" type="unsigned" size="16">
+        <enum name="Hairline" value="0xFFFF" />
+        <enum name="NarrowSingle" value="0x0000" />
+        <enum name="MediumDouble" value="0x0001" />
+        <enum name="WideTriple" value="0x0002" />
+   </field>
+   <field name="fAuto" type="bool" size="1" />
+   <field name="reserved1" type="bool" size="1" />
+   <field name="fAxisOn" type="bool" size="1" />
+   <field name="fAutoCo" type="bool" size="1" />
+   <field name="reserved2" type="unsigned" size="12" />
+   <field name="icv" type="unsigned" size="16" />
 </record>
 
 <record name="MarkerFormat" id="0x1009">
@@ -571,6 +619,7 @@
 </record>
 
 <record name="Axis" id="0x101d">
+  <field name="wType" type="unsigned" size="16" />
 </record>
 
 <record name="Tick" id="0x101e">
@@ -582,7 +631,22 @@
 <record name="CatSerRange" id="0x1020">
 </record>
 
+<record name="CrtLayout12" id="0x89D">
+</record>
+
+<record name="CrtMlFrt" id="0x89E">
+</record>
+
+<record name="CatLab" id="0x856">
+</record>
+
 <record name="AxisLine" id="0x1021">
+  <field name="identifier" type="unsigned" size="16">
+    <enum name="AxisItself" value="0x0000" />
+    <enum name="MajorGridlinesAlongTheAxis" value="0x0001" />
+    <enum name="MinorGridlinesAlongTheAxis" value="0x0002" />
+    <enum name="WallsAndFloorsOf3DChart" value="0x0003" />
+  </field>
 </record>
 
 <record name="CrtLink" id="0x1022"/>

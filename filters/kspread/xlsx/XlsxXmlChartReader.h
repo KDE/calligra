@@ -78,8 +78,7 @@ protected:
     KoFilter::ConversionStatus read_areaChart();
     KoFilter::ConversionStatus read_val();
     KoFilter::ConversionStatus read_cat();
-    KoFilter::ConversionStatus read_serTx();
-    KoFilter::ConversionStatus read_chartTx();
+    KoFilter::ConversionStatus read_tx();
     KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
     KoFilter::ConversionStatus read_holeSize();
@@ -89,8 +88,6 @@ private:
     Charting::Series *m_currentSeries;
     QString m_cellRangeAddress;
     bool m_autoTitleDeleted;
-    
-    QString readText();
 };
 
 #endif
