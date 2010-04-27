@@ -1,5 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -443,7 +444,7 @@ Column::Column(Sheet* sheet, unsigned index)
     d = new Column::Private;
     d->sheet   = sheet;
     d->index   = index;
-    //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+    //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
     //it's not completely accurate (for that we need to know 256 of the width of the current font),
     //but seems to be good enough
     d->width   = 2560.0 / 120.0 / 31.0 * 72.0;
@@ -522,7 +523,7 @@ Row::Row(Sheet* sheet, unsigned index)
     d = new Row::Private;
     d->sheet   = sheet;
     d->index   = index;
-    d->height  = 10;
+    d->height  = 12;
     d->visible = true;
 }
 

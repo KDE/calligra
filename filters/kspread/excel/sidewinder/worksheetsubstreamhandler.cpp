@@ -2,6 +2,7 @@
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006,2009 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
+   Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -436,7 +437,7 @@ void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
     for (unsigned i = firstColumn; i <= lastColumn; i++) {
         Column* column = d->sheet->column(i, true);
         if (column) {
-            //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+            //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
             //it's not completely accurate (for that we need to know 256 of the width of the current font),
             //but seems to be good enough
             column->setWidth((double)width / 120.0 / 31.0 * 72.0);

@@ -2,6 +2,7 @@
  * This file is part of Office 2007 Filters for KOffice
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
+ * Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com

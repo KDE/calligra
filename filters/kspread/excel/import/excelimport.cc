@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
-   Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+   Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
    Contact: Manikandaprasad Chandrasekar <manikandaprasad.chandrasekar@nokia.com>
+   Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -180,7 +181,7 @@ public:
     void processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
     QString processCellFormat(Format* format, const QString& formula = QString());
-    QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, int rowHeight = -1);
+    QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, double rowHeight = -1);
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
@@ -1556,7 +1557,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
 }
 
 // Processes styles for a row within a sheet.
-QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, int rowHeight)
+QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, double rowHeight)
 {
     QString refName;
     QString valueFormat = string(format->valueFormat());
@@ -1821,7 +1822,7 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 void ExcelImport::Private::createDefaultColumnStyle() {
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
     style.addProperty("fo:break-before", "auto");
-    //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+    //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
     //it's not completely accurate (for that we need to know 256 of the width of the current font),
     //but seems to be good enough
     style.addPropertyPt("style:column-width", 2560.0 / 120.0 / 31.0 * 72.0 );
