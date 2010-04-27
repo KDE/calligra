@@ -187,7 +187,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(pie3DChart)
             ELSE_TRY_READ_IF(doughnutChart)
             ELSE_TRY_READ_IF(areaChart)
+            ELSE_TRY_READ_IF(area3DChart)
             ELSE_TRY_READ_IF(barChart)
+            ELSE_TRY_READ_IF(bar3DChart)
+            ELSE_TRY_READ_IF(lineChart)
+            ELSE_TRY_READ_IF(line3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
@@ -297,7 +301,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
 {
     READ_PROLOGUE
-    enum State { Start, InStrRef, InRichText } state;
+    enum { Start, InStrRef, InRichText } state;
     state = Start;
     while (!atEnd()) {
         readNext();
@@ -320,7 +324,35 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 }
                 break;
             case InRichText: // richtext means the title text
-                m_currentSeries->m_texts << new Charting::Text(readElementText());
+                // we extract the text from the richtext cause we cannot handle the richtext formattings anyway
+                QString result;
+                enum { Rich, Paragraph, TextRun } s;
+                s = Rich;
+                while (!atEnd()) {
+                    readNext();
+                    switch(s) {
+                        case Rich:
+                            if (isStartElement() && qualifiedName() == QLatin1String("a:p")) s = Paragraph;
+                            break;
+                        case Paragraph:
+                            if (qualifiedName() == QLatin1String("a:r")) // text run
+                            s = isStartElement() ? TextRun : Rich;
+                        break;
+                        case TextRun:
+                            if (qualifiedName() == QLatin1String("a:t")) {
+                                if(isStartElement()) {
+                                    if(!result.isEmpty()) result += ' '; //concat multiple strings into one result
+                                    result += readElementText();
+                                } else
+                                    s = Paragraph;
+                            }
+                            break;
+                    }
+                    BREAK_IF_END_OF(rich);
+                }
+                if(!result.isEmpty())
+                    m_context->m_chart->m_texts << new Charting::Text(result);
+                state = Start;
                 break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -399,11 +431,54 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL area3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::AreaImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL barChart
 KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
 {
     if(!m_context->m_chart->m_impl) {
         m_context->m_chart->m_impl = new Charting::BarImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bar3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::BarImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lineChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::LineImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL line3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::LineImpl();
+        m_context->m_chart->m_is3d = true;
     }
     return KoFilter::OK;
 }
@@ -424,8 +499,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_grouping()
 {
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(val)
-    m_context->m_chart->m_stacked = (val == "stacked");
-    m_context->m_chart->m_f100 = (val == "percentStacked");
+    if(val == "stacked") {
+        m_context->m_chart->m_stacked = true;
+    } else if(val == "percentStacked") {
+        m_context->m_chart->m_stacked = true;
+        m_context->m_chart->m_f100 = true;
+    } else if(val == "clustered") {
+        //TODO
+    } // else if(val == "standard") is not needed cause that's the default anyway
     return KoFilter::OK;
 }
 

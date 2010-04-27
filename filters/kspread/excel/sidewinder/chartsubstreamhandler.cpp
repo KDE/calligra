@@ -210,6 +210,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleBar(static_cast<BarRecord*>(record));
     else if (type == AreaRecord::id)
         handleArea(static_cast<AreaRecord*>(record));
+    else if (type == LineRecord::id)
+        handleLine(static_cast<LineRecord*>(record));
     else if (type == AxisRecord::id)
         handleAxis(static_cast<AxisRecord*>(record));
     else if (type == AxisLineRecord::id)
@@ -611,6 +613,18 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
     if(!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::AreaImpl();
+    m_chart->m_stacked = record->isFStacked();
+    m_chart->m_f100 = record->isF100();
+}
+
+// specifies that the chartgroup is a line chart
+void ChartSubStreamHandler::handleLine(LineRecord* record)
+{
+    if(!record || m_chart->m_impl) return;
+    DEBUG << std::endl;
+    m_chart->m_impl = new Charting::LineImpl();
+    m_chart->m_stacked = record->isFStacked();
+    m_chart->m_f100 = record->isF100();
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)

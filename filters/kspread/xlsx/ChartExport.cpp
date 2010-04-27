@@ -210,6 +210,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int countXAxis = 0;
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
+        //TODO handle series-axis
+        if(axis->m_type == Charting::Axis::SeriesAxis) continue;
+
         bodyWriter->startElement("chart:axis");
         switch(axis->m_type) {
             case Charting::Axis::HorizontalValueAxis:
@@ -218,16 +221,14 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 break;
             case Charting::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "x");
-                if(countXAxis == 0 && !verticalCellRangeAddress.isEmpty()) {
+                bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
+                if(countXAxis == 1 && !verticalCellRangeAddress.isEmpty()) {
                     bodyWriter->startElement("chart:categories");
                     bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
                     bodyWriter->endElement();
                 }
-                bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
                 break;
-            case Charting::Axis::SeriesAxis:
-                //TODO what is a series-axis / how does it differ to the other axes?
-                break;
+            default: break;
         }
         if(axis->m_majorGridlines.m_format.m_style != Charting::LineFormat::None) {
             bodyWriter->startElement("chart:grid");

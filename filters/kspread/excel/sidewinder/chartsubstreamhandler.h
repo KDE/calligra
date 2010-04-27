@@ -114,6 +114,7 @@ private:
     void handlePie(PieRecord *);
     void handleBar(BarRecord *);
     void handleArea(AreaRecord *);
+    void handleLine(LineRecord *);
     void handleAxis(AxisRecord* record);
     void handleAxisLine(AxisLineRecord* record);
     void handleSIIndex(SIIndexRecord *);
