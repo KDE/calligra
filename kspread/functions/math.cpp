@@ -505,12 +505,20 @@ Value func_logn(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args [0].isError())
         return args [0];
-    if ((args [0].isNumber() == false) || (args[0].asFloat() <= 0))
+    if (args [0].isEmpty())
+        return Value::errorNUM();
+    if (args [0].isNumber() == false)
+        return Value::errorVALUE();
+    if (args[0].asFloat() <= 0)
         return Value::errorNUM();
     if (args.count() == 2) {
         if (args [1].isError())
             return args [1];
+        if (args [1].isEmpty())
+            return Value::errorNUM();
         if (args [1].isNumber() == false)
+            return Value::errorVALUE();
+        if (args [1].asFloat() <= 0)
             return Value::errorNUM();
         return calc->log(args[0], args[1]);
     } else
