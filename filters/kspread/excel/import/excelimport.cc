@@ -63,32 +63,32 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
 }
 
-float offset( unsigned long dimension, unsigned long offset ) {
+qreal offset( unsigned long dimension, unsigned long offset ) {
     return (float)dimension * (float)offset / 1024.0;
 }
 
-float columnStart(Sheet* sheet, unsigned long col) {
+qreal columnStart(Sheet* sheet, unsigned long col) {
     double columnStart = 0;
     for( int i = 0; i < col; ++i )
         columnStart += sheet->column(i)->width();
     return columnStart;
 }
 
-float rowStart(Sheet* sheet, unsigned long row) {
+qreal rowStart(Sheet* sheet, unsigned long row) {
     double rowStart = 0;
     for( int i = 0; i < row; ++i )
         rowStart += sheet->row(i)->height();
     return rowStart;
 }
 
-float columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
+qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
     double columnDistance = 0.0;
     for( unsigned long i = col1; i < col2; ++i )
         columnDistance += sheet->column(i)->width();
     return columnDistance;
 }
 
-float rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
+qreal rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
     double rowDistance = 0.0;
     for( unsigned long i = row1; i < row2; ++i )
         rowDistance += sheet->row(i)->height();
@@ -185,6 +185,9 @@ public:
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style);
     void processCharts(KoXmlWriter* manifestWriter);
+
+    void createDefaultColumnStyle();
+    QString defaultColumnStyleName;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -736,6 +739,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
     if (columnCount < minimumColumnCount-1) {
         xmlWriter->startElement("table:table-column");
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
         xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - columnCount);
         xmlWriter->endElement();
     }
@@ -771,6 +775,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     QString styleName = styles->insert(style, "ta");
     sheetStyles.append(styleName);
 
+    createDefaultColumnStyle();
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
     for (unsigned i = 0; i <= columnCount; ++i) {
         processColumnForStyle(sheet, i, xmlWriter);
@@ -906,6 +911,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     if (!xmlWriter) return;
     if (!column) {
         xmlWriter->startElement("table:table-column");
+        xmlWriter->addAttribute("table:style-name", defaultColumnStyleName);
         xmlWriter->endElement();
         return;
     }
@@ -1810,4 +1816,15 @@ QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
     }
 
     return styles->insert( style, "N" );
+}
+
+void ExcelImport::Private::createDefaultColumnStyle() {
+    KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
+    style.addProperty("fo:break-before", "auto");
+    //Magic number, the unit is aproximately 120*27 of an inch, then there are 72 pts in an inch
+    //it's not completely accurate (for that we need to know 256 of the width of the current font),
+    //but seems to be good enough
+    style.addPropertyPt("style:column-width", 2560.0 / 120.0 / 31.0 * 72.0 );
+
+    defaultColumnStyleName = styles->insert(style, "co");
 }
