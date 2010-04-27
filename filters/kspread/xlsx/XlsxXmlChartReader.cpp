@@ -29,6 +29,7 @@
 
 #include "Charting.h"
 #include "ChartExport.h"
+#include "Utils.h"
 
 #define MSOOXML_CURRENT_NS "c"
 #define MSOOXML_CURRENT_CLASS XlsxXmlChartReader
@@ -187,6 +188,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
 
 #undef CURRENT_EL
 #define CURRENT_EL ser
+/*! Read the series. */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
 {
     READ_PROLOGUE
@@ -202,8 +204,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(val)
-            //ELSE_TRY_READ_IF(idx)
-            //ELSE_TRY_READ_IF(order)
+            ELSE_TRY_READ_IF(cat)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -213,6 +214,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
 
 #undef CURRENT_EL
 #define CURRENT_EL val
+/*! Read the horizontal value. */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
 {
     READ_PROLOGUE
@@ -222,6 +224,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
             TRY_READ_IF(numCache)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
                 m_currentSeries->m_valuesCellRangeAddress = readElementText();
+                QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
+                m_context->m_chart->addRange( result.second );
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cat
+/*! Read the vertical category value. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
+                m_context->m_chart->m_verticalCellRangeAddress = readElementText();
+                QPair<QString,QRect> result = splitCellRange( m_context->m_chart->m_verticalCellRangeAddress );
+                m_context->m_chart->addRange( result.second );
             }
         }
         BREAK_IF_END_OF(CURRENT_EL);

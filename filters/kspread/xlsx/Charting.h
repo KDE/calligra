@@ -137,17 +137,6 @@ namespace Charting
     class Chart
     {
     public:
-#if 0
-        /// anchored to sheet
-        QString m_sheetName;
-        /// anchored to cell
-        //unsigned long m_colL, m_rwT;
-        
-        QString m_href;
-        QString m_endCellAddress;
-        QString m_x, m_y, m_width, m_height;
-        QString m_notifyOnUpdateOfRanges;
-#endif
         /// Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
         int m_total_x, m_total_y, m_total_width, m_total_height;
 
@@ -169,8 +158,26 @@ namespace Charting
         /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
         ChartImpl *m_impl;
 
-        explicit Chart() : /*m_colL(0), m_rwT(0),*/ m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0) {}
+        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0) {}
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; }
+        
+        void addRange(const QRect& range)
+        {
+            if (range.isValid()) {
+                if (m_cellRangeAddress.isValid()) {
+                    if (range.left() < m_cellRangeAddress.left())
+                        m_cellRangeAddress.setLeft(range.left());
+                    if (range.top() < m_cellRangeAddress.top())
+                        m_cellRangeAddress.setTop(range.top());
+                    if (range.right() > m_cellRangeAddress.right())
+                        m_cellRangeAddress.setRight(range.right());
+                    if (range.bottom() > m_cellRangeAddress.bottom())
+                        m_cellRangeAddress.setBottom(range.bottom());
+                } else {
+                    m_cellRangeAddress = range;
+                }
+            }
+        }
     };
 
 } // namespace Charting
