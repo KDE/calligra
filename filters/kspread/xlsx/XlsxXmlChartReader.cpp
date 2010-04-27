@@ -85,6 +85,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
     , m_context(0)
     , m_currentSeries(0)
+    , m_autoTitleDeleted(false)
 {
 }
 
@@ -121,6 +122,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         if (isStartElement()) {
             TRY_READ_IF(plotArea)
             ELSE_TRY_READ_IF(legend)
+
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                m_autoTitleDeleted = val.toInt();
+            }
         }
     }
 
@@ -205,6 +212,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         if (isStartElement()) {
             TRY_READ_IF(val)
             ELSE_TRY_READ_IF(cat)
+            if  (!m_autoTitleDeleted)
+                TRY_READ_IF(tx)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -254,6 +263,46 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
                 QPair<QString,QRect> result = splitCellRange( m_context->m_chart->m_verticalCellRangeAddress );
                 m_context->m_chart->addRange( result.second );
             }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tx
+/*! This element specifies text to use on a chart, including rich text formatting. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
+{
+    enum State { Start, InStrRef, InRichText } state;
+    state = Start;
+
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        switch(state) {
+            case Start:
+                if (qualifiedName() == QLatin1String(QUALIFIED_NAME(strRef)))
+                    state = isStartElement() ? InStrRef : Start;
+                else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(rich)))
+                    state = isStartElement() ? InRichText : Start;
+                break;
+            case InStrRef:
+                if (isStartElement()) {
+                    if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
+                        //TODO handle formulas that references to a cell that contains the text. Such
+                        //functionality is not supported by ODF 1.2.
+                    } else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(v))) {
+                        //TODO handle other text's then the title text too
+                        Charting::Text* t = new Charting::Text;
+                        t->m_text = readElementText();
+                        m_context->m_chart->m_texts << t;
+                    }
+                }
+                break;
+            case InRichText:
+                //TODO
+                break;
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
