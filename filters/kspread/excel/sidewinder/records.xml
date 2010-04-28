@@ -619,6 +619,12 @@
 </record>
 
 <record name="Scatter" id="0x101b">
+  <field name="pcBubbleSizeRatio" type="unsigned" size="16" />
+  <field name="wBubbleSize" type="unsigned" size="16" />
+  <field name="fBubbles" type="bool" size="1" />
+  <field name="fShowNegBubbles" type="bool" size="1" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="13" />
 </record>
 
 <record name="Axis" id="0x101d">

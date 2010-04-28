@@ -139,6 +139,28 @@ namespace Charting
         AreaImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "area"; }
     };
+    
+    class ScatterImpl : public ChartImpl
+    {
+    public:
+        ScatterImpl() : ChartImpl() {}
+        virtual QByteArray name() const { return "scatter"; }
+    };
+
+    class BubbleImpl : public ChartImpl
+    {
+    public:
+        enum SizeType {
+            Area = 0x0001, ///< The area of the data point represents the value.
+            Width = 0x0002 ///< The width of the data point represents the value.
+        };
+        /// Specifies how the default size of the data points represents the value.
+        SizeType m_sizeType;
+        /// The size of the data points as a percentage of their default size. A value of 100 shows all the data points in their default size, as determined by the application.
+        unsigned int m_sizeRatio;
+        BubbleImpl(SizeType sizeType, unsigned int sizeRatio = 100) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio) {}
+        virtual QByteArray name() const { return "bubble"; }
+    };
 
     class Obj
     {

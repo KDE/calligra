@@ -213,6 +213,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleArea(static_cast<AreaRecord*>(record));
     else if (type == LineRecord::id)
         handleLine(static_cast<LineRecord*>(record));
+    else if (type == ScatterRecord::id)
+        handleScatter(static_cast<ScatterRecord*>(record));
     else if (type == AxisRecord::id)
         handleAxis(static_cast<AxisRecord*>(record));
     else if (type == AxisLineRecord::id)
@@ -626,6 +628,17 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
     m_chart->m_impl = new Charting::LineImpl();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
+}
+
+// specifies that the chartgroup is a scatter chart
+void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
+{
+    if(!record || m_chart->m_impl) return;
+    DEBUG << std::endl;
+    if(record->isFBubbles())
+        m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio());
+    else
+        m_chart->m_impl = new Charting::ScatterImpl();
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)

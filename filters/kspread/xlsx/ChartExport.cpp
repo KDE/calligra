@@ -192,6 +192,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
+
     if(!m_cellRangeAddress.isEmpty()) {
         bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
     }
@@ -208,6 +209,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //bodyWriter->addAttribute("svg:width", "6.712cm"); //FIXME
     //bodyWriter->addAttribute("svg:height", "6.58cm"); //FIXME
 
+    const bool definesCategories = chart()->m_impl->name() != "scatter"; // scatter charts are using domains
     int countXAxis = 0;
     int countYAxis = 0;
     foreach(Charting::Axis* axis, chart()->m_axes) {
@@ -223,7 +225,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             case Charting::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "x");
                 bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
-                if(countXAxis == 1 && !verticalCellRangeAddress.isEmpty()) {
+                if(countXAxis == 1 && definesCategories && !verticalCellRangeAddress.isEmpty()) {
                     bodyWriter->startElement("chart:categories");
                     bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
                     bodyWriter->endElement();
@@ -247,7 +249,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->startElement("chart:axis");
         bodyWriter->addAttribute("chart:dimension", "x");
         bodyWriter->addAttribute("chart:name", "primary-x");
-        if(!verticalCellRangeAddress.isEmpty()) {
+        if(definesCategories && !verticalCellRangeAddress.isEmpty()) {
             bodyWriter->startElement("chart:categories");
             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
             bodyWriter->endElement();
@@ -313,6 +315,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         if(!valuesCellRangeAddress.isEmpty())
             bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
 
+        if(chart()->m_impl->name() == "scatter") {
+            bodyWriter->startElement("chart:domain");
+            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+            bodyWriter->endElement();
+        }
+        
         for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
