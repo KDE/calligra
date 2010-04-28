@@ -30,7 +30,7 @@
 
 #include "Charting.h"
 #include "ChartExport.h"
-#include "Utils.h"
+#include "XlsxUtils.h"
 
 #define MSOOXML_CURRENT_NS "c"
 #define MSOOXML_CURRENT_CLASS XlsxXmlChartReader
