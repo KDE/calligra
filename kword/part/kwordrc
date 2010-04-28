@@ -1,7 +1,7 @@
 [koffice]
 ColorSpaceExtensionsPluginsDisabled=krita_colorspaces_extensions
 ColorSpacePluginsDisabled=kolcmsengine,kritakscolorspacesplugin
-FlakePluginsDisabled=emfshape,formulashape,kexirelationdesignshape,vectorshape
+FlakePluginsDisabled=kexirelationdesignshape
 TextEditingPluginsDisabled=thesaurustool
 ShapePluginsDisabled=kritashape,videoshape
 TextVariablePluginsDisabled=kprvariables
