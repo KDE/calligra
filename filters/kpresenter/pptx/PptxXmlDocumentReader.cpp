@@ -47,14 +47,11 @@ class PptxXmlDocumentReader::Private
 {
 public:
     Private()
-            : slideNumber(0)
-            , slideReader(0) {
+            : slideNumber(0) {
     }
     ~Private() {
-        delete slideReader;
     }
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
-    PptxXmlSlideReader *slideReader;
 private:
 };
 
@@ -82,8 +79,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     Q_ASSERT(m_context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
-        return KoFilter::OK;
     return result;
 }
 
@@ -151,9 +146,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     QString path("ppt/slides");
     QString file = QString("slide%1.xml").arg(d->slideNumber);
     kDebug() << "path:" << path + "/" + file;
-    if (!d->slideReader) {
-        d->slideReader = new PptxXmlSlideReader(this);
-    }
+    PptxXmlSlideReader slideReader(this);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         path, file,
@@ -162,10 +155,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->relationships);
 
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                d->slideReader, path + "/" + file, &context);
+                &slideReader, path + "/" + file, &context);
 
     if (result != KoFilter::OK) {
-        raiseError(d->slideReader->errorString());
+        raiseError(slideReader.errorString());
         return result;
     }
     SKIP_EVERYTHING

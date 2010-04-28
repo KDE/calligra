@@ -137,8 +137,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
         }*/
     kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
     m_context = 0;
-    if (result == KoFilter::OK)
-        return KoFilter::OK;
     return result;
 }
 
