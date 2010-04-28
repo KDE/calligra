@@ -242,18 +242,24 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
             Q_ASSERT( topLeft.parent() == bottomRight.parent() );
+            Q_ASSERT( topLeft.model() == m_model && bottomRight.model() == m_model );
 
-            if( topLeft.parent() != m_rootIndex )
+            if( !topLeft.isValid() || !bottomRight.isValid() || topLeft.parent() != m_rootIndex )
                 return;
-    
-            const int minRow = topLeft.row();
-            const int maxRow = bottomRight.row();
-            const int minCol = topLeft.column();
-            const int maxCol = bottomRight.column();
 
-            for( int row = qMax( 0, minRow ); row <= maxRow; ++row )
+            const int minRow = qMax( 0, topLeft.row() );
+            const int maxRow = bottomRight.row();
+            const int minCol = qMax( 0, topLeft.column() );
+            const int maxCol = bottomRight.column();
+            
+            Q_ASSERT( minRow <= maxRow );
+            Q_ASSERT( minCol <= maxCol );
+            Q_ASSERT( maxRow < m_model->rowCount( m_rootIndex ) );
+            Q_ASSERT( maxCol < m_model->columnCount( m_rootIndex ) );
+
+            for( int row = minRow; row <= maxRow; ++row )
             {
-                for( int col = qMax( 0, minCol ); col <= maxCol; ++col )
+                for( int col = minCol; col <= maxCol; ++col )
                 {
                     m_cacheValid[ row ][ col ] = false;
                     Q_ASSERT( !isCached( row, col ) );

@@ -220,10 +220,20 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleRadar(static_cast<RadarRecord*>(record));
     else if (type == RadarAreaRecord::id)
         handleRadarArea(static_cast<RadarAreaRecord*>(record));
+    else if (type == SurfRecord::id)
+        handleSurf(static_cast<SurfRecord*>(record));
     else if (type == AxisRecord::id)
         handleAxis(static_cast<AxisRecord*>(record));
     else if (type == AxisLineRecord::id)
         handleAxisLine(static_cast<AxisLineRecord*>(record));
+    else if (type == ValueRangeRecord::id)
+        handleValueRange(static_cast<ValueRangeRecord*>(record));
+    else if (type == TickRecord::id)
+        handleTick(static_cast<TickRecord*>(record));
+    else if (type == AxcExtRecord::id)
+        handleAxcExt(static_cast<AxcExtRecord*>(record));
+    else if (type == CatSerRangeRecord::id)
+        handleCatSerRange(static_cast<CatSerRangeRecord*>(record));
     else if (type == SIIndexRecord::id)
         handleSIIndex(static_cast<SIIndexRecord*>(record));
     else if (type == MsoDrawingRecord::id)
@@ -658,12 +668,20 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
     m_chart->m_impl = new Charting::RadarImpl();
 }
 
-// specifies that the chartgroup is a radar chart
+// specifies that the chartgroup is a filled radar chart
 void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
     if(!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::RadarImpl();
+}
+
+// specifies that the chartgroup is a surface chart
+void ChartSubStreamHandler::handleSurf(SurfRecord *record)
+{
+    if(!record || m_chart->m_impl) return;
+    DEBUG << std::endl;
+    m_chart->m_impl = new Charting::SurfaceImpl(record->isFFillSurface());
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)
@@ -755,4 +773,32 @@ void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if(!record) return;
     DEBUG << std::endl;
+}
+
+void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
+{
+    if(!record) return;
+    DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleTick(TickRecord *record)
+{
+    if(!record) return;
+    DEBUG << "tktMajor=" << record->tktMajor() << " tktMinor=" << record->tktMinor() << " tlt=" << record->tlt() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleAxcExt(AxcExtRecord *record)
+{
+    if(!record) return;
+    DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fDateAxis=" << record->isFDateAxis() << " fAutoBase=" << record->isFAutoBase() << " fAutoCross=" << record->isFAutoCross() << " fAutoDate=" << record->isFAutoDate() << std::endl;
+    //TODO
+}
+
+void ChartSubStreamHandler::handleCatSerRange(CatSerRangeRecord *record)
+{
+    if(!record) return;
+    DEBUG << "fBetween=" << record->isFBetween() << " fMaxCross=" << record->isFMaxCross() << " fReverse=" << record->isFReverse() << std::endl;
+    //TODO
 }

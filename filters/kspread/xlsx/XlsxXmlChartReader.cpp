@@ -198,6 +198,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(scatter3DChart)
             ELSE_TRY_READ_IF(radarChart)
             ELSE_TRY_READ_IF(radar3DChart)
+            ELSE_TRY_READ_IF(surfaceChart)
+            ELSE_TRY_READ_IF(surface3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
@@ -571,7 +573,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radar3DChart()
     }
     return KoFilter::OK;
 }
-    
+
+#undef CURRENT_EL
+#define CURRENT_EL surfaceChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_surfaceChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::SurfaceImpl();
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL surface3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_surface3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::SurfaceImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL barDir
 KoFilter::ConversionStatus XlsxXmlChartReader::read_barDir()

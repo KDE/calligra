@@ -87,6 +87,8 @@ protected:
     KoFilter::ConversionStatus read_scatter3DChart();
     KoFilter::ConversionStatus read_radarChart();
     KoFilter::ConversionStatus read_radar3DChart();
+    KoFilter::ConversionStatus read_surfaceChart();
+    KoFilter::ConversionStatus read_surface3DChart();
 
     KoFilter::ConversionStatus read_barDir();
     KoFilter::ConversionStatus read_grouping();

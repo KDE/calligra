@@ -178,6 +178,15 @@ namespace Charting
         virtual QByteArray name() const { return "bubble"; }
     };
 
+    class SurfaceImpl : public ChartImpl
+    {
+    public:
+        /// Specifies that the surface is either filled or a wireframe.
+        bool m_fill;
+        SurfaceImpl(bool fill = false) : ChartImpl(), m_fill(fill) {}
+        virtual QByteArray name() const { return "surface"; }
+    };
+
     class Obj
     {
     public:

@@ -748,9 +748,9 @@ void Axis::Private::createRadarDiagram()
 
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
-        kdBarDiagram->setType( KDChart::PolarDiagram::Stacked );
+        kdRadarDiagram->setType( KDChart::PolarDiagram::Stacked );
     else if ( plotAreaChartSubType == PercentChartSubtype )
-        kdBarDiagram->setType( KDChart::PolarDiagram::Percent );
+        kdRadarDiagram->setType( KDChart::PolarDiagram::Percent );
 #endif
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
     kdPolarPlane->addDiagram( kdRadarDiagram );
@@ -799,11 +799,34 @@ void Axis::Private::createStockDiagram()
     Q_ASSERT( kdStockDiagram == 0 );
 
     kdStockDiagramModel = new KDChartModel;
-    kdStockDiagramModel->setDataDimensions( 2 );
 
     kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
     kdStockDiagram->setModel( kdStockDiagramModel );
     registerDiagram( kdStockDiagram );
+
+#if 0  // Stacked and Percent not supported by KDChart.
+    if ( plotAreaChartSubType == StackedChartSubtype )
+        kdStockDiagram->setType( KDChart::StockDiagram::Stacked );
+    else if ( plotAreaChartSubType == PercentChartSubtype )
+        kdStockDiagram->setType( KDChart::StockDiagram::Percent );
+#endif
+
+    if ( isVisible )
+        kdStockDiagram->addAxis( kdAxis );
+    kdPlane->addDiagram( kdStockDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+
+    Q_ASSERT( plotArea );
+    foreach ( Axis *axis, plotArea->axes() ) {
+        if ( axis->dimension() == XAxisDimension )
+            if ( axis->isVisible() )
+                kdStockDiagram->addAxis( axis->kdAxis() );
+    }
+
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdStockDiagram );
+
 }
 
 void Axis::Private::createBubbleDiagram()
@@ -812,7 +835,7 @@ void Axis::Private::createBubbleDiagram()
     Q_ASSERT( kdBubbleDiagram == 0 );
 
     kdBubbleDiagramModel = new KDChartModel;
-    kdBubbleDiagramModel->setDataDimensions( 3 );
+    kdBubbleDiagramModel->setDataDimensions( 2 );
 
     kdBubbleDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
     kdBubbleDiagram->setModel( kdBubbleDiagramModel );
@@ -821,10 +844,8 @@ void Axis::Private::createBubbleDiagram()
 
 void Axis::Private::createSurfaceDiagram()
 {
-    // This is a so far unsupported chart type.  So we implement the
-    // model, but cannot implement the diagram since it's not yet
-    // supported by KDChart.
-
+    // This is a so far a by KDChart unsupported chart type.
+#if 0
     // The model.
     if ( kdSurfaceDiagramModel == 0 ) {
         kdSurfaceDiagramModel = new KDChartModel;
@@ -832,19 +853,22 @@ void Axis::Private::createSurfaceDiagram()
     }
 
     // No KDChart::Diagram since KDChart doesn't support this type
-#if 0
     if ( kdSurfaceDiagram == 0 ) {
         ...
     }
+#else // fallback to bar diagram for now
+    createBarDiagram();
+    kdSurfaceDiagramModel = kdBarDiagramModel;
+    kdBarDiagramModel = 0;
+    kdSurfaceDiagram = kdBarDiagram;
+    kdBarDiagram = 0;
 #endif
 }
 
 void Axis::Private::createGanttDiagram()
 {
-    // This is a so far unsupported chart type.  So we implement the
-    // model, but cannot implement the diagram since it's not yet
-    // supported by KDChart.
-
+    // This is a so far a by KDChart unsupported chart type (through KDGantt got merged into KDChart with 2.3)
+#if 0
     // The model.
     if ( kdGanttDiagramModel == 0 ) {
         kdGanttDiagramModel = new KDChartModel;
@@ -852,13 +876,17 @@ void Axis::Private::createGanttDiagram()
     }
 
     // No KDChart::Diagram since KDChart doesn't support this type
-#if 0
     if ( kdGanttDiagram == 0 ) {
         ...
     }
+#else // fallback to bar diagram for now
+    createBarDiagram();
+    kdSurfaceDiagramModel = kdBarDiagramModel;
+    kdBarDiagramModel = 0;
+    kdSurfaceDiagram = kdBarDiagram;
+    kdBarDiagram = 0;
 #endif
 }
-
 
 /**
  * Automatically adjusts the diagram so that all currently displayed
@@ -1656,6 +1684,11 @@ void Axis::update() const
         d->kdLineDiagram->update();
     }
 
+    if ( d->kdStockDiagram ) {
+        d->kdStockDiagram->doItemsLayout();
+        d->kdStockDiagram->update();
+    }
+
     d->plotArea->parent()->requestRepaint();
 }
 
@@ -1950,6 +1983,22 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
 #endif
         break;
+    case StockChartType:
+        if ( d->kdStockDiagram ) {
+            KDChart::StockDiagram::Type type;
+            switch ( subType ) {
+#if 0
+            case StackedChartSubtype:
+                type = KDChart::StockDiagram::Candlestick; break;
+            case PercentChartSubtype:
+                type = KDChart::StockDiagram::OpenHighLowClose; break;
+#endif
+            default:
+                type = KDChart::StockDiagram::HighLowClose;
+            }
+            d->kdStockDiagram->setType( type );
+        }
+        break;
     default:;
         // FIXME: Implement more chart types
     }
@@ -1965,6 +2014,10 @@ void Axis::registerKdAxis( KDChart::CartesianAxis *axis )
         d->kdAreaDiagram->addAxis( axis );
     if ( d->kdScatterDiagram )
         d->kdScatterDiagram->addAxis( axis );
+    if ( d->kdStockDiagram )
+        d->kdStockDiagram->addAxis( axis );
+    if ( d->kdBubbleDiagram )
+        d->kdBubbleDiagram->addAxis( axis );
     // FIXME: Add all diagrams here
 }
 
@@ -1978,6 +2031,10 @@ void Axis::deregisterKdAxis( KDChart::CartesianAxis *axis )
         d->kdAreaDiagram->takeAxis( axis );
     if ( d->kdScatterDiagram )
         d->kdScatterDiagram->takeAxis( axis );
+    if ( d->kdStockDiagram )
+        d->kdStockDiagram->takeAxis( axis );
+    if ( d->kdBubbleDiagram )
+        d->kdBubbleDiagram->takeAxis( axis );
     // FIXME: Add all diagrams here
 }
 

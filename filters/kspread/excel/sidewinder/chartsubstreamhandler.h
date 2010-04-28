@@ -118,6 +118,7 @@ private:
     void handleScatter(ScatterRecord *);
     void handleRadar(RadarRecord *);
     void handleRadarArea(RadarAreaRecord *);
+    void handleSurf(SurfRecord *);
     void handleAxis(AxisRecord* record);
     void handleAxisLine(AxisLineRecord* record);
     void handleSIIndex(SIIndexRecord *);
@@ -126,7 +127,10 @@ private:
     void handleTextPropsStream(TextPropsStreamRecord *);
     void handleObjectLink(ObjectLinkRecord *);
     void handlePlotArea(PlotAreaRecord *);
-
+    void handleValueRange(ValueRangeRecord *);
+    void handleTick(TickRecord *);
+    void handleAxcExt(AxcExtRecord *);
+    void handleCatSerRange(CatSerRangeRecord *);
 };
 
 } // namespace Swinder

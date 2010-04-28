@@ -632,12 +632,52 @@
 </record>
 
 <record name="Tick" id="0x101e">
+  <field name="tktMajor" type="unsigned" size="8" />
+  <field name="tktMinor" type="unsigned" size="8" />
+  <field name="tlt" type="unsigned" size="8" />
+  <field name="wBkgMode" type="unsigned" size="8" />
+  <field name="red" type="unsigned" size="8" />
+  <field name="green" type="unsigned" size="8" />
+  <field name="blue" type="unsigned" size="8" />
+  <field name="reserved" type="bool" size="8" />
+  <field name="reserved1" size="32" />
+  <field name="reserved2" size="32" />
+  <field name="reserved3" size="32" />
+  <field name="reserved4" size="32" />
+  <field name="fAutoCo" type="bool" size="1" />
+  <field name="fAutoMode" type="bool" size="1" />
+  <field name="rot" type="unsigned" size="3" />
+  <field name="fAutoRot" type="bool" size="1" />
+  <field name="unused" type="unsigned" size="8" />
+  <field name="iReadingOrder" type="unsigned" size="2" />
+  <field name="icv" type="unsigned" size="16" />
+  <field name="trot" type="unsigned" size="16" />
 </record>
 
 <record name="ValueRange" id="0x101f">
+  <field name="numMin" type="float" size="64" />
+  <field name="numMax" type="float" size="64" />
+  <field name="numMajor" type="float" size="64" />
+  <field name="numMinor" type="float" size="64" />
+  <field name="numCross" type="float" size="64" />
+  <field name="fAutoMin" type="bool" size="1" />
+  <field name="fAutoMax" type="bool" size="1" />
+  <field name="fAutoMajor" type="bool" size="1" />
+  <field name="fAutoMinor" type="bool" size="1" />
+  <field name="fAutoCross" type="bool" size="1" />
+  <field name="fLog" type="bool" size="1" />
+  <field name="fReversed" type="bool" size="1" />
+  <field name="fMaxCross" type="bool" size="1" />
 </record>
 
 <record name="CatSerRange" id="0x1020">
+  <field name="catCross" type="unsigned" size="16" />
+  <field name="catLabel" type="unsigned" size="16" />
+  <field name="catMark" type="unsigned" size="16" />
+  <field name="fBetween" type="bool" size="1" />
+  <field name="fMaxCross" type="bool" size="1" />
+  <field name="fReverse" type="bool" size="1" />
+  <field name="reserved" type="unsigned" size="13" />
 </record>
 
 <record name="CrtLayout12" id="0x89D">
@@ -754,6 +794,9 @@
 </record>
 
 <record name="Surf" id="0x103f">
+  <field name="fFillSurface" type="bool" size="1" />
+  <field name="f3DPhongShade" type="bool" size="1" />
+  <field name="reserved" size="14" />
 </record>
 
 <record name="RadarArea" id="0x1040">
@@ -838,6 +881,22 @@
 </record>
 
 <record name="AxcExt" id="0x1062">
+  <field name="catMin" type="unsigned" size="16" />
+  <field name="catMax" type="unsigned" size="16" />
+  <field name="catMajor" type="unsigned" size="16" />
+  <field name="duMajor" type="unsigned" size="16" />
+  <field name="catMinor" type="unsigned" size="16" />
+  <field name="duMinor" type="unsigned" size="16" />
+  <field name="duBase" type="unsigned" size="16" />
+  <field name="catCrossDate" type="unsigned" size="16" />
+  <field name="fAutoMin" type="bool" size="1" />
+  <field name="fAutoMax" type="bool" size="1" />
+  <field name="fAutoMajor" type="bool" size="1" />
+  <field name="fAutoMinor" type="bool" size="1" />
+  <field name="fDateAxis" type="bool" size="1" />
+  <field name="fAutoBase" type="bool" size="1" />
+  <field name="fAutoCross" type="bool" size="1" />
+  <field name="fAutoDate" type="bool" size="1" />
 </record>
 
 <record name="Dat" id="0x1063">
