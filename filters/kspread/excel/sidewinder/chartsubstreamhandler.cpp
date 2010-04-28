@@ -25,7 +25,7 @@
 #include <QRegExp>
 #include <QDebug>
 
-#include <Utils.h>
+#include <XlsxUtils.h>
 
 namespace Swinder {
 
