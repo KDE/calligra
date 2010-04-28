@@ -53,7 +53,7 @@ public:
     qreal titleFontSize() const;
     LegendExpansion expansion() const;
     Qt::Alignment alignment() const;
-    LegendPosition legendPosition() const;
+    Position legendPosition() const;
 
     void setTitle( const QString &title );
     void setShowFrame( bool show );
@@ -67,7 +67,7 @@ public:
     void setTitleFontSize( qreal size );
     void setExpansion( LegendExpansion expansion );
     void setAlignment( Qt::Alignment alignment );
-    void setLegendPosition( LegendPosition position );
+    void setLegendPosition( Position position );
     void setSize( const QSizeF &size );
 
     void paint( QPainter &painter, const KoViewConverter &converter );

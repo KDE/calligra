@@ -63,90 +63,96 @@ AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position
     return BottomAxisPosition;
 }
 
-QString LegendPositionToString( LegendPosition position )
+// Used to save e.g. legend-position attribute to ODF. Do not change these strings.
+QString PositionToString( Position position )
 {
     switch ( position ) {
-    case StartLegendPosition:
+    case StartPosition:
         return QString( "start" );
-    case TopLegendPosition:
+    case TopPosition:
         return QString( "top" );
-    case BottomLegendPosition:
+    case BottomPosition:
         return QString( "bottom" );
-    case TopStartLegendPosition:
+    case TopStartPosition:
         return QString( "top-start" );
-    case BottomStartLegendPosition:
+    case BottomStartPosition:
         return QString( "bottom-start" );
-    case TopEndLegendPosition:
+    case TopEndPosition:
         return QString( "top-end" );
-    case BottomEndLegendPosition:
+    case BottomEndPosition:
         return QString( "bottom-end" );
-    case EndLegendPosition:
+    case EndPosition:
         return QString( "end" );
-    case FloatingLegendPosition:
+    case CenterPosition:
+        return QString( "center" );
+    case FloatingPosition:
         return QString();
     }
     
-    Q_ASSERT( "Unknown LegendPosition!" );
+    Q_ASSERT( "Unknown Position!" );
     return QString();
 }
 
-KDChartEnums::PositionValue LegendPositionToKDChartPositionValue( LegendPosition position )
+KDChartEnums::PositionValue PositionToKDChartPositionValue( Position position )
 {
     switch ( position ) {
-    case StartLegendPosition:
+    case StartPosition:
         return KDChartEnums::PositionWest;
-    case TopLegendPosition:
+    case TopPosition:
         return KDChartEnums::PositionNorth;
-    case BottomLegendPosition:
+    case BottomPosition:
         return KDChartEnums::PositionSouth;
-    case TopStartLegendPosition:
+    case TopStartPosition:
         return KDChartEnums::PositionNorthWest;
-    case BottomStartLegendPosition:
+    case BottomStartPosition:
         return KDChartEnums::PositionSouthWest;
-    case TopEndLegendPosition:
+    case TopEndPosition:
         return KDChartEnums::PositionNorthEast;
-    case BottomEndLegendPosition:
+    case BottomEndPosition:
         return KDChartEnums::PositionSouthEast;
-    case EndLegendPosition:
+    case EndPosition:
         return KDChartEnums::PositionEast;
-    case FloatingLegendPosition:
+    case CenterPosition:
+        return KDChartEnums::PositionCenter;
+    case FloatingPosition:
         return KDChartEnums::PositionFloating;
     }
     
-    Q_ASSERT( "Unknown LegendPosition!" );
+    Q_ASSERT( "Unknown Position!" );
     return KDChartEnums::PositionEast;
 }
 
-LegendPosition KDChartPositionValueToLegendPosition( KDChartEnums::PositionValue position )
+Position KDChartPositionValueToPosition( KDChartEnums::PositionValue position )
 {
     switch ( position ) {
     case KDChartEnums::PositionNorthWest:
-        return TopStartLegendPosition;
+        return TopStartPosition;
     case KDChartEnums::PositionNorth:
-        return TopLegendPosition;
+        return TopPosition;
     case KDChartEnums::PositionNorthEast:
-        return TopEndLegendPosition;
+        return TopEndPosition;
     case KDChartEnums::PositionEast:
-        return EndLegendPosition;
+        return EndPosition;
     case KDChartEnums::PositionSouthEast:
-        return BottomEndLegendPosition;
+        return BottomEndPosition;
     case KDChartEnums::PositionSouth:
-        return BottomLegendPosition;
+        return BottomPosition;
     case KDChartEnums::PositionSouthWest:
-        return BottomStartLegendPosition;
+        return BottomStartPosition;
     case KDChartEnums::PositionWest:
-        return StartLegendPosition;
+        return StartPosition;
+    case KDChartEnums::PositionCenter:
+        return CenterPosition;
     case KDChartEnums::PositionFloating:
-        return FloatingLegendPosition;
+        return FloatingPosition;
         
     // These are unsupported values
     case KDChartEnums::PositionUnknown:
-    case KDChartEnums::PositionCenter:
-        return FloatingLegendPosition;
+        return FloatingPosition;
     }
     
     Q_ASSERT( "Unknown KDChartEnums::PositionValue!" );
-    return FloatingLegendPosition;
+    return FloatingPosition;
 }
 
 Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion )

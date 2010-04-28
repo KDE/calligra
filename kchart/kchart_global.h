@@ -70,17 +70,18 @@ struct ChartTypeOptions
     ChartSubtype subtype;
 };
 
-enum LegendPosition {
-    StartLegendPosition,
-    TopLegendPosition,
-    BottomLegendPosition,
-    TopStartLegendPosition,
-    BottomStartLegendPosition,
-    TopEndLegendPosition,
-    BottomEndLegendPosition,
-    EndLegendPosition,
-    
-    FloatingLegendPosition
+enum Position {
+    StartPosition,
+    TopPosition,
+    EndPosition,
+    BottomPosition,
+    TopStartPosition,
+    TopEndPosition,
+    BottomStartPosition,
+    BottomEndPosition,
+    CenterPosition,
+
+    FloatingPosition
 };
 
 enum LegendExpansion {

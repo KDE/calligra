@@ -81,6 +81,7 @@ class Axis;
 class ThreeDScene;
 class CellRegion;
 class ChartTableModel;
+class Layout;
 
 extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
 
@@ -118,6 +119,7 @@ public:
     TextLabelData  *footerData() const;
     Legend         *legend() const;
     PlotArea       *plotArea() const;
+    Layout         *layout() const;
 
     /**
      * Returns a list of all labels in this chart, visible and hidden.
@@ -135,11 +137,6 @@ public:
     void setModel( QAbstractItemModel *model, const QVector<QRect> &selection );
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
-
-    void setPosition( const QPointF &size );
-    void setSize( const QSizeF &size );
-
-    void setLegendSize( const QSizeF &size );
 
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
@@ -169,8 +166,6 @@ public:
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
-
-    void updateChildrenPositions();
 
     using KoShapeContainer::update;
     /// reimplemented

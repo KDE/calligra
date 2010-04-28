@@ -102,6 +102,7 @@
 #include "TextLabelDummy.h"
 #include "ChartDocument.h"
 #include "ChartTableModel.h"
+#include "Layout.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -233,46 +234,6 @@ QColor defaultDataSetColor( int dataSetNum )
     return QColor( defaultDataSetColors[ dataSetNum ] );
 }
 
-static QPointF scalePointCenterLeft( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.rx() -= size.width() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.rx() += size.width() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterRight( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.rx() += size.width() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.rx() -= size.width() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterTop( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.ry() -= size.height() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.ry() += size.height() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterBottom( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.ry() += size.height() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.ry() -= size.height() / 2.0;
-
-    return center;
-}
-
 // ================================================================
 //                     The Private class
 
@@ -285,8 +246,6 @@ public:
 
     bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context );
     void showLabel( KoShape *label, bool doShow );
-    QPointF relativePosition( KoShape *shape );
-    void setRelativePosition( KoShape *shape, const QPointF &relPos );
 
     // The components of a chart
     KoShape   *title;
@@ -388,42 +347,8 @@ void ChartShape::Private::showLabel( KoShape *label, bool doShow )
         return;
 
     label->setVisible( doShow );
-
-    // The bounds of the space that is left for the plotarea.
-    // Start with the full height of the shape.
-    qreal yTop = 0;
-    qreal yBottom = shape->size().height();
-
-    // Start calculate the available space for the plotarea.  First
-    // remove the space for the title/subtitle/footer
-    if (title->isVisible()) {
-        yTop = title->position().y() + title->size().height();
-    }
-    if (subTitle->isVisible()) {
-        // Here we assume that the subtitle is below the title.
-        yTop = subTitle->position().y() + subTitle->size().height();
-    }
-    if (footer->isVisible()) {
-        yBottom = footer->position().y();
-    }
-
-    // Then remove the space that is taken by the axis titles.
-    foreach ( Axis *axis, plotArea->axes() ) {
-        if ( axis->position() != BottomAxisPosition )
-            continue;
-
-        // Make room for the Axis titles.
-        // FIXME: They should only be allocated space if they are visible.
-        yBottom -= axis->title()->size().height();
-        axis->title()->setPosition( QPointF(axis->title()->position().x(), yBottom) );
-    }
-
-    // Check if there is any room left for the plotarea.
-    // Maybe we should use a minimal size?
-    if (yTop < yBottom) {
-        plotArea->setPosition(QPointF(plotArea->position().x(), yTop));
-        plotArea->setSize(QSizeF(plotArea->size().width(), yBottom - yTop));
-    }
+    // FIXME: Shouldn't there be a KoShape::VisibilityChanged for KoShape::shapeChanged()?
+    shape->layout()->scheduleRelayout();
 }
 
 
@@ -434,6 +359,7 @@ void ChartShape::Private::showLabel( KoShape *label, bool doShow )
 
 ChartShape::ChartShape(KoResourceManager *resourceManager)
     : KoFrameShape( KoXmlNS::draw, "object" )
+    , KoShapeContainer( new Layout )
     , d ( new Private( this ) )
 {
     d->resourceManager = resourceManager;
@@ -478,7 +404,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
 
     // Start with a reasonable default size that we can base all following relative
     // positions of chart elements on.
-    KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 
     // Add the title to the shape
     addChild( d->title );
@@ -551,6 +477,14 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
 
     KoLineBorder *border = new KoLineBorder( 0, Qt::black );
     setBorder( border );
+
+    Layout *l = layout();
+    l->setPosition( d->plotArea, CenterPosition );
+    l->setPosition( d->title,    TopPosition, 0 );
+    l->setPosition( d->subTitle, TopPosition, 1 );
+    l->setPosition( d->footer,   BottomPosition, 1 );
+    l->setPosition( d->legend,   d->legend->legendPosition() );
+    l->layout();
 
     requestRepaint();
 }
@@ -644,6 +578,13 @@ PlotArea *ChartShape::plotArea() const
     return d->plotArea;
 }
 
+Layout *ChartShape::layout() const
+{
+    Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
+    Q_ASSERT( l );
+    return l;
+}
+
 
 void ChartShape::showTitle(bool doShow)
 {
@@ -709,159 +650,6 @@ bool ChartShape::removeAxis( Axis *axis )
 {
     Q_ASSERT( d->plotArea );
     return d->plotArea->removeAxis( axis );
-}
-
-void ChartShape::setPosition( const QPointF &pos )
-{
-    //QPointF relativePosition = pos - position();
-    //if ( relativePosition.x() > 0.01 || relativePosition.y() > 0.01 )
-    //    d->legend->setPosition( d->legend->position() - relativePosition );
-    KoShape::setPosition( pos );
-}
-
-QPointF ChartShape::Private::relativePosition( KoShape *shape )
-{
-    return shape->absolutePosition() - this->shape->absolutePosition( KoFlake::TopLeftCorner );
-}
-
-void ChartShape::Private::setRelativePosition( KoShape *shape, const QPointF &relPos )
-{
-    shape->setAbsolutePosition( relPos + this->shape->absolutePosition( KoFlake::TopLeftCorner ) );
-}
-
-void ChartShape::setSize( const QSizeF &newSize )
-{
-    Q_ASSERT( d->plotArea );
-
-    const qreal factorX = newSize.width() / size().width();
-    const qreal factorY = newSize.height() / size().height();
-
-    // Reposition the Axes within the shape.
-    foreach( Axis *axis, d->plotArea->axes() ) {
-        KoShape *title = axis->title();
-        switch( axis->position() ) {
-        case TopAxisPosition:
-            d->setRelativePosition( title,
-                                    scalePointCenterTop( d->relativePosition( title ), factorX, factorY, title->boundingRect().size() ) );
-            break;
-        case BottomAxisPosition:
-            d->setRelativePosition( title,
-                                    scalePointCenterBottom( d->relativePosition( title ), factorX, factorY, title->boundingRect().size() ) );
-            break;
-        case LeftAxisPosition:
-            d->setRelativePosition( title,
-                                    scalePointCenterLeft( d->relativePosition( title ), factorX, factorY, title->boundingRect().size() ) );
-            break;
-        case RightAxisPosition:
-            d->setRelativePosition( title,
-                                    scalePointCenterRight( d->relativePosition( title ), factorX, factorY, title->boundingRect().size() ) );
-            break;
-        }
-    }
-
-    // Reposition the Legend within the shape.
-    switch ( d->legend->legendPosition() ) {
-    case TopLegendPosition:
-        d->setRelativePosition( d->legend,
-                                scalePointCenterTop( d->relativePosition( d->legend ), factorX, factorY, d->legend->boundingRect().size() ) );
-        break;
-    case BottomLegendPosition:
-        d->setRelativePosition( d->legend,
-                                scalePointCenterBottom( d->relativePosition( d->legend ), factorX, factorY, d->legend->boundingRect().size() ) );
-        break;
-    case StartLegendPosition:
-        d->setRelativePosition( d->legend,
-                                scalePointCenterLeft( d->relativePosition( d->legend ), factorX, factorY, d->legend->boundingRect().size() ) );
-        break;
-    case EndLegendPosition:
-        d->setRelativePosition( d->legend,
-                                scalePointCenterRight( d->relativePosition( d->legend ), factorX, factorY, d->legend->boundingRect().size() ) );
-        break;
-    case TopStartLegendPosition:
-    case BottomStartLegendPosition:
-    case TopEndLegendPosition:
-    case BottomEndLegendPosition:
-    case FloatingLegendPosition:
-        // FIXME: These are not handled.
-        break;
-    }
-
-    // Reposition the Title, Subtitle and Footer within the shape.
-    d->setRelativePosition( d->title,
-                            scalePointCenterTop( d->relativePosition( d->title ), factorX, factorY, d->title->boundingRect().size() ) );
-    d->setRelativePosition( d->subTitle,
-                            scalePointCenterTop( d->relativePosition( d->subTitle ), factorX, factorY, d->subTitle->boundingRect().size() ) );
-    d->setRelativePosition( d->footer,
-                            scalePointCenterBottom( d->relativePosition( d->footer ), factorX, factorY, d->footer->boundingRect().size() ) );
-
-    // Finally, resize the plotarea.
-    const QSizeF plotAreaSize = d->plotArea->size();
-    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(),
-                                  plotAreaSize.height() + newSize.height() - size().height() ) );
-
-    // Oh yeah, the whole shape needs resizing too.
-    KoShape::setSize( newSize );
-}
-
-void ChartShape::setLegendSize( const QSizeF &size )
-{
-    QPointF newPos = d->legend->position();
-    QSizeF oldSize = d->legend->size();
-    switch ( d->legend->legendPosition() ) {
-    case TopLegendPosition:
-        // Move it to the left as much as the width changed
-        newPos.rx() -= (size.width() - oldSize.width()) / 2.0;
-        // No adjustment of y position needed
-        break;
-    case BottomLegendPosition:
-        // Move it up as much as the height changed
-        newPos.ry() -= (size.height() - oldSize.height());
-        // Move it to the left as much as the width changed
-        newPos.rx() -= (size.width() - oldSize.width()) / 2.0;
-        break;
-    case StartLegendPosition:
-        // No adjustment of x position needed
-        newPos.ry() -= (size.height() - oldSize.height()) / 2.0;
-        break;
-    case EndLegendPosition:
-        newPos.ry() -= (size.height() - oldSize.height()) / 2.0;
-        // Move it to the left as much as the width changed
-        newPos.rx() -= (size.width() - oldSize.width());
-        break;
-    // FIXME: The following positions are not handled
-    // The new position is simply set as is
-    case TopStartLegendPosition:
-    case BottomStartLegendPosition:
-    case TopEndLegendPosition:
-    case BottomEndLegendPosition:
-
-    // If the legend is floating, the user has changed the position manually.
-    // There's no way to determine where the user wants it to be after a resize.
-    // (more to the left? more to the right?)
-    case FloatingLegendPosition:
-        break;
-    }
-
-    // TODO: Adjust plot area's size and position if necessary
-
-    d->legend->setPosition( newPos );
-    d->legend->setSize( size );
-}
-
-void ChartShape::updateChildrenPositions()
-{
-    Q_ASSERT( d->plotArea );
-
-    foreach( Axis *axis, d->plotArea->axes() ) {
-        KoShape  *title = axis->title();
-        QPointF   titlePosition;
-
-        // FIXME BUG: titlePosition is uninitialized here!
-        title->setPosition( titlePosition );
-    }
-
-    d->legend->setPosition( QPointF( size().width() - d->legend->size().width(),
-                                     size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }
 
 
@@ -933,6 +721,9 @@ void ChartShape::setThreeD( bool threeD )
 void ChartShape::paintComponent( QPainter &painter,
                                  const KoViewConverter &converter )
 {
+    // Only does a relayout if scheduled
+    layout()->layout();
+
     // Paint the background
     if ( background() ) {
         applyConversion( painter, converter );

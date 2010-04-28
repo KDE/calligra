@@ -75,7 +75,7 @@
 #include "ThreeDScene.h"
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
-
+#include "Layout.h"
 
 using namespace KChart;
 
@@ -209,8 +209,8 @@ void PlotArea::Private::initAxes()
     xAxis->setPosition( BottomAxisPosition );
     yAxis->setPosition( LeftAxisPosition );
     yAxis->setShowMajorGrid( true );
-    axes.append( xAxis );
-    axes.append( yAxis );
+    q->addAxis( xAxis );
+    q->addAxis( yAxis );
 }
 
 PlotArea::PlotArea( ChartShape *parent )
@@ -666,6 +666,13 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         // by adopting that behaviour we avoid extra special-handling of
         // documents created by OOo.
         proxyModel()->setDataDirection( Qt::Vertical );
+
+    // The exact position defined in ODF overwrites the default layout position
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+        parent()->layout()->setPosition( this, FloatingPosition );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     

@@ -56,6 +56,7 @@
 // Kchart
 #include "PlotArea.h"
 #include "ScreenConversions.h"
+#include "Layout.h"
 
 using namespace KChart;
 
@@ -72,7 +73,7 @@ public:
     QPen framePen;
     QBrush backgroundBrush;
     LegendExpansion expansion;
-    LegendPosition position;
+    Position position;
     QFont font;
     QFont titleFont;
     QColor fontColor;
@@ -99,7 +100,7 @@ Legend::Private::Private()
     expansion = HighLegendExpansion;
     alignment = Qt::AlignRight;
     pixmapRepaintRequested = true;
-    position = EndLegendPosition;
+    position = EndPosition;
 }
 
 Legend::Private::~Private()
@@ -331,15 +332,17 @@ void Legend::setAlignment( Qt::Alignment alignment )
     d->alignment = alignment;
 }
 
-LegendPosition Legend::legendPosition() const
+Position Legend::legendPosition() const
 {
     return d->position;
 }
 
-void Legend::setLegendPosition( LegendPosition position )
+void Legend::setLegendPosition( Position position )
 {
     d->position = position;
     d->pixmapRepaintRequested = true;
+
+    d->shape->layout()->setPosition( this, position );
 }
 
 void Legend::setSize( const QSizeF &newSize )
@@ -445,6 +448,13 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
             lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
 
+        // The exact position defined in ODF overwrites the default layout position
+        if ( legendElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
+             legendElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
+             legendElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
+             legendElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+            d->shape->layout()->setPosition( this, FloatingPosition );
+
         loadOdfAttributes( legendElement, context, attributesToLoad );
 
         QString lalign;
@@ -473,28 +483,28 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
         }
 
         if ( lp == "start" ) {
-            setLegendPosition( StartLegendPosition );
+            setLegendPosition( StartPosition );
         }
         else if ( lp == "top" ) {
-            setLegendPosition( TopLegendPosition );
+            setLegendPosition( TopPosition );
         }
         else if ( lp == "bottom" ) {
-            setLegendPosition( BottomLegendPosition );
+            setLegendPosition( BottomPosition );
         }
         else if ( lp == "top-start" ) {
-            setLegendPosition( TopStartLegendPosition );
+            setLegendPosition( TopStartPosition );
         }
         else if ( lp == "bottom-start" ) {
-            setLegendPosition( BottomStartLegendPosition );
+            setLegendPosition( BottomStartPosition );
         }
         else if ( lp == "top-end" ) {
-            setLegendPosition( TopEndLegendPosition );
+            setLegendPosition( TopEndPosition );
         }
         else if ( lp == "bottom-end" ) {
-            setLegendPosition( BottomEndLegendPosition );
+            setLegendPosition( BottomEndPosition );
         }
         else {
-            setLegendPosition( EndLegendPosition );
+            setLegendPosition( EndPosition );
         }
 
         if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) ) {
@@ -516,7 +526,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
     else {
         // No legend element, use default legend.
         // FIXME: North??  Isn't that a bit strange as default? /IW
-        setLegendPosition( TopLegendPosition );
+        setLegendPosition( TopPosition );
         setAlignment( Qt::AlignCenter );
     }
 
@@ -538,7 +548,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
 
     saveOdfAttributes( context, (OdfMandatories ^ OdfStyle) | OdfPosition );
 
-    QString lp = LegendPositionToString( d->position );
+    QString lp = PositionToString( d->position );
 
     QString lalign;
 
@@ -595,7 +605,8 @@ void Legend::slotKdLegendChanged()
     // in KDChartModel. Right now, only yDataChanged() is implemented.
     //d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
-    d->shape->setLegendSize( ScreenConversions::scaleFromPxToPt( size ) );
+    // FIXME: Scale size from px to pt?
+    setSize( size );
     update();
 }
 

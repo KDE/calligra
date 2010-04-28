@@ -70,6 +70,7 @@
 #include "KDChartConvertions.h"
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
+#include "Layout.h"
 
 
 using namespace KChart;
@@ -1007,6 +1008,25 @@ void Axis::setPosition( AxisPosition position )
 
     // KDChart
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
+
+    Position layoutPosition;
+    switch ( position ) {
+        case TopAxisPosition:
+            layoutPosition = TopPosition;
+            break;
+        case BottomAxisPosition:
+            layoutPosition = BottomPosition;
+            break;
+        case LeftAxisPosition:
+            layoutPosition = StartPosition;
+            break;
+        case RightAxisPosition:
+            layoutPosition = EndPosition;
+            break;
+    }
+    Layout *layout = plotArea()->parent()->layout();
+    layout->setPosition( title(), layoutPosition );
+    layout->layout();
 
     requestRepaint();
 }
