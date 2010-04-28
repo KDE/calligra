@@ -184,6 +184,39 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         m_bodyWriter->addAttribute("text:name", sectionName);
         m_bodyWriter->addAttribute("text:style-name", sectionStyleName);
     }
+
+    if (sep->nLnnMod != 0) {    // if line numbering modulus is not 0, do line numbering
+        if (m_mainStyles) {
+            QString lineNumbersStyleName = QString("Standard");     // set default line numbers style
+
+            if (m_document) {                                       // if we have m_document
+                QString lineNumbersStyleNameTemp = m_document->lineNumbersStyleName();
+
+                if (lineNumbersStyleNameTemp.isEmpty() == false) {      // if the style name is not empty
+                    lineNumbersStyleName = lineNumbersStyleNameTemp;    // use it
+                }
+            }
+
+            // prepare string for line numbering configuration
+            QString lineNumberingConfig("<text:linenumbering-configuration text:style-name=\"%1\" "
+                                        "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
+
+            m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
+                                             lineNumberingConfig.arg(lineNumbersStyleName).toLatin1());
+
+            KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"));
+
+            // if got Normal style, insert line numbering configuration in it
+            if (normalStyle) {
+                normalStyle->addProperty(QString("text:number-lines"), QString("true"));
+                normalStyle->addProperty(QString("text:line-number"), QString("0"));
+            } else {
+                kWarning() << "Could not find Normal style, numbering not added!";
+            }
+
+        }
+    }
+
 }
 
 void KWordTextHandler::sectionEnd()
