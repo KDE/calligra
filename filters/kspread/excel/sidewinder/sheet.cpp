@@ -129,7 +129,7 @@ void Sheet::clear()
     d->bottomMargin = 72;  // 1 inch
     d->autoCalc = true;
     d->defaultRowHeight = 12;
-    d->defaultColWidth = 2640.0*Column::COLUMN_UNITS_TO_PTS;
+    d->defaultColWidth = 2640.0 * Column::COLUMN_UNITS_TO_PTS;
     d->zoomLevel = 1.0; // 100%
     d->showGrid = true;
     d->showZeroValues = true;
@@ -444,10 +444,7 @@ Column::Column(Sheet* sheet, unsigned index)
     d = new Column::Private;
     d->sheet   = sheet;
     d->index   = index;
-    //Magic number, the unit is aproximately 120*31 of an inch, then there are 72 pts in an inch
-    //it's not completely accurate (for that we need to know 256 of the width of the current font),
-    //but seems to be good enough
-    d->width   = 2560.0 / 120.0 / 31.0 * 72.0;
+    d->width   = 2560.0 * Column::COLUMN_UNITS_TO_PTS;
     d->visible = true;
 }
 

@@ -921,7 +921,7 @@ void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* rec
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultColWidth(record->cchdefColWidth());
+    d->sheet->setDefaultColWidth( record->cchdefColWidth() * 256.0 * Column::COLUMN_UNITS_TO_PTS );
 }
 
 void WorksheetSubStreamHandler::handleSetup(SetupRecord*)
