@@ -54,6 +54,7 @@
 #include <KDChartLineDiagram>
 #include <KDChartPieDiagram>
 #include <KDChartPlotter>
+#include <KDChartStockDiagram>
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 #include <KDChartBarAttributes>
@@ -140,9 +141,11 @@ public:
     KDChart::RingDiagram  *kdRingDiagram;
     KDChart::PolarDiagram *kdRadarDiagram;
     KDChart::Plotter      *kdScatterDiagram;
+    KDChart::StockDiagram *kdStockDiagram;
+    KDChart::Plotter      *kdBubbleDiagram;
     // FIXME BUG: Somehow we need to visualize something for these
     //            missing chart types.  We have some alternatives:
-    //            1. Show an emtpy area
+    //            1. Show an empty area
     //            2. Show a text "unsupported chart type"
     //            3. Exchange for something else, e.g. a bar chart.
     //            ... More?
@@ -150,8 +153,6 @@ public:
     // NOTE: Whatever we do, we should always store the data so that
     //       it can be saved back into the file for a perfect
     //       roundtrip.
-    KDChart::BarDiagram   *kdStockDiagram;
-    KDChart::BarDiagram   *kdBubbleDiagram;
     KDChart::BarDiagram   *kdSurfaceDiagram;
     KDChart::BarDiagram   *kdGanttDiagram;
 
@@ -788,42 +789,28 @@ void Axis::Private::createScatterDiagram()
 
 void Axis::Private::createStockDiagram()
 {
-    // This is a so far unsupported chart type.  So we implement the
-    // model, but cannot implement the diagram since it's not yet
-    // supported by KDChart.
+    Q_ASSERT( kdStockDiagramModel == 0 );
+    Q_ASSERT( kdStockDiagram == 0 );
 
-    // The model.
-    if ( kdStockDiagramModel == 0 ) {
-        kdStockDiagramModel = new KDChartModel;
-        kdStockDiagramModel->setDataDimensions( 2 );
-    }
+    kdStockDiagramModel = new KDChartModel;
+    kdStockDiagramModel->setDataDimensions( 2 );
 
-    // No KDChart::Diagram since KDChart doesn't support this type
-#if 0
-    if ( kdStockDiagram == 0 ) {
-        ...
-    }
-#endif
+    kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
+    kdStockDiagram->setModel( kdStockDiagramModel );
+    registerDiagram( kdStockDiagram );
 }
 
 void Axis::Private::createBubbleDiagram()
 {
-    // This is a so far unsupported chart type.  So we implement the
-    // model, but cannot implement the diagram since it's not yet
-    // supported by KDChart.
+    Q_ASSERT( kdBubbleDiagramModel == 0 );
+    Q_ASSERT( kdBubbleDiagram == 0 );
 
-    // The model.
-    if ( kdBubbleDiagramModel == 0 ) {
-        kdBubbleDiagramModel = new KDChartModel;
-        //kdBubbleDiagramModel->setDataDimensions( 2 );
-    }
+    kdBubbleDiagramModel = new KDChartModel;
+    kdBubbleDiagramModel->setDataDimensions( 3 );
 
-    // No KDChart::Diagram since KDChart doesn't support this type
-#if 0
-    if ( kdBubbleDiagram == 0 ) {
-        ...
-    }
-#endif
+    kdBubbleDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
+    kdBubbleDiagram->setModel( kdBubbleDiagramModel );
+    registerDiagram( kdBubbleDiagram );
 }
 
 void Axis::Private::createSurfaceDiagram()
@@ -1781,15 +1768,13 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         if ( !d->kdStockDiagram )
            d->createStockDiagram();
         newModel = d->kdStockDiagramModel;
-        //newDiagram = d->kdStockDiagram;
-        newDiagram = 0;
+        newDiagram = d->kdStockDiagram;
         break;
     case BubbleChartType:
         if ( !d->kdBubbleDiagram )
            d->createBubbleDiagram();
         newModel = d->kdBubbleDiagramModel;
-        //newDiagram = d->kdBubbleDiagram;
-        newDiagram = 0;
+        newDiagram = d->kdBubbleDiagram;
         break;
     case SurfaceChartType:
         if ( !d->kdSurfaceDiagram )

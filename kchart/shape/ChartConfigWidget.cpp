@@ -261,12 +261,10 @@ ChartConfigWidget::ChartConfigWidget()
     // X/Y charts: scatter and bubble
     d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
     d->bubbleChartAction = chartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
-    d->bubbleChartAction->setEnabled( false );
 
     chartTypeMenu->addSeparator();
 
     d->stockChartAction = chartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
-    d->stockChartAction->setEnabled( false );
     d->surfaceChartAction = chartTypeMenu->addAction( KIcon( "chart_surface_normal" ), i18n("Surface Chart") );
     d->surfaceChartAction->setEnabled( false );
     d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Gantt Chart") );
@@ -302,6 +300,8 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
     d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
     d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
+    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
     
@@ -612,11 +612,11 @@ void ChartConfigWidget::setCartesianChartTypesEnabled( bool enabled )
     d->dataSetLineChartMenu->setEnabled( enabled );
     d->dataSetAreaChartMenu->setEnabled( enabled );
     d->dataSetScatterChartAction->setEnabled( enabled );
+    d->dataSetStockChartAction->setEnabled( enabled );
+    d->dataSetBubbleChartAction->setEnabled( enabled );
     // FIXME: Enable for:
     // pie, ring?
     //NYI: 
-    //stock
-    //bubble
     //surface
     //gantt
 }
@@ -700,10 +700,12 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type = RingChartType;
     else if ( action == d->dataSetScatterChartAction )
         type = ScatterChartType;
+    else if ( action == d->dataSetStockChartAction )
+        type = StockChartType;
+    else if ( action == d->dataSetBubbleChartAction )
+        type = BubbleChartType;
     
     // FIXME: Not supported by KChart yet:
-    //stock
-    //bubble
     //surface
     //gantt
 
