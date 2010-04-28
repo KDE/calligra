@@ -17,7 +17,7 @@
  */
 
 #include "kexireportview.h"
-#include "kexireportpage.h"
+#include <KoReportPage.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
 
@@ -279,7 +279,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_pageSelector->setRecordCount(m_pageCount);
             }
 
-            m_reportWidget = new KexiReportPage(this, m_reportDocument);
+            m_reportWidget = new KoReportPage(this, m_reportDocument);
             m_reportWidget->setObjectName("KexiReportPage");
             m_scrollArea->setWidget(m_reportWidget);
 

@@ -20,7 +20,6 @@ set(kexihandler_report_SRCS
     kexireports.cpp
     kexireportpart.cpp
     kexireportview.cpp
-    kexireportpage.cpp
     kexireportdesignview.cpp
     kexidbreportdata.cpp
     keximigratereportdata.cpp

@@ -28,7 +28,7 @@
 class KoReportPreRenderer;
 class ORODocument;
 class QScrollArea;
-class KexiReportPage;
+class KoReportPage;
 class KexiReportViewPageSelect;
 class KexiRecordNavigator;
 class KexiScriptAdaptor;
@@ -52,7 +52,7 @@ private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
-    KexiReportPage *m_reportWidget;
+    KoReportPage *m_reportWidget;
     KexiRecordNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
