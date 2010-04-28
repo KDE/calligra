@@ -833,8 +833,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0)
                     processRun( chunk, chp, length, index, currentStart );
             } else if ( m_bookmark ) {
-                if (m_bookmarkText.find(chunk.m_text.substr(index, length), 0) != 0)
+                if (m_bookmarkText.find(chunk.m_text.substr(index, length), 0) != 0) {
                     processRun( chunk, chp, length, index, currentStart );
+                }
             }
 
             break;   // should be faster than messing with length...
