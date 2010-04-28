@@ -34,6 +34,8 @@
 
 // KDChart
 #include <KDChartGlobal>
+#include <KDChartPieAttributes>
+#include <KDChartDataValueAttributes>
 
 using namespace KChart;
 
@@ -175,7 +177,9 @@ QVariant KDChartModel::data( const QModelIndex &index,
     case KDChart::DatasetPenRole:
         return dataSet->pen( section );
     case KDChart::PieAttributesRole:
-        return QVariant::fromValue(dataSet->pieAttributes( section ));
+        return QVariant::fromValue( dataSet->pieAttributes( section ) );
+    case KDChart::DataValueLabelAttributesRole:
+        return QVariant::fromValue( dataSet->dataValueAttributes( section ) );
     }
 
     // TODO (Johannes): Support for third data dimension
@@ -315,6 +319,7 @@ bool KDChartModel::Private::isKnownDataRole( int role ) const
     case KDChart::DatasetPenRole:
     case KDChart::DatasetBrushRole:
     case KDChart::PieAttributesRole:
+    case KDChart::DataValueLabelAttributesRole:
         return true;
     }
 
@@ -366,6 +371,8 @@ QVariant KDChartModel::headerData( int section,
             return dataSet->pen();
         case KDChart::PieAttributesRole:
             return QVariant::fromValue(dataSet->pieAttributes());
+        case KDChart::DataValueLabelAttributesRole:
+            return QVariant::fromValue( dataSet->dataValueAttributes() );
         }
     }
     /* else if ( orientation == d->dataDirection ) { */

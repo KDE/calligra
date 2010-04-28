@@ -671,9 +671,12 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     
     // Find out if the data table contains labels as first row and/or column.
     // This is in the plot-area element itself.
-    if( proxyModel()->categoryDataRegion().isEmpty() && // if chart:categories with a table:cell-range-address is defined within an axis then we need to ignore the data-source-has-labels.
-        plotAreaElement.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
-        // Yes, it does.  Now find out how.
+
+    // Do not ignore the data-source-has-labels in any case, even if a category data region is specified for an axis, as the first column still
+    // has to be exluded from the actual data region if e.g. data-source-has-labels is set to "column"
+    // If an axis contains the chart:categories element, the category data region will automatically be set on every data set attached to that
+    // axis. See Axis::attachDataSet().
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
         const QString  dataSourceHasLabels
             = plotAreaElement.attributeNS( KoXmlNS::chart,
                                         "data-source-has-labels" );

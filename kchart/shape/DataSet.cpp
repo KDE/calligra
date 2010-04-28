@@ -37,7 +37,10 @@
 
 // KDChart
 #include <KDChartDataValueAttributes>
+#include <KDChartPieAttributes>
 #include <KDChartTextAttributes>
+#include <KDChartRelativePosition>
+#include <KDChartPosition>
 #include <KDChartAbstractDiagram>
 #include <KDChartMeasure>
 #include "KDChartModel.h"
@@ -51,6 +54,7 @@
 // KOffice
 #include <KoXmlNS.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoGenStyle.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -92,7 +96,6 @@ public:
     Axis *attachedAxis;
     bool showMeanValue;
     QPen meanValuePen;
-    bool showValues;
     bool showLabels;
     bool showLowerErrorIndicator;
     bool showUpperErrorIndicator;
@@ -108,11 +111,19 @@ public:
     bool brushIsSet;
     QPen pen;
     QBrush brush;
+
+    // Returns an instance of DataValueAttributes with sane default values in
+    // relation to KChart
+    KDChart::DataValueAttributes defaultDataValueAttributes();
+
     KDChart::PieAttributes pieAttributes;
+    KDChart::DataValueAttributes dataValueAttributes;
 
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
     QMap<int, KDChart::PieAttributes> sectionsPieAttributes;
+    QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
+    QMap<int, bool> sectionsShowLabels;
 
     int num;
 
@@ -145,7 +156,6 @@ DataSet::Private::Private( DataSet *parent )
     kdChartModel = 0;
     kdDataSetNumber = -1;
     showMeanValue = false;
-    showValues = false;
     showLabels = false;
     showLowerErrorIndicator = false;
     showUpperErrorIndicator = false;
@@ -161,10 +171,47 @@ DataSet::Private::Private( DataSet *parent )
     blockSignals = false;
     penIsSet = false;
     brushIsSet = false;
+    dataValueAttributes = defaultDataValueAttributes();
 }
 
 DataSet::Private::~Private()
 {
+}
+
+KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes()
+{
+    KDChart::DataValueAttributes attr;
+    KDChart::TextAttributes textAttr = attr.textAttributes();
+    KDChart::Measure fontSize = textAttr.fontSize();
+    fontSize.setValue( 10 );
+    // Don't change font size with chart size
+    fontSize.setCalculationMode( KDChartEnums::MeasureCalculationModeAbsolute );
+    textAttr.setFontSize( fontSize );
+    // Draw text horizontally
+    textAttr.setRotation( 0 );
+    attr.setTextAttributes( textAttr );
+    // Set positive value position
+    KDChart::RelativePosition positivePosition = attr.positivePosition();
+    positivePosition.setAlignment( Qt::AlignCenter | Qt::AlignBottom );
+    positivePosition.setReferencePosition( KDChartEnums::PositionNorth );
+    positivePosition.setHorizontalPadding( 0.0 );
+    positivePosition.setVerticalPadding( -100.0 );
+    attr.setPositivePosition( positivePosition );
+    // Set negative value position
+    KDChart::RelativePosition negativePosition = attr.negativePosition();
+    negativePosition.setAlignment( Qt::AlignCenter | Qt::AlignTop );
+    negativePosition.setReferencePosition( KDChartEnums::PositionSouth );
+    negativePosition.setHorizontalPadding( 0.0 );
+    negativePosition.setVerticalPadding( 100.0 );
+    attr.setNegativePosition( negativePosition );
+    // No decimal digits by default
+    attr.setDecimalDigits( 0 );
+    // Show all values, even if they overlap
+    attr.setShowOverlappingDataLabels( true );
+    // Yes, data point labels can repeatedly have the same text. (e.g. the same value)
+    attr.setShowRepetitiveDataLabels( true );
+
+    return attr;
 }
 
 void DataSet::Private::updateSize()
@@ -476,40 +523,19 @@ void DataSet::setAttachedAxis( Axis *axis )
     d->attachedAxis = axis;
 }
 
-bool DataSet::showValues() const
+bool DataSet::showLabels( int section /* = -1 */ ) const
 {
-    return d->showValues;
-}
-
-bool DataSet::showLabels() const
-{
+    if ( section >= 0 )
+        return d->sectionsShowLabels[ section ];
     return d->showLabels;
 }
 
-void DataSet::setShowValues( bool showValues )
+void DataSet::setShowLabels( bool showLabels, int section /* = -1 */ )
 {
-    if ( !d->kdDiagram )
-        return;
-
-    d->showValues = showValues;
-    
-    KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
-    attributes.setVisible( showValues );
-
-    // FIXME: This should be a dynamic property that can be changed by
-    //        the user (for 2.1)
-    KDChart::TextAttributes textAttributes = attributes.textAttributes();
-    textAttributes.setFontSize( KDChart::Measure( 6, KDChartEnums::MeasureCalculationModeAbsolute ) );
-    attributes.setTextAttributes( textAttributes );
-    d->kdDiagram->setDataValueAttributes( d->kdDataSetNumber, attributes );
-    
-    if ( d->attachedAxis )
-        d->attachedAxis->update();
-}
-
-void DataSet::setShowLabels( bool showLabels )
-{
-    d->showLabels = showLabels;
+    if ( section >= 0 )
+        d->sectionsShowLabels[ section ] = showLabels;
+    else
+        d->showLabels = showLabels;
 }
 
 QPen DataSet::pen() const
@@ -548,6 +574,13 @@ KDChart::PieAttributes DataSet::pieAttributes( int section ) const
     if( d->sectionsPieAttributes.contains( section ) )
         return d->sectionsPieAttributes[ section ];
     return pieAttributes();
+}
+
+KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 */ ) const
+{
+    if ( d->sectionsDataValueAttributes.contains( section ) )
+        return d->sectionsDataValueAttributes[ section ];
+    return d->dataValueAttributes;
 }
 
 void DataSet::setPen( const QPen &pen )
@@ -983,6 +1016,43 @@ void DataSet::blockSignals( bool block )
     d->blockSignals = block;
 }
 
+void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
+{
+    KDChart::DataValueAttributes &attr = d->dataValueAttributes;
+    if ( section >= 0 && !d->sectionsDataValueAttributes.contains( section ) )
+        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
+    if ( section >= 0 )
+        attr = d->sectionsDataValueAttributes[ section ];
+
+    switch ( type ) {
+        case NoValueLabel:
+            attr.setVisible( false );
+            break;
+        case RealValueLabel:
+            attr.setVisible( true );
+            attr.setUsePercentage( false );
+            break;
+        case PercentageValueLabel:
+            attr.setVisible( true );
+            attr.setUsePercentage( true );
+            attr.setSuffix( "%" );
+            break;
+    }
+}
+
+DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
+{
+    KDChart::DataValueAttributes &attr = d->dataValueAttributes;
+    if ( d->sectionsDataValueAttributes.contains( section ) )
+        attr = d->sectionsDataValueAttributes[ section ];
+
+    if ( !attr.isVisible() )
+        return NoValueLabel;
+    if ( !attr.usePercentage() )
+        return RealValueLabel;
+    return PercentageValueLabel;
+}
+
 bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded)
 {
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
@@ -1069,6 +1139,15 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
         const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
         setShowLabels( enable == "true" );
+    }
+    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
+        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
+        ValueLabelType type = NoValueLabel;
+        if ( format == "value" )
+            type = RealValueLabel;
+        else if ( format == "percentage" )
+            type = PercentageValueLabel;
+        setValueLabelType( type );
     }
 
     // load data points

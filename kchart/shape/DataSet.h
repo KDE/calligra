@@ -29,12 +29,14 @@
 // Qt
 #include <QPen>
 
-//KDChart
-#include <KDChartPieAttributes>
-
 // KChart
 #include "ChartShape.h"
 #include "CellRegion.h"
+
+namespace KDChart {
+    class DataValueAttributes;
+    class PieAttributes;
+}
 
 class KoShapeLoadingContext;
 
@@ -68,8 +70,35 @@ public:
 
     ChartProxyModel   *model() const;
 
-    bool showValues() const;
-    bool showLabels() const;
+    /**
+     * Describes ODF attribute chart:data-label-number from §15.32.3
+     */
+    enum ValueLabelType {
+        /// No value will be displayed
+        NoValueLabel,
+        /// The actual value will be displayed
+        RealValueLabel,
+        /// A percentage in e.g. respect to the sum of all values in a series
+        /// will be shown.
+        PercentageValueLabel
+    };
+
+    /**
+     * Sets the value label type. \see ValueLabelType
+     *
+     * \param section The data point to set this type for. -1 will set
+     * a series-wide value
+     */
+    void setValueLabelType( ValueLabelType type, int section = -1 );
+
+    /**
+     * \return the value label type.
+     * \see ValueLabelType
+     *
+     * \param section The data point to return the type for. -1 will return
+     * the series-wide value
+     */
+    ValueLabelType valueLabelType( int section = -1 ) const;
 
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
@@ -78,6 +107,7 @@ public:
     QPen   pen( int section ) const;
     QBrush brush( int section ) const;
     KDChart::PieAttributes pieAttributes( int section ) const;
+    KDChart::DataValueAttributes dataValueAttributes( int section = -1 ) const;
     QColor color() const;
     int    number() const;
 
@@ -98,8 +128,16 @@ public:
     void setChartSubType( ChartSubtype type );
     void setAttachedAxis( Axis *axis );
 
-    void setShowValues( bool showValues );
-    void setShowLabels( bool showLabels );
+    /**
+     * \return Whether to display categories as labels or not
+     * See ODF's chart:data-label-text attribute from §15.32.3
+     */
+    bool showLabels( int section = -1 ) const;
+
+    /**
+     * \see showLabels
+     */
+    void setShowLabels( bool showLabels, int section = -1 );
 
     void setPen( const QPen &pen );
     void setBrush( const QBrush &brush );

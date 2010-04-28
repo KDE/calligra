@@ -98,6 +98,17 @@ namespace KDChart {
 
         bool usesExternalAttributesModel()const;
 
+        // FIXME: Optimize if necessary
+        virtual qreal calcPercentValue( const QModelIndex & index )
+        {
+            qreal sum = 0.0;
+            for ( int col = 0; col < attributesModel->columnCount( QModelIndex() ); col++ )
+                sum += attributesModel->data( attributesModel->index( index.row(), col, QModelIndex() ) ).toDouble();
+            if ( sum == 0.0 )
+                return 0.0;
+            return attributesModel->data( attributesModel->mapFromSource( index ) ).toDouble() / sum * 100.0;
+        }
+
         void appendDataValueTextInfoToList(
             AbstractDiagram * diagram,
             DataValueTextInfoList & list,
@@ -248,6 +259,9 @@ namespace KDChart {
             const DataValueAttributes a( diag->dataValueAttributes( index ) );
 
             if ( !a.isVisible() ) return;
+
+            if ( a.usePercentage() )
+                value = calcPercentValue( index );
 
             // handle decimal digits
             int decimalDigits = a.decimalDigits();
