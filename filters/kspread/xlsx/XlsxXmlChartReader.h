@@ -72,6 +72,8 @@ protected:
     KoFilter::ConversionStatus read_ser();
     KoFilter::ConversionStatus read_title();
     KoFilter::ConversionStatus read_legend();
+    KoFilter::ConversionStatus read_spPr();
+
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
     KoFilter::ConversionStatus read_doughnutChart();
@@ -83,6 +85,9 @@ protected:
     KoFilter::ConversionStatus read_line3DChart();
     KoFilter::ConversionStatus read_scatterChart();
     KoFilter::ConversionStatus read_scatter3DChart();
+    KoFilter::ConversionStatus read_radarChart();
+    KoFilter::ConversionStatus read_radar3DChart();
+
     KoFilter::ConversionStatus read_barDir();
     KoFilter::ConversionStatus read_grouping();
     KoFilter::ConversionStatus read_val();

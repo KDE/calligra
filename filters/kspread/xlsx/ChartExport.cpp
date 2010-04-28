@@ -116,9 +116,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttributePt("svg:height", m_height);
 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
-    //style.addProperty("draw:stroke", "none");
-    //style.addProperty("draw:stroke", "solid");
-    //style.addProperty("draw:fill-color", "#ff0000");
+    if(!chart()->m_areaFormat || chart()->m_areaFormat->m_fill) {
+        style.addProperty("draw:fill", "solid");
+        style.addProperty("draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF");
+    }
     bodyWriter->addAttribute("chart:style-name", styles.insert(style, "ch"));
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
@@ -331,7 +332,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             foreach(Charting::Text* t, series->m_texts) {
                 bodyWriter->startElement("chart:data-label");
                 bodyWriter->startElement("text:p");
-                bodyWriter->addTextNode("BlaGaGa");//t->m_text);
+                bodyWriter->addTextNode(t->m_text);
                 bodyWriter->endElement();
                 bodyWriter->endElement();
             }

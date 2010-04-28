@@ -748,12 +748,18 @@
 </record>
 
 <record name="Radar" id="0x103e">
+  <field name="fRdrAxLab" type="bool" size="1" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="reserved" size="14" />
 </record>
 
 <record name="Surf" id="0x103f">
 </record>
 
 <record name="RadarArea" id="0x1040">
+  <field name="fRdrAxLab" type="bool" size="1" />
+  <field name="fHasShadow" type="bool" size="1" />
+  <field name="reserved" size="14" />
 </record>
 
 <record name="AxisParent" id="0x1041">

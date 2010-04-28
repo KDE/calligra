@@ -469,22 +469,22 @@ public:
      */
     bool isNull() const;
 
-    enum {
-        SolidPattern,
-        Dense1Pattern, // diagonal crosshatch
-        Dense2Pattern, // thick diagonal crosshatch
-        Dense3Pattern, // 75% gray
-        Dense4Pattern, // 50% gray
-        Dense5Pattern, // 25% gray
-        Dense6Pattern, // 12.5% gray
-        Dense7Pattern, // 6.25% gray
-        HorPattern,  // Horizonatal lines
-        VerPattern,  // Vertical lines
-        CrossPattern, // Horizontal and Vertical lines
-        BDiagPattern, // Left-bottom to right-top diagonal lines
-        FDiagPattern, // Left-top to right-bottom diagonal lines
-        DiagCrossPattern, // Crossing diagonal lines
-        EmptyPattern
+    enum FillPattern {
+        SolidPattern, ///< solid
+        Dense1Pattern, ///< diagonal crosshatch
+        Dense2Pattern, ///< thick diagonal crosshatch
+        Dense3Pattern, ///< 75% gray
+        Dense4Pattern, ///< 50% gray
+        Dense5Pattern, ///< 25% gray
+        Dense6Pattern, ///< 12.5% gray
+        Dense7Pattern, ///< 6.25% gray
+        HorPattern,  ///< Horizonatal lines
+        VerPattern,  ///< Vertical lines
+        CrossPattern, ///< Horizontal and Vertical lines
+        BDiagPattern, ///< Left-bottom to right-top diagonal lines
+        FDiagPattern, ///< Left-top to right-bottom diagonal lines
+        DiagCrossPattern, ///< Crossing diagonal lines
+        EmptyPattern ///< Transparent
     };
 
     /**

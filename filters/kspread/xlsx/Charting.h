@@ -24,7 +24,7 @@
 //#include <QtCore/QStringList>
 #include <QtCore/QRect>
 #include <QtCore/QMap>
-//#include <QtGui/QColor>
+#include <QtGui/QColor>
 #include <QtCore/QDebug>
 
 namespace Charting
@@ -94,6 +94,15 @@ namespace Charting
         int m_pcExplode; // from PieFormat
         PieFormat(int pcExplode = 0) : Format(), m_pcExplode(pcExplode) {}
     };
+    
+    class AreaFormat : public Format
+    {
+    public:
+        QColor m_foreground;
+        QColor m_background;
+        bool m_fill;
+        AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
+    };
 
     class ChartImpl
     {
@@ -132,6 +141,13 @@ namespace Charting
     public:
         virtual QByteArray name() const { return "line"; }
     };
+    
+    class RadarImpl : public ChartImpl
+    {
+    public:
+        RadarImpl() : ChartImpl() {}
+        virtual QByteArray name() const { return "radar"; }
+    };
 
     class AreaImpl : public ChartImpl
     {
@@ -166,8 +182,9 @@ namespace Charting
     {
     public:
         unsigned int m_mdTopLt, m_mdBotRt, m_x1, m_y1, m_x2, m_y2;
-        explicit Obj() : m_mdTopLt(0), m_mdBotRt(0), m_x1(0), m_y1(0), m_x2(0), m_y2(0) {}
-        virtual ~Obj() {}
+        Charting::AreaFormat *m_areaFormat;
+        explicit Obj() : m_mdTopLt(0), m_mdBotRt(0), m_x1(0), m_y1(0), m_x2(0), m_y2(0), m_areaFormat(0) {}
+        virtual ~Obj() { delete m_areaFormat; }
     };
 
     class Text : public Obj
@@ -235,14 +252,9 @@ namespace Charting
     };
 
     /// The main charting class that represents a single chart.
-    class Chart
+    class Chart : public Obj
     {
     public:
-        /// Optional total positioning. The need to be ignored if the chart is embedded into a sheet.
-        int m_total_x, m_total_y, m_total_width, m_total_height;
-
-        //int m_x, m_y, m_width, m_height;
-
         /// If true then the chart is a 3d chart else teh chart is 2d.
         bool m_is3d;
         /// Specifies a counter clockwise rotation of a polar coordinate in a circle, ring or polar chart.
@@ -269,7 +281,9 @@ namespace Charting
         /// Whether the chart is percentage or not.
         bool m_f100;
 
-        explicit Chart() : m_total_x(-1), m_total_y(-1), m_total_width(-1), m_total_height(-1), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false) {}
+        explicit Chart() : Obj(), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false) {
+            m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
+        }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; }
         
         void addRange(const QRect& range)
