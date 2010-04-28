@@ -155,7 +155,7 @@ void Chart::Private::layoutHeadersAndFooters()
     Q_FOREACH( HeaderFooter *hf, headerFooters ) {
         // for now, there are only two types of Header/Footer,
         // we use a pointer to the right layout, depending on the type():
-        int innerLayoutIdx;
+        int innerLayoutIdx = 0;
         switch( hf->type() ){
             case HeaderFooter::Header:
                 innerLayoutIdx = 0;
