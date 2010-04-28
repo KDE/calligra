@@ -539,7 +539,12 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     }
 
     // setData method
-    out << "void " << className << "::setData( unsigned size, const unsigned char* data, const unsigned int* )\n{\n";
+    bool hasFields = !fieldNodes.isEmpty();
+    if (hasFields) {
+        out << "void " << className << "::setData( unsigned size, const unsigned char* data, const unsigned int* )\n{\n";
+    } else {
+        out << "void " << className << "::setData( unsigned, const unsigned char*, const unsigned int* )\n{\n";
+    }
     if (e.elementsByTagName("if").size() > 0 || e.elementsByTagName("array").size() > 0 || containsStrings)
         out << "    unsigned curOffset;\n";
     if (containsStrings) {
