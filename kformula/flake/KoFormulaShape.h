@@ -24,9 +24,13 @@
 #define KoFormulaShapeId "FormulaShapeID"
 #include <KoFrameShape.h>
 
+class KoStore;
+class KoResourceManager;
+
 class BasicElement;
 class FormulaRenderer;
 class FormulaData;
+class FormulaDocument;
 
 /**
  * @short The flake shape for a formula
@@ -43,7 +47,8 @@ class FormulaData;
 class KoFormulaShape : public KoShape, public KoFrameShape {
 public:
     /// The basic constructor
-    KoFormulaShape();
+    KoFormulaShape(KoResourceManager *documentResourceManager);
+    //KoFormulaShape();
 
     /// The basic destructor
     ~KoFormulaShape();
@@ -77,7 +82,10 @@ public:
     bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
 
     virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
-    
+    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
+                              const KoXmlDocument &manifestDocument); // private?
+    bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
+
     /**
      * @brief store the shape data as ODF XML. - reimplemented from KoShape
      * This is the method that will be called when saving a shape as a described in
@@ -86,12 +94,20 @@ public:
      */ 
     void saveOdf( KoShapeSavingContext& context ) const;
 
+    KoResourceManager *resourceManager() const;
+
 private:
     /// The data this shape displays
     FormulaData* m_formulaData;
 
     /// The renderer that takes care of painting the shape's formula
     FormulaRenderer* m_formulaRenderer;
+
+    /// True if this formula is inline, i.e. not embedded in a formula document.
+    bool m_isInline;
+
+    FormulaDocument *m_document;
+    KoResourceManager *m_resourceManager;
 };
 
 #endif // KOFORMULASHAPE_H
