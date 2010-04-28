@@ -175,27 +175,6 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     return mainStyles.insert( autoStyle, "ch" );
 }
 
-bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
-{
-    Q_UNUSED(context);
-    TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
-    if ( !labelData )
-        return false;
-
-    // Following will always return false cause KoTextShapeData::loadOdf will try to load
-    // a frame while our text:p is not within a frame. So, let's just not call loadOdf then...
-    //label->loadOdf( labelElement, context );
-
-    // TODO: Read optional attributes
-    // 1. Table range
-    KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
-                                                 KoXmlNS::text, "p" );
-
-    labelData->document()->setPlainText( pElement.text() );
-
-    return true;
-}
-
 void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
                    KoGenStyles &mainStyles, LabelType labelType )
 {
@@ -253,6 +232,45 @@ QColor defaultDataSetColor( int dataSetNum )
     return QColor( defaultDataSetColors[ dataSetNum ] );
 }
 
+static QPointF scalePointCenterLeft( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
+{
+    center.rx() -= size.width() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.rx() += size.width() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterRight( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
+{
+    center.rx() += size.width() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.rx() -= size.width() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterTop( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
+{
+    center.ry() -= size.height() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.ry() += size.height() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterBottom( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
+{
+    center.ry() += size.height() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.ry() -= size.height() / 2.0;
+
+    return center;
+}
 
 // ================================================================
 //                     The Private class
@@ -264,6 +282,7 @@ public:
     Private( ChartShape *shape );
     ~Private();
 
+    bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context );
     void showLabel( KoShape *label, bool doShow );
     QPointF relativePosition( KoShape *shape );
     void setRelativePosition( KoShape *shape, const QPointF &relPos );
@@ -311,6 +330,49 @@ ChartShape::Private::~Private()
 {
 }
 
+bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
+{
+    TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
+    if ( !labelData )
+        return false;
+
+    // Following will always return false cause KoTextShapeData::loadOdf will try to load
+    // a frame while our text:p is not within a frame. So, let's just not call loadOdf then...
+    //label->loadOdf( labelElement, context );
+
+    // 1. set the text
+    KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
+                                                 KoXmlNS::text, "p" );
+
+    QTextDocument* doc = labelData->document();
+    doc->setPlainText( pElement.text() );
+
+    // 2. set the position
+    QPointF pos = label->position();
+    bool posChanged = false;
+    if ( labelElement.hasAttributeNS( KoXmlNS::svg, "x" ) ) {
+        pos.setX( KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        posChanged = true;
+    }
+    if ( labelElement.hasAttributeNS( KoXmlNS::svg, "y" ) ) {
+        pos.setY( KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+        posChanged = true;
+    }
+    if ( posChanged ) {
+        label->setPosition( pos );
+    }
+
+    // 3. set the size
+    QSizeF size = shape->size();
+    QRect r = QFontMetrics( doc->defaultFont() ).boundingRect(
+                    labelData->shapeMargins().left, labelData->shapeMargins().top,                         
+                    qMax( CM_TO_POINT( 5 ), size.width() - pos.x() * 2.0 - labelData->shapeMargins().right ),
+                    qMax( CM_TO_POINT( 0.6 ), size.height() - labelData->shapeMargins().bottom ),
+                    Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, doc->toPlainText() );
+    label->setSize( r.size() );
+
+    return true;
+}
 
 //
 // Show a label, which means either the Title, Subtitle or Footer.
@@ -635,46 +697,6 @@ void ChartShape::setPosition( const QPointF &pos )
     //if ( relativePosition.x() > 0.01 || relativePosition.y() > 0.01 )
     //    d->legend->setPosition( d->legend->position() - relativePosition );
     KoShape::setPosition( pos );
-}
-
-static QPointF scalePointCenterLeft( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.rx() -= size.width() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.rx() += size.width() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterRight( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.rx() += size.width() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.rx() -= size.width() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterTop( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.ry() -= size.height() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.ry() += size.height() / 2.0;
-
-    return center;
-}
-
-static QPointF scalePointCenterBottom( QPointF center, qreal factorX, qreal factorY, const QSizeF &size )
-{
-    center.ry() += size.height() / 2.0;
-    center.rx() *= factorX;
-    center.ry() *= factorY;
-    center.ry() -= size.height() / 2.0;
-
-    return center;
 }
 
 QPointF ChartShape::Private::relativePosition( KoShape *shape )
@@ -1175,7 +1197,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
-        if ( !loadOdfLabel( d->title, titleElem, context) )
+        if ( !d->loadOdfLabel( d->title, titleElem, context) )
             return false;
         d->showLabel(d->title, true);
     }
@@ -1184,7 +1206,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement,
                                                     KoXmlNS::chart, "subtitle" );
     if ( !subTitleElem.isNull() ) {
-        if ( !loadOdfLabel( d->subTitle, subTitleElem, context) )
+        if ( !d->loadOdfLabel( d->subTitle, subTitleElem, context) )
             return false;
         d->showLabel(d->subTitle, true);
     }
@@ -1193,7 +1215,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement,
                                                   KoXmlNS::chart, "footer" );
     if ( !footerElem.isNull() ) {
-        if ( !loadOdfLabel( d->footer, footerElem, context ) )
+        if ( !d->loadOdfLabel( d->footer, footerElem, context ) )
             return false;
         d->showLabel(d->footer, true);
     }
