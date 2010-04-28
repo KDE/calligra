@@ -190,7 +190,15 @@ private:
 
     KWord::Table* m_currentTable;
     //pointer to paragraph object
-    Paragraph* m_paragraph;
+    Paragraph *m_paragraph;
+#if 1
+    bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap 
+    int        m_dcs_fdct;
+    int        m_dcs_lines;
+    qreal      m_dropCapDistance;
+#endif
+    QString    m_dropCapString;
+    //Paragraph *m_dropCapParagraph; // These are stored separately by MS Office.
 
     QString m_fieldValue;
     bool m_insideField;

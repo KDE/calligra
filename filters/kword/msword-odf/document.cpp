@@ -315,10 +315,9 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(),
-                                                &userStyle, parentStyle);
-            Paragraph::applyParagraphProperties(style->paragraphProperties(),
-                                                &userStyle, parentStyle);
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), 
+                                                &userStyle, parentStyle, false, 0);
 
             // Add style to main collection, using the name that it
             // had in the .doc.

@@ -24,6 +24,7 @@
 
 #include <QBuffer>
 
+#include <qlist.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -59,11 +60,22 @@ public:
         m_containsPageNumberField = containsPageNumberField;
     }
 
+    typedef enum { NoDropCap, IsDropCapPara, HasDropCapIntegrated }  DropCapStatus;
+    DropCapStatus dropCapStatus() const;
+    void getDropCapData(QString *string, int *type, int *lines, qreal *distance) const;
+    void addDropCap(QString &string, int type, int lines, qreal distance);
+
+    // debug:
+    int  strings() const;
+    QString string(int index) const;
+
     // Static functions for parsing wvWare properties and applying
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool setDefaultAlign=false);
-    static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false);
+                                         KoGenStyle* style, const wvWare::Style* parentStyle,
+                                         bool setDefaultAlign, Paragraph *paragraph);
+    static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
+                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false);
 
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
@@ -78,8 +90,10 @@ private:
     const wvWare::Style* m_paragraphStyle;  // style for the paragraph
     const wvWare::Style* m_paragraphStyle2; // style when in inner paragraph
 
-    std::vector<QString> m_textStrings; // list of text strings within a paragraph
-    std::vector<QString> m_textStrings2; // original list when in inner paragraph
+    //std::vector<QString> m_textStrings; // list of text strings within a paragraph
+    //std::vector<QString> m_textStrings2; // original list when in inner paragraph
+    QList<QString> m_textStrings; // list of text strings within a paragraph
+    QList<QString> m_textStrings2; // original list when in inner paragraph
     std::vector<const KoGenStyle*> m_textStyles; // list of styles for text within a paragraph
     std::vector<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
     std::vector<bool> m_addCompleteElement;         // list of flags if we should output the complete parahraph instead of processing it
@@ -89,6 +103,12 @@ private:
     bool m_isHeading; //information for writing a heading instead of a paragraph
     // (odt looks formats them similarly)
     int m_outlineLevel;
+
+    DropCapStatus  m_dropCapStatus; // True if this paragraph has a dropcap 
+    int   m_dcs_fdct;
+    int   m_dcs_lines;
+    qreal m_dropCapDistance;
+
     bool m_inHeaderFooter;
     bool m_containsPageNumberField;
 }; //end class Paragraph

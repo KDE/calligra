@@ -69,6 +69,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_index(0)
     , m_currentTable(0)
     , m_paragraph(0)
+    , m_hasStoredDropCap(false)
     , m_insideField(false)
     , m_fieldAfterSeparator(false)
     , m_fieldType(0)
@@ -685,6 +686,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     //    paragraphEnd();
     //m_bInParagraph = true;
     //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
+
     kDebug(30513) << "set paragraph properties";
     m_paragraph->setParagraphProperties(paragraphProperties);
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
@@ -714,7 +716,14 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
 void KWordTextHandler::paragraphEnd()
 {
-    kDebug(30513);
+    kDebug(30513) << "-----------------------------------------------";
+
+    // If the last paragraph was a drop cap paragraph, combine it with
+    // this one.
+    if (m_hasStoredDropCap) {
+        kDebug(30513) << "combine paragraphs for drop cap" << m_dropCapString;
+        m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance);
+    }
 
     //clear our paragraph flag
     //m_bInParagraph = false;
@@ -736,7 +745,25 @@ void KWordTextHandler::paragraphEnd()
         m_paragraph->writeToFile(m_drawingWriter);
     } else if (!document()->writingHeader()) {
         kDebug(30513) << "writing to body";
+
+        // Need to call this before the drop cap test just below,
+        // because here is where the style is applied.
         m_paragraph->writeToFile(m_bodyWriter);
+
+        // If this paragraph is a drop cap, it should be combined with
+        // the next paragraph.  So store the drop cap data for future
+        // use.  However, only do this if the last paragraph was *not*
+        // a dropcap.
+        if (!m_hasStoredDropCap && m_paragraph->dropCapStatus() == Paragraph::IsDropCapPara) {
+            m_paragraph->getDropCapData(&m_dropCapString, &m_dcs_fdct, &m_dcs_lines,
+                                        &m_dropCapDistance);
+            m_hasStoredDropCap = true;
+            kDebug(30513) << "saving drop cap data in texthandler" << m_dropCapString;
+        }
+
+        // Remove the traces of the drop cap for the next round.
+        m_hasStoredDropCap = false;
+        m_dropCapString.clear();
 
     } else {
         kDebug(30513) << "writing a header";
@@ -745,7 +772,6 @@ void KWordTextHandler::paragraphEnd()
 
     delete m_paragraph;
     m_paragraph = 0;
-
 }//end paragraphEnd()
 
 void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)

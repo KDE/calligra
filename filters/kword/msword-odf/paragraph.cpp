@@ -36,6 +36,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
         m_outlineLevel(0),
+        m_dropCapStatus(NoDropCap),
         m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false)
 {
@@ -63,7 +64,9 @@ Paragraph::~Paragraph()
     m_odfParagraphStyle = 0;
 }
 
-void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement)
+void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                             QString fontName, const wvWare::StyleSheet& styles,
+                             bool addCompleteElement)
 {
     // Check for column break in this text string
     int colBreak = text.indexOf(QChar(0xE));
@@ -87,7 +90,8 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
     m_addCompleteElement.push_back(addCompleteElement);
 
     // Add text string to list.
-    m_textStrings.push_back(QString(text));
+    //m_textStrings.push_back(QString(text));
+    m_textStrings.append(QString(text));
 
     // Now find out what style to associate with the string.
 
@@ -145,7 +149,44 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513);
 
     // Set up the paragraph style.
-    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeaderFooter && m_containsPageNumberField);
+    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
+                             m_inHeaderFooter && m_containsPageNumberField, this);
+ 
+    // MS Word puts dropcap characters in its own paragraph with the
+    // rest of the text in the subsequent paragraph. On the other
+    // hand, ODF wants the whole paragraph to be one unit.
+    //
+    // So if this paragraph is only one string and we have a dropcap,
+    // then we should combine this paragraph with the next, and write
+    // them together.  That means we should just return here now so
+    // that the next call to writeToFile() they will be in the same
+    // paragraph.
+    if (m_dropCapStatus == IsDropCapPara) {
+        kDebug(30513) << "returning with drop cap paragraph";
+        return;
+    }
+
+    // If there is a dropcap defined, then write it to the style.
+    if (m_dropCapStatus == HasDropCapIntegrated) {
+        kDebug(30513) << "Creating drop cap style";
+
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter tmpWriter(&buf, 3);
+        tmpWriter.startElement("style:drop-cap");
+        tmpWriter.addAttribute("style:lines", m_dcs_lines);
+        tmpWriter.addAttributePt("style:distance", m_dropCapDistance);
+        // We have only support for fdct=1, i.e. regular dropcaps.
+        // There is no support for fdct=2, i.e. dropcaps in the margin (ODF doesn't support this).
+        tmpWriter.addAttribute("style:length", m_dcs_fdct > 0 ? 1 : 0);
+        tmpWriter.endElement();//style:drop-cap
+        buf.close();
+
+        QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        m_odfParagraphStyle->addChildElement("style:drop-cap", contents);
+
+        m_dropCapStatus = NoDropCap;
+    }
 
     QString textStyleName;
     //add paragraph style to the collection and its name to the content
@@ -232,12 +273,14 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
     //just close the paragraph if there's no content
-    if (m_textStrings.empty()) {
+    //if (m_textStrings.empty()) {
+    if (m_textStrings.isEmpty()) {
         writer->endElement(); //text:p
         return;
     }
 
-    //loop through each text strings and styles (equal # of both)
+    // Loop through each text strings and styles (equal # of both) and
+    // write them to the file.
     kDebug(30513) << "writing text spans now";
     QString oldStyleName;
     bool startedSpan = false;
@@ -246,8 +289,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             //if style is null, we have an inner paragraph and add the
             // complete paragraph element to writer
             //need to get const char* from the QString
-            kDebug(30513) << "complete element: " <<
-            m_textStrings[i].toLocal8Bit().constData();
+            kDebug(30513) << "complete element: " << m_textStrings[i].toLocal8Bit().constData();
             writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
         } else {
             //add text style to collection
@@ -268,8 +310,8 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
                 }
                 oldStyleName = textStyleName;
             }
-            //write text string to writer
-            //now I just need to write the text:span to the header tag
+            // Write text string to writer.
+            // Now I just need to write the text:span to the header tag.
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
             if (m_addCompleteElement[i] == false) {
                 writer->addTextSpan(m_textStrings[i]);
@@ -282,8 +324,12 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             m_textStyles[i] = 0;
         }
     }
-    if (startedSpan) // we wrote a span of text so make sure we close the span tag
+
+    // If we have an unfinished text:span, finish it now.
+    if (startedSpan) {
         writer->endElement(); //text:span
+        startedSpan = false;
+    }
 
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
@@ -365,7 +411,8 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
 }
 
 void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-        KoGenStyle* style, const wvWare::Style* parentStyle, bool setDefaultAlign)
+                                         KoGenStyle* style, const wvWare::Style* parentStyle,
+                                         bool setDefaultAlign, Paragraph *paragraph)
 {
     kDebug(30513);
 
@@ -519,18 +566,34 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addProperty("fo:border-right", Conversion::setBorderAttributes(pap.brcRight), KoGenStyle::ParagraphType);
     }
 
+    // Drop Cap Style (DCS)
     if (!refPap || refPap->dcs.fdct != pap.dcs.fdct || refPap->dcs.lines != pap.dcs.lines) {
+        if (paragraph) {
+            kDebug(30513) << "Processing drop cap";
+            if (paragraph->m_textStrings.size() > 0)
+                kDebug(30513) << "String = """ << paragraph->m_textStrings[0] << """";
+            else
+                kDebug(30513) << "No drop cap string";
+
+            paragraph->m_dropCapStatus = IsDropCapPara;
+            paragraph->m_dcs_fdct  = pap.dcs.fdct;
+            paragraph->m_dcs_lines = pap.dcs.lines;
+            paragraph->m_dropCapDistance = (qreal)pap.dxaFromText / (qreal)20.0;
+        }
+#if 0
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter tmpWriter(&buf, 3);
-        tmpWriter.startElement("style:drop-cap");
+         tmpWriter.startElement("style:drop-cap");
         tmpWriter.addAttribute("style:lines", pap.dcs.lines);
         tmpWriter.addAttributePt("style:distance", (qreal)pap.dxaFromText / (qreal)20.0);
         tmpWriter.addAttribute("style:length", pap.dcs.fdct > 0 ? 1 : 0);
         tmpWriter.endElement();//style:drop-cap
         buf.close();
+
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         style->addChildElement("style:drop-cap", contents);
+#endif
     }
 
 //TODO introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
@@ -751,3 +814,74 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 }
 
+Paragraph::DropCapStatus Paragraph::dropCapStatus() const
+{
+    return m_dropCapStatus;
+}
+
+
+void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *distance) const
+{
+    // As far as I can see there is only ever a single character as drop cap.
+    *string = m_textStrings[0];
+    *type = m_dcs_fdct;
+    *lines = m_dcs_lines;
+    *distance = m_dropCapDistance;
+}
+
+
+void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance)
+{
+    kDebug(30513) << "combining drop cap paragraph: " << string;
+    if (m_dropCapStatus == IsDropCapPara) 
+        kDebug(30513) << "This paragraph already has a dropcap set!";
+
+    m_dropCapStatus = HasDropCapIntegrated;
+
+    // Get the drop cap data.
+    m_dcs_fdct        = type;
+    m_dcs_lines       = lines;
+    m_dropCapDistance = distance;
+
+    // Add the actual text.
+    // Here we assume that there will only be one text snippet for the drop cap.
+#if 1
+
+#if 1
+    kDebug(30513) << "size: " << m_textStrings.size();
+    m_textStrings[0].prepend(string);
+#else
+    m_textStrings.prepend(string);
+    KoGenStyle* style = 0;
+    m_textStyles.insert(m_textStyles.begin(), style);
+#endif
+
+#else
+    std::vector<QString>            tempStrings;
+    std::vector<const KoGenStyle*>  tempStyles;
+    tempStrings.push_back(dropCapParagraph->m_textStrings[0]);
+    KoGenStyle* style = 0;
+    tempStyles.push_back(style);
+
+    if (dropCapParagraph->m_textStrings.size() > 0) {
+        for (uint i = 0; i < m_textStrings.size(); ++i) {
+            tempStrings.push_back(m_textStrings.[i]);
+            tempStyles.push_back(m_textStyles.[i]);
+        }            
+    }
+
+    m_textStrings = tempStrings;
+    m_textStyles  = tempStyles;
+#endif
+}
+
+
+int Paragraph::strings() const
+{
+    return m_textStrings.size();
+}
+
+QString Paragraph::string(int index) const
+{
+    return m_textStrings[index];
+}

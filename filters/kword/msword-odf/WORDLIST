@@ -13,6 +13,8 @@ Minor features
 
 BRC - BoRder Code (found inside a PAP)
       Used to describe paragraph borders.
+DCS - Drop Cap Style (found inside a PAP)
+      Used to describe drop caps properties of a paragraph.
 JC  - Justification Code (found inside a PAP)
       Used for paragraph alignment.
 LSPD - Line SPacing Descriptor (found inside a PAP)
