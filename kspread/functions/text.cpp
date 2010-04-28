@@ -445,6 +445,9 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     // Excel compatible
     pos--;
 
+    // workaround for Qt bug
+    if (len > 0x7fffffff - pos) len = 0x7fffffff - pos;
+
     return Value(str.mid(pos, len));
 }
 

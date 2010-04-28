@@ -177,6 +177,7 @@ void TestTextFunctions::testMID()
     CHECK_EVAL("MID(\"123456789\";1;0)", Value(""));
     CHECK_EVAL("MID(\"123456789\";2.9;1)", Value("2"));
     CHECK_EVAL("MID(\"123456789\";2;2.9)", Value("23"));
+    CHECK_EVAL("MID(\"123456789\";5)", Value("56789"));
 }
 
 void TestTextFunctions::testPROPER()
