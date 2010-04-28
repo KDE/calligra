@@ -453,7 +453,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
              legendElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
              legendElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
              legendElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
-            d->shape->layout()->setScaleOnly( this, true );
+            d->shape->layout()->setPosition( this, FloatingPosition );
 
         loadOdfAttributes( legendElement, context, attributesToLoad );
 

@@ -672,7 +672,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
-        parent()->layout()->setScaleOnly( this, true );
+        parent()->layout()->setPosition( this, FloatingPosition );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
