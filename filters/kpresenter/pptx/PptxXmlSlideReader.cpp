@@ -502,6 +502,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF_NS(a, solidFill)
+            ELSE_TRY_READ_IF_NS(a, blip)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);

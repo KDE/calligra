@@ -42,6 +42,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_colorType = BackgroundColor;
     m_hyperLink = false;
     m_currentListStyleProperties = 0;
+    m_listStylePropertiesAltered = false;
 }
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
@@ -678,8 +679,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
     }
+
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
     while (!atEnd()) {
         readNext();
@@ -717,8 +719,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  if (listDepth == 0) {
                      if (m_currentListStyle.isEmpty()) {
                          // for now the name is hardcoded...should be maybe fixed
-                         qDebug() << "our type is " << m_phType;
-                         if (m_phType == "title") {
+                         if (m_phType == "title" || m_phType == "ctrTitle" || m_phType == "subTitle") {
                              body->addAttribute("text:style-name", "titleList"); 
                          }
                          else {
@@ -1010,6 +1011,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentListStyleProperties = new KoListLevelProperties;
+    m_listStylePropertiesAltered = false;
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
@@ -1025,22 +1027,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         if (isStartElement()) {
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
+            ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(spcBef)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
 
-    QBuffer listBuf;
-    KoXmlWriter listStyleWriter(&listBuf);
+    if (m_listStylePropertiesAltered) {
+        QBuffer listBuf;
+        KoXmlWriter listStyleWriter(&listBuf);
     
-    m_currentListStyleProperties->saveOdf(&listStyleWriter);
+        m_currentListStyleProperties->saveOdf(&listStyleWriter);
+        const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
+        m_currentListStyle.addChildElement("list-style-properties", elementContents);
 
-    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-
-    m_currentListStyle.addChildElement("list-style-properties", elementContents);
-
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
+        delete m_currentListStyleProperties;
+        m_currentListStyleProperties = 0;
+    }
 
 #ifdef __GNUC__
 #warning implement read_DrawingML_pPr
@@ -2235,7 +2239,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     TRY_READ_ATTR_WITHOUT_NS(algn)
     if (!algn.isEmpty()) {
         if (algn == "l") {
-            //listWriter.addAttribute("fo:text-align", "left");
+            m_currentListStyleProperties->setAlignment(Qt::AlignLeft);
+        }
+        else if (algn == "ctr") {
+            m_currentListStyleProperties->setAlignment(Qt::AlignHCenter);
+        }
+        else if (algn == "r") {
+            m_currentListStyleProperties->setAlignment(Qt::AlignRight);
         }
 //! @todo add rest of the alignments
     }
@@ -2251,6 +2261,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             TRY_READ_IF(defRPr)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buAutoNum)
+            ELSE_TRY_READ_IF(buChar)
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
@@ -2305,7 +2316,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet)     §21.1.2.4.1
   - buBlip (Picture Bullet)              §21.1.2.4.2
-  - buChar (Character Bullet)            §21.1.2.4.3
+  - [done] buChar (Character Bullet)            §21.1.2.4.3
   - buClr (Color Specified)              §21.1.2.4.4
   - buClrTx (Follow Text)                §21.1.2.4.5
   - buFont (Specified)                   §21.1.2.4.6
@@ -2411,6 +2422,108 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl9pPr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL buChar
+//! buChar - bullet character
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());   
+
+    if (attrs.hasAttribute("char")) {
+        // Effectively converts this to QChar
+        m_currentListStyleProperties->setBulletCharacter(attrs.value("char").toString().at(0));
+    }
+
+    m_listStylePropertiesAltered = true;
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL spcBef
+//! spcBef - spacing before
+/*!
+ Parent elements:
+
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+
+ - spcPct (Spacing Percent) §21.1.2.2.11
+ - [done] spcPts (Spacing Points)  §21.1.2.2.12
+
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF(spcPts)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL spcPts
+//! spcPts - spacing points
+/*!
+ Parent elements:
+ - lnSpc (§21.1.2.2.5)
+ - spcAft (§21.1.2.2.9)
+ - [done] spcBef (§21.1.2.2.10)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+   
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    bool ok = false;
+    const int marginTop = val.toDouble(&ok);
+
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop/100);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL buNone
 //! buNone - No bullets
 /*!
@@ -2432,6 +2545,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
     m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_listStylePropertiesAltered = true;
     readNext();
     READ_EPILOGUE
 }
@@ -2468,6 +2582,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
         }
     }
 
+    m_listStylePropertiesAltered = true;
     readNext();
 
     READ_EPILOGUE

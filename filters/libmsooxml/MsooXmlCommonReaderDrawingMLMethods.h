@@ -75,6 +75,12 @@ KoFilter::ConversionStatus read_scrgbClr();
 
 QString m_phType; //! set by read_ph()
 
+KoFilter::ConversionStatus read_spcBef();
+KoFilter::ConversionStatus read_spcPts();
+
+bool m_listStylePropertiesAltered;
+
+KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buNone();
 KoFilter::ConversionStatus read_buAutoNum();
 KoFilter::ConversionStatus lvlHelper(const QString& level);
