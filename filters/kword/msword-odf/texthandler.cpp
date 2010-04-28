@@ -372,7 +372,12 @@ void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UStrin
     m_bookmarkWriter->endElement();
 
     // Text
-    m_bookmarkWriter->addTextNode(bookmarkText);
+    // If we are in an hyperlink, we should not add the text because it will be out of control after that.
+    if (m_hyperLinkActive) {
+        m_hyperLinkList.last().append(bookmarkText);
+    } else {
+        m_bookmarkWriter->addTextNode(bookmarkText);
+    }
 
     // bookmark-end
     m_bookmarkWriter->startElement("text:bookmark-end");
@@ -758,10 +763,13 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         m_paragraph->setContainsPageNumberField(true);
         break;
     case 37: // Pageref
-        kDebug(30513) << "processing field...";
+        kDebug(30513) << "processing field... Pageref";
+        if (m_hyperLinkActive) {
+            m_fieldType = 88;
+        }
         break;
     case 88:  // HyperLink
-        kDebug(30513) << "processing field...";
+        kDebug(30513) << "processing field... HyperLink";
         m_hyperLinkActive = true;
         break;
     default:
@@ -806,11 +814,11 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             if (m_bookmarkRef[0].contains("PAGEREF")) {
                 // we need to keep only the reference
                 m_bookmarkRef[0].remove("PAGEREF");
-                int pos = 0;
+                int pos = m_bookmarkRef[0].indexOf('\\');
                 while (pos != -1)
                 {
-                    pos = m_bookmarkRef[0].indexOf('\\');
                     m_bookmarkRef[0].replace(pos, 2, "");
+                    pos = m_bookmarkRef[0].indexOf('\\');
                 }
                 m_bookmarkRef[0].remove(' ');
                 m_bookmarkRef[1].remove(' ');
@@ -827,7 +835,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         QList<QString> fullList(m_hyperLinkList);
         QList<QString> emptyList;
         QString hyperlink;
-
         for (int i = 0; i < fullList.size(); i++) {
             fullList[i].replace("\\l","");
             if (fullList[i].contains("PAGEREF")) {
@@ -912,7 +919,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 
     // This method is called twice for each hyperlink. Save link
     // data to m_hyperLinkList to handle it later in fieldEnd -method.
-    if (m_insideField && m_fieldType == 88) {
+   if (m_insideField && m_fieldType == 88) {
         m_hyperLinkList.append(newText);
         return;
     }
@@ -920,7 +927,12 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     // This method is called twice for each pageref (bookmark-ref). Save link
     // data to m_bookmarkRef to handle it later in fieldEnd -method.
     if (m_insideField && m_fieldType == 37) {
-        m_bookmarkRef.append(newText);
+        if (m_hyperLinkActive) {
+            m_hyperLinkList.append(newText);
+            m_fieldType = 88;
+        } else {
+            m_bookmarkRef.append(newText);
+        }
         return;
     }
 
