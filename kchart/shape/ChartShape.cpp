@@ -945,8 +945,10 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
         context.odfLoadingContext().fillStyleStack( chartElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
+    // Also load the size here as it, if specified here, overwrites the frame's size,
+    // See ODF specs for chart:chart element for more details.
     loadOdfAttributes( chartElement, context,
-                       OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements | OdfStyle );
+                       OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements | OdfStyle | OdfSize );
 
 #ifndef NWORKAROUND_ODF_BUGS
     if ( !background() ) {

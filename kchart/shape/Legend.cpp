@@ -462,8 +462,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
 
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-expansion" ) ) {
-            QString lexpansion = legendElement.attributeNS( KoXmlNS::koffice, "legend-expansion", QString() );
+        if ( legendElement.hasAttributeNS( KoXmlNS::style, "legend-expansion" ) ) {
+            QString lexpansion = legendElement.attributeNS( KoXmlNS::style, "legend-expansion", QString() );
             if ( lexpansion == "wide" )
                 setExpansion( WideLegendExpansion );
             else if ( lexpansion == "high" )
@@ -605,8 +605,7 @@ void Legend::slotKdLegendChanged()
     // in KDChartModel. Right now, only yDataChanged() is implemented.
     //d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
-    // FIXME: Scale size from px to pt?
-    setSize( size );
+    setSize( ScreenConversions::scaleFromPxToPt( size ) );
     update();
 }
 
