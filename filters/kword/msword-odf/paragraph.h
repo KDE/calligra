@@ -75,7 +75,8 @@ public:
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph);
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
-                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false, bool combineCharacters=false);
+                                         KoGenStyle* style, const wvWare::Style* parentStyle,
+                                         bool suppressFontSize=false, bool combineCharacters=false);
 
     void setCombinedCharacters(bool isCombined);
 private:

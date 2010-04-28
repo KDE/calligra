@@ -36,10 +36,10 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
         m_outlineLevel(0),
-	m_combinedCharacters(false),
         m_dropCapStatus(NoDropCap),
         m_inHeaderFooter(inHeaderFooter),
-        m_containsPageNumberField(false)
+        m_containsPageNumberField(false),
+	m_combinedCharacters(false)
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
@@ -285,7 +285,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513) << "writing text spans now";
     QString oldStyleName;
     bool startedSpan = false;
-    for (uint i = 0; i < m_textStrings.size(); i++) {
+    for (int i = 0; i < m_textStrings.size(); i++) {
         if (m_textStyles[i] == 0) {
             //if style is null, we have an inner paragraph and add the
             // complete paragraph element to writer
