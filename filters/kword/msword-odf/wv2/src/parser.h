@@ -52,6 +52,32 @@ class StyleSheet;
 class AssociatedStrings;
 class Drawings;
 
+/**
+ * This class is the heart of the filter:
+ *<ul>
+ *  <li>
+ *    The layers above it consume the output, primarily using the handlers passed in
+ *    using the setXXXHandler() methods.
+ *  </li>
+ *  <li>
+ *    The layers below handle the specifics of different versions of Word.
+ *  </li>
+ *  <li>
+ *    This layer:
+ *  <ul>
+ *    <li>
+ *        Mostly hides visibility of structures that are specific to any given
+ *        version of Word (a few things like the FIB from Word97 *are* generic enough
+ *        to be used here).
+ *    </li>
+ *    <li>
+ *        Does all the processing during the call to parse(), by calling the provided
+ *        handlers as needed.
+ *    </li>
+ *  </ul>
+ *</li>
+ *</ul>
+ */
 class WV2_EXPORT Parser : public Shared
 {
 public:

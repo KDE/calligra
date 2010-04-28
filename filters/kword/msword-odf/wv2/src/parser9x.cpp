@@ -773,7 +773,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             length -= disLen;
             index += disLen;
             m_customFootnote = chunk.m_text.substr(index, length);
-            processFootnote( m_customFootnote, disruption, chp, length );
+            emitFootnote( m_customFootnote, disruption, chp, length );
             index+=length;
             length=0;
             m_customFootnote = "";
@@ -794,7 +794,7 @@ void Parser9x::processRun( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
     if ( chp->fSpec ) {
         U32 i = 0;
         while ( i < length ) {
-            processSpecialCharacter( chunk.m_text[ index + i ], currentStart + chunk.m_position.offset + index + i, chp );
+            emitSpecialCharacter( chunk.m_text[ index + i ], currentStart + chunk.m_position.offset + index + i, chp );
             ++i;
         }
     }
@@ -804,7 +804,7 @@ void Parser9x::processRun( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
     }
 }
 
-void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp )
+void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp )
 {
     switch( character.unicode() ) {
         // Is it one of the "simple" special characters?
@@ -846,7 +846,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
         if ( m_subDocument == Footnote || m_subDocument == Endnote )
             m_textHandler->footnoteAutoNumber( chp );
         else
-            processFootnote( UString(character), globalCP, chp);
+            emitFootnote( UString(character), globalCP, chp);
         break;
     case TextHandler::FieldBegin:
         {
@@ -871,7 +871,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
         }
     case TextHandler::AnnotationRef:
         {
-            processAnnotation(UString(character), globalCP, chp);
+            emitAnnotation(UString(character), globalCP, chp);
         }
     case TextHandler::FieldEscapeChar:
             wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
@@ -883,7 +883,7 @@ void Parser9x::processSpecialCharacter( UChar character, U32 globalCP, SharedPtr
 }
 }
 
-void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
+void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
@@ -898,7 +898,7 @@ void Parser9x::processFootnote( UString characters, U32 globalCP, SharedPtr<cons
         m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
 }
 
-void Parser9x::processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
+void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
     for (int i = 0; i < characters.length(); ++i) {
         wvlog << characters[i].unicode();
@@ -1157,8 +1157,8 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                     z.SetBreak(blip.compressedImageSize());
                     std::vector<U8> outBuffer;
                     int err = z.Decompress( *stream, &outBuffer );
-#ifdef WV2_DEBUG_PICTURES
                     wvlog << "  err=" << err << endl;
+#ifdef WV2_DEBUG_PICTURES
                     wvlog << "  outBuffer size = " << outBuffer.size() << endl;
 #endif
                     z.EndCompression(&outBuffer);

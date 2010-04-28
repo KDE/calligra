@@ -211,18 +211,43 @@ namespace wvWare
         // plain old overloading. It's just a matter of compressed vs. real unicode (1 vs. 2 bytes)
         UString processPieceStringHelper( XCHAR* string, unsigned int start, unsigned int index ) const;
         UString processPieceStringHelper( U8* string, unsigned int start, unsigned int index ) const;
-        // Processes the current contents of the Paragraph structure and clears it when it's done
+
+        /**
+         * The basic structure of a Word text document is a sequence of paragraphs comprising
+         * runs of text with a given set of properties (i.e. a CHP). This model is implemented
+         * by having parse() call processParagraph().
+         *
+         * The processXXX() methods deal with text in blocks:
+         *<ul>
+         *  <li>
+         *  processParagraph() processes the current contents of the Paragraph structure
+         *  and clears it when it's done. Generally calls processChunk().
+         *  </li>
+         *  <li>
+         *  processChunk() processes the section text with a given CHP value. This is what
+         *  processRun(), except that processChunk() also handles points (such as for footnotes
+         *  and endnotes) which are marked by arrays of CPs (located via the FIB). Generally calls
+         *  processRun().
+         *  </li>
+         *  <li>
+         *  processRun() processes the section text with a given CHP value. If CHP.fSpec is set,
+         *  calls emitSpecialCharacter().
+         *  </li>
+         *</ul>
+         */
         void processParagraph( U32 fc );
         void processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
                            U32 length, U32 index, U32 currentStart );
         void processRun( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
                          U32 length, U32 index, U32 currentStart );
 
-        void processSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
-        void processFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
-        void processAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
-
-        // Helper methods to gather and emit the information needed for the functors
+        /**
+         * Generally, the emitXXX() methods gather and emit the information needed for the
+         * corresponding functors.
+         */
+        void emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
+        void emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
+        void emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
         void emitDrawnObject( U32 globalCP );
