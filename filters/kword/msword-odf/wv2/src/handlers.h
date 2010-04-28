@@ -38,6 +38,7 @@ namespace wvWare {
     typedef Functor<Parser9x, TableRowData> TableRowFunctor;
     typedef Functor<Parser9x, FootnoteData> FootnoteFunctor;
     typedef Functor<Parser9x, PictureData> PictureFunctor;
+    typedef Functor<Parser9x, BookmarkData> BookmarkFunctor;
 
     /**
      * This class allows to replace the character values of some
@@ -97,6 +98,16 @@ namespace wvWare {
          * Once the footnote characters are processed this method is called.
          */
         virtual void footnoteEnd();
+
+        /**
+        * Every time you invoke a @ref BookmarkFunctor this method will be called.
+        * Note that @ref BookmarkFunctor is also emitted when we find endnotes.
+        */
+        virtual void bookmarkStart();
+        /**
+        * Once the bookmark characters are processed this method is called.
+        */
+        virtual void bookmarkEnd();
 
         /**
          * 2.3.4
@@ -385,7 +396,14 @@ namespace wvWare {
         virtual void footnoteFound( FootnoteData::Type type, UString characters,
                                     SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
 
-
+        /**
+        * The parser found a bookmark. The passed functor will trigger the parsing of this
+        * bookmark start/end, the default implementation just emits the passed character
+        * with runOfText (that it doesn't get lost if someone doesn't override this method)
+        * and invokes the functor.
+        */
+        virtual void bookmarkFound( UString characters, UString name,
+                                    SharedPtr<const Word97::CHP> chp, const BookmarkFunctor& parseBookmark);
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this
          * annotation, the default implementation just emits the passed character with

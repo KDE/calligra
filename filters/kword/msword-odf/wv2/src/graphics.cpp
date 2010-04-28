@@ -54,6 +54,7 @@ Drawings::~Drawings()
     delete m_plcftxbxTxt;
     delete m_plcfspaHdr;
     delete m_plcfspaMom;
+
 }
 
 EscherHeader::EscherHeader( OLEStreamReader* stream )
@@ -258,7 +259,7 @@ Blip::Blip( OLEStreamReader* stream, string blipType )
         m_fFilter = 255; //test value, so we'll just initialize to this
     }
     else if( blipType.compare("EMF") == 0 || blipType.compare("WMF") == 0
-            || blipType.compare("PICT") == 0 ) 
+            || blipType.compare("PICT") == 0 )
     {
         stream->read( m_rgbUid, 16 ); //data UID
         stream->read( m_rgbUidPrimary, 16 ); //primary Uid
@@ -315,7 +316,7 @@ void Blip::dump()
         wvlog << " m_rgbUid = " << m_rgbUid << endl;
         wvlog << " m_bTag = " << static_cast<unsigned int> (m_bTag) << endl;
     }
-    else 
+    else
     {
         wvlog << " metafile blip:" << endl;
         wvlog << " m_rgbUid = " << m_rgbUid << endl;

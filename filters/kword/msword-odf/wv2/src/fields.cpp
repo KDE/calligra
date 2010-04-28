@@ -96,9 +96,9 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
           << "  annotation: fc=" << fib.fcPlcffldAtn << " lcb=" << fib.lcbPlcffldAtn << endl
           << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << endl
           << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << endl
+          << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << endl
           << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << endl;
 #endif
-
     tableStream->seek( fib.fcPlcffldMom, G_SEEK_SET ); // to make the sanity check work
     read( fib.fcPlcffldMom, fib.lcbPlcffldMom, tableStream, &m_main );
 
@@ -116,6 +116,9 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     sanityCheck( tableStream, fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx );
     read( fib.fcPlcffldTxbx, fib.lcbPlcffldTxbx, tableStream, &m_textbox );
+
+    sanityCheck( tableStream, fib.fcSttbfbkmk, fib.lcbSttbfbkmk );
+    read( fib.fcSttbfbkmk, fib.lcbSttbfbkmk, tableStream, &m_bookmark );
 
     // No sanity check here, plcOcx might be in between
     read( fib.fcPlcffldHdrTxbx, fib.lcbPlcffldHdrTxbx, tableStream, &m_headerTextbox );
@@ -165,6 +168,9 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
             break;
         case Parser::HeaderTextBox:
             return fldForCP( m_headerTextbox, cp );
+            break;
+        case Parser::Bookmark:
+            return fldForCP( m_bookmark, cp );
             break;
     }
     return 0; // make the compiler happy, never reached

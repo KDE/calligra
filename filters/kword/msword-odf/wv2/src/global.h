@@ -41,6 +41,7 @@
 //#define WV2_DEBUG_TABLES 1
 //#define WV2_DEBUG_PICTURES 1
 //#define WV2_DEBUG_ANNOTATIONS 1
+//#define WV2_DEBUG_BOOKMARK 1
 
 // This define should only be commented out for releases (if at all)
 #define WV2_CHECKING 1

@@ -79,6 +79,13 @@ void SubDocumentHandler::footnoteEnd()
 {
 }
 
+void SubDocumentHandler::bookmarkStart()
+{
+}
+
+void SubDocumentHandler::bookmarkEnd()
+{
+}
 
 void SubDocumentHandler::annotationStart()
 {
@@ -207,6 +214,13 @@ void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters
     if ( characters[0].unicode() != 2 )
         runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
     parseFootnote();
+}
+
+void TextHandler::bookmarkFound( UString characters, UString name,
+                                 SharedPtr<const Word97::CHP> chp, const BookmarkFunctor& parseBookmark)
+{
+    runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
+    parseBookmark();
 }
 
 void TextHandler::annotationFound( UString characters,

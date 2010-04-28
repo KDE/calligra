@@ -22,6 +22,8 @@
 #include "sharedptr.h"
 #include "wvlog.h"
 #include "wv2_export.h"
+#include "ustring.h"
+
 namespace wvWare
 {
     /**
@@ -57,6 +59,20 @@ namespace wvWare
         bool autoNumbered;
         unsigned int startCP;
         unsigned int limCP;
+    };
+
+    /**
+    * @internal
+    * Holds all necessary information for delayed bookmark parsing.
+    */
+    struct WV2_EXPORT BookmarkData
+    {
+        BookmarkData( unsigned int start, unsigned int lim, UString nameRef  ) :
+        startCP( start ), limCP( lim ), name(nameRef) {}
+
+        unsigned int startCP;
+        unsigned int limCP;
+        UString name;
     };
 
     /**

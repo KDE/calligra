@@ -163,7 +163,7 @@ namespace wvWare
     public:
         Blip( OLEStreamReader* stream, string blipType );
         ~Blip();
-        
+
         bool isMetafileBlip(); //is this an EMF, WMF, or PICT?
         bool isCompressed(); //is this blip compressed? (only applied to metafile blips)
         int recordSize(); //size of the record *without* the actual picture data

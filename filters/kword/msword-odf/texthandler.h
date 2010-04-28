@@ -78,6 +78,9 @@ public:
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
+    virtual void bookmarkFound(wvWare::UString characters, wvWare::UString name,
+                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                               const wvWare::BookmarkFunctor& parseBookmark);
     virtual void annotationFound(wvWare::UString characters,
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                  const wvWare::AnnotationFunctor& parseAnnotation);
@@ -128,6 +131,7 @@ signals:
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
+    void bookmarkFound(const wvWare::FunctorBase* parsingFunctor);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);
@@ -197,6 +201,10 @@ private:
     bool m_insideFootnote;
     KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
     QBuffer* m_footnoteBuffer; //buffer for the footnote data
+
+    bool m_insideBookmark;
+    KoXmlWriter* m_bookmarkWriter; //add the bookmark to bodyWriter
+    QBuffer* m_bookmarkBuffer; //buffer for the bookmark data
 
     bool m_insideAnnotation;
     KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
