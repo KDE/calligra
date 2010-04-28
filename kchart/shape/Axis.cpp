@@ -209,6 +209,9 @@ Axis::Private::Private( Axis *axis )
 
     majorInterval = 2;
     minorIntervalDivisor = 1;
+    
+    showMajorGrid = false;
+    showMinorGrid = false;
 
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
@@ -735,9 +738,12 @@ void Axis::Private::createRadarDiagram()
     Q_ASSERT( kdRadarDiagram == 0 );
 
     kdRadarDiagramModel = new KDChartModel;
+    //kdRadarDiagramModel->setDataDimensions( 2 );
+    //kdRadarDiagramModel->setDataDirection( Qt::Horizontal );
 
     kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
     kdRadarDiagram->setModel( kdRadarDiagramModel );
+    kdRadarDiagram->setCloseDatasets(true);
     registerDiagram( kdRadarDiagram );
 
 #if 0  // Stacked and Percent not supported by KDChart.
@@ -900,9 +906,10 @@ Axis::Axis( PlotArea *parent )
     gridAttributes = d->kdPolarPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
     d->kdPolarPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
-
-    setShowMajorGrid( false );
-    setShowMinorGrid( false );
+    
+    gridAttributes = d->kdPolarPlane->gridAttributes( Qt::Vertical );
+    gridAttributes.setGridVisible( false );
+    d->kdPolarPlane->setGridAttributes( Qt::Vertical, gridAttributes );
 
     d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape(parent->parent()->resourceManager());
     if ( d->title ) {
@@ -1164,10 +1171,15 @@ void Axis::setMajorInterval( qreal interval )
     // KDChart
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setGridStepWidth( interval );
+    d->kdPlane->setGridAttributes( orientation(), attributes );
+
+    attributes = d->kdPolarPlane->gridAttributes( orientation() );
+    attributes.setGridStepWidth( interval );
+    d->kdPolarPlane->setGridAttributes( orientation(), attributes );
+
     // FIXME: Hide minor tick marks more appropriately
     if ( !d->showMinorGrid && interval != 0.0 )
         setMinorInterval( interval );
-    d->kdPlane->setGridAttributes( orientation(), attributes );
 
     requestRepaint();
 }
@@ -1201,11 +1213,12 @@ void Axis::setMinorIntervalDivisor( int divisor )
 
     // KDChart
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
-    if ( divisor != 0 )
-        attributes.setGridSubStepWidth( d->majorInterval / divisor );
-    else
-        attributes.setGridSubStepWidth( 0.0 );
+    attributes.setGridSubStepWidth( (divisor != 0) ? (d->majorInterval / divisor) : 0.0 );
     d->kdPlane->setGridAttributes( orientation(), attributes );
+    
+    attributes = d->kdPolarPlane->gridAttributes( orientation() );
+    attributes.setGridSubStepWidth( (divisor != 0) ? (d->majorInterval / divisor) : 0.0 );
+    d->kdPolarPlane->setGridAttributes( orientation(), attributes );
 
     requestRepaint();
 }
@@ -1267,7 +1280,7 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
                                   ? KDChart::AbstractCoordinatePlane::Logarithmic
                                   : KDChart::AbstractCoordinatePlane::Linear );
     d->kdPlane->layoutPlanes();
-
+    
     requestRepaint();
 }
 
@@ -1289,6 +1302,10 @@ void Axis::setShowMajorGrid( bool showGrid )
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setGridVisible( d->showMajorGrid );
     d->kdPlane->setGridAttributes( orientation(), attributes );
+    
+    attributes = d->kdPolarPlane->gridAttributes( orientation() );
+    attributes.setGridVisible( d->showMajorGrid );
+    d->kdPolarPlane->setGridAttributes( orientation(), attributes );
 
     requestRepaint();
 }
@@ -1306,6 +1323,10 @@ void Axis::setShowMinorGrid( bool showGrid )
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setSubGridVisible( d->showMinorGrid );
     d->kdPlane->setGridAttributes( orientation(), attributes );
+    
+    attributes = d->kdPolarPlane->gridAttributes( orientation() );
+    attributes.setSubGridVisible( d->showMinorGrid );
+    d->kdPolarPlane->setGridAttributes( orientation(), attributes );
 
     requestRepaint();
 }
@@ -1350,10 +1371,9 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     styleStack.save();
 
     d->title->setVisible( false );
-
-    KDChart::GridAttributes gridAttr = d->kdPlane->gridAttributes( orientation() );
-    gridAttr.setGridVisible( false );
-    gridAttr.setSubGridVisible( false );
+    
+    QPen gridPen(Qt::NoPen);
+    QPen subGridPen(Qt::NoPen);
 
     d->showMajorGrid = false;
     d->showMinorGrid = false;
@@ -1422,10 +1442,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 }
 
                 if ( major ) {
-                    gridAttr.setGridVisible( true );
                     d->showMajorGrid = true;
                 } else {
-                    gridAttr.setSubGridVisible( true );
                     d->showMinorGrid = true;
                 }
 
@@ -1434,11 +1452,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     styleStack.setTypeProperties( "graphic" );
                     if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
                         const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
-                        gridAttr.setGridVisible( true );
+                        d->showMajorGrid = true;
                         if ( major )
-                            gridAttr.setGridPen( QColor( strokeColor ) );
+                            gridPen = QPen( QColor( strokeColor ) );
                         else
-                            gridAttr.setSubGridPen( QColor( strokeColor ) );
+                            subGridPen = QPen( QColor( strokeColor ) );
                     }
                 }
             }
@@ -1492,7 +1510,23 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }
 
+    KDChart::GridAttributes gridAttr = d->kdPlane->gridAttributes( orientation() );
+    gridAttr.setGridVisible( d->showMajorGrid );
+    gridAttr.setSubGridVisible( d->showMinorGrid );
+    if ( gridPen.style() != Qt::NoPen )
+        gridAttr.setGridPen( gridPen );
+    if ( subGridPen.style() != Qt::NoPen )
+        gridAttr.setSubGridPen( subGridPen );
     d->kdPlane->setGridAttributes( orientation(), gridAttr );
+
+    gridAttr = d->kdPolarPlane->gridAttributes( orientation() );
+    gridAttr.setGridVisible( d->showMajorGrid );
+    gridAttr.setSubGridVisible( d->showMinorGrid );
+    if ( gridPen.style() != Qt::NoPen )
+        gridAttr.setGridPen( gridPen );
+    if ( subGridPen.style() != Qt::NoPen )
+        gridAttr.setSubGridPen( subGridPen );
+    d->kdPolarPlane->setGridAttributes( orientation(), gridAttr );
 
     if ( !loadOdfChartSubtypeProperties( axisElement, context ) )
         return false;
@@ -1848,7 +1882,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 
     d->plotAreaChartType = newChartType;
 
-    d->kdPlane->layoutPlanes();
+    layoutPlanes();
 
     requestRepaint();
 }
@@ -1998,10 +2032,8 @@ void Axis::requestRepaint() const
 
 void Axis::layoutPlanes()
 {
-    if ( d->kdPlane )
-        d->kdPlane->layoutPlanes();
-    if ( d->kdPolarPlane )
-        d->kdPolarPlane->layoutPlanes();
+    d->kdPlane->layoutPlanes();
+    d->kdPolarPlane->layoutPlanes();
 }
 
 void Axis::setGapBetweenBars( int percent )
