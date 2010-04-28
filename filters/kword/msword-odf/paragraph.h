@@ -75,8 +75,9 @@ public:
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph);
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
-                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false);
+                                         KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize=false, bool combineCharacters=false);
 
+    void setCombinedCharacters(bool isCombined);
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
@@ -111,6 +112,7 @@ private:
 
     bool m_inHeaderFooter;
     bool m_containsPageNumberField;
+    bool m_combinedCharacters;            // is true when the next characters are combined
 }; //end class Paragraph
 
 #endif //PARAGRAPH_H

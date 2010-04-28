@@ -36,6 +36,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_inStylesDotXml(inStylesDotXml),
         m_isHeading(isHeading),
         m_outlineLevel(0),
+	m_combinedCharacters(false),
         m_dropCapStatus(NoDropCap),
         m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false)
@@ -121,7 +122,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
     // chp of the paragraph and the summed chp.
     const wvWare::Style* parentStyle = styles.styleByIndex(msTextStyle->m_std->istdBase);
     if (parentStyle) {
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize);
+        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
         //if we have a new font, process that
         const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
@@ -137,7 +138,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         if (!fontName.isEmpty()) {
             textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
         }
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize);
+        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
     }
 
     //add text style to list
@@ -647,7 +648,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 } //end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
@@ -786,6 +787,10 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:text-outline", "false", KoGenStyle::TextType);
     }
 
+    // if the characters are combined, add proper style
+    if (combineCharacters) {
+        style->addProperty("style:text-combine","letters");
+    }
 
     //dxaSpace = letterspacing in twips
     if (!refChp || refChp->dxaSpace != chp->dxaSpace) {
@@ -814,11 +819,15 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 }
 
+void Paragraph::setCombinedCharacters(bool isCombined)
+{
+    m_combinedCharacters = isCombined;
+}
+
 Paragraph::DropCapStatus Paragraph::dropCapStatus() const
 {
     return m_dropCapStatus;
 }
-
 
 void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *distance) const
 {
@@ -885,3 +894,4 @@ QString Paragraph::string(int index) const
 {
     return m_textStrings[index];
 }
+

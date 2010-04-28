@@ -218,6 +218,9 @@ private:
     KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
     QBuffer* m_annotationBuffer; //buffer for the annotation data
 
+    bool    m_RunOfTextCollect;         // when this is enabled, the m_RunOfTextStrings collects strings when runOfText is called
+    QString m_RunOfTextStrings;         // collection of strings passed to runOfText
+
     bool m_insideDrawing;
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
 

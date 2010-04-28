@@ -781,6 +781,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     m_insideField = true;
     m_fieldAfterSeparator = false;
     m_fieldValue = "";
+    m_RunOfTextCollect = false;     // do not collect strings in runOfText (yet)
+    m_RunOfTextStrings = "";
 
     //check to see if we can process this field type or not
     switch (m_fieldType) {
@@ -793,6 +795,9 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         if (m_hyperLinkActive) {
             m_fieldType = 88;
         }
+        break;
+    case 49:
+        m_RunOfTextCollect = true;     // do collect strings in runOfText
         break;
     case 88:  // HyperLink
         kDebug(30513) << "processing field... HyperLink";
@@ -812,11 +817,13 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
 
 void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
-    Q_UNUSED(chp);
+//    Q_UNUSED(chp);
 
     kDebug(30513);
     //process different fields
     //we could be writing to content or styles.xml (in a header)
+    
+    m_RunOfTextCollect = false;     // do not collect strings anymore
 
     //create temp writer that we'll add to m_paragraph
     QBuffer buf;
@@ -854,6 +861,21 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 writer.addAttribute("text:ref-name",m_bookmarkRef[0]);
                 writer.addTextNode(m_bookmarkRef[1]);
                 writer.endElement();
+            }
+        }
+        break;
+    case 49:    // combined characters stored as 'equation'
+        {
+            QRegExp rx("eq \\\\o\\(\\\\s\\\\up 36\\(([^\\)]*)\\),\\\\s\\\\do 12\\(([^\\)]*)\\)\\)");
+            int where = rx.indexIn(m_RunOfTextStrings);
+
+            if (where != -1) {
+                QString combinedCharacters = rx.cap(1) + rx.cap(2);
+                if (!combinedCharacters.isEmpty()) {
+                    m_paragraph->setCombinedCharacters(true);
+                    m_paragraph->addRunOfText(combinedCharacters, chp, QString(""), m_parser->styleSheet());
+                    m_paragraph->setCombinedCharacters(false);
+                }
             }
         }
         break;
@@ -938,6 +960,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 {
     QString newText(Conversion::string(text));
     kDebug(30513) << newText;
+
+    m_RunOfTextStrings += newText;
 
     //we don't want to do anything with an empty string
     if (newText.isEmpty())
