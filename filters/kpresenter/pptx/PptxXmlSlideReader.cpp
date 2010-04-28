@@ -185,6 +185,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     if (m_context->type == Slide) {
         TRY_READ(sld)
     } else {
+
         TRY_READ(sldMaster)
     }
     kDebug() << "===========finished============";
@@ -228,7 +229,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
     - sldLayoutIdLst (List of Slide Layouts) §19.3.1.41
     - timing (Slide Timing Information for a Slide Layout) §19.3.1.48
     - transition (Slide Transition for a Slide Layout) §19.3.1.50
-    - txStyles (Slide Master Text Styles) §19.3.1.52
+    - [done] txStyles (Slide Master Text Styles) §19.3.1.52
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster()
@@ -265,6 +266,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             kDebug() << *this;
             if (isStartElement()) {
                 TRY_READ_IF(cSld)
+                ELSE_TRY_READ_IF(txStyles)
 //! @todo add ELSE_WRONG_FORMAT
             }
             if (m_context->type == Slide) {
@@ -299,6 +301,138 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         }
     }
     return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL txStyles
+//! txStyles handler (Slide Master Text Styles)
+/*!
+ Parent elements:
+    - [done] sldMaster (§19.3.1.42)
+
+ Child elements:
+    - [done] bodyStyle (Slide Master Body Text Style)   §19.3.1.5
+    - extLst (Extension List)                    §19.2.1.12
+    - otherStyle (Slide Master Other Text Style) §19.3.1.35
+    - [done] titleStyle (Slide Master Title Text Style) §19.3.1.49
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(bodyStyle)
+            ELSE_TRY_READ_IF(titleStyle)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bodyStyle
+//! bodyStyle handler (Slide Master Body Text)
+/*!
+ Parent elements:
+    - [done] txStyles (§19.3.1.52)
+
+ Child elements:
+    - defPPr (Default Paragraph Style)  §21.1.2.2.2
+    - extLst (Extension List)           §20.1.2.2.15
+    - [done] lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+    - [done] lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+    - [done] lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+    - [done] lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+    - [done] lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+    - [done] lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+    - [done] lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+    - [done] lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+    - [done] lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
+{
+    READ_PROLOGUE
+
+    QString currentListStyleName = "bodyList";
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL titleStyle
+//! titleStyle handler (Slide Master Title Text)
+/*!
+ Parent elements:
+    - [done] txStyles (§19.3.1.52)
+
+ Child elements:
+    - defPPr (Default Paragraph Style)  §21.1.2.2.2
+    - extLst (Extension List)           §20.1.2.2.15
+    - [done] lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+    - [done] lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+    - [done] lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+    - [done] lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+    - [done] lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+    - [done] lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+    - [done] lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+    - [done] lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+    - [done] lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
+{
+    READ_PROLOGUE
+
+    QString currentListStyleName = "titleList";
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -486,45 +620,43 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     m_pPr_lvl = 0;
     const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType.toLatin1()) == "outline";
 
+    MSOOXML::Utils::XmlWriteBuffer listBuf;
+    body = listBuf.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        if (isStartElement()) {
-            TRY_READ_IF_NS(a, lstStyle)
-//            else TRY_READ_IF_NS(a, p)
+        if (isStartElement()) {            
+	    TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
                 // buffer each text:p, because we have to write after the child elements aregenerated
                 MSOOXML::Utils::XmlWriteBuffer paragraphBuf;
-//                KoXmlWriter *origBody = body;
                 if (isOutline) {
-//                    body = new KoXmlWriter(&paragraphBuf, origBody->indentLevel()+1);
                     body = paragraphBuf.setWriter(body);
                 }
                 TRY_READ(DrawingML_p);
                 if (isOutline) { // CASE #P612
-//                    delete body;
-//                    body = origBody;
-                      body = paragraphBuf.originalWriter();
-                    for (uint i = 0; i <= m_pPr_lvl; i++) {
-                        body->startElement("text:list");
-                        if (i == 0) {
-//! @todo Lpredef2 hardcoded
-                            body->addAttribute("text:style-name", "Lpredef2");
-                        }
-                        body->startElement("text:list-item");
-                    }
-//                    body->addCompleteElement(&paragraphBuf);
+                     body = paragraphBuf.originalWriter();
                     (void)paragraphBuf.releaseWriter();
-                    for (uint i = 0; i <= m_pPr_lvl; i++) {
-                        body->endElement(); //text:list-item
-                        body->endElement(); //text:list
-                    }
                 }
             }
-//! @todo a:bodyPr
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (m_lstStyleFound) {
+        body = listBuf.originalWriter();
+        //body->startElement("text:list");
+        //const QString currentListStyleName(mainStyles->insert(m_currentListStyle));
+
+        //! @todo currently hardcoded
+        //body->addAttribute("text:style-name", "bodyList");
+        (void)listBuf.releaseWriter();
+        //body->endElement(); // text:list
+    }
+    else {
+        body = listBuf.releaseWriter();
     }
 
     body->endElement(); // draw:text-box

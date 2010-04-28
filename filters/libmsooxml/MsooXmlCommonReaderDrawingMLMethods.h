@@ -73,6 +73,22 @@ KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
+QString m_phType; //! set by read_ph()
+
+KoFilter::ConversionStatus read_buNone();
+KoFilter::ConversionStatus read_buAutoNum();
+KoFilter::ConversionStatus lvlHelper(const QString& level);
+KoFilter::ConversionStatus read_lvl1pPr();
+KoFilter::ConversionStatus read_lvl2pPr();
+KoFilter::ConversionStatus read_lvl3pPr();
+KoFilter::ConversionStatus read_lvl4pPr();
+KoFilter::ConversionStatus read_lvl5pPr();
+KoFilter::ConversionStatus read_lvl6pPr();
+KoFilter::ConversionStatus read_lvl7pPr();
+KoFilter::ConversionStatus read_lvl8pPr();
+KoFilter::ConversionStatus read_lvl9pPr();
+KoFilter::ConversionStatus read_defRPr();
+
 //! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
 void saveStyleWrap(const char * style);
 
@@ -95,6 +111,8 @@ KoFilter::ConversionStatus copyFile(
 KoGenStyle m_currentDrawStyle; //!< set by read_drawing() and read_object(), used by read_pic() and read_object()
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
+
+int m_currentListLevel; //! set by drawingML_ppr
 
 int m_svgX; //!< set by read_off()
 int m_svgY; //!< set by read_off()

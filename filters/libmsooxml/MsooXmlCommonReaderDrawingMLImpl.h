@@ -41,6 +41,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentDoubleValue = 0;
     m_colorType = BackgroundColor;
     m_hyperLink = false;
+    m_currentListStyleProperties = 0;
 }
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
@@ -668,6 +669,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
+    m_currentListLevel = 0;
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
@@ -676,6 +678,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
     }
 
     while (!atEnd()) {
@@ -705,14 +708,47 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     if (args & read_p_Skip) {
         //nothing
-    } else {
-        body = textPBuf.originalWriter();
-        body->startElement("text:p", false);
-        setupParagraphStyle();
-        (void)textPBuf.releaseWriter();
-        body->endElement(); //text:p
-        kDebug() << "/text:p";
-    }
+     } else {
+         body = textPBuf.originalWriter();
+         if (m_lstStyleFound) {
+             int listDepth = 0;
+             while (listDepth <= m_currentListLevel) {
+                 body->startElement("text:list");
+                 if (listDepth == 0) {
+                     if (m_currentListStyle.isEmpty()) {
+                         // for now the name is hardcoded...should be maybe fixed
+                         qDebug() << "our type is " << m_phType;
+                         if (m_phType == "title") {
+                             body->addAttribute("text:style-name", "titleList"); 
+                         }
+                         else {
+                             // Fixme? : for now the master slide list style is called bodyList
+                             body->addAttribute("text:style-name", "bodyList");
+                         }
+                     }
+                     else {
+                         QString listStyleName = mainStyles->insert(m_currentListStyle);
+                         body->addAttribute("text:style-name", listStyleName);
+                     }
+                 }
+                 body->startElement("text:list-item");
+                 ++listDepth;                 
+             }
+         }
+         body->startElement("text:p", false);
+         setupParagraphStyle();
+         (void)textPBuf.releaseWriter();
+         if (m_lstStyleFound) {
+             int listDepth = 0;
+             while (listDepth <= m_currentListLevel) {
+                 body->endElement(); // text:list-item
+                 body->endElement(); // text:list
+                 ++listDepth;
+             }
+         }
+         body->endElement(); //text:p
+         kDebug() << "/text:p";
+     }
     READ_EPILOGUE
 }
 
@@ -972,12 +1008,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 {
     READ_PROLOGUE2(DrawingML_pPr)
     const QXmlStreamAttributes attrs(attributes());
+
+    m_currentListStyleProperties = new KoListLevelProperties;
+
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
+
+    TRY_READ_ATTR_WITHOUT_NS(lvl)
+
+    if (!lvl.isEmpty()) {
+        m_currentListStyleProperties->setLevel(lvl.toInt());
+        m_currentListLevel = lvl.toInt();
+    }
+
     while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF(buAutoNum)
+            ELSE_TRY_READ_IF(buNone)
+        }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
+
+    QBuffer listBuf;
+    KoXmlWriter listStyleWriter(&listBuf);
+    
+    m_currentListStyleProperties->saveOdf(&listStyleWriter);
+
+    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
+
+    m_currentListStyle.addChildElement("list-style-properties", elementContents);
+
+    delete m_currentListStyleProperties;
+    m_currentListStyleProperties = 0;
 
 #ifdef __GNUC__
 #warning implement read_DrawingML_pPr
@@ -1585,6 +1648,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     READ_PROLOGUE
     m_lstStyleFound = true;
 
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -2134,6 +2199,353 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
+    READ_EPILOGUE
+}
+
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level) {
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentListStyleProperties = new KoListLevelProperties;
+
+    // Number 3 makes eg. lvl4 -> 4
+    m_currentListStyleProperties->setLevel(QString(level.at(3)).toInt());
+
+    TRY_READ_ATTR_WITHOUT_NS(marL)
+    TRY_READ_ATTR_WITHOUT_NS(indent)
+
+    bool marginalOk = true;
+    bool indentOk = true;
+    float marginal = 0;
+    float ind = 0;
+
+//! @todo Check if this conversion is really correct?
+
+    if (!marL.isEmpty()) {
+        marginal = int(TWIP_TO_DM(marL.toDouble(&marginalOk)));
+    }
+    if (!indent.isEmpty()) {
+        ind = int(TWIP_TO_DM(indent.toDouble(&indentOk)));
+    }
+
+    if (marginalOk || indentOk) {
+        //listWriter.addAttributePt("text:space-before", marginal + ind);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(algn)
+    if (!algn.isEmpty()) {
+        if (algn == "l") {
+            //listWriter.addAttribute("fo:text-align", "left");
+        }
+//! @todo add rest of the alignments
+    }
+
+    TRY_READ_ATTR(defTabSz)
+
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(defRPr)
+            ELSE_TRY_READ_IF(buNone)
+            ELSE_TRY_READ_IF(buAutoNum)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
+            break;
+        }
+    }
+
+/*
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter tempWriter(&buffer);
+    m_currentTextStyle.writeStyleProperties(&tempWriter, KoGenStyle::TextType);
+    QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+
+    listWriter.addCompleteElement(content.toUtf8());
+
+    listWriter.endElement(); // text:list-level-style-number
+
+    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
+
+    m_currentListStyle.addChildElement(QString("level %1").arg(level), elementContents);
+*/
+
+    QBuffer listBuf;
+    KoXmlWriter listStyleWriter(&listBuf);
+
+    m_currentListStyleProperties->saveOdf(&listStyleWriter);
+
+    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
+
+    m_currentListStyle.addChildElement("list-style-properties", elementContents);
+
+    delete m_currentListStyleProperties;
+    m_currentListStyleProperties = 0;
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl1pPr
+//! List level 1 text style
+/*!
+
+ Parent elements:
+  - [done] bodyStyle (§19.3.1.5)
+  - defaultTextStyle (§19.2.1.8)
+  - lstStyle (§21.1.2.4.12)
+  - notesStyle (§19.3.1.28)
+  - otherStyle (§19.3.1.35)
+  - titleStyle (§19.3.1.49)
+
+ Child elements:
+  - [done] buAutoNum (Auto-Numbered Bullet)     §21.1.2.4.1
+  - buBlip (Picture Bullet)              §21.1.2.4.2
+  - buChar (Character Bullet)            §21.1.2.4.3
+  - buClr (Color Specified)              §21.1.2.4.4
+  - buClrTx (Follow Text)                §21.1.2.4.5
+  - buFont (Specified)                   §21.1.2.4.6
+  - buFontTx (Follow text)               §21.1.2.4.7
+  - [done] buNone (No Bullet)                   §21.1.2.4.8
+  - buSzPct (Bullet Size Percentage)     §21.1.2.4.9
+  - buSzPts (Bullet Size Points)         §21.1.2.4.10
+  - buSzTx (Bullet Size Follows Text)    §21.1.2.4.11
+  - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
+  - extLst (Extension List)              §20.1.2.2.15
+  - lnSpc (Line Spacing)                 §21.1.2.2.5
+  - spcAft (Space After)                 §21.1.2.2.9
+  - spcBef (Space Before)                §21.1.2.2.10
+  - tabLst (Tab List)                    §21.1.2.2.14
+
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl1pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl1pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl2pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl2pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl2pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl3pPr
+//! Look for lvl1pPr documentation  
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl3pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl3pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl4pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl4pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl4pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl5pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl5pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl5pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl6pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl6pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl6pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl7pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl7pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl7pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl8pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl8pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl8pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvl9pPr
+//! Look for lvl1pPr documentation
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl9pPr()
+{
+    READ_PROLOGUE
+    lvlHelper("lvl9pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buNone
+//! buNone - No bullets
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
+{
+    READ_PROLOGUE
+    m_currentListStyleProperties->setBulletCharacter(QChar());
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buAutoNum
+//! buAutoNum - Bullet Auto Numbering
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+
+    if (!type.isEmpty()) {
+        if (type == "arabicPeriod") {
+            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
+        }
+    }
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL defRPr
+//! defRPr - Default Text Run Properties
+/*!
+
+ Parent elements:
+     - defPPr (§21.1.2.2.2)
+     - [done] lvl1pPr (§21.1.2.4.13)
+     - [done] lvl2pPr (§21.1.2.4.14)
+     - [done] lvl3pPr (§21.1.2.4.15)
+     - [done] lvl4pPr (§21.1.2.4.16)
+     - [done] lvl5pPr (§21.1.2.4.17)
+     - [done] lvl6pPr (§21.1.2.4.18)
+     - [done] lvl7pPr (§21.1.2.4.19)
+     - [done] lvl8pPr (§21.1.2.4.20)
+     - [done] lvl9pPr (§21.1.2.4.21) 
+     - pPr (§21.1.2.2.7)
+
+ Child elements:
+     - blipFill (Picture Fill)                         §20.1.8.14
+     - cs (Complex Script Font)                        §21.1.2.3.1
+     - ea (East Asian Font)                            §21.1.2.3.3
+     - effectDag (Effect Container)                    §20.1.8.25
+     - effectLst (Effect Container)                    §20.1.8.26
+     - extLst (Extension List)                         §20.1.2.2.15
+     - gradFill (Gradient Fill)                        §20.1.8.33
+     - grpFill (Group Fill)                            §20.1.8.35
+     - highlight (Highlight Color)                     §21.1.2.3.4
+     - hlinkClick (Click Hyperlink)                    §21.1.2.3.5
+     - hlinkMouseOver (Mouse-Over Hyperlink)           §21.1.2.3.6
+     - latin (Latin Font)                              §21.1.2.3.7
+     - ln (Outline)                                    §20.1.2.2.24
+     - noFill (No Fill)                                §20.1.8.44
+     - pattFill (Pattern Fill)                         §20.1.8.47
+     - rtl (Right to Left Run)                         §21.1.2.2.8
+     - solidFill (Solid Fill)                          §20.1.8.54
+     - sym (Symbol Font)                               §21.1.2.3.10
+     - uFill (Underline Fill)                          §21.1.2.3.12
+     - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
+     - uLn (Underline Stroke)                          §21.1.2.3.14
+     - uLnTx (Underline Follows Text)                  §21.1.2.3.15
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentTextStyleProperties = new KoCharacterStyle();
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(sz)
+    if (!sz.isEmpty()) {
+        bool ok = false;
+        const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
+        if (ok) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
+    }
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+
     READ_EPILOGUE
 }
 

@@ -26,6 +26,7 @@
 
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
+#include <styles/KoListLevelProperties.h>
 
 #include "MsooXmlReader.h"
 
@@ -58,6 +59,9 @@ protected:
     KoGenStyle m_currentTextStyle;
     bool m_currentTextStylePredefined; //!< true if m_currentTextStyle shouldn't be created in read_rPr
     KoCharacterStyle* m_currentTextStyleProperties;
+
+    KoGenStyle m_currentListStyle;
+    KoListLevelProperties* m_currentListStyleProperties;
 
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;

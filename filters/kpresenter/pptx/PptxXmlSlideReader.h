@@ -82,6 +82,10 @@ public:
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
+   
+    KoFilter::ConversionStatus read_titleStyle();
+    KoFilter::ConversionStatus read_bodyStyle();
+    KoFilter::ConversionStatus read_txStyles();
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_sld();
     KoFilter::ConversionStatus read_sldInternal();
@@ -95,8 +99,8 @@ protected:
     KoFilter::ConversionStatus read_txBody();
 
     KoGenStyle m_currentPageStyle;
+
     PptxXmlSlideReaderContext* m_context;
-    QString m_phType; //! set by read_ph()
     PptxShapeProperties* m_currentShapeProperties;
 
 private:
