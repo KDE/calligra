@@ -757,7 +757,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case 33:
         m_paragraph->setContainsPageNumberField(true);
         break;
-    case 37: // PAGEREF
+    case 37: // Pageref
+        kDebug(30513) << "processing field...";
         break;
     case 88:  // HyperLink
         kDebug(30513) << "processing field...";
@@ -797,25 +798,23 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.addAttribute("text:select-page", "current");
         writer.endElement();
         break;
-    case 37:
-        kDebug()<<"m_bookmarkRef.length() = " << m_bookmarkRef.length();
-        foreach(QString st, m_bookmarkRef) {
-            kDebug()<<st;
-        }
+    case 37:  // Pageref
         if (m_bookmarkRef.length() == 2) {
+            // if we have a pageref, two part parts are necessary:
+            // - the first on in which is described the reference
+            // - the second in which is written the text to print
             if (m_bookmarkRef[0].contains("PAGEREF")) {
+                // we need to keep only the reference
                 m_bookmarkRef[0].remove("PAGEREF");
-
                 int pos = 0;
                 while (pos != -1)
                 {
                     pos = m_bookmarkRef[0].indexOf('\\');
                     m_bookmarkRef[0].replace(pos, 2, "");
                 }
-
                 m_bookmarkRef[0].remove(' ');
                 m_bookmarkRef[1].remove(' ');
-
+                // Now, we have everything we needed, let's write a bookmark-ref
                 writer.startElement("text:bookmark-ref");
                 writer.addAttribute("text:reference-format","page");
                 writer.addAttribute("text:ref-name",m_bookmarkRef[0]);
@@ -921,8 +920,6 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     // This method is called twice for each pageref (bookmark-ref). Save link
     // data to m_bookmarkRef to handle it later in fieldEnd -method.
     if (m_insideField && m_fieldType == 37) {
-
-        kDebug() << "m_bookmarkRef ........." <<newText;
         m_bookmarkRef.append(newText);
         return;
     }
@@ -930,7 +927,6 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     // text after fieldStart and before fieldSeparator is useless
     if (m_insideField && !m_fieldAfterSeparator) {
         kDebug(30513) << "Ignoring this text in first part of field.";
-        kDebug()<<"m_fieldType = "<<m_fieldType;
         return;
     }
 
