@@ -87,6 +87,7 @@ Value func_negbinomdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_norminv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
@@ -309,6 +310,10 @@ void StatisticalModule::registerFunctions()
     f = new Function("NORMSINV", func_normsinv);
     repo->add(f);
     f = new Function("PEARSON", func_correl_pop);
+    f->setParamCount(2);
+    f->setAcceptArray();
+    repo->add(f);
+    f = new Function("PERCENTILE", func_percentile);
     f->setParamCount(2);
     f->setAcceptArray();
     repo->add(f);
@@ -2141,6 +2146,41 @@ Value func_normsinv(valVector args, ValueCalc *calc, FuncExtra *)
 
     return calc->gaussinv(x);
 }
+
+//
+// Function: percentile
+//
+// PERCENTILE( data set; alpha )
+//
+Value func_percentile(valVector args, ValueCalc *calc, FuncExtra*)
+{
+    double alpha = numToDouble(calc->conv()->toFloat(args[1]));
+
+    // create array - does NOT support anything other than doubles !!!
+    List array;
+    int number = 0;
+
+    func_array_helper(args[0], calc, array, number);
+
+    // check constraints - number of values must be > 0 and flag >0 <=4
+    if (number == 0)
+        return Value::errorNA(); // or VALUE?
+    if (alpha < -1e-9 || alpha > 1 + 1e-9)
+        return Value::errorVALUE();
+
+    // sort values
+    qSort(array);
+
+    if (number == 1)
+        return Value(array[0]); // only one value
+    else {
+        double r = alpha * (number - 1);
+        int index = ::floor(r);
+        double d = r - index;
+        return Value(array[index] + d * (array[index+1] - array[index]));
+    }
+}
+
 
 //
 // Function: phi
