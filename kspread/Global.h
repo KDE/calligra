@@ -36,7 +36,7 @@
 #include <QTime>
 
 /* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
-#define KS_rowMax 0x7FFF
+#define KS_rowMax 0x10000
 /* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
 #define KS_colMax 0x7FFF
 

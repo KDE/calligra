@@ -753,10 +753,10 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     // in odf default-cell-style's only apply to cells/rows/columns that are present in the file while in Excel
     // row/column styles should apply to all cells in that row/column. So, try to fake that behavior by writting
     // a number-columns-repeated to apply the styles/formattings to "all" columns.
-    if (columnCount < minimumColumnCount-1) {
+    if (columnCount < maximalColumnCount-1) {
         xmlWriter->startElement("table:table-column");
         xmlWriter->addAttribute("table:style-name", defaultColumnStyles[defaultColumnStyleIndex]);
-        xmlWriter->addAttribute("table:number-columns-repeated", minimumColumnCount - 1 - columnCount);
+        xmlWriter->addAttribute("table:number-columns-repeated", maximalColumnCount - 1 - columnCount);
         xmlWriter->endElement();
     }
 
@@ -767,9 +767,9 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     }
 
     // same we did above with columns is also needed for rows.
-    if(rowCount < minimumRowCount-1) {
+    if(rowCount < maximalRowCount-1) {
         xmlWriter->startElement("table:table-row");
-        xmlWriter->addAttribute("table:number-rows-repeated", minimumRowCount - 1 - rowCount);
+        xmlWriter->addAttribute("table:number-rows-repeated", maximalRowCount - 1 - rowCount);
         xmlWriter->endElement();
     }
 
