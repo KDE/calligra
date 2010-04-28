@@ -760,11 +760,11 @@ void KWordTextHandler::paragraphEnd()
             m_hasStoredDropCap = true;
             kDebug(30513) << "saving drop cap data in texthandler" << m_dropCapString;
         }
-
-        // Remove the traces of the drop cap for the next round.
-        m_hasStoredDropCap = false;
-        m_dropCapString.clear();
-
+        else {
+            // Remove the traces of the drop cap for the next round.
+            m_hasStoredDropCap = false;
+            m_dropCapString.clear();
+        }
     } else {
         kDebug(30513) << "writing a header";
         m_paragraph->writeToFile(document()->headerWriter());
