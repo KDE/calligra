@@ -1411,7 +1411,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
 
         case FormulaToken::Intersect:
-            mergeTokens(&stack, 2, UString(" "));
+            mergeTokens(&stack, 2, UString("!"));
             break;
 
         case FormulaToken::Union:
