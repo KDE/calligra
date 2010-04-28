@@ -437,7 +437,7 @@ void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
     for (unsigned i = firstColumn; i <= lastColumn; i++) {
         Column* column = d->sheet->column(i, true);
         if (column) {
-            column->setWidth((double)width * Column::COLUMN_UNITS_TO_PTS);
+            column->setWidth( Column::columnUnitsToPts((double)width) );
             column->setFormat(d->globals->convertedFormat(xfIndex));
             column->setVisible(!hidden);
         }
@@ -921,7 +921,8 @@ void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* rec
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultColWidth( record->cchdefColWidth() * 256.0 * Column::COLUMN_UNITS_TO_PTS );
+
+    d->sheet->setDefaultColWidth( Column::columnUnitsToPts(record->cchdefColWidth() * 256.0) );
 }
 
 void WorksheetSubStreamHandler::handleSetup(SetupRecord*)

@@ -27,6 +27,10 @@
 #include <iostream>
 #include <map>
 #include <QPoint>
+#include <QFont>
+#include <QFontMetricsF>
+#include <QWidget>
+#include <QDebug>
 
 namespace Swinder
 {
@@ -129,7 +133,7 @@ void Sheet::clear()
     d->bottomMargin = 72;  // 1 inch
     d->autoCalc = true;
     d->defaultRowHeight = 12;
-    d->defaultColWidth = 2640.0 * Column::COLUMN_UNITS_TO_PTS;
+    d->defaultColWidth = Column::columnUnitsToPts(8.43 * 256.0);
     d->zoomLevel = 1.0; // 100%
     d->showGrid = true;
     d->showZeroValues = true;
@@ -444,7 +448,7 @@ Column::Column(Sheet* sheet, unsigned index)
     d = new Column::Private;
     d->sheet   = sheet;
     d->index   = index;
-    d->width   = 2560.0 * Column::COLUMN_UNITS_TO_PTS;
+    d->width   = 0.0;
     d->visible = true;
 }
 
@@ -465,6 +469,9 @@ unsigned Column::index() const
 
 double Column::width() const
 {
+    if( d->width == 0.0)
+        return d->sheet->defaultColWidth();
+
     return d->width;
 }
 
@@ -503,6 +510,25 @@ bool Column::operator==(const Column &other) const
 bool Column::operator!=(const Column &other) const
 {
     return ! (*this == other);
+}
+
+double Column::columnUnitsToPts(const double columnUnits)
+{
+    QFont font("Arial", 10);
+    QFontMetricsF fontMetrics(font);
+    double characterWidth = qMax(fontMetrics.width("0"),qMax(fontMetrics.width("1"),
+    qMax(fontMetrics.width("2"),qMax(fontMetrics.width("3"),
+    qMax(fontMetrics.width("4"),qMax(fontMetrics.width("5"),
+    qMax(fontMetrics.width("6"),qMax(fontMetrics.width("7"),
+    qMax(fontMetrics.width("8"),fontMetrics.width("9"))))))))));
+
+    double width = characterWidth * columnUnits / 256.0; //px
+    width = qRound(width / 8.0 + 0.5) * 8.0;
+
+    QWidget widget;
+    width /= (double)widget.physicalDpiX(); //in
+    width *= 72.0; //pt
+    return width;
 }
 
 class Row::Private
