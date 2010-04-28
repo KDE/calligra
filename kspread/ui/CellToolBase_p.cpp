@@ -94,20 +94,33 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
 void CellToolBase::Private::updateLocationComboBox()
 {
     QString address;
-    if (q->selection()->activeSheet()->getLcMode()) {
-        if (q->selection()->isSingular()) {
-            address = 'L' + QString::number(q->selection()->marker().y()) +
-                      'C' + QString::number(q->selection()->marker().x());
-        } else {
-            const QRect lastRange = q->selection()->lastRange();
-            address = QString::number(lastRange.bottom() - lastRange.top() + 1) + "Lx";
-            if (Region::Range(lastRange).isRow())
-                address += QString::number(q->maxCol() - lastRange.left() + 1) + 'C';
-            else
-                address += QString::number(lastRange.right() - lastRange.left() + 1) + 'C';
+    const QList< QPair<QRectF, QString> > names = q->selection()->activeSheet()->cellStorage()->namedAreas(*q->selection());
+    {
+        QRect range;
+        if (q->selection()->isSingular()) range = QRect(q->selection()->marker(), QSize(1, 1));
+        else range = q->selection()->lastRange();
+        for (int i = 0; i < names.size(); i++) {
+            if (names[i].first.toRect() == range) {
+                address = names[i].second;
+            }
         }
-    } else {
-        address = q->selection()->name();
+    }
+    if (address.isEmpty()) {
+        if (q->selection()->activeSheet()->getLcMode()) {
+            if (q->selection()->isSingular()) {
+                address = 'L' + QString::number(q->selection()->marker().y()) +
+                        'C' + QString::number(q->selection()->marker().x());
+            } else {
+                const QRect lastRange = q->selection()->lastRange();
+                address = QString::number(lastRange.bottom() - lastRange.top() + 1) + "Lx";
+                if (Region::Range(lastRange).isRow())
+                    address += QString::number(q->maxCol() - lastRange.left() + 1) + 'C';
+                else
+                    address += QString::number(lastRange.right() - lastRange.left() + 1) + 'C';
+            }
+        } else {
+            address = q->selection()->name();
+        }
     }
     if (address != locationComboBox->lineEdit()->text())
         locationComboBox->lineEdit()->setText(address);
