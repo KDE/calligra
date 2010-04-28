@@ -147,6 +147,80 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     // Set up the paragraph style.
     applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle, m_inHeaderFooter && m_containsPageNumberField);
 
+    QString textStyleName;
+    //add paragraph style to the collection and its name to the content
+    kDebug(30513) << "adding paragraphStyle";
+    //add the attribute for our style in <text:p>
+    textStyleName = "P";
+    textStyleName = m_mainStyles->insert(*m_odfParagraphStyle, textStyleName);
+
+    // check if the paragraph is inside frame
+    if (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs ) {
+        KoGenStyle userStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+        QString drawStyleName;
+
+        writer->startElement("text:p", false);
+        writer->addAttribute("text:style-name", textStyleName.toUtf8());
+
+        int dxaAbs = 0;
+        const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
+        //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
+        if (pap.dxaAbs == -4)   // center
+            userStyle.addProperty("style:horizontal-pos","center");
+        else if (pap.dxaAbs == -8)  // right
+            userStyle.addProperty("style:horizontal-pos","right");
+        else if (pap.dxaAbs == -12)  // inside
+            userStyle.addProperty("style:horizontal-pos","inside");
+        else if (pap.dxaAbs == -16)  // outside
+            userStyle.addProperty("style:horizontal-pos","outside");
+        else //
+            dxaAbs = pap.dxaAbs;
+
+        int dyaAbs = 0;
+        //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
+        if (pap.dyaAbs == -4)   // top
+            userStyle.addProperty("style:vertical-pos","top");
+        else if (pap.dyaAbs == -8)  // middle
+            userStyle.addProperty("style:vertical-pos","middle");
+        else if (pap.dyaAbs == -12)  // bottom
+            userStyle.addProperty("style:vertical-pos","bottom");
+        else if (pap.dyaAbs == -16)  // inside
+            userStyle.addProperty("style:vertical-pos","inline");
+        else if (pap.dyaAbs == -20)  // outside
+            userStyle.addProperty("style:vertical-pos","inline");
+        else //
+            dyaAbs = pap.dyaAbs;
+
+        //MS-DOC - PositionCodeOperand - anchor vertical position
+        if (pap.pcVert == 0)   // margin
+            userStyle.addProperty("style:vertical-rel","page-content");
+        else if (pap.pcVert == 1)  // page
+            userStyle.addProperty("style:vertical-rel","page");
+        else if (pap.pcVert == 2)  // paragraph
+            userStyle.addProperty("style:vertical-rel","paragraph");
+
+        //MS-DOC - PositionCodeOperand - anchor horizontal position
+        if (pap.pcHorz == 0)   // current column
+            userStyle.addProperty("style:horizontal-rel","paragraph");
+        else if (pap.pcHorz == 1)  // margin
+            userStyle.addProperty("style:horizontal-rel","page-content");
+        else if (pap.pcHorz == 2)  // page
+            userStyle.addProperty("style:horizontal-rel","page");
+
+        drawStyleName = "fr";
+        drawStyleName = m_mainStyles->insert(userStyle, drawStyleName);
+        writer->startElement("draw:frame");
+        writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
+        writer->addAttribute("text:anchor-type", "paragraph");
+        if (pap.dxaWidth != 0)
+            writer->addAttributePt("svg:width", (double)pap.dxaWidth/20);
+        if (pap.dyaHeight != 0)
+            writer->addAttributePt("svg:height", (double)pap.dyaHeight/20);
+        writer->addAttributePt("svg:x", (double)dxaAbs/20);
+        writer->addAttributePt("svg:y", (double)dyaAbs/20);
+        writer->startElement("draw:text-box");
+    }
+
     // Open paragraph or heading tag.
     if (m_isHeading) {
         writer->startElement("text:h", false);
@@ -155,12 +229,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         writer->startElement("text:p", false);
     }
 
-    //add paragraph style to the collection and its name to the content
-    kDebug(30513) << "adding paragraphStyle";
-    //add the attribute for our style in <text:p>
-    QString styleName("P");
-    styleName = m_mainStyles->insert(*m_odfParagraphStyle, styleName);
-    writer->addAttribute("text:style-name", styleName.toUtf8());
+    writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
     //just close the paragraph if there's no content
     if (m_textStrings.empty()) {
@@ -172,7 +241,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     kDebug(30513) << "writing text spans now";
     QString oldStyleName;
     bool startedSpan = false;
-    for (int i = 0; i < m_textStrings.size(); i++) {
+    for (uint i = 0; i < m_textStrings.size(); i++) {
         if (m_textStyles[i] == 0) {
             //if style is null, we have an inner paragraph and add the
             // complete paragraph element to writer
@@ -184,20 +253,20 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             //add text style to collection
             //put style into m_mainStyles & get its name
             //kDebug(30513) << m_textStyles[i]->type();
-            styleName = 'T';
-            styleName = m_mainStyles->insert(*m_textStyles[i], styleName);
+            textStyleName = 'T';
+            textStyleName = m_mainStyles->insert(*m_textStyles[i], textStyleName);
 
-            if (oldStyleName != styleName) {
+            if (oldStyleName != textStyleName) {
                 if (startedSpan) {
                     writer->endElement(); //text:span
                     startedSpan = false;
                 }
-                if (styleName != "DefaultParagraphFont") {
+                if (textStyleName != "DefaultParagraphFont") {
                     writer->startElement("text:span");
-                    writer->addAttribute("text:style-name", styleName.toUtf8());
+                    writer->addAttribute("text:style-name", textStyleName.toUtf8());
                     startedSpan = true;
                 }
-                oldStyleName = styleName;
+                oldStyleName = textStyleName;
             }
             //write text string to writer
             //now I just need to write the text:span to the header tag
@@ -218,6 +287,12 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
 
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
+
+    if (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs ) {
+        writer->endElement(); //draw:text-box
+        writer->endElement(); // draw:frame
+        writer->endElement(); // close the <text:p>
+    }
 }
 
 void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)

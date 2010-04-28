@@ -934,9 +934,11 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             fNoAutoHyph = *ptr == 1;
             break;
         case SPRM::sprmPWHeightAbs:
-            // Seems to be undocumented...
-            wvlog << "Warning: sprmPWHeightAbs not implemented" << endl;
+        {
+            U16 heightAbsTmp = readU16( ptr );
+            dyaHeight = ( heightAbsTmp & 0xfffe );
             break;
+        }
         case SPRM::sprmPDcs:
             dcs.readPtr( ptr );
             break;
@@ -2321,7 +2323,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmTUndocumented12:
             break;
         case SPRM::sprmTWidthIndent:
-	{
+    {
             //MS-DOC, page 363 of 609
             const U8 ftsWidth = *ptr;
             const S16 wWidth = readS16( ptr + 1 );
@@ -2329,13 +2331,13 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             //TODO: value is expressed in percentage of page/table, etc.
             if (ftsWidth == 2) {
 
-	    }
+        }
             //value in twipspx
             else if (ftsWidth == 3) {
                 widthIndent = wWidth;
-	    }
+        }
             break;
-	}
+    }
         // These are needed in case there are table properties inside the huge papx
         case SPRM::sprmPHugePapx:
         case SPRM::sprmPHugePapx2:

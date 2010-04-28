@@ -26,11 +26,13 @@
 #include <wv2/src/ms_odraw.h>
 #include "generated/leinputstream.h"
 #include "drawstyle.h"
+#include "ODrawToOdf.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <QtGui/QColor>
 
 
 using namespace wvWare;
@@ -357,12 +359,39 @@ void KWordPictureHandler::externalImage(const UString& name, SharedPtr<const Wor
     kDebug(30513);
 }
 
+namespace
+{
+const char* dashses[11] = {
+    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
+    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
+};
+const char* arrowHeads[6] = {
+    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+};
+QString format(double v) {
+    static const QString f("%1");
+    static const QString e("");
+    static const QRegExp r("\\.?0+$");
+    return f.arg(v, 0, 'f').replace(r, e);
+}
+QString pt(double v) {
+    static const QString pt("pt");
+    return format(v) + pt;
+}
+QString percent(double v) {
+    return format(v) + '%';
+}
+}
+
 DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_)
         : Writer(xmlWriter,kostyles,stylesxml_),
         xLeft(0),
         xRight(0),
         yTop(0),
-        yBottom(0)
+        yBottom(0),
+        m_pSpa(0),
+        m_bodyDrawing(true)
 {
     scaleX = 25.4 / 1440;
     scaleY = 25.4 / 1440;
@@ -428,6 +457,7 @@ KWordDrawingHandler::KWordDrawingHandler(Document* doc, KoGenStyles* mainStyles,
 , m_mainStyles(mainStyles)
 , m_bodyWriter(bodyWriter)
 , m_drawings(0)
+, m_fib(0)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
 {
@@ -456,36 +486,51 @@ void KWordDrawingHandler::init(Drawings * pDrawings, wvWare::OLEStreamReader* ta
 //    m_mainStyles->insert(style, "");
 
     m_drawings = pDrawings;
+    m_fib = const_cast<wvWare::Word97::FIB *>(&fib);
 }
 
 void KWordDrawingHandler::drawingData(unsigned int globalCP)
 {
-    kDebug(30513);
-
+    kDebug(30513) << "globalCP" << globalCP ;
     // draw shape or group of shapes
     if(m_drawings == NULL) {
         return;
     }
 
     PLCF<Word97::FSPA>* fspa = m_drawings->getSpaMom();
-    if(fspa == NULL) {
-        return;
+    if (fspa != 0) {
+        PLCFIterator<Word97::FSPA> it(fspa->at(0));
+
+        //search for drawing in main body
+        for(size_t i = 0; i < fspa->count(); i++, ++it) {
+            kDebug(30513) << "FSPA start:" << it.currentStart();
+            kDebug(30513) << "FSPA spid:" << it.current()->spid;
+
+            if(it.currentStart() == globalCP) {
+                DrawingWriter out(*m_bodyWriter,*m_mainStyles,true);
+                out.m_pSpa = it.current();
+                out.m_bodyDrawing = true;
+                drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out,it.current());
+                return;
+            }
+        }
     }
 
-    PLCFIterator<Word97::FSPA> it( fspa->at( 0 ) );
+    fspa = m_drawings->getSpaHdr();
+    if (fspa != 0) {
+        PLCFIterator<Word97::FSPA> itHeader(fspa->at(0));
+        //search for drawing in header
+        for(size_t i = 0; i < fspa->count(); i++, ++itHeader) {
+            kDebug(30513) << "FSPA start:" << itHeader.currentStart() + m_fib->ccpText + m_fib->ccpFtn;
+            kDebug(30513) << "FSPA spid:" << itHeader.current()->spid;
 
-    kDebug(30513) << "globalCP" << globalCP ;
-
-    //search for drawing
-    for(size_t i = 0; i < fspa->count(); i++, ++it) {
-        kDebug(30513) << "FSPA start:" << it.currentStart();
-        kDebug(30513) << "FSPA spid:" << it.current()->spid;
-
-        if(it.currentStart() == globalCP) {
-            KoGenStyles tmpStyles; //not used yet
-            DrawingWriter out(*m_bodyWriter,tmpStyles,true);
-            drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out,it.current());
-            break;
+            if((itHeader.currentStart() + m_fib->ccpText + m_fib->ccpFtn)  == globalCP) {
+                DrawingWriter out(*m_bodyWriter,*m_mainStyles,true);
+                out.m_pSpa = itHeader.current();
+                out.m_bodyDrawing = false;
+                drawObject((uint) itHeader.current()->spid, m_pOfficeArtHeaderDgContainer, out,itHeader.current());
+                return;
+            }
         }
     }
 }
@@ -519,7 +564,7 @@ void KWordDrawingHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, 
             const OfficeArtSpContainer* first =
                     (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
 
-            if(first && first->shapeProp.spid == spid) {
+            if (first && first->shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
                 processObjectForBody(*co.anon.get<OfficeArtSpgrContainer>(), out); //draw group
                 break;
@@ -529,7 +574,7 @@ void KWordDrawingHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, 
         {
             const OfficeArtSpContainer & spCo = *co.anon.get<OfficeArtSpContainer>();
 
-            if(spCo.shapeProp.spid == spid) {
+            if (spCo.shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
                 processObjectForBody(spCo, out); //draw object
                 break;
@@ -576,9 +621,16 @@ void KWordDrawingHandler::processObjectForBody(const MSO::OfficeArtSpContainer& 
         return;
     }
 
-
     switch (o.shapeProp.rh.recInstance)
     {
+        case msosptRectangle: {
+            kDebug(30513)<< "processing rectangle";
+            processRectangle(o, out);
+            break;
+        }
+        case msosptEllipse:
+            kDebug(30513)<< "processing ellipse";
+            break;
         case msosptPictureFrame:
             kDebug(30513)<< "processing picture frame";
             processPictureFrame(o, out);
@@ -714,6 +766,260 @@ void KWordDrawingHandler::parseOfficeArtContainer(wvWare::OLEStreamReader* table
     }
 }
 
+void KWordDrawingHandler::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
+                          wvWare::Word97::FSPA* spa, const QString& listStyle)
+{
+    MSO::OfficeArtCOLORREF clr;
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    // dr3d:ambient-color
+    // dr3d:back-scale
+    // dr3d:backface-culling
+    // dr3d:close-back
+    // dr3d:close-front
+    // dr3d:depth
+    // dr3d:diffuse-color
+    // dr3d:edge-rounding
+    // dr3d:edge-rounding-mode
+    // dr3d:emissive-color
+    // dr3d:end-angle
+    // dr3d:horizontal-segments
+    // dr3d:lighting-mode
+    // dr3d:normals-direction
+    // dr3d:normals-kind
+    // dr3d:shadow
+    // dr3d:shininess
+    // dr3d:specular-color
+    // dr3d:texture-filter
+    // dr3d:texture-generation-mode-x
+    // dr3d:texture-generation-mode-y
+    // dr3d:texture-kind
+    // dr3d:texture-mode
+    // dr3d:vertical-segments
+    // draw:auto-grow-height
+    // draw:auto-grow-width
+    // draw:blue
+    // draw:caption-angle
+    // draw:caption-angle-type
+    // draw:caption-escape
+    // draw:caption-escape-direction
+    // draw:caption-fit-line-length
+    // draw:caption-gap
+    // draw:caption-line-length
+    // draw:caption-type
+    // draw:color-inversion
+    // draw:color-mode
+    // draw:contrast
+    // draw:decimal-places
+    // draw:end-guide
+    // draw:end-line-spacing-horizontal
+    // draw:end-line-spacing-vertical
+    // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
+    qint32 fillType = ds.fillType();
+    if (ds.fFilled()) {
+        style.addProperty("draw:fill", getFillType(fillType), gt);
+    } else {
+        style.addProperty("draw:fill", "none", gt);
+    }
+    // draw:fill-color
+    // only set the color if the fill type is 'solid' because OOo ignores
+    // fill='none' if the color is set
+    if (fillType == 0) {
+        clr = ds.fillColor();
+        QColor fillColor(clr.red,clr.green,clr.blue);
+        style.addProperty("draw:fill-color", fillColor.name(), gt);
+    }
+    // draw:fill-gradient-name
+    // draw:fill-hatch-name
+    // draw:fill-hatch-solid
+    // draw:fill-image-height
+    // draw:fill-image-name
+    // draw:fill-image-ref-point
+    // draw:fill-image-ref-point-x
+    // draw:fill-image-ref-point-y
+    // draw:fill-image-width
+    // draw:fit-to-contour
+    // draw:fit-to-size
+    // draw:frame-display-border
+    // draw:frame-display-scrollbar
+    // draw:frame-margin-horizontal
+    // draw:frame-margin-vertical
+    // draw:gamma
+    // draw:gradient-step-count
+    // draw:green
+    // draw:guide-distance
+    // draw:guide-overhang
+    // draw:image-opacity
+    // draw:line-distance
+    // draw:luminance
+    // draw:marker-end
+    quint32 lineEndArrowhead = ds.lineEndArrowhead();
+    if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
+        style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
+    }
+    // draw:marker-end-center
+    // draw:marker-end-width
+    qreal lineWidthPt = ds.lineWidth() / 12700.;
+    style.addProperty("draw:marker-end-width",
+                      pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
+    // draw:marker-start
+    quint32 lineStartArrowhead = ds.lineStartArrowhead();
+    if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
+        style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead],
+                          gt);
+    }
+    // draw:marker-start-center
+    // draw:marker-start-width
+    style.addProperty("draw:marker-start-width",
+                      pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
+    // draw:measure-align
+    // draw:measure-vertical-align
+    // draw:ole-draw-aspect
+    // draw:opacity
+    // draw:opacity-name
+    // draw:parallel
+    // draw:placing
+    // draw:red
+    // draw:secondary-fill-color
+    // draw:shadow
+    // draw:shadow-color
+    // draw:shadow-offset-x
+    style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+    // draw:shadow-offset-y
+    style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+    // draw:shadow-opacity
+    float shadowOpacity = toQReal(ds.shadowOpacity());
+    style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    // draw:show-unit
+    // draw:start-guide
+    // draw:start-line-spacing-horizontal
+    // draw:start-line-spacing-vertical
+    // draw:stroke ('dash', 'none' or 'solid')
+    quint32 lineDashing = ds.lineDashing();
+    // OOo interprets solid line with with 0 as hairline, so if
+    // width == 0, stroke *must* be none to avoid OOo from
+    // displaying a line
+    if (lineWidthPt == 0) {
+        style.addProperty("draw:stroke", "none", gt);
+    } else if (ds.fLine() || ds.fNoLineDrawDash()) {
+        if (lineDashing > 0 && lineDashing < 11) {
+            style.addProperty("draw:stroke", "dash", gt);
+        } else {
+            style.addProperty("draw:stroke", "solid", gt);
+        }
+    } else {
+        style.addProperty("draw:stroke", "none", gt);
+    }
+    // draw:stroke-dash from 2.3.8.17 lineDashing
+    if (lineDashing > 0 && lineDashing < 11) {
+        style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
+    }
+    // draw:stroke-dash-names
+    // draw:stroke-linejoin
+    // draw:symbol-color
+    // draw:textarea-horizontal-align
+    // draw:textarea-vertical-align
+    // draw:tile-repeat-offset
+    // draw:unit
+    // draw:visible-area-height
+    // draw:visible-area-left
+    // draw:visible-area-top
+    // draw:visible-area-width
+    // draw:wrap-influence-on-position
+    // fo:background-color
+    // fo:border
+    // fo:border-bottom
+    // fo:border-left
+    // fo:border-right
+    // fo:border-top
+    // fo:clip
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
+    // fo:max-height
+    // fo:max-width
+    // fo:min-height
+    // fo:min-width
+    // fo:padding
+    // fo:padding-bottom
+    // fo:padding-left
+    // fo:padding-right
+    // fo:padding-top
+    // fo:wrap-option
+    // style:border-line-width
+    // style:border-line-width-bottom
+    // style:border-line-width-left
+    // style:border-line-width-right
+    // style:border-line-width-top
+    // style:editable
+    // style:flow-with-text
+    // style:horizontal-pos
+    // style:horizontal-rel
+
+    if (spa != 0) {
+        if (spa->bx == 0)   // current column
+            style.addProperty("style:horizontal-rel","page-content");
+        else if (spa->bx == 1)  // margin
+            style.addProperty("style:horizontal-rel","page");
+        else if (spa->bx == 2)  // page
+            style.addProperty("style:horizontal-rel","paragraph");
+    }
+    // style:mirror
+    // style:number-wrapped-paragraphs
+    // style:overflow-behavior
+    // style:print-content
+    // style:protect
+    // style:rel-height
+    // style:rel-width
+    // style:repeat
+    // style:run-through
+    // style:shadow
+    // style:vertical-pos
+    // style:vertical-rel
+
+    if (spa != 0) {
+        if (spa->by == 0)   // margin
+            style.addProperty("style:vertical-rel","page-content");
+        else if (spa->by == 1)  // page
+            style.addProperty("style:vertical-rel","page");
+        else if (spa->by == 2)  // paragraph
+            style.addProperty("style:vertical-rel","paragraph");
+    }
+    // style:wrap
+    // style:wrap-contour
+    // style:wrap-contour-mode
+    // style:wrap-dynamic-treshold
+    // svg:fill-rule
+    // svg:height
+    // svg:stroke-color from 2.3.8.1 lineColor
+    clr = ds.lineColor();
+    QColor lineColor(clr.red,clr.green,clr.blue);
+    style.addProperty("svg:stroke-color", lineColor.name(), gt);
+    // svg:stroke-opacity from 2.3.8.2 lineOpacity
+    style.addProperty("svg:stroke-opacity",
+                      percent(100.0 * ds.lineOpacity() / 0x10000), gt);
+    // svg:stroke-width from 2.3.8.14 lineWidth
+    style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
+    // svg:width
+    // svg:x
+    // svg:y
+    // text:anchor-page-number
+    // text:anchor-type
+    // text:animation
+    // text:animation-delay
+    // text:animation-direction
+    // text:animation-repeat
+    // text:animation-start-inside
+    // text:animation-steps
+    // text:animation-stop-inside
+
+    /* associate with a text:list-style element */
+    if (!listStyle.isNull()) {
+        style.addAttribute("style:list-style-name", listStyle);
+    }
+}
+
 void KWordDrawingHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     out.xml.startElement("draw:frame");
@@ -747,6 +1053,38 @@ void KWordDrawingHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Drawi
     emit textBoxFound(o.shapeProp.spid , &out.xml);
 
     out.xml.endElement(); //draw:text-box
+    out.xml.endElement(); // draw:frame
+}
+
+void KWordDrawingHandler::processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out)
+{
+    QString styleName;
+    DrawStyle ds(m_OfficeArtDggContainer,&o);
+    if (out.m_bodyDrawing) {
+        KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+        defineGraphicProperties(style, ds, out.m_pSpa);
+        styleName = out.styles.insert(style);
+    }
+    else {
+        KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
+        defineGraphicProperties(style, ds, out.m_pSpa);
+        styleName = out.styles.insert(style);
+    }
+//    DocDrawClient drawclient(this);
+//    ODrawToOdf odrawtoodf(drawclient);
+//    odrawtoodf.defineGraphicProperties(style, ds);
+
+    out.xml.startElement("draw:frame");
+    out.xml.addAttribute("draw:style-name", styleName);
+    out.xml.addAttribute("text:anchor-type","char");
+    out.xml.addAttribute("draw:layer", "layout");
+    out.xml.addAttribute("svg:width", out.hLength());
+    out.xml.addAttribute("svg:height", out.vLength());
+    out.xml.addAttribute("svg:x", out.hOffset());
+    out.xml.addAttribute("svg:y", out.vOffset());
+
+    out.xml.startElement("draw:text-box");
+    out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }
 

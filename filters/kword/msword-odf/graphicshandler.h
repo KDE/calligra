@@ -90,10 +90,15 @@ private:
  class DrawingWriter : public Writer
  {
  public:
+     //position
      int xLeft;
      int xRight;
      int yTop;
      int yBottom;
+     //structure that specifies placement of drawing
+     wvWare::Word97::FSPA* m_pSpa;
+     //true - drawing is in body; false - drawing is in header/footer
+     bool m_bodyDrawing;
 
      DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_);
 
@@ -132,11 +137,13 @@ private:
     void processObjectForBody(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
     void processObjectForBody(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
-    void parseOfficeArtContainer(wvWare::OLEStreamReader* table
-            ,const  wvWare::Word97::FIB &fib);
+    void parseOfficeArtContainer(wvWare::OLEStreamReader* table, const wvWare::Word97::FIB &fib);
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, wvWare::Word97::FSPA* spa,
+            const QString& listStyle=QString());
 //    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
     void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o,DrawingWriter& out);
 
     Document* m_doc;
@@ -144,6 +151,7 @@ private:
     KoXmlWriter* m_bodyWriter;
 
     wvWare::Drawings * m_drawings;
+    wvWare::Word97::FIB * m_fib;
 
     MSO::OfficeArtDggContainer m_OfficeArtDggContainer;
     MSO::OfficeArtDgContainer * m_pOfficeArtHeaderDgContainer;

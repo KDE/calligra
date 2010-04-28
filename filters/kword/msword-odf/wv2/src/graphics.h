@@ -44,6 +44,7 @@ namespace wvWare
         ~Drawings();
 
         PLCF<Word97::FSPA>* getSpaMom(){return m_plcfspaMom;};
+        PLCF<Word97::FSPA>* getSpaHdr(){return m_plcfspaHdr;};
         PLCF<Word97::FTXBXS>* getTxbxTxt(){return m_plcftxbxTxt;};
     private:
         Drawings( const Drawings& rhs );
@@ -163,7 +164,7 @@ namespace wvWare
     public:
         Blip( OLEStreamReader* stream, string blipType );
         ~Blip();
-
+        
         bool isMetafileBlip(); //is this an EMF, WMF, or PICT?
         bool isCompressed(); //is this blip compressed? (only applied to metafile blips)
         int recordSize(); //size of the record *without* the actual picture data
