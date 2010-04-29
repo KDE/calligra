@@ -867,7 +867,7 @@ void Axis::Private::createBubbleDiagram()
     KDChart::MarkerAttributes ma( dva.markerAttributes() );
     ma.setVisible( true );
     ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-    ma.setMarkerSize( QSizeF(30.0,30.0) ); // );
+    //ma.setMarkerSize( QSizeF(30.0,30.0) );
     dva.setMarkerAttributes( ma );
 
     //KDChart::RelativePosition pos( dva.positivePosition() );
