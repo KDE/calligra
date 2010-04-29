@@ -425,7 +425,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->addAttribute("office:value-type", cell->valueType);
                     }
                     if (!cell->valueAttr.isEmpty()) {
-                        body->addAttribute(cell->valueAttr, cell->valueAttrValue);
+                        // Treat boolean values specially (ODF1.1 chapter 6.7.1)
+                        if (cell->valueAttr == XlsxXmlWorksheetReader::officeBooleanValue)
+                            //! @todo This breaks down if the value is a formula and not constant.
+                            body->addAttribute(cell->valueAttr, 
+                                               cell->valueAttrValue == "0" ? "false" : "true");
+                        else
+                            body->addAttribute(cell->valueAttr, cell->valueAttrValue);
                     }
                     if (!cell->formula.isEmpty()) {
                         body->addAttribute("table:formula", cell->formula);
@@ -439,7 +445,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
                     if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty() || hasHyperlink) {
                         body->startElement("text:p", false);
-                        if(!cell->charStyleName.isEmpty()) {
+                        if (!cell->charStyleName.isEmpty()) {
                             body->startElement( "text:span" );
                             body->addAttribute( "text:style-name", cell->charStyleName);
                         }
@@ -449,10 +455,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             //body->addAttribute("office:target-frame-name", targetFrameName);
                             body->addTextNode(cell->text.isEmpty() ? cell->hyperlink : cell->text);
                             body->endElement(); // text:a
-                        } else if(!cell->text.isEmpty()) {
+                        } else if (!cell->text.isEmpty()) {
                             body->addTextSpan(cell->text);
                         }
-                        if(!cell->charStyleName.isEmpty()) {
+                        if (!cell->charStyleName.isEmpty()) {
                             body->endElement(); // text:span
                         }
                         body->endElement(); // text:p
