@@ -2439,7 +2439,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_w()
     if (!val.isEmpty()) {
         int wNumber;
         STRING_TO_INT(val, wNumber, "w@val")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(wNumber)/100.0);
+        m_currentTextStyleProperties->setTextScale(wNumber);
     }
     readNext();
     READ_EPILOGUE
