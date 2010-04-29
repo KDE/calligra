@@ -467,7 +467,10 @@
   <field name="numCopies"               type="unsigned" size="16" />
 </record>
 
-<record name="CrtLine" id="0x101c"/>
+<record name="CrtLine" id="0x101c">
+  <field name="identifier" type="unsigned" size="16" />
+</record>
+
 <record name="Units" id="0x1001"/>
 
 <!-- TODO all records following are missing the handle in there streams -->

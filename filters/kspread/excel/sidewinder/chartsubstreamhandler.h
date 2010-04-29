@@ -130,6 +130,7 @@ private:
     void handleValueRange(ValueRangeRecord *);
     void handleTick(TickRecord *);
     void handleAxcExt(AxcExtRecord *);
+    void handleCrtLine(CrtLineRecord *);
     void handleCatSerRange(CatSerRangeRecord *);
 };
 

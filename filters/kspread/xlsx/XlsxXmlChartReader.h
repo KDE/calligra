@@ -91,6 +91,8 @@ protected:
     KoFilter::ConversionStatus read_surface3DChart();
     KoFilter::ConversionStatus read_bubbleChart();
     KoFilter::ConversionStatus read_bubble3DChart();
+    KoFilter::ConversionStatus read_stockChart();
+    KoFilter::ConversionStatus read_stock3DChart();
 
     KoFilter::ConversionStatus read_barDir();
     KoFilter::ConversionStatus read_grouping();

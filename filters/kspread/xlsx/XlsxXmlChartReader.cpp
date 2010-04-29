@@ -202,6 +202,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(surface3DChart)
             ELSE_TRY_READ_IF(bubbleChart)
             ELSE_TRY_READ_IF(bubble3DChart)
+            ELSE_TRY_READ_IF(stockChart)
+            ELSE_TRY_READ_IF(stock3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
@@ -614,6 +616,26 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubble3DChart()
 {
     if(!m_context->m_chart->m_impl) {
         m_context->m_chart->m_impl = new Charting::BubbleImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL stockChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_stockChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::StockImpl();
+    }
+    return KoFilter::OK;
+}
+#undef CURRENT_EL
+#define CURRENT_EL stock3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_stock3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::StockImpl();
         m_context->m_chart->m_is3d = true;
     }
     return KoFilter::OK;

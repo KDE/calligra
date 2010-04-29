@@ -155,7 +155,14 @@ namespace Charting
         AreaImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "area"; }
     };
-    
+
+    class StockImpl : public ChartImpl
+    {
+    public:
+        StockImpl() : ChartImpl() {}
+        virtual QByteArray name() const { return "stock"; }
+    };
+
     class ScatterImpl : public ChartImpl
     {
     public:

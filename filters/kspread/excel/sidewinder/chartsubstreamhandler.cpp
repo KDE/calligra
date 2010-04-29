@@ -232,6 +232,8 @@ void ChartSubStreamHandler::handleRecord(Record* record)
         handleTick(static_cast<TickRecord*>(record));
     else if (type == AxcExtRecord::id)
         handleAxcExt(static_cast<AxcExtRecord*>(record));
+    else if (type == CrtLineRecord::id)
+        handleCrtLine(static_cast<CrtLineRecord*>(record));
     else if (type == CatSerRangeRecord::id)
         handleCatSerRange(static_cast<CatSerRangeRecord*>(record));
     else if (type == SIIndexRecord::id)
@@ -793,6 +795,14 @@ void ChartSubStreamHandler::handleAxcExt(AxcExtRecord *record)
 {
     if(!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fDateAxis=" << record->isFDateAxis() << " fAutoBase=" << record->isFAutoBase() << " fAutoCross=" << record->isFAutoCross() << " fAutoDate=" << record->isFAutoDate() << std::endl;
+    //TODO
+}
+
+// Specifies the presence of drop lines, high-low lines, series lines or leader lines on the chart group. This record is followed by a LineFormat record which specifies the format of the lines.
+void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
+{
+    if(!record) return;
+    DEBUG << "identifier=" << record->identifier() << std::endl;
     //TODO
 }
 
