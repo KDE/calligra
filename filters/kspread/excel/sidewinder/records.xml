@@ -576,6 +576,13 @@
 </record>
 
 <record name="ChartFormat" id="0x1014">
+  <field name="reserved1" type="unsigned" size="32" />
+  <field name="reserved2" type="unsigned" size="32" />
+  <field name="reserved3" type="unsigned" size="32" />
+  <field name="reserved4" type="unsigned" size="32" />
+  <field name="fVaried" type="bool" size="1" />
+  <field name="reserved5" type="unsigned" size="15" />
+  <field name="icrt" type="unsigned" size="16" />
 </record>
 
 <record name="Legend" id="0x1015">

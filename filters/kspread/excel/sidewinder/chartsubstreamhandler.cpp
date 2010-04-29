@@ -488,7 +488,7 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 void ChartSubStreamHandler::handleChartFormat(ChartFormatRecord *record)
 {
     if(!record) return;
-    DEBUG << std::endl;
+    DEBUG << "fVaried=" << record->isFVaried() << std::endl;
     //TODO
 }
 
@@ -803,7 +803,24 @@ void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
 {
     if(!record) return;
     DEBUG << "identifier=" << record->identifier() << std::endl;
-    //TODO
+    switch(record->identifier()) {
+        case 0x0000: // Drop lines below the data points of line, area, and stock chart groups.
+            //TODO
+            break;
+        case 0x0001: // High-Low lines around the data points of line and stock chart groups.
+            if(Charting::LineImpl* line = dynamic_cast<Charting::LineImpl*>(m_chart->m_impl)) {
+                // It seems that a stockchart is always a linechart with a CrtLine record that defines High-Low lines.
+                delete line;
+                m_chart->m_impl = new Charting::StockImpl();
+            }
+            break;
+        case 0x0002: // Series lines connecting data points of stacked column and bar chart groups, and the primary pie to the secondary bar/pie of bar of pie and pie of pie chart groups.
+            //TODO
+            break;
+        case 0x0003: // Leader lines with non-default formatting connecting data labels to the data point of pie and pie of pie chart groups.
+            //TODO
+            break;
+    }
 }
 
 void ChartSubStreamHandler::handleCatSerRange(CatSerRangeRecord *record)
