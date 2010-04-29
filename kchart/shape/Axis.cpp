@@ -62,6 +62,7 @@
 #include <KDChartThreeDBarAttributes>
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
+#include <KDChartDataValueAttributes>
 
 // KChart
 #include "PlotArea.h"
@@ -839,7 +840,44 @@ void Axis::Private::createBubbleDiagram()
 
     kdBubbleDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
     kdBubbleDiagram->setModel( kdBubbleDiagramModel );
+    
     registerDiagram( kdBubbleDiagram );
+    
+    kdPlane->addDiagram( kdBubbleDiagram );
+
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdPlane );
+    
+    //foreach ( Axis *axis, plotArea->axes() ) {
+    //    if ( axis->isVisible() )
+    //        kdBubbleDiagram->addAxis( axis->kdAxis() );
+    //}
+    
+     // disable the connecting line
+    //kdBubbleDiagram->setPen( QPen( Qt::black, 0.0 ) );
+    kdBubbleDiagram->setPen( Qt::NoPen );
+
+    KDChart::DataValueAttributes dva( kdBubbleDiagram->dataValueAttributes() );
+    dva.setVisible( true );
+    
+    KDChart::TextAttributes ta( dva.textAttributes() );
+    ta.setVisible( false );
+    dva.setTextAttributes( ta );
+
+    KDChart::MarkerAttributes ma( dva.markerAttributes() );
+    ma.setVisible( true );
+    ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+    ma.setMarkerSize( QSizeF(30.0,30.0) ); // );
+    dva.setMarkerAttributes( ma );
+
+    //KDChart::RelativePosition pos( dva.positivePosition() );
+    //pos.setAlignment( Qt::AlignCenter );
+    //pos.setHorizontalPadding(0);
+    //dva.setPositivePosition( pos );
+
+    kdBubbleDiagram->setDataValueAttributes( dva );
+
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdBubbleDiagram );
 }
 
 void Axis::Private::createSurfaceDiagram()
