@@ -313,7 +313,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
  Child elements:
     - [done] bodyStyle (Slide Master Body Text Style)   §19.3.1.5
     - extLst (Extension List)                    §19.2.1.12
-    - otherStyle (Slide Master Other Text Style) §19.3.1.35
+    - [done] otherStyle (Slide Master Other Text Style) §19.3.1.35
     - [done] titleStyle (Slide Master Title Text Style) §19.3.1.49
 */
 //! @todo support all child elements
@@ -326,6 +326,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
         if (isStartElement()) {
             TRY_READ_IF(bodyStyle)
             ELSE_TRY_READ_IF(titleStyle)
+            ELSE_TRY_READ_IF(otherStyle)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -410,6 +411,57 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "titleList";
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL otherStyle
+//! otherStyle handler (Slide Master Other Text)
+/*!
+ Parent elements:
+    - [done] txStyles (§19.3.1.52)
+
+ Child elements:
+    - defPPr (Default Paragraph Style)  §21.1.2.2.2
+    - extLst (Extension List)           §20.1.2.2.15
+    - [done] lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+    - [done] lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+    - [done] lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+    - [done] lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+    - [done] lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+    - [done] lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+    - [done] lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+    - [done] lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+    - [done] lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
+{
+    READ_PROLOGUE
+
+    QString currentListStyleName = "otherList";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
     while (!atEnd()) {

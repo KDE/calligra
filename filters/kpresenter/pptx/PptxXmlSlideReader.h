@@ -85,6 +85,7 @@ protected:
    
     KoFilter::ConversionStatus read_titleStyle();
     KoFilter::ConversionStatus read_bodyStyle();
+    KoFilter::ConversionStatus read_otherStyle();
     KoFilter::ConversionStatus read_txStyles();
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_sld();

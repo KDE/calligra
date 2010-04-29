@@ -719,12 +719,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  if (listDepth == 0) {
                      if (m_currentListStyle.isEmpty()) {
                          // for now the name is hardcoded...should be maybe fixed
-                         if (m_phType == "title" || m_phType == "ctrTitle" || m_phType == "subTitle") {
+                         if (m_phType == "title" || m_phType == "ctrTitle") {
                              body->addAttribute("text:style-name", "titleList"); 
                          }
-                         else {
+                         else if (m_phType == "body" ) {
                              // Fixme? : for now the master slide list style is called bodyList
                              body->addAttribute("text:style-name", "bodyList");
+                         }
+                         else {
+                             // This hardcoded name should maybe changed to something else
+                             body->addAttribute("text:style-name", "otherList");
                          }
                      }
                      else {
@@ -1138,16 +1142,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
         kDebug() << "Saved to m_currentShapeProperties";
     }
 #endif
+
     kDebug()
     << "svg:x" << m_svgX
     << "svg:y" << m_svgY
     << "svg:width" << m_svgWidth
     << "svg:height" << m_svgHeight;
-
-    while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
-    }
 
     READ_EPILOGUE
 }
@@ -2215,6 +2215,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     // Number 3 makes eg. lvl4 -> 4
     m_currentListStyleProperties->setLevel(QString(level.at(3)).toInt());
 
+    // To prevent the default bullet, as MS2007 does have it
+    m_currentListStyleProperties->setBulletCharacter(QChar());
+ 
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(indent)
 
@@ -2233,7 +2236,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     }
 
     if (marginalOk || indentOk) {
-        //listWriter.addAttributePt("text:space-before", marginal + ind);
+        m_currentListStyleProperties->setIndent(marginal + ind);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
