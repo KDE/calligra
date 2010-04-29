@@ -655,7 +655,7 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
     if(!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     if(record->isFBubbles())
-        m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio());
+        m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
         m_chart->m_impl = new Charting::ScatterImpl();
 }

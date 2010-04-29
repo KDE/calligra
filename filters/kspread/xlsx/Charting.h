@@ -174,7 +174,9 @@ namespace Charting
         SizeType m_sizeType;
         /// The size of the data points as a percentage of their default size. A value of 100 shows all the data points in their default size, as determined by the application.
         unsigned int m_sizeRatio;
-        BubbleImpl(SizeType sizeType, unsigned int sizeRatio = 100) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio) {}
+        /// Specifies whether data points with negative values are shown.
+        bool m_showNegativeBubbles;
+        BubbleImpl(SizeType sizeType = Area, unsigned int sizeRatio = 100, bool showNegativeBubbles = true) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio), m_showNegativeBubbles(showNegativeBubbles) {}
         virtual QByteArray name() const { return "bubble"; }
     };
 

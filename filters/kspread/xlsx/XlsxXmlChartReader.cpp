@@ -200,10 +200,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(radar3DChart)
             ELSE_TRY_READ_IF(surfaceChart)
             ELSE_TRY_READ_IF(surface3DChart)
+            ELSE_TRY_READ_IF(bubbleChart)
+            ELSE_TRY_READ_IF(bubble3DChart)
             ELSE_TRY_READ_IF(barDir)
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
             ELSE_TRY_READ_IF(holeSize)
+            ELSE_TRY_READ_IF(bubbleSize)
+            ELSE_TRY_READ_IF(bubbleScale)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -596,6 +600,26 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surface3DChart()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL bubbleChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::BubbleImpl();
+    }
+    return KoFilter::OK;
+}
+#undef CURRENT_EL
+#define CURRENT_EL bubble3DChart
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bubble3DChart()
+{
+    if(!m_context->m_chart->m_impl) {
+        m_context->m_chart->m_impl = new Charting::BubbleImpl();
+        m_context->m_chart->m_is3d = true;
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL barDir
 KoFilter::ConversionStatus XlsxXmlChartReader::read_barDir()
 {
@@ -642,6 +666,34 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_holeSize()
         const QXmlStreamAttributes attrs(attributes());
         TRY_READ_ATTR(val)
         ring->m_pcDonut = val.toInt(); // default value is zero
+    }
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bubbleSize
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleSize()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        //TODO
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bubbleScale
+KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleScale()
+{
+    if(Charting::BubbleImpl* bubble = dynamic_cast<Charting::BubbleImpl*>(m_context->m_chart->m_impl)) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR(val)
+        bool ok;
+        const int i = val.toInt(&ok);
+        if(ok)
+            bubble->m_sizeRatio = i;
     }
     return KoFilter::OK;
 }

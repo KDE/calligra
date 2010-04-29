@@ -89,6 +89,8 @@ protected:
     KoFilter::ConversionStatus read_radar3DChart();
     KoFilter::ConversionStatus read_surfaceChart();
     KoFilter::ConversionStatus read_surface3DChart();
+    KoFilter::ConversionStatus read_bubbleChart();
+    KoFilter::ConversionStatus read_bubble3DChart();
 
     KoFilter::ConversionStatus read_barDir();
     KoFilter::ConversionStatus read_grouping();
@@ -98,7 +100,8 @@ protected:
     KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
     KoFilter::ConversionStatus read_holeSize();
-    
+    KoFilter::ConversionStatus read_bubbleSize();
+    KoFilter::ConversionStatus read_bubbleScale();
 private:
     XlsxXmlChartReaderContext *m_context;
     Charting::Series *m_currentSeries;
