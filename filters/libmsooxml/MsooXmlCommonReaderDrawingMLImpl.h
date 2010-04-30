@@ -2583,6 +2583,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
             m_currentListStyleProperties->setListItemSuffix(".");
             m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
         }
+        else if (type == "arabicParenR") {
+            m_currentListStyleProperties->setListItemSuffix(")");
+            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
+        }
+        else if (type == "alphaLcPeriod") {
+            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentListStyleProperties->setStyle(KoListStyle::AlphaLowerItem);
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentListStyleProperties->setListItemSuffix(")");
+            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentListStyleProperties->setListItemSuffix(")");
+            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
+        }
     }
 
     m_listStylePropertiesAltered = true;
