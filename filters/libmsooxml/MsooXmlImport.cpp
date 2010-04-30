@@ -144,21 +144,32 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
     QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound)
 {
     *pathFound = false;
-    if (!m_zip) {
-        return KoFilter::UsageError;
-    }
-    const QString path = m_contentTypes.value(contentType);
-
-    kDebug() << contentType << " path=" << path;
-    if (path.isEmpty()) {
+    const QString fileName = m_contentTypes.value(contentType);
+    kDebug() << contentType << "fileName=" << fileName;
+    if (fileName.isEmpty()) {
         errorMessage = i18n("Could not find path for type %1", QString(contentType));
         kWarning() << errorMessage;
         return KoFilter::FileNotFound;
     }
+    KoFilter::ConversionStatus status = loadAndParseDocumentFromFileInternal(
+        fileName, reader, writers, errorMessage, context, pathFound);
+    *pathFound = status != KoFilter::FileNotFound;
+    return status;
+}
 
-    *pathFound = true;
-    return Utils::loadAndParseDocument(
-               reader, m_zip, writers, errorMessage, path, context);
+// private
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentFromFileInternal(
+    const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
+    QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound)
+{
+    *pathFound = false;
+    if (!m_zip) {
+        return KoFilter::UsageError;
+    }
+    KoFilter::ConversionStatus status = Utils::loadAndParseDocument(
+               reader, m_zip, writers, errorMessage, fileName, context);
+    *pathFound = status != KoFilter::FileNotFound;
+    return status;
 }
 
 // protected
@@ -167,9 +178,19 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
     QString& errorMessage, MsooXmlReaderContext* context)
 {
     bool pathFound;
-    return loadAndParseDocumentInternal( contentType, reader, writers, errorMessage, context, &pathFound);
+    return loadAndParseDocumentInternal(contentType, reader, writers, errorMessage, context, &pathFound);
 }
 
+// protected
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentFromFile(
+    const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
+    QString& errorMessage, MsooXmlReaderContext* context)
+{
+    bool pathFound;
+    return loadAndParseDocumentFromFileInternal(fileName, reader, writers, errorMessage, context, &pathFound);
+}
+
+// protected
 KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentIfExists(
     const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
     QString& errorMessage, MsooXmlReaderContext* context)
@@ -177,6 +198,19 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentIfExists(
     bool pathFound;
     const KoFilter::ConversionStatus status( loadAndParseDocumentInternal(
         contentType, reader, writers, errorMessage, context, &pathFound) );
+    if (!pathFound)
+        return KoFilter::OK;
+    return status;
+}
+
+// protected
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentFromFileIfExists(
+    const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
+    QString& errorMessage, MsooXmlReaderContext* context)
+{
+    bool pathFound;
+    const KoFilter::ConversionStatus status( loadAndParseDocumentFromFileInternal(
+        fileName, reader, writers, errorMessage, context, &pathFound) );
     if (!pathFound)
         return KoFilter::OK;
     return status;

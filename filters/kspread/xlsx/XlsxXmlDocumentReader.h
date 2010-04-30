@@ -30,6 +30,7 @@
 #include <QMap>
 
 class XlsxImport;
+class XlsxComments;
 class XlsxStyles;
 
 //! Context for XlsxXmlDocumentReader
@@ -38,11 +39,14 @@ class XlsxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 public:
     XlsxXmlDocumentReaderContext(XlsxImport& _import,
                                  const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-                                 const XlsxSharedStringVector& _sharedStrings, const XlsxStyles& _styles,
+                                 const XlsxSharedStringVector& _sharedStrings,
+                                 const XlsxComments& _comments,
+                                 const XlsxStyles& _styles,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     XlsxImport *import;
     const QMap<QString, MSOOXML::DrawingMLTheme*> *themes;
     const XlsxSharedStringVector* sharedStrings;
+    const XlsxComments* comments;
     const XlsxStyles* styles;
 };
 

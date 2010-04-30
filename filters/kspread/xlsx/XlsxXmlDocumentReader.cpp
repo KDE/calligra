@@ -23,6 +23,7 @@
 
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlWorksheetReader.h"
+#include "XlsxXmlCommentsReader.h"
 #include "XlsxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -40,6 +41,7 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import,
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
+    const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships
     )
@@ -47,6 +49,7 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
         , import(&_import)
         , themes(&_themes)
         , sharedStrings(&_sharedStrings)
+        , comments(&_comments)
         , styles(&_styles)
 {
 }
@@ -131,7 +134,6 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
     TRY_READ(workbook)
 
 //! @todo hardcoded font face list; look at fonts used by theme
-    ;
     mainStyles->insertFontFace(KoFontFace("Calibri"));
     mainStyles->insertFontFace(KoFontFace("Arial"));
     mainStyles->insertFontFace(KoFontFace("Tahoma"));
@@ -252,7 +254,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 
     XlsxXmlWorksheetReader worksheetReader(this);
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, path, file,
-                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles,
+                                          *m_context->themes, *m_context->sharedStrings,
+                                          *m_context->comments,
+                                          *m_context->styles,
                                           *m_context->relationships, m_context->import );
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
                 &worksheetReader, filepath, &context);

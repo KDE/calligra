@@ -27,6 +27,7 @@
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlSharedStringsReader.h"
 #include "XlsxXmlStylesReader.h"
+#include "XlsxXmlCommentsReader.h"
 #include "XlsxSharedString.h"
 
 #include <MsooXmlUtils.h>
@@ -571,9 +572,18 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(
             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context) )
     }
-    // 4. parse document
+    // 4. parse comments
+    XlsxComments comments;
     {
-        XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, styles, *relationships);
+        XlsxXmlCommentsReader commentsReader(writers);
+        XlsxXmlCommentsReaderContext context(comments);
+        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+//! @todo only support "xl/comments1.xml" filename for comments?
+            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
+    }
+    // 5. parse document
+    {
+        XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

@@ -14,6 +14,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlStylesReader.cpp
     XlsxXmlDrawingReader.cpp
     XlsxXmlChartReader.cpp
+    XlsxXmlCommentsReader.cpp
     NumberFormatParser.cpp
     ChartExport.cpp
 )

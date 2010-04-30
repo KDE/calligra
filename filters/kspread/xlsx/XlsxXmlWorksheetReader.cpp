@@ -23,6 +23,7 @@
  */
 
 #include "XlsxXmlWorksheetReader.h"
+#include "XlsxXmlCommentsReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlDrawingReader.h"
@@ -76,15 +77,17 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const QString _path, const QString _file,
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
+    const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import
-    )
+)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , worksheetNumber(_worksheetNumber)
         , worksheetName(_worksheetName)
         , themes(&_themes)
         , sharedStrings(&_sharedStrings)
+        , comments(&_comments)
         , styles(&_styles)
         , import(_import)
         , path(_path)
@@ -306,6 +309,32 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
         "sheet was exceeded.");
 }
 
+inline static QString encodeLabelText(int col, int row)
+{
+    return KSpread::Util::encodeColumnLabelText(col) + QString::number(row);
+}
+
+void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
+{
+    QString ref(encodeLabelText(col + 1, row));
+    kDebug() << ref;
+    XlsxComment *comment = m_context->comments->value(ref);
+    if (!comment)
+        return;
+    kDebug() << "Saving annotation for cell" << ref;
+    body->startElement("office:annotation");
+    body->startElement("dc:creator");
+    body->addTextNode(comment->author(m_context->comments));
+    body->endElement(); // dc:creator
+    //! @todo support dc:date
+    foreach (const QString& text, comment->texts) {
+        body->startElement("text:p");
+        body->addTextSpan(text);
+        body->endElement(); // text:p
+    }
+    body->endElement(); // office:annotation
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL worksheet
 //! worksheet handler (Worksheet)
@@ -442,6 +471,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     if (cell->columnsMerged > 1) {
                         body->addAttribute("table:number-columns-spanned", cell->columnsMerged);
                     }
+
+                    saveAnnotation(c, r);
 
                     if (!cell->text.isEmpty() || !cell->charStyleName.isEmpty() || hasHyperlink) {
                         body->startElement("text:p", false);
@@ -871,9 +902,11 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
                 const QString ref = result.mid(cellReferenceStart, i - cellReferenceStart);
                 QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
                 if (rx.exactMatch(ref)) {
-                    const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
+                    const int c = KSpread::Util::decodeColumnLabelText(ref)
+                                  + thisCell->column - referencedCell->column;
                     const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
-                    result = result.replace(cellReferenceStart, i - cellReferenceStart, KSpread::Util::encodeColumnLabelText(c) + QString::number(r));
+                    result = result.replace(cellReferenceStart,
+                                            i - cellReferenceStart, encodeLabelText(c, r));
                     state = InArguments;
                 }
             }

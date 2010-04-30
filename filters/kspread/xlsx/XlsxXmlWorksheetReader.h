@@ -34,6 +34,7 @@
 
 class XlsxXmlWorksheetReaderContext;
 class XlsxXmlDocumentReaderContext;
+class XlsxComments;
 class XlsxStyles;
 class XlsxImport;
 
@@ -94,6 +95,8 @@ private:
     QString processRowStyle(const QString& heightString = QString());
     void appendTableColumns(int columns, const QString& width = QString());
     void appendTableCells(int cells);
+    //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
+    void saveAnnotation(int col, int row);
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
@@ -112,6 +115,7 @@ public:
         const QString _path, const QString _file,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         const XlsxSharedStringVector& _sharedStrings,
+        const XlsxComments& _comments,
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import);
@@ -120,8 +124,9 @@ public:
     QString worksheetName;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
     const XlsxSharedStringVector *sharedStrings;
+    const XlsxComments* comments;
     const XlsxStyles* styles;
-    
+
     XlsxImport* import;
     const QString path;
     const QString file;

@@ -90,9 +90,21 @@ protected:
         QString& errorMessage, MsooXmlReaderContext* context = 0);
 
     //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
+    //! but file name is provided directly instead of content type
+    KoFilter::ConversionStatus loadAndParseDocumentFromFile(
+        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
+        QString& errorMessage, MsooXmlReaderContext* context);
+
+    //! Like @ref loadAndParseDocument(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
     //! but return KoFilter::OK if the document for the content type is not found.
     KoFilter::ConversionStatus loadAndParseDocumentIfExists(
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+        QString& errorMessage, MsooXmlReaderContext* context = 0);
+
+    //! Like @ref loadAndParseDocumentIfExists(const QByteArray&, MsooXmlReader*, KoOdfWriters*, QString&, MsooXmlReaderContext*)
+    //! but file name is provided directly instead of content type
+    KoFilter::ConversionStatus loadAndParseDocumentFromFileIfExists(
+        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context = 0);
 
     KoFilter::ConversionStatus parseThemes(QMap<QString, MSOOXML::DrawingMLTheme*>& themes,
@@ -108,6 +120,10 @@ private:
 
     KoFilter::ConversionStatus loadAndParseDocumentInternal(
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,
+        QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound);
+
+    KoFilter::ConversionStatus loadAndParseDocumentFromFileInternal(
+        const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context, bool *pathFound);
 
     KZip* m_zip; //!< Input zip file
