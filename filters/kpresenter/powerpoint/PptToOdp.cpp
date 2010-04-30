@@ -1623,6 +1623,10 @@ QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
 {
     QString friendly;
     QString target;
+
+    if( !p->documentContainer->exObjList )
+        return qMakePair(friendly, target);
+
     foreach(ExObjListSubContainer container,
             p->documentContainer->exObjList->rgChildRec) {
         // Search all ExHyperlinkContainers for specified id
