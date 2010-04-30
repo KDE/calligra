@@ -1005,10 +1005,10 @@ Region::Point::Point(const QPoint& point)
         , m_fixedColumn(false)
         , m_fixedRow(false)
 {
-    if (m_point.y() > KS_colMax)
-        m_point.setY(KS_colMax);
-    if (m_point.x() > KS_rowMax)
-        m_point.setX(KS_rowMax);
+    if (m_point.x() > KS_colMax)
+        m_point.setX(KS_colMax);
+    if (m_point.y() > KS_rowMax)
+        m_point.setY(KS_rowMax);
 }
 
 Region::Point::Point(const QString& string)
