@@ -120,8 +120,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     sharedData->loadOdfStyles(sc, styleManager);
     sc.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
-    KoTextLoader *loader = new KoTextLoader(sc);
-    Q_UNUSED(loader);
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
     loadMasterPageStyles(context, hasMainText);
