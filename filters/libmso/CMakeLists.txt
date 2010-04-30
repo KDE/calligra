@@ -1,3 +1,3 @@
-include_directories( ${QT_INCLUDES} ${KDE4_INCLUDES} ../../libs/odf )
+include_directories( ${QT_INCLUDES} ${KDE4_INCLUDES} ../../libs/odf)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
-add_library(mso STATIC generated/simpleParser.cpp drawstyle.cpp writer.cpp ODrawToOdf.cpp shapes.cpp)
+add_library(mso STATIC generated/simpleParser.cpp drawstyle.cpp writer.cpp ODrawToOdf.cpp shapes.cpp pictures.cpp pole.cpp)

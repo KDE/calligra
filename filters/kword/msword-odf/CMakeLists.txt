@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 
 kde4_add_plugin(mswordodf_import WITH_PREFIX ${mswordodf_import_PART_SRCS})
 
-target_link_libraries(mswordodf_import kowv2  komain mso)
+target_link_libraries(mswordodf_import kowv2 komain mso ${ZLIB_LIBRARIES})
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
