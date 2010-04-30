@@ -42,6 +42,7 @@ class PptxShapeProperties
 {
 public:
     PptxShapeProperties();
+
     //! p:spPr/a:xfrm/a:off@x value in EMU
     int x;
     //! p:spPr/a:xfrm/a:off@y value in EMU
@@ -50,6 +51,8 @@ public:
     int width;
     //! p:spPr/a:xfrm/a:ext@cy value in EMU
     int height;
+    //! p:spPr/a:xfrm@rot value in 1/60,000th of a degree.
+    int rot;
 };
 
 //! Data structure collecting information about single slide/master slide

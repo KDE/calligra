@@ -24,6 +24,10 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626
+#endif
+
 #if !defined DRAWINGML_NS && !defined NO_DRAWINGML_NS
 #error missing DRAWINGML_NS define!
 #endif
@@ -178,6 +182,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
         body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        //! @todo: flipH, flipV
+        //! @todo: Generalize the generation of draw:transform so it can be used in other places.
+        if (m_rot != 0) {
+            // m_rot is in 1/60,000th of a degree
+            QString rot = QString("rotate(%f)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
+                                                    / (qreal)60000.0);
+            body->addAttribute("draw:transform", rot);
+        }
+
         if (!m_xlinkHref.isEmpty()) {
             body->startElement("draw:image");
             body->addAttribute("xlink:href", m_xlinkHref);
@@ -1139,6 +1152,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
         m_currentShapeProperties->y = m_svgY;
         m_currentShapeProperties->width = m_svgWidth;
         m_currentShapeProperties->height = m_svgHeight;
+        m_currentShapeProperties->rot = m_rot;
         kDebug() << "Saved to m_currentShapeProperties";
     }
 #endif
@@ -1147,7 +1161,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     << "svg:x" << m_svgX
     << "svg:y" << m_svgY
     << "svg:width" << m_svgWidth
-    << "svg:height" << m_svgHeight;
+    << "svg:height" << m_svgHeight
+    << "rotation" << m_rot;
 
     READ_EPILOGUE
 }
