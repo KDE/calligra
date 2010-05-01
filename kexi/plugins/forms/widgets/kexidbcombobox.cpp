@@ -120,14 +120,28 @@ bool KexiDBComboBox::isEditable() const
 void KexiDBComboBox::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    QColorGroup cg(palette().active());
+    p.setPen(palette().color(QPalette::Text));
+//    QColorGroup cg(palette().active());
 // if ( hasFocus() )
 //  cg.setColor(QColorGroup::Base, cg.highlight());
 // else
-    cg.setColor(QColorGroup::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
-    p.setPen(cg.text());
+    QPalette pal(palette());
+    pal.setColor(QColorGroup::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
+
+    if (width() < 5 || height() < 5) {
+        qDrawShadePanel(&p, rect(), pal, false /* !sunken */,
+                        2 /*line width*/, &pal.brush(QPalette::Button)/*fill*/);
+        return;
+    }
+
+#ifdef __GNUC__
+#warning TODO KexiDBComboBox::paintEvent()
+#else
+#pragma WARNING( TODO KexiDBComboBox::paintEvent() )
+#endif
 
     QStyleOptionComboBox option;
+    option.palette = pal;
     option.initFrom(d->paintedCombo);
 
     if (isEnabled())
@@ -137,16 +151,8 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
     if (d->mouseOver)
         option.state |= QStyle::State_MouseOver;
 
-    if (width() < 5 || height() < 5) {
-        qDrawShadePanel(&p, rect(), cg, false, 2, &cg.brush(QColorGroup::Button));
-        return;
-    }
+    style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, d->paintedCombo);
 
-#ifdef __GNUC__
-#warning TODO KexiDBComboBox::paintEvent()
-#else
-#pragma WARNING( TODO KexiDBComboBox::paintEvent() )
-#endif
 #if 0 //TODO
 //! @todo support reverse layout
 //bool reverse = QApplication::reverseLayout();
@@ -200,11 +206,21 @@ void KexiDBComboBox::createEditor()
     if (m_subwidget) {
         m_subwidget->setGeometry(editorGeometry());
         if (!d->isEditable) {
+            QStyleOptionComboBox option;
+            option.initFrom(m_subwidget);
+            const QRect comboRect = m_subwidget->style()->subControlRect(
+                QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, m_subwidget);
+            kDebug() << "comboRect:" << comboRect;
+            m_subwidget->setContentsMargins(comboRect.left(), comboRect.top(),
+                width() - comboRect.right(), height() - comboRect.bottom());
+            int l, t, r, b;
+            m_subwidget->getContentsMargins(&l, &t, &r, &b);
+            kDebug() << "altered margins:" << l << t << r << b;
+
+            m_subwidget->setFocusPolicy(Qt::NoFocus);
             m_subwidget->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
-//! @todo Qt4: set transparent background, for now we're setting button color
             QPalette subwidgetPalette(m_subwidget->palette());
-            subwidgetPalette.setColor(QPalette::Active, QColorGroup::Base,
-                                      subwidgetPalette.color(QPalette::Active, QColorGroup::Button));
+            subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
             m_subwidget->setPalette(subwidgetPalette);
             d->subWidgetsWithDisabledEvents.clear();
             d->subWidgetsWithDisabledEvents << m_subwidget;
@@ -379,11 +395,12 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
                 return true;
         } else if (e->type() == QEvent::FocusOut) {
             if (popup() && popup()->isVisible()) {
-                popup()->hide();
-                undoChanges();
+//                popup()->hide();
+//                undoChanges();
             }
         }
     } else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
+        kDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
             if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
@@ -392,7 +409,8 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
             if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
                 return true;
         }
-        return e->type() != QEvent::Paint;
+        if (e->type() != QEvent::Paint)
+            return true;
     }
     return KexiDBAutoField::eventFilter(o, e);
 }
@@ -406,10 +424,10 @@ bool KexiDBComboBox::subwidgetStretchRequired(KexiDBAutoField* autoField) const
 void KexiDBComboBox::setPaletteBackgroundColor(const QColor & color)
 {
     KexiDBAutoField::setPaletteBackgroundColor(color);
-    QPalette pal(palette());
+/*    QPalette pal(palette());
     QColorGroup cg(pal.active());
     pal.setActive(cg);
-    QWidget::setPalette(pal);
+    QWidget::setPalette(pal);*/
     update();
 }
 

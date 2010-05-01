@@ -665,10 +665,10 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 
 void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
+    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+
     if (d->disableDrawContents)
         return;
-
-//kDebug() << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
 
     bool paintOnlyInsertRow = false;
     bool inserting = isInsertingEnabled();

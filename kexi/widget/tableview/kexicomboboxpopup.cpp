@@ -350,10 +350,12 @@ void KexiComboBoxPopup::slotTVItemAccepted(KexiDB::RecordData *record, int row, 
 bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
 {
     if (o == this && e->type() == QEvent::Hide) {
+        kDebug(44010) << "HIDE!!!";
         emit hidden();
     } else if (e->type() == QEvent::MouseButtonPress) {
-        kDebug() << "QEvent::MousePress";
+        kDebug(44010) << "QEvent::MousePress";
     } else if (o == d->tv) {
+        kDebug(44010) << "QEvent::KeyPress TV";
         if (e->type() == QEvent::KeyPress) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
             const int k = ke->key();

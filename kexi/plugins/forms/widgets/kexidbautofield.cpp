@@ -145,15 +145,19 @@ KexiDBAutoField::createEditor()
     }
 
     QWidget *newSubwidget;
+    kDebug() << "widgetType:" << d->widgetType;
     switch (d->widgetType) {
     case Text:
     case Double: //! @todo setup validator
     case Integer: //! @todo setup validator
     case Date:
     case Time:
-    case DateTime:
-        newSubwidget = new KexiDBLineEdit(this);
+    case DateTime: {
+        KexiDBLineEdit *le = new KexiDBLineEdit(this);
+        newSubwidget = le;
+        le->setFrame(false);
         break;
+    }
     case MultiLineText:
         newSubwidget = new KexiDBTextEdit(this);
         break;
@@ -176,6 +180,7 @@ KexiDBAutoField::createEditor()
         break;
     }
 
+    kDebug() << newSubwidget;
     setSubwidget(newSubwidget);   //this will also allow to declare subproperties, see KFormDesigner::WidgetWithSubpropertiesInterface
     if (newSubwidget) {
         newSubwidget->setObjectName(
@@ -199,6 +204,7 @@ KexiDBAutoField::createEditor()
             newSubwidget->setPalette(qApp->palette());
         copyPropertiesToEditor();
 //  KFormDesigner::installRecursiveEventFilter(newSubwidget, this);
+//        newSubwidget->hide();
     }
 
     setLabelPosition(labelPosition());
@@ -206,6 +212,7 @@ KexiDBAutoField::createEditor()
 
 void KexiDBAutoField::copyPropertiesToEditor()
 {
+    kDebug() << m_subwidget;
     if (m_subwidget) {
 //  kDebug() << "base col: " <<  d->baseColor.name() <<
 //   "; text col: " << d->textColor.name();
@@ -710,7 +717,7 @@ void KexiDBAutoField::unsetPalette()
 
 // ===== methods below are just proxies for the internal editor or label =====
 
-const QColor & KexiDBAutoField::paletteForegroundColor() const
+QColor KexiDBAutoField::paletteForegroundColor() const
 {
 //! @todo how about brush?
     return d->textBrush.color();
@@ -723,7 +730,7 @@ void KexiDBAutoField::setPaletteForegroundColor(const QColor & color)
     copyPropertiesToEditor();
 }
 
-const QColor & KexiDBAutoField::paletteBackgroundColor() const
+QColor KexiDBAutoField::paletteBackgroundColor() const
 {
 //! @todo how about brush?
     return d->baseBrush.color();
@@ -731,12 +738,13 @@ const QColor & KexiDBAutoField::paletteBackgroundColor() const
 
 void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 {
+    kDebug();
 //! @todo how about brush?
     d->baseBrush.setColor(color);
     copyPropertiesToEditor();
 }
 
-const QColor & KexiDBAutoField::foregroundLabelColor() const
+QColor KexiDBAutoField::foregroundLabelColor() const
 {
     if (d->widgetType == Boolean)
         return paletteForegroundColor();
@@ -761,12 +769,12 @@ void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
     }
 }
 
-const QColor & KexiDBAutoField::backgroundLabelColor() const
+QColor KexiDBAutoField::backgroundLabelColor() const
 {
     if (d->widgetType == Boolean)
         return paletteBackgroundColor();
 
-    return d->label->paletteBackgroundColor();
+    return d->label->palette().color(d->label->backgroundRole());
 }
 
 void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
