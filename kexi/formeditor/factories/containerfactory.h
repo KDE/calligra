@@ -170,6 +170,8 @@ public:
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
     virtual void dropEvent(QDropEvent *e);
 
+    virtual QSize sizeHint() const;
+
 signals:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
