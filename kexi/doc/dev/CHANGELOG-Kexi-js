@@ -104,6 +104,11 @@ Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-05-02
+Reports
+*mising or poorly selected icons fixed: barcode, checkbox (copies of the newest oxygen), label, line (copies from kexi forms)
+*added missing i18n
+
 2010-04-26
 KexiDB
 *MySQL Driver: Fix "DB created but cannot open" error appearing on creating a new database for mysql backend.
@@ -140,6 +145,7 @@ Table View
 *fix possible crash in tooltips handling
 Forms
 *fix display of comboboxes
+TODO: further improve it  (r1121616)
 
 2010-04-05
 Forms
