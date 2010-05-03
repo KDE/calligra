@@ -213,6 +213,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent)
     m_spacing = d->form ? d->form->defaultSpacing() : 0;
 
     if (toplevel) {
+        kDebug() << "Creating ObjectTreeItem:";
         ObjectTreeItem *it = new ObjectTreeItem(d->form->library()->displayName(classname),
                                                 widget()->objectName(), widget(), this, this);
         setObjectTree(it);
@@ -270,9 +271,8 @@ Container::eventFilter(QObject *s, QEvent *e)
         d->stopSelectionRectangleOrInserting();
         m_mousePressEventReceived = true;
 
-        kDebug() << "sender object = " << s->objectName()
-            << "of type " << s->metaObject()->className();
-        kDebug() << "this          = " << this->objectName();
+        kDebug() << "sender object =" << s->objectName() << "of type =" << s->metaObject()->className()
+            << "this =" << this->objectName() << metaObject()->className();
 
         m_moving = static_cast<QWidget*>(s);
         d->idOfPropertyCommand++; // this will create another PropertyCommand
@@ -485,7 +485,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         QPainter p(widget());
         p.setRenderHint(QPainter::Antialiasing, false);
 #if 1 // grid
-#define DEBUG_PAINTER
+//#define DEBUG_PAINTER
 #ifdef DEBUG_PAINTER
     kDebug() << "would draw grid" << pe->rect();
     QTime t;

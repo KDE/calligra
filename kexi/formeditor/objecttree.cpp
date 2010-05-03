@@ -40,6 +40,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
                                Container *parentContainer, Container *container)
         : m_enabled(true), m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
 {
+    kDebug() << classn << name << widget->objectName() << "parentContainer:" << parentContainer << "container:" << container;
     m_className = classn;
     m_name = name;
     m_widget = widget;

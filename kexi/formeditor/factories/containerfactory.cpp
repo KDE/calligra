@@ -808,6 +808,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   CreateWidgetOptions options)
 {
     QWidget *w = 0;
+    bool createContainer = false;
 #if 0 // needed?
     if (c == "QButtonGroup") {
         QString text = container->form()->library()->textForWidgetName(n, c);
@@ -823,6 +824,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         tab->setTabReorderingEnabled(true);
         connect(tab, SIGNAL(movedTab(int, int)), this, SLOT(reorderTabs(int, int)));
 #endif
+        kDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),
                 new KFormDesigner::ObjectTreeItem(
                     container->form()->library()->displayName(c), n, tab, container));
@@ -834,22 +836,26 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         }
     } else if (c == "QWidget") {
         w = new ContainerWidget(p);
-        new KFormDesigner::Container(container, w, p);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, p);
     } else if (c == "QGroupBox") {
         QString text = container->form()->library()->textForWidgetName(n, c);
         w = new GroupBox(text, p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "QFrame") {
         QFrame *frm = new QFrame(p);
         w = frm;
         frm->setLineWidth(2);
         frm->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "QStackedWidget" || /* compat */ c == "QWidgetStack") {
         QStackedWidget *stack = new QStackedWidget(p);
         w = stack;
         stack->setLineWidth(2);
         stack->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+        kDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),
                 new KFormDesigner::ObjectTreeItem(
                     container->form()->library()->displayName(c), n, stack, container));
@@ -860,19 +866,24 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         }
     } else if (c == "HBox") {
         w = new HBox(p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "VBox") {
         w = new VBox(p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "Grid") {
         w = new Grid(p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "HFlow") {
         w = new HFlow(p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
     } else if (c == "VFlow") {
         w = new VFlow(p);
-        new KFormDesigner::Container(container, w, container);
+        createContainer = true;
+//        new KFormDesigner::Container(container, w, container);
 #if 0 //todo
     } else if (c == "SubForm") {
         w = new SubForm(container->form(), p);
@@ -884,15 +895,18 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
             split->setOrientation(
                 (options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
         }
-        (void)new KFormDesigner::Container(container, split, container);
+        createContainer = true;
+//        (void)new KFormDesigner::Container(container, split, container);
     }
 
     if (w) {
         w->setObjectName(n);
         kDebug() << w << w->objectName() << "created";
-        return w;
     }
-    return 0;
+    if (createContainer) {
+        (void)new KFormDesigner::Container(container, w, container);
+    }
+    return w;
 }
 
 bool
@@ -985,12 +999,15 @@ ContainerFactory::startInlineEditing(InlineEditorCreationArguments& args)
         return true;
     }
 #endif
-    if (args.classname == "QGroupBox") {
-        QGroupBox *group = static_cast<QGroupBox*>(args.widget);
+//! @todo enable GroupBox inline editing
+#if 0
+    if (args.classname == "GroupBox") {
+        GroupBox *group = dynamic_cast<GroupBox*>(args.widget);
         args.text = group->title();
-        args.geometry = QRect(group->x() + 2, group->y() - 5, group->width() - 10, args.widget->fontMetrics().height() + 10);
+        args.geometry = QRect(group->x() + 2, group->y(), group->width() - 10, args.widget->fontMetrics().height() + 10);
         return true;
     }
+#endif
     return false;
 }
 
