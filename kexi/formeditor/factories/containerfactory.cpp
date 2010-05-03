@@ -99,6 +99,11 @@ void GroupBox::dropEvent(QDropEvent *e)
     emit handleDropEvent(e);
 }
 
+QSize GroupBox::sizeHint() const
+{
+    return title().isEmpty() ? QGroupBox::sizeHint() : QSize(fontMetrics().width(title()), fontMetrics().height()*3);
+}
+
 ////////////////////////
 
 KFDTabWidget::KFDTabWidget(KFormDesigner::Container *container, QWidget *parent)
