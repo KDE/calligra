@@ -994,6 +994,9 @@ DateTime Task::calculateForward(int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
+    if ( m_visitedForward ) {
+        return m_earlyFinish;
+    }
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::CalculateForward );
     //cs->logDebug( "calculateForward: earlyStart=" + cs->earlyStart.toString() );
@@ -1215,6 +1218,9 @@ DateTime Task::calculateBackward(int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
+    if ( m_visitedBackward ) {
+        return m_lateStart;
+    }
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::CalculateBackward );
     //cs->lateFinish = projectNode()->constraintEndTime();
@@ -1387,6 +1393,9 @@ DateTime Task::calculateLateStart(int use) {
 }
 
 DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
+    if ( m_visitedForward ) {
+        return m_currentSchedule->endTime;
+    }
     DateTime time;
     foreach (Relation *r, list) {
         if (r->parent()->type() == Type_Summarytask) {
