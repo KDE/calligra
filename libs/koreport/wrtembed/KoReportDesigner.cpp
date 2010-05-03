@@ -1249,7 +1249,7 @@ QList<QAction*> KoReportDesigner::actions()
     QList<QAction*> actList;
     QAction *act;
 
-    act = new QAction(KIcon("feed-subscribe"), i18n("Label"), 0);
+    act = new QAction(KIcon("label"), i18n("Label"), 0);
     act->setObjectName("action-insert-label");
     actList << act;
 
@@ -1261,11 +1261,11 @@ QList<QAction*> KoReportDesigner::actions()
     act->setObjectName("action-insert-text");
     actList << act;
 
-    act = new QAction(KIcon("draw-freehand"), i18n("Line"), 0);
+    act = new QAction(KIcon("line"), i18n("Line"), 0);
     act->setObjectName("action-insert-line");
     actList << act;
 
-    act = new QAction(KIcon("insert-barcode"), i18n("Barcode"), 0);
+    act = new QAction(KIcon("view-barcode"), i18n("Barcode"), 0);
     act->setObjectName("action-insert-barcode");
     actList << act;
 
@@ -1277,11 +1277,11 @@ QList<QAction*> KoReportDesigner::actions()
     act->setObjectName("action-insert-chart");
     actList << act;
 
-    act = new QAction(KIcon("view-statistics"), i18n("Shape"), 0);
+    act = new QAction(KIcon("shapes"), i18n("Shape"), 0);
     act->setObjectName("action-insert-shape");
     actList << act;
 
-    act = new QAction(KIcon("draw-cross"), i18n("Check"), 0);
+    act = new QAction(KIcon("checkbox"), i18n("Check"), 0);
     act->setObjectName("action-insert-check");
     actList << act;
 

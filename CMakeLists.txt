@@ -75,8 +75,8 @@ endif(KDE4_BUILD_TESTS)
 ## Look for KDE and Qt ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.3.0")
-find_package(KDE4 4.3.0 REQUIRED)
+set(KDE_MIN_VERSION "4.2.0")
+find_package(KDE4 4.2.0 REQUIRED)
 
 option(FORCE_COMPILATION_WITH_QT45 "This option force KOffice to accept compilation with Qt4.5, but note that this is not supported by KOffice team" OFF)
 
