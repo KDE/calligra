@@ -871,7 +871,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( limit < m_availableFrom ) {
             limit = m_availableFrom;
         }
-        DateTime t = availableBefore(start, limit, sch);
+        DateTime t = start;
         foreach ( Resource *r, required ) {
             if ( ! t.isValid() ) {
                 break;
@@ -894,7 +894,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( limit > m_availableUntil ) {
             limit = m_availableUntil;
         }
-        DateTime t = availableAfter(start, limit, sch);
+        DateTime t = start;
         foreach ( Resource *r, required ) {
             if ( ! t.isValid() ) {
                 break;
