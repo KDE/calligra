@@ -373,16 +373,16 @@ class AddTabAction : public KAction
 {
 public:
     AddTabAction(KFormDesigner::Container *container,
-                 QWidget *receiver, QObject *parent);
-protected slots:
+                 TabWidgetBase *receiver, QObject *parent);
+public slots:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
+    TabWidgetBase *m_receiver;
 };
 
 AddTabAction::AddTabAction(KFormDesigner::Container *container, 
-                           QWidget *receiver, QObject *parent)
+                           TabWidgetBase *receiver, QObject *parent)
     : KAction(KIcon("tab-new"), i18nc("Add page to tab widget", "Add Page"),
               parent)
     , m_container(container)
@@ -393,10 +393,11 @@ AddTabAction::AddTabAction(KFormDesigner::Container *container,
 
 void AddTabAction::slotTriggered()
 {
+    kDebug();
     if (!m_receiver->inherits("QTabWidget"))
         return;
     KFormDesigner::Command *command = new InsertPageCommand(m_container, m_receiver);
-    if (dynamic_cast<TabWidgetBase*>(m_receiver)->count() == 0) {
+    if (m_receiver->count() == 0) {
         command->execute();
         delete command;
     }
@@ -411,23 +412,23 @@ class RemoveTabAction : public KAction
 {
 public:
     RemoveTabAction(KFormDesigner::Container *container,
-                    QWidget *receiver, QObject *parent);
+                    TabWidgetBase *receiver, QObject *parent);
 protected slots:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
+    TabWidgetBase *m_receiver;
 };
 
 RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
-                                 QWidget *receiver, QObject *parent)
+                                 TabWidgetBase *receiver, QObject *parent)
     : KAction(KIcon("tab-close-other"), i18nc("Remove tab widget's page", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
 {
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
-    if (dynamic_cast<TabWidgetBase*>(m_receiver)->count() <= 1) {
+    if (m_receiver->count() <= 1) {
         setEnabled(false);
     }
 }
@@ -436,13 +437,12 @@ void RemoveTabAction::slotTriggered()
 {
     if (!m_receiver->inherits("QTabWidget"))
         return;
-    TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_receiver);
-    QWidget *w = tab->currentWidget();
+    QWidget *w = m_receiver->currentWidget();
 
     QWidgetList list;
     list.append(w);
     KFormDesigner::Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
-    tab->removeTab(tab->indexOf(w));
+    m_receiver->removeTab(m_receiver->indexOf(w));
     m_container->form()->addCommand(com);
 }
 
@@ -452,16 +452,16 @@ class RenameTabAction : public KAction
 {
 public:
     RenameTabAction(KFormDesigner::Container *container,
-                    QWidget *receiver, QObject *parent);
+                    TabWidgetBase *receiver, QObject *parent);
 protected slots:
     void slotTriggered();
 private:
     KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
+    TabWidgetBase *m_receiver;
 };
 
 RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
-                                 QWidget *receiver, QObject *parent)
+                                 TabWidgetBase *receiver, QObject *parent)
     : KAction(KIcon("edit-rename"), i18nc("Rename tab widget's page", "Rename Page..."),
               parent)
     , m_container(container)
@@ -474,14 +474,13 @@ void RenameTabAction::slotTriggered()
 {
     if (!m_receiver->inherits("QTabWidget"))
         return;
-    TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(m_receiver);
-    QWidget *w = tab->currentWidget();
+    QWidget *w = m_receiver->currentWidget();
     bool ok;
     QString name = KInputDialog::getText(i18n("New Page Title"),
                                          i18n("Enter a new title for the current page:"),
-                                         tab->tabText(tab->indexOf(w)), &ok, w->topLevelWidget());
+                                         m_receiver->tabText(m_receiver->indexOf(w)), &ok, w->topLevelWidget());
     if (ok)
-        tab->setTabText(tab->indexOf(w), name);
+        m_receiver->setTabText(m_receiver->indexOf(w), name);
 }
 
 //! Action of adding page to a stacked widget
@@ -807,6 +806,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options)
 {
+    kDebug() << c;
     QWidget *w = 0;
     bool createContainer = false;
 #if 0 // needed?
@@ -828,16 +828,12 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         container->form()->objectTree()->addItem(container->objectTree(),
                 new KFormDesigner::ObjectTreeItem(
                     container->form()->library()->displayName(c), n, tab, container));
-
-        // if we are loading, don't add this tab
-        if (container->form()->interactiveMode()) {
-//2.0            setWidget(tab, container);
-            AddTabAction(container, tab, 0).trigger(); // addTabPage();
-        }
     } else if (c == "QWidget") {
         w = new ContainerWidget(p);
-        createContainer = true;
-//        new KFormDesigner::Container(container, w, p);
+        w->setObjectName(n);
+//        createContainer = true;
+        new KFormDesigner::Container(container, w, p);
+        return w;
     } else if (c == "QGroupBox") {
         QString text = container->form()->library()->textForWidgetName(n, c);
         w = new GroupBox(text, p);
@@ -906,6 +902,15 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     if (createContainer) {
         (void)new KFormDesigner::Container(container, w, container);
     }
+
+    if (c == "KFDTabWidget") {
+        // if we are loading, don't add this tab
+        if (container->form()->interactiveMode()) {
+//2.0            setWidget(tab, container);
+            TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
+            AddTabAction(container, tab, 0).slotTriggered(); // addTabPage();
+        }
+    }
     return w;
 }
 
@@ -942,6 +947,7 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
 {
 //2.0    setWidget(w, container);
     QWidget *pw = w->parentWidget();
+    kDebug() << classname << w->metaObject()->className();
 
     if (classname == "KFDTabWidget" || pw->parentWidget()->inherits("QTabWidget")) {
 #ifdef __GNUC__
@@ -954,10 +960,12 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
             setWidget(pw->parentWidget(), m_container->toplevel());
         }
 #endif
-
-        menu->addAction( new AddTabAction(container, w, menu) );
-        menu->addAction( new RenameTabAction(container, w, menu) );
-        menu->addAction( new RemoveTabAction(container, w, menu) );
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
+        if (tab) {
+            menu->addAction( new AddTabAction(container, tab, menu) );
+            menu->addAction( new RenameTabAction(container, tab, menu) );
+            menu->addAction( new RemoveTabAction(container, tab, menu) );
+        }
         return true;
     }
     else if (    (KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
