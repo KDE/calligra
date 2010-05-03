@@ -2116,7 +2116,18 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     DateTime t;
     if (e != Duration::zeroDuration) {
         foreach ( ResourceRequest *r, lst ) {
-            t = backward ? r->availableAfter(end, ns) : r->availableBefore(end, ns);
+            DateTime tt;
+            if ( backward ) {
+                tt = r->availableAfter(end, ns);
+                if ( ! t.isValid() || tt < t ) {
+                    t = tt;
+                }
+            } else {
+                tt = r->availableBefore(end, ns);
+                if ( ! t.isValid() || tt > t ) {
+                    t = tt;
+                }
+            }
         }
     }
     end = t.isValid() ? t : time;
