@@ -875,6 +875,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container, Command *pa
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
+    kDebug() << "containerName:" << d->containerName;
     d->_class = d->form->selectedClass();
     d->pos = container.selectionOrInsertingBegin();
     d->widgetName = d->form->objectTree()->generateUniqueName(
@@ -892,6 +893,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
+    kDebug() << "containerName:" << d->containerName;
     d->_class = className;
     d->pos = pos;
     //d->insertRect is null (default)
@@ -1017,6 +1019,7 @@ void InsertWidgetCommand::execute()
     // it's already created in Container's constructor
     ObjectTreeItem *item = d->form->objectTree()->lookup(d->widgetName);
     if (!item) { //not yet created...
+        kDebug() << "Creating ObjectTreeItem:";
         item = new ObjectTreeItem(d->form->library()->displayName(d->_class), d->widgetName, w, container);
         d->form->objectTree()->addItem(container->objectTree(), item);
     }

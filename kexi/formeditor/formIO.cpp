@@ -1155,6 +1155,11 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
             break;
         }
     }
+    ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
+    if (item) {
+        kWarning() << "Widget" << wname << "already exists! Skipping...";
+        return;
+    }
 
     QByteArray classname, alternate;
     // We translate some name (for compatibility)
@@ -1224,9 +1229,11 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     w->show();
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
-    ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
+    item = container->form()->objectTree()->lookup(wname);
+    kDebug() << wname << item << classname << (parent ? parent->objectName() : 0);
     if (!item)  {
         // not yet created
+        kDebug() << "Creating ObjectTreeItem:";
         item =  new ObjectTreeItem(container->form()->library()->displayName(classname),
                                    wname, w, container);
         if (parent)  {
