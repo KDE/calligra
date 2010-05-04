@@ -175,8 +175,9 @@ protected slots:
 
 private:
     QSortFilterProxyModel *m_model;
-    
+#ifndef NDEBUG
     KToggleAction *actionShowDebug;
+#endif
 };
 
 //----------------------------------------------
