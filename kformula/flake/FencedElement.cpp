@@ -44,12 +44,12 @@ void FencedElement::layout( const AttributeManager* am )
     OperatorElement op;
     m_fence.addPath( op.renderForFence( am->stringOf( "open", this ), Prefix ) );
 
-    const QStringList separators = am->stringOf( "separators", this ).split( ' ' );
+    const QString separators = am->stringOf( "separators", this );
     int count = 0;
     foreach( const BasicElement* tmp, childElements() ) {
         m_fence.moveTo( m_fence.currentPosition() + QPointF( tmp->width() , 0.0 ) );
         if( tmp != childElements().last() )
-            m_fence.addPath( op.renderForFence( separators[ count ], Infix ) );
+            m_fence.addPath( op.renderForFence( separators.at( count ), Infix ) );
         count++;
     }
 
