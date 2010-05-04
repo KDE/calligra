@@ -106,12 +106,13 @@ Form OperatorElement::determineOperatorForm() const
  
     if( dynamic_cast<RowElement*>( parentElement() ) == 0 )
         return Prefix;
-    else if( parentElement()->childElements().first() == this )
+    if( parentElement()->childElements().isEmpty() )
         return Prefix;
-    else if( parentElement()->childElements().last() == this )
+    if( parentElement()->childElements().first() == this )
+        return Prefix;
+    if( parentElement()->childElements().last() == this )
         return Postfix;
-    else
-        return Infix;
+    return Infix;
 }
 
 
