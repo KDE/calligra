@@ -1298,6 +1298,7 @@ Schedule *ResourceRequest::resourceSchedule( Schedule *ns, Resource *res )
         s = r->createSchedule(ns->parent());
     }
     s->setCalculationMode( ns->calculationMode() );
+    s->setAllowOverbookingState( ns->allowOverbookingState() );
     static_cast<ResourceSchedule*>( s )->setNodeSchedule( ns );
     //kDebug()<<s->name()<<": id="<<s->id()<<" mode="<<s->calculationMode();
     return s;

@@ -1051,9 +1051,10 @@ DateTime Task::calculateEarlyFinish(int use) {
                     makeAppointments();
 
                     // calculate duration wo checking booking = the earliest finish possible
-                    cs->setAllowOverbooking( true );
+                    Schedule::OBState obs = cs->allowOverbookingState();
+                    cs->setAllowOverbookingState( Schedule::OBS_Allow );
                     m_durationForward = duration(cs->earlyStart, use, false);
-                    cs->setAllowOverbooking( false );
+                    cs->setAllowOverbookingState( obs );
 #ifndef NDEBUG
                     cs->logDebug("ASAP/ALAP earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
 #endif
@@ -1095,9 +1096,10 @@ DateTime Task::calculateEarlyFinish(int use) {
                     makeAppointments();
 
                     // calculate duration wo checking booking = the earliest finish possible
-                    cs->setAllowOverbooking( true );
+                    Schedule::OBState obs = cs->allowOverbookingState();
+                    cs->setAllowOverbookingState( Schedule::OBS_Allow );
                     m_durationForward = duration(cs->earlyStart, use, false);
-                    cs->setAllowOverbooking( false );
+                    cs->setAllowOverbookingState( obs );
 #ifndef NDEBUG
                     cs->logDebug("MSO/SNE earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
 #endif
@@ -1273,9 +1275,10 @@ DateTime Task::calculateLateStart(int use) {
                     makeAppointments();
 
                     // calculate wo checking bookings = latest start possible
-                    cs->setAllowOverbooking( true );
+                    Schedule::OBState obs = cs->allowOverbookingState();
+                    cs->setAllowOverbookingState( Schedule::OBS_Allow );
                     m_durationBackward = duration(cs->lateFinish, use, true);
-                    cs->setAllowOverbooking( false );
+                    cs->setAllowOverbookingState( obs );
 #ifndef NDEBUG
                     cs->logDebug("ASAP/ALAP latest start possible: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + (cs->lateFinish-m_durationBackward).toString() );
 #endif

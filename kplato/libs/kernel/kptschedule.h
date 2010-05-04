@@ -97,7 +97,12 @@ public:
     
     virtual bool isBaselined() const;
     virtual bool usePert() const;
-    virtual void setAllowOverbooking( bool state );
+    
+    enum OBState { OBS_Parent, OBS_Allow, OBS_Deny };
+    /// Sets wether overbooking resources is allowed locally for this schedule
+    /// If @p state is OBS_Parent, the parent is checked when allowOverbooking() is called
+    virtual void setAllowOverbookingState( OBState state );
+    OBState allowOverbookingState() const;
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
 
@@ -237,6 +242,7 @@ protected:
     long m_id;
     bool m_deleted;
     Schedule *m_parent;
+    OBState m_obstate;
 
     int m_calculationMode;
     QList<Appointment*> m_appointments;
@@ -419,7 +425,6 @@ public:
     virtual bool isDeleted() const { return m_deleted; }
     
     virtual bool isBaselined() const;
-    virtual void setAllowOverbooking( bool state );
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
     virtual bool usePert() const;

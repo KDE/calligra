@@ -48,6 +48,7 @@ Schedule::Schedule()
         m_id( 0 ),
         m_deleted( false ),
         m_parent( 0 ),
+        m_obstate( OBS_Parent ),
         m_calculationMode( Schedule::Scheduling )
 {}
 
@@ -56,6 +57,7 @@ Schedule::Schedule( Schedule *parent )
         m_id( 0 ),
         m_deleted( false ),
         m_parent( parent ),
+        m_obstate( OBS_Parent ),
         m_calculationMode( Schedule::Scheduling )
 {
 
@@ -73,6 +75,7 @@ Schedule::Schedule( const QString& name, Type type, long id )
         m_id( id ),
         m_deleted( false ),
         m_parent( 0 ),
+        m_obstate( OBS_Parent ),
         m_calculationMode( Schedule::Scheduling )
 {
 
@@ -168,18 +171,22 @@ bool Schedule::usePert() const
     return false;
 }
 
-void Schedule::setAllowOverbooking( bool state )
+void Schedule::setAllowOverbookingState( Schedule::OBState state )
 {
-    if ( m_parent )
-        m_parent->setAllowOverbooking( state );
+    m_obstate = state;
+}
+
+Schedule::OBState Schedule::allowOverbookingState() const
+{
+    return m_obstate;
 }
 
 bool Schedule::allowOverbooking() const
 {
-    if ( m_parent ) {
+    if ( m_obstate == OBS_Parent && m_parent ) {
         return m_parent->allowOverbooking();
     }
-    return false;
+    return m_obstate == OBS_Allow;
 }
 
 bool Schedule::checkExternalAppointments() const
@@ -1097,12 +1104,6 @@ bool MainSchedule::isBaselined() const
 bool MainSchedule::usePert() const
 {
     return m_manager == 0 ? false : m_manager->usePert();
-}
-
-void MainSchedule::setAllowOverbooking( bool state )
-{
-    if ( m_manager )
-        m_manager->setAllowOverbooking( state );
 }
 
 bool MainSchedule::allowOverbooking() const
