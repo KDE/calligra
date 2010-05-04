@@ -411,9 +411,11 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    
+
+#ifndef NDEBUG
     actionShowDebug = new KToggleAction( i18nc( "@action", "Show Debug Information" ), this );
     connect( actionShowDebug, SIGNAL(toggled(bool)), SLOT(slotShowDebug(bool)));
+#endif
 }
 
 void ScheduleLogTreeView::setFilterWildcard( const QString &filter )
@@ -434,10 +436,12 @@ void ScheduleLogTreeView::slotShowDebug( bool on )
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 {
     //kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+#ifndef NDEBUG
     KMenu *m = new KMenu( this );
     m->addAction( actionShowDebug );
     m->exec( mapToGlobal( pos ) );
     delete m;
+#endif
 }
 
 void ScheduleLogTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
