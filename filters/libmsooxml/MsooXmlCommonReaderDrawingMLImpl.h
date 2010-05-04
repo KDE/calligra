@@ -2618,6 +2618,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
             m_currentListStyleProperties->setListItemSuffix(")");
             m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
         }
+        else if (type == "romanUcPeriod") {
+            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
+        }
+        else if (type == "romanUcParenR") {
+            m_currentListStyleProperties->setListItemSuffix(")");
+            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
+        }
+        else if (type == "romanLcParenR") {
+            m_currentListStyleProperties->setListItemSuffix(")");
+            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
+        }
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(startAt)
+    if (!startAt.isEmpty()) {
+        m_currentListStyleProperties->setStartValue(startAt.toInt());
     }
 
     m_listStylePropertiesAltered = true;
