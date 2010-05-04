@@ -313,13 +313,11 @@ TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int len
         if ( sch ) {
             // check if booked
             //kDebug()<<"Booked?"<<date<<","<<t1<<"+"<<l<<"="<<t1.addMSecs( l );
-            DateTime dt1( DateTime( date, t1, spec ) );
+            DateTime dt1( date, t1, spec );
             DateTimeInterval dti( dt1, dt1.addMSecs( l ) );
             dti = sch->available( dti );
             //kDebug()<<"Checked sch:"<<ti.first<<","<<ti.second<<"="<<dti;
-            dt1 = dti.first.toTimeSpec( spec );
-            l = ( DateTime(dti.second.toTimeSpec( spec )) - dt1 ).milliseconds();
-            ti = TimeInterval( dt1.time(), l );
+            ti = TimeInterval( dti.first.toTimeSpec( spec ).time(), ( dti.second - dti.first ).milliseconds() );
         }
         if ( ti.isValid() ) {
             //kDebug()<<"Return:"<<ti.first<<"+"<<ti.second<<"="<<ti.first.addMSecs( ti.second );
