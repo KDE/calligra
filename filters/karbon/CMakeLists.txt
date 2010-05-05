@@ -3,6 +3,8 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/RectangleShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/StarShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pictureshape/PictureShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pictureshape/GreyscaleFilterEffect.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pictureshape/MonoFilterEffect.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp)
 
