@@ -326,7 +326,7 @@ void KarbonPart::saveOasisSettings(KoStore * store)
 
 bool KarbonPart::saveOdf(SavingContext &documentContext)
 {
-    if (! d->document.saveOdf(documentContext))
+    if (! d->document.saveOdf(documentContext, pageLayout()))
         return false;
 
     KoStore * store = documentContext.odfStore.store();

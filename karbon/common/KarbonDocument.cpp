@@ -309,7 +309,7 @@ void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> d
 // ODF saving
 //#############################################################################
 
-bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
+bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext, const KoPageLayout &layout)
 {
     KoStore * store = documentContext.odfStore.store();
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
@@ -325,14 +325,7 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext)
     saveOdfStyles(shapeContext);
 
     // save page
-    KoPageLayout page;
-    page.format = KoPageFormat::defaultFormat();
-    page.orientation = KoPageFormat::Portrait;
-    page.width = pageSize().width();
-    page.height = pageSize().height();
-
-    KoGenStyle pageLayout = page.saveOdf();
-    QString layoutName = mainStyles.insert(pageLayout, "PL");
+    QString layoutName = mainStyles.insert(layout.saveOdf(), "PL");
     KoGenStyle masterPage(KoGenStyle::MasterPageStyle);
     masterPage.addAttribute("style:page-layout-name", layoutName);
     mainStyles.insert(masterPage, "Default", KoGenStyles::DontAddNumberToName);

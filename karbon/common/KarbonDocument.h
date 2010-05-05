@@ -155,7 +155,7 @@ public:
     const QList<KoShape*> shapes() const;
 
     void saveOasis(KoShapeSavingContext & context) const;
-    bool saveOdf(KoDocument::SavingContext & documentContext);
+    bool saveOdf(KoDocument::SavingContext & documentContext, const KoPageLayout &layout);
     bool loadOasis(const KoXmlElement &element, KoShapeLoadingContext &context);
     void loadOdfStyles(KoShapeLoadingContext & context);
     void saveOdfStyles(KoShapeSavingContext & context);
