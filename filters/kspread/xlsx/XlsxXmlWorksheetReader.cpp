@@ -316,7 +316,7 @@ inline static QString encodeLabelText(int col, int row)
 
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
 {
-    QString ref(encodeLabelText(col + 1, row));
+    QString ref(encodeLabelText(col + 1, row + 1));
     kDebug() << ref;
     XlsxComment *comment = m_context->comments->value(ref);
     if (!comment)
