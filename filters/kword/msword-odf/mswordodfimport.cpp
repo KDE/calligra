@@ -100,14 +100,16 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     KoStore *storeout;
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0) { }
+        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) { }
         ~Finalizer() {
-            delete m_store; delete m_genStyles; delete m_document;
+            delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
         }
 
         KoStore *m_store;
         KoGenStyles *m_genStyles;
         Document *m_document;
+        KoXmlWriter* m_contentWriter;
+        KoXmlWriter* m_bodyWriter;
     };
 
     storeout = KoStore::createStore(outputFile, KoStore::Write,
@@ -142,7 +144,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     QBuffer contentBuf;
     QBuffer bodyBuf;
     KoXmlWriter *contentWriter = new KoXmlWriter(&contentBuf);
+    finalizer.m_contentWriter = contentWriter;
     KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
+    finalizer.m_bodyWriter = bodyWriter;
     if (!bodyWriter || !contentWriter)
         return KoFilter::CreationError; //not sure if this is the right error to return
 
@@ -213,6 +217,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     meta->endElement(); //office:meta
     meta->endElement(); //office:document-meta
     meta->endDocument();
+    delete meta;
     if (!storeout->close())
         return KoFilter::CreationError;
 

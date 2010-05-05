@@ -136,6 +136,7 @@ Document::~Document()
     delete m_pictureHandler;
     delete m_tableHandler;
     delete m_replacementHandler;
+    delete m_drawingHandler;
 }
 
 //set whether or not document has header or footer
