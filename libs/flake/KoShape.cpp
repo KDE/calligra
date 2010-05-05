@@ -933,15 +933,17 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
 
     QString value;
-    if (isGeometryProtected())
+    if (isGeometryProtected()) {
         value = "position size";
+    }
     if (isContentProtected()) {
         if (! value.isEmpty())
             value += ' ';
         value += "content";
     }
-    if (!value.isEmpty())
-        (const_cast<KoShapePrivate*>(d))->additionalStyleAttributes.insert("style:protect", value);
+    if (!value.isEmpty()) {
+        style.addProperty("style:protect", value);
+    }
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
     for (; it != d->additionalStyleAttributes.constEnd(); ++it) {
@@ -982,6 +984,10 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     setBackground(loadOdfFill(element, context));
     setBorder(loadOdfStroke(element, context));
     setShadow(loadOdfShadow(element, context));
+
+    QString protect(styleStack.property(KoXmlNS::style, "protect"));
+    setGeometryProtected(protect.contains("position") || protect.contains("size"));
+    setContentProtected(protect.contains("content"));
 
     styleStack.restore();
 }
