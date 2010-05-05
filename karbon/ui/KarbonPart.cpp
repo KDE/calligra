@@ -237,11 +237,12 @@ bool KarbonPart::loadOdf(KoOdfReadStore & odfStore)
         master = odfStore.styles().masterPages().begin().value();
 
     if (master) {
-        const KoXmlElement *style = odfStore.styles().findStyle(
-                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
+        const QString pageStyleName = master->attributeNS(KoXmlNS::style, "page-layout-name", QString());
+        const KoXmlElement *style = odfStore.styles().findStyle(pageStyleName);
         if (style) {
-            pageLayout().loadOdf(*style);
-            setPageSize(QSizeF(pageLayout().width, pageLayout().height));
+            KoPageLayout layout;
+            layout.loadOdf(*style);
+            setPageLayout(layout);
         }
     } else {
         kWarning() << "No master page found!";
