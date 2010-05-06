@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +36,7 @@ public:
      * @param smilSubType The smil:subType used for loading/saving
      * @param revers The flag for the smil:direction used for loading/saving true means reverse false means forward
      */
-    KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse, bool graphicsView = false);
     virtual ~KPrPageEffectStrategy();
 
     /**
@@ -111,6 +112,10 @@ public:
      */
     bool reverse() const;
 
+    /**
+    * @return true if we use QGraphicsView, false otherwise
+    */
+    bool useGraphicsView() const;
 private:
     struct SmilData
     {
@@ -127,6 +132,7 @@ private:
 
     int m_subType;
     SmilData m_smilData;
+    bool m_graphicsView;
 };
 
 #endif /* KPRPAGEEFFECTSTRATEGY_H */

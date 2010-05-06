@@ -115,7 +115,7 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY})
+target_link_libraries(kpresenterprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY})
 target_link_libraries(kpresenterprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Swap Effect
+Comment=Swap Page Effect
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_swapeffect
+X-KPresenter-Version=0

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +24,13 @@
 #include <QPixmap>
 #include <QTimeLine>
 
+#include <KoXmlReaderForward.h>
 #include "kpresenter_export.h"
 
 class QPainter;
-#include "KoXmlReaderForward.h"
+class QGraphicsScene;
+class QGraphicsPixmapItem;
+class QGraphicsView;
 class KoXmlWriter;
 class KoGenStyle;
 class KPrPageEffectStrategy;
@@ -52,6 +56,8 @@ public:
         : m_oldPage( oldPage )
         , m_newPage( newPage )
         , m_widget( w )
+        , m_scene( 0 )
+        , m_graphicsView( 0 )
         , m_finished( false )
         , m_currentTime( 0 )
         , m_lastTime( 0 )
@@ -61,6 +67,10 @@ public:
         QPixmap m_newPage;
         QWidget * m_widget;
         QTimeLine m_timeLine;
+        QGraphicsScene *m_scene;
+        QGraphicsView *m_graphicsView;
+        QGraphicsPixmapItem *m_oldPageItem;
+        QGraphicsPixmapItem *m_newPageItem;
         bool m_finished;
         int m_currentTime;
         int m_lastTime;
@@ -76,7 +86,7 @@ public:
     virtual ~KPrPageEffect();
 
     virtual void setup( const Data &data, QTimeLine &timeLine );
-
+    virtual bool useGraphicsView();
     /**
      * Paint the page effect
      *

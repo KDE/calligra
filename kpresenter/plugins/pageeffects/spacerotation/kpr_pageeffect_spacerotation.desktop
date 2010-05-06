@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Space Rotation
+Comment=Space Rotation Page Effect
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_spacerotation
+X-KPresenter-Version=0
