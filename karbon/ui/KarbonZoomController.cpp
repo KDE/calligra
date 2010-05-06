@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008,2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
 #include <KoResourceManager.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 #include <KActionCollection>
 #include <KLocale>
@@ -128,6 +130,10 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
     // now calculate the preferred center in document coordinates
     QPointF docCenter = d->zoomHandler->viewToDocument(preferredCenter - documentOrigin);
+    KoSelection * selection = d->canvas->shapeManager()->selection();
+    if( selection->count()) {
+        docCenter = selection->boundingRect().center();
+    }
 
     d->zoomHandler->setZoom(zoom);
 
