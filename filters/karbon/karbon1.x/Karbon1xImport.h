@@ -71,6 +71,8 @@ protected:
     double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
     int nextZIndex();
+    KoShape * createShape(const QString &shapeID) const;
+
 private:
     KarbonDocument * m_document;
     QMatrix m_mirrorMatrix;

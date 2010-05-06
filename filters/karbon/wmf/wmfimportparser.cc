@@ -34,7 +34,6 @@
 
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
-#include <pictureshape/PictureShape.h>
 #include <artistictextshape/ArtisticTextShape.h>
 #include <kdebug.h>
 
@@ -424,7 +423,7 @@ void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int s
     if (! data)
         return;
 
-    PictureShape * pic = static_cast<PictureShape*>(createShape(PICTURESHAPEID));
+    KoShape * pic = createShape("PictureShape");
     if (! pic)
         return;
 

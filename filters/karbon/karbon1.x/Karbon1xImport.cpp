@@ -47,6 +47,8 @@
 #include <KoPatternBackground.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
 
 #include <KGenericFactory>
 
@@ -1162,7 +1164,7 @@ KoShape * KarbonImport::loadImage(const KoXmlElement &element)
     if (! data)
         return 0;
 
-    PictureShape * picture = new PictureShape();
+    KoShape * picture = createShape("PictureShape");
     picture->setUserData(data);
     picture->setSize(img.size());
     picture->setTransformation(m);
@@ -1256,4 +1258,25 @@ int KarbonImport::nextZIndex()
     static int zIndex = 0;
 
     return zIndex++;
+}
+
+KoShape * KarbonImport::createShape(const QString &shapeID) const
+{
+    KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get(shapeID);
+    if (! factory) {
+        kWarning() << "Could not find factory for shape id" << shapeID;
+        return 0;
+    }
+
+    KoShape * shape = factory->createDefaultShape(m_document->resourceManager());
+    if (shape && shape->shapeId().isEmpty())
+        shape->setShapeId(factory->id());
+
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (path && shapeID == KoPathShapeId)
+        path->clear();
+    // reset tranformation that might come from the default shape
+    shape->setTransformation(QMatrix());
+
+    return shape;
 }
