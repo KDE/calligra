@@ -23,6 +23,9 @@
 #include "KPrAnimationFactory.h"
 #include "KPrAnimationCache.h"
 
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+
 KPrAnimPar::KPrAnimPar()
 {
 }

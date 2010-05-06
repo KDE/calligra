@@ -22,6 +22,9 @@
 
 #include "KPrAnimationCache.h"
 
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+
 KPrAnimateColor::KPrAnimateColor()
 {
 }
