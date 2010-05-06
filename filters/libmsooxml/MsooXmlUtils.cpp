@@ -1050,7 +1050,7 @@ static bool isUnitAcceptable(const QString& unit)
 }
 
 static QString ST_TwipsMeasure_to_ODF_with_unit(const QString& value,
-                                                double (*convertFromTwips)(double), const char* unit)
+                                                qreal (*convertFromTwips)(qreal), const char* unit)
 {
     if (value.isEmpty())
         return QString();
