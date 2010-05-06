@@ -39,7 +39,7 @@
 #include <QTextBlock>
 
 // #define DEBUG_TEXT
-// #define DEBUG_ANCHORS
+#define DEBUG_ANCHORS
 
 #ifdef DEBUG_TEXT
 #define TDEBUG kDebug(32002)
