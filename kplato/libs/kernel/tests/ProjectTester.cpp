@@ -1354,6 +1354,70 @@ void ProjectTester::requiredResource()
     QCOMPARE( task1->endTime(), apps.last()->endTime() );
 }
 
+void ProjectTester::resourceWithLimitedAvailability()
+{
+    Project project;
+    project.setName( "P1" );
+    DateTime targetstart = DateTime( QDate( 2010, 5, 1 ), QTime(0,0,0) );
+    DateTime targetend = DateTime( targetstart.addDays( 7 ) );
+    project.setConstraintStartTime( targetstart );
+    project.setConstraintEndTime( targetend);
+
+    DateTime expectedEndTime( QDate( 2010, 5, 3 ), QTime( 16, 0, 0 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    project.addCalendar( c );
+    
+    Task *task1 = project.createTask( &project );
+    task1->setName( "T1" );
+    project.addTask( task1, &project );
+    task1->estimate()->setUnit( Duration::Unit_d );
+    task1->estimate()->setExpectedEstimate( 4.0 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+
+    QString s = "Two resources: One with available until < resulting task length --------";
+    ResourceGroup *g = new ResourceGroup();
+    project.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    r1->setAvailableFrom( targetstart );
+    r1->setCalendar( c );
+    project.addResource( g, r1 );
+
+    Resource *r2 = new Resource();
+    r2->setName( "R2" );
+    r2->setAvailableFrom( targetstart );
+    r2->setAvailableUntil( targetstart.addDays( 1 ) );
+    r2->setCalendar( c );
+    project.addResource( g, r2 );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    task1->addRequest( gr );
+    ResourceRequest *rr1 = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( rr1 );
+    ResourceRequest *rr2 = new ResourceRequest( r2, 100 );
+    gr->addResourceRequest( rr2 );
+
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+    project.calculate( *sm );
+
+    Debug::print( r1, s);
+    Debug::print( r2, s);
+    Debug::print( &project, task1, s);
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), expectedEndTime );
+}
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ProjectTester )

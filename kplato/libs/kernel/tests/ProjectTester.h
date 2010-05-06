@@ -60,6 +60,8 @@ private slots:
 
     void materialResource();
     void requiredResource();
+
+    void resourceWithLimitedAvailability();
     
 private:
     void printDebug( Calendar *c, const QString &s = QString(), bool full = false ) const;
