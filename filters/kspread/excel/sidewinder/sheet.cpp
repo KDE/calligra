@@ -75,6 +75,7 @@ public:
     bool isPageBreakViewEnabled;
 
     unsigned long passwd;
+    UString backgroundImagePath;
 };
 
 }
@@ -431,6 +432,16 @@ unsigned long Sheet::password() const
 void Sheet::setPassword(unsigned long hash)
 {
     d->passwd = hash;
+}
+
+void Sheet::setBackgroundImage( const UString& imagePath )
+{
+    d->backgroundImagePath = imagePath;
+}
+
+UString Sheet::backgroundImage()
+{
+    return d->backgroundImagePath;
 }
 
 class Column::Private

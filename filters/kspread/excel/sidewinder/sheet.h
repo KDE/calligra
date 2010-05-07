@@ -22,6 +22,7 @@
 
 #include "ustring.h"
 #include "format.h"
+#include <QImage>
 
 class QPoint;
 
@@ -161,6 +162,9 @@ public:
     
     unsigned long password() const;
     void setPassword(unsigned long hash);
+
+    UString backgroundImage();
+    void setBackgroundImage( const Swinder::UString& imagePath);
 
 private:
     // no copy or assign
