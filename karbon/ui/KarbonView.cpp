@@ -511,7 +511,6 @@ void KarbonView::fileImportGraphic()
 void KarbonView::selectionDuplicate()
 {
     d->canvas->toolProxy()->copy();
-    // TODO bring back copy offset
     d->canvas->toolProxy()->paste();
 }
 

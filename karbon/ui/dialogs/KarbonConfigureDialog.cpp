@@ -113,7 +113,6 @@ ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
     m_config = KarbonFactory::componentData().config();
 
     m_oldRecentFiles = 10;
-    m_oldCopyOffset = 10;
     m_oldDockerFontSize = 8;
     m_oldCanvasColor = QColor(Qt::white);
     bool oldShowStatusBar = true;
@@ -128,7 +127,6 @@ ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
 
         m_oldRecentFiles = interfaceGroup.readEntry("NbRecentFile", m_oldRecentFiles);
         oldShowStatusBar = interfaceGroup.readEntry("ShowStatusBar", true);
-        m_oldCopyOffset = interfaceGroup.readEntry("CopyOffset", m_oldCopyOffset);
         m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
     }
 
@@ -143,12 +141,6 @@ ConfigInterfacePage::ConfigInterfacePage(KarbonView* view, char* name)
     m_recentFiles->setValue(m_oldRecentFiles);
     m_recentFiles->setLabel(i18n("Number of recent files:"));
     grpLayout->addWidget(m_recentFiles);
-
-    m_copyOffset = new KIntNumInput(m_oldCopyOffset, tmpQGroupBox);
-    m_copyOffset->setRange(1, 50, 1);
-    m_copyOffset->setValue(m_oldCopyOffset);
-    m_copyOffset->setLabel(i18n("Copy offset:"));
-    grpLayout->addWidget(m_copyOffset);
 
     m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
     m_dockerFontSize->setRange(5, 20, 1);
@@ -179,13 +171,6 @@ void ConfigInterfacePage::apply()
         interfaceGroup.writeEntry("NbRecentFile", recent);
         m_view->setNumberOfRecentFiles(recent);
         m_oldRecentFiles = recent;
-    }
-
-    int copyOffset = m_copyOffset->value();
-
-    if (copyOffset != m_oldCopyOffset) {
-        interfaceGroup.writeEntry("CopyOffset", copyOffset);
-        m_oldCopyOffset = copyOffset;
     }
 
     bool refreshGUI = false;
