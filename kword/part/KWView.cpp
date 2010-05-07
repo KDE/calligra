@@ -193,6 +193,8 @@ QWidget *KWView::canvas() const
 
 void KWView::updateReadWrite(bool readWrite)
 {
+    m_canvas->setReadWrite(readWrite);
+    KoToolManager::instance()->updateReadWrite(m_gui->canvasController(), readWrite);
     m_actionFormatFrameSet->setEnabled(readWrite);
     m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
