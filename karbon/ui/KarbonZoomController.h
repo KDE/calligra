@@ -28,7 +28,6 @@ class KActionCollection;
 class KoZoomAction;
 class QSizeF;
 
-// TODO try to merge this class with KoZoomController since its got a lot of things the same.
 class KarbonZoomController : public QObject
 {
     Q_OBJECT

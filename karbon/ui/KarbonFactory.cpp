@@ -52,25 +52,6 @@ KarbonFactory::KarbonFactory(QObject* parent, const char* name)
         : KoFactory(parent, name)
 {
     componentData();
-
-
-    // Load plugins
-    /* TODO enable it when we are in better shape (already ported to kde4)
-    KService::List offers = KServiceTypeTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
-                                    QString::fromLatin1("Type == 'Service'"));
-
-    KService::List::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-        KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( plugin )
-            kDebug(38000) <<"found plugin" << service -> property("Name").toString() <<"";
-    }
-    */
 }
 
 KarbonFactory::~KarbonFactory()
