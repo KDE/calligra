@@ -1063,7 +1063,7 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
 
 void WorksheetSubStreamHandler::handleBkHim(BkHimRecord* record)
 {
-    
+    d->sheet->setBackgroundImage(record->imagePath());
 }
 
 } // namespace Swinder
