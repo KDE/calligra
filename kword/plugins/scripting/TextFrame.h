@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,11 +21,11 @@
 #ifndef SCRIPTING_TEXTFRAME_H
 #define SCRIPTING_TEXTFRAME_H
 
-#include <QObject>
-#include <QPointer>
-#include <QTextFrame>
-
 #include "TextCursor.h"
+
+#include <QObject>
+#include <QWeakPointer>
+#include <QTextFrame>
 
 namespace Scripting
 {
@@ -46,46 +47,70 @@ public slots:
 
     /** Return the frame content as plain text. */
     QString text() const {
-        return QTextCursor(m_frame).block().text();
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return QTextCursor(frame).block().text();
+        return QString();
     }
 
     /** Return the \a TextCursor object for this frame. */
     QObject* cursor() {
-        return new TextCursor(this, QTextCursor(m_frame));
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return new TextCursor(this, QTextCursor(frame));
+        return 0;
     }
 
     /** Return the first position in the frame. */
     int firstPosition() const {
-        return m_frame->firstPosition();
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return frame->firstPosition();
+        return 0;
     }
 
     /** Return a \a TextCursor object for the first position in the frame. */
     QObject* firstCursorPosition() {
-        return new TextCursor(this, m_frame->firstCursorPosition());
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return new TextCursor(this, frame->firstCursorPosition());
+        return 0;
     }
 
     /** Return the last position in the frame. */
     int lastPosition() const {
-        return m_frame->lastPosition();
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return frame->lastPosition();
+        return 0;
     }
 
     /** Return a \a TextCursor object for the last position in the frame. */
     QObject* lastCursorPosition() {
-        return new TextCursor(this, m_frame->lastCursorPosition());
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return new TextCursor(this, frame->lastCursorPosition());
+        return 0;
     }
 
     /** Return a child \a TextFrame object with the defined \p index . */
     QObject* childFrame(int index) {
-        return (index >= 0 && index < m_frame->childFrames().count()) ? m_frame->childFrames().at(index) : 0;
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return (index >= 0 && index < frame->childFrames().count()) ? frame->childFrames().at(index) : 0;
+        return 0;
     }
 
     /** Return the number of \a TextCursor objects. */
     int childFrameCount() const {
-        return m_frame->childFrames().count();
+        QTextFrame *frame = m_frame.data();
+        if (frame)
+            return frame->childFrames().count();
+        return 0;
     }
 
 private:
-    QPointer<QTextFrame> m_frame;
+    QWeakPointer<QTextFrame> m_frame;
 };
 
 }

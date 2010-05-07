@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,12 +45,12 @@ public slots:
 
     /** Return the number of items the list has. */
     int countItems() {
-        return m_list ? m_list->count() : 0;
+        return m_list ? m_list.data()->count() : 0;
     }
 
     /** Return a \a TextCursor object for the item at the position \p index . */
     QObject* item(int index) {
-        QTextCursor cursor = m_list ? QTextCursor(m_list->item(index)) : QTextCursor();
+        QTextCursor cursor = m_list ? QTextCursor(m_list.data()->item(index)) : QTextCursor();
         return cursor.isNull() ? 0 : new TextCursor(this, cursor);
     }
 
@@ -66,16 +67,16 @@ public slots:
 
     /** Return the content as text of the defined item with index \p index . */
     QString itemText(int index) {
-        QTextBlock block = m_list ? m_list->item(index) : QTextBlock();
-        return block.isValid() ? m_list->itemText(block) : QString();
+        QTextBlock block = m_list ? m_list.data()->item(index) : QTextBlock();
+        return block.isValid() ? m_list.data()->itemText(block) : QString();
     }
 
     /** Return the content of the list as text. */
     QString text() {
         QString result;
-        const int count = m_list ? m_list->count() : 0;
+        const int count = m_list ? m_list.data()->count() : 0;
         for (int i = 0; i < count; ++i) {
-            const QString s = m_list->itemText(m_list->item(i));
+            const QString s = m_list.data()->itemText(m_list.data()->item(i));
             if (! s.isNull())
                 result += QString("%1\n").arg(s);
         }
@@ -85,7 +86,7 @@ public slots:
     /** Remove the item at position \p index . */
     void removeItem(int index) {
         if (m_list)
-            m_list->removeItem(index);
+            m_list.data()->removeItem(index);
     }
 
     /** Set the style this TextList uses to the as argument passed \a Style object. */
@@ -100,9 +101,9 @@ public slots:
             kWarning(32001) << "TextList.setStyle Invalid KoParagraphStyle object";
             return;
         }
-        const int count = m_list ? m_list->count() : 0;
+        const int count = m_list ? m_list.data()->count() : 0;
         for (int i = 0; i < count; ++i) {
-            QTextBlock block = m_list->item(i);
+            QTextBlock block = m_list.data()->item(i);
             ps->applyStyle(block);
         }
     }
@@ -118,7 +119,7 @@ public slots:
 #endif
 
 private:
-    QPointer<QTextList> m_list;
+    QWeakPointer<QTextList> m_list;
 };
 
 }

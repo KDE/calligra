@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +31,8 @@
 #include "TextFrame.h"
 #include "TextCursor.h"
 
+#include <QWeakPointer>
+
 namespace Scripting
 {
 
@@ -43,15 +46,19 @@ class TextDocument : public QObject
 public:
     TextDocument(QObject* parentFrameSet, QTextDocument* doc)
             : QObject(parentFrameSet), m_doc(doc) {
-        connect(m_doc, SIGNAL(contentsChange(int, int, int)), this, SIGNAL(contentsChanged(int, int, int)));
-        connect(m_doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
-        connect(m_doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
+        connect(doc, SIGNAL(contentsChange(int, int, int)), this, SIGNAL(contentsChanged(int, int, int)));
+        connect(doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
+        connect(doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
     }
     virtual ~TextDocument() {}
 
     KoInlineTextObjectManager* inlineTextObjectManager() {
-        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(m_doc->documentLayout());
-        return layout ? layout->inlineTextObjectManager() : 0;
+        QTextDocument *doc = m_doc.data();
+        if (doc) {
+            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+            return layout ? layout->inlineTextObjectManager() : 0;
+        }
+        return 0;
     }
 
     KoVariableManager* variableManager() {
@@ -63,35 +70,56 @@ public slots:
 
     /** Return the width of the document in pt. */
     virtual qreal width() const {
-        return m_doc->documentLayout()->documentSize().width();
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->documentLayout()->documentSize().width();
+        return 0;
     }
     /** Return the height of the document in pt. */
     virtual qreal height() const {
-        return m_doc->documentLayout()->documentSize().height();
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->documentLayout()->documentSize().height();
+        return 0;
     }
     /** Return true if the document was modified else false is returned. */
     bool isModified() const {
-        return m_doc->isModified();
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->isModified();
+        return false;
     }
 
     //bool isEmpty() const { return m_doc->isEmpty(); }
 
     /** Return the root \a Frame object of the document. */
     QObject* rootFrame() {
-        return new TextFrame(this, m_doc->rootFrame());
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return new TextFrame(this, doc->rootFrame());
+        return 0;
     }
 
     /** Return the \a Cursor object for the document. */
     QObject* cursor() {
-        return new TextCursor(this, QTextCursor(m_doc));
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return new TextCursor(this, QTextCursor(doc));
+        return 0;
     }
     /** Return the first \a Cursor object of the document. */
     QObject* firstCursor() {
-        return new TextCursor(this, QTextCursor(m_doc->begin()));
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return new TextCursor(this, QTextCursor(doc->begin()));
+        return 0;
     }
     /** Return the last \a Cursor object of the document. */
     QObject* lastCursor() {
-        return new TextCursor(this, QTextCursor(m_doc->end()));
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return new TextCursor(this, QTextCursor(doc->end()));
+        return 0;
     }
 
     //QTextObject * object ( int objectIndex ) const
@@ -99,27 +127,42 @@ public slots:
 
     /** Return the content of the document as plain-text. */
     QString toText() const {
-        return m_doc->toPlainText();
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->toPlainText();
+        return 0;
     }
     /** Set the content of the document to the \p text plain-text. */
     void setText(const QString & text) {
-        m_doc->setPlainText(text);
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            doc->setPlainText(text);
     }
     /** Return the stylesheet. */
     QString defaultStyleSheet() const {
-        return m_doc->defaultStyleSheet();
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->defaultStyleSheet();
+        return QString();
     }
     /** Set the stylesheet. */
     void setDefaultStyleSheet(const QString& stylesheet) {
-        m_doc->setDefaultStyleSheet(stylesheet);
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+        doc->setDefaultStyleSheet(stylesheet);
     }
     /** Return the content of the document as HTML-text. */
     QString toHtml(const QString& encoding = QString()) const {
-        return m_doc->toHtml(encoding.isNull() ? QByteArray() : encoding.toLatin1());
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+            return doc->toHtml(encoding.isNull() ? QByteArray() : encoding.toLatin1());
+        return QString();
     }
     /** Set the content of the document to the \p html HTML-text. */
     void setHtml(const QString & html) {
-        m_doc->setHtml(html);
+        QTextDocument *doc = m_doc.data();
+        if (doc)
+        doc->setHtml(html);
     }
 
     /** Return a list of all variablenames. */
@@ -180,7 +223,7 @@ signals:
     void documentSizeChanged();
 
 private:
-    QPointer<QTextDocument> m_doc;
+    QWeakPointer<QTextDocument> m_doc;
 };
 
 }

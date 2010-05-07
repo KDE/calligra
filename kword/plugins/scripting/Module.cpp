@@ -2,6 +2,7 @@
  * This file is part of KWord
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -29,7 +30,7 @@
 #include <KWView.h>
 #include <KWPage.h>
 
-#include <QPointer>
+#include <QWeakPointer>
 
 extern "C"
 {
@@ -40,38 +41,24 @@ extern "C"
 
 using namespace Scripting;
 
-namespace Scripting
-{
-
-/// \internal d-pointer class.
-class Module::Private
-{
-public:
-    QPointer<KWDocument> doc;
-};
-}
-
 Module::Module(QObject* parent)
-        : KoScriptingModule(parent, "KWord")
-        , d(new Private())
+    : KoScriptingModule(parent, "KWord")
 {
-    d->doc = 0;
 }
 
 Module::~Module()
 {
-    delete d;
 }
 
 KWDocument* Module::kwDoc()
 {
-    if (! d->doc) {
-        if (KWView* v = dynamic_cast< KWView* >(view()))
-            d->doc = v->kwdocument();
-        if (! d->doc)
-            d->doc = new KWDocument(0, this);
+    if (!m_doc) {
+        if (KWView *v = dynamic_cast< KWView* >(view()))
+            m_doc = v->kwdocument();
+        if (!m_doc)
+            m_doc = new KWDocument(0, this);
     }
-    return d->doc;
+    return m_doc.data();
 }
 
 KoDocument* Module::doc()

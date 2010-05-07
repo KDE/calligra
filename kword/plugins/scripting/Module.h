@@ -2,6 +2,7 @@
  * This file is part of KWord
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -24,6 +25,7 @@
 #include <KoScriptingModule.h>
 
 #include <KWord.h>
+#include <QWeakPointer>
 
 class KWDocument;
 
@@ -187,10 +189,7 @@ public slots:
     QObject* tool();
 
 private:
-    /// \internal d-pointer class. (TODO: remove the dpointer, just overhead for non-exported class)
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    QWeakPointer<KWDocument> m_doc;
 };
 
 }

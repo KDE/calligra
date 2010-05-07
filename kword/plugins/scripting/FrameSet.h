@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define SCRIPTING_FRAMESET_H
 
 #include <QObject>
+#include <QWeakPointer>
 #include "Module.h"
 #include "TextDocument.h"
 #include "Frame.h"
@@ -67,34 +69,44 @@ public slots:
 
     /** Return this framesets name. */
     const QString name() {
-        return m_frameset->name();
+        KWFrameSet *fs = m_frameset.data();
+        if (fs)
+            return fs->name();
+        return QString();
     }
     /** Set the framesets name. */
     void setName(const QString &name) {
-        m_frameset->setName(name);
+        KWFrameSet *fs = m_frameset.data();
+        if (fs)
+            fs->setName(name);
     }
 
     /** Return the number of frames this frameset has. */
     int frameCount() {
-        return m_frameset->frames().count();
+        KWFrameSet *fs = m_frameset.data();
+        if (fs)
+            return fs->frames().count();
+        return 0;
     }
     /** Return the \a Frame object with index \p frameNr or NULL if there
     exists no \a Frame with such a index. */
     QObject* frame(int frameNr) {
-        if (frameNr >= 0 && frameNr < m_frameset->frames().count())
-            return new Frame(this, m_frameset->frames().at(frameNr));
+        KWFrameSet *fs = m_frameset.data();
+        if (fs && frameNr >= 0 && frameNr < fs->frames().count())
+            return new Frame(this, fs->frames().at(frameNr));
         return 0;
     }
 
     /** Return the \a TextDocument object or NULL if this frameset does not
     have a \a TextDocument object. */
     QObject* document() {
-        KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >((KWFrameSet*)m_frameset);
+        KWFrameSet *fs = m_frameset.data();
+        KWTextFrameSet *textframeset = dynamic_cast<KWTextFrameSet*>(fs);
         return textframeset ? new TextDocument(this, textframeset->document()) : 0;
     }
 
 private:
-    QPointer<KWFrameSet> m_frameset;
+    QWeakPointer<KWFrameSet> m_frameset;
 };
 
 }
