@@ -24,6 +24,7 @@
 
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 
 KPrAnimateColor::KPrAnimateColor()
 {

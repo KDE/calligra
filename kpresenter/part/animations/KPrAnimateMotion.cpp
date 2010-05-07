@@ -23,6 +23,7 @@
 
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 
 KPrAnimateMotion::KPrAnimateMotion()
 {
