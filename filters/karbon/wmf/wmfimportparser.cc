@@ -68,7 +68,7 @@ bool WMFImportParser::play(KarbonDocument& doc)
     foreach(KoShape * shape, mDoc->shapes()) {
         shape->setZIndex(zIndex++);
         if (! shape->parent())
-            layer->addChild(shape);
+            layer->addShape(shape);
     }
 
     return true;

@@ -163,14 +163,14 @@ void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList
         foreach(KoShape * shape, toplevelShapes) {
             // ungroup toplevel groups
             KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
-            QList<KoShape*> children = group->childShapes();
+            QList<KoShape*> children = group->shapes();
             KoShapeUngroupCommand cmd(group, children, QList<KoShape*>() << group);
             cmd.redo();
 
             KoShapeLayer * layer = new KoShapeLayer();
             foreach(KoShape * child, children) {
                 m_document->add(child);
-                layer->addChild(child);
+                layer->addShape(child);
             }
             if (! group->name().isEmpty())
                 layer->setName(group->name());
@@ -183,7 +183,7 @@ void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList
         KoShapeLayer * layer = new KoShapeLayer();
         foreach(KoShape * shape, toplevelShapes) {
             m_document->add(shape);
-            layer->addChild(shape);
+            layer->addShape(shape);
         }
         m_document->insertLayer(layer);
     }

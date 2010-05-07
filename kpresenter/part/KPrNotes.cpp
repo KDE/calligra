@@ -64,7 +64,7 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
 {
     // add default layer
     KoShapeLayer* layer = new KoShapeLayer;
-    addChild( layer );
+    addShape( layer );
 
     // All sizes and positions are hardcoded for now
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
@@ -83,8 +83,8 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
     m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
 
-    layer->addChild( m_textShape );
-    layer->addChild( m_thumbnailShape );
+    layer->addShape( m_textShape );
+    layer->addShape( m_thumbnailShape );
 }
 
 KPrNotes::~KPrNotes()
@@ -110,8 +110,8 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
     writer.endElement(); // draw:page-thumbnail
 
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( childShapes().last() );
-    foreach ( KoShape *shape, layer->childShapes() ) {
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes().last() );
+    foreach ( KoShape *shape, layer->shapes() ) {
         if ( shape != m_textShape && shape != m_thumbnailShape ) {
             shape->saveOdf( context );
         }
@@ -123,7 +123,7 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
 bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoXmlElement child;
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( childShapes().last() );
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes().last() );
 
     forEachElement( child, element ) {
         if ( child.namespaceURI() != KoXmlNS::draw )
@@ -143,14 +143,14 @@ bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &conte
             if ( shape ) {
                 if ( shape->shapeId() == "TextShapeID" &&
                         child.hasAttributeNS( KoXmlNS::presentation, "class" ) ) {
-                    layer->removeChild( m_textShape );
+                    layer->removeShape( m_textShape );
                     delete m_textShape;
                     m_textShape = shape;
                     m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
-                    layer->addChild( m_textShape );
+                    layer->addShape( m_textShape );
                 }
                 else {
-                    layer->addChild( shape );
+                    layer->addShape( shape );
                 }
             }
         }

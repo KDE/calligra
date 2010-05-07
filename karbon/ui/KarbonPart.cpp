@@ -458,7 +458,7 @@ void KarbonPart::addShape(KoShape* shape)
                 activeLayer = d->document.layers().first();
 
             if (activeLayer)
-                activeLayer->addChild(shape);
+                activeLayer->addShape(shape);
         }
 
         d->document.add(shape);

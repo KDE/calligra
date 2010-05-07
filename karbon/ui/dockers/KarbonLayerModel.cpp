@@ -78,7 +78,7 @@ int KarbonLayerModel::rowCount(const QModelIndex &parent) const
     if (! parentShape)
         return 0;
 
-    return parentShape->childCount();
+    return parentShape->shapeCount();
 }
 
 int KarbonLayerModel::columnCount(const QModelIndex &) const
@@ -109,7 +109,7 @@ QModelIndex KarbonLayerModel::index(int row, int column, const QModelIndex &pare
     if (! parentShape)
         return QModelIndex();
 
-    if (row < parentShape->childCount())
+    if (row < parentShape->shapeCount())
         return createIndex(row, column, childFromIndex(parentShape, row));
     else
         return QModelIndex();
@@ -198,7 +198,7 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
         if (container) {
             bbox = QRectF();
-            foreach(KoShape* shape, container->childShapes())
+            foreach(KoShape* shape, container->shapes())
             bbox = bbox.united(shape->outline().boundingRect());
         }
         return qreal(bbox.width()) / bbox.height();
@@ -323,7 +323,7 @@ QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize)
     shapes.append(shape);
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
     if (container)
-        shapes.append(container->childShapes());
+        shapes.append(container->shapes());
 
     painter.setShapes(shapes);
 
@@ -343,12 +343,12 @@ QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize)
 
 KoShape * KarbonLayerModel::childFromIndex(KoShapeContainer *parent, int row) const
 {
-    return parent->childShapes().at(row);
+    return parent->shapes().at(row);
 }
 
 int KarbonLayerModel::indexFromChild(KoShapeContainer *parent, KoShape *child) const
 {
-    return parent->childShapes().indexOf(child);
+    return parent->shapes().indexOf(child);
 }
 
 Qt::DropActions KarbonLayerModel::supportedDropActions() const
@@ -458,7 +458,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
 
             emit layoutAboutToBeChanged();
 
-            beginInsertRows(parent, group->childCount(), group->childCount() + toplevelShapes.count());
+            beginInsertRows(parent, group->shapeCount(), group->shapeCount() + toplevelShapes.count());
 
             QUndoCommand * cmd = new QUndoCommand();
             cmd->setText(i18n("Reparent shapes"));
@@ -478,7 +478,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
             if (toplevelShapes.count()) {
                 emit layoutAboutToBeChanged();
 
-                beginInsertRows(parent, container->childCount(), container->childCount() + toplevelShapes.count());
+                beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
 
                 QUndoCommand * cmd = new QUndoCommand();
                 cmd->setText(i18n("Reparent shapes"));
@@ -490,7 +490,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
                         continue;
                     }
 
-                    clipped.append(shape->parent()->childClipped(shape));
+                    clipped.append(shape->parent()->isClipped(shape));
                     new KoShapeUngroupCommand(shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd);
                 }
 

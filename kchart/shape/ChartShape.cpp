@@ -375,15 +375,15 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     // Configure the plotarea.
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer.
-    addChild( d->plotArea );
+    addShape(d->plotArea);
     d->plotArea->plotAreaInit();
     d->plotArea->setZIndex( 0 );
-    setClipping( d->plotArea, true );
+    setClipped( d->plotArea, true );
 
     // Configure the legend.
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
-    setClipping( d->legend, true );
+    setClipped( d->legend, true );
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType( BarChartType );
@@ -407,7 +407,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 
     // Add the title to the shape
-    addChild( d->title );
+    addShape(d->title);
     QFont font = titleData()->document()->defaultFont();
     font.setPointSizeF( 12.0 );
     titleData()->document()->setDefaultFont( font );
@@ -417,7 +417,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->title->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, 0.0 ) );
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
-    setClipping( d->title, true );
+    setClipped( d->title, true );
 
     // Create the Subtitle and add it to the shape.
     d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
@@ -428,7 +428,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
         TextLabelData *dataDummy = new TextLabelData;
         d->subTitle->setUserData( dataDummy );
     }
-    addChild( d->subTitle );
+    addShape(d->subTitle);
     font = subTitleData()->document()->defaultFont();
     font.setPointSizeF( 10.0 );
     subTitleData()->document()->setDefaultFont( font );
@@ -440,7 +440,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
                                        d->title->size().height() ) );
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
-    setClipping( d->subTitle, true );
+    setClipped( d->subTitle, true );
 
     // Create the Footer and add it to the shape.
     d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
@@ -451,7 +451,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
         TextLabelData *dataDummy = new TextLabelData;
         d->footer->setUserData( dataDummy );
     }
-    addChild( d->footer );
+    addShape(d->footer);
     font = footerData()->document()->defaultFont();
     font.setPointSizeF( 10.0 );
     footerData()->document()->setDefaultFont( font );
@@ -463,7 +463,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
                                      size().height() - d->footer->size().height() ) );
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
-    setClipping( d->footer, true );
+    setClipped( d->footer, true );
 
     // Enable auto-resizing of chart labels
     foreach( KoShape *label, labels() ) {

@@ -204,7 +204,7 @@ KoShape * SvgParser::findObject(const QString &name, KoShapeContainer * group)
     if (! group)
         return 0L;
 
-    foreach(KoShape * shape, group->childShapes()) {
+    foreach(KoShape * shape, group->shapes()) {
         if (shape->name() == name)
             return shape;
 

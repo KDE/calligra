@@ -299,7 +299,7 @@ void KarbonImport::loadGroup(KoShapeContainer * parent, const KoXmlElement &elem
         cmd.redo();
     } else {
         foreach(KoShape * shape, shapes) {
-            parent->addChild(shape);
+            parent->addShape(shape);
         }
     }
 

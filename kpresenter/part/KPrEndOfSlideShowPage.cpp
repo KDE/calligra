@@ -54,7 +54,7 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     masterPage()->setBackground( new KoColorBackground( Qt::black ) );
 
     KoShapeLayer* layer = new KoShapeLayer;
-    addChild( layer );
+    addShape( layer );
 
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
@@ -68,7 +68,7 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
         cursor.insertText( i18n("End of presentation. Click to exit." ) );
         textShape->setPosition( QPointF( 10.0, 10.0 ) );
         textShape->setSize( QSizeF( pageLayout.width - 20.0, pageLayout.height - 20.0 ) );
-        layer->addChild( textShape );
+        layer->addShape( textShape );
     }
 }
 

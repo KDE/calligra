@@ -996,8 +996,8 @@ Axis::Axis( PlotArea *parent )
     }
     d->title->setSize( QSizeF( CM_TO_POINT( 3 ), CM_TO_POINT( 0.75 ) ) );
 
-    d->plotArea->parent()->addChild( d->title );
-    d->plotArea->parent()->setClipping( d->title, true );
+    d->plotArea->parent()->addShape( d->title );
+    d->plotArea->parent()->setClipped( d->title, true );
 
     connect( d->plotArea, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,        SLOT( setGapBetweenBars( int ) ) );
@@ -1012,7 +1012,7 @@ Axis::Axis( PlotArea *parent )
 Axis::~Axis()
 {
     Q_ASSERT( d->plotArea );
-    d->plotArea->parent()->KoShapeContainer::removeChild( d->title );
+    d->plotArea->parent()->KoShapeContainer::removeShape( d->title );
 
     Q_ASSERT( d->title );
     if ( d->title )

@@ -94,12 +94,12 @@ public:
     /**
      * Turns clipping of a shape on or off.
      */
-    void setClipping( const KoShape *shape, bool clipping );
+    void setClipped( const KoShape *shape, bool clipping );
 
     /**
      * @see setClipping
      */
-    bool childClipped( const KoShape *shape ) const;
+    bool isClipped( const KoShape *shape ) const;
 
     /**
      * Returns the number of shapes in this layout.
@@ -109,7 +109,7 @@ public:
     /**
      * Returns a list of shapes in this layout.
      */
-    QList<KoShape*> childShapes() const;
+    QList<KoShape*> shapes() const;
 
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.

@@ -301,7 +301,7 @@ void KarbonLayerDocker::deleteItem()
         if (m_part->document().layers().count() > selectedLayers.count()) {
             QList<KoShape*> deleteShapes;
             foreach(KoShapeLayer* layer, selectedLayers) {
-                deleteShapes += layer->childShapes();
+                deleteShapes += layer->shapes();
                 deleteShapes.append(layer);
             }
             cmd = new KoShapeDeleteCommand(m_part, deleteShapes);
@@ -427,7 +427,7 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes(
 
 void KarbonLayerDocker::addChildsRecursive(KoShapeGroup * parent, QList<KoShape*> &shapes)
 {
-    foreach(KoShape * child, parent->childShapes()) {
+    foreach(KoShape * child, parent->shapes()) {
         if (! shapes.contains(child))
             shapes.append(child);
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(child);

@@ -85,13 +85,13 @@ void Layout::remove( KoShape *shape )
     }
 }
 
-void Layout::setClipping( const KoShape *shape, bool clipping )
+void Layout::setClipped( const KoShape *shape, bool clipping )
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     m_layoutItems.value( const_cast<KoShape*>(shape) )->clipped = clipping;
 }
 
-bool Layout::childClipped( const KoShape *shape ) const
+bool Layout::isClipped( const KoShape *shape ) const
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     return m_layoutItems.value( const_cast<KoShape*>(shape) )->clipped;
@@ -102,7 +102,7 @@ int Layout::count() const
     return m_layoutItems.size();
 }
 
-QList<KoShape*> Layout::childShapes() const
+QList<KoShape*> Layout::shapes() const
 {
     return m_layoutItems.keys();
 }

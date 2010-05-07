@@ -102,6 +102,6 @@ void TablePageManager::preparePage(int page)
         const TableShape* predecessor = d->pages[page - 1];
         shape->setPosition(predecessor->position() + QPointF(0.0, predecessor->size().height()));
         d->pages.append(shape);
-        textShape->addChild(shape);
+        textShape->addShape(shape);
     }
 }

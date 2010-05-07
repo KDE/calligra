@@ -60,8 +60,8 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
     close();
     group->setZIndex(child->zIndex());
 
-    group->addChild(this);
-    group->addChild(child);
+    group->addShape(this);
+    group->addShape(child);
 }
 
 KWOutlineShape::~KWOutlineShape()

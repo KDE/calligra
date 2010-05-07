@@ -115,7 +115,7 @@ void KarbonBooleanCommand::redo()
 
     if (d->controller) {
         if (d->resultParent)
-            d->resultParent->addChild(d->resultingPath);
+            d->resultParent->addShape(d->resultingPath);
         d->controller->addShape(d->resultingPath);
     }
 
@@ -132,7 +132,7 @@ void KarbonBooleanCommand::undo()
         if (! d->resultParentCmd) {
             d->resultParent = d->resultingPath->parent();
             if (d->resultParent)
-                d->resultParent->removeChild(d->resultingPath);
+                d->resultParent->removeShape(d->resultingPath);
         }
         d->controller->removeShape(d->resultingPath);
     }

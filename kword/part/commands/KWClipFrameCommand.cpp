@@ -67,8 +67,8 @@ void KWClipFrameCommand::redo()
         } else {
             container = m_clipShapes.at(i);
         }
-        container->addChild(frame->shape());
-        container->setClipping(frame->shape(), true);
+        container->addShape(frame->shape());
+        container->setClipped(frame->shape(), true);
         frame->shape()->setPosition(QPoint());
         frame->shape()->setTransformation(QMatrix());
         foreach (KoView *view, m_document->views()) {

@@ -669,7 +669,7 @@ static void findTextShapesRecursive(KoShapeContainer* con, KoPAPageBase* page,
                                     QList<QPair<KoPAPageBase*, KoShape*> >& shapes,
                                     QList<QTextDocument*>& docs)
 {
-    foreach(KoShape* shape, con->childShapes()) {
+    foreach(KoShape* shape, con->shapes()) {
         KoTextShapeData* tsd = qobject_cast<KoTextShapeData*> (shape->userData());
         if (tsd) {
             shapes.append(qMakePair(page, shape));

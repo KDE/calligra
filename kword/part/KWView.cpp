@@ -105,8 +105,8 @@ static KWFrame *frameForShape(KoShape *shape)
     KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
     if (answer == 0) { // this may be a clipping shape containing the frame-shape
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-        if (container && container->childCount() == 1) {
-            answer = dynamic_cast<KWFrame*>(container->childShapes()[0]->applicationData());
+        if (container && container->shapeCount() == 1) {
+            answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
         }
     }
     return answer;

@@ -244,7 +244,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
             KoShape *shape = fs->frames().first()->shape();
             // may be a frame that is anchored to text, don't save those here.
             // but first check since clipped shapes look similar, but are not anchored to text
-            if (shape->parent() && !shape->parent()->childClipped(shape))
+            if (shape->parent() && !shape->parent()->isClipped(shape))
                 continue;
         }
 
@@ -494,7 +494,7 @@ void KWOdfWriter::addShapeToTree(KoShape *shape)
     // add the children of a KoShapeContainer
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape *containerShape, container->childShapes()) {
+        foreach(KoShape *containerShape, container->shapes()) {
             addShapeToTree(containerShape);
         }
     }

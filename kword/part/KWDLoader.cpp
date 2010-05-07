@@ -1181,7 +1181,7 @@ void KWDLoader::insertAnchors()
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(anchor.textShape);
         Q_ASSERT(container);
         if (! container) continue;
-        container->addChild(frame->shape());   // attach here & avoid extra layouts
+        container->addShape(frame->shape());   // attach here & avoid extra layouts
         KoTextAnchor *textAnchor = new KoTextAnchor(frame->shape());
         QTextCursor cursor(anchor.document);
         cursor.setPosition(anchor.cursorPosition);

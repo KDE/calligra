@@ -32,7 +32,7 @@ Outline::Outline(KWFrame *frame, const QMatrix &matrix)
     if (shape == 0)
         shape = frame->shape();
     QPainterPath path = shape->outline();
-    if (frame->shape()->parent() && frame->shape()->parent()->childClipped(frame->shape())) {
+    if (frame->shape()->parent() && frame->shape()->parent()->isClipped(frame->shape())) {
         path = shape->transformation().map(path);
         path = frame->shape()->parent()->outline().intersected(path);
         path = shape->transformation().inverted().map(path);

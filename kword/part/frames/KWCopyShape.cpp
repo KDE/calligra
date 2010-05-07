@@ -71,11 +71,11 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
     if (container) {
-        if (!container->childCount()) {
+        if (!container->shapeCount()) {
             return;
 	}
 
-        QList<KoShape*> sortedObjects = container->childShapes();
+        QList<KoShape*> sortedObjects = container->shapes();
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
         // Do the following to revert the absolute transformation of the

@@ -51,7 +51,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
             kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
             return false;
         }
-        sc->addChild(m_anchor->shape());
+        sc->addShape(m_anchor->shape());
         calculateKnowledgePoint();
     }
     if (m_knowledgePoint < 0)

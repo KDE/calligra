@@ -127,7 +127,7 @@ Legend::Legend( ChartShape *parent )
 
     update();
 
-    parent->addChild( this );
+    parent->addShape( this );
 
     connect ( d->kdLegend, SIGNAL( propertiesChanged() ),
               this,        SLOT( slotKdLegendChanged() ) );

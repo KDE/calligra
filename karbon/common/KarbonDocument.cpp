@@ -240,7 +240,7 @@ bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContex
             if (! defaultLayer)
                 defaultLayer = new KoShapeLayer();
 
-            defaultLayer->addChild(shape);
+            defaultLayer->addShape(shape);
         }
     }
 

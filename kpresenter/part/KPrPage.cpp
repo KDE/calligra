@@ -71,7 +71,7 @@ KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 , d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );
-    placeholders().init( 0, childShapes() );
+    placeholders().init( 0, shapes() );
 }
 
 KPrPage::~KPrPage()
@@ -108,7 +108,7 @@ void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
     QSizeF pageSize( pageLayout().width, pageLayout().height );
     KPrMasterPage * master = dynamic_cast<KPrMasterPage *>( masterPage() );
     Q_ASSERT( master );
-    placeholders().setLayout( layout, document, childShapes(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
+    placeholders().setLayout( layout, document, shapes(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
     kDebug(33001) << "master placeholders";
     master->placeholders().debug();
 }
@@ -230,7 +230,7 @@ void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext 
             kDebug(33001) << "page layout" << layoutName << layout;
         }
     }
-    placeholders().init( layout, childShapes() );
+    placeholders().init( layout, shapes() );
 
     if (element.hasAttributeNS(KoXmlNS::presentation, "use-footer-name")) {
         QString name = element.attributeNS (KoXmlNS::presentation, "use-footer-name");
