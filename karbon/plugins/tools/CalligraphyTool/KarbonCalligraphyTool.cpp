@@ -146,7 +146,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
         canvas()->addCommand(cmd);
         canvas()->updateCanvas(m_shape->boundingRect());
     } else {
-        // TODO: when may this happen????
+        // don't leak shape when command could not be created
         delete m_shape;
     }
 
