@@ -245,10 +245,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     layout->setMargin(0);
     layout->addWidget(d->canvasController, 1, 1);
 
-    if (shell()) {
-        KoToolManager::instance()->addController(d->canvasController);
-        KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-    }
+    KoToolManager::instance()->addController(d->canvasController);
+    KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
 
     initActions();
 
@@ -1082,6 +1080,8 @@ void KarbonView::pageLayout()
 
 void KarbonView::selectionChanged()
 {
+    if (!shell())
+        return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
     int count = selection->selectedShapes(KoFlake::FullSelection).count();
 
@@ -1159,7 +1159,8 @@ void KarbonView::createLayersTabDock()
 
 void KarbonView::updateReadWrite(bool readwrite)
 {
-    Q_UNUSED(readwrite);
+    canvasWidget()->setReadWrite(readwrite);
+    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
 }
 
 void KarbonView::updateUnit(const KoUnit &unit)
