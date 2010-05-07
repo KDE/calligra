@@ -358,6 +358,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleWindow2(static_cast<Window2Record*>(record));
     else if (type == PasswordRecord::id)
         handlePassword(static_cast<PasswordRecord*>(record));
+    else if (type == BkHimRecord::id)
+        handleBkHim(static_cast<BkHimRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -1057,6 +1059,11 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
     std::cout << ">>>> " << sPasswd.data() << std::endl; //0x218490a
 #endif
 
+}
+
+void WorksheetSubStreamHandler::handleBkHim(BkHimRecord* record)
+{
+    
 }
 
 } // namespace Swinder

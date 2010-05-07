@@ -71,6 +71,7 @@ class ZoomLevelRecord;
 class MsoDrawingRecord;
 class Window2Record;
 class PasswordRecord;
+class BkHimRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
@@ -131,6 +132,7 @@ private:
     void handleMsoDrawing(MsoDrawingRecord* record);
     void handleWindow2(Window2Record* record);
     void handlePassword(PasswordRecord* record);
+    void handleBkHim(BkHimRecord* record);
 
     class Private;
     Private * const d;
