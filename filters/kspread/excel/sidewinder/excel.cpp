@@ -2470,6 +2470,106 @@ void XFRecord::dump(std::ostream& out) const
     << patternBackColor() << std::endl;
 }
 
+// ========== BkHimRecord ==========
+
+const unsigned BkHimRecord::id = 0x00e9;
+
+class BkHimRecord::Private
+{
+public:
+    Format format;
+    UString imagePath;
+};
+
+BkHimRecord::BkHimRecord(Workbook *book)
+    : Record(book), d(new Private)
+{
+}
+
+BkHimRecord::~BkHimRecord()
+{
+    delete d;
+}
+
+BkHimRecord::BkHimRecord( const BkHimRecord& record )
+    : Record(record), d(new Private)
+{
+    *this = record;
+}
+
+BkHimRecord& BkHimRecord::operator=( const BkHimRecord& record )
+{
+    *d = *record.d;
+    return *this;
+}
+
+UString BkHimRecord::formatToString(Format format)
+{
+    switch (format) {
+        case WindowsBitMap: return UString("WindowsBitMap");
+        case NativeFormat: return UString("NativeFormat");
+        default: return UString("Unknown: ") + UString::from(format);
+    }
+}
+
+BkHimRecord::Format BkHimRecord::format() const
+{
+    return d->format;
+}
+
+void BkHimRecord::setFormat(Format format )
+{
+    d->format = format;
+}
+
+UString BkHimRecord::imagePath() const
+{
+    return d->imagePath;
+}
+
+void BkHimRecord::setImagePath(UString imagePath )
+{
+    d->imagePath = imagePath;
+}
+
+void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+{
+    unsigned curOffset;
+    if (size < 8) {
+        setIsValid(false);
+        return;
+    }
+    setFormat(static_cast<Format>(readU16(data)));
+
+    unsigned imageSize = readU32(data + 4);
+    curOffset = 8;
+
+    static int counter = 1; //we need unique file names
+    const UString filename = UString("Pictures/sheetBackground").append(UString::from(counter++));
+    setImagePath(filename);
+
+    Store *store = m_workbook->store();
+    Q_ASSERT(store);
+    if(store->open(filename.cstring().c_str())) {
+        store->write((const char*)(data + curOffset), imageSize);
+        store->close();
+    } else {
+        std::cerr << "BkHimRecord: Failed to open file=" << filename << std::endl;
+    }
+}
+
+void BkHimRecord::dump( std::ostream& out ) const
+{
+    out << "BkHim" << std::endl;
+    out << "             Format : " << formatToString(format()) << std::endl;
+    out << "          ImagePath : " << imagePath() << std::endl;
+}
+
+static Record* createBkHimRecord(Workbook *book)
+{
+    return new BkHimRecord(book);
+}
+
 //=============================================
 //          ExcelReader
 //=============================================
@@ -2605,6 +2705,7 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(TxORecord::id, createTxORecord);
     RecordRegistry::registerRecordClass(MsoDrawingRecord::id, createRecordMsoDrawingRecord);
     RecordRegistry::registerRecordClass(MsoDrawingGroupRecord::id, createMsoDrawingGroupRecord);
+    RecordRegistry::registerRecordClass(BkHimRecord::id, createBkHimRecord);
 }
 
 void printEntries(POLE::Storage &storage, const std::string path = "/", int level = 0)
