@@ -300,7 +300,7 @@ void KarbonLayerModel::lockRecursively(KoShapeContainer *container, bool lock)
         container->setSelectable(!lock);
     }
 
-    foreach(KoShape *shape, container->childShapes()) {
+    foreach(KoShape *shape, container->shapes()) {
         KoShapeContainer * shapeContainer = dynamic_cast<KoShapeContainer*>(shape);
         if (shapeContainer) {
             lockRecursively(shapeContainer, lock);
