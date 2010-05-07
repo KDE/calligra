@@ -278,10 +278,40 @@ void KarbonLayerModel::setProperties(KoShape* shape, const PropertyList &propert
 
     shape->setVisible(newVisibleState);
     shape->setGeometryProtected(newLockedState);
-    shape->setSelectable(!newLockedState);
+
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container)
+        lockRecursively(container, newLockedState);
+    else
+        shape->setSelectable(!newLockedState);
 
     if ((oldVisibleState != shape->isVisible()) || (oldLockedState != shape->isGeometryProtected()))
         shape->update();
+}
+
+void KarbonLayerModel::lockRecursively(KoShapeContainer *container, bool lock)
+{
+    if (!container)
+       return;
+
+    if (!lock) {
+        container->setSelectable(!container->isGeometryProtected());
+    } else {
+        container->setSelectable(!lock);
+    }
+
+    foreach(KoShape *shape, container->childShapes()) {
+        KoShapeContainer * shapeContainer = dynamic_cast<KoShapeContainer*>(shape);
+        if (shapeContainer) {
+            lockRecursively(shapeContainer, lock);
+        } else {
+            if (!lock) {
+                shape->setSelectable(!shape->isGeometryProtected());
+            } else {
+                shape->setSelectable(!lock);
+            }
+        }
+    }
 }
 
 QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize) const
