@@ -180,7 +180,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
         m_importData->setEnabled( false );
     }
 
-    m_canvas->shapeManager()->add( part->chart() );
+    m_canvas->shapeManager()->addShape( part->chart() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
     m_canvasController->show();

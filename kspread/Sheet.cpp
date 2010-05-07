@@ -347,7 +347,7 @@ void Sheet::addShape(KoShape* shape)
         for (int i = 0; i < views.count(); ++i) {
             View* const view = static_cast<View*>(views[i]);
             if (view->activeSheet() == this) {
-                view->canvasWidget()->shapeManager()->add(shape);
+                view->canvasWidget()->shapeManager()->addShape(shape);
             }
         }
     }

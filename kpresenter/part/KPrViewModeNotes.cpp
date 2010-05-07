@@ -206,7 +206,7 @@ void KPrViewModeNotes::addShape( KoShape *shape )
     if ( notes ) {
         KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
         if ( notes == activePage->pageNotes() ) {
-            m_view->kopaCanvas()->shapeManager()->add( shape );
+            m_view->kopaCanvas()->shapeManager()->addShape( shape );
         }
     }
 }

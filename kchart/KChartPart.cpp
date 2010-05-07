@@ -316,7 +316,7 @@ void KChartPart::addShape( KoShape *shape )
 {
     foreach( KoView* view, views() ) {
         KChartCanvas  *canvas = ( ( KChartView* )view )->canvasWidget();
-        canvas->shapeManager()->add( shape );
+        canvas->shapeManager()->addShape( shape );
     }
 }
 

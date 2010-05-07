@@ -465,7 +465,7 @@ void KarbonPart::addShape(KoShape* shape)
 
         foreach(KoView *view, views()) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-            canvas->shapeManager()->add(shape);
+            canvas->shapeManager()->addShape(shape);
         }
     }
 
