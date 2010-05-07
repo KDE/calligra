@@ -247,6 +247,49 @@ bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContex
     if (defaultLayer)
         insertLayer(defaultLayer);
 
+    KoOdfStylesReader & styleReader = context.odfLoadingContext().stylesReader();
+    QHash<QString, KoXmlElement*> masterPages = styleReader.masterPages();
+
+    KoXmlElement * master = 0;
+    if( masterPages.contains( "Standard" ) )
+        master = masterPages.value( "Standard" );
+    else if( masterPages.contains( "Default" ) )
+        master = masterPages.value( "Default" );
+    else if( ! masterPages.empty() )
+        master = masterPages.begin().value();
+
+    if (master) {
+        context.odfLoadingContext().setUseStylesAutoStyles( true );
+
+        QList<KoShape*> masterPageShapes;
+        KoXmlElement child;
+        forEachElement(child, (*master)) {
+            kDebug(38000) <<"loading master page shape" << child.localName();
+            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
+            if( shape )
+                masterPageShapes.append( shape );
+        }
+
+        KoShapeLayer * masterPageLayer = 0;
+        // add all toplevel shapes to the master page layer
+        foreach(KoShape * shape, masterPageShapes) {
+            d->objects.append( shape );
+            if(!shape->parent()) {
+                if( ! masterPageLayer ) {
+                    masterPageLayer = new KoShapeLayer();
+                    masterPageLayer->setName(i18n("Master Page"));
+                }
+
+                masterPageLayer->addChild( shape );
+            }
+        }
+
+        if( masterPageLayer )
+            insertLayer( masterPageLayer );
+
+        context.odfLoadingContext().setUseStylesAutoStyles( false );
+    }
+
     return true;
 }
 
