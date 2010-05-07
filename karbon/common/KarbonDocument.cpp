@@ -280,7 +280,7 @@ bool KarbonDocument::loadOasis(const KoXmlElement &element, KoShapeLoadingContex
                     masterPageLayer->setName(i18n("Master Page"));
                 }
 
-                masterPageLayer->addChild( shape );
+                masterPageLayer->addShape(shape);
             }
         }
 
