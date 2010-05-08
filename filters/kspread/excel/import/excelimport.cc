@@ -199,6 +199,7 @@ public:
     void processCharts(KoXmlWriter* manifestWriter);
 
     void createDefaultColumnStyle( Sheet* sheet );
+    void processSheetBackground(Sheet* sheet, KoGenStyle& style);
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
 };
@@ -788,6 +789,8 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
 
     style.addProperty("table:display", sheet->visible() ? "true" : "false");
     style.addProperty("table:writing-mode", "lr-tb");
+
+    processSheetBackground(sheet, style);
 
     QString styleName = styles->insert(style, "ta");
     sheetStyles.append(styleName);
@@ -1861,3 +1864,24 @@ void ExcelImport::Private::createDefaultColumnStyle( Sheet* sheet ) {
     const QString styleName = styles->insert(style, "co");
     defaultColumnStyles.append( styleName );
 }
+
+void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& style)
+{
+    if( sheet->backgroundImage().isEmpty() )
+        return;
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buffer);
+
+    writer.startElement("style:background-image");
+    writer.addAttribute("xlink:href", sheet->backgroundImage().ascii());
+    writer.addAttribute("xlink:type", "simple");
+    writer.addAttribute("xlink:show", "embed");
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("style:repeat", "true");
+    writer.endElement();
+
+    style.addChildElement("style:background-image", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
+}
+
