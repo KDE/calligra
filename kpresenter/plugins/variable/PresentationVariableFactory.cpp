@@ -40,7 +40,7 @@ PresentationVariableFactory::PresentationVariableFactory()
     KoProperties *props = new KoProperties();
     props->setProperty("vartype", 1);
     var1.properties = props;
-    addTemplate(var1);
+    //addTemplate(var1);
 
     KoVariableTemplate var2;
     var2.id = "Footer";
@@ -48,8 +48,7 @@ PresentationVariableFactory::PresentationVariableFactory()
     props = new KoProperties();
     props->setProperty("vartype", 2);
     var2.properties = props;
-    addTemplate(var2);
-
+    //addTemplate(var2);
 
     QStringList elementNames;
     elementNames << "footer" << "header" << "date-time";
