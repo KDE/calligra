@@ -43,7 +43,8 @@ TODO Form editor:
  - fix syncing form geometry with properties in the propeditor
  - show Spring element and autofield widget for 2.3
  - disable 'assign action' when no button is selected
-  
+ - disable mouse-over highlighting effect for buttons and check boxes
+ 
 TODO: setting "enabled" property to false does not work
 TODO: inserting tab widget does not work
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
@@ -70,6 +71,8 @@ KexiDB
 *edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
 Reports
 *batch mode: generates output from data and design or shows report in data mode with minimal gui; add appropriate startup options and alter main window
+*add support for mysql embedded
+*fix KDE's FindMySQL.cmake to support mysql embedded;see https://bugs.kde.org/show_bug.cgi?id=234941 and http://gitorious.org/amarok/amarok/blobs/history/master/cmake/modules/FindMySQLAmarok.cmake
 
 Forms:
 TODO: crashes on app exit:
@@ -101,13 +104,33 @@ select ob.o_id, o_sub_id, o_type, o_name, substr(o_data, 0, 40) from kexi__objec
 Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
+2010-05-08
+Table View
+*Optimize display of scaled image entries in table grid by caching
+BUG:234347
+TODO: optimize: keep the checksum for pixmap in context of data itself
+TODO: optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
 
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-05-04
+Forms
+*do not display grid on ContainerWidget (e.g. inside of tab widget) becasue it's already done at higher level
+TODO: instead of this skip displaying grid at higher level
+
+2010-05-03
+Forms
+*fix inserting group boxes, they now properly act as containers
+*avoid loading widgets with the same name more than once
+*tab widget properly acts as container now
+TODO: fix adding/removing tabs
 
 2010-05-02
 Reports
 *mising or poorly selected icons fixed: barcode, checkbox (copies of the newest oxygen), label, line (copies from kexi forms)
 *added missing i18n
+Forms
+*Fix default size of group box
 
 2010-04-26
 KexiDB
