@@ -89,7 +89,7 @@ void test( BasicElement* element )
 
     load( element, input );
     QCOMPARE( element->childElements().count() , output );
-//    QCOMPARE( count( element->childElements() ), outputRecursive );
+    QCOMPARE( count( element->childElements() ), outputRecursive );
 
     delete element;
 }
