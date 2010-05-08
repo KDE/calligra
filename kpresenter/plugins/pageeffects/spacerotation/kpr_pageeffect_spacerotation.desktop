@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Space Rotation
+Name[pt]=Rotação do Espaço
+Name[sv]=Rymdrotation
+Name[uk]=Обертання у просторі
 Name[x-test]=xxSpace Rotationxx
 Comment=Space Rotation Page Effect
+Comment[pt]=Efeito da Página de Rotação do Espaço
+Comment[sv]=Sideffekt med rymdrotation
+Comment[uk]=Ефект обертання сторінки у просторі
 Comment[x-test]=xxSpace Rotation Page Effectxx
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

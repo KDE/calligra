@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Swap Effect
+Name[pt]=Efeito de Troca
+Name[sv]=Växlingseffekt
+Name[uk]=Ефект перегортання
 Name[x-test]=xxSwap Effectxx
 Comment=Swap Page Effect
+Comment[pt]=Efeito da Página de Troca
+Comment[sv]=Växlingssideffekt
+Comment[uk]=Ефект перегортання сторінки
 Comment[x-test]=xxSwap Page Effectxx
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
