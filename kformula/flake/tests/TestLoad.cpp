@@ -77,7 +77,7 @@ static void addRow( const QString& input, int output )
 static void addRow( const QString& input, int output, int outputRecursive )
 {
     static int counter = 0;
-    QString name = "LoadRecursive " + QString::number( ++counter ); 
+    QString name = "LoadRecursive " + QString::number( ++counter );
     QTest::newRow( name.toLatin1() ) << input << output << outputRecursive;
 }
 
@@ -90,7 +90,7 @@ void test( BasicElement* element )
     load( element, input );
     QCOMPARE( element->childElements().count() , output );
 //    QCOMPARE( count( element->childElements() ), outputRecursive );
-    
+
     delete element;
 }
 
@@ -280,7 +280,7 @@ void TestLoad::rowElement_data()
             " <mo> ) </mo>"
             "</mrow>", 3, 6 );
 
-    
+
 }
 
 void TestLoad::fracElement_data()
@@ -806,12 +806,12 @@ void TestLoad::trElement_data()
             "  <mtext> (2.1) </mtext>"
             " </mtd>"
             "</mtr>", 2, 15 );
-    
+
     // Be sure attributes don't break anything
     addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
     addRow( "<mtr groupalign=\"left\"><mi>x</mi></mtr>", 1, 2 );
 }
-/*    
+/*
 void TestLoad::labeledtrElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -847,12 +847,12 @@ void TestLoad::labeledtrElement_data()
             "  </mrow>"
             " </mtd>"
             "</mlabeledtr>", 2, 15 );
-    
+
     // Be sure attributes don't break anything
     addRow( "<mlabeledtr rowalign=\"top\"><mi>x</mi></mlabeledtr>", 1, 2 );
     addRow( "<mlabeledtr groupalign=\"left\"><mi>x</mi></mlabeledtr>", 1, 2 );
 }
-*/    
+*/
 void TestLoad::tdElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -869,7 +869,7 @@ void TestLoad::tdElement_data()
     addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 1 );
     addRow( "<mtd groupalign=\"left\"><mi>x</mi></mtd>", 1, 1 );
 }
-    
+
 void TestLoad::actionElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -882,7 +882,7 @@ void TestLoad::actionElement_data()
     addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 2 );
     addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 1 );
 }
-        
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
