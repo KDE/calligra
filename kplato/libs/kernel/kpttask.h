@@ -263,6 +263,9 @@ public:
     explicit WorkPackage( const WorkPackage &wp );
     virtual ~WorkPackage();
 
+    /// Clear all workpackage and completion data
+    void clear();
+
     Task *parentTask() const { return m_task; }
     void setParentTask( Task *task ) { m_task = task; }
 

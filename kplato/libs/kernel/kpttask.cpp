@@ -2723,6 +2723,10 @@ void Completion::copy( const Completion &p )
     m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
     m_entrymode = p.entrymode();
+    qDeleteAll( m_entries );
+    m_entries.clear();
+    qDeleteAll( m_usedEffort );
+    m_usedEffort.clear();
     foreach ( const QDate &d, p.entries().keys() ) {
         addEntry( d, new Entry( *(p.entries()[ d ]) ) );
     }
@@ -3435,6 +3439,18 @@ WorkPackage::WorkPackage( const WorkPackage &wp )
 
 WorkPackage::~WorkPackage()
 {
+}
+
+void WorkPackage::clear()
+{
+    m_manager = 0;
+    m_completion = Completion();
+    m_completion.setNode( m_task );
+    m_ownerName = QString();
+    m_ownerId = QString();
+    m_transmitionStatus = TS_None;
+    m_transmitionTime = DateTime();
+    m_log.clear();
 }
 
 bool WorkPackage::loadXML(KoXmlElement &element, XMLLoaderObject &status )
