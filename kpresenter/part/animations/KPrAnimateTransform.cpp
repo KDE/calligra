@@ -20,12 +20,12 @@
 #include "KPrAnimateTransform.h"
 
 #include "KPrAnimationCache.h"
-
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
-KPrAnimateTransform::KPrAnimateTransform()
+KPrAnimateTransform::KPrAnimateTransform(KPrShapeAnimation *shapeAnimation)
+: KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -45,7 +45,11 @@ void KPrAnimateTransform::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimateTransform::init(KPrAnimationCache *animationCache) const
+void KPrAnimateTransform::init(KPrAnimationCache *animationCache, int step) const
 {
     Q_UNUSED(animationCache);
+}
+
+void KPrAnimateTransform::updateCurrentTime(int currentTime)
+{
 }

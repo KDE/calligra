@@ -33,7 +33,7 @@ class KoTextBlockData;
  * It relies on the Animation Framework to update it's state.
  *
  * It provides a central place for painters of text and shapes to get information
- * about any needed attributes (position, visibillity etc) of the animated objects
+ * about any needed attributes (position, visibility etc) of the animated objects
  * (shapes or paragraphs)
  **/
 class KPrAnimationCache
@@ -113,9 +113,56 @@ public:
      */
     QVariant value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue);
 
+    // 1. Init cache with values that take effect even before the animation is started
+    //    This information should be kept in the first stack entry
+    //    I think this is only needed for visibility as the other take only effect in the presentation step
+    // 2. For the animation on 1. step
+    //    copy falues form previous step that are still there.
+    //    update values with the values from the animations of that current step
+    //    when all is finished start with the next step
+    //    do the same for each time the effect is triggert until all effects in this step are finished.
+    // go on with step 2 until there are no more steps left
+
+    // start a new step
+    // copy over all what is at the end of the last step
+
+    // if we go backward in a presentation we need to setup all steps
+    // if we go forward we can do it while we are at it but maybe it would be better to initilialize also
+    // everything right away.
+
+    // initialize step with values that will be there at the end of the step
+    // step 0 is the value the object has before any animation is started
+    // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
+    // e.g. the object has been moved to its original position, one the animation is done the value is removed
+    void init(int step, KoShape *shape, const QString &id, const QVariant &value, const QVariant &backValue);
+
+    // update step value by values
+    // will do different things depending on type of QVariant
+    // e.g. for QMatrix it will add the value to the matrix
+    // the default action when there is no special handling is to copy the value over
+    // if QVariant is emty it will remove the id from the step
+    // the step in update must match the step of startStep
+    // this will update the values used for the animation.
+    // maybe have an internal method to also use it for updating the stack while init
+    void update(int step, KoShape *shape, const QString &id, const QVariant &value);
+
+    // trigger copying of data from the last step to the current one
+    // these values will be updated by update.
+    // the step in update must match the step of startStep
+    void startStep(int step);
+
+    QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue);
+
+    bool hasValue(int step, KoShape *shape, const QString &id);
+
+    // ending and animation will just activate the values of the step
 private:
     QMap<KoShape *, QMap<QString, QVariant> > m_shapeValues;
     QMap<KoTextBlockData *, QMap<QString, QVariant> > m_textBlockDataValues;
+
+    QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
+    QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
+    int stackPos;
 };
 
 

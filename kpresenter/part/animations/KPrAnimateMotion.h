@@ -25,12 +25,15 @@
 class KPrAnimateMotion : public KPrAnimationBase
 {
 public:
-    KPrAnimateMotion();
+    KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateMotion();
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext &context ) const;
-    virtual void init(KPrAnimationCache *animationCache) const;
+    virtual void init(KPrAnimationCache *animationCache, int step) const;
+
+protected:
+    virtual void updateCurrentTime(int currentTime);
 };
 
 #endif // KPRANIMATEMOTION_H

@@ -25,12 +25,15 @@
 class KPrAnimateColor : public KPrAnimationBase
 {
 public:
-    KPrAnimateColor();
+    KPrAnimateColor(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateColor();
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext &context ) const;
-    virtual void init(KPrAnimationCache *animationCache) const;
+    virtual void init(KPrAnimationCache *animationCache, int step) const;
+
+protected:
+    virtual void updateCurrentTime(int currentTime);
 };
 
 #endif /* KPRANIMATECOLOR_H */

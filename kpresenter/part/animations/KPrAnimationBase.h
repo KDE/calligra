@@ -20,17 +20,20 @@
 #ifndef KPRANIMATIONBASE_H
 #define KPRANIMATIONBASE_H
 
+#include <QAbstractAnimation>
+
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShape;
 class KoTextBlockData;
 class KPrAnimationCache;
+class KPrShapeAnimation;
 
-class KPrAnimationBase
+class KPrAnimationBase : public QAbstractAnimation
 {
 public:
-    KPrAnimationBase();
+    KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationBase();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
@@ -39,13 +42,33 @@ public:
     /**
      * initialize the case and set the cache onto each of the animated objects (textBlocks and shapes)
      */
-    virtual void init(KPrAnimationCache *animationCache) const = 0;
+    virtual void init(KPrAnimationCache *animationCache, int step) const = 0;
+
+#if XXX
+    // how do I know which step we are in? only animations for the current step should do something
+    // in the cache we should set the values for the current step freshly again and again
+    // stuff that is still in the cache when a step is done should be kept there. if it is no longer relevant it should#
+    // be no longer in the step of the cache
+    // 1. Init cache with values that take effect even before the animation is started
+    //    This information should be kept in the first stack entry
+    //    I think this is only needed for visibility as the other take only effect in the presentation step
+    // 2. For the animation on 1. step 
+    //    copy falues form previous step that are still there.
+    //    update values with the values from the animations of that current step
+    //    when all is finished start with the next step
+    //    do the same for each time the effect is triggert until all effects in this step are finished.
+    // go on with step 2 until there are no more steps left
+    virtual void updateCache(int currentTime)
+#endif
+
+    virtual int duration() const;
 
 protected:
+    virtual void updateCurrentTime(int currentTime) = 0;
+
+    KPrShapeAnimation *m_shapeAnimation; // we could also use the group() but that would mean we need to cast all the time
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
-    KoShape *m_shape;
-    KoTextBlockData *m_textBlockData;
 };
 
 #endif /* KPRANIMATIONBASE_H */

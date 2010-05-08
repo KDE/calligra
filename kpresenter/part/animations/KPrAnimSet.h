@@ -25,12 +25,15 @@
 class KPrAnimSet : public KPrAnimationBase
 {
 public:
-    KPrAnimSet();
+    KPrAnimSet(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimSet();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache) const;
+    virtual void init(KPrAnimationCache *animationCache, int step) const;
+
+protected:
+    virtual void updateCurrentTime(int currentTime);
 
 private:
     bool m_visible;

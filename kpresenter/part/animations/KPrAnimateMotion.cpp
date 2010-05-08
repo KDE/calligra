@@ -25,7 +25,8 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
-KPrAnimateMotion::KPrAnimateMotion()
+KPrAnimateMotion::KPrAnimateMotion(KPrShapeAnimation *shapeAnimation)
+: KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -46,7 +47,11 @@ void KPrAnimateMotion::saveOdf( KoShapeSavingContext &context ) const
 }
 
 
-void KPrAnimateMotion::init(KPrAnimationCache *animationCache) const
+void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step) const
 {
     Q_UNUSED(animationCache);
+}
+
+void KPrAnimateMotion::updateCurrentTime(int currentTime)
+{
 }

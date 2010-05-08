@@ -31,7 +31,8 @@
 
 #include <kdebug.h>
 
-KPrAnimSet::KPrAnimSet()
+KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
+: KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -42,38 +43,17 @@ KPrAnimSet::~KPrAnimSet()
 bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     bool retval = false;
-    QString targetElement(element.attributeNS(KoXmlNS::smil, "targetElement", QString()));
-    if (!targetElement.isEmpty()) {
-        bool isText = element.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text";
-        if(isText) {
-            QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
-            m_shape = pair.first;
-            m_textBlockData = pair.second.value<KoTextBlockData *>();
-            KPrTextBlockPaintStrategy *paintStrategy = new KPrTextBlockPaintStrategy(m_textBlockData);
-            m_textBlockData->setPaintStrategy(paintStrategy);
 
-        } else {
-            m_shape = context.shapeById(targetElement);
-        }
-
-        if (m_shape) {
-            QString attributeName(element.attributeNS(KoXmlNS::smil, "attributeName", QString()));
-            if (attributeName == "visibility") {
-                m_visible = element.attributeNS(KoXmlNS::smil, "to", "hidden") == "visible";
-                retval = true;
-                kDebug(33003) << "animate visibility for shape with id" << targetElement << m_visible;
-            }
-            else {
-                kWarning(33003) << "attributeName" << attributeName << "not yet supported";
-            }
-        }
-        else {
-            kWarning(33003) << "shape not found for id" << targetElement;
-        }
+    QString attributeName(element.attributeNS(KoXmlNS::smil, "attributeName", QString()));
+    if (attributeName == "visibility") {
+        m_visible = element.attributeNS(KoXmlNS::smil, "to", "hidden") == "visible";
+        retval = true;
+        kDebug(33003) << "animate visibility for shape with id" << m_visible;
     }
     else {
-        kWarning(33003) << "target element not found";
+        kWarning(33003) << "attributeName" << attributeName << "not yet supported";
     }
+
     return retval;
 }
 
@@ -83,16 +63,25 @@ void KPrAnimSet::saveOdf(KoShapeSavingContext &context) const
 }
 
 
-void KPrAnimSet::init(KPrAnimationCache *animationCache) const
+void KPrAnimSet::init(KPrAnimationCache *animationCache, int step) const
 {
+#if 0
+    QPair<KoShape *, KoTextBlockData *> m_shapeAnimation->animationShape() const;
+
     if (m_textBlockData) {
         dynamic_cast<KPrTextBlockPaintStrategy*>(m_textBlockData->paintStrategy())->setAnimationCache(animationCache);
         if (!animationCache->hasValue(m_textBlockData, "visibility")) {
             animationCache->setValue(m_textBlockData, "visibility", !m_visible);
         }
-    } else {
+    }
+    else {
         if (!animationCache->hasValue(m_shape, "visibility")) {
             animationCache->setValue(m_shape, "visibility", !m_visible);
         }
     }
+#endif
+}
+
+void KPrAnimSet::updateCurrentTime(int currentTime)
+{
 }

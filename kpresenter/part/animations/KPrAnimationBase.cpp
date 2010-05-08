@@ -19,14 +19,17 @@
 
 #include "KPrAnimationBase.h"
 
-KPrAnimationBase::KPrAnimationBase()
-: m_begin(0)
-, m_duration(0)
-, m_shape(0)
-, m_textBlockData(0)
+KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
+: m_shapeAnimation(shapeAnimation)
+, m_begin(0)
 {
 }
 
 KPrAnimationBase::~KPrAnimationBase()
 {
+}
+
+int KPrAnimationBase::duration() const
+{
+    return m_duration;
 }

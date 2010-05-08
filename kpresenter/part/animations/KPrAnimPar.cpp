@@ -51,9 +51,9 @@ void KPrAnimPar::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimPar::init(KPrAnimationCache *animationCache) const
+void KPrAnimPar::init(KPrAnimationCache *animationCache, int step) const
 {
     foreach(KPrAnimationBase *animation, m_animations) {
-        animation->init(animationCache);
+        animation->init(animationCache, step);
     }
 }

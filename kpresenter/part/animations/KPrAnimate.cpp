@@ -20,12 +20,21 @@
 #include "KPrAnimate.h"
 
 #include "KPrAnimationCache.h"
-
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoTextBlockData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
-KPrAnimate::KPrAnimate()
+#include "KPrAnimationCache.h"
+
+#include <kdebug.h>
+
+KPrAnimate::KPrAnimate(KPrShapeAnimation *shapeAnimation)
+: KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -35,9 +44,44 @@ KPrAnimate::~KPrAnimate()
 
 bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-    return true;
+    bool retval = false;
+#if 0
+    QString targetElement(element.attributeNS(KoXmlNS::smil, "targetElement", QString()));
+    if (!targetElement.isEmpty()) {
+        bool isText = element.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text";
+        if(isText) {
+            QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
+            m_shape = pair.first;
+            m_textBlockData = pair.second.value<KoTextBlockData *>();
+        } else {
+            m_shape = context.shapeById(targetElement);
+        }
+
+        if (m_shape) {
+            QString attributeName(element.attributeNS(KoXmlNS::smil, "attributeName", QString()));
+            if (attributeName == "x") {
+                QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
+                QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
+                kDebug(33003) << "animate x for shape with id" << targetElement << from << to;
+            }
+            else if (attributeName == "y") {
+                QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
+                QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
+                kDebug(33003) << "animate y for shape with id" << targetElement << from << to;
+            }
+            else {
+                kWarning(33003) << "attributeName" << attributeName << "not yet supported";
+            }
+        }
+        else {
+            kWarning(33003) << "shape not found for id" << targetElement;
+        }
+    }
+    else {
+        kWarning(33003) << "target element not found";
+    }
+#endif
+    return retval;
 }
 
 void KPrAnimate::saveOdf(KoShapeSavingContext &context) const
@@ -45,7 +89,11 @@ void KPrAnimate::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimate::init(KPrAnimationCache *animationCache) const
+void KPrAnimate::init(KPrAnimationCache *animationCache, int step) const
 {
     Q_UNUSED(animationCache);
+}
+
+void KPrAnimate::updateCurrentTime(int currentTime)
+{
 }

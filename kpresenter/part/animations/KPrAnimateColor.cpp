@@ -21,12 +21,12 @@
 #include "KPrAnimateColor.h"
 
 #include "KPrAnimationCache.h"
-
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 
-KPrAnimateColor::KPrAnimateColor()
+KPrAnimateColor::KPrAnimateColor(KPrShapeAnimation *shapeAnimation)
+: KPrAnimationBase(shapeAnimation)
 {
 }
 
@@ -46,7 +46,11 @@ void KPrAnimateColor::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimateColor::init(KPrAnimationCache *animationCache) const
+void KPrAnimateColor::init(KPrAnimationCache *animationCache, int step) const
 {
     Q_UNUSED(animationCache);
+}
+
+void KPrAnimateColor::updateCurrentTime(int currentTime)
+{
 }

@@ -31,36 +31,36 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 
-KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context,
+                                                               KPrShapeAnimation *shapeAnimation)
 {
     KPrAnimationBase * animation = 0;
     if (element.namespaceURI() == KoXmlNS::anim) {
-        if (element.tagName() == "par") {
-            animation = new KPrAnimPar();
-        }
-        else if (element.tagName() == "seq") {
-            animation = new KPrAnimSeq();
-        }
-        else if (element.tagName() == "set") {
-            animation = new KPrAnimSet();
+        if (element.tagName() == "set") {
+            animation = new KPrAnimSet(shapeAnimation);
         }
         else if (element.tagName() == "animate") {
-            animation = new KPrAnimate();
+            animation = new KPrAnimate(shapeAnimation);
         }
         else if (element.tagName() == "animateMotion") {
-            animation = new KPrAnimateMotion();
+            animation = new KPrAnimateMotion(shapeAnimation);
         }
         else if (element.tagName() == "animateColor") {
-            animation = new KPrAnimateColor();
+            animation = new KPrAnimateColor(shapeAnimation);
         }
         else if (element.tagName() == "animationTransform") {
-            animation = new KPrAnimateTransform();
+            animation = new KPrAnimateTransform(shapeAnimation);
         }
         else if (element.tagName() == "transitionFilter") {
         }
 
         if (animation) {
-            animation->loadOdf(element, context);
+            if (!animation->loadOdf(element, context)) {
+                delete animation;
+                animation = 0;
+            }
+            else {
+            }
         }
         else {
         }
