@@ -52,6 +52,11 @@
 #include <widget/utils/kexidropdownbutton.h>
 #include <widget/utils/kexicontextmenuutils.h>
 
+struct PixmapAndPos {
+    QPixmap pixmap;
+    QPoint pos;
+};
+
 //! @internal
 class KexiBlobTableEdit::Private
 {
@@ -68,6 +73,7 @@ public:
     KexiImageContextMenu *menu;
     bool readOnly; //!< cached for slotUpdateActionsAvailabilityRequested()
     bool setValueInternalEnabled; //!< used to disable KexiBlobTableEdit::setValueInternal()
+    QCache<qulonglong, PixmapAndPos> cachedPixmaps;
 };
 
 //======================================================
@@ -210,14 +216,40 @@ KexiBlobTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
     Q_UNUSED(txt);
     Q_UNUSED(align);
 
-//! @todo optimize: load to m_pixmap, downsize
-    QPixmap pixmap;
+    QPoint pos;
+    PixmapAndPos *pp = 0;
     x = 0;
     w -= 1; //a place for border
     h -= 1; //a place for border
-    if (p && val.canConvert(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
+    if (p) {
+        const QByteArray array(val.toByteArray());
+//! @todo optimize: keep this checksum in context of data
+//! @todo optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
+        // the key is unique for this tuple: (checksum, w, h)
+        qulonglong sum((((qulonglong(qChecksum(array.constData(), array.length())) << 32) + w) << 16) + h);
+        pp = d->cachedPixmaps.object(sum);
+        if (!pp) {
+            QPixmap pixmap;
+            if (val.canConvert(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
+#if 0
         KexiUtils::drawPixmap(*p, KexiUtils::WidgetMargins()/*lineWidth*/, QRect(x, y_offset, w, h),
                               pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
+#endif
+                QPoint pos;
+                pixmap = KexiUtils::scaledPixmap(KexiUtils::WidgetMargins()/*lineWidth*/, QRect(x, y_offset, w, h),
+                             pixmap, pos, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/,
+                             Qt::SmoothTransformation);
+                if (!pixmap.isNull()) {
+                    pp = new PixmapAndPos;
+                    pp->pixmap = pixmap;
+                    pp->pos = pos;
+                    d->cachedPixmaps.insert(sum, pp);
+                }
+            }
+        }
+        if (pp) {
+            p->drawPixmap(pp->pos, pp->pixmap);
+        }
     }
 }
 

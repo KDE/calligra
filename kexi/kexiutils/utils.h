@@ -338,10 +338,18 @@ public:
 //! \return the sum of \a margins1 and \a margins1; each component is added separately.
 const WidgetMargins operator+ (const WidgetMargins& margins1, const WidgetMargins& margins2);
 
-//! Draws pixmap on painter \a p using predefined parameters.
+//! Draws pixmap @a pixmap on painter @a p using predefined parameters.
 //! Used in KexiDBImageBox and KexiBlobTableEdit.
 KEXIUTILS_EXPORT void drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
-                                 const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio);
+                                 const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio,
+                                 Qt::TransformationMode transformMode = Qt::FastTransformation);
+
+//! Scales pixmap @a pixmap on painter @a p using predefined parameters.
+//! Used in KexiDBImageBox and KexiBlobTableEdit.
+KEXIUTILS_EXPORT QPixmap scaledPixmap(const WidgetMargins& margins, const QRect& rect,
+                                      const QPixmap& pixmap, QPoint& pos, Qt::Alignment alignment,
+                                      bool scaledContents, bool keepAspectRatio,
+                                      Qt::TransformationMode transformMode = Qt::FastTransformation);
 
 //! A helper for automatic deleting of contents of containers.
 template <typename Container>

@@ -386,8 +386,10 @@ void KexiUtils::simpleDecrypt(QString& string)
         string[i] = QChar(string[i].unicode() - 47 - i);
 }
 
-void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
-                           const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio)
+static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins, const QRect& rect,
+                                      QPixmap& pixmap, QPoint &pos, Qt::Alignment alignment,
+                                      bool scaledContents, bool keepAspectRatio,
+                                      Qt::TransformationMode transformMode = Qt::FastTransformation)
 {
     if (pixmap.isNull())
         return;
@@ -401,7 +403,7 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
 //    QPainter p2;
     QPainter *target;
 //    if (fast) {
-        target = &p;
+        target = p;
 //    } else {
 //moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
 //moved  p2.begin(&pm, p.device());
@@ -410,11 +412,10 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
-    QPoint pos;
     if (scaledContents) {
         if (keepAspectRatio) {
             QImage img(pixmap.toImage());
-            img = img.scaled(w, h, Qt::KeepAspectRatio);
+            img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
             pos = rect.topLeft();
             if (img.width() < w) {
 //                int hAlign = QApplication::horizontalAlignment(alignment);
@@ -437,14 +438,23 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
             else {
 //                target->drawPixmap(pos, pixmapBuffer);
             }
-            p.drawImage(pos, img);
+            if (p) {
+                p->drawImage(pos, img);
+            }
+            else {
+                pixmap = QPixmap::fromImage(img);
+            }
         } else {
             if (!fast) {
 //                pixmapBuffer = QPixmap(rect.size() - QSize(margins.right, margins.bottom));
 //                p2.begin(&pixmapBuffer);
                 //, p.device());
 //                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
-                p.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+                pos = rect.topLeft();
+                pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
+                if (p) {
+                    p->drawPixmap(pos, pixmap);
+                }
             }
             else {
 //                target->drawPixmap(QRect(rect.x() + margins.left, rect.y() + margins.top, w, h), pixmap);
@@ -469,7 +479,10 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
 //  target->drawPixmap(pos, pixmap);
 //  if (!fast)
 //   p2.begin(&pixmapBuffer, p.device());
-        p.drawPixmap(margins.left + pos.x(), margins.top + pos.y(), pixmap);
+        pos += QPoint(margins.left, margins.top);
+        if (p) {
+            p->drawPixmap(pos, pixmap);
+        }
     }
 /*    if (scaledContents && !fast && p.isActive()) {
         p2.end();
@@ -479,6 +492,24 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
             pixmapBuffer,
             rect.x(), rect.y(), w, h);
     }*/
+}
+
+void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
+                           const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio,
+                           Qt::TransformationMode transformMode)
+{
+    QPixmap px(pixmap);
+    QPoint pos;
+    drawOrScalePixmapInternal(&p, margins, rect, px, pos, alignment, scaledContents, keepAspectRatio, transformMode);
+}
+
+QPixmap KexiUtils::scaledPixmap(const WidgetMargins& margins, const QRect& rect,
+                                const QPixmap& pixmap, QPoint& pos, Qt::Alignment alignment,
+                                bool scaledContents, bool keepAspectRatio, Qt::TransformationMode transformMode)
+{
+    QPixmap px(pixmap);
+    drawOrScalePixmapInternal(0, margins, rect, px, pos, alignment, scaledContents, keepAspectRatio, transformMode);
+    return px;
 }
 
 QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
