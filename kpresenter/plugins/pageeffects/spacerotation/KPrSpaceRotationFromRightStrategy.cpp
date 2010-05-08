@@ -50,7 +50,7 @@ void KPrSpaceRotationFromRightStrategy::paintStep(QPainter &p, int currPos, cons
 void KPrSpaceRotationFromRightStrategy::next(const KPrPageEffect::Data &data)
 {
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
-    if ( frame >= data.m_timeLine.endFrame() ) {
+    if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
     }
     else {

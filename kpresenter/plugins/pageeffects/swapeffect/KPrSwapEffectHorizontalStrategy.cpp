@@ -51,7 +51,7 @@ void KPrSwapEffectHorizontalStrategy::paintStep(QPainter &p, int currPos, const 
 void KPrSwapEffectHorizontalStrategy::next(const KPrPageEffect::Data &data)
 {
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
-    if ( frame >= data.m_timeLine.endFrame() ) {
+    if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
     }
     else {
@@ -61,10 +61,11 @@ void KPrSwapEffectHorizontalStrategy::next(const KPrPageEffect::Data &data)
         qreal factor = (qreal)(data.m_timeLine.endFrame() - frame) / (data.m_timeLine.endFrame());
         qreal scaleFactor;
         qreal degree;
-        if(factor<0.5){
+        if (factor<0.5) {
             data.m_oldPageItem->setZValue(1);
             data.m_newPageItem->setZValue(2);
-        }else{
+        }
+        else{
             data.m_oldPageItem->setZValue(2);
             data.m_newPageItem->setZValue(1);
         }
@@ -104,7 +105,7 @@ void KPrSwapEffectHorizontalStrategy::next(const KPrPageEffect::Data &data)
         m_transform.translate(size.width() / 2, size.height() / 2).rotate(-degree, Qt::YAxis)
                    .translate(-size.width() / 2,-size.height() / 2);
 
-        if (factor > 0.5){
+        if (factor > 0.5) {
             m_transform.translate(-(1 - factor) * 2 * dxMax, 0);
         }
         else {
