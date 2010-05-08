@@ -2545,7 +2545,10 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
     curOffset = 8;
 
     static int counter = 1; //we need unique file names
-    const UString filename = UString("Pictures/sheetBackground").append(UString::from(counter++));
+    UString filename = UString("Pictures/sheetBackground").append(UString::from(counter++));
+    if(format() == WindowsBitMap) {
+        filename.append(UString(".bmp"));
+    }
     setImagePath(filename);
 
     Store *store = m_workbook->store();
