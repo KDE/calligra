@@ -2534,15 +2534,19 @@ void BkHimRecord::setImagePath(UString imagePath )
 
 void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
-    unsigned curOffset;
+    unsigned curOffset = 0;
     if (size < 8) {
         setIsValid(false);
         return;
     }
-    setFormat(static_cast<Format>(readU16(data)));
+    setFormat(static_cast<Format>(readU16(data + curOffset)));
+    curOffset += 2;
 
-    unsigned imageSize = readU32(data + 4);
-    curOffset = 8;
+    //16 reserved bits
+    curOffset += 2;
+
+    unsigned imageSize = readU32(data + curOffset);
+    curOffset += 4;
 
     static int counter = 1; //we need unique file names
     UString filename = UString("Pictures/sheetBackground").append(UString::from(counter++));
