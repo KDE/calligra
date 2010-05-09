@@ -123,6 +123,7 @@ void KPrAnimationCache::startStep(int step)
 QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue)
 {
     // TODO is it needed?
+    return QVariant();
 }
 
 bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id)
