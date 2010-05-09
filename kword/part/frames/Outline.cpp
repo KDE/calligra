@@ -51,7 +51,20 @@ Outline::Outline(KoShape *shape, const QMatrix &matrix)
     : m_side(None),
     m_shape(shape)
 {
-    init(matrix, shape->outline(), 0);
+    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    qreal distance = 0;
+    if (frame) {
+        distance = frame->runAroundDistance();
+        if (frame->textRunAround() == KWord::NoRunAround) {
+            // make the shape take the full width of the text area
+            m_side = Empty;
+        } else if (frame->textRunAround() == KWord::RunThrough) {
+            // We don't exist.
+            return;
+        }
+    }
+
+    init(matrix, shape->outline(), distance);
 }
 
 void Outline::init(const QMatrix &matrix, const QPainterPath &outline, qreal distance)
