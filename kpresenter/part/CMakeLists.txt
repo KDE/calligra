@@ -80,8 +80,6 @@ set( kpresenterprivate_LIB_SRCS
      shapeanimations/KPrShapeAnimationRegistry.cpp
 
      animations/KPrAnimationBase.cpp
-     animations/KPrAnimPar.cpp
-     animations/KPrAnimSeq.cpp
      animations/KPrAnimSet.cpp
      animations/KPrAnimate.cpp
      animations/KPrAnimateColor.cpp
