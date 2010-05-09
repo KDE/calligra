@@ -61,8 +61,8 @@ void KWFrameSet::printDebug()
 {
     int i = 1;
     foreach (KWFrame *frame, frames()) {
-        kDebug(32001) << " +-- Frame" << i++ << " of" << frameCount() << "    (" << frame << ")" <<
-        (frame->isCopy() ? "[copy]" : "") << endl;
+        kDebug(32001) << " +-- Frame" << i++ << "of" << frameCount() << "    (" << frame << ")"
+            << (frame->isCopy() ? "[copy]" : "");
         printDebug(frame);
     }
 }
@@ -74,9 +74,10 @@ void KWFrameSet::printDebug(KWFrame *frame)
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
     kDebug(32001) << "     Rectangle :" << frame->shape()->position().x() << "," << frame->shape()->position().y() << "" << frame->shape()->size().width() << "x" << frame->shape()->size().height();
-    kDebug(32001) << "     RunAround:" << runaround[ frame->textRunAround()] << " side:" << runaroundSide[ frame->runAroundSide()];
-    kDebug(32001) << "     FrameBehavior:" << frameBh[ frame->frameBehavior()];
-    kDebug(32001) << "     NewFrameBehavior:" << newFrameBh[ frame->newFrameBehavior()];
+    kDebug(32001) << "     RunAround:" << runaround[frame->textRunAround()] << "side:" << runaroundSide[frame->runAroundSide()];
+    kDebug(32001) << "=>" << frame->textRunAround();
+    kDebug(32001) << "     FrameBehavior:" << frameBh[frame->frameBehavior()];
+    kDebug(32001) << "     NewFrameBehavior:" << newFrameBh[frame->newFrameBehavior()];
     if (!frame->shape()->background())
         kDebug(32001) << "     BackgroundColor: Transparent";
     else {
