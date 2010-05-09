@@ -99,9 +99,15 @@
 
 static KWFrame *frameForShape(KoShape *shape)
 {
-    while (shape->parent()) {
+    while (shape) {
+        KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+        if (answer)
+            return answer;
+        if (shape->parent() == 0)
+            break;
         shape = shape->parent();
     }
+
     KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
     if (answer == 0) { // this may be a clipping shape containing the frame-shape
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
