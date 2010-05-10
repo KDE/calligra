@@ -154,7 +154,7 @@ protected slots:
     void slotModified( bool );
 
     void insertFileCompleted();
-    void insertFileCanceled( const QString& );
+    void insertFileCancelled( const QString& );
 
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
