@@ -317,6 +317,9 @@ public:
     DateTime transmitionTime() const { return m_transmitionTime; }
     void setTransmitionTime( const DateTime &dt ) { m_transmitionTime = dt; }
 
+    /// Clear workpackage data
+    void clear();
+
 private:
     Task *m_task;
     ScheduleManager *m_manager;

@@ -23,6 +23,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kio/netaccess.h>
 #include <kdebug.h>
 
 #include <QRadioButton>
@@ -98,7 +99,7 @@ void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 
 void InsertFilePanel::changed( const QString &text )
 {
-    emit enableButtonOk( ! text.isEmpty() );
+    emit enableButtonOk( KIO::NetAccess::exists( KUrl( text ), KIO::NetAccess::SourceSide, 0 ) );
 }
 
 KUrl InsertFilePanel::url() const
