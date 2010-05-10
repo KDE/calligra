@@ -840,7 +840,7 @@ void Part::insertFile( const QString &filename, Node *parent, Node *after )
     part->m_insertFileInfo.parent = parent;
     part->m_insertFileInfo.after = after;
     connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
-    connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCanceled(const QString&)));
+    connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCancelled(const QString&)));
     connect(part, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 
     part->openUrl( KUrl( filename ) );
@@ -856,7 +856,7 @@ void Part::insertFileCompleted()
     }
 }
 
-void Part::insertFileCanceled( const QString &error )
+void Part::insertFileCancelled( const QString &error )
 {
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
