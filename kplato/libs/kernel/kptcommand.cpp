@@ -3250,6 +3250,18 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
 {
     Q_ASSERT( &project != m_project );
 
+    // remove unhandled info in tasks
+    foreach ( Node *n, project.allNodes() ) {
+        if ( n->type() == Node::Type_Task ) {
+            Task *t = static_cast<Task*>( n );
+            t->workPackage().clear();
+            while ( ! t->workPackageLog().isEmpty() ) {
+                WorkPackage *wp = t->workPackageLog().at( 0 );
+                t->removeWorkPackage( wp );
+                delete wp;
+            }
+        }
+    }
     QMap<Calendar*, Calendar*> unusedCalendars;
     foreach ( Calendar *c, project.calendars() ) {
         addCalendars( c, 0, unusedCalendars );

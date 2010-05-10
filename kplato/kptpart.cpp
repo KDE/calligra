@@ -833,11 +833,37 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
 
 void Part::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    Part part;
-    if ( part.openUrl( KUrl( filename ) ) ) {
-        part.setReadWrite( false );
-        Project &p = part.getProject();
-        insertProject( p, parent, after );
+    Part *part = new Part();
+    part->disconnect(); // part shall not handle feedback from openUrl()
+    part->setAutoSave( 0 ); //disable
+    part->m_insertFileInfo.url = filename;
+    part->m_insertFileInfo.parent = parent;
+    part->m_insertFileInfo.after = after;
+    connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
+    connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCanceled(const QString&)));
+    connect(part, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
+
+    part->openUrl( KUrl( filename ) );
+}
+
+void Part::insertFileCompleted()
+{
+    Part *part = qobject_cast<Part*>( sender() );
+    if ( part ) {
+        Project &p = part->getProject();
+        insertProject( p, part->m_insertFileInfo.parent, part->m_insertFileInfo.after );
+        part->deleteLater();
+    }
+}
+
+void Part::insertFileCanceled( const QString &error )
+{
+    if ( ! error.isEmpty() ) {
+        KMessageBox::error( 0, error );
+    }
+    Part *part = qobject_cast<Part*>( sender() );
+    if ( part ) {
+        part->deleteLater();
     }
 }
 

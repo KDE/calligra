@@ -135,6 +135,14 @@ protected:
 
     void mergeWorkPackage( Task *to, const Task *from, const Package *package );
 
+    // used by insert file
+    struct InsertFileInfo {
+        QString url;
+        Node *parent;
+        Node *after;
+    } m_insertFileInfo;
+
+
 protected slots:
     void slotViewDestroyed();
     virtual void openTemplate( const KUrl& url );
@@ -144,6 +152,9 @@ protected slots:
     void checkForWorkPackage();
 
     void slotModified( bool );
+
+    void insertFileCompleted();
+    void insertFileCanceled( const QString& );
 
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);

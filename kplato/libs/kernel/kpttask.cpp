@@ -2711,9 +2711,13 @@ void Completion::copy( const Completion &p )
     m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
     m_entrymode = p.entrymode();
+    qDeleteAll( m_entries );
+    m_entries.clear();
     foreach ( const QDate &d, p.entries().keys() ) {
         addEntry( d, new Entry( *(p.entries()[ d ]) ) );
     }
+    qDeleteAll( m_usedEffort );
+    m_usedEffort.clear();
     foreach ( const Resource *r, p.usedEffortMap().keys() ) {
         addUsedEffort( r, new UsedEffort( *( p.usedEffortMap()[ r ] ) ) );
     }
@@ -3524,6 +3528,21 @@ WorkPackage::WPTransmitionStatus WorkPackage::transmitionStatusFromString( const
     lst << "None" << "Send" << "Receive";
     int s = lst.indexOf( sts );
     return s < 0 ? TS_None : static_cast<WPTransmitionStatus>( s );
+}
+
+void WorkPackage::clear()
+{
+    //m_task = 0;
+    m_manager = 0;
+    m_ownerName = QString();
+    m_ownerId = QString();
+    m_transmitionStatus = TS_None;
+    m_transmitionTime = DateTime();
+    m_log.clear();
+
+    m_completion = Completion();
+    m_completion.setNode( m_task );
+
 }
 
 //--------------------------------
