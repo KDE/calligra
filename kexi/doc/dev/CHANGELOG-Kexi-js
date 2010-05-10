@@ -65,8 +65,6 @@ Main Window TODO
 *View menu still disabled as showing hiding would be implemented as side bars; use this view for something else
 TableView TODO
 *mouse move over large tables scrolls the table!
-Security:
-*SECURE DELETE http://sqlite.org/compile.html#secure_delete - should be also possible to disable it in the config
 KexiDB
 *edited table orders by adding pkey....message popped up saying 'queries are open based on table, do you want to close them' i clicked 'close windows' ....boom http://pastebin.ca/1773394
 Reports
@@ -107,11 +105,17 @@ Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 2010-05-08
 Table View
 *Optimize display of scaled image entries in table grid by caching
+**Images are now more smoothly scaled
 BUG:234347
 TODO: optimize: keep the checksum for pixmap in context of data itself
 TODO: optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
 
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-05-10
+KexiDB
+*[security] SQLite: Set the secure-delete on, so SQLite overwrites deleted content with zeros. Works with 3.6.23. Earlier versions just ignore this pragma. See http://www.sqlite.org/pragma.html#pragma_secure_delete
+TODO: add connection flags to the driver and global setting to control the "secure delete" pragma
 
 2010-05-04
 Forms
