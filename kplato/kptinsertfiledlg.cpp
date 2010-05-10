@@ -43,7 +43,8 @@ InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget
     setCaption( i18n("Insert File") );
     setButtons( KDialog::Ok | KDialog::Cancel );
     setDefaultButton( Ok );
-
+    showButtonSeparator( true );
+    
     m_panel = new InsertFilePanel( project, currentNode, this );
 
     setMainWidget( m_panel );
