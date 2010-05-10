@@ -850,12 +850,6 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
         n->setId( project.uniqueNodeId( existingIds ) );
         project.removeId( oldid ); // remove old id
         project.registerNodeId( n ); // register new id
-        if ( n->type() == Node::Type_Task ) {
-            // clear workpackage and completion, it's not handled yet
-            Task *t = static_cast<Task*>( n );
-            t->workPackageLog().clear();
-            t->workPackage().clear();
-        }
     }
     MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) );
     if ( m->isEmpty() ) {
