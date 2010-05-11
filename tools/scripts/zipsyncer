@@ -1,0 +1,797 @@
+#!/usr/bin/python -Qwarnall
+"""ZipSyncer, a tool to keep zip files synchronized with unzipped directories
+
+Usage examples:
+
+  zipsyncer listzipped [directory]
+
+  Scan directory recursively look for zipped files that are supported by
+  zipsyncer.
+
+  zipsyncer createunzipped [directory]
+
+  Scan directory recursively, look for zipped files that are supported and unzip
+  them.
+
+  zipsyncer createzipped [directory]
+
+  Scan directory recursively, look for unzipped directories that are have the right naming and zip them.
+
+  zipsyncer sync [directory]
+
+  Scan directory recursively, look for zipped-unzipped pairs and synchronize
+  them if one has been changed.
+
+  zipsyncer removezipped [directory]
+  
+  Scan directory recursively, look for zipped-unzipped pairs and delete the
+  zipped part if they are in sync.
+
+  zipsyncer removeunzipped [directory]
+
+  Scan directory recursively, look for zipped-unzipped pairs and delete the
+  unzipped part if they are in sync.
+
+"""
+
+import struct, zlib, os, base64, time, shutil
+
+""" Deflate a data blob and remove the pre- and post-fix.
+    This is how files are compressed by the DEFLATE method in zip files.
+"""
+def deflate(data, level):
+	return zlib.compress(data, level)[2:-4]
+
+""" Find the compression level that compresses to a given size.
+    To recreate a zipfile from the unzipped files, the file has to be compressed
+    to the same size as specified in the original zip file. Depending on the
+    used DEFLATE algorithm, this may or may nor succeed.
+"""
+def compressToTargetSize(data, targetsize):
+	for level in [6, 9, 5, 4, 3, 2, 1, 7, 8, 0, -1]:
+		d = deflate(data, level)
+		if len(d) == targetsize:
+			return d
+	return None
+
+def getCRC(data):
+	return zlib.crc32(data) & 0xFFFFFFFF
+
+def dos2unixtime(dostime, dosdate):
+	""" Convert date/time code to (year, month, day, hour, min, sec) """
+	return ( (dosdata>>9)+1980, (dosdate>>5)&0xF, dosdate&0x1F,
+		dostime>>11, (dostime>>5)&0x3F, (dostime&0x1F) * 2 )
+
+def unixtime2dos(secondssinceepoch):
+	t = time.gmtime(secondssinceepoch)
+	dosdate = (t[0] - 1980) << 9 | t[1] << 5 | t[2]
+	dostime = t[3] << 11 | t[4] << 5 | t[5] >> 1
+	return (dostime, dosdate)
+
+class ZipEntry:
+	sigstruct = struct.Struct("<I")
+	class Common:
+		struct = struct.Struct("<HHHHHIIIHH")
+		def __init__(self):
+			self.versionNeeded = 20
+			self.flag = 0
+			self.compressionMethod = 0
+			self.crc32 = 0
+			self.compressedSize = 0
+			self.uncompressedSize = 0
+			self.extraLength = 0
+			self.extra = ''
+		def unpack(self, data, offset):
+			fields = ZipEntry.Common.struct.unpack_from(data, offset)
+			(self.versionNeeded, self.flag, self.compressionMethod,
+				self.mtime, self.mdate, self.crc32,
+				self.compressedSize, self.uncompressedSize,
+				self.filenameLength, self.extraLength) = fields;
+			return offset + 26
+		def pack(self):
+			return ZipEntry.Common.struct.pack(self.versionNeeded, self.flag,
+				self.compressionMethod, self.mtime, self.mdate, self.crc32,
+				self.compressedSize, self.uncompressedSize,
+				self.filenameLength, self.extraLength)
+		def getFields(self):
+			return map(str, [self.versionNeeded, self.flag,
+				self.compressionMethod, self.mtime, self.mdate,
+				self.crc32,
+				self.compressedSize, self.uncompressedSize,
+				self.filenameLength, self.extraLength])
+		def setFields(self, fields):
+			(self.versionNeeded, self.flag, self.compressionMethod,
+				self.mtime, self.mdate, self.crc32,
+				self.compressedSize, self.uncompressedSize,
+				self.filenameLength, self.extraLength) = map(int, fields)
+
+	class Header(Common):
+		def __init__(self):
+			ZipEntry.Common.__init__(self)
+			self.valid = False
+			self.signature = 0x04034b50
+		def unpack(self, data, offset):
+			self.valid = False
+			sig = ZipEntry.sigstruct.unpack_from(data, offset)
+			if sig[0] != 0x04034b50:
+				return offset
+			self.signature = sig[0]
+			offset = ZipEntry.Common.unpack(self, data, offset + 4)
+			filenameend = offset + self.filenameLength
+			extraend = filenameend + self.extraLength
+			self.filename = data[offset : filenameend]
+			self.extra = data[filenameend : extraend]
+			self.valid = True
+			return extraend
+		def pack(self):
+			return ZipEntry.sigstruct.pack(self.signature) \
+					+ ZipEntry.Common.pack(self) + self.filename + self.extra
+		def getFields(self):
+			return [str(self.signature)] + ZipEntry.Common.getFields(self) \
+				+ [self.filename, base64.b64encode(self.extra)]
+		def setFields(self, fields):
+			self.signature = int(fields[0])
+			ZipEntry.Common.setFields(self, fields[1:11])
+			self.filename = fields[11]
+			self.extra = base64.b64decode(fields[12])
+		def getSize(self):
+			return 30 + self.filenameLength + self.extraLength
+
+	class DataDescriptor:
+		struct = struct.Struct("<III")
+		def __init__(self):
+			(self.signature, self.crc32, self.compressedSize,
+				self.uncompressedSize) = (0, 0, 0, 0)
+		def unpack(self, flag, data, offset):
+			self.signature = 0
+			if len(data) - offset > 4:
+				sig = ZipEntry.sigstruct.unpack_from(data, offset)
+				if sig[0] == 0x08074b50:
+					self.signature = 0x08074b50
+					offset += 4
+			if flag & 8 or self.signature:
+				d = ZipEntry.DataDescriptor.struct.unpack_from(data, offset)
+				offset += 12
+			else:
+				d = (0, 0, 0)
+			(self.crc32, self.compressedSize, self.uncompressedSize) = d
+			return offset
+		def pack(self):
+			if self.signature:
+				return ZipEntry.sigstruct.pack(self.signature) \
+						+ ZipEntry.DataDescriptor.struct.pack(self.crc32,
+							self.compressedSize,
+							self.uncompressedSize)
+			if self.crc32 or self.compressedSize \
+					or self.uncompressedSize:
+				return ZipEntry.DataDescriptor.struct.pack(
+					self.crc32, self.compressedSize,
+					self.uncompressedSize)
+			return ''
+		def getFields(self):
+			return map(str, [self.signature, self.crc32,
+				self.compressedSize, self.uncompressedSize])
+		def setFields(self, fields):
+			(self.signature, self.crc32, self.compressedSize,
+				self.uncompressedSize) = map(int, fields)
+		def getSize(self):
+			if self.signature: return 16
+			if self.crc32: return 12
+			return 0
+
+	class CentralDirectoryData(Common):
+		struct1 = struct.Struct("<IH")
+		struct2 = struct.Struct("<HHHII")
+		def __init__(self):
+			ZipEntry.Common.__init__(self)
+			self.valid = False
+			self.signature = 0x02014b50
+			self.version = 20
+			self.commentLength = 0
+			self.disk = 0
+			self.internalAttr = 0
+			self.externalAttr = 0
+			self.comment = ''
+		def unpack(self, data, offset):
+			self.valid = False
+			if len(data) - offset < 6:
+				return offset
+			sig = ZipEntry.CentralDirectoryData.struct1.unpack_from(
+					data, offset)
+			if sig[0] != 0x02014b50:
+				return offset
+			(self.signature, self.version) = sig
+			offset = ZipEntry.Common.unpack(self, data, offset + 6)
+			(self.commentLength, self.disk, self.internalAttr,
+				self.externalAttr, self.offset
+					) = ZipEntry.CentralDirectoryData.struct2.unpack_from(
+					data, offset)
+			offset += 14
+			filenameend = offset + self.filenameLength
+			extraend = filenameend + self.extraLength
+			commentend = extraend + self.commentLength
+			self.filename = data[offset : filenameend]
+			self.extra = data[filenameend : extraend]
+			self.comment = data[extraend : commentend]
+			self.valid = True
+			return commentend
+		def pack(self):
+			return ZipEntry.CentralDirectoryData.struct1.pack(
+					self.signature, self.version) \
+				+ ZipEntry.Common.pack(self) \
+				+ ZipEntry.CentralDirectoryData.struct2.pack(
+					self.commentLength, self.disk, self.internalAttr,
+					self.externalAttr, self.offset) \
+				+ self.filename + self.extra + self.comment
+		def getFields(self):
+			return map(str, [self.signature, self.version]) \
+				+ ZipEntry.Common.getFields(self) \
+				+ map(str, [self.commentLength, self.disk,
+					self.internalAttr,
+					self.externalAttr, self.offset]) \
+				+ [self.filename, base64.b64encode(self.extra),
+					base64.b64encode(self.comment)]
+		def setFields(self, fields):
+			self.signature = int(fields[0])
+			self.version = int(fields[1])
+			ZipEntry.Common.setFields(self, fields[2:12])
+			(self.commentLength, self.disk, self.internalAttr,
+				self.externalAttr, self.offset) = map(int, fields[12:17])
+			self.filename = fields[17]
+			self.extra = base64.b64decode(fields[18])
+			self.comment = base64.b64decode(fields[19])
+		def getSize(self):
+			return 46 + self.filenameLength + self.extraLength \
+				+ self.commentLength
+
+	def __init__(self):
+		self.reset()
+	def reset(self):
+		self.header = ZipEntry.Header()
+		self.datadescriptor = ZipEntry.DataDescriptor()
+		self.data = ''
+		self.cddata = ZipEntry.CentralDirectoryData()
+	def setHeader(self, header, filename, extra):
+		self.header = ZipEntry.Header(header, filename, extra)
+	def setData(self, data):
+		self.data = data
+	def setDataDescriptor(self, sig, datadescriptor):
+		self.datadescriptor = ZipEntry.DataDescriptor(sig,
+				datadescriptor)
+	def setCentralDirectoryData(self, entry, filename, extra, comment):
+		self.cddata = ZipEntry.CentralDirectoryData(entry, filename,
+				extra, comment)
+	def unpackHeader(self, data, offset):
+		self.valid = False
+		# read header
+		self.header = ZipEntry.Header()
+		offset = self.header.unpack(data, offset)
+		if not self.header.valid:
+			return offset
+		# read data
+		if self.header.compressionMethod == 8: # deflate
+			decompressobj = zlib.decompressobj(-15)
+			self.data = decompressobj.decompress(data[offset:])
+			left = decompressobj.unused_data
+			offset = len(data) - len(left)
+		elif self.header.compressionMethod == 0: # no compression
+			size = self.header.uncompressedSize
+			self.data = data[offset : offset + size ]
+			offset += size
+		else:
+			self.error = "compression method not supported"
+			return None
+
+		# read data descriptor
+		self.datadescriptor = ZipEntry.DataDescriptor()
+		offset = self.datadescriptor.unpack(self.header.flag, data, offset)
+		self.valid = True
+		return offset
+	def packHeader(self):
+		d = self.data
+		if self.header.compressionMethod == 8:
+			compressedSize = self.datadescriptor.compressedSize \
+					if self.datadescriptor.compressedSize \
+					else self.header.compressedSize
+			d = compressToTargetSize(d, compressedSize)
+			if not d:
+				self.error = 'deflating to target size failed'
+				return ''
+		return self.header.pack() + d + self.datadescriptor.pack()
+	def unpackEntry(self, data, offset):
+		self.valid = False
+		self.cddata = ZipEntry.CentralDirectoryData()
+		offset = self.cddata.unpack(data, offset)
+		if not self.cddata.valid:
+			return None
+		self.valid = True
+		return offset
+	def packEntry(self):
+		return self.cddata.pack()
+	def getFields(self):
+		return self.header.getFields() + self.datadescriptor.getFields() \
+			+ self.cddata.getFields()
+	def setFields(self, fields):
+		self.header.setFields(fields[:13])
+		self.datadescriptor.setFields(fields[13:17])
+		self.cddata.setFields(fields[17:])
+	def setEntry(self, path, mtime):
+		self.header.filenameLength = self.cddata.filenameLength = len(path)
+		self.header.filename = self.cddata.filename = path
+		(self.header.mtime, self.header.mdate) \
+			= (self.cddata.mtime, self.cddata.mdate) \
+			= unixtime2dos(mtime)
+	def setDirectory(self, offset, path, mtime):
+		self.setEntry(offset, path, mtime)
+	def setFile(self, path, mtime, data, compresslevel):
+		self.setEntry(path, mtime)
+		self.data = data
+		if compresslevel:
+			self.cddata.compressionMethod = 8
+			self.cddata.compressedSize = len(deflate(data, compresslevel))
+	def updateOffsetEtc(self, offset):
+		self.cddata.offset = offset
+		self.cddata.uncompressedSize = len(self.data)
+		self.cddata.crc32 = getCRC(self.data)
+		csize = self.cddata.uncompressedSize
+		if self.cddata.compressionMethod:
+			cdata = compressToTargetSize(self.data,
+				self.cddata.compressedSize)
+			if not cdata:
+				cdata = deflate(self.data, 6)
+			csize = len(cdata)
+		self.cddata.compressedSize = csize
+		if self.datadescriptor.compressedSize:
+			o = self.datadescriptor
+		else:
+			o = self.header
+		o.crc32 = self.cddata.crc32
+		o.uncompressedSize = self.cddata.uncompressedSize
+		o.compressedSize = self.cddata.compressedSize
+		
+	def getHeaderSize(self):
+		return self.header.getSize() + self.cddata.compressedSize \
+			+ self.datadescriptor.getSize()
+
+class ZipData:
+
+	def __init__(self):
+		self.reset()
+
+	def reset(self):
+		""" True if the data in @entries and @filedata constitutes a
+		    valid, supported zip file. """
+		self.valid = False
+	
+		""" A string describing the error that caused the object to be
+		    invalid. """
+		self.error = 'No entries.'
+	
+		""" Metadata for all entries. """
+		self.entries = []
+	
+		""" Raw uncompressed data for all entries. """
+		self.filedata = []
+
+		""" Data from the end of central directory record """
+		self.fileinfo = 9*[None]
+		self.fileinfo[0] = 0x06054b50
+		self.fileinfo[1] = 0
+		self.fileinfo[2] = 0
+		self.fileinfo[7] = 0
+		self.fileinfo[8] = ''
+
+	def setFromFileContents(self, data):
+		self.reset()
+
+		# parse the full entries
+		offset = 0
+		while offset < len(data):
+			entry = ZipEntry()
+			offset = entry.unpackHeader(data, offset)
+			if entry.valid:
+				self.entries.append(entry)
+			else:
+				break
+			
+		if len(self.entries) == 0:
+			self.error = "No entries."
+			return
+
+		# parse central directory
+		for e in self.entries:
+			offset = e.unpackEntry(data, offset)
+			if not e.valid:
+				return
+
+		# parse end of central directory
+		if offset + 22 > len(data):
+			self.error = "premature end of zipfile"
+			return
+		dirend = struct.unpack_from("<IHHHHIIH", data, offset)
+		if dirend[0] != 0x06054b50:
+			self.error = 'invalid end of central directory'
+			return
+		offset += 22
+		l = dirend[7]
+		zipcomment = data[offset:offset+l]
+		offset += l
+
+		if offset != len(data):
+			self.error = "trailing data in zip file"
+			return
+		if len(data) != dirend[5] + dirend[6] + dirend[7] + 22:
+			self.error = 'zip file invalid or not supported'
+			return
+		self.fileinfo = list(dirend) + [zipcomment]
+
+		self.error = None
+		recreated = self.recreate()
+#		for i in range(len(recreated)):
+#			if recreated[i] != data[i]:
+#				print 'error at pos ' + str(i)
+#				break
+#		print str(len(data)) + ' ' + str(len(recreated))
+		if self.error:
+			return
+		if recreated != data:
+			#print str(len(recreated))+' '+str(len(data))
+			#for i in range(0, min(len(recreated),len(data))):
+			#	if recreated[i] != data[i]:
+			#		print 'pos ' + hex(i)
+			self.error = "roundtripping fails"
+			return
+
+		self.valid = True
+		self.error = None
+
+	def containsPath(self, path):
+		for e in self.entries:
+			if e.header.filename == path:
+				return True
+		return False
+
+	def addDirectory(self, basedir, dir):
+		p = os.path.relpath(dir, basedir) + '/'
+		if self.containsPath(p):
+			return
+		print 'adding dir ' + p
+		mtime = os.path.getmtime(dir)
+		e = ZipEntry()
+		offset = 0
+		e.setDirectory(offset, p, mtime)
+		self.entries.append(e)
+
+	def addFile(self, basedir, file, compresslevel):
+		p = os.path.relpath(file, basedir)
+		if self.containsPath(p):
+			return
+		print 'adding file "' + p + '"'
+		mtime = os.path.getmtime(file)
+		f = open(file, 'rb')
+		data = f.read()
+		f.close()
+		e = ZipEntry()
+		e.setFile(p, mtime, data, compresslevel)
+		self.entries.append(e)
+
+	def setFromDirectory(self, basedir, zipdatafile):
+		# first the original entry description
+		if os.path.isfile(zipdatafile):
+			self.readFromDataFile(zipdatafile)
+		# adapt it to the current directory files
+		i = 0
+		while i < len(self.entries):
+			# if an entry does not exist anymore, remove it
+			e = self.entries[i]
+			p = os.path.join(basedir, e.header.filename)
+			if e.header.filename.endswith('/'):
+				# always keep directories as zip entries,
+				# directory entries must be removed by hand
+				i += 1
+			elif os.path.isfile(p):
+				f = open(p, 'rb')
+				e.data = f.read()
+				f.close()
+				# read data into filedata
+				i += 1
+			else:
+				del self.entries[i]
+		# if the archive is empty so far and, the file 'mimetype'
+		# exists, add it first, in uncompressed form
+		p = os.path.join(basedir, 'mimetype')
+		if os.path.isfile(p):
+			self.addFile(basedir, p, 0)
+		# add all directories and files that are not there yet
+		for root, directories, files in os.walk(basedir):
+			# directory entries are not created
+			#for d in directories:
+			#	p = os.path.join(root, d)
+			#	self.addDirectory(basedir, p)
+			for f in files:
+				p = os.path.join(root, f)
+				self.addFile(basedir, p, 6)
+
+	def recreate(self):
+		self.updateOffsetsAndSizes()
+		filesize = 22 + self.fileinfo[5] + self.fileinfo[6]
+		data = ''
+
+		for e in self.entries:
+			data += e.packHeader()
+		for e in self.entries:
+			data += e.packEntry()
+
+		fi = self.fileinfo
+		data += struct.pack("<IHHHHIIH", fi[0], fi[1], fi[2], fi[3], fi[4], fi[5], fi[6], fi[7]) + fi[8]
+
+		return data
+
+	def updateOffsetsAndSizes(self):
+		total = 0
+		for e in self.entries:
+			e.updateOffsetEtc(total)
+			total += e.getHeaderSize()
+		cdstart = total
+		for e in self.entries:
+			total += e.cddata.getSize()
+
+		self.fileinfo[3] = self.fileinfo[4] = len(self.entries)
+		self.fileinfo[5] = total - cdstart
+		self.fileinfo[6] = cdstart
+
+	def writeToDirectory(self, dirpath):
+		for e in self.entries:
+			p = os.path.join(dirpath, e.header.filename)
+			if os.path.commonprefix([p, dirpath]) != dirpath:
+				# error, zip file would lie outside of parentdir
+				return
+			if p.endswith('/'):
+				try:
+					os.makedirs(p)
+				except:
+					None
+				continue
+			try:
+				os.makedirs(os.path.dirname(p))
+			except:
+				None
+			f = open(p, 'wb')
+			f.write(e.data)
+			f.close()
+		None
+	def writeToDataFile(self, zipdatafile):
+		f = open(zipdatafile, 'w')
+		# write file specific line with 9 fields first
+		for i in range(8):
+			f.write(str(self.fileinfo[i]) + '\t')
+		f.write(base64.b64encode(self.fileinfo[8]) + '\n')
+		# write one line with 37 fields per entry
+		for e in self.entries:
+			f.write('\t'.join(e.getFields()) + '\n')
+		f.close()
+	def readFromDataFile(self, zipdatafile):
+		self.reset()
+		f = open(zipdatafile, 'r')
+		line = f.readline()
+		fields = line.split('\t')
+		for i in range(8):
+			self.fileinfo[i] = int(fields[i])
+		self.fileinfo[8] = base64.b64decode(fields[8])
+		if (len(fields) != 9):
+			self.error = 'First line does not have 9 entries.'
+		for line in f:
+			fields = line.split('\t')
+			if (len(fields) != 37):
+				self.error = 'Entry line does not have 37 entries.'
+			e = ZipEntry()
+			e.setFields(fields)
+			self.entries.append(e)
+		f.close()
+		self.filedata = len(self.entries)*['']
+
+def filenameToDirname(filename, extensions):
+	ext = filter(lambda e: filename.endswith('.' + e), extensions)
+	if len(ext) == 1:
+		l = len(ext[0])
+		return filename[:-l-1] + '_' + ext[0]
+	return None
+
+def dirnameToFilename(dirname, extensions):
+	ext = filter(lambda e: dirname.endswith('_' + e), extensions)
+	if len(ext) == 1:
+		l = len(ext[0])
+		return dirname[:-l-1] + '.' + ext[0]
+	return None
+
+"""
+    List all files and directories that are potentially supported.
+    The list is created on the extension of the file and trailing part of the
+    name of the directory
+"""
+def scanDirectory(rootdir, extensions):
+	if os.path.isfile(rootdir):
+		return [rootdir]
+
+	filext = map(lambda e: "." + e, extensions)
+	list = []
+	for root, directories, files in os.walk(rootdir):
+		for file in files:
+			if file.startswith('.'):
+				continue
+			if any(map(lambda e: file.endswith(e), filext)):
+				list.append(os.path.join(root, file))
+		for dir in directories:
+			file = dirnameToFilename(dir, extensions)
+			if file:
+				list.append(os.path.join(root, file))
+
+	# remove duplicates by converting to a set
+	return frozenset(list)
+
+def readZipData(filepath):
+	if not os.path.exists(filepath):
+		return
+
+	try:
+		fd = open(filepath, "rb")
+		magic = fd.read(4)
+		if magic != 'PK\3\4':
+			return
+		fd.seek(0)
+		data = fd.read()
+		fd.close()
+	except:
+		return
+	return data
+
+def writeZipped(data, filepath):
+	fd = open(filepath, "wb")
+	fd.write(data)
+	fd.close()
+
+def writeUnzipped(data, dirpath, descriptionfile):
+	zipdata = ZipData()
+	zipdata.setFromFileContents(data)
+	if not zipdata.valid:
+		return
+	zipdata.writeToDirectory(dirpath)
+	zipdata.writeToDataFile(descriptionfile)
+
+def listzippedFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	# if there is a problem reading, simply do not list the file
+	data = readZipData(filepath)
+	if not data:
+		return
+	zipdata = ZipData()
+	zipdata.setFromFileContents(data)
+	if zipdata.valid:
+		print filepath
+
+def createzippedFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	# check that no file exists yet
+	if os.path.isfile(filepath) or os.path.isfile(hiddenfile):
+		return
+
+	zipdata = ZipData()
+	try:
+		zipdata.setFromDirectory(dirpath, descriptionfile)
+	except:
+		raise
+		return
+	data = zipdata.recreate()
+	writeZipped(data, filepath)
+	shutil.copy(filepath, hiddenfile)
+
+def createunzippedFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	# check that no directory exists yet
+	if os.path.isdir(dirpath) or os.path.isfile(hiddenfile) \
+			or os.path.isfile(descriptionfile):
+		return
+
+	# if there is a problem reading, simply do not unzip the file
+	data = readZipData(filepath)
+	if not data:
+		return
+	writeUnzipped(data, dirpath, descriptionfile)
+	shutil.copy(filepath, hiddenfile)
+
+""" Find which file is the newest, that is which is different from the other
+    two. Returns None if all are equal, 'Error' when it cannot be determined,
+    e.g. because one version does not exist. 'unzipped' when the unzipped
+    version is different, 'zipped' when the zipped version is different and
+    'both' when no version resembles the hidden file. """
+def findDifferentVersion(filepath, dirpath, descriptionfile, hiddenfile):
+	d = dict(source='error', data='')
+	# check that an unzipped version and a hidden file exist
+	if not os.path.isdir(dirpath) or not os.path.isfile(hiddenfile) \
+			or not os.path.isfile(filepath):
+		return d
+
+	# check that the files are in sync
+	hidden = readZipData(hiddenfile)
+	zipped = readZipData(filepath)
+	zipdata = ZipData()
+	try:
+		zipdata.setFromDirectory(dirpath, descriptionfile)
+	except:
+		return d
+	unzipped = zipdata.recreate()
+	if hidden == zipped:
+		d['data'] = unzipped
+		if hidden == unzipped:
+			d['source'] = None
+			return d
+		d['source'] = 'unzipped'
+		return d
+	if hidden == unzipped:
+		d['data'] = unzipped
+		d['source'] = 'zipped'
+		return d
+	d['source'] = 'both'
+	return d
+
+def syncFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	d = findDifferentVersion(filepath, dirpath, descriptionfile, hiddenfile)
+	if d['source'] == 'both':
+		print 'Conflict for ' + filepath
+	elif d['source'] == 'zipped':
+		writeUnzipped(d['data'], dirpath, descriptionfile)
+		shutil.copy(filepath, hiddenfile)
+	elif d['source'] == 'unzipped' or d['source'] == None:
+		writeZipped(d['data'], filepath)
+		shutil.copy(filepath, hiddenfile)
+
+def removezippedFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	# only delete a version of there is no different version
+	d = findDifferentVersion(filepath, dirpath, descriptionfile, hiddenfile)
+	if d['source'] != None:
+		return
+	os.remove(filepath)
+	os.remove(hiddenfile)
+
+def removeunzippedFunction(filepath, dirpath, descriptionfile, hiddenfile):
+	# only delete a version of there is no different version
+	d = findDifferentVersion(filepath, dirpath, descriptionfile, hiddenfile)
+	if d['source'] != None:
+		return
+	os.remove(hiddenfile)
+	if os.path.isfile(descriptionfile):
+		os.remove(descriptionfile)
+	shutil.rmtree(dirpath)
+
+if __name__ == '__main__':
+	import sys
+
+	if len(sys.argv) < 2:
+		print 'Bad usage'
+		exit(1)
+
+	command = sys.argv[1]
+	if len(sys.argv) == 2:
+		directories = ['.']
+	else:
+	        directories = sys.argv[2:]
+
+	commands = {'listzipped': listzippedFunction,
+		'createzipped': createzippedFunction,
+		'createunzipped': createunzippedFunction,
+		'sync': syncFunction,
+		'removezipped': removezippedFunction,
+		'removeunzipped': removeunzippedFunction}
+
+        if not command in commands:
+		print 'invalid command "' + command + '"'
+		exit(1)
+
+	commandFunction = commands[command]
+
+	extensions = ["odt", "odp", "ods", "odg", "jar", "zip"]
+
+	for directory in directories:
+		fileList = scanDirectory(directory, extensions)
+		for file in fileList:
+			dir = filenameToDirname(file, extensions)
+			descriptionfile = dir + '.cd'
+			hiddenfile = '/.'.join(os.path.split(file))
+			commandFunction(file, dir, descriptionfile, hiddenfile)
