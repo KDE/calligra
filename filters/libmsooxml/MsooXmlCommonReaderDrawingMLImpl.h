@@ -891,6 +891,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
         }
     }
+    bool ok = false;
+    TRY_READ_ATTR_WITHOUT_NS(spc)
+    const int pointSize = spc.toInt(&ok)/100;
+    if (ok) {
+        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
+    }
+
     if (attrs.hasAttribute("sz")) {
         bool ok = false;
         const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
