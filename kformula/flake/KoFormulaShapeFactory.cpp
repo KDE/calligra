@@ -33,37 +33,18 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
     setToolTip(i18n( "A formula"));
     setIcon( "x-shape-formula" );
 
-#if 0
-    QStringList elementNames;
-    elementNames << "math";
-    elementNames << "object";
-    // FIXME: How can I set this so that it supports both inline
-    //        formulas and embedded ones in an embedded object?
-    //setOdfElementNames("http://www.w3.org/1998/Math/MathML", elementNames);
-#endif
-
-    // The following two alternatives let the formula shape load
-    // either embedded formulas or inline formulas.  Inline formulas
-    // is what KOffice 2.x has supported since 2.0.  Formulas in an
-    // embedded document is what OOo supports, and what I *think* is
-    // the only supported mode in ODF.
+    // The following lines let the formula shape load both embedded and
+    // inline formulas.
     //
     // The line below tells the shape registry which XML elements that
-    // the shape supports.  As far as I understand right now there is
-    // only one element that can be supported here.  If I am right,
-    // this needs to be fixed.  Note that the loading code in the
-    // formula shape can load either way.
+    // the shape supports.
     //
-    // FIXME: Find out if inline formulas are supported by ODF and if
-    //        there is a way to tell the shape registry that this
-    //        shape supports both.
-#if 1
-    // Formulas in an embedded document.
-    setOdfElementNames(KoXmlNS::draw, QStringList("object"));
-#else
-    // Inline formulas
-    setOdfElementNames( "http://www.w3.org/1998/Math/MathML", QStringList("math"));
-#endif
+    // FIXME: Find out if inline formulas are supported by ODF.
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("object")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::math), QStringList("math")));
+    setOdfElements(elementNamesList);
 
     setLoadingPriority( 1 );
 /*    KoShapeTemplate t;
@@ -88,10 +69,10 @@ KoShape *KoFormulaShapeFactory::createDefaultShape(KoResourceManager *resourceMa
 
 bool KoFormulaShapeFactory::supports(const KoXmlElement& e) const
 {
-    bool retval = ((e.nodeName() == "math"
-                    && e.namespaceURI() == "http://www.w3.org/1998/Math/MathML")
-                   || (e.tagName() == "object"
-                       && e.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"));
+    bool retval = ((e.localName() == "math"
+                    && e.namespaceURI() == KoXmlNS::math)
+                   || (e.localName() == "object"
+                       && e.namespaceURI() == KoXmlNS::draw));
 
     // Should be 39001 (kformula) instead of 31000 (koffice)
     //kDebug(31000) << e.nodeName() << " - "<< e.namespaceURI(); 

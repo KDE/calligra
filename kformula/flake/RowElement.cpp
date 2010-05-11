@@ -24,6 +24,7 @@
 #include "FormulaCursor.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoXmlNS.h>
 #include <QPainter>
 
 #include <kdebug.h>
@@ -234,10 +235,12 @@ ElementType RowElement::elementType() const
 
 bool RowElement::readMathMLContent( const KoXmlElement& parent )
 {
+    KoXmlNode semanticsNode = parent.namedItemNS( KoXmlNS::math, "semantics" );
+    KoXmlElement realParent = semanticsNode.isNull() ? parent: semanticsNode.toElement();
+
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-    forEachElement( tmp, parent )
-    {
+    forEachElement ( tmp, realParent ) {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         Q_ASSERT( tmpElement );
         if( !tmpElement->readMathML( tmp ) ) {

@@ -104,7 +104,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
                                          KoShapeLoadingContext &context)
 {
     // If this formula is embedded and not inline, then load the embedded document.
-    if ( element.tagName() == "object" ) {
+    if ( element.tagName() == "object" && element.hasAttributeNS( KoXmlNS::xlink, "href" )) {
         m_isInline = false;
 
         // This calls loadOdfEmbedded().
@@ -114,7 +114,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
     }
 
     // It's not a frame:object, so it must be inline.
-    const KoXmlElement &topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
+    const KoXmlElement& topLevelElement = KoXml::namedItemNS(element, KoXmlNS::math, "math");
     if (topLevelElement.isNull()) {
         kWarning() << "no math element as first child";
         return false;
