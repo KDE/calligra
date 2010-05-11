@@ -793,5 +793,8 @@ if __name__ == '__main__':
 		for file in fileList:
 			dir = filenameToDirname(file, extensions)
 			descriptionfile = dir + '.cd'
-			hiddenfile = '/.'.join(os.path.split(file))
+			if file.find('/') == -1:
+				hiddenfile = '.' + file
+			else:
+				hiddenfile = '/.'.join(os.path.split(file))
 			commandFunction(file, dir, descriptionfile, hiddenfile)
