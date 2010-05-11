@@ -954,18 +954,7 @@ void KWordDrawingHandler::defineGraphicProperties(KoGenStyle& style, const DrawS
     // style:border-line-width-top
     // style:editable
     // style:flow-with-text
-    // style:horizontal-pos
-    // style:horizontal-rel
-
-    if (spa != 0) {
-        if (spa->bx == 0)   // current column
-            style.addProperty("style:horizontal-rel","page-content");
-        else if (spa->bx == 1)  // margin
-            style.addProperty("style:horizontal-rel","page");
-        else if (spa->bx == 2)  // page
-            style.addProperty("style:horizontal-rel","paragraph");
-    }
-    // style:mirror
+     // style:mirror
     // style:number-wrapped-paragraphs
     // style:overflow-behavior
     // style:print-content
@@ -975,17 +964,6 @@ void KWordDrawingHandler::defineGraphicProperties(KoGenStyle& style, const DrawS
     // style:repeat
     // style:run-through
     // style:shadow
-    // style:vertical-pos
-    // style:vertical-rel
-
-    if (spa != 0) {
-        if (spa->by == 0)   // margin
-            style.addProperty("style:vertical-rel","page-content");
-        else if (spa->by == 1)  // page
-            style.addProperty("style:vertical-rel","page");
-        else if (spa->by == 2)  // paragraph
-            style.addProperty("style:vertical-rel","paragraph");
-    }
     // style:wrap
     // style:wrap-contour
     // style:wrap-contour-mode
@@ -1017,6 +995,70 @@ void KWordDrawingHandler::defineGraphicProperties(KoGenStyle& style, const DrawS
     /* associate with a text:list-style element */
     if (!listStyle.isNull()) {
         style.addAttribute("style:list-style-name", listStyle);
+    }
+}
+
+void KWordDrawingHandler::defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds)
+{
+    // style:horizontal-pos MS-ODRAW - 2.3.4.19
+    quint32 posH = ds.posH();
+    if (posH == 0) {  // msophAbs
+        style.addProperty("style:horizontal-pos","from-left");
+    } else if (posH == 1) { // msophLeft
+        style.addProperty("style:horizontal-pos","left");
+    } else if (posH == 2) { // msophCenter
+        style.addProperty("style:horizontal-pos","center");
+    } else if (posH == 3) { // msophRight
+        style.addProperty("style:horizontal-pos","right");
+    } else if (posH == 4) { // msophInside
+        style.addProperty("style:horizontal-pos","inside");
+    } else if (posH == 5) { // msophOutside
+        style.addProperty("style:horizontal-pos","outside");
+    }
+
+    // style:horizontal-rel MS-ODRAW 2.3.4.20
+    quint32 posRelH = ds.posRelH();
+
+    if (posRelH == 0) {//msoprhMargin
+        style.addProperty("style:horizontal-rel","page-content");
+    } else if (posRelH == 1) {//msoprhPage
+        style.addProperty("style:horizontal-rel","page");
+    } else if (posRelH == 2) {//msoprhText
+        style.addProperty("style:horizontal-rel","paragraph");
+    } else if (posRelH == 3) {//msoprhChar
+        style.addProperty("style:horizontal-rel","char");
+    } else {
+        style.addProperty("style:horizontal-rel","page-content");
+    }
+
+    // style:vertical-pos MS-ODRAW - 2.3.4.21
+    quint32 posV = ds.posV();
+    if (posV == 0) {  // msophAbs
+        style.addProperty("style:vertical-pos","from-top");
+    } else if (posV == 1) { // msophTop
+        style.addProperty("style:vertical-pos","top");
+    } else if (posV == 2) { // msophCenter
+        style.addProperty("style:vertical-pos","middle");
+    } else if (posV == 3) { // msophBottom
+        style.addProperty("style:vertical-pos","bottom");
+    } else if (posV == 4) { // msophInside - not possible to write it into odf
+        style.addProperty("style:vertical-pos","top");
+    } else if (posV == 5) { // msophOutside - not possible to write it into odf
+        style.addProperty("style:vertical-pos","bottom");
+    }
+
+    // style:vertical-rel MS-ODRAW 2.3.4.22
+    quint32 posRelV = ds.posRelV();
+    if (posRelV == 0) {//msoprvMargin
+        style.addProperty("style:vertical-rel","page-content");
+    } else if (posRelV == 1) {//msoprvPage
+        style.addProperty("style:vertical-rel","page");
+    } else if (posRelV == 2) {//msoprvText
+        style.addProperty("style:vertical-rel","paragraph");
+    } else if (posRelV == 3) { //msoprvLine
+        style.addProperty("style:vertical-rel","line");
+    } else {
+        style.addProperty("style:vertical-rel","page-content");
     }
 }
 
@@ -1063,16 +1105,15 @@ void KWordDrawingHandler::processRectangle(const MSO::OfficeArtSpContainer& o,Dr
     if (out.m_bodyDrawing) {
         KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
         defineGraphicProperties(style, ds, out.m_pSpa);
+        defineAnchorProperties(style, ds);
         styleName = out.styles.insert(style);
     }
     else {
         KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
         defineGraphicProperties(style, ds, out.m_pSpa);
+        defineAnchorProperties(style, ds);
         styleName = out.styles.insert(style);
     }
-//    DocDrawClient drawclient(this);
-//    ODrawToOdf odrawtoodf(drawclient);
-//    odrawtoodf.defineGraphicProperties(style, ds);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);

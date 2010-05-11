@@ -77,6 +77,10 @@ GETTER(quint32,                LineDashing,         lineDashing,        0)
 GETTER(MSO::OfficeArtCOLORREF, LineColor,           lineColor,          black())
 GETTER(qint32,                 LineOpacity,         lineOpacity,        0x10000)
 GETTER(qint32,                 TxflTextFlow,        txflTextFlow,       0)
+GETTER(qint32,                 PosH,                posH,               0)
+GETTER(qint32,                 PosRelH,             posRelH,            2)
+GETTER(qint32,                 PosV,                posV,               0)
+GETTER(qint32,                 PosRelV,             posRelV,            2)
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \

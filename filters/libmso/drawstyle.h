@@ -82,6 +82,14 @@ public:
     qint32 lineOpacity() const;
     // TxflTextFlow
     qint32 txflTextFlow() const;
+    // PosH
+    qint32 posH() const;
+    // PosRelH
+    qint32 posRelH() const;
+    // PosV
+    qint32 posV() const;
+    // PosRelV
+    qint32 posRelV() const;
 };
 
 /**

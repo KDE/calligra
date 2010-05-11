@@ -140,6 +140,7 @@ private:
     void parseOfficeArtContainer(wvWare::OLEStreamReader* table, const wvWare::Word97::FIB &fib);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, wvWare::Word97::FSPA* spa,
             const QString& listStyle=QString());
+    void defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds);
 //    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
     void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);

@@ -215,8 +215,10 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:horizontal-pos","inside");
         else if (pap.dxaAbs == -16)  // outside
             userStyle.addProperty("style:horizontal-pos","outside");
-        else //
+        else { //
             dxaAbs = pap.dxaAbs;
+            userStyle.addProperty("style:horizontal-pos","from-left");
+        }
 
         int dyaAbs = 0;
         //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
@@ -230,8 +232,10 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:vertical-pos","inline");
         else if (pap.dyaAbs == -20)  // outside
             userStyle.addProperty("style:vertical-pos","inline");
-        else //
+        else {//
             dyaAbs = pap.dyaAbs;
+            userStyle.addProperty("style:vertical-pos","from-top");
+        }
 
         //MS-DOC - PositionCodeOperand - anchor vertical position
         if (pap.pcVert == 0)   // margin
