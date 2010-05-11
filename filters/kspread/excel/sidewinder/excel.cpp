@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
+#include <QtEndian>
 
 #include "pole.h"
 #include "swinder.h"
@@ -2545,7 +2546,7 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
     //16 reserved bits
     curOffset += 2;
 
-    unsigned imageSize = readU32(data + curOffset);
+    quint32 imageSize = readU32(data + curOffset);
     curOffset += 4;
 
     static int counter = 1; //we need unique file names
@@ -2558,6 +2559,78 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
     Store *store = m_workbook->store();
     Q_ASSERT(store);
     if(store->open(filename.cstring().c_str())) {
+        //Excel doesn't include the file header, only the pixmap header,
+        //we need to convert it to a standard BMP header
+        //see http://www.fileformat.info/format/bmp/egff.htm for details
+
+        //quint32 headerSize = readU32(data + curOffset); // this header size is always 12
+        curOffset += 4;
+        const quint16 width = readU16(data + curOffset); //in px
+        curOffset += 2;
+        const qint16 height = readU16(data + curOffset); // in px
+        curOffset += 2;
+        //const qint16 planes = data + curOffset; //must be 1
+        curOffset += 2;
+        qint16 bitsPerPixel = readU16(data + curOffset); //usually 24
+        curOffset += 2;
+
+        QByteArray newHeader;
+        newHeader.fill(0x0, 54);
+
+        int currentHeaderOffset = 0;
+
+        //signature
+        newHeader[0] = 0x42;
+        newHeader[1] = 0x4d;
+        currentHeaderOffset += 2;
+
+        char* newHeaderChar = newHeader.data();
+
+        //size
+        imageSize -= 12; //remove the header size
+        const qint32 fileSize = qToLittleEndian(imageSize + 54);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&fileSize), 4);
+        currentHeaderOffset += 4;
+
+        //4 reserved bytes_read
+        currentHeaderOffset += 4;
+
+        //offset to the start of the image, the size of this new header: always 54 bytes
+        const qint32 startImageData = qToLittleEndian(qint32(54));
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&startImageData), 4);
+        currentHeaderOffset += 4;
+
+        const quint32 sizeOfBitmapInfoHeader = qToLittleEndian(qint32(40));
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&sizeOfBitmapInfoHeader), 4);
+        currentHeaderOffset += 4;
+
+        const quint32 imageWidth = qToLittleEndian(qint32(width));
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&imageWidth), 4);
+        currentHeaderOffset += 4;
+
+        const quint32 imageHeight = qToLittleEndian(qint32(height));
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&imageHeight), 4);
+        currentHeaderOffset += 4;
+
+        const quint32 planes = qToLittleEndian(quint16(1));
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&planes), 2);
+        currentHeaderOffset += 2;
+
+        bitsPerPixel = qToLittleEndian(bitsPerPixel);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&bitsPerPixel), 2);
+        currentHeaderOffset += 2;
+
+        //compresion type, for this case always 0
+        currentHeaderOffset += 4;
+
+        //size of image bits
+        const quint32 litEndimageSize = qToLittleEndian(imageSize);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&litEndimageSize), 4);
+        currentHeaderOffset += 4;
+
+        //we leave the remaining bits to zero
+
+        store->write(newHeaderChar, 54);
         store->write((const char*)(data + curOffset), imageSize);
         store->close();
     } else {
