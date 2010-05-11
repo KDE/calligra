@@ -57,6 +57,7 @@ Comment[tr]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[uk]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[wa]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[x-test]=xxAND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XORxx
+Comment[zh_CN]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Comment[zh_TW]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Icon=funct
 Type=Service

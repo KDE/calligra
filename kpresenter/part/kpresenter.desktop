@@ -115,6 +115,7 @@ Comment[sv]=Skriv presentationsdokument
 Comment[uk]=Створення документів презентацій
 Comment[wa]=Sicrire documint di prezintaedje
 Comment[x-test]=xxWrite presentation documentsxx
+Comment[zh_CN]=编写演示文稿
 Comment[zh_TW]=撰寫簡報文件
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;
 Type=Application
