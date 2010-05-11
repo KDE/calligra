@@ -90,15 +90,63 @@ public:
     qint32 posV() const;
     // PosRelV
     qint32 posRelV() const;
+    // Horizontal rule related
+    quint32 pctHR() const;
+    quint32 alignHR() const;
+    qint32 dxHeightHR() const;
+    qint32 dxWidthHR() const;
+    // Wrapping related
+    quint32 pWrapPolygonVertices() const;
+    qint32 dxWrapDistLeft() const;
+    qint32 dyWrapDistTop() const;
+    qint32 dxWrapDistRight() const;
+    qint32 dyWrapDistBottom() const;
+    // Text margins related
+    qint32 dxTextLeft() const;
+    qint32 dyTextTop() const;
+    qint32 dxTextRight() const;
+    qint32 dyTextBottom() const;
+    // GroupShapeBooleanProperties
+    bool fPrint() const;
+    bool fHidden() const;
+    bool fOneD() const;
+    bool fIsButton() const;
+    bool fOnDblClickNotify() const;
+    bool fBehindDocument() const;
+    bool fEditedWrap() const;
+    bool fScriptAnchor() const;
+    bool fReallyHidden() const;
+    bool fAllowOverlap() const;
+    bool fUserDrawn() const;
+    bool fHorizRule() const;
+    bool fNoshadeHR() const;
+    bool fStandardHR() const;
+    bool fIsBullet() const;
+    bool fLayoutInCell() const;
+    bool fUsefPrint() const;
+    bool fUsefHidden() const;
+    bool fUsefOneD() const;
+    bool fUsefIsButton() const;
+    bool fUsefOnDblClickNotify() const;
+    bool fUsefBehindDocument() const;
+    bool fUsefEditedWrap() const;
+    bool fUsefScriptAnchor() const;
+    bool fUsefReallyHidden() const;
+    bool fUsefAllowOverlap() const;
+    bool fUsefUserDrawn() const;
+    bool fUsefHorizRule() const;
+    bool fUsefNoshadeHR() const;
+    bool fUsefStandardHR() const;
+    bool fUsefIsBullet() const;
+    bool fUsefLayoutInCell() const;
 };
 
 /**
  * Retrieve an option from an options containing class B
  *
- * @p b must have a member fopt that is an array of
- * type OfficeArtFOPTEChoice.
- * A is the type of the required option. The option containers
- * in PPT have only one instance of each option in a option container.
+ * @p b must have a member fopt that is an array of type OfficeArtFOPTEChoice.
+ * A is the type of the required option. The option containers in PPT/DOC have
+ * only one instance of each option in an option container.
  * @param b class that contains options.
  * @return pointer to the option of type A or 0 if there is none.
  */
@@ -161,6 +209,62 @@ const A*
 get(const T* o)
 {
     return (o) ?get<A>(*o) :0;
+}
+/**
+ * Retrieve the complex data from an options containing class B
+ *
+ * @p b must have a member fopt that is an array of type OfficeArtFOPTEChoice.
+ * A is the type of the required option.  The option containers in PPT/DOC have
+ * only one instance of each option in an option container.
+ *
+ * @param b class that contains options.
+ * @return pointer to an array storing the complex data or NULL if there were
+ * no complex data or the option of type A at all.
+ */
+template <typename A, typename B>
+QByteArray*
+getComplexData(const B& b)
+{
+    MSO::OfficeArtFOPTE* p = NULL;
+    QByteArray* a = NULL;
+    uint offset = 0;
+
+    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
+        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+        if (p->opid.fComplex) {
+            if (_c.anon.get<A>()) {
+                a = new QByteArray(b.complexData.mid(offset, p->op));
+                break;
+            }
+            else {
+	        offset += p->op;
+	    }
+        }
+    }
+    return a;
+}
+/**
+ * Retrieve the complex data for an option from an OfficeArtSpContainer
+ *
+ * Look in all option containers in @p o for an option of type A.
+ *
+ * @param o OfficeArtSpContainer instance which contains options.
+
+ * @return pointer to an array storing the complex data or NULL if there were
+ * no complex data or the option of type A at all.  The caller takes the
+ * ownership of the array reference.
+ */
+template <typename A>
+QByteArray*
+getComplexData(const MSO::OfficeArtSpContainer& o)
+{
+    QByteArray* a = NULL;
+    if (o.shapePrimaryOptions) a = getComplexData<A>(*o.shapePrimaryOptions);
+    if (!a && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
+    if (!a && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
+    if (!a && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
+    if (!a && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
+    return a;
 }
 
 #endif

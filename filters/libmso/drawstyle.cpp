@@ -60,27 +60,40 @@ TYPE DrawStyle::NAME() const \
     return DEFAULT; \
 }
 
-//     TYPE                    FOPT                 NAME                DEFAULT
-GETTER(quint32,                FillType,            fillType,           0)
-GETTER(MSO::OfficeArtCOLORREF, FillColor,           fillColor,          white())
-GETTER(quint32,                FillBlip,            fillBlip,           0)
-GETTER(qint32,                 FillDztype,          fillDztype,         0)
-GETTER(quint32,                LineEndArrowhead,    lineEndArrowhead,   0)
-GETTER(quint32,                LineStartArrowhead,  lineStartArrowhead, 0)
-GETTER(quint32,                LineStartArrowWidth, lineStartArrowWidth,1)
-GETTER(quint32,                LineEndArrowWidth,   lineEndArrowWidth,  1)
-GETTER(quint32,                LineWidth,           lineWidth,          0x2535)
-GETTER(qint32,                 ShadowOffsetX,       shadowOffsetX,      0x6338)
-GETTER(qint32,                 ShadowOffsetY,       shadowOffsetY,      0x6338)
-GETTER(MSO::FixedPoint,        ShadowOpacity,       shadowOpacity,      one())
-GETTER(quint32,                LineDashing,         lineDashing,        0)
-GETTER(MSO::OfficeArtCOLORREF, LineColor,           lineColor,          black())
-GETTER(qint32,                 LineOpacity,         lineOpacity,        0x10000)
-GETTER(qint32,                 TxflTextFlow,        txflTextFlow,       0)
-GETTER(qint32,                 PosH,                posH,               0)
-GETTER(qint32,                 PosRelH,             posRelH,            2)
-GETTER(qint32,                 PosV,                posV,               0)
-GETTER(qint32,                 PosRelV,             posRelV,            2)
+//     TYPE                    FOPT                  NAME                  DEFAULT
+GETTER(quint32,                FillType,             fillType,             0)
+GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white())
+GETTER(quint32,                FillBlip,             fillBlip,             0)
+GETTER(qint32,                 FillDztype,           fillDztype,           0)
+GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)
+GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)
+GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)
+GETTER(quint32,                LineEndArrowWidth,    lineEndArrowWidth,    1)
+GETTER(quint32,                LineWidth,            lineWidth,            0x2535)
+GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)
+GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)
+GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())
+GETTER(quint32,                LineDashing,          lineDashing,          0)
+GETTER(MSO::OfficeArtCOLORREF, LineColor,            lineColor,            black())
+GETTER(qint32,                 LineOpacity,          lineOpacity,          0x10000)
+GETTER(qint32,                 TxflTextFlow,         txflTextFlow,         0)
+GETTER(qint32,                 PosH,                 posH,                 0)
+GETTER(qint32,                 PosRelH,              posRelH,              2)
+GETTER(qint32,                 PosV,                 posV,                 0)
+GETTER(qint32,                 PosRelV,              posRelV,              2)
+GETTER(quint32,                PctHR,                pctHR,                0x000003e8)
+GETTER(quint32,                AlignHR,              alignHR,              0)
+GETTER(qint32,                 DxHeightHR,           dxHeightHR,           0)
+GETTER(qint32,                 DxWidthHR,            dxWidthHR,            0)
+GETTER(quint32,                PWrapPolygonVertices, pWrapPolygonVertices, 0)
+GETTER(qint32,                 DxWrapDistLeft,       dxWrapDistLeft,       0)
+GETTER(qint32,                 DyWrapDistTop,        dyWrapDistTop,        0)
+GETTER(qint32,                 DxWrapDistRight,      dxWrapDistRight,      0)
+GETTER(qint32,                 DyWrapDistBottom,     dyWrapDistBottom,     0)
+GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)
+GETTER(qint32,                 DyTextTop,            dyTextTop,            0)
+GETTER(qint32,                 DxTextRight,          dxTextRight,          0)
+GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
@@ -105,7 +118,7 @@ bool DrawStyle::NAME() const \
     } \
     return DEFAULT; \
 }
-//     FOPT                       NAME             TEST               DEFAULT
+// FOPT        NAME           TEST                       DEFAULT
 #define FOPT FillStyleBooleanProperties
 GETTER(fNoFillHitTest,        fUseNoFillHitTest,         false)
 GETTER(fillUseRect,           fUseFillUseRext,           false)
@@ -124,3 +137,22 @@ GETTER(fArrowHeadsOK,         fUsefArrowHeadsOK,         false)
 GETTER(fInsetPenOK,           fUseInsetPenOK,            true)
 GETTER(fInsetPen,             fUseInsetPen,              false)
 GETTER(fLineOpaqueBackColor,  fUsefLineOpaqueBackColor,  false)
+#undef FOPT
+#define FOPT GroupShapeBooleanProperties
+GETTER(fPrint,                fUsefPrint,                true)
+GETTER(fHidden,               fUsefHidden,               false)
+GETTER(fOneD,                 fUsefOneD,                 false)
+GETTER(fIsButton,             fUsefIsButton,             false)
+GETTER(fOnDblClickNotify,     fUsefOnDblClickNotify,     false)
+GETTER(fBehindDocument,       fUsefBehindDocument,       false)
+GETTER(fEditedWrap,           fUsefEditedWrap,           false)
+GETTER(fScriptAnchor,         fUsefScriptAnchor,         false)
+GETTER(fReallyHidden,         fUsefReallyHidden,         false)
+GETTER(fAllowOverlap,         fUsefAllowOverlap,         true)
+GETTER(fUserDrawn,            fUsefUserDrawn,            false)
+GETTER(fHorizRule,            fUsefHorizRule,            false)
+GETTER(fNoshadeHR,            fUsefNoshadeHR,            false)
+GETTER(fStandardHR,           fUsefStandardHR,           false)
+GETTER(fIsBullet,             fUsefIsBullet,             false)
+GETTER(fLayoutInCell,         fUsefLayoutInCell,         true)
+#undef FOPT
