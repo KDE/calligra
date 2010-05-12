@@ -265,23 +265,3 @@ bool MsooXmlReader::expectNS(const char* nsName)
     }
     return true;
 }
-
-//----------------------------------------------------------------------------
-
-KoFilter::ConversionStatus MsooXmlReader::read_sz(const QByteArray& ns, KoCharacterStyle* characterStyle)
-{
-    const QXmlStreamAttributes attrs(attributes());
-    QString val(attrs.value(ns + ":val").toString());
-    kDebug() << (ns + ":val") << val;
-    if (!val.isEmpty()) {
-// CASE #1164
-        bool ok;
-        const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0;   /* half-points */
-        if (ok) {
-            kDebug() << "pointSize:" << pointSize;
-            characterStyle->setFontPointSize(pointSize);
-        }
-    }
-    readNext();
-    return KoFilter::OK;
-}

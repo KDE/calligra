@@ -122,9 +122,6 @@ protected:
     //! Decodes boolean attribute. Used by read_b(), read_i(), etc.
     bool readBooleanAttr(const char* attrName, bool defaultValue = false) const;
 
-    //! generic reader methods for common elements
-    KoFilter::ConversionStatus read_sz(const QByteArray& ns, KoCharacterStyle* characterStyle);
-
     QString m_defaultNamespace; //!< stores namespace (for optimization)
 
     QStack<QByteArray> m_callsNames;

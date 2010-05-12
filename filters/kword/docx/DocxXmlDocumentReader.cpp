@@ -1791,11 +1791,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 {
     READ_PROLOGUE
-    const char *ns = 0;
-#ifdef MSOOXML_CURRENT_NS
-    ns = MSOOXML_CURRENT_NS;
-#endif
-    RETURN_IF_ERROR(MSOOXML::MsooXmlReader::read_sz(ns, m_currentTextStyleProperties))
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(val)
+    bool ok;
+    const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0; /* half-points */
+    if (ok) {
+        kDebug() << "pointSize:" << pointSize;
+        m_currentTextStyleProperties->setFontPointSize(pointSize);
+    }
+    SKIP_EVERYTHING
     READ_EPILOGUE
 }
 
