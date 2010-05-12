@@ -2574,6 +2574,8 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
         qint16 bitsPerPixel = readU16(data + curOffset); //usually 24
         curOffset += 2;
 
+        //For the standard header see wikipedia or
+        //http://www.fastgraph.com/help/bmp_header_format.html
         QByteArray newHeader;
         newHeader.fill(0x0, 54);
 
@@ -2592,7 +2594,7 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
         memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&fileSize), 4);
         currentHeaderOffset += 4;
 
-        //4 reserved bytes_read
+        //4 reserved bytes
         currentHeaderOffset += 4;
 
         //offset to the start of the image, the size of this new header: always 54 bytes
