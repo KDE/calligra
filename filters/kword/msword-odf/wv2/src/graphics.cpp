@@ -239,6 +239,11 @@ int FBSE::getNameLength()
     return static_cast<unsigned int> (cbName);
 }
 
+U8* FBSE::getRgbUid()
+{
+    return rgbUid;
+}
+
 Blip::Blip( OLEStreamReader* stream, string blipType )
 {
     m_size = 0; //just an initial value

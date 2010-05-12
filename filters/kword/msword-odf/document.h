@@ -28,6 +28,7 @@
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functor.h>
+#include "pole.h"
 
 #include <QString>
 #include <qdom.h>
@@ -65,7 +66,8 @@ class Document : public QObject, public wvWare::SubDocumentHandler
     Q_OBJECT
 public:
     Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-             KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter);
+             KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+             KoStore* store, POLE::Storage* storage);
     virtual ~Document();
 
     KWordTextHandler *textHandler() const {
@@ -111,12 +113,13 @@ public:
         QString extraName;
     };
 
-    // Provide access to those attributes for texthandler.cpp and tablehandler.cpp
+    // Provide access to private attributes for our handlers
     QString masterPageName(void) const { return m_masterPageName_list.first(); }
     void set_writeMasterPageName(bool val) { m_writeMasterPageName = val; }
     bool writeMasterPageName(void) const { return m_writeMasterPageName; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
+    POLE::Storage* storage(void) const { return m_storage; }
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
@@ -172,7 +175,6 @@ private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
     std::queue<KWord::Table> m_tableQueue;
-    QStringList m_pictureList; // for <PICTURES>
 
     bool m_bodyFound;
 
@@ -203,6 +205,9 @@ private:
     int m_initialEndnoteNumber;
 
     QString m_lineNumbersStyleName;
+
+    POLE::Storage* m_storage; // pointer to the pole storage
+    QMap<QByteArray, QString> m_picNames; //picture names shared in graphicshandler.cpp
 };
 
 #endif // DOCUMENT_H

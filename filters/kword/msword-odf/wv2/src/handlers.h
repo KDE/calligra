@@ -249,8 +249,8 @@ namespace wvWare {
         /**
          * This method is called when the image is escher data.
          */
-        virtual void escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type, U32 pib);
-        virtual void escherData( std::vector<U8> data, SharedPtr<const Word97::PICF> picf, int type, U32 pib);
+        virtual void escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type, const U8* rgbUid);
+        virtual void escherData( std::vector<U8> data, SharedPtr<const Word97::PICF> picf, int type, const U8* rgbUid);
         /**
          * This method is called when you invoke a PictureFunctor and the embedded
          * image is a .wmf file. The data can be accessed using the OLEImageReader.
@@ -276,8 +276,8 @@ namespace wvWare {
         virtual ~DrawingHandler();
 
         /**
-         *This method is called when picture should be drawn. Function gets cp of drawing
-         *and and draws the date belonging to it.
+         * This method is called when picture should be drawn. Function gets cp
+         * of a drawing and draws the data belonging to it.
          */
         virtual void drawingData(unsigned int globalCP);
     };

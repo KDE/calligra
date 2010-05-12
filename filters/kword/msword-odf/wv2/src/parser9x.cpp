@@ -1053,23 +1053,12 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     }
 
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "picf:" << endl << " lcb=" << picf->lcb << " cbHeader=" << picf->cbHeader
-            <<  endl << " mfp.mm=" << picf->mfp.mm << " mfp.xExt=" << picf->mfp.xExt
-            << " mfp.yExt=" << picf->mfp.yExt << " mfp.hMF=" << picf->mfp.hMF << endl
-            << " dxaGoal=" << picf->dxaGoal << " dyaGoal=" << picf->dyaGoal << " mx="
-            << picf->mx << " my=" << picf->my << endl << " dxaCropLeft=" << picf->dxaCropLeft
-            << " dyaCropTop=" << picf->dyaCropTop << " dxaCropRight=" << picf->dxaCropRight
-            << " dyaCropBottom=" << picf->dyaCropBottom << endl << " fFrameEmpty="
-            << picf->fFrameEmpty << " fBitmap=" << picf->fBitmap << " fDrawHatch="
-            << picf->fDrawHatch << " fError=" << picf->fError << " bpp=" << picf->bpp
-            << endl << " dxaOrigin=" << picf->dxaOrigin << " dyaOrigin="
-            << picf->dyaOrigin << endl;
+    picf->dump();
 #endif
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
     m_textHandler->pictureFound( make_functor( *this, &Parser9x::parsePicture,
-                                               PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ), sharedPicf ) ),
-                                 sharedPicf, chp );
+                                               PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ), sharedPicf ) ), sharedPicf, chp );
 }
 
 void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
@@ -1236,7 +1225,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
 #endif
                     z.EndCompression(&outBuffer);
                     //pass vector to escherData instead of OLEImageReader
-                    m_pictureHandler->escherData(outBuffer, data.picf, fbse.getBlipType(), pib);
+                    m_pictureHandler->escherData(outBuffer, data.picf, fbse.getBlipType(), fbse.getRgbUid());
                 }
                 //normal data, just create an OLEImageReader to be read
                 else
@@ -1244,7 +1233,7 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
                     int start = stream->tell();
                     int limit = endOfPicf; //TODO is it possible that it wouldn't go all the way to the end?
                     OLEImageReader reader( *stream, start, limit);
-                    m_pictureHandler->escherData(reader, data.picf, fbse.getBlipType(), pib);
+                    m_pictureHandler->escherData(reader, data.picf, fbse.getBlipType(), fbse.getRgbUid());
                     //we've read the data in OLEImageReader, so advance stream to the
                     //end of OLEImageReader
                     stream->seek( endOfPicf, G_SEEK_SET );

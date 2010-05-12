@@ -138,6 +138,7 @@ namespace wvWare
                     //(does NOT include actual picture data, either, which is in a
                     //new record)
 
+        U8* getRgbUid();
         int getBlipType();
         int getStreamOffset();
         int getNameLength();

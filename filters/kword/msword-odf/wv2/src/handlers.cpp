@@ -141,11 +141,11 @@ void PictureHandler::bitmapData( OLEImageReader& /*reader*/, SharedPtr<const Wor
 {
 }
 
-void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, wvWare::U32 /*pib*/)
+void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
 {
 }
 
-void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, wvWare::U32 /*pib*/)
+void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
 {
 }
 

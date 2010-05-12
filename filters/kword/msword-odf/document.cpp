@@ -50,14 +50,13 @@
 #include <QColor>
 
 Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
+                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+                   KoStore* store, POLE::Storage* storage)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
-        , m_pictureHandler(new KWordPictureHandler(this, bodyWriter,
-                           manifestWriter, store,
-                           mainStyles))
-        , m_drawingHandler(new KWordDrawingHandler(this,mainStyles,bodyWriter))
+        , m_pictureHandler(new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames))
+        , m_drawingHandler(new KWordDrawingHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames))
         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
 	  //        , m_headerFooters(0)
@@ -76,6 +75,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_buffer(0)
         , m_bufferEven(0)
         , m_writeMasterPageName(false)
+        , m_storage(0)
 {
     kDebug(30513);
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
@@ -86,6 +86,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
         m_headerWriter = 0;
+        m_storage = storage;
 
         m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
@@ -116,7 +117,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
 #ifdef IMAGE_IMPORT
         m_parser->setPictureHandler(m_pictureHandler);
 #endif
-        m_drawingHandler->init(m_parser->getDrawings(),m_parser->getTable(),m_parser->fib());
+        m_drawingHandler->init(m_parser->getDrawings(), m_parser->fib());
         m_parser->setDrawingHandler(m_drawingHandler);
 
         m_parser->setInlineReplacementHandler(m_replacementHandler);

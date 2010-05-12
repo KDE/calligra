@@ -42,6 +42,7 @@
 #include <wv2/src/word95_generated.h>
 #include <wv2/src/olestorage.h>
 #include <wv2/src/olestream.h>
+#include "pole.h"
 
 typedef KGenericFactory<MSWordOdfImport> MSWordOdfImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libmswordodf_import, MSWordOdfImportFactory("kofficefilters"))
@@ -95,6 +96,13 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     // check if file is encrypted
     if (isEncrypted(inputFile))
         return KoFilter::PasswordProtected;
+
+    // NOTE: testing the pole storage which should replace olestorage
+    POLE::Storage storage(inputFile.toLocal8Bit());
+    if (!storage.open()) {
+        kDebug(30513) << "Cannot open " << inputFile;
+        return KoFilter::StupidError;
+    }
 
     // Create output files
     KoStore *storeout;
@@ -157,8 +165,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), m_chain, bodyWriter, mainStyles,
-                                      &metaWriter, storeout, &manifestWriter);
+    Document *document = new Document(QFile::encodeName(inputFile).data(), m_chain, bodyWriter,
+                                      mainStyles, &metaWriter, &manifestWriter,
+                                      storeout, &storage);
     finalizer.m_document = document;
 
     //check that we can parse the document?
