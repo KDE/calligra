@@ -22,6 +22,8 @@
 
 #include <QCache>
 #include <QRect>
+#include <QPainter>
+
 
 #include <KoViewConverter.h>
 
@@ -205,6 +207,35 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
 
 // kDebug() <<"paintRect:" << paintRect;
 // kDebug() <<"topLeft:" << topLeft;
+
+    // 0. Paint the sheet background
+    if (!sheet()->backgroundImage().isNull()) {
+        const int firstCol = d->visibleRect.left();
+        const int firstRow = d->visibleRect.top();
+        const int firstColPosition = d->sheet->columnPosition(firstCol);
+        const int firstRowPosition = d->sheet->rowPosition(firstRow);
+
+        const int imageWidth = sheet()->backgroundImage().rect().width();
+        const int imageHeight = sheet()->backgroundImage().rect().height();
+
+        int xBackground = firstColPosition - (firstColPosition % imageWidth);
+        int yBackground = firstRowPosition - (firstRowPosition % imageHeight);
+
+        const int lastCol = d->visibleRect.right();
+        const int lastRow = d->visibleRect.bottom();
+        const int lastColPosition = d->sheet->columnPosition(lastCol);
+        const int lastRowPosition = d->sheet->rowPosition(lastRow);
+
+        while( xBackground < lastColPosition ) {
+            int y = yBackground;
+            while( y < lastRowPosition ) {
+                painter.drawImage(QRect(xBackground, y, imageWidth, imageHeight), sheet()->backgroundImage());
+                y += imageHeight;
+            }
+            xBackground += imageWidth;
+        }
+    }
+
     // 1. Paint the cell background
 
     // Handle right-to-left layout.
