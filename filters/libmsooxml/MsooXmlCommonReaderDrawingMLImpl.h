@@ -1053,6 +1053,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
             ELSE_TRY_READ_IF(spcBef)
+            ELSE_TRY_READ_IF(lnSpc)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -2520,6 +2521,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL lnSpc
+//! lnSpc - line spacing
+/*!
+ Parent elements:
+
+ - defPPr (§21.1.2.2.2)
+ - lvl1pPr (§21.1.2.4.13)
+ - lvl2pPr (§21.1.2.4.14)
+ - lvl3pPr (§21.1.2.4.15)
+ - lvl4pPr (§21.1.2.4.16)
+ - lvl5pPr (§21.1.2.4.17)
+ - lvl6pPr (§21.1.2.4.18)
+ - lvl7pPr (§21.1.2.4.19)
+ - lvl8pPr (§21.1.2.4.20)
+ - lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+
+ - [done] spcPct (Spacing Percent) §21.1.2.2.11
+ - spcPts (Spacing Points)  §21.1.2.2.12
+
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF(spcPct)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL spcPts
 //! spcPts - spacing points
 /*!
@@ -2542,6 +2581,36 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
     if (ok) {
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop/100);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL spcPct
+//! spcPct - spacing percentage
+/*!
+ Parent elements:
+ - [done] lnSpc (§21.1.2.2.5)
+ - spcAft (§21.1.2.2.9)
+ - spcBef (§21.1.2.2.10)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+   
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    bool ok = false;
+    int lineSpace = val.toDouble(&ok)/1000;
+    if (ok) {
+        QString space = "%1";
+        space = space.arg(lineSpace);
+        space.append('%');
+        m_currentParagraphStyle.addProperty("fo:line-height", space);
     }
 
     readNext();
