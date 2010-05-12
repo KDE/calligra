@@ -47,6 +47,8 @@ class KoPAPageBase;
 class QShortcut;
 class QCheckBox;
 
+class OfficeInterface;
+
 /*!
  * \brief Main window of the application. KoCanvasController is set as
  * the central widget. It displays the loaded documents.
@@ -203,6 +205,9 @@ private:
     void raiseWindow(void);
 
 private slots:
+
+    void menuClicked(QAction* action);     
+    void pluginOpen(bool newWindow, const QString& path);
     void updateUI();
     void resourceChanged(int key, const QVariant &value);
     /*!
@@ -311,6 +316,9 @@ public slots:
     void loadScrollAndQuit();
 
 private:
+
+    QMap<QString, OfficeInterface*> loadedPlugins;
+
     void setShowProgressIndicator(bool visible);
     /*!
      * Opened file

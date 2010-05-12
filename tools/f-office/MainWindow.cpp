@@ -22,6 +22,7 @@
  *
  */
 
+#include "OfficeInterface.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "Common.h"
@@ -110,6 +111,33 @@ void MainWindow::init()
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionAbout);
+    
+    // false here means that they are not plugins
+    m_ui->actionOpen->setData(QVariant(false));
+    m_ui->actionAbout->setData(QVariant(false));
+
+    const QDir pluginDir("/usr/lib/freoffice/");
+    const QStringList plugins = pluginDir.entryList(QDir::Files);
+
+    for (int i = 0; i < plugins.size(); ++i) {
+        QPluginLoader test(pluginDir.absoluteFilePath(plugins.at(i)));
+        QObject *plug = test.instance();
+        plug->setParent(this);
+        if (plug != 0)
+        {
+            OfficeInterface* inter = qobject_cast<OfficeInterface*>(plug);
+            const QString plugName = inter->pluginName();
+            loadedPlugins[plugName] = inter;
+            connect(plug, SIGNAL(openDocument(bool, const QString&)), this, SLOT(pluginOpen(bool, const QString&)));
+            QAction *action = new QAction(plugName, this);
+            
+            // True states that this action is a plugin            
+            action->setData(QVariant(true));
+            menu->addAction(action);
+        }
+    }
+
+    connect(menu, SIGNAL(triggered(QAction*)), this, SLOT(menuClicked(QAction*)));
 
     m_search = new QLineEdit(this);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_search);
@@ -169,11 +197,22 @@ void MainWindow::init()
 
     m_copyShortcut = new QShortcut(QKeySequence::Copy, this);
     connect(m_copyShortcut, SIGNAL(activated()), this, SLOT(copy()));
+
+    // Toolbar should be shown only when we open a document
+    m_ui->viewToolBar->hide();
 }
 
 MainWindow::~MainWindow()
 {
     closeDocument();
+
+    QMapIterator<QString, OfficeInterface*> i(loadedPlugins);
+    while (i.hasNext())
+    {
+        i.next();
+        delete i.value();
+    }
+
     delete m_ui;
     m_ui = 0;
 }
@@ -310,6 +349,7 @@ void MainWindow::closeDocument()
 
     m_ui->actionZoomLevel->setText(i18n("%1 %", 100));
     m_ui->actionPageNumber->setText(i18n("%1 of %2", 0, 0));
+    m_ui->viewToolBar->hide();
 }
 
 void MainWindow::doOpenDocument()
@@ -333,6 +373,8 @@ void MainWindow::raiseWindow(void)
 
 void MainWindow::openDocument(const QString &fileName)
 {
+    m_ui->viewToolBar->show();
+
     if (!checkFiletype(fileName))
         return;
 
@@ -1038,6 +1080,25 @@ void MainWindow::checkDBusActivation()
 {
     if (m_splash && !this->isActiveWindow())
         openFileDialog();
+}
+
+void MainWindow::pluginOpen(bool newWindow, const QString& path)
+{
+    openDocument(path);
+}
+
+void MainWindow::menuClicked(QAction* action)
+{
+    if (!action->data().toBool())
+    {
+        return; // We return if it was not a plugin action
+    }
+
+    const QString activeText = action->text();
+    closeDocument();
+    OfficeInterface *nextPlugin = loadedPlugins[activeText];
+    nextPlugin->setDocument(m_doc);
+    setCentralWidget(nextPlugin->view());
 }
 
 void MainWindow::loadScrollAndQuit()
