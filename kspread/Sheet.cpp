@@ -56,6 +56,7 @@
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoStore.h>
 
 #include "CellStorage.h"
 #include "part/Canvas.h" // FIXME detach from part
@@ -2264,6 +2265,23 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                         }
                     }
                 }
+            }
+
+            if (style->hasChildNodes() ) {
+                KoXmlElement element;
+                forEachElement(element, properties) {
+                    if (element.nodeName() == "style:background-image") {
+                        QString imagePath = element.attributeNS(KoXmlNS::xlink, "href");
+                        KoStore* store = tableContext.odfContext.store();
+                        if( store->hasFile(imagePath) ) {
+                            QByteArray data;
+                            store->extractFile(imagePath, data);
+                            QImage image = QImage::fromData( data );
+                            setBackgroundImage(image);
+                        }
+                    }
+                }
+
             }
         }
     }
