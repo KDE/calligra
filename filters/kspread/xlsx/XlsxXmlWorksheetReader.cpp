@@ -197,6 +197,9 @@ public:
     int maxColumn() const { return m_maxColumn; }
     int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
 
+    QString pictureBackgroundPath() { return m_pictureBackgroundPath; }
+    void setPictureBackgroundPath(const QString& path) { m_pictureBackgroundPath = path; }
+
 private:
     QHash<int, Row*> m_rows;
     QHash<int, Column*> m_columns;
@@ -204,6 +207,7 @@ private:
     int m_maxRow;
     int m_maxColumn;
     QHash<int, int> m_maxCellsInRow;
+    QString m_pictureBackgroundPath;
 };
 
 class XlsxXmlWorksheetReader::Private
@@ -397,8 +401,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 //! @todo table:display="true" hardcoded
     m_tableStyle.addProperty("table:display", XlsxXmlWorksheetReader::constTrue);
 
-    const QString currentTableStyleName(mainStyles->insert(m_tableStyle, "ta"));
-    body->addAttribute("table:style-name", currentTableStyleName);
+    //The style might be changed depending on what elements we find, 
+    //hold the body writer so that we can set the proper style
+    KoXmlWriter* heldBody = body;
+    QBuffer* bodyBuffer = new QBuffer();
+    bodyBuffer->open(QIODevice::ReadWrite);
+    body = new KoXmlWriter(bodyBuffer);
 
     while (!atEnd()) {
         readNext();
@@ -414,6 +422,31 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    bodyBuffer->close();
+
+    if( !d->sheet->pictureBackgroundPath().isNull() ) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buffer);
+
+        writer.startElement("style:background-image");
+        writer.addAttribute("xlink:href", d->sheet->pictureBackgroundPath());
+        writer.addAttribute("xlink:type", "simple");
+        writer.addAttribute("xlink:show", "embed");
+        writer.addAttribute("xlink:actuate", "onLoad");
+        writer.endElement();
+
+        buffer.close();
+        m_tableStyle.addChildElement("style:background-image", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
+    }
+
+    const QString currentTableStyleName(mainStyles->insert(m_tableStyle, "ta"));
+    heldBody->addAttribute("table:style-name", currentTableStyleName);
+    heldBody->addCompleteElement(bodyBuffer);
+    delete body;
+    delete bodyBuffer;
+    body = heldBody;
 
     // now we have everything to start writing the actual cells
     for(int c = 0; c <= d->sheet->maxColumn(); ++c) {
@@ -1411,6 +1444,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "Pictures/", fileName) )
+    d->sheet->setPictureBackgroundPath(fileName);
     //NOTE manifest entry is added by copyFile
 
     while (!atEnd()) {
