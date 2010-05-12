@@ -69,6 +69,7 @@ Outline::Outline(KoShape *shape, const QMatrix &matrix)
 
 void Outline::init(const QMatrix &matrix, const QPainterPath &outline, qreal distance)
 {
+    m_distance = distance;
     QPainterPath path =  matrix.map(outline);
     m_bounds = path.boundingRect();
     if (distance >= 0.0) {
@@ -167,3 +168,8 @@ qreal Outline::xAtY(const QLineF &line, qreal y)
     return line.x1() + (y - line.y1()) / line.dy() * line.dx();
 }
 
+void Outline::changeMatrix(const QMatrix &matrix)
+{
+    m_edges.clear();
+    init(matrix, m_shape->outline(), m_distance);
+}

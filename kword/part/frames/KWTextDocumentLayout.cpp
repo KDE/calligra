@@ -418,11 +418,10 @@ void KWTextDocumentLayout::layout()
                 foreach (Outline *outline, outlines) {
                     if (outline->shape() == strategy->anchoredShape()) {
                         ADEBUG << "  refreshing outline";
-                        outlines.removeAll(outline);
                         QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
-                        outlines.append(new Outline(strategy->anchoredShape(), matrix));
+                        outline->changeMatrix(matrix);
                         break;
                     }
                 }

@@ -42,12 +42,15 @@ public:
 
     static qreal xAtY(const QLineF &line, qreal y);
 
+    void changeMatrix(const QMatrix &matrix);
+
 private:
     enum Side { None, Left, Right, Empty }; // TODO support Auto and Both
     Side m_side;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
     KoShape *m_shape;
+    qreal m_distance;
 };
 
 #endif
