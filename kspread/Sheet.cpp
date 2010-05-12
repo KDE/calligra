@@ -3770,7 +3770,7 @@ void Sheet::setShowPageBorders(bool b)
     emit sig_updateView(this);
 }
 
-QImage Sheet::backgroundImage()
+QImage Sheet::backgroundImage() const
 {
     return d->backgroundImage;
 }
@@ -3780,7 +3780,7 @@ void Sheet::setBackgroundImage(const QImage& image)
     d->backgroundImage = image;
 }
 
-Sheet::BackgroundImageProperties Sheet::backgroundImageProperties()
+Sheet::BackgroundImageProperties Sheet::backgroundImageProperties() const
 {
     return d->backgroundProperties;
 }

@@ -312,11 +312,11 @@ public:
     /**
      * @return The QImage used as the background picture for this sheet
      */
-    QImage backgroundImage();
+    QImage backgroundImage() const;
 
     void setBackgroundImageProperties( const BackgroundImageProperties& properties );
     
-    BackgroundImageProperties backgroundImageProperties();
+    BackgroundImageProperties backgroundImageProperties() const;
 
     //
     //END Methods related to sheet properties
