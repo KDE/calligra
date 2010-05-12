@@ -1879,9 +1879,9 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
-    writer.addAttribute("style:repeat", "true");
     writer.endElement();
 
+    buffer.close();
     style.addChildElement("style:background-image", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
 }
 
