@@ -221,7 +221,7 @@ target_link_libraries(kspreadcommon
     komain
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
-    kutils
+    ${KDE4_KUTILS_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
