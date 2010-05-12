@@ -2274,10 +2274,10 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     if (element.nodeName() == "style:background-image") {
                         QString imagePath = element.attributeNS(KoXmlNS::xlink, "href");
                         KoStore* store = tableContext.odfContext.store();
-                        if( store->hasFile(imagePath) ) {
+                        if (store->hasFile(imagePath)) {
                             QByteArray data;
                             store->extractFile(imagePath, data);
-                            QImage image = QImage::fromData( data );
+                            QImage image = QImage::fromData(data);
                             setBackgroundImage(image);
                             //TODO load backgroundProperties
                         }
