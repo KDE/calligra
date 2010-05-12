@@ -31,6 +31,7 @@
 #include <QStack>
 #include <QTextStream>
 #include <QPainter>
+#include <QImage>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -160,6 +161,8 @@ public:
     // Max range of canvas in x and y direction.
     //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
     QSizeF documentSize;
+
+    QImage backgroundImage;
 };
 
 int Sheet::s_id = 0;
@@ -3746,6 +3749,17 @@ void Sheet::setShowPageBorders(bool b)
     d->showPageBorders = b;
     emit sig_updateView(this);
 }
+
+QImage Sheet::backgroundImage()
+{
+    return d->backgroundImage;
+}
+
+void Sheet::setBackgroundImage(const QImage& image)
+{
+    d->backgroundImage = image;
+}
+
 
 void Sheet::insertColumnFormat(ColumnFormat *l)
 {

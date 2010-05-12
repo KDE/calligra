@@ -270,6 +270,16 @@ public:
      */
     void setShowPageBorders(bool _b);
 
+    /**
+     * Set background image for this sheet
+     */
+    void setBackgroundImage( const QImage& image );
+
+    /**
+     * @return The QImage used as the background picture for this sheet
+     */
+    QImage backgroundImage();
+
     //
     //END Methods related to sheet properties
     //
