@@ -42,7 +42,7 @@ public:
 
     ~KoToolBasePrivate()
     {
-        qDeleteAll(optionWidgets);
+        //qDeleteAll(optionWidgets); // disabled means Mem leak, but no crash...
     }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
