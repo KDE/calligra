@@ -363,7 +363,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
  - pageMargins (Page Margins) §18.3.1.62
  - pageSetup (Page Setup Settings) §18.3.1.63
  - phoneticPr (Phonetic Properties) §18.4.3
- - picture (Background Image) §18.3.1.67
+ - [done] picture (Background Image) §18.3.1.67
  - printOptions (Print Options) §18.3.1.70
  - protectedRanges (Protected Ranges) §18.3.1.72
  - rowBreaks (Horizontal Page Breaks (Row)) §18.3.1.74
@@ -410,6 +410,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(mergeCells)
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(hyperlinks)
+            ELSE_TRY_READ_IF(picture)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -1398,3 +1399,24 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
     }
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL picture
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+    const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
+    QString fileName = link.right( link.lastIndexOf('/') +1 );
+    RETURN_IF_ERROR( copyFile(link, "Pictures/", fileName) )
+    //NOTE manifest entry is added by copyFile
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+

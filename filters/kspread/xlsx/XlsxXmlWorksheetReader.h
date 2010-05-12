@@ -65,6 +65,7 @@ protected:
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_hyperlinks();
+    KoFilter::ConversionStatus read_picture();
 
     XlsxXmlWorksheetReaderContext* m_context;
 
