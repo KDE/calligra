@@ -164,6 +164,7 @@ public:
     QSizeF documentSize;
 
     QImage backgroundImage;
+    Sheet::BackgroundImageProperties backgroundProperties;
 };
 
 int Sheet::s_id = 0;
@@ -2278,6 +2279,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             store->extractFile(imagePath, data);
                             QImage image = QImage::fromData( data );
                             setBackgroundImage(image);
+                            //TODO load backgroundProperties
                         }
                     }
                 }
@@ -3778,6 +3780,15 @@ void Sheet::setBackgroundImage(const QImage& image)
     d->backgroundImage = image;
 }
 
+Sheet::BackgroundImageProperties Sheet::backgroundImageProperties()
+{
+    return d->backgroundProperties;
+}
+
+void Sheet::setBackgroundImageProperties(const Sheet::BackgroundImageProperties& properties)
+{
+    d->backgroundProperties = properties;
+}
 
 void Sheet::insertColumnFormat(ColumnFormat *l)
 {

@@ -270,6 +270,40 @@ public:
      */
     void setShowPageBorders(bool _b);
 
+    struct BackgroundImageProperties {
+        BackgroundImageProperties()
+        : repeat(Repeat)
+        , opacity(1.0)
+        , verticalPosition(VerticalCenter)
+        , horizontalPosition(HorizontalCenter)
+        {}
+
+        enum Repetition {
+            NoRepeat,
+            Repeat,
+            Stretch
+        };
+        Repetition repeat;
+
+        float opacity;
+
+        enum VerticalPosition {
+            Left,
+            VerticalCenter,
+            Right
+        };
+        VerticalPosition verticalPosition;
+
+        enum HorizontalPosition {
+            Top,
+            HorizontalCenter,
+            Bottom
+        };
+        HorizontalPosition horizontalPosition;
+
+        //TODO filterName
+    };
+
     /**
      * Set background image for this sheet
      */
@@ -279,6 +313,10 @@ public:
      * @return The QImage used as the background picture for this sheet
      */
     QImage backgroundImage();
+
+    void setBackgroundImageProperties( const BackgroundImageProperties& properties );
+    
+    BackgroundImageProperties backgroundImageProperties();
 
     //
     //END Methods related to sheet properties
