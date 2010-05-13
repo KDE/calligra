@@ -576,8 +576,6 @@ QList<DataSet*> KDChartModel::dataSets() const
 
 void KDChartModel::emitReset()
 {
-    int biggestDataSetIndex = -1;
-
     // Update max data set sizes
     d->biggestDataSetSize = d->calcMaxDataSetSize();
 
