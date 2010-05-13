@@ -26,7 +26,9 @@
 #define NO_EXTERNAL_SOURCES
 
 #ifdef NO_EXTERNAL_SOURCES
+#ifdef __GNUC__
 #warning enable external data sources for 2.3
+#endif
 #endif
 
 KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn) : QWidget(parent)
