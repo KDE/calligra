@@ -1107,7 +1107,7 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     // Only paint the actual chart if there is a certain minimal size,
     // because otherwise kdchart will crash.
     QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect);
-    if (kdchartRect.width() > 10 && kdchartRect.height() > 10) {
+    if (kdchartRect.width() > 20 && kdchartRect.height() > 20) {
         d->kdChart->paint(&painter, kdchartRect);
     }
     //painter.restore();
