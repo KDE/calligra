@@ -2279,7 +2279,81 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             store->extractFile(imagePath, data);
                             QImage image = QImage::fromData(data);
                             setBackgroundImage(image);
-                            //TODO load backgroundProperties
+
+                            BackgroundImageProperties bgProperties;
+                            if( element.hasAttribute("draw:opacity") ) {
+                                QString opacity = element.attribute("draw:opacity", "");
+                                if( opacity.endsWith('%') ) {
+                                    opacity = opacity.left(opacity.size() - 2);
+                                }
+                                bool ok;
+                                float opacityFloat = opacity.toFloat( &ok );
+                                if( ok ) {
+                                    bgProperties.opacity = opacityFloat;
+                                }
+                            }
+                            //TODO
+                            //if( element.hasAttribute("style:filterName") ) {
+                            //}
+                            if( element.hasAttribute("style:position") ) {
+                                const QString positionAttribute = element.attribute("style:position","");
+                                const QStringList positionList = positionAttribute.split(" ", QString::SkipEmptyParts);
+                                if( positionList.size() == 1) {
+                                    const QString position = positionList.at(0);
+                                    if( position == "left" ) {
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::Left;
+                                    }
+                                    if( position == "center" ) {
+                                        //NOTE the standard is too vague to know what center alone means, we assume that it means both centered
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::HorizontalCenter;
+                                        bgProperties.verticalPosition = BackgroundImageProperties::VerticalCenter;
+                                    }
+                                    if( position == "right" ) {
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::Right;
+                                    }
+                                    if( position == "top" ) {
+                                        bgProperties.verticalPosition = BackgroundImageProperties::Top;
+                                    }
+                                    if( position == "bottom" ) {
+                                        bgProperties.verticalPosition = BackgroundImageProperties::Bottom;
+                                    }
+                                }
+                                else if (positionList.size() == 2) {
+                                    const QString verticalPosition = positionList.at(0);
+                                    const QString horizontalPosition = positionList.at(1);
+                                    if( horizontalPosition == "left" ) {
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::Left;
+                                    }
+                                    if( horizontalPosition == "center" ) {
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::HorizontalCenter;
+                                    }
+                                    if( horizontalPosition == "right" ) {
+                                        bgProperties.horizontalPosition = BackgroundImageProperties::Right;
+                                    }
+                                    if( verticalPosition == "top" ) {
+                                        bgProperties.verticalPosition = BackgroundImageProperties::Top;
+                                    }
+                                    if( verticalPosition == "center" ) {
+                                        bgProperties.verticalPosition = BackgroundImageProperties::VerticalCenter;
+                                    }
+                                    if( verticalPosition == "bottom" ) {
+                                        bgProperties.verticalPosition = BackgroundImageProperties::Bottom;
+                                    }
+                                }
+                            }
+                            if( element.hasAttribute("style:repeat") ) {
+                                const QString repeat = element.attribute("style:repeat");
+                                if( repeat == "no-repeat" ) {
+                                    bgProperties.repeat = BackgroundImageProperties::NoRepeat;
+                                }
+                                if( repeat == "repeat" ) {
+                                    bgProperties.repeat = BackgroundImageProperties::Repeat;
+                                }
+                                if( repeat == "stretch" ) {
+                                    bgProperties.repeat = BackgroundImageProperties::Stretch;
+                                }
+                            }
+                            setBackgroundImageProperties(bgProperties);
                         }
                     }
                 }
