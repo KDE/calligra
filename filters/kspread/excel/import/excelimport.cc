@@ -200,8 +200,11 @@ public:
 
     void createDefaultColumnStyle( Sheet* sheet );
     void processSheetBackground(Sheet* sheet, KoGenStyle& style);
+    void addManifestEntries(KoXmlWriter* ManifestWriter);
+
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
+    QMap<QString,QString> manifestEntries;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -319,6 +322,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
     d->processCharts(manifestWriter);
+    d->addManifestEntries(manifestWriter);
     oasisStore.closeManifestWriter();
 
     // we are done!
@@ -1874,6 +1878,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
 
+    //TODO add the manifest entry
     writer.startElement("style:background-image");
     writer.addAttribute("xlink:href", sheet->backgroundImage().ascii());
     writer.addAttribute("xlink:type", "simple");
@@ -1883,5 +1888,16 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     buffer.close();
     style.addChildElement("style:background-image", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
+    manifestEntries.insert(QString::fromAscii(sheet->backgroundImage().ascii()), "image/bmp");
+}
+
+void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
+{
+    QMap<QString, QString>::const_iterator iterator = manifestEntries.constBegin();
+    QMap<QString, QString>::const_iterator end = manifestEntries.constEnd();
+    while( iterator != end ) {
+        manifestWriter->addManifestEntry(iterator.key(), iterator.value());
+        iterator++;
+    }
 }
 
