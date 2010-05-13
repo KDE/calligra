@@ -201,6 +201,7 @@ public:
     void createDefaultColumnStyle( Sheet* sheet );
     void processSheetBackground(Sheet* sheet, KoGenStyle& style);
     void addManifestEntries(KoXmlWriter* ManifestWriter);
+    void insertPictureManifest(Picture* picture);
 
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
@@ -1461,6 +1462,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
         xmlWriter->endElement(); // draw:image
         xmlWriter->endElement(); // draw:frame
+
+        insertPictureManifest(picture);
     }
 
     // handle charts
@@ -1899,5 +1902,37 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
         manifestWriter->addManifestEntry(iterator.key(), iterator.value());
         iterator++;
     }
+}
+
+void ExcelImport::Private::insertPictureManifest(Picture* picture)
+{
+    QString mimeType;
+    const QString fileName = QString::fromAscii(picture->m_filename.c_str());
+    const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
+
+    if( extension == "gif" ) {
+        mimeType = "image/gif";
+    }
+    else if( extension == "jpg" || extension == "jpeg" 
+            || extension == "jpe" || extension == "jfif" ) {
+        mimeType = "image/jpeg";
+    }
+    else if( extension == "tif" || extension == "tiff" ) {
+        mimeType = "image/tiff";
+    }
+    else if( extension == "png" ) {
+        mimeType = "image/png";
+    }
+    else if( extension == "emf" ) {
+        mimeType = "application/x-openoffice-wmf;windows_formatname=\"Image EMF\"";
+    }
+    else if( extension == "wmf" ) {
+        mimeType = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
+    }
+    else if( extension == "bmp" ) {
+        mimeType = "image/bmp";
+    }
+
+    manifestEntries.insert(fileName, mimeType);
 }
 
