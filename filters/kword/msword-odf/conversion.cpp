@@ -441,6 +441,57 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     return value;
 }
+//get a  koffice:borderspecial value "style"
+QString Conversion::borderKOfficeAttributes(const wvWare::Word97::BRC& brc)
+{
+    kDebug(30153) << "brc.brcType      = " << brc.brcType;
+    kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
+    kDebug(30153) << "brc.cv           = " << brc.cv;
+
+
+    QString style;   //empty if nothing special is neededreasonable default
+
+    switch (brc.brcType) {
+        //ODF doesn't support dot dashed or wavy borders???
+
+    case 7: // dash large gap
+        style = "dashed largegap";
+        break;
+    case 22: // dash small gap
+        style = "dashed smallgap";
+        break;
+    case 6: // dot
+        style = "dotted";
+        break;
+    case 8: // dot dash
+        style = "dot-dashed";
+        break;
+    case 9: // dot dot dash
+        style = "dot-dot-dashed";
+        break;
+
+    case 20: // wave
+        style = "wave";
+        break;
+    case 21: // double wave
+        style = "double wave";
+        break;
+
+    case 10: // triple
+        style = "triple";
+        break;
+
+    case 13: // thin-thick-thin small gap
+    case 16: // thin-thick-thin medium gap
+    case 19: // thin-thick-thin large gap
+    default:
+        //if a fancy unsupported border is specified -> better a normal border than none
+        //so just leave values as defaults
+        break;
+    }
+
+    return style;
+}
 
 QString Conversion::numberFormatCode(int nfc)
 {

@@ -395,6 +395,9 @@ void KWordTableHandler::tableCellStart()
     //set borders for the four edges of the cell
     if (brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
+        QString kba = Conversion::borderKOfficeAttributes(brcTop);
+        if (!kba.isEmpty())
+            cellStyle.addProperty("koffice:specialborder-top",kba);
         QString dba = Conversion::setDoubleBorderAttributes(brcTop);
         if (!dba.isEmpty())
             cellStyle.addProperty("style:border-line-width-top", dba);
@@ -403,6 +406,9 @@ void KWordTableHandler::tableCellStart()
     //left
     if (brcLeft.brcType > 0 && brcLeft.brcType < 64) {
         cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
+        QString kba = Conversion::borderKOfficeAttributes(brcLeft);
+        if (!kba.isEmpty())
+        cellStyle.addProperty("koffice:specialborder-left",kba);
         QString dba = Conversion::setDoubleBorderAttributes(brcLeft);
         if (!dba.isEmpty())
             cellStyle.addProperty("style:border-line-width-left", dba);
@@ -411,6 +417,9 @@ void KWordTableHandler::tableCellStart()
     //bottom
     if (brcBottom.brcType != 0 && brcBottom.brcType < 64) {
         cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
+        QString kba = Conversion::borderKOfficeAttributes(brcBottom);
+        if (!kba.isEmpty())
+        cellStyle.addProperty("koffice:specialborder-bottom",kba);
         QString dba = Conversion::setDoubleBorderAttributes(brcBottom);
         if (!dba.isEmpty())
             cellStyle.addProperty("style:border-line-width-bottom", dba);
@@ -419,6 +428,9 @@ void KWordTableHandler::tableCellStart()
     //right
     if (brcRight.brcType > 0 && brcRight.brcType < 64) {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
+        QString kba = Conversion::borderKOfficeAttributes(brcRight);
+        if (!kba.isEmpty())
+            cellStyle.addProperty("koffice:specialborder-right",kba);
         QString dba = Conversion::setDoubleBorderAttributes(brcRight);
         if (!dba.isEmpty())
             cellStyle.addProperty("style:border-line-width-right", dba);

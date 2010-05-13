@@ -90,6 +90,9 @@ QString setDoubleBorderAttributes(const wvWare::Word97::BRC& brc);
 // Return an ODF attribute for border characteristics from a BRC structure
 QString setBorderAttributes(const wvWare::Word97::BRC& brc);
 
+//get a  koffice:borderspecial value "style"
+QString borderKOfficeAttributes(const wvWare::Word97::BRC& brc);
+
 // Convert wv2's Header Type to a KWord frameInfo value
 int headerTypeToFrameInfo(unsigned char type);
 
