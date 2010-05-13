@@ -23,6 +23,12 @@
 #include <KDebug>
 #include <QDomElement>
 
+#define NO_EXTERNAL_SOURCES
+
+#ifdef NO_EXTERNAL_SOURCES
+#warning enable external data sources for 2.3
+#endif
+
 KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn) : QWidget(parent)
 {
 
@@ -43,14 +49,26 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
     m_internalSource->addItems(queryList());
 
+#ifndef NO_EXTERNAL_SOURCES
+
+//!@TODO enable when adding external data
+    
     m_layout->addWidget(new QLabel(i18n("Source Type:"), this));
     m_layout->addWidget(m_sourceType);
     m_layout->addSpacing(10);
+#else
+    m_sourceType->setVisible(false);
+    m_externalSource->setVisible(false);
+#endif
+
     m_layout->addWidget(new QLabel(i18n("Internal Source:"), this));
     m_layout->addWidget(m_internalSource);
     m_layout->addSpacing(10);
+
+#ifndef NO_EXTERNAL_SOURCES
     m_layout->addWidget(new QLabel(i18n("External Source:"), this));
     m_layout->addWidget(m_externalSource);
+#endif
     m_layout->addSpacing(20);
     m_layout->addWidget(m_setData);
     m_layout->addStretch();
@@ -108,6 +126,9 @@ QDomElement KexiSourceSelector::connectionData()
     QDomDocument d;
     QDomElement conndata = d.createElement("connection");
 
+#ifndef NO_EXTERNAL_SOURCES
+//!@TODO Make a better gui for selecting external data source
+
     conndata.setAttribute("type", m_sourceType->itemData(m_sourceType->currentIndex()).toString());
 
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
@@ -115,6 +136,10 @@ QDomElement KexiSourceSelector::connectionData()
     } else {
         conndata.setAttribute("source", m_externalSource->text());
     }
+#else
+    conndata.setAttribute("type", "internal");
+    conndata.setAttribute("source", m_internalSource->currentText());
+#endif
     return conndata;
 }
 
@@ -130,8 +155,8 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiMigrateData = 0;
     }
 
-    kDebug() << m_sourceType->itemData(m_sourceType->currentIndex()).toString();
-    
+//!@TODO Fix when enable external data
+#ifndef NO_EXTERNAL_SOURCES
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
         m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
         return m_kexiDBData;
@@ -140,7 +165,10 @@ KoReportData* KexiSourceSelector::sourceData()
         m_kexiMigrateData = new KexiMigrateReportData(m_externalSource->text());
         return m_kexiMigrateData;
     }
-
+#else
+    m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
+    return m_kexiDBData;
+#endif
     return 0;
 }
 
