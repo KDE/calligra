@@ -287,19 +287,19 @@ public:
 
         float opacity;
 
-        enum VerticalPosition {
+        enum HorizontalPosition {
             Left,
-            VerticalCenter,
+            HorizontalCenter,
             Right
         };
-        VerticalPosition verticalPosition;
+        HorizontalPosition horizontalPosition;
 
-        enum HorizontalPosition {
+        enum VerticalPosition {
             Top,
-            HorizontalCenter,
+            VerticalCenter,
             Bottom
         };
-        HorizontalPosition horizontalPosition;
+        VerticalPosition verticalPosition;
 
         //TODO filterName
     };
