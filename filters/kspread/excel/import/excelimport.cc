@@ -1900,7 +1900,7 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
     QMap<QString, QString>::const_iterator end = manifestEntries.constEnd();
     while( iterator != end ) {
         manifestWriter->addManifestEntry(iterator.key(), iterator.value());
-        iterator++;
+        ++iterator;
     }
 }
 
