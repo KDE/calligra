@@ -1104,7 +1104,12 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     // KDChart thinks in pixels, KOffice in pt
     ScreenConversions::scaleFromPtToPx( painter );
 
-    d->kdChart->paint( &painter, ScreenConversions::scaleFromPtToPx( paintRect ) );
+    // Only paint the actual chart if there is a certain minimal size,
+    // because otherwise kdchart will crash.
+    QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect);
+    if (kdchartRect.width() > 10 && kdchartRect.height() > 10) {
+        d->kdChart->paint(&painter, kdchartRect);
+    }
     //painter.restore();
 
     // Paint the cached pixmap if we got a GO from paintPixmap()
