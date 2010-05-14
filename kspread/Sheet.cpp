@@ -2278,6 +2278,11 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             QByteArray data;
                             store->extractFile(imagePath, data);
                             QImage image = QImage::fromData(data);
+
+                            if( image.isNull() ) {
+                                continue;
+                            }
+
                             setBackgroundImage(image);
 
                             BackgroundImageProperties bgProperties;
