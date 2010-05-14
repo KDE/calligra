@@ -379,6 +379,11 @@ public:
     /**
      * \ingroup OpenDocument
      */
+    void saveOdfBackgroundImage(KoXmlWriter& xmlWriter) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOdfSettings(const KoOasisSettings::NamedMap &settings);
 
     /**

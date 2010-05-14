@@ -3099,6 +3099,58 @@ void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
     kDebug(36003) << " text end :" << text << " var :" << var;
 }
 
+void Sheet::saveOdfBackgroundImage(KoXmlWriter& xmlWriter) const
+{
+    const BackgroundImageProperties& properties = backgroundImageProperties();
+    xmlWriter.startElement("style:backgroundImage");
+
+    //xmlWriter.addAttribute("xlink:href", fileName);
+    xmlWriter.addAttribute("xlink:type", "simple");
+    xmlWriter.addAttribute("xlink:show", "embed");
+    xmlWriter.addAttribute("xlink:actuate", "onLoad");
+
+    QString opacity = QString("%1%").arg(properties.opacity);
+    xmlWriter.addAttribute("draw:opacity", opacity);
+
+    QString position;
+    if(properties.horizontalPosition == BackgroundImageProperties::Left) {
+        position += "left";
+    }
+    else if(properties.horizontalPosition == BackgroundImageProperties::HorizontalCenter) {
+        position += "center";
+    }
+    else if(properties.horizontalPosition == BackgroundImageProperties::Right) {
+        position += "right";
+    }
+
+    position += " ";
+
+    if(properties.verticalPosition == BackgroundImageProperties::Top) {
+        position += "top";
+    }
+    else if(properties.verticalPosition == BackgroundImageProperties::VerticalCenter) {
+        position += "center";
+    }
+    else if(properties.verticalPosition == BackgroundImageProperties::Bottom) {
+        position += "right";
+    }
+    xmlWriter.addAttribute("style:position", position);
+
+    QString repeat;
+    if(properties.repeat == BackgroundImageProperties::NoRepeat) {
+        repeat = "no-repeat";
+    }
+    else if(properties.repeat == BackgroundImageProperties::Repeat) {
+        repeat = "repeat";
+    }
+    else if(properties.repeat == BackgroundImageProperties::Stretch) {
+        repeat = "stretch";
+    }
+    xmlWriter.addAttribute("style:repeat", repeat);
+
+    xmlWriter.endElement();
+}
+
 
 void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
 {
@@ -3230,6 +3282,17 @@ QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
     pageStyle.addAttribute("style:master-page-name", mainStyles.insert(pageMaster, "Standard"));
 
     pageStyle.addProperty("table:display", !isHidden());
+
+    if( !backgroundImage().isNull() ) {
+        QBuffer bgBuffer;
+        bgBuffer.open(QIODevice::WriteOnly);
+        KoXmlWriter bgWriter(&bgBuffer); //TODO pass identation level
+        saveOdfBackgroundImage(bgWriter);
+
+        const QString bgContent = QString::fromUtf8(bgBuffer.buffer(), bgBuffer.size());
+        pageMaster.addChildElement("backgroundImage", bgContent);
+    }
+
     return mainStyles.insert(pageStyle, "ta");
 }
 
