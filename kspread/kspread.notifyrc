@@ -360,6 +360,7 @@ Comment[tr]=Hücrelerin formüllerinin ayrıştırılması başarılamadı
 Comment[uk]=Обробка формули комірки завершилась невдачею
 Comment[wa]=L' analijhe del sintake d' ene formule d' ene boesse a fwait berwete
 Comment[x-test]=xxParsing of a cell's formula failedxx
+Comment[zh_CN]=解析单元格中的公式失败
 Comment[zh_TW]=剖析儲存格中的公式失敗
 Action=None
 

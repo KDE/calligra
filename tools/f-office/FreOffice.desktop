@@ -18,6 +18,7 @@ Name[sv]=Office-visning
 Name[uk]=Переглядач документів
 Name[wa]=Håyneu burotike
 Name[x-test]=xxOffice Viewerxx
+Name[zh_CN]=办公文档查看器
 Name[zh_TW]=Office 檢視器
 Exec=/usr/bin/FreOffice
 Icon=freoffice

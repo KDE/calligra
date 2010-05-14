@@ -56,6 +56,7 @@ Comment[tr]=Hücre genişliğine takvim ekle
 Comment[uk]=Вставляє календар у діапазон комірок.
 Comment[wa]=Sititche on calindrî dins one fortchete di boesses
 Comment[x-test]=xxInserts a calendar into a cell range.xx
+Comment[zh_CN]=向单元格范围插入日历。
 Comment[zh_TW]=將行事曆插入一塊儲存格範圍。
 Icon=office-calendar
 Type=Service

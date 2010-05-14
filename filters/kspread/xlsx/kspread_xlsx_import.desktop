@@ -20,6 +20,7 @@ Name[sv]=Microsoft Excel 2007-importfilter för Kspread
 Name[uk]=Фільтр експорту MS Excel 2007 для KSpread
 Name[wa]=Passete d' abagaedje MS Excel 2007 po KSpread
 Name[x-test]=xxMS Excel 2007 Import Filter for KSpreadxx
+Name[zh_CN]=KSpread 的 MS Excel 2007 导入过滤器
 Name[zh_TW]=KSpread 的 Microsoft Excel 2007 匯出過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.ms-excel.template.macroEnabled.12

@@ -112,6 +112,7 @@ Comment[sv]=Skriv kalkylarksdokument
 Comment[uk]=Створення електронних таблиць
 Comment[wa]=Sicrire des documints tåvleas
 Comment[x-test]=xxWrite spreadsheet documentsxx
+Comment[zh_CN]=编写电子表格文档
 Comment[zh_TW]=撰寫工作表文件
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
 Type=Application

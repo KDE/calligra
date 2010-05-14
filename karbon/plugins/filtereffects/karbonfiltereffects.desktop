@@ -23,6 +23,7 @@ Name[tr]=Filtre Etkileri
 Name[uk]=Ефекти фільтрування
 Name[wa]=Efets di passete
 Name[x-test]=xxFilter Effectsxx
+Name[zh_CN]=Flake 效果
 Name[zh_TW]=過濾器效果
 X-KDE-ServiceTypes=KOffice/FilterEffect
 Type=Service
