@@ -1225,15 +1225,18 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         case SPRM::sprmCKcd:
             kcd = *ptr;
             break;
-        case SPRM::sprmCFBold:
-            if ( *ptr < 128 )
+        case SPRM::sprmCFBold:              // handling of bold style property
+            if ( *ptr < 128 ) {             // if ToggleOperand == 1, the text is BOLD
                 fBold = *ptr == 1;
-            else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
-                    fBold = chp->fBold;
-                else if ( *ptr == 129 && chp )
-                    fBold = !chp->fBold;
+            } else {                        // if ToggleOperand >= 128
+                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) ); // get CHP by the istd and parent (paragraph)
+                if ( *ptr == 128 && chp ) {
+                    fBold = chp->fBold;     // for ToggleOperand == 128, the BOLD property of this equals the BOLD property of parent (paragraph)
+                } else if ( *ptr == 129 && chp ) {
+                    fBold = !chp->fBold;    // for ToggleOperand == 129, the BOLD property of this is oposite to BOLD property of parent (paragraph)
+                } else if ( !chp ) {
+                    fBold = 1;              // if we failed to get chp by istd and parent AND we should change the BOLD property, just make it BOLD
+                }
             }
             break;
         case SPRM::sprmCFItalic:
