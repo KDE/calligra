@@ -65,6 +65,7 @@ public:
     bool        filtered;
     RowFormat*  next;
     RowFormat*  prev;
+    bool        pageBreak;
 };
 
 RowFormat::RowFormat()
@@ -77,6 +78,7 @@ RowFormat::RowFormat()
     d->filtered = false;
     d->next     = 0;
     d->prev     = 0;
+    d->pageBreak= false;
 }
 
 RowFormat::RowFormat(const RowFormat& other)
@@ -283,8 +285,21 @@ bool RowFormat::operator==(const RowFormat& other) const
         return false;
     if (d->filtered != other.d->filtered)
         return false;
+    if (d->pageBreak != other.d->pageBreak)
+        return false;
     return true;
 }
+
+void RowFormat::setPageBreak(bool pageBreak)
+{
+    d->pageBreak = pageBreak;
+}
+
+bool RowFormat::isPageBreakSet()
+{
+    return d->pageBreak;
+}
+
 
 /*****************************************************************************
  *
@@ -302,6 +317,7 @@ public:
     bool            filtered;
     ColumnFormat*   next;
     ColumnFormat*   prev;
+    bool            pageBreak;
 };
 
 ColumnFormat::ColumnFormat()
@@ -314,6 +330,7 @@ ColumnFormat::ColumnFormat()
     d->filtered = false;
     d->next     = 0;
     d->prev     = 0;
+    d->pageBreak= false;
 }
 
 ColumnFormat::ColumnFormat(const ColumnFormat& other)
@@ -521,5 +538,18 @@ bool ColumnFormat::operator==(const ColumnFormat& other) const
         return false;
     if (d->filtered != other.d->filtered)
         return false;
+    if (d->pageBreak != other.d->pageBreak)
+        return false;
     return true;
 }
+
+void ColumnFormat::setPageBreak(bool pageBreak)
+{
+    d->pageBreak = pageBreak;
+}
+
+bool ColumnFormat::isPageBreakSet()
+{
+    return d->pageBreak;
+}
+

@@ -2666,12 +2666,12 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
             if (width != -1.0)   //safe
                 cf->setWidth(width);
-            // if ( insertPageBreak )
-            //   columnFormat->setPageBreak( true )
             if (visibility == Collapsed)
                 cf->setHidden(true);
             else if (visibility == Filtered)
                 cf->setFiltered(true);
+
+            cf->setPageBreak(insertPageBreak);
         } else {
             columnFormat = this->columnFormat(indexCol);
         }
@@ -2791,6 +2791,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                 rowFormat->setHidden(true);
             else if (visibility == Filtered)
                 rowFormat->setFiltered(true);
+
+            rowFormat->setPageBreak(insertPageBreak);
         }
     }
 

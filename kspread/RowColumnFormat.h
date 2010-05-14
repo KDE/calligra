@@ -97,6 +97,9 @@ public:
     void setFiltered(bool filtered);
     bool isFiltered() const;
 
+    void setPageBreak(bool pageBreak);
+    bool isPageBreakSet();
+
     bool isHiddenOrFiltered() const;
 
     bool operator==(const RowFormat& other) const;
@@ -170,6 +173,9 @@ public:
     bool isFiltered() const;
 
     bool isHiddenOrFiltered() const;
+
+    void setPageBreak(bool pageBreak);
+    bool isPageBreakSet();
 
     bool operator==(const ColumnFormat& other) const;
     inline bool operator!=(const ColumnFormat& other) const {
