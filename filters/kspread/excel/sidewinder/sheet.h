@@ -147,19 +147,19 @@ public:
 
     double zoomLevel() const;
     void setZoomLevel(double fraction);
-    
+
     bool showGrid() const;
     void setShowGrid(bool show);
 
     bool showZeroValues() const;
     void setShowZeroValues(bool show);
-    
+
     QPoint firstVisibleCell() const;
     void setFirstVisibleCell(const QPoint &point);
-    
+
     bool isPageBreakViewEnabled() const;
     void setPageBreakViewEnabled(bool enabled);
-    
+
     unsigned long password() const;
     void setPassword(unsigned long hash);
 
@@ -197,7 +197,7 @@ public:
 
     bool visible() const;
     void setVisible(bool v);
-    
+
     bool operator==(const Column &other) const;
     bool operator!=(const Column &other) const;
 
@@ -230,7 +230,7 @@ public:
 
     bool visible() const;
     void setVisible(bool v);
-    
+
     bool operator==(const Row &other) const;
     bool operator!=(const Row &other) const;
 
