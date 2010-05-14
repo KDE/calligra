@@ -169,6 +169,8 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     m_context = DocDefaultsContext;
 
     m_currentTextStyle = KoGenStyle();
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

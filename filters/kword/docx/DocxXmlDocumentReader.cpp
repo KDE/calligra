@@ -1202,21 +1202,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     if (args & read_p_Skip) {
         //nothing
     } else {
-        body = textPBuf.originalWriter();
-        body->startElement("text:p", false);
-        if (m_currentStyleName.isEmpty()) {
-            setupParagraphStyle();
+        if (m_dropCapStatus == DropCapRead) {
+            body = textPBuf.releaseWriter();
+            // If we read a drop cap but there was no text
+            // there might as well be no drop cap
+            m_dropCapStatus = NoDropCap;
         }
         else {
-            body->addAttribute("text:style-name", m_currentStyleName);
-        }
-        /*        if (!m_paragraphStyleNameWritten) {
+            body = textPBuf.originalWriter();
+            body->startElement("text:p", false);
+            if (m_currentStyleName.isEmpty()) {
+                setupParagraphStyle();
+            }
+            else {
+                body->addAttribute("text:style-name", m_currentStyleName);
+            }
+            /*        if (!m_paragraphStyleNameWritten) {
                     // no style, set default
                     body->addAttribute("text:style-name", "Standard");
                 }*/
-        (void)textPBuf.releaseWriter();
-        body->endElement(); //text:p 
-        kDebug() << "/text:p";
+       
+            (void)textPBuf.releaseWriter();
+            body->endElement(); //text:p 
+            kDebug() << "/text:p";
+        }
     }
     m_currentStyleName.clear();
     READ_EPILOGUE
@@ -1295,6 +1304,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     KoXmlWriter* oldWriter = body;
 
     if (m_dropCapStatus == DropCapRead) {
+       m_dropCapStatus = DropCapDone;
        m_dropCapBuffer.open(QIODevice::ReadWrite);
        m_dropCapWriter = new KoXmlWriter(&m_dropCapBuffer);
        body = m_dropCapWriter;
@@ -1329,12 +1339,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    if (m_dropCapStatus == DropCapRead) {
-        m_dropCapStatus = DropCapDone;
+    if (m_dropCapStatus == DropCapDone) {
         body = oldWriter;
     }
-
-    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || m_complexCharType != NoComplexFieldCharType) {
+    else if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || m_complexCharType != NoComplexFieldCharType) {
         // We want to write to the higher body level
         body = buffer.originalWriter();
         QString currentTextStyleName;
@@ -1572,10 +1580,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     setParentParagraphStyleName(attrs);
-
-    if (!m_currentParagraphStylePredefined) {
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-    }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
