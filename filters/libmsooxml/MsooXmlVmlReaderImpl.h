@@ -475,7 +475,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
     TRY_READ_ATTR_WITH_NS(r, id)
     if (!r_id.isEmpty()) {
         imagedata = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
-        //imagedata = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
 
     kDebug() << "imagedata:" << imagedata;
