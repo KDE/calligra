@@ -31,6 +31,7 @@
 #include <QFontMetricsF>
 #include <QWidget>
 #include <QDebug>
+#include <QList>
 
 namespace Swinder
 {
@@ -76,6 +77,8 @@ public:
 
     unsigned long passwd;
     UString backgroundImagePath;
+
+    QList<VerticalPageBreak> verticalPageBreaks;
 };
 
 }
@@ -442,6 +445,16 @@ void Sheet::setBackgroundImage( const UString& imagePath )
 UString Sheet::backgroundImage()
 {
     return d->backgroundImagePath;
+}
+
+void Sheet::addVerticalPageBreak(const Swinder::VerticalPageBreak& pageBreak)
+{
+    d->verticalPageBreaks.append(pageBreak);
+}
+
+QList<VerticalPageBreak> Sheet::verticalPageBreaks()
+{
+    return d->verticalPageBreaks;
 }
 
 class Column::Private

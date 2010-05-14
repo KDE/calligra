@@ -33,6 +33,7 @@ class Workbook;
 class Cell;
 class Column;
 class Row;
+struct VerticalPageBreak;
 
 class Sheet
 {
@@ -164,7 +165,10 @@ public:
     void setPassword(unsigned long hash);
 
     UString backgroundImage();
-    void setBackgroundImage( const Swinder::UString& imagePath);
+    void setBackgroundImage(const Swinder::UString& imagePath);
+
+    void addVerticalPageBreak(const VerticalPageBreak& pageBreak);
+    QList<VerticalPageBreak> verticalPageBreaks();
 
 private:
     // no copy or assign
@@ -173,6 +177,12 @@ private:
 
     class Private;
     Private *d;
+};
+
+struct VerticalPageBreak {
+    quint16 col;
+    quint16 rowStart;
+    quint16 rowEnd;
 };
 
 class Column
