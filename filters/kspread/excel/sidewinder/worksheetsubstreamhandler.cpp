@@ -360,6 +360,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handlePassword(static_cast<PasswordRecord*>(record));
     else if (type == BkHimRecord::id)
         handleBkHim(static_cast<BkHimRecord*>(record));
+    else if (type == VerticalPageBreaksRecord::id)
+        handleVerticalPageBreaksRecord(static_cast<VerticalPageBreaksRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -1064,6 +1066,18 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
 void WorksheetSubStreamHandler::handleBkHim(BkHimRecord* record)
 {
     d->sheet->setBackgroundImage(record->imagePath());
+}
+
+void WorksheetSubStreamHandler::handleVerticalPageBreaksRecord(VerticalPageBreaksRecord* record)
+{
+    const int count = record->count();
+    for(int i = 0; i <= count; ++i ) {
+        VerticalPageBreak pageBreak;
+        pageBreak.col = record->col(i);
+        pageBreak.rowStart = record->rowStart(i);
+        pageBreak.rowEnd = record->rowEnd(i);
+        d->sheet->addVerticalPageBreak(pageBreak);
+    }
 }
 
 } // namespace Swinder

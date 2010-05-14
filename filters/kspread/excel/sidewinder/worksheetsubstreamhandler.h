@@ -72,6 +72,7 @@ class MsoDrawingRecord;
 class Window2Record;
 class PasswordRecord;
 class BkHimRecord;
+class VerticalPageBreaksRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
@@ -133,6 +134,7 @@ private:
     void handleWindow2(Window2Record* record);
     void handlePassword(PasswordRecord* record);
     void handleBkHim(BkHimRecord* record);
+    void handleVerticalPageBreaksRecord(Swinder::VerticalPageBreaksRecord* record);
 
     class Private;
     Private * const d;
