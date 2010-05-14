@@ -274,8 +274,8 @@ public:
         BackgroundImageProperties()
         : repeat(Repeat)
         , opacity(1.0)
-        , verticalPosition(VerticalCenter)
         , horizontalPosition(HorizontalCenter)
+        , verticalPosition(VerticalCenter)
         {}
 
         enum Repetition {
