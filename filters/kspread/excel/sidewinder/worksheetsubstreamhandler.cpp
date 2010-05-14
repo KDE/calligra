@@ -192,12 +192,12 @@ public:
 
     // mapping from object id's to object instances
     std::map<unsigned long, Object*> sharedObjects;
-    
+
     // maps object id's of NoteObject's to there continuous number
     std::map<unsigned long, int> noteMap;
     // the number of NoteObject's in this worksheet
     int noteCount;
-    
+
     // list of textobjects as received via TxO records
     std::vector<UString> textObjects;
 
