@@ -1471,46 +1471,6 @@ private:
     Private* d;
 };
 
-class BkHimRecord : public Record
-{
-public:
-    static const unsigned id;
-
-    virtual unsigned rtti() const { return this->id; }
-
-    BkHimRecord(Workbook *book);
-    virtual ~BkHimRecord();
-
-    BkHimRecord( const BkHimRecord& record );
-    BkHimRecord& operator=( const BkHimRecord& record );
-
-    enum Format {
-        WindowsBitMap = 0x0009,
-        NativeFormat = 0x000e
-    };
-
-    static UString formatToString(Format format);
-
-    Format format() const;
-    void setFormat( Format format );
-
-    UString imagePath() const;
-    void setImagePath( UString imagePath );
-
-    unsigned imageSize() const;
-    void setImageSize( unsigned imageSize );
-
-    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );
-
-    virtual const char* name() const { return "BkHim"; }
-
-    virtual void dump( std::ostream& out ) const;
-
-private:
-    class Private;
-    Private * const d;
-};
-
 } // namespace Swinder
 
 
