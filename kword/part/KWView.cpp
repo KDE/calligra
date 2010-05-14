@@ -74,7 +74,6 @@
 #include <KoMainWindow.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
-#include <KoResourceManager.h>
 #include <KoTextAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
@@ -1398,7 +1397,7 @@ void KWView::createTextOnShape()
     }
 #else
     foreach (KoShape *shape, frameShapes) {
-        KoTextOnShapeContainer *decorator = new KoTextOnShapeContainer(shape);
+        KoTextOnShapeContainer *decorator = new KoTextOnShapeContainer(shape, m_document->resourceManager());
         decorator->setPlainText("dummy text, la la la enzo");
         m_document->addShape(decorator);
     }
