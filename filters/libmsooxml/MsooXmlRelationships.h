@@ -44,7 +44,7 @@ public:
 
     QString target(const QString& path, const QString& file, const QString& id);
 
-    QString linkTarget(const QString& id, const QString path, const QString file);
+    QString linkTarget(const QString& id, const QString& path, const QString& file);
 private:
     class Private;
     Private* const d;

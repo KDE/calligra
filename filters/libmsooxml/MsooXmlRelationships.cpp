@@ -72,7 +72,7 @@ MsooXmlRelationships::~MsooXmlRelationships()
     delete d;
 }
 
-QString MsooXmlRelationships::linkTarget(const QString& id, const QString path, const QString file)
+QString MsooXmlRelationships::linkTarget(const QString& id, const QString& path, const QString& file)
 {
     if (!d->loadedFiles.contains(path + '/' + file)) {
         d->loadRels(path, file);

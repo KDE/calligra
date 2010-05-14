@@ -69,6 +69,8 @@ QString DocxXmlHeaderReader::content()
 
 KoFilter::ConversionStatus DocxXmlHeaderReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
+    m_context = dynamic_cast<DocxXmlDocumentReaderContext*>(context);
+    
     kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
