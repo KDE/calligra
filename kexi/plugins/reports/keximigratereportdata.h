@@ -35,7 +35,7 @@ private:
     bool m_valid;
     KexiDB::TableSchema m_TableSchema;
     KexiDB::TableOrQuerySchema *m_schema;
-    KexiMigration::KexiMigrate *m_KexiMigrate;
+    KexiMigration::KexiMigrate *m_kexiMigrate;
     qint64 m_position;
 
 public:
