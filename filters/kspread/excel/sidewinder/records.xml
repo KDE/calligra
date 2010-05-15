@@ -1162,4 +1162,13 @@
   </array>
 </record>
 
+<record name="HorizontalPageBreaks" id="0x001c">
+  <field name="count" type="unsigned" size="16" />
+  <array length="count">
+    <field name="row"          type="unsigned" size="16" />
+    <field name="colStart"     type="unsigned" size="16" />
+    <field name="colEnd"       type="unsigned" size="16" />
+  </array>
+</record>
+
 </records>
