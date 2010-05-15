@@ -3383,8 +3383,8 @@ bool operator==(const CHP &lhs, const CHP &rhs) {
            lhs.ibstDispFldRMark==rhs.ibstDispFldRMark &&
            lhs.dttmDispFldRMark==rhs.dttmDispFldRMark &&
            lhs.shd==rhs.shd &&
-           lhs.brc==rhs.brc;
-           lhs.fTNY==rhs.fTNY;
+           lhs.brc==rhs.brc&&
+           lhs.fTNY==rhs.fTNY &&
            lhs.fTNYCompress==rhs.fTNYCompress;
 }
 
