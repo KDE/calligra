@@ -34,6 +34,7 @@ class Cell;
 class Column;
 class Row;
 struct VerticalPageBreak;
+struct HorizontalPageBreak;
 
 class Sheet
 {
@@ -170,6 +171,9 @@ public:
     void addVerticalPageBreak(const VerticalPageBreak& pageBreak);
     QList<VerticalPageBreak> verticalPageBreaks();
 
+    void addHorizontalPageBreak(const HorizontalPageBreak& pageBreak);
+    QList<HorizontalPageBreak> horizontalPageBreaks();
+
 private:
     // no copy or assign
     Sheet(const Sheet&);
@@ -183,6 +187,12 @@ struct VerticalPageBreak {
     quint16 col;
     quint16 rowStart;
     quint16 rowEnd;
+};
+
+struct HorizontalPageBreak {
+    quint16 row;
+    quint16 colStart;
+    quint16 colEnd;
 };
 
 class Column

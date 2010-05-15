@@ -79,6 +79,7 @@ public:
     UString backgroundImagePath;
 
     QList<VerticalPageBreak> verticalPageBreaks;
+    QList<HorizontalPageBreak> horizontalPageBreaks;
 };
 
 }
@@ -456,6 +457,17 @@ QList<VerticalPageBreak> Sheet::verticalPageBreaks()
 {
     return d->verticalPageBreaks;
 }
+
+void Sheet::addHorizontalPageBreak(const Swinder::HorizontalPageBreak& pageBreak)
+{
+    d->horizontalPageBreaks.append(pageBreak);
+}
+
+QList<HorizontalPageBreak> Sheet::horizontalPageBreaks()
+{
+    return d->horizontalPageBreaks;
+}
+
 
 class Column::Private
 {
