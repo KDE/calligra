@@ -1153,7 +1153,7 @@
   <field name="entries"     type="unsigned" size="16" />
 </record>
 
-<record name="VerticalPageBreaks" id="0x001b">
+<record name="VerticalPageBreaks" id="0x001a">
   <field name="count" type="unsigned" size="16" />
   <array length="count">
     <field name="col"          type="unsigned" size="16" />
@@ -1162,7 +1162,7 @@
   </array>
 </record>
 
-<record name="HorizontalPageBreaks" id="0x001c">
+<record name="HorizontalPageBreaks" id="0x001b">
   <field name="count" type="unsigned" size="16" />
   <array length="count">
     <field name="row"          type="unsigned" size="16" />
