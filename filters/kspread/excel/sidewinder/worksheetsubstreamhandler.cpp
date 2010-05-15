@@ -589,6 +589,8 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleBkHim(static_cast<BkHimRecord*>(record));
     else if (type == VerticalPageBreaksRecord::id)
         handleVerticalPageBreaksRecord(static_cast<VerticalPageBreaksRecord*>(record));
+    else if (type == HorizontalPageBreaksRecord::id)
+        handleHorizontalPageBreaksRecord(static_cast<HorizontalPageBreaksRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -1304,6 +1306,18 @@ void WorksheetSubStreamHandler::handleVerticalPageBreaksRecord(VerticalPageBreak
         pageBreak.rowStart = record->rowStart(i);
         pageBreak.rowEnd = record->rowEnd(i);
         d->sheet->addVerticalPageBreak(pageBreak);
+    }
+}
+
+void WorksheetSubStreamHandler::handleHorizontalPageBreaksRecord(HorizontalPageBreaksRecord* record)
+{
+    const unsigned int count = record->count();
+    for( int i = 0; i < count; ++i ) {
+        HorizontalPageBreak pageBreak;
+        pageBreak.row = record->row(i);
+        pageBreak.colStart = record->colStart(i);
+        pageBreak.colEnd = record->colEnd(i);
+        d->sheet->addHorizontalPageBreak(pageBreak);
     }
 }
 
