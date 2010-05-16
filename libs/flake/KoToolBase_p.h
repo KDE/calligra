@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QWidget>
 #include <QString>
+#include <string.h> // for the qt version check
 
 class QWidget;
 class KAction;
@@ -42,7 +43,16 @@ public:
 
     ~KoToolBasePrivate()
     {
-        //qDeleteAll(optionWidgets); // disabled means Mem leak, but no crash...
+        bool badQt = strcmp(qVersion(), "4.6.2") <= 0;
+        if (badQt) { // In <= Qt462 we do a bit more to avoid a crash
+            foreach(QWidget *optionWidget, optionWidgets) {
+                optionWidget->setParent(0);
+                delete optionWidget;
+            }
+            optionWidgets.clear();
+        } else {
+            qDeleteAll(optionWidgets);
+        }
     }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
