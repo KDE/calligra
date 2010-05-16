@@ -144,25 +144,25 @@ public:
     virtual void setFocusPolicy(Qt::FocusPolicy policy);
 
     //! Reimplemented to return internal editor's color.
-    const QColor & paletteForegroundColor() const;
+    QColor paletteForegroundColor() const;
 
     //! Reimplemented to set internal editor's color.
     void setPaletteForegroundColor(const QColor & color);
 
     //! Reimplemented to return internal editor's color.
-    const QColor & paletteBackgroundColor() const;
+    QColor paletteBackgroundColor() const;
 
     //! Reimplemented to set internal editor's color.
     virtual void setPaletteBackgroundColor(const QColor & color);
 
     //! \return label's foreground color
-    const QColor & foregroundLabelColor() const;
+    QColor foregroundLabelColor() const;
 
     //! Sets label's foreground color
     virtual void setForegroundLabelColor(const QColor & color);
 
     //! \return label's background color
-    const QColor & backgroundLabelColor() const;
+    QColor backgroundLabelColor() const;
 
     //! Sets label's background color
     virtual void setBackgroundLabelColor(const QColor & color);

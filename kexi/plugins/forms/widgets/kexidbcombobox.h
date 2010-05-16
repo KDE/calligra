@@ -86,7 +86,7 @@ public:
      Reimplemented. */
     virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
 
-    const QColor & paletteBackgroundColor() const {
+    QColor paletteBackgroundColor() const {
         return KexiDBAutoField::paletteBackgroundColor();
     }
 
