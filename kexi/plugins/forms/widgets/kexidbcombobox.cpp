@@ -73,6 +73,13 @@ KexiDBComboBox::KexiDBComboBox(QWidget *parent)
         , KexiComboBoxBase()
         , d(new Private())
 {
+#ifdef __GNUC__
+#warning TODO fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow
+#else
+#pragma WARNING( fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow )
+#endif
+    m_reinstantiatePopupOnShow = true;
+
     setMouseTracking(true);
     setFocusPolicy(Qt::WheelFocus);
     installEventFilter(this);

@@ -44,6 +44,7 @@ KexiComboBoxBase::KexiComboBoxBase()
     m_selectAllInInternalEditor_enabled = true;
     m_setValueInInternalEditor_enabled = true;
     m_setVisibleValueOnSetValueInternal = false;
+    m_reinstantiatePopupOnShow = false;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -346,6 +347,13 @@ void KexiComboBoxBase::createPopup(bool show)
     m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
+
+    if (m_reinstantiatePopupOnShow) {
+        QWidget *oldPopup = popup();
+        setPopup(0);
+        delete oldPopup;
+    }
+
     if (!popup()) {
         setPopup(column() ? new KexiComboBoxPopup(thisWidget, *column())
                  : new KexiComboBoxPopup(thisWidget, *field()));

@@ -145,6 +145,10 @@ protected:
     //! Used by KexiDBComboBox.
     void undoChanges();
 
+    //! A hack for createPopup(), used by forms only. Avoid magical disappearing of the popup in forms after 2nd and subsequent use.
+    //! fix creating popup for forms instead!
+    bool m_reinstantiatePopupOnShow;
+
     QVariant m_visibleValue;
 
     QVariant m_userEnteredValue; //!< value (usually a text) entered by hand (by the user)
