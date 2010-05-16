@@ -367,21 +367,7 @@ SubForm::setFormName(const QString &name)
 
 /////   Internal actions
 
-//! Action of adding tab to a tab widget
-//! Keeps context expressed using container and receiver widget
-class AddTabAction : public KAction
-{
-public:
-    AddTabAction(KFormDesigner::Container *container,
-                 TabWidgetBase *receiver, QObject *parent);
-public slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    TabWidgetBase *m_receiver;
-};
-
-AddTabAction::AddTabAction(KFormDesigner::Container *container, 
+AddTabAction::AddTabAction(KFormDesigner::Container *container,
                            TabWidgetBase *receiver, QObject *parent)
     : KAction(KIcon("tab-new"), i18nc("Add page to tab widget", "Add Page"),
               parent)
@@ -393,7 +379,6 @@ AddTabAction::AddTabAction(KFormDesigner::Container *container,
 
 void AddTabAction::slotTriggered()
 {
-    kDebug();
     if (!m_receiver->inherits("QTabWidget"))
         return;
     KFormDesigner::Command *command = new InsertPageCommand(m_container, m_receiver);
@@ -405,20 +390,6 @@ void AddTabAction::slotTriggered()
         m_container->form()->addCommand(command);
     }
 }
-
-//! Action of removing tab from a tab widget
-//! Keeps context expressed using container and receiver widget
-class RemoveTabAction : public KAction
-{
-public:
-    RemoveTabAction(KFormDesigner::Container *container,
-                    TabWidgetBase *receiver, QObject *parent);
-protected slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    TabWidgetBase *m_receiver;
-};
 
 RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
@@ -446,20 +417,6 @@ void RemoveTabAction::slotTriggered()
     m_container->form()->addCommand(com);
 }
 
-//! Action renaming tab widget's tab
-//! Keeps context expressed using container and receiver widget
-class RenameTabAction : public KAction
-{
-public:
-    RenameTabAction(KFormDesigner::Container *container,
-                    TabWidgetBase *receiver, QObject *parent);
-protected slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    TabWidgetBase *m_receiver;
-};
-
 RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
     : KAction(KIcon("edit-rename"), i18nc("Rename tab widget's page", "Rename Page..."),
@@ -482,20 +439,6 @@ void RenameTabAction::slotTriggered()
     if (ok)
         m_receiver->setTabText(m_receiver->indexOf(w), name);
 }
-
-//! Action of adding page to a stacked widget
-//! Keeps context expressed using container and receiver widget
-class AddStackPageAction : public KAction
-{
-public:
-    AddStackPageAction(KFormDesigner::Container *container,
-                       QWidget *receiver, QObject *parent);
-protected slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
-};
 
 AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent)
@@ -523,20 +466,6 @@ void AddStackPageAction::slotTriggered()
         m_container->form()->addCommand(command);
     }
 }
-
-//! Action of removing page from a stacked widget
-//! Keeps context expressed using container and receiver widget
-class RemoveStackPageAction : public KAction
-{
-public:
-    RemoveStackPageAction(KFormDesigner::Container *container,
-                          QWidget *receiver, QObject *parent);
-protected slots:
-    void slotTriggered();
-private:
-    KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
-};
 
 RemoveStackPageAction::RemoveStackPageAction(KFormDesigner::Container *container,
                                              QWidget *receiver, QObject *parent)
@@ -582,27 +511,6 @@ void RemoveStackPageAction::slotTriggered()
     stack->removeWidget(page);
     m_container->form()->addCommand(com);
 }
-
-//! Action of moving between pages of a stacked widget
-//! Keeps context expressed using container and receiver widget
-class GoToStackPageAction : public KAction
-{
-public:
-    enum Direction {
-        Previous,
-        Next
-    };
-    GoToStackPageAction(Direction direction, KFormDesigner::Container *container,
-                        QWidget *receiver, QObject *parent);
-protected slots:
-    void slotTriggered();
-private:
-    int nextWidgetIndex() const;
-
-    Direction m_direction;
-    KFormDesigner::Container *m_container;
-    QWidget *m_receiver;
-};
 
 GoToStackPageAction::GoToStackPageAction(Direction direction,
                                          KFormDesigner::Container *container,

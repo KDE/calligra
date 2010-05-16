@@ -72,7 +72,20 @@ EventEater::eventFilter(QObject *o, QEvent *ev)
 {
     if (!m_container)
         return false;
-    //kDebug() << o << m_widget;
+    /*if (ev->type() != QEvent::Paint && ev->type() != QEvent::WindowDeactivate && ev->type() != QEvent::FocusIn && ev->type() != QEvent::FocusOut && ev->type() != QEvent::ChildInserted) {
+        kDebug() << o << ev << m_widget;
+    }
+    if (ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget")) {
+        kDebug() << "MOUSE RELASE EVENT QTabWidget";
+    }*/
+    if (ev->type() == QEvent::MouseButtonPress && o->inherits("QTabBar")) {
+        //kDebug() << "TABBAR:" << tabBar << tabBar->parentWidget();
+        QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
+        if (mev->button() == Qt::RightButton) {
+            // (because of tab widget specifics) block right-click for tab widget's tab bar, otherwise form will be selected!
+            return true;
+        }
+    }
 #if 0
     // When the user click the empty part of tab bar, only MouseReleaseEvent is sent,
     // we need to simulate the Press event
@@ -821,7 +834,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 void Container::selectWidget(QWidget *w, Form::WidgetSelectionFlags flags)
 {
     if (w) {
-        kDebug() << w->objectName();
+        kDebug() << w;
     }
 
     if (!w) {
