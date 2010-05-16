@@ -814,6 +814,8 @@ protected:
 private:
     void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
+    void selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags);
+
     WidgetLibrary *m_lib;
     FormPrivate * const d;
 

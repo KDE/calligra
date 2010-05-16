@@ -68,11 +68,12 @@ EventEater::EventEater(QWidget *widget, QObject *container)
 }
 
 bool
-EventEater::eventFilter(QObject *, QEvent *ev)
+EventEater::eventFilter(QObject *o, QEvent *ev)
 {
     if (!m_container)
         return false;
-
+    //kDebug() << o << m_widget;
+#if 0
     // When the user click the empty part of tab bar, only MouseReleaseEvent is sent,
     // we need to simulate the Press event
     if (ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget")) {
@@ -85,6 +86,7 @@ EventEater::eventFilter(QObject *, QEvent *ev)
             //return true;
         }
     }
+#endif
 // else if(ev->type() == QEvent::ChildInserted) {
     // widget's children have changed, we need to reinstall filter
 //  installRecursiveEventFilter(m_widget, this);
@@ -277,12 +279,14 @@ Container::eventFilter(QObject *s, QEvent *e)
         m_moving = static_cast<QWidget*>(s);
         d->idOfPropertyCommand++; // this will create another PropertyCommand
         if (m_moving->parentWidget() && KexiUtils::objectIsA(m_moving->parentWidget(), "QStackedWidget")) {
+            kDebug() << "widget is a stacked widget's page";
             m_moving = m_moving->parentWidget(); // widget is a stacked widget's page
         }
         if (m_moving->parentWidget() && m_moving->parentWidget()->inherits("QTabWidget")) {
+            kDebug() << "widget is a tab widget page";
             m_moving = m_moving->parentWidget(); // widget is a tab widget page
         }
-        
+        //kDebug() << "2." << m_moving;
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
         m_grab = QPoint(mev->x(), mev->y());
 
@@ -481,6 +485,19 @@ Container::eventFilter(QObject *s, QEvent *e)
     case QEvent::Paint: { // Draw the dotted background
         if (s != widget())
             return false;
+        /*kDebug() << widget()->parentWidget()->metaObject()->className()
+            << widget()->parentWidget()->parentWidget()->metaObject()->className()
+            << widget()->parentWidget()->parentWidget()->parentWidget()->metaObject()->className()
+            << widget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->metaObject()->className()
+            << widget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->metaObject()->className()
+            << widget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->metaObject()->className();*/
+        if (widget()->inherits("ContainerWidget")) {
+            QWidget *parentContainer = widget()->parentWidget()->parentWidget()->parentWidget();
+            if (parentContainer->inherits("KexiDBForm") || parentContainer->inherits("ContainerWidget")) {
+                // do not display grid on ContainerWidget (e.g. inside of tab widget) becasue it's already done at higher level
+                return false;
+            }
+        }
         QPaintEvent* pe = static_cast<QPaintEvent*>(e);
         QPainter p(widget());
         p.setRenderHint(QPainter::Antialiasing, false);
@@ -696,6 +713,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         QContextMenuEvent* cme = static_cast<QContextMenuEvent*>(e);
         m_moving = 0; // clear this otherwise mouse dragging outside
                       // of the popup menu would drag the selected widget(s) randomly
+//kDebug() << "-----------" << s;
         d->form->createContextMenu(static_cast<QWidget*>(s), this, cme->pos());//false);
         return true;
     }
