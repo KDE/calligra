@@ -335,13 +335,13 @@ bool KexiComboBoxBase::valueIsEmpty()
 
 void KexiComboBoxBase::showPopup()
 {
-    kDebug(44010);
+    //kDebug(44010);
     createPopup(true);
 }
 
 void KexiComboBoxBase::createPopup(bool show)
 {
-    kDebug() << show << field() << popup() << m_updatePopupSelectionOnShow;
+    //kDebug() << show << field() << popup() << m_updatePopupSelectionOnShow;
     if (!field())
         return;
     m_insideCreatePopup = true;
@@ -381,13 +381,13 @@ void KexiComboBoxBase::createPopup(bool show)
 //! todo alter the position to fit the popup within screen boundaries
         popup()->hide();
         popup()->move(posMappedToGlobal + QPoint(0, thisWidget->height()));
-        kDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
+        //kDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
         //to avoid flickering: first resize to 0-height, then show and resize back to prev. height
         const int w = popupWidthHint();
         popup()->resize(w, 0);
         if (show) {
             popup()->show();
-            kDebug(44010) << "SHOW!!!";
+            //kDebug(44010) << "SHOW!!!";
         }
         popup()->updateSize(w);
         if (m_updatePopupSelectionOnShow) {
@@ -427,7 +427,6 @@ void KexiComboBoxBase::createPopup(bool show)
         popup()->raise();
         popup()->repaint();
     }
-    kDebug(44010) << popup()->isVisible();
     m_insideCreatePopup = false;
 }
 
@@ -461,7 +460,7 @@ void KexiComboBoxBase::acceptPopupSelection()
 
 void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
 {
-    kDebug(44010) << "m_visibleValue=" << m_visibleValue;
+    //kDebug(44010) << "m_visibleValue=" << m_visibleValue;
 
     QVariant valueToSet;
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
