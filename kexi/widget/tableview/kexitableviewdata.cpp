@@ -750,10 +750,13 @@ void KexiTableViewData::clearInternal()
 //TODO: this is time consuming: find better data model
 // KexiTableViewDataBase::clear();
     const uint c = count();
+#ifndef KEXI_NO_PROCESS_EVENTS
+    const bool processEvents = !qApp->closingDown();
+#endif
     for (uint i = 0; i < c; i++) {
         removeLast();
 #ifndef KEXI_NO_PROCESS_EVENTS
-        if (i % 1000 == 0)
+        if (processEvents && i % 1000 == 0)
             qApp->processEvents(QEventLoop::AllEvents, 1);
 #endif
     }
@@ -796,6 +799,11 @@ bool KexiTableViewData::preloadAllRows()
     //const uint fcount = d->cursor->fieldCount() + (d->containsROWIDInfo ? 1 : 0);
     if (!d->cursor->moveFirst() && d->cursor->error())
         return false;
+
+#ifndef KEXI_NO_PROCESS_EVENTS
+    const bool processEvents = !qApp->closingDown();
+#endif
+
     for (int i = 0;!d->cursor->eof();i++) {
         KexiDB::RecordData *record = d->cursor->storeCurrentRow();
         if (!record) {
@@ -809,7 +817,7 @@ bool KexiTableViewData::preloadAllRows()
             return false;
         }
 #ifndef KEXI_NO_PROCESS_EVENTS
-        if ((i % 1000) == 0)
+        if (processEvents && (i % 1000) == 0)
             qApp->processEvents(QEventLoop::AllEvents, 1);
 #endif
     }
