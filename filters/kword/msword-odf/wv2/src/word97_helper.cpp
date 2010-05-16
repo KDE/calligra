@@ -1243,59 +1243,75 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             if ( *ptr < 128 )
                 fItalic = *ptr == 1;
             else {
+                //see comments on SPRM::sprmCFBold above
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                if (*ptr == 128 && chp) {
                     fItalic = chp->fItalic;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fItalic = !chp->fItalic;
+                } else if ( !chp ) {
+                    fItalic = 1;
+                }
             }
             break;
         case SPRM::sprmCFStrike:
             wvlog << "sprmCFStrike -- fStrike = " << static_cast<int>( fStrike ) << " *ptr = " << static_cast<int>( *ptr ) << endl;
-            if ( *ptr < 128 )
+            if (*ptr < 128)
                 fStrike = *ptr == 1;
             else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
+                const Word97::CHP* chp(determineCHP( istd, paragraphStyle, styleSheet));
                 if ( chp )
                     wvlog << "chp->fStrike = " << static_cast<int>( chp->fStrike ) << endl;
-                if ( *ptr == 128 && chp )
+                if (*ptr == 128 && chp) {
                     fStrike = chp->fStrike;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fStrike = !chp->fStrike;
+                } else if (!chp) {
+                    fStrike = 1;
+                }
             }
             wvlog << "sprmCFStrike -- fStrike (changed) = " << static_cast<int>( fStrike ) << endl;
             break;
         case SPRM::sprmCFOutline:
-            if ( *ptr < 128 )
+            if (*ptr < 128)
                 fOutline = *ptr == 1;
             else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
+                if (*ptr == 128 && chp) {
                     fOutline = chp->fOutline;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fOutline = !chp->fOutline;
+                } else if (!chp) {
+                    fOutline = 1;
+                }
             }
             break;
         case SPRM::sprmCFShadow:
-            if ( *ptr < 128 )
+            if (*ptr < 128)
                 fShadow = *ptr == 1;
             else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
+                if (*ptr == 128 && chp) {
                     fShadow = chp->fShadow;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fShadow = !chp->fShadow;
+                } else if (!chp) {
+                    fShadow = 1;
+                }
             }
             break;
         case SPRM::sprmCFSmallCaps:
-            if ( *ptr < 128 )
+            if (*ptr < 128)
                 fSmallCaps = *ptr == 1;
             else {
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                const Word97::CHP* chp(determineCHP(istd, paragraphStyle, styleSheet));
+                if (*ptr == 128 && chp) {
                     fSmallCaps = chp->fSmallCaps;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fSmallCaps = !chp->fSmallCaps;
+                } else if (!chp) {
+                    fSmallCaps = 1;
+                }
             }
             break;
         case SPRM::sprmCFCaps:
@@ -1303,10 +1319,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                 fCaps = *ptr == 1;
             else {
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                if (*ptr == 128 && chp) {
                     fCaps = chp->fCaps;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fCaps = !chp->fCaps;
+                } else if (!chp) {
+                    fCaps = 1;
+                }
             }
             break;
         case SPRM::sprmCFVanish:
@@ -1314,10 +1333,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                 fVanish = *ptr == 1;
             else {
                 const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
-                if ( *ptr == 128 && chp )
+                if (*ptr == 128 && chp) {
                     fVanish = chp->fVanish;
-                else if ( *ptr == 129 && chp )
+                } else if (*ptr == 129 && chp) {
                     fVanish = !chp->fVanish;
+                } else if (!chp) {
+                    fVanish = 1;
+                }
             }
             break;
         case SPRM::sprmCFtcDefault:
