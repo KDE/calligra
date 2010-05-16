@@ -194,8 +194,8 @@ public slots:
     }
 
     /** The shape will be sheared using the zero-point which is the top-left corner. */
-    void setShear(qreal sx, qreal sy) {
-        m_frame->shape()->setShear(sx, sy);
+    void shear(qreal sx, qreal sy) {
+        m_frame->shape()->shear(sx, sy);
     }
 
     /** Get the width of the shape in pt. */
