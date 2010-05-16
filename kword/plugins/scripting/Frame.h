@@ -180,8 +180,8 @@ public slots:
     }
 
     /** Scale the shape using the zero-point which is the top-left corner. */
-    void setScale(qreal sx, qreal sy) {
-        m_frame->shape()->setScale(sx, sy);
+    void scale(qreal sx, qreal sy) {
+        m_frame->shape()->scale(sx, sy);
     }
 
     /** Return the current rotation in degrees, or NAN if its been transformed too much to extract that info. */
