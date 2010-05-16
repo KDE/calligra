@@ -312,6 +312,7 @@ public:
     bool slotPropertyChangedEnabled : 1;
     bool slotPropertyChanged_addCommandEnabled : 1;
     bool insideAddPropertyCommand : 1;
+    bool selectWidgetEnabled;
 // end of moved from WidgetPropertySet
 
     // i18n stuff
@@ -375,6 +376,7 @@ FormPrivate::FormPrivate(Form *form)
 // end of moved from WidgetPropertySet
     designModeStyle = 0;
     idOfPropertyCommand = 0;
+    selectWidgetEnabled = true;
 }
 
 FormPrivate::~FormPrivate()
@@ -838,6 +840,15 @@ void Form::setMode(Mode mode)
 
 void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
 {
+    if (!d->selectWidgetEnabled)
+        return;
+    d->selectWidgetEnabled = false;
+    selectWidgetInternal(w, flags);
+    d->selectWidgetEnabled = true;
+}
+
+void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
+{
     if (!w) {
         selectWidget(widget());
         return;
@@ -865,8 +876,10 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
         wtmp = wtmp->parentWidget();
     }
 
+//kDebug() << w << wtmp << "1111111111111111111111111";
     if (wtmp)
         wtmp->setFocus();
+//kDebug() << "2222222222222222222222222";
 
     if (flags & ReplacePreviousSelection) {
         d->selected.clear();
@@ -1370,6 +1383,7 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
 //   if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
             if (obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
                 if (!d->tabstops.contains(it)) {
+                    kDebug() << "adding child of" << w << ":" << obj;
                     d->tabstops.append(it);
                     return;
                 }
@@ -1377,6 +1391,7 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
         }
     }
     else if (!d->tabstops.contains(it)) { // not yet in the list
+        kDebug() << "adding" << w;
         d->tabstops.append(it);
     }
 }
@@ -2147,7 +2162,8 @@ void Form::createPropertiesForWidget(QWidget *w)
     }
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
-    d->propertySet["enabled"].setValue(tree->isEnabled());
+//! @todo fix enabled property here
+//crashes:    d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
@@ -2209,6 +2225,7 @@ void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const
 //! @todo what about 'forceReload' arg? It's not passed to updatePropertiesForSelection() now...
 void Form::emitSelectionChanged(QWidget *w, WidgetSelectionFlags flags)
 {
+//kDebug() << w;
     updatePropertiesForSelection(w, flags);
     emit selectionChanged(w, flags);
 }
@@ -2298,6 +2315,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 {
     if (!widget())
         return;
+//kDebug() << w << widget();
     const bool toplevelWidgetSelected = widget() == w;
     const uint widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;

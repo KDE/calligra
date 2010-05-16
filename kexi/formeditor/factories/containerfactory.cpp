@@ -960,6 +960,7 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
             setWidget(pw->parentWidget(), m_container->toplevel());
         }
 #endif
+
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
         if (tab) {
             menu->addAction( new AddTabAction(container, tab, menu) );
