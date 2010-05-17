@@ -911,7 +911,7 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
 
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
-    loadOdfAttributes( element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );
+    loadOdfAttributes( element, context, OdfAllAttributes );
     bool result = loadOdfFrame( element, context );
 
     // Restore previous setting
@@ -1091,7 +1091,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     {
         bodyWriter.startElement( "draw:frame" );
         // See also loadOdf() in loadOdfAttributes.
-        saveOdfAttributes( context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes );
+        saveOdfAttributes( context, OdfAllAttributes );
 
         bodyWriter.startElement( "draw:object" );
         context.embeddedSaver().embedDocument( bodyWriter, d->document );
