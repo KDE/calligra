@@ -60,7 +60,6 @@ void KWClipFrameCommand::redo()
         if (createClipShapes) {
             container = new KWFrameClipper();
             m_clipShapes.append(container);
-            container->setPosition(frame->shape()->position());
             container->setSize(frame->shape()->size());
             container->setTransformation(frame->shape()->transformation());
             container->setZIndex(frame->shape()->zIndex());
@@ -69,7 +68,6 @@ void KWClipFrameCommand::redo()
         }
         container->addShape(frame->shape());
         container->setClipped(frame->shape(), true);
-        frame->shape()->setPosition(QPoint());
         frame->shape()->setTransformation(QMatrix());
         foreach (KoView *view, m_document->views()) {
             KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
