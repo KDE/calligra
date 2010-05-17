@@ -934,17 +934,28 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("fo:background-color", color.name());
 
     //set the minimum height of header/footer to the full margin minus margin above header
-    //TODO: the margin between header/footer and text is just hard-coded for now
+    //problem with footer is that it is not possible to say how big the footer is.
     QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
+    header.append("<style:header-footer-properties fo:margin-bottom=\"");
     header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
-    header.append("pt\"/>");
+    header.append("pt\" fo:min-height=\"10pt\"/>");
     header.append("</style:header-style>");
+
     QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"20pt\" fo:min-height=\"");
-    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
-    footer.append("pt\"/>");
+    footer.append("<style:header-footer-properties fo:margin-top=\"");
+    if (sep->dyaBottom > (int)sep->dyaHdrBottom) {
+        if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
+            footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
+        } else {
+            footer.append("10");
+        }
+    }
+    else {
+        footer.append("10");
+    }
+    footer.append("pt\" fo:min-height=\"10pt\"/>");
     footer.append("</style:footer-style>");
+
     pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
     pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
 
