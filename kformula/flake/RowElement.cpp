@@ -235,8 +235,11 @@ ElementType RowElement::elementType() const
 
 bool RowElement::readMathMLContent( const KoXmlElement& parent )
 {
-    KoXmlNode semanticsNode = parent.namedItemNS( KoXmlNS::math, "semantics" );
-    KoXmlElement realParent = semanticsNode.isNull() ? parent: semanticsNode.toElement();
+    KoXmlElement realParent = parent;
+    // go deeper in the xml tree and 'skip' the semantics elements
+    while (!realParent.namedItemNS( KoXmlNS::math, "semantics" ).isNull()) {            // while there is a child 'semantics'
+        realParent = realParent.namedItemNS( KoXmlNS::math, "semantics" ).toElement();  // move to it
+    }
 
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
