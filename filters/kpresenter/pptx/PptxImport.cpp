@@ -140,15 +140,8 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     // 0. Document properties
     {
         MSOOXML::MsooXmlDocPropertiesReader docPropsReader(writers);
-
-        const KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                      &docPropsReader,
-                                                      QLatin1String("docProps/core.xml"),
-                                                      errorMessage, 0 );
-        if (status != KoFilter::OK) {
-            kDebug() << docPropsReader.errorString();
-            return status;
-        }
+        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
+            MSOOXML::ContentTypes::coreProps, &docPropsReader, writers, errorMessage) )
     }
 
     // 1. temporary styles
