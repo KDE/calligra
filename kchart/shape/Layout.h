@@ -114,7 +114,7 @@ public:
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.
      */
-    void containerChanged( KoShapeContainer *container );
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
 
     /**
      * Returns whether a shape is locked for user modifications.

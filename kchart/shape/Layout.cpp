@@ -107,8 +107,9 @@ QList<KoShape*> Layout::shapes() const
     return m_layoutItems.keys();
 }
 
-void Layout::containerChanged( KoShapeContainer *container )
+void Layout::containerChanged(KoShapeContainer *container,KoShape::ChangeType type)
 {
+    Q_UNUSED(type);
     // Container was resized
     if ( container->size() != m_containerSize ) {
         QSizeF oldSize = m_containerSize;
