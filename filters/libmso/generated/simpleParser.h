@@ -1709,7 +1709,7 @@ public:
 };
 class UnknownTextContainerChild : public StreamOffset {
 public:
-    RecordHeader rh;
+    OfficeArtRecordHeader rh;
     QByteArray unknown;
     UnknownTextContainerChild(void* /*dummy*/ = 0) {}
 };

@@ -2310,7 +2310,7 @@ void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainer
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
-    parseRecordHeader(in, _s.rh);
+    parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 3)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 3");
     }
@@ -9362,8 +9362,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     }
     _m = in.setMark();
     try {
-        RecordHeader _optionCheck(&_s);
-        parseRecordHeader(in, _optionCheck);
+        OfficeArtRecordHeader _optionCheck(&_s);
+        parseOfficeArtRecordHeader(in, _optionCheck);
         _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recInstance == 9)&&(_optionCheck.recType == 0);
     } catch(EOFException _e) {
         _possiblyPresent = false;
