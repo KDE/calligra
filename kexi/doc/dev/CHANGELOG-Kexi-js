@@ -45,8 +45,6 @@ TODO Form editor:
  - disable 'assign action' when no button is selected
  - disable mouse-over highlighting effect for buttons and check boxes
  
-TODO: setting "enabled" property to false does not work
-TODO: inserting tab widget does not work
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
  - setting alignment property (e.g. for text box) does not work because it is numeric now
 TODO: clearing widget's dataSource property sets datasource to "" in XML instead of clrearing it completely; the same for form's dataSource and dataSourcePartClass properties
@@ -110,7 +108,26 @@ BUG:234347
 TODO: optimize: keep the checksum for pixmap in context of data itself
 TODO: optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
 
+
+**** TODO: setting "enabled" property to false does not work
+
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-05-16
+Table View
+*When non-empty table view(s) are opened, it's possible to encounter a crash due to QApplication::processEvent() calls from destructor. Avoid that by checking qApp->closingDown().
+BUG:237796
+**merged with trunk
+Widgets
+*Use Qt::WA_WindowPropagation and Qt::WA_X11NetWmWindowTypeCombo attributes on combo box popups for X11 for better behaviour
+Forms
+*Fix Kexi combo box widgets in forms (did not display values and were non-functional)
+**Workaround used by adding KexiComboBoxBase::m_setReinstantiatePopupOnShow and recreating popups from scratch
+BUG:235964
+TODO: fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow
+*do not display grid on ContainerWidget (e.g. inside of tab widget) becasue it's already done at higher level
+*fixed crash in setting enabled property in property editor
+*ported tab widget, and inserting/renaming/removing tabs
 
 2010-05-10
 KexiDB
