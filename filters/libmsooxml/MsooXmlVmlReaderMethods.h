@@ -47,6 +47,8 @@ protected:
     KoFilter::ConversionStatus read_shapetype();
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
+    KoFilter::ConversionStatus read_textbox();
+    KoFilter::ConversionStatus read_txbxContent();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);

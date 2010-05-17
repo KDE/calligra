@@ -52,24 +52,47 @@
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
+
+    body->startElement("draw:frame");
+
+    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
+    body = drawFrameBuf.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             if (qualifiedName() == "v:rect") {
                 TRY_READ(rect)
             }
+            ELSE_TRY_READ_IF_NS(v, shapetype)
+            ELSE_TRY_READ_IF_NS(v, shape)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    body->startElement("draw:frame");
+
+    body = drawFrameBuf.originalWriter();
+
+    const QString width(m_vmlStyle.value("width")); // already in "...cm" format
+    const QString height(m_vmlStyle.value("height")); // already in "...cm" format
+    const QString x_mar(m_vmlStyle.value("margin-left"));
+    const QString y_mar(m_vmlStyle.value("margin-top"));
+    if (!width.isEmpty()) {
+        body->addAttribute("svg:width", width);
+    }
+    if (!height.isEmpty()) {
+        body->addAttribute("svg:height", height);
+    }
+    if (!x_mar.isEmpty()) {
+        body->addAttribute("svg:x", x_mar);
+    }
+    if (!y_mar.isEmpty()) {
+        body->addAttribute("svg:y", y_mar);
+    }
+
+    (void)drawFrameBuf.releaseWriter();    
+
     {
-        const QString width(m_vmlStyle.value("width")); // already in "...cm" format
-        const QString height(m_vmlStyle.value("height")); // already in "...cm" format
-        if (!width.isEmpty())
-            body->addAttribute("svg:width", width);
-        if (!height.isEmpty())
-            body->addAttribute("svg:height", height);
         {
             const QString rId(m_vmlStyle.value("v:fill@r:id"));
             if (!rId.isEmpty()) {
@@ -87,7 +110,35 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             }
         }
     }
+
     body->endElement(); //draw:frame
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL txbxContent
+/*! txbxContent handler (Textbox content)
+
+ Parent elements:
+ - [done] textbox (§14.1.2.19)
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+        }
+
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
 
     READ_EPILOGUE
 }
@@ -385,7 +436,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
  - stroke (Line Stroke Settings) §14.1.2.21
- - textbox (Text Box) §14.1.2.22
+ - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
  - wrap (Text Wrapping) §14.3.2.6
@@ -413,6 +464,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     if (!heightCm.isEmpty()) {
         m_currentObjectHeightCm = heightCm;
     }
+    const QString xCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-left")));
+    if (!xCmMar.isEmpty()) {
+        m_currentObjectXCm = xCmMar;
+    }
+    const QString yCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-top")));
+    if (!yCmMar.isEmpty()) {
+        m_currentObjectYCm = yCmMar;
+    }
     // override x or y after 'object' element is possible
     const QString xCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("left")));
     if (!xCm.isEmpty()) {
@@ -432,6 +491,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
+            ELSE_TRY_READ_IF_NS(v, textbox)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -494,6 +554,37 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL textbox
+/*! text box handler (Text Box)
+
+ Parent elements:
+ - [done] shape (§14.1.2.19)
+ - more...
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    body->startElement("draw:text-box");
+
+    while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF_NS(w, txbxContent)
+        }
+
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+    body->endElement(); // draw-textbox
+
+    READ_EPILOGUE
+}
 
 
 #endif // MSOOXMLVMLREADER_IMPL_H
