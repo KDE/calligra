@@ -938,7 +938,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     QString header("<style:header-style>");
     header.append("<style:header-footer-properties fo:margin-bottom=\"");
     header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
-    header.append("pt\" fo:min-height=\"10pt\"/>");
+    header.append("pt\" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
     QString footer("<style:footer-style>");
@@ -947,11 +947,11 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
             footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
         } else {
-            footer.append("10");
+            footer.append("14");
         }
     }
     else {
-        footer.append("10");
+        footer.append("14");
     }
     footer.append("pt\" fo:min-height=\"10pt\"/>");
     footer.append("</style:footer-style>");

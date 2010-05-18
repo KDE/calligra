@@ -515,6 +515,7 @@ bool Parser9x::parseBody()
     if ( !sep )
         sep = new Word97::SEP(); // don't pass 0 pointers in any case
     m_textHandler->sectionStart( sep ); // First section, starting at CP 0
+    sep->dump();
     emitHeaderData( sep );
     sep = 0; // get rid of the huge SEP
 
