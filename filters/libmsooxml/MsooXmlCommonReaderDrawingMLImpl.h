@@ -186,7 +186,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         //! @todo: Generalize the generation of draw:transform so it can be used in other places.
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
-            QString rot = QString("rotate(%f)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
+            QString rot = QString("rotate(%1)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
                                                     / (qreal)60000.0);
             body->addAttribute("draw:transform", rot);
         }
