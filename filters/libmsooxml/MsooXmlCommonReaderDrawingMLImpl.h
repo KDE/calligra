@@ -486,6 +486,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
+    m_rot = 0;
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
     // to write after the child elements are generated
@@ -542,6 +543,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
         body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        if (m_rot != 0) {
+            // m_rot is in 1/60,000th of a degree
+            QString rot = QString("rotate(%1)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
+                                                    / (qreal)60000.0);
+            body->addAttribute("draw:transform", rot);
+        }
+
 #else
 #ifdef __GNUC__
 #warning TODO: docx
