@@ -109,21 +109,13 @@ QList<KoShape*> Layout::shapes() const
 
 void Layout::containerChanged(KoShapeContainer *container,KoShape::ChangeType type)
 {
-    Q_UNUSED(type);
-    // Container was resized
-    if ( container->size() != m_containerSize ) {
-        QSizeF oldSize = m_containerSize;
+    switch( type ) {
+    case KoShape::SizeChanged:
         m_containerSize = container->size();
         scheduleRelayout();
-    }
-    // Container was moved
-    // FIXME: Normally, the "else" should be redundant here, as only one thing can change - either
-    // size, or position, or something else. But it works around a bug in the defaultTools's resize
-    // handling that erronsously produces an absolutePosition() of QPointF(0,0) due to internal
-    // unwinding of the shape's transformation matrix before calling setSize().
-    else if ( container->absolutePosition( KoFlake::TopLeftCorner ) != m_containerPos ) {
-        m_containerPos = container->absolutePosition( KoFlake::TopLeftCorner );
-        // container-move-related code here
+        break;
+    default:
+        break;
     }
 }
 

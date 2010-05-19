@@ -185,7 +185,6 @@ private:
     class LayoutData;
     bool m_doingLayout;
     bool m_relayoutScheduled;
-    QPointF m_containerPos;
     QSizeF m_containerSize;
     QMap<KoShape*, LayoutData*> m_layoutItems;
 };
