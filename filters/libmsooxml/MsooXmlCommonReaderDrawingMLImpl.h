@@ -1456,7 +1456,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
         TRY_READ_ATTR_WITHOUT_NS(r, l)
         TRY_READ_ATTR_WITHOUT_NS(r, r)
         TRY_READ_ATTR_WITHOUT_NS(r, t)*/
-//MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+//MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     //m_fillImageRenderingStyle = QLatin1String("stretch");
     while (!atEnd()) {
@@ -1629,7 +1629,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
  Complex type: CT_RelativeRect, p. 4545
 
  const QXmlStreamAttributes attrs( attributes() );
- use double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
+ use qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
 */
 
 
