@@ -155,6 +155,8 @@ protected:
 
     DocxXmlDocumentReaderContext* m_context;
 
+    KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
+
 private:
     void init();
 

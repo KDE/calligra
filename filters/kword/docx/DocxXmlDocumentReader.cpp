@@ -152,6 +152,7 @@ public:
 DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
         : MSOOXML::MsooXmlCommonReader(writers)
         , m_pDocBkgImageWriter(0)
+        , m_writers(writers)
         , d(new Private)
 {
     init();
@@ -522,8 +523,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
     DocxXmlFooterReader reader(this);
 
     QString errorMessage;
+
+    MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+        relationships, *m_context->themes);
+
     const KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, m_context);
+        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);
     if (status != KoFilter::OK) {
         reader.raiseError(errorMessage);
     }
@@ -567,8 +574,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
     DocxXmlHeaderReader reader(this);
 
     QString errorMessage;
+
+    MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+        relationships, *m_context->themes);
+
     const KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, m_context);
+        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);
     if (status != KoFilter::OK) {
         reader.raiseError(errorMessage);
     }
