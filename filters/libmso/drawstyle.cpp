@@ -94,6 +94,7 @@ GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)
 GETTER(qint32,                 DyTextTop,            dyTextTop,            0)
 GETTER(qint32,                 DxTextRight,          dxTextRight,          0)
 GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
+GETTER(quint32,                Pib,                  pib,                  0)
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \

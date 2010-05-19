@@ -139,6 +139,7 @@ public:
     bool fUsefStandardHR() const;
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
+    quint32 pib() const;
 };
 
 /**
