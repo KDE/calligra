@@ -858,6 +858,8 @@ class SlideProgBinaryTagContainer;
 void parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTagContainer& _s);
 class OfficeArtSpContainer;
 void parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s);
+class OfficeArtInlineSpContainer;
+void parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpContainer& _s);
 class DocProgTagsSubContainerOrAtom;
 void parseDocProgTagsSubContainerOrAtom(LEInputStream& in, DocProgTagsSubContainerOrAtom& _s);
 class SlideProgTagsSubContainerOrAtom;
@@ -1709,7 +1711,7 @@ public:
 };
 class UnknownTextContainerChild : public StreamOffset {
 public:
-    OfficeArtRecordHeader rh;
+    RecordHeader rh;
     QByteArray unknown;
     UnknownTextContainerChild(void* /*dummy*/ = 0) {}
 };
@@ -4966,6 +4968,12 @@ public:
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
     OfficeArtSpContainer(void* /*dummy*/ = 0) {}
+};
+class OfficeArtInlineSpContainer : public StreamOffset {
+public:
+    OfficeArtSpContainer shape;
+    QList<OfficeArtBStoreContainerFileBlock> rgfb;
+    OfficeArtInlineSpContainer(void* /*dummy*/ = 0) {}
 };
 class DocProgTagsSubContainerOrAtom : public StreamOffset {
 public:

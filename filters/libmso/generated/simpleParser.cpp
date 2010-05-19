@@ -7,9 +7,6 @@ void MSO::parseRecordHeader(LEInputStream& in, RecordHeader& _s) {
     _s.recVer = in.readuint4();
     _s.recInstance = in.readuint12();
     _s.recType = in.readuint16();
-    if (!(((quint16)_s.recType)>0)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.recType)>0");
-    }
     _s.recLen = in.readuint32();
 }
 void MSO::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
@@ -2310,7 +2307,7 @@ void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainer
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
-    parseOfficeArtRecordHeader(in, _s.rh);
+    parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 3)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 3");
     }
@@ -9362,8 +9359,8 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
     }
     _m = in.setMark();
     try {
-        OfficeArtRecordHeader _optionCheck(&_s);
-        parseOfficeArtRecordHeader(in, _optionCheck);
+        RecordHeader _optionCheck(&_s);
+        parseRecordHeader(in, _optionCheck);
         _possiblyPresent = (_optionCheck.recVer == 3)&&(_optionCheck.recInstance == 9)&&(_optionCheck.recType == 0);
     } catch(EOFException _e) {
         _possiblyPresent = false;
@@ -11880,6 +11877,28 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
             in.rewind(_m);
         } catch(EOFException _e) {
             _s.shapeTertiaryOptions2.clear();
+            in.rewind(_m);
+        }
+    }
+}
+void MSO::parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpContainer& _s) {
+    _s.streamOffset = in.getPosition();
+    LEInputStream::Mark _m;
+    bool _atend;
+    parseOfficeArtSpContainer(in, _s.shape);
+    _atend = false;
+    while (!_atend) {
+        _m = in.setMark();
+        try {
+            _s.rgfb.append(OfficeArtBStoreContainerFileBlock(&_s));
+            parseOfficeArtBStoreContainerFileBlock(in, _s.rgfb.last());
+        } catch(IncorrectValueException _e) {
+            _s.rgfb.removeLast();
+            _atend = true;
+            in.rewind(_m);
+        } catch(EOFException _e) {
+            _s.rgfb.removeLast();
+            _atend = true;
             in.rewind(_m);
         }
     }
