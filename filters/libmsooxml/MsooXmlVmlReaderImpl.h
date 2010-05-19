@@ -55,6 +55,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 
     body->startElement("draw:frame");
 
+    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
 
@@ -90,7 +92,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
         body->addAttribute("svg:y", y_mar);
     }
 
-    (void)drawFrameBuf.releaseWriter();    
+    if (!m_imagedataPath.isEmpty()) {
+        body->startElement("draw:image");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->addAttribute("xlink:href", m_imagedataPath);
+        body->endElement(); // draw:image
+    }
+
+    if (!m_currentDrawStyle.isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(
+            m_currentDrawStyle, "gr") );
+        body->addAttribute("draw:style-name", drawStyleName);
+    }
 
     {
         {
@@ -110,6 +125,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             }
         }
     }
+
+    (void)drawFrameBuf.releaseWriter();    
 
     body->endElement(); //draw:frame
 
