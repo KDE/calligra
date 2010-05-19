@@ -61,7 +61,7 @@ namespace MSOOXML
 namespace Utils {
 
 //! Performs EMU conversion and returns string.
-inline QString cmString(double cm)
+inline QString cmString(qreal cm)
 {
     QString res;
     return res.sprintf("%3.3fcm", cm);
@@ -116,13 +116,13 @@ MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
 //! Performs EMU conversion and returns string.
 inline QString EMU_TO_CM_STRING(int emu)
 {
-    return MSOOXML::Utils::cmString(EMU_TO_CM(double(emu)));
+    return MSOOXML::Utils::cmString(EMU_TO_CM(qreal(emu)));
 }
 
 //! Performs EMU conversion and returns string.
 inline QString EMU_TO_INCH_STRING(int emu)
 {
-    return MSOOXML::Utils::cmString(EMU_TO_INCH(double(emu)));
+    return MSOOXML::Utils::cmString(EMU_TO_INCH(qreal(emu)));
 }
 
 // px conversion

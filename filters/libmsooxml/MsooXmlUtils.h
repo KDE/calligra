@@ -225,17 +225,17 @@ MSOOXML_EXPORT QLocale localeForLangId( int langid );
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT double ST_Percentage_to_double(const QString& val, bool& ok);
+MSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! If "%" suffix is not present (MSOOXML violation of OOXML), the format is expected to be int({ST_Percentage}*1000).
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
 struct MSOOXML_EXPORT DoubleModifier {
-    DoubleModifier(double v) : value(v), valid(true) {}
+    DoubleModifier(qreal v) : value(v), valid(true) {}
     DoubleModifier() : value(0.0), valid(false) {}
-    double value;
+    qreal value;
     bool valid;
 };
 

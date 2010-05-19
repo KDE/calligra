@@ -161,7 +161,7 @@ ColorType m_colorType;
 QColor m_currentColor;
 QPen m_currentPen;
 
-double* m_currentDoubleValue;
+qreal* m_currentDoubleValue;
 
 bool m_hyperLink;
 QString m_hyperLinkTarget;

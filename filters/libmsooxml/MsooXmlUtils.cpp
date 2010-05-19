@@ -721,7 +721,7 @@ QLocale Utils::localeForLangId( int langid )
     return QLocale( s_LangIdToLocaleMapping->value( langid ) );
 }
 
-double Utils::ST_Percentage_to_double(const QString& val, bool& ok)
+qreal Utils::ST_Percentage_to_double(const QString& val, bool& ok)
 {
     if (!val.endsWith('%')) {
         ok = false;
@@ -732,16 +732,16 @@ double Utils::ST_Percentage_to_double(const QString& val, bool& ok)
     return result.toDouble(&ok);
 }
 
-double Utils::ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)
+qreal Utils::ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)
 {
-    const double result = ST_Percentage_to_double(val, ok);
+    const qreal result = ST_Percentage_to_double(val, ok);
     if (ok)
         return result;
     // MSOOXML fix: the format is int({ST_Percentage}*1000)
     const int resultInt = val.toInt(&ok);
     if (!ok)
         return 0.0;
-    return double(resultInt) / 1000.0;
+    return qreal(resultInt) / 1000.0;
 }
 
 QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modulation, const DoubleModifier& offset)
@@ -1006,7 +1006,7 @@ QString Utils::TWIP_to_ODF(const QString& twipValue)
         return QString();
     if (twip == 0)
         return QLatin1String("0cm");
-    return cmString(TWIP_TO_CM(double(twip)));
+    return cmString(TWIP_TO_CM(qreal(twip)));
 }
 
 QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)
