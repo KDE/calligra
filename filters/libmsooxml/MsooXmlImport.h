@@ -34,6 +34,7 @@
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
+class QSize;
 class KZip;
 class KoOdfWriteStore;
 class KoStore;
@@ -75,6 +76,12 @@ public:
      of the importing process, i.e. not from within parseParts(). */
     KoFilter::ConversionStatus copyFile(const QString& sourceName,
                                         const QString& destinationName);
+
+    /*! @return size of image file @a sourceName read from zip archive @a zip.
+    Size of the image is returned in @a size.
+    @return KoFilter::OK on success.
+    On failure @a errorMessage is set. */
+    KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize* size);
 
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,

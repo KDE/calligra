@@ -52,7 +52,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
     QString& destinationName)
 {
-    destinationName =  destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+    destinationName = destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
     if (m_copiedFiles.contains(sourceName)) {
         kDebug() << sourceName << "already copied - skipping";
     }
@@ -63,6 +63,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& source
         m_copiedFiles.insert(sourceName);
     }
     return KoFilter::OK;
+}
+
+QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
+{
+    const QMap<QString, QSize>::ConstIterator it(m_imageSizes.constFind(sourceName));
+    if (it == m_imageSizes.constEnd()) {
+        QSize size;
+        const KoFilter::ConversionStatus status = m_context->import->imageSize(sourceName, &size);
+        if (status != KoFilter::OK)
+            size = QSize(-1, -1);
+        m_imageSizes.insert(sourceName, size);
+        return size;
+    }
+    return it.value();
 }
 
 #undef CURRENT_EL
@@ -1319,6 +1333,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         }
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
     }
@@ -1358,7 +1373,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     READ_PROLOGUE
 
     m_fillImageRenderingStyleStretch = true;
-    //! todo for tead_tile: m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
     m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("stretch"));
 
     while (!atEnd()) {
@@ -1368,6 +1382,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
             TRY_READ_IF(fillRect)
             ELSE_WRONG_FORMAT
         }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tile
+//! tile handler (Placeholder Shape)
+/*! ECMA-376, 19.3.1.36, p. 3234
+ This element specifies that a BLIP should be tiled to fill the available space. This element defines a "tile"
+ rectangle within the bounding box. The image is encompassed within the tile rectangle, and the tile rectangle
+ is tiled across the bounding box to fill the entire area.
+
+ Parent elements:
+ - blipFill (§21.3.2.2)
+ - blipFill (§20.1.8.14)
+ - blipFill (§20.2.2.1)
+ - blipFill (§20.5.2.2)
+ - blipFill (§19.3.1.4)
+
+ No child elements.
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
+//! @todo algn - convert to "ODF's Fill Image Tile Reference Point"
+    m_currentDrawStyle.addProperty("draw:fill-image-ref-point", "top-left");
+//! @todo flip
+//! @todo sx
+//! @todo sy
+//! @todo tx
+//! @todo ty
+
+    while (!atEnd()) {
+        readNext();
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
@@ -1554,8 +1606,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
                 TRY_READ(blip)
             } else if (qualifiedName() == QLatin1String("a:stretch")) {
                 TRY_READ(stretch)
+            } else if (qualifiedName() == QLatin1String("a:tile")) {
+                TRY_READ(tile)
             }
-            //! @todo read_tile
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1922,13 +1975,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             case BackgroundColor:
             {
                 QBrush brush(col, Qt::SolidPattern);
-                KoOdfGraphicStyles::saveOdfFillStyle(m_currentPageStyle, *mainStyles, brush);
+                KoOdfGraphicStyles::saveOdfFillStyle(m_currentDrawStyle, *mainStyles, brush);
             }
             break;
             case OutlineColor:
             {
                 m_currentPen.setColor(col);
-                KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentPageStyle, *mainStyles, m_currentPen);
+                KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentDrawStyle, *mainStyles, m_currentPen);
             }
             break;
             case TextColor:

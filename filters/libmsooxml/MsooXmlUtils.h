@@ -37,6 +37,7 @@
 class QLocale;
 class QDomElement;
 class QDomDocument;
+class QSize;
 class KZip;
 struct KoOdfWriters;
 class KoCharacterStyle;
@@ -168,12 +169,20 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* re
         MsooXmlReaderContext* context = 0);
 
 /*! Copies file @a sourceName from zip archive @a zip to @a outputStore store
- under @a destinationName name. @return KoFilter::OK on success.
+ under @a destinationName name. If @a size is not 0, *size is set to size of the image
+ @return KoFilter::OK on success.
  On failure @a errorMessage is set. */
 KoFilter::ConversionStatus copyFile(const KZip* zip, QString& errorMessage,
                                     const QString& sourceName,
                                     KoStore *outputStore,
                                     const QString& destinationName);
+
+/*! @return size of image file @a sourceName read from zip archive @a zip.
+ Size of the image is returned in @a size.
+ @return KoFilter::OK on success.
+ On failure @a errorMessage is set. */
+KoFilter::ConversionStatus imageSize(const KZip* zip, QString& errorMessage,
+                                     const QString& sourceName, QSize* size);
 
 //! Loads a thumbnail.
 /*! @return conversion status

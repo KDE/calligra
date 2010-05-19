@@ -102,8 +102,7 @@ protected:
     KoFilter::ConversionStatus read_ph();
     KoFilter::ConversionStatus read_txBody();
 
-    KoGenStyle m_currentPageStyle;
-
+//    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
     PptxShapeProperties* m_currentShapeProperties;
 

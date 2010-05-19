@@ -52,27 +52,20 @@
 //! Converts emu value (integer or double) to cm
 #define EMU_TO_CM(emu) ((emu)/360000.0)
 
-//! Performs EMU conversion and returns string.
-inline QString EMU_TO_CM_STRING(int emu)
-{
-    QString res;
-    return res.sprintf("%3.3fcm", EMU_TO_CM(double(emu)));
-}
-
 //! Converts emu value (integer or double) to inches
 #define EMU_TO_INCH(emu) ((emu)/914400.0)
-
-//! Performs EMU conversion and returns string.
-inline QString EMU_TO_INCH_STRING(int emu)
-{
-    QString res;
-    return res.sprintf("%3.3fin", EMU_TO_INCH(double(emu)));
-}
 
 namespace MSOOXML
 {
 
 namespace Utils {
+
+//! Performs EMU conversion and returns string.
+inline QString cmString(double cm)
+{
+    QString res;
+    return res.sprintf("%3.3fcm", cm);
+}
 
 //! Converts EMU Unit of Measurement to cm.
 /*! Converts value expressed in EMU (ECMA-376, 20.1.2.1: EMU Unit of Measurement)
@@ -119,6 +112,18 @@ MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
 
 } // Utils
 } // MSOOXML
+
+//! Performs EMU conversion and returns string.
+inline QString EMU_TO_CM_STRING(int emu)
+{
+    return MSOOXML::Utils::cmString(EMU_TO_CM(double(emu)));
+}
+
+//! Performs EMU conversion and returns string.
+inline QString EMU_TO_INCH_STRING(int emu)
+{
+    return MSOOXML::Utils::cmString(EMU_TO_INCH(double(emu)));
+}
 
 // px conversion
 #define PT_TO_PX(pt) ((pt)*1.33597222222)

@@ -31,6 +31,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoUnit.h>
 
 #include <kde_file.h> // for WARNING
 
@@ -248,9 +249,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
 
     if (m_context->type == Slide) {
-        m_currentPageStyle = KoGenStyle(KoGenStyle::DrawingPageStyle, "drawing-page"); // CASE #P109
-        m_currentPageStyle.addProperty("presentation:background-visible", true);   // CASE #P111
-        m_currentPageStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
+        // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
+        m_currentDrawStyle = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
+        m_currentDrawStyle.addProperty("presentation:background-visible", true);   // CASE #P111
+        m_currentDrawStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
     }
 
     {
@@ -290,7 +292,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 //! @todo presentation:use-date-time-name //optional; CASE #P304
                 //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
 
-                const QString currentPageStyleName(mainStyles->insert(m_currentPageStyle));
+                const QString currentPageStyleName(mainStyles->insert(m_currentDrawStyle));
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
 
@@ -526,6 +528,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 
 #undef CURRENT_EL
 #define CURRENT_EL bg
+//! 19.3.1.1 bg (Slide Background)
+//! This element specifies the background appearance information for a slide. The slide background covers the
+//! entire slide and is visible where no objects exist and as the background for transparent objects.
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 {
     READ_PROLOGUE
@@ -543,21 +548,57 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 
 #undef CURRENT_EL
 #define CURRENT_EL bgPr
+//! 19.3.1.2 bgPr (Background Properties)
+//! This element specifies visual effects used to render the slide background. This includes any fill, image, or effects
+//! that are to make up the background of the slide.
+
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
     READ_PROLOGUE
 
     m_colorType = BackgroundColor;
+    QString fillImageName;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF_NS(a, solidFill)
-            ELSE_TRY_READ_IF_NS(a, blip)
+//            ELSE_TRY_READ_IF_NS(a, blip)
+            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+                TRY_READ(blipFill)
+                KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
+                fillImageStyle.addAttribute("xlink:href", m_xlinkHref);
+                //! @todo draw:name="???"
+                fillImageStyle.addAttribute("xlink:type", "simple");
+                fillImageStyle.addAttribute("xlink:show", "embed");
+                fillImageStyle.addAttribute("xlink:actuate", "onLoad");
+                fillImageName = mainStyles->insert(fillImageStyle);
+                kDebug() << fillImageName;
+            }
+/*            else if (qualifiedName() == QLatin1String("a:tile")) {
+                TRY_READ(tile)
+                foundTile = true;
+            }*/
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (!fillImageName.isEmpty()) {
+        //! Setup slide's bitmap fill
+        m_currentDrawStyle.addProperty("draw:fill", "bitmap");
+        m_currentDrawStyle.addProperty("draw:fill-image-name", fillImageName);
+        if (!m_recentSourceName.isEmpty()) {
+            const QSize size(imageSize(m_recentSourceName));
+            kDebug() << "SIZE:" << size;
+            if (size.isValid()) {
+                m_currentDrawStyle.addProperty("draw:fill-image-width",
+                    MSOOXML::Utils::cmString(POINT_TO_CM(size.width())));
+                m_currentDrawStyle.addProperty("draw:fill-image-height",
+                    MSOOXML::Utils::cmString(POINT_TO_CM(size.height())));
+            }
+        }
     }
     READ_EPILOGUE
 }
@@ -754,7 +795,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
     READ_EPILOGUE
 }
 
-#define blipFill_NS "p"
+#define blipFill_NS "a"
 
 // END NAMESPACE p
 

@@ -138,6 +138,19 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
     return status;
 }
 
+KoFilter::ConversionStatus MsooXmlImport::imageSize(const QString& sourceName, QSize* size)
+{
+    if (!m_zip) {
+        return KoFilter::UsageError;
+    }
+    QString errorMessage;
+    const KoFilter::ConversionStatus status = Utils::imageSize(
+        m_zip, errorMessage, sourceName, size);
+//! @todo transmit the error to the GUI...
+    kDebug() << errorMessage;
+    return status;
+}
+
 // private
 KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocumentInternal(
     const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,

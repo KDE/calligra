@@ -56,6 +56,7 @@
 #include <QColor>
 #include <QBrush>
 #include <QImage>
+#include <QImageReader>
 #include <QPalette>
 #include <QRegExp>
 #include <QtXml>
@@ -244,9 +245,8 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
 
 #define BLOCK_SIZE 4096
 KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessage,
-        const QString& sourceName,
-        KoStore *outputStore,
-        const QString& destinationName)
+                                           const QString& sourceName, KoStore *outputStore,
+                                           const QString& destinationName)
 {
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
@@ -276,6 +276,23 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
     return status;
 }
 #undef BLOCK_SIZE
+
+KoFilter::ConversionStatus Utils::imageSize(const KZip* zip, QString& errorMessage, const QString& sourceName,
+                                            QSize* size)
+{
+    Q_ASSERT(size);
+    KoFilter::ConversionStatus status;
+    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
+    if (!inputDevice.get()) {
+        return status;
+    }
+    QImageReader r(inputDevice.get(), QFileInfo(sourceName).suffix().toLatin1());
+    if (!r.canRead())
+        return KoFilter::WrongFormat;
+    *size = r.size();
+    kDebug() << *size;
+    return KoFilter::OK;
+}
 
 KoFilter::ConversionStatus Utils::loadThumbnail(QImage& thumbnail, KZip* zip)
 {
@@ -989,8 +1006,7 @@ QString Utils::TWIP_to_ODF(const QString& twipValue)
         return QString();
     if (twip == 0)
         return QLatin1String("0cm");
-    QString res;
-    return res.sprintf("%3.3fcm", TWIP_TO_CM(double(twip)));
+    return cmString(TWIP_TO_CM(double(twip)));
 }
 
 QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)
@@ -1108,8 +1124,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
     if (v.isEmpty())
         return QString();
-    QString res;
-    return res.sprintf("%3.3fcm", POINT_TO_CM(KoUnit::parseValue(v)));
+    return cmString(POINT_TO_CM(KoUnit::parseValue(v)));
 }
 
 // </units> -------------------
