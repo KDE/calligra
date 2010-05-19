@@ -44,6 +44,9 @@
 #include <wv2/src/olestream.h>
 #include "pole.h"
 
+//function prototypes of local functions
+bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
+
 typedef KGenericFactory<MSWordOdfImport> MSWordOdfImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libmswordodf_import, MSWordOdfImportFactory("kofficefilters"))
 
@@ -97,12 +100,35 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     if (isEncrypted(inputFile))
         return KoFilter::PasswordProtected;
 
-    // NOTE: testing the pole storage which should replace olestorage
+    /*
+     * ************************************************
+     *  POLE storage, POLE and LEInput streams
+     * ************************************************
+     */
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         kDebug(30513) << "Cannot open " << inputFile;
         return KoFilter::StupidError;
     }
+    QBuffer buff1;
+    if (!readStream(storage, "/Data", buff1)) {
+        return KoFilter::StupidError;
+    }
+    LEInputStream data_stream(&buff1);
+
+//     //TODO: fib information required to select the correct stream name
+//     QBuffer buff2;
+//     const std::string tmp = fib.fWhichTblStm ? "1Table" : "0Table";
+//     if (!readStream(storage, tmp, buff2)) {
+//         return KoFilter::StupidError;
+//     }
+//     LEInputStream table_stream(&buff2);
+
+    QBuffer buff3;
+    if (!readStream(storage, "/WordDocument", buff3)) {
+        return KoFilter::StupidError;
+    }
+    LEInputStream wdocument_stream(&buff3);
 
     // Create output files
     KoStore *storeout;
@@ -167,7 +193,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     //create our document object, writing to the temporary buffers
     Document *document = new Document(QFile::encodeName(inputFile).data(), m_chain, bodyWriter,
                                       mainStyles, &metaWriter, &manifestWriter,
-                                      storeout, &storage);
+                                      storeout, &storage, &data_stream, NULL, &wdocument_stream);
     finalizer.m_document = document;
 
     //check that we can parse the document?
@@ -235,6 +261,29 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     kDebug(30513) << "######################## MSWordOdfImport::convert done ####################";
     return KoFilter::OK;
+}
+
+/*
+ * Read the stream content into buffer.
+ * @param storage; POLE storage
+ * @param streampath; stream path into the POLE storage
+ * @param buffer; buffer provided by the user
+ */
+bool
+readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
+{
+    std::string path(streampath);
+    POLE::Stream stream(&storage, path);
+    QByteArray array;
+    array.resize(stream.size());
+    unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
+    if (r != stream.size()) {
+        kError(30513) << "Error while reading from " << streampath << "stream";
+        return false;
+    }
+    buffer.setData(array);
+    buffer.open(QIODevice::ReadOnly);
+    return true;
 }
 
 #include <mswordodfimport.moc>

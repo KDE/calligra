@@ -62,13 +62,13 @@ EscherHeader::EscherHeader( OLEStreamReader* stream )
     //read first 32 bits
     U32 shifterU32;
     shifterU32 = stream->readU32();
-    ver = shifterU32;
+    recVer = shifterU32;
     shifterU32>>=4;
-    inst = shifterU32;
+    recInstance = shifterU32;
     shifterU32>>=12;
-    fbt = shifterU32;
+    recType = shifterU32;
     //read second 32 bits
-    cbLength = stream->readU32();
+    recLen = stream->readU32();
 }
 
 EscherHeader::~EscherHeader()
@@ -78,7 +78,7 @@ EscherHeader::~EscherHeader()
 bool EscherHeader::isAtom()
 {
     //0xF in ver means it's a container
-    if( ver == 0xF  )
+    if( recVer == 0xF  )
         return false;
     else
         return true;
@@ -87,7 +87,7 @@ bool EscherHeader::isAtom()
 string EscherHeader::getRecordType()
 {
     string s;
-    switch( fbt ) {
+    switch( recType ) {
         case 0xF000:
             s = "msofbtDggContainer";
             break;
@@ -160,22 +160,22 @@ string EscherHeader::getRecordType()
 //returns size of the record NOT COUNTING the header
 int EscherHeader::recordSize()
 {
-    return static_cast<int> (cbLength);
+    return static_cast<int> (recLen);
 }
 
 // returns the record instance
 int EscherHeader::recordInstance()
 {
-    return inst;
+    return recInstance;
 }
 
 void EscherHeader::dump()
 {
     wvlog << "Dumping Escher header:" << endl;
-    wvlog << " ver = " << ver << endl;
-    wvlog << " inst = " << inst << endl;
-    wvlog << " fbt = " << fbt << endl;
-    wvlog << " cbLength = " << cbLength << endl;
+    wvlog << " recVer = " << hex << recVer << dec << endl;
+    wvlog << " recInstance = " << hex << recInstance << dec << endl;
+    wvlog << " recType = " << hex << recType << dec << endl;
+    wvlog << " recLen = " << recLen << endl;
     wvlog << "Finished dumping Escher header." << endl;
 }
 

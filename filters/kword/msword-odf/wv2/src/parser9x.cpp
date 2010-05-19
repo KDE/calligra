@@ -312,41 +312,6 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parsePicture( const PictureData& data )
-{
-    wvlog << "Parser9x::parsePicture" << endl;
-    OLEStreamReader* stream = m_fib.nFib < Word8nFib ? m_wordDocument : m_data;
-    stream->push(); // saveState would be overkill
-
-    //go to the position in the stream after the PICF, where the actual picture data/escher is
-    if ( !stream->seek( data.fcPic + data.picf->cbHeader, G_SEEK_SET ) ) {
-        wvlog << "Error: Parser9x::parsePicture couldn't seek properly" << endl;
-        stream->pop();
-        return;
-    }
-
-    if ( data.picf->mfp.mm == 0x64 || data.picf->mfp.mm == 0x66 ) {
-        wvlog << "Linked graphic in Escher object" << endl;
-        parsePictureEscher( data, stream, data.picf->lcb, data.fcPic );
-    }
-    else {
-        switch ( data.picf->mfp.mm ) {
-        case 94: // A .bmp or a .gif name is stored after the PICF
-        case 98: // The .tiff name is stored after the PICF
-            parsePictureExternalHelper( data, stream );
-            break;
-        case 99: // A full bmp is stored after the PICF -- not handled in OOo??
-            parsePictureBitmapHelper( data, stream );
-            break;
-        default: // It has to be a .wmf or .emf file (right after the PICF)
-            wvlog << "assuming WMF/EMF file... not sure this is correct" << endl;
-            parsePictureWmfHelper( data, stream );
-            break;
-        }
-    }
-    stream->pop();
-}
-
 void Parser9x::parseTextBox( uint lid)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
@@ -1018,13 +983,13 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
 
 void Parser9x::emitDrawnObject( U32 globalCP )
 {
-    m_textHandler->drawingFound(globalCP);
+    m_textHandler->floatingObjectFound(globalCP);
 }
 
 void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
 {
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Found a picture; the fcPic is " << chp->fcPic_fcObj_lTagObj << endl;
+    wvlog << "Found a picture; fcPic: " << chp->fcPic_fcObj_lTagObj;
 #endif
 
     OLEStreamReader* stream( m_fib.nFib < Word8nFib ? m_wordDocument : m_data );
@@ -1057,9 +1022,43 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
+    // up2date offset into the data stream for the GraphicsHandler
+    int offset = 0;
+    //update the offset information
+    offset += chp->fcPic_fcObj_lTagObj + picf->cbHeader;
+
+#ifdef WV2_DEBUG_PICTURES
+    wvlog << "picf->lcb: " << picf->lcb << endl;
+    wvlog << "picf->cbHeader: " << picf->cbHeader << endl;
+    wvlog << "picf->mfp.mm: " << hex << picf->mfp.mm << endl;
+#endif
+
+    //read cchPicName and stPicName in case of a shape file
+    if ( picf->mfp.mm == 0x0066 )
+    {
+        U8 cchPicName = stream->readU8();
+	U8* stPicName = new U8[cchPicName + 1];
+
+        stream->read(stPicName, cchPicName);
+	stPicName[cchPicName] = '\0';
+
+#ifdef WV2_DEBUG_PICTURES
+        wvlog << "cchPicName: " << cchPicName << endl;
+        wvlog << "stPicName: " << stPicName << endl;
+#endif
+	//update the offset information
+	offset += cchPicName + 1;
+	delete [] stPicName;
+    }
+
     SharedPtr<const Word97::PICF> sharedPicf( picf );
-    m_textHandler->pictureFound( make_functor( *this, &Parser9x::parsePicture,
-                                               PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ), sharedPicf ) ), sharedPicf, chp );
+    PictureData data( offset, sharedPicf );
+    m_textHandler->inlineObjectFound(data, chp);
+
+//     PictureFunctor fnct = make_functor( *this, &Parser9x::parsePicture,
+//				 PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ),
+//					     sharedPicf ) );
+//     m_textHandler->pictureFound( fnct, sharedPicf, chp );
 }
 
 void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
@@ -1104,6 +1103,143 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
     restoreState();
 }
 
+void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode )
+{
+    oldParsingStates.push( ParsingState( m_tableRowStart, m_tableRowLength, m_cellMarkFound, m_remainingCells,
+                                         m_currentParagraph, m_remainingChars, m_sectionNumber, m_subDocument,
+                                         m_parsingMode ) );
+    m_tableRowStart = 0;
+    m_cellMarkFound = false;
+    m_currentParagraph = new Paragraph;
+    m_remainingChars = newRemainingChars;
+    m_subDocument = newSubDocument;
+    m_parsingMode = newParsingMode;
+
+    m_wordDocument->push();
+    if ( m_data )
+        m_data->push();
+}
+
+void Parser9x::restoreState()
+{
+    if ( oldParsingStates.empty() ) {
+        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << endl;
+        return;
+    }
+
+    if ( m_data )
+        m_data->pop();
+    m_wordDocument->pop();
+
+    ParsingState ps( oldParsingStates.top() );
+    oldParsingStates.pop();
+
+    if ( m_tableRowStart )
+        wvlog << "Bug: We still have to process the table row." << endl;
+    delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    m_tableRowStart = ps.tableRowStart;
+    m_tableRowLength = ps.tableRowLength;
+    m_cellMarkFound = ps.cellMarkFound;
+    m_remainingCells = ps.remainingCells;
+
+    if ( !m_currentParagraph->empty() )
+        wvlog << "Bug: The current paragraph isn't empty." << endl;
+    delete m_currentParagraph;
+    m_currentParagraph = ps.paragraph;
+
+    if ( m_remainingChars != 0 )
+        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
+    m_remainingChars = ps.remainingChars;
+    m_sectionNumber = ps.sectionNumber;
+
+    m_subDocument = ps.subDocument;
+    m_parsingMode = ps.parsingMode;
+}
+
+U32 Parser9x::toLocalCP( U32 globalCP ) const
+{
+    if ( globalCP < m_fib.ccpText )
+        return globalCP;
+    globalCP -= m_fib.ccpText;
+
+    if ( globalCP < m_fib.ccpFtn )
+        return globalCP;
+    globalCP -= m_fib.ccpFtn;
+
+    if ( globalCP < m_fib.ccpHdd )
+        return globalCP;
+    globalCP -= m_fib.ccpHdd;
+
+    if ( globalCP < m_fib.ccpMcr )
+        return globalCP;
+    globalCP -= m_fib.ccpMcr;
+
+    if ( globalCP < m_fib.ccpAtn )
+        return globalCP;
+    globalCP -= m_fib.ccpAtn;
+
+    if ( globalCP < m_fib.ccpEdn )
+        return globalCP;
+    globalCP -= m_fib.ccpEdn;
+
+    if ( globalCP < m_fib.ccpTxbx )
+        return globalCP;
+    globalCP -= m_fib.ccpTxbx;
+
+    if ( globalCP < m_fib.ccpHdrTxbx )
+        return globalCP;
+    globalCP -= m_fib.ccpHdrTxbx;
+
+    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << endl;
+    return globalCP;
+}
+
+int Parser9x::accumulativeLength( int len, const Parser9x::Chunk& chunk )
+{
+    return len + chunk.m_text.length();
+}
+
+/*
+ * ************************************************
+ *  OBSOLETE STUFF -> handled by GraphicsHanler
+ * ************************************************
+ */
+#ifdef OBSOLETE
+
+void Parser9x::parsePicture( const PictureData& data )
+{
+    wvlog << "Parser9x::parsePicture" << endl;
+    OLEStreamReader* stream = m_fib.nFib < Word8nFib ? m_wordDocument : m_data;
+    stream->push(); // saveState would be overkill
+
+    //go to the position in the stream after the PICF, where the actual picture data/escher is
+    if ( !stream->seek( data.fcPic + data.picf->cbHeader, G_SEEK_SET ) ) {
+        wvlog << "Error: Parser9x::parsePicture couldn't seek properly" << endl;
+        stream->pop();
+        return;
+    }
+    if ( data.picf->mfp.mm == 0x64 || data.picf->mfp.mm == 0x66 ) {
+        wvlog << "Linked graphic in Escher object" << endl;
+        parsePictureEscher( data, stream, data.picf->lcb, data.fcPic );
+    }
+    else {
+        switch ( data.picf->mfp.mm ) {
+        case 94: // A .bmp or a .gif name is stored after the PICF
+        case 98: // The .tiff name is stored after the PICF
+            parsePictureExternalHelper( data, stream );
+            break;
+        case 99: // A full bmp is stored after the PICF -- not handled in OOo??
+            parsePictureBitmapHelper( data, stream );
+            break;
+        default: // It has to be a .wmf or .emf file (right after the PICF)
+            wvlog << "assuming WMF/EMF file... not sure this is correct" << endl;
+            parsePictureWmfHelper( data, stream );
+            break;
+        }
+    }
+    stream->pop();
+}
+
 void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* stream,
                                    int totalPicfSize, int picfStartPos )
 {
@@ -1121,16 +1257,6 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
     OfficeArtProperties artProps;
     memset(&artProps, 0, sizeof(artProps));
     artProps.width = 100.0f;                    // default is 100% width
-
-    //from OOo code, looks like we have to process this type differently
-    //  read a byte in, and that's an offset before reading the image
-    if ( data.picf->mfp.mm == 102 )
-    {
-        U8 byte = stream->readU8();
-        int offset = static_cast<unsigned int> (byte);
-        wvlog << "  0x66 offset is " << offset << endl;
-        stream->seek( offset, G_SEEK_CUR );
-    }
 
     //now we do a big loop, just reading each record until we get to the end of the picf
     do
@@ -1259,6 +1385,44 @@ void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* str
     } while (stream->tell() != endOfPicf); //end of record
 }
 
+void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream )
+{
+#ifdef WV2_DEBUG_PICTURES
+    wvlog << "Parser9x::parsePictureExternalHelper" << endl;
+#endif
+
+    // Guessing... some testing would be nice
+    const U8 length( stream->readU8() );
+    U8* string = new U8[ length ];
+    stream->read( string, length );
+    // Do we have to use the textconverter here?
+    UString ustring( m_textconverter->convert( reinterpret_cast<char*>( string ),
+                                               static_cast<unsigned int>( length ) ) );
+    delete [] string;
+
+    m_pictureHandler->externalImage( ustring, data.picf );
+}
+
+void Parser9x::parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream )
+{
+#ifdef WV2_DEBUG_PICTURES
+    wvlog << "Parser9x::parsePictureBitmapHelper" << endl;
+#endif
+    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
+    m_pictureHandler->bitmapData( reader, data.picf );
+}
+
+void Parser9x::parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream )
+{
+#ifdef WV2_DEBUG_PICTURES
+    wvlog << "Parser9x::parsePictureWmfHelper" << endl;
+#endif
+    // ###### TODO: Handle the Mac case (x-wmf + PICT)
+    // ###### CHECK: Do we want to do anything about .emf files?
+    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
+    m_pictureHandler->wmfData( reader, data.picf );
+}
+
 void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib)
 {
 #ifdef WV2_DEBUG_PICTURES
@@ -1335,137 +1499,4 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
         delete [] s;
     }
 }
-
-void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureExternalHelper" << endl;
-#endif
-
-    // Guessing... some testing would be nice
-    const U8 length( stream->readU8() );
-    U8* string = new U8[ length ];
-    stream->read( string, length );
-    // Do we have to use the textconverter here?
-    UString ustring( m_textconverter->convert( reinterpret_cast<char*>( string ),
-                                               static_cast<unsigned int>( length ) ) );
-    delete [] string;
-
-    m_pictureHandler->externalImage( ustring, data.picf );
-}
-
-void Parser9x::parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureBitmapHelper" << endl;
-#endif
-    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
-    m_pictureHandler->bitmapData( reader, data.picf );
-}
-
-void Parser9x::parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureWmfHelper" << endl;
-#endif
-    // ###### TODO: Handle the Mac case (x-wmf + PICT)
-    // ###### CHECK: Do we want to do anything about .emf files?
-    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
-    m_pictureHandler->wmfData( reader, data.picf );
-}
-
-void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode )
-{
-    oldParsingStates.push( ParsingState( m_tableRowStart, m_tableRowLength, m_cellMarkFound, m_remainingCells,
-                                         m_currentParagraph, m_remainingChars, m_sectionNumber, m_subDocument,
-                                         m_parsingMode ) );
-    m_tableRowStart = 0;
-    m_cellMarkFound = false;
-    m_currentParagraph = new Paragraph;
-    m_remainingChars = newRemainingChars;
-    m_subDocument = newSubDocument;
-    m_parsingMode = newParsingMode;
-
-    m_wordDocument->push();
-    if ( m_data )
-        m_data->push();
-}
-
-void Parser9x::restoreState()
-{
-    if ( oldParsingStates.empty() ) {
-        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << endl;
-        return;
-    }
-
-    if ( m_data )
-        m_data->pop();
-    m_wordDocument->pop();
-
-    ParsingState ps( oldParsingStates.top() );
-    oldParsingStates.pop();
-
-    if ( m_tableRowStart )
-        wvlog << "Bug: We still have to process the table row." << endl;
-    delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
-    m_tableRowStart = ps.tableRowStart;
-    m_tableRowLength = ps.tableRowLength;
-    m_cellMarkFound = ps.cellMarkFound;
-    m_remainingCells = ps.remainingCells;
-
-    if ( !m_currentParagraph->empty() )
-        wvlog << "Bug: The current paragraph isn't empty." << endl;
-    delete m_currentParagraph;
-    m_currentParagraph = ps.paragraph;
-
-    if ( m_remainingChars != 0 )
-        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
-    m_remainingChars = ps.remainingChars;
-    m_sectionNumber = ps.sectionNumber;
-
-    m_subDocument = ps.subDocument;
-    m_parsingMode = ps.parsingMode;
-}
-
-U32 Parser9x::toLocalCP( U32 globalCP ) const
-{
-    if ( globalCP < m_fib.ccpText )
-        return globalCP;
-    globalCP -= m_fib.ccpText;
-
-    if ( globalCP < m_fib.ccpFtn )
-        return globalCP;
-    globalCP -= m_fib.ccpFtn;
-
-    if ( globalCP < m_fib.ccpHdd )
-        return globalCP;
-    globalCP -= m_fib.ccpHdd;
-
-    if ( globalCP < m_fib.ccpMcr )
-        return globalCP;
-    globalCP -= m_fib.ccpMcr;
-
-    if ( globalCP < m_fib.ccpAtn )
-        return globalCP;
-    globalCP -= m_fib.ccpAtn;
-
-    if ( globalCP < m_fib.ccpEdn )
-        return globalCP;
-    globalCP -= m_fib.ccpEdn;
-
-    if ( globalCP < m_fib.ccpTxbx )
-        return globalCP;
-    globalCP -= m_fib.ccpTxbx;
-
-    if ( globalCP < m_fib.ccpHdrTxbx )
-        return globalCP;
-    globalCP -= m_fib.ccpHdrTxbx;
-
-    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << endl;
-    return globalCP;
-}
-
-int Parser9x::accumulativeLength( int len, const Parser9x::Chunk& chunk )
-{
-    return len + chunk.m_text.length();
-}
+#endif //OBSOLETE

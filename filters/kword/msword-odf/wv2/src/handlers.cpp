@@ -161,14 +161,18 @@ void PictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
 {
 }
 
-DrawingHandler::~DrawingHandler()
+GraphicsHandler::~GraphicsHandler()
 {
 
 }
 
-void DrawingHandler::drawingData(unsigned int /*globalCP*/)
+void GraphicsHandler::handleFloatingObject(unsigned int /*globalCP*/)
 {
 
+}
+
+void GraphicsHandler::handleInlineObject(const PictureData& /*data*/)
+{
 }
 
 TextHandler::~TextHandler()
@@ -259,13 +263,10 @@ void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<cons
     tableRow();
 }
 
-void TextHandler::pictureFound( const PictureFunctor& picture, SharedPtr<const Word97::PICF> /*picf*/,
-                                SharedPtr<const Word97::CHP> /*chp*/ )
+void TextHandler::inlineObjectFound(const PictureData& /*data*/, SharedPtr<const Word97::CHP> /*chp*/ )
 {
-    picture();
 }
 
-void TextHandler::drawingFound( unsigned int globalCP )
+void TextHandler::floatingObjectFound( unsigned int /*globalCP*/ )
 {
-
 }

@@ -6369,7 +6369,8 @@ struct METAFILEPICT {
 
     // Data
     /**
-     * Specifies the mapping mode in which the picture is drawn.
+     * Specifies the format of the picture data.
+     * 0x0064 - shape object, 0x0066 - shape file
      */
     S16 mm;
 

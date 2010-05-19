@@ -24,11 +24,14 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
+#include "generated/leinputstream.h"
+#include "pole.h"
 #include "tablehandler.h"
+
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functor.h>
-#include "pole.h"
+#include <wv2/src/functordata.h>
 
 #include <QString>
 #include <qdom.h>
@@ -59,7 +62,7 @@ class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordPictureHandler;
 class KWordTextHandler;
-class KWordDrawingHandler;
+class KWordGraphicsHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
 {
@@ -67,7 +70,8 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 public:
     Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
              KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-             KoStore* store, POLE::Storage* storage);
+             KoStore* store, POLE::Storage* storage, 
+             LEInputStream* data, LEInputStream* table, LEInputStream* wdoc);
     virtual ~Document();
 
     KWordTextHandler *textHandler() const {
@@ -119,7 +123,11 @@ public:
     bool writeMasterPageName(void) const { return m_writeMasterPageName; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
+
     POLE::Storage* storage(void) const { return m_storage; }
+    LEInputStream* data_stream(void) const { return m_data_stream; }
+    LEInputStream* table_stream(void) const { return m_table_stream; }
+    LEInputStream* wdocument_stream(void) const { return m_wdocument_stream; }
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
@@ -143,11 +151,9 @@ public slots:
 
     void slotTableFound(KWord::Table* table);
 
-    // Write out the frameset and add the key to the PICTURES tag
-    void slotPictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
-                          const wvWare::FunctorBase*);
+    void slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
 
-    void slotDrawingFound(unsigned int globalCP, KoXmlWriter* writer);
+    void slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 
     void slotTextBoxFound(uint lid, KoXmlWriter* writer);
 
@@ -168,8 +174,7 @@ private:
     KWordTextHandler*        m_textHandler;
     KWordTableHandler*       m_tableHandler;
     KWordReplacementHandler* m_replacementHandler;
-    KWordPictureHandler*     m_pictureHandler;
-    KWordDrawingHandler*     m_drawingHandler;
+    KWordGraphicsHandler*    m_graphicsHandler;
 
     KoFilterChain* m_chain;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
@@ -206,7 +211,12 @@ private:
 
     QString m_lineNumbersStyleName;
 
+    //pointers to the POLE store content
+    LEInputStream* m_data_stream;
+    LEInputStream* m_table_stream;
+    LEInputStream* m_wdocument_stream;
     POLE::Storage* m_storage; // pointer to the pole storage
+
     QMap<QByteArray, QString> m_picNames; //picture names shared in graphicshandler.cpp
 };
 

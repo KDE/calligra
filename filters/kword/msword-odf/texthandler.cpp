@@ -520,9 +520,8 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 }
 
 #ifdef IMAGE_IMPORT
-void KWordTextHandler::pictureFound(const wvWare::PictureFunctor& pictureFunctor,
-                                    wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                                    wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data,
+                                         wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     kDebug(30513);
 
@@ -532,47 +531,30 @@ void KWordTextHandler::pictureFound(const wvWare::PictureFunctor& pictureFunctor
         return;
     }
 
-    static unsigned int s_pictureNumber = 0;
-    QString pictureName = "pictures/picture";
-    pictureName += QString::number(s_pictureNumber);   // filenames start at 0
-    // looks better to the user if frame names start at 1
-    QString frameName = i18n("Picture %1", ++s_pictureNumber);
-    //insertAnchor( frameName );
-
-    switch (picf->mfp.mm) {
-    case 98:
-        pictureName += ".tif"; // not implemented!
-        break;
-    case 99:
-        pictureName += ".bmp";
-        break;
-    default:
-        pictureName += ".wmf";
-        break;
-    }
-
     //if we're inside a paragraph
     if (m_paragraph != 0) {
-        kDebug(30513) << "picture inside paragraph";
+        kDebug(30513) << "inline object inside paragraph";
         //create temporary writer for the picture tags
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter writer(&buf);
-        //signal that we have a picture, with a writer pointer that will be used GraphicsHandler
-        emit pictureFound(frameName, pictureName, &writer, new wvWare::PictureFunctor(pictureFunctor));
+        //signal that we have a picture, writer pointer will be used by the GraphicsHandler
+        emit inlineObjectFound(data, &writer);
         //now add content to our current paragraph
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+
+        //TODO: check if we need chp here
         m_paragraph->addRunOfText(contents, chp, QString(""), m_parser->styleSheet(), true);
 
     } else {
         //signal picture without a writer, because it can just write to the default (bodyWriter)
-        emit pictureFound(frameName, pictureName, 0, new wvWare::PictureFunctor(pictureFunctor));
+        emit inlineObjectFound(data, 0);
     }
 
 }
 #endif // IMAGE_IMPORT
 
-void KWordTextHandler::drawingFound(unsigned int globalCP)
+void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
 {
     kDebug(30513);
     //create temporary writer for the picture tags
@@ -583,13 +565,11 @@ void KWordTextHandler::drawingFound(unsigned int globalCP)
     m_drawingWriter = new KoXmlWriter(&drawingBuffer);
 
     saveState();
-    emit
-    drawingFound(globalCP, m_drawingWriter);
+    emit floatingObjectFound(globalCP, m_drawingWriter);
     restoreState();
 
     //now add content to our current paragraph
-    QString contents = QString::fromUtf8(drawingBuffer.buffer(),
-            drawingBuffer.buffer().size());
+    QString contents = QString::fromUtf8(drawingBuffer.buffer(), drawingBuffer.buffer().size());
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
 
     m_insideDrawing = false;

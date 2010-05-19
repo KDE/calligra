@@ -29,6 +29,7 @@
 #include "paragraph.h"
 
 #include <wv2/src/handlers.h>
+#include <wv2/src/functordata.h>
 #include <wv2/src/lists.h>
 #include <QString>
 #include <QObject>
@@ -95,10 +96,11 @@ public:
     virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
 
 #ifdef IMAGE_IMPORT
-    virtual void pictureFound(const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                              wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void inlineObjectFound(const wvWare::PictureData& data, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 #endif // IMAGE_IMPORT
-    void drawingFound(unsigned int globalCP );
+    virtual void floatingObjectFound(unsigned int globalCP );
+
+
     ///////// Our own interface, also used by processStyles
 
     Document* document() const {
@@ -135,9 +137,8 @@ signals:
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);
-    void pictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
-                      const wvWare::FunctorBase* pictureFunctor);
-    void drawingFound(unsigned int globalCP, KoXmlWriter* writer);
+    void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
+    void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
     void updateListDepth(int);
 
 protected:

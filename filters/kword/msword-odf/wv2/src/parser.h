@@ -45,7 +45,7 @@ class SubDocumentHandler;
 class TableHandler;
 class PictureHandler;
 class TextHandler;
-class DrawingHandler;
+class GraphicsHandler;
 class OLEStorage;
 class OLEStreamReader;
 class StyleSheet;
@@ -176,10 +176,10 @@ public:
      */
     void setTextHandler( TextHandler* handler );
     /**
-     * The drawing handler is used to tell the consumer about drawing structures.
+     * The graphics handler is used to tell the consumer about MS-ODRAW structures.
      * We don't take ownership of the handler!
      */
-    void setDrawingHandler( DrawingHandler* handler );
+    void setGraphicsHandler( GraphicsHandler* handler );
 
     // Do we need public access to parts of the OLEStorage interface?
     // If we add public accessors we should make m_storage private.
@@ -190,13 +190,13 @@ protected:
     TableHandler* m_tableHandler;
     PictureHandler* m_pictureHandler;
     TextHandler* m_textHandler;
-    DrawingHandler* m_drawingHandler;
+    GraphicsHandler* m_graphicsHandler;
     bool m_ourInlineHandler;
     bool m_ourSubDocumentHandler;
     bool m_ourTableHandler;
     bool m_ourPictureHandler;
     bool m_ourTextHandler;
-    bool m_ourDrawingHandler;
+    bool m_ourGraphicsHandler;
 
     OLEStorage* m_storage;           // The storage representing the file
     OLEStreamReader* m_wordDocument; // document stream ('WordDocument')

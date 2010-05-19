@@ -115,10 +115,10 @@ namespace wvWare
         void dump();
 
     private:
-        U32 ver:4; //4 bits
-        U32 inst:12; //12 bits
-        U32 fbt:16; //16 bits
-        U32 cbLength; //4 bytes
+        U32 recVer:4; //4 bits
+        U32 recInstance:12; //12 bits
+        U32 recType:16; //16 bits
+        U32 recLen; //4 bytes
     }; //EscherHeader
 
     //msofbtSpContainer

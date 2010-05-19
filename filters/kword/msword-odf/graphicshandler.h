@@ -26,85 +26,51 @@
 #include <wv2/src/handlers.h>
 #include "wv2/src/ms_odraw.h"
 #include "wv2/src/graphics.h"
+#include "versionmagic.h"
+#include "document.h"
+
+#include "generated/simpleParser.h"
+#include "writer.h"
 
 #include <QObject>
 #include <QHash>
 #include <QMap>
-#include "document.h"
-#include "versionmagic.h"
-#include "generated/simpleParser.h"
-#include "writer.h"
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
-
 #include <vector>
 
 class DrawStyle;
 
-#ifndef IMAGE_IMPORT
-namespace wvWare
-{
-class PictureHandler
-{
-};
-}
-#endif // IMAGE_IMPORT
-
-class KWordPictureHandler : public QObject, public wvWare::PictureHandler
-{
-    Q_OBJECT
-public:
-    KWordPictureHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
-                        KoStore* store, KoGenStyles* mainStyles,
-                        QMap<QByteArray, QString>& picNames);
-
-#ifdef IMAGE_IMPORT
-    //////// PictureHandler interface
-    virtual void bitmapData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
-    virtual void escherData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, const wvWare::U8* uid);
-    virtual void escherData(std::vector<wvWare::U8> data, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, const wvWare::U8* uid);
-    virtual void wmfData(wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
-    virtual void externalImage(const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf);
-
-    virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
-#endif // IMAGE_IMPORT
-
-    //lets us write to another writer instead of directly to the main body writer
-    // (as in the case of a picture inside a Paragraph)
-    void setBodyWriter(KoXmlWriter* writer);
-
-private:
-    void ODTProcessing(QString* picName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type, QByteArray uid);
-
-    void officeArtLine(wvWare::OfficeArtProperties *artProperties);
-
-    Document* m_document;
-    KoStore* m_store;
-    KoXmlWriter* m_bodyWriter;
-    KoXmlWriter* m_manifestWriter;
-    KoGenStyles* m_mainStyles;
-
-    int m_pictureCount;
-    int m_officeArtCount;
-
-    QMap<QByteArray, QString>& m_picNames; //picture names shared by picture & drawing handler
-};
-
+/*
+ * ************************************************
+ * Drawing Writer
+ * ************************************************
+ */
 class DrawingWriter : public Writer
 {
 public:
+    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_, bool inlineObj);
+
     //position
     int xLeft;
     int xRight;
     int yTop;
     int yBottom;
-    //structure that specifies placement of drawing
+
+    //structure that specifies placement of a floating object
     wvWare::Word97::FSPA* m_pSpa;
+
+    //specifies the type, size and border information for an inline picture
+    wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
+
+    //unique identifier of a BLIP
+    QByteArray m_rgbUid;
+
     //true - drawing is in body; false - drawing is in header/footer
     bool m_bodyDrawing;
-
-    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_);
+    //true - inline object; false - floating object
+    bool m_inline;
 
     QString vLength();
     QString hLength();
@@ -116,14 +82,31 @@ public:
     void SetClientRectangle(MSO::OfficeArtChildAnchor& anchor);
 };
 
-class KWordDrawingHandler : public QObject, public wvWare::DrawingHandler
+/*
+ * ************************************************
+ * Graphics Handler
+ * ************************************************
+ */
+class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
 public:
-    KWordDrawingHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter, 
-                        KoStore* store, KoGenStyles* mainStyles,
-                        QMap<QByteArray, QString>& picNames);
-    ~KWordDrawingHandler();
+    KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+                         KoStore* store, KoGenStyles* mainStyles,
+                         QMap<QByteArray, QString>& picNames);
+    ~KWordGraphicsHandler();
+
+    /**
+     * This method gets called when a floating object is found by wv2 parser.
+     * @param globalCP actual character position in the WordDocument stream.
+     */
+    virtual void handleFloatingObject(unsigned int globalCP);
+
+    /**
+     * This method gets called when an inline object is found by wv2 parser.
+     * @param data PictureData as defined in functordata.h
+     */
+    virtual void handleInlineObject(const wvWare::PictureData& data);
 
     /**
      * Initialize the drawing handler.  Optional containers from Table stream
@@ -131,8 +114,10 @@ public:
      */
     void init(wvWare::Drawings* pDrawings, const wvWare::Word97::FIB &fib);
 
-    virtual void drawingData(unsigned int globalCP);
-
+    /**
+     * Set the appropriate writer for object properties and content.
+     * @param writer KoXmlWriter provided by the Document class
+     */
     void setBodyWriter(KoXmlWriter* writer);
 
     /**
@@ -153,7 +138,7 @@ private:
     /**
      * Parse floating pictures data from the WordDocument stream.
      */
-    void parseFloatingPictures(POLE::Storage* storage);
+    void parseFloatingPictures(void);
 
     /**
      * Store floating pictures into ODT, write the appropriate manifest entry.
@@ -167,17 +152,66 @@ private:
      */
     QString getPicturePath(int pib) const;
 
-    void drawObject(uint spid, MSO::OfficeArtDgContainer* dg, DrawingWriter& out
-            , wvWare::Word97::FSPA* spa);
-    void processObjectForBody(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
-    void processObjectForBody(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, wvWare::Word97::FSPA* spa, const QString& listStyle=QString());
+    /**
+     * Process general properties of a shape.
+     */
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, const QString& listStyle=QString());
+
+    /**
+     * Process anchor related properties of a shape.
+     */
     void defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds);
+
+    /**
+     * Process text wrapping related properties of a shape.
+     */
+    void defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
+
 //    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
+    /**
+     *
+     */
+    void drawObject(uint spid, MSO::OfficeArtDgContainer* dg, DrawingWriter& out,
+                    wvWare::Word97::FSPA* spa);
+    /**
+     * Check object types in a container of groups of shapes.
+     * @param o container of groups of shapes
+     * @param out drawing writer
+     */
+    void processObjectContent(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
+
+    /**
+     * Check object type and call the appropriate method to process it.
+     * @param o container for shapes
+     * @param out drawing writer
+     */
+    void processObjectContent(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+
+    /**
+     * Process the properties of a text box, use wv2 to parse the content.
+     */
     void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
-    void processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out);
-    void processPictureFrame(const MSO::OfficeArtSpContainer& o,DrawingWriter& out);
+
+    /**
+     * Process a rectangle shape.
+     */
+    void processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+
+    /**
+     * Process a line shape.
+     */
+    void processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+
+    /**
+     * Process a floating frame shape.
+     */
+    void processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+
+    /**
+     * Process an inline frame shape.
+     */
+    void processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
 
     Document* m_document;
     KoStore* m_store;

@@ -22,7 +22,7 @@
    Boston, MA 02110-1301, USA.
 
 */
-
+#include "generated/leinputstream.h"
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
@@ -49,17 +49,18 @@
 #include <QBuffer>
 #include <QColor>
 
+//TODO: provide all streams to the wv2 parser; POLE storage is going to replace
+//OLE storage soon!
 Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-                   KoStore* store, POLE::Storage* storage)
+                   KoStore* store, POLE::Storage* storage, 
+		   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
-        , m_pictureHandler(new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames))
-        , m_drawingHandler(new KWordDrawingHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames))
+        , m_graphicsHandler(0)
         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
-	  //        , m_headerFooters(0)
         , m_bodyFound(false)
         , m_footNoteNumber(0)
         , m_endNoteNumber(0)
@@ -70,14 +71,16 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_headerCount(0)
         , m_writingHeader(false)
         , m_evenOpen(false)
-	  //        , m_oddOpen(false)
 	, m_firstOpen(false)
         , m_buffer(0)
         , m_bufferEven(0)
         , m_writeMasterPageName(false)
-        , m_storage(0)
+        , m_data_stream(data)
+        , m_table_stream(table)
+        , m_wdocument_stream(wdocument)
 {
     kDebug(30513);
+
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
 
         m_bodyWriter = bodyWriter; //pointer for writing to the body
@@ -92,6 +95,8 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
+        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames);
+
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
@@ -104,22 +109,18 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                 this, SLOT(slotTableFound(KWord::Table*)));
-        connect(m_textHandler, SIGNAL(pictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)),
-                this, SLOT(slotPictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)));
-        connect(m_textHandler, SIGNAL(drawingFound(unsigned int , KoXmlWriter* )),
-                this, SLOT(slotDrawingFound(unsigned int , KoXmlWriter* )));
-        connect(m_drawingHandler, SIGNAL(textBoxFound(uint , KoXmlWriter* )),
+        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
+                this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
+                this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , KoXmlWriter* )),
                 this, SLOT(slotTextBoxFound(uint , KoXmlWriter* )));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
         m_parser->setTableHandler(m_tableHandler);
-#ifdef IMAGE_IMPORT
-        m_parser->setPictureHandler(m_pictureHandler);
-#endif
-        m_drawingHandler->init(m_parser->getDrawings(), m_parser->fib());
-        m_parser->setDrawingHandler(m_drawingHandler);
-
+        m_graphicsHandler->init(m_parser->getDrawings(), m_parser->fib());
+        m_parser->setGraphicsHandler(m_graphicsHandler);
         m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
@@ -134,10 +135,9 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
 Document::~Document()
 {
     delete m_textHandler;
-    delete m_pictureHandler;
     delete m_tableHandler;
     delete m_replacementHandler;
-    delete m_drawingHandler;
+    delete m_graphicsHandler;
 }
 
 //set whether or not document has header or footer
@@ -833,34 +833,31 @@ void Document::slotTableFound(KWord::Table* table)
     //m_tableQueue.push( table );
 }
 
-//add the picture SubDocument to the queue
-void Document::slotPictureFound(const QString& frameName, const QString& pictureName,
-                                KoXmlWriter* writer, const wvWare::FunctorBase* pictureFunctor)
+void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the pictureHandler
+    //if we have a temp writer, tell the graphicsHandler
     if (writer) {
-        m_pictureHandler->setBodyWriter(writer);
+        m_graphicsHandler->setBodyWriter(writer);
     }
-    SubDocument subdoc(pictureFunctor, 0, frameName, pictureName);
-    (*subdoc.functorPtr)();
-    delete subdoc.functorPtr;
+    m_graphicsHandler->handleInlineObject(data);
+
     if (writer) {
-        m_pictureHandler->setBodyWriter(m_bodyWriter);
+        m_graphicsHandler->setBodyWriter(m_bodyWriter);
     }
 }
 
-void Document::slotDrawingFound(unsigned int globalCP, KoXmlWriter* writer)
+void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the drawingHandler
+    //if we have a temp writer, tell the graphicsHandler
     if (writer) {
-        m_drawingHandler->setBodyWriter(writer);
+        m_graphicsHandler->setBodyWriter(writer);
     }
-    m_drawingHandler->drawingData(globalCP);
+    m_graphicsHandler->handleFloatingObject(globalCP);
 
     if (writer) {
-        m_drawingHandler->setBodyWriter(m_bodyWriter);
+        m_graphicsHandler->setBodyWriter(m_bodyWriter);
     }
 }
 
@@ -924,7 +921,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
 
-    DrawStyle ds = m_drawingHandler->getDrawingStyle();
+    DrawStyle ds = m_graphicsHandler->getDrawingStyle();
     // TODO: use ds.fillType to enable fill efects for document background
 
     // When more complete background color implementation will be added to filter,

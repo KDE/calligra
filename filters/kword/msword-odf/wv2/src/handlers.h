@@ -212,6 +212,8 @@ namespace wvWare {
      * callbacks. All the image data is passed to the consumer via this
      * interface.
      */
+    //NOTE: OBSOLETE, graphics are handled by the GraphicsHandler and we are
+    //using msoscheme to parse Office Drawing Binary File Format structures.
     class WV2_EXPORT PictureHandler
     {
     public:
@@ -269,17 +271,28 @@ namespace wvWare {
         virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
     };
 
-    class WV2_EXPORT DrawingHandler
+    /**
+     * The GraphicsHandler class is the interface for MS-ODRAW objects related
+     * callbacks.  Office Drawing Binary File Format structures are parsed by
+     * msoscheme.
+     */
+    class WV2_EXPORT GraphicsHandler
     {
     public:
 
-        virtual ~DrawingHandler();
+        virtual ~GraphicsHandler();
 
         /**
-         * This method is called when picture should be drawn. Function gets cp
-         * of a drawing and draws the data belonging to it.
+         * This method gets called when a floating object is found.
+	 * @param globalCP (character position)
          */
-        virtual void drawingData(unsigned int globalCP);
+        virtual void handleFloatingObject(unsigned int globalCP);
+
+	/**
+	 * This method gets called when an inline object is found.  @param data
+         * the picture properties and offset into data stream.
+	 */
+	virtual void handleInlineObject(const PictureData& data);
     };
 
 
@@ -453,20 +466,17 @@ namespace wvWare {
         virtual void tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> tap );
 
         /**
-         * This method is called every time we find a picture. The default
-         * implementation invokes the functor, which triggers the parsing
-         * process for the given picture.
-         * @param picf the picture properties. Those are the same as the
-         * ones you'll get when invoking the functor, but by having them here,
-         * you can do some preprocessing.
+         * This method is called every time we find an inline object.
+         * @param data the picture data as defined by functordata.
+	 * @param chp the character properties.
          */
-        virtual void pictureFound( const PictureFunctor& picture, SharedPtr<const Word97::PICF> picf,
-                                   SharedPtr<const Word97::CHP> chp );
+        virtual void inlineObjectFound(const PictureData& data, SharedPtr<const Word97::CHP> chp);
 
         /**
-         * This method is called every time we find a drawing.
+         * This method is called every time we find a floating object.
+	 * @param cp of a drawing
          */
-        virtual void drawingFound( unsigned int globalCP );
+        virtual void floatingObjectFound( unsigned int globalCP );
     };
 
 } // namespace wvWare
