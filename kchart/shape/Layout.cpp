@@ -107,7 +107,7 @@ QList<KoShape*> Layout::shapes() const
     return m_layoutItems.keys();
 }
 
-void Layout::containerChanged(KoShapeContainer *container,KoShape::ChangeType type)
+void Layout::containerChanged( KoShapeContainer *container, KoShape::ChangeType type )
 {
     switch( type ) {
     case KoShape::SizeChanged:
