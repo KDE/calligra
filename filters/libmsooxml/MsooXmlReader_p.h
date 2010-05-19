@@ -118,10 +118,10 @@
 //inline bool aaaa(const char * aa) { kDebug() << "aa" << aa; return true; }
 
 #define QUALIFIED_NAME_IS(name) \
-    (/*aaaa(STRINGIFY(name)) &&*/ qualifiedName() == QLatin1String(QUALIFIED_NAME(name)))
+    (qualifiedName() == QLatin1String(QUALIFIED_NAME(name)))
 
-#define TRY_READ_IF_INTERNAL(name, context) \
-    if (QUALIFIED_NAME_IS(name)) { \
+#define TRY_READ_IF_INTERNAL(name, qname, context) \
+    if (qualifiedName() == QLatin1String(qname)) { \
         if (!isStartElement()) { /* sanity check */ \
             raiseError(i18n("Start element \"%1\" expected, found \"%2\"", \
                        QLatin1String(STRINGIFY(name)), tokenString())); \
@@ -133,12 +133,18 @@
     }
 
 #define TRY_READ_IF_IN_CONTEXT_INTERNAL(name, context) \
-    TRY_READ_IF_INTERNAL(name, context)
+    TRY_READ_IF_INTERNAL(name, QUALIFIED_NAME(name), context)
+
+#define TRY_READ_IF_NS_IN_CONTEXT_INTERNAL(ns, name, context) \
+    TRY_READ_IF_INTERNAL(name, JOIN(STRINGIFY(ns) ":", name), context)
 
 //! Tries to read element @a name by entering into read_{name} function.
 //! Must be enclosed within if (isStartElement()), otherwise error will be returned.
 #define TRY_READ_IF_IN_CONTEXT(name) \
     TRY_READ_IF_IN_CONTEXT_INTERNAL(name, PASS_CONTEXT(name))
+
+#define TRY_READ_IF_NS_IN_CONTEXT(ns, name) \
+    TRY_READ_IF_NS_IN_CONTEXT_INTERNAL(ns, name, PASS_CONTEXT(name))
 
 #define TRY_READ_IF(name) \
     TRY_READ_IF_IN_CONTEXT_INTERNAL(name,)

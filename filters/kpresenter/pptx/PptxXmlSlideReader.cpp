@@ -564,9 +564,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF_NS(a, solidFill)
-//            ELSE_TRY_READ_IF_NS(a, blip)
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
-                TRY_READ(blipFill)
+                TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)
                 KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
                 fillImageStyle.addAttribute("xlink:href", m_xlinkHref);
                 //! @todo draw:name="???"

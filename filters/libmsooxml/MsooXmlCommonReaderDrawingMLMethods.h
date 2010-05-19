@@ -51,7 +51,12 @@ KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
-KoFilter::ConversionStatus read_blipFill();
+enum blipFillCaller {
+    blipFill_pic = 'p', //dml
+    blipFill_rPr = 'p', //dml
+    blipFill_bgPr = 'a', // pptx
+};
+KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;

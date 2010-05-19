@@ -138,7 +138,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(spPr)
-            ELSE_TRY_READ_IF(blipFill)
+            ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(nvPicPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -242,7 +242,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
                 mirror = "none";
         }
         //! @todo: horizontal-on-{odd,even}?
-        m_currentDrawStyle.addAttribute("style:mirror", mirror);
+        m_currentDrawStyle.addProperty("style:mirror", mirror);
 
         //! @todo: m_rot
 
@@ -878,7 +878,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(latin)
-            ELSE_TRY_READ_IF(blipFill)
+            ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
@@ -1373,7 +1373,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     READ_PROLOGUE
 
     m_fillImageRenderingStyleStretch = true;
-    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("stretch"));
+    m_currentDrawStyle.addProperty("style:repeat", QLatin1String("stretch"));
 
     while (!atEnd()) {
         readNext();
@@ -1409,7 +1409,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    m_currentDrawStyle.addAttribute("style:repeat", QLatin1String("repeat"));
+    m_currentDrawStyle.addProperty("style:repeat", QLatin1String("repeat"));
 //! @todo algn - convert to "ODF's Fill Image Tile Reference Point"
     m_currentDrawStyle.addProperty("draw:fill-image-ref-point", "top-left");
 //! @todo flip
@@ -1537,9 +1537,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_EPILOGUE
 }
 
-#undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS blipFill_NS
-
+#define MSOOXML_CURRENT_NS "a" // note: osed only for blipFill namespace is parametrized, can be a or p
 #undef CURRENT_EL
 #define CURRENT_EL blipFill
 //! blipFill handler (Picture Fill)
@@ -1556,7 +1554,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
  Parent elements:
     - bg (§21.4.3.1)
     - bgFillStyleLst (§20.1.4.1.7)
-    - bgPr (§19.3.1.2)
+    - [done] bgPr (§19.3.1.2)
     - defRPr (§21.1.2.3.2)
     - endParaRPr (§21.1.2.2.3)
     - fill (§20.1.8.28)
@@ -1584,17 +1582,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
  Child elements:
     - [done] blip (Blip) §20.1.8.13
     - srcRect (Source Rectangle) §20.1.8.55
-    - stretch (Stretch) §20.1.8.56
-    - tile (Tile) §20.1.8.58
+    - [done] stretch (Stretch) §20.1.8.56
+    - [done] tile (Tile) §20.1.8.58
 
  Attributes:
     - dpi (DPI Setting)
     - rotWithShape (Rotate With Shape)
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller caller)
 {
-    READ_PROLOGUE
+    kDebug() << "Caller:" << (char)caller;
+    // we do not use READ_PROLOGUE because namespace depends on caller here
+    PUSH_NAME_INTERNAL
+    const QString qn(QString(QChar((char)caller)) + ":" STRINGIFY(CURRENT_EL));
+    if (!expectEl(qn)) {
+        return KoFilter::WrongFormat;
+    }
 
     m_fillImageRenderingStyleStretch = false;
 
@@ -1602,18 +1606,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:blip")) {
-                TRY_READ(blip)
-            } else if (qualifiedName() == QLatin1String("a:stretch")) {
-                TRY_READ(stretch)
-            } else if (qualifiedName() == QLatin1String("a:tile")) {
-                TRY_READ(tile)
-            }
+            TRY_READ_IF(blip)
+            ELSE_TRY_READ_IF(stretch)
+            ELSE_TRY_READ_IF(tile)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF_QSTRING(qn)
     }
-    READ_EPILOGUE
+    // we do not use READ_EPILOGUE because namespace depends on caller here
+    POP_NAME_INTERNAL
+    if (!expectElEnd(qn)) {
+        kDebug() << "READ_EPILOGUE:" << qn << "not found!";
+        return KoFilter::WrongFormat;
+    }
+    return KoFilter::OK;
 }
 
 //! @todo KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
@@ -1654,7 +1660,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
 
 void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
 {
-    m_currentDrawStyle.addProperty(QLatin1String("style:wrap"), style, KoGenStyle::GraphicType);
+    m_currentDrawStyle.addProperty("style:wrap", style, KoGenStyle::GraphicType);
 }
 
 void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)

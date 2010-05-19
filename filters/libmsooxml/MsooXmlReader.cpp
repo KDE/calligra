@@ -220,6 +220,16 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
     return true;
 }
 
+bool MsooXmlReader::expectEl(const QString& qualifiedElementName)
+{
+    kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    if (!isStartElement() || qualifiedName() != qualifiedElementName) {
+        raiseElNotFoundError(qualifiedElementName.toLatin1());
+        return false;
+    }
+    return true;
+}
+
 bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
 {
     if (isStartElement()) {
