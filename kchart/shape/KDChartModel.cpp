@@ -365,7 +365,14 @@ QVariant KDChartModel::headerData( int section,
 
     if ( orientation != d->dataDirection ) {
         int dataSetNumber = section / d->dataDimensions;
+
+        if (d->dataSets.count() >= dataSetNumber) {
+            qWarning() << "KDChartModel::headerData(): trying to get more datasets than we have.";
+            return QVariant();
+        }
+
         Q_ASSERT( dataSetNumber < d->dataSets.count() );
+        qDebug() << dataSetNumber << section << d->dataDimensions;
         DataSet *dataSet  = d->dataSets[ dataSetNumber ];
 
         switch ( role ) {
