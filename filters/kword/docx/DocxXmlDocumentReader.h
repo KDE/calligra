@@ -228,6 +228,7 @@ private:
     KoGenStyle m_currentTableCellStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
+    bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
     /*! true if w:object/v:shape or w:object/o:OLEObject has been handled, .
      When w:object/o:OLEObject is visited and m_objectRectInitialized is true, handling

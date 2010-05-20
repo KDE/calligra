@@ -2,6 +2,7 @@
  * This file is part of Office 2007 Filters for KOffice
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 KoGmbh (casper.boemann@kogmbh.com).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -182,6 +183,7 @@ void DocxXmlDocumentReader::init()
     m_dropCapWriter = 0;
     m_currentTableNumber = 0;
     m_objectRectInitialized = false;
+    m_wasCaption = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -1170,7 +1172,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
-    if (args & read_p_Skip) {
+    bool oldWasCaption = m_wasCaption;
+    m_wasCaption = false;
+    if (oldWasCaption || (args & read_p_Skip)) {
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
@@ -1212,7 +1216,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    if (args & read_p_Skip) {
+    if (oldWasCaption || (args & read_p_Skip)) {
         //nothing
     } else {
         if (m_dropCapStatus == DropCapRead) {
@@ -1229,6 +1233,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             }
             else {
                 body->addAttribute("text:style-name", m_currentStyleName);
+                if (m_currentStyleName=="Caption")
+                    m_wasCaption = true;
             }
             /*        if (!m_paragraphStyleNameWritten) {
                     // no style, set default
