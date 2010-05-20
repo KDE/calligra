@@ -72,6 +72,10 @@ KoFilter::ConversionStatus read_DrawingML_highlight();
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
+enum noFillCaller {
+        noFill_rPr
+};
+KoFilter::ConversionStatus read_noFill(noFillCaller caller);
 KoFilter::ConversionStatus read_schemeClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();

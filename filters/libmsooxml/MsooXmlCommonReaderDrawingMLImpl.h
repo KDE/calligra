@@ -845,7 +845,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
  - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
  - [done] latin (Latin Font) §21.1.2.3.7
  - [done] ln (Outline) §20.1.2.2.24
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - rtl (Right to Left Run) §21.1.2.2.8
  - [done] solidFill (Solid Fill) §20.1.8.54
@@ -880,6 +880,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
+            ELSE_TRY_READ_IF_IN_CONTEXT(noFill) 
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
@@ -1926,6 +1927,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+//noFill 20.1.8.44
+/*This element specifies No fill.
+Parents:
+    - bg (§21.4.3.1)
+    - bgFillStyleLst (§20.1.4.1.7)
+    - bgPr (§19.3.1.2)
+    - defRPr (§21.1.2.3.2)
+    - endParaRPr (§21.1.2.2.3)
+    - fill (§20.1.8.28)
+    - fill (§20.1.4.2.9)
+    - fillOverlay (§20.1.8.29)
+    - fillStyleLst (§20.1.4.1.13)
+    - grpSpPr (§21.3.2.14)
+    - grpSpPr (§20.1.2.2.22)
+    - grpSpPr (§20.5.2.18)
+    - grpSpPr (§19.3.1.23)
+    - ln (§20.1.2.2.24)
+    - lnB (§21.1.3.5)
+    - lnBlToTr(§21.1.3.6)
+    - lnL (§21.1.3.7)
+    - lnR (§21.1.3.8)
+    - lnT (§21.1.3.9)
+    - lnTlToBr (§21.1.3.10)
+    - [done] rPr (§21.1.2.3(§21.2.2.197)
+    - spPr (§21.3.2.23)
+    - spPr (§21.4.3.7)
+    - spPr (§20.1.2.2.35)
+    - spPr (§20.2.2.6)
+    - spPr (§20(§19.3.1.44) 
+    - tblPr (§21.1.3.15)
+    - tcPr (§21.1.3.17)
+    - uFill (§21.1.2.3.12)
+    - uLn (§21.1.2.3.14)
+*/
+#undef CURRENT_EL
+#define CURRENT_EL noFill
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller caller)
+{
+    READ_PROLOGUE
+    if (caller == noFill_rPr) {
+       m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
+    }
+    readNext();
     READ_EPILOGUE
 }
 
