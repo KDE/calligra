@@ -628,6 +628,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         writer = m_bookmarkWriter;
     } else if (m_insideDrawing) {
         writer = m_drawingWriter;
+        if (document()->writingHeader()) {
+            inStylesDotXml = true;
+        }
     } else if (document()->writingHeader()) {
         writer = document()->headerWriter();
         inStylesDotXml = true;

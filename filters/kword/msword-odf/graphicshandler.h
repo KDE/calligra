@@ -127,7 +127,7 @@ public:
 
     // Communication with Document, without having to know about Document
 signals:
-    void textBoxFound( uint lid, KoXmlWriter* writer);
+    void textBoxFound( uint lid, bool bodyDrawing);
 
 private:
     /**

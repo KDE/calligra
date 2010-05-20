@@ -113,8 +113,8 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
         connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
                 this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , KoXmlWriter* )),
-                this, SLOT(slotTextBoxFound(uint , KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , bool)),
+                this, SLOT(slotTextBoxFound(uint , bool)));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
@@ -861,11 +861,11 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint lid, KoXmlWriter* /*writer*/)
+void Document::slotTextBoxFound( uint lid, bool bodyDrawing)
 {
     kDebug(30513) ;
 
-    m_parser->parseTextBox(lid);
+    m_parser->parseTextBox(lid, bodyDrawing);
 }
 
 //process through all the subDocs and the tables

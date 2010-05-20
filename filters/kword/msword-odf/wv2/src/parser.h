@@ -147,7 +147,7 @@ public:
     /**
      * Looks for textbox text data and process them
      */
-    virtual void parseTextBox( uint lid) =0;
+    virtual void parseTextBox( uint lid, bool bodyDrawing) =0;
 
     /**
      * The inline replacement handler is used to replace certain characters on the fly.

@@ -927,10 +927,26 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
 
 void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
-    out.xml.startElement("draw:frame");
+    QString styleName;
+    DrawStyle ds(m_OfficeArtDggContainer,&o);
+    if (out.m_bodyDrawing) {
+        KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+        defineGraphicProperties(style, ds);
+        defineAnchorProperties(style, ds);
+        styleName = out.styles.insert(style);
+    }
+    else {
+        KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
+        defineGraphicProperties(style, ds);
+        defineAnchorProperties(style, ds);
+        styleName = out.styles.insert(style);
+    }
 
     DrawStyle drawStyle(m_OfficeArtDggContainer,NULL,&o);
 
+    out.xml.startElement("draw:frame");
+    out.xml.addAttribute("draw:style-name", styleName);
+    out.xml.addAttribute("text:anchor-type","char");
     switch(drawStyle.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
@@ -955,7 +971,7 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 
     out.xml.startElement("draw:text-box");
 
-    emit textBoxFound(o.shapeProp.spid , &out.xml);
+    emit textBoxFound(o.shapeProp.spid , out.m_bodyDrawing);
 
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); // draw:frame

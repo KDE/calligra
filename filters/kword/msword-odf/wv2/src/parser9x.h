@@ -130,7 +130,7 @@ namespace wvWare
         void parsePicture( const PictureData& data );
         void parseBookmark( const BookmarkData& data );
         //I can't create Functor for textbox in advance because i don't know lid
-        virtual void parseTextBox( uint lid);
+        virtual void parseTextBox( uint lid, bool bodyDrawing);
 
     protected:
         // First all variables which don't change their state during
