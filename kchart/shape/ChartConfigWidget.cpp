@@ -87,17 +87,17 @@ public:
     QVBoxLayout           *rightLayout;
     Ui::ChartConfigWidget  ui;
     bool                   isExternalDataSource;
-    
+
     // Menus
     QMenu *dataSetBarChartMenu;
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
-    
+
     // chart type selection actions
     QAction  *normalBarChartAction;
     QAction  *stackedBarChartAction;
     QAction  *percentBarChartAction;
-    
+
     QAction  *normalLineChartAction;
     QAction  *stackedLineChartAction;
     QAction  *percentLineChartAction;
@@ -109,7 +109,7 @@ public:
     QAction  *circleChartAction;
     QAction  *ringChartAction;
     QAction  *radarChartAction;
-    
+
     QAction  *scatterChartAction;
     QAction  *bubbleChartAction;
 
@@ -121,7 +121,7 @@ public:
     QAction  *dataSetNormalBarChartAction;
     QAction  *dataSetStackedBarChartAction;
     QAction  *dataSetPercentBarChartAction;
-    
+
     QAction  *dataSetNormalLineChartAction;
     QAction  *dataSetStackedLineChartAction;
     QAction  *dataSetPercentLineChartAction;
@@ -129,7 +129,7 @@ public:
     QAction  *dataSetNormalAreaChartAction;
     QAction  *dataSetStackedAreaChartAction;
     QAction  *dataSetPercentAreaChartAction;
-    
+
     QAction  *dataSetCircleChartAction;
     QAction  *dataSetRingChartAction;
     QAction  *dataSetRadarChartAction;
@@ -148,7 +148,7 @@ public:
     int                   lastVerticalAlignment;
     KDChart::Position     fixedPosition;
     KDChart::Position     lastFixedPosition;
-    
+
     int                   selectedDataSet;
     int                   selectedDataSet_CellRegionDialog;
 
@@ -161,7 +161,7 @@ public:
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
     CellRegionDialog  cellRegionDialog;
-    
+
     CellRegionStringValidator *cellRegionStringValidator;
 };
 
@@ -171,7 +171,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     , newAxisDialog( parent )
     , axisScalingDialog( parent )
     , cellRegionDialog( parent )
-      
+
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
     lastVerticalAlignment   = 1; // Qt::AlignCenter
@@ -183,7 +183,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     subtype = KChart::NoChartSubtype;
     isExternalDataSource = false;
     cellRegionStringValidator = 0;
-    
+
     dataSetBarChartMenu = 0;
     dataSetLineChartMenu = 0;
     dataSetAreaChartMenu = 0;
@@ -222,17 +222,17 @@ ChartConfigWidget::ChartConfigWidget()
 {
     setObjectName("Chart Type");
     d->ui.setupUi( this );
-    
+
     // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu( this );
     chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
-    
+
     // Bar charts
     QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar_beside" ), i18n( "Bar Chart" ) );
     d->normalBarChartAction  = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
     d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
     d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
-    
+
     // Line charts
     QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line_normal" ), i18n( "Line Chart" ) );
     d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
@@ -244,7 +244,7 @@ ChartConfigWidget::ChartConfigWidget()
     d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
     d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
-    
+
     chartTypeMenu->addSeparator();
 
     // Circular charts: pie and ring
@@ -271,32 +271,32 @@ ChartConfigWidget::ChartConfigWidget()
     d->ganttChartAction->setEnabled( false );
 
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
-    
-    connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
+
+    connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ),
              this,          SLOT( chartTypeSelected( QAction* ) ) );
-    
+
     // Data set chart type button
     QMenu *dataSetChartTypeMenu = new QMenu( this );
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );       
+    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
 
-    
+
     d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
     d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
     d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
     d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
-    
+
     d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
     d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
     d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
     d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
-    
+
     d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
     d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
     d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
-    
+
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
     d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
     d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
@@ -304,15 +304,15 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
-    
+
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
-    
-    connect( dataSetChartTypeMenu, SIGNAL( triggered( QAction* ) ), 
+
+    connect( dataSetChartTypeMenu, SIGNAL( triggered( QAction* ) ),
              this,                 SLOT( dataSetChartTypeSelected( QAction* ) ) );
-    
+
     connect( d->ui.dataSetHasChartType, SIGNAL( toggled( bool ) ),
              this,                      SLOT( ui_dataSetHasChartTypeChanged( bool ) ) );
-             
+
     // "Plot Area" tab
     connect( d->ui.showTitle,    SIGNAL( toggled( bool ) ),
              this,               SIGNAL( showTitleChanged( bool ) ) );
@@ -320,12 +320,12 @@ ChartConfigWidget::ChartConfigWidget()
              this,               SIGNAL( showSubTitleChanged( bool ) ) );
     connect( d->ui.showFooter,   SIGNAL( toggled( bool ) ),
              this,               SIGNAL( showFooterChanged( bool ) ) );
-    
+
     connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
              this,             SLOT( setThreeDMode( bool ) ) );
     connect( d->ui.showLegend, SIGNAL( toggled( bool ) ),
              this,             SIGNAL( showLegendChanged( bool ) ) );
-    
+
     // "Datasets" tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
              this, SLOT( datasetColorSelected( const QColor& ) ) );
@@ -337,7 +337,7 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( gapBetweenSetsChanged( int ) ) );
     connect( d->ui.pieExplodeFactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( ui_dataSetPieExplodeFactorChanged( int ) ) );
-    
+
     // "Legend" tab
     connect( d->ui.legendTitle, SIGNAL( textChanged( const QString& ) ),
              this, SIGNAL( legendTitleChanged( const QString& ) ) );
@@ -345,7 +345,7 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( legendShowFrameChanged( bool ) ) );
     connect( d->ui.legendOrientationIsVertical, SIGNAL( toggled( bool ) ),
              this, SLOT( setLegendOrientationIsVertical( bool ) ) );
-    
+
     // Second part of "Plot Area" tab.
     // FIXME: Is there any particular reason it's separated from the Labels?
     d->ui.addAxis->setIcon( KIcon( "list-add" ) );
@@ -359,7 +359,7 @@ ChartConfigWidget::ChartConfigWidget()
              this, SLOT( ui_axisShowGridLinesChanged( bool ) ) );
     connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
               this, SLOT( ui_axisSelectionChanged( int ) ) );
-    
+
     connect( d->ui.dataSets, SIGNAL( currentIndexChanged( int ) ),
              this, SLOT( ui_dataSetSelectionChanged( int ) ) );
     connect( d->ui.dataSetAxes, SIGNAL( currentIndexChanged( int ) ),
@@ -367,7 +367,7 @@ ChartConfigWidget::ChartConfigWidget()
 
     setupDialogs();
     createActions();
-    
+
     // Activate spin box "acceleration" for "Data Sets"->"Foo Properties"
     // where Foo is one of the chart types with special property settings.
     d->ui.gapBetweenBars->setAccelerated( true );
@@ -393,7 +393,7 @@ void ChartConfigWidget::open( KoShape* shape )
     if ( ! shape ) {
         return;
     }
- 
+
     // There are 3 shapes that we can select: the full chart shape,
     // the plotarea and the legend.
     //
@@ -404,14 +404,14 @@ void ChartConfigWidget::open( KoShape* shape )
     // First see if it was the chart shape itself.
     d->shape = dynamic_cast<ChartShape*>( shape );
     if ( !d->shape ) {
-	// If not, try to see if it was the plot area.
+        // If not, try to see if it was the plot area.
         PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
         if ( plotArea ) {
             d->shape = plotArea->parent();
             d->ui.tabWidget->setCurrentIndex( 0 );
         }
         else {
-	    // And finally try if it was the legend.
+            // And finally try if it was the legend.
             Legend *legend = dynamic_cast<Legend*>( shape );
             Q_ASSERT( legend );
             d->shape = dynamic_cast<ChartShape*>( shape->parent() );
@@ -423,27 +423,27 @@ void ChartConfigWidget::open( KoShape* shape )
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
     ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
     d->isExternalDataSource = ( spreadSheetModel != 0 && tableModel == 0 );
-    
+
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
     //d->ui.yAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText() );
-    
+
     // Update the legend title
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
-    
+
     // Fill the data table
     if ( d->isExternalDataSource ) {
-    	d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
-    	d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
-    	d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
-    	d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
-    	d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
-    	
-	// If the data source is external, the editData button opens a
-	// dialog to edit the data ranges instead of the data itself.
+        d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
+        d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
+        d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
+        d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
+        d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
+
+        // If the data source is external, the editData button opens a
+        // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText( i18n( "Data Ranges..." ) );
         connect( d->ui.editData,       SIGNAL( clicked( bool ) ),
-		 &d->cellRegionDialog, SLOT( show() ) );
+                 &d->cellRegionDialog, SLOT( show() ) );
         connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
                  this, SLOT( ui_dataSetXDataRegionChanged() ) );
         connect( d->cellRegionDialog.yDataRegion, SIGNAL( editingFinished() ),
@@ -458,12 +458,12 @@ void ChartConfigWidget::open( KoShape* shape )
                  this, SLOT( ui_dataSetSelectionChanged_CellRegionDialog( int ) ) );
     }
     else {
-	// This part is run when the data source is not external,
-	// i.e. the data is handled by the chart shape itself.
+        // This part is run when the data source is not external,
+        // i.e. the data is handled by the chart shape itself.
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
                  this,           SLOT( slotShowTableEditor( bool ) ) );
     }
-    
+
     update();
 }
 
@@ -483,7 +483,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
     ChartType     type = LastChartType;
     ChartSubtype  subtype = NoChartSubtype;
-    
+
     // Bar charts
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;
@@ -495,7 +495,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type    = BarChartType;
         subtype = PercentChartSubtype;
     }
-    
+
     // Line charts
     else if ( action == d->normalLineChartAction ) {
         type    = LineChartType;
@@ -535,7 +535,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type    = RingChartType;
         subtype = NoChartSubtype;
     }
-    
+
     else if ( action == d->scatterChartAction ) {
         type    = ScatterChartType;
         subtype = NoChartSubtype;
@@ -561,7 +561,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = NoChartSubtype;
     }
 
-    
+
     // o Make sure polar and cartesian plots can't conflict and
     //   don't allow the user to mix these two types
     // o Hide axis configuration options for polar plots
@@ -586,10 +586,10 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         d->ui.dataSetHasChartType->setEnabled( true );
         d->ui.dataSetChartTypeMenu->setEnabled( true );
     }
-    
+
     emit chartTypeChanged( type );
     emit chartSubTypeChanged( subtype );
-    
+
     update();
 }
 
@@ -616,7 +616,7 @@ void ChartConfigWidget::setCartesianChartTypesEnabled( bool enabled )
     d->dataSetBubbleChartAction->setEnabled( enabled );
     // FIXME: Enable for:
     // pie, ring?
-    //NYI: 
+    //NYI:
     //surface
     //gantt
 }
@@ -625,12 +625,12 @@ void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged( int percent )
 {
     if ( d->selectedDataSet < 0 )
         return;
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
     Q_ASSERT( dataSet );
     if ( !dataSet )
         return;
-    
+
     emit pieExplodeFactorChanged( dataSet, percent );
 }
 
@@ -638,13 +638,13 @@ void ChartConfigWidget::ui_dataSetHasChartTypeChanged( bool b )
 {
     if ( d->selectedDataSet < 0 )
         return;
-    
+
     if ( !b ) {
         DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
         Q_ASSERT( dataSet );
         if ( !dataSet )
             return;
-        
+
         emit dataSetChartTypeChanged( dataSet, LastChartType );
         emit dataSetChartSubTypeChanged( dataSet, NoChartSubtype );
         d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
@@ -655,10 +655,10 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 {
     if ( d->selectedDataSet < 0 )
         return;
-    
+
     ChartType     type    = LastChartType;
     ChartSubtype  subtype = NoChartSubtype;
-    
+
     if ( action == d->dataSetNormalBarChartAction ) {
         type    = BarChartType;
         subtype = NormalChartSubtype;
@@ -669,7 +669,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type    = BarChartType;
         subtype = PercentChartSubtype;
     }
-    
+
     else if ( action == d->dataSetNormalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
@@ -680,7 +680,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type    = LineChartType;
         subtype = PercentChartSubtype;
     }
-    
+
     else if ( action == d->dataSetNormalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
@@ -691,7 +691,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type    = AreaChartType;
         subtype = PercentChartSubtype;
     }
-    
+
     else if ( action == d->dataSetRadarChartAction )
         type = RadarChartType;
     else if ( action == d->dataSetCircleChartAction )
@@ -704,7 +704,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type = StockChartType;
     else if ( action == d->dataSetBubbleChartAction )
         type = BubbleChartType;
-    
+
     // FIXME: Not supported by KChart yet:
     //surface
     //gantt
@@ -713,7 +713,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     Q_ASSERT( dataSet );
     if ( !dataSet )
         return;
-    
+
     switch ( subtype ) {
     case NormalChartSubtype:
         switch ( type ) {
@@ -797,7 +797,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 
     emit dataSetChartTypeChanged( dataSet, type );
     emit dataSetChartSubTypeChanged( dataSet, subtype );
-    
+
     update();
 }
 
@@ -825,11 +825,11 @@ void ChartConfigWidget::update()
 {
     if ( !d->shape )
         return;
-    
+
     // We only want to update this widget according to the current
     // state of the shape
     blockSignals( true );
-    
+
     // Update cartesian diagram-specific properties
     if ( d->axes != d->shape->plotArea()->axes() ) {
         // Remove old items from the combo box
@@ -838,7 +838,7 @@ void ChartConfigWidget::update()
         // Sync the internal list
         d->axes = d->shape->plotArea()->axes();
         d->dataSetAxes.clear();
-    
+
         if ( !d->axes.isEmpty() ) {
             foreach ( Axis *axis, d->axes ) {
                 d->ui.axes->addItem( axis->titleText() );
@@ -852,7 +852,7 @@ void ChartConfigWidget::update()
                     d->ui.dataSetAxes->blockSignals( false );
                 }
             }
-            
+
             const Axis *selectedAxis = d->shape->plotArea()->axes().first();
 
             d->ui.axisShowGridLines->setEnabled( true );
@@ -883,7 +883,7 @@ void ChartConfigWidget::update()
     d->ui.showTitle->setChecked( d->shape->title()->isVisible() );
     d->ui.showSubTitle->setChecked( d->shape->subTitle()->isVisible() );
     d->ui.showFooter->setChecked( d->shape->footer()->isVisible() );
-    
+
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue( d->shape->plotArea()->gapBetweenBars() );
     d->ui.gapBetweenSets->setValue( d->shape->plotArea()->gapBetweenSets() );
@@ -989,7 +989,7 @@ void ChartConfigWidget::update()
         default:
             break;
         }
-        
+
         // Make sure we only allow legal chart type combinations
         if ( isPolar( d->shape->chartType() ) ) {
             setPolarChartTypesEnabled( true );
@@ -1003,7 +1003,7 @@ void ChartConfigWidget::update()
         d->type    = d->shape->chartType();
         d->subtype = d->shape->chartSubType();
     }
-    
+
     // If the datasets have changed, set up the new ones.
     if ( d->shape->plotArea()->dataSets() != d->dataSets ) {
         d->dataSets = d->shape->plotArea()->dataSets();
@@ -1029,7 +1029,7 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->setText( d->shape->legend()->title() );
         d->ui.legendTitle->blockSignals( false );
     }
-    
+
     blockSignals( false );
 }
 
@@ -1160,11 +1160,11 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT( ui_axisScalingButtonClicked() ) );
     connect( d->axisScalingDialog.logarithmicScaling, SIGNAL( toggled( bool ) ),
              this, SLOT( ui_axisUseLogarithmicScalingChanged( bool ) ) );
-    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( qreal ) ),
+    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged   ( double ) ),
              this, SLOT( ui_axisStepWidthChanged( qreal ) ) );
     connect ( d->axisScalingDialog.automaticStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticStepWidthChanged( bool ) ) );
-    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( qreal ) ),
+    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double) ),
              this, SLOT( ui_axisSubStepWidthChanged( qreal ) ) );
     connect ( d->axisScalingDialog.automaticSubStepWidth, SIGNAL( toggled( bool ) ),
               this, SLOT( ui_axisUseAutomaticSubStepWidthChanged( bool ) ) );
@@ -1179,7 +1179,7 @@ void ChartConfigWidget::selectDataset( int dataset )
     if ( dataset >= 0 ) {
         d->ui.datasetColorLabel->setEnabled( true );
         d->ui.datasetColor->setEnabled( true );
-        
+
         d->ui.datasetColor->blockSignals( true );
         //d->ui.datasetColor->setColor( d->shape->plotArea()->kdDiagram()->brush( dataset ).color() );
         d->ui.datasetColor->blockSignals( false );
@@ -1207,18 +1207,18 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index )
     // Check for valid index
     if ( index < 0 || index >= d->axes.size() )
         return;
-    
+
     Axis *axis = d->axes[ index ];
-    
+
     // Count how many axes there are of the same dimension
     int numAxesOfSameDimension = 0;
     foreach ( Axis *a, d->axes )
         if ( axis->dimension() == a->dimension() )
             numAxesOfSameDimension++;
-    
+
     // Don't let the user remove the last axis of a particular dimension
     d->ui.removeAxis->setEnabled( numAxesOfSameDimension > 1 );
-    
+
     d->ui.axisTitle->blockSignals( true );
     d->ui.axisTitle->setText( axis->titleText() );
     d->ui.axisTitle->blockSignals( false );
@@ -1228,27 +1228,27 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index )
     d->ui.axisShowGridLines->blockSignals( true );
     d->ui.axisShowGridLines->setChecked( axis->showMajorGrid() || axis->showMinorGrid() );
     d->ui.axisShowGridLines->blockSignals( false );
-    
+
     d->axisScalingDialog.logarithmicScaling->blockSignals( true );
     if ( axis->dimension() == YAxisDimension )
         d->axisScalingDialog.logarithmicScaling->setEnabled( true );
     else
         d->axisScalingDialog.logarithmicScaling->setEnabled( false );
     d->axisScalingDialog.logarithmicScaling->blockSignals( false );
-    
+
     d->axisScalingDialog.stepWidth->blockSignals( true );
     d->axisScalingDialog.stepWidth->setValue( axis->majorInterval() );
     d->axisScalingDialog.stepWidth->blockSignals( false );
-    
+
     d->axisScalingDialog.subStepWidth->blockSignals( true );
     d->axisScalingDialog.subStepWidth->setValue( axis->minorInterval() );
     d->axisScalingDialog.subStepWidth->blockSignals( false );
-    
+
     d->axisScalingDialog.automaticStepWidth->blockSignals( true );
     d->axisScalingDialog.automaticStepWidth->setChecked( axis->useAutomaticMajorInterval() );
     d->axisScalingDialog.stepWidth->setEnabled( !axis->useAutomaticMajorInterval() );
     d->axisScalingDialog.automaticStepWidth->blockSignals( false );
-    
+
     d->axisScalingDialog.automaticSubStepWidth->blockSignals( true );
     d->axisScalingDialog.automaticSubStepWidth->setChecked( axis->useAutomaticMinorInterval() );
     d->axisScalingDialog.subStepWidth->setEnabled( !axis->useAutomaticMinorInterval() );
@@ -1261,11 +1261,11 @@ void ChartConfigWidget::ui_dataSetXDataRegionChanged()
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
-    
+
     const QString region = d->cellRegionDialog.xDataRegion->text();
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
-    
+
     emit dataSetXDataRegionChanged( dataSet, region );
 }
 
@@ -1274,11 +1274,11 @@ void ChartConfigWidget::ui_dataSetYDataRegionChanged()
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
-    
+
     const QString region = d->cellRegionDialog.yDataRegion->text();
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
-    
+
     emit dataSetYDataRegionChanged( dataSet, region );
 }
 
@@ -1292,11 +1292,11 @@ void ChartConfigWidget::ui_dataSetCustomDataRegionChanged()
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
-    
+
     const QString region = d->cellRegionDialog.customDataRegion->text();
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
-    
+
     emit dataSetCustomDataRegionChanged( dataSet, region );
     */
 }
@@ -1306,11 +1306,11 @@ void ChartConfigWidget::ui_dataSetCategoryDataRegionChanged()
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
-    
+
     const QString region = d->cellRegionDialog.categoryDataRegion->text();
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
-    
+
     emit dataSetCategoryDataRegionChanged( dataSet, region );
 }
 
@@ -1319,11 +1319,11 @@ void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
-    
+
     const QString region = d->cellRegionDialog.labelDataRegion->text();
-    
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
-    
+
     emit dataSetLabelDataRegionChanged( dataSet, region );
 }
 
@@ -1332,7 +1332,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
     // Check for valid index
     if ( index < 0 || index >= d->dataSets.size() )
         return;
-    
+
     DataSet *dataSet = d->dataSets[ index ];
     const int dimensions = dataSet->dimension();
 
@@ -1346,7 +1346,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
         d->cellRegionDialog.xDataRegion->setEnabled( false );
     d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegionString() );
     d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegionString() );
-    
+
     d->selectedDataSet_CellRegionDialog = index;
 }
 
@@ -1355,25 +1355,25 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
     // Check for valid index
     if ( index < 0 || index >= d->dataSets.size() )
         return;
-    
+
     DataSet *dataSet = d->dataSets[ index ];
     //d->ui.datasetColor->setText( axis->titleText() );
     d->ui.dataSetAxes->blockSignals( true );
     d->ui.dataSetAxes->setCurrentIndex( d->dataSetAxes.indexOf( dataSet->attachedAxis() ) );
     d->ui.dataSetAxes->blockSignals( false );
-    
+
     d->ui.datasetColor->blockSignals( true );
     d->ui.datasetColor->setColor( dataSet->color() );
     d->ui.datasetColor->blockSignals( false );
-    
+
     d->ui.datasetShowValues->blockSignals( true );
     d->ui.datasetShowValues->setChecked( dataSet->valueLabelType() == DataSet::RealValueLabel );
     d->ui.datasetShowValues->blockSignals( false );
-    
+
     d->ui.dataSetShowLabels->blockSignals( true );
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
-    
+
     if ( dataSet->chartType() != LastChartType ) {
         d->ui.dataSetHasChartType->blockSignals( true );
         d->ui.dataSetHasChartType->setChecked( true );
@@ -1460,7 +1460,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
             break;
         }
     }
-    
+
     d->selectedDataSet = index;
 }
 
@@ -1469,7 +1469,7 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index )
     if ( d->ui.dataSets->currentIndex() < 0 || d->ui.dataSets->currentIndex() >= d->dataSets.count() )
         return;
     DataSet *dataSet = d->dataSets[ d->ui.dataSets->currentIndex() ];
-    
+
     if ( index < 0 || index >= d->dataSetAxes.count() )
         return;
     Axis *axis = d->dataSetAxes[ index ];
@@ -1481,7 +1481,7 @@ void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
 {
     if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
         return;
-    
+
     emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
 }
 
@@ -1489,7 +1489,7 @@ void ChartConfigWidget::ui_axisShowTitleChanged( bool b )
 {
     if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
         return;
-    
+
     // To hide the axis title, we pass an empty string
     emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
@@ -1498,7 +1498,7 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b )
 {
     if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
         return;
-    
+
     emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
@@ -1608,7 +1608,7 @@ void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
     if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
 
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b );
 }
 
 void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
@@ -1616,7 +1616,7 @@ void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
     if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
 
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b );
 }
 
 
