@@ -52,7 +52,7 @@ KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
 enum blipFillCaller {
-    blipFill_pic = 'p', //dml
+    blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
     blipFill_bgPr = 'a', // pptx
 };

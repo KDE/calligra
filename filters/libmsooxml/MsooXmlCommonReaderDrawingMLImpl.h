@@ -1596,7 +1596,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     kDebug() << "Caller:" << (char)caller;
     // we do not use READ_PROLOGUE because namespace depends on caller here
     PUSH_NAME_INTERNAL
-    const QString qn(QString(QChar((char)caller)) + ":" STRINGIFY(CURRENT_EL));
+    QString ns;
+    // 'p' by default; for dml in docx use 'pic'
+#ifdef DOCXXMLDOCREADER_CPP
+    if (caller == blipFill_pic) {
+        ns = QLatin1String("pic");
+    }
+    else {
+        ns = QChar((char)caller);
+    }
+#else
+    ns = QChar((char)caller);
+#endif
+    const QString qn(ns + ":" STRINGIFY(CURRENT_EL));
     if (!expectEl(qn)) {
         return KoFilter::WrongFormat;
     }
