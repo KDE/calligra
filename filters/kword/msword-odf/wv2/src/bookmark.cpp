@@ -112,6 +112,7 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
         m_textIt != m_text.end() ) {
 
         ++( *m_startIt ); // yay, but it is hard to make that more elegant
+        ++( *m_endIt );
 
         U32 start = *m_textIt;
         ++m_textIt;
@@ -120,7 +121,9 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
         wvlog << "Bookmarks::bookmark(): start = " << start << endl;
         wvlog << "Bookmarks::bookmark(): name = " << (*m_nameIt).ascii() << endl;
 #endif
-        return BookmarkData( start, *m_textIt, *m_nameIt );
+        UString name = *m_nameIt;
+        ++m_nameIt;
+        return BookmarkData( start, *m_textIt, name );
     }
 
     ok = false;
