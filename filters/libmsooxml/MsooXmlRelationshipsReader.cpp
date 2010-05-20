@@ -35,9 +35,10 @@
 using namespace MSOOXML;
 
 MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(
-    const QString& _path, const QString& _file, QMap<QString, QString>& _rels)
+    const QString& _path, const QString& _file, QMap<QString, QString>& _rels,
+    QMap<QString, QString>& _targetsForTypes)
         : path(_path), file(_file)
-        , rels(&_rels)
+        , rels(&_rels), targetsForTypes(&_targetsForTypes)
 {
 }
 
@@ -153,7 +154,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(Id)
-//unused:    READ_ATTR_WITHOUT_NS(Type)
+    READ_ATTR_WITHOUT_NS(Type)
     READ_ATTR_WITHOUT_NS(Target)
     QString fixedPath(m_context->path);
     while (Target.startsWith("../")) {
@@ -167,6 +168,9 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
         kDebug() << fixedPath + '/' + Target;*/
 
     m_context->rels->insert(d->pathAndFile + Id, fixedPath + '/' + Target);
+//    kDebug() << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key="
+//             << targetKey(fixedPath + '/' + m_context->file, Type);
+    m_context->targetsForTypes->insert(targetKey(fixedPath + '/' + m_context->file, Type), fixedPath + '/' + Target);
 
     while (!atEnd()) {
         readNext();

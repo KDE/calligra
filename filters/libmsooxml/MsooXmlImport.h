@@ -117,6 +117,8 @@ protected:
     KoFilter::ConversionStatus parseThemes(QMap<QString, MSOOXML::DrawingMLTheme*>& themes,
         KoOdfWriters *writers, QString& errorMessage);
 
+    //! @return part names associated with @a contentType
+    QList<QByteArray> partNames(const QByteArray& contentType) const { return m_contentTypes.values(contentType); }
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.

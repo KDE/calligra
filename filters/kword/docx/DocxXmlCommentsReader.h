@@ -47,7 +47,7 @@ private:
     bool m_null;
 };
 
-//! A context structure for MsooXmlRelationshipsReader
+//! A context structure for DocxXmlCommentsReader
 class DocxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:

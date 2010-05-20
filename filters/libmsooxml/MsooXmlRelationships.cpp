@@ -44,6 +44,7 @@ public:
     KoOdfWriters* writers;
     QString *errorMessage;
     QMap<QString, QString> rels;
+    QMap<QString, QString> targetsForTypes;
     QSet<QString> loadedFiles;
 };
 
@@ -51,7 +52,7 @@ KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString
 {
     kDebug() << (path + '/' + file) << "...";
     loadedFiles.insert(path + '/' + file);
-    MsooXmlRelationshipsReaderContext context(path, file, rels);
+    MsooXmlRelationshipsReaderContext context(path, file, rels, targetsForTypes);
     MsooXmlRelationshipsReader reader(writers);
 
     const QString realPath(path + "/_rels/" + file + ".rels");
@@ -96,7 +97,7 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
     if (!result.isEmpty())
         return result;
     if (d->loadedFiles.contains(path + '/' + file)) {
-        *d->errorMessage = i18n("Could not find target \"%1\" in file \"%2\"", id, path + "/" + file);
+        *d->errorMessage = i18n("Could not find target for id \"%1\" in file \"%2\"", id, path + "/" + file);
         return QString(); // cannot be found
     }
     if (d->loadRels(path, file) != KoFilter::OK) {
@@ -104,4 +105,23 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
         return QString();
     }
     return d->rels.value(key);
+}
+
+QString MsooXmlRelationships::targetForType(const QString& path, const QString& file, const QString& relType)
+{
+    const QString key(MsooXmlRelationshipsReader::targetKey(path + "/" + file, relType));
+    //kDebug() << key;
+    const QString target(d->targetsForTypes.value(key));
+    if (!target.isEmpty())
+        return target;
+    if (d->loadedFiles.contains(path + "/" + file)) {
+        *d->errorMessage = i18n("Could not find target for relationship \"%1\" in file \"%2\"",
+                                relType, path + "/" + file);
+        return QString(); // cannot be found
+    }
+    if (d->loadRels(path, file) != KoFilter::OK) {
+        *d->errorMessage = i18n("Could not find relationships file \"%1\"", path + "/" + file);
+        return QString();
+    }
+    return d->targetsForTypes.value(key);
 }

@@ -28,6 +28,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
+#include <MsooXmlRelationships.h>
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlStylesReader.h"
 #include "DocxXmlFontTableReader.h"
@@ -241,16 +242,38 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(
             MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context) )
     }
+
     // 2. parse themes
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
+
     // 3. parse styles
-    {
-        DocxXmlStylesReader stylesReader(writers);
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::wordStyles, &stylesReader, writers, errorMessage) )
+    QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
+    if (partNames.count() != 1) {
+        errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
+        return KoFilter::WrongFormat;
     }
+    const QString documentPath(partNames.first());
+    {
+        // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
+        // ECMA-376, 11.3.12 Style Definitions Part, p. 65
+        // An instance of this part type contains the definition for a set of styles used by this document.
+        // A package shall contain at most two Style Definitions parts. One instance of that part shall be
+        // the target of an implicit relationship from the Main Document (§11.3.10) part, and the other shall
+        // be the target of an implicit relationship in from the Glossary Document (§11.3.8) part.
+        const QString stylesPath(relationships->targetForType(
+            documentPath.left(documentPath.lastIndexOf('/')),
+            documentPath.mid(documentPath.lastIndexOf('/') + 1),
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/styles"));
+        kDebug() << "stylesPath:" << stylesPath;
+        DocxXmlStylesReader stylesReader(writers);
+        if (!stylesPath.isEmpty()) {
+            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+                stylesPath, &stylesReader, writers, errorMessage) )
+        }
+    }
+
     // 4. parse document
     {
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
