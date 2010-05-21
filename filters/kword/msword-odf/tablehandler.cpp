@@ -52,10 +52,13 @@ KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainS
 void KWordTableHandler::tableStart(KWord::Table* table)
 {
     kDebug(30513);
+
     Q_ASSERT(table);
     Q_ASSERT(!table->name.isEmpty());
 
     KoXmlWriter*  writer = currentWriter();
+    wvWare::SharedPtr<const wvWare::Word97::TAP> tap = table->tap;
+
     m_currentTable = table;
     m_cellOpen = false;
 
@@ -93,12 +96,10 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     tableStyle.addProperty("table:align", align);
     tableStyle.addProperty("style:border-model", "collapsing");
 
-    //process margin information, note that if a table in word 2000/2003 is
-    //aligned to left, there may be a left margin
-    if (table->tap->widthIndent) {
-	qreal margin = twipsToPt(table->tap->widthIndent);
-        tableStyle.addPropertyPt("fo:margin-left", margin);
-    }
+    //process margin information, check sprmTDxaLeft description in MS-DOC
+    int margin = tap->dxaLeft - tap->dxaGapHalf;
+    margin += tap->widthIndent;
+    tableStyle.addPropertyPt("fo:margin-left", twipsToPt(margin));
 
     //check if we need a master page name attribute.
     if (document()->writeMasterPageName() && !document()->writingHeader()) {

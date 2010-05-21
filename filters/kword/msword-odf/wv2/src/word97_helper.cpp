@@ -211,6 +211,7 @@ typedef enum
     sprmPBrcBottom = 0x6426,
     sprmPBrcRight = 0x6427,
     sprmPBrcBetween = 0x6428,
+    sprmPTableProps = 0x646b,
     sprmPBrcBar = 0x6629,
     sprmPHugePapx = 0x6645,
     sprmPHugePapx2 = 0x6646,
@@ -566,7 +567,7 @@ Word97::TAP* initTAP( const U8* exceptions, OLEStreamReader* dataStream, WordVer
     }
     else
         cb -= 3;
-
+    
     exceptions += 2; // skip the istd
     cb = cb < 0 ? 0 : cb;  // safety :-}
     tap->apply( exceptions, cb, 0, 0, dataStream, version ); // we don't need a style(sheet), do we?
@@ -1932,199 +1933,225 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     const U16 sprm( getSPRM( &ptr, version, sprmLength ) );
 
 #ifdef WV2_DEBUG_SPRMS
-    wvlog << "sprm to process: " << hex << sprm << dec << endl;
-    wvlog << "sprmLength: " << hex << sprmLength << dec << endl;
+    wvlog << "sprm: 0x" << hex << sprm << dec << endl;
+    wvlog << "sprmLength: " << sprmLength << endl;
 #endif
     // Is it a TAP sprm? Not really an error if it's none, as all TAP sprms live
     // inside PAP grpprls
-    if ( ( ( sprm & 0x1C00 ) >> 10 ) != 5 && sprm != SPRM::sprmPHugePapx && sprm != SPRM::sprmPHugePapx2 ) {
+    if ( ( ( sprm & 0x1C00 ) >> 10 ) != 5 && 
+         (sprm != SPRM::sprmPHugePapx) &&
+         (sprm != SPRM::sprmPHugePapx2) &&
+         (sprm != SPRM::sprmPTableProps) )
+    {
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "Warning: You're trying to apply a non TAP sprm to a TAP. Not necessarily bad." << endl;
+        wvlog << "Warning: You're trying to apply a non TAP sprm to a TAP. Not necessarily bad." 
+              << endl;
 #endif
         return -1;
     }
     // which one? ;)
     switch ( sprm ) {
-        case SPRM::sprmNoop:
-            wvlog << "Huh? Found a sprmNoop..." << endl;
-            break;
-        case SPRM::sprmTJc:
-            jc = readS16( ptr );
-            break;
-        case SPRM::sprmTDxaLeft:
-        {
-            const S16 dxaNew = readS16( ptr ) - ( rgdxaCenter[ 0 ] + dxaGapHalf );
-            std::transform( rgdxaCenter.begin(), rgdxaCenter.end(), rgdxaCenter.begin(), std::bind1st( std::plus<S16>(), dxaNew ) );
-            break;
-        }
-        case SPRM::sprmTDxaGapHalf:
-        {
-            const S16 dxaGapHalfNew = readS16( ptr );
-            if ( !rgdxaCenter.empty() )
-                rgdxaCenter[ 0 ] += dxaGapHalf - dxaGapHalfNew;
-            dxaGapHalf = dxaGapHalfNew;
-            break;
-        }
-        case SPRM::sprmTFCantSplit:
-            fCantSplit = *ptr == 1;
-            break;
-        case SPRM::sprmTTableHeader:
-            fTableHeader = *ptr == 1;
-            break;
-        case SPRM::sprmTTableBorders80:
-        {
-            const U8 inc = version == Word8 ? Word97::BRC::sizeOf97 : Word95::BRC::sizeOf;
-            for ( int i = 0; i < 6; ++i )
-            {
-                // skip the leading size byte
-                readBRC( rgbrcTable[ i ], ptr + 1 + i * inc, version );
-            }
-            break;
-        }
-         case SPRM::sprmTTableBorders:
-        {
-            const U8 inc = version == Word8 ? Word97::BRC::sizeOf : Word95::BRC::sizeOf;
-            for ( int i = 0; i < 6; ++i )
-                // skip the leading size byte
-                rgbrcTable[ i ].read90Ptr( ptr + 1 + i * inc );
-            break;
-        }
-       case SPRM::sprmTDefTable10:
-            wvlog << "Warning: sprmTDefTable10 is obsolete" << endl;
-            break;
-        case SPRM::sprmTDyaRowHeight:
-            dyaRowHeight = readS16( ptr );
-            break;
-        case SPRM::sprmTDefTable:
-        {
-            if ( itcMac != 0 ) {
-                wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
-                break;
-            }
-            int remainingLength = readU16( ptr ) - 1;
-            itcMac = *( ptr + 2 );
+    case SPRM::sprmNoop:
+        wvlog << "Huh? Found a sprmNoop..." << endl;
+        break;
+    case SPRM::sprmTJc:
+        jc = readS16( ptr );
+        break;
+    case SPRM::sprmTDxaLeft:
+    {
+//         const S16 dxaNew = readS16( ptr ) - ( rgdxaCenter[ 0 ] + dxaGapHalf );
+//         std::transform( rgdxaCenter.begin(), rgdxaCenter.end(), rgdxaCenter.begin(), 
+//                         std::bind1st( std::plus<S16>(), dxaNew ) );
 
-            remainingLength -= 2 * ( itcMac + 1 );
-            if ( remainingLength < 0 ) {
-                wvlog << "Bug: Not even enough space for the dxas!" << endl;
-                break;
-            }
+        //NOTE: calculation of the horizontal origin moved to TableHandler
+        dxaLeft = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+        wvlog << "dxaLeft: " << dxaLeft << endl;
+#endif
+        break;
+    }
+    case SPRM::sprmTDxaGapHalf:
+    {
+//         const S16 dxaGapHalfNew = readS16( ptr );
+//         if ( !rgdxaCenter.empty() ) {
+//             rgdxaCenter[ 0 ] += dxaGapHalf - dxaGapHalfNew;
+//         }
 
-            const U8* myPtr = ptr + 3;
-            const U8* myLim = ptr + 3 + 2 * ( itcMac + 1 );
-            while ( myPtr < myLim ) {
-                rgdxaCenter.push_back( readS16( myPtr ) );
-                myPtr += 2;
-            }
+        //NOTE: calculation of the horizontal origin moved to TableHandler
+        dxaGapHalf = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+        wvlog << "dxaGapHalf: " << dxaGapHalf << endl;
+#endif
+        break;
+    }
+    case SPRM::sprmTFCantSplit:
+        fCantSplit = *ptr == 1;
+        break;
+    case SPRM::sprmTTableHeader:
+        fTableHeader = *ptr == 1;
+        break;
+    case SPRM::sprmTTableBorders80:
+    {
+        const U8 inc = version == Word8 ? Word97::BRC::sizeOf97 : Word95::BRC::sizeOf;
+        for ( int i = 0; i < 6; ++i )
+        {
+            // skip the leading size byte
+            readBRC( rgbrcTable[ i ], ptr + 1 + i * inc, version );
+        }
+        break;
+    }
+    case SPRM::sprmTTableBorders:
+    {
+        const U8 inc = version == Word8 ? Word97::BRC::sizeOf : Word95::BRC::sizeOf;
+        for ( int i = 0; i < 6; ++i )
+            // skip the leading size byte
+            rgbrcTable[ i ].read90Ptr( ptr + 1 + i * inc );
+        break;
+    }
+    case SPRM::sprmTDefTable10:
+        wvlog << "Warning: sprmTDefTable10 is obsolete" << endl;
+        break;
+    case SPRM::sprmTDyaRowHeight:
+        dyaRowHeight = readS16( ptr );
+        break;
+    case SPRM::sprmTDefTable:
+    {
+        if ( itcMac != 0 ) {
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            break;
+        }
+        int remainingLength = readU16( ptr ) - 1;
+        itcMac = *( ptr + 2 );
 
-            const int tcSize = version == Word8 ? Word97::TC::sizeOf : Word95::TC::sizeOf;
-            myLim = myPtr + ( remainingLength / tcSize ) * tcSize;
-            while ( myPtr < myLim ) {
-                if ( version == Word8 )
-                    rgtc.push_back( TC( myPtr ) );
-                else
-                    rgtc.push_back( toWord97( Word95::TC( myPtr ) ) );
-                myPtr += tcSize;
-            }
-            if ( rgtc.size() < static_cast<std::vector<S16>::size_type>( itcMac ) )
-                rgtc.insert( rgtc.end(), itcMac - rgtc.size(), TC() );
+        remainingLength -= 2 * ( itcMac + 1 );
+        if ( remainingLength < 0 ) {
+            wvlog << "Bug: Not even enough space for the dxas!" << endl;
+            break;
+        }
+        const U8* myPtr = ptr + 3;
+        const U8* myLim = ptr + 3 + 2 * ( itcMac + 1 );
+        while ( myPtr < myLim ) {
+            rgdxaCenter.push_back( readS16( myPtr ) );
+            myPtr += 2;
+        }
+        wvlog << "rgdxaCenter[0]: " << rgdxaCenter[0] << endl;
 
-            rgshd.insert( rgshd.begin(), itcMac, SHD() );
-            break;
-        }
-        case SPRM::sprmTDefTableShd80:
-        {
-            const U8* myPtr = ptr + 1;
-            const U8* myLim = ptr + 1 + *ptr;
-            rgshd.clear();
-            while ( myPtr < myLim ) {
-                rgshd.push_back( SHD( myPtr ) );
-                myPtr += SHD::sizeOf;
+        const int tcSize = version == Word8 ? Word97::TC::sizeOf : Word95::TC::sizeOf;
+        myLim = myPtr + ( remainingLength / tcSize ) * tcSize;
+        while ( myPtr < myLim ) {
+            if ( version == Word8 ) {
+                rgtc.push_back( TC( myPtr ) );
             }
-            if ( rgshd.size() < static_cast<std::vector<S16>::size_type>( itcMac ) )
-                rgshd.insert( rgshd.end(), itcMac - rgshd.size(), SHD() );
-            break;
-        }
-        case SPRM::sprmTDefTableShd:
-        {
-            const U8* myPtr = ptr + 1;
-            const U8* myLim = ptr + 1 + *ptr;
-            rgshd.clear();
-            while ( myPtr < myLim ) {
-                SHD shd;
-                shd.read90Ptr(myPtr);
-                rgshd.push_back( shd );
-                myPtr += SHD::sizeOf;
+            else {
+                rgtc.push_back( toWord97( Word95::TC( myPtr ) ) );
             }
-            if ( rgshd.size() < static_cast<std::vector<S16>::size_type>( itcMac ) )
-                rgshd.insert( rgshd.end(), itcMac - rgshd.size(), SHD() );
-            break;
+            myPtr += tcSize;
         }
-        case SPRM::sprmTDefTableShd2nd:
-        {
-            break;
+        if ( rgtc.size() < static_cast<std::vector<S16>::size_type>( itcMac ) ) {
+            rgtc.insert( rgtc.end(), itcMac - rgtc.size(), TC() );
         }
-        case SPRM::sprmTDefTableShd3rd:
-        {
-            break;
+        //default shading
+        rgshd.insert( rgshd.begin(), itcMac, SHD() );
+        break;
+    }
+    case SPRM::sprmTDefTableShd80:
+    {
+        const U8* myPtr = ptr + 1;
+        const U8* myLim = ptr + 1 + *ptr;
+        rgshd.clear();
+        while ( myPtr < myLim ) {
+            rgshd.push_back( SHD( myPtr ) );
+            myPtr += SHD::sizeOf;
         }
-        case SPRM::sprmTTlp:
-            tlp.readPtr( ptr );
-            break;
-        case SPRM::sprmTFBiDi:
-            wvlog << "Warning: sprmTFBiDi not implemented" << endl;
-            break;
-        case SPRM::sprmTHTMLProps:
-            wvlog << "Warning: sprmTHTMLProps not implemented" << endl;
-            break;
-        case SPRM::sprmTSetBrc80:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-            U8 itcFirst = *myPtr;
-            U8 itcLim = *( myPtr + 1 );
-            cropIndices( itcFirst, itcLim, rgtc.size() );
-            const U8 flags = *( myPtr + 2 );
-            BRC brc;
-            readBRC( brc, myPtr + 3, version );
+        if ( rgshd.size() < static_cast<std::vector<S16>::size_type>( itcMac ) ) {
+            rgshd.insert( rgshd.end(), itcMac - rgshd.size(), SHD() );
+        }
+        break;
+    }
+    case SPRM::sprmTDefTableShd:
+    {
+        const U8* myPtr = ptr + 1;
+        const U8* myLim = ptr + 1 + *ptr;
+        rgshd.clear();
+        while ( myPtr < myLim ) {
+            SHD shd;
+            shd.read90Ptr(myPtr);
+            rgshd.push_back( shd );
+            myPtr += SHD::sizeOf;
+        }
+        if ( rgshd.size() < static_cast<std::vector<S16>::size_type>( itcMac ) ) {
+            rgshd.insert( rgshd.end(), itcMac - rgshd.size(), SHD() );
+        }
+        break;
+    }
+    case SPRM::sprmTDefTableShd2nd:
+    {
+        break;
+    }
+    case SPRM::sprmTDefTableShd3rd:
+    {
+        break;
+    }
+    case SPRM::sprmTTlp:
+        tlp.readPtr( ptr );
+        break;
+    case SPRM::sprmTFBiDi:
+        wvlog << "Warning: sprmTFBiDi not implemented" << endl;
+        break;
+    case SPRM::sprmTHTMLProps:
+        wvlog << "Warning: sprmTHTMLProps not implemented" << endl;
+        break;
+    case SPRM::sprmTSetBrc80:
+    {
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        U8 itcFirst = *myPtr;
+        U8 itcLim = *( myPtr + 1 );
+        cropIndices( itcFirst, itcLim, rgtc.size() );
+        const U8 flags = *( myPtr + 2 );
+        BRC brc;
+        readBRC( brc, myPtr + 3, version );
 
-            for ( ; itcFirst < itcLim; ++itcFirst ) {
-                if ( flags & 0x01 )
-                    rgtc[ itcFirst ].brcTop = brc;
-                if ( flags & 0x02 )
-                    rgtc[ itcFirst ].brcLeft = brc;
-                if ( flags & 0x04 )
-                    rgtc[ itcFirst ].brcBottom = brc;
-                if ( flags & 0x08 )
-                    rgtc[ itcFirst ].brcRight = brc;
-            }
-            break;
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            if ( flags & 0x01 )
+                rgtc[ itcFirst ].brcTop = brc;
+            if ( flags & 0x02 )
+                rgtc[ itcFirst ].brcLeft = brc;
+            if ( flags & 0x04 )
+                rgtc[ itcFirst ].brcBottom = brc;
+            if ( flags & 0x08 )
+                rgtc[ itcFirst ].brcRight = brc;
         }
-        case SPRM::sprmTInsert:
-        {
-            const U8 itcInsert = *ptr;
-            const U8 ctc = *( ptr + 1 );
-            const S16 dxaCol = readS16( ptr + 2 );
+        break;
+    }
+    case SPRM::sprmTInsert:
+    {
+        const U8 itcFirst = *ptr;
+        const U8 ctc = *( ptr + 1 );
+        const U16 dxaCol = readU16( ptr + 2 );
 
+        //NOTE: don't process before sprmTDefTable
+        if (itcMac) {
             // Sanity check
             if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
                 wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
                 itcMac = rgdxaCenter.size() - 1;
             }
 
-            if ( itcMac < itcInsert ) {
-                // Shaky, no idea why we would have to subtract ctc here?
-                // The implementation below is a guess from me, but it looks like this never happens
-                // in real documents.
+            if ( itcMac < itcFirst ) {
+                // Shaky, no idea why we would have to subtract ctc here?  The
+                // implementation below is a guess from me, but it looks like
+                // this never happens in real documents.
                 wvlog << "Warning: sprmTInsert: Debug me ########################################" << endl;
 
                 S16 runningDxaCol = 0;
-                if ( !rgdxaCenter.empty() )
+                if ( !rgdxaCenter.empty() ) {
                     runningDxaCol = rgdxaCenter.back();
+                }
 
-                for ( ; itcMac < itcInsert; ++itcMac ) {
-                    // If the index is bigger than our current array we just fill the
-                    // hole with dummy cells (dxaCol wide, default TC) as suggested in
-                    // the documentation
+                for ( ; itcMac < itcFirst; ++itcMac ) {
+                    // If the index is bigger than our current array we just
+                    // fill the hole with dummy cells (dxaCol wide, default TC)
+                    // as suggested in the documentation
                     runningDxaCol += dxaCol;
                     rgdxaCenter.push_back( runningDxaCol );
                     rgtc.push_back( TC() );
@@ -2132,259 +2159,279 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             }
             else {
                 S16 runningDxaCol;
-                if ( itcInsert > 0 )
-                    runningDxaCol = rgdxaCenter[ itcInsert - 1 ] + dxaCol;
-                else // preserve the position of the table row
+                if ( itcFirst > 0 ) {
+                    runningDxaCol = rgdxaCenter[ itcFirst - 1 ] + dxaCol;
+                }
+                // preserve the position of the table row 
+                else { 
                     runningDxaCol = rgdxaCenter[ 0 ];
-
+                }
                 for ( int i = 0; i < ctc; ++i ) {
-                    std::vector<S16>::iterator dxaIt = rgdxaCenter.begin() + itcInsert + i;
+                    std::vector<S16>::iterator dxaIt = rgdxaCenter.begin() + itcFirst + i;
                     rgdxaCenter.insert( dxaIt, runningDxaCol );
                     runningDxaCol += dxaCol;
                 }
 
-                rgtc.insert( rgtc.begin() + itcInsert, ctc, TC() );
-                rgshd.insert( rgshd.begin() + itcInsert, ctc, SHD() );
+                rgtc.insert( rgtc.begin() + itcFirst, ctc, TC() );
+                rgshd.insert( rgshd.begin() + itcFirst, ctc, SHD() );
                 itcMac += ctc;
 
                 // Adjust all successive items (+= ctc * dxaCol)
-                std::transform( rgdxaCenter.begin() + itcInsert + ctc, rgdxaCenter.end(),
-                                rgdxaCenter.begin() + itcInsert + ctc, std::bind1st( std::plus<S16>(), ctc * dxaCol ) );
+                std::transform( rgdxaCenter.begin() + itcFirst + ctc, rgdxaCenter.end(),
+                                rgdxaCenter.begin() + itcFirst + ctc, 
+                                std::bind1st( std::plus<S16>(), ctc * dxaCol ) );
             }
-            break;
         }
-        case SPRM::sprmTDelete:
-        {
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgdxaCenter.size() );
+        break;
+    }
+    case SPRM::sprmTDelete:
+    {
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgdxaCenter.size() );
 
-            rgdxaCenter.erase( rgdxaCenter.begin() + itcFirst, rgdxaCenter.begin() + itcLim );
-            rgtc.erase( rgtc.begin() + itcFirst, rgtc.begin() + itcLim );
-            rgshd.erase( rgshd.begin() + itcFirst, rgshd.begin() + itcLim );
+        rgdxaCenter.erase( rgdxaCenter.begin() + itcFirst, rgdxaCenter.begin() + itcLim );
+        rgtc.erase( rgtc.begin() + itcFirst, rgtc.begin() + itcLim );
+        rgshd.erase( rgshd.begin() + itcFirst, rgshd.begin() + itcLim );
 
-            itcMac -= itcLim - itcFirst;
-            break;
-        }
-        case SPRM::sprmTDxaCol:
-        {
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
+        itcMac -= itcLim - itcFirst;
+        break;
+    }
+    case SPRM::sprmTDxaCol:
+    {
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        const S16 dxaCol = readS16( ptr + 2 );
+
+        //NOTE: don't process before sprmTDefTable
+        if (itcMac) {
             cropIndices( itcFirst, itcLim, rgdxaCenter.size() );
-            const S16 dxaCol = readS16( ptr + 2 );
             S16 shift = 0;
-
             for ( ; itcFirst < itcLim; ++itcFirst ) {
                 shift += rgdxaCenter[ itcFirst + 1 ] - rgdxaCenter[ itcFirst ] - dxaCol;
                 rgdxaCenter[ itcFirst + 1 ] = rgdxaCenter[ itcFirst ] + dxaCol;
             }
-
             // Adjust all the following columns
             ++itcFirst;
             std::transform( rgdxaCenter.begin() + itcFirst, rgdxaCenter.end(),
-                            rgdxaCenter.begin() + itcFirst, std::bind2nd( std::minus<S16>(), shift ) );
-            break;
+                            rgdxaCenter.begin() + itcFirst, 
+                            std::bind2nd( std::minus<S16>(), shift ) );
         }
-        case SPRM::sprmTMerge:
-        {
-            wvlog << "Debug me (sprmTMerge) #########################################################" << endl;
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgtc.size() );
+        break;
+    }
+    case SPRM::sprmTMerge:
+    {
+        wvlog << "Debug me (sprmTMerge) #########################################################" << endl;
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgtc.size() );
 
-            rgtc[ itcFirst++ ].fFirstMerged = 1;
-            for ( ; itcFirst < itcLim; ++itcFirst )
-                rgtc[ itcFirst ].fMerged = 1;
-            break;
+        rgtc[ itcFirst++ ].fFirstMerged = 1;
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            rgtc[ itcFirst ].fMerged = 1;
         }
-        case SPRM::sprmTSplit:
-        {
-            wvlog << "Debug me (sprmTSplit) #########################################################" << endl;
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgtc.size() );
+        break;
+    }
+    case SPRM::sprmTSplit:
+    {
+        wvlog << "Debug me (sprmTSplit) #########################################################" << endl;
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgtc.size() );
 
-            std::vector<TC>::iterator it = rgtc.begin() + itcFirst;
-            std::vector<TC>::const_iterator end = rgtc.begin() + itcLim;
-            for ( ; it != end; ++it ) {
-                ( *it ).fFirstMerged = 0;
-                ( *it ).fMerged = 0;
+        std::vector<TC>::iterator it = rgtc.begin() + itcFirst;
+        std::vector<TC>::const_iterator end = rgtc.begin() + itcLim;
+        for ( ; it != end; ++it ) {
+            ( *it ).fFirstMerged = 0;
+            ( *it ).fMerged = 0;
+        }
+        break;
+    }
+    case SPRM::sprmTSetBrc10:
+        wvlog << "Warning: sprmTSetBrc10 doesn't make sense for Word97 structures" << endl;
+        break;
+    case SPRM::sprmTSetShd:
+    {
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgshd.size() );
+        const SHD shd( ptr + 2 );
+
+        std::fill_n( rgshd.begin() + itcFirst, itcLim - itcFirst, shd );
+        break;
+    }
+    case SPRM::sprmTSetShdOdd:
+    {
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgshd.size() );
+        const SHD shd( ptr + 2 );
+
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            if ( itcFirst & 0x01 ) {
+                rgshd[ itcFirst ] = shd;
             }
-            break;
         }
-        case SPRM::sprmTSetBrc10:
-            wvlog << "Warning: sprmTSetBrc10 doesn't make sense for Word97 structures" << endl;
-            break;
-        case SPRM::sprmTSetShd:
-        {
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgshd.size() );
-            const SHD shd( ptr + 2 );
+        break;
+    }
+    case SPRM::sprmTTextFlow:
+        wvlog << "Warning: sprmTTextFlow is undocumented. Please send this document to trobin@kde.org." << endl;
+        break;
+    case SPRM::sprmTDiagLine:
+        wvlog << "Warning: sprmTDiagLine is undocumented. Please send this document to trobin@kde.org." << endl;
+        break;
+    case SPRM::sprmTVertMerge:
+    {
+        const U8 index = *ptr;
+        const U8 flags = *( ptr + 1 );
+        if ( index < rgtc.size() ) {
+            rgtc[ index ].fVertMerge = flags;
+            rgtc[ index ].fVertRestart = ( flags & 0x02 ) >> 1;
+        }
+        else {
+            wvlog << "Warning: sprmTVertMerge: Out of bounds access" << endl;
+        }
+        break;
+    }
+    case SPRM::sprmTVertAlign:
+    {
+        U8 itcFirst = *ptr;
+        U8 itcLim = *( ptr + 1 );
+        cropIndices( itcFirst, itcLim, rgtc.size() );
+        const U8 vertAlign = *( ptr + 2 );
 
-            std::fill_n( rgshd.begin() + itcFirst, itcLim - itcFirst, shd );
-            break;
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            rgtc[ itcFirst ].vertAlign = vertAlign;
         }
-        case SPRM::sprmTSetShdOdd:
-        {
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgshd.size() );
-            const SHD shd( ptr + 2 );
+        break;
+    }
+    case SPRM::sprmTSetBrc:
+    {
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        U8 itcFirst = *myPtr;
+        U8 itcLim = *( myPtr + 1 );
+        cropIndices( itcFirst, itcLim, rgtc.size() );
+        const U8 flags = *( myPtr + 2 );
+        BRC brc;
+        brc.read90Ptr(myPtr + 3 );
 
-            for ( ; itcFirst < itcLim; ++itcFirst )
-                if ( itcFirst & 0x01 )
-                    rgshd[ itcFirst ] = shd;
-            break;
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            if ( flags & 0x01 )
+                rgtc[ itcFirst ].brcTop = brc;
+            if ( flags & 0x02 )
+                rgtc[ itcFirst ].brcLeft = brc;
+            if ( flags & 0x04 )
+                rgtc[ itcFirst ].brcBottom = brc;
+            if ( flags & 0x08 )
+                rgtc[ itcFirst ].brcRight = brc;
         }
-        case SPRM::sprmTTextFlow:
-            wvlog << "Warning: sprmTTextFlow is undocumented. Please send this document to trobin@kde.org." << endl;
-            break;
-        case SPRM::sprmTDiagLine:
-            wvlog << "Warning: sprmTDiagLine is undocumented. Please send this document to trobin@kde.org." << endl;
-            break;
-        case SPRM::sprmTVertMerge:
-        {
-            const U8 index = *ptr;
-            const U8 flags = *( ptr + 1 );
-            if ( index < rgtc.size() ) {
-                rgtc[ index ].fVertMerge = flags;
-                rgtc[ index ].fVertRestart = ( flags & 0x02 ) >> 1;
-            }
-            else
-                wvlog << "Warning: sprmTVertMerge: Out of bounds access" << endl;
-            break;
-        }
-        case SPRM::sprmTVertAlign:
-        {
-            U8 itcFirst = *ptr;
-            U8 itcLim = *( ptr + 1 );
-            cropIndices( itcFirst, itcLim, rgtc.size() );
-            const U8 vertAlign = *( ptr + 2 );
-
-            for ( ; itcFirst < itcLim; ++itcFirst )
-                rgtc[ itcFirst ].vertAlign = vertAlign;
-            break;
-        }
-        case SPRM::sprmTSetBrc:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-            U8 itcFirst = *myPtr;
-            U8 itcLim = *( myPtr + 1 );
-            cropIndices( itcFirst, itcLim, rgtc.size() );
-            const U8 flags = *( myPtr + 2 );
-            BRC brc;
-            brc.read90Ptr(myPtr + 3 );
-
-            for ( ; itcFirst < itcLim; ++itcFirst ) {
-                if ( flags & 0x01 )
-                    rgtc[ itcFirst ].brcTop = brc;
-                if ( flags & 0x02 )
-                    rgtc[ itcFirst ].brcLeft = brc;
-                if ( flags & 0x04 )
-                    rgtc[ itcFirst ].brcBottom = brc;
-                if ( flags & 0x08 )
-                    rgtc[ itcFirst ].brcRight = brc;
-            }
-            break;
-        }
-        case SPRM::sprmTUndocumentedSpacing:
-            if ( *ptr == 6 ) {
+        break;
+    }
+    case SPRM::sprmTUndocumentedSpacing:
+        if ( *ptr == 6 ) {
 /*                wvlog << "sprmTUndocumentedSpacing----" << endl;
                 const U8 itcFirst( *( ptr + 1 ) );
                 for ( int i = 0; i < 6; ++i )
                     wvlog << "    byte " << i << ": " << hex << ( int )*( ptr + i ) << dec << endl;
 */
-            }
-            else
-                wvlog << "Warning: sprmTUndocumentedSpacing with unusual length=" << static_cast<int>( *ptr ) << endl;
-            break;
-        case SPRM::sprmTUndocumented8:
+        }
+        else {
+            wvlog << "Warning: sprmTUndocumentedSpacing with unusual length=" << 
+                  static_cast<int>( *ptr ) << endl;
+        }
+        break;
+    case SPRM::sprmTUndocumented8:
             // ###### TODO
             //wvlog << "sprmTUndocumented8: some undocumented spacing thingy, TODO" << endl;
-            break;
-        case SPRM::sprmTUndocumented1:
-        case SPRM::sprmTUndocumented2:
-            break;
-        case SPRM::sprmTBrcTopCv:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-
-            for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
-                rgtc[ i ].brcTop.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
-            }
-            break;
-        }
-        case SPRM::sprmTBrcLeftCv:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-
-            for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
-                rgtc[ i ].brcLeft.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
-            }
-            break;
-        }
-        case SPRM::sprmTBrcRightCv:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-
-            for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
-                rgtc[ i ].brcRight.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
-            }
-            break;
-        }
-        case SPRM::sprmTBrcBottomCv:
-        {
-            const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-
-            for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
-                rgtc[ i ].brcBottom.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
-            }
-            break;
-        }
-        case SPRM::sprmTUndocumented9:
-        case SPRM::sprmTUndocumented10:
-        case SPRM::sprmTUndocumented11:
-        case SPRM::sprmTUndocumented12:
-            break;
-        case SPRM::sprmTWidthIndent:
+        break;
+    case SPRM::sprmTUndocumented1:
+    case SPRM::sprmTUndocumented2:
+        break;
+    case SPRM::sprmTBrcTopCv:
     {
-            //MS-DOC, page 363 of 609
-            const U8 ftsWidth = *ptr;
-            const S16 wWidth = readS16( ptr + 1 );
-
-            //TODO: value is expressed in percentage of page/table, etc.
-            if (ftsWidth == 2) {
-
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+            rgtc[ i ].brcTop.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
-            //value in twipspx
-            else if (ftsWidth == 3) {
-                widthIndent = wWidth;
-        }
-            break;
+        break;
     }
-        // These are needed in case there are table properties inside the huge papx
-        case SPRM::sprmPHugePapx:
-        case SPRM::sprmPHugePapx2:
-        {
-            if ( dataStream ) {
-                dataStream->push();
-                dataStream->seek( readU32( ptr ), G_SEEK_SET );
-                const U16 count( dataStream->readU16() );
-                U8* grpprl = new U8[ count ];
-                dataStream->read( grpprl, count );
-                dataStream->pop();
-
-                apply( grpprl, count, style, styleSheet, dataStream, version );
-                delete [] grpprl;
-            }
-            else
-                wvlog << "Error: sprmPHugePapx found, but no data stream!" << endl;
-            break;
+    case SPRM::sprmTBrcLeftCv:
+    {
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+            rgtc[ i ].brcLeft.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
-        default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
-            break;
+        break;
+    }
+    case SPRM::sprmTBrcRightCv:
+    {
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+            rgtc[ i ].brcRight.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
+        }
+        break;
+    }
+    case SPRM::sprmTBrcBottomCv:
+    {
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+            rgtc[ i ].brcBottom.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
+        }
+        break;
+    }
+    case SPRM::sprmTUndocumented9:
+    case SPRM::sprmTUndocumented10:
+    case SPRM::sprmTUndocumented11:
+    case SPRM::sprmTUndocumented12:
+        break;
+    case SPRM::sprmTWidthIndent:
+    {
+        //MS-DOC, page 362 of 609
+        const U8 ftsWidth = *ptr;
+        const S16 wWidth = readS16( ptr + 1 );
+
+        if ((ftsWidth == 0x01) || (ftsWidth == 0x13)) {
+            wvlog << "Warning: sprmTWidthIndent: unsupported units of measurement"; 
+        }  
+        //value is expressed in percentage of page/table, etc.
+        if (ftsWidth == 2) {
+            wvlog << "Warning: sprmTWidthIndent: unsupported units of measurement"; 
+        }
+        //absolute width measured in twips
+        else if (ftsWidth == 3) {
+            widthIndent = wWidth;
+            wvlog << "widthIndent" << widthIndent;
+        }
+        break; 
+    }
+    // These are needed in case there are table properties inside the huge papx
+    case SPRM::sprmPHugePapx:
+    case SPRM::sprmPHugePapx2:
+    case SPRM::sprmPTableProps:
+    {
+        wvlog << "--> Parsing PrcData" << endl;
+        if ( dataStream ) {
+            dataStream->push();
+            dataStream->seek( readU32( ptr ), G_SEEK_SET );
+
+            const U16 count( dataStream->readU16() );
+            U8* grpprl = new U8[ count ];
+
+            dataStream->read( grpprl, count );
+            dataStream->pop();
+
+            apply( grpprl, count, style, styleSheet, dataStream, version );
+            delete [] grpprl;
+        }
+        else {
+            wvlog << "Error: no data stream!" << endl;
+        }
+        wvlog << "<-- PrcData parsed successfully" << endl;
+        break;
+    }
+    default:
+        wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+        break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
 }
