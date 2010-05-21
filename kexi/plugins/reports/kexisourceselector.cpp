@@ -23,7 +23,7 @@
 #include <KDebug>
 #include <QDomElement>
 
-#define NO_EXTERNAL_SOURCES
+//#define NO_EXTERNAL_SOURCES
 
 #ifdef NO_EXTERNAL_SOURCES
 #ifdef __GNUC__

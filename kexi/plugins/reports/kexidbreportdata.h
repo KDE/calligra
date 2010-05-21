@@ -37,18 +37,18 @@ private:
 
     KexiDB::Cursor *m_cursor;
     KexiDB::Connection *m_connection;
-    KexiDB::QuerySchema *m_schema;
-
+    KexiDB::QuerySchema *m_originalSchema;
+    KexiDB::QuerySchema *m_copySchema;
+    
     bool getSchema();
 
 public:
     KexiDBReportData(const QString &qstrSQL, KexiDB::Connection *conn);
     virtual ~KexiDBReportData();
 
-    //virtual void* connection() const;
-
     virtual QStringList fieldNames() const;
     virtual void setSorting(const QList<SortedField>& sorting);
+    virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
     virtual unsigned int fieldNumber(const QString &field) const;
