@@ -101,6 +101,11 @@ public:
      */
     bool isClipped( const KoShape *shape ) const;
 
+    /// reimplemented
+    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+    /// reimplemented
+    virtual bool inheritsTransform(const KoShape *shape) const;
+
     /**
      * Returns the number of shapes in this layout.
      */

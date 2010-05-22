@@ -998,6 +998,7 @@ Axis::Axis( PlotArea *parent )
 
     d->plotArea->parent()->addShape( d->title );
     d->plotArea->parent()->setClipped( d->title, true );
+    d->plotArea->parent()->setInheritsTransform(d->title, true);
 
     connect( d->plotArea, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,        SLOT( setGapBetweenBars( int ) ) );

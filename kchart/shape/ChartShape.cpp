@@ -379,11 +379,13 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->plotArea->plotAreaInit();
     d->plotArea->setZIndex( 0 );
     setClipped( d->plotArea, true );
+    setInheritsTransform(d->plotArea, true);
 
     // Configure the legend.
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
     setClipped( d->legend, true );
+    setInheritsTransform(d->legend, true);
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType( BarChartType );
@@ -418,6 +420,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
     setClipped( d->title, true );
+    setInheritsTransform(d->title, true);
 
     // Create the Subtitle and add it to the shape.
     d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
@@ -441,6 +444,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
     setClipped( d->subTitle, true );
+    setInheritsTransform(d->subTitle, true);
 
     // Create the Footer and add it to the shape.
     d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
@@ -464,6 +468,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
     setClipped( d->footer, true );
+    setInheritsTransform(d->footer, true);
 
     // Enable auto-resizing of chart labels
     foreach( KoShape *label, labels() ) {

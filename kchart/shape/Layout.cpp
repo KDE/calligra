@@ -42,11 +42,13 @@ public:
     Position pos;
     int weight;
     bool clipped;
+    bool inheritsTransform;
 
     LayoutData( Position _pos, int _weight )
         : pos( _pos ),
           weight( _weight ),
-          clipped( true ) {};
+          clipped( true ),
+          inheritsTransform(true) {}
 };
 
 Layout::Layout()
@@ -95,6 +97,16 @@ bool Layout::isClipped( const KoShape *shape ) const
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     return m_layoutItems.value( const_cast<KoShape*>(shape) )->clipped;
+}
+
+void Layout::setInheritsTransform(const KoShape *shape, bool inherit)
+{
+    m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform = inherit;
+}
+
+bool Layout::inheritsTransform(const KoShape *shape) const
+{
+    return m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform;
 }
 
 int Layout::count() const
