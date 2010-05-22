@@ -105,7 +105,7 @@ int main( int argc, char **argv )
                 kDebug() <<"Making backup...";;
                 KUrl backup( uOut );
                 backup.setPath( uOut.path() + '~' );
-                KIO::FileCopyJob *job = KIO::file_copy( uOut, backup,KIO::Overwrite | KIO::HideProgressInfo);
+                KIO::FileCopyJob *job = KIO::file_copy( uOut, backup, -1, KIO::Overwrite | KIO::HideProgressInfo);
                 job->exec();
             }
         }
