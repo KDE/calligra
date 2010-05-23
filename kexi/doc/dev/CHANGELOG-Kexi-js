@@ -14,8 +14,6 @@ CCMAIL:danny@commit-digest.org
 TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
 TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
 
-===================== Kexi 2.2  =====================
-
 TODO KoProperty:
 - mising border below the last item when its editor is visible
 - when started to change the editor's value:
@@ -100,18 +98,19 @@ select ob.o_id, o_sub_id, o_type, o_name, substr(o_data, 0, 40) from kexi__objec
 Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
-2010-05-08
-Table View
-*Optimize display of scaled image entries in table grid by caching
-**Images are now more smoothly scaled
-BUG:234347
-TODO: optimize: keep the checksum for pixmap in context of data itself
-TODO: optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
-
 
 **** TODO: setting "enabled" property to false does not work
+Forms
+*Image Box widget:
+**added new property "Smoothing". When "Scaled Contents" is on, image is scaled smoothly. On by default.
+**cache scaled pixmap between paint events
 
+===================== Kexi 2.2  =====================
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-05-18
+KexiDB
+*SQLite: recommended version is 3.6.23 for security reasons (secure-delete feature is available there)
 
 2010-05-16
 Table View
@@ -133,6 +132,14 @@ TODO: fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinst
 KexiDB
 *[security] SQLite: Set the secure-delete on, so SQLite overwrites deleted content with zeros. Works with 3.6.23. Earlier versions just ignore this pragma. See http://www.sqlite.org/pragma.html#pragma_secure_delete
 TODO: add connection flags to the driver and global setting to control the "secure delete" pragma
+
+2010-05-08
+Table View
+*Optimize display of scaled image entries in table grid by caching
+**Images are now more smoothly scaled
+BUG:234347
+TODO: optimize: keep the checksum for pixmap in context of data itself
+TODO: optimize: for now 100 items are cached; set proper cache size, e.g. based on the number of blob items visible on screen
 
 2010-05-04
 Forms
@@ -1482,6 +1489,8 @@ Kexi 2.0
 - updated widget/, formeditor/, main/
   More info at http://kexi-project.org/wiki/wikiview/index.php@Porting%20to%20Qt4.html
 - mimetype icons moved to KDE4-compatible hicolor
+
+~~~~~~~~~~~~~~~~ 1.1.3 bugfix release (with KOffice 1.6.3)  ~~~~~~~~~~~~~~~~
 
 2007-05-29
 Core
