@@ -48,6 +48,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
     Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId STORED false)
     Q_PROPERTY(uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents)
+    Q_PROPERTY(bool smoothTransformation READ smoothTransformation WRITE setSmoothTransformation)
     Q_PROPERTY(bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
 // Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
@@ -97,6 +98,8 @@ public:
     virtual bool isReadOnly() const;
 
     bool hasScaledContents() const;
+
+    bool smoothTransformation() const;
 
     Qt::Alignment alignment() const {
         return m_alignment;
@@ -171,6 +174,8 @@ public slots:
 //todo  void setOriginalFileName(const QString& name) { m_value.setOriginalFileName(name); }
 
     void setScaledContents(bool set);
+
+    void setSmoothTransformation(bool set);
 
     void setAlignment(Qt::Alignment alignment);
 
@@ -275,16 +280,22 @@ protected:
     Qt::Alignment m_alignment;
     Qt::FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
 //2.0 moved to FormWidgetInterface    bool m_designMode : 1;
-    bool m_readOnly : 1;
-    bool m_scaledContents : 1;
-    bool m_keepAspectRatio : 1;
-    bool m_insideSetData : 1;
-    bool m_setFocusOnButtonAfterClosingPopup : 1;
+
+    QPixmap m_currentScaledPixmap; //!< for caching
+    QRect m_currentRect;           //!< for caching
+    QPoint m_currentPixmapPos;     //!< for caching
+
+    bool m_readOnly;
+    bool m_scaledContents;
+    bool m_smoothTransformation;
+    bool m_keepAspectRatio;
+    bool m_insideSetData;
+    bool m_setFocusOnButtonAfterClosingPopup;
 //    bool m_lineWidthChanged : 1;
-    bool m_paletteBackgroundColorChanged : 1;
-    bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
-    bool m_dropDownButtonVisible : 1;
-    bool m_insideSetPalette : 1;
+    bool m_paletteBackgroundColorChanged;
+    bool m_paintEventEnabled; //!< used to disable paintEvent()
+    bool m_dropDownButtonVisible;
+    bool m_insideSetPalette;
 };
 
 #endif

@@ -79,6 +79,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 //2.0 moved to FormWidgetInterface      , m_designMode(designMode)
         , m_readOnly(false)
         , m_scaledContents(false)
+        , m_smoothTransformation(true)
         , m_keepAspectRatio(true)
         , m_insideSetData(false)
         , m_setFocusOnButtonAfterClosingPopup(false)
@@ -179,6 +180,9 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
         ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
         ///ok = KImageIO::canRead( type );
         ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true; //, type.toLatin1());
+        if (loadPixmap) {
+            m_currentScaledPixmap = QPixmap(); // clear cache
+        }
         if (!ok) {
             //! @todo inform about error?
         }
@@ -186,6 +190,7 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
     if (!ok) {
         m_valueMimeType.clear();
         m_pixmap = QPixmap();
+        m_currentScaledPixmap = QPixmap(); // clear cache
     }
     repaint();
 }
@@ -287,14 +292,29 @@ void KexiDBImageBox::setScaledContents(bool set)
 {
 //todo m_pixmapLabel->setScaledContents(set);
     m_scaledContents = set;
+    m_currentScaledPixmap = QPixmap();
+    repaint();
+}
+
+bool KexiDBImageBox::smoothTransformation() const
+{
+    return m_smoothTransformation;
+}
+
+void KexiDBImageBox::setSmoothTransformation(bool set)
+{
+    m_smoothTransformation = set;
+    m_currentScaledPixmap = QPixmap();
     repaint();
 }
 
 void KexiDBImageBox::setKeepAspectRatio(bool set)
 {
     m_keepAspectRatio = set;
-    if (m_scaledContents)
+    m_currentScaledPixmap = QPixmap();
+    if (m_scaledContents) {
         repaint();
+    }
 }
 
 QWidget* KexiDBImageBox::widget()
@@ -432,6 +452,7 @@ void KexiDBImageBox::handlePasteAction()
         buffer.open(IO_WriteOnly);
         if (m_pixmap.save(&buffer, "PNG")) {  // write pixmap into ba in PNG format
             setValueInternal(ba, true, false/* !loadPixmap */);
+            m_currentScaledPixmap = QPixmap(); // clear cache
         } else {
             setValueInternal(QByteArray(), true);
         }
@@ -710,8 +731,17 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         //clearing needed here because we may need to draw a pixmap with transparency
  //       p.fillRect(0, 0, width(), height(), bgBrush);
 
-        KexiUtils::drawPixmap(p, margins, QRect(QPoint(0, 0), internalSize), pixmap(), m_alignment,
-                              m_scaledContents, m_keepAspectRatio);
+        const QRect internalRect(QPoint(0, 0), internalSize);
+        if (m_currentScaledPixmap.isNull() || internalRect != m_currentRect) {
+            m_currentRect = internalRect;
+            m_currentScaledPixmap = KexiUtils::scaledPixmap(
+                margins, m_currentRect, pixmap(), m_currentPixmapPos, m_alignment,
+                m_scaledContents, m_keepAspectRatio,
+                m_smoothTransformation ? Qt::SmoothTransformation : Qt::FastTransformation);
+        }
+        p.drawPixmap(m_currentPixmapPos, m_currentScaledPixmap);
+//        KexiUtils::drawPixmap(p, margins, QRect(QPoint(0, 0), internalSize), pixmap(), m_alignment,
+//                              m_scaledContents, m_keepAspectRatio);
     }
     KexiFrame::drawFrame(&p);
 

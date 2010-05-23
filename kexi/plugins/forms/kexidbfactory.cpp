@@ -346,6 +346,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 // m_propDesc["pixmap"] = i18n("Image");
     m_propDesc["pixmapId"] = i18n("Image");
     m_propDesc["scaledContents"] = i18n("Scaled Contents");
+    m_propDesc["smoothTransformation"] = i18nc("Smoothing when contents are scaled", "Smoothing");
     m_propDesc["keepAspectRatio"] = i18nc("Keep Aspect Ratio (short)", "Keep Ratio");
 
     //hide classes that are replaced by db-aware versions
