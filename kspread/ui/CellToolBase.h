@@ -35,6 +35,8 @@
 #include "kspread_export.h"
 #include "Selection.h"
 
+class KoColor;
+
 namespace KSpread
 {
 class SheetView;
@@ -114,7 +116,7 @@ protected Q_SLOTS:
     void fontSize(int size);
     void increaseFontSize();
     void decreaseFontSize();
-    void changeTextColor();
+    void changeTextColor(const KoColor &);
     // -- horizontal alignment actions --
     void alignLeft(bool enable);
     void alignRight(bool enable);
@@ -131,7 +133,7 @@ protected Q_SLOTS:
     void borderAll();
     void borderRemove();
     void borderOutline();
-    void borderColor();
+    void borderColor(const KoColor &);
     // -- text layout actions --
     void wrapText(bool enable);
     void verticalText(bool enable);
@@ -147,7 +149,7 @@ protected Q_SLOTS:
     void toUpperCase();
     void toLowerCase();
     void firstLetterToUpperCase();
-    void changeBackgroundColor();
+    void changeBackgroundColor(const KoColor &);
     // -- cell merging actions --
     void mergeCells();
     void mergeCellsHorizontal();

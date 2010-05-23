@@ -98,6 +98,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoResourceManager.h>
+#include <KoColorPopupAction.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
@@ -237,9 +238,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("decreaseFontSize", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreaseFontSize()));
 
-    action = new KAction(KIcon("textcolor"), i18n("Text Color"), this);
-    addAction("changeTextColor", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(changeTextColor()));
+    action = new KoColorPopupAction(this);
+    action->setIcon(KIcon("format-text-color"));
+    action->setText(i18n("Text Color"));
+    action->setToolTip(i18n("Set the text color"));
+    addAction("textColor", action);
+    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeTextColor(const KoColor &)));
 
     // -- horizontal alignment actions --
 
@@ -333,10 +337,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));
     action->setToolTip(i18n("Set a border to the outline of the selected area"));
 
-    action = new KAction(KIcon("format-stroke-color"), i18n("Border Color"), this);
-    addAction("borderColor", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(borderColor()));
+    action = new KoColorPopupAction(this);
+    action->setIcon(KIcon("format-stroke-color"));
     action->setToolTip(i18n("Select a new border color"));
+    action->setText(i18n("Border Color"));
+    addAction("borderColor", action);
+    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(borderColor(const KoColor &)));
 
     // -- text layout actions --
 
@@ -412,10 +418,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(firstLetterToUpperCase()));
     action->setToolTip(i18n("Capitalize the first letter"));
 
-    action = new KAction(KIcon("format-fill-color"), i18n("Background Color"), this);
-    addAction("changeBackgroundColor", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(changeBackgroundColor()));
+    action = new KoColorPopupAction(this);
+    action->setIcon(KIcon("format-fill-color"));
     action->setToolTip(i18n("Set the background color"));
+    action->setText(i18n("Background Color"));
+    addAction("backgroundColor", action);
+    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeBackgroundColor(const KoColor &)));
 
     // -- cell merging actions --
 
@@ -1715,12 +1723,12 @@ void CellToolBase::decreaseFontSize()
     command->execute(canvas());
 }
 
-void CellToolBase::changeTextColor()
+void CellToolBase::changeTextColor(const KoColor &color)
 {
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Text Color"));
-    command->setFontColor(canvas()->resourceManager()->foregroundColor().toQColor());
+    command->setFontColor(color.toQColor());
     command->add(*selection());
     command->execute(canvas());
 }
@@ -1874,11 +1882,11 @@ void CellToolBase::borderOutline()
     command->execute(canvas());
 }
 
-void CellToolBase::borderColor()
+void CellToolBase::borderColor(const KoColor &color)
 {
     BorderColorCommand* command = new BorderColorCommand();
     command->setSheet(selection()->activeSheet());
-    command->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+    command->setColor(color.toQColor());
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2002,12 +2010,12 @@ void CellToolBase::firstLetterToUpperCase()
     command->execute(canvas());
 }
 
-void CellToolBase::changeBackgroundColor()
+void CellToolBase::changeBackgroundColor(const KoColor &color)
 {
     StyleCommand* command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Change Background Color"));
-    command->setBackgroundColor(canvas()->resourceManager()->backgroundColor().toQColor());
+    command->setBackgroundColor(color.toQColor());
     command->add(*selection());
     command->execute(canvas());
 }
