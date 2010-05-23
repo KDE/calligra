@@ -203,21 +203,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KToggleAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("bold", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(bold(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
     action = new KToggleAction(KIcon("format-text-italic"), i18n("Italic"), this);
     addAction("italic", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(italic(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
     action = new KToggleAction(KIcon("format-text-underline"), i18n("Underline"), this);
     addAction("underline", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(underline(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
     action = new KToggleAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
     addAction("strikeOut", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(strikeOut(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
 
     action = new KFontAction(i18n("Select Font..."), this);
     action->setIconText(i18n("Font"));
@@ -247,21 +247,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KToggleAction(KIcon("format-justify-left"), i18n("Align Left"), this);
     action->setIconText(i18n("Left"));
     addAction("alignLeft", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignLeft(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignLeft(bool)));
     action->setToolTip(i18n("Left justify the cell contents"));
     action->setActionGroup(groupAlign);
 
     action = new KToggleAction(KIcon("format-justify-center"), i18n("Align Center"), this);
     action->setIconText(i18n("Center"));
     addAction("alignCenter", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignCenter(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignCenter(bool)));
     action->setToolTip(i18n("Center the cell contents"));
     action->setActionGroup(groupAlign);
 
     action = new KToggleAction(KIcon("format-justify-right"), i18n("Align Right"), this);
     action->setIconText(i18n("Right"));
     addAction("alignRight", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignRight(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignRight(bool)));
     action->setToolTip(i18n("Right justify the cell contents"));
     action->setActionGroup(groupAlign);
 
@@ -271,21 +271,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KToggleAction(KIcon("text_top"), i18n("Align Top"), this);
     action->setIconText(i18n("Top"));
     addAction("alignTop", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignTop(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignTop(bool)));
     action->setToolTip(i18n("Align cell contents along the top of the cell"));
     action->setActionGroup(groupPos);
 
     action = new KToggleAction(KIcon("middle"), i18n("Align Middle"), this);
     action->setIconText(i18n("Middle"));
     addAction("alignMiddle", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignMiddle(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignMiddle(bool)));
     action->setToolTip(i18n("Align cell contents centered in the cell"));
     action->setActionGroup(groupPos);
 
     action = new KToggleAction(KIcon("text_bottom"), i18n("Align Bottom"), this);
     action->setIconText(i18n("Bottom"));
     addAction("alignBottom", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(alignBottom(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(alignBottom(bool)));
     action->setToolTip(i18n("Align cell contents along the bottom of the cell"));
     action->setActionGroup(groupPos);
 
@@ -343,13 +343,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KToggleAction(KIcon("multirow"), i18n("Wrap Text"), this);
     action->setIconText(i18n("Wrap"));
     addAction("wrapText", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(wrapText(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(wrapText(bool)));
     action->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
     action = new KToggleAction(KIcon("vertical_text"), i18n("Vertical Text"), this);
     action->setIconText(i18n("Vertical"));
     addAction("verticalText", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(verticalText(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(verticalText(bool)));
     action->setToolTip(i18n("Print cell contents vertically"));
 
     action = new KAction(KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"), i18n("Increase Indent"), this);
@@ -373,13 +373,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KToggleAction(KIcon("percent"), i18n("Percent Format"), this);
     action->setIconText(i18n("Percent"));
     addAction("percent", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(percent(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(percent(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
     action = new KToggleAction(KIcon("money"), i18n("Money Format"), this);
     action->setIconText(i18n("Money"));
     addAction("currency", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(currency(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(currency(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
     action = new KAction(KIcon("prec_plus"), i18n("Increase Precision"), this);
