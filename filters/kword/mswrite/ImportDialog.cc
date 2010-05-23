@@ -41,7 +41,6 @@ MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
 {
     setCaption(i18n("KWord's MS Write Import Filter"));
     setButtons(Ok | Cancel);
-    setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
     m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->availableEncodingNames());

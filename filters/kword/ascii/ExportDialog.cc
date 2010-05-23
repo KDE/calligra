@@ -42,7 +42,6 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
 
     setButtons(Ok | Cancel);
     setCaption(i18n("KWord's Plain Text Export Filter"));
-    setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
