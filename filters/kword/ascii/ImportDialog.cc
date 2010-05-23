@@ -20,12 +20,12 @@
 
 #include <QTextCodec>
 #include <QRadioButton>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kcharsets.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kapplication.h>
 #include <kcombobox.h>
 #include <kmessagebox.h>
 
@@ -43,8 +43,7 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
     setButtons(Ok | Cancel);
     setCaption(i18n("KWord's Plain Text Import Filter"));
-    setDefaultButton(KDialog::No);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )", "UTF-8");
@@ -63,7 +62,7 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
 AsciiImportDialog :: ~AsciiImportDialog()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec* AsciiImportDialog::getCodec() const
