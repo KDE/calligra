@@ -47,6 +47,7 @@ KoFilter::ConversionStatus read_off();
 KoFilter::ConversionStatus read_ext();
 KoFilter::ConversionStatus read_blip();
 KoFilter::ConversionStatus read_stretch();
+KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();

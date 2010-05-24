@@ -1299,7 +1299,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     - alphaMod (Alpha Modulate Effect) §20.1.8.5
     - alphaModFix (Alpha Modulate Fixed Effect) §20.1.8.6
     - alphaRepl (Alpha Replace Effect) §20.1.8.8
-    - biLevel (Bi-Level (Black/White) Effect) §20.1.8.11
+    - [done] biLevel (Bi-Level (Black/White) Effect) §20.1.8.11
     - blur (Blur Effect) §20.1.8.15
     - clrChange (Color Change Effect) §20.1.8.16
     - clrRepl (Solid Color Replacement) §20.1.8.18
@@ -1322,6 +1322,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     READ_PROLOGUE
 
     m_xlinkHref.clear();
+
     const QXmlStreamAttributes attrs(attributes());
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
@@ -1343,6 +1344,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
+            TRY_READ_IF(biLevel)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1383,6 +1385,43 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
             TRY_READ_IF(fillRect)
             ELSE_WRONG_FORMAT
         }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL biLevel
+//! tile handler (BiLevel (Black/White) Effect)
+/*! ECMA-376, 20.1.8.13, p. 3183
+
+  This element specifies a bi-level (black/white) effect. Input colors
+  whose luminance is less than the specified threshold value are
+  changed to black. Input colors whose luminance are greater than or
+  equal the specified value are set to white. The alpha effect values
+  are unaffected by this effect.
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ No child elements.
+
+ Attributes
+ - thresh (Threshold)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_biLevel()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("mono"));
+//! @todo thresh attribute (no real counterpoint in ODF)
+
+    while (!atEnd()) {
+        readNext();
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
