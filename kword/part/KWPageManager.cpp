@@ -265,10 +265,20 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         page.pageNumber = 1;
     }
 
-    if (pageStyle.isValid())
+    if (pageStyle.isValid()) {
         page.style = pageStyle;
-    if (!page.style.isValid())
+    } else {
+        if (page.style.isValid()) {
+            QString nextPageMasterStyleName = page.style.nextStyleName();
+            KWPageStyle nextPageMasterStyle = this->pageStyle(nextPageMasterStyleName);
+            if (nextPageMasterStyle.isValid()) {
+                page.style = nextPageMasterStyle;
+            }
+        }
+    }
+    if (!page.style.isValid()) {
         page.style = defaultPageStyle();
+    }
 
     if (page.pageNumber % 2 == 0) {
         if (page.style.pageLayout().bindingSide >= 0) // pageSpread

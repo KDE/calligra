@@ -385,8 +385,8 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
     case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
     case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
     case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderInset: pen.setStyle(Qt::DashDotLine); break; // FIXME
+    case KoBorder::BorderOutset: pen.setStyle(Qt::DashDotDotLine); break; // FIXME
 
     case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
     case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;

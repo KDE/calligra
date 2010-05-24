@@ -185,6 +185,12 @@ public:
     /// set the background/
     void setBackground(KoShapeBackground *background);
 
+    /// get the next page master style/
+    QString nextStyleName() const;
+
+    /// set the next page master style/
+    void setNextStyleName(const QString &nextStyleName);
+
     /**
      * Save this page style to ODF.
      */
@@ -193,7 +199,7 @@ public:
     /**
      * Load this page style from ODF
      */
-    void loadOdf(KoOdfLoadingContext &context, const KoXmlElement &style, KoResourceManager *documentResources);
+    void loadOdf(KoOdfLoadingContext &context, const KoXmlElement &masterNode, const KoXmlElement &style, KoResourceManager *documentResources);
 
     bool operator==(const KWPageStyle &other) const;
     inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }

@@ -63,6 +63,7 @@ void KWPageStylePrivate::clear()
         delete fullPageBackground;
     }
     fullPageBackground = 0;
+    nextStyleName.clear();
 }
 
 ///////////
@@ -314,7 +315,7 @@ KoGenStyle KWPageStyle::saveOdf() const
     return pageLayout;
 }
 
-void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &style, KoResourceManager *documentResources)
+void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &masterNode, const KoXmlElement &style, KoResourceManager *documentResources)
 {
     d->pageLayout.loadOdf(style);
     KoXmlElement props = KoXml::namedItemNS(style, KoXmlNS::style, "page-layout-properties");
@@ -380,6 +381,19 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &styl
             d->fullPageBackground->ref();
         }
     }
+
+    // Load next master-page style name
+    d->nextStyleName = masterNode.attributeNS(KoXmlNS::style, "next-style-name", QString());
+}
+
+QString KWPageStyle::nextStyleName() const
+{
+    return d->nextStyleName;
+}
+
+void KWPageStyle::setNextStyleName(const QString &nextStyleName)
+{
+    d->nextStyleName = nextStyleName;
 }
 
 KoText::Direction KWPageStyle::direction() const
