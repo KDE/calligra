@@ -2,6 +2,7 @@
 Name=Space Rotation
 Name[es]=Rotación del espacio
 Name[it]=Rotazione spaziale
+Name[ja]=空間回転
 Name[nds]=Ruumdreihen
 Name[nl]=Ruimte-rotatie
 Name[pt]=Rotação do Espaço
@@ -12,6 +13,7 @@ Name[x-test]=xxSpace Rotationxx
 Comment=Space Rotation Page Effect
 Comment[es]=Efecto de página de rotación del espacio
 Comment[it]=Effetto di transizione a rotazione spaziale
+Comment[ja]=空間回転ページ効果
 Comment[nds]=Ruumdreihen-Effekt
 Comment[nl]=Ruimte-rotatie-pagina-effect
 Comment[pt]=Efeito da Página de Rotação do Espaço

@@ -95,7 +95,6 @@ Comment[tr]=Bir sayfa başlığı ve iki metin sütununa sahip bir sunum (dikey 
 Comment[uk]=Презентація з заголовком сторінки і двома стовпчиками для тексту (книжкова орієнтація)
 Comment[wa]=Prezintaedje avou on tite di pådje eyet deus colones di tecse (metou d' astampé)
 Comment[x-test]=xxPresentation with a page title and two text columns (portrait-oriented)xx
-Comment[zh_CN]=带有页面标题和两列文本区域的演示文稿(纵向)
 Comment[zh_TW]=具有頁面標題與兩欄文字的簡報（縱向）
 Type=Link
 URL=.source/TwoColumnPortrait.kpt

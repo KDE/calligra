@@ -95,7 +95,6 @@ Comment[tr]=Sayfa başlığına sahip bir sunum (dikey sayfa düzeninde)
 Comment[uk]=Презентація з заголовком сторінки (книжкова орієнтація)
 Comment[wa]=Prezintaedje avou on tite di pådje (metou d' astampé)
 Comment[x-test]=xxPresentation with a page title (portrait-oriented)xx
-Comment[zh_CN]=带页面标题的演示文稿(纵向)
 Comment[zh_TW]=具有標題的簡報（縱向）
 Type=Link
 URL=.source/TitlePortrait.kpt

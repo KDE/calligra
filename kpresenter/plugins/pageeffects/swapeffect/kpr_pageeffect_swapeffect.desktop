@@ -2,6 +2,7 @@
 Name=Swap Effect
 Name[es]=Efecto de intercambio
 Name[it]=Scambio
+Name[ja]=入れ替え
 Name[nds]=Utwessel-Effekt
 Name[nl]=Omwissel-effect
 Name[pt]=Efeito de Troca
@@ -12,6 +13,7 @@ Name[x-test]=xxSwap Effectxx
 Comment=Swap Page Effect
 Comment[es]=Efecto de página de intercambio
 Comment[it]=Effetto di transizione a scambio
+Comment[ja]=入れ替えページ効果
 Comment[nds]=Utwessel-Effekt
 Comment[nl]=Pagina-omwisselen-effect
 Comment[pt]=Efeito da Página de Troca
