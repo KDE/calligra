@@ -20,18 +20,18 @@
 #ifndef MOCKANIMATION_H
 #define MOCKANIMATION_H
 
-#include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrShapeAnimationOld.h"
 #include "shapeanimations/KPrAnimationData.h"
 
 #include <KoViewConverter.h>
 
 #include <QPainter>
 
-class MockAppearAnimation : public KPrShapeAnimation
+class MockAppearAnimation : public KPrShapeAnimationOld
 {
 public:
     MockAppearAnimation( KoShape * shape, int step )
-    : KPrShapeAnimation( shape, step, Appear )
+    : KPrShapeAnimationOld( shape, step, Appear )
     {}
 
     KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
@@ -68,11 +68,11 @@ public:
     }
 };
 
-class MockDisappearAnimation : public KPrShapeAnimation
+class MockDisappearAnimation : public KPrShapeAnimationOld
 {
 public:
     MockDisappearAnimation( KoShape * shape, int step )
-    : KPrShapeAnimation( shape, step, Disappear )
+    : KPrShapeAnimationOld( shape, step, Disappear )
     {}
 
     KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )

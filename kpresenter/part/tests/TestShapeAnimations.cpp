@@ -36,22 +36,22 @@ void TestShapeAnimations::addRemove()
     KPrShapeAnimations animations;
     animations.add( m_animation1_2 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step2;
+    QMap<KoShape *, KPrShapeAnimationOld *> step2;
     step2.insert( m_animation1_2->shape(), m_animation1_2 );
 
     QVERIFY( step2 == animations.animations( 2 ) );
 
     MockDisappearAnimation animation1_2( ( KoShape * )1, 2 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step2replace;
+    QMap<KoShape *, KPrShapeAnimationOld *> step2replace;
     step2replace.insert( animation1_2.shape(), &animation1_2 );
 
     animations.add( &animation1_2 );
 
 #if 0
     // this is for printing out the data in case something might be wrong
-    QMap<KoShape *, KPrShapeAnimation *> animationData = animations.animations( 2 );
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( animationData.begin() );
+    QMap<KoShape *, KPrShapeAnimationOld *> animationData = animations.animations( 2 );
+    QMap<KoShape *, KPrShapeAnimationOld *>::iterator it( animationData.begin() );
     for (  ; it != animationData.end(); ++it )
     {
         qDebug() << "s" << it.key() << (  it.value() ? (  it.value() )->step() : -1 ) << it.value()->type();
@@ -82,35 +82,35 @@ void TestShapeAnimations::animations()
     animations.add( m_animation2_4 );
     animations.add( m_animation3_3 );
     
-    QVector<QMap<KoShape *, KPrShapeAnimation *> > animationVector;
+    QVector<QMap<KoShape *, KPrShapeAnimationOld *> > animationVector;
 
-    QMap<KoShape *, KPrShapeAnimation *> step0;
+    QMap<KoShape *, KPrShapeAnimationOld *> step0;
     step0.insert( m_animation1_2->shape(), 0 );
     step0.insert( m_animation2_0->shape(), m_animation2_0 );
     animationVector.push_back( step0 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step1;
+    QMap<KoShape *, KPrShapeAnimationOld *> step1;
     step1.insert( m_animation1_2->shape(), 0 );
     animationVector.push_back( step1 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step2;
+    QMap<KoShape *, KPrShapeAnimationOld *> step2;
     step2.insert( m_animation1_2->shape(), m_animation1_2 );
     step2.insert( m_animation2_2->shape(), m_animation2_2 );
     animationVector.push_back( step2 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step3;
+    QMap<KoShape *, KPrShapeAnimationOld *> step3;
     step3.insert( m_animation2_2->shape(), 0 );
     step3.insert( m_animation3_3->shape(), m_animation3_3 );
     animationVector.push_back( step3 );
 
-    QMap<KoShape *, KPrShapeAnimation *> step4;
+    QMap<KoShape *, KPrShapeAnimationOld *> step4;
     step4.insert( m_animation2_4->shape(), m_animation2_4 ); 
     step4.insert( m_animation3_3->shape(), 0 );
     animationVector.push_back( step4 );
 
     for ( int i = 0; i < animationVector.size(); ++i )
     {
-        QMap<KoShape *, KPrShapeAnimation *> animationData = animations.animations( i );
+        QMap<KoShape *, KPrShapeAnimationOld *> animationData = animations.animations( i );
         QVERIFY( animationData == animationVector[i] );
     }
 }

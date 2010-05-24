@@ -27,7 +27,7 @@
 #include "KPrAnimationData.h"
 
 KPrTranslateAnimation::KPrTranslateAnimation( KoShape * shape, int step, Type type )
-: KPrShapeAnimation( shape, step, type )
+: KPrShapeAnimationOld( shape, step, type )
 {
 }
 

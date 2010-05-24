@@ -40,7 +40,7 @@ class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrAnimationData;
 class KPrPageData;
-class KPrShapeAnimation;
+class KPrShapeAnimationOld;
 
 class KPrAnimationDirector : public QObject
 {
@@ -109,7 +109,7 @@ public:
      * @param shape which should be animated
      * @return pair of the animation and the animation data for the shape or a 0, 0 if there is no animation
      */
-    QPair<KPrShapeAnimation *, KPrAnimationData *> shapeAnimation( KoShape * shape );
+    QPair<KPrShapeAnimationOld *, KPrAnimationData *> shapeAnimation( KoShape * shape );
 
 protected:
     // set the page to be shon and update the UI
@@ -178,7 +178,7 @@ private:
 
     KPrPageEffectRunner * m_pageEffectRunner;
     // TODO remove when we read the effect from the page
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> > m_animations;
+    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> > m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
     int m_stepIndex;

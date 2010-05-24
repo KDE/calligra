@@ -182,7 +182,7 @@ KoOdf::DocumentType KPrDocument::documentType() const
     return KoOdf::Presentation;
 }
 
-void KPrDocument::addAnimation( KPrShapeAnimation * animation )
+void KPrDocument::addAnimation( KPrShapeAnimationOld * animation )
 {
     KoShape * shape = animation->shape();
 
@@ -200,7 +200,7 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
     applicationData->animations().insert( animation );
 }
 
-void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
+void KPrDocument::removeAnimation( KPrShapeAnimationOld * animation, bool removeFromApplicationData )
 {
     KoShape * shape = animation->shape();
 
@@ -223,8 +223,8 @@ void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
         // reinsert animations. this is needed on undo of a delete shape that had a animations
-        QSet<KPrShapeAnimation *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        QSet<KPrShapeAnimationOld *> animations = applicationData->animations();
+        for ( QSet<KPrShapeAnimationOld *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
             addAnimation( *it );
         }
     }
@@ -235,8 +235,8 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( page );
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
-        QSet<KPrShapeAnimation *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        QSet<KPrShapeAnimationOld *> animations = applicationData->animations();
+        for ( QSet<KPrShapeAnimationOld *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
             // remove animations, don't remove from shape application data so that it can be reinserted on undo.
             removeAnimation( *it, false );
         }

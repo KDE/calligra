@@ -27,7 +27,7 @@
 #include "KPrAnimationData.h"
 
 KPrAnimationDisappear::KPrAnimationDisappear( KoShape * shape, int step )
-: KPrShapeAnimation( shape, step, Disappear )
+: KPrShapeAnimationOld( shape, step, Disappear )
 {
 }
 

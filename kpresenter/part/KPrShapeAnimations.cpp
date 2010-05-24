@@ -27,7 +27,7 @@ KPrShapeAnimations::~KPrShapeAnimations()
 {
 }
 
-void KPrShapeAnimations::add( KPrShapeAnimation * animation )
+void KPrShapeAnimations::add( KPrShapeAnimationOld * animation )
 {
     ShapeAnimations::iterator it( m_shapeAnimations.find( boost::make_tuple( animation->shape(), animation->step() ) ) );
 
@@ -39,7 +39,7 @@ void KPrShapeAnimations::add( KPrShapeAnimation * animation )
     }
 }
 
-void KPrShapeAnimations::remove( KPrShapeAnimation * animation )
+void KPrShapeAnimations::remove( KPrShapeAnimationOld * animation )
 {
     ShapeAnimations::iterator it( m_shapeAnimations.find( boost::make_tuple( animation->shape(), animation->step() ) ) );
 
@@ -48,9 +48,9 @@ void KPrShapeAnimations::remove( KPrShapeAnimation * animation )
     }
 }
 
-QMap<KoShape *, KPrShapeAnimation *> KPrShapeAnimations::animations( int step ) const
+QMap<KoShape *, KPrShapeAnimationOld *> KPrShapeAnimations::animations( int step ) const
 {
-    QMap<KoShape *, KPrShapeAnimation *> animationData;
+    QMap<KoShape *, KPrShapeAnimationOld *> animationData;
 
     ShapeAnimations::const_iterator it = m_shapeAnimations.begin();
 
@@ -58,11 +58,11 @@ QMap<KoShape *, KPrShapeAnimation *> KPrShapeAnimations::animations( int step ) 
     {
         ShapeAnimations::const_iterator upper = m_shapeAnimations.upper_bound( boost::make_tuple( ( *it )->shape() ) );
 
-        KPrShapeAnimation * animation = *it;
+        KPrShapeAnimationOld * animation = *it;
         if ( step < animation->step() )
         {
             // if the first animation is not Appear we don't need an entry
-            if ( animation->type() == KPrShapeAnimation::Appear )
+            if ( animation->type() == KPrShapeAnimationOld::Appear )
             {
                 animationData.insert( animation->shape(), 0 );
             }
@@ -79,7 +79,7 @@ QMap<KoShape *, KPrShapeAnimation *> KPrShapeAnimations::animations( int step ) 
             else {
                 --lower;
                 // if the last animation that was done was a disappear effect it is no longer visible
-                if ( ( *lower )->type() == KPrShapeAnimation::Disappear )
+                if ( ( *lower )->type() == KPrShapeAnimationOld::Disappear )
                 {
                     animationData.insert( animation->shape(), 0 );
                 }

@@ -29,24 +29,24 @@
 #include <QMap>
 
 #include "kpresenter_export.h"
-#include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrShapeAnimationOld.h"
 
 struct shape_step_key : boost::multi_index::composite_key<
-    KPrShapeAnimation,
-    boost::multi_index::const_mem_fun<KPrShapeAnimation, KoShape *, &KPrShapeAnimation::shape>,
-    boost::multi_index::const_mem_fun<KPrShapeAnimation, int, &KPrShapeAnimation::step>
+    KPrShapeAnimationOld,
+    boost::multi_index::const_mem_fun<KPrShapeAnimationOld, KoShape *, &KPrShapeAnimationOld::shape>,
+    boost::multi_index::const_mem_fun<KPrShapeAnimationOld, int, &KPrShapeAnimationOld::step>
 >
 {
 };
 
 typedef boost::multi_index_container<
-    KPrShapeAnimation *,
+    KPrShapeAnimationOld *,
     boost::multi_index::indexed_by<
         boost::multi_index::ordered_unique<
             shape_step_key
         >,
         boost::multi_index::ordered_non_unique<
-            boost::multi_index::const_mem_fun<KPrShapeAnimation, int, &KPrShapeAnimation::step>
+            boost::multi_index::const_mem_fun<KPrShapeAnimationOld, int, &KPrShapeAnimationOld::step>
         >
     >
 > ShapeAnimations;
@@ -66,14 +66,14 @@ public:
      *
      * @parama animation the animation to insert
      */
-    void add( KPrShapeAnimation * animation );
+    void add( KPrShapeAnimationOld * animation );
 
     /**
      * Remove  animation to the animations
      *
      * @parama animation the animation to remove
      */
-    void remove( KPrShapeAnimation * animation );
+    void remove( KPrShapeAnimationOld * animation );
 
     /**
      * Get the animations for the given step
@@ -82,7 +82,7 @@ public:
      * @return A map of the shape -> animation if the animation is 0 the shape 
      *         is not visible
      */
-    QMap<KoShape *, KPrShapeAnimation *> animations( int step ) const;
+    QMap<KoShape *, KPrShapeAnimationOld *> animations( int step ) const;
 
     /**
      * Get a list of used steps in the animations

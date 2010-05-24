@@ -22,9 +22,9 @@
 #include <klocale.h>
 
 #include "KPrDocument.h"
-#include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrShapeAnimationOld.h"
 
-KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
+KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimationOld * animation )
 : m_doc( doc )
 , m_animation( animation )
 , m_deleteAnimation( true )

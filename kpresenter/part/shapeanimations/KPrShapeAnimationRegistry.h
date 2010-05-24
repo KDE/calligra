@@ -23,7 +23,7 @@
 #include <KoGenericRegistry.h>
 
 #include "KoXmlReaderForward.h"
-class KPrShapeAnimation;
+class KPrShapeAnimationOld;
 class KPrShapeAnimationFactory;
 
 class KPrShapeAnimationRegistry : public KoGenericRegistry<KPrShapeAnimationFactory *>
@@ -32,7 +32,7 @@ public:
     class Singleton;
     static KPrShapeAnimationRegistry * instance();
 
-    KPrShapeAnimation * createShapeAnimation( const KoXmlElement & element );
+    KPrShapeAnimationOld * createShapeAnimation( const KoXmlElement & element );
 
 private:
     friend class Singleton;

@@ -44,7 +44,7 @@ class KPrAnimationData;
  * The state of the animation is kept in the animationData and is 
  * passed to the ainmation when it is run e.g. on a special view.
  */
-class KPRESENTER_TEST_EXPORT KPrShapeAnimation
+class KPRESENTER_TEST_EXPORT KPrShapeAnimationOld
 {
 public:
     enum Type
@@ -53,7 +53,7 @@ public:
         Disappear
     };
 
-    virtual ~KPrShapeAnimation();
+    virtual ~KPrShapeAnimationOld();
 
     /**
      * Get a animation data object
@@ -138,7 +138,7 @@ protected:
      *
      * Only to be called form derived classes
      */
-    KPrShapeAnimation( KoShape * shape, int step, Type type );
+    KPrShapeAnimationOld( KoShape * shape, int step, Type type );
 
     // the shape for which is aminated
     KoShape * m_shape;

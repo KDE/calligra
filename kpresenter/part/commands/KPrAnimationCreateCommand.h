@@ -23,13 +23,13 @@
 #include <QUndoCommand>
 
 class KPrDocument;
-class KPrShapeAnimation;
+class KPrShapeAnimationOld;
 
 /// Command to create an animation
 class KPrAnimationCreateCommand : public QUndoCommand
 {
 public:
-    KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation );
+    KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimationOld * animation );
     virtual ~KPrAnimationCreateCommand();
 
     /// redo the command
@@ -39,7 +39,7 @@ public:
 
 private:
     KPrDocument * m_doc;
-    KPrShapeAnimation * m_animation;
+    KPrShapeAnimationOld * m_animation;
     bool m_deleteAnimation;
 };
 

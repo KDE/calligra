@@ -26,7 +26,7 @@
 #include "KPrShapeAnimations.h"
 #include "KPrPlaceholderShape.h"
 #include "KPrAnimationDirector.h"
-#include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrShapeAnimationOld.h"
 
 #include "kdebug.h"
 
@@ -48,7 +48,7 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
             painter.save();
             painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
             // animate shape
-            QPair<KPrShapeAnimation *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
+            QPair<KPrShapeAnimationOld *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
             if ( animation.first ) {
                 animation.first->animate( painter, converter, animation.second );
             }
@@ -61,7 +61,7 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 
 void KPrShapeManagerAnimationStrategy::adapt( KoShape * shape, QRectF & rect )
 {
-    QPair<KPrShapeAnimation *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
+    QPair<KPrShapeAnimationOld *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
     if ( animation.first ) {
         animation.first->animateRect( rect, animation.second );
     }

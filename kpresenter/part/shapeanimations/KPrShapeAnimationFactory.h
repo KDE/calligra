@@ -19,7 +19,7 @@
 #ifndef KPRSHAPEANIMATIONFACTORY_H
 #define KPRSHAPEANIMATIONFACTORY_H
 
-#include "KPrShapeAnimation.h"
+#include "KPrShapeAnimationOld.h"
 
 /**
  * Base class for shape animation factories
@@ -43,7 +43,7 @@ public:
      *
      * @param properties The properties for creating a page effect
      */
-    virtual KPrShapeAnimation * createShapeAnimation() const = 0;
+    virtual KPrShapeAnimationOld * createShapeAnimation() const = 0;
 
     /**
      * Get the id of the page effect

@@ -20,13 +20,13 @@
 #ifndef KPRTRANSLATEANIMATION_H
 #define KPRTRANSLATEANIMATION_H
 
-#include "KPrShapeAnimation.h"
+#include "KPrShapeAnimationOld.h"
 
 /**
  * This is the base class for all animations which are animated by
  * translating the painter.
  */
-class KPrTranslateAnimation : public KPrShapeAnimation
+class KPrTranslateAnimation : public KPrShapeAnimationOld
 {
 public:
     KPrTranslateAnimation( KoShape * shape, int step, Type type );

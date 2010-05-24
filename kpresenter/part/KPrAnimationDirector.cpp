@@ -23,6 +23,7 @@
 #include <QPaintEvent>
 #include <QWidget>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
 #include <KoShapeManagerPaintingStrategy.h>
@@ -42,7 +43,7 @@
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "shapeanimations/KPrAnimationData.h"
-#include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrShapeAnimationOld.h"
 
 #include <KoShapeLayer.h>
 #include <KoPAMasterPage.h>
@@ -100,6 +101,7 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
         bool finished = m_pageEffectRunner->isFinished();
         if ( !m_pageEffectRunner->paint( painter ) )
         {
+            kDebug(33001) << "XXXXXXXXXXXXXX delete old runner" << m_pageEffectRunner;
             delete m_pageEffectRunner;
             m_pageEffectRunner = 0;
 
@@ -236,11 +238,11 @@ bool KPrAnimationDirector::shapeShown( KoShape * shape )
     return !m_animations.contains( shape ) || m_animations[shape].first != 0;
 }
 
-QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimation( KoShape * shape )
+QPair<KPrShapeAnimationOld *, KPrAnimationData *> KPrAnimationDirector::shapeAnimation( KoShape * shape )
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.find( shape ) );
+    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.find( shape ) );
 
-    return ( it != m_animations.end() ) ? it.value() : QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 );
+    return ( it != m_animations.end() ) ? it.value() : QPair<KPrShapeAnimationOld *, KPrAnimationData *>( 0, 0 );
 }
 
 
@@ -350,12 +352,12 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
             shape->waitUntilReady( m_zoomHandler, false );
         }
 
-        m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, false );
+        m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, true );
     }
     foreach ( KoShape *shape, m_canvas->shapeManager()->shapes() ) {
         shape->waitUntilReady( m_zoomHandler, false );
     }
-    m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
+    m_canvas->shapeManager()->paint( painter, m_zoomHandler, true );
 }
 
 bool KPrAnimationDirector::nextStep()
@@ -395,7 +397,9 @@ bool KPrAnimationDirector::nextStep()
             newPainter.setRenderHint( QPainter::Antialiasing );
             paintStep( newPainter );
 
+            KPrPageEffectRunner *oldRunner = m_pageEffectRunner;
             m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
+            kDebug(33001) << "XXXXXXXXXXXXXX new pageEffecrRunner old:" << oldRunner << "new:" << m_pageEffectRunner;
             startTimeLine( effect->duration() );
         }
         else {
@@ -459,10 +463,10 @@ void KPrAnimationDirector::insertAnimations( KPrPageData * controller, KoShapeMa
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
     QRectF pageRect( 0, 0, pageLayout.width, pageLayout.height );
 
-    QMap<KoShape *, KPrShapeAnimation *> animations = controller->animations().animations( m_steps[m_stepIndex] );
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( animations.begin() );
+    QMap<KoShape *, KPrShapeAnimationOld *> animations = controller->animations().animations( m_steps[m_stepIndex] );
+    QMap<KoShape *, KPrShapeAnimationOld *>::iterator it( animations.begin() );
     for ( ; it != animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value();
+        KPrShapeAnimationOld * animation = it.value();
         if ( animation ) {
             m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager, pageRect ) ) );
             m_hasAnimation = true;
@@ -471,14 +475,14 @@ void KPrAnimationDirector::insertAnimations( KPrPageData * controller, KoShapeMa
             }
         }
         else {
-            m_animations.insert( it.key(), QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 ) );
+            m_animations.insert( it.key(), QPair<KPrShapeAnimationOld *, KPrAnimationData *>( 0, 0 ) );
         }
     }
 }
 
 void KPrAnimationDirector::clearAnimations()
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
         delete it.value().second;
     }
@@ -502,9 +506,9 @@ void KPrAnimationDirector::animate()
 
 void KPrAnimationDirector::finishAnimations()
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value().first;
+        KPrShapeAnimationOld * animation = it.value().first;
         if ( animation ) {
             animation->finish( it.value().second );
             it.value().second->m_shapeManager->notifyShapeChanged( it.key() );
@@ -515,9 +519,9 @@ void KPrAnimationDirector::finishAnimations()
 
 void KPrAnimationDirector::animateShapes( int currentTime )
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value().first;
+        KPrShapeAnimationOld * animation = it.value().first;
         if ( animation ) {
             animation->next( currentTime, it.value().second );
             it.value().second->m_shapeManager->notifyShapeChanged( it.key() );

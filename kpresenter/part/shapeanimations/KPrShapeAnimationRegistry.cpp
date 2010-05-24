@@ -57,7 +57,7 @@ KPrShapeAnimationRegistry * KPrShapeAnimationRegistry::instance()
     return &( singleton->q );
 }
 
-KPrShapeAnimation * KPrShapeAnimationRegistry::createShapeAnimation( const KoXmlElement & element )
+KPrShapeAnimationOld * KPrShapeAnimationRegistry::createShapeAnimation( const KoXmlElement & element )
 {
     Q_UNUSED(element);
     //TODO

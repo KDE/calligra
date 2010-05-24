@@ -20,12 +20,12 @@
 #ifndef KPRANIMATIONDISAPPEAR_H
 #define KPRANIMATIONDISAPPEAR_H
 
-#include "KPrShapeAnimation.h"
+#include "KPrShapeAnimationOld.h"
 
 #include <QPointF>
 #include <QRectF>
 
-class KPrAnimationDisappear : public KPrShapeAnimation
+class KPrAnimationDisappear : public KPrShapeAnimationOld
 {
 public:
     KPrAnimationDisappear( KoShape * shape, int step );
