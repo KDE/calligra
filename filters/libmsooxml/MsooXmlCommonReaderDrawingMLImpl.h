@@ -1422,8 +1422,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
 
 #undef CURRENT_EL
 #define CURRENT_EL biLevel
-//! tile handler (BiLevel (Black/White) Effect)
-/*! ECMA-376, 20.1.8.13, p. 3183
+//! biLevel handler (BiLevel (Black/White) Effect)
+/*! ECMA-376, 20.1.8.13, p. 3193
 
   This element specifies a bi-level (black/white) effect. Input colors
   whose luminance is less than the specified threshold value are
