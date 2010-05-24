@@ -435,12 +435,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
     - extLst (Extension List) §20.1.2.2.15
     - spLocks (Shape Locks) §20.1.2.2.34
  Attributes:
-    - txBox (Text Box)
+    - [done] txBox (Text Box)
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    // Read attributes
+    // FIXME: Make a member?
+    bool isTextBox = MSOOXML::Utils::convertBooleanAttr(attrs.value("txBox").toString(), false);
+
+    // Read child elements
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -538,15 +545,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body = drawFrameBuf.originalWriter();
 
         body->startElement("draw:frame"); // CASE #P475
+
 #ifdef PPTXXMLSLIDEREADER_H
         body->addAttribute("draw:layer", "layout");
+
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 //todo        body->addAttribute("presentation:style-name", styleName);
 # ifdef HARDCODED_PRESENTATIONSTYLENAME
         d->presentationStyleNameCount++;
         body->addAttribute("presentation:style-name",
                            d->presentationStyleNameCount == 1 ? "pr1" : "pr2");
-# endif
+# endif // HARDCODED_PRESENTATIONSTYLENAME
 
 // CASE #P476
         body->addAttribute("draw:id", m_cNvPrId);
@@ -564,11 +573,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             body->addAttribute("draw:transform", rot);
         }
 
+        // FIXME: Adapt this to apply to the current graphics style and use that.
+        //if (m_currentColor.isValid()) {
+        //  m_currentDrawStyle.addProperty("fo:background-color", m_currentColor.name());
+        //  m_currentColor = QColor();
+        //}
+
 #else
 #ifdef __GNUC__
 #warning TODO: docx
 #endif
-#endif
+#endif // PPTXXMLSLIDEREADER_H
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -613,7 +628,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     - pattFill (Pattern Fill) §20.1.8.47
     - prstGeom (Preset geometry) §20.1.9.18
     - scene3d (3D Scene Properties) §20.1.4.1.26
-    - solidFill (Solid Fill) §20.1.8.54
+    - [done] solidFill (Solid Fill) §20.1.8.54
     - sp3d (Apply 3D shape properties) §20.1.5.12
     - [done] xfrm (2D Transform for Individual Objects) §20.1.7.6
  Attributes:
@@ -624,6 +639,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     bool xfrm_read = false;
+    bool solidFill_read = false;
     m_noFill = false;
     while (!atEnd()) {
         readNext();
@@ -633,7 +649,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(xfrm)
                 xfrm_read = true;
             }
-            if ( qualifiedName() == QLatin1String("a:ln") ) {
+            else if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                solidFill_read = true;
+            }
+            else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
@@ -670,8 +690,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 #endif
 
+    if (solidFill_read) {
+        
+    }
+
     READ_EPILOGUE
 }
+
+
+// ================================================================
+//                             NameSpace "a"
+// ================================================================
+
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
@@ -1937,10 +1967,10 @@ This element especifies a solid color fill.
     - spPr (§21.2.2.197)
     - spPr (§21.3.2.23)
     - spPr (§21.4.3.7)
-    - spPr (§20.1.2.2.35)
+    - [done] spPr (§20.1.2.2.35)
     - spPr (§20.2.2.6)
     - spPr (§20.5.2.30)
-    - spPr (§19.3.1.44)
+    - [done] spPr (§19.3.1.44)
     - tblPr (§21.1.3.15)
     - tcPr (§21.1.3.17)
     - uFill (§21.1.2.3.12)
