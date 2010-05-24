@@ -45,6 +45,7 @@
 #include "pagelayout/KPrPlaceholder.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
+#include "animations/KPrAnimationLoader.h"
 
 #include <kdebug.h>
 
@@ -116,6 +117,32 @@ void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
 KPrPageLayout * KPrPage::layout() const
 {
     return placeholders().layout();
+}
+
+bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    if (!KoPAPageBase::loadOdf(element, context)) {
+        return false;
+    }
+
+    KoXmlElement animation = KoXml::namedItemNS(element, KoXmlNS::anim, "par");
+
+    if (!animation.isNull()) {
+        KoXmlElement animationElement;
+        forEachElement(animationElement, animation) {
+            if (animationElement.tagName() == "seq" && animationElement.namespaceURI() == KoXmlNS::anim) {
+                QString nodeType(animationElement.attributeNS(KoXmlNS::presentation, "node-type"));
+                if (nodeType == "main-sequence") {
+                    KPrAnimationLoader al;
+                    al.loadOdf(animationElement, context);
+                }
+                else {
+                    // not yet supported
+                }
+            }
+        }
+    }
+    return true;
 }
 
 void KPrPage::saveOdfPageContent( KoPASavingContext & paContext ) const

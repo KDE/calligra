@@ -86,6 +86,9 @@ public:
 
     QString declaration(KPrDeclarations::Type type) const;
 
+    /// reimplemented
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
 protected:
     /// reimplemented
     virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
