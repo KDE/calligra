@@ -1209,11 +1209,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             raiseElNotFoundError("a:ext");
             return KoFilter::WrongFormat;
         }
-        m_currentShapeProperties->x = m_svgX;
-        m_currentShapeProperties->y = m_svgY;
-        m_currentShapeProperties->width = m_svgWidth;
-        m_currentShapeProperties->height = m_svgHeight;
-        m_currentShapeProperties->rot = m_rot;
+        if(m_currentShapeProperties != NULL) {
+            m_currentShapeProperties->x = m_svgX;
+            m_currentShapeProperties->y = m_svgY;
+            m_currentShapeProperties->width = m_svgWidth;
+            m_currentShapeProperties->height = m_svgHeight;
+            m_currentShapeProperties->rot = m_rot;
+        }
         kDebug() << "Saved to m_currentShapeProperties";
     }
 #endif
