@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSHAPEANIMATION_H
-#define KPRSHAPEANIMATION_H
+#include "KPrShapeAnimation.h"
 
-KPrShapeAnimation::KPrShapeAnimation()
+KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
+: m_shape(shape)
+, m_textBlockData(textBlockData)
 {
 }
 
@@ -30,6 +31,7 @@ KPrShapeAnimation::~KPrShapeAnimation()
 
 bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    return false;
 }
 
 void KPrShapeAnimation::saveOdf(KoShapeSavingContext &context) const
@@ -38,11 +40,6 @@ void KPrShapeAnimation::saveOdf(KoShapeSavingContext &context) const
 
 void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step) const
 {
-}
-
-NodeType KPrShapeAnimation::nodeType() const
-{
-    return m_nodeType;
 }
 
 // we could have a loader that would put the data into the correct pos

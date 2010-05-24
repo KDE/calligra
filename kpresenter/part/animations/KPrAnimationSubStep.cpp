@@ -17,38 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSHAPEANIMATION_H
-#define KPRSHAPEANIMATION_H
 
-#include <QParallelAnimationGroup>
-#include <QPair>
+#include "KPrAnimationSubStep.h"
 
-class KoShape;
-class KoTextBlockData;
-class KoXmlElement;
-class KoShapeLoadingContext;
-class KoShapeSavingContext;
-class KPrAnimationCache;
-
-class KPrShapeAnimation : public QParallelAnimationGroup
+KPrAnimationSubStep::KPrAnimationSubStep()
 {
-public:
-    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
-    virtual ~KPrShapeAnimation();
+}
 
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    void saveOdf(KoShapeSavingContext &context) const;
-
-    void init(KPrAnimationCache *animationCache, int step) const;
-
-    /**
-     * Read the value from the first KPrAnimationBase object
-     */
-    //QPair<KoShape *, KoTextBlockData *> animationShape() const;
-
-private:
-    KoShape *m_shape;
-    KoTextBlockData *m_textBlockData;
-};
-
-#endif /* KPRSHAPEANIMATION_H */
+KPrAnimationSubStep::~KPrAnimationSubStep()
+{
+}

@@ -17,15 +17,43 @@
  * Boston, MA 02110-1301, USA.
  */
 
-KPrAnimationLoader();
+#include "KPrAnimationLoader.h"
+
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoTextBlockData.h>
+
+#include <QVariant>
+#include <QDomDocument>
+#include <QDomNode>
+
+#include <kdebug.h>
+
+#include "KPrShapeAnimation.h"
+#include "KPrAnimationBase.h"
+#include "KPrAnimationFactory.h"
+#include "KPrAnimationStep.h"
+#include "KPrAnimationSubStep.h"
+
+KPrAnimationLoader::KPrAnimationLoader()
 {
 }
 
-~KPrAnimationLoader();
+KPrAnimationLoader::~KPrAnimationLoader()
 {
 }
 
-bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+void debugXml(const QString & pos, const KoXmlElement &element)
+{
+    QByteArray array;
+    QDomDocument doc;
+    QTextStream st(&array);
+    st << element.asQDomNode(doc);
+    kDebug() << pos << array;
+}
+
+bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // have an overall structure for animations each step needs to be in its own QSequentialAnimationGroup subclass
     // use KPrAnimationStep for that
@@ -36,9 +64,12 @@ bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
             KPrAnimationStep *animationStep = new KPrAnimationStep();
 
             KoXmlElement parElement;
-            forEachElement(parElement, e) {
-                if (parElement.tagName() == "par" && parElement.namespaceURI() == KoXmlNS::anim) {
-                    loadOdfAnimation(animationStep, parElement, context);
+            forEachElement(parElement, stepElement) {
+                KoXmlElement innerParElement;
+                forEachElement(innerParElement, parElement) {
+                    if (innerParElement.tagName() == "par" && innerParElement.namespaceURI() == KoXmlNS::anim) {
+                        loadOdfAnimation(animationStep, innerParElement, context);
+                    }
                 }
             }
             m_animations.append(animationStep);
@@ -48,32 +79,81 @@ bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
             // accoring to spec there should be onla par elements 
         }
     }
+
+    debug();
+
+    return true;
 }
 
-bool loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
+void KPrAnimationLoader::debug()
+{
+    foreach(KPrAnimationStep *step, m_animations) {
+        kDebug() << "step";
+        debug(step, 1);
+    }
+}
 
-    KPrShapeAnimation *animation = new KPrShapeAnimation();
+void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
+{
+    QString indent;
+    for (int i = 0; i < level; ++i) {
+        indent += ' ';
+    }
+    if (KPrAnimationStep *a = dynamic_cast<KPrAnimationStep*>(animation)) {
+        kDebug() << indent + "animation step";
+    }
+    else if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+        kDebug() << indent + "animation sub step";
+    }
+    else if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+        kDebug() << indent + "shape animation";
+    }
+    else if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase*>(animation)) {
+        kDebug() << indent + "animation base";
+    }
 
+    if (QAnimationGroup *group = dynamic_cast<QAnimationGroup*>(animation)) {
+        for (int i = 0; i < group->animationCount(); ++i) {
+            debug(group->animationAt(i), level + 1);
+        }
+    }
+}
+
+bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
 
+    kDebug() << "nodeType:" << nodeType;
+
+    KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
         // if there is allready an aniation create a new step
         if (animationStep->animationCount() != 0) {
             m_animations.append(animationStep);
             animationStep = new KPrAnimationStep();
         }
-        animationStep.addAnimation(new QParallelAnimationGroup)
-        // add par
+        subStep = new KPrAnimationSubStep();
+        animationStep->addAnimation(subStep);
         // add par animation
     }
     else if (nodeType == "after-previous") {
         // add to sequence
         // add par
+        subStep = new KPrAnimationSubStep();
+        animationStep->addAnimation(subStep);
         // add par animation
     }
     else {
         if (nodeType != "with-previous") {
             kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
+        }
+        // use the current substep
+        if (animationStep->animationCount()) {
+            subStep = dynamic_cast<KPrAnimationSubStep*>(animationStep->animationAt(animationStep->animationCount() - 1));
+        }
+        else {
+            subStep = new KPrAnimationSubStep();
+            animationStep->addAnimation(subStep);
         }
         // add par to current par
     }
@@ -81,24 +161,32 @@ bool loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &eleme
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is 
     KoXmlElement e;
-    foreach (e, element) {
+    forEachElement(e, element) {
+        // TODO add a check that the shape animation is still the correct one
         if (shapeAnimation == 0) {
             QString targetElement(e.attributeNS(KoXmlNS::smil, "targetElement", QString()));
             if (!targetElement.isEmpty()) {
                 KoShape *shape = 0;
-                KoTextBlockData *textBlockData;
+                KoTextBlockData *textBlockData = 0;
 
                 if (element.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text") {
                     QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
                     shape = pair.first;
                     textBlockData = pair.second.value<KoTextBlockData *>();
+                    kDebug() << "subitem text" << textBlockData;
                 }
                 else {
                     shape = context.shapeById(targetElement);
                 }
+                kDebug() << "shape:" << shape << "textBlockData" << textBlockData;
 
                 if (shape) {
                     shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
+                }
+                else {
+                    // shape animation not created
+                    // TODO logging
+                    continue;
                 }
             }
         }
@@ -108,4 +196,9 @@ bool loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &eleme
             shapeAnimation->addAnimation(animation);
         }
     }
+
+    if (shapeAnimation) {
+        subStep->addAnimation(shapeAnimation);
+    }
+    return true;
 }

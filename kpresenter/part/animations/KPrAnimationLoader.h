@@ -23,6 +23,9 @@
 #include <QList>
 
 class KPrAnimationStep;
+class KoShapeLoadingContext;
+class KoXmlElement;
+class QAbstractAnimation;
 
 class KPrAnimationLoader
 {
@@ -34,6 +37,10 @@ public:
 
 protected:
     bool loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    void debug();
+
+    void debug(QAbstractAnimation *animation, int level);
 
 private:
     QList<KPrAnimationStep *> m_animations;
