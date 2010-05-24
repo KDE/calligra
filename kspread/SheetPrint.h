@@ -35,6 +35,7 @@
 #include <KoZoomHandler.h>
 
 #include "kspread_export.h"
+#include "HeadFoot.h"
 #include "PrintSettings.h"
 
 class KoGenStyles;
@@ -278,7 +279,7 @@ public:
     /**
      * Returns the head and foot line of the print out
      */
-    KoHeadFoot headFootLine() const;
+    HeadFoot headFootLine() const;
 
     /**
      * Sets the head and foot line of the print out

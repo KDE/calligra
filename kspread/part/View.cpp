@@ -2007,7 +2007,7 @@ void View::paperLayoutDlg()
 
     KoPageLayout pl = print->settings()->pageLayout();
 
-    KoHeadFoot hf;
+    HeadFoot hf;
     hf.headLeft  = print->localizeHeadFootLine(print->headLeft());
     hf.headRight = print->localizeHeadFootLine(print->headRight());
     hf.headMid   = print->localizeHeadFootLine(print->headMid());

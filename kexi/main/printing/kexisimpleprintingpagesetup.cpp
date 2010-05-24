@@ -507,8 +507,6 @@ void KexiSimplePrintingPageSetup::slotChangeTitleFont()
 
 void KexiSimplePrintingPageSetup::slotChangePageSizeAndMargins()
 {
-    KoHeadFoot headfoot; //dummy
-
 #ifdef __GNUC__
 #warning TODO reenable when KoPageLayoutDia is ported
 #else

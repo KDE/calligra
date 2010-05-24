@@ -811,9 +811,9 @@ QString SheetPrint::delocalizeHeadFootLine(const QString &_text)
 }
 
 
-KoHeadFoot SheetPrint::headFootLine() const
+HeadFoot SheetPrint::headFootLine() const
 {
-    KoHeadFoot hf;
+    HeadFoot hf;
     hf.headLeft  = m_headLeft;
     hf.headRight = m_headRight;
     hf.headMid   = m_headMid;

@@ -295,8 +295,8 @@ protected:
     QString m_sheetName;
     KoPageLayout m_pl;
     KoPageLayout m_plRedo;
-    KoHeadFoot m_hf;
-    KoHeadFoot m_hfRedo;
+    HeadFoot m_hf;
+    HeadFoot m_hfRedo;
     KoUnit m_unit;
     KoUnit m_unitRedo;
     bool m_printGrid;
