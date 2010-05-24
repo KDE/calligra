@@ -25,7 +25,7 @@
 
 #include <QSet>
 
-class KPrShapeAnimation;
+class KPrShapeAnimationOld;
 
 class KPrShapeApplicationData : public KoShapeApplicationData
 {
@@ -33,11 +33,11 @@ public:
     KPrShapeApplicationData();
     ~KPrShapeApplicationData();
 
-    QSet<KPrShapeAnimation *> & animations();
+    QSet<KPrShapeAnimationOld *> & animations();
 
 private:
     // stores the animations of a shape
-    QSet<KPrShapeAnimation *> m_animations;
+    QSet<KPrShapeAnimationOld *> m_animations;
 };
 
 
