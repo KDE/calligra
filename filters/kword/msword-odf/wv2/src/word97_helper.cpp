@@ -149,7 +149,7 @@ typedef enum
     sprmTUndocumented1 = 0x3615,
     sprmPWHeightAbs = 0x442B,
     sprmPDcs = 0x442C,
-    sprmPShd = 0x442D,
+    sprmPShd80 = 0x442D,
     sprmPWAlignFont = 0x4439,
     sprmPFrameTextFlow = 0x443A,
     sprmPIstd = 0x4600,
@@ -277,6 +277,7 @@ typedef enum
     sprmPAnld = 0xC63E,
     sprmPPropRMark = 0xC63F,
     sprmPNumRM = 0xC645,
+    sprmPShd = 0xC64D,
     sprmPUndocumented1 = 0xC64E,
     sprmPUndocumented2 = 0xC64F,
     sprmPUndocumented3 = 0xC650,
@@ -456,7 +457,7 @@ U16 word6toWord8( U8 sprm )
         sprmPBrcTop10, sprmPBrcLeft10, sprmPBrcBottom10, sprmPBrcRight10, sprmPBrcBetween10,
         sprmPBrcBar10, sprmPDxaFromText10, sprmPWr, sprmPBrcTop, sprmPBrcLeft,
         sprmPBrcBottom, sprmPBrcRight, sprmPBrcBetween, sprmPBrcBar, sprmPFNoAutoHyph,
-        sprmPWHeightAbs, sprmPDcs, sprmPShd, sprmPDyaFromText, sprmPDxaFromText,
+        sprmPWHeightAbs, sprmPDcs, sprmPShd80, sprmPDyaFromText, sprmPDxaFromText,
         sprmPFLocked, sprmPFWidowControl, sprmPRuler, sprmNoop, sprmNoop,
         sprmNoop, sprmNoop, sprmNoop, sprmNoop, sprmNoop,
         sprmNoop, sprmNoop, sprmNoop, sprmNoop, sprmNoop,
@@ -943,8 +944,11 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPDcs:
             dcs.readPtr( ptr );
             break;
-        case SPRM::sprmPShd:
+        case SPRM::sprmPShd80:
             shd.readPtr( ptr );
+            break;
+        case SPRM::sprmPShd:
+            shd.readSHDOperandPtr( ptr );       // and read the SHDOperand structure into SHD
             break;
         case SPRM::sprmPDyaFromText:
             dyaFromText = readS16( ptr );

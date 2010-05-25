@@ -557,6 +557,9 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
     shifterU16>>=5;
     ipat=shifterU16;
 
+    // call just to set the member variable shdAutoOrNill
+    isShdAutoOrNill();
+
     if(preservePos)
         stream->pop();
     return true;
@@ -576,6 +579,9 @@ void SHD::readPtr(const U8 *ptr) {
     cvBack=Word97::icoToRGB(ico);
     shifterU16>>=5;
     ipat=shifterU16;
+
+    // call just to set the member variable shdAutoOrNill
+    isShdAutoOrNill();
 }
 
 void SHD::read90Ptr(const U8 *ptr) {
@@ -603,6 +609,55 @@ void SHD::read90Ptr(const U8 *ptr) {
     cvBack=(cvauto<<24)|(r<<16)|(g<<8)|(b);
     shifterU16=readU16(ptr);
     ipat=shifterU16;
+
+    // call just to set the member variable shdAutoOrNill
+    isShdAutoOrNill();
+}
+
+void SHD::readSHDOperandPtr(const U8 *ptr) {
+
+    U16 shifterU16;
+    U8 r,g,b,cvauto;
+
+    U8 cb = readU8( ptr );      // read the cb property and do nothing with it
+
+    cvauto=readU8(ptr);
+    ptr+=sizeof(U8);
+    r=readU8(ptr);
+    ptr+=sizeof(U8);
+    g=readU8(ptr);
+    ptr+=sizeof(U8);
+    b=readU8(ptr);
+    ptr+=sizeof(U8);
+    cvFore=(cvauto<<24)|(r<<16)|(g<<8)|(b);
+    cvauto=readU8(ptr);
+    ptr+=sizeof(U8);
+    r=readU8(ptr);
+    ptr+=sizeof(U8);
+    g=readU8(ptr);
+    ptr+=sizeof(U8);
+    b=readU8(ptr);
+    ptr+=sizeof(U8);
+    cvBack=(cvauto<<24)|(r<<16)|(g<<8)|(b);
+    shifterU16=readU16(ptr);
+    ipat=shifterU16;
+
+    // call just to set the member variable shdAutoOrNill
+    isShdAutoOrNill();
+}
+
+bool SHD::isShdAutoOrNill()
+{
+    shdAutoOrNill = false;
+
+    if (cvFore == 0xff000000 && cvBack == 0xff000000 && ipat == 0x0000) {
+        shdAutoOrNill = true;
+    }
+    if (cvFore == 0xffffffff && cvBack == 0xffffffff && (ipat == 0x0000 || ipat == 0xffff)) {
+        shdAutoOrNill = true;
+    }
+
+    return shdAutoOrNill;
 }
 
 bool SHD::write(OLEStreamWriter *stream, bool preservePos) const {
@@ -626,6 +681,9 @@ void SHD::clear() {
     cvFore=0xff000000;
     cvBack=0xff000000;
     ipat=0;
+
+    // call just to set the member variable shdAutoOrNill
+    isShdAutoOrNill();
 }
 
 void SHD::dump() const

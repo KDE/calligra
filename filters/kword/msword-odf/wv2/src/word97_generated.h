@@ -565,6 +565,11 @@ struct SHD {
     void read90Ptr(const U8 *ptr);
 
     /**
+     * This method reads the SHDOperand struct from a pointer
+     */
+    void readSHDOperandPtr(const U8 *ptr);
+
+    /**
      * Same as reading :)
      */
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
@@ -657,6 +662,12 @@ struct SHD {
      */
     U16 ipat;
 
+    /**
+     * returns if this is ShdAuto or ShdNill - specifies that no shading is applied
+     */
+    bool isShdAutoOrNill();
+
+    bool shdAutoOrNill;     /// holds the last value of isShdAutoOrNill() call
 }; // SHD
 
 bool operator==(const SHD &lhs, const SHD &rhs);

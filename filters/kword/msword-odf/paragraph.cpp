@@ -457,11 +457,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("style:writing-mode", "lr-tb", KoGenStyle::ParagraphType);
     }
 
-    if (!refPap || refPap->shd.cvBack != pap.shd.cvBack) {
-        if (pap.shd.cvBack != 0xff000000)
+    if (!refPap ||                                                  // if there is no parent style OR
+        refPap->shd.cvBack != pap.shd.cvBack ||                     // the parent and child background color don't match OR
+        (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) ) {   // parent color was invalid, childs color is valid
+        if (!pap.shd.shdAutoOrNill) {                               // is the color valid? (don't compare to black - 0xff000000 !!!)
             style->addProperty(QString("fo:background-color"), '#' + QString::number(pap.shd.cvBack | 0xff000000, 16).right(6).toUpper());
-        else
+        } else {
             style->addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
+        }
     }
 
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
