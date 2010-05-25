@@ -100,7 +100,8 @@ protected:
     KoFilter::ConversionStatus read_spacing();
     enum shdCaller {
         shd_rPr,
-        shd_pPr
+        shd_pPr,
+        shd_tcPr
     };
     KoFilter::ConversionStatus read_shd(shdCaller caller);
     KoFilter::ConversionStatus read_rFonts();

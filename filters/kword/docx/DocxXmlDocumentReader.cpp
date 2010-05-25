@@ -1923,6 +1923,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
 /*! ECMA-376, 17.3.5, p.399
  Parent Elements:
  - [done] pPr (Paragraph Properties) §17.3.1.26
+ - [done] tcPr (Table Cell Properties) §17.4.70
  Attributes:
  - color (Shading Pattern Color)
  - fill (Shading Background Color)
@@ -1956,6 +1957,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
         if (caller == shd_pPr) {
             m_currentParagraphStyle.addProperty("fo:background-color", fillColor);
         }
+        if (caller == shd_tcPr) {
+             m_currentTableCellStyle.addProperty("fo:background-color", fillColor);
+        }
+
     }
     readNext();
     READ_EPILOGUE
@@ -3069,7 +3074,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - hideMark (Ignore End Of Cell Marker In Row Height Calculation) §17.4.21
  - hMerge (Horizontally Merged Cell) §17.4.22
  - noWrap (Don't Wrap Cell Content) §17.4.30
- - shd (Table Cell Shading) §17.4.33
+ - [done] shd (Table Cell Shading) §17.4.33
  - tcBorders (Table Cell Borders) §17.4.67
  - tcFitText (Fit Text Within Cell) §17.4.68
  - tcMar (Single Table Cell Margins) §17.4.69
@@ -3087,6 +3092,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
         readNext();
         if (isStartElement()) {
 //            TRY_READ_IF(..)
+              TRY_READ_IF_IN_CONTEXT(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
