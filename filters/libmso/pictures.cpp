@@ -130,7 +130,7 @@ getSuffix(quint16 type)
 }
 template<class T>
 void
-savePicture(PictureReference& ref, const T* a, KoStore* out, bool compressed)
+savePicture(PictureReference& ref, const T* a, KoStore* out)
 {
     if (!a) return;
     ref.uid = a->rgbUid1 + a->rgbUid2;
@@ -140,34 +140,59 @@ savePicture(PictureReference& ref, const T* a, KoStore* out, bool compressed)
         ref.uid.clear();
         return; // empty name reports an error
     }
-    if (compressed) {
-        // TODO
-    } else {
-        out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
-    }
+    out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
     ref.mimetype = getMimetype(a->rh.recType);
     out->close();
 }
 template<class T>
 void
-savePicture(PictureReference& ref, const T* a, KoStore* store)
+saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
 {
     if (!a) return;
+
+    QByteArray buff = a->BLIPFileData;
     bool compressed = a->metafileHeader.compression == 0;
-    savePicture(ref, a, store, compressed);
+
+    if (compressed) {
+        quint32 cbSize = a->metafileHeader.cbSize;
+        char tmp[4];
+
+        //big-endian byte order required
+        tmp[3] = (cbSize & 0x000000ff);
+        tmp[2] = ((cbSize >> 8) & 0x0000ff);
+        tmp[1] = ((cbSize >> 16) & 0x00ff);
+        tmp[0] = (cbSize >> 24);
+        buff.prepend((char*) tmp, 4);
+        buff = qUncompress(buff);
+
+        if (buff.size() != cbSize) {
+            qDebug() << "Warning: uncompressed size of the metafile differs";
+        }
+    }
+    //reuse the savePicture code
+    ref.uid = a->rgbUid1 + a->rgbUid2;
+    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+    if (!store->open(ref.name.toLocal8Bit())) {
+        ref.name.clear();
+        ref.uid.clear();
+        return; // empty name reports an error
+    }
+    store->write(buff.data(), buff.size());
+    ref.mimetype = getMimetype(a->rh.recType);
+    store->close();
 }
 PictureReference
 savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
     // only one of these calls will actually save a picture
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store, false);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store, false);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store, false);
-    savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store, false);
+    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
+    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
+    saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store);
+    savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store);
     return ref;
 }
 }
