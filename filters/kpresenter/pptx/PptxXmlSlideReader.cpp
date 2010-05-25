@@ -503,7 +503,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     - sldLayout (§19.3.1.39)
     - sldMaster (§19.3.1.42)
  Child elements:
-    - bg (Slide Background) §19.3.1.1
+    - [done] bg (Slide Background) §19.3.1.1
     - controls (List of controls) §19.3.1.15
     - custDataLst (Customer Data List) §19.3.1.18
     - extLst (Extension List) §19.2.1.12
@@ -528,9 +528,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 
 #undef CURRENT_EL
 #define CURRENT_EL bg
-//! 19.3.1.1 bg (Slide Background)
-//! This element specifies the background appearance information for a slide. The slide background covers the
-//! entire slide and is visible where no objects exist and as the background for transparent objects.
+// bg handler (Slide Background)
+/*! ECMA-376, 19.3.1.1
+ This element specifies the background appearance information for a slide. The slide background covers the
+ entire slide and is visible where no objects exist and as the background for transparent objects.
+
+ Parent elements:
+    - cSld (§19.3.1.16)
+ Attributes:
+    - bwMode (Black and White Mode)
+ Child elements:
+    - [done] bgPr (Background Properties) §19.3.1.2
+    - bgRef (Background Style Reference) §19.3.1.3
+*/
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 {
     READ_PROLOGUE
