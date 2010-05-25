@@ -27,6 +27,7 @@
 #include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
+#include "DocxXmlNumberingReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -49,8 +50,8 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
-        themes(&_themes), 
-        m_commentsLoaded(false), m_endnotesLoaded(false), m_footnotesLoaded(false)
+        themes(&_themes), m_commentsLoaded(false), m_endnotesLoaded(false), 
+        m_footnotesLoaded(false)
 {
 }
 
@@ -184,6 +185,8 @@ void DocxXmlDocumentReader::init()
     m_currentTableNumber = 0;
     m_objectRectInitialized = false;
     m_wasCaption = false;
+    m_listFound = false;
+    m_numberingLoaded = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -228,7 +231,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(body)
-            TRY_READ_IF(background)
+            ELSE_TRY_READ_IF(background)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(document)
@@ -1169,6 +1172,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     m_read_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
+    m_currentListStyleName.clear();
+    m_listFound = false;
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
@@ -1227,6 +1232,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
         else {
             body = textPBuf.originalWriter();
+            if (m_listFound) {
+                body->startElement("text:list");
+                if (!m_currentListStyleName.isEmpty()) {
+                    body->addAttribute("text:style-name", m_currentListStyleName);
+                }
+                for (int i = 0; i <= m_currentListLevel; ++i) {
+                    body->startElement("text:list-item");
+                }
+            }
             body->startElement("text:p", false);
             if (m_currentStyleName.isEmpty()) {
                 setupParagraphStyle();
@@ -1240,9 +1254,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     // no style, set default
                     body->addAttribute("text:style-name", "Standard");
                 }*/
-       
+
             (void)textPBuf.releaseWriter();
-            body->endElement(); //text:p 
+            body->endElement(); //text:p
+            if (m_listFound) {
+                for (int i = 0; i <= m_currentListLevel; ++i) {
+                                    body->endElement(); // text:list-item
+
+                }
+                body->endElement(); // text:list
+            }
             kDebug() << "/text:p";
         }
     }
@@ -1569,7 +1590,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - keepNext (Keep Paragraph With Next Paragraph) §17.3.1.15
  - kinsoku (Use East Asian Typography Rules for First and Last Character per Line) §17.3.1.16
  - mirrorIndents (Use Left/Right Indents as Inside/Outside Indents) §17.3.1.18
- - numPr (Numbering Definition Instance Reference) §17.3.1.19
+ - [done] numPr (Numbering Definition Instance Reference) §17.3.1.19
  - outlineLvl (Associated Outline Level) §17.3.1.20
  - overflowPunct (Allow Punctuation to Extend Past Text Extents) §17.3.1.21
  - pageBreakBefore (Start Paragraph on Next Page) §17.3.1.23
@@ -1613,6 +1634,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(tabs)
             ELSE_TRY_READ_IF(spacing)
             ELSE_TRY_READ_IF(pStyle)
+            ELSE_TRY_READ_IF(numPr)
             ELSE_TRY_READ_IF(pBdr)
             ELSE_TRY_READ_IF(framePr)
             ELSE_TRY_READ_IF(ind)
@@ -1620,6 +1642,84 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numPr
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
+{
+    READ_PROLOGUE
+
+    if (!m_numberingLoaded)
+    {
+        m_numberingLoaded = true;
+
+        DocxXmlNumberingReader reader(this);
+
+        QString errorMessage;
+        DocxXmlNumberingReaderContext context;
+
+        const KoFilter::ConversionStatus status
+            = m_context->import->loadAndParseDocument(&reader, "word/numbering.xml", errorMessage, &context);
+        if (status != KoFilter::OK) {
+            reader.raiseError(errorMessage);
+        }
+    }
+
+    m_listFound = true;
+    m_currentListLevel = 0;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(numId)
+            ELSE_TRY_READ_IF(ilvl)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ilvl
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        bool ok = false;
+        uint listValue = val.toUInt(&ok);
+        if (ok) {
+            m_currentListLevel = listValue;
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numId
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    // In docx, this value defines a predetermined style from numbering xml,
+    // The styles from numbering have to be given some name, NumStyle has been chosen here
+    if (!val.isEmpty()) {
+        m_currentListStyleName = QString("NumStyle%1").arg(val);
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 

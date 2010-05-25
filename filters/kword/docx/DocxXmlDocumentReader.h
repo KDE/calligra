@@ -71,6 +71,9 @@ protected:
     };
     KoFilter::ConversionStatus read_rPr(rPrCaller caller);
     KoFilter::ConversionStatus read_pPr();
+    KoFilter::ConversionStatus read_numPr();
+    KoFilter::ConversionStatus read_numId();
+    KoFilter::ConversionStatus read_ilvl();
     KoFilter::ConversionStatus read_sectPr();
     KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
@@ -230,6 +233,10 @@ private:
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
+
+    bool m_numberingLoaded;
+    bool m_listFound; // was there numPr element in ppr
+    QString m_currentListStyleName;
 
     /*! true if w:object/v:shape or w:object/o:OLEObject has been handled, .
      When w:object/o:OLEObject is visited and m_objectRectInitialized is true, handling

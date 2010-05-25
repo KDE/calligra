@@ -12,6 +12,7 @@ set(docximport_PART_SRCS
     DocxXmlDocumentReader.cpp
     DocxXmlHeaderReader.cpp
     DocxXmlFooterReader.cpp
+    DocxXmlNumberingReader.cpp
     DocxImport.cpp
 )
 
