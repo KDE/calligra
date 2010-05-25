@@ -95,6 +95,7 @@ Comment[tr]=Hızlıca bir faks bağlantısı yaratan bir şablon
 Comment[uk]=Шаблон для швидкого створення факсу
 Comment[wa]=On modele po fé rade ene comunicåcion pa facsimilé
 Comment[x-test]=xxA template to quickly create a facsimile communicationxx
+Comment[zh_CN]=快速创建传真通讯的模板
 Comment[zh_TW]=一個樣本，以便快速建立傳真聯繫
 Icon=template_fax
 X-KDE-MeasureSystem=metric

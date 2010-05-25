@@ -95,6 +95,7 @@ Comment[tr]=Bir sayfa başlığı ve tek, geniş metin alanına sahip bir sunum 
 Comment[uk]=Презентація з заголовком сторінки і великою ділянкою для тексту (книжкова орієнтація)
 Comment[wa]=Prezintaedje avou on tite di pådje eyet ene seule grande redjon di tecse (metou d' astampé)
 Comment[x-test]=xxPresentation with a page title and single large text area (portrait-oriented)xx
+Comment[zh_CN]=带有一个标题和单个大文本框的演示文稿(纵向)
 Comment[zh_TW]=一個頁面標題與單一文字區域的簡報（縱向）
 Type=Link
 URL=.source/OneColumnPortrait.kpt
