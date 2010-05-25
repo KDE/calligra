@@ -15,6 +15,8 @@ install(FILES
     unlocked.png
     transparency-locked.png
     transparency-unlocked.png
+    paintop_settings_01.png
+    paintop_settings_02.png
     selection_add.png
     selection_exclude.png
     selection_intersect.png
