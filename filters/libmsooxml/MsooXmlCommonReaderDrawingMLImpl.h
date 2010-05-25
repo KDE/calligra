@@ -861,6 +861,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
  - br (§21.1.2.2.1)
  - fld (§21.1.2.2.4)
  - [done] r (§21.1.2.3.8)
+ Attributes:
+ - altLang (Alternative Language)
+ - b (Bold)
+ - baseline (Baseline)
+ - bmk (Bookmark Link Target)
+ - cap (Capitalization)
+ - dirty (Dirty)
+ - err (Spelling Error)
+ - i (Italics)
+ - kern (Kerning)
+ - kumimoji (Kumimoji)
+ - lang (Language ID)
+ - noProof (No Proofing)
+ - normalizeH (Normalize Heights)
+ - smtClean (SmartTag Clean)
+ - smtId (SmartTag ID)
+ - spc (Spacing)
+ - strike (Strikethrough)
+ - sz (Font Size)
+ - u (Underline)
  Child elements:
  - [done] blipFill (Picture Fill) §20.1.8.14
  - cs (Complex Script Font) §21.1.2.3.1
@@ -903,6 +923,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
+    // Read child elements
     while (!atEnd()) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -925,6 +946,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentColor = QColor();
     }
 
+    // Read Attributes
+
     // DrawingML: b, i, strike, u attributes:
     if (attrs.hasAttribute("b")) {
         m_currentTextStyleProperties->setFontWeight(
@@ -935,6 +958,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
         }
+
     if (attrs.hasAttribute("cap")) {
         const QString capValue = attrs.value("cap").toString();
         if (capValue == "small") {
@@ -944,6 +968,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
         }
     }
+
     bool ok = false;
     TRY_READ_ATTR_WITHOUT_NS(spc)
     const int pointSize = spc.toInt(&ok)/100;
@@ -1072,14 +1097,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
- - fld (§21.1.2.2.4)
- - p (§21.1.2.2.6)
-
- Child elements:
-
-TODO....
+  - fld (§21.1.2.2.4)
+  - p (§21.1.2.2.6)
  Attributes:
- - [incomplete] algn (Alignment)
+  - [incomplete] algn (Alignment)
+  - defTabSz (Default Tab Size)
+  - eaLnBrk (East Asian Line Break)
+  - fontAlgn (Font Alignment)
+  - hangingPunct (Hanging Punctuation)
+  - indent (Indent)
+  - latinLnBrk (Latin Line Break)
+  - [done] lvl (Level)
+  - marL (Left Margin)
+  - marR (Right Margin)
+  - rtl (Right To Left)
+ Child elements:
+  - buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
+  - buBlip (Picture Bullet) §21.1.2.4.2
+  - [done] buChar (Character Bullet) §21.1.2.4.3
+  - buClr (Color Specified) §21.1.2.4.4
+  - buClrTx (Follow Text) §21.1.2.4.5
+  - buFont (Specified) §21.1.2.4.6
+  - buFontTx (Follow text) §21.1.2.4.7
+  - [done] buNone (No Bullet) §21.1.2.4.8
+  - buSzPct (Bullet Size Percentage) §21.1.2.4.9
+  - buSzPts (Bullet Size Points) §21.1.2.4.10
+  - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
+  - defRPr (Default Text Run Properties) §21.1.2.3.2
+  - extLst (Extension List) §20.1.2.2.15
+  - [done] lnSpc (Line Spacing) §21.1.2.2.5
+  - spcAft (Space After) §21.1.2.2.9
+  - [done] spcBef (Space Before) §21.1.2.2.10
+  - tabLst (Tab List) §21.1.2.2.14
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
@@ -1117,7 +1166,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         KoXmlWriter listStyleWriter(&listBuf);
     
         m_currentListStyleProperties->saveOdf(&listStyleWriter);
-        const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
+        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
+                                                          listBuf.buffer().size());
         m_currentListStyle.addChildElement("list-style-properties", elementContents);
 
         delete m_currentListStyleProperties;
@@ -1751,6 +1801,7 @@ void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)
 {
     if (ov.isEmpty())
         return;
+
     QString v;
     if (ov == QLatin1String("l"))
         v = QLatin1String("start");
