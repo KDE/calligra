@@ -51,7 +51,7 @@ kde4_add_kdeinit_executable( kformula_bin ${kformula_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kformula_bin komain )
 
-install(TARGETS kdeinit_kformula_bin  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS kdeinit_kformula_bin  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set_target_properties(kdeinit_kformula_bin PROPERTIES OUTPUT_NAME kdeinit_kformula)
 
@@ -65,6 +65,6 @@ set_target_properties( kformula_bin PROPERTIES OUTPUT_NAME kformula)
 install( FILES  tips  DESTINATION ${DATA_INSTALL_DIR}/kformula)
 install( FILES  kformulapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kformula.rc kformula_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kformula)
-install( FILES  kformula.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+# install( FILES  kformula.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 
