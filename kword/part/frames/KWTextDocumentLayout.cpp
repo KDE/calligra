@@ -410,7 +410,7 @@ void KWTextDocumentLayout::layout()
             QPointF old;
             if (strategy->anchoredShape())
                 old = strategy->anchoredShape()->position();
-            if (strategy->checkState(m_state, startOfBlock, startOfBlockText)) {
+            if (strategy->checkState(m_state, startOfBlock, startOfBlockText, m_frameSet)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
             }

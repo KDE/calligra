@@ -35,6 +35,7 @@ public:
     QString name;
     bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
+    qreal headerMinimumHeight,footerMinimumHeight;
     KWord::HeaderFooterType headers, footers;
 
     qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'

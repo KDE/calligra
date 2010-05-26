@@ -32,6 +32,8 @@ public:
     /// reimplemented
     virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
 
+    KWPage page() const;
+
 private:
     KWPage m_page;
 };

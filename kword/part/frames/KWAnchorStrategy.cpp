@@ -18,6 +18,10 @@
  */
 
 #include "KWAnchorStrategy.h"
+#include "KWPageTextInfo.h"
+#include "KWTextFrameSet.h"
+#include "KWDocument.h"
+#include "KWFrame.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
@@ -43,7 +47,8 @@ KWAnchorStrategy::~KWAnchorStrategy()
 {
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText)
+bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText,
+                                  KWTextFrameSet *frameSet)
 {
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
         KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
@@ -73,6 +78,14 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     // exit when finished or when we can expect another call with a higher cursor position
     if (m_finished || (m_knowledgePoint > state->cursorPosition()))
         return false;
+
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+    Q_ASSERT(data);
+    KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+    if(!pageInfo) {
+        kWarning(32002) << "Failed to get pageInfo";
+        return false;
+    }
 
     // *** alter 'state' to relayout the part we want.
     QTextLayout *layout = block.layout();
@@ -122,11 +135,18 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         m_finished = true;
         break;
     }
+    case KoTextAnchor::LeftOfPage: {
+        newPosition.setX(-containerBoundingRect.x());
+        break;
+    }
+    case KoTextAnchor::RightOfPage: {
+        newPosition.setX(pageInfo->page().width() - containerBoundingRect.x() - boundingRect.width());
+        break;
+    }
     default:
         Q_ASSERT(false); // new enum added?
     }
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
-    Q_ASSERT(data);
+
     switch (m_anchor->verticalAlignment()) {
     case KoTextAnchor::TopOfFrame:
         recalcFrom = qMax(recalcFrom, data->position());
@@ -182,6 +202,56 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         }
         newPosition.setY(y - data->documentOffset());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
+        break;
+    }
+    case KoTextAnchor::TopOfPage: {
+        newPosition.setY(pageInfo->page().offsetInDocument() - containerBoundingRect.y());
+        break;
+    }
+    case KoTextAnchor::BottomOfPage: {
+        newPosition.setY(pageInfo->page().offsetInDocument() + pageInfo->page().height()
+                        - containerBoundingRect.y() - boundingRect.height());
+        break;
+    }
+    case KoTextAnchor::TopOfPageContent: {
+        // find main frame
+        KWTextFrameSet *tfs =frameSet->kwordDocument()->mainFrameSet();
+        if (tfs) {
+            foreach (KWFrame *frame, tfs->frames()) { //find main frame for current page
+                KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
+                if(data != 0) {
+                    KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(tmpData->page());
+                    if (tmpPageInfo != 0) {
+                        if (tmpPageInfo->pageNumber() == pageInfo->pageNumber()) {//found main frame for current page
+                            newPosition.setY(frame->shape()->boundingRect().y() - containerBoundingRect.y());
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    }
+    case KoTextAnchor::BottomOfPageContent: {
+        // find main frame
+        KWTextFrameSet *tfs =frameSet->kwordDocument()->mainFrameSet();
+        if (tfs) {
+            foreach (KWFrame *frame, tfs->frames()) { //find main frame for current page
+                KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
+                if(data != 0) {
+                    KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(tmpData->page());
+                    if (tmpPageInfo != 0) {
+                        if (tmpPageInfo->pageNumber() == pageInfo->pageNumber()) {//found main frame for current page
+                            newPosition.setY(frame->shape()->boundingRect().bottom() -
+                                             containerBoundingRect.y() - frame->shape()->boundingRect().height());
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        }
         break;
     }
     default:
@@ -242,7 +312,9 @@ void KWAnchorStrategy::calculateKnowledgePoint()
     case KoTextAnchor::Left:
     case KoTextAnchor::FurtherFromBinding:
     case KoTextAnchor::Right:
-    case KoTextAnchor::Center: {
+    case KoTextAnchor::Center:
+    case KoTextAnchor::LeftOfPage:
+    case KoTextAnchor::RightOfPage: {
         if (m_anchor->shape()->parent() == 0) // not enough info yet.
             return;
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
@@ -261,6 +333,10 @@ void KWAnchorStrategy::calculateKnowledgePoint()
     case KoTextAnchor::VerticalOffset:
     case KoTextAnchor::AboveCurrentLine:
     case KoTextAnchor::BelowCurrentLine:
+    case KoTextAnchor::TopOfPage:
+    case KoTextAnchor::BottomOfPage:
+    case KoTextAnchor::TopOfPageContent:
+    case KoTextAnchor::BottomOfPageContent:
         m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument());
         break;
     case KoTextAnchor::TopOfFrame:

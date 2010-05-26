@@ -51,3 +51,8 @@ int KWPageTextInfo::pageNumber(PageSelection select, int adjustment) const
     return page.pageNumber();
 }
 
+KWPage KWPageTextInfo::page() const
+{
+    return m_page;
+}
+

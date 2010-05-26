@@ -225,7 +225,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     // Create some data structures used for the layouting of the frames later
     int minZIndex = INT_MAX;
-    qreal requestedHeight[8], minimumHeight[8], resultingPositions[8];
+    qreal requestedHeight[9], minimumHeight[9], resultingPositions[9];
     for (int i = 0; i < 9; i++) { // zero fill.
         requestedHeight[i] = 0;
         minimumHeight[i] = 0;
@@ -272,17 +272,19 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
-            minimumHeight[1] = 10;
+            minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerMinimumHeight());
             requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
-            minimumHeight[2] = page.pageStyle().headerDistance();
+            if (minimumHeight[1] < page.pageStyle().headerDistance())
+                minimumHeight[2] = page.pageStyle().headerDistance() - minimumHeight[1];
             break;
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
-            minimumHeight[7] = 10;
+            minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerMinimumHeight());
             requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
-            minimumHeight[6] = page.pageStyle().headerDistance();
+            if(minimumHeight[7] < page.pageStyle().footerDistance())
+                minimumHeight[6] = page.pageStyle().footerDistance() - minimumHeight[7];
             break;
         }
         case KWord::MainTextFrameSet: {

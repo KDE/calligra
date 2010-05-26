@@ -51,6 +51,8 @@ void KWPageStylePrivate::clear()
     mainFrame = true;
     headerDistance = 10; // ~3mm
     footerDistance = 10;
+    headerMinimumHeight = 0;
+    footerMinimumHeight = 0;
     footNoteDistance = 10;
     endNoteDistance = 10;
     headers = KWord::HFTypeNone;
@@ -157,6 +159,26 @@ qreal KWPageStyle::headerDistance() const
 void KWPageStyle::setHeaderDistance(qreal distance)
 {
     d->headerDistance = distance;
+}
+
+qreal KWPageStyle::headerMinimumHeight() const
+{
+    return d->headerMinimumHeight;
+}
+
+void KWPageStyle::setHeaderMinimumHeight(qreal height)
+{
+    d->headerMinimumHeight = height;
+}
+
+qreal KWPageStyle::footerMinimumHeight() const
+{
+    return d->footerMinimumHeight;
+}
+
+void KWPageStyle::setFooterMinimumHeight(qreal height)
+{
+    d->footerMinimumHeight = height;
 }
 
 qreal KWPageStyle::footerDistance() const
@@ -340,6 +362,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         KoXmlElement hfprops = KoXml::namedItemNS(header, KoXmlNS::style, "header-footer-properties");
         if (! hfprops.isNull())
             d->headerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-bottom"));
+            d->headerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 
@@ -348,6 +371,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         KoXmlElement hfprops = KoXml::namedItemNS(footer, KoXmlNS::style, "header-footer-properties");
         if (! hfprops.isNull())
             d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
+            d->footerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 

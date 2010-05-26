@@ -121,6 +121,22 @@ public:
      */
     void setHeaderDistance(qreal distance);
 
+    /// return the minimum header height.
+    qreal headerMinimumHeight() const;
+    /**
+     * Set the minimum header height.
+     * @param height the height
+     */
+    void setHeaderMinimumHeight(qreal height);
+
+    /// return the minimum footer height.
+    qreal footerMinimumHeight() const;
+    /**
+     * Set the minimum footer height.
+     * @param height the height
+     */
+    void setFooterMinimumHeight(qreal height);
+
     /// return the distance between the footer and the frame directly above that (footnote or main)
     qreal footerDistance() const;
     /**

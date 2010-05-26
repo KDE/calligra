@@ -25,6 +25,7 @@
 
 class KWAnchorStrategy;
 class KWFrame;
+class KWTextFrameSet;
 
 /**
  * Class for text layout of anchored frames.
@@ -56,7 +57,8 @@ public:
      * @return will return true if the layout state has been changed.
      * @see isFinished()
      */
-    bool checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText);
+    bool checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText,
+                    KWTextFrameSet *frameSet);
 
     /**
      * @return if the anchor is placed properly and no more changes are required.
