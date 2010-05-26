@@ -259,7 +259,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
             }
         }
 
-        KWFrame *lastNonCopyFrame = 0;
         int counter = 1;
         QSet<QString> uniqueNames;
         foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
@@ -273,89 +272,8 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         const QList<KWFrame*> frames = fs->frames();
         for (int i = 0; i < frames.count(); ++i) {
             KWFrame *frame = frames.at(i);
-            KoShape *shape = frame->shape();
-            // frame properties first
-            shape->setAdditionalStyleAttribute("fo:margin", QString::number(frame->runAroundDistance()) + "pt");
-            shape->setAdditionalStyleAttribute("style:horizontal-pos", "from-left");
-            shape->setAdditionalStyleAttribute("style:horizontal-rel", "page");
-            shape->setAdditionalStyleAttribute("style:vertical-pos", "from-top");
-            shape->setAdditionalStyleAttribute("style:vertical-rel", "page");
-            QString value;
-            switch (frame->textRunAround()) {
-            case KWord::RunAround:
-                switch (frame->runAroundSide()) {
-                case KWord::BiggestRunAroundSide: value = "biggest"; break;
-                case KWord::LeftRunAroundSide: value = "left"; break;
-                case KWord::RightRunAroundSide: value = "right"; break;
-                case KWord::AutoRunAroundSide: value = "dynamic"; break;
-                case KWord::BothRunAroundSide: value = "parallel"; break;
-                }
-                break;
-            case KWord::RunThrough:
-                value = "run-through";
-                break;
-            case KWord::NoRunAround:
-                value = "none";
-                break;
-            }
-            shape->setAdditionalStyleAttribute("style:wrap", value);
-
-            switch (frame->frameBehavior()) {
-            case KWord::AutoCreateNewFrameBehavior:
-                value = "auto-create-new-frame";
-                break;
-            case KWord::IgnoreContentFrameBehavior:
-                value = "clip";
-                break;
-            case KWord::AutoExtendFrameBehavior:
-                // the third case, AutoExtendFrame is handled by min-height
-                value.clear();
-                KWTextFrame *tf = dynamic_cast<KWTextFrame*>(frame);
-                if (tf && tf->minimumFrameHeight() > 1)
-                    shape->setAdditionalAttribute("fo:min-height", QString::number(tf->minimumFrameHeight()) + "pt");
-                break;
-            }
-            if (!value.isEmpty())
-                shape->setAdditionalStyleAttribute("style:overflow-behavior", value);
-
-            if (frame->frameBehavior() != KWord::IgnoreContentFrameBehavior) {
-                switch (frame->newFrameBehavior()) {
-                case KWord::ReconnectNewFrame: value = "followup"; break;
-                case KWord::NoFollowupFrame: value.clear(); break; // "none" is the default
-                case KWord::CopyNewFrame: value = "copy"; break;
-                }
-                if (!value.isEmpty()) {
-                    shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
-                    if (! frame->frameOnBothSheets())
-                        shape->setAdditionalAttribute("koffice:frame-copy-to-facing-pages", "true");
-                }
-            }
-
-            if (frame->isCopy()) {
-                Q_ASSERT(lastNonCopyFrame);
-                shape->setAdditionalAttribute("draw:copy-of", lastNonCopyFrame->shape()->name());
-            } else {
-                lastNonCopyFrame = frame;
-            }
-
-            // shape properties
-            KWPage page = m_document->pageManager()->page(shape);
-            const qreal pagePos = page.offsetInDocument();
-
-            const int effectiveZIndex = shape->zIndex() + m_zIndexOffsets.value(page);
-            shape->setAdditionalAttribute("draw:z-index", QString::number(effectiveZIndex));
-            shape->setAdditionalAttribute("text:anchor-type", "page");
-            shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
-            context.addShapeOffset(shape, QMatrix(1, 0, 0 , 1, 0, -pagePos));
-            shape->saveOdf(context);
-            context.removeShapeOffset(shape);
-            shape->removeAdditionalAttribute("draw:copy-of");
-            shape->removeAdditionalAttribute("draw:z-index");
-            shape->removeAdditionalAttribute("fo:min-height");
-            shape->removeAdditionalAttribute("koffice:frame-copy-to-facing-pages");
-            shape->removeAdditionalAttribute("text:anchor-page-number");
-            shape->removeAdditionalAttribute("text:anchor-page-number");
-            shape->removeAdditionalAttribute("text:anchor-type");
+            KWPage page = m_document->pageManager()->page(frame->shape());
+            frame->saveOdf(context, page, m_zIndexOffsets.value(page));
         }
     }
 

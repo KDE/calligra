@@ -111,11 +111,13 @@ QPainterPath KWCopyShape::outline() const
 
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 {
-    // TODO
+    KWCopyShape *me = const_cast<KWCopyShape*>(this);
+    me->setAdditionalAttribute("draw:copy-of", m_original->name());
+    saveOdfAttributes(context, OdfAllAttributes);
+    me->removeAdditionalAttribute("draw:copy-of");
 }
 
-bool KWCopyShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     return false; // TODO
 }
-

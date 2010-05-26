@@ -31,6 +31,7 @@ class KoTextAnchor;
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;
+class KWPage;
 
 /**
  * This class represents a single frame.
@@ -191,7 +192,7 @@ public:
      * Save the frame as ODF
      * @param context the context for saving.
      */
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset = 0) const;
 
     KWOutlineShape *outlineShape() const {
         return m_outline;
