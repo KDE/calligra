@@ -18,7 +18,6 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 	TextDocument.h TextFrame.h TextList.h TextTable.h
 	Frame.h FrameSet.h
 	Tool.h
-	Variable.h
 )
 
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
