@@ -25,20 +25,15 @@
 #ifndef PRESENTATION_VARIABLE_FACTORY_H
 #define PRESENTATION_VARIABLE_FACTORY_H
 
-#include <KoVariableFactory.h>
+#include <KoInlineObjectFactoryBase.h>
 
-class PresentationVariableFactory : public KoVariableFactory
+class PresentationVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    PresentationVariableFactory();
-
-    virtual ~PresentationVariableFactory();
+    PresentationVariableFactory(QObject *parent = 0);
 
     /// reimplemented
-    virtual KoVariable * createVariable(const KoProperties *properties) const;
-
-    /// reimplemented
-    virtual KoVariable * createVariable() const;
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };
 
 #endif
