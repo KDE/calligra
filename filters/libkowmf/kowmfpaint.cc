@@ -31,6 +31,7 @@
 KoWmfPaint::KoWmfPaint()
     : KoWmfRead()
     , mTextPen()
+    , mSaveCount(0)
 {
     mTarget = 0;
     mIsInternalPainter = true;
@@ -66,7 +67,12 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
     mRelativeCoord = relativeCoord;
 
     // Play the wmf file
-    return KoWmfRead::play();
+    mSaveCount = 0;
+    bool ret = KoWmfRead::play();
+    // check that the painter is in the same state as before KoWmfRead::play()
+    for (; mSaveCount > 0; mSaveCount--)
+        restore();
+    return ret;
 }
 
 
@@ -121,12 +127,14 @@ bool KoWmfPaint::end()
 void KoWmfPaint::save()
 {
     mPainter->save();
+    mSaveCount++;
 }
 
 
 void KoWmfPaint::restore()
 {
     mPainter->restore();
+    mSaveCount--;
 }
 
 

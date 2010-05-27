@@ -142,6 +142,8 @@ protected:
     int  mOrgY;
     int  mExtWidth;
     int  mExtHeight;
+
+    int mSaveCount; //number of times Save() was called without Restore()
 };
 
 #endif
