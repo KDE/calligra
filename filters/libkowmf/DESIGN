@@ -1,5 +1,5 @@
 This directory contains several parsers for the Windows MetaFile
-format (WMF).
+format (WMF).  This is only for historical reasons.
 
 1. The first parser is a simple viewer that uses a QPainter to paint
    the output.  This parser consists of wmfstruct.h, qwmf.{h,cc}, and
@@ -32,16 +32,18 @@ metafuncs.h     Big table of MetaFuncRec, with {name, number, handler} for
                 not really sure why it's in a .h file at all.
 
 kwmf.{h,cc]     "a generic parser for WMFs.  The output is a series of callbacks."
-                Not used anywhere
+                Not used anywhere.
 
 
+kowmfenums.h    Most of the enums defined in the [MS-EMF].pdf documentation
 kowmfstruct.h   A number of structs used in the wmf file.  Seems
                 similar to wmfstruct.h
 kowmfstack.{h,cc}
                 "WMF file allows manipulation on a stack of object.
-                 It's possible to create, delete or select an object."
-kowmfread.{h,cc} Abstract base class of the callback interface.
-                 Also contains some implemented methods.
+                It's possible to create, delete or select an object."
+kowmfread.{h,cc}
+                Abstract base class of the callback interface.
+                Also contains some implemented methods.
 kowmfreadprivate.{h,cc}
                 Private class for kowmfread. Contains the actual implementation.
 kowmfpaint.{h,cc}
