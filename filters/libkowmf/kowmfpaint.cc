@@ -69,7 +69,8 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
     // Play the wmf file
     mSaveCount = 0;
     bool ret = KoWmfRead::play();
-    // check that the painter is in the same state as before KoWmfRead::play()
+
+    // Check that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
         restore();
     return ret;
@@ -133,8 +134,10 @@ void KoWmfPaint::save()
 
 void KoWmfPaint::restore()
 {
-    mPainter->restore();
-    mSaveCount--;
+    if (mSaveCount > 0) {
+        mPainter->restore();
+        mSaveCount--;
+    }
 }
 
 
