@@ -913,6 +913,19 @@ public:
     }
 };
 
+QString Utils::rotateString(const qreal rotation, const qreal xPos, const qreal yPos)
+{
+    qreal angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)
+                                                    / (qreal)60000.0;
+    qreal oldX = xPos / 360000.0;
+    qreal oldY = yPos / 360000.0;
+    qreal hypo = sqrt(oldX * oldX + oldY * oldY);
+    qreal newX = hypo * sin((qreal)(M_PI)/4 + angle);
+    qreal newY = hypo * cos((qreal)(M_PI)/4 + angle);
+
+    return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(oldX - newX).arg(oldY - newY);
+}
+
 void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties)
 {
     K_GLOBAL_STATIC(UnderlineStylesHash, s_underLineStyles)

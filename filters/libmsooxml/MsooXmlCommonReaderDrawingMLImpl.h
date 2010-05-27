@@ -24,6 +24,8 @@
 #ifndef MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
+#include <math.h>
+
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626
 #endif
@@ -200,9 +202,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         //! @todo: Generalize the generation of draw:transform so it can be used in other places.
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
-            QString rot = QString("rotate(%1)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
-                                                    / (qreal)60000.0);
-            body->addAttribute("draw:transform", rot);
+            body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
         }
 
         if (!m_xlinkHref.isEmpty()) {
@@ -568,9 +568,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
-            QString rot = QString("rotate(%1)").arg(-(qreal)m_rot * ((qreal)(M_PI) / (qreal)180.0)
-                                                    / (qreal)60000.0);
-            body->addAttribute("draw:transform", rot);
+            body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
         }
 
         // FIXME: Adapt this to apply to the current graphics style and use that.

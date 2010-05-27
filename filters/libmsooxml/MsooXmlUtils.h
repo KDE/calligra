@@ -263,6 +263,9 @@ MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterS
 //! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
 MSOOXML_EXPORT QString columnName(uint column);
 
+//! @return the string which is needed when rotation objects
+MSOOXML_EXPORT QString rotateString(const qreal rotation, const qreal xPos, const qreal yPos);
+
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based
     on XML elements parsed later. In such case the information cannot be saved in one pass.
