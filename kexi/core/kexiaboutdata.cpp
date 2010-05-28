@@ -26,9 +26,10 @@
 #include <klocale.h>
 
 static const char *description =
-    I18N_NOOP("Database creation for everyone")
 #ifndef CUSTOM_VERSION
-    "\n\n" I18N_NOOP("This application is a part of the KOffice suite.")
+    I18N_NOOP("Database creation for everyone\n\nThis application is a part of the KOffice suite.")
+#else
+    I18N_NOOP("Database creation for everyone")
 #endif
     ;
 
