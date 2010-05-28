@@ -107,7 +107,11 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
             }
             kDebug() << "Found:" << it.key() << "Mapped to:" << it.value();
             const QString t = text().toString();
-            meta->startElement(qPrintable(it.value()));
+            //can't use qPrintable() the string has to remain valid until endElement is called
+            //which we can't do if we call qPrintable, the QByteArray falls out of scope after
+            //the statement in which it is used
+            QByteArray elementArray = it.value().toLocal8Bit();
+            meta->startElement(elementArray.constData());
             meta->addTextNode(t.toUtf8());
             meta->endElement();
             while (!isEndElement())
