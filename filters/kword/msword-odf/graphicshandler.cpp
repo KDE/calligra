@@ -759,6 +759,9 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // style:repeat
 
     if (ds.fBehindDocument()) {
+        // The 'OpenDocument Essentials' say that if you want a frame in the background,
+        // you should set style:wrap="run-through" AND style:run-through="background"
+        style.addProperty("style:wrap", "run-through");
         style.addProperty("style:run-through", "background");
     }
     else {
