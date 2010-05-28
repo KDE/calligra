@@ -48,7 +48,7 @@ TYPE DrawStyle::NAME() const \
     if (sp) { \
         p = get<MSO::FOPT>(*sp); \
     } \
-    if (mastersp) { \
+    if (!p && mastersp) { \
         p = get<MSO::FOPT>(*mastersp); \
     } \
     if (!p) { \
