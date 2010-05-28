@@ -1764,28 +1764,28 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
                 fillStyle.addProperty("draw:transparency", "0%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
-            case FormatBackground::Dense3Pattern: // 75% gray
-                fillStyle.addProperty("draw:fill-color", bgColor);
-                fillStyle.addProperty("draw:transparency", "75%");
+            case FormatBackground::Dense3Pattern: // 88% gray
+                fillStyle.addProperty("draw:fill-color", "#000000");
+                fillStyle.addProperty("draw:transparency", "88%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
             case FormatBackground::Dense4Pattern: // 50% gray
-                fillStyle.addProperty("draw:fill-color", bgColor);
-                fillStyle.addProperty("draw:transparency", "94%");
+                fillStyle.addProperty("draw:fill-color", "#000000");
+                fillStyle.addProperty("draw:transparency", "50%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
-            case FormatBackground::Dense5Pattern: // 25% gray
-                fillStyle.addProperty("draw:fill-color", bgColor);
-                fillStyle.addProperty("draw:transparency", "25%");
+            case FormatBackground::Dense5Pattern: // 37% gray
+                fillStyle.addProperty("draw:fill-color", "#000000");
+                fillStyle.addProperty("draw:transparency", "37%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
-            case FormatBackground::Dense6Pattern: // 12.5% gray
-                fillStyle.addProperty("draw:fill-color", bgColor);
+            case FormatBackground::Dense6Pattern: // 12% gray
+                fillStyle.addProperty("draw:fill-color", "#000000");
                 fillStyle.addProperty("draw:transparency", "12%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
-            case FormatBackground::Dense7Pattern: // 6.25% gray
-                fillStyle.addProperty("draw:fill-color", bgColor);
+            case FormatBackground::Dense7Pattern: // 6% gray
+                fillStyle.addProperty("draw:fill-color", "#000000");
                 fillStyle.addProperty("draw:transparency", "6%");
                 fillStyle.addProperty("draw:fill", "solid");
                 break;
