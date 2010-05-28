@@ -32,7 +32,7 @@
 #include <kdebug.h>
 
 PresentationVariableFactory::PresentationVariableFactory(QObject *parent)
-    : KoInlineObjectFactoryBase(parent, "PresentationVariable")
+    : KoInlineObjectFactoryBase(parent, "PresentationVariable", Other)
 {
     KoInlineObjectTemplate var1;
     var1.id = "Header";
