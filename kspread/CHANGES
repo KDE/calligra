@@ -1,4 +1,4 @@
-Changes since KSpread 2.1
+Changes since KSpread 2.2
 =========================
 
 Features
@@ -11,6 +11,7 @@ Bug Fixes
 ---------
 Fix text/background/border color actions by using KoColorPopupAction (if pigment is built).
 208868: Fix action triggering on selection changes, which resulted in style changes.
+Fix cell removal by shifting cells up.
 
 Developer-Visible Only
 ----------------------

@@ -407,14 +407,16 @@ public:
             const QVector<T> data = m_data.mid(rowStart, rowLength);
             // first, iterate over the destination row
             for (int col = cols.count() - 1; col >= 0; --col) {
-                if (cols.value(col) >= rect.left() && cols.value(col) <= rect.right()) {
+                const int column = cols.value(col); // real column value (1...KS_colMax)
+                if (column >= rect.left() && column <= rect.right()) {
                     // save the old data
                     if (row <= rect.bottom())
-                        oldData.append(qMakePair(QPoint(cols.value(col), row), data.value(col)));
+                        oldData.append(qMakePair(QPoint(column, row), data.value(col)));
                     // search
-                    const QVector<int>::const_iterator cstart2((row + rect.height() - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(row + rect.height() - 1) : m_cols.end());
-                    const QVector<int>::const_iterator cend2(((row + rect.height() < m_rows.count())) ? (m_cols.begin() + m_rows.value(row + rect.height())) : m_cols.end());
-                    const QVector<int>::const_iterator cit2 = qBinaryFind(cstart2, cend2, cols.value(col));
+                    const int srcRow = row + rect.height();
+                    const QVector<int>::const_iterator cstart2((srcRow - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(srcRow - 1) : m_cols.end());
+                    const QVector<int>::const_iterator cend2((srcRow < m_rows.count()) ? (m_cols.begin() + m_rows.value(srcRow)) : m_cols.end());
+                    const QVector<int>::const_iterator cit2 = qBinaryFind(cstart2, cend2, column);
                     // column's missing?
                     if (cit2 == cend2) {
                         m_cols.remove(rowStart + col);
@@ -437,25 +439,48 @@ public:
                 }
             }
             // last, iterate over the source row
-            const int rowStart2 = (row + rect.height() - 1 < m_rows.count()) ? m_rows.value(row + rect.height() - 1) : m_data.count();
-            const int rowLength2 = (row + rect.height() < m_rows.count()) ? m_rows.value(row + rect.height()) - rowStart2 : -1;
+            const int srcRow = row + rect.height();
+            const int rowStart2 = (srcRow - 1 < m_rows.count()) ? m_rows.value(srcRow - 1) : m_data.count();
+            const int rowLength2 = (srcRow < m_rows.count()) ? m_rows.value(srcRow) - rowStart2 : -1;
             const QVector<int> cols2 = m_cols.mid(rowStart2, rowLength2);
             const QVector<T> data2 = m_data.mid(rowStart2, rowLength2);
+            int offset = 0;
             for (int col = cols2.count() - 1; col >= 0; --col) {
-                if (cols2.value(col) >= rect.left() && cols2.value(col) <= rect.right()) {
+                const int column = cols2.value(col); // real column value (1...KS_colMax)
+                if (column >= rect.left() && column <= rect.right()) {
                     // find the insertion position
                     const QVector<int>::const_iterator cstart((row - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(row - 1) : m_cols.end());
                     const QVector<int>::const_iterator cend(((row < m_rows.count())) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
                     const QVector<int>::const_iterator cit = qUpperBound(cstart, cend, cols2.value(col));
-                    // copy it to its new position
-                    m_data.insert(cit - m_cols.constBegin(), m_data.value(rowStart2 + col));
-                    m_cols.insert(cit - m_cols.constBegin(), m_cols.value(rowStart2 + col));
-                    // remove it from its old position
-                    m_data.remove(rowStart2 + col + 1);
-                    m_cols.remove(rowStart2 + col + 1);
-                    // adjust the offsets of the following rows
-                    for (int r = row; r < row + rect.height(); ++r)
-                        ++m_rows[r];
+                    // Destination column:
+                    const QVector<int>::const_iterator dstcit = qBinaryFind(cols.begin(), cols.end(), column);
+                    if (dstcit != cols.end()) { // destination column exists
+                        // replace the existing destination value
+                        const int dstCol = (dstcit - cols.constBegin());
+                        m_data[rowStart + dstCol] = m_data.value(rowStart2 + col);
+                        // remove it from its old position
+                        m_data.remove(rowStart2 + col + 1);
+                        m_cols.remove(rowStart2 + col + 1);
+                        // The amount of values in the range from the
+                        // destination row to the source row have not changed.
+                        // adjust the offsets of the following rows
+                        for (int r = srcRow; r < m_rows.count(); ++r) {
+                            ++m_rows[r];
+                        }
+                    } else { // destination column does not exist yet
+                        // copy it to its new position
+                        const int dstCol = cit - m_cols.constBegin();
+                        m_data.insert(dstCol, data2.value(col));
+                        m_cols.insert(dstCol, cols2.value(col));
+                        // remove it from its old position
+                        m_data.remove(rowStart2 + col + 1 + offset);
+                        m_cols.remove(rowStart2 + col + 1 + offset);
+                        ++offset;
+                        // adjust the offsets of the following rows
+                        for (int r = row; r < srcRow; ++r) {
+                            ++m_rows[r];
+                        }
+                    }
                 }
             }
         }
