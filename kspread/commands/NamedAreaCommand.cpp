@@ -23,6 +23,7 @@
 
 #include "Damages.h"
 #include "FormulaStorage.h"
+#include "Limits.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"

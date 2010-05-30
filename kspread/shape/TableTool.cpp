@@ -45,7 +45,7 @@
 
 #include "AutoFillStrategy.h"
 #include "Cell.h"
-#include "Global.h"
+#include "Limits.h"
 #include "Map.h"
 #include "MergeStrategy.h"
 #include "Selection.h"

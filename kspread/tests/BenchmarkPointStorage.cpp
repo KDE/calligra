@@ -19,7 +19,7 @@
 
 #include <quuid.h>
 
-#include "Global.h"
+#include "Limits.h"
 
 #include "PointStorage.h"
 

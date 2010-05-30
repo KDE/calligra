@@ -21,7 +21,7 @@
 #define KSPREAD_FORMULA_STORAGE
 
 #include "Formula.h"
-#include "Global.h"
+#include "Limits.h"
 #include "PointStorage.h"
 
 namespace KSpread

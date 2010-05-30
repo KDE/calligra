@@ -70,6 +70,7 @@
 #include "Canvas_p.h"
 #include "Cell.h"
 #include "Doc.h"
+#include "Limits.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "Selection.h"

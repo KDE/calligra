@@ -19,6 +19,7 @@
 
 // Ours
 #include "SheetAccessModel.h"
+#include "Limits.h"
 #include "Map.h"
 #include "Binding.h"
 #include "BindingManager.h"

@@ -27,7 +27,7 @@
 
 #include <KoRTree.h>
 
-#include "Global.h"
+#include "Limits.h"
 
 namespace KSpread
 {

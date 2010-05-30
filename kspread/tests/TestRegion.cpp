@@ -22,6 +22,7 @@
 #include "qtest_kde.h"
 
 #include "part/Doc.h" // FIXME detach from part
+#include "Limits.h"
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"

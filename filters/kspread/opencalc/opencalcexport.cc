@@ -46,6 +46,7 @@
 #include <kspread/CalculationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/part/Doc.h>
+#include <kspread/Limits.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
 #include <kspread/RowColumnFormat.h>

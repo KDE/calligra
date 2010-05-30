@@ -25,7 +25,7 @@
 #include <QTextDocument>
 
 #include "Cell.h"
-#include "Global.h"
+#include "Limits.h"
 #include "PointStorage.h"
 
 #include "database/Database.h"

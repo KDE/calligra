@@ -30,19 +30,9 @@
 #ifndef KSPREAD_GLOBAL_H
 #define KSPREAD_GLOBAL_H
 
-
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <QTime>
-
-/* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
-#define KS_rowMax 0x10000
-/* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
-#define KS_colMax 0x7FFF
-
-/* Definition of maximal supported columns/rows, which can be merged */
-#define KS_spanMax 0xFFF
-
 
 namespace KSpread
 {
@@ -125,54 +115,6 @@ enum Operation {
 // necessary due to QDock* enums (Werner)
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
-
-enum ModifyType {
-    MT_NONE = 0,
-    MT_MOVE,
-    MT_RESIZE_UP,
-    MT_RESIZE_DN,
-    MT_RESIZE_LF,
-    MT_RESIZE_RT,
-    MT_RESIZE_LU,
-    MT_RESIZE_LD,
-    MT_RESIZE_RU,
-    MT_RESIZE_RD
-};
-
-enum PropValue {
-    STATE_ON = 0,
-    STATE_OFF = 1,
-    STATE_UNDEF = 2
-};
-
-//TODO Implement all objects :)
-enum ToolEditMode {
-    TEM_MOUSE = 0,
-    //INS_RECT = 1,
-    //INS_ELLIPSE = 2,
-    //INS_TEXT = 3,
-    //INS_PIE = 4,
-    INS_OBJECT = 5,
-    //INS_LINE = 6,
-    INS_DIAGRAMM = 7,
-    //INS_TABLE = 8,
-    //INS_FORMULA = 9,
-    //INS_AUTOFORM = 10,
-    //INS_FREEHAND = 11,
-    //INS_POLYLINE = 12,
-    //INS_QUADRICBEZIERCURVE = 13,
-    //INS_CUBICBEZIERCURVE = 14,
-    //INS_POLYGON = 15,
-    INS_PICTURE = 16
-    //INS_CLIPART = 17,
-    //TEM_ROTATE = 18,
-    //TEM_ZOOM = 19,
-    //INS_CLOSED_FREEHAND = 20,
-    //INS_CLOSED_POLYLINE = 21,
-    //INS_CLOSED_QUADRICBEZIERCURVE = 22,
-    //INS_CLOSED_CUBICBEZIERCURVE = 23
-};
-
 
 } // namespace KSpread
 

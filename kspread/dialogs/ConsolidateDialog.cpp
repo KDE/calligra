@@ -49,6 +49,7 @@
 
 //KSpread Includes
 #include <Global.h>
+#include "Limits.h"
 #include <Localization.h>
 #include <Map.h>
 #include <Selection.h>

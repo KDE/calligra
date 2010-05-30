@@ -21,6 +21,7 @@
 
 // KSpread
 #include "Cell.h"
+#include "Limits.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Style.h"

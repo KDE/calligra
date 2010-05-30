@@ -19,6 +19,7 @@
 
 #include "SelectionStrategy.h"
 
+#include "Limits.h"
 #include "Selection.h"
 #include "Sheet.h"
 

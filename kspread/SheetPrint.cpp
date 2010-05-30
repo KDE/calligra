@@ -25,6 +25,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include "Limits.h"
 
 #include "ApplicationSettings.h"
 #include "part/Doc.h" // FIXME detach from part

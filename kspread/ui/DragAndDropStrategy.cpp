@@ -20,6 +20,7 @@
 #include "DragAndDropStrategy.h"
 
 #include "Cell.h"
+#include "Limits.h"
 #include "Selection.h"
 #include "Sheet.h"
 
