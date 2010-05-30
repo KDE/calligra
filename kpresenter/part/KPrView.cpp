@@ -38,6 +38,7 @@
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
+#include "KPrPageSelectStrategyActive.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
@@ -80,7 +81,8 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
     actionCollection()->action("configure")->setText(i18n("Configure KPresenter..."));
 
-    masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager() ) );
+    masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
+                                                   new KPrPageSelectStrategyActive( this ) ) );
 }
 
 KPrView::~KPrView()

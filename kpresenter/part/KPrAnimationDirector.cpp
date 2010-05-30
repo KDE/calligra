@@ -40,6 +40,7 @@
 #include "KPrPageApplicationData.h"
 #include "KPrShapeManagerAnimationStrategy.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
+#include "KPrPageSelectStrategyActive.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "shapeanimations/KPrAnimationData.h"
@@ -74,8 +75,10 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
-    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), this ) );
+    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this,
+                                                       new KPrPageSelectStrategyActive( m_view ) ) );
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), this,
+                                                             new KPrPageSelectStrategyActive( m_view ) ) );
 
     if ( hasAnimation() ) {
         startTimeLine( m_maxShapeDuration );
@@ -89,7 +92,8 @@ KPrAnimationDirector::~KPrAnimationDirector()
     clearAnimations();
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager() ) );
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager(),
+                                                             new KPrPageSelectStrategyActive( m_view ) ) );
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )

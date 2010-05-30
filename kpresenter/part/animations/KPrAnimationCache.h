@@ -117,7 +117,7 @@ public:
     //    This information should be kept in the first stack entry
     //    I think this is only needed for visibility as the other take only effect in the presentation step
     // 2. For the animation on 1. step
-    //    copy falues form previous step that are still there.
+    //    copy falues from previous step that are still there.
     //    update values with the values from the animations of that current step
     //    when all is finished start with the next step
     //    do the same for each time the effect is triggert until all effects in this step are finished.

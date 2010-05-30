@@ -22,27 +22,32 @@
 #include <QPainter>
 #include <KoShape.h>
 #include <KoShapeManager.h>
+#include <KoPAPageBase.h>
 
 #include "KPrShapeAnimations.h"
 #include "KPrPlaceholderShape.h"
 #include "KPrAnimationDirector.h"
+#include "KPrPageSelectStrategyBase.h"
 #include "shapeanimations/KPrShapeAnimationOld.h"
 
 #include "kdebug.h"
 
-KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector )
+KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector,
+                                                                    KPrPageSelectStrategyBase * strategy )
 : KoShapeManagerPaintingStrategy( shapeManager )
 , m_animationDirector( animationDirector )
+, m_strategy( strategy )
 {
 }
 
 KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 {
+    delete m_strategy;
 }
 
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
-    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) ) {
+    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
         if ( m_animationDirector->shapeShown( shape ) ) {
             //kDebug() << shape;
             painter.save();

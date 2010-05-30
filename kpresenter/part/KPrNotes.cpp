@@ -184,6 +184,11 @@ void KPrNotes::setDisplayMasterShapes( bool )
 {
 }
 
+bool KPrNotes::displayShape(KoShape *) const
+{
+    return true;
+}
+
 bool KPrNotes::displayMasterBackground()
 {
     return false;

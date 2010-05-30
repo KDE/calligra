@@ -39,6 +39,7 @@
 #include "KPrNotes.h"
 #include "KPrPlaceholderShape.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
+#include "KPrPageSelectStrategyFixed.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "pagelayout/KPrPageLayoutSharedSavingData.h"
@@ -180,6 +181,10 @@ void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paCont
     KoPAPage::saveOdfPageStyleData( style, paContext );
     style.addProperty( "presentation:background-visible", ( m_pageProperties & DisplayMasterBackground ) == DisplayMasterBackground );
     style.addProperty( "presentation:background-objects-visible", ( m_pageProperties & DisplayMasterShapes ) == DisplayMasterShapes );
+    style.addProperty( "presentation:display-date-time", ( m_pageProperties & DisplayDateTime ) == DisplayDateTime );
+    style.addProperty( "presentation:display-footer", ( m_pageProperties & DisplayFooter ) == DisplayFooter );
+    style.addProperty( "presentation:display-header", ( m_pageProperties & DisplayHeader ) == DisplayHeader );
+    style.addProperty( "presentation:display-page-number", ( m_pageProperties & DisplayPageNumber ) == DisplayPageNumber );
 
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
     Q_ASSERT( data );
@@ -289,7 +294,28 @@ QString KPrPage::declaration(KPrDeclarations::Type type) const
     return d->declarations->declaration(type, d->usedDeclaration.value(type));
 }
 
+bool KPrPage::displayShape(KoShape *shape) const
+{
+    bool display = true;
+    QString presentationClass = shape->additionalAttribute("presentation:class");
+    if (!presentationClass.isEmpty()) {
+        if (presentationClass == "date-time") {
+            display = m_pageProperties & DisplayDateTime;
+        }
+        else if (presentationClass == "footer") {
+            display = m_pageProperties & DisplayFooter;
+        }
+        else if (presentationClass == "header") {
+            display = m_pageProperties & DisplayHeader;
+        }
+        else if (presentationClass == "page-number") {
+            display = m_pageProperties & DisplayPageNumber;
+        }
+    }
+    return display;
+}
+
 KoShapeManagerPaintingStrategy * KPrPage::getPaintingStrategy() const
 {
-    return new KPrShapeManagerDisplayMasterStrategy(0);
+    return new KPrShapeManagerDisplayMasterStrategy(0, new KPrPageSelectStrategyFixed(this) );
 }

@@ -89,6 +89,9 @@ public:
     /// reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    /// reimplemented
+    virtual bool displayShape(KoShape *shape) const;
+
 protected:
     /// reimplemented
     virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
