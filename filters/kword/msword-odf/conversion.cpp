@@ -455,26 +455,20 @@ QString Conversion::borderKOfficeAttributes(const wvWare::Word97::BRC& brc)
         //ODF doesn't support dot dashed or wavy borders???
 
     case 7: // dash large gap
-        style = "dashed largegap";
-        break;
-    case 22: // dash small gap
-        style = "dashed smallgap";
-        break;
-    case 6: // dot
-        style = "dotted";
+        style = "dash-largegap";
         break;
     case 8: // dot dash
-        style = "dot-dashed";
+        style = "dot-dash";
         break;
     case 9: // dot dot dash
-        style = "dot-dot-dashed";
+        style = "dot-dot-dash";
         break;
 
     case 20: // wave
         style = "wave";
         break;
     case 21: // double wave
-        style = "double wave";
+        style = "double-wave";
         break;
 
     case 10: // triple
