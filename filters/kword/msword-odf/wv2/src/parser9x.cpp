@@ -584,9 +584,22 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         case PARAGRAPH_MARK:
             {
                 // No "index - start + 1" here, as we don't want to copy the paragraph mark!
+                //
+                // FIXME: This is a workaround.  The original code
+                //        didn't have a pointer here, as you can see
+                //        below.  For some reason, we get a memory
+                //        corruption in the test files for drop caps,
+                //        thus exchanging the drop cap character for
+                //        some other random character.
+#if 1
+                UString *ustring = new UString( processPieceStringHelper( string, start, index ) );
+                m_currentParagraph->push_back( Chunk( *ustring, Position( position.piece, position.offset + start ),
+                                                      fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+#else
                 UString ustring( processPieceStringHelper( string, start, index ) );
                 m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
                                                       fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+#endif
                 processParagraph( fc + index * sizeof( String ) );
                 m_cellMarkFound = false;
                 start = ++index;
