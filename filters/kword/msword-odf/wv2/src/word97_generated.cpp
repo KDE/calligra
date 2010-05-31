@@ -896,7 +896,7 @@ bool BRC::read(OLEStreamReader *stream, bool preservePos) {
     shifterU16>>=8;
     brcType=shifterU16;
     shifterU16=stream->readU16();
-    ico=shifterU16;
+    ico=shifterU16 & 0xFF;
     cv=Word97::icoToRGB(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
@@ -923,7 +923,7 @@ void BRC::readPtr(const U8 *ptr) {
     brcType=shifterU16;
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
-    ico=shifterU16;
+    ico=shifterU16 & 0xFF;
     cv=Word97::icoToRGB(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
