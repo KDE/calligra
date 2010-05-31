@@ -86,6 +86,8 @@ protected:
     KoFilter::ConversionStatus read_outline();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
+    KoFilter::ConversionStatus read_webHidden();
+    KoFilter::ConversionStatus read_bookmarkStart();
     //KoFilter::ConversionStatus read_commentRangeEnd();
     KoFilter::ConversionStatus read_commentRangeStart();
     KoFilter::ConversionStatus read_endnoteReference();
@@ -198,7 +200,8 @@ private:
     void applyBorders(KoGenStyle *style);
 
     enum ComplexFieldCharType {
-       NoComplexFieldCharType, HyperlinkComplexFieldCharType
+       NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
+       ReferenceNextComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
@@ -234,6 +237,7 @@ private:
     qreal m_currentTableWidth; //!< in cm
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
+    bool m_closeHyperlink; // should read_r close hyperlink
     bool m_numberingLoaded;
     bool m_listFound; // was there numPr element in ppr
     QString m_currentListStyleName;

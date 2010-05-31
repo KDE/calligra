@@ -187,6 +187,7 @@ void DocxXmlDocumentReader::init()
     m_wasCaption = false;
     m_listFound = false;
     m_numberingLoaded = false;
+    m_closeHyperlink = false;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -1009,6 +1010,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = HyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
+            else if (instruction.startsWith("PAGEREF")) {
+                instruction.remove(0, 8); // removes PAGEREF
+                m_complexCharType = ReferenceComplexFieldCharType;
+                m_complexCharValue = instruction.left(instruction.indexOf(' '));
+            }
             //! @todo: Add rest of the instructions
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1026,8 +1032,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - customXml (§17.5.1.3)
  - dir (§17.3.2.8)
  - fldSimple (§17.16.19)
- - hyperlink (§17.16.22)
- - p (§17.3.1.22)
+ - [done] hyperlink (§17.16.22)
+ - [done] p (§17.3.1.22)
  - sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
@@ -1062,7 +1068,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
- - r (Text Run) §17.3.2.25
+ - [done] r (Text Run) §17.3.2.25
  - sdt (Inline-Level Structured Document Tag) §17.5.2.31
  - smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
@@ -1073,8 +1079,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     READ_PROLOGUE
 
     QString link_target;
-    MSOOXML::Utils::XmlWriteBuffer linkBuf;
-    body = linkBuf.setWriter(body);
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
@@ -1086,23 +1090,32 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     }
     kDebug() << "link_target:" << link_target;
 
+    if (link_target.isEmpty()) {
+        TRY_READ_ATTR(anchor)
+        if (!anchor.isEmpty())
+        {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", anchor);
+        }
+    }
+    else {
+        body->startElement("text:a");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+    }
+
+    m_closeHyperlink = true;
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(t)
-            ELSE_TRY_READ_IF(r)
+            TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
             //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL)
     }
-
-    body = linkBuf.originalWriter();
-    body->startElement("text:a");
-    body->addAttribute("xlink:type", "simple");
-    body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
-    (void)linkBuf.releaseWriter();
-    body->endElement(); // text:a
 
     READ_EPILOGUE
 }
@@ -1127,10 +1140,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
  - sdtContent (§17.5.2.34)
  - tc (§17.4.66)
  - [done] p (§17.3.1.22)
+
  Child elements:
  - bdo (Bidirectional Override) §17.3.2.3
  - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4 - WML only
  - customXml (Inline-Level Custom XML Element) §17.5.1.3
@@ -1174,6 +1188,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     m_currentStyleName.clear();
     m_currentListStyleName.clear();
     m_listFound = false;
+    m_closeHyperlink = false;
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
@@ -1212,6 +1227,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             //ELSE_TRY_READ_IF(commentRangeEnd)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
+            ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(pPr) // CASE #400.1
 //! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
@@ -1259,8 +1275,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body->endElement(); //text:p
             if (m_listFound) {
                 for (int i = 0; i <= m_currentListLevel; ++i) {
-                                    body->endElement(); // text:list-item
-
+                    body->endElement(); // text:list-item
                 }
                 body->endElement(); // text:list
             }
@@ -1311,7 +1326,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] footnoteReference (Footnote Reference) §17.11.14
  - [done] instrText (Field Code) §17.16.23
  - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
- - monthLong (Date Block - Long Month Format) §17.3.3.15
+  - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
@@ -1323,7 +1338,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - softHyphen (Optional Hyphen Character) §17.3.3.29
  - sym (Symbol Character) §17.3.3.30
  - [done] t (Text) §17.3.3.31
- - tab (Tab Character) §17.3.3.32
+ - [done] tab (Tab Character) §17.3.3.32
  - yearLong (Date Block - Long Year Format) §17.3.3.33
  - yearShort (Date Block - Short Year Format) §17.3.3.34
 
@@ -1364,7 +1379,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(t)
-            ELSE_TRY_READ_IF(ptab)   
+            ELSE_TRY_READ_IF(ptab)
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(endnoteReference)
             ELSE_TRY_READ_IF(footnoteReference)
@@ -1373,6 +1388,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
+            else  if (qualifiedName() == "w:tab") {
+                body->startElement("text:tab");
+                body->endElement(); // text:tab
+            }
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1382,7 +1401,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     if (m_dropCapStatus == DropCapDone) {
         body = oldWriter;
     }
-    else if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || m_complexCharType != NoComplexFieldCharType) {
+    else if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || 
+             m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
         // We want to write to the higher body level
         body = buffer.originalWriter();
         QString currentTextStyleName;
@@ -1395,10 +1415,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 mainStyles->markStyleForStylesXml(currentTextStyleName);
             }
         }
-        if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
-            body->startElement("text:a");
-            body->addAttribute("xlink:type", "simple");
-            body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+        if (m_complexCharStatus == InstrExecute) {
+            if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->startElement("text:a");
+                body->addAttribute("xlink:type", "simple");
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+            }
+            else if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+                body->startElement("text:bookmark-ref");
+                body->addAttribute("text:reference-format", "page");
+                body->addAttribute("text:ref-name", m_complexCharValue);
+            }
         }
         body->startElement("text:span", false);
         body->addAttribute("text:style-name", currentTextStyleName);
@@ -1407,8 +1434,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         body = buffer.releaseWriter();
 
         body->endElement(); //text:span
-        if (m_complexCharStatus == InstrExecute && m_complexCharType == HyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
+
+        if (m_complexCharStatus == InstrExecute) {
+             if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+                 body->endElement(); //text:bookmar-ref
+                 m_complexCharType = NoComplexFieldCharType;
+             }
+             else if (m_complexCharType == ReferenceComplexFieldCharType) {
+                 m_complexCharType = ReferenceNextComplexFieldCharType;
+             }
+             else if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                 body->endElement(); // text:a
+             }
+        }
+        if (m_closeHyperlink) {
+            body->endElement(); //either text:bookmark-ref or text:a
+            m_closeHyperlink = false;
         }
     }
     else {
@@ -1478,7 +1519,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - vanish (Hidden Text) §17.3.2.41
  - [done] vertAlign (Subscript/Superscript Text) §17.3.2.42
  - w (Expanded/Compressed Text) §17.3.2.43
- - webHidden (Web Hidden Text) §17.3.2.44
+ - [done] webHidden (Web Hidden Text) §17.3.2.44
 */
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
@@ -1517,6 +1558,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(caps)
             ELSE_TRY_READ_IF(smallCaps)
             ELSE_TRY_READ_IF(w)
+            ELSE_TRY_READ_IF(webHidden)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1642,6 +1684,102 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL webHidden
+//! webHidden handler (Web Hidden Text)
+/*!
+
+ Parent elements:
+ - [done] rPr (§17.3.1.29)
+ - [done] rPr (§17.3.1.30)
+ - [done] rPr (§17.5.2.28)
+ - [done] rPr (§17.9.25)
+ - [done] rPr (§17.7.9.1)
+ - [done] rPr (§17.7.5.4)
+ - [done] rPr (§17.3.2.28)
+ - [done] rPr (§17.5.2.27)
+ - [done] rPr (§17.7.6.2)
+ - [done]  rPr (§17.3.2.27)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
+{
+    READ_PROLOGUE
+
+//! TODO: implement hidden
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bookmarkStart
+//! bookmarkStart handler (Bookmark Start)
+/*!
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - body (§17.2.2)
+ - comment (§17.13.4.2)
+ - customXml (§17.5.1.6)
+ - customXml (§17.5.1.4)
+ - customXml (§17.5.1.5)
+ - customXml (§17.5.1.3)
+ - deg (§22.1.2.26)
+ - del (§17.13.5.14)
+ - den (§22.1.2.28)
+ - dir (§17.3.2.8)
+ - docPartBody (§17.12.6)
+ - e (§22.1.2.32)
+ - endnote (§17.11.2)
+ - fldSimple (§17.16.19)
+ - fName (§22.1.2.37)
+ - footnote (§17.11.10)
+ - ftr (§17.10.3)
+ - hdr (§17.10.4)
+ - hyperlink (§17.16.22)
+ - ins (§17.13.5.18)
+ - lim (§22.1.2.52)
+ - moveFrom (§17.13.5.22)
+ - moveTo (§17.13.5.25)
+ - num (§22.1.2.75)
+ - oMath (§22.1.2.77)
+ - [done p (§17.3.1.22)
+ - rt (§17.3.3.24)
+ - rubyBase (§17.3.3.27)
+ - sdtContent (§17.5.2.34)
+ - sdtContent (§17.5.2.33)
+ - sdtContent (§17.5.2.35)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+ - sub (§22.1.2.112)
+ - sup (§22.1.2.114)
+ - tbl (§17.4.38)
+ - tc (§17.4.66)
+ - tr (§17.4.79)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(name)
+    if (!name.isEmpty()) {
+        body->startElement("text:bookmark");
+        body->addAttribute("text:name", name);
+        body->endElement(); // text:bookmark-ref
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2168,7 +2306,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    READ_ATTR_INTO(val, m_currentStyleName)
+    m_currentParagraphStyle.setParentName(val);
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -2200,7 +2338,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    READ_ATTR_INTO(val, m_currentRunStyleName)
+    m_currentTextStyle.setParentName(val);
+
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -2370,6 +2509,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
     const qreal value = qreal(TWIP_TO_POINT(pos.toDouble(&ok)));
     if (ok) {
         body->addAttributePt("style:position", value);
+    }
+    if (!leader.isEmpty()) {
+        if (leader == "dot") {
+            body->addAttribute("style:leader-text", ".");
+        }
     }
     body->endElement(); // style:tab-stop
 
