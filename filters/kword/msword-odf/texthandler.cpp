@@ -1195,8 +1195,14 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 // With bullets, text can only be one character, which
                 // tells us what kind of bullet to use
                 unsigned int code = text[0].unicode();
-                if ((code & 0xFF00) == 0xF000)   // see wv2
-                    code &= 0x00FF;
+                if ((code & 0xFF00) == 0xF000) {  // unicode: private use area (0xf000 - 0xf0ff)
+                    if (code >= 0x20) {
+                        // microsoft symbol charset shall apply here.
+                        code = Conversion::MS_SYMBOL_ENCODING[code%256];
+                    } else {
+                        code &= 0x00FF;
+                    }
+                }
                 listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
             } else
                 kWarning(30513) << "Bullet with more than one character, not supported";
