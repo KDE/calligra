@@ -470,6 +470,10 @@ QString Conversion::borderKOfficeAttributes(const wvWare::Word97::BRC& brc)
     case 21: // double wave
         style = "double-wave";
         break;
+    case 23: // slash
+        style = "slash";
+        break;
+
 
     case 10: // triple
         style = "triple";
