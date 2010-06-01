@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Swap Effect
 Name[es]=Efecto de intercambio
+Name[et]=Leheküljevahetuse efekt
 Name[ja]=入れ替え
 Name[nds]=Utwessel-Effekt
 Name[nl]=Omwissel-effect
@@ -11,6 +12,7 @@ Name[uk]=Ефект перегортання
 Name[x-test]=xxSwap Effectxx
 Comment=Swap Page Effect
 Comment[es]=Efecto de página de intercambio
+Comment[et]=Lehekülje vahetamise efekt
 Comment[ja]=入れ替えページ効果
 Comment[nds]=Utwessel-Effekt
 Comment[nl]=Pagina-omwisselen-effect
