@@ -792,13 +792,13 @@ public:
     }
 };
 
-QByteArray Utils::ST_PlaceholderType_to_ODF(const QByteArray& ecmaType)
+QString Utils::ST_PlaceholderType_to_ODF(const QString& ecmaType)
 {
     K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
-    QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType));
+    QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType.toLatin1()));
     if (it == s_ST_PlaceholderType_to_ODF->constEnd())
-        return "outline";
-    return it.value();
+        return QLatin1String("outline");
+    return QString(it.value());
 }
 
 //! Mapping for handling u element, used in setupUnderLineStyle()
@@ -992,6 +992,14 @@ QString Utils::columnName(uint column)
         str.prepend(QChar('A' + (col % 26)));
 
     return str;
+}
+
+void Utils::splitPathAndFile(const QString& pathAndFile, QString* path, QString* file)
+{
+    Q_ASSERT(path);
+    Q_ASSERT(file);
+    *path = pathAndFile.left(pathAndFile.lastIndexOf('/'));
+    *file = pathAndFile.mid(pathAndFile.lastIndexOf('/') + 1);
 }
 
 // <units> -------------------

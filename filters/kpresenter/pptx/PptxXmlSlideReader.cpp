@@ -68,6 +68,7 @@ void PptxSlideProperties::clear()
 {
     qDeleteAll(shapes);
     shapes.clear();
+    layoutStyleName.clear();
 }
 
 
@@ -76,12 +77,12 @@ void PptxSlideProperties::clear()
 PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
     uint _slideNumber, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-    PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
+    PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
     MSOOXML::MsooXmlRelationships& _relationships)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
-        slideProperties(&_slideProperties)
+        slideProperties(_slideProperties)
 {
 }
 
@@ -98,12 +99,14 @@ public:
 #endif
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
+    QString qualifiedNameOfMainElement;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
         : MSOOXML::MsooXmlCommonReader(writers)
         , m_context(0)
         , m_currentShapeProperties(0)
+        , m_placeholderElWriter(0)
         , d(new Private)
 {
     init();
@@ -126,17 +129,36 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 {
     m_context = dynamic_cast<PptxXmlSlideReaderContext*>(context);
     Q_ASSERT(m_context);
-    kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
-    if (m_context->type == SlideMaster) { // will be written
-        m_context->slideProperties->clear();
+    switch (m_context->type) {
+    case Slide:
+        d->qualifiedNameOfMainElement = "p:sld";
+        break;
+    case SlideLayout:
+        d->qualifiedNameOfMainElement = "p:sldLayout";
+        break;
+    case SlideMaster:
+        d->qualifiedNameOfMainElement = "p:sldMaster";
+        break;
     }
+#if 0
+    if (m_context->slideProperties) {
+        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
+        if (m_context->type == SlideMaster) { // will be written
+            m_context->slideProperties->clear();
+        }
+    }
+#endif
     const KoFilter::ConversionStatus result = readInternal();
     /*    if (m_context->type == SlideMaster) {
             if (result == KoFilter::OK) {
                 m_context->slideProperties->clear();
             }
         }*/
-    kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
+#if 0
+    if (m_context->slideProperties) {
+        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
+    }
+#endif
     m_context = 0;
     return result;
 }
@@ -159,7 +181,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     readNext();
     kDebug() << *this << namespaceUri();
 
-    if (!expectEl(m_context->type == Slide ? "p:sld" : "p:sldMaster")) {
+    if (!expectEl(d->qualifiedNameOfMainElement)) {
         return KoFilter::WrongFormat;
     }
     if (!expectNS(MSOOXML::Schemas::presentationml)) {
@@ -183,11 +205,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    if (m_context->type == Slide) {
+    switch (m_context->type) {
+    case Slide:
         TRY_READ(sld)
-    } else {
-
+        break;
+    case SlideLayout:
+        TRY_READ(sldLayout)
+        break;
+    case SlideMaster:
         TRY_READ(sldMaster)
+        break;
     }
     kDebug() << "===========finished============";
     return KoFilter::OK;
@@ -218,10 +245,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
 
 #undef CURRENT_EL
 #define CURRENT_EL sldMaster
-//! sldMster handler (Slide Master)
-/*! This element specifies an instance of a slide master slide.
- ECMA-376, 19.3.1.42, p. 2853.
+//! sldMaster handler (Slide Master)
+/*! ECMA-376, 19.3.1.42, p. 2853.
  This element specifies an instance of a slide master slide.
+
  Child elements:
     - clrMap (Color Scheme Map) §19.3.1.6
     - [done] cSld (Common Slide Data) §19.3.1.16
@@ -240,6 +267,32 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL sldLayout
+//! sldLayout handler (Slide Layout)
+/*! ECMA-376, 19.3.1.39, p. 2851.
+ This element specifies an instance of a slide layout. The slide layout contains
+ in essence a template slide design that can be applied to any existing slide.
+ When applied to an existing slide all corresponding content should be mapped to the new slide layout.
+
+ Root element of PresentationML Slide Layout part.
+
+ Child elements:
+ - clrMapOvr (Color Scheme Map Override) §19.3.1.7
+ - [done] cSld (Common Slide Data) §19.3.1.16
+ - extLst (Extension List with Modification Flag) §19.3.1.20
+ - hf (Header/Footer information for a slide master) §19.3.1.25
+ - timing (Slide Timing Information for a Slide Layout) §19.3.1.48
+ - transition (Slide Transition for a Slide Layout) §19.3.1.50
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_sldLayout()
+{
+    READ_PROLOGUE
+    RETURN_IF_ERROR( read_sldInternal() )
+    READ_EPILOGUE
+}
+
 //! CASE #P300
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 {
@@ -249,10 +302,37 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
 
     if (m_context->type == Slide) {
+#if 0
+    QString slidePath, slideFile;
+    MSOOXML::Utils::splitPathAndFile(masterSlidePathAndFile, &slidePath, &slideFile);
+
+    PptxXmlSlideReaderContext context(
+        *m_context->import,
+        slidePath, slideFile,
+        0/*unused*/, *m_context->themes,
+        PptxXmlSlideReader::SlideMaster,
+        0, /*slideProperties*/
+        *m_context->relationships
+    );
+    PptxXmlSlideReader slideReader(this);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
+        &slideReader, slidePath + "/" + slideFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideReader.errorString();
+        return status;
+    }
+        
+        
+
+#endif
+
         // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
         m_currentDrawStyle = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
         m_currentDrawStyle.addProperty("presentation:background-visible", true);   // CASE #P111
         m_currentDrawStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
+    }
+    else if (m_context->type == SlideLayout) {
+        m_currentPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
     }
 
     {
@@ -265,16 +345,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         }
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
             if (isStartElement()) {
                 TRY_READ_IF(cSld)
-                ELSE_TRY_READ_IF(txStyles)
+                else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
+                    TRY_READ(txStyles)
+                }
 //! @todo add ELSE_WRONG_FORMAT
             }
-            if (m_context->type == Slide) {
-                BREAK_IF_END_OF(sld);
-            } else {
-                BREAK_IF_END_OF(sldMaster);
+            if (isEndElement()) {
+                if (d->qualifiedNameOfMainElement == qualifiedName()) {
+                    break;
+                }
             }
         }
 
@@ -287,7 +368,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 //! @todo draw:master-page-name is hardcoded for now
                 body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
                 //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
-                body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber)); //optional; CASE #P303
+                body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
                 body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
                 //! @todo presentation:use-date-time-name //optional; CASE #P304
                 //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
@@ -296,11 +377,23 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
 
+                if (!m_context->slideProperties->layoutStyleName.isEmpty()) {
+                    kDebug() << "presentation:presentation-page-layout-name=" <<
+                                       m_context->slideProperties->layoutStyleName;
+                    body->addAttribute("presentation:presentation-page-layout-name",
+                                       m_context->slideProperties->layoutStyleName);
+                }
+
 //                body->addCompleteElement(&drawPageBuf);
                 (void)drawPageBuf.releaseWriter();
                 body->endElement(); //draw:page
             }
         }
+    }
+
+    if (m_context->type == SlideLayout) {
+        m_context->slideProperties->layoutStyleName = mainStyles->insert(m_currentPageLayoutStyle);
+        kDebug() << "layoutStyleName:" << m_context->slideProperties->layoutStyleName;
     }
     return KoFilter::OK;
 }
@@ -643,6 +736,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     d->presentationStyleNameCount = 0;
 #endif
     d->shapeNumber = 0;
+    QByteArray placeholderEl;
+    QBuffer placeholderElBuffer(&placeholderEl);
+    placeholderElBuffer.open(QIODevice::WriteOnly);
+    delete m_placeholderElWriter;
+    m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
+    MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -653,6 +752,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    placeholderElBuffer.close();
+    m_currentPageLayoutStyle.addProperty(
+        QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
+    placeholderElWriterSetter.release();
+    delete m_placeholderElWriter;
+    m_placeholderElWriter = 0;
+
     READ_EPILOGUE
 }
 
@@ -717,11 +823,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 {
     READ_PROLOGUE
+    kDebug() << "m_context->type:" << m_context->type;
+
+#ifdef __GNUC__
+#warning remove m_context->type != Slide
+#endif
+    if (m_context->type != Slide) {
+        SKIP_EVERYTHING_AND_RETURN
+    }
+
     body->startElement("draw:text-box"); // CASE #P436
 
     m_lstStyleFound = false;
     m_pPr_lvl = 0;
-    const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType.toLatin1()) == "outline";
+    const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType) == QLatin1String("outline");
 
     MSOOXML::Utils::XmlWriteBuffer listBuf;
     body = listBuf.setWriter(body);
@@ -729,8 +844,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        if (isStartElement()) {            
-	    TRY_READ_IF_NS(a, lstStyle)
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
                 // buffer each text:p, because we have to write after the child elements aregenerated
                 MSOOXML::Utils::XmlWriteBuffer paragraphBuf;

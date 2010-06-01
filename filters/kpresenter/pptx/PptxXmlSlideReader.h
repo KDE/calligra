@@ -30,6 +30,7 @@
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
 
+class KoXmlWriter;
 class PptxXmlSlideReaderContext;
 class PptxImport;
 namespace MSOOXML
@@ -65,7 +66,11 @@ public:
     QList<PptxShapeProperties*> shapes;
 
     void clear();
+
+    QString layoutStyleName; //!< Used for page layouts
 };
+
+typedef QMap<QString, PptxSlideProperties*> PptxSlidePropertiesMap;
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
 class PptxXmlSlideReader : public MSOOXML::MsooXmlCommonReader
@@ -74,6 +79,7 @@ public:
     //! Mode of operation.
     enum Type {
         Slide,
+        SlideLayout,
         SlideMaster
     };
 
@@ -94,6 +100,7 @@ protected:
     KoFilter::ConversionStatus read_sld();
     KoFilter::ConversionStatus read_sldInternal();
     KoFilter::ConversionStatus read_sldMaster(); //!< For SlideMaster mode
+    KoFilter::ConversionStatus read_sldLayout(); //!< For SlideLayout mode
     KoFilter::ConversionStatus read_cSld();
     KoFilter::ConversionStatus read_bg();
     KoFilter::ConversionStatus read_bgPr();
@@ -105,6 +112,8 @@ protected:
 //    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
     PptxShapeProperties* m_currentShapeProperties;
+
+    KoXmlWriter* m_placeholderElWriter;
 
 private:
     void init();
@@ -120,12 +129,12 @@ class PptxXmlSlideReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     //! Creates the context object.
-    /*! @param slideProperties is written for SlideMaster type and read for Slide type. */
+    /*! @param _slideProperties is written for SlideMaster type and read for Slide type. */
     PptxXmlSlideReaderContext(
         PptxImport& _import, const QString& _path, const QString& _file,
         uint _slideNumber,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
+        PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
         MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport* import;
     const QString path;

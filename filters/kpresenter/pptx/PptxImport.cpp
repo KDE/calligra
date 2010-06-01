@@ -1092,6 +1092,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
+#if 0 // moved to PptxXmlDocumentReader::read_sldMasterId()
     // 3. parse master slides
 #ifdef __GNUC__
 #warning TODO use MsooXmlRelationships; parse all used master slides; now one hardcoded master name is used
@@ -1127,11 +1128,21 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
             return status;
         }
     }
+#endif //0
+    QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
+    if (partNames.count() != 1) {
+        errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
+        return KoFilter::WrongFormat;
+    }
     // 4. parse document
+    const QString documentPathAndFile(partNames.first());
+    QString documentPath, documentFile;
+    MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
+    kDebug() << documentPathAndFile << documentPath << documentFile;
     {
         PptxXmlDocumentReaderContext context(
             *this, themes,
-            masterSlideProperties,
+            documentPath, documentFile,
             *relationships);
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(

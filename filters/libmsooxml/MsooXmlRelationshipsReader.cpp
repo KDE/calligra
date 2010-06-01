@@ -158,19 +158,18 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     READ_ATTR_WITHOUT_NS(Target)
     QString fixedPath(m_context->path);
     while (Target.startsWith("../")) {
-//        kDebug() << "- Target:" << Target << "fixedPath:" << fixedPath;
+        //kDebug() << "- Target:" << Target << "fixedPath:" << fixedPath;
         Target = Target.mid(3);
         fixedPath.truncate(fixedPath.lastIndexOf('/'));
-//        kDebug() << "= Target:" << Target << "fixedPath:" << fixedPath;
+        //kDebug() << "= Target:" << Target << "fixedPath:" << fixedPath;
     }
-    /*    kDebug() << "adding rel:";
-        kDebug() << d->pathAndFile + Id;
-        kDebug() << fixedPath + '/' + Target;*/
+    //kDebug() << "adding rel:";
+    //kDebug() << d->pathAndFile + Id;
+    //kDebug() << fixedPath + '/' + Target;
 
     m_context->rels->insert(d->pathAndFile + Id, fixedPath + '/' + Target);
-//    kDebug() << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key="
-//             << targetKey(fixedPath + '/' + m_context->file, Type);
-    m_context->targetsForTypes->insert(targetKey(fixedPath + '/' + m_context->file, Type), fixedPath + '/' + Target);
+    //kDebug() << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file, Type);
+    m_context->targetsForTypes->insert(targetKey(m_context->path + '/' + m_context->file, Type), fixedPath + '/' + Target);
 
     while (!atEnd()) {
         readNext();

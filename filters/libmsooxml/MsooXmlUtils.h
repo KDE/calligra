@@ -255,7 +255,7 @@ MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     By default (and for empty argument), "outline" is returned.
 */
 //! CASE #P500
-MSOOXML_EXPORT QByteArray ST_PlaceholderType_to_ODF(const QByteArray& ecmaType);
+MSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
 //! Sets up @a textStyleProperties with underline style matching MSOOXML name @a msooxmlName.
 //! Based on 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681
@@ -265,6 +265,9 @@ MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterS
 //! @return the symbolic name of column @a column (counted from 0)
 //! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
 MSOOXML_EXPORT QString columnName(uint column);
+
+//! Splits @a pathAndFile into path and file parts. Path does not end with '/'.
+MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! @return the string which is needed when rotation objects
 MSOOXML_EXPORT QString rotateString(const qreal rotation, const qreal xPos, const qreal yPos);

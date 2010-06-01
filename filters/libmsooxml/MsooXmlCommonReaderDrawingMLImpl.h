@@ -42,6 +42,8 @@
 #define MSOOXML_CURRENT_NS DRAWINGML_PIC_NS
 #endif
 
+#include <KoXmlWriter.h>
+
 void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
@@ -445,7 +447,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
 
     // Read attributes
     // FIXME: Make a member?
-    bool isTextBox = MSOOXML::Utils::convertBooleanAttr(attrs.value("txBox").toString(), false);
+    //bool isTextBox = MSOOXML::Utils::convertBooleanAttr(attrs.value("txBox").toString(), false);
 
     // Read child elements
     while (!atEnd()) {
@@ -498,9 +500,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) {
-    } else if (m_context->type == SlideMaster) {
+    }
+    else if (m_context->type == SlideMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
         m_context->slideProperties->shapes.append(m_currentShapeProperties);
+        m_currentMasterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
+#warning TODO:     m_currentMasterPageStyle.addChildElement(....)
+    }
+    else if (m_context->type == SlideLayout) {
+#warning TODO:     m_currentMasterPageStyle.addChildElement(....)
     }
     m_phType.clear();
 #endif
@@ -530,7 +538,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
 #ifdef PPTXXMLSLIDEREADER_H
-            else if (m_context->type == Slide) {
+            else if (m_context->type == Slide || m_context->type == SlideLayout) {
                 TRY_READ_IF(txBody)
             }
 #endif
@@ -560,7 +568,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 // CASE #P476
         body->addAttribute("draw:id", m_cNvPrId);
         body->addAttribute("presentation:class",
-                           MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType.toLatin1()));
+                           MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType));
 //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -587,8 +595,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //        body->addCompleteElement(&drawFrameBuf);
         body->endElement(); //draw:frame
     }
-
 #ifdef PPTXXMLSLIDEREADER_H
+    else if (m_context->type == SlideLayout) {
+        // presentation:placeholder
+        Q_ASSERT(m_placeholderElWriter);
+        m_placeholderElWriter->startElement("presentation:placeholder");
+        m_placeholderElWriter->addAttribute("presentation:object",
+            MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType));
+        m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        m_placeholderElWriter->endElement();
+    }
     d->shapeNumber++;
 #endif
 
@@ -667,23 +686,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_H
 //! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
-        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
-        << "d->shapeNumber" << d->shapeNumber;
-        if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
-            // for inheritance
-            m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
-            kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
+        if (m_context->slideProperties) {
+            kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
+                     << "d->shapeNumber" << d->shapeNumber;
+            if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
+                // for inheritance
+                m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
+                kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
 
-            m_svgX = m_currentShapeProperties->x;
-            m_svgY = m_currentShapeProperties->y;
-            kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
-            m_svgWidth = m_currentShapeProperties->width;
-            m_svgHeight = m_currentShapeProperties->height;
-            kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-        } else {
-            m_currentShapeProperties = 0;
-            kWarning() << QString("No shape #%1 found in master slide; shapes count = %2").arg(d->shapeNumber)
-            .arg(m_context->slideProperties->shapes.count());
+                m_svgX = m_currentShapeProperties->x;
+                m_svgY = m_currentShapeProperties->y;
+                kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
+                m_svgWidth = m_currentShapeProperties->width;
+                m_svgHeight = m_currentShapeProperties->height;
+                kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
+            } else {
+                m_currentShapeProperties = 0;
+                kWarning() << QString("No shape #%1 found in master slide; shapes count = %2").arg(d->shapeNumber)
+                .arg(m_context->slideProperties->shapes.count());
+            }
         }
     }
 #endif
@@ -1257,14 +1278,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             raiseElNotFoundError("a:ext");
             return KoFilter::WrongFormat;
         }
-        if(m_currentShapeProperties != NULL) {
+        if (m_currentShapeProperties) {
             m_currentShapeProperties->x = m_svgX;
             m_currentShapeProperties->y = m_svgY;
             m_currentShapeProperties->width = m_svgWidth;
             m_currentShapeProperties->height = m_svgHeight;
             m_currentShapeProperties->rot = m_rot;
+            kDebug() << "Saved to m_currentShapeProperties";
         }
-        kDebug() << "Saved to m_currentShapeProperties";
     }
 #endif
 
@@ -1297,7 +1318,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     - [done] y (Y-Axis Coordinate)
 */
 //! @todo support all elements
-//! 20.1.7.4 off (Offset)
 #undef CURRENT_EL
 #define CURRENT_EL off
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
@@ -1873,14 +1893,14 @@ void MSOOXML_CURRENT_CLASS::readWrap()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 {
     READ_PROLOGUE
-    m_lstStyleFound = true;
-
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
+        //! @todo read children
         readNext();
     }
+    m_lstStyleFound = !m_currentListStyle.isEmpty();
 
     READ_EPILOGUE
 }

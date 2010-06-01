@@ -254,7 +254,10 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
         return KoFilter::WrongFormat;
     }
-    const QString documentPath(partNames.first());
+    const QString documentPathAndFile(partNames.first());
+    QString documentPath, documentFile;
+    MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
+    kDebug() << documentPathAndFile << documentPath << documentFile;
     {
         // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
         // ECMA-376, 11.3.12 Style Definitions Part, p. 65
@@ -262,9 +265,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         // A package shall contain at most two Style Definitions parts. One instance of that part shall be
         // the target of an implicit relationship from the Main Document (§11.3.10) part, and the other shall
         // be the target of an implicit relationship in from the Glossary Document (§11.3.8) part.
-        const QString stylesPath(relationships->targetForType(
-            documentPath.left(documentPath.lastIndexOf('/')),
-            documentPath.mid(documentPath.lastIndexOf('/') + 1),
+        const QString stylesPath(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/styles"));
         kDebug() << "stylesPath:" << stylesPath;
         DocxXmlStylesReader stylesReader(writers);
@@ -278,8 +279,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     {
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
         DocxXmlDocumentReaderContext context(
-            *this, QLatin1String("word"), QLatin1String("document.xml"),
-            *relationships, themes);
+            *this, documentPath, documentFile, *relationships, themes);
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

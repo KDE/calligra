@@ -176,4 +176,9 @@ qreal* m_currentDoubleValue;
 bool m_hyperLink;
 QString m_hyperLinkTarget;
 
+#ifdef PPTXXMLSLIDEREADER_H
+KoGenStyle m_currentMasterPageStyle; //!< set by read_sp()
+KoGenStyle m_currentPageLayoutStyle; //!< set by read_sp()
+#endif
+
 #endif

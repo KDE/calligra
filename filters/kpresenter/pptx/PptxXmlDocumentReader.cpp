@@ -24,6 +24,7 @@
 #include "PptxXmlDocumentReader.h"
 #include "PptxXmlSlideReader.h"
 #include "PptxImport.h"
+#include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
@@ -37,9 +38,10 @@
 
 PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
     PptxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-    PptxSlideProperties& _masterSlideProperties, MSOOXML::MsooXmlRelationships& _relationships)
-        : import(&_import), themes(&_themes), masterSlideProperties(&_masterSlideProperties),
-        relationships(&_relationships)
+    const QString& _path, const QString& _file,
+    MSOOXML::MsooXmlRelationships& _relationships)
+        : import(&_import), themes(&_themes),
+          path(_path), file(_file), relationships(&_relationships)
 {
 }
 
@@ -50,7 +52,11 @@ public:
             : slideNumber(0) {
     }
     ~Private() {
+        qDeleteAll(masterSlidePropertiesMap);
+        qDeleteAll(slideLayoutsPropertiesMap);
     }
+    PptxSlidePropertiesMap masterSlidePropertiesMap;
+    PptxSlidePropertiesMap slideLayoutsPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
 private:
 };
@@ -123,6 +129,47 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     return KoFilter::OK;
 }
 
+PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
+    const QString& slidePath, const QString& slideFile)
+{
+    const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
+        slidePath, slideFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"));
+    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout";
+    kDebug() << "slideLayoutPathAndFile:" << slideLayoutPathAndFile;
+    if (slideLayoutPathAndFile.isEmpty())
+        return 0;
+
+    QString slideLayoutPath, slideLayoutFile;
+    MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideLayoutPath, &slideLayoutFile);
+
+    // load layout or find in cache
+    PptxSlideProperties *result = d->slideLayoutsPropertiesMap.value(slideLayoutPathAndFile);
+    if (result)
+        return result;
+
+    result = new PptxSlideProperties();
+    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(result);
+    PptxXmlSlideReaderContext context(
+        *m_context->import,
+        slideLayoutPath, slideLayoutFile,
+        0/*unused*/, *m_context->themes,
+        PptxXmlSlideReader::SlideLayout,
+        result,
+        *m_context->relationships
+    );
+    PptxXmlSlideReader slideLayoutReader(this);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
+        &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideLayoutReader.errorString();
+        return 0;
+    }
+    slideLayoutPropertiesSetter.release();
+    d->slideLayoutsPropertiesMap.insert(slideLayoutPathAndFile, result);
+    return result;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL sldId
 //! p:sldId handler (Slide ID)
@@ -140,30 +187,83 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
     kDebug() << "id:" << id << "r:id:" << r_id;
-//! @todo use MSOOXML::MsooXmlRelationships
-//!       (for now we hardcode relationships, e.g. we use slide1, slide2...)
-    d->slideNumber++; // counted from 1
-    QString path("ppt/slides");
-    QString file = QString("slide%1.xml").arg(d->slideNumber);
-    kDebug() << "path:" << path + "/" + file;
-    PptxXmlSlideReader slideReader(this);
+
+    // locate this slide
+    const QString slidePathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "slidePathAndFile:" << slidePathAndFile;
+
+    QString slidePath, slideFile;
+    MSOOXML::Utils::splitPathAndFile(slidePathAndFile, &slidePath, &slideFile);
+
+    PptxSlideProperties *slideLayoutProperties = this->slideLayoutProperties(slidePath, slideFile);
     PptxXmlSlideReaderContext context(
         *m_context->import,
-        path, file,
-        d->slideNumber, *m_context->themes,
-        PptxXmlSlideReader::Slide, *m_context->masterSlideProperties,
-        *m_context->relationships);
-
-    const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                &slideReader, path + "/" + file, &context);
-
-    if (result != KoFilter::OK) {
-        raiseError(slideReader.errorString());
-        return result;
+        slidePath, slideFile,
+        0/*unused*/, *m_context->themes,
+        PptxXmlSlideReader::Slide,
+        slideLayoutProperties,
+        *m_context->relationships
+    );
+    PptxXmlSlideReader slideReader(this);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
+        &slideReader, slidePath + "/" + slideFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideReader.errorString();
+        return status;
     }
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL sldMasterId
+//! p:sldMasterId (Slide Master ID)
+/*! This element specifies a slide master that is available within the corresponding presentation.
+    A slide master is a slide that is specifically designed to be a template for all related child layout slides.
+
+ ECMA-376, 19.2.1.33, p. 2797.
+ Parent elements:
+    - [done] sldMasterIdLst (§19.2.1.37)
+ Child elements:
+    - extLst (Extension List) §19.2.1.12
+*/
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITHOUT_NS(id)
+    READ_ATTR_WITH_NS(r, id)
+    kDebug() << "id:" << id << "r:id:" << r_id;
+
+    const QString slideMasterPathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "slideMasterPathAndFile:" << slideMasterPathAndFile;
+
+    QString slideMasterPath, slideMasterFile;
+    MSOOXML::Utils::splitPathAndFile(slideMasterPathAndFile, &slideMasterPath, &slideMasterFile);
+
+    PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
+    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
+    PptxXmlSlideReaderContext context(
+        *m_context->import,
+        slideMasterPath, slideMasterFile,
+        0/*unused*/, *m_context->themes,
+        PptxXmlSlideReader::SlideMaster,
+        masterSlideProperties,
+        *m_context->relationships
+    );
+    PptxXmlSlideReader slideMasterReader(this);
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
+        &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideMasterReader.errorString();
+        return status;
+    }
+    d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
+    masterSlidePropertiesSetter.release();
+    SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL sldIdLst
@@ -190,6 +290,34 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL sldMasterIdLst
+//! p:sldMasterIdLst handler (List of Slide Master IDs)
+/*! ECMA-376, 19.2.1.37, p. 2800
+ This element specifies a list of identification information for the slide master slides that
+ are available within the corresponding presentation. A slide master is a slide that
+ is specifically designed to be a template for all related child layout slides.
+
+ Parent Elements:
+ - [done] presentation (§19.2.1.26)
+ Child Elements:
+ - [done] sldMasterId (Slide Master ID) §19.2.1.36
+*/
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(sldMasterId)
+            ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL presentation
 //! p:presentation handler (Presentation)
 /*! ECMA-376, 19.2.1.26, p. 2790.
@@ -206,8 +334,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
     - notesMasterIdLst (List of Notes Master IDs) §19.2.1.21
     - notesSz (Notes Slide Size) §19.2.1.22
     - photoAlbum (Photo Album Information) §19.2.1.24
-    - sldIdLst (List of Slide IDs) §19.2.1.34
-    - sldMasterIdLst (List of Slide Master IDs) §19.2.1.37
+    - [done] sldIdLst (List of Slide IDs) §19.2.1.34
+    - [done] sldMasterIdLst (List of Slide Master IDs) §19.2.1.37
     - sldSz (Presentation Slide Size) §19.2.1.39
     - smartTags (Smart Tags) §19.2.1.40
 */
@@ -226,7 +354,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(sldIdLst)
+            TRY_READ_IF(sldMasterIdLst)
+            ELSE_TRY_READ_IF(sldIdLst)
+            //! @todo ELSE_TRY_READ_IF(sldSz)
+            //! @todo ELSE_TRY_READ_IF(notesSz)
+            //! @todo ELSE_TRY_READ_IF(defaultTextStyle)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
