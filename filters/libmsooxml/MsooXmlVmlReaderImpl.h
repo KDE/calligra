@@ -91,6 +91,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
     if (!y_mar.isEmpty()) {
         body->addAttribute("svg:y", y_mar);
     }
+    if (!m_shapeColor.isEmpty()) {
+        m_currentDrawStyle.addProperty("fo:background-color", m_shapeColor);
+    }
 
     if (!m_imagedataPath.isEmpty()) {
         body->startElement("draw:image");
@@ -126,7 +129,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
         }
     }
 
-    (void)drawFrameBuf.releaseWriter();    
+    (void)drawFrameBuf.releaseWriter();
 
     body->endElement(); //draw:frame
 
@@ -501,7 +504,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
-    
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+
+    if (!fillcolor.isEmpty()) {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
     m_imagedataPath.clear();
 
     while (!atEnd()) {

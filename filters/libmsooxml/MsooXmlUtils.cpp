@@ -1132,6 +1132,28 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
+MSOOXML_EXPORT QString Utils::rgbColor(const QString& color)
+{
+    QString newColor;
+    if (color == "red") {
+        newColor = "#ff0000";
+    }
+    else if (color == "green") {
+        newColor = "#00ff00";
+    }
+    else if (color == "blue") {
+        newColor = "#0000ff";
+    }
+    else if (color == "yellow") {
+        newColor = "#ffff00 ";
+    }
+    else {
+        newColor = color;
+    }
+
+    return newColor;
+}
+
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
