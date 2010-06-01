@@ -326,8 +326,8 @@ bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelEleme
     QSizeF size = shape->size();
     QRect r = QFontMetrics( doc->defaultFont() ).boundingRect(
                     labelData->shapeMargins().left, labelData->shapeMargins().top,                         
-                    qMax( CM_TO_POINT( 5 ), size.width() - pos.x() * 2.0 - labelData->shapeMargins().right ),
-                    qMax( CM_TO_POINT( 0.6 ), size.height() - labelData->shapeMargins().bottom ),
+                    qMax( CM_TO_POINT( 5 ), qreal(size.width() - pos.x() * 2.0 - labelData->shapeMargins().right) ),
+                    qMax( CM_TO_POINT( 0.6 ), qreal(size.height() - labelData->shapeMargins().bottom) ),
                     Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, doc->toPlainText() );
     label->setSize( r.size() );
 
