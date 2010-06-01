@@ -85,6 +85,9 @@ public:
     QString helpText() const;
     void setHelpText(const QString& text);
     Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = 0);
+    
+    QString alternateName() const;
+    void setAlternateName(const QString &name);
 
 private:
     Q_DISABLE_COPY(Function)

@@ -168,6 +168,7 @@ void MathModule::registerFunctions()
     f = new Function("FACT",          func_fact);
     repo->add(f);
     f = new Function("FACTDOUBLE",    func_factdouble);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE");
     repo->add(f);
     f = new Function("FIB",           func_fib);  // KSpread-specific, like Quattro-Pro's FIB
     repo->add(f);
@@ -196,9 +197,11 @@ void MathModule::registerFunctions()
     f->setParamCount(2);
     repo->add(f);
     f = new Function("MROUND",        func_mround);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND");
     f->setParamCount(2);
     repo->add(f);
     f = new Function("MULTINOMIAL",   func_multinomial);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL");
     f->setParamCount(1, -1);
     repo->add(f);
     f = new Function("ODD",           func_odd);
@@ -210,6 +213,7 @@ void MathModule::registerFunctions()
     f->setParamCount(2);
     repo->add(f);
     f = new Function("QUOTIENT",      func_quotient);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT");
     f->setParamCount(2);
     repo->add(f);
     f = new Function("RAND",          func_rand);
@@ -218,6 +222,7 @@ void MathModule::registerFunctions()
     f = new Function("RANDBERNOULLI", func_randbernoulli);
     repo->add(f);
     f = new Function("RANDBETWEEN",   func_randbetween);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN");
     f->setParamCount(2);
     repo->add(f);
     f = new Function("RANDBINOM",     func_randbinom);
@@ -250,6 +255,7 @@ void MathModule::registerFunctions()
     f = new Function("SQRT",          func_sqrt);
     repo->add(f);
     f = new Function("SQRTPI",        func_sqrtpi);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI");
     repo->add(f);
     f = new Function("TRUNC",         func_trunc);
     f->setParamCount(1, 2);
@@ -282,6 +288,7 @@ void MathModule::registerFunctions()
     f->setAcceptArray();
     repo->add(f);
     f = new Function("GCD",           func_gcd);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD");
     f->setParamCount(1, -1);
     f->setAcceptArray();
     repo->add(f);
@@ -290,6 +297,7 @@ void MathModule::registerFunctions()
     f->setAcceptArray();
     repo->add(f);
     f = new Function("LCM",           func_lcm);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM");
     f->setParamCount(1, -1);
     f->setAcceptArray();
     repo->add(f);

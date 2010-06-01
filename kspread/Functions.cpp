@@ -44,6 +44,7 @@ class Function::Private
 {
 public:
     QString name;
+    QString alternateName;
     FunctionPtr ptr;
     int paramMin, paramMax;
     bool acceptArray;
@@ -55,6 +56,7 @@ class FunctionRepository::Private
 public:
     QHash<QString, Function*> functions;
     QHash<QString, FunctionDescription*> descriptions;
+    QHash<QString, Function*> alternates;
     QStringList groups;
     bool initialized;
 };
@@ -85,6 +87,16 @@ QString Function::name() const
     return d->name;
 }
 
+QString Function::alternateName() const
+{
+    return d->alternateName;
+}
+
+void Function::setAlternateName(const QString &name)
+{
+    d->alternateName = name;
+}
+    
 void Function::setParamCount(int min, int max)
 {
     d->paramMin = min;
@@ -235,6 +247,9 @@ void FunctionRepository::add(Function* function)
 {
     if (!function) return;
     d->functions.insert(function->name().toUpper(), function);
+    if (!function->alternateName().isNull()) {
+        d->alternates.insert(function->alternateName().toUpper(), function);
+    }
 }
 
 void FunctionRepository::add(FunctionDescription *desc)
@@ -257,14 +272,19 @@ void FunctionRepository::remove(const QString& groupName)
         }
     }
     foreach(const QString &functionName, functionNames) {
-        d->functions.remove(functionName);
+        if (d->functions.contains(functionName)) {
+            Function* function = d->functions.take(functionName);
+            d->alternates.remove(function->alternateName().toUpper());
+        }
         d->descriptions.remove(functionName);
     }
 }
 
 Function *FunctionRepository::function(const QString& name)
 {
-    return d->functions.value(name.toUpper());
+    const QString n = name.toUpper();
+    Function* f = d->functions.value(n);
+    return f ? f : d->alternates.value(n);
 }
 
 FunctionDescription *FunctionRepository::functionInfo(const QString& name)

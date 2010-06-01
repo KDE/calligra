@@ -110,6 +110,7 @@ void InformationModule::registerFunctions()
     f = new Function("ISERROR", func_iserror);
     repo->add(f);
     f = new Function("ISEVEN", func_iseven);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN");
     repo->add(f);
     f = new Function("ISLOGICAL", func_islogical);
     repo->add(f);
@@ -124,6 +125,7 @@ void InformationModule::registerFunctions()
     f = new Function("ISNUMBER", func_isnum);
     repo->add(f);
     f = new Function("ISODD", func_isodd);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD");
     repo->add(f);
     f = new Function("ISREF", func_isref);
     f->setNeedsExtra(true);

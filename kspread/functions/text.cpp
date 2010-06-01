@@ -188,6 +188,7 @@ void TextModule::registerFunctions()
     f->setParamCount(1, 2);
     repo->add(f);
     f = new Function("BAHTTEXT", func_bahttext);
+    f->setAlternateName("COM.MICROSOFT.BAHTTEXT");
     f->setParamCount(1);
     repo->add(f);
 }
