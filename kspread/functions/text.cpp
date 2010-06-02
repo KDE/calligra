@@ -62,7 +62,7 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_replace(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rept(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_rot(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rot13(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_right(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_search(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sleek(valVector args, ValueCalc *calc, FuncExtra *);
@@ -118,7 +118,8 @@ void TextModule::registerFunctions()
     repo->add(f);
     f = new Function("PROPER", func_proper);
     repo->add(f);
-    f = new Function("ROT", func_rot);
+    f = new Function("ROT13", func_rot13);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13");
     repo->add(f);
     f = new Function("SLEEK", func_sleek);
     repo->add(f);
@@ -573,8 +574,8 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(str.right(nb));
 }
 
-// Function: ROT
-Value func_rot(valVector args, ValueCalc *calc, FuncExtra *)
+// Function: ROT13
+Value func_rot13(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString text = calc->conv()->asString(args[0]).asString();
 
