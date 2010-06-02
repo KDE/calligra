@@ -186,6 +186,9 @@ void TestDatetimeFunctions::testISLEAPYEAR()
     CHECK_EVAL("ISLEAPYEAR(2002)", Value(false));
     CHECK_EVAL("ISLEAPYEAR(2003)", Value(false));
     CHECK_EVAL("ISLEAPYEAR(2004)", Value(true));
+    // test alternate name for the ISLEAPYEAR function
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETISLEAPYEAR(1900)", Value(false));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETISLEAPYEAR(2000)", Value(true));
 }
 
 void TestDatetimeFunctions::testWEEKNUM()
@@ -325,6 +328,9 @@ void TestDatetimeFunctions::testDAYSINMONTH()
     CHECK_EVAL("DAYSINMONTH(2000;02)", Value(29));
     CHECK_EVAL("DAYSINMONTH(1900;02)", Value(28));     // non leapyear
     CHECK_EVAL("DAYSINMONTH(2004;02)", Value(29));
+
+    // test alternate name for the DAYSINMONTH function
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINMONTH(1995;01)", Value(31));
 }
 
 void TestDatetimeFunctions::testDAYS360()
@@ -510,6 +516,12 @@ void TestDatetimeFunctions::testYEAR()
 {
     //
     CHECK_EVAL("YEAR(DATE(1904;1;1))", Value(1904));
+}
+
+void TestDatetimeFunctions::testWEEKS()
+{
+    CHECK_EVAL("WEEKS(\"2002-02-18\"; \"2002-02-26\"; 0)", Value(1));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS(\"2002-02-18\"; \"2002-02-26\"; 0)", Value(1));
 }
 
 QTEST_KDEMAIN(TestDatetimeFunctions, GUI)

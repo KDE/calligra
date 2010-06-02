@@ -62,6 +62,7 @@ private slots:
     void testTODAY();
     void testWEEKDAY();
     void testYEAR();
+    void testWEEKS();
 
 private:
     Value evaluate(const QString&, Value& ex);
