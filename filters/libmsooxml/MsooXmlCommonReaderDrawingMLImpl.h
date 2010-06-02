@@ -742,7 +742,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
  Child elements:
  - br (Text Line Break) §21.1.2.2.1
  - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
- - fld (Text Field) §21.1.2.2.4
+ - [done] fld (Text Field) §21.1.2.2.4
  - pPr (Text Paragraph Properties) §21.1.2.2.7
  - [done] r (Text Run) §21.1.2.3.8
 */
@@ -787,6 +787,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             else if (QUALIFIED_NAME_IS(r)) {
                 TRY_READ(DrawingML_r)
             }
+            ELSE_TRY_READ_IF(fld)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2746,6 +2747,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     m_listStylePropertiesAltered = true;
 
     readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fld
+//! fld - Text Field
+/*!
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+
+ - [done] pPr (Text Paragraph Properties) §21.1.2.2.7
+ - [done] rPr (Text Run Properties) §21.1.2.3.9
+ - [done] t (Text String) §21.1.2.3.11
+
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(type)
+
+    if (!type.isEmpty()) {
+//! @todo support all possible fields here
+    }
+
+    while (!atEnd()) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(rPr)) {
+                TRY_READ(DrawingML_rPr)
+            }
+            else if (QUALIFIED_NAME_IS(pPr)) {
+                TRY_READ(DrawingML_pPr)
+            }
+            ELSE_TRY_READ_IF(t)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
     READ_EPILOGUE
 }
 
