@@ -945,7 +945,8 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     Q_ASSERT(columnFormatIndex < colStyles.count());
     Q_ASSERT(columnFormatIndex < colCellStyles.count());
     const QString styleName = colStyles[columnFormatIndex];
-    const QString defaultStyleName = colCellStyles[columnFormatIndex]; columnFormatIndex++;
+    const QString defaultStyleName = colCellStyles[columnFormatIndex];
+    columnFormatIndex++;
 
     xmlWriter->startElement("table:table-column");
     xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
