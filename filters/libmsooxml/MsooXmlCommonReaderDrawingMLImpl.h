@@ -2191,7 +2191,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             break;
             case TextColor:
             {
-                m_currentTextStyleProperties->setForeground(col);
+                if (m_currentTextStyleProperties) {
+                    m_currentTextStyleProperties->setForeground(col);
+                }
             }
             break;
         }
