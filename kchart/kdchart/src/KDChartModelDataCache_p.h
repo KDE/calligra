@@ -209,7 +209,6 @@ namespace KDChart
             if( parent != m_rootIndex )
                 return;
 
-            Q_ASSERT( start >= 0 && start <= m_data.size() );
             Q_ASSERT( start <= end );
 
             const int rowCount = m_data.count();
