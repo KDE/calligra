@@ -420,7 +420,7 @@ bool ExcelImport::Private::createContent(KoOdfWriteStore* store)
     columnFormatIndex = 0;
     rowFormatIndex = 0;
     cellFormatIndex = 0;
-    
+
 
     // office:body
     bodyWriter->startElement("office:body");
@@ -576,7 +576,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         QPoint point = sheet->firstVisibleCell();
         settingsWriter->addConfigItem("CursorPositionX", point.x());
         settingsWriter->addConfigItem("CursorPositionY", point.y());
-        //TODO how should we replace these settings? 
+        //TODO how should we replace these settings?
 //         settingsWriter->addConfigItem("xOffset", columnWidth(sheet,point.x()));
 //         settingsWriter->addConfigItem("yOffset", rowHeight(sheet,point.y()));
         settingsWriter->addConfigItem("ShowZeroValues", sheet->showZeroValues());
@@ -937,16 +937,15 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
     if (!xmlWriter) return;
     if (!column) {
         xmlWriter->startElement("table:table-column");
+        Q_ASSERT(defaultColumnStyleIndex < defaultColumnStyles.count());
         xmlWriter->addAttribute("table:style-name", defaultColumnStyles[defaultColumnStyleIndex] );
         xmlWriter->endElement();
         return;
     }
     Q_ASSERT(columnFormatIndex < colStyles.count());
+    Q_ASSERT(columnFormatIndex < colCellStyles.count());
     const QString styleName = colStyles[columnFormatIndex];
-    columnFormatIndex++;
-
-    Q_ASSERT(defaultColumnStyleIndex < defaultColumnStyles.count());
-    const QString defaultStyleName = defaultColumnStyles[defaultColumnStyleIndex];
+    const QString defaultStyleName = colCellStyles[columnFormatIndex]; columnFormatIndex++;
 
     xmlWriter->startElement("table:table-column");
     xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
@@ -1913,7 +1912,7 @@ void ExcelImport::Private::insertPictureManifest(Picture* picture)
     if( extension == "gif" ) {
         mimeType = "image/gif";
     }
-    else if( extension == "jpg" || extension == "jpeg" 
+    else if( extension == "jpg" || extension == "jpeg"
             || extension == "jpe" || extension == "jfif" ) {
         mimeType = "image/jpeg";
     }
