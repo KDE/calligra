@@ -3175,11 +3175,14 @@ void ExcelReader::handleEOF(EOFRecord* record)
 #ifdef SWINDER_XLS2RAW
 
 #include <iostream>
+#include <QApplication>
 
 int main(int argc, char ** argv)
 {
+    QApplication app(argc, argv);
+
     if (argc < 2) {
-        std::cout << "Usage: xls2raw filename" << std::endl;
+        std::cout << "Usage: sidewinder filename" << std::endl;
         return 0;
     }
 
