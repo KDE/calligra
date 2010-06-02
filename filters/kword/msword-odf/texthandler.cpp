@@ -838,7 +838,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     kDebug(30513);
     //process different fields
     //we could be writing to content or styles.xml (in a header)
-    
+
     m_RunOfTextCollect = false;     // do not collect strings anymore
 
     //create temp writer that we'll add to m_paragraph

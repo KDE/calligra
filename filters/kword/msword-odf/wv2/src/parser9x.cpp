@@ -819,6 +819,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             } else if ( m_bookmark ) {
                 if (m_bookmarkText.find(chunk.m_text.substr(index, length), 0) != 0) {
                     processRun( chunk, chp, length, index, currentStart );
+                    if ( m_bookmark ) {
+                        m_bookmarkText = chunk.m_text.substr(index, length);
+                        emitBookmark( m_bookmarkText, 0, chp, length );
+                        m_bookmarkText = "";
+                    }
                 }
             }
 
