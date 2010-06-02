@@ -103,6 +103,8 @@ protected:
     KoFilter::ConversionStatus read_sz();
     KoFilter::ConversionStatus read_jc();
     KoFilter::ConversionStatus read_spacing();
+    KoFilter::ConversionStatus read_trPr();
+    KoFilter::ConversionStatus read_trHeight();
     enum shdCaller {
         shd_rPr,
         shd_pPr,

@@ -2589,7 +2589,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
             }
             else if (QUALIFIED_NAME_IS(left)) {
                 RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
-            }
+            } 
             else if (QUALIFIED_NAME_IS(bottom)) {
                 RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
             }
@@ -3165,7 +3165,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
  - sdt (Cell-Level Structured Document Tag) §17.5.2.32
  - tblPrEx (Table-Level Property Exceptions) §17.4.61
  - tc (Table Cell) §17.4.66
- - trPr (Table Row Properties) §17.4.82
+ - [done]trPr (Table Row Properties) §17.4.82
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
@@ -3180,6 +3180,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(tc)
+            ELSE_TRY_READ_IF(trPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -3204,6 +3205,68 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 
     m_currentTableRowNumber++;
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL trPr
+/*
+Parent elements:
+ - tr (§17.4.79)
+
+child elements:
+ - cantSplit (Table Row Cannot Break Across Pages) §17.4.6
+ - cnfStyle (Table Row Conditional Formatting) §17.4.7
+ - del (Deleted Table Row)§17.13.5.12
+ - divId (Associated HTML div ID)§17.4.9
+ - gridAfter (Grid Columns After Last Cell)§17.4.14
+ - gridBefore (Grid Columns Before First Cell) §17.4.15
+ - hidden (Hidden Table Row Marker)§17.4.20
+ - ins (Inserted Table Row) §17.13.5.17
+ - jc (Table Row Alignment) §17.4.28
+ - tblCellSpacing (Table Row Cell Spacing) §17.4.44
+ - tblHeader (Repeat Table Row on Every New Page) §17.4.50
+ - [done]trHeight (Table Row Height) §17.4.81
+ - trPrChange (Revision Information for Table Row Properties) §17.13.5.37
+ - wAfter (Preferred Width After Table Row) §17.4.86 
+ - wBefore (Preferred Width Before Table Row) §17.4.87
+*/ 
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(trHeight)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+/*
+Parent elements:
+ - [done]trPr (§17.4.82)
+ - trPr (§17.7.6.10)
+ - trPr (§17.7.6.11)
+ - trPr (§17.4.83)
+*/
+#undef CURRENT_EL
+#define CURRENT_EL trHeight
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+    TRY_READ_ATTR(hRule)
+    const QString s(MSOOXML::Utils::TWIP_to_ODF(val));
+    if (hRule == QLatin1String("exact")) {
+	m_currentTableRowStyle.addProperty("style:row-height",s, KoGenStyle::TableRowType);
+    }
+    else if (hRule == QLatin1String("atLeast")) {
+	    m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
+    }
+    readNext();
     READ_EPILOGUE
 }
 
