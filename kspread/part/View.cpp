@@ -1203,7 +1203,7 @@ void View::createTemplate()
     tempFile.setSuffix(".kst");
     //Check that creation of temp file was successful
     if (!tempFile.open()) {
-        qWarning("Creation of temprary file to store template failed.");
+        qWarning("Creation of temporary file to store template failed.");
         return;
     }
 
