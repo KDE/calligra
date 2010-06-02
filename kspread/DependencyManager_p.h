@@ -85,7 +85,7 @@ public:
      * Generates the depth of cell and all of its consumers.
      * Calls itself recursively for the cell's consuming cells.
      */
-    void generateDepths(Cell cell);
+    void generateDepths(Cell cell, QSet<Cell>& computedDepths);
 
     /**
      * Returns the region, that consumes the value of \p cell.

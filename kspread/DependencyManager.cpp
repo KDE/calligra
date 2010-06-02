@@ -367,6 +367,8 @@ void DependencyManager::Private::generateDependencies(const Cell& cell, const Fo
 
 void DependencyManager::Private::generateDepths(const Region& region)
 {
+    QSet<Cell> computedDepths;
+
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
@@ -396,7 +398,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
                 for (int i = 0; i < consumers.count(); ++i) {
                     if (!region.contains(consumers[i].cellPosition(), consumers[i].sheet()))
-                        generateDepths(consumers[i]);
+                        generateDepths(consumers[i], computedDepths);
                 }
 
                 formula = sheet->formulaStorage()->nextInRow(col, row, &col);
@@ -405,7 +407,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
     }
 }
 
-void DependencyManager::Private::generateDepths(Cell cell)
+void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedDepths)
 {
     static QSet<Cell> processedCells;
 
@@ -416,6 +418,9 @@ void DependencyManager::Private::generateDepths(Cell cell)
         depths.insert(cell, 0);
         return;
     }
+    if (computedDepths.contains(cell)) {
+        return;
+    }
 
     // set the compute reference depth flag
     processedCells.insert(cell);
@@ -423,13 +428,15 @@ void DependencyManager::Private::generateDepths(Cell cell)
     int depth = computeDepth(cell);
     depths.insert(cell, depth);
 
+    computedDepths.insert(cell);
+
     // Recursion. We need the whole dependency tree of the changed region.
     // An infinite loop is prevented by the check above.
     if (!consumers.contains(cell.sheet()))
         return;
     const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
     for (int i = 0; i < consumers.count(); ++i)
-        generateDepths(consumers[i]);
+        generateDepths(consumers[i], computedDepths);
 
     // clear the compute reference depth flag
     processedCells.remove(cell);
