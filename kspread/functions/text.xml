@@ -398,18 +398,18 @@
     </Function>
 
     <Function>
-      <Name>ROT</Name>
+      <Name>ROT13</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>Text</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The ROT() function encrypts text by replacing each letter with the one 13 places along in the alphabet. If the 13th position is beyond the letter Z, it begins again at A (rotation).</Text>
+	<Text>The ROT13() function encrypts text by replacing each letter with the one 13 places along in the alphabet. If the 13th position is beyond the letter Z, it begins again at A (rotation).</Text>
         <Text>By applying the encryption function again to the resulting text, you can decrypt the text.</Text>
-	<Syntax>ROT(Text)</Syntax>
-	<Example>ROT("KSpread") returns "XFcernq"</Example>
-	<Example>ROT("XFcernq") returns "KSpread"</Example>
+	<Syntax>ROT13(Text)</Syntax>
+	<Example>ROT13("KSpread") returns "XFcernq"</Example>
+	<Example>ROT13("XFcernq") returns "KSpread"</Example>
       </Help>
     </Function>
 
