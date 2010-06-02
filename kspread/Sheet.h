@@ -755,7 +755,7 @@ public:
      * \see InsertDeleteRowManipulator
      * Deletes \p number rows beginning at \p row .
      */
-    void removeRows(int row, int numbers);
+    void removeRows(int row, int number);
 
     /**
      * Updates vertical border and view.
