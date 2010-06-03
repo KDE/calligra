@@ -36,7 +36,7 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
-    bool loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context);
 
     void debug();
 

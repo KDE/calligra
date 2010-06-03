@@ -68,7 +68,7 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
                 KoXmlElement innerParElement;
                 forEachElement(innerParElement, parElement) {
                     if (innerParElement.tagName() == "par" && innerParElement.namespaceURI() == KoXmlNS::anim) {
-                        loadOdfAnimation(animationStep, innerParElement, context);
+                        loadOdfAnimation(&animationStep, innerParElement, context);
                     }
                 }
             }
@@ -119,7 +119,7 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
     }
 }
 
-bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep *animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
 
@@ -128,19 +128,19 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep *animationStep, const
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
         // if there is allready an aniation create a new step
-        if (animationStep->animationCount() != 0) {
-            m_animations.append(animationStep);
-            animationStep = new KPrAnimationStep();
+        if ((*animationStep)->animationCount() != 0) {
+            m_animations.append(*animationStep);
+            *animationStep = new KPrAnimationStep();
         }
         subStep = new KPrAnimationSubStep();
-        animationStep->addAnimation(subStep);
+        (*animationStep)->addAnimation(subStep);
         // add par animation
     }
     else if (nodeType == "after-previous") {
         // add to sequence
         // add par
         subStep = new KPrAnimationSubStep();
-        animationStep->addAnimation(subStep);
+        (*animationStep)->addAnimation(subStep);
         // add par animation
     }
     else {
@@ -148,12 +148,12 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep *animationStep, const
             kWarning(33003) << "unsupported node-type" << nodeType << "found. Using with-previous";
         }
         // use the current substep
-        if (animationStep->animationCount()) {
-            subStep = dynamic_cast<KPrAnimationSubStep*>(animationStep->animationAt(animationStep->animationCount() - 1));
+        if ((*animationStep)->animationCount()) {
+            subStep = dynamic_cast<KPrAnimationSubStep*>((*animationStep)->animationAt((*animationStep)->animationCount() - 1));
         }
         else {
             subStep = new KPrAnimationSubStep();
-            animationStep->addAnimation(subStep);
+            (*animationStep)->addAnimation(subStep);
         }
         // add par to current par
     }
