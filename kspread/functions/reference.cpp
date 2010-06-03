@@ -304,7 +304,7 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const int rows = data.rows();
     if (row < 1 || row > rows)
         return Value::errorVALUE();
-    const bool sorted = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
+    const bool rangeLookup = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison
     Value r;
@@ -316,7 +316,7 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
             return data.element(col, row - 1);
         }
         // optionally look for the next largest value that is less than key
-        if (sorted && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
+        if (rangeLookup && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
             r = le;
             v = data.element(col, row - 1);
         }
@@ -472,7 +472,7 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const int rows = data.rows();
     if (col < 1 || col > cols)
         return Value::errorVALUE();
-    const bool sorted = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
+    const bool rangeLookup = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison
     Value r;
@@ -484,7 +484,7 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
             return data.element(col - 1, row);
         }
         // optionally look for the next largest value that is less than key
-        if (sorted && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
+        if (rangeLookup && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
             r = le;
             v = data.element(col - 1, row);
         }
