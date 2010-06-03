@@ -133,5 +133,6 @@ inline qreal toQReal(const MSO::FixedPoint& f)
     return f.integral + f.fractional / 65536.0;
 }
 const char* getFillType(quint32 fillType);
+const char* getRepeatStyle(quint32 fillType);
 
 #endif
