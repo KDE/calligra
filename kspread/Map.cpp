@@ -516,6 +516,12 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, textStyleManager());
     textStyleManager()->defaultParagraphStyle()->characterStyle()->removeHardCodedDefaults();
+    foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
+        style->removeHardCodedDefaults();
+    }
+    foreach (KoCharacterStyle* style, sharedData->characterStyles(false)) {
+        style->removeHardCodedDefaults();
+    }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
     // load default column style
