@@ -58,6 +58,8 @@ private slots:
     void testUNICHAR();
     void testUNICODE();
     void testUPPER();
+    void testROT13();
+    void testBAHTTEXT();
 
 private:
     Value evaluate(const QString&, Value& ex);

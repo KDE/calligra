@@ -271,6 +271,22 @@ void TestTextFunctions::testUPPER()
     CHECK_EVAL("UPPER(\"Habc7\")", Value("HABC7"));
 }
 
+void TestTextFunctions::testROT13()
+{
+    CHECK_EVAL("ROT13(\"KSpread\")", Value("XFcernq"));
+    CHECK_EVAL("ROT13(\"XFcernq\")", Value("KSpread"));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13(\"KSpread\")", Value("XFcernq"));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13(\"XFcernq\")", Value("KSpread"));
+}
+
+void TestTextFunctions::testBAHTTEXT()
+{
+    Value r;
+    r = evaluate("BAHTTEXT(23)", r);
+    CHECK_EVAL("BAHTTEXT(23)", r);
+    CHECK_EVAL("COM.MICROSOFT.BAHTTEXT(23)", r);
+}
+
 QTEST_KDEMAIN(TestTextFunctions, GUI)
 
 #include "TestTextFunctions.moc"

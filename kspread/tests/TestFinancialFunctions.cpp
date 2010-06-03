@@ -81,6 +81,8 @@ void TestFinancialFunctions::testACCRINT()
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 4 )", Value(25));                // leap year, quaterly, European 30/360
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 1 )",    Value(24.7222222222));     // leap year, annual, US (NASD) 30/360
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 2 )",    Value(24.7222222222));     // leap year, semiannual, US 30/360
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINT( \"1992-12-01\";\"1993-06-01\";\"1993-07-01\";0.055;100;2;0)", Value(3.2083333333));
 }
 
 // ACCRINTM
@@ -93,6 +95,8 @@ void TestFinancialFunctions::testACCRINTM()
     CHECK_EVAL_SHORT("ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 2 )", Value(25.0));           // leap year, actual/360
     CHECK_EVAL_SHORT("ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 3 )", Value(24.657534));      // leap year, actual/365
     CHECK_EVAL_SHORT("ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 4 )", Value(25.0));           // leap year, European 30/360
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINTM( \"2001-04-01\"; \"2001-06-15\"; 0.1; 1000; 3 )", Value(20.5479454));
 }
 
 // AMORDEGRC
@@ -119,6 +123,9 @@ void TestFinancialFunctions::testAMORDEGRC()
     CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )"  , Value(231));     // (specs 232) leap year, actual/360
     CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )"  , Value(228));     // leap year, actual/365
     CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )"  , Value(228));     // leap year, European 30/360
+    
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORDEGRC(2400;34199;34334;300;1;0.15;1)", Value(775));
 }
 
 // AMORLINC
@@ -126,6 +133,7 @@ void TestFinancialFunctions::testAMORLINC()
 {
     CHECK_EVAL_SHORT("AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 )" , Value(91.2568306011));     // the first period (10 years life time)
     CHECK_EVAL_SHORT("AMORLINC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )" , Value(91.2328767123));     // leap year, actual/365
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORLINC(1000;\"2004-02-01\";\"2004-12-31\";10;0;0.1;1)", Value(91.2568306011));
 }
 
 // COMPOUND
@@ -154,6 +162,8 @@ void TestFinancialFunctions::testCOUPNUM()
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 2 )", Value(20));     //
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 3 )", Value(20));     //
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 4 )", Value(20));     //
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM(\"2004-01-01\";\"2007-01-01\";1;1)", Value(3));
 }
 
 // CUMIPMT
@@ -165,6 +175,8 @@ void TestFinancialFunctions::testCUMIPMT()
     CHECK_EVAL_SHORT("CUMIPMT( 0.06/12; 5*12; 100000; 0; 0; 0 )",   Value(Value::errorVALUE()));     // start > 0; end > 0
     CHECK_EVAL_SHORT("CUMIPMT( 0.06/12; 5*12; 100000; 5; 61; 0 )",  Value(Value::errorVALUE()));     // end > periods
     CHECK_EVAL_SHORT("CUMIPMT( 0.06/12; 5*12; 100000; 15; 12; 0 )", Value(Value::errorVALUE()));     // start > end
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMIPMT(0.06/12;5*12;100000;5;12;0)", Value(-3562.187023));
 }
 
 // CUMPRINC
@@ -176,6 +188,8 @@ void TestFinancialFunctions::testCUMPRINC()
     CHECK_EVAL_SHORT("CUMPRINC( 0.06/12; 5*12; 100000; 0;  0; 0 )", Value(Value::errorVALUE()));     // start > 0; end > 0
     CHECK_EVAL_SHORT("CUMPRINC( 0.06/12; 5*12; 100000; 5; 61; 0 )", Value(Value::errorVALUE()));     // end > periods
     CHECK_EVAL_SHORT("CUMPRINC( 0.06/12; 5*12; 100000;15; 12; 0 )", Value(Value::errorVALUE()));     // start > end
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMPRINC(0.06/12;5*12;100000;5;12;0)", Value(-11904.054201));
 }
 
 // Fixed-declining balance depreciation
@@ -288,6 +302,7 @@ void TestFinancialFunctions::testDISC()
     CHECK_EVAL_SHORT("DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 4)", Value(0.010333));
     CHECK_EVAL_SHORT("DISC( DATE(2006;01;01); date(2008;01;01);   200;    100; 3)", Value(-0.500000));
     CHECK_EVAL_SHORT("DISC( DATE(2006;01;01); date(2005;07;01); 95000; 100000; 4)", Value(false));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value(0.010339));
 }
 
 // DOLLARDE
@@ -314,6 +329,9 @@ void TestFinancialFunctions::testDOLLARDE()
     CHECK_EVAL_SHORT("DOLLARDE(   1.0; 5)"  , Value(1));              //
     CHECK_EVAL_SHORT("DOLLARDE(   1.1;10)"  , Value(1.1));            //
     CHECK_EVAL_SHORT("DOLLARDE(   1.1; 0)"  , Value::errorVALUE());   //
+
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARDE(1.1;8)" , Value(1.125));
 }
 
 // DOLLARFR
@@ -336,6 +354,9 @@ void TestFinancialFunctions::testDOLLARFR()
     CHECK_EVAL_SHORT("DOLLARFR(-1.33333; 3)" , Value(-1.099999));      // ODF specs error (1.1) must be -1.1
     CHECK_EVAL_SHORT("DOLLARFR(     1.0; 5)" , Value(1));              //
     CHECK_EVAL_SHORT("DOLLARFR(     1.1; 0)" , Value::errorVALUE());   //
+    
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARFR(    1.1 ;  9)" , Value(1.09));
 }
 
 // DURATION
@@ -343,6 +364,8 @@ void TestFinancialFunctions::testDURATION()
 {
     // kspread
     CHECK_EVAL("DURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));     //
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));
 }
 
 // DURATION_ADD
@@ -356,6 +379,8 @@ void TestFinancialFunctions::testEFFECT()
 {
     // kspread
     CHECK_EVAL_SHORT("EFFECT(0.08;12)", Value(0.083));
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEFFECT(0.08;12)", Value(0.083));
 }
 
 // Euro conversion
@@ -613,6 +638,8 @@ void TestFinancialFunctions::testFVSCHEDULE()
 {
     // ODF
     CHECK_EVAL_SHORT("FVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value(1124760));     // A trivial example of FVSCHEDULE.
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value(1124760));
 }
 
 // INTRATE
@@ -628,6 +655,8 @@ void TestFinancialFunctions::testINTRATE()
     CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )" , Value(0.1476620180));     //
     CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )" , Value(0.1497128794));     //
     CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value(0.1498127341));     //
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETINTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value(0.1498127341));
 }
 
 // IPMT
@@ -673,6 +702,8 @@ void TestFinancialFunctions::testMDURATION()
     // and intentionally end on May 31, which
     // illustrates the differences between
     // many bases
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)" , Value(0.3189792663));
 }
 
 // MIRR
@@ -712,6 +743,9 @@ void TestFinancialFunctions::testNOMINAL()
     CHECK_EVAL("NOMINAL(8%;4)",      Value(0.0777061876330940));
     CHECK_EVAL("NOMINAL(12.5%;12)",  Value(0.118362966638538));
     CHECK_EVAL("NOMINAL(1%;2)",      Value(0.00997512422417790));
+    
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNOMINAL(8%;4)",      Value(0.0777061876330940));
 }
 
 // NPER
@@ -838,6 +872,8 @@ void TestFinancialFunctions::testPRICEMAT()
     CHECK_EVAL_SHORT("PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;4)", Value(103.819218241));     // With Basis=4
     CHECK_EVAL_SHORT("PRICEMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1);3%;2%;0)", Value(102.395007924));     //
     CHECK_EVAL_SHORT("PRICEMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1);5%;3%;2)", Value(104.709020052));     //
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%  )", Value(103.819218241));
 }
 
 // PV
@@ -860,6 +896,8 @@ void TestFinancialFunctions::testRECEIVED()
 {
     // ODF
     CHECK_EVAL_SHORT("RECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)" , Value(10300.4291845494));     // Without Basis parameter
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)" , Value(10300.4291845494));
 }
 
 // RRI
@@ -921,6 +959,8 @@ void TestFinancialFunctions::testTBILLEQ()
     CHECK_EVAL("TBILLEQ(DATE(1996;01;01);DATE(1996;12;31);5%)", Value(0.0533625731));            // specs 0.053401609
     CHECK_EVAL("TBILLEQ(DATE(1996;01;01);DATE(1997;01;01);5%)", Value(Value::errorVALUE()));     // specs 0.053409423 OOo-2.2.1 Error(#VALUE!) days 361
     CHECK_EVAL("TBILLEQ(DATE(1996;07;01);DATE(1997;07;01);5%)", Value(Value::errorVALUE()));     // specs 0.053401609 OOo-2.2.1 Error(#VALUE!) days 361
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLEQ(DATE(1996;01;01);DATE(1996;02;01);5%)", Value(0.0509136560));
 }
 
 // TBILLPRICE
@@ -936,6 +976,8 @@ void TestFinancialFunctions::testTBILLPRICE()
     CHECK_EVAL("TBILLPRICE(DATE(1996;01;01);DATE(1996;12;31);5%)", Value(Value::errorVALUE()));     // ODF specs 94.93055556 OOo-2.2.1 Err:502
     CHECK_EVAL("TBILLPRICE(DATE(1996;01;01);DATE(1997;01;01);5%)", Value(94.9861111111));     // ODF specs 94.91666667 OOo-2.2.1 94.98611111
     CHECK_EVAL("TBILLPRICE(DATE(1996;07;01);DATE(1997;07;01);5%)", Value(94.9861111111));     // ODF specs 94.93055556 OOo-2.2.1 94.98611111
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLPRICE(DATE(1996;01;01);DATE(1996;02;01);5%)", Value(99.5694444444));
 }
 
 // TBILLYIELD
@@ -953,6 +995,8 @@ void TestFinancialFunctions::testTBILLYIELD()
     CHECK_EVAL("TBILLYIELD(DATE(1996;01;01);DATE(1996;12;31);94.93)", Value(Value::errorVALUE()));     // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
     CHECK_EVAL("TBILLYIELD(DATE(1996;01;01);DATE(1997;01;01);94.92)", Value(Value::errorVALUE()));     // specs 0.0526414 OOo-2.2.1 Error(#VALUE!)
     CHECK_EVAL("TBILLYIELD(DATE(1996;07;01);DATE(1997;07;01);94.93)", Value(Value::errorVALUE()));     // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLYIELD(DATE(1996;01;01);DATE(1996;02;01);99.57)", Value(0.0501511337));
 }
 
 // VDB
@@ -979,6 +1023,8 @@ void TestFinancialFunctions::testXIRR()
     CHECK_EVAL_SHORT("XIRR( {-20000;4000;12000;8000}; {date(2000;01;01); date(2000;06;01); date(2000;12;30); date(2001;03;01)} )", Value(0.2115964));     //
     CHECK_EVAL_SHORT("XIRR( {-20000;25000};           {date(2000;01;01); date(2001;01;01)} )",                                     Value(0.2492381));     //
     CHECK_EVAL_SHORT("XIRR( {-10000;4000;12000};      {date(2000;01;01); date(2002;06;01); date(2004;01;01)} )",                   Value(0.1405418));     //
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXIRR( {-20000;25000};{date(2000;01;01); date(2001;01;01)} )", Value(0.2492381));
 }
 
 // XNPV
@@ -994,8 +1040,8 @@ void TestFinancialFunctions::testXNPV()
     CHECK_EVAL("XNPV(0.09; {-10000;2750};           {date(2005;01;01); date(2005;01;10); date(2005;01;15)})",  Value(Value::errorNUM()));       //
     CHECK_EVAL("XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",          Value(Value::errorVALUE()));     //
 
-    // ODF
-
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})",Value(-380.3891178530));
 }
 
 // YIELDDISC
@@ -1009,6 +1055,8 @@ void TestFinancialFunctions::testYIELDDISC()
     CHECK_EVAL("YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.94444;1000; 4)", Value(0.1061633823));     // With Basis=4 specs 0.105657842 OOo-2.2.1 0.1061633823
     CHECK_EVAL("YIELDDISC(DATE(1990;01;01);DATE(1990;12;31);97.08219;100;   1)", Value(0.0301376180));     // specs 0.051522942 OOo-2.2.1 0.0301376180
     CHECK_EVAL("YIELDDISC(DATE(1990;06;01);DATE(1990;06;30);99.75833;100;   4)", Value(0.0300730914));     //
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.66667;1000   )", Value(0.1061946838));
 }
 
 // YIELDMAT
@@ -1022,6 +1070,9 @@ void TestFinancialFunctions::testYIELDMAT()
 //   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1); 6%;103.817732653;4)", Value( 0.050000000  ) ); // With Basis=4 NOK diff = 0.0074805
     CHECK_EVAL_SHORT("YIELDMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1); 3%;102.395007924;0)", Value(0.020000000));      // With Basis=0
 //   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 5%;102.967175933;2)", Value( 0.030000000  ) ); // With Basis=2 NOK diff = -0.0126036
+
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.819218241  )", Value(0.050000000));
 }
 
 // Zero-coupon (pure discount) bond
