@@ -81,11 +81,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
 
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     Q_ASSERT(data);
-    KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
-    if(!pageInfo) {
-        kWarning(32002) << "Failed to get pageInfo";
-        return false;
-    }
 
     // *** alter 'state' to relayout the part we want.
     QTextLayout *layout = block.layout();
@@ -140,7 +135,10 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         break;
     }
     case KoTextAnchor::RightOfPage: {
-        newPosition.setX(pageInfo->page().width() - containerBoundingRect.x() - boundingRect.width());
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if(pageInfo) {
+            newPosition.setX(pageInfo->page().width() - containerBoundingRect.x() - boundingRect.width());
+        }
         break;
     }
     default:
@@ -205,15 +203,24 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         break;
     }
     case KoTextAnchor::TopOfPage: {
-        newPosition.setY(pageInfo->page().offsetInDocument() - containerBoundingRect.y());
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if(pageInfo) {
+            newPosition.setY(pageInfo->page().offsetInDocument() - containerBoundingRect.y());
+        }
         break;
     }
     case KoTextAnchor::BottomOfPage: {
-        newPosition.setY(pageInfo->page().offsetInDocument() + pageInfo->page().height()
-                        - containerBoundingRect.y() - boundingRect.height());
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if(pageInfo) {
+            newPosition.setY(pageInfo->page().offsetInDocument() + pageInfo->page().height()
+                            - containerBoundingRect.y() - boundingRect.height());
+        }
         break;
     }
     case KoTextAnchor::TopOfPageContent: {
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if (!pageInfo)
+            break;
         // find main frame
         KWTextFrameSet *tfs =frameSet->kwordDocument()->mainFrameSet();
         if (tfs) {
@@ -234,6 +241,9 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         break;
     }
     case KoTextAnchor::BottomOfPageContent: {
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if (!pageInfo)
+            break;
         // find main frame
         KWTextFrameSet *tfs =frameSet->kwordDocument()->mainFrameSet();
         if (tfs) {
