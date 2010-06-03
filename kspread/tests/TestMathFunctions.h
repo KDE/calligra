@@ -84,7 +84,7 @@ private slots:
     void testMMULT();
     void testMOD();
     void testMROUND();
-//   void testMULTINOMINAL();
+    void testMULTINOMIAL();
     void testMUNIT();
     void testODD();
 //   void testPI(); -> TestEngineering

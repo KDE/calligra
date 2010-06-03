@@ -344,6 +344,7 @@ void TestInformationFunctions::testISEVEN()
     CHECK_EVAL("ISEVEN(-3)",   Value(false));       //
     CHECK_EVAL("ISEVEN(NA())", Value::errorNA());   //
     CHECK_EVAL("ISEVEN( 0)",   Value(true));        //
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN(2.5)", Value(true)); // alternate function name
 }
 
 /*
@@ -404,6 +405,7 @@ void TestInformationFunctions::testISODD()
     CHECK_EVAL("ISODD(-3)",   Value(true));      //
     CHECK_EVAL("ISODD(-3.1)", Value(true));      //
     CHECK_EVAL("ISODD(-3.5)", Value(true));      //
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD(3.1)", Value(true)); // alternate function name
 }
 
 void TestInformationFunctions::testISTEXT()

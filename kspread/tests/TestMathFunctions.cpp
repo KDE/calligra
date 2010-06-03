@@ -142,9 +142,7 @@ void TestMathFunctions::testABS()
     CHECK_EVAL("ABS(2)",   Value(2));
     CHECK_EVAL("ABS(3)",   Value(3));
     CHECK_EVAL("ABS(4)",   Value(4));
-
     CHECK_EVAL("ABS(1/0)", Value::errorDIV0());
-
 }
 
 void TestMathFunctions::testACOS()
@@ -452,6 +450,7 @@ void TestMathFunctions::testFACTDOUBLE()
     CHECK_EVAL("FACTDOUBLE(6)", Value(48));
     CHECK_EVAL("FACTDOUBLE(-1)",        Value::errorNUM());
     CHECK_EVAL("FACTDOUBLE(\"xyzzy\")", Value::errorNUM());
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE(7)", Value(105)); // alternate function name
 }
 
 void TestMathFunctions::testFIB()
@@ -527,6 +526,7 @@ void TestMathFunctions::testGCD()
     CHECK_EVAL("GCD(-2;3)",  Value::errorNUM());
     CHECK_EVAL("GCD(2;-4)",  Value::errorNUM());
     CHECK_EVAL("GCD(-2;-4)", Value::errorNUM());
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD(18;24)", Value(6)); // alternate function name
 }
 
 void TestMathFunctions::testGESTEP()
@@ -567,6 +567,7 @@ void TestMathFunctions::testLCM()
     CHECK_EVAL("LCM(-2;4)",  Value::errorNUM());
     CHECK_EVAL("LCM(2;-4)",  Value::errorNUM());
     CHECK_EVAL("LCM(-2;-4)", Value::errorNUM());
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM(18;12)", Value(36)); // alternate function name
 }
 
 void TestMathFunctions::testLN()
@@ -664,6 +665,16 @@ void TestMathFunctions::testMROUND()
     CHECK_EVAL("=MROUND(1520;100)", Value(1500));
     CHECK_EVAL("=MROUND(1550;100)", Value(1600));
     CHECK_EVAL("=MROUND(41.89;8)",  Value(40));
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND(1520;100)", Value(1500));
+}
+
+void TestMathFunctions::testMULTINOMIAL()
+{
+    // ODF-tests
+    CHECK_EVAL("=MULTINOMIAL(3;4;5)", Value(27720));
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL(3;4;5)", Value(27720));
 }
 
 void TestMathFunctions::testMUNIT()
@@ -708,6 +719,7 @@ void TestMathFunctions::testQUOTIENT()
     CHECK_EVAL("QUOTIENT(21;-5)",    Value(-4));     //
     CHECK_EVAL("QUOTIENT(-14;5)",    Value(-2));     //
     CHECK_EVAL("QUOTIENT(5;0)" ,     Value::errorDIV0());   //
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT(14;5)", Value(2)); // alternate function name
 }
 
 void TestMathFunctions::testRADIANS()
@@ -728,6 +740,7 @@ void TestMathFunctions::testRANDBETWEEN()
     CHECK_EVAL("RANDBETWEEN(5;15)<=15", Value(true));     // Must return value in range
     CHECK_EVAL("RANDBETWEEN(15;5)>=5",  Value(true));     // Must return value in range
     CHECK_EVAL("RANDBETWEEN(15;5)<=15", Value(true));     // Must return value in range
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN(8;8)", Value(8)); // alternate function name
 }
 
 void TestMathFunctions::testROUND()
@@ -803,6 +816,7 @@ void TestMathFunctions::testSQRTPI()
     CHECK_EVAL_SHORT("SQRTPI(1)",  Value(1.77245385));       // TODO more digits / The square root of PI
     CHECK_EVAL("SQRTPI(2)",  Value(2.5066282746));     // The square root of 2PI
     CHECK_EVAL("SQRTPI(-4)", Value::errorNUM());       // The argument must be non-negative
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI(2)", Value(2.5066282746)); // alternate function name
 }
 
 void TestMathFunctions::testSUBTOTAL()

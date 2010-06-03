@@ -48,6 +48,7 @@ private slots:
     void testDAY();
     void testDAYS();
     void testDAYSINMONTH();
+    void testDAYSINYEAR();
     void testDAYS360();
     void testEDATE();
     void testEOMONTH();
@@ -55,6 +56,7 @@ private slots:
     void testISOWEEKNUM();
     void testMINUTE();
     void testMONTH();
+    void testMONTHS();
     void testNOW();
     void testSECOND();
     void testTIME();
@@ -62,6 +64,7 @@ private slots:
     void testTODAY();
     void testWEEKDAY();
     void testYEAR();
+    void testYEARS();
     void testWEEKS();
 
 private:

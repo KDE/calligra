@@ -147,6 +147,9 @@ void TestDatetimeFunctions::testYEARFRAC()
     CHECK_EVAL("YEARFRAC( \"2001-01-01\" ; \"2002-01-01\" ; 4)", Value(1.0000000000));
     CHECK_EVAL("YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 4)", Value(0.0694444444));
     CHECK_EVAL("YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 4)", Value(6.5138888889));
+
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYEARFRAC(\"1999-01-01\";\"1999-06-30\";1)", Value(0.4931506849));
 }
 
 void TestDatetimeFunctions::testDATEDIF()
@@ -219,6 +222,8 @@ void TestDatetimeFunctions::testWEEKNUM()
     CHECK_EVAL("WEEKNUM(DATE(2006;01;01);2)", Value(01));
     CHECK_EVAL("WEEKNUM(DATE(2006;01;02);2)", Value(02));
 
+    // alternate function name
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWEEKNUM(DATE(2000;05;21);1)", Value(22));
 }
 
 void TestDatetimeFunctions::testWEEKSINYEAR()
@@ -226,6 +231,7 @@ void TestDatetimeFunctions::testWEEKSINYEAR()
     //
     CHECK_EVAL("WEEKSINYEAR(1995)", Value(52));
     CHECK_EVAL("WEEKSINYEAR(1992)", Value(53));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETWEEKSINYEAR(1992)", Value(53));
 }
 
 void TestDatetimeFunctions::testWORKDAY()
@@ -235,6 +241,7 @@ void TestDatetimeFunctions::testWORKDAY()
     //          01 02 -- --
     CHECK_EVAL("WORKDAY(DATE(2001;01;01);2;2)=DATE(2001;01;05)", Value(true));
     CHECK_EVAL("WORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value(true));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value(true));
 }
 
 void TestDatetimeFunctions::testNETWORKDAY()
@@ -330,7 +337,13 @@ void TestDatetimeFunctions::testDAYSINMONTH()
     CHECK_EVAL("DAYSINMONTH(2004;02)", Value(29));
 
     // test alternate name for the DAYSINMONTH function
-    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINMONTH(1995;01)", Value(31));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINMONTH(1995;01)", Value(31)); // alternate function name
+}
+
+void TestDatetimeFunctions::testDAYSINYEAR()
+{
+    CHECK_EVAL("DAYSINYEAR(2000)", Value(366));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDAYSINYEAR(2000)", Value(366)); // alternate function name
 }
 
 void TestDatetimeFunctions::testDAYS360()
@@ -352,6 +365,7 @@ void TestDatetimeFunctions::testEDATE()
     CHECK_EVAL("EDATE(\"2006-01-01\";-2) =DATE(2005;11;01)", Value(true));     // 2006 is not a leap year. Last day of March, going back to February
     CHECK_EVAL("EDATE(\"2000-04-30\";-2) =DATE(2000; 2;29)", Value(true));     // TODO 2000 was a leap year, so the end of February is the 29th
     CHECK_EVAL("EDATE(\"2000-04-05\";24 )=DATE(2002;04;05)", Value(true));     // EDATE isn't limited to 12 months
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEDATE(\"2006-01-01\";0)  =DATE(2006;01;01)", Value(true)); // alternate function name
 }
 
 void TestDatetimeFunctions::testEOMONTH()
@@ -373,6 +387,7 @@ void TestDatetimeFunctions::testEOMONTH()
     CHECK_EVAL("EOMONTH(\"2006-01-05\";09) =DATE(2002;10;31)", Value(false));     // Oct 31
     CHECK_EVAL("EOMONTH(\"2006-01-05\";10) =DATE(2002;11;30)", Value(false));     // Nov. 30
     CHECK_EVAL("EOMONTH(\"2006-01-05\";11) =DATE(2002;12;31)", Value(false));     // Dec. 31
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEOMONTH(\"2006-01-01\";0)  =DATE(2006;01;31)", Value(true)); // alternate function name
 }
 
 void TestDatetimeFunctions::testHOUR()
@@ -451,6 +466,14 @@ void TestDatetimeFunctions::testMONTH()
     CHECK_EVAL("MONTH(DATE(2006;5;21))", Value(5));        // Month extraction from DATE() value
 }
 
+void TestDatetimeFunctions::testMONTHS()
+{
+    CHECK_EVAL("MONTHS(\"2002-01-18\"; \"2002-02-26\"; 0)", Value(1));
+    CHECK_EVAL("MONTHS(\"2002-01-19\"; \"2002-02-26\"; 1)", Value(0));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFMONTHS(\"2002-01-18\"; \"2002-02-26\"; 0)", Value(1));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFMONTHS(\"2002-01-19\"; \"2002-02-26\"; 1)", Value(0));
+}
+
 void TestDatetimeFunctions::testNOW()
 {
     //
@@ -514,8 +537,16 @@ void TestDatetimeFunctions::testWEEKDAY()
 
 void TestDatetimeFunctions::testYEAR()
 {
-    //
     CHECK_EVAL("YEAR(DATE(1904;1;1))", Value(1904));
+    CHECK_EVAL("YEAR(DATE(2004;1;1))", Value(2004));
+}
+
+void TestDatetimeFunctions::testYEARS()
+{
+    CHECK_EVAL("YEARS(\"2001-02-19\"; \"2002-02-26\"; 0)", Value(1));
+    CHECK_EVAL("YEARS(\"2002-02-19\"; \"2002-02-26\"; 1)", Value(0));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFYEARS(\"2001-02-19\";\"2002-02-26\";0)", Value(1));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFYEARS(\"2002-02-19\";\"2002-02-26\";1)", Value(0));
 }
 
 void TestDatetimeFunctions::testWEEKS()
