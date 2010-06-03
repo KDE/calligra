@@ -307,15 +307,21 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const bool sorted = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison
+    Value r;
+    Value v = Value::errorNA();
     for (int col = 0; col < cols; ++col) {
         // search in the first row
         const Value le = data.element(col, 0);
-        if (sorted && calc->naturalLower(key, le))
-            return Value::errorNA();
-        if (calc->naturalEqual(key, le))
+        if (calc->naturalEqual(key, le)) {
             return data.element(col, row - 1);
+        }
+        // optionally look for the next largest value that is less than key
+        if (sorted && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
+            r = le;
+            v = data.element(col, row - 1);
+        }
     }
-    return Value::errorNA();
+    return v;
 }
 
 
@@ -469,15 +475,21 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const bool sorted = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison
+    Value r;
+    Value v = Value::errorNA();
     for (int row = 0; row < rows; ++row) {
         // search in the first column
         const Value le = data.element(0, row);
-        if (sorted && calc->naturalLower(key, le))
-            return Value::errorNA();
-        if (calc->naturalEqual(key, le))
-            return data.element(col -1, row);
+        if (calc->naturalEqual(key, le)) {
+            return data.element(col - 1, row);
+        }
+        // optionally look for the next largest value that is less than key
+        if (sorted && calc->naturalLower(le, key) && calc->naturalLower(r, le)) {
+            r = le;
+            v = data.element(col - 1, row);
+        }
     }
-    return Value::errorNA();
+    return v;
 }
 
 #include "ReferenceModule.moc"
