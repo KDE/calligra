@@ -103,6 +103,8 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 //  m_srcTypeCombo->setCurrentText( driverName );
 
 //  showPage( m_srcConnPage );
+        setAppropriate(m_srcConnPageItem, false);
+        setAppropriate(m_srcDBPageItem, false);
         m_srcConn->showSimpleConn();
         m_srcConn->setSelectedFileName(m_predefinedDatabaseName);
 
@@ -143,6 +145,14 @@ void ImportWizard::parseArguments()
         }
     }
     m_args->clear();
+}
+
+QString ImportWizard::selectedSourceFileName() const
+{
+    if (m_predefinedDatabaseName.isEmpty())
+        return m_srcConn->selectedFileName();
+
+    return m_predefinedDatabaseName;
 }
 
 //===========================================================
@@ -484,11 +494,7 @@ void ImportWizard::arriveSrcDBPage()
 void ImportWizard::arriveDstTitlePage()
 {
     if (fileBasedSrcSelected()) {
-        QString fname;
-        if (m_predefinedDatabaseName.isEmpty())
-            fname = m_srcConn->selectedFileName();
-        else
-            fname = m_predefinedDatabaseName;
+        const QString fname(selectedSourceFileName());
         QString suggestedDBName(QFileInfo(fname).fileName());
         const QFileInfo fi(suggestedDBName);
         suggestedDBName = suggestedDBName.left(suggestedDBName.length()
@@ -607,12 +613,12 @@ void ImportWizard::progressUpdated(int percent)
 QString ImportWizard::driverNameForSelectedSource()
 {
     if (fileBasedSrcSelected()) {
-        KMimeType::Ptr ptr = KMimeType::findByFileContent(m_srcConn->selectedFileName());
+        KMimeType::Ptr ptr = KMimeType::findByFileContent(selectedSourceFileName());
         if (!ptr
                 || ptr.data()->name() == "application/octet-stream"
                 || ptr.data()->name() == "text/plain") {
             //try by URL:
-            ptr = KMimeType::findByUrl(m_srcConn->selectedFileName());
+            ptr = KMimeType::findByUrl(selectedSourceFileName());
         }
         return ptr ? m_migrateManager.driverForMimeType(ptr.data()->name()) : QString();
     }
@@ -743,7 +749,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         md->destination = new KexiProjectData(*cdata, dbname);
         if (fileBasedSrcSelected()) {
             KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
-            conn_data->setFileName(m_srcConn->selectedFileName());
+            conn_data->setFileName(selectedSourceFileName());
             md->source = conn_data;
             md->sourceName.clear();
         } else {
@@ -855,7 +861,7 @@ void ImportWizard::next()
 {
     if (currentPage() == m_srcConnPageItem) {
         if (fileBasedSrcSelected()
-                && /*! @todo use KUrl? */!QFileInfo(m_srcConn->selectedFileName()).isFile()) {
+                && /*! @todo use KUrl? */!QFileInfo(selectedSourceFileName()).isFile()) {
 
             KMessageBox::sorry(this, i18n("Select source database filename."));
             return;
@@ -870,7 +876,7 @@ void ImportWizard::next()
         if (!import || m_migrateManager.error()) {
             QString dbname;
             if (fileBasedSrcSelected())
-                dbname = m_srcConn->selectedFileName();
+                dbname = selectedSourceFileName();
             else
                 dbname = m_srcConn->selectedConnectionData()
                          ? m_srcConn->selectedConnectionData()->serverInfoString() : QString();
@@ -978,7 +984,7 @@ void ImportWizard::helpClicked()
 
 void ImportWizard::slotOptionsButtonClicked()
 {
-    QPointer<OptionsDialog> dlg = new OptionsDialog(m_srcConn->selectedFileName(), m_sourceDBEncoding, this);
+    QPointer<OptionsDialog> dlg = new OptionsDialog(selectedSourceFileName(), m_sourceDBEncoding, this);
     if (QDialog::Accepted == dlg->exec()) {
         if (m_sourceDBEncoding != dlg->encodingComboBox()->selectedEncoding()) {
             m_sourceDBEncoding = dlg->encodingComboBox()->selectedEncoding();

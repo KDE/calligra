@@ -99,6 +99,10 @@ Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
 
+Migration
+*When source filename is preselected (e.g. when opening mdb file with Kexi), do not display the source name selection page
+*Append proper extension is not present, e.g. .kexi (regression in 2.x)
+
 **** TODO: setting "enabled" property to false does not work
 Forms
 *Image Box widget:

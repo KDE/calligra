@@ -119,6 +119,9 @@ private:
     void arriveFinishPage();
     void arriveImportingPage();
 
+    //! @return source filename selected by user or preselected one (if present)
+    QString selectedSourceFileName() const;
+
     QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget,
     *m_dstTypePageWidget, *m_dstPageWidget, *m_importTypePageWidget, *m_importingPageWidget, *m_finishPageWidget;
 

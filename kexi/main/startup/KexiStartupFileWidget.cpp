@@ -339,6 +339,33 @@ bool KexiStartupFileWidget::checkSelectedFile()
         return false;
     }
 
+    if (!currentFilter().isEmpty()) {
+        if (d->mode & SavingFileBasedDB) {
+            const QStringList filters( currentFilter().split(" ") );
+            QString path = highlightedFile();
+            kDebug()<< "filter:" << filters << "path:" << path;
+            QString ext( QFileInfo(path).suffix() );
+            bool hasExtension = false;
+            foreach (const QString& filter, filters) {
+                const QString f( filter.trimmed() );
+                hasExtension = !f.mid(2).isEmpty() && ext==f.mid(2);
+                if (hasExtension)
+                break;
+            }
+            if (!hasExtension) {
+                //no extension: add one
+                QString defaultExtension( d->defaultExtension );
+                if (defaultExtension.isEmpty()) {
+                    defaultExtension = filters.first().trimmed().mid(2); //first one
+                }
+                path += (QLatin1String(".")+defaultExtension);
+                kDebug() << "appended extension" << path;
+                setSelection( path );
+                d->highlightedUrl = KUrl(path);
+            }
+        }
+    }
+
     kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl;
 // kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName();
 //todo if ( url.isLocalFile() ) {
