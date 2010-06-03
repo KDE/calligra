@@ -989,8 +989,10 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
     // smil:subtype
     // smil:type
     // style:repeat
-    if (ds.fillDztype() == 0) {
-        style.addProperty("style:repeat", "stretch");
+    //NOTE: fFilled is a boolean property which specifies whether fill of the
+    //shape is render based on the properties of the "fill style" property set
+    if (ds.fFilled()) {
+        style.addProperty("style:repeat", getRepeatStyle(fillType));
     }
     // svg:fill-rule
 }

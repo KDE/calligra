@@ -358,6 +358,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 const char* getFillType(quint32 fillType)
 {
     switch (fillType) {
+    case 1: // msofillPattern
+        // NOTE: there's usually a DIB file used for the pattern, check also
+        // draw:fill="hatch" and <draw:hatch> in ODF specification
     case 2: // msofillTexture
     case 3: // msofillPicture
         return "bitmap";
@@ -367,12 +370,30 @@ const char* getFillType(quint32 fillType)
     case 7: // msofillShadeScale
     case 8: // msofillShadeTitle
         return "gradient";
-    case 1: // msofillPattern
-        return "hatch";
     case 9: // msofillBackground
         return "none";
     case 0: // msofillSolid
     default:
         return "solid";
+    }
+}
+
+const char* getRepeatStyle(quint32 fillType)
+{
+    switch(fillType) {
+    case 3: // msofillPicture
+    case 7: // msofillShadeScale
+        return "stretch";
+    case 0: // msofillSolid
+    case 4: // msofillShade
+    case 5: // msofillShadeCenter
+    case 6: // msofillShadeShape
+    case 8: // msofillShadeTitle
+    case 9: // msofillBackground
+        return "no-repeat";
+    case 1: // msofillPattern
+    case 2: // msofillTexture
+    default:
+        return "repeat";
     }
 }
