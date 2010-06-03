@@ -1039,8 +1039,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
 
  Child elements:
  - bdo (Bidirectional Override) §17.3.2.3
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Inline-Level Custom XML Element) §17.5.1.3
@@ -1112,6 +1112,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         if (isStartElement()) {
             TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
             //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL)
@@ -1143,7 +1145,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
  Child elements:
  - bdo (Bidirectional Override) §17.3.2.3
- - bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
  - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - [done] commentRangeStart (Comment Anchor Range Start) §17.13.4.4 - WML only
@@ -1228,6 +1230,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(pPr) // CASE #400.1
 //! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
@@ -1742,7 +1745,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - footnote (§17.11.10)
  - ftr (§17.10.3)
  - hdr (§17.10.4)
- - hyperlink (§17.16.22)
+ - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
  - moveFrom (§17.13.5.22)
@@ -1773,10 +1776,78 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR(name)
-    if (!name.isEmpty()) {
-        body->startElement("text:bookmark");
+    TRY_READ_ATTR(id)
+    if (!name.isEmpty() && !id.isEmpty()) {
+        body->startElement("text:bookmark-start");
         body->addAttribute("text:name", name);
-        body->endElement(); // text:bookmark-ref
+        body->endElement(); // text:bookmark-start
+        m_bookmarks[id] = name;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bookmarkEnd
+//! bookmarkEnd handler (Bookmark End)
+/*!
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - body (§17.2.2)
+ - comment (§17.13.4.2)
+ - customXml (§17.5.1.6)
+ - customXml (§17.5.1.4)
+ - customXml (§17.5.1.5)
+ - customXml (§17.5.1.3)
+ - deg (§22.1.2.26)
+ - del (§17.13.5.14)
+ - den (§22.1.2.28)
+ - dir (§17.3.2.8)
+ - docPartBody (§17.12.6)
+ - e (§22.1.2.32)
+ - endnote (§17.11.2)
+ - fldSimple (§17.16.19)
+ - fName (§22.1.2.37)
+ - footnote (§17.11.10)
+ - ftr (§17.10.3)
+ - hdr (§17.10.4)
+ - [done] hyperlink (§17.16.22)
+ - ins (§17.13.5.18)
+ - lim (§22.1.2.52)
+ - moveFrom (§17.13.5.22)
+ - moveTo (§17.13.5.25)
+ - num (§22.1.2.75)
+ - oMath (§22.1.2.77)
+ - [done p (§17.3.1.22)
+ - rt (§17.3.3.24)
+ - rubyBase (§17.3.3.27)
+ - sdtContent (§17.5.2.34)
+ - sdtContent (§17.5.2.33)
+ - sdtContent (§17.5.2.35)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+ - sub (§22.1.2.112)
+ - sup (§22.1.2.114)
+ - tbl (§17.4.38)
+ - tc (§17.4.66)
+ - tr (§17.4.79)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(id)
+    if (!id.isEmpty()) {
+        body->startElement("text:bookmark-end");
+        body->addAttribute("text:name", m_bookmarks[id]);
+        body->endElement(); // text:bookmark-end
     }
 
     readNext();

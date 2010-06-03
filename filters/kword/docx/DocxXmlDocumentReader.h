@@ -88,6 +88,7 @@ protected:
     KoFilter::ConversionStatus read_OLEObject();
     KoFilter::ConversionStatus read_webHidden();
     KoFilter::ConversionStatus read_bookmarkStart();
+    KoFilter::ConversionStatus read_bookmarkEnd();
     //KoFilter::ConversionStatus read_commentRangeEnd();
     KoFilter::ConversionStatus read_commentRangeStart();
     KoFilter::ConversionStatus read_endnoteReference();
@@ -228,6 +229,8 @@ private:
     KoXmlWriter* m_dropCapWriter;
     QString m_dropCapLines;
     qreal   m_dropCapDistance;
+
+    QMap<QString, QString> m_bookmarks; //!< Bookmarks
 
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
