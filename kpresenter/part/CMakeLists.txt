@@ -88,6 +88,7 @@ set( kpresenterprivate_LIB_SRCS
      animations/KPrAnimateColor.cpp
      animations/KPrAnimateMotion.cpp
      animations/KPrAnimateTransform.cpp
+     animations/KPrAnimTransitionFilter.cpp
      animations/KPrAnimationFactory.cpp
      animations/KPrAnimationCache.cpp
      animations/KPrTextBlockPaintStrategy.cpp

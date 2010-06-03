@@ -26,6 +26,7 @@
 #include "KPrAnimateColor.h"
 #include "KPrAnimateMotion.h"
 #include "KPrAnimateTransform.h"
+#include "KPrAnimTransitionFilter.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -52,6 +53,7 @@ KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElemen
             animation = new KPrAnimateTransform(shapeAnimation);
         }
         else if (element.tagName() == "transitionFilter") {
+            animation = new KPrAnimTransitionFilter(shapeAnimation);
         }
 
         if (animation) {
