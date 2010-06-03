@@ -307,7 +307,8 @@ void KWAnchorStrategy::calculateKnowledgePoint()
 {
     m_knowledgePoint = -1;
     // figure out until what cursor position we need to layout to get all the info we need
-    switch (m_anchor->horizontalAlignment()) {
+qDebug()<<"horiz"<<m_anchor->horizontalAlignment();
+switch (m_anchor->horizontalAlignment()) {
     case KoTextAnchor::ClosestToBinding:
     case KoTextAnchor::Left:
     case KoTextAnchor::FurtherFromBinding:
@@ -323,7 +324,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
         break;
     }
     case KoTextAnchor::HorizontalOffset:
-        m_knowledgePoint = m_anchor->positionInDocument();
+        m_knowledgePoint = m_anchor->positionInDocument()+1;
     }
     switch (m_anchor->verticalAlignment()) {
     case KoTextAnchor::TopOfParagraph:
@@ -337,7 +338,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
     case KoTextAnchor::BottomOfPage:
     case KoTextAnchor::TopOfPageContent:
     case KoTextAnchor::BottomOfPageContent:
-        m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument());
+        m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument()+1);
         break;
     case KoTextAnchor::TopOfFrame:
     case KoTextAnchor::BottomOfFrame: {
