@@ -109,7 +109,7 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
     ok = true;
 
     if ( m_startIt && m_startIt->currentStart() == globalCP &&
-        m_textIt != m_text.end() ) {
+        m_textIt != m_text.end() && m_nameIt != m_name.end()) {
 
         ++( *m_startIt ); // yay, but it is hard to make that more elegant
         ++( *m_endIt );
