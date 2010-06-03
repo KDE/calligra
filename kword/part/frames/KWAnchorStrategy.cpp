@@ -307,8 +307,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
 {
     m_knowledgePoint = -1;
     // figure out until what cursor position we need to layout to get all the info we need
-qDebug()<<"horiz"<<m_anchor->horizontalAlignment();
-switch (m_anchor->horizontalAlignment()) {
+    switch (m_anchor->horizontalAlignment()) {
     case KoTextAnchor::ClosestToBinding:
     case KoTextAnchor::Left:
     case KoTextAnchor::FurtherFromBinding:
