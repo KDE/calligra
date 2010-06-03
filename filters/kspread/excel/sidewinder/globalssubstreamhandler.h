@@ -63,6 +63,7 @@ public:
 
     virtual void handleRecord(Record* record);
 
+    Workbook* workbook() const;
     bool passwordProtected() const;
     unsigned version() const;
     Sheet* sheetFromPosition(unsigned position) const;
@@ -90,6 +91,7 @@ public:
     virtual UString externNameFromIndex(unsigned index) const;
     
     MsoDrawingBlibItem* drawing(unsigned long pid) const;
+    QList< Sheet* >& chartSheets();
 
     Store* store() const;
 

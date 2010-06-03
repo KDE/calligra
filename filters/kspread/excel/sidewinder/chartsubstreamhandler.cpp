@@ -106,12 +106,31 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, S
         Q_ASSERT(m_chart);
         m_currentObj = m_chart;
 
-        //unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
         Cell* cell = m_sheet->cell(m_chartObject->drawingObject()->m_colL, m_chartObject->drawingObject()->m_rwT, true);
         cell->addChart(m_chartObject);
     } else {
-        std::cerr << "ChartSubStreamHandler: Chart is not embedded into a worksheet. This is not handled yet." << std::endl;
-        //TODO
+        Q_ASSERT(globals);
+        if(globals->chartSheets().isEmpty()) {
+            std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
+        } else {
+            m_sheet = globals->chartSheets().takeFirst();
+
+            static unsigned long id = 99999;
+            m_chartObject = new ChartObject(++id);
+            m_chart = m_chartObject->m_chart;
+            Q_ASSERT(m_chart);
+            m_currentObj = m_chart;
+
+            DrawingObject* drawing = new DrawingObject;
+            drawing->m_properties[DrawingObject::pid] = m_chartObject->id();
+            drawing->m_properties[DrawingObject::itxid] = m_chartObject->id();
+            drawing->m_colL = drawing->m_dxL = drawing->m_rwT = drawing->m_dyT = drawing->m_dxR = drawing->m_dyB = 0;
+            drawing->m_colR = 10; drawing->m_rwB = 30; //FIXME use sheet "fullscreen" rather then hardcode
+            m_chartObject->setDrawingObject(drawing);
+
+            Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
+            cell->addChart(m_chartObject);
+        }
     }
 }
 

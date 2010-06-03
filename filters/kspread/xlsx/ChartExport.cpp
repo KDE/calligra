@@ -76,8 +76,10 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
     xmlWriter->addAttributePt("svg:x", m_x);
     xmlWriter->addAttributePt("svg:y", m_y);
-    xmlWriter->addAttributePt("svg:width", m_width);
-    xmlWriter->addAttributePt("svg:height", m_height);
+    if(m_width > 0)
+        xmlWriter->addAttributePt("svg:width", m_width);
+    if(m_height > 0)
+        xmlWriter->addAttributePt("svg:height", m_height);
     xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
@@ -112,8 +114,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if (!chart()->m_impl->name().isEmpty())
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
-    bodyWriter->addAttributePt("svg:width", m_width);
-    bodyWriter->addAttributePt("svg:height", m_height);
+    if(m_width > 0)
+        bodyWriter->addAttributePt("svg:width", m_width);
+    if(m_height > 0)
+        bodyWriter->addAttributePt("svg:height", m_height);
 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     if(!chart()->m_areaFormat || chart()->m_areaFormat->m_fill) {

@@ -75,6 +75,9 @@ public:
 
     // table blib items
     std::vector< MsoDrawingBlibItem* > drawingTable;
+
+    // list of chart sheets
+    QList< Sheet* > chartSheets;
 };
 
 GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned version)
@@ -103,6 +106,11 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
 {
     delete d;
+}
+
+Workbook* GlobalsSubStreamHandler::workbook() const
+{
+    return d->workbook;
 }
 
 bool GlobalsSubStreamHandler::passwordProtected() const
@@ -566,20 +574,26 @@ void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
 {
     if (!record) return;
 
-    // only care for Worksheet, forget everything else
-    if (record->sheetType() == BoundSheetRecord::Worksheet) {
-        // create a new sheet
-        Sheet* sheet = new Sheet(d->workbook);
-        sheet->setName(record->sheetName());
-        sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
+    switch (record->sheetType()) {
+        case BoundSheetRecord::Chart: // chartsheets are worksheets too
+        case BoundSheetRecord::Worksheet: {
+            // create a new sheet
+            Sheet* sheet = new Sheet(d->workbook);
+            sheet->setName(record->sheetName());
+            sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
 
-        d->workbook->appendSheet(sheet);
+            d->workbook->appendSheet(sheet);
 
-        // update bof position map
-        unsigned bofPos = record->bofPosition();
-        d->bofMap[ bofPos ] = sheet;
-    } else {
-        std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
+            if(record->sheetType() == BoundSheetRecord::Chart)
+                d->chartSheets << sheet;
+
+            // update bof position map
+            unsigned bofPos = record->bofPosition();
+            d->bofMap[ bofPos ] = sheet;
+        } break;
+        default:
+            std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
+            break;
     }
 }
 
@@ -770,6 +784,11 @@ MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
         return 0;
     }
     return d->drawingTable.at(pid - 1);
+}
+
+QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
+{
+    return d->chartSheets;
 }
 
 Store* GlobalsSubStreamHandler::store() const
