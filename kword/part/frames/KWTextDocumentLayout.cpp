@@ -285,19 +285,18 @@ void KWTextDocumentLayout::relayout()
         return;
     const QList<KWFrame*> frames = m_frameSet->frames();
     QList<KWFrame*> dirtyFrames = frames;
-    bool foundADirtyOne = false;
     KWFrame *firstDirtyFrame = 0;
     foreach (KWFrame *frame, frames) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
         if (!firstDirtyFrame && data && data->isDirty())
             firstDirtyFrame = frame;
-        if (! firstDirtyFrame)
+        if (!firstDirtyFrame)
             dirtyFrames.removeAll(frame);
     }
 
     // make sure the ordering is proper
     m_frameSet->sortFrames();
-    if (foundADirtyOne) {
+    if (firstDirtyFrame) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
         // mark dirty any frame that were previously later in the flow, but are now before it.
         foreach (KWFrame *frame, frames) {
