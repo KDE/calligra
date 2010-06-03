@@ -947,7 +947,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                     urlStr = urlStr.remove(urlStr.length() - 1, 1);
 
                 writer.addAttribute("xlink:href", QUrl(urlStr).toEncoded());
-                if (m_hyperLinkList[1].contains("\t")) {
+                if (m_hyperLinkList[1].contains("\t") && fullList.size() < 2) {
                     writer.startElement("text:tab");
                     writer.endElement();
                 }
