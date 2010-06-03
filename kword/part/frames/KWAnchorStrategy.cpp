@@ -251,7 +251,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
         break;
     }
     case KoTextAnchor::HorizontalOffset:
-        m_knowledgePoint = m_anchor->positionInDocument();
+        m_knowledgePoint = m_anchor->positionInDocument()+1;
     }
     switch (m_anchor->verticalAlignment()) {
     case KoTextAnchor::TopOfParagraph:
@@ -261,7 +261,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
     case KoTextAnchor::VerticalOffset:
     case KoTextAnchor::AboveCurrentLine:
     case KoTextAnchor::BelowCurrentLine:
-        m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument());
+        m_knowledgePoint = qMax(m_knowledgePoint, m_anchor->positionInDocument()+1);
         break;
     case KoTextAnchor::TopOfFrame:
     case KoTextAnchor::BottomOfFrame: {
