@@ -1407,7 +1407,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     - duotone (Duotone Effect) §20.1.8.23
     - extLst (Extension List) §20.1.2.2.15
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
-    - grayscl (Gray Scale Effect) §20.1.8.34
+    - [done] grayscl (Gray Scale Effect) §20.1.8.34
     - hsl (Hue Saturation Luminance Effect) §20.1.8.39
     - lum (Luminance Effect) §20.1.8.42
     - tint (Tint Effect) §20.1.8.60
@@ -1446,6 +1446,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(biLevel)
+            ELSE_TRY_READ_IF(grayscl)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1521,10 +1522,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_biLevel()
     m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("mono"));
 //! @todo thresh attribute (no real counterpoint in ODF)
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL grayscl
+//! grayscl handler (gray scale)
+/*!
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ No child elements.
+
+ Attributes
+ - thresh (Threshold)
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grayscl()
+{
+    READ_PROLOGUE
+
+    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("greyscale"));
+
+    readNext();
     READ_EPILOGUE
 }
 
