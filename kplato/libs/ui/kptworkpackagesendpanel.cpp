@@ -39,7 +39,7 @@ WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  Schedule
     : QWidget(p)
 {
     setupUi( this );
-    long id = sm ? sm->id() : NOTSCHEDULED;
+    long id = sm ? sm->scheduleId() : NOTSCHEDULED;
     foreach ( Node *n, tasks ) {
         Task *t = qobject_cast<Task*>( n );
         if ( t == 0 ) {

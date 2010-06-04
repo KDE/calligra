@@ -75,6 +75,7 @@ void AccountsTester::init()
     //kDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
     project.setConstraintStartTime( DateTime( today, QTime() ) );
     project.setConstraintEndTime( DateTime( tomorrow, QTime() ) );
+    sm->createSchedules();
     project.calculate( *sm );
     
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( project.startTime() ) );
@@ -154,7 +155,7 @@ void AccountsTester::costPlaces() {
     Account *a = new Account( "Running account" );
     project.accounts().insert( a, top );
     a->addRunning( *t );
-    ec = a->plannedCost( sm->id() );
+    ec = a->plannedCost( sm->scheduleId() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 800.0 );
 
@@ -162,7 +163,7 @@ void AccountsTester::costPlaces() {
     project.accounts().insert( a, top );
     a->addStartup( *t );
     t->setStartupCost( 200.0 );
-    ec = a->plannedCost( sm->id() );
+    ec = a->plannedCost( sm->scheduleId() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 200.0 );
 
@@ -170,13 +171,13 @@ void AccountsTester::costPlaces() {
     project.accounts().insert( a, top );
     a->addShutdown( *t );
     t->setShutdownCost( 300.0 );
-    ec = a->plannedCost( sm->id() );
+    ec = a->plannedCost( sm->scheduleId() );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
     QCOMPARE( ec.totalCost(), 300.0 );
 
-    ec = top->plannedCost( sm->id() );
+    ec = top->plannedCost( sm->scheduleId() );
 
-//    Debug::print( top, sm->id(), "All planned cost in child accounts--------" );
+//    Debug::print( top, sm->scheduleId(), "All planned cost in child accounts--------" );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 1300.0 );
     
@@ -185,8 +186,8 @@ void AccountsTester::costPlaces() {
     a->addRunning( *t );
     a->addStartup( *t );
     a->addShutdown( *t );
-    ec = a->plannedCost( sm->id() );
-//    Debug::print( a, sm->id(), "All planned cost in one account-----------" );
+    ec = a->plannedCost( sm->scheduleId() );
+//    Debug::print( a, sm->scheduleId(), "All planned cost in one account-----------" );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
     QCOMPARE( ec.totalCost(), 1300.0 );
 

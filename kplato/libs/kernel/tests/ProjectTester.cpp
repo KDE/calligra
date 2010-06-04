@@ -218,12 +218,14 @@ void ProjectTester::schedule()
 
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
     QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 1 )) );
     
     t->estimate()->setCalendar( m_calendar );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
@@ -246,6 +248,7 @@ void ProjectTester::schedule()
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
@@ -261,6 +264,7 @@ void ProjectTester::schedule()
     r->setUnits( 50 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
@@ -277,6 +281,7 @@ void ProjectTester::schedule()
     rr->setUnits( 50 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
 //    printDebug( m_project, t, s );
@@ -296,6 +301,7 @@ void ProjectTester::schedule()
     rr->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //    printDebug( m_project, t, s);
@@ -316,6 +322,7 @@ void ProjectTester::schedule()
     r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
@@ -333,6 +340,7 @@ void ProjectTester::schedule()
     t->setConstraintStartTime( DateTime( nextweek, t1 ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
@@ -350,6 +358,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->startTime() );
@@ -370,6 +379,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->startTime() );
@@ -389,6 +399,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->startTime() );
@@ -408,6 +419,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //    Debug::print( m_project, t, s );
@@ -428,6 +440,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //    printDebug( m_project, t, s );
@@ -449,6 +462,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->startTime() );
@@ -471,6 +485,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     //printDebug( m_project, t, s );
@@ -494,6 +509,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     //printDebug( m_project, t, s );
@@ -517,6 +533,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -537,6 +554,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     //printDebug( m_project, t, s );
@@ -559,6 +577,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -579,6 +598,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -599,6 +619,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -619,6 +640,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -639,6 +661,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), t->constraintStartTime() );
@@ -659,6 +682,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -681,6 +705,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), t->constraintEndTime() );
@@ -703,6 +728,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -725,6 +751,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), t->constraintStartTime() );
@@ -747,6 +774,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
@@ -769,6 +797,7 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     sm->setSchedulingDirection( true );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), t->constraintStartTime() );
@@ -803,6 +832,7 @@ void ProjectTester::schedule()
     sm->setAllowOverbooking( false );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //     Debug::print( m_project, t, s );
@@ -844,6 +874,7 @@ void ProjectTester::schedule()
     sm->setAllowOverbooking( true );
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //    printDebug( m_project, t, s );
@@ -908,6 +939,7 @@ void ProjectTester::scheduleFullday()
 
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
     
 //     printDebug( c, s );
@@ -955,6 +987,8 @@ void ProjectTester::scheduleFullday()
     r->setCalendar( c3 );
     gr->addResourceRequest( new ResourceRequest( r, 100 ) );
 
+
+    sm->createSchedules();
     m_project->calculate( *sm );
 
 //    printDebug( m_project, t, s );
@@ -1006,6 +1040,7 @@ void ProjectTester::scheduleWithExternalAppointments()
 
     ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
     project.addScheduleManager( sm );
+    sm->createSchedules();
     project.calculate( *sm );
     
     QString s = "Schedule with external appointments ----------";
@@ -1017,6 +1052,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     
     sm->setAllowOverbooking( true );
+    sm->createSchedules();
     project.calculate( *sm );
 
     //printSchedulingLog( *sm );
@@ -1026,6 +1062,7 @@ void ProjectTester::scheduleWithExternalAppointments()
 
     sm->setAllowOverbooking( false );
     sm->setSchedulingDirection( true ); // backwards
+    sm->createSchedules();
     project.calculate( *sm );
 
     //printSchedulingLog( *sm );
@@ -1034,6 +1071,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
 
     sm->setAllowOverbooking( true );
+    sm->createSchedules();
     project.calculate( *sm );
 
     //printSchedulingLog( *sm );
@@ -1043,6 +1081,7 @@ void ProjectTester::scheduleWithExternalAppointments()
 
     sm->setAllowOverbooking( false );
     r->clearExternalAppointments();
+    sm->createSchedules();
     project.calculate( *sm );
 
     //printSchedulingLog( *sm );
@@ -1121,6 +1160,7 @@ void ProjectTester::reschedule()
 
     ScheduleManager *sm = project.createScheduleManager( "Plan" );
     project.addScheduleManager( sm );
+    sm->createSchedules();
     project.calculate( *sm );
     
 //    printDebug( &project, task1, s, true );
@@ -1149,6 +1189,7 @@ void ProjectTester::reschedule()
     project.addScheduleManager( child, sm );
     child->setRecalculate( true );
     child->setRecalculateFrom( restart );
+    child->createSchedules();
     project.calculate( *child );
 
 //     printDebug( &project, task1, s, true );
@@ -1225,6 +1266,7 @@ void ProjectTester::materialResource()
 
     ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
     project.addScheduleManager( sm );
+    sm->createSchedules();
     project.calculate( *sm );
 
 //     printDebug( r, s);
@@ -1298,6 +1340,7 @@ void ProjectTester::requiredResource()
     
     ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
     project.addScheduleManager( sm );
+    sm->createSchedules();
     project.calculate( *sm );
 
 //     Debug::print( r, s);
@@ -1314,12 +1357,12 @@ void ProjectTester::requiredResource()
     QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( task1->schedulingError() == false );
     
-    QList<Appointment*> apps = r->appointments( sm->id() );
+    QList<Appointment*> apps = r->appointments( sm->scheduleId() );
     QVERIFY( apps.count() == 1 );
     QCOMPARE( task1->startTime(), apps.first()->startTime() );
     QCOMPARE( task1->endTime(), apps.last()->endTime() );
 
-    apps = mr->appointments( sm->id() );
+    apps = mr->appointments( sm->scheduleId() );
     QVERIFY( apps.count() == 1 );
     QCOMPARE( task1->startTime(), apps.first()->startTime() );
     QCOMPARE( task1->endTime(), apps.last()->endTime() );
@@ -1327,6 +1370,7 @@ void ProjectTester::requiredResource()
     s = "Required resource limits availability --------";
     DateTime tomorrow = targetstart.addDays( 1 );
     mr->setAvailableFrom( tomorrow );
+    sm->createSchedules();
     project.calculate( *sm );
 
 //     Debug::print( r, s);
@@ -1343,12 +1387,12 @@ void ProjectTester::requiredResource()
     QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( task1->schedulingError() == false );
     
-    apps = r->appointments( sm->id() );
+    apps = r->appointments( sm->scheduleId() );
     QVERIFY( apps.count() == 1 );
     QCOMPARE( task1->startTime(), apps.first()->startTime() );
     QCOMPARE( task1->endTime(), apps.last()->endTime() );
 
-    apps = mr->appointments( sm->id() );
+    apps = mr->appointments( sm->scheduleId() );
     QVERIFY( apps.count() == 1 );
     QCOMPARE( task1->startTime(), apps.first()->startTime() );
     QCOMPARE( task1->endTime(), apps.last()->endTime() );
@@ -1408,6 +1452,7 @@ void ProjectTester::resourceWithLimitedAvailability()
 
     ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
     project.addScheduleManager( sm );
+    sm->createSchedules();
     project.calculate( *sm );
 
     Debug::print( r1, s);

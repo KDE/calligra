@@ -385,7 +385,7 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
     model()->setScheduleManager( sm );
     m_manager = sm;
     if ( sm && project() ) {
-        QDateTime start = project()->startTime( sm->id() ).dateTime().addDays( -1 );
+        QDateTime start = project()->startTime( sm->scheduleId() ).dateTime().addDays( -1 );
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
         if ( g->startDateTime() !=  start ) {
             g->setStartDateTime( start );
@@ -717,7 +717,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
     if ( sm && m_project ) {
         QDateTime start;
         foreach ( const Node *n, model()->mileStones() ) {
-            QDateTime nt = n->startTime( sm->id() ).dateTime();
+            QDateTime nt = n->startTime( sm->scheduleId() ).dateTime();
             if ( ! nt.isValid() ) {
                 continue;
             }
@@ -727,7 +727,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
             }
         }
         if ( ! start.isValid() ) {
-            start = project()->startTime( sm->id() ).dateTime();
+            start = project()->startTime( sm->scheduleId() ).dateTime();
         }
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
         start = start.addDays( -1 );

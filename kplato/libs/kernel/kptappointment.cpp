@@ -97,7 +97,7 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
         m_end = DateTime::fromString(s, status.projectSpec());
     m_load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) m_load = 100;
-    return m_start.isValid() && m_end.isValid();
+    return isValid();
 }
 
 void AppointmentInterval::saveXML(QDomElement &element) const {
@@ -479,6 +479,7 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
     //kDebug()<<"res="<<m_resource<<" node="<<m_node;
     m_intervals.loadXML( element, status );
     if (isEmpty()) {
+        kError()<<"Appointment is empty (added anyway): "<<node->name()<<res->name();
         return false;
     }
     return true;

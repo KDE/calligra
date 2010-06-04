@@ -37,4 +37,20 @@
 #  define KPLATORCPS_EXPORT_DEPRECATED KDE_DEPRECATED KPLATORCPS_EXPORT
 # endif
 
+/* Now the same for KPLATO_TEST_EXPORT, if compiling with unit tests enabled */
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KPLATOKERNEL_LIB)
+#       define KPLATORCPS_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KPLATORCPS_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KPLATORCPS_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KPLATORCPS_TEST_EXPORT
+#endif
+
 #endif

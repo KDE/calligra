@@ -303,6 +303,9 @@ private slots:
 
     void slotRemoveCommands();
 
+    void slotMaxProgress( int p );
+    void slotSetProgress( int p );
+
 private:
     void createViews();
     ViewBase *createView( ViewListItem *cat, const QString &type, const QString &tag, const QString &name, const QString &tip, int index = -1 );

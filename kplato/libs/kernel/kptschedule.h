@@ -476,12 +476,15 @@ public:
     void addCriticalPathNode( Node *node );
     
     QList<Schedule::Log> logs() const;
+    void setLog( const QList<Schedule::Log> &log ) { m_log = log; }
     virtual void addLog( Schedule::Log &log );
     virtual void clearLogs() { m_log.clear(); m_logPhase.clear(); }
     
     void setPhaseName( int phase, const QString &name ) { m_logPhase[ phase ] = name; }
     QString logPhase( int phase ) const { return m_logPhase.value( phase ); }
     static QString logSeverity( int severity );
+    QMap<int, QString> phaseNames() const { return m_logPhase; }
+    void setPhaseNames( const QMap<int, QString> &pn ) { m_logPhase = pn; }
     
     virtual void incProgress();
 
@@ -534,12 +537,15 @@ public:
     void setName( const QString& name );
     QString name() const { return m_name; }
 
+    void setManagerId( const QString &id ) { m_id = id; }
+    QString managerId() const { return m_id; }
+
     Project &project() const { return m_project; }
     
     void setParentManager( ScheduleManager *sm );
     ScheduleManager *parentManager() const { return m_parent; }
     
-    long id() const { return m_expected == 0 ? NOTSCHEDULED : m_expected->id(); }
+    long scheduleId() const { return m_expected == 0 ? NOTSCHEDULED : m_expected->id(); }
     
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
@@ -560,7 +566,7 @@ public:
     DateTime recalculateFrom() const { return m_recalculateFrom; }
     /// Set the datetime this schedule will be calculated from to @p dt
     void setRecalculateFrom( const DateTime &dt ) { m_recalculateFrom = dt; }
-    long parentScheduleId() const { return m_parent == 0 ? NOTSCHEDULED : m_parent->id(); }
+    long parentScheduleId() const { return m_parent == 0 ? NOTSCHEDULED : m_parent->scheduleId(); }
     void createSchedules();
     
     void setDeleted( bool on );
@@ -611,8 +617,6 @@ public:
             
     void scheduleChanged( MainSchedule *sch );
     
-    void incProgress();
-
     const QList<SchedulerPlugin*> schedulerPlugins() const;
     QString schedulerPluginId() const;
     void setSchedulerPluginId( const QString &id );
@@ -621,23 +625,56 @@ public:
     int schedulerPluginIndex() const;
     void setSchedulerPlugin( int index );
 
+    /// Stop calculation. Use result if possible.
     void stopCalculation();
+    /// Terminate calculation. Forget any results.
+    void haltCalculation();
     void calculateSchedule();
     int calculationResult() const { return m_calculationresult; }
     void setCalculationResult( int r ) { m_calculationresult = r; }
 
+    /// Increments progress in the project
+    void incProgress();
+    /// Returns current progress
     int progress() const { return m_progress; }
-    void setProgress( int progress );
+    /// Returns maximum progress value
     int maxProgress() const { return m_maxprogress; }
-    void setMaxProgress( int max ) { m_maxprogress = max; }
 
-protected:
+    /// Log added by MainSchedule
+    /// Emits sigLogAdded() to enable syncronization between schedules
+    void logAdded( Schedule::Log &log );
+
+    /// Create and load a MainSchedule
     MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
-    
+
+    /// Load an existing MainSchedule
+    bool loadMainSchedule( MainSchedule *schedule, KoXmlElement &element, XMLLoaderObject &status );
+
+public slots:
+    /// Set maximum progress. Emits signal maxProgressChanged
+    void setMaxProgress( int value );
+    /// Set progress. Emits signal progressChanged
+    void setProgress( int value );
+
+    /// Add @p log to expected()
+    /// Usually connected to sigLogAdded() (other manager) to syncronize this with the other manager
+    void slotAddLog( KPlato::Schedule::Log log );
+
+    void slotAddLog( const QList<KPlato::Schedule::Log> &log );
+
+signals:
+    void maxProgressChanged( int );
+    void progressChanged( int );
+
+    /// Emitted by logAdded() (but not by slotAddLog())
+    /// Usually connected to slotAddLog() (other manager) to syncronize the other manager with this manager
+    void sigLogAdded( Schedule::Log log );
+
 protected:
     Project &m_project;
     ScheduleManager *m_parent;
     QString m_name;
+    QString m_id;
     bool m_baselined;
     bool m_allowOverbooking;
     bool m_checkExternalAppointments;
@@ -662,5 +699,7 @@ protected:
 
 
 } //namespace KPlato
+
+QDebug &operator<<( QDebug &dbg, const KPlato::Schedule::Log &log );
 
 #endif

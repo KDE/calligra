@@ -1563,79 +1563,76 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         m_progressBarTimer.stop();
         removeProgressBarItems();
     }
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "@info:status 1=schedule name", "Calculate %1", sm->name() ) );
-    m_calculationcommands.insert( sm, cmd );
-    cmd->execute();
-    //getPart() ->addCommand( cmd );
-    QApplication::restoreOverrideCursor();
-    slotUpdate();
-}
+//    m_calculationcommands.insert( sm, cmd );
 
-void View::slotCalculationStarted( Project *project, ScheduleManager *sm )
-{
-    //qDebug()<<"View::slotCalculationStarted:"<<sm<<sm->name();
     if ( m_progressBarTimer.isActive() ) {
         m_progressBarTimer.stop();
         removeProgressBarItems();
     }
-    removeStatusBarItem( m_estlabel );
+//    removeStatusBarItem( m_estlabel );
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
-    addStatusBarItem( m_text, 0, true );
+//    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
+//    addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
     m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
-    addStatusBarItem( m_progress, 0, true );
+//    addStatusBarItem( m_progress, 0, true );
     
-    connect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
-    connect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT( setValue( int ) ) );
+    connect( project, SIGNAL( maxProgress( int ) ), this, SLOT( slotMaxProgress( int ) ) );
+    connect( project, SIGNAL( sigProgress( int ) ), this, SLOT( slotSetProgress( int ) ) );
     connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
+
+    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "@info:status 1=schedule name", "Calculate %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
+    slotUpdate();
+}
+
+void View::slotMaxProgress( int p )
+{
+    if ( m_progress ) {
+        m_progress->setMaximum( p );
+    }
+}
+void View::slotSetProgress( int p )
+{
+    if ( m_progress ) {
+        m_progress->setValue( p );
+    }
+}
+
+void View::slotCalculationStarted( Project *project, ScheduleManager *sm )
+{
 }
 
 void View::slotCalculationFinished( Project *project, ScheduleManager *sm )
 {
     switch ( sm->calculationResult() ) {
         case ScheduleManager::CalculationStopped:
-            m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation stopped", sm->name() ) );
+            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation stopped", sm->name() ) );
             break;
         case ScheduleManager::CalculationCanceled:
-            m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation canceled", sm->name() ) );
+            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation canceled", sm->name() ) );
             break;
         case ScheduleManager::CalculationError:
-            m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation error", sm->name() ) );
+            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation error", sm->name() ) );
             break;
         default: {
-            m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculating done", sm->name() ) );
+            //m_text->setText( i18nc( "@info:status 1=schedule name", "%1: Calculation done", sm->name() ) );
             // if multiple views open, only the view that started calculation has a cmd
-            if ( m_calculationcommands.contains( sm ) ) {
-                CalculateScheduleCmd *cmd = m_calculationcommands.value( sm );
-                m_calculationcommands.remove( sm );
-                Q_ASSERT( cmd );
-                MacroCommand *m = new MacroCommand( cmd->text() );
-                getPart()->addCommand( m );
-                m->addCommand( cmd );
-            }
             break;
         }
     }
-    // if command is not used, clean up
-    if ( m_calculationcommands.contains( sm ) ) {
-        // let command finish before we delete it!
-        m_undocommands.append( m_calculationcommands.value( sm ) );
-        m_calculationcommands.remove( sm );
-        QTimer::singleShot( 0, this, SLOT( slotRemoveCommands() ) ); 
+    if ( m_progress ) {
+        //m_progressBarTimer.start( 2000 );
     }
+
     disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
     disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
     disconnect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
-    sm->setScheduling( false );
-    m_progressBarTimer.start( 2000 );
-
     disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
 }
 

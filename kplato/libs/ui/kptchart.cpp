@@ -193,9 +193,9 @@ void Chart::calculateData(const Project & p, const ScheduleManager & sm)
 {
     mTotalTime = 0.0;
     mTotalCostPlanned = 0.0;
-    kDebug()<<p.name()<<sm.id();
-    acwpPrDay = p.acwp( sm.id() );
-    bcwpPrDay = p.bcwpPrDay( sm.id() );
+    kDebug()<<p.name()<<sm.scheduleId();
+    acwpPrDay = p.acwp( sm.scheduleId() );
+    bcwpPrDay = p.bcwpPrDay( sm.scheduleId() );
 
     calculateBCWP(p,sm);
     calculateActualCost(p,sm);

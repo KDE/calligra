@@ -32,7 +32,7 @@ Scripting::Schedule::Schedule( Scripting::Project *project, KPlato::ScheduleMana
 
 qlonglong Scripting::Schedule::id() const
 {
-    return (qlonglong)m_schedule->id();
+    return (qlonglong)m_schedule->scheduleId();
 }
 
 QString Scripting::Schedule::name() const

@@ -18,7 +18,7 @@
 */
 #include "ProjectTester.h"
 
-#include "KPlatoRCPSScheduler.h"
+#include "KPlatoRCPSPlugin.h"
 
 #include "kptcommand.h"
 #include "kptcalendar.h"
@@ -40,6 +40,7 @@ namespace KPlato
 void ProjectTester::initTestCase()
 {
     m_project = new Project();
+    m_project->setName( "P1" );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
     QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
@@ -57,6 +58,7 @@ void ProjectTester::initTestCase()
 
     m_task = 0;
     qDebug()<<"Project:"<<m_project->constraintStartTime()<<m_project->constraintEndTime();
+    Debug::print( m_project, "Initiated to:" );
 }
 
 void ProjectTester::cleanupTestCase()
@@ -85,38 +87,30 @@ void ProjectTester::oneTask()
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     
-    QString s = "Calculate forward, Task: Fixed duration -----------------------------------";
-    qDebug()<<s;
-    KPlatoRCPSScheduler *rcps = new KPlatoRCPSScheduler( m_project, sm );
-    qDebug()<<1;
-    QCOMPARE( rcps->kplatoToRCPS(), 0 );
-    rcps->doRun();
-    qDebug()<<2;
-    QCOMPARE( rcps->result, 0 );
-    rcps->kplatoFromRCPS();
-    qDebug()<<3;
+    KPlatoRCPSPlugin rcps( 0, QVariantList() );
+
+    QString s = "Calculate forward, Task: Fixed duration ------------------------------";
+
+    rcps.calculate( *m_project, sm, true/*nothread*/ );
+
+    Debug::print( m_project, s );
+    Debug::print( t, s );
+
     QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 1 )) );
-    
-    delete rcps;
-    qDebug()<<4;
 
-    s = "Calculate forward, Task: Length -----------------------------------";
-    qDebug()<<s;
+    s = "Calculate forward, Task: Length --------------------------------------";
+
     t->estimate()->setCalendar( m_calendar );
-    rcps = new KPlatoRCPSScheduler( m_project, sm );
-    QCOMPARE( rcps->kplatoToRCPS(), 0 );
-    rcps->doRun();
-    QCOMPARE( rcps->result, 0 );
-    rcps->kplatoFromRCPS();
+
+    rcps.calculate( *m_project, sm, true/*nothread*/ );
+
+    Debug::print( t, s );
 
     QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
     QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );
 
-    delete rcps;
-    
-    s = "Calculate forward, Task: Effort -----------------------------------";
-    qDebug()<<s;
+    s = "Calculate forward, Task: Effort --------------------------------------";
 
     ResourceGroup *g = new ResourceGroup();
     m_project->addResourceGroup( g );
@@ -130,12 +124,10 @@ void ProjectTester::oneTask()
     ResourceRequest *rr = new ResourceRequest( r, 100 );
     gr->addResourceRequest( rr );
     t->estimate()->setType( Estimate::Type_Effort );
-    
-    rcps = new KPlatoRCPSScheduler( m_project, sm );
-    QCOMPARE( rcps->kplatoToRCPS(), 0 );
-    rcps->doRun();
-    QCOMPARE( rcps->result, 0 );
-    rcps->kplatoFromRCPS();
+
+    rcps.calculate( *m_project, sm, true/*nothread*/ );
+
+    Debug::print( t, s );
 
     QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
     QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );

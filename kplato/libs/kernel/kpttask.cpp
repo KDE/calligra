@@ -286,7 +286,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     bool ok = false;
     m_id = element.attribute("id");
 
-    m_name = element.attribute("name");
+    setName( element.attribute("name") );
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
     //kDebug()<<m_name<<": id="<<m_id;

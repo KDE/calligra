@@ -327,7 +327,7 @@ void ResourceAppointmentsItemModel::setScheduleManager( ScheduleManager *sm )
 
 long ResourceAppointmentsItemModel::id() const
 {
-    return m_manager == 0 ? -1 : m_manager->id();
+    return m_manager == 0 ? -1 : m_manager->scheduleId();
 }
 
 Qt::ItemFlags ResourceAppointmentsItemModel::flags( const QModelIndex &index ) const
@@ -419,7 +419,7 @@ QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QMo
     if ( r && ( m_showInternal || m_showExternal ) ) {
         int num = m_showInternal ? r->numAppointments( id() ) : 0;
         if ( row < num ) {
-            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() );
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->scheduleId() );
             return createAppointmentIndex( row, column, r->appointmentAt( row, id() ) );
         }
         int extRow = row - num;
@@ -464,7 +464,7 @@ void ResourceAppointmentsItemModel::refresh()
 
 void ResourceAppointmentsItemModel::refreshData()
 {
-    long id = m_manager == 0 ? -1 : m_manager->id();
+    long id = m_manager == 0 ? -1 : m_manager->scheduleId();
     //kDebug()<<"Schedule id: "<<id<<endl;
     QDate start;
     QDate end;
@@ -598,7 +598,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, int role ) c
         case Qt::DisplayRole: {
             Duration d;
             if ( m_showInternal ) {
-                QList<Appointment*> lst = res->appointments( m_manager->id() );
+                QList<Appointment*> lst = res->appointments( m_manager->scheduleId() );
                 foreach ( Appointment *a, lst ) {
                     if ( m_effortMap.contains( a ) ) {
                         d += m_effortMap[ a ].totalEffort();
@@ -1429,7 +1429,7 @@ void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
 
 long ResourceAppointmentsRowModel::id() const
 {
-    return m_manager ? m_manager->id() : -1;
+    return m_manager ? m_manager->scheduleId() : -1;
 }
 
 const QMetaEnum ResourceAppointmentsRowModel::columnMap() const
@@ -1594,7 +1594,7 @@ QModelIndex ResourceAppointmentsRowModel::index( int row, int column, const QMod
     if ( Resource *r = resource( parent ) ) {
         int num = r->numAppointments( id() ) + r->numExternalAppointments();
         if ( row < num ) {
-            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() );
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->scheduleId() );
             return const_cast<ResourceAppointmentsRowModel*>( this )->createAppointmentIndex( row, column, r );
         }
         return QModelIndex();
@@ -1602,7 +1602,7 @@ QModelIndex ResourceAppointmentsRowModel::index( int row, int column, const QMod
     if ( Appointment *a = appointment( parent ) ) {
         int num = a->count();
         if ( row < num ) {
-            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() );
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->scheduleId() );
             return const_cast<ResourceAppointmentsRowModel*>( this )->createIntervalIndex( row, column, a );
         }
         return QModelIndex();

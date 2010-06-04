@@ -108,8 +108,8 @@ void NodeChartModel::calculate()
                     }
                 }
                 if ( ! skip ) {
-                    m_bcwp += n->bcwpPrDay( m_manager->id() );
-                    m_acwp += n->acwp( m_manager->id() );
+                    m_bcwp += n->bcwpPrDay( m_manager->scheduleId() );
+                    m_acwp += n->acwp( m_manager->scheduleId() );
                 }
             }
         }

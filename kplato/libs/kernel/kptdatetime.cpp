@@ -111,8 +111,7 @@ DateTime DateTime::fromString( const QString dts, const KDateTime::Spec &spec )
         return DateTime( dt.dateTime(), spec );
     }
     DateTime t = DateTime( dt.toTimeSpec( spec ) );
-    //kDebug()<<dt<<" ->"<<t.toString();
-    return t;
+    return t.isValid() ? t : DateTime( dt ); // try hard!
 }
 
 }  //KPlato namespace

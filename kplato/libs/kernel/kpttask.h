@@ -287,7 +287,7 @@ public:
     /// Return schedule manager
     ScheduleManager *scheduleManager() const { return m_manager; }
     /// Return the schedule id, or NOTSCHEDULED if no schedule manager is set
-    long id() const { return m_manager ? m_manager->id() : NOTSCHEDULED; }
+    long id() const { return m_manager ? m_manager->scheduleId() : NOTSCHEDULED; }
 
     Completion &completion();
     const Completion &completion() const;

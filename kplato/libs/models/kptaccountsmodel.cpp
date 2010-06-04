@@ -560,7 +560,7 @@ void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
 
 long CostBreakdownItemModel::id() const
 {
-    return m_manager == 0 ? -1 : m_manager->id();
+    return m_manager == 0 ? -1 : m_manager->scheduleId();
 }
 
 EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )

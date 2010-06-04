@@ -138,7 +138,7 @@ void PertResult::draw()
     widget.scheduleName->setText( i18n( "None" ) );
     widget.totalFloat->clear();
     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
-        long id = model()->manager()->id();
+        long id = model()->manager()->scheduleId();
         if ( id == -1 ) {
             return;
         }
@@ -490,7 +490,7 @@ void PertCpmView::draw()
     bool enbl = m_project && current_schedule && current_schedule->isScheduled() && current_schedule->usePert();
     widget.probabilityFrame->setVisible( enbl );
     if ( m_project && current_schedule && current_schedule->isScheduled() ) {
-        long id = current_schedule->id();
+        long id = current_schedule->scheduleId();
         if ( id == -1 ) {
             return;
         }
@@ -514,7 +514,7 @@ void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
     block = true;
     double var = model()->variance( Qt::EditRole ).toDouble();
     double dev = sqrt( var );
-    DateTime et = m_project->endTime( current_schedule->id() );
+    DateTime et = m_project->endTime( current_schedule->scheduleId() );
     DateTime t = DateTime( KDateTime( dt ) );
     double d = ( et - t ).toDouble();
     d = t < et ? -d : d;
@@ -534,7 +534,7 @@ void PertCpmView::slotProbabilityChanged( int value )
     block = true;
     double var = model()->variance( Qt::EditRole ).toDouble();
     double dev = sqrt( var );
-    DateTime et = m_project->endTime( current_schedule->id() );
+    DateTime et = m_project->endTime( current_schedule->scheduleId() );
     double p = valueZ( value );
     DateTime t = et + Duration( qint64( p * dev ) );
     widget.finishTime->setDateTime( t.dateTime() );

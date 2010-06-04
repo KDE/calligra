@@ -125,7 +125,7 @@ public:
 
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
     
-    long id() const { return m_manager == 0 ? -1 : m_manager->id(); }
+    long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
 
 signals:
     void rowInserted( const QDate& );

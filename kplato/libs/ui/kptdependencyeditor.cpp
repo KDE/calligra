@@ -2027,7 +2027,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
                 //kDebug()<<"No node";
                 return;
             }
-            bool scheduled = m_manager != 0 && m_currentnode->isScheduled( m_manager->id() );
+            bool scheduled = m_manager != 0 && m_currentnode->isScheduled( m_manager->scheduleId() );
             switch ( m_currentnode->type() ) {
                 case Node::Type_Task:
                     name = scheduled ? "task_popup" : "task_edit_popup";

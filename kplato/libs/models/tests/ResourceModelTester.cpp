@@ -137,11 +137,12 @@ void ResourceModelTester::internalAppointments()
 {
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
-    long id = sm->id();
+    long id = sm->scheduleId();
     m_model.setScheduleManager( sm );
 
-    //printDebug( sm->id() );
+    //printDebug( sm->scheduleId() );
 
     QModelIndex idx;
     // resource group
@@ -204,11 +205,12 @@ void ResourceModelTester::externalAppointments()
 
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
+    sm->createSchedules();
     m_project->calculate( *sm );
-    long id = sm->id();
+    long id = sm->scheduleId();
     m_model.setScheduleManager( sm );
     //printSchedulingLog( *sm );
-    //printDebug( sm->id() );
+    //printDebug( sm->scheduleId() );
     
     // resource group
     QModelIndex idx;
@@ -283,8 +285,9 @@ void ResourceModelTester::externalOverbook()
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     sm->setAllowOverbooking( true );
+    sm->createSchedules();
     m_project->calculate( *sm );
-    long id = sm->id();
+    long id = sm->scheduleId();
     m_model.setScheduleManager( sm );
     //printSchedulingLog( *sm );
     //printDebug( id );

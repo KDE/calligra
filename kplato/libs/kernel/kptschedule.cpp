@@ -1322,6 +1322,9 @@ void MainSchedule::addLog( Schedule::Log &log )
         log.phase = m_log.last().phase;
     }
     m_log.append( log );
+    if ( m_manager ) {
+        m_manager->logAdded( log );
+    }
 }
 
 //static
@@ -1407,6 +1410,9 @@ void ScheduleManager::insertChild( ScheduleManager *sm, int index )
 void ScheduleManager::createSchedules()
 {
     setExpected( m_project.createSchedule( m_name, Schedule::Expected ) );
+    if ( m_recalculate ) {
+        m_calculateAll = false;
+    }
     if ( m_calculateAll ) {
         setOptimistic( m_project.createSchedule( m_name, Schedule::Optimistic ) );
         setPessimistic( m_project.createSchedule( m_name, Schedule::Pessimistic ) );
@@ -1462,6 +1468,9 @@ bool ScheduleManager::isParentOf( const ScheduleManager *sm ) const
 void ScheduleManager::setName( const QString& name )
 {
     m_name = name;
+#ifndef NDEBUG
+    setObjectName( name );
+#endif
     if ( m_expected ) {
         m_expected->setName( name );
         m_project.changed( m_expected );
@@ -1618,9 +1627,22 @@ void ScheduleManager::stopCalculation()
     schedulerPlugin()->stopCalculation( this );
 }
 
-void ScheduleManager::setProgress( int progress )
+void ScheduleManager::haltCalculation()
 {
-    m_progress = progress;
+    schedulerPlugin()->haltCalculation( this );
+}
+
+void ScheduleManager::setMaxProgress( int value )
+{
+    m_maxprogress = value;
+    emit maxProgressChanged( value );
+    m_project.changed( this );
+}
+
+void ScheduleManager::setProgress( int value )
+{
+    m_progress = value;
+    emit progressChanged( value );
     m_project.changed( this );
 }
 
@@ -1755,6 +1777,30 @@ void ScheduleManager::incProgress()
     m_project.incProgress();
 }
 
+void ScheduleManager::logAdded( Schedule::Log &log )
+{
+    emit sigLogAdded( log );
+}
+
+void ScheduleManager::slotAddLog( KPlato::Schedule::Log log )
+{
+    if ( expected() ) {
+        //qDebug()<<"ScheduleManager::slotAddLog:"<<log;
+        expected()->addLog( log );
+        m_project.changed( this );
+    }
+}
+
+void ScheduleManager::slotAddLog( const QList<KPlato::Schedule::Log> &log )
+{
+    if ( expected() ) {
+        foreach ( const KPlato::Schedule::Log &l, log ) {
+            expected()->addLog( const_cast<KPlato::Schedule::Log&>( l ) );
+        }
+        m_project.changed( this );
+    }
+}
+
 bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
     MainSchedule *sch = 0;
@@ -1772,13 +1818,17 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
         }
         return true;
     }
-    m_name = element.attribute( "name" );
+    setName( element.attribute( "name" ) );
+    m_id = element.attribute( "id" );
     m_usePert = (bool)(element.attribute( "distribution" ).toInt());
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
     m_checkExternalAppointments = (bool)(element.attribute( "check-external-appointments" ).toInt());
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     m_baselined = (bool)(element.attribute( "baselined" ).toInt());
     m_schedulerPluginId = element.attribute( "scheduler-plugin-id" );
+    m_usePert = (bool)(element.attribute( "use-pert" ).toInt());
+    m_recalculate = (bool)(element.attribute( "recalculate" ).toInt());
+    m_recalculateFrom = DateTime::fromString( element.attribute( "recalculate-from" ), status.projectSpec() );
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -1799,7 +1849,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
         } else if ( e.tagName() == "plan" ) {
             ScheduleManager *sm = new ScheduleManager( status.project() );
             if ( sm->loadXML( e, status ) ) {
-                sm->setParentManager( this );
+                m_project.addScheduleManager( sm, this );
             } else {
                 kError()<<"Failed to load schedule manager"<<endl;
                 delete sm;
@@ -1826,20 +1876,41 @@ MainSchedule *ScheduleManager::loadMainSchedule( KoXmlElement &element, XMLLoade
     return sch;
 }
 
+bool ScheduleManager::loadMainSchedule( MainSchedule *schedule, KoXmlElement &element, XMLLoaderObject &status ) {
+    long sid = schedule->id();
+    if ( schedule->loadXML( element, status ) ) {
+        if ( sid != schedule->id() && status.project().findSchedule( sid ) ) {
+            status.project().takeSchedule( schedule );
+        }
+        if ( ! status.project().findSchedule( schedule->id() ) ) {
+            status.project().addSchedule( schedule );
+        }
+        schedule->setNode( &(status.project()) );
+        status.project().setParentSchedule( schedule );
+        schedule->setScheduled( true );
+        return true;
+    }
+    return false;
+}
+
 void ScheduleManager::saveXML( QDomElement &element ) const
 {
     QDomElement el = element.ownerDocument().createElement( "plan" );
     element.appendChild( el );
     el.setAttribute( "name", m_name );
+    el.setAttribute( "id", m_id );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     el.setAttribute( "baselined", m_baselined );
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
+    el.setAttribute( "use-pert", m_usePert );
+    el.setAttribute( "recalculate", m_recalculate );
+    el.setAttribute( "recalculate-from", m_recalculateFrom.toString( KDateTime::ISODate ) );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
-        if ( !s->isDeleted() && s->isScheduled() ) {
+        if ( !s->isDeleted() /*&& s->isScheduled()*/ ) {
             QDomElement schs = el.ownerDocument().createElement( "schedule" );
             el.appendChild( schs );
             s->saveXML( schs );
@@ -1857,6 +1928,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     QDomElement el = element.ownerDocument().createElement( "plan" );
     element.appendChild( el );
     el.setAttribute( "name", m_name );
+    el.setAttribute( "id", m_id );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
@@ -1998,5 +2070,11 @@ void MainSchedule::printDebug( const QString& _indent )
 #endif
 
 } //namespace KPlato
+
+QDebug &operator<<( QDebug &dbg, const KPlato::Schedule::Log &log )
+{
+    dbg.nospace()<<"Schedule::Log:"<<log.formatMsg();
+    return dbg.space();
+}
 
 #include "kptschedule.moc"

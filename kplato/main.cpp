@@ -19,12 +19,19 @@
 
 #include "kptaboutdata.h"
 
+#include "kptschedule.h"
+
 #include <kdemacros.h>
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 
 namespace KPlato
 {
+
+void registerMetaTypes()
+{
+    qRegisterMetaType<Schedule::Log>("Schedule::Log");
+}
 
 }  //KPlato namespace
 
@@ -42,6 +49,9 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     // This is disabled for now so the crude test below will run
     if (!app.start())
 	return 1;
+
+    KPlato::registerMetaTypes();
+
     app.exec();
 
     delete (aboutData);

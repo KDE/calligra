@@ -158,6 +158,7 @@ void Project::calculate( const DateTime &dt )
         kError() << "No current schedule to calculate";
         return ;
     }
+    stopcalculation = false;
     KLocale *locale = KGlobal::locale();
     DateTime time = dt.isValid() ? dt : DateTime( KDateTime::currentLocalDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
@@ -168,17 +169,17 @@ void Project::calculate( const DateTime &dt )
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         propagateEarliestStart( time );
-        // Calculate lateFinish from time. If a task has started, remaingEffort is used.
+        // Calculate lateFinish from time. If a task has started, remainingEffort is used.
         cs->setPhaseName( 1, i18nc( "Schedule project forward", "Forward" ) );
         cs->logInfo( i18n( "Calculate finish" ), 1 );
         cs->lateFinish = calculateForward( estType );
         cs->lateFinish = checkEndConstraints( cs->lateFinish );
         propagateLatestFinish( cs->lateFinish );
-        // Calculate earlyFinish. If a task has started, remaingEffort is used.
+        // Calculate earlyFinish. If a task has started, remainingEffort is used.
         cs->setPhaseName( 2, i18nc( "Schedule project backward","Backward" ) );
         cs->logInfo( i18n( "Calculate start" ), 2 );
-        cs->calculateBackward( estType );
-        // Schedule. If a task has started, remaingEffort is used and appointments are copied from parent
+        calculateBackward( estType );
+        // Schedule. If a task has started, remainingEffort is used and appointments are copied from parent
         cs->setPhaseName( 3, i18n( "Schedule" ) );
         cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
         cs->endTime = scheduleForward( cs->startTime, estType );
@@ -215,12 +216,10 @@ void Project::calculate( ScheduleManager &sm )
         }
     }
     int maxprogress = nodes * 3;
-    //kDebug();
     if ( sm.recalculate() ) {
         emit maxProgress( maxprogress );
+        sm.setMaxProgress( maxprogress );
         incProgress();
-        sm.setCalculateAll( false );
-        sm.createSchedules();
         if ( sm.parentManager() ) {
             sm.expected()->startTime = sm.parentManager()->expected()->startTime;
             sm.expected()->earlyStart = sm.parentManager()->expected()->earlyStart;
@@ -235,7 +234,7 @@ void Project::calculate( ScheduleManager &sm )
             maxprogress += nodes * 3;
         }
         emit maxProgress( maxprogress );
-        sm.createSchedules();
+        sm.setMaxProgress( maxprogress );
         calculate( sm.expected() );
         emit scheduleChanged( sm.expected() );
         if ( sm.optimistic() ) {
@@ -270,6 +269,7 @@ void Project::calculate()
         kError() << "No current schedule to calculate";
         return ;
     }
+    stopcalculation = false;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     bool backwards = false;
     if ( cs->manager() ) {
@@ -278,6 +278,7 @@ void Project::calculate()
     KLocale *locale = KGlobal::locale();
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
+        QTime timer; timer.start();
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( ! backwards ) {
@@ -294,7 +295,7 @@ void Project::calculate()
             propagateLatestFinish( cs->lateFinish );
             cs->setPhaseName( 2, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 2 );
-            cs->calculateBackward( estType );
+            calculateBackward( estType );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
             cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
             cs->endTime = scheduleForward( cs->startTime, estType );
@@ -321,7 +322,7 @@ void Project::calculate()
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
-            cs->lateFinish = cs->calculateForward( estType );
+            cs->lateFinish = calculateForward( estType );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
             cs->logInfo( i18n( "Schedule tasks backward" ), 3 );
             cs->startTime = scheduleBackward( cs->lateFinish, estType );
@@ -350,6 +351,7 @@ void Project::calculate()
             }
             calcCriticalPath( true );
         }
+        cs->logInfo( i18n( "Calculation took: %1", locale->formatDuration( timer.elapsed() ) ) );
         //makeAppointments();
         calcResourceOverbooked();
         cs->notScheduled = false;
@@ -546,6 +548,28 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
     return t;
 }
 
+void Project::tasksForward( Task *task, int pos )
+{
+    int cp = m_forwardTasks.value( task );
+    if ( cp == 0 || cp > pos ) {
+        m_forwardTasks[ task ] = pos;
+    }
+    foreach ( Relation *r, task->dependParentNodes() + task->parentProxyRelations() ) {
+        tasksForward( static_cast<Task*>( r->parent() ), pos - 1 );
+    }
+}
+
+void Project::tasksBackward( Task *task, int pos )
+{
+    int cp = m_backwardTasks.value( task );
+    if ( cp == 0 || cp > pos ) {
+        m_backwardTasks[ task ] = pos;
+    }
+    foreach ( Relation *r, task->dependChildNodes() + task->childProxyRelations() ) {
+        tasksBackward( static_cast<Task*>( r->child() ), pos - 1 );
+    }
+}
+
 DateTime Project::calculateForward( int use )
 {
     //kDebug()<<m_name;
@@ -560,15 +584,39 @@ DateTime Project::calculateForward( int use )
         }
         // Follow *parent* relations back and
         // calculate forwards following the child relations
-        DateTime finish;
-        DateTime time;
+        m_forwardTasks.clear();
         foreach ( Node *n, cs->endNodes() ) {
-            time = n->calculateForward( use );
-            if ( !finish.isValid() || time > finish )
-                finish = time;
+            tasksForward( static_cast<Task*>( n ), -1 );
         }
-        //kDebug()<<m_name<<" finish="<<finish.toString();
-        return finish;
+        if ( ! m_forwardTasks.isEmpty() ) {
+            QMultiMap<int, Task*> map;
+            QMap<Task*, int>::const_iterator i = m_forwardTasks.begin();
+            for ( ; i != m_forwardTasks.end(); ++i   ) {
+                map.insertMulti( i.value(), i.key() );
+            }
+            DateTime finish;
+            DateTime time;
+            foreach ( int key, map.uniqueKeys() ) {
+                QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
+                QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+                do {
+                    --upper;
+                    time = static_cast<Node*> ( upper.value() )->calculateForward( use );
+                    if ( !finish.isValid() || time > finish ) {
+                        finish = time;
+                    }
+                } while ( upper != low && ! stopcalculation );
+            }
+/*            foreach ( Task *n, map ) {
+                time = static_cast<Node*> ( n )->calculateForward( use );*/
+    /*        foreach ( Node *n, cs->endNodes() ) {
+                time = n->calculateForward( use );*/
+/*                if ( !finish.isValid() || time > finish )
+                    finish = time;
+            }*/
+            //kDebug()<<m_name<<" finish="<<finish.toString();
+            return finish;
+        }
     } else {
         //TODO: subproject
     }
@@ -577,9 +625,8 @@ DateTime Project::calculateForward( int use )
 
 DateTime Project::calculateBackward( int use )
 {
-    //kDebug()<<m_name;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    if ( cs == 0 ) {
+    if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
     if ( type() == Node::Type_Project ) {
@@ -589,13 +636,37 @@ DateTime Project::calculateBackward( int use )
         }
         // Follow *child* relations back and
         // calculate backwards following parent relation
+        m_backwardTasks.clear();
+        foreach ( Node *n, cs->startNodes() ) {
+            tasksBackward( static_cast<Task*>( n ), -1 );
+        }
         DateTime start;
         DateTime time;
-        foreach ( Node *n, cs->startNodes() ) {
-            time = n->calculateBackward( use );
-            if ( !start.isValid() || time < start )
-                start = time;
+        if ( ! m_backwardTasks.isEmpty() ) {
+            QMultiMap<int, Task*> map;
+            QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
+            for ( ; i != m_backwardTasks.end(); ++i   ) {
+                map.insertMulti( i.value(), i.key() );
+            }
+            foreach ( int key, map.uniqueKeys() ) {
+                QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
+                QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+                do {
+                    --upper;
+                    time = static_cast<Node*> ( upper.value() )->calculateBackward( use );
+                    if ( !start.isValid() || time < start ) {
+                        start = time;
+                    }
+                } while ( upper != low && ! stopcalculation );
+            }
         }
+/*        foreach ( Task *n, map ) {
+            time = static_cast<Node*> ( n )->calculateBackward( use );*/
+/*        foreach ( Node *n, cs->startNodes() ) {
+            time = n->calculateBackward( use );*/
+/*            if ( !start.isValid() || time < start )
+                start = time;
+        }*/
         //kDebug()<<m_name<<" start="<<start.toString();
         return start;
     } else {
@@ -607,18 +678,38 @@ DateTime Project::calculateBackward( int use )
 DateTime Project::scheduleForward( const DateTime &earliest, int use )
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    if ( cs == 0 ) {
+    if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
-    resetVisited();
     DateTime end = earliest;
     DateTime time;
-    QListIterator<Node*> it( cs->endNodes() );
-    while ( it.hasNext() ) {
-        time = it.next() ->scheduleForward( earliest, use );
-        if ( time > end )
-            end = time;
+    resetVisited();
+    if ( ! m_forwardTasks.isEmpty() ) {
+        QMultiMap<int, Task*> map;
+        QMap<Task*, int>::const_iterator i = m_forwardTasks.begin();
+        for ( ; i != m_forwardTasks.end(); ++i   ) {
+            map.insertMulti( i.value(), i.key() );
+        }
+        foreach ( int key, map.uniqueKeys() ) {
+            QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
+            QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+            do {
+                --upper;
+                time = static_cast<Node*> ( upper.value() )->scheduleForward( earliest, use );
+                if ( time > end ) {
+                    end = time;
+                }
+            } while ( upper != low && ! stopcalculation );
+        }
     }
+/*    foreach ( Task *n, map ) {
+        time = static_cast<Node*> ( n )->scheduleForward( earliest, use );*/
+/*    QListIterator<Node*> it( cs->endNodes() );
+    while ( it.hasNext() ) {
+        time = it.next() ->scheduleForward( earliest, use );*/
+/*        if ( time > end )
+            end = time;
+    }*/
     // Fix summarytasks
     adjustSummarytask();
     return end;
@@ -627,18 +718,43 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
 DateTime Project::scheduleBackward( const DateTime &latest, int use )
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    if ( cs == 0 ) {
+    if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
     resetVisited();
+    QMultiMap<int, Task*> map;
+    QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
+    for ( ; i != m_backwardTasks.end(); ++i   ) {
+        map.insertMulti( i.value(), i.key() );
+    }
     DateTime start = latest;
     DateTime time;
-    QListIterator<Node*> it( cs->startNodes() );
-    while ( it.hasNext() ) {
-        time = it.next() ->scheduleBackward( latest, use );
-        if ( time < start )
-            start = time;
+    if ( ! m_backwardTasks.isEmpty() ) {
+        QMultiMap<int, Task*> map;
+        QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
+        for ( ; i != m_backwardTasks.end(); ++i   ) {
+            map.insertMulti( i.value(), i.key() );
+        }
+        foreach ( int key, map.uniqueKeys() ) {
+            QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
+            QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+            do {
+                --upper;
+                time = static_cast<Node*> ( upper.value() )->scheduleBackward( latest, use );
+                if ( time < start ) {
+                    start = time;
+                }
+            } while ( upper != low && ! stopcalculation );
+        }
     }
+/*    foreach ( Task *n, map ) {
+        time = static_cast<Node*> ( n )->scheduleBackward( latest, use );*/
+/*    QListIterator<Node*> it( cs->startNodes() );
+    while ( it.hasNext() ) {
+        time = it.next() ->scheduleBackward( latest, use );*/
+/*        if ( time < start )
+            start = time;
+     }*/
     // Fix summarytasks
     adjustSummarytask();
     return start;
@@ -647,7 +763,7 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
 void Project::adjustSummarytask()
 {
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    if ( cs == 0 ) {
+    if ( cs == 0 || stopcalculation ) {
         return;
     }
     QListIterator<Node*> it( cs->summaryTasks() );
@@ -717,7 +833,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     QList<Calendar*> cals;
     QString s;
     bool ok = false;
-    m_name = element.attribute( "name" );
+    setName( element.attribute( "name" ) );
     m_id = element.attribute( "id" );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
@@ -901,7 +1017,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 bool add = false;
                 if ( status.version() <= "0.5" ) {
                     if ( el.tagName() == "schedule" ) {
-                        sm = findScheduleManager( el.attribute( "name" ) );
+                        sm = findScheduleManagerByName( el.attribute( "name" ) );
                         if ( sm == 0 ) {
                             sm = new ScheduleManager( *this, el.attribute( "name" ) );
                             add = true;
@@ -1482,10 +1598,10 @@ bool Project::registerNodeId( Node *node )
     return true;
 }
 
-QList<Node*> Project::allNodes()
+QList<Node*> Project::allNodes() const
 {
     QList<Node*> lst = nodeIdDict.values();
-    int me = lst.indexOf( this );
+    int me = lst.indexOf( const_cast<Project*>( this ) );
     if ( me != -1 ) {
         lst.removeAt( me );
     }
@@ -2152,14 +2268,19 @@ void Project::setCurrentSchedule( long id )
 ScheduleManager *Project::scheduleManager( long id ) const
 {
     foreach ( ScheduleManager *sm, m_managers ) {
-        if ( sm->id() == id ) {
+        if ( sm->scheduleId() == id ) {
             return sm;
         }
     }
     return 0;
 }
 
-ScheduleManager *Project::findScheduleManager( const QString &name ) const
+ScheduleManager *Project::scheduleManager( const QString &id ) const
+{
+    return m_managerIdMap.value( id );
+}
+
+ScheduleManager *Project::findScheduleManagerByName( const QString &name ) const
 {
     //kDebug();
     ScheduleManager *m = 0;
@@ -2185,14 +2306,14 @@ QList<ScheduleManager*> Project::allScheduleManagers() const
 QString Project::uniqueScheduleName() const {
     //kDebug();
     QString n = i18n( "Plan" );
-    bool unique = findScheduleManager( n ) == 0;
+    bool unique = findScheduleManagerByName( n ) == 0;
     if ( unique ) {
         return n;
     }
     n += " %1";
     int i = 1;
     for ( ; true; ++i ) {
-        unique = findScheduleManager( n.arg( i ) ) == 0;;
+        unique = findScheduleManagerByName( n.arg( i ) ) == 0;;
         if ( unique ) {
             break;
         }
@@ -2209,6 +2330,12 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
         emit scheduleManagerToBeAdded( parent, parent->children().count() );
         sm->setParentManager( parent );
     }
+    if ( sm->managerId().isEmpty() ) {
+        sm->setManagerId( uniqueScheduleManagerId() );
+    }
+    Q_ASSERT( ! m_managerIdMap.contains( sm->managerId() ) );
+    m_managerIdMap.insert( sm->managerId(), sm );
+
     emit scheduleManagerAdded( sm );
     emit changed();
     //kDebug()<<"Added:"<<sm->name()<<", now"<<m_managers.count();
@@ -2228,6 +2355,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
         if ( index >= 0 ) {
             emit scheduleManagerToBeRemoved( sm );
             sm->setParentManager( 0 );
+            m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
             emit changed();
         }
@@ -2236,6 +2364,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
         if ( index >= 0 ) {
             emit scheduleManagerToBeRemoved( sm );
             m_managers.removeAt( indexOf( sm ) );
+            m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
             emit changed();
         }
@@ -2268,6 +2397,15 @@ ScheduleManager *Project::createScheduleManager()
 {
     //kDebug();
     return createScheduleManager( uniqueScheduleName() );
+}
+
+QString Project::uniqueScheduleManagerId() const
+{
+    QString ident = KRandom::randomString( 10 );
+    while ( m_managerIdMap.contains( ident ) ) {
+        ident = KRandom::randomString( 10 );
+    }
+    return ident;
 }
 
 bool Project::isBaselined( long id ) const

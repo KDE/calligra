@@ -536,7 +536,7 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration v = m_node->plannedEffort( m_manager->id() );
+            Duration v = m_node->plannedEffort( m_manager->scheduleId() );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
             return v.format();
         }

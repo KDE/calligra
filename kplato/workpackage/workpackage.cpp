@@ -75,7 +75,7 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
 
     if ( ! project->scheduleManagers().isEmpty() ) {
         // should be only one manager
-        project->setCurrentSchedule( m_project->scheduleManagers().first()->id() );
+        project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
     }
     connect( project, SIGNAL( changed() ), this, SLOT( projectChanged() ) );
 }
@@ -216,7 +216,7 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
     }
     if ( ! m_project->scheduleManagers().isEmpty() ) {
         // should be only one manager
-        m_project->setCurrentSchedule( m_project->scheduleManagers().first()->id() );
+        m_project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
     }
     return ok;
 }

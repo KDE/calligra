@@ -63,7 +63,7 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
     foreach ( KPlato::ScheduleManager *sm, p->allScheduleManagers() ) {
         if ( sm->isScheduled() ) {
             QStandardItem *i = new QStandardItem( sm->name() );
-            i->setData( (qlonglong)sm->id() );
+            i->setData( (qlonglong)sm->scheduleId() );
             model->appendRow( i );
             kDebug()<<i<<model->rowCount();
         }

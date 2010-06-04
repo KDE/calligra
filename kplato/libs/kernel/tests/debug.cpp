@@ -74,7 +74,8 @@ void print( Project *p, Task *t, const QString &str, bool full = true ) {
     print( p, str );
     print( t );
 }
-void print( Task *t, const QString &str, bool full = true ) const {
+static
+void print( Task *t, const QString &str, bool full = true ) {
     qDebug()<<"Debug info: Task"<<t->name()<<str;
     print( t );
 }

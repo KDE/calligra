@@ -20,6 +20,8 @@
 #ifndef KPLATORCPSPLUGIN_H
 #define KPLATORCPSPLUGIN_H
 
+#include "kplatorcps_export.h"
+
 #include "kptschedulerplugin.h"
 
 #include <QVariantList>
@@ -34,7 +36,9 @@ namespace KPlato
     class Schedule;
 }
 
-class KPlatoRCPSPlugin : public KPlato::SchedulerPlugin 
+using namespace KPlato;
+
+class KPLATORCPS_TEST_EXPORT KPlatoRCPSPlugin : public SchedulerPlugin 
 {
     Q_OBJECT
 
@@ -43,28 +47,23 @@ public:
     ~KPlatoRCPSPlugin();
 
     /// Calculate the project
-    virtual void calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread = false );
-
-    void stopCalculation( KPlato::ScheduleManager *sm );
+    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 
 signals:
-    void stopScheduling();
+    void sigCalculationStarted(Project*, ScheduleManager*);
+    void sigCalculationFinished(Project*, ScheduleManager*);
 
 public slots:
     void stopAllCalculations();
-    void stopCalculation( KPlatoRCPSScheduler *sch );
+    void stopCalculation( SchedulerThread *sch );
 
 protected slots:
-    void slotStarted( KPlatoRCPSScheduler *job );
-    void slotFinished( KPlatoRCPSScheduler *job );
-    
-    void logError( KPlato::Schedule*, QString, int );
-    void logWarning( KPlato::Schedule*, QString, int );
-    void logInfo( KPlato::Schedule*, QString, int );
-    void logDebug( KPlato::Schedule*, QString, int );
+    void slotStarted( SchedulerThread *job );
+    void slotFinished( SchedulerThread *job );
 
-private:
-    QList<KPlatoRCPSScheduler*> m_jobs;
+protected:
+    QStringList missingFunctions( Project &project, ScheduleManager *sm ) const;
+
 };
 
 

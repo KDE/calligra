@@ -2960,22 +2960,20 @@ CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, 
 
 void CalculateScheduleCmd::execute()
 {
+    Q_ASSERT( m_sm );
     if ( m_first ) {
-        QApplication::setOverrideCursor( Qt::WaitCursor );
         m_sm->calculateSchedule();
-        Q_ASSERT( m_sm );
         if ( m_sm->calculationResult() != ScheduleManager::CalculationCanceled ) {
             m_first = false;
-            m_newexpected = m_sm->expected();
-            m_newoptimistic = m_sm->optimistic();
-            m_newpessimistic = m_sm->pessimistic();
         }
-        QApplication::restoreOverrideCursor();
-        return;
+        m_newexpected = m_sm->expected();
+        m_newoptimistic = m_sm->optimistic();
+        m_newpessimistic = m_sm->pessimistic();
+    } else {
+        m_sm->setExpected( m_newexpected );
+        m_sm->setOptimistic( m_newoptimistic );
+        m_sm->setPessimistic( m_newpessimistic );
     }
-    m_sm->setExpected( m_newexpected );
-    m_sm->setOptimistic( m_newoptimistic );
-    m_sm->setPessimistic( m_newpessimistic );
 }
 
 void CalculateScheduleCmd::unexecute()
@@ -2983,7 +2981,7 @@ void CalculateScheduleCmd::unexecute()
     if ( m_sm->scheduling() ) {
         // terminate scheduling
         QApplication::setOverrideCursor( Qt::WaitCursor );
-        m_sm->stopCalculation();
+        m_sm->haltCalculation();
         m_first = true;
         QApplication::restoreOverrideCursor();
 
@@ -2991,7 +2989,6 @@ void CalculateScheduleCmd::unexecute()
     m_sm->setExpected( m_oldexpected );
     m_sm->setOptimistic( m_oldoptimistic );
     m_sm->setPessimistic( m_oldpessimistic );
-
 }
 
 //------------------------

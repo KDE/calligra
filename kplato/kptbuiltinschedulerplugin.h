@@ -23,13 +23,27 @@
 #include "kplato_export.h"
 #include "kptschedulerplugin.h"
 
+#include "kptschedule.h"
+
+#include <KoXmlReader.h>
+
+#include <QThread>
+#include <QMutex>
+#include <QTimer>
+
+
+class KLocale;
+
 
 namespace KPlato
 {
 
+class KPlatoScheduler;
 class Project;
 class ScheduleManager;
- 
+class Node;
+class XMLLoaderObject;
+
 class KPLATO_EXPORT BuiltinSchedulerPlugin : public SchedulerPlugin
 {
     Q_OBJECT
@@ -39,6 +53,38 @@ public:
 
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
+
+signals:
+    void sigCalculationStarted( Project*, ScheduleManager* );
+    void sigCalculationFinished( Project*, ScheduleManager* );
+    void maxProgress( int, ScheduleManager* );
+    void sigProgress( int, ScheduleManager* );
+
+protected slots:
+    void slotStarted( SchedulerThread *job );
+    void slotFinished( SchedulerThread *job );
+};
+
+
+class KPlatoScheduler : public SchedulerThread
+{
+    Q_OBJECT
+
+public:
+    KPlatoScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
+    ~KPlatoScheduler();
+
+    KLocale *locale() const;
+
+public slots:
+    /// Stop scheduling.
+    virtual void stopScheduling();
+    /// Halt scheduling
+    virtual void haltScheduling() { m_haltScheduling = true; stopScheduling(); }
+
+protected:
+    void run();
+
 };
 
 } //namespace KPlato

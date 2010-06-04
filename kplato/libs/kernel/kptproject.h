@@ -308,7 +308,7 @@ public:
 
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
     /// Return a list of all nodes in the project (exluding myself)
-    QList<Node*> allNodes();
+    QList<Node*> allNodes() const;
     /// Return the number of all nodes in the project (exluding myself)
     int nodeCount() const { return nodeIdDict.count() - 1; }
 
@@ -396,7 +396,7 @@ public:
     const Accounts &accounts() const { return m_accounts; }
 
     /**
-     * Set current schedule to schedule with identity id, for me and my children
+     * Set current schedule to the schedule with identity @p id, for me and my children
      * Note that this is used (and may be changed) when calculating schedules
      */
     virtual void setCurrentSchedule( long id );
@@ -409,8 +409,14 @@ public:
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
     
+    /// Find the schedule manager that manages the Schedule with @p id
     ScheduleManager *scheduleManager( long id ) const;
+    /// Find the schedule manager with @p id
+    ScheduleManager *scheduleManager( const QString &id ) const;
+    /// Create a unique schedule name (This may later be changed by the user)
     QString uniqueScheduleName() const;
+    /// Create a unique schedule manager identity
+    QString uniqueScheduleManagerId() const;
     ScheduleManager *createScheduleManager();
     ScheduleManager *createScheduleManager( const QString name );
     /// Returns a list of all top level schedule managers
@@ -420,7 +426,7 @@ public:
     bool isScheduleManager( void* ptr ) const;
     void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0 );
     int takeScheduleManager( ScheduleManager *sm );
-    ScheduleManager *findScheduleManager( const QString &name ) const;
+    ScheduleManager *findScheduleManagerByName( const QString &name ) const;
     /// Returns a list of all schedule managers
     QList<ScheduleManager*> allScheduleManagers() const;
     /// Return true if schedule with identity @p id is baselined
@@ -495,8 +501,6 @@ public:
     /// Signal that locale data has changed
     void emitLocaleChanged();
     
-    void incProgress();
-
     void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
     const QMap<QString, SchedulerPlugin*> &schedulerPlugins() const { return m_schedulerPlugins; }
 
@@ -506,10 +510,19 @@ public:
     void finishCalculation( ScheduleManager &sm );
     void adjustSummarytask();
 
+    /// Increments progress and emits signal sigProgress()
+    void incProgress();
+    /// Emits signal maxProgress()
     void emitMaxProgress( int value );
 
+    bool stopcalculation;
+
 public slots:
+    /// Sets m_progress to @p progress and emits signal sigProgress()
+    /// If @p sm is not 0, progress is also set for the schedule manager
     void setProgress( int progress, ScheduleManager *sm = 0 );
+    /// Sets m_maxprogress to @p max and emits signal maxProgress()
+    /// If @p sm is not 0, max progress is also set for the schedule manager
     void setMaxProgress( int max, ScheduleManager *sm = 0 );
 
 signals:
@@ -614,6 +627,9 @@ protected:
     /// Calculate critical path
     virtual bool calcCriticalPath( bool fromEnd );
 
+    void tasksForward( Task *task, int pos );
+    void tasksBackward( Task *task, int pos );
+
 protected:
     virtual void changed(Node *node);
     
@@ -643,6 +659,7 @@ private:
     QHash<QString, Node*> nodeIdDict;
     QMap<QString, Node*> nodeIdReserved;
     QMap<QString, Calendar*> calendarIdDict;
+    QMap<QString, ScheduleManager*> m_managerIdMap;
 
     QList<ScheduleManager*> m_managers;
     KDateTime::Spec m_spec;
@@ -657,6 +674,9 @@ private:
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
 
     int m_refCount; // make it possible to use the project by different threads
+
+    QMap<Task*, int> m_forwardTasks;
+    QMap<Task*, int> m_backwardTasks;
 
 #ifndef NDEBUG
 public:

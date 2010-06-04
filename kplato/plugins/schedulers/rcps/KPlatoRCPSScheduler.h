@@ -22,12 +22,13 @@
 
 #include "kplatorcps_export.h"
 
+#include "kptschedulerplugin.h"
+
 #include "kptdatetime.h"
 
 #include <QThread>
 #include <QObject>
 #include <QMap>
-#include <QMutex>
 
 class ProgressInfo;
 
@@ -46,7 +47,7 @@ namespace KPlato
 }
 using namespace KPlato;
 
-class KPLATORCPS_EXPORT KPlatoRCPSScheduler : public QThread
+class KPLATORCPS_TEST_EXPORT KPlatoRCPSScheduler : public KPlato::SchedulerThread
 {
     Q_OBJECT
 
@@ -67,49 +68,26 @@ public:
     ~KPlatoRCPSScheduler();
 
     int check();
-    int kplatoToRCPS();
-    void kplatoFromRCPS();
-    ScheduleManager *manager() const { return m_manager; }
-    void setManager( ScheduleManager *sm ) { m_manager = sm; }
-    
+
     int result;
 
     static int progress_callback( int generations, int duration, void *arg );
     static int duration_callback( int direction, int time, int nominal_duration, void *arg );
-    
+
     int progress( int generations, int duration );
     int duration( int direction, int time, int nominal_duration, duration_info *info );
 
-    void doRun();
-    
-    /// The scheduling is stopping
-    bool isStopped() const { return m_stopScheduling; }
-
-    QStringList missingFunctions() const;
+    /// Fill project data into RCPS structure
+    int kplatoToRCPS();
+    /// Fetch project data from RCPS structure
+    void kplatoFromRCPS();
 
 signals:
-    void jobStarted( KPlatoRCPSScheduler *job );
-    void jobFinished( KPlatoRCPSScheduler *job );
-    
-    void maxProgress( int, ScheduleManager* );
-    void sigProgress( int, ScheduleManager* );
     void sigCalculationStarted( Project*, ScheduleManager* );
     void sigCalculationFinished( Project*, ScheduleManager* );
 
-    void logError( KPlato::Schedule*, QString, int = -1 );
-    void logWarning( KPlato::Schedule*, QString, int = -1 );
-    void logInfo( KPlato::Schedule*, QString, int = -1 );
-    void logDebug( KPlato::Schedule*, QString, int = -1 );
-
 public slots:
-    /// Stop scheduling. Result may still be used.
-    void stopScheduling() { m_stopScheduling = true; }
-    /// Halt scheduling. Use only when plugin (owner) is deleted.
-    void haltScheduling() { m_haltScheduling = true; }
-
     void solve();
-    void slotStarted();
-    void slotFinished();
 
 protected:
     void run();
@@ -136,8 +114,6 @@ private:
     KLocale *locale() const;
 
 private:
-    Project *m_project;
-    ScheduleManager *m_manager;
     MainSchedule *m_schedule;
     bool m_recalculate;
     bool m_usePert;
@@ -154,12 +130,6 @@ private:
     QList<struct duration_info*> m_duration_info_list;
     
     ProgressInfo *m_progressinfo;
-    bool m_stopScheduling; // Stop next time progress is called
-    bool m_haltScheduling; // Do not access kplato project structure anymore !
-    
-    // unsupported functions
-    bool m_timeconstraint;
-    bool m_alap;
 };
 
 #endif // KPLATORCPSPSCHEDULER_H

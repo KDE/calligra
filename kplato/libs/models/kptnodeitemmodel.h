@@ -138,7 +138,7 @@ public:
     void setManager( ScheduleManager *sm );
     Project *project() const { return m_project; }
     ScheduleManager *manager() const { return m_manager; }
-    long id() const { return m_manager == 0 ? -1 : m_manager->id(); }
+    long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
     
     QVariant data( const Node *node, int property, int role = Qt::DisplayRole ) const; 
     static bool setData( Node *node, int property, const QVariant & value, int role = Qt::EditRole );
