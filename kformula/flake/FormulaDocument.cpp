@@ -53,7 +53,7 @@ class FormulaDocument::Private
 public:
     Private();
     ~Private();
-    
+
     KoFormulaShape *parent;
 };
 
@@ -128,21 +128,21 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     KoXmlWriter *contentWriter  = odfStore.contentWriter();
     if ( !contentWriter )
         return false;
-    
+
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     if ( !bodyWriter )
         return false;
-    
-    KoEmbeddedDocumentSaver embeddedSaver = context.embeddedSaver;
-    
+
+    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
+
     KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
-    
+
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:formula" );
-    
+
     d->parent->saveOdf( savingContext );
-    
+
     bodyWriter->endElement(); // office:formula
     bodyWriter->endElement(); // office:body
 
@@ -160,7 +160,7 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     if ( !savingContext.saveDataCenter( store, manifestWriter ) ) {
         return false;
     }
-    
+
     return true;
 }
 

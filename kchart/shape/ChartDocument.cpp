@@ -54,7 +54,7 @@ class ChartDocument::Private
 public:
     Private();
     ~Private();
-    
+
     ChartShape *parent;
 };
 
@@ -123,21 +123,21 @@ bool ChartDocument::saveOdf( SavingContext &context )
     KoXmlWriter *contentWriter  = odfStore.contentWriter();
     if ( !contentWriter )
         return false;
-    
+
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     if ( !bodyWriter )
         return false;
-    
-    KoEmbeddedDocumentSaver embeddedSaver = context.embeddedSaver;
-    
+
+    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
+
     KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
-    
+
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:chart" );
-    
+
     d->parent->saveOdf( savingContext );
-    
+
     bodyWriter->endElement(); // office:chart
     bodyWriter->endElement(); // office:body
 
@@ -155,7 +155,7 @@ bool ChartDocument::saveOdf( SavingContext &context )
     if ( !savingContext.saveDataCenter( store, manifestWriter ) ) {
         return false;
     }
-    
+
     return true;
 }
 
