@@ -978,7 +978,7 @@ void Legend::buildLegend()
         // as well as through the dataset brush set in the diagram, whereas the
         // MarkerAttributes are preferred.
         const QBrush markerBrush = markerAttrs[dataset].markerColor().isValid() ?
-                                   markerAttrs[dataset].markerColor() : brush( dataset );
+                                   QBrush(markerAttrs[dataset].markerColor()) : brush( dataset );
         switch( style ){
             case( MarkersOnly ):
                 markerLineItem = new KDChart::MarkerLayoutItem(
