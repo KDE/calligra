@@ -23,6 +23,7 @@
 
 #include <QFont>
 #include <QSharedDataPointer>
+#include <QTextCharFormat>
 
 #include <KoXmlReader.h>
 
@@ -342,6 +343,10 @@ public:
 
     void dump() const;
 
+    /**
+     * Return the properties of this style that can be represented as a QTextCharFormat
+     */
+    QTextCharFormat asCharFormat() const;
 protected:
     QList<SharedSubStyle> subStyles() const;
 

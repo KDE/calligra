@@ -369,6 +369,8 @@ QString Cell::userInput() const
 
 void Cell::setUserInput(const QString& string)
 {
+    QString old = userInput();
+
     if (!string.isEmpty() && string[0] == '=') {
         // set the formula
         Formula formula(sheet(), *this);
@@ -383,8 +385,10 @@ void Cell::setUserInput(const QString& string)
         sheet()->cellStorage()->setUserInput(d->column, d->row, string);
     }
 
-    // remove any existing richtext
-    setRichText(QSharedPointer<QTextDocument>());
+    if (old != string) {
+        // remove any existing richtext
+        setRichText(QSharedPointer<QTextDocument>());
+    }
 }
 
 
@@ -1181,6 +1185,9 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if (!isEmpty() && link().isEmpty()) {
         QSharedPointer<QTextDocument> doc = richText();
         if (doc) {
+            QTextCharFormat format = style().asCharFormat();
+            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+
             KoEmbeddedDocumentSaver saver;
             KoShapeSavingContext shapeContext(xmlwriter, mainStyles, saver);
             KoTextWriter writer(shapeContext);
@@ -1637,6 +1644,10 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             // for now we don't support richtext and embedded shapes in the same cell;
             // this is because they would currently be loaded twice, once by the KoTextLoader
             // and later properly by the cell itself
+
+            QTextCharFormat format = style().asCharFormat();
+            sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
+
             KoTextLoader loader(*tableContext.shapeContext);
             QSharedPointer<QTextDocument> doc(new QTextDocument);
             KoTextDocument(doc.data()).setStyleManager(sheet()->map()->textStyleManager());

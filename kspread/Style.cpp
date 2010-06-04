@@ -2474,6 +2474,18 @@ void Style::dump() const
         subStyles()[i]->dump();
 }
 
+QTextCharFormat Style::asCharFormat() const
+{
+    QTextCharFormat format;
+    format.setFont(font());
+    format.setFontWeight(bold() ? QFont::Bold : QFont::Normal);
+    format.setFontItalic(italic());
+    format.setFontUnderline(underline());
+    format.setFontStrikeOut(strikeOut());
+    return format;
+}
+
+
 QList<SharedSubStyle> Style::subStyles() const
 {
     return d->subStyles.values();
