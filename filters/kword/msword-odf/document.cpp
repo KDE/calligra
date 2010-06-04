@@ -291,7 +291,8 @@ void Document::processStyles()
         QString displayName = Conversion::string(style->name());
         QString name = Conversion::styleNameString(style->name());
 
-        if (style->sti() == 40) {           // if the invariant style identifier says it's a style used for line numbers
+        // if the invariant style identifier says it's a style used for line numbers
+        if (style->sti() == 40) {
             m_lineNumbersStyleName = name;  // store the name of that style
         }
 
@@ -341,8 +342,9 @@ void Document::processStyles()
                                        Conversion::styleNameString(parentStyle->name()));
             }
 
-            // even if we were able to process character properties in the chpx lists then we don't need to
-            // the design is such that the styles are modified during processing of text runs
+            // even if we were able to process character properties in the chpx
+            // lists then we don't need to the design is such that the styles
+            // are modified during processing of text runs
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
@@ -447,7 +449,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     QString masterStyleName("Standard");
 
     if (m_textHandler->m_sectionNumber > 1) {
-        masterStyleName.prepend(QString::number(m_textHandler->m_sectionNumber));
+        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
     }
     masterStyle->addAttribute("style:display-name", masterStyleName);
     masterStyleName = m_mainStyles->insert(*masterStyle, masterStyleName,

@@ -117,9 +117,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 {
     kDebug(30513);
     m_sectionNumber++;
-
-    //store sep for section end
-    m_sep = sep;
+    m_sep = sep; //store sep for section end
 
     //break code
     kDebug(30513) << "sep->bkc = " << sep->bkc;
@@ -222,6 +220,17 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 void KWordTextHandler::sectionEnd()
 {
     kDebug(30513);
+
+    //check for a table to be parsed and processed
+    if (m_currentTable) {
+        KWord::Table* table = m_currentTable;
+        //reset m_currentTable
+        m_currentTable = 0L;
+        //must delete table in Document!
+        emit tableFound(table);
+        m_maxColumns = 0;
+    }
+
     if (m_sep->bkc != 1) {
         emit sectionEnd(m_sep);
     }
@@ -609,7 +618,7 @@ QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";
-    //check for a table to parse
+    //check for a table to be parsed and processed
     if (m_currentTable) {
         KWord::Table* table = m_currentTable;
         //reset m_currentTable
