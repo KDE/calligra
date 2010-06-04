@@ -634,12 +634,6 @@ void KWTextDocumentLayout::layout()
             }
 #endif
         }
-
-        QRectF repaintRect = line.line.rect();
-        repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
-        repaintRect.setX(0.0); // just take full width since we can't force a repaint of
-        repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
-        m_state->shape->update(repaintRect);
     }
     if (requestFrameResize) {
         TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
