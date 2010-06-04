@@ -195,7 +195,7 @@ public:
     QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, double rowHeight = -1);
     void processFormat(Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
-    void processFontFormat(const FormatFont& font, KoGenStyle& style);
+    void processFontFormat(const FormatFont& font, KoGenStyle& style, bool allProps = false);
     void processCharts(KoXmlWriter* manifestWriter);
 
     void createDefaultColumnStyle( Sheet* sheet );
@@ -1530,7 +1530,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
         for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
             if (fontStyles.contains(it->second)) continue;
             KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
-            processFontFormat(it->second, style);
+            processFontFormat(it->second, style, true);
             QString styleName = styles->insert(style, "T");
             fontStyles[it->second] = styleName;
         }
@@ -1666,24 +1666,39 @@ void convertBorder(const QString& which, const QString& lineWidthProperty, const
     }
 }
 
-void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle& style)
+void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle& style, bool allProps)
 {
     if (font.isNull()) return;
 
-    if (font.bold())
+    if (font.bold()) {
         style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
+    } else if (allProps) {
+        style.addProperty("fo:font-weight", "normal", KoGenStyle::TextType);
+    }
 
-    if (font.italic())
+    if (font.italic()) {
         style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
+    } else if (allProps) {
+        style.addProperty("fo:font-style", "normal", KoGenStyle::TextType);
+    }
 
     if (font.underline()) {
+        style.addProperty("style:text-underline-type", "single", KoGenStyle::TextType);
         style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
         style.addProperty("style:text-underline-width", "auto", KoGenStyle::TextType);
         style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
+    } else if (allProps) {
+        style.addProperty("style:text-underline-type", "none", KoGenStyle::TextType);
+        style.addProperty("style:text-underline-style", "none", KoGenStyle::TextType);
     }
 
-    if (font.strikeout())
+    if (font.strikeout()) {
+        style.addProperty("style:text-line-through-type", "single", KoGenStyle::TextType);
         style.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
+    } else {
+        style.addProperty("style:text-line-through-type", "none", KoGenStyle::TextType);
+        style.addProperty("style:text-line-through-style", "none", KoGenStyle::TextType);
+    }
 
     if (!font.fontFamily().isEmpty())
         style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
