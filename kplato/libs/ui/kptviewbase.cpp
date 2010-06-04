@@ -1751,7 +1751,7 @@ void DoubleTreeViewBase::setStretchFactors()
 {
     int lc = m_leftview->header()->count() - m_leftview->header()->hiddenSectionCount();
     int rc = m_rightview->header()->count() - m_rightview->header()->hiddenSectionCount();
-    setStretchFactor( indexOf( m_rightview ), qMax( 1, qMin( 4, rc / lc ) ) );
+    setStretchFactor( indexOf( m_rightview ), qMax( 1, qMin( 4, rc / qMax( 1, lc ) ) ) );
     //kDebug()<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
 }
 
