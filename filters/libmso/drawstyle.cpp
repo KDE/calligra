@@ -60,11 +60,12 @@ TYPE DrawStyle::NAME() const \
     return DEFAULT; \
 }
 
-//     TYPE                    FOPT                  NAME                  DEFAULT
-GETTER(quint32,                FillType,             fillType,             0)
-GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white())
-GETTER(quint32,                FillBlip,             fillBlip,             0)
-GETTER(qint32,                 FillDztype,           fillDztype,           0)
+//     TYPE                    FOPT                  NAME                  DEFAULT  ODRAW Ref
+GETTER(quint32,                FillType,             fillType,             0)       // 2.3.7.1
+GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white()) // 2.3.7.2
+GETTER(qint32,                 FillOpacity,          fillOpacity,          0x10000) // 2.3.7.3
+GETTER(quint32,                FillBlip,             fillBlip,             0)       // 2.3.7.7
+GETTER(qint32,                 FillDztype,           fillDztype,           0)       // 2.3.7.24
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)
 GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)

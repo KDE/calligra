@@ -41,14 +41,14 @@ public:
     bool fFilled() const;
     bool fUseShapeAnchor() const;
     bool fRecolorFillAsPicture() const;
-    // FillType
-    quint32 fillType() const;
-    // FillColor
+
+    // Fill properties
+    quint32                fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
-    // FillBlip
-    quint32 fillBlip() const;
-    // FillDztype
-    qint32 fillDztype() const;
+    qint32                 fillOpacity() const;
+    quint32                fillBlip() const;
+    qint32                 fillDztype() const;
+
     // LineEndArrowhead
     quint32 lineEndArrowhead() const;
     // LineStartArrowhead

@@ -228,6 +228,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:measure-vertical-align
     // draw:ole-draw-aspect
     // draw:opacity
+    style.addProperty("draw:opacity",
+                      percent(100.0 * ds.fillOpacity() / 0x10000), gt);
     // draw:opacity-name
     // draw:parallel
     // draw:placing

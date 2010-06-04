@@ -628,6 +628,8 @@ class FillType;
 void parseFillType(LEInputStream& in, FillType& _s);
 class FillColor;
 void parseFillColor(LEInputStream& in, FillColor& _s);
+class FillOpacity;
+void parseFillOpacity(LEInputStream& in, FillOpacity& _s);
 class FillBackColor;
 void parseFillBackColor(LEInputStream& in, FillBackColor& _s);
 class FillBlip;
@@ -3724,6 +3726,12 @@ public:
     OfficeArtCOLORREF fillColor;
     FillColor(void* /*dummy*/ = 0) {}
 };
+class FillOpacity : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillOpacity;
+    FillOpacity(void* /*dummy*/ = 0) {}
+};
 class FillBackColor : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -4594,6 +4602,7 @@ public:
         explicit choice2689094652(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
         explicit choice2689094652(FillType* a) :QSharedPointer<StreamOffset>(a) {}
         explicit choice2689094652(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2689094652(FillOpacity* a) :QSharedPointer<StreamOffset>(a) {}
         explicit choice2689094652(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
         explicit choice2689094652(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
         explicit choice2689094652(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}

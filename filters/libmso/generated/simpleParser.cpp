@@ -7337,6 +7337,26 @@ void MSO::parseFillColor(LEInputStream& in, FillColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillColor);
 }
+void MSO::parseFillOpacity(LEInputStream& in, FillOpacity& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0182)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0182");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillOpacity = in.readint32();
+    if (!(((qint32)_s.fillOpacity)>=0)) {
+        throw IncorrectValueException(in.getPosition(), "((qint32)_s.fillOpacity)>=0");
+    }
+    if (!(((qint32)_s.fillOpacity)<=65536)) {
+        throw IncorrectValueException(in.getPosition(), "((qint32)_s.fillOpacity)<=65536");
+    }
+}
 void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -10162,6 +10182,9 @@ void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s)
     } else if ((_choice.opid == 0x0181)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
         _s.anon = OfficeArtFOPTEChoice::choice2689094652(new FillColor(&_s));
         parseFillColor(in, *(FillColor*)_s.anon.data());
+    } else if ((_choice.opid == 0x0182)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
+        _s.anon = OfficeArtFOPTEChoice::choice2689094652(new FillOpacity(&_s));
+        parseFillOpacity(in, *(FillOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0183)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
         _s.anon = OfficeArtFOPTEChoice::choice2689094652(new FillBackColor(&_s));
         parseFillBackColor(in, *(FillBackColor*)_s.anon.data());
