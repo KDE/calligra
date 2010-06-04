@@ -102,12 +102,12 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
     QList<ScheduleManager*> lst = project.allScheduleManagers();
     foreach(const ScheduleManager *m, lst) {
         if (! baselined) {
-            id = lst.last()->id();
+            id = lst.last()->scheduleId();
             //kDebug()<<"last:"<<id;
             break;
         }
         if (m->isBaselined()) {
-            id = m->id();
+            id = m->scheduleId();
             //kDebug()<<"baselined:"<<id;
             break;
         }
