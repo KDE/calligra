@@ -499,6 +499,33 @@ QDomElement Map::save(QDomDocument& doc)
     return mymap;
 }
 
+static void fixupStyle(KoCharacterStyle* style)
+{
+    style->removeHardCodedDefaults();
+
+    QTextCharFormat format;
+    style->applyStyle(format);
+    switch (style->underlineStyle()) {
+        case KoCharacterStyle::NoLineStyle:
+            format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
+        case KoCharacterStyle::SolidLine:
+            format.setUnderlineStyle(QTextCharFormat::SingleUnderline); break;
+        case KoCharacterStyle::DottedLine:
+            format.setUnderlineStyle(QTextCharFormat::DotLine); break;
+        case KoCharacterStyle::DashLine:
+            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
+        case KoCharacterStyle::DotDashLine:
+            format.setUnderlineStyle(QTextCharFormat::DashDotLine); break;
+        case KoCharacterStyle::DotDotDashLine:
+            format.setUnderlineStyle(QTextCharFormat::DashDotDotLine); break;
+        case KoCharacterStyle::LongDashLine:
+            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
+        case KoCharacterStyle::WaveLine:
+            format.setUnderlineStyle(QTextCharFormat::WaveUnderline); break;
+    }
+    style->copyProperties(format);
+}
+
 bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 {
     d->isLoading = true;
@@ -515,12 +542,13 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     tableContext.shapeContext = &shapeContext;
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, textStyleManager());
-    textStyleManager()->defaultParagraphStyle()->characterStyle()->removeHardCodedDefaults();
+
+    fixupStyle(textStyleManager()->defaultParagraphStyle()->characterStyle());
     foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
-        style->removeHardCodedDefaults();
+        fixupStyle(style);
     }
     foreach (KoCharacterStyle* style, sharedData->characterStyles(false)) {
-        style->removeHardCodedDefaults();
+        fixupStyle(style);
     }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
