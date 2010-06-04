@@ -60,8 +60,6 @@ protected:
     KoFilter::ConversionStatus read_pPr_numbering();
     KoFilter::ConversionStatus read_ind_numbering();
 
-    DocxXmlNumberingReaderContext* m_context;
-
     KoGenStyle m_currentListStyle;
     KoListLevelProperties* m_currentListStyleProperties;
 

@@ -31,6 +31,7 @@
 #include <MsooXmlRelationships.h>
 #include "DocxXmlDocumentReader.h"
 #include "DocxXmlStylesReader.h"
+#include "DocxXmlNumberingReader.h"
 #include "DocxXmlFontTableReader.h"
 
 #include <QColor>
@@ -275,7 +276,19 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
-    // 4. parse document
+    // 4. parse numbering
+    {
+        const QString numberingPath(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
+        kDebug() << "numberingPath:" << numberingPath;
+        DocxXmlNumberingReader numberingReader(writers);
+        if (!numberingPath.isEmpty()) {
+            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+                numberingPath, &numberingReader, writers, errorMessage) )
+        }
+    }
+
+    // 5. parse document
     {
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
         DocxXmlDocumentReaderContext context(

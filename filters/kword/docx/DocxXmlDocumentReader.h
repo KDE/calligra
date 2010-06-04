@@ -243,7 +243,6 @@ private:
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
     bool m_closeHyperlink; // should read_r close hyperlink
-    bool m_numberingLoaded;
     bool m_listFound; // was there numPr element in ppr
     QString m_currentListStyleName;
 

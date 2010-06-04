@@ -48,7 +48,6 @@ public:
 
 DocxXmlNumberingReader::DocxXmlNumberingReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
     , d(new Private)
 {
     init();
@@ -67,8 +66,7 @@ void DocxXmlNumberingReader::init()
 
 KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-
-    m_context = static_cast<DocxXmlNumberingReaderContext*>(context);
+    Q_UNUSED(context)
     kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
@@ -334,6 +332,8 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         QString name = "NumStyle" + numId;
         KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
         mainStyles->insert(m_currentListStyle, name, insertionFlags);
+        // Maybe this should go to styles.xml?
+        //mainStyles->markStyleForStylesXml(name);
     }
 
     READ_EPILOGUE

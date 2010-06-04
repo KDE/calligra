@@ -186,7 +186,6 @@ void DocxXmlDocumentReader::init()
     m_objectRectInitialized = false;
     m_wasCaption = false;
     m_listFound = false;
-    m_numberingLoaded = false;
     m_closeHyperlink = false;
 }
 
@@ -1859,22 +1858,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 {
     READ_PROLOGUE
-
-    if (!m_numberingLoaded)
-    {
-        m_numberingLoaded = true;
-
-        DocxXmlNumberingReader reader(this);
-
-        QString errorMessage;
-        DocxXmlNumberingReaderContext context;
-
-        const KoFilter::ConversionStatus status
-            = m_context->import->loadAndParseDocument(&reader, "word/numbering.xml", errorMessage, &context);
-        if (status != KoFilter::OK) {
-            reader.raiseError(errorMessage);
-        }
-    }
 
     m_listFound = true;
     m_currentListLevel = 0;
