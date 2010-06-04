@@ -692,7 +692,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
         d->style.setBottomBorderPen(sheetView->cellView(col, row + cell.mergedYCells()).style().topBorderPen());
     else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
         paintBorder |= BottomBorder;
-    
+
     // Check merging...
     if (d->merged) {
         // by default: none ...
@@ -1068,6 +1068,12 @@ void CellView::paintMoreTextIndicator(QPainter& painter, const QPointF& coordina
     }
 }
 
+static int fixAngle(int angle) {
+    angle = ((angle % 360) + 360) % 360;
+    // now angle is between 0 and 359, but 181-359 should be -179 - -1
+    if (angle > 180) angle = angle - 360;
+    return angle;
+}
 
 // Paint the real contents of a cell - the text.
 //
@@ -1076,12 +1082,8 @@ void CellView::paintText(QPainter& painter,
                          QPaintDevice* paintDevice, const Cell& cell)
 {
     Q_UNUSED(paintDevice);
+
     QColor textColorPrint = d->style.fontColor();
-
-    // set a clipping region
-    painter.save();
-    painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
-
     // Resolve the text color if invalid (=default).
     if (!textColorPrint.isValid()) {
         if (dynamic_cast<QPrinter*>(painter.device()))
@@ -1164,12 +1166,19 @@ void CellView::paintText(QPainter& painter,
         fontOffset = qMax(fontMetrics.underlinePos() + 1, fontMetrics.descent());
     }
 
-    const int tmpAngle = d->style.angle();
+    const int tmpAngle = fixAngle(d->style.angle());
     const bool tmpVerticalText = d->style.verticalText();
     // force multiple rows on explicitly set line breaks
     const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains('\n');
     const bool tmpVDistributed = vAlign == Style::VJustified || vAlign == Style::VDistributed;
     const bool tmpRichText = !d->richText.isNull();
+
+
+    // set a clipping region for non-rotated text
+    painter.save();
+    if (tmpAngle == 0)
+        painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
+
 
     // Actually paint the text.
     //    There are 5 possible cases:
@@ -1187,26 +1196,25 @@ void CellView::paintText(QPainter& painter,
     } else if (tmpAngle != 0) {
         // Case 2: an angle.
 
-        int angle = ((tmpAngle % 360) + 360) % 360;
-        // now angle is between 0 and 359, but 181-359 should be -179 - -1
-        if (angle > 180) angle = angle - 360;
-
-        painter.rotate(angle);
+        painter.rotate(tmpAngle);
         qreal x;
-        if (angle > 0)
+        if (tmpAngle > 0)
             x = indent + coordinate.x();
         else
             x = indent + coordinate.x()
-                - (fontMetrics.descent() + fontMetrics.ascent()) * ::sin(angle * M_PI / 180);
+                - (fontMetrics.descent() + fontMetrics.ascent()) * ::sin(tmpAngle * M_PI / 180);
         qreal y;
-        if (angle > 0)
+        if (tmpAngle > 0)
             y = coordinate.y() + d->textY;
         else
             y = coordinate.y() + d->textY + d->textHeight;
-        const QPointF position(x * ::cos(angle * M_PI / 180) + y * ::sin(angle * M_PI / 180),
-                               -x * ::sin(angle * M_PI / 180) + y * ::cos(angle * M_PI / 180));
+        if (tmpAngle < -90 || tmpAngle > 90) {
+            x += d->textWidth;
+        }
+        const QPointF position(x * ::cos(tmpAngle * M_PI / 180) + y * ::sin(tmpAngle * M_PI / 180),
+                               -x * ::sin(tmpAngle * M_PI / 180) + y * ::cos(tmpAngle * M_PI / 180));
         drawText(painter, position, d->displayText.split('\n'), cell);
-        painter.rotate(-angle);
+        painter.rotate(-tmpAngle);
     } else if (tmpMultiRow && !tmpVerticalText && !tmpRichText) {
         // Case 3: Multiple rows, but horizontal.
         const QPointF position(indent + coordinate.x(), coordinate.y() + d->textY);
@@ -1958,7 +1966,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     const qreal ascent = fontMetrics.ascent();
     const Style::HAlign hAlign = d->style.halign();
     const Style::VAlign vAlign = d->style.valign();
-    const int tmpAngle = d->style.angle();
+    const int tmpAngle = fixAngle(d->style.angle());
     const bool tmpVerticalText = d->style.verticalText();
     const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains('\n');
     const bool tmpRichText = !d->richText.isNull();
@@ -1997,6 +2005,9 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                     d->textY = effBottom - d->textHeight;
                 } else {
                     d->textY = effBottom - d->textHeight + ascent * ::cos(tmpAngle * M_PI / 180);
+                }
+                if (tmpAngle < -90 || tmpAngle > 90) {
+                    d->textY += ascent * ::cos(tmpAngle * M_PI / 180);
                 }
             } else {
                 if (tmpAngle < 0) {
@@ -2391,11 +2402,11 @@ void CellView::Private::calculateVerticalTextSize(const QFont& font, const QFont
 void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
 {
     Q_UNUSED(font)
-    const qreal angle = style.angle();
+    const qreal angle = fixAngle(style.angle());
     const qreal height = fontMetrics.ascent() + fontMetrics.descent();
     const qreal width  = fontMetrics.width(displayText);
-    textHeight = height * ::cos(angle * M_PI / 180) + qAbs(width * ::sin(angle * M_PI / 180));
-    textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + width * ::cos(angle * M_PI / 180);
+    textHeight = qAbs(height * ::cos(angle * M_PI / 180)) + qAbs(width * ::sin(angle * M_PI / 180));
+    textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + qAbs(width * ::cos(angle * M_PI / 180));
     fittingHeight = textHeight <= this->width;
     fittingWidth = textWidth <= this->height;
 }
