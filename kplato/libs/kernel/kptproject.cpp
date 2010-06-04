@@ -590,15 +590,15 @@ DateTime Project::calculateForward( int use )
         }
         if ( ! m_forwardTasks.isEmpty() ) {
             QMultiMap<int, Task*> map;
-            QMap<Task*, int>::const_iterator i = m_forwardTasks.begin();
-            for ( ; i != m_forwardTasks.end(); ++i   ) {
+            QMap<Task*, int>::const_iterator i = m_forwardTasks.constBegin();
+            for ( ; i != m_forwardTasks.constEnd(); ++i   ) {
                 map.insertMulti( i.value(), i.key() );
             }
             DateTime finish;
             DateTime time;
             foreach ( int key, map.uniqueKeys() ) {
-                QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
-                QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+                QMap<int, Task*>::iterator low = map.lowerBound( key );
+                QMap<int, Task*>::iterator upper = map.upperBound( key );
                 do {
                     --upper;
                     time = static_cast<Node*> ( upper.value() )->calculateForward( use );
@@ -644,13 +644,13 @@ DateTime Project::calculateBackward( int use )
         DateTime time;
         if ( ! m_backwardTasks.isEmpty() ) {
             QMultiMap<int, Task*> map;
-            QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
-            for ( ; i != m_backwardTasks.end(); ++i   ) {
+            QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
+            for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
                 map.insertMulti( i.value(), i.key() );
             }
             foreach ( int key, map.uniqueKeys() ) {
-                QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
-                QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+                QMap<int, Task*>::iterator low = map.lowerBound( key );
+                QMap<int, Task*>::iterator upper = map.upperBound( key );
                 do {
                     --upper;
                     time = static_cast<Node*> ( upper.value() )->calculateBackward( use );
@@ -686,13 +686,13 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
     resetVisited();
     if ( ! m_forwardTasks.isEmpty() ) {
         QMultiMap<int, Task*> map;
-        QMap<Task*, int>::const_iterator i = m_forwardTasks.begin();
-        for ( ; i != m_forwardTasks.end(); ++i   ) {
+        QMap<Task*, int>::const_iterator i = m_forwardTasks.constBegin();
+        for ( ; i != m_forwardTasks.constEnd(); ++i   ) {
             map.insertMulti( i.value(), i.key() );
         }
         foreach ( int key, map.uniqueKeys() ) {
-            QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
-            QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+            QMap<int, Task*>::Iterator low = map.lowerBound( key );
+            QMap<int, Task*>::Iterator upper = map.upperBound( key );
             do {
                 --upper;
                 time = static_cast<Node*> ( upper.value() )->scheduleForward( earliest, use );
@@ -723,21 +723,21 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
     }
     resetVisited();
     QMultiMap<int, Task*> map;
-    QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
-    for ( ; i != m_backwardTasks.end(); ++i   ) {
+    QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
+    for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
         map.insertMulti( i.value(), i.key() );
     }
     DateTime start = latest;
     DateTime time;
     if ( ! m_backwardTasks.isEmpty() ) {
         QMultiMap<int, Task*> map;
-        QMap<Task*, int>::const_iterator i = m_backwardTasks.begin();
-        for ( ; i != m_backwardTasks.end(); ++i   ) {
+        QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
+        for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
             map.insertMulti( i.value(), i.key() );
         }
         foreach ( int key, map.uniqueKeys() ) {
-            QMap<int, Task*>::ConstIterator low = map.lowerBound( key );
-            QMap<int, Task*>::ConstIterator upper = map.upperBound( key );
+            QMap<int, Task*>::Iterator low = map.lowerBound( key );
+            QMap<int, Task*>::Iterator upper = map.upperBound( key );
             do {
                 --upper;
                 time = static_cast<Node*> ( upper.value() )->scheduleBackward( latest, use );
