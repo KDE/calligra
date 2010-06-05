@@ -11,3 +11,53 @@ date information.
 
 If you are a user, you will find more user-oriented information in
 doc/kspread in the top directory of KOffice.
+
+
+What's where - where's what
+---------------------------
+
+./
+    Document related code, independent from any visualization.
+
+chart/
+    The dialog appearing when the user creates a new chart.
+    Used to get the currently selected cell range as data set.
+
+commands/
+    Commands used for both, the KPart and the flake shape.
+
+data/
+    Icons and templates.
+
+database/
+    Database range related code, e.g. auto-filtering.
+
+dialogs/
+    Dialogs used for both, the KPart and the flake shape.
+
+doc/
+    Developer documentation.
+
+dtd/
+    Document Type Definition of KSpread's own file format.
+
+interfaces/
+    DBus adaptors and data models.
+
+part/
+    Everything, that is only needed for the KPart, i.e. for KSpread itself and
+    for the embedding into non-KOffice applications using the KPart framework.
+    Everything means document AND view/controller related.
+
+plugins/
+    Functions modules, Kross scripting, tools, etc.
+
+shape/
+    The flake shape, that can be embedded into other KOffice apps, and its tool.
+
+tests/
+    Unit tests.
+
+ui/
+    General user interface (view/controller) related code, i.e. code that's
+    used by both visualizations, the KPart and the flake shape.
