@@ -1,0 +1,61 @@
+Current status:
+  ChartInterface: kspread -> kchart
+  ChartModel: kchart -> kspread
+Drawbacks:
+- Hardcoded shape id of the chart shape in KSpread.
+- Specialized for both, KChart and KSpread.
+
+
+On shape insertion:
+KSpread does not know the shape id before the config dialog is shown.
+Solution 1:
+- Install extra plugin by KChart for KSpread
+- Identifies KChart as data consumer
+- Use shape id to install config widgets to be used at shape creation
+BULLSHIT (there's a shape):
+- Let plugin install QObject implementing DataConsumerInterface
+- Let DataConsumerInterface know about DataConsumerManager
+
+
+
+How does the chart shape know that the hosting app is KSpread or that
+it should retrieve its data from an embedded table?
+Is it possible to know what is the active shape on shape insertion?
+Solution 1:
+- Query KComponentData
+Solution 2:
+- Register SourceRangeManager as (canvas) resource.
+Notes:
+- KoShapeUserData is qobject_cast'able
+
+
+How does KSpread communicate with the chart shape?
+Solution 1:
+- Chart shape implements a data consumer interface
+Solution 2:
+- KSpread fires KoEventActions and KChart can react by querying SourceRangeManager.
+Notes:
+- QAbstractItemModel seems to have the necessary signals for reacting on data changes
+  except the cell region. Provide the whole sheet and let KChart trim the model?
+  What about mouse selections of the cell region then? Use QItemSelection(Model)?
+  Is it possible to temporarily activate the cell tool for the selection? Needs
+  non-modal dialog.
+- The cell region may be provided by a special role of the model's root item.
+
+
+Does KChart has to communicate with KSpread/embedded tables at all?
+- Current status: KChartModel provides accessors and setters for the cell region.
+- KSpread needs to know the used cell region, so that it can shift it on
+  column/row/cell range insertions/deletions.
+- Therefore, the communication in both directions, KChart <-> KSpread,
+  is mandatory.
+- KChart needs information about:
+    - data changes (cell shifts) -> QAbstractItemModel::dataChanged(), etc.
+    - complete deletion of the cell region -> QAbstractItemModel::destroyed()
+    - textual representation of the cell region -> ???
+- KSpread needs information about:
+    - cell region change requests
+    - deletion of the chart shape
+
+
+How would KSpread communicate with a database?
