@@ -27,7 +27,7 @@
 
 namespace KSpread
 {
-class Doc;
+class Map;
 
 class TestDatabaseFunctions: public QObject
 {
@@ -52,7 +52,7 @@ private Q_SLOTS:
 private:
     Value evaluate(const QString&, Value& ex);
 
-    Doc* m_doc;
+    Map* m_map;
 };
 
 } // namespace KSpread

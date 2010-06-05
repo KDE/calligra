@@ -59,7 +59,6 @@
 #include <KoStore.h>
 
 #include "CellStorage.h"
-#include "part/Canvas.h" // FIXME detach from part
 #include "Cluster.h"
 #include "Condition.h"
 #include "Damages.h"
@@ -87,7 +86,6 @@
 #include "Validity.h"
 #include "ValueConverter.h"
 #include "ValueStorage.h"
-#include "part/View.h" // FIXME detach from part
 
 // commands
 #include "commands/DataManipulators.h"
@@ -204,11 +202,11 @@ Sheet::Sheet(Map* map, const QString& sheetName)
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
     new SheetAdaptor(this);
-    if (d->workbook->doc()) {
-        QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                '/' + d->workbook->objectName() +
-                '/' + this->objectName(), this);
+    QString dbusPath('/' + d->workbook->objectName() + '/' + objectName());
+    if (parent()) {
+        dbusPath.prepend('/' + parent()->objectName());
     }
+    QDBusConnection::sessionBus().registerObject(dbusPath, this);
 
     d->cellStorage = new CellStorage(this);
     d->rows.setAutoDelete(true);
@@ -258,11 +256,11 @@ Sheet::Sheet(const Sheet& other)
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
     new SheetAdaptor(this);
-    if (d->workbook->doc()) {
-        QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                '/' + d->workbook->objectName() +
-                '/' + this->objectName(), this);
+    QString dbusPath('/' + d->workbook->objectName() + '/' + objectName());
+    if (parent()) {
+        dbusPath.prepend('/' + parent()->objectName());
     }
+    QDBusConnection::sessionBus().registerObject(dbusPath, this);
 
     d->id = s_id++;
     s_mapSheets->insert(d->id, this);
@@ -352,16 +350,7 @@ void Sheet::addShape(KoShape* shape)
         return;
     d->shapes.append(shape);
     shape->setApplicationData(new ShapeApplicationData());
-
-    if (doc()) {
-        const QList<KoView*> views = doc()->views();
-        for (int i = 0; i < views.count(); ++i) {
-            View* const view = static_cast<View*>(views[i]);
-            if (view->activeSheet() == this) {
-                view->canvasWidget()->shapeManager()->addShape(shape);
-            }
-        }
-    }
+    emit shapeAdded(this, shape);
 }
 
 void Sheet::removeShape(KoShape* shape)
@@ -369,16 +358,7 @@ void Sheet::removeShape(KoShape* shape)
     if (!shape)
         return;
     d->shapes.removeAll(shape);
-
-    if (doc()) {
-        const QList<KoView*> views = doc()->views();
-        for (int i = 0; i < views.count(); ++i) {
-            View* const view = static_cast<View*>(views[i]);
-            if (view->activeSheet() == this) {
-                view->canvasWidget()->shapeManager()->remove(shape);
-            }
-        }
-    }
+    emit shapeRemoved(this, shape);
 }
 
 QList<KoShape*> Sheet::shapes() const

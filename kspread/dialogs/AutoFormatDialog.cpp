@@ -41,7 +41,6 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -96,8 +95,8 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     vbox->addWidget(d->combo);
     vbox->addWidget(d->label, 1);
 
-
-    const QStringList lst = Factory::global().dirs()->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
+    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
+    const QStringList lst = dirs->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
 
     int index = 0;
     QStringList::ConstIterator it = lst.begin();
@@ -131,7 +130,8 @@ void AutoFormatDialog::slotActivated(int index)
 {
     enableButtonOk(true);
 
-    QString image = Factory::global().dirs()->findResource("sheet-styles", d->entries[index].image);
+    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
+    QString image = dirs->findResource("sheet-styles", d->entries[index].image);
     if (image.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find image %1.", d->entries[index].image));
         enableButtonOk(false);
@@ -149,7 +149,8 @@ void AutoFormatDialog::slotActivated(int index)
 
 void AutoFormatDialog::slotOk()
 {
-    QString xml = Factory::global().dirs()->findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
+    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
+    QString xml = dirs->findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
     if (xml.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find sheet-style XML file '%1'.", d->entries[d->combo->currentIndex()].xml));
         return;

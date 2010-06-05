@@ -30,7 +30,7 @@ using namespace KSpread;
 
 KoShapeConfigWidgetBase* ChartDatabaseSelectorFactory::createConfigWidget(KoShape* shape)
 {
-    ChartDatabaseSelector* widget = new ChartDatabaseSelector(m_doc);
+    ChartDatabaseSelector* widget = new ChartDatabaseSelector(m_map);
     widget->open(shape);
     return widget;
 }

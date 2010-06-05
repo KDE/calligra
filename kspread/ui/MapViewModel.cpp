@@ -28,6 +28,7 @@
 #include "interfaces/ReadWriteTableModel.h"
 
 #include <KoCanvasBase.h>
+#include <KoShapeManager.h>
 
 #include <KIcon>
 
@@ -39,14 +40,16 @@ class MapViewModel::Private
 {
 public:
     Sheet* activeSheet;
+    KoCanvasBase *canvas;
 };
 
 
-MapViewModel::MapViewModel(Map* map)
+MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas)
     : MapModel(map)
     , d(new Private)
 {
     d->activeSheet = 0;
+    d->canvas = canvas;
 }
 
 MapViewModel::~MapViewModel()
@@ -128,7 +131,7 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     // Unhide, if necessary.
     if (sheet && sheet->isHidden()) {
         QUndoCommand* command = new ShowSheetCommand(sheet);
-        emit addCommandRequested(command);
+        d->canvas->addCommand(command);
     }
 
     // Both sheets have to be in the list. If not, there won't be any signals.
@@ -140,6 +143,20 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     emit dataChanged(oldIndex, oldIndex);
     emit dataChanged(newIndex, newIndex);
     emit activeSheetChanged(sheet);
+}
+
+void MapViewModel::addShape(Sheet *sheet, KoShape *shape)
+{
+    if (sheet == d->activeSheet) {
+        d->canvas->shapeManager()->addShape(shape);
+    }
+}
+
+void MapViewModel::removeShape(Sheet *sheet, KoShape *shape)
+{
+    if (sheet == d->activeSheet) {
+        d->canvas->shapeManager()->remove(shape);
+    }
 }
 
 #include "MapViewModel.moc"

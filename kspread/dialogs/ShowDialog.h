@@ -31,19 +31,19 @@ class QListWidget;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class ShowDialog: public KDialog
 {
     Q_OBJECT
 public:
-    ShowDialog(View* parent, const char* name);
+    ShowDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     virtual void accept();
-protected:
-    View* m_pView;
 
+private:
+    Selection* m_selection;
     QListWidget *m_listWidget;
 };
 

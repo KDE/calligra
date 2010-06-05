@@ -18,7 +18,6 @@
 */
 
 #include "FunctionModuleRegistry.h"
-#include "part/Factory.h" // FIXME detach from part
 #include "FunctionModule.h"
 #include "Functions.h"
 
@@ -47,7 +46,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    const KStandardDirs* dirs = Factory::global().dirs();
+    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
     const QString fileName = dirs->findResource("functions", module->descriptionFileName());
     if (fileName.isEmpty()) {
         kDebug(36002) << module->descriptionFileName() << "not found.";

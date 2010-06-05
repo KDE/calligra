@@ -30,7 +30,6 @@
 #include "Binding.h"
 #include "CanvasResources.h"
 #include "CellStorage.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Region.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -40,17 +39,17 @@ using namespace KSpread;
 class ChartDatabaseSelector::Private
 {
 public:
-    Doc* doc;
+    Map* map;
     Selection* selection;
     KoChart::ChartInterface* shape;
     Ui::ChartDatabaseSelector widget;
 };
 
-ChartDatabaseSelector::ChartDatabaseSelector(Doc* doc)
+ChartDatabaseSelector::ChartDatabaseSelector(Map *map)
         : KoShapeConfigWidgetBase()
         , d(new Private)
 {
-    d->doc = doc;
+    d->map = map;
     d->selection = 0;
     d->shape = 0;
     d->widget.setupUi(this);
@@ -77,7 +76,7 @@ void ChartDatabaseSelector::save()
     // This region contains the entire sheet
     const Region region(1, 1, KS_colMax, KS_rowMax, d->selection->activeSheet());
     // The region to be displayed in the chart
-    const Region selectedRegion(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
+    const Region selectedRegion(d->widget.m_cellRegion->text(), d->map, d->selection->activeSheet());
     if (!region.isValid() || !region.isContiguous())
         return;
     Binding binding(region);

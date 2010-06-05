@@ -39,7 +39,7 @@
 #include "Cell.h"
 #include "Formula.h"
 
-#include "part/Doc.h" // FIXME detach from part
+#include <KoDocument.h>
 
 using namespace KSpread;
 
@@ -185,16 +185,14 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(QString(KOFFICE_VERSION_STRING));
 
     if (type == "numfile")
-        return Value((int) Doc::documents().count());
+        return Value(KoDocument::documentList() ? KoDocument::documentList()->count() : 0);
 
     if (type == "recalc") {
         QString result;
-//     if (calc->doc()) {
-//       if ( calc->doc()->displaySheet() && !calc->doc()->displaySheet()->isAutoCalculationEnabled() )
-//         result = i18n ("Manual");
-//       else
+      if (!calc->settings()->isAutoCalculationEnabled())
+        result = i18n ("Manual");
+      else
         result = i18n("Automatic");
-//     }
         return Value(result);
     }
 

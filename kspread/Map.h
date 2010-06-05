@@ -37,9 +37,13 @@ class KoOdfLoadingContext;
 class KoEmbeddedDocumentSaver;
 class KoStyleManager;
 
+class KCompletion;
+
 class QAbstractItemModel;
 class QDomElement;
 class QDomDocument;
+class QUndoCommand;
+
 class KoXmlWriter;
 class KoGenStyles;
 class KoOasisSettings;
@@ -77,7 +81,7 @@ public:
     /**
      * Created an empty map.
      */
-    explicit Map(Doc* doc, const char* name = 0);
+    explicit Map(Doc* doc = 0, int syntaxVersion = 1);
 
     /**
      * This deletes all sheets contained in this map.
@@ -309,6 +313,18 @@ public:
     bool isLoading() const;
 
     /**
+     * \return the document's syntax version
+     * \ingroup NativeFormat
+     */
+    int syntaxVersion() const;
+
+    /**
+     * Sets the document's syntax \p version.
+     * \ingroup NativeFormat
+     */
+    void setSyntaxVersion(int version);
+
+    /**
      * \ingroup OpenDocument
      * \ingroup NativeFormat
      * Creates the loading info, if it does not exist yet.
@@ -322,6 +338,17 @@ public:
      * Deletes the loading info. Called after loading is complete.
      */
     void deleteLoadingInfo();
+
+    /**
+     * \return the KCompletion object, that allows user input completions.
+     */
+    KCompletion &stringCompletion();
+
+    /**
+     * Adds \p string to the list of string values in order to be able to
+     * complete user inputs.
+     */
+    void addStringCompletion(const QString &string);
 
     /**
      * \ingroup Operations
@@ -339,11 +366,23 @@ public Q_SLOTS:
      */
     void handleDamages(const QList<Damage*>& damages);
 
+    /**
+     * Emits the signal commandAdded(QUndoCommand *).
+     * You have to connect the signal to the object holding the undo stack or
+     * any relay object, that propagates \p command to the undo stack.
+     */
+    void addCommand(QUndoCommand *command);
+
 Q_SIGNALS:
     /**
      * \ingroup Operations
      */
     void damagesFlushed(const QList<Damage*>& damages);
+
+    /**
+     * Emitted, if a command was added by addCommand(QUndoCommand *).
+     */
+    void commandAdded(QUndoCommand *command);
 
     /**
      * Emitted, if a newly created sheet was added to the document.

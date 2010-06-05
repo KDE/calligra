@@ -551,7 +551,7 @@ CellEditor::CellEditor(QWidget* parent, Selection* selection, bool captureAllKey
 
 #if 0 // FIXME Implement a completion aware KTextEdit.
     d->textEdit->setCompletionMode(selection()->view()->doc()->completionMode());
-    d->textEdit->setCompletionObject(&selection()->view()->doc()->completion(), true);
+    d->textEdit->setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
 
     setFocusProxy(d->textEdit);
@@ -1532,7 +1532,7 @@ EditWidget::EditWidget(QWidget *_parent, Canvas *_canvas,
     setEditMode(false);   // disable buttons
 
     setCompletionMode(m_pCanvas->doc()->completionMode());
-    setCompletionObject(&m_pCanvas->doc()->completion(), true);
+    setCompletionObject(&m_pCanvas->doc()->map()->stringCompletion(), true);
 }
 
 void EditWidget::showEditWidget(bool _show)

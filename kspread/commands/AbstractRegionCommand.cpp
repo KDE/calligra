@@ -28,7 +28,6 @@
 #include <KoCanvasBase.h>
 
 #include "Cell.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
 #include "Sheet.h"
 
@@ -76,7 +75,7 @@ bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
         return false;
     // registering in undo history?
     if (m_register)
-        canvas ? canvas->addCommand(this) : m_sheet->doc()->addCommand(this);
+        canvas ? canvas->addCommand(this) : m_sheet->map()->addCommand(this);
     else
         redo();
     return m_success;

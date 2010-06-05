@@ -26,7 +26,6 @@
 #include "qtest_kde.h"
 
 #include <CellStorage.h>
-#include <part/Doc.h> // FIXME detach from part
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -80,7 +79,7 @@ Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& 
 {
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
-    Formula f(m_doc->map()->sheet(0)); // bind to test case data set
+    Formula f(m_map->sheet(0)); // bind to test case data set
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -113,7 +112,7 @@ static Value RoundNumber(const Value& v)
 
 Value TestStatisticalFunctions::evaluate(const QString& formula)
 {
-    Formula f(m_doc->map()->sheet(0));
+    Formula f(m_map->sheet(0));
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -131,9 +130,9 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 void TestStatisticalFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_doc = new Doc();
-    m_doc->map()->addNewSheet();
-    Sheet* sheet = m_doc->map()->sheet(0);
+    m_map = new Map(0 /*no Doc*/);
+    m_map->addNewSheet();
+    Sheet* sheet = m_map->sheet(0);
     CellStorage* storage = sheet->cellStorage();
 
     //
@@ -1228,7 +1227,7 @@ void TestStatisticalFunctions::testZTEST()
 
 void TestStatisticalFunctions::cleanupTestCase()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 QTEST_KDEMAIN(TestStatisticalFunctions, GUI)

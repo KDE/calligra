@@ -911,6 +911,8 @@ signals:
      * for \p timeout msecs.
      */
     void statusMessage(const QString& message, int timeout);
+    void shapeAdded(Sheet *sheet, KoShape *shape);
+    void shapeRemoved(Sheet *sheet, KoShape *shape);
 
 protected:
     /**

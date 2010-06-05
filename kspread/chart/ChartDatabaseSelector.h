@@ -25,7 +25,7 @@
 
 namespace KSpread
 {
-class Doc;
+class Map;
 
 /// A widget that is shown for selecting the cell region providding the chart data
 class ChartDatabaseSelector : public KoShapeConfigWidgetBase
@@ -33,7 +33,7 @@ class ChartDatabaseSelector : public KoShapeConfigWidgetBase
     Q_OBJECT
 public:
     /// constructor
-    explicit ChartDatabaseSelector(Doc* doc);
+    explicit ChartDatabaseSelector(Map *map);
     ~ChartDatabaseSelector();
 
     /// reimplemented

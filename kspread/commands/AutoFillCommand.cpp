@@ -30,7 +30,6 @@
 
 #include "AutoFillCommand.h"
 
-#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -176,7 +175,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
 
         if (AutoFillCommand::other == 0) {
             // AutoFillCommand::other = new QStringList();
-            KSharedConfigPtr config = Factory::global().config();
+            KSharedConfigPtr config = KGlobal::activeComponent().config();
             AutoFillCommand::other = new QStringList(config->group("Parameters").readEntry("Other list", QStringList()));
         }
 

@@ -21,8 +21,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include <part/Doc.h> // FIXME detach from part
-#include <Map.h>
+#include "CalculationSettings.h"
 
 
 void TestValue::testEmpty()
@@ -134,7 +133,7 @@ void TestValue::testDate()
 
     // check all (valid) dates from 1900 to 2050
     // note: bail on first error immediately
-    Doc doc;
+    CalculationSettings calculationSettings;
     QDate refDate(1899, 12, 31);
     v1 = new Value();
     bool date_error = 0;
@@ -144,7 +143,7 @@ void TestValue::testDate()
                 QDate dv1 = QDate(y, m, d);
                 if (!dv1.isValid()) continue;
                 long double serialNo = -dv1.daysTo(refDate) + 1.0;
-                *v1 = Value(Value(dv1, doc.map()->calculationSettings()));
+                *v1 = Value(Value(dv1, &calculationSettings));
                 QCOMPARE(numToDouble(v1->asFloat()), serialNo);
                 date_error = v1->asFloat() != serialNo;
             }
@@ -153,19 +152,19 @@ void TestValue::testDate()
 
 void TestValue::testTime()
 {
-    Doc doc;
+    CalculationSettings calculationSettings;
     Value* v1;
 
     // time value
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0), doc.map()->calculationSettings()));
+    *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned h = 0; h < 24; h++)
         for (unsigned m = 0; m < 60; m++)
             for (unsigned s = 0; s < 60; s++) {
                 QTime t1 = QTime(h, m, s);
-                *v1 = Value(Value(t1, doc.map()->calculationSettings()));
-                QTime t2 = v1->asTime(doc.map()->calculationSettings());
+                *v1 = Value(Value(t1, &calculationSettings));
+                QTime t2 = v1->asTime(&calculationSettings);
                 QCOMPARE(t1.hour(), t2.hour());
                 QCOMPARE(t1.minute(), t2.minute());
                 QCOMPARE(t1.second(), t2.second());
@@ -175,12 +174,12 @@ void TestValue::testTime()
 
     // time value (msec)
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0), doc.map()->calculationSettings()));
+    *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned ms = 0;ms < 1000;ms++) {
         QTime t1 = QTime(1, 14, 2, ms);
-        *v1 = Value(Value(t1, doc.map()->calculationSettings()));
-        QTime t2 = v1->asTime(doc.map()->calculationSettings());
+        *v1 = Value(Value(t1, &calculationSettings));
+        QTime t2 = v1->asTime(&calculationSettings);
         QCOMPARE(t1.hour(), t2.hour());
         QCOMPARE(t1.minute(), t2.minute());
         QCOMPARE(t1.second(), t2.second());

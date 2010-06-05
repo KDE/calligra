@@ -35,7 +35,6 @@
 #include <KTextEdit>
 
 #include "commands/AutoFillCommand.h"
-#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 
 using namespace KSpread;
@@ -191,7 +190,7 @@ void ListDialog::init()
     sday += i18n("Sun");
     lst.append(sday);
 
-    d->config = Factory::global().config();
+    d->config = KGlobal::activeComponent().config();
     const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end();++it) {

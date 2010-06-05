@@ -20,7 +20,6 @@
 #include "TestDatabaseFunctions.h"
 
 #include "CellStorage.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"
@@ -44,7 +43,7 @@ static Value RoundNumber(const Value& v)
 
 Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 {
-    Formula f(m_doc->map()->sheet(0));
+    Formula f(m_map->sheet(0));
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -62,13 +61,13 @@ Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 void TestDatabaseFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_doc = new Doc();
-    m_doc->map()->addNewSheet();
-    Sheet* sheet = m_doc->map()->sheet(0);
+    m_map = new Map(0 /* no Doc */);
+    m_map->addNewSheet();
+    Sheet* sheet = m_map->sheet(0);
     CellStorage* storage = sheet->cellStorage();
 
     // TESTDB = A18:I31
-    m_doc->map()->namedAreaManager()->insert(Region(QRect(QPoint(1, 18), QPoint(9, 31)), sheet), "TESTDB");
+    m_map->namedAreaManager()->insert(Region(QRect(QPoint(1, 18), QPoint(9, 31)), sheet), "TESTDB");
     // A18:A31
     storage->setValue(1, 18, Value("TestID"));
     for (int row = 19; row <= 31; ++row)
@@ -156,7 +155,7 @@ void TestDatabaseFunctions::testDVARP()
 
 void TestDatabaseFunctions::cleanupTestCase()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 QTEST_KDEMAIN(TestDatabaseFunctions, GUI)

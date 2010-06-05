@@ -27,14 +27,14 @@ class KoShape;
 
 namespace KSpread
 {
-class Doc;
+class Map;
 
 /// factory to create a ChartDatabaseSelector widget
 class ChartDatabaseSelectorFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    ChartDatabaseSelectorFactory(Doc* doc) : m_doc(doc) {}
+    ChartDatabaseSelectorFactory(Map *map) : m_map(map) {}
     ~ChartDatabaseSelectorFactory() {}
 
     /// reimplemented method from superclass
@@ -50,7 +50,7 @@ public:
     }
 
 private:
-    Doc* m_doc;
+    Map* m_map;
 };
 
 } // namespace KSpread

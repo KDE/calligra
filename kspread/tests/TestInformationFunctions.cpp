@@ -19,7 +19,6 @@
 */
 
 #include <CellStorage.h>
-#include <part/Doc.h> // FIXME detach from part
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -33,7 +32,7 @@
 
 Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
 {
-    Sheet* sheet = m_doc->map()->sheet(0);
+    Sheet* sheet = m_map->sheet(0);
     Formula f(sheet);
     QString expr = formula;
     if (expr[0] != '=')
@@ -52,9 +51,9 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
 void TestInformationFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_doc = new Doc();
-    m_doc->map()->addNewSheet();
-    Sheet* sheet = m_doc->map()->sheet(0);
+    m_map = new Map(0 /* no Doc */);
+    m_map->addNewSheet();
+    Sheet* sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
     CellStorage* storage = sheet->cellStorage();
 
@@ -520,7 +519,7 @@ void TestInformationFunctions::testVALUE()
 
 void TestInformationFunctions::cleanupTestCase()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 QTEST_KDEMAIN(TestInformationFunctions, GUI)

@@ -25,7 +25,7 @@
 
 namespace KSpread
 {
-class Doc;
+class Map;
 
 class TestRegion : public QObject
 {
@@ -40,7 +40,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Doc* m_doc;
+    Map* m_map;
 };
 
 } // namespace KSpread

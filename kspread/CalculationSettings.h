@@ -132,6 +132,22 @@ public:
      */
     const QString& fileName() const;
 
+    /**
+     * Sets the activation state of the active sheet's automatic recalculation
+     * setting.
+     * Used in the INFO function.
+     */
+    void setAutoCalculationEnabled(bool enable);
+
+    /**
+     * Returns the activation state of the active sheet's automatic
+     * recalculation setting.
+     * Used in the INFO function.
+     *
+     * \return the activation state
+     */
+    bool isAutoCalculationEnabled() const;
+
 private:
     class Private;
     Private * const d;

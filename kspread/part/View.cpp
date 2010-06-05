@@ -107,6 +107,7 @@
 // KSpread includes
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
+#include "CalculationSettings.h"
 #include "CanvasResources.h"
 #include "CellStorage.h"
 #include "CellView.h"
@@ -728,7 +729,7 @@ void View::initView()
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Setup the map model.
-    d->mapViewModel = new MapViewModel(d->doc->map());
+    d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas);
     connect(d->mapViewModel, SIGNAL(addCommandRequested(QUndoCommand*)),
             doc(), SLOT(addCommand(QUndoCommand*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
@@ -1248,6 +1249,10 @@ void View::addSheet(Sheet * _t)
             this, SLOT(slotSheetShown(Sheet*)));
     connect(_t, SIGNAL(sig_SheetRemoved(Sheet*)),
             this, SLOT(slotSheetRemoved(Sheet*)));
+    connect(_t, SIGNAL(shapeAdded(Sheet *, KoShape *)),
+            d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
+    connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
+            d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
 
     if (!d->loading)
         updateBorderButton();
@@ -1343,6 +1348,10 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     d->adjustActions(!d->activeSheet->isProtected());
     d->adjustWorkbookActions(!doc()->map()->isProtected());
+
+    // Auto calculation state for the INFO function.
+    const bool autoCalc = d->activeSheet->isAutoCalculationEnabled();
+    d->doc->map()->calculationSettings()->setAutoCalculationEnabled(autoCalc);
 
     calcStatusBarOp();
 }
@@ -1515,8 +1524,8 @@ void View::showSheet()
     if (!d->activeSheet)
         return;
 
-    ShowDialog dlg(this, "Sheet show");
-    dlg.exec();
+    ShowDialog dialog(this, d->selection);
+    dialog.exec();
 }
 
 void View::copyAsText()

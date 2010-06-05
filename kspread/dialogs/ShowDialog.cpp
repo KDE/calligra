@@ -31,24 +31,24 @@
 
 #include <klocale.h>
 
-#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
-#include "part/View.h" // FIXME detach from part
+#include "Selection.h"
+#include "Sheet.h"
 
 // commands
 #include "commands/SheetCommands.h"
 
 using namespace KSpread;
 
-ShowDialog::ShowDialog(View* parent, const char* name)
-        : KDialog(parent)
+ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
+    : KDialog(parent)
+    , m_selection(selection)
 {
     setCaption(i18n("Show Sheet"));
     setModal(true);
     setButtons(Ok | Cancel);
-    setObjectName(name);
+    setObjectName("ShowDialog");
 
-    m_pView = parent;
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
@@ -64,7 +64,7 @@ ShowDialog::ShowDialog(View* parent, const char* name)
     m_listWidget->setSelectionMode(QListWidget::MultiSelection);
     QString text;
     QStringList::Iterator it;
-    QStringList tabsList = m_pView->doc()->map()->hiddenSheets();
+    QStringList tabsList = m_selection->activeSheet()->map()->hiddenSheets();
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
@@ -82,7 +82,7 @@ void ShowDialog::accept()
         return;
     }
 
-    const Map *const map = m_pView->doc()->map();
+    Map *const map = m_selection->activeSheet()->map();
     Sheet *sheet;
     QUndoCommand* macroCommand = new QUndoCommand(i18n("Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
@@ -91,8 +91,8 @@ void ShowDialog::accept()
             continue;
         new ShowSheetCommand(sheet, macroCommand);
     }
-    m_pView->doc()->addCommand(macroCommand);
-    m_pView->slotUpdateView(m_pView->activeSheet());
+    map->addCommand(macroCommand);
+    m_selection->activeSheet()->updateView();
     KDialog::accept();
 }
 

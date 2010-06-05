@@ -48,6 +48,7 @@ bool precisionAsShown         : 1;
 bool wholeCellSearchCriteria  : 1;
 bool automaticFindLabels      : 1;
 bool useRegularExpressions    : 1;
+    bool automaticCalculation     : 1;
     int refYear; // the reference year two-digit years are relative to
     QDate refDate; // the reference date all dates are relative to
     // The precision used for decimal numbers, if the default cell style's
@@ -71,6 +72,7 @@ CalculationSettings::CalculationSettings()
     d->wholeCellSearchCriteria  = true;
     d->automaticFindLabels      = true;
     d->useRegularExpressions    = true;
+    d->automaticCalculation     = true;
     d->refYear = 1930;
     d->refDate = QDate(1899, 12, 30);
     d->precision = 8;
@@ -196,4 +198,14 @@ void CalculationSettings::setFileName(const QString& fileName)
 const QString& CalculationSettings::fileName() const
 {
     return d->fileName;
+}
+
+void CalculationSettings::setAutoCalculationEnabled(bool enable)
+{
+    d->automaticCalculation = enable;
+}
+
+bool CalculationSettings::isAutoCalculationEnabled() const
+{
+    return d->automaticCalculation;
 }

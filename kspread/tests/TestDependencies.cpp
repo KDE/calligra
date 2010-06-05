@@ -24,7 +24,6 @@
 #include "CellStorage.h"
 #include "DependencyManager.h"
 #include "DependencyManager_p.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Formula.h"
 #include "Map.h"
 #include "Region.h"
@@ -35,8 +34,8 @@ using namespace KSpread;
 
 void TestDependencies::initTestCase()
 {
-    m_doc = new Doc();
-    m_sheet = m_doc->map()->addNewSheet();
+    m_map = new Map(0 /* no Doc */);
+    m_sheet = m_map->addNewSheet();
     m_sheet->setSheetName("Sheet1");
     m_storage = m_sheet->cellStorage();
 }
@@ -50,7 +49,7 @@ void TestDependencies::testCircleRemoval()
     QApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
-    DependencyManager* manager = m_doc->map()->dependencyManager();
+    DependencyManager* manager = m_map->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
     QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
@@ -86,7 +85,7 @@ void TestDependencies::testCircles()
 
 void TestDependencies::cleanupTestCase()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 QTEST_KDEMAIN(TestDependencies, GUI)

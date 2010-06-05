@@ -25,6 +25,7 @@
 
 
 #include <kcodecs.h>
+#include <kcompletion.h>
 #include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
@@ -118,14 +119,18 @@ public:
 
     QList<Damage*> damages;
     bool isLoading;
+
+    int syntaxVersion;
+
+    KCompletion listCompletion;
 };
 
 
-Map::Map(Doc* doc, const char* name)
+Map::Map ( Doc* doc, int syntaxVersion)
         : QObject(doc),
         d(new Private)
 {
-    setObjectName(name);   // necessary for D-Bus
+    setObjectName("Map"); // necessary for D-Bus
     d->model = new MapModel(this);
     d->doc = doc;
     d->tableId = 1;
@@ -144,9 +149,6 @@ Map::Map(Doc* doc, const char* name)
 
     d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
-    if (doc) {
-        d->calculationSettings->setFileName(doc->url().prettyUrl()); // for FILENAME function ;)
-    }
 
     d->parser = new ValueParser(d->calculationSettings);
     d->converter = new ValueConverter(d->parser);
@@ -161,6 +163,9 @@ Map::Map(Doc* doc, const char* name)
     d->defaultColumnFormat->setWidth((font.pointSizeF() + 3) * 5);
 
     d->isLoading = false;
+
+    // default document properties
+    d->syntaxVersion = syntaxVersion;
 
     new MapAdaptor(this);
     if (doc) {
@@ -835,6 +840,16 @@ bool Map::isLoading() const
     return d->isLoading;
 }
 
+int Map::syntaxVersion() const
+{
+    return d->syntaxVersion;
+}
+
+void Map::setSyntaxVersion(int version)
+{
+    d->syntaxVersion = version;
+}
+
 LoadingInfo* Map::loadingInfo() const
 {
     if (!d->loadingInfo) {
@@ -847,6 +862,18 @@ void Map::deleteLoadingInfo()
 {
     delete d->loadingInfo;
     d->loadingInfo = 0;
+}
+
+KCompletion& Map::stringCompletion()
+{
+    return d->listCompletion;
+}
+
+void Map::addStringCompletion(const QString &stringCompletion)
+{
+    if (d->listCompletion.items().contains(stringCompletion) == 0) {
+        d->listCompletion.addItem(stringCompletion);
+    }
 }
 
 void Map::addDamage(Damage* damage)
@@ -972,6 +999,11 @@ void Map::handleDamages(const QList<Damage*>& damages)
     if (!bindingChangedRegion.isEmpty()) {
         d->bindingManager->regionChanged(bindingChangedRegion);
     }
+}
+
+void Map::addCommand(QUndoCommand *command)
+{
+    emit commandAdded(command);
 }
 
 #include "Map.moc"

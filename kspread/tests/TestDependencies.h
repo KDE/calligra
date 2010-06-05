@@ -26,7 +26,7 @@
 namespace KSpread
 {
 class CellStorage;
-class Doc;
+class Map;
 class Sheet;
 
 class TestDependencies : public QObject
@@ -41,7 +41,7 @@ private Q_SLOTS:
 
 private:
     CellStorage* m_storage;
-    Doc* m_doc;
+    Map* m_map;
     Sheet* m_sheet;
 };
 

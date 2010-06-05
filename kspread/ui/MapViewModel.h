@@ -22,6 +22,9 @@
 
 #include "MapModel.h"
 
+class KoCanvasBase;
+class KoShape;
+
 namespace KSpread
 {
 
@@ -32,7 +35,7 @@ class MapViewModel : public MapModel
 {
     Q_OBJECT
 public:
-    MapViewModel(Map* map);
+    MapViewModel(Map *map, KoCanvasBase *canvas);
     virtual ~MapViewModel();
 
     // QAbstractItemModel interface
@@ -47,6 +50,16 @@ public Q_SLOTS:
      * Set the active \p sheet and emits activeSheetChanged(Sheet*) afterwards.
      */
     void setActiveSheet(Sheet* sheet);
+
+    /**
+     * Adds the \p shape, if \p sheet is active.
+     */
+    void addShape(Sheet *sheet, KoShape *shape);
+
+    /**
+     * Removes the \p shape, if \p sheet is active.
+     */
+    void removeShape(Sheet *sheet, KoShape *shape);
 
 Q_SIGNALS:
     void activeSheetChanged(Sheet* sheet);

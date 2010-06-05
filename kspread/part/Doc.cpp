@@ -45,7 +45,6 @@
 #include <QList>
 #include <QPainter>
 
-#include <kcompletion.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -118,10 +117,7 @@ public:
     // This flag is used to avoid updates etc. during loading.
     bool isLoading;
 
-    KCompletion listCompletion;
-
     // document properties
-    int syntaxVersion;
     bool configLoadFromFile : 1;
     QStringList spellListIgnoreAll;
     SavedDocParts savedDocParts;
@@ -141,7 +137,9 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode)
         , d(new Private)
 {
-    d->map = new Map(this, "Map");
+    d->map = new Map(this, CURRENT_SYNTAX_VERSION);
+    // Document Url for FILENAME function and page header/footer.
+    d->map->calculationSettings()->setFileName(url().prettyUrl());
 
     d->configLoadFromFile = false;
 
@@ -152,18 +150,17 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
     d->isLoading = false;
 
-    // default document properties
-    d->syntaxVersion = CURRENT_SYNTAX_VERSION;
-
     d->sheetAccessModel = new SheetAccessModel(d->map);
 
     // Init chart shape factory with KSpread's specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
-        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(this);
+        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);
         chartShape->setOptionPanels(panels);
     }
 
+    connect(d->map, SIGNAL(commandAdded(QUndoCommand *)),
+            this, SLOT(addCommand(QUndoCommand *)));
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
@@ -246,20 +243,15 @@ void Doc::initConfig()
 #endif // KSPREAD_DOC_ZOOM
 }
 
-int Doc::syntaxVersion() const
-{
-    return d->syntaxVersion;
-}
-
 bool Doc::isLoading() const
 {
     // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
     return d->isLoading || KoDocument::isLoading();
 }
 
-KCompletion& Doc::completion()
+int Doc::syntaxVersion() const
 {
-    return d->listCompletion;
+    return d->map->syntaxVersion();
 }
 
 KoView* Doc::createViewInstance(QWidget* parent)
@@ -523,11 +515,11 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 
     bool ok = false;
     int version = spread.attribute("syntaxVersion").toInt(&ok);
-    d->syntaxVersion = ok ? version : 0;
-    if (d->syntaxVersion > CURRENT_SYNTAX_VERSION) {
+    map()->setSyntaxVersion(ok ? version : 0);
+    if (map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                              "When you open it with this version of KSpread, some information may be lost.", d->syntaxVersion),
+                              "When you open it with this version of KSpread, some information may be lost.",map()->syntaxVersion()),
                       i18n("File Format Mismatch"), KStandardGuiItem::cont());
         if (ret == KMessageBox::Cancel) {
             setErrorMessage("USER_CANCELED");
@@ -602,7 +594,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         map()->namedAreaManager()->loadXML(areaname);
 
     //Backwards compatibility with older versions for paper layout
-    if (d->syntaxVersion < 1) {
+    if (map()->syntaxVersion() < 1) {
         KoXmlElement paper = spread.namedItem("paper").toElement();
         if (!paper.isNull()) {
             loadPaper(paper);
@@ -799,12 +791,6 @@ void Doc::paintRegion(QPainter &painter, const QRectF &viewRegion,
     }
     sheetView.setPaintCellRange(cellRegion);
     sheetView.paintCells(view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft);
-}
-
-void Doc::addStringCompletion(const QString &stringCompletion)
-{
-    if (d->listCompletion.items().contains(stringCompletion) == 0)
-        d->listCompletion.addItem(stringCompletion);
 }
 
 void Doc::refreshInterface()

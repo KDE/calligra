@@ -22,7 +22,6 @@
 #include "TestKspreadCommon.h"
 
 #include <CellStorage.h>
-#include <part/Doc.h> // FIXME detach from part
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -40,7 +39,7 @@ Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int
 {
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
-    Formula f(m_doc->map()->sheet(0));
+    Formula f(m_map->sheet(0));
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -79,7 +78,7 @@ static Value RoundNumber(const Value& v)
 
 Value TestMathFunctions::evaluate(const QString& formula)
 {
-    Formula f(m_doc->map()->sheet(0));
+    Formula f(m_map->sheet(0));
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -96,9 +95,11 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
 void TestMathFunctions::initTestCase()
 {
-    m_doc = new Doc();
-    m_doc->map()->addNewSheet();
-    Sheet* sheet = m_doc->map()->sheet(0);
+    FunctionModuleRegistry::instance()->loadFunctionModules();
+
+    m_map = new Map(0 /* no Doc */);
+    m_map->addNewSheet();
+    Sheet* sheet = m_map->sheet(0);
     CellStorage* storage = sheet->cellStorage();
 
     // B3:B7
@@ -113,7 +114,7 @@ void TestMathFunctions::initTestCase()
 
 void TestMathFunctions::cleanupTestCase()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

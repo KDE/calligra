@@ -49,7 +49,6 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-#include "part/Factory.h" // FIXME detach from part
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -292,7 +291,7 @@ void SortDialog::init()
     ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
     ',' + i18n("Sunday");
 
-    KSharedConfigPtr config = Factory::global().config();
+    KSharedConfigPtr config = KGlobal::activeComponent().config();
     const QStringList other = config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {

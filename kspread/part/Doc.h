@@ -48,8 +48,6 @@
 class QDomDocument;
 class QPainter;
 
-class KCompletion;
-
 class KoGenStyles;
 class KoOasisSettings;
 class KoStore;
@@ -198,9 +196,6 @@ public:
      * \ingroup Painting
      */
     void paintContent(QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true);
-
-    KCompletion& completion();
-    void addStringCompletion(const QString & stringCompletion);
 
     void initConfig();
     void saveConfig();

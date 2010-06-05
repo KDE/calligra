@@ -37,7 +37,6 @@
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "DragAndDropStrategy.h"
 #include "HyperlinkStrategy.h"
 #include "tests/inspector.h"
@@ -1502,9 +1501,7 @@ void CellToolBase::applyUserInput(bool expandMatrix)
 
     Cell cell = Cell(selection()->activeSheet(), selection()->marker());
     if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
-        if (selection()->activeSheet()->doc()) {
-            selection()->activeSheet()->doc()->addStringCompletion(text);
-        }
+        selection()->activeSheet()->map()->addStringCompletion(text);
     }
 }
 

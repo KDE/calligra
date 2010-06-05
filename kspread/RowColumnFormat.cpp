@@ -37,7 +37,6 @@
 #include <KoOdfStylesReader.h>
 
 #include "CellStorage.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Global.h"
 #include "Map.h"
 #include "Region.h"
@@ -166,7 +165,7 @@ bool RowFormat::load(const KoXmlElement & row, int yshift, Paste::Mode mode)
         return false;
 
     if (row.hasAttribute("height")) {
-        if (d->sheet->doc()->syntaxVersion() < 1)   //compatibility with old format - was in millimeter
+        if (d->sheet->map()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
             d->height = qRound(MM_TO_POINT(row.attribute("height").toDouble(&ok)));
         else
             d->height = row.attribute("height").toDouble(&ok);
@@ -414,7 +413,7 @@ bool ColumnFormat::load(const KoXmlElement & col, int xshift, Paste::Mode mode)
     Q_ASSERT(d->sheet);
     bool ok;
     if (col.hasAttribute("width")) {
-        if (d->sheet->doc()->syntaxVersion() < 1)   //combatibility to old format - was in millimeter
+        if (d->sheet->map()->syntaxVersion() < 1) //combatibility to old format - was in millimeter
             d->width = qRound(MM_TO_POINT(col.attribute("width").toDouble(&ok)));
         else
             d->width = col.attribute("width").toDouble(&ok);

@@ -47,10 +47,10 @@ void ChartDialog::cancelClicked()
 }
 
 // static
-QList<KoShapeConfigFactoryBase*> ChartDialog::panels(Doc* doc)
+QList<KoShapeConfigFactoryBase*> ChartDialog::panels(Map *map)
 {
     QList<KoShapeConfigFactoryBase*> answer;
-    answer.append(new ChartDatabaseSelectorFactory(doc));
+    answer.append(new ChartDatabaseSelectorFactory(map));
     return answer;
 }
 

@@ -28,7 +28,7 @@
 
 namespace KSpread
 {
-class Doc;
+class Map;
 
 class TestMathFunctions: public QObject
 {
@@ -111,7 +111,7 @@ private:
     Value TestDouble(const QString& formula, const Value& v2, int accuracy);
     Value evaluate(const QString&);
 
-    Doc* m_doc;
+    Map* m_map;
 };
 
 } // namespace KSpread
