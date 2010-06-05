@@ -27,7 +27,29 @@ Things to do after the release of KOffice 2.0
 Item										Prio	Status
 ----------------------------------------------------------------------------------------------
 
-* Databases									1	----
+* User Interface                                                                1       ----
+  - Add a 'Go' ('Navigation') menu to select the active sheet. Reuse the actions
+    from the 'Navigation' toolbar and add a sheet list (use KSelectAction?).
+    'View' -> 'Goto Cell' should be moved there, too.
+  - 'Rename sheet', 'Duplicate sheet' are also missing in the menu. Move
+    them into 'Edit' -> 'Sheet'?
+  - Improve conformance to the standard menu layout:
+    `kde4-config --install config`/ui/ui_standards.rc
+
+* Commands                                                                      3       ----
+  Replace CellStorageUndoData by a QUndoCommand consisting of QUndoCommands
+  for each substorage. Other commands could make use of it by using it as
+  child command. It should just implement the undo() method; surprise!
+
+* Thread support                                                                3       ----
+  Move the dependency calculation and cell recalculation into a separate
+  thread. In a first step the data manipulating actions should be disabled
+  while running the cell recalculation. These actions could also become
+  threaded later on. And as a final step, only actions acting on the
+  affected cell ranges should be disabled, so the user can continue his/her
+  work in other parts of the document.
+
+* Databases									3	----
   Currently Database is used solely for the autofilter functionality.
   Generalize it: Rewrite the filter code, so that Database carries a data
   model. Such a generic data providing class will allow to add data imports of
@@ -35,13 +57,13 @@ Item										Prio	Status
   The OpenDocument spec urges to implement database queries, sorting and
   subtotal implementation this way.
 
-* Page View Mode								1	----
+* Page View Mode								3	----
   Add a page view mode. This would be a more intuitive way to see the printing
   layout. The pages should be based on KoShapeContainer, so that the TableShape
   becomes a child of it and can rely on its dimension to layout the table
   pages.
 
-* Source-/TargetRange concept							1	----
+* Source-/TargetRange concept							3	----
   Currently, cell ranges, which data is exported, are called Binding. The
   opposite, cell ranges, that contain imported data, are called Database.
 
@@ -108,13 +130,6 @@ Item                                                               Prio Status
 
 Regressions
 -----------
-* Autofill							      1 DONE
-  Fix it. Works, if you comment out the undo creation. Probably since
-  the KCommand to QUndoCommand.
-* Border (l,r,t,b & outline)					      1 DONE
-  Redo does not work.
-* Auto-Format							      1 DONE
-  Undo does not work.
 
 General bugs
 ------------
@@ -128,21 +143,13 @@ Things not in bugzilla
 ----------------------
 
 * Printing
-  + printouts with zoom other than 100% (it's a missing feature, but  2 done
-    the GUI is there... - page layout, options, Scale Printout )
-  + make print range work over more than 1 page			      2 done
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
-    - Make it possible to enter just one row/column into GUI, don't   2 done
-      force a range.
-  + Insert manual page break					      2 ----
-  + Print selection only					      2 done
+  + Insert manual page break					      2 done
 
 * OpenDocument file format
-  - see OASIS.txt						      1 ----
-  - Fix loading of named styles					      1 done
-  - Fix loading order of columns, rows and cells		      1 done
+  - see TODO.opendocument					      1 ----
 
 * OpenFormula compliance (Medium group)
   - implement all functions of the Small and Medium group	      1 ----
@@ -151,8 +158,6 @@ Things not in bugzilla
     see section 8.5.2 in [1] and section 3.3 in [2]
 
 * Flake integration.
-  + Provide a table shape					      1 done
-  + General shape support					      1 done
   + Cell anchoring						      1 ----
     - Saving								----
       Query the shape container of the sheet before iterating over
@@ -163,44 +168,9 @@ Things not in bugzilla
       Shapes anchored cells should be moved, if the cell itself
       got moved; either by column/row/cell range insertions/deletions
       or by column/row dimension changes.
-  + Move all the managers and other necessary logic from Doc to Map	done
-    in order to use Map solely as data center for embedded tables.
 
 * Internals (See also DESIGN.html)
-  + Painting    						      1 DONE
-    Use a 'CellWindow' to store CellViews for the the currently
-    visible cells. This 'CellWindow' will create and delete CellViews
-    if necessary, but reuses existing ones. This approach will enable
-    us to decouple the CellViews from the Cells. This in turn will
-    enable us to cache each and every attribute related to the cell
-    painting, which is currently not possible because of memory
-    consumption. Caching the attributes should make the painting
-    way faster.
-
-  + Zooming							      1 DONE
-    Make it view dependent and not document dependent.
-
   + Cell Storage						      1 ----
-    - Move all cell attributes to separate storages.			done
-    - Undo for LinkStorage (insert/remove columns/rows/cell ranges)	done
-    - Undo for FusionStorage (insert/remove columns/rows/cell ranges)	done
-    - Move all storages out of Sheet.					done
-      This CellStorage (SuperStorage) should provide methods to iterate
-      over the non-empty cells, i.e. those that have at least one
-      attribute. All getter and setter should be moved from Sheet to
-      this super storage.
-    - Merge new Cell Storage into trunk					done
-    - A common undo object.						done
-      Provide a startUndoRecord() and a stopUndoRecord() method.
-      On stopping the recording an undo data object containing all
-      necessary data for each storage is returned. Provide a method
-      that takes such an undo data object and performs the undo.
-      For each storage one has to store a list/vector. If empty, those
-      take just the size of a pointer.
-      The undo process will than be in one place and the undo data
-      object can be stored on the heap. By just passing its pointer
-      around the undo data object can be implemented as a private
-      class of the super storage.
     - (Re-)Adjust the saving algos to use the new (old) iteration	----
       functionality.
     - Rewrite the MergeManipulator to work directly on the CellStorage.	----
@@ -215,104 +185,26 @@ Things not in bugzilla
   + Style Storage						      1 ----
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
-    - Merge new Style Storage into trunk				done
-    - Remove old Format							done
-    - reuse existing sub-styles (book-keeping)				done
-      Done on a per substyle basis.
-      Lookup: O(n)
-      n: number of different aggregations of a substyle,
-         e.g. red, blue, etc. for the background color substyle
-    - Garbage collection						done
-      Every minute a list of pairs, consisting of a rect and a
-      substyle, is filled. Every now and then one pair is checked
-      wether it's obsolete.
-    - Keep track of the used area.					done
-      Styled cells do not necessarily occur in the cluster anymore.
-      Same goes for rows and columns.
-    - Speedup the OpenDocument loading by 'collecting' the used area	done
-      of each style and insert a minimal set of rectangles into the
-      style storage.
-    - Undo of style changes						done
-      This should insert the inverse substyles or something similar.
-    - Add insertion/deletion of columns/rows				done
-    - OpenDocument loading/saving					done
-    - Old native format loading/saving					done
-    - Replace Cell::format() by Cell::style().				done
-    - Move the StyleManipulator class into the FormatManipulators file	done
-      and rename the file to StyleManipulators.
-    - Fix the border outline operation.					done
-    - Port the filters.							done
-    - Decouple validity and conditions from cells.			done
-    - Fix named styles.							done
-    - Check for orphaned (nonDefault)Cell lookups.			done
-    - Extend the Storage template to the StyleStorage level.		done
-      - Garbage collection						done
-      - Book-keeping							done
-      - Used area tracking						done
-      - Cache								done
-    - Improve the caching of the styles.				done
-    - Insertion/deletion of cell ranges.				done
-    - Fix garbage collection.						done
-      Remove only data rectangles, that are completely covered.
-    - Seek & destroy R-Tree data rects, if they get empty after		done
-      deletion of columns/rows, but store them for undo.
-    - Port FormatDialog.						done
-    - Port IncreaseIndentManipulator.					done
-    - Port BorderColorManipulator.					done
-    - Undo for insertion/deletion of columns/rows.			done
-    - Undo for insertion/deletion of cell ranges.			done
     - Improve the saving.						----
       Only StyleStorage::Private::usedArea should track the occupied
       cells only - not those of columns or rows. Adjust the saving algo
       appropriately.
-    - Fix Style::isDefault(). Use the StyleManager's default style.	done
-    - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	done
     - Add configure option to choose wether the style of the current	----
       or of the previous (default) column/row is used on insertion.
     - Launch the garbage collection in a separate thread.		----
-    - Garbage collection triggering.					done
-      Currently, every minute the whole tree is filled in as possible
-      garbage and each piece is checked when time allows. To avoid the
-      check of the whole tree every minute (at worst), the changed
-      region's rectangle/data pairs are marked as possible garbage.
-    - Revisit Style::loadXML(), Style::saveXML(). Check copy&paste!	done
-
-  + Speed up selection.						      1 DONE
-    - Clipped selection painting.					done
-      Provide a SelectionDamage. On selection changes the changed cell
-      range is already calculated. Now, use this changed cell region,
-      convert it into view coordinates and set QPainter's clip region
-      appropriately.
-
-  + Non-continguous selection					      2 DONE
-    Convert the operations to work on non-contiguous selections.
-    - InsertColumn							done
-    - InsertRow								done
-    - DeleteColumn							done
-    - DeleteRow								done
-    - Insert cells							done
-    - Delete cells							done
 
   + Commands							      2 ----
     Convert UndoActions and related logic to Commands.
-    - Copy								done
-      Can't be undone -> not necessary
-    - Delete								done
-    - Cut								done
-      Consists of Copy and Delete -> undoing by undoing Delete
     - Paste								----
     - Paste Special							----
     - Paste with insertion						----
-    - InsertColumn							done
-    - InsertRow								done
-    - DeleteColumn							done
-    - DeleteRow								done
-    - Insert cells							done
-    - Delete cells							done
-    - Autofill sequence							done
 
   + Rich text in cells.						      1 ----
     - Use KoText.    							----
+      Add a RichTextStorage containing one(!) QTextDocument consisting
+      of a sole table. This obsoletes LinkStorage. Plain text can still
+      be stored in ValueStorage, but does not have to: unsure what's
+      best in this case.
     - Background spell check (necessary to have rich text)		----
 
   + Evaluation of how best to increase floating point precision.      3 ----
@@ -321,26 +213,6 @@ Things not in bugzilla
 	ValueCalc, and nothing else, then modifying Value* to
 	support GnuMP.  The conversion step shall be done as a part
 	of converting to the new parser.
-
-  + Damage concept						      1 DONE
-    - Split the damage processing: document and view related.		done
-
-  + code cleanups						      3 ----
-    - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	done
-      Caution: also used by OpenCalc filter
-    - Check if all logic of Point and Range is materialized in Region.	done
-      Replace all occurences of Point and Range by Region.
-    - All util_foo() functions that act on Point/Ranges should become	done
-      static members of Region.
-    - Move all util_foo() functions to 'Util' namespace and remove	done
-      the prefix 'util_'.
-    - Reduce amount of parameters for methods which takes many of	----
-      them, e.g. Sheet::paste(). bools -> QFlags, static variables
-    - Revisit Conditions class.						done
-      Make it an implicitly shared class - like Style.
-    - Revisit Validity class.						done
-      Make it an implicitly shared class - like Style.
-    - Move Cell::testValidity() into Validity class.			done
 
 * GUI
   + Indent and multiline doesn't work together			      2 ----
@@ -353,23 +225,8 @@ Things not in bugzilla
   + Scrollbar that supports jumping one row/column forward or back    2 ----
 
 * Formula/Value engine
-  + DependencyManager / RecalcManager				      1 DONE
-    - The reference depth changes only if a formula was altered. So,	done
-      it belongs to the DependencyManager and has to be moved. OTOH,
-      it is only use for recalculation. If this is disabled, the
-      reference depth is useless. Therefore, we have to respect the
-      automatic recalc setting.
-    - Move Cell::calc() to RecalcManager.				done
-    - Emit an appropriate Damage after cell/col/row insertion/deletion.	done
-
-  + Named areas							      1 DONE
-    - Update on cell/col/row insertion/deletion.			done
-      Maybe refactor the code to have a separate manager for the named
-      areas and store them in a RectStorage; similar to Binding storage.
-
-  + Value							      1 DONE
-    - Support datetimes (again)						done
-    - Distinct complex type						done
+  + DependencyManager / RecalcManager				      3 ----
+    - Port to a threaded approach.                               	----
 
   + Matrix operations						      2 ----
     - Determinant							done
@@ -380,11 +237,6 @@ Things not in bugzilla
     - Norm								----
     - Rank								----
     - Transpose								done
-
-  + Locked areas (for formulas with a matrix as result)		      2 DONE
-    - Move the unlocking/checking from CellStorage to the preprocessing done
-      of the Commands. Copy/paste operations need a special handling
-      unless they are converted to Commands.
 
   + References to cells in other files				      2 ----
 
