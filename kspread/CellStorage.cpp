@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007, 2009 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@
 #include "DependencyManager.h"
 #include "FormulaStorage.h"
 #include "Map.h"
+#include "ModelSupport.h"
 #include "RecalcManager.h"
 #include "RectStorage.h"
 #include "Sheet.h"
@@ -41,9 +42,16 @@
 #include "ValidityStorage.h"
 #include "ValueStorage.h"
 
+// commands
+#include "commands/PointStorageUndoCommand.h"
+#include "commands/RectStorageUndoCommand.h"
+#include "commands/StyleStorageUndoCommand.h"
+
 // database
 #include "database/DatabaseStorage.h"
 #include "database/DatabaseManager.h"
+
+Q_DECLARE_METATYPE(QSharedPointer<QTextDocument>)
 
 using namespace KSpread;
 
@@ -105,6 +113,8 @@ public:
         delete richTextStorage;
     }
 
+    void createCommand(QUndoCommand *parent) const;
+
     Sheet*                  sheet;
     BindingStorage*         bindingStorage;
     CommentStorage*         commentStorage;
@@ -122,6 +132,81 @@ public:
     RichTextStorage*        richTextStorage;
     CellStorageUndoData*    undoData;
 };
+
+void CellStorage::Private::createCommand(QUndoCommand *parent) const
+{
+    if (!undoData->bindings.isEmpty()) {
+        RectStorageUndoCommand<Binding> *const command
+            = new RectStorageUndoCommand<Binding>(sheet->model(), SourceRangeRole, parent);
+        command->add(undoData->bindings);
+    }
+    if (!undoData->comments.isEmpty()) {
+        RectStorageUndoCommand<QString> *const command
+            = new RectStorageUndoCommand<QString>(sheet->model(), CommentRole, parent);
+        command->add(undoData->comments);
+    }
+    if (!undoData->conditions.isEmpty()) {
+        RectStorageUndoCommand<Conditions> *const command
+            = new RectStorageUndoCommand<Conditions>(sheet->model(), ConditionRole, parent);
+        command->add(undoData->conditions);
+    }
+    if (!undoData->databases.isEmpty()) {
+        RectStorageUndoCommand<Database> *const command
+            = new RectStorageUndoCommand<Database>(sheet->model(), TargetRangeRole, parent);
+        command->add(undoData->databases);
+    }
+    if (!undoData->formulas.isEmpty()) {
+        PointStorageUndoCommand<Formula> *const command
+            = new PointStorageUndoCommand<Formula>(sheet->model(), FormulaRole, parent);
+        command->add(undoData->formulas);
+    }
+    if (!undoData->fusions.isEmpty()) {
+        RectStorageUndoCommand<bool> *const command
+            = new RectStorageUndoCommand<bool>(sheet->model(), FusionedRangeRole, parent);
+        command->add(undoData->fusions);
+    }
+    if (!undoData->links.isEmpty()) {
+        PointStorageUndoCommand<QString> *const command
+            = new PointStorageUndoCommand<QString>(sheet->model(), LinkRole, parent);
+        command->add(undoData->links);
+    }
+    if (!undoData->matrices.isEmpty()) {
+        RectStorageUndoCommand<bool> *const command
+            = new RectStorageUndoCommand<bool>(sheet->model(), LockedRangeRole, parent);
+        command->add(undoData->matrices);
+    }
+    if (!undoData->namedAreas.isEmpty()) {
+        RectStorageUndoCommand<QString> *const command
+            = new RectStorageUndoCommand<QString>(sheet->model(), NamedAreaRole, parent);
+        command->add(undoData->namedAreas);
+    }
+    if (!undoData->richTexts.isEmpty()) {
+        PointStorageUndoCommand<QSharedPointer<QTextDocument> > *const command
+        = new PointStorageUndoCommand<QSharedPointer<QTextDocument> >(sheet->model(), RichTextRole, parent);
+        command->add(undoData->richTexts);
+    }
+    if (!undoData->styles.isEmpty()) {
+        StyleStorageUndoCommand *const command
+            = new StyleStorageUndoCommand(styleStorage, parent);
+        command->add(undoData->styles);
+    }
+    if (!undoData->userInputs.isEmpty()) {
+        PointStorageUndoCommand<QString> *const command
+            = new PointStorageUndoCommand<QString>(sheet->model(), UserInputRole, parent);
+        command->add(undoData->userInputs);
+    }
+    if (!undoData->validities.isEmpty()) {
+        RectStorageUndoCommand<Validity> *const command
+            = new RectStorageUndoCommand<Validity>(sheet->model(), ValidityRole, parent);
+        command->add(undoData->validities);
+    }
+    if (!undoData->values.isEmpty()) {
+        PointStorageUndoCommand<Value> *const command
+            = new PointStorageUndoCommand<Value>(sheet->model(), ValueRole, parent);
+        command->add(undoData->values);
+    }
+}
+
 
 CellStorage::CellStorage(Sheet* sheet)
         : QObject(sheet)
@@ -330,6 +415,11 @@ void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
         d->undoData->namedAreas << d->namedAreaStorage->undoData(region);
 
     d->namedAreaStorage->insert(region, namedArea);
+}
+
+void CellStorage::emitInsertNamedArea(const Region &region, const QString &namedArea)
+{
+    emit insertNamedArea(region, namedArea);
 }
 
 Style CellStorage::style(int column, int row) const
@@ -1280,55 +1370,18 @@ void CellStorage::startUndoRecording()
     d->undoData = new CellStorageUndoData();
 }
 
-CellStorageUndoData* CellStorage::stopUndoRecording()
+void CellStorage::stopUndoRecording(QUndoCommand *parent)
 {
     // If undoData is null, the recording wasn't started.
     // Should not happen, hence this assertion.
     Q_ASSERT(d->undoData != 0);
-    CellStorageUndoData* undoData = d->undoData;
-    d->undoData = 0;
-    for (int i = 0; i < undoData->namedAreas.count(); ++i)
-        emit namedAreaRemoved(undoData->namedAreas[i].second);
-    // do not store an object unnecessarily
-    if (undoData->isEmpty()) {
-        delete undoData;
-        undoData = 0;
+    // append sub-commands to the parent command
+    d->createCommand(parent); // needs d->undoData
+    for (int i = 0; i < d->undoData->namedAreas.count(); ++i) {
+        emit namedAreaRemoved(d->undoData->namedAreas[i].second);
     }
-    return undoData;
-}
-
-void CellStorage::undo(CellStorageUndoData* data)
-{
-    if (!data)   // nothing to do?
-        return;
-    for (int i = 0; i < data->formulas.count(); ++i)
-        setFormula(data->formulas[i].first.x(), data->formulas[i].first.y(), data->formulas[i].second);
-    for (int i = 0; i < data->values.count(); ++i)
-        setValue(data->values[i].first.x(), data->values[i].first.y(), data->values[i].second);
-    for (int i = 0; i < data->userInputs.count(); ++i)
-        setUserInput(data->userInputs[i].first.x(), data->userInputs[i].first.y(), data->userInputs[i].second);
-    for (int i = 0; i < data->richTexts.count(); ++i)
-        setRichText(data->richTexts[i].first.x(), data->richTexts[i].first.y(), data->richTexts[i].second);
-    for (int i = 0; i < data->links.count(); ++i)
-        setLink(data->links[i].first.x(), data->links[i].first.y(), data->links[i].second);
-    for (int i = 0; i < data->fusions.count(); ++i)
-        d->fusionStorage->insert(Region(data->fusions[i].first.toRect()), data->fusions[i].second);
-    for (int i = 0; i < data->matrices.count(); ++i)
-        d->matrixStorage->insert(Region(data->matrices[i].first.toRect()), data->matrices[i].second);
-    for (int i = 0; i < data->namedAreas.count(); ++i)
-        emit insertNamedArea(Region(data->namedAreas[i].first.toRect(), d->sheet), data->namedAreas[i].second);
-    for (int i = 0; i < data->styles.count(); ++i)
-        d->styleStorage->insert(data->styles[i].first.toRect(), data->styles[i].second);
-    for (int i = 0; i < data->bindings.count(); ++i)
-        setBinding(Region(data->bindings[i].first.toRect()), data->bindings[i].second);
-    for (int i = 0; i < data->comments.count(); ++i)
-        setComment(Region(data->comments[i].first.toRect()), data->comments[i].second);
-    for (int i = 0; i < data->conditions.count(); ++i)
-        setConditions(Region(data->conditions[i].first.toRect()), data->conditions[i].second);
-    for (int i = 0; i < data->databases.count(); ++i)
-        setDatabase(Region(data->databases[i].first.toRect()), data->databases[i].second);
-    for (int i = 0; i < data->validities.count(); ++i)
-        setValidity(Region(data->validities[i].first.toRect()), data->validities[i].second);
+    delete d->undoData;
+    d->undoData = 0;
 }
 
 #include "CellStorage.moc"

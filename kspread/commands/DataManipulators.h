@@ -212,7 +212,7 @@ class ShiftManipulator : public AbstractRegionCommand
 {
 public:
     enum Direction { ShiftRight, ShiftBottom };
-    ShiftManipulator();
+    ShiftManipulator(QUndoCommand* parent = 0);
     virtual ~ShiftManipulator();
     void setDirection(Direction direction) {
         m_direction = direction;

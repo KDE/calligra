@@ -22,6 +22,8 @@
 
 #include <QAbstractTableModel>
 
+class QItemSelectionRange;
+
 namespace KSpread
 {
 class Sheet;
@@ -44,6 +46,10 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+
+    bool setData(const QItemSelectionRange &range, const QVariant &value, int role = Qt::EditRole);
+    bool setData(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+                 const QVariant &value, int role = Qt::EditRole);
 
 protected:
     Sheet* sheet() const;

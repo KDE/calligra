@@ -24,6 +24,7 @@
 #include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
+#include <QVariant>
 #include <QVector>
 #include <QPoint>
 
@@ -433,6 +434,7 @@ inline uint qHash(const Formula& formula)
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Formula)
 Q_DECLARE_TYPEINFO(KSpread::Formula, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_FORMULA

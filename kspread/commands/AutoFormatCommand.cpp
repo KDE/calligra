@@ -28,8 +28,6 @@
 
 #include <QPen>
 
-#include "CellStorage_p.h"
-
 using namespace KSpread;
 
 AutoFormatCommand::AutoFormatCommand()
@@ -39,7 +37,6 @@ AutoFormatCommand::AutoFormatCommand()
 
 AutoFormatCommand::~AutoFormatCommand()
 {
-    delete m_undoData;
 }
 
 void AutoFormatCommand::setStyles(const QList<Style>& styles)
@@ -58,14 +55,14 @@ bool AutoFormatCommand::preProcessing()
     for (Region::ConstIterator it = constBegin(); it != end; ++it)
         m_sheet->cellStorage()->setStyle(Region((*it)->rect()), defaultStyle);
     if (m_firstrun)
-        m_undoData = m_sheet->cellStorage()->stopUndoRecording();
+        m_sheet->cellStorage()->stopUndoRecording(this);
     return true;
 }
 
 bool AutoFormatCommand::mainProcessing()
 {
     if (m_reverse) {
-        m_sheet->cellStorage()->undo(m_undoData);
+        QUndoCommand::undo(); // undo child commands
         return true;
     }
     return AbstractRegionCommand::mainProcessing();

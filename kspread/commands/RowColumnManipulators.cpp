@@ -29,11 +29,11 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
-#include "CellStorage_p.h"
 #include "Damages.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
+#include "Value.h"
 
 using namespace KSpread;
 
@@ -532,8 +532,8 @@ QString AdjustColumnRowManipulator::name() const
   class InsertDeleteColumnManipulator
 ****************************************************************************/
 
-InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
-        : AbstractRegionCommand()
+InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(QUndoCommand *parent)
+    : AbstractRegionCommand(parent)
         , m_mode(Insert)
 {
     setText(i18n("Insert Columns"));
@@ -541,7 +541,6 @@ InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
 
 InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
 {
-    delete m_undoData;
 }
 
 void InsertDeleteColumnManipulator::setReverse(bool reverse)
@@ -556,9 +555,6 @@ void InsertDeleteColumnManipulator::setReverse(bool reverse)
 
 bool InsertDeleteColumnManipulator::process(Element* element)
 {
-    if (m_firstrun)
-        m_sheet->cellStorage()->startUndoRecording(); // FIXME Stefan: Must be global!
-
     const QRect range = element->rect();
     const int pos = range.left();
     const int num = range.width();
@@ -568,25 +564,72 @@ bool InsertDeleteColumnManipulator::process(Element* element)
         m_sheet->cellStorage()->insertColumns(pos, num);
 
         // undo deletion
-        if (m_mode == Delete)
-            m_sheet->cellStorage()->undo(m_undoData);
-    } else { // deletion
+        if (m_mode == Delete) {
+            QUndoCommand::undo(); // process child commands (from CellStorage)
+        }
+    } else {
         // delete rows
         m_sheet->removeColumns(pos, num);
         m_sheet->cellStorage()->removeColumns(pos, num);
 
         // undo insertion
-        if (m_mode == Insert)
-            m_sheet->cellStorage()->undo(m_undoData);
+        if (m_mode == Insert) {
+            QUndoCommand::undo(); // process child commands (from CellStorage)
+        }
     }
-
-    if (m_firstrun)
-        m_undoData = m_sheet->cellStorage()->stopUndoRecording();
     return true;
+}
+
+bool elementLeftColumnLessThan(const KSpread::Region::Element *e1, const KSpread::Region::Element *e2)
+{
+    return e1->rect().left() < e2->rect().left();
+}
+
+bool InsertDeleteColumnManipulator::preProcessing()
+{
+    if (m_firstrun) {
+        // If we have an NCS, create a child command for each element.
+        if (cells().count() > 1) { // non-contiguous selection
+            // Sort the elements by their top row.
+            qStableSort(cells().begin(), cells().end(), elementLeftColumnLessThan);
+            // Create sub-commands.
+            const Region::ConstIterator end(constEnd());
+            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
+                InsertDeleteColumnManipulator *const command = new InsertDeleteColumnManipulator(this);
+                command->setSheet(m_sheet);
+                command->add(Region((*it)->rect(), (*it)->sheet()));
+                if (m_mode == Delete) {
+                    command->setReverse(true);
+                }
+            }
+        } else { // contiguous selection
+            m_sheet->cellStorage()->startUndoRecording();
+        }
+    }
+    return AbstractRegionCommand::preProcessing();
+}
+
+bool InsertDeleteColumnManipulator::mainProcessing()
+{
+    if (cells().count() > 1) { // non-contiguous selection
+        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
+            QUndoCommand::undo(); // process all sub-commands
+        } else {
+            QUndoCommand::redo(); // process all sub-commands
+        }
+        return true;
+    }
+    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
 }
 
 bool InsertDeleteColumnManipulator::postProcessing()
 {
+    if (cells().count() > 1) { // non-contiguous selection
+        return true;
+    }
+    if (m_firstrun) {
+        m_sheet->cellStorage()->stopUndoRecording(this);
+    }
     const QRect rect(QPoint(boundingRect().left(), 1), QPoint(KS_colMax, KS_rowMax));
     m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
     return true;
@@ -596,8 +639,8 @@ bool InsertDeleteColumnManipulator::postProcessing()
   class InsertDeleteRowManipulator
 ****************************************************************************/
 
-InsertDeleteRowManipulator::InsertDeleteRowManipulator()
-        : AbstractRegionCommand()
+InsertDeleteRowManipulator::InsertDeleteRowManipulator(QUndoCommand *parent)
+    : AbstractRegionCommand(parent)
         , m_mode(Insert)
 {
     setText(i18n("Insert Rows"));
@@ -605,7 +648,6 @@ InsertDeleteRowManipulator::InsertDeleteRowManipulator()
 
 InsertDeleteRowManipulator::~InsertDeleteRowManipulator()
 {
-    delete m_undoData;
 }
 
 void InsertDeleteRowManipulator::setReverse(bool reverse)
@@ -620,9 +662,6 @@ void InsertDeleteRowManipulator::setReverse(bool reverse)
 
 bool InsertDeleteRowManipulator::process(Element* element)
 {
-    if (m_firstrun)
-        m_sheet->cellStorage()->startUndoRecording(); // FIXME Stefan: Must be global!
-
     const QRect range = element->rect();
     const int pos = range.top();
     const int num = range.height();
@@ -632,25 +671,72 @@ bool InsertDeleteRowManipulator::process(Element* element)
         m_sheet->cellStorage()->insertRows(pos, num);
 
         // undo deletion
-        if (m_mode == Delete)
-            m_sheet->cellStorage()->undo(m_undoData);
-    } else { // deletion
+        if (m_mode == Delete) {
+            QUndoCommand::undo(); // process child commands (from CellStorage)
+        }
+    } else {
         // delete rows
         m_sheet->removeRows(pos, num);
         m_sheet->cellStorage()->removeRows(pos, num);
 
         // undo insertion
-        if (m_mode == Insert)
-            m_sheet->cellStorage()->undo(m_undoData);
+        if (m_mode == Insert) {
+            QUndoCommand::undo(); // process child commands (from CellStorage)
+        }
     }
-
-    if (m_firstrun)
-        m_undoData = m_sheet->cellStorage()->stopUndoRecording();
     return true;
+}
+
+bool elementTopRowLessThan(const KSpread::Region::Element *e1, const KSpread::Region::Element *e2)
+{
+    return e1->rect().top() < e2->rect().top();
+}
+
+bool InsertDeleteRowManipulator::preProcessing()
+{
+    if (m_firstrun) {
+        // If we have an NCS, create a child command for each element.
+        if (cells().count() > 1) { // non-contiguous selection
+            // Sort the elements by their top row.
+            qStableSort(cells().begin(), cells().end(), elementTopRowLessThan);
+            // Create sub-commands.
+            const Region::ConstIterator end(constEnd());
+            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
+                InsertDeleteRowManipulator *const command = new InsertDeleteRowManipulator(this);
+                command->setSheet(m_sheet);
+                command->add(Region((*it)->rect(), (*it)->sheet()));
+                if (m_mode == Delete) {
+                    command->setReverse(true);
+                }
+            }
+        } else { // contiguous selection
+            m_sheet->cellStorage()->startUndoRecording();
+        }
+    }
+    return AbstractRegionCommand::preProcessing();
+}
+
+bool InsertDeleteRowManipulator::mainProcessing()
+{
+    if (cells().count() > 1) { // non-contiguous selection
+        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
+            QUndoCommand::undo(); // process all sub-commands
+        } else {
+            QUndoCommand::redo(); // process all sub-commands
+        }
+        return true;
+    }
+    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
 }
 
 bool InsertDeleteRowManipulator::postProcessing()
 {
+    if (cells().count() > 1) { // non-contiguous selection
+        return true;
+    }
+    if (m_firstrun) {
+        m_sheet->cellStorage()->stopUndoRecording(this);
+    }
     const QRect rect(QPoint(1, boundingRect().top()), QPoint(KS_colMax, KS_rowMax));
     m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
     return true;

@@ -14,6 +14,7 @@ Fix text/background/border color actions by using KoColorPopupAction (if pigment
 Fix map/sheet protection action.
 208868: Fix action triggering on selection changes, which resulted in style changes.
 Fix cell removal by shifting cells up.
+Fix column/row insertion/removal undo/redo for non-contiguous selections.
 
 Developer-Visible Only
 ----------------------

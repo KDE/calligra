@@ -21,6 +21,7 @@
 #define KSPREAD_BINDING
 
 #include <QSharedDataPointer>
+#include <QVariant>
 
 #include "Region.h"
 
@@ -66,6 +67,7 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Binding)
 Q_DECLARE_TYPEINFO(KSpread::Binding, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_BINDING

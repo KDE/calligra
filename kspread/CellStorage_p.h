@@ -35,6 +35,8 @@ class CellStorageUndoData
 {
 public:
     bool isEmpty() const {
+        if ( !bindings.isEmpty() )
+            return false;
         if (!comments.isEmpty())
             return false;
         if (!conditions.isEmpty())

@@ -20,15 +20,23 @@
 #include "SheetModel.h"
 
 // KSpread
+#include "Binding.h"
 #include "Cell.h"
+#include "CellStorage.h"
+#include "Condition.h"
+#include "database/Database.h"
+#include "Formula.h"
 #include "Map.h"
+#include "ModelSupport.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "Validity.h"
 #include "Value.h"
 #include "ValueFormatter.h"
 
 // Qt
 #include <QBrush>
+#include <QItemSelectionRange>
 #include <QSize>
 
 using namespace KSpread;
@@ -112,6 +120,27 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     } else if (role == Qt::ForegroundRole) {
         return style.fontColor();
     }
+    const int column = index.column() + 1;
+    const int row = index.row() + 1;
+    CellStorage *const storage = d->sheet->cellStorage();
+    switch (role) {
+        case UserInputRole:
+            return storage->userInput(column, row);
+        case FormulaRole:
+        {
+            QVariant data;
+            data.setValue(storage->formula(column, row));
+            return data;
+        }
+        case ValueRole:
+        {
+            QVariant data;
+            data.setValue(storage->value(column, row));
+            return data;
+        }
+        case LinkRole:
+            return storage->link(column, row);
+    }
     return QVariant();
 }
 
@@ -190,13 +219,79 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
         }
     }
     // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    const int column = index.column() + 1;
+    const int row = index.row() + 1;
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
-    if (role == Qt::EditRole) {
-        cell.parseUserInput(value.toString());
-        emit dataChanged(index, index);
-        return true;
+    CellStorage *const storage = d->sheet->cellStorage();
+    switch (role) {
+        case Qt::EditRole:
+            cell.parseUserInput(value.toString());
+            break;
+        case UserInputRole:
+            storage->setUserInput(column, row, value.toString());
+            break;
+        case FormulaRole:
+            storage->setFormula(column, row, value.value<Formula>());
+            break;
+        case ValueRole:
+            storage->setValue(column, row, value.value<Value>());
+            break;
+        case LinkRole:
+            storage->setLink(column, row, value.toString());
+            break;
+        default:
+            return false;
     }
-    return false;
+    emit dataChanged(index, index);
+    return true;
+}
+
+bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value, int role)
+{
+    const Region region(toRange(range), d->sheet);
+    CellStorage *const storage = d->sheet->cellStorage();
+    switch (role) {
+        case CommentRole:
+            storage->setComment(region, value.toString());
+            break;
+        case ConditionRole:
+            storage->setConditions(region, value.value<Conditions>());
+            break;
+        case FusionedRangeRole:
+            // TODO
+//             storage->setFusion(region, value.value<bool>());
+            break;
+        case LockedRangeRole:
+            // TODO
+//             storage->setMatrix(region, value.value<bool>());
+            break;
+        case NamedAreaRole:
+            storage->emitInsertNamedArea(region, value.toString());
+            break;
+        case SourceRangeRole:
+            storage->setBinding(region, value.value<Binding>());
+            break;
+        case StyleRole:
+            // TODO
+//             storage->setStyle(region, value.value<Style>());
+            break;
+        case TargetRangeRole:
+            storage->setDatabase(region, value.value<Database>());
+            break;
+        case ValidityRole:
+            storage->setValidity(region, value.value<Validity>());
+            break;
+        default:
+            return false;
+    }
+    emit dataChanged(range.topLeft(), range.bottomRight());
+    return true;
+}
+
+bool SheetModel::setData(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+                         const QVariant &value, int role)
+{
+    return setData(QItemSelectionRange(topLeft, bottomRight), value, role);
 }
 
 Sheet* SheetModel::sheet() const

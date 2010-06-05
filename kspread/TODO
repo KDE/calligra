@@ -21,6 +21,13 @@ S	Involves string changes.  Must be done before the freeze.
 
 
 
+BUGS
+====
+ ---    AutoFormatCommand does not redo() properly.
+
+
+
+
 Things to do after the release of KOffice 2.0
 =============================================
 
@@ -37,9 +44,8 @@ Item										Prio	Status
     `kde4-config --install config`/ui/ui_standards.rc
 
 * Commands                                                                      3       ----
-  Replace CellStorageUndoData by a QUndoCommand consisting of QUndoCommands
-  for each substorage. Other commands could make use of it by using it as
-  child command. It should just implement the undo() method; surprise!
+  CellStorage: Replace CellStorageUndoData* by a QStack<CellStorageUndoData>,
+  so that cascaded undo recordings become possible.
 
 * Thread support                                                                3       ----
   Move the dependency calculation and cell recalculation into a separate

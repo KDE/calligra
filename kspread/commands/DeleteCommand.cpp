@@ -29,7 +29,8 @@
 
 using namespace KSpread;
 
-DeleteCommand::DeleteCommand()
+DeleteCommand::DeleteCommand(QUndoCommand *parent)
+    : AbstractDataManipulator(parent)
 {
     setText(i18n("Delete"));
     m_checkLock = true;

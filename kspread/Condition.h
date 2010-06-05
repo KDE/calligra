@@ -24,6 +24,7 @@
 #include <QDomElement>
 #include <QLinkedList>
 #include <QSharedData>
+#include <QVariant>
 
 #include "kspread_export.h"
 #include <KoXmlReader.h>
@@ -196,6 +197,7 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Conditions)
 Q_DECLARE_TYPEINFO(KSpread::Conditions, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_CONDITION_H

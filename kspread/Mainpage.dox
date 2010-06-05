@@ -93,6 +93,11 @@ All command classes reside in the subdirectory commands/.
  */
 
 /**
+ * \defgroup Model Data Models
+ * Classes and methods related to data models.
+ */
+
+/**
  * \defgroup NativeFormat Old native file format
  * Classes and methods related to the KSpread's old native file format loading/saving.
  */

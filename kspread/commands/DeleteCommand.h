@@ -35,7 +35,7 @@ public:
     /**
      * Constructor.
      */
-    DeleteCommand();
+    DeleteCommand(QUndoCommand *parent = 0);
 
     /**
      * Destructor.

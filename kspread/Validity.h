@@ -40,6 +40,7 @@
 #include <QSharedDataPointer>
 #include <QStringList>
 #include <QTime>
+#include <QVariant>
 
 // KOffice
 #include "kspread_export.h"
@@ -195,6 +196,7 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Validity)
 Q_DECLARE_TYPEINFO(KSpread::Validity, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_VALIDITY

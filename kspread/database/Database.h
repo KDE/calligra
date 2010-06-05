@@ -21,6 +21,7 @@
 #define KSPREAD_DATABASE
 
 #include <QSharedDataPointer>
+#include <QVariant>
 
 #include <KoXmlReader.h>
 
@@ -139,6 +140,7 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Database)
 Q_DECLARE_TYPEINFO(KSpread::Database, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_DATABASE

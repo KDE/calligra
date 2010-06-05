@@ -27,6 +27,7 @@
 #include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
+#include <QVariant>
 
 #include <kdebug.h>
 
@@ -491,6 +492,7 @@ uint qHash(const Value& value);
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE(KSpread::Value)
 Q_DECLARE_TYPEINFO(KSpread::Value, Q_MOVABLE_TYPE);
 
 

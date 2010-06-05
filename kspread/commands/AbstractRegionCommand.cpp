@@ -126,9 +126,11 @@ void AbstractRegionCommand::undo()
 
 bool AbstractRegionCommand::isApproved() const
 {
-    Region::ConstIterator endOfList(constEnd());
-    for (Region::ConstIterator it = constBegin(); it != endOfList; ++it) {
-        const QRect range = (*it)->rect();
+    const QList<Element *> elements = cells();
+    const int begin = m_reverse ? elements.count() - 1 : 0;
+    const int end = m_reverse ? -1 : elements.count();
+    for (int i = begin; i != end; m_reverse ? --i : ++i) {
+        const QRect range = elements[i]->rect();
 
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
@@ -156,9 +158,11 @@ bool AbstractRegionCommand::isApproved() const
 bool AbstractRegionCommand::mainProcessing()
 {
     bool successfully = true;
-    Region::Iterator endOfList(cells().end());
-    for (Region::Iterator it = cells().begin(); it != endOfList; ++it) {
-        successfully = successfully && process(*it);
+    const QList<Element *> elements = cells();
+    const int begin = m_reverse ? elements.count() - 1 : 0;
+    const int end = m_reverse ? -1 : elements.count();
+    for (int i = begin; i != end; m_reverse ? --i : ++i) {
+        successfully = successfully && process(elements[i]);
     }
     return successfully;
 }

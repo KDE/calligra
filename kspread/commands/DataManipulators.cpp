@@ -44,7 +44,6 @@ AbstractDataManipulator::AbstractDataManipulator(QUndoCommand* parent)
 
 AbstractDataManipulator::~AbstractDataManipulator()
 {
-    delete m_undoData;
 }
 
 bool AbstractDataManipulator::process(Element* element)
@@ -104,7 +103,7 @@ bool AbstractDataManipulator::mainProcessing()
 {
     if (m_reverse) {
         // reverse - use the stored value
-        m_sheet->cellStorage()->undo(m_undoData);
+        QUndoCommand::undo(); // undo child commands
         return true;
     }
     return AbstractRegionCommand::mainProcessing();
@@ -115,7 +114,7 @@ bool AbstractDataManipulator::postProcessing()
     // not the first run - data already stored ...
     if (!m_firstrun)
         return true;
-    m_undoData = m_sheet->cellStorage()->stopUndoRecording();
+    m_sheet->cellStorage()->stopUndoRecording(this);
     return true;
 }
 
@@ -387,8 +386,8 @@ bool CaseManipulator::wantChange(Element *element, int col, int row)
 
 
 
-ShiftManipulator::ShiftManipulator()
-        : AbstractRegionCommand()
+ShiftManipulator::ShiftManipulator(QUndoCommand *parent)
+        : AbstractRegionCommand(parent)
         , m_mode(Insert)
 {
     m_checkLock = true;
@@ -397,7 +396,6 @@ ShiftManipulator::ShiftManipulator()
 
 ShiftManipulator::~ShiftManipulator()
 {
-    delete m_undoData;
 }
 
 void ShiftManipulator::setReverse(bool reverse)
@@ -428,7 +426,7 @@ bool ShiftManipulator::process(Element* element)
 
         // undo deletion
         if (m_mode == Delete) {
-            m_sheet->cellStorage()->undo(m_undoData);
+            QUndoCommand::undo(); // undo child commands
         }
     } else { // deletion
         if (m_direction == ShiftBottom) {
@@ -441,12 +439,12 @@ bool ShiftManipulator::process(Element* element)
 
         // undo insertion
         if (m_mode == Insert) {
-            m_sheet->cellStorage()->undo(m_undoData);
+            QUndoCommand::undo(); // undo child commands
         }
     }
 
     if (m_firstrun)
-        m_undoData = m_sheet->cellStorage()->stopUndoRecording();
+        m_sheet->cellStorage()->stopUndoRecording(this);
     return true;
 }
 

@@ -866,7 +866,6 @@ public:
     void emit_updateRow(RowFormat* rowFormat, int _row, bool repaint = true);
     void emit_updateColumn(ColumnFormat* columnFormat, int _column);
 
-
     /**
      * Shows a status \p message in the status bar for \p timeout msecs.
      */

@@ -26,7 +26,6 @@
 
 namespace KSpread
 {
-class CellStorageUndoData;
 class Style;
 
 class AutoFormatCommand : public AbstractRegionCommand
@@ -51,7 +50,6 @@ protected:
 
 private:
     QList<Style> m_styles;
-    CellStorageUndoData* m_undoData;
 };
 
 } // namespace KSpread

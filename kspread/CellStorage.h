@@ -32,12 +32,13 @@
 
 class KoXmlWriter;
 
+class QUndoCommand;
+
 namespace KSpread
 {
 class Binding;
 class BindingStorage;
 class Cell;
-class CellStorageUndoData;
 class CommentStorage;
 class Conditions;
 class ConditionsStorage;
@@ -158,6 +159,7 @@ public:
     QString namedArea(int column, int row) const;
     QList< QPair<QRectF, QString> > namedAreas(const Region& region) const;
     void setNamedArea(const Region& region, const QString& namedArea);
+    void emitInsertNamedArea(const Region &region, const QString &namedArea);
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .
@@ -359,29 +361,20 @@ public:
     const ValueStorage* valueStorage() const;
 
     /**
-     * Start the undo recording.
+     * Starts the undo recording.
      * While recording the undo data of each storage operation is saved in
-     * the undo data object, that is returned when the recording is stopped.
+     * an undo command, that can be retrieved when the recording is stopped.
      * \see stopUndoRecording
-     * \see undo
      */
     void startUndoRecording();
 
     /**
-     * Stops the undo recording and return the undo data object.
-     * If no undo data occurred, it returns null.
+     * Stops the undo recording.
+     * An undo command has to be passed as \p parent command and
+     * for each sub-storage an undo-capable command is attached to \p parent.
      * \see startUndoRecording
-     * \see undo
-     * \return the undo object
      */
-    CellStorageUndoData* stopUndoRecording();
-
-    /**
-     * Reapplies the data stored in \p undoData.
-     * \see startUndoRecording
-     * \see stopUndoRecording
-     */
-    void undo(CellStorageUndoData* undoData);
+    void stopUndoRecording(QUndoCommand *parent);
 
 Q_SIGNALS:
     void insertNamedArea(const Region&, const QString&);

@@ -28,7 +28,6 @@
 
 namespace KSpread
 {
-class CellStorageUndoData;
 
 /**
    * \class ResizeColumnManipulator
@@ -153,18 +152,18 @@ bool m_manipulateRows    : 1;
 class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
-    InsertDeleteColumnManipulator();
+    InsertDeleteColumnManipulator(QUndoCommand *parent = 0);
     virtual ~InsertDeleteColumnManipulator();
 
     virtual void setReverse(bool reverse);
 
 protected:
     virtual bool process(Element*);
+    virtual bool preProcessing();
+    virtual bool mainProcessing();
     virtual bool postProcessing();
 
 private:
-    CellStorageUndoData* m_undoData;
-
     enum Mode { Insert, Delete };
     Mode m_mode;
 };
@@ -178,18 +177,18 @@ private:
 class InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
-    InsertDeleteRowManipulator();
+    InsertDeleteRowManipulator(QUndoCommand *parent = 0);
     virtual ~InsertDeleteRowManipulator();
 
     virtual void setReverse(bool reverse);
 
 protected:
     virtual bool process(Element*);
+    virtual bool preProcessing();
+    virtual bool mainProcessing();
     virtual bool postProcessing();
 
 private:
-    CellStorageUndoData* m_undoData;
-
     enum Mode { Insert, Delete };
     Mode m_mode;
 };
