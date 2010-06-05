@@ -276,7 +276,7 @@ void DependencyManager::Private::reset()
 KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
     if (!consumers.contains(cell.sheet())) {
-        kDebug(36002) << "No consumer tree found for the cell's sheet.";
+//         kDebug(36002) << "No consumer tree found for the cell's sheet.";
         return Region();
     }
 

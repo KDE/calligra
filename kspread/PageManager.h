@@ -88,6 +88,8 @@ protected:
     virtual void preparePage(int page);
 
 private:
+    Q_DISABLE_COPY(PageManager)
+
     class Private;
     Private * const d;
 };

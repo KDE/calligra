@@ -660,7 +660,7 @@ void Canvas::paintEvent(QPaintEvent* event)
     if (!sheet)
         return;
 
-    ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
+//     ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
 
     QPainter painter(this);
     const QPointF offset = viewConverter()->documentToView(this->offset());

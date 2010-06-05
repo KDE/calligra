@@ -26,13 +26,11 @@
 #include <QFile>
 #include <QHash>
 
-#include <KComponentData>
 #include <kdebug.h>
 #include <KGlobal>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "part/Factory.h" // FIXME detach from part
 #include "Formula.h"
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
