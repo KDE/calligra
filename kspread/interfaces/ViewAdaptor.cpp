@@ -36,6 +36,11 @@
 #include "part/Canvas.h"
 #include "MapAdaptor.h"
 
+// commands
+#include "commands/BorderColorCommand.h"
+#include "commands/CommentCommand.h"
+#include "commands/StyleCommand.h"
+
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
@@ -352,7 +357,12 @@ void ViewAdaptor::setSelectionVerticalText(bool enable)
 
 void ViewAdaptor::setSelectionComment(const QString& comment)
 {
-    m_view->setSelectionComment(comment);
+    CommentCommand* command = new CommentCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Add Comment"));
+    command->setComment(comment.trimmed());
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 #if 0 // -> cell tool
@@ -364,17 +374,32 @@ void ViewAdaptor::setSelectionAngle(int value)
 
 void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
 {
-    m_view->setSelectionTextColor(txtColor);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Text Color"));
+    command->setFontColor(txtColor);
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setSelectionBgColor(const QColor& bgColor)
 {
-    m_view->setSelectionBackgroundColor(bgColor);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Background Color"));
+    command->setBackgroundColor(bgColor);
+    command->add(*m_view->selection());
+    command->execute();
 }
 
-void ViewAdaptor::setSelectionBorderColor(const QColor& bdColor)
+void ViewAdaptor::setSelectionBorderColor(const QColor& bgColor)
 {
-    m_view->setSelectionBorderColor(bdColor);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Background Color"));
+    command->setBackgroundColor(bgColor);
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 #if 0 // -> cell tool
@@ -396,32 +421,76 @@ void ViewAdaptor::cutSelection()
 
 void ViewAdaptor::setLeftBorderColor(const QColor& color)
 {
-    m_view->setSelectionLeftBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    if (m_view->activeSheet()->layoutDirection() == Qt::RightToLeft)
+        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    else
+        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setTopBorderColor(const QColor& color)
 {
-    m_view->setSelectionTopBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setRightBorderColor(const QColor& color)
 {
-    m_view->setSelectionRightBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    if (m_view->activeSheet()->layoutDirection() == Qt::RightToLeft)
+        command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    else
+        command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setBottomBorderColor(const QColor& color)
 {
-    m_view->setSelectionBottomBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setAllBorderColor(const QColor& color)
 {
-    m_view->setSelectionAllBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setHorizontalPen(QPen(color, 1, Qt::SolidLine));
+    command->setVerticalPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 void ViewAdaptor::setOutlineBorderColor(const QColor& color)
 {
-    m_view->setSelectionOutlineBorderColor(color);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_view->activeSheet());
+    command->setText(i18n("Change Border"));
+    command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    command->add(*m_view->selection());
+    command->execute();
 }
 
 #if 0 // -> cell tool

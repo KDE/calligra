@@ -221,20 +221,8 @@ public Q_SLOTS:
     void showSheet();
     void helpUsing();
 
-    void setSelectionTextColor(const QColor &txtColor);
-    void setSelectionBackgroundColor(const QColor &bgColor);
-    void setSelectionBorderColor(const QColor &bdColor);
-
-    void setSelectionLeftBorderColor(const QColor &color);
-    void setSelectionRightBorderColor(const QColor &color);
-    void setSelectionTopBorderColor(const QColor &color);
-    void setSelectionBottomBorderColor(const QColor &color);
-    void setSelectionAllBorderColor(const QColor &color);
-    void setSelectionOutlineBorderColor(const QColor &color);
-
     void optionsNotifications();
     void preference();
-    void setSelectionComment(const QString& comment);
 
     void copyAsText();
 

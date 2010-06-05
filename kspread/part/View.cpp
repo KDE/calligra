@@ -141,13 +141,8 @@
 #include "MapViewModel.h"
 
 // commands
-#include "commands/BorderColorCommand.h"
-#include "commands/CommentCommand.h"
-#include "commands/DataManipulators.h"
 #include "commands/DefinePrintRangeCommand.h"
-#include "commands/RowColumnManipulators.h"
 #include "commands/SheetCommands.h"
-#include "commands/StyleCommand.h"
 #include "commands/Undo.h"
 
 // dialogs
@@ -1226,124 +1221,9 @@ void View::createTemplate()
             "data", "kspread/templates/");
 }
 
-/*
-void View::oszilloscope()
-{
-    QDialog* dlg = new OsziDlg( this );
-    dlg->show();
-}
-*/
-
-void View::setSelectionTextColor(const QColor &txtColor)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Text Color"));
-    manipulator->setFontColor(txtColor);
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionBackgroundColor(const QColor &bgColor)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Background Color"));
-    manipulator->setBackgroundColor(bgColor);
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionBorderColor(const QColor &bdColor)
-{
-    BorderColorCommand* command = new BorderColorCommand();
-    command->setSheet(activeSheet());
-    command->setColor(bdColor);
-    command->add(*selection());
-    command->execute();
-}
-
 void View::helpUsing()
 {
     KToolInvocation::invokeHelp();
-}
-
-void View::setSelectionBottomBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-    manipulator->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionRightBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-    if (d->activeSheet->layoutDirection() == Qt::RightToLeft)
-        manipulator->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
-        manipulator->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionLeftBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-#if 0
-    if (d->activeSheet->layoutDirection() == Qt::RightToLeft)
-        manipulator->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
-        manipulator->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-#else
-    Q_UNUSED(color);
-#endif
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionTopBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-    manipulator->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionOutlineBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-    manipulator->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->add(*selection());
-    manipulator->execute();
-}
-
-void View::setSelectionAllBorderColor(const QColor & color)
-{
-    StyleCommand* manipulator = new StyleCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Change Border"));
-    manipulator->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setHorizontalPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->setVerticalPen(QPen(color, 1, Qt::SolidLine));
-    manipulator->add(*selection());
-    manipulator->execute();
 }
 
 void View::addSheet(Sheet * _t)
@@ -1786,16 +1666,6 @@ void View::preference()
         d->columnHeader->update();
         d->rowHeader->update();
     }
-}
-
-void View::setSelectionComment(const QString& comment)
-{
-    CommentCommand* manipulator = new CommentCommand();
-    manipulator->setSheet(d->activeSheet);
-    manipulator->setText(i18n("Add Comment"));
-    manipulator->setComment(comment.trimmed());
-    manipulator->add(*selection());
-    manipulator->execute();
 }
 
 bool View::showSheet(const QString& sheetName)
