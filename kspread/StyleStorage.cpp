@@ -120,7 +120,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::undoData(const Region& regi
             // trim the rects
             pairs[i].first = pairs[i].first.intersected(rect);
         }
-        result << pairs;
+        // Always a default subStyle first, even if there are no pairs.
+        result << qMakePair(QRectF(rect), SharedSubStyle()) << pairs;
     }
     return result;
 }
@@ -292,7 +293,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, in
         d->usedRows.remove(it.key());
     d->usedRows.unite(map);
     // process the tree
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.insertRows(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), SharedSubStyle());
+    undoData << d->tree.insertRows(position, number);
     return undoData;
 }
 
@@ -320,7 +323,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertColumns(int position,
         d->usedColumns.remove(it.key());
     d->usedColumns.unite(map);
     // process the tree
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.insertColumns(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), SharedSubStyle());
+    undoData << d->tree.insertColumns(position, number);
     return undoData;
 }
 
@@ -345,7 +350,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeRows(int position, in
         d->usedRows.remove(it.key());
     d->usedRows.unite(map);
     // process the tree
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.removeRows(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(1, position, KS_colMax, number), SharedSubStyle());
+    undoData << d->tree.removeRows(position, number);
     return undoData;
 }
 
@@ -370,14 +377,18 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeColumns(int position,
         d->usedColumns.remove(it.key());
     d->usedColumns.unite(map);
     // process the tree
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.removeColumns(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), SharedSubStyle());
+    undoData << d->tree.removeColumns(position, number);
     return undoData;
 }
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftRight(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.insertShiftRight(rect);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(rect), SharedSubStyle());
+    undoData << d->tree.insertShiftRight( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = d->usedArea & invalidRect;
@@ -401,7 +412,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftRight(const QRec
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftDown(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.insertShiftDown(rect);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(rect), SharedSubStyle());
+    undoData << d->tree.insertShiftDown( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = d->usedArea & invalidRect;
@@ -425,7 +438,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftDown(const QRect
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftLeft(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.removeShiftLeft(rect);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(rect), SharedSubStyle());
+    undoData << d->tree.removeShiftLeft( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = d->usedArea & QRect(rect.right() + 1, rect.top(), KS_colMax, rect.height());
@@ -444,7 +459,9 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftLeft(const QRect
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftUp(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, SharedSubStyle> > undoData = d->tree.removeShiftUp(rect);
+    QList< QPair<QRectF,SharedSubStyle> > undoData;
+    undoData << qMakePair(QRectF(rect), SharedSubStyle());
+    undoData << d->tree.removeShiftUp( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = d->usedArea & QRect(rect.left(), rect.bottom() + 1, rect.width(), KS_rowMax);

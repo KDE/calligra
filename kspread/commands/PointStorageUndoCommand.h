@@ -73,7 +73,8 @@ PointStorageUndoCommand<T>::PointStorageUndoCommand(QAbstractItemModel *const mo
 template<typename T>
 void PointStorageUndoCommand<T>::undo()
 {
-    for (int i = 0; i < m_undoData.count(); ++i) {
+    // In reverse order for the case that a location was altered multiple times.
+    for (int i = m_undoData.count() - 1; i >= 0; --i) {
         const int column = m_undoData[i].first.x();
         const int row = m_undoData[i].first.y();
         const QModelIndex index = m_model->index(row - 1, column - 1);

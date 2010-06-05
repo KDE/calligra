@@ -15,6 +15,9 @@ Fix map/sheet protection action.
 208868: Fix action triggering on selection changes, which resulted in style changes.
 Fix cell removal by shifting cells up.
 Fix column/row insertion/removal undo/redo for non-contiguous selections.
+Fix special paste operations (!= OverWrite) do not undo properly.
+Fix undo of pasting styles.
+Fix undo of pasting comments.
 
 Developer-Visible Only
 ----------------------

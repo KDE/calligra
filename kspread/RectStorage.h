@@ -229,7 +229,8 @@ QList< QPair<QRectF, T> > RectStorage<T>::undoData(const Region& region) const
             // trim the rects
             pairs[i].first = pairs[i].first.intersected(rect);
         }
-        result << pairs;
+        // Always add a default value even if there are no pairs.
+        result << qMakePair(QRectF(rect), T()) << pairs;
     }
     return result;
 }
@@ -307,7 +308,9 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
 //         m_usedRows.remove(it.key());
 //     m_usedRows.unite(map);
     // process the tree
-    QList< QPair<QRectF, T> > undoData = m_tree.insertRows(position, number);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
+    undoData << m_tree.insertRows(position, number);
     return undoData;
 }
 
@@ -337,7 +340,9 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number
 //         m_usedColumns.remove(it.key());
 //     m_usedColumns.unite(map);
     // process the tree
-    QList< QPair<QRectF, T> > undoData = m_tree.insertColumns(position, number);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
+    undoData << m_tree.insertColumns(position, number);
     return undoData;
 }
 
@@ -364,7 +369,9 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
 //         m_usedRows.remove(it.key());
 //     m_usedRows.unite(map);
     // process the tree
-    QList< QPair<QRectF, T> > undoData = m_tree.removeRows(position, number);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(1, position, KS_colMax, number), T());
+    undoData << m_tree.removeRows(position, number);
     return undoData;
 }
 
@@ -391,7 +398,9 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number
 //         m_usedColumns.remove(it.key());
 //     m_usedColumns.unite(map);
     // process the tree
-    QList< QPair<QRectF, T> > undoData = m_tree.removeColumns(position, number);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), T());
+    undoData << m_tree.removeColumns(position, number);
     return undoData;
 }
 
@@ -399,7 +408,9 @@ template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, T> > undoData = m_tree.insertShiftRight(rect);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(rect), T());
+    undoData << m_tree.insertShiftRight( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = m_usedArea & invalidRect;
@@ -425,7 +436,9 @@ template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, T> > undoData = m_tree.insertShiftDown(rect);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(rect), T());
+    undoData << m_tree.insertShiftDown( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = m_usedArea & invalidRect;
@@ -451,7 +464,9 @@ template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, T> > undoData = m_tree.removeShiftLeft(rect);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(rect), T());
+    undoData << m_tree.removeShiftLeft( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = m_usedArea & QRect(rect.right() + 1, rect.top(), KS_colMax, rect.height());
@@ -472,7 +487,9 @@ template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
 {
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, T> > undoData = m_tree.removeShiftUp(rect);
+    QList< QPair<QRectF,T> > undoData;
+    undoData << qMakePair(QRectF(rect), T());
+    undoData << m_tree.removeShiftUp( rect );
     regionChanged(invalidRect);
     // update the used area
     const QRegion usedArea = m_usedArea & QRect(rect.left(), rect.bottom() + 1, rect.width(), KS_rowMax);
