@@ -159,8 +159,6 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     m_canvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
-    m_canvas->show();
-    m_canvas->setFocus();
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -170,6 +168,9 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     // move and resize now as otherwise it is not set when we call activate on the tool.
     m_canvas->move( presentationRect.topLeft() );
     m_canvas->resize( presentationRect.size() );
+    // show and setFocus needs to be done after move and resize as otherwise the move and resize have no effect
+    m_canvas->show();
+    m_canvas->setFocus();
 
     KCursor::setAutoHideCursor( m_canvas, true );
 
