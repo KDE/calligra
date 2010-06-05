@@ -157,8 +157,8 @@
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
 
-namespace KSpread
-{
+using namespace KSpread;
+
 class ViewActions;
 
 class View::Private
@@ -2385,7 +2385,5 @@ KoPrintJob * View::createPrintJob()
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
 }
-
-} // namespace KSpread
 
 #include "View.moc"
