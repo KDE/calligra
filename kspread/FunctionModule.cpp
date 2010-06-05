@@ -19,22 +19,23 @@
 
 #include "FunctionModule.h"
 
+#include "Functions.h"
+
+#include <QList>
+
 using namespace KSpread;
 
 class FunctionModule::Private
 {
 public:
-    QString id;
-    QString name;
+    QList<QSharedPointer<Function> > functions;
 };
 
 
-FunctionModule::FunctionModule(QObject* parent, const QString &id, const QString& name)
+FunctionModule::FunctionModule(QObject* parent)
         : QObject(parent)
         , d(new Private)
 {
-    d->id = id;
-    d->name = name;
 }
 
 FunctionModule::~FunctionModule()
@@ -42,14 +43,39 @@ FunctionModule::~FunctionModule()
     delete d;
 }
 
-QString FunctionModule::id() const
+QList<QSharedPointer<Function> > FunctionModule::functions() const
 {
-    return d->id;
+    return d->functions;
 }
 
-QString FunctionModule::name() const
+bool FunctionModule::isRemovable()
 {
-    return d->name;
+    QList<Function*> checkedFunctions;
+    QWeakPointer<Function> weakPointer;
+    while (d->functions.count() != 0) {
+        weakPointer = d->functions.last().toWeakRef();
+        checkedFunctions.append(d->functions.takeLast().data());
+        if (!weakPointer.isNull()) {
+            // Put it and the other checked ones back in.
+            d->functions.append(weakPointer.toStrongRef());
+            // The failing on was used, so we do not put it in twice.
+            checkedFunctions.removeLast();
+            foreach (Function* function, checkedFunctions) {
+                // It is okay to recreate the shared pointers, as they were not used.
+                d->functions.append(QSharedPointer<Function>(function));
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+void FunctionModule::add(Function* function)
+{
+    if (!function) {
+        return;
+    }
+    d->functions.append(QSharedPointer<Function>(function));
 }
 
 #include "FunctionModule.moc"

@@ -43,67 +43,51 @@ Value func_true(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(LogicModulePluginFactory,
-                 registerPlugin<LogicModule>();
-                )
-K_EXPORT_PLUGIN(LogicModulePluginFactory("LogicModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("logic", LogicModule)
 
 
 LogicModule::LogicModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "logic", i18n("Logic Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("FALSE", func_false);
+    f->setParamCount(0);
+  add(f);
+    f = new Function("TRUE", func_true);
+    f->setParamCount(0);
+  add(f);
+    f = new Function("NOT", func_not);
+    f->setParamCount(1);
+  add(f);
+    f = new Function("AND", func_and);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("NAND", func_nand);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("NOR", func_nor);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("OR", func_or);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("XOR", func_xor);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("IF", func_if);
+    f->setParamCount(2, 3);
+  add(f);
 }
 
 QString LogicModule::descriptionFileName() const
 {
     return QString("logic.xml");
-}
-
-void LogicModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("FALSE", func_false);
-    f->setParamCount(0);
-    repo->add(f);
-    f = new Function("TRUE", func_true);
-    f->setParamCount(0);
-    repo->add(f);
-    f = new Function("NOT", func_not);
-    f->setParamCount(1);
-    repo->add(f);
-    f = new Function("AND", func_and);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("NAND", func_nand);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("NOR", func_nor);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("OR", func_or);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("XOR", func_xor);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("IF", func_if);
-    f->setParamCount(2, 3);
-    repo->add(f);
-}
-
-void LogicModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Logical");
 }
 
 

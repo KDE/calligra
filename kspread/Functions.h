@@ -23,8 +23,10 @@
 #define KSPREAD_FUNCTIONS
 
 #include <QList>
+#include <QSharedPointer>
 #include <QStringList>
 #include <QVector>
+
 #include "kspread_export.h"
 #include "Region.h"
 
@@ -191,11 +193,19 @@ public:
 
     static FunctionRepository *self();
 
-    void add(Function *function);
+    /**
+     * Adds \p function to the repository.
+     */
+    void add(const QSharedPointer<Function>& function);
     void add(FunctionDescription *desc);
-    void remove(const QString& groupName);
 
-    Function *function(const QString& name);
+    /**
+     * Removes \p function from the repository.
+     * The Function object and the appropriate description will be destroyed.
+     */
+    void remove(const QSharedPointer<Function>& function);
+
+    QSharedPointer<Function> function(const QString& name);
 
     FunctionDescription *functionInfo(const QString& name);
 

@@ -20,6 +20,7 @@
 #include "qtest_kde.h"
 
 #include <Formula.h>
+#include <FunctionModuleRegistry.h>
 #include <Value.h>
 
 #include <float.h> // DBL_EPSILON

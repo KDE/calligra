@@ -20,15 +20,9 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/LogicModule.h"
-#include "functions/InformationModule.h"
-#include "FunctionModuleRegistry.h"
-
 void TestLogicFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new InformationModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 // because we may need to promote expected value from integer to float

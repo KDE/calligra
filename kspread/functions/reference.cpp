@@ -55,87 +55,71 @@ Value func_rows(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(ReferenceModulePluginFactory,
-                 registerPlugin<ReferenceModule>();
-                )
-K_EXPORT_PLUGIN(ReferenceModulePluginFactory("ReferenceModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("reference", ReferenceModule)
 
 
 ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "reference", i18n("Reference Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("ADDRESS",  func_address);
+    f->setParamCount(2, 5);
+  add(f);
+    f = new Function("AREAS",    func_areas);
+    f->setParamCount(1);
+    f->setNeedsExtra(true);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("CHOOSE",   func_choose);
+    f->setParamCount(2, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("COLUMN",   func_column);
+    f->setParamCount(0, 1);
+  add(f);
+    f = new Function("COLUMNS",  func_columns);
+    f->setParamCount(1);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+  add(f);
+    f = new Function("HLOOKUP",  func_hlookup);
+    f->setParamCount(3, 4);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("INDEX",   func_index);
+    f->setParamCount(3);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("INDIRECT", func_indirect);
+    f->setParamCount(1, 2);
+    f->setNeedsExtra(true);
+  add(f);
+    f = new Function("LOOKUP",   func_lookup);
+    f->setParamCount(3);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
+    f->setParamCount(3, 5);
+    f->setNeedsExtra(true);
+  add(f);
+    f = new Function("ROW",      func_row);
+    f->setParamCount(0, 1);
+  add(f);
+    f = new Function("ROWS",     func_rows);
+    f->setParamCount(1);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+  add(f);
+    f = new Function("VLOOKUP",  func_vlookup);
+    f->setParamCount(3, 4);
+    f->setAcceptArray();
+  add(f);
 }
 
 QString ReferenceModule::descriptionFileName() const
 {
     return QString("reference.xml");
-}
-
-void ReferenceModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("ADDRESS",  func_address);
-    f->setParamCount(2, 5);
-    repo->add(f);
-    f = new Function("AREAS",    func_areas);
-    f->setParamCount(1);
-    f->setNeedsExtra(true);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("CHOOSE",   func_choose);
-    f->setParamCount(2, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("COLUMN",   func_column);
-    f->setParamCount(0, 1);
-    repo->add(f);
-    f = new Function("COLUMNS",  func_columns);
-    f->setParamCount(1);
-    f->setAcceptArray();
-    f->setNeedsExtra(true);
-    repo->add(f);
-    f = new Function("HLOOKUP",  func_hlookup);
-    f->setParamCount(3, 4);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("INDEX",   func_index);
-    f->setParamCount(3);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("INDIRECT", func_indirect);
-    f->setParamCount(1, 2);
-    f->setNeedsExtra(true);
-    repo->add(f);
-    f = new Function("LOOKUP",   func_lookup);
-    f->setParamCount(3);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
-    f->setParamCount(3, 5);
-    f->setNeedsExtra(true);
-    repo->add(f);
-    f = new Function("ROW",      func_row);
-    f->setParamCount(0, 1);
-    repo->add(f);
-    f = new Function("ROWS",     func_rows);
-    f->setParamCount(1);
-    f->setAcceptArray();
-    f->setNeedsExtra(true);
-    repo->add(f);
-    f = new Function("VLOOKUP",  func_vlookup);
-    f->setParamCount(3, 4);
-    f->setAcceptArray();
-    repo->add(f);
-}
-
-void ReferenceModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Lookup & Reference");
 }
 
 

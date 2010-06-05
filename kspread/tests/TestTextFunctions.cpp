@@ -20,17 +20,9 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/InformationModule.h"
-#include "functions/LogicModule.h"
-#include "functions/TextModule.h"
-#include "FunctionModuleRegistry.h"
-
 void TestTextFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new InformationModule(this));
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new TextModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }

@@ -78,126 +78,110 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(TextModulePluginFactory,
-                 registerPlugin<TextModule>();
-                )
-K_EXPORT_PLUGIN(TextModulePluginFactory("TextModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("text", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "text", i18n("Text Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    // one-parameter functions
+    f = new Function("ASC", func_asc);
+  add(f);
+    f = new Function("CHAR", func_char);
+  add(f);
+    f = new Function("CLEAN", func_clean);
+  add(f);
+    f = new Function("CODE", func_code);
+  add(f);
+    f = new Function("JIS", func_jis);
+  add(f);
+    f = new Function("LEN", func_len);
+  add(f);
+    f = new Function("LOWER", func_lower);
+  add(f);
+    f = new Function("PROPER", func_proper);
+  add(f);
+    f = new Function("ROT13", func_rot13);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13");
+    add(f);
+    f = new Function("SLEEK", func_sleek);
+  add(f);
+    f = new Function("T", func_t);
+  add(f);
+    f = new Function("TOGGLE", func_toggle);
+  add(f);
+    f = new Function("TRIM", func_trim);
+  add(f);
+    f = new Function("UNICHAR", func_unichar);
+  add(f);
+    f = new Function("UNICODE", func_unicode);
+  add(f);
+    f = new Function("UPPER", func_upper);
+  add(f);
+    f = new Function("VALUE", func_value);
+  add(f);
+
+    // other functions
+    f = new Function("COMPARE", func_compare);
+    f->setParamCount(3);
+  add(f);
+    f = new Function("CONCATENATE", func_concatenate);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("DOLLAR", func_dollar);
+    f->setParamCount(1, 2);
+  add(f);
+    f = new Function("EXACT", func_exact);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("FIND", func_find);
+    f->setParamCount(2, 3);
+  add(f);
+    f = new Function("FIXED", func_fixed);
+    f->setParamCount(1, 3);
+  add(f);
+    f = new Function("LEFT", func_left);
+    f->setParamCount(1, 2);
+  add(f);
+    f = new Function("MID", func_mid);
+    f->setParamCount(2, 3);
+  add(f);
+    f = new Function("REGEXP", func_regexp);
+    f->setParamCount(2, 4);
+  add(f);
+    f = new Function("REGEXPRE", func_regexpre);
+    f->setParamCount(3);
+  add(f);
+    f = new Function("REPLACE", func_replace);
+    f->setParamCount(4);
+  add(f);
+    f = new Function("REPT", func_rept);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("RIGHT", func_right);
+    f->setParamCount(1, 2);
+  add(f);
+    f = new Function("SEARCH", func_search);
+    f->setParamCount(2, 3);
+  add(f);
+    f = new Function("SUBSTITUTE", func_substitute);
+    f->setParamCount(3, 4);
+  add(f);
+    f = new Function("TEXT", func_text);
+    f->setParamCount(1, 2);
+  add(f);
+    f = new Function("BAHTTEXT", func_bahttext);
+    f->setAlternateName("COM.MICROSOFT.BAHTTEXT");
+    f->setParamCount(1);
+    add(f);
 }
 
 QString TextModule::descriptionFileName() const
 {
     return QString("text.xml");
-}
-
-void TextModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    // one-parameter functions
-    f = new Function("ASC", func_asc);
-    repo->add(f);
-    f = new Function("CHAR", func_char);
-    repo->add(f);
-    f = new Function("CLEAN", func_clean);
-    repo->add(f);
-    f = new Function("CODE", func_code);
-    repo->add(f);
-    f = new Function("JIS", func_jis);
-    repo->add(f);
-    f = new Function("LEN", func_len);
-    repo->add(f);
-    f = new Function("LOWER", func_lower);
-    repo->add(f);
-    f = new Function("PROPER", func_proper);
-    repo->add(f);
-    f = new Function("ROT13", func_rot13);
-    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13");
-    repo->add(f);
-    f = new Function("SLEEK", func_sleek);
-    repo->add(f);
-    f = new Function("T", func_t);
-    repo->add(f);
-    f = new Function("TOGGLE", func_toggle);
-    repo->add(f);
-    f = new Function("TRIM", func_trim);
-    repo->add(f);
-    f = new Function("UNICHAR", func_unichar);
-    repo->add(f);
-    f = new Function("UNICODE", func_unicode);
-    repo->add(f);
-    f = new Function("UPPER", func_upper);
-    repo->add(f);
-    f = new Function("VALUE", func_value);
-    repo->add(f);
-
-    // other functions
-    f = new Function("COMPARE", func_compare);
-    f->setParamCount(3);
-    repo->add(f);
-    f = new Function("CONCATENATE", func_concatenate);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("DOLLAR", func_dollar);
-    f->setParamCount(1, 2);
-    repo->add(f);
-    f = new Function("EXACT", func_exact);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("FIND", func_find);
-    f->setParamCount(2, 3);
-    repo->add(f);
-    f = new Function("FIXED", func_fixed);
-    f->setParamCount(1, 3);
-    repo->add(f);
-    f = new Function("LEFT", func_left);
-    f->setParamCount(1, 2);
-    repo->add(f);
-    f = new Function("MID", func_mid);
-    f->setParamCount(2, 3);
-    repo->add(f);
-    f = new Function("REGEXP", func_regexp);
-    f->setParamCount(2, 4);
-    repo->add(f);
-    f = new Function("REGEXPRE", func_regexpre);
-    f->setParamCount(3);
-    repo->add(f);
-    f = new Function("REPLACE", func_replace);
-    f->setParamCount(4);
-    repo->add(f);
-    f = new Function("REPT", func_rept);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("RIGHT", func_right);
-    f->setParamCount(1, 2);
-    repo->add(f);
-    f = new Function("SEARCH", func_search);
-    f->setParamCount(2, 3);
-    repo->add(f);
-    f = new Function("SUBSTITUTE", func_substitute);
-    f->setParamCount(3, 4);
-    repo->add(f);
-    f = new Function("TEXT", func_text);
-    f->setParamCount(1, 2);
-    repo->add(f);
-    f = new Function("BAHTTEXT", func_bahttext);
-    f->setAlternateName("COM.MICROSOFT.BAHTTEXT");
-    f->setParamCount(1);
-    repo->add(f);
-}
-
-void TextModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Text");
 }
 
 

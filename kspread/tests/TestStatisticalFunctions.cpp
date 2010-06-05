@@ -35,11 +35,6 @@
 
 using namespace KSpread;
 
-#include "functions/LogicModule.h"
-#include "functions/MathModule.h"
-#include "functions/StatisticalModule.h"
-#include "FunctionModuleRegistry.h"
-
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
 //  - different algorithms among spreadsheet programs
@@ -135,10 +130,7 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 
 void TestStatisticalFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->add(new StatisticalModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

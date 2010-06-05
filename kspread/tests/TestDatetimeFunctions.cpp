@@ -20,15 +20,9 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/DateTimeModule.h"
-#include "functions/MathModule.h"
-#include "FunctionModuleRegistry.h"
-
 void TestDatetimeFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new DateTimeModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }

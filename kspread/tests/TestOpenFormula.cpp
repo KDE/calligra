@@ -26,8 +26,6 @@
 #include "qtest_kde.h"
 
 #include <Formula.h>
-#include <functions/InformationModule.h>
-#include <functions/LogicModule.h>
 #include <FunctionModuleRegistry.h>
 #include <Region.h>
 #include <Util.h>
@@ -93,9 +91,7 @@ QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
 
 void TestOpenFormula::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new InformationModule(this));
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 void TestOpenFormula::testEvaluation()

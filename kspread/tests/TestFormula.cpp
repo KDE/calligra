@@ -22,11 +22,6 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/LogicModule.h"
-#include "functions/MathModule.h"
-#include "functions/TrigonometryModule.h"
-#include "FunctionModuleRegistry.h"
-
 using namespace KSpread;
 
 static char encodeTokenType(const Token& token)
@@ -112,10 +107,7 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
 
 void TestFormula::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 void TestFormula::testTokenizer()

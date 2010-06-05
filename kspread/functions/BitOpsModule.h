@@ -34,9 +34,6 @@ public:
     explicit BitOpsModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
-
-    void registerFunctions();
-    void removeFunctions();
 };
 
 } // namespace KSpread

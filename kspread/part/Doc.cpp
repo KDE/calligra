@@ -165,7 +165,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     }
 
     // Load the function modules.
-    FunctionModuleRegistry::instance();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 Doc::~Doc()

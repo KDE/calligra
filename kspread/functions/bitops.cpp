@@ -38,49 +38,35 @@ Value func_bitxor(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift(valVector args, ValueCalc *calc, FuncExtra *);
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(BitOpsModulePluginFactory,
-                 registerPlugin<BitOpsModule>();
-                )
-K_EXPORT_PLUGIN(BitOpsModulePluginFactory("BitOpsModule"))
-#endif
+
+KSPREAD_EXPORT_FUNCTION_MODULE("bitops", BitOpsModule)
+
 
 BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "bitops", i18n("Bit Operation Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("BITAND", func_bitand);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("BITOR", func_bitor);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("BITXOR", func_bitxor);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("BITLSHIFT", func_bitlshift);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("BITRSHIFT", func_bitrshift);
+    f->setParamCount(2);
+  add(f);
 }
 
 QString BitOpsModule::descriptionFileName() const
 {
     return QString("bitops.xml");
-}
-
-void BitOpsModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("BITAND", func_bitand);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("BITOR", func_bitor);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("BITXOR", func_bitxor);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("BITLSHIFT", func_bitlshift);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("BITRSHIFT", func_bitrshift);
-    f->setParamCount(2);
-    repo->add(f);
-}
-
-void BitOpsModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Bit Operations");
 }
 
 

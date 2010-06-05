@@ -120,262 +120,246 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(MathModulePluginFactory,
-                 registerPlugin<MathModule>();
-                )
-K_EXPORT_PLUGIN(MathModulePluginFactory("MathModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("math", MathModule)
 
 
 MathModule::MathModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "math", i18n("Math Functions"))
+    : FunctionModule(parent)
 {
-}
-
-QString MathModule::descriptionFileName() const
-{
-    return QString("math.xml");
-}
-
-void MathModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
     Function *f;
 
     /*
       f = new Function ("MULTIPLEOPERATIONS", func_multipleOP);
-      repo->add (f);
+  add(f);
     */
 
     // functions that don't take array parameters
     f = new Function("ABS",           func_abs);
-    repo->add(f);
+  add(f);
     f = new Function("CEIL",          func_ceil);
-    repo->add(f);
+  add(f);
     f = new Function("CEILING",       func_ceiling);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
     f = new Function("CUR",           func_cur);
-    repo->add(f);
+  add(f);
     f = new Function("EPS",           func_eps);
     f->setParamCount(0);
-    repo->add(f);
+  add(f);
     f = new Function("EVEN",          func_even);
-    repo->add(f);
+  add(f);
     f = new Function("EXP",           func_exp);
-    repo->add(f);
+  add(f);
     f = new Function("FACT",          func_fact);
-    repo->add(f);
+  add(f);
     f = new Function("FACTDOUBLE",    func_factdouble);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE");
-    repo->add(f);
+    add(f);
     f = new Function("FIB",           func_fib);  // KSpread-specific, like Quattro-Pro's FIB
-    repo->add(f);
+  add(f);
     f = new Function("FLOOR",         func_floor);
     f->setParamCount(1, 3);
-    repo->add(f);
+  add(f);
     f = new Function("GAMMA",         func_gamma);
-    repo->add(f);
+  add(f);
     f = new Function("INT",           func_int);
-    repo->add(f);
+  add(f);
     f = new Function("INV",           func_inv);
-    repo->add(f);
+  add(f);
     f = new Function("LN",            func_ln);
-    repo->add(f);
+  add(f);
     f = new Function("LOG",           func_logn);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
     f = new Function("LOG2",          func_log2);
-    repo->add(f);
+  add(f);
     f = new Function("LOG10",         func_log10);
-    repo->add(f);
+  add(f);
     f = new Function("LOGN",          func_logn);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("MOD",           func_mod);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("MROUND",        func_mround);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND");
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("MULTINOMIAL",   func_multinomial);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL");
     f->setParamCount(1, -1);
-    repo->add(f);
+  add(f);
     f = new Function("ODD",           func_odd);
-    repo->add(f);
+  add(f);
     f = new Function("POW",         func_pow);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("POWER",         func_pow);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("QUOTIENT",      func_quotient);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT");
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("RAND",          func_rand);
     f->setParamCount(0);
-    repo->add(f);
+  add(f);
     f = new Function("RANDBERNOULLI", func_randbernoulli);
-    repo->add(f);
+  add(f);
     f = new Function("RANDBETWEEN",   func_randbetween);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN");
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("RANDBINOM",     func_randbinom);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("RANDEXP",       func_randexp);
-    repo->add(f);
+  add(f);
     f = new Function("RANDNEGBINOM",  func_randnegbinom);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("RANDNORM",      func_randnorm);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("RANDPOISSON",   func_randpoisson);
-    repo->add(f);
+  add(f);
     f = new Function("ROOTN",         func_rootn);
     f->setParamCount(2);
-    repo->add(f);
+  add(f);
     f = new Function("ROUND",         func_round);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
     f = new Function("ROUNDDOWN",     func_rounddown);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
     f = new Function("ROUNDUP",       func_roundup);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
     f = new Function("SIGN",          func_sign);
-    repo->add(f);
+  add(f);
     f = new Function("SQRT",          func_sqrt);
-    repo->add(f);
+  add(f);
     f = new Function("SQRTPI",        func_sqrtpi);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI");
-    repo->add(f);
+    add(f);
     f = new Function("TRUNC",         func_trunc);
     f->setParamCount(1, 2);
-    repo->add(f);
+  add(f);
 
     // functions that operate over arrays
     f = new Function("COUNT",         func_count);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("COUNTA",        func_counta);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("COUNTBLANK",    func_countblank);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("COUNTIF",       func_countif);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-    repo->add(f);
+  add(f);
     f = new Function("DIV",           func_div);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("G_PRODUCT",     func_kproduct);  // Gnumeric compatibility
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("GCD",           func_gcd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD");
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("KPRODUCT",      func_kproduct);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("LCM",           func_lcm);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM");
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MAX",           func_max);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MAXA",          func_maxa);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MDETERM",          func_mdeterm);
     f->setParamCount(1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MIN",           func_min);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MINA",          func_mina);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MINVERSE",         func_minverse);
     f->setParamCount(1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MMULT",          func_mmult);
     f->setParamCount(2);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MULTIPLY",      func_product);   // same as PRODUCT
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("MUNIT",         func_munit);
     f->setParamCount(1);
-    repo->add(f);
+  add(f);
     f = new Function("PRODUCT",       func_product);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("SERIESSUM",     func_seriessum);
     f->setParamCount(3, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("SUM",           func_sum);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("SUMA",          func_suma);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("SUBTOTAL",      func_subtotal);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-    repo->add(f);
+  add(f);
     f = new Function("SUMIF",         func_sumif);
     f->setParamCount(2, 3);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-    repo->add(f);
+    add(f);
     f = new Function("SUMSQ",         func_sumsq);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("TRANSPOSE",     func_transpose);
     f->setParamCount(1);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
 }
 
-void MathModule::removeFunctions()
+QString MathModule::descriptionFileName() const
 {
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Math");
+    return QString("math.xml");
 }
 
 
@@ -1252,7 +1236,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // Good. Now we can execute the necessary function on the range.
     Value res;
-    Function *f;
+  QSharedPointer<Function> f;
     valVector a;
     switch (function) {
     case 1: // Average

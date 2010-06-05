@@ -24,10 +24,11 @@
 
 #include <KoGenericRegistry.h>
 
-#include "FunctionModule.h"
+#include "kspread_export.h"
 
 namespace KSpread
 {
+class FunctionModule;
 
 /**
  * Registry for function modules.
@@ -51,7 +52,7 @@ public:
      * Depending on their activation state read from the config,
      * the modules are added or removed from the registry.
      */
-    void loadFunctions();
+    void loadFunctionModules();
 
     /**
      * Registers the functions from all modules in the function repository

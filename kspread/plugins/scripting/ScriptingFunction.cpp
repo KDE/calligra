@@ -156,7 +156,7 @@ public:
             repo->addGroup(i18n("Scripts"));
 
         // register ourself at the repository
-        repo->add(this);
+        repo->add(QSharedPointer<KSpread::Function>(this));
 
         // create a new description for the function
         KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(description);

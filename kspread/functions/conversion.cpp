@@ -49,73 +49,57 @@ Value func_booltoint(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(ConversionModulePluginFactory,
-                 registerPlugin<ConversionModule>();
-                )
-K_EXPORT_PLUGIN(ConversionModulePluginFactory("ConversionModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("conversion", ConversionModule)
 
 
 ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "conversion", i18n("Conversion Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("ARABIC", func_arabic);
+  add(f);
+    f = new Function("CARX", func_carx);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("CARY", func_cary);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("DECSEX", func_decsex);
+  add(f);
+    f = new Function("POLR", func_polr);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("POLA", func_pola);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("ROMAN", func_roman);
+    f->setParamCount(1, 2);
+  add(f);
+    f = new Function("SEXDEC", func_sexdec);
+    f->setParamCount(1, 3);
+  add(f);
+    f = new Function("ASCIITOCHAR", func_AsciiToChar);
+    f->setParamCount(1, -1);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("CHARTOASCII", func_CharToAscii);
+  add(f);
+    f = new Function("BOOL2INT", func_booltoint);
+  add(f);
+    f = new Function("INT2BOOL", func_inttobool);
+  add(f);
+    f = new Function("BOOL2STRING", func_ToString);
+  add(f);
+    f = new Function("NUM2STRING", func_ToString);
+  add(f);
+    f = new Function("STRING", func_ToString);
+  add(f);
 }
 
 QString ConversionModule::descriptionFileName() const
 {
     return QString("conversion.xml");
-}
-
-void ConversionModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("ARABIC", func_arabic);
-    repo->add(f);
-    f = new Function("CARX", func_carx);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("CARY", func_cary);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("DECSEX", func_decsex);
-    repo->add(f);
-    f = new Function("POLR", func_polr);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("POLA", func_pola);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("ROMAN", func_roman);
-    f->setParamCount(1, 2);
-    repo->add(f);
-    f = new Function("SEXDEC", func_sexdec);
-    f->setParamCount(1, 3);
-    repo->add(f);
-    f = new Function("ASCIITOCHAR", func_AsciiToChar);
-    f->setParamCount(1, -1);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("CHARTOASCII", func_CharToAscii);
-    repo->add(f);
-    f = new Function("BOOL2INT", func_booltoint);
-    repo->add(f);
-    f = new Function("INT2BOOL", func_inttobool);
-    repo->add(f);
-    f = new Function("BOOL2STRING", func_ToString);
-    repo->add(f);
-    f = new Function("NUM2STRING", func_ToString);
-    repo->add(f);
-    f = new Function("STRING", func_ToString);
-    repo->add(f);
-}
-
-void ConversionModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Conversion");
 }
 
 

@@ -67,88 +67,72 @@ Value func_type(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(InformationModulePluginFactory,
-                 registerPlugin<InformationModule>();
-                )
-K_EXPORT_PLUGIN(InformationModulePluginFactory("InformationModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("information", InformationModule)
 
 
 InformationModule::InformationModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "information", i18n("Information Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("ERRORTYPE", func_errortype);
+  add(f);
+    f = new Function("FILENAME", func_filename);
+    f->setParamCount(0);
+  add(f);
+    f = new Function("FORMULA", func_formula);
+    f->setParamCount(1);
+    f->setNeedsExtra(true);
+    add(f);
+    f = new Function("INFO", func_info);
+  add(f);
+    f = new Function("ISBLANK", func_isblank);
+  add(f);
+    f = new Function("ISDATE", func_isdate);
+  add(f);
+    f = new Function("ISERR", func_iserr);
+  add(f);
+    f = new Function("ISERROR", func_iserror);
+  add(f);
+    f = new Function("ISEVEN", func_iseven);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN");
+    add(f);
+    f = new Function("ISLOGICAL", func_islogical);
+  add(f);
+    f = new Function("ISNA", func_isna);
+  add(f);
+    f = new Function("ISNONTEXT", func_isnottext);
+  add(f);
+    f = new Function("ISNOTTEXT", func_isnottext);
+  add(f);
+    f = new Function("ISNUM", func_isnum);
+  add(f);
+    f = new Function("ISNUMBER", func_isnum);
+  add(f);
+    f = new Function("ISODD", func_isodd);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD");
+    add(f);
+    f = new Function("ISREF", func_isref);
+    f->setNeedsExtra(true);
+    f->setAcceptArray();
+  add(f);
+    f = new Function("ISTEXT", func_istext);
+  add(f);
+    f = new Function("ISTIME", func_istime);
+  add(f);
+    f = new Function("N", func_n);
+  add(f);
+    f = new Function("NA", func_na);
+    f->setParamCount(0);
+  add(f);
+    f = new Function("TYPE", func_type);
+    f->setAcceptArray();
+  add(f);
 }
 
 QString InformationModule::descriptionFileName() const
 {
     return QString("information.xml");
-}
-
-void InformationModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("ERRORTYPE", func_errortype);
-    repo->add(f);
-    f = new Function("FILENAME", func_filename);
-    f->setParamCount(0);
-    repo->add(f);
-    f = new Function("FORMULA", func_formula);
-    f->setParamCount(1);
-    f->setNeedsExtra(true);
-    repo->add(f);
-    f = new Function("INFO", func_info);
-    repo->add(f);
-    f = new Function("ISBLANK", func_isblank);
-    repo->add(f);
-    f = new Function("ISDATE", func_isdate);
-    repo->add(f);
-    f = new Function("ISERR", func_iserr);
-    repo->add(f);
-    f = new Function("ISERROR", func_iserror);
-    repo->add(f);
-    f = new Function("ISEVEN", func_iseven);
-    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN");
-    repo->add(f);
-    f = new Function("ISLOGICAL", func_islogical);
-    repo->add(f);
-    f = new Function("ISNA", func_isna);
-    repo->add(f);
-    f = new Function("ISNONTEXT", func_isnottext);
-    repo->add(f);
-    f = new Function("ISNOTTEXT", func_isnottext);
-    repo->add(f);
-    f = new Function("ISNUM", func_isnum);
-    repo->add(f);
-    f = new Function("ISNUMBER", func_isnum);
-    repo->add(f);
-    f = new Function("ISODD", func_isodd);
-    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD");
-    repo->add(f);
-    f = new Function("ISREF", func_isref);
-    f->setNeedsExtra(true);
-    f->setAcceptArray();
-    repo->add(f);
-    f = new Function("ISTEXT", func_istext);
-    repo->add(f);
-    f = new Function("ISTIME", func_istime);
-    repo->add(f);
-    f = new Function("N", func_n);
-    repo->add(f);
-    f = new Function("NA", func_na);
-    f->setParamCount(0);
-    repo->add(f);
-    f = new Function("TYPE", func_type);
-    f->setAcceptArray();
-    repo->add(f);
-}
-
-void InformationModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Information");
 }
 
 

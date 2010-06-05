@@ -28,14 +28,6 @@
 
 #include "TestInformationFunctions.h"
 
-#include "functions/DateTimeModule.h"
-#include "functions/InformationModule.h"
-#include "functions/LogicModule.h"
-#include "functions/MathModule.h"
-#include "functions/ReferenceModule.h"
-#include "functions/TextModule.h"
-#include "FunctionModuleRegistry.h"
-
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
@@ -59,13 +51,7 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestInformationFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new DateTimeModule(this));
-    FunctionModuleRegistry::instance()->add(new InformationModule(this));
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->add(new ReferenceModule(this));
-    FunctionModuleRegistry::instance()->add(new TextModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

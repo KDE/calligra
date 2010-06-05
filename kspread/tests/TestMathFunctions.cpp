@@ -27,13 +27,6 @@
 #include <Map.h>
 #include <Sheet.h>
 
-#include "functions/EngineeringModule.h"
-#include "functions/LogicModule.h"
-#include "functions/MathModule.h"
-#include "functions/StatisticalModule.h"
-#include "functions/TrigonometryModule.h"
-#include "FunctionModuleRegistry.h"
-
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
 //  - different algorithms among spreadsheet programs
@@ -103,12 +96,6 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
 void TestMathFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new EngineeringModule(this));
-    FunctionModuleRegistry::instance()->add(new LogicModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->add(new StatisticalModule(this));
-    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

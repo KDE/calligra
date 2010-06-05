@@ -20,13 +20,9 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/TrigonometryModule.h"
-#include "FunctionModuleRegistry.h"
-
 void TestTrigFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult

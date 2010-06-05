@@ -52,9 +52,9 @@ public:
 class FunctionRepository::Private
 {
 public:
-    QHash<QString, Function*> functions;
+    QHash<QString, QSharedPointer<Function> > functions;
+    QHash<QString, QSharedPointer<Function> > alternates;
     QHash<QString, FunctionDescription*> descriptions;
-    QHash<QString, Function*> alternates;
     QStringList groups;
     bool initialized;
 };
@@ -211,7 +211,7 @@ FunctionRepository* FunctionRepository::self()
 
         // Verify, that every function has a description.
         QStringList missingDescriptions;
-        typedef QHash<QString, Function*> Functions;
+        typedef QHash<QString, QSharedPointer<Function> > Functions;
         Functions::ConstIterator end = s_singleton->instance.d->functions.constEnd();
         for (Functions::ConstIterator it = s_singleton->instance.d->functions.constBegin(); it != end; ++it) {
             if (!s_singleton->instance.d->descriptions.contains(it.key()))
@@ -236,12 +236,11 @@ FunctionRepository::FunctionRepository()
 
 FunctionRepository::~FunctionRepository()
 {
-    qDeleteAll(d->functions);
     qDeleteAll(d->descriptions);
     delete d;
 }
 
-void FunctionRepository::add(Function* function)
+void FunctionRepository::add(const QSharedPointer<Function>& function)
 {
     if (!function) return;
     d->functions.insert(function->name().toUpper(), function);
@@ -257,32 +256,21 @@ void FunctionRepository::add(FunctionDescription *desc)
     d->descriptions.insert(desc->name(), desc);
 }
 
-void FunctionRepository::remove(const QString& groupName)
+void FunctionRepository::remove(const QSharedPointer<Function>& function)
 {
-    if (!d->groups.contains(groupName)) {
-        return;
-    }
-    d->groups.removeAll(groupName);
-    QStringList functionNames;
-    foreach(const FunctionDescription* description, d->descriptions) {
-        if (description->group() == groupName) {
-            functionNames.append(description->name());
-        }
-    }
-    foreach(const QString &functionName, functionNames) {
-        if (d->functions.contains(functionName)) {
-            Function* function = d->functions.take(functionName);
-            d->alternates.remove(function->alternateName().toUpper());
-        }
-        d->descriptions.remove(functionName);
+    const QString functionName = function->name().toUpper();
+    delete d->descriptions.take(functionName);
+    if (d->functions.contains(functionName)) {
+        QSharedPointer<Function> function = d->functions.take(functionName);
+        d->alternates.remove(function->alternateName().toUpper());
     }
 }
 
-Function *FunctionRepository::function(const QString& name)
+QSharedPointer<Function> FunctionRepository::function(const QString& name)
 {
     const QString n = name.toUpper();
-    Function* f = d->functions.value(n);
-    return f ? f : d->alternates.value(n);
+    QSharedPointer<Function> f = d->functions.value(n);
+    return !f.isNull() ? f : d->alternates.value(n);
 }
 
 FunctionDescription *FunctionRepository::functionInfo(const QString& name)

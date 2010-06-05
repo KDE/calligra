@@ -53,77 +53,61 @@ Value func_tanh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(TrigonometryModulePluginFactory,
-                 registerPlugin<TrigonometryModule>();
-                )
-K_EXPORT_PLUGIN(TrigonometryModulePluginFactory("TrigonometryModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("trigonometry", TrigonometryModule)
 
 
 TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "trigonometry", i18n("Trig Functions"))
+    : FunctionModule(parent)
 {
+    Function *f;
+
+    f = new Function("ACOS",   func_acos);
+  add(f);
+    f = new Function("ACOSH",  func_acosh);
+  add(f);
+    f = new Function("ACOT",   func_acot);
+  add(f);
+    f = new Function("ACOTH",  func_acoth);
+  add(f);
+    f = new Function("ASIN",   func_asin);
+  add(f);
+    f = new Function("ASINH",  func_asinh);
+  add(f);
+    f = new Function("ATAN",   func_atan);
+  add(f);
+    f = new Function("ATAN2",  func_atan2);
+    f->setParamCount(2);
+  add(f);
+    f = new Function("ATANH",  func_atanh);
+  add(f);
+    f = new Function("COS",    func_cos);
+  add(f);
+    f = new Function("COSH",   func_cosh);
+  add(f);
+    f = new Function("COT",    func_cot);
+  add(f);
+    f = new Function("COTH",   func_coth);
+  add(f);
+    f = new Function("DEGREES", func_degrees);
+  add(f);
+    f = new Function("RADIANS", func_radians);
+  add(f);
+    f = new Function("SIN",    func_sin);
+  add(f);
+    f = new Function("SINH",   func_sinh);
+  add(f);
+    f = new Function("TAN",    func_tan);
+  add(f);
+    f = new Function("TANH",   func_tanh);
+  add(f);
+    f = new Function("PI",     func_pi);
+    f->setParamCount(0);
+  add(f);
 }
 
 QString TrigonometryModule::descriptionFileName() const
 {
     return QString("trig.xml");
-}
-
-void TrigonometryModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
-    Function *f;
-
-    f = new Function("ACOS",   func_acos);
-    repo->add(f);
-    f = new Function("ACOSH",  func_acosh);
-    repo->add(f);
-    f = new Function("ACOT",   func_acot);
-    repo->add(f);
-    f = new Function("ACOTH",  func_acoth);
-    repo->add(f);
-    f = new Function("ASIN",   func_asin);
-    repo->add(f);
-    f = new Function("ASINH",  func_asinh);
-    repo->add(f);
-    f = new Function("ATAN",   func_atan);
-    repo->add(f);
-    f = new Function("ATAN2",  func_atan2);
-    f->setParamCount(2);
-    repo->add(f);
-    f = new Function("ATANH",  func_atanh);
-    repo->add(f);
-    f = new Function("COS",    func_cos);
-    repo->add(f);
-    f = new Function("COSH",   func_cosh);
-    repo->add(f);
-    f = new Function("COT",    func_cot);
-    repo->add(f);
-    f = new Function("COTH",   func_coth);
-    repo->add(f);
-    f = new Function("DEGREES", func_degrees);
-    repo->add(f);
-    f = new Function("RADIANS", func_radians);
-    repo->add(f);
-    f = new Function("SIN",    func_sin);
-    repo->add(f);
-    f = new Function("SINH",   func_sinh);
-    repo->add(f);
-    f = new Function("TAN",    func_tan);
-    repo->add(f);
-    f = new Function("TANH",   func_tanh);
-    repo->add(f);
-    f = new Function("PI",     func_pi);
-    f->setParamCount(0);
-    repo->add(f);
-}
-
-void TrigonometryModule::removeFunctions()
-{
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Trigonometric");
 }
 
 

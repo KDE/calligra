@@ -20,13 +20,11 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/BitOpsModule.h"
-#include "FunctionModuleRegistry.h"
+#include <KStandardDirs>
 
 void TestBitopsFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new BitOpsModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 // because we may need to promote expected value from integer to float

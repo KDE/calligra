@@ -47,87 +47,71 @@ Value func_dvarp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
-K_PLUGIN_FACTORY(DatabaseModulePluginFactory,
-                 registerPlugin<DatabaseModule>();
-                )
-K_EXPORT_PLUGIN(DatabaseModulePluginFactory("DatabaseModule"))
-#endif
+KSPREAD_EXPORT_FUNCTION_MODULE("database", DatabaseModule)
 
 
 DatabaseModule::DatabaseModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent, "database", i18n("Database Functions"))
+    : FunctionModule(parent)
 {
-}
-
-QString DatabaseModule::descriptionFileName() const
-{
-    return QString("database.xml");
-}
-
-void DatabaseModule::registerFunctions()
-{
-    FunctionRepository* repo = FunctionRepository::self();
     Function *f;
 
     f = new Function("DAVERAGE",     func_daverage);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DCOUNT",       func_dcount);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DCOUNTA",      func_dcounta);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DGET",         func_dget);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DMAX",         func_dmax);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DMIN",         func_dmin);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DPRODUCT",     func_dproduct);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DSTDEV",       func_dstdev);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DSTDEVP",      func_dstdevp);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DSUM",         func_dsum);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DVAR",         func_dvar);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("DVARP",        func_dvarp);
     f->setParamCount(3);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
     f = new Function("GETPIVOTDATA", func_getpivotdata);  // partially Excel-compatible
     f->setParamCount(2);
     f->setAcceptArray();
-    repo->add(f);
+  add(f);
 }
 
-void DatabaseModule::removeFunctions()
+QString DatabaseModule::descriptionFileName() const
 {
-    // NOTE: The group name has to match the one in the xml description.
-    FunctionRepository::self()->remove("Database");
+    return QString("database.xml");
 }
 
 

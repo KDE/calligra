@@ -21,15 +21,9 @@
 
 #include "TestKspreadCommon.h"
 
-#include "functions/EngineeringModule.h"
-#include "functions/MathModule.h"
-#include "FunctionModuleRegistry.h"
-
 void TestEngineeringFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new EngineeringModule(this));
-    FunctionModuleRegistry::instance()->add(new MathModule(this));
-    FunctionModuleRegistry::instance()->registerFunctions();
+    FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult

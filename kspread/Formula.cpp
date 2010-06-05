@@ -1387,7 +1387,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
     const ValueConverter* converter = map->converter();
     ValueCalc* calc = map->calc();
 
-    Function* function;
+    QSharedPointer<Function> function;
     FuncExtra fe;
     fe.mycol = fe.myrow = 0;
     if (!d->cell.isNull()) {
