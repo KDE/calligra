@@ -21,11 +21,11 @@
 #define KSPREAD_FACTORY_H
 
 #include <KoFactory.h>
+
 #include "kspread_export.h"
 
 class KAboutData;
 class KIconLoader;
-class DCOPObject;
 
 namespace KSpread
 {
@@ -41,17 +41,11 @@ public:
 
     static const KComponentData &global();
 
-    static KIconLoader* iconLoader();
-
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
-    static DCOPObject* dcopObject();
-
 private:
     static KComponentData* s_global;
-    static KIconLoader* s_iconLoader;
-    static DCOPObject* s_dcopObject;
     static KAboutData* s_aboutData;
 };
 

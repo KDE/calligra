@@ -21,19 +21,15 @@
 #include "Factory.h"
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include "AboutData.h"
 #include "Doc.h"
-// #include "KSpreadAppIface.h"
 
 using namespace KSpread;
 
 KComponentData* Factory::s_global = 0;
-KIconLoader* Factory::s_iconLoader = 0;
-// DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
 
 Factory::Factory(QObject* parent, const char* name)
@@ -43,7 +39,6 @@ Factory::Factory(QObject* parent, const char* name)
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is KSpread.
     (void)global();
-//   (void)dcopObject();
 }
 
 Factory::~Factory()
@@ -53,10 +48,6 @@ Factory::~Factory()
     s_aboutData = 0;
     delete s_global;
     s_global = 0;
-    delete s_iconLoader;
-    s_iconLoader = 0;
-//   delete s_dcopObject;
-//   s_dcopObject = 0;
 }
 
 KParts::Part* Factory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
@@ -87,27 +78,8 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
         s_global->dirs()->addResourceType("functions", "data", "kspread/functions/");
         s_global->dirs()->addResourceType("sheet-styles", "data", "kspread/sheetstyles/");
-
     }
     return *s_global;
 }
-
-KIconLoader* Factory::iconLoader()
-{
-    if (!s_iconLoader) {
-        // Tell the iconloader about share/apps/koffice/icons
-        s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
-        s_iconLoader->addAppDir("koffice");
-    }
-
-    return s_iconLoader;
-}
-
-// DCOPObject* Factory::dcopObject()
-// {
-//     if ( !s_dcopObject )
-//         s_dcopObject = new AppIface;
-//     return s_dcopObject;
-// }
 
 #include "Factory.moc"
