@@ -10,6 +10,7 @@ Display status bar messages instead of notifications (in a few cases).
 
 Bug Fixes
 ---------
+Fix the dependency calculation after region changes and after sheet additions/removals.
 Fix text/background/border color actions by using KoColorPopupAction (if pigment is built).
 Fix map/sheet protection action.
 208868: Fix action triggering on selection changes, which resulted in style changes.

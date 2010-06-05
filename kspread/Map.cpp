@@ -172,6 +172,18 @@ Map::Map ( Doc* doc, int syntaxVersion)
         QDBusConnection::sessionBus().registerObject('/' + doc->objectName() + '/' + objectName(), this);
     }
 
+    connect(this, SIGNAL(sheetAdded(Sheet*)),
+            d->dependencyManager, SLOT(addSheet(Sheet*)));
+    connect(this, SIGNAL(sheetAdded(Sheet*)),
+            d->recalcManager, SLOT(addSheet(Sheet*)));
+    connect(this, SIGNAL(sheetRemoved(Sheet*)),
+            d->dependencyManager, SLOT(removeSheet(Sheet*)));
+    connect(this, SIGNAL(sheetRemoved(Sheet*)),
+            d->recalcManager, SLOT(removeSheet(Sheet*)));
+    connect(this, SIGNAL(sheetRevived(Sheet*)),
+            d->dependencyManager, SLOT(addSheet(Sheet*)));
+    connect(this, SIGNAL(sheetRevived(Sheet*)),
+            d->recalcManager, SLOT(addSheet(Sheet*)));
     connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),

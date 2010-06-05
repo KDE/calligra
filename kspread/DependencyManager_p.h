@@ -89,6 +89,7 @@ public:
 
     /**
      * Returns the region, that consumes the value of \p cell.
+     * \see DependencyManager::consumingRegion(const Cell&)
      * \return region consuming \p cell 's value
      */
     Region consumingRegion(const Cell& cell) const;
@@ -107,6 +108,17 @@ public:
 
     /**
      * Computes and stores the dependencies.
+     *
+     * Parses \p formula and adds each contained reference to a
+     * cell, a cell range or a named area to the providing regions
+     * of \p cell.
+     * Additionally, the opposite direction is also stored:
+     * Each consumed region, i.e. each reference, points to \p cell.
+     *
+     * The \p formula has to belong to \p cell. It would have been
+     * possible to look it up from \p cell, but is passed separately
+     * for performance reasons.
+     * Do not call this method for a \p cell not containing a \p formula.
      */
     void computeDependencies(const Cell& cell, const Formula& formula);
 
@@ -127,6 +139,7 @@ public:
     // stores consuming cell locations ordered by their providing regions
     QHash<Sheet*, RTree<Cell>*> consumers;
     // stores consuming cell locations ordered by their providing named area
+    // (in addition to the general storage of the consuming cell locations)
     QHash<QString, QList<Cell> > namedAreaConsumers;
     /*
      * Stores cells with its reference depth.

@@ -450,10 +450,10 @@ void Sheet::setAutoCalculationEnabled(bool enable)
     d->autoCalc = enable;
     //If enabling automatic calculation, make sure that the dependencies are up-to-date
     if (enable == true) {
-        Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), this);
-//        region = map()->dependencyManager()->reduceToProvidingRegion(region);
-        map()->dependencyManager()->regionChanged(region);
+        map()->dependencyManager()->addSheet(this);
         map()->recalcManager()->recalcSheet(this);
+    } else {
+        map()->dependencyManager()->removeSheet(this);
     }
 }
 

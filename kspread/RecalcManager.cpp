@@ -155,8 +155,9 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& 
     }
 }
 
-RecalcManager::RecalcManager(const Map* map)
-        : d(new Private)
+RecalcManager::RecalcManager(Map *const map)
+        : QObject(map)
+        , d(new Private)
 {
     d->map  = map;
     d->active = false;
@@ -204,6 +205,19 @@ void RecalcManager::recalcMap()
 bool RecalcManager::isActive() const
 {
     return d->active;
+}
+
+void RecalcManager::addSheet(Sheet *sheet)
+{
+    // Manages also the revival of a deleted sheet.
+    Q_UNUSED(sheet);
+    recalcMap(); // FIXME Stefan: Implement a more elegant solution.
+}
+
+void RecalcManager::removeSheet(Sheet *sheet)
+{
+    Q_UNUSED(sheet);
+    recalcMap(); // FIXME Stefan: Implement a more elegant solution.
 }
 
 void RecalcManager::recalc()

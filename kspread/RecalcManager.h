@@ -22,6 +22,8 @@
 
 #include <Region.h>
 
+#include <QObject>
+
 namespace KSpread
 {
 class Cell;
@@ -45,15 +47,16 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class KSPREAD_EXPORT RecalcManager
+class KSPREAD_EXPORT RecalcManager : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a RecalcManager. It is used for a whole map.
      *
      * \param map The Map which this RecalcManager belongs to.
      */
-    explicit RecalcManager(const Map* map);
+    explicit RecalcManager(Map *const map);
 
     /**
      * Destructor.
@@ -94,6 +97,17 @@ public:
      * Prints out the cell depths in the current recalculation event.
      */
     void dump() const;
+
+public Q_SLOTS:
+    /**
+     * Called after a sheet was added.
+     */
+    void addSheet(Sheet *sheet);
+
+    /**
+     * Called after a sheet was removed.
+     */
+    void removeSheet(Sheet *sheet);
 
 protected:
     /**

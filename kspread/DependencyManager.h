@@ -48,10 +48,21 @@ public:
     /** clear all data */
     void reset();
 
-    /** handle the fact that cell's contents have changed */
+    /**
+     * Handles the fact, that formulas have changed in \p region.
+     * The \p region needs to contain only those areas, in which
+     * each cell has a changed formula. That can also be a removed
+     * formula. This class has no chance to know the old formula
+     * locations, but the caller of this method has. So, usually the
+     * \p region consists of several cell locations, not cell ranges.
+     * The caller has to take care of that, because each and every
+     * cell in \p region is traversed.
+     */
     void regionChanged(const Region& region);
 
-    /** Updates the whole map. */
+    /**
+     * Updates the whole \p map.
+     */
     void updateAllDependencies(const Map* map);
 
     /**
@@ -62,6 +73,12 @@ public:
 
     /**
      * Returns the region, that consumes the value of \p cell.
+     *
+     * I.e. the returned region contains all cells, that have
+     * got a formula referencing \p cell. Even if the formula
+     * references a complete cell range or a named area, that
+     * contains \p cell.
+     *
      * \return region consuming \p cell 's value
      */
     Region consumingRegion(const Cell& cell) const;
@@ -82,6 +99,16 @@ public:
 
 public Q_SLOTS:
     void namedAreaModified(const QString&);
+
+    /**
+     * Called after a sheet was added.
+     */
+    void addSheet(Sheet *sheet);
+
+    /**
+     * Called after a sheet was removed.
+     */
+    void removeSheet(Sheet *sheet);
 
 protected:
     /**

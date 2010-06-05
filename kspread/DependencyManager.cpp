@@ -103,25 +103,16 @@ void DependencyManager::regionChanged(const Region& region)
         const QRect range = (*it)->rect();
         const Sheet* sheet = (*it)->sheet();
 
-        const CellStorage *cells = sheet->cellStorage();
-
-        int bottom = range.bottom();
-        if (bottom > cells->rows()) bottom = cells->rows();
-        for (int row = range.top(); row <= bottom; ++row) {
-            int col = range.left();
+        for (int col = range.left(); col <= range.right(); ++col) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                Cell cell(sheet, col, row);
             bool first = true;
-            while (1) {
-                Cell cell;
                 if (first) {
                     cell = Cell(sheet, col, row);
                     first = false;
                 } else {
-                    cell = cells->nextInRow(col, row);
-                    if (cell.isNull()) break;
-                    col = cell.column();
-                    if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+                    cell = sheet->cellStorage()->nextInRow(col, row);
                 }
-
                 const Formula formula = cell.formula();
 
                 // remove it and all its consumers from the reference depth list
@@ -147,6 +138,47 @@ void DependencyManager::regionChanged(const Region& region)
 void DependencyManager::namedAreaModified(const QString &name)
 {
     d->namedAreaModified(name);
+}
+
+void DependencyManager::addSheet(Sheet *sheet)
+{
+    // Manages also the revival of a deleted sheet.
+    Q_UNUSED(sheet);
+#if 0 // TODO Stefan: Enable, if dependencies should not be tracked all the time.
+    ElapsedTime et("Generating dependencies", ElapsedTime::PrintOnlyTime);
+
+    // Clear orphaned dependencies (i.e. cells formerly containing formulas)
+    // FIXME Stefan: Iterate only over the consumers in sheet. Needs adjustment
+    //               of the way the providers are stored. Now: only by cell.
+    //               Future: QHash<Sheet*, QHash<Cell, Region> >
+    const QList<Cell> consumers = d->providers.keys();
+    foreach (const Cell& cell, consumers) {
+        if (cell.sheet() == sheet) {
+            // Those cells may had got providing regions. Clear them first.
+            // TODO
+
+            // Clear this cell as provider.
+            d->providers.remove(cell);
+        }
+    }
+
+    Cell cell;
+    for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
+        cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+
+        d->generateDependencies(cell, sheet->formulaStorage()->data(c));
+        if (!d->depths.contains(cell)) {
+            int depth = d->computeDepth(cell);
+            d->depths.insert(cell , depth);
+        }
+    }
+#endif
+}
+
+void DependencyManager::removeSheet(Sheet *sheet)
+{
+    Q_UNUSED(sheet);
+    // TODO Stefan: Implement, if dependencies should not be tracked all the time.
 }
 
 void DependencyManager::updateAllDependencies(const Map* map)
