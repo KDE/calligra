@@ -20,10 +20,9 @@
 #ifndef KSPREAD_BINDING_MANAGER
 #define KSPREAD_BINDING_MANAGER
 
-#include <KoTableInterface.h>
-
 #include <QObject>
 
+class QAbstractItemModel;
 class QString;
 
 namespace KSpread
@@ -34,10 +33,9 @@ class Region;
 /**
  * Manages cell ranges acting as data sources.
  */
-class BindingManager : public QObject, public KoTable::SourceRangeManager
+class BindingManager : public QObject
 {
     Q_OBJECT
-    Q_INTERFACES(KoTable::SourceRangeManager)
 public:
     /**
      * Constructor.

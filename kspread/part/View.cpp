@@ -746,7 +746,6 @@ void View::initView()
     variant.setValue<void*>(d->selection);
     d->canvas->resourceManager()->setResource(CanvasResource::Selection, variant);
     variant.setValue<QObject*>(doc()->map()->bindingManager());
-    d->canvas->resourceManager()->setResource(KoTable::Resource::SourceRangeManager, variant);
 
     // Load the KSpread Tools
     ToolRegistry::instance();

@@ -102,23 +102,10 @@ Item										Prio	Status
   to fix the ranges by dollar signs, even if these are ignored in the ODF in
   this case.
 
-  External apps or shapes should be allowed to consume or to provide data.
-  Expose an interface to the SourceRangeManager, that takes a cell range name
-  and returns an cell range interface (model + cell range name) and allows to
-  remove such a tracked cell range again.
-  For data providers an interface to TargetRangeManager should be published.
-  This needs a method, that takes a cell range name and a model. The method
-  also returns an cell range interface (model + cell range name). A method to
-  remove the cell range has to be supported, too.
-
   Summary:
   1. Binding* becomes SourceRange*.
-  2. SourceRangeModel implements abstract interface (model + cell range name).
-  3. Create TargetRangeModel implementing same abstract interface as SourceRange.
-  4. Refactor Database, so that it refers to a TargetRangeModel.
-  5. DatabaseStorage becomes TargetRangeStorage.
-  6. Expose a SourceRange manager interface to allow externals to consume data.
-  7. Expose a TargetRange manager interface to allow externals to provide data.
+  2. Refactor Database, so that it refers to a TargetRangeModel.
+  3. DatabaseStorage becomes TargetRangeStorage.
 
 
 
