@@ -25,6 +25,8 @@
 #include <QString>
 #include <QStringList>
 
+#include "ProtectableObject.h"
+
 #include "kspread_export.h"
 
 #include <KoDataCenterBase.h>
@@ -68,7 +70,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class KSPREAD_EXPORT Map : public QObject, public KoDataCenterBase
+class KSPREAD_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:
@@ -224,11 +226,6 @@ public:
 
     bool loadChildren(KoStore* _store);
     bool saveChildren(KoStore* _store);
-
-    void password(QByteArray & passwd) const;
-    bool isProtected() const;
-    void setProtected(QByteArray const & passwd);
-    bool checkPassword(QByteArray const & passwd) const;
 
     /**
      * The sheet named @p _from is being moved to the sheet @p _to.

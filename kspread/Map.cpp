@@ -87,11 +87,6 @@ public:
     QList<Sheet*> lstSheets;
     QList<Sheet*> lstDeletedSheets;
 
-    /**
-     * Password to protect the map from being changed.
-     */
-    QByteArray strPassword;
-
     // used to give every Sheet a unique default name.
     int tableId;
 
@@ -320,11 +315,6 @@ CalculationSettings* Map::calculationSettings() const
     return d->calculationSettings;
 }
 
-void Map::setProtected(QByteArray const & passwd)
-{
-    d->strPassword = passwd;
-}
-
 Sheet* Map::createSheet()
 {
     QString name(i18n("Sheet%1", d->tableId++));
@@ -442,11 +432,13 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     defaultRowStyle.setDefaultStyle(true);
     savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
-    if (!d->strPassword.isNull()) {
+    QByteArray password;
+    this->password(password);
+    if (!password.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");
-        QByteArray str = KCodecs::base64Encode(d->strPassword);
+        QByteArray str = KCodecs::base64Encode( password );
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
-        xmlWriter.addAttribute("table:protection-key", QString(str));
+        xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }
 
     OdfSavingContext tableContext(savingContext);
@@ -493,9 +485,15 @@ QDomElement Map::save(QDomDocument& doc)
         mymap.setAttribute("yOffset",      canvas->yOffset());
     }
 
-    if (!d->strPassword.isNull()) {
-        QByteArray str = KCodecs::base64Encode(d->strPassword);
-        mymap.setAttribute("protected", QString(str.data()));
+    QByteArray password;
+    this->password(password);
+    if (!password.isNull()) {
+        if (password.size() > 0) {
+            QByteArray str = KCodecs::base64Encode(password);
+            mymap.setAttribute("protected", QString(str.data()));
+        } else {
+            mymap.setAttribute("protected", "");
+        }
     }
 
     foreach(Sheet* sheet, d->lstSheets) {
@@ -594,13 +592,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 
     d->calculationSettings->loadOdf(body); // table::calculation-settings
     if (body.hasAttributeNS(KoXmlNS::table, "structure-protected")) {
-        if (body.hasAttributeNS(KoXmlNS::table, "protection-key")) {
-            QString p = body.attributeNS(KoXmlNS::table, "protection-key", QString());
-            if(!p.isNull()) {
-                QByteArray str(p.toUtf8());
-                d->strPassword = KCodecs::base64Decode(str);
-            }
-        }
+        loadOdfProtection(body);
     }
 
     KoXmlNode sheetNode = KoXml::namedItemNS(body, KoXmlNS::table, "table");
@@ -706,11 +698,7 @@ bool Map::loadXML(const KoXmlElement& mymap)
         n = n.nextSibling();
     }
 
-    if (mymap.hasAttribute("protected")) {
-        QString passwd = mymap.attribute("protected");
-        QByteArray str(passwd.toUtf8());
-        d->strPassword = KCodecs::base64Decode(str);
-    }
+    loadXmlProtection(mymap);
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
@@ -810,21 +798,6 @@ QStringList Map::hiddenSheets() const
             result.append(sheet->sheetName());
     }
     return result;
-}
-
-void Map::password(QByteArray & passwd) const
-{
-    passwd = d->strPassword;
-}
-
-bool Map::isProtected() const
-{
-    return !d->strPassword.isNull();
-}
-
-bool Map::checkPassword(QByteArray const & passwd) const
-{
-    return (passwd == d->strPassword);
 }
 
 Sheet* Map::sheet(int index) const

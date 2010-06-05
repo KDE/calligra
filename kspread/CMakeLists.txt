@@ -185,6 +185,7 @@ SET (kspreadcommon_LIB_SRCS
 	Number.cpp
 	PageManager.cpp
 	PrintSettings.cpp
+        ProtectableObject.cpp
 	RecalcManager.cpp
 	Region.cpp
         RegionModel.cpp

@@ -132,9 +132,6 @@ public:
     // true if sheet is hidden
     bool hide;
 
-    // password of protected sheet
-    QByteArray password;
-
     bool showGrid;
     bool showFormula;
     bool showFormulaIndicator;
@@ -181,7 +178,7 @@ Sheet* Sheet::find(int _id)
 }
 
 Sheet::Sheet(Map* map, const QString& sheetName)
-        : KoShapeUserData()
+    : KoShapeUserData(map)
         , KoShapeControllerBase()
         , d(new Private)
 {
@@ -244,8 +241,9 @@ Sheet::Sheet(Map* map, const QString& sheetName)
 }
 
 Sheet::Sheet(const Sheet& other)
-        : KoShapeUserData()
+    : KoShapeUserData(other.d->workbook)
         , KoShapeControllerBase()
+    , ProtectableObject(other)
         , d(new Private)
 {
     d->workbook = other.d->workbook;
@@ -271,7 +269,6 @@ Sheet::Sheet(const Sheet& other)
 
     d->layoutDirection = other.d->layoutDirection;
     d->hide = other.d->hide;
-    d->password = other.d->password;
     d->showGrid = other.d->showGrid;
     d->showFormula = other.d->showFormula;
     d->showFormulaIndicator = other.d->showFormulaIndicator;
@@ -576,26 +573,6 @@ const ValidityStorage* Sheet::validityStorage() const
 const ValueStorage* Sheet::valueStorage() const
 {
     return d->cellStorage->valueStorage();
-}
-
-void Sheet::password(QByteArray & passwd) const
-{
-    passwd = d->password;
-}
-
-bool Sheet::isProtected() const
-{
-    return !d->password.isNull();
-}
-
-void Sheet::setProtected(QByteArray const & passwd)
-{
-    d->password = passwd;
-}
-
-bool Sheet::checkPassword(QByteArray const & passwd) const
-{
-    return (passwd == d->password);
 }
 
 SheetPrint* Sheet::print() const
@@ -2525,15 +2502,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     }
 
     if (sheetElement.attributeNS(KoXmlNS::table, "protected", QString()) == "true") {
-        if (sheetElement.hasAttributeNS(KoXmlNS::table, "protection-key")) {
-            QString p = sheetElement.attributeNS(KoXmlNS::table, "protection-key", QString());
-            if(!p.isNull()) {
-                QByteArray str(p.toUtf8());
-                QByteArray passwd = KCodecs::base64Decode(str);
-                kDebug(30518) << "Password password:" << str << "hash:" << passwd;
-                setProtected(passwd);
-            }
-        }
+        loadOdfProtection(sheetElement);
     }
     return true;
 }
@@ -3973,11 +3942,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         convertObscuringBorders();
     }
 
-    if (sheet.hasAttribute("protected")) {
-        QString passwd = sheet.attribute("protected");
-        QByteArray str(passwd.toUtf8());
-        setProtected(KCodecs::base64Decode(str));
-    }
+    loadXmlProtection(sheet);
 
     return true;
 }

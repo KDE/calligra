@@ -66,9 +66,7 @@
 #include <KFontChooser>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <knewpassworddialog.h>
 #include <kpassivepopup.h>
-#include <kpassworddialog.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
@@ -114,7 +112,6 @@
 #include "CellView.h"
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "Digest.h"
 #include "Doc.h"
 #include "Factory.h"
 #include "LoadingInfo.h"
@@ -364,13 +361,13 @@ void View::Private::initActions()
     actions->protectSheet  = new KToggleAction(i18n("Protect &Sheet..."), view);
     ac->addAction("protectSheet", actions->protectSheet);
     actions->protectSheet->setToolTip(i18n("Protect the sheet from being modified"));
-    connect(actions->protectSheet, SIGNAL(toggled(bool)),
+    connect(actions->protectSheet, SIGNAL(triggered(bool)),
             view, SLOT(toggleProtectSheet(bool)));
 
     actions->protectDoc  = new KToggleAction(i18n("Protect &Document..."), view);
     ac->addAction("protectDoc", actions->protectDoc);
     actions->protectDoc->setToolTip(i18n("Protect the document from being modified"));
-    connect(actions->protectDoc, SIGNAL(toggled(bool)), view, SLOT(toggleProtectDoc(bool)));
+    connect(actions->protectDoc, SIGNAL(triggered(bool)), view, SLOT(toggleProtectDoc(bool)));
 
     // -- misc actions --
 
@@ -1663,46 +1660,17 @@ void View::toggleProtectDoc(bool mode)
     if (!doc() || !doc()->map())
         return;
 
+    bool success;
     if (mode) {
-        KNewPasswordDialog dlg(this);
-        dlg.setPrompt(i18n("Enter a password."));
-        dlg.setWindowTitle(i18n("Protect Document"));
-        if (dlg.exec() != KPasswordDialog::Accepted) {
-            d->actions->protectDoc->blockSignals(true);
-            d->actions->protectDoc->setChecked(false);
-            d->actions->protectDoc->blockSignals(false);
-            return;
-        }
-
-        QByteArray hash("");
-        QString password = dlg.password();
-        if (password.length() > 0)
-            SHA1::getHash(password, hash);
-        doc()->map()->setProtected(hash);
+        success = doc()->map()->showPasswordDialog(this, ProtectableObject::Lock,
+                                                   i18n("Protect Document"));
     } else {
-        KPasswordDialog dlg(this);
-        dlg.setPrompt(i18n("Enter the password."));
-        dlg.setWindowTitle(i18n("Unprotect Document"));
-        if (dlg.exec() != KPasswordDialog::Accepted) {
-            d->actions->protectDoc->blockSignals(true);
-            d->actions->protectDoc->setChecked(true);
-            d->actions->protectDoc->blockSignals(false);
-            return;
-        }
-
-        QByteArray hash("");
-        QString password(dlg.password());
-        if (password.length() > 0)
-            SHA1::getHash(password, hash);
-        if (!doc()->map()->checkPassword(hash)) {
-            KMessageBox::error(0, i18n("Password is incorrect."));
-            d->actions->protectDoc->blockSignals(true);
-            d->actions->protectDoc->setChecked(true);
-            d->actions->protectDoc->blockSignals(false);
-            return;
-        }
-
-        doc()->map()->setProtected(QByteArray());
+        success = doc()->map()->showPasswordDialog(this, ProtectableObject::Unlock,
+                                                   i18n("Unprotect Document"));
+    }
+    if (!success) {
+        d->actions->protectDoc->setChecked(!mode);
+        return;
     }
 
     doc()->setModified(true);
@@ -1714,49 +1682,17 @@ void View::toggleProtectSheet(bool mode)
     if (!d->activeSheet)
         return;
 
+    bool success;
     if (mode) {
-        KNewPasswordDialog dlg(this);
-        dlg.setPrompt(i18n("Enter a password."));
-        dlg.setWindowTitle(i18n("Protect Sheet"));
-        if (dlg.exec() != KPasswordDialog::Accepted) {
-            d->actions->protectSheet->blockSignals(true);
-            d->actions->protectSheet->setChecked(false);
-            d->actions->protectSheet->blockSignals(false);
-            return;
-        }
-
-        QByteArray hash("");
-        QString password = dlg.password();
-        if (password.length() > 0)
-            SHA1::getHash(password, hash);
-        d->activeSheet->setProtected(hash);
+        success = activeSheet()->showPasswordDialog(this, ProtectableObject::Lock,
+                                                    i18n("Protect Sheet"));
     } else {
-        KPasswordDialog dlg(this);
-        dlg.setPrompt(i18n("Enter the password."));
-        dlg.setWindowTitle(i18n("Unprotect Sheet"));
-        if (dlg.exec() != KPasswordDialog::Accepted) {
-            d->actions->protectSheet->blockSignals(true);
-            d->actions->protectSheet->setChecked(true);
-            d->actions->protectSheet->blockSignals(false);
-            return;
-        }
-
-        QByteArray hash("");
-        QString password(dlg.password());
-        if (password.length() > 0)
-            SHA1::getHash(password, hash);
-
-
-        if (!d->activeSheet->checkPassword(hash)) {
-            KMessageBox::error(0, i18n("Password is incorrect."));
-            d->actions->protectSheet->blockSignals(true);
-            d->actions->protectSheet->setChecked(true);
-            d->actions->protectSheet->blockSignals(false);
-            return;
-        }
-
-        d->activeSheet->setProtected(QByteArray());
-
+        success = activeSheet()->showPasswordDialog(this, ProtectableObject::Unlock,
+                                                    i18n("Unprotect Sheet"));
+    }
+    if (!success) {
+        d->actions->protectSheet->setChecked(!mode);
+        return;
     }
 
     doc()->setModified(true);

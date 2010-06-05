@@ -38,6 +38,7 @@
 #include "Cell.h"
 #include "Style.h"
 #include "Global.h"
+#include "ProtectableObject.h"
 
 #include "kspread_export.h"
 
@@ -87,7 +88,8 @@ class View;
 /**
  * A sheet contains several cells.
  */
-class KSPREAD_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase
+class KSPREAD_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
+                             public ProtectableObject
 {
     Q_OBJECT
     Q_PROPERTY(QString sheetName READ sheetName)
@@ -404,34 +406,6 @@ public:
 
     //
     //END Methods related to the OpenDocument file format
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Methods related to protection
-    //
-
-    /**
-     * \ingroup Protection
-     */
-    void password(QByteArray & passwd) const ;
-
-    /**
-     * \ingroup Protection
-     */
-    bool isProtected() const;
-
-    /**
-     * \ingroup Protection
-     */
-    void setProtected(QByteArray const & passwd);
-
-    /**
-     * \ingroup Protection
-     */
-    bool checkPassword(QByteArray const & passwd) const;
-
-    //
-    //END Methods related to protection
     //
     //////////////////////////////////////////////////////////////////////////
     //
