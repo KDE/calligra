@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
+   Copyright 2009 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,38 +17,34 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_READONLY_TABLE_MODEL
-#define KSPREAD_READONLY_TABLE_MODEL
+#ifndef KSPREAD_REGION_MODEL
+#define KSPREAD_REGION_MODEL
 
-#include <QAbstractTableModel>
+#include "SheetModel.h"
 
 namespace KSpread
 {
-class Sheet;
+class Region;
 
-class ReadOnlyTableModel : public QAbstractTableModel
+/**
+ * A model for a contiguous cell region.
+ * \ingroup Model
+ */
+class RegionModel : public SheetModel
 {
 public:
-    /**
-     * Constructor.
-     */
-    explicit ReadOnlyTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    RegionModel(const Region& region);
+    virtual ~RegionModel();
 
     /**
-     * Destructor.
+     * Existing data gets overwritten.
+     * The cell region gets the sheet boundaries as maxima.
      */
-    ~ReadOnlyTableModel();
+    void setOverwriteMode(bool enable);
 
-    // QAbstractTableModel interface
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    
-protected:
-    Sheet* sheet() const;
-    const QSize& size() const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
 private:
     class Private;
@@ -57,4 +53,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_READONLY_TABLE_MODEL
+#endif // KSPREAD_REGION_MODEL

@@ -35,6 +35,7 @@ class KoOdfLoadingContext;
 class KoEmbeddedDocumentSaver;
 class KoStyleManager;
 
+class QAbstractItemModel;
 class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
@@ -80,6 +81,11 @@ public:
      * This deletes all sheets contained in this map.
      */
     virtual ~Map();
+
+    /**
+     * \return a model for this map
+     */
+    QAbstractItemModel* model() const;
 
     /**
      * \return the document this map belongs to

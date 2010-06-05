@@ -133,7 +133,7 @@
 
 #ifndef NDEBUG
 #include <QTableView>
-#include "interfaces/ReadWriteTableModel.h"
+#include "SheetModel.h"
 #endif
 
 using namespace KSpread;
@@ -3241,8 +3241,7 @@ void CellToolBase::qTableView()
 #ifndef NDEBUG
     KDialog* const dialog = new KDialog(canvas()->canvasWidget());
     QTableView* const view = new QTableView(dialog);
-//     ReadOnlyTableModel* const model = new ReadOnlyTableModel(selection()->activeSheet());
-    ReadWriteTableModel* const model = new ReadWriteTableModel(selection()->activeSheet());
+    SheetModel* const model = new SheetModel(selection()->activeSheet());
     view->setModel(model);
     dialog->setCaption("Read{Only,Write}TableModel Test");
     dialog->setMainWidget(view);

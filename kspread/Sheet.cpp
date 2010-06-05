@@ -79,6 +79,7 @@
 #include "ShapeApplicationData.h"
 #include "SheetPrint.h"
 #include "RectStorage.h"
+#include "SheetModel.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
@@ -119,6 +120,7 @@ class Sheet::Private
 {
 public:
     Map* workbook;
+    SheetModel *model;
 
     SheetAdaptor* dbus;
 
@@ -193,6 +195,7 @@ Sheet::Sheet(Map* map, const QString& sheetName)
         s_mapSheets = new QHash<int, Sheet*>;
 
     d->workbook = map;
+    d->model = new SheetModel(this);
 
     d->id = s_id++;
     s_mapSheets->insert(d->id, this);
@@ -246,6 +249,7 @@ Sheet::Sheet(const Sheet& other)
         , d(new Private)
 {
     d->workbook = other.d->workbook;
+    d->model = new SheetModel(this);
 
     // create a unique name
     int i = 1;
@@ -323,6 +327,11 @@ Sheet::~Sheet()
     delete d->cellStorage;
     qDeleteAll(d->shapes);
     delete d;
+}
+
+QAbstractItemModel* Sheet::model() const
+{
+    return d->model;
 }
 
 QString Sheet::sheetName() const

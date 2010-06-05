@@ -109,9 +109,6 @@ SET (functions_DIR_SRCS
 
 SET (interfaces_DIR_SRCS
 	interfaces/MapAdaptor.cpp
-	interfaces/ReadOnlyRegionModel.cpp
-	interfaces/ReadOnlyTableModel.cpp
-	interfaces/ReadWriteTableModel.cpp
 	interfaces/SheetAdaptor.cpp
 	interfaces/ViewAdaptor.cpp
 	)
@@ -154,6 +151,7 @@ SET (ui_DIR_SRCS
 	ui/DragAndDropStrategy.cpp
 	ui/Editors.cpp
 	ui/HyperlinkStrategy.cpp
+        ui/MapViewModel.cpp
 	ui/MergeStrategy.cpp
 	ui/PasteStrategy.cpp
 	ui/SelectionStrategy.cpp
@@ -181,6 +179,7 @@ SET (kspreadcommon_LIB_SRCS
 	GenValidationStyle.cpp
 	Localization.cpp
 	Map.cpp
+        MapModel.cpp
     SheetAccessModel.cpp
 	NamedAreaManager.cpp
 	Number.cpp
@@ -188,10 +187,12 @@ SET (kspreadcommon_LIB_SRCS
 	PrintSettings.cpp
 	RecalcManager.cpp
 	Region.cpp
+        RegionModel.cpp
 	RowColumnFormat.cpp
 	Selection.cpp
 	ShapeApplicationData.cpp
 	Sheet.cpp
+        SheetModel.cpp
 	SheetPrint.cpp
 	RectStorage.cpp
 	Style.cpp

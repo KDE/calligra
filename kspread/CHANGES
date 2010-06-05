@@ -16,6 +16,7 @@ Fix cell removal by shifting cells up.
 Developer-Visible Only
 ----------------------
 Improved the function module loading/unloading. (@PACKAGERS: plugin interface changed!)
+Implement models for Map/Sheet/Region.
 
 
 

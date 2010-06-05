@@ -141,6 +141,8 @@
 #include "ValueConverter.h"
 #include "PrintJob.h"
 
+#include "MapViewModel.h"
+
 // commands
 #include "commands/BorderColorCommand.h"
 #include "commands/CommentCommand.h"
@@ -175,6 +177,7 @@ public:
     // the active sheet, may be 0
     // this is the sheet which has the input focus
     Sheet* activeSheet;
+    MapViewModel* mapViewModel;
     QHash<const Sheet*, SheetView*> sheetViews;
 
     // GUI elements
@@ -728,6 +731,13 @@ void View::initView()
     d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    // Setup the map model.
+    d->mapViewModel = new MapViewModel(d->doc->map());
+    connect(d->mapViewModel, SIGNAL(addCommandRequested(QUndoCommand*)),
+            doc(), SLOT(addCommand(QUndoCommand*)));
+    connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
+            this, SLOT(setActiveSheet(Sheet*)));
+
     // Setup the selection.
     d->selection = new Selection(d->canvas);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
@@ -1246,7 +1256,7 @@ void View::setSelectionBackgroundColor(const QColor &bgColor)
 void View::setSelectionBorderColor(const QColor &bdColor)
 {
     BorderColorCommand* command = new BorderColorCommand();
-    command->setSheet(d->activeSheet);
+    command->setSheet(activeSheet());
     command->setColor(bdColor);
     command->add(*selection());
     command->execute();
@@ -1485,6 +1495,7 @@ void View::changeSheet(const QString& _name)
     if (!selection()->referenceSelectionMode())
         selection()->emitCloseEditor(true); // save changes
     setActiveSheet(t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
+    d->mapViewModel->setActiveSheet(t);
 
     //refresh toggle button
     updateBorderButton();

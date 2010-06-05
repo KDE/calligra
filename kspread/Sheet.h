@@ -41,6 +41,7 @@
 
 #include "kspread_export.h"
 
+class QAbstractItemModel;
 class QDomElement;
 class QUndoCommand;
 class QWidget;
@@ -112,6 +113,11 @@ public:
      * Destructor.
      */
     ~Sheet();
+
+    /**
+     * \return a model for this sheet
+     */
+    QAbstractItemModel *model() const;
 
     /**
      * \return the map this sheet belongs to

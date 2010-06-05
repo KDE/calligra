@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
+   Copyright 2009 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,11 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "ReadOnlyTableModel.h"
+#include "SheetModel.h"
 
 // KSpread
 #include "Cell.h"
-#include "Limits.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -34,47 +33,55 @@
 
 using namespace KSpread;
 
-class ReadOnlyTableModel::Private
+class SheetModel::Private
 {
 public:
     Sheet* sheet;
-    QSize size;
 };
 
-ReadOnlyTableModel::ReadOnlyTableModel(Sheet* sheet, int columns, int rows)
-        : QAbstractTableModel(sheet)
-        , d(new Private)
+SheetModel::SheetModel(Sheet* sheet)
+    : QAbstractTableModel(sheet)
+    , d(new Private)
 {
     d->sheet = sheet;
-    d->size = (columns && rows) ? QSize(columns, rows) : QSize(KS_colMax, KS_rowMax);
 }
 
-ReadOnlyTableModel::~ReadOnlyTableModel()
+SheetModel::~SheetModel()
 {
     delete d;
 }
 
-int ReadOnlyTableModel::columnCount(const QModelIndex& parent) const
+int SheetModel::columnCount(const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
-    return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).width();
+    if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
+        return 0;
+    }
+    return KS_colMax;
 }
 
-int ReadOnlyTableModel::rowCount(const QModelIndex& parent) const
+QVariant SheetModel::data(const QModelIndex& index, int role) const
 {
-    Q_UNUSED(parent);
-    return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).height();
-}
-
-QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
-{
+    if (!index.isValid()) {
+        return QVariant();
+    }
+    if (index.model() != this) {
+        return QVariant();
+    }
+    if (index.internalPointer() != d->sheet) {
+        return QVariant();
+    }
+    if (index.parent().isValid()) {
+        if (index.parent().internalPointer() != d->sheet->map()) {
+            return QVariant();
+        }
+    }
     // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
     const Cell cell = Cell(d->sheet, index.column() + 1, index.row() + 1).masterCell();
     const Style style = cell.effectiveStyle();
     if (role == Qt::DisplayRole) {
         // Display a formula if warranted.  If not, simply display the value.
         if (cell.isFormula() && d->sheet->getShowFormula() &&
-                !(d->sheet->isProtected() && style.hideFormula())) {
+            !(d->sheet->isProtected() && style.hideFormula())) {
             return QVariant(cell.userInput());
         } else if (d->sheet->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0.0) {
             // Hide zero.
@@ -83,9 +90,9 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
             // Format the value appropriately and set the display text.
             // The format of the resulting value is used below to determine the alignment.
             Value value = d->sheet->map()->formatter()->formatText(cell.value(), style.formatType(),
-                          style.precision(), style.floatFormat(),
-                          style.prefix(), style.postfix(),
-                          style.currency().symbol());
+                                                                   style.precision(), style.floatFormat(),
+                                                                   style.prefix(), style.postfix(),
+                                                                   style.currency().symbol());
             return value.asString();
         }
     } else if (role == Qt::EditRole) {
@@ -108,7 +115,26 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant ReadOnlyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+Qt::ItemFlags SheetModel::flags(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return Qt::NoItemFlags;
+    }
+    if (index.model() != this) {
+        return Qt::NoItemFlags;
+    }
+    if (index.internalPointer() != d->sheet) {
+        return Qt::NoItemFlags;
+    }
+    if (index.parent().isValid()) {
+        if (index.parent().internalPointer() != d->sheet->map()) {
+            return Qt::NoItemFlags;
+        }
+    }
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+}
+
+QVariant SheetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
     if (role == Qt::DisplayRole) {
@@ -121,28 +147,59 @@ QVariant ReadOnlyTableModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
-QModelIndex ReadOnlyTableModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex SheetModel::index(int row, int column, const QModelIndex &parent) const
 {
-    QModelIndex index;
+    if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
+        return QModelIndex();
+    }
     // A cell in our sheet?
     if (!parent.isValid()) {
-        index = createIndex(row, column, d->sheet);
-    // Embedded in a MapModel?
+        return createIndex(row, column, d->sheet);
+        // Embedded in a MapModel?
     } else if (parent.internalPointer() == d->sheet->map()) {
-        index = createIndex(row, column, d->sheet);
-    // A sub-table?
+        return createIndex(row, column, d->sheet);
+        // A sub-table?
     } else if (parent.internalPointer() == this) {
         // TODO sub-tables
     }
-    return index;
+    return QModelIndex();
 }
 
-Sheet* ReadOnlyTableModel::sheet() const
+int SheetModel::rowCount(const QModelIndex& parent) const
+{
+    if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
+        return 0;
+    }
+    return KS_rowMax;
+}
+
+bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (!index.isValid()) {
+        return false;
+    }
+    if (index.model() != this) {
+        return false;
+    }
+    if (index.internalPointer() != d->sheet) {
+        return false;
+    }
+    if (index.parent().isValid()) {
+        if (index.parent().internalPointer() != d->sheet->map()) {
+            return false;
+        }
+    }
+    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
+    if (role == Qt::EditRole) {
+        cell.parseUserInput(value.toString());
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
+}
+
+Sheet* SheetModel::sheet() const
 {
     return d->sheet;
-}
-
-const QSize& ReadOnlyTableModel::size() const
-{
-    return d->size;
 }
