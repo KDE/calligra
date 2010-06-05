@@ -95,9 +95,7 @@
 
 // KSpread
 #include "CellStorage.h"
-#include "CellView.h"
 #include "Doc.h"
-#include "Editors.h"
 #include "Global.h"
 #include "Headers.h"
 #include "Localization.h"
@@ -105,7 +103,6 @@
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "SheetView.h"
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
@@ -114,6 +111,11 @@
 #include "commands/DeleteCommand.h"
 #include "commands/StyleCommand.h"
 #include "commands/Undo.h"
+
+// ui
+#include "ui/CellView.h"
+#include "ui/Editors.h"
+#include "ui/SheetView.h"
 
 #define MIN_SIZE 10
 

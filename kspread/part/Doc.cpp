@@ -87,7 +87,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "SheetView.h"
 #include "StyleManager.h"
 #include "Util.h"
 #include "View.h"
@@ -96,6 +95,9 @@
 // chart shape
 #include "kchart/shape/ChartShape.h"
 #include "chart/ChartDialog.h"
+
+// ui
+#include "ui/SheetView.h"
 
 using namespace std;
 using namespace KSpread;

@@ -61,22 +61,23 @@
 #include <KoViewConverter.h>
 
 #include "Cell.h"
-#include "CellView.h"
 #include "Canvas.h"
 #include "Canvas_p.h"
 #include "Doc.h"
-#include "Editors.h"
 #include "Limits.h"
 #include "PrintSettings.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "SheetView.h"
 #include "StyleManager.h"
 #include "Util.h"
 #include "View.h"
 
 #include "commands/AutoFillCommand.h"
 #include "commands/DefinePrintRangeCommand.h"
+
+#include "ui/CellView.h"
+#include "ui/Editors.h"
+#include "ui/SheetView.h"
 
 using namespace KSpread;
 

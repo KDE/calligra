@@ -36,7 +36,7 @@
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "Util.h"
-#include "Editors.h"
+#include "ui/Editors.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"

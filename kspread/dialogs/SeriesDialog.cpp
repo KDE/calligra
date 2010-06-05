@@ -26,7 +26,7 @@
 
 #include "SeriesDialog.h"
 
-#include "Editors.h"
+#include "ui/Editors.h"
 #include "Selection.h"
 #include "Sheet.h"
 

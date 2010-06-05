@@ -33,7 +33,7 @@
 #include "Map.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "SheetView.h"
+#include "ui/SheetView.h"
 #include "Selection.h"
 
 #include "part/commands/DefinePrintRangeCommand.h" // FIXME detach from part

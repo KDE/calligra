@@ -23,7 +23,8 @@
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "SheetView.h"
+
+#include "ui/SheetView.h"
 
 #include <KoShape.h>
 #include <KoZoomHandler.h>

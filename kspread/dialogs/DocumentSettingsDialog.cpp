@@ -47,7 +47,6 @@
 #include <sonnet/configwidget.h>
 
 #include "CalculationSettings.h"
-#include "Editors.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"

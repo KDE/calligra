@@ -29,7 +29,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Editors.h"
+#include "ui/Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 

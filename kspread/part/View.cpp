@@ -110,14 +110,12 @@
 #include "CalculationSettings.h"
 #include "CanvasResources.h"
 #include "CellStorage.h"
-#include "CellView.h"
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "Factory.h"
 #include "LoadingInfo.h"
 #include "Canvas.h"
-#include "Editors.h"
 #include "Global.h"
 #include "Headers.h"
 #include "Localization.h"
@@ -129,7 +127,6 @@
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "SheetView.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
@@ -138,8 +135,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
-
-#include "MapViewModel.h"
 
 // commands
 #include "commands/DefinePrintRangeCommand.h"
@@ -152,6 +147,12 @@
 #include "dialogs/ShowDialog.h"
 
 #include "dialogs/SheetPropertiesDialog.h"
+
+// ui
+#include "ui/CellView.h"
+#include "ui/Editors.h"
+#include "ui/MapViewModel.h"
+#include "ui/SheetView.h"
 
 // D-Bus
 #include "interfaces/ViewAdaptor.h"

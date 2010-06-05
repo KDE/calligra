@@ -7,8 +7,7 @@ add_subdirectory( plugins )
 add_subdirectory( dtd )
 add_subdirectory( functions )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ui
-                     ${CMAKE_SOURCE_DIR}/interfaces
+include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart
                      ${KOMAIN_INCLUDES}
                      ${KOTEXT_INCLUDES}

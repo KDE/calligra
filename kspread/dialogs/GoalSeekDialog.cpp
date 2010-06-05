@@ -26,7 +26,7 @@
 #include "GoalSeekDialog.h"
 
 #include "CalculationSettings.h"
-#include "Editors.h"
+#include "ui/Editors.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
