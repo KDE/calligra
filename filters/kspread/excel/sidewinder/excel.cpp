@@ -1829,7 +1829,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
             const unsigned char* blipItemOffset = blipStoreOffset + 8;
             if(recType == 0xF007) { // OfficeArtFBSE
-                if(blipItemOffset+44-data-size < 0) return;
+                if (blipItemOffset+44-data-size < 0) return;
                 std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
                 const unsigned btWin32 = readU8(blipItemOffset);
                 //const unsigned btMacOS = readU8(blipItemOffset + 1);
@@ -1863,7 +1863,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
                 std::cout << "nameData=" << nameData.ascii() << " size=" << size << " cRef=" << cRef << " foDelay=" << foDelay << std::endl;
                 readHeader(blipItemOffset, &recVer, &recInstance, &recType, &recLen);
                 blipItemOffset += 8;
-            } else if(recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
+            } else if (recType >= 0xF018 && recType <= 0xF117) { // OfficeArtBlip
                 // fall through
             } else {
                 std::cerr << "MsoDrawingGroupRecord: OfficeArtBStoreContainerFileBlock type=" << recType << std::endl;
@@ -1872,65 +1872,112 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             }
 
             // OfficeArtBlip
-            if(blipItemOffset-data-size < 16*8) return;
+            if (blipItemOffset-data-size < 16*8)
+                return;
 
             char rgbUid[16]; // every OfficeArtBlip starts with the unique rgbUid
-            for(int i = 0; i < 16; ++i)
+            for (int i = 0; i < 16; ++i)
                 rgbUid[i] = readU8(blipItemOffset + i);
 
             MsoDrawingBlibItem *item = new MsoDrawingBlibItem;
             m_items.push_back(item);
 
-            quint16 offset = 0;
+            quint16        offset = 0;
+            const unsigned char *metafileHeader;
+            bool           isCompressed = false;
+            quint32        cbSize;    // Size of uncompressed data
+            quint32        cbSave;    // Size of compressed data
+
             const char* namesuffix = "";
             const char* mimetype = "application/octet-stream";
-            switch(recType) {
-                case 0xF01A:
-                    offset = (recInstance == 0x3D4) ? 50 : 66;
-                    namesuffix = ".emf";
-                    break;
-                case 0xF01B:
-                    offset = (recInstance == 0x216) ? 50 : 66;
-                    namesuffix = ".wmf";
-                    break;
-                case 0xF01C:
-                    offset = (recInstance == 0x542) ? 50 : 66;
-                    namesuffix = ".pict";
-                    mimetype = "image/pict";
-                    break;
-                case 0xF01D:
-                case 0xF02A: {
-                    offset = (recInstance == 0x46A || recInstance==0x6E2) ? 17 : 33;
-                    namesuffix = ".jpg";
-                    mimetype = "image/jpeg";
-                } break;
-                case 0xF01E:
-                    offset = (recInstance == 0x6E0) ? 17 : 33;
-                    namesuffix = ".png";
-                    mimetype = "image/png";
-                    break;
-                case 0xF01F:
-                    offset = (recInstance == 0x7A8) ? 17 : 33;
-                    namesuffix = ".dib";
-                    break;
-                case 0xF029:
-                    offset = (recInstance == 0x6E4) ? 17 : 33;
-                    namesuffix = ".tiff";
-                    break;
-                default:
-                    printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
-                    break;
+            switch (recType) {
+            case 0xF01A: // OfficeArtBlipEMF record
+                // 0x03D4 specifies one UID, 0x03D5 specifies two UID's
+                offset = (recInstance == 0x3D4) ? 50 : 66;
+                metafileHeader = blipItemOffset + offset - 34; // 34 is size of header
+                namesuffix = ".emf";
+
+                // Check in the header if the EMF is compressed, and
+                // if so pick up necessary data.
+                isCompressed = *(metafileHeader + 32) == 0x0;
+                if (isCompressed) {
+                    cbSize = *((unsigned int *)metafileHeader + 0);
+                    cbSave = *((unsigned int *)metafileHeader + 28);
+                }
+                break;
+            case 0xF01B: // OfficeArtBlipWMF record
+                offset = (recInstance == 0x216) ? 50 : 66;
+                metafileHeader = blipItemOffset + offset - 34; // 34 is size of header
+                namesuffix = ".wmf";
+
+                // Check in the header if the WMF is compressed, and
+                // if so pick up necessary data.
+                isCompressed = *(metafileHeader + 32) == 0x0;
+                if (isCompressed) {
+                    cbSize = *((unsigned int *)metafileHeader + 0);
+                    cbSave = *((unsigned int *)metafileHeader + 28);
+                }
+                break;
+
+            case 0xF01C:
+                offset = (recInstance == 0x542) ? 50 : 66;
+                namesuffix = ".pict";
+                mimetype = "image/pict";
+                break;
+            case 0xF01D:
+            case 0xF02A: {
+                offset = (recInstance == 0x46A || recInstance==0x6E2) ? 17 : 33;
+                namesuffix = ".jpg";
+                mimetype = "image/jpeg";
+            } break;
+            case 0xF01E:
+                offset = (recInstance == 0x6E0) ? 17 : 33;
+                namesuffix = ".png";
+                mimetype = "image/png";
+                break;
+            case 0xF01F:
+                offset = (recInstance == 0x7A8) ? 17 : 33;
+                namesuffix = ".dib";
+                break;
+            case 0xF029:
+                offset = (recInstance == 0x6E4) ? 17 : 33;
+                namesuffix = ".tiff";
+                break;
+            default:
+                printf("MsoDrawingGroupRecord: Unhandled Image with type=%x\n", recType);
+                break;
             }
 
             const unsigned char *blipData = blipItemOffset + offset;
-            unsigned long blibSize = recLen - offset;
-            Q_ASSERT(blibSize <= size);
+            const unsigned long  blipSize = recLen - offset;
+            Q_ASSERT(blipSize <= size);
+
+            // Uncompress data if necessary.
+            QByteArray buff((const char*)blipData, (int)blipSize);
+            if (isCompressed) {
+                // This code is taken from filters/libmso/pictures.cpp.
+                //
+                // FIXME: The right solution is of course to use
+                //        libmso in the excel filter instead of having
+                //        our own half-assed copy here.
+
+                // big-endian byte order required
+                char tmp[4];
+                tmp[3] = (cbSize & 0x000000ff);
+                tmp[2] = ((cbSize >> 8) & 0x0000ff);
+                tmp[1] = ((cbSize >> 16) & 0x00ff);
+                tmp[0] = (cbSize >> 24);
+                buff.prepend((char*) tmp, 4);
+                buff = qUncompress(buff);
+            }
+
             Store *store = m_workbook->store();
             Q_ASSERT(store);
             item->id = QByteArray(rgbUid,16).toHex().constData();
             item->filename = "Pictures/" + item->id + namesuffix;
-            if(store->open(item->filename)) {
-                store->write((const char*)blipData, blibSize);
+            if (store->open(item->filename)) {
+                //store->write((const char*)blipData, blipSize);
+                store->write(buff.data(), buff.size());
                 store->close();
             } else {
                 std::cerr << "MsoDrawingGroupRecord: Failed to open file=" << item->filename << " mimetype=" << mimetype << std::endl;

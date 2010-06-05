@@ -76,8 +76,9 @@ public:
     void operator=(const DrawingObject& other);
 
 protected:
-    // read a OfficeArtRecordHeader struct.
-    void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0, unsigned *recType = 0, unsigned long *recLen = 0);
+    // read an OfficeArtRecordHeader struct.
+    void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0,
+                    unsigned *recType = 0, unsigned long *recLen = 0);
     // read a drawing object (container or atom) and handle/dispatch according to the recType.
     unsigned long handleObject(unsigned size, const unsigned char* data, bool* recordHandled = 0);
 };
@@ -138,8 +139,8 @@ private:
 };
 
 /**
- * Picture objects used to store bitmap, enhanced metafiles or other
- * kind of images.
+ * Picture objects are used to store bitmap, enhanced metafiles or
+ * other kind of images.
  */
 class PictureObject : public Object
 {
