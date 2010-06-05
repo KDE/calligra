@@ -920,24 +920,24 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
         style.setFormatType(Format::Generic);
     } else if (formatString[l - 1] == '%') {
         style.setFormatType(Format::Percentage);
-    } else if (formatString[0] == '$') {
+    } else if (formatString[0] == '$') { // dollar
         style.setFormatType(Format::Money);
         Currency currency("$");
         style.setCurrency(currency);
         lastPos = 1;
-    } else if (formatString[0] == '£') {
+    } else if (formatString.startsWith("Â£")) { // pound
         style.setFormatType(Format::Money);
-        Currency currency("£");
+        Currency currency("Â£");
         style.setCurrency(currency);
         lastPos = 1;
-    } else if (formatString[0] == '¥') {
+    } else if (formatString.startsWith("Â¥")) { // yen
         style.setFormatType(Format::Money);
-        Currency currency("¥");
+        Currency currency("Â¥");
         style.setCurrency(currency);
         lastPos = 1;
-    } else if (formatString[0] == '¤') {
+    } else if (formatString.startsWith("â‚¬")) { // euro
         style.setFormatType(Format::Money);
-        Currency currency("¤");
+        Currency currency("â‚¬");
         style.setCurrency(currency);
         lastPos = 1;
     } else if (l > 1) {
