@@ -75,7 +75,7 @@ Q_DECLARE_FLAGS(CellDataRoles, CellDataRole)
  * Converts a model index into a Cell.
  * \ingroup Model
  */
-static Cell toCell(const QModelIndex &index)
+static inline Cell toCell(const QModelIndex &index)
 {
     const int column = index.column() + 1;
     const int row = index.row() + 1;
@@ -87,7 +87,7 @@ static Cell toCell(const QModelIndex &index)
  * Converts a model index into cell coordinates.
  * \ingroup Model
  */
-static QPoint toPoint(const QModelIndex &index)
+static inline QPoint toPoint(const QModelIndex &index)
 {
     const int column = index.column() + 1;
     const int row = index.row() + 1;
@@ -98,7 +98,7 @@ static QPoint toPoint(const QModelIndex &index)
  * Converts an item range into a range in cell coordinates.
  * \ingroup Model
  */
-static QRect toRange(const QItemSelectionRange &range)
+static inline QRect toRange(const QItemSelectionRange &range)
 {
     return QRect(range.left() + 1, range.top() + 1, range.width(), range.height());
 }
@@ -107,7 +107,7 @@ static QRect toRange(const QItemSelectionRange &range)
  * Converts an item selection into a cell region.
  * \ingroup Model
  */
-static Region toRegion(const QItemSelection &selection)
+static inline Region toRegion(const QItemSelection &selection)
 {
     Region region;
     for (int i = 0; i < selection.count(); ++i) {
@@ -122,7 +122,7 @@ static Region toRegion(const QItemSelection &selection)
  * Converts a range in cell coordinates into a model item range.
  * \ingroup Model
  */
-static QItemSelectionRange fromRange(const QRect &range, const QAbstractItemModel *const model)
+static inline QItemSelectionRange fromRange(const QRect &range, const QAbstractItemModel *const model)
 {
     const QModelIndex topLeft = model->index(range.top() - 1, range.left() - 1);
     const QModelIndex bottomRight = model->index(range.bottom() - 1, range.right() - 1);
@@ -133,7 +133,7 @@ static QItemSelectionRange fromRange(const QRect &range, const QAbstractItemMode
  * Converts a range in cell coordinates into a model item range.
  * \ingroup Model
  */
-static QItemSelectionRange fromRange(const QRect &range, Sheet *const sheet)
+static inline QItemSelectionRange fromRange(const QRect &range, Sheet *const sheet)
 {
     return fromRange(range, sheet->model());
 }
@@ -142,7 +142,7 @@ static QItemSelectionRange fromRange(const QRect &range, Sheet *const sheet)
  * Converts a cell region into an item selection.
  * \ingroup Model
  */
-static QItemSelection fromRegion(const Region &region)
+static inline QItemSelection fromRegion(const Region &region)
 {
     QItemSelection selection;
     for (Region::ConstIterator it = region.constBegin(), end = region.constEnd(); it != end; ++it) {
