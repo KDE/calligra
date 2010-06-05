@@ -351,18 +351,18 @@ public:
     void addStringCompletion(const QString &string);
 
     /**
-     * \ingroup Operations
+     * \ingroup Damages
      */
     void addDamage(Damage* damage);
 
 public Q_SLOTS:
     /**
-     * \ingroup Operations
+     * \ingroup Damages
      */
     void flushDamages();
 
     /**
-     * \ingroup Operations
+     * \ingroup Damages
      */
     void handleDamages(const QList<Damage*>& damages);
 
@@ -375,7 +375,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * \ingroup Operations
+     * \ingroup Damages
      */
     void damagesFlushed(const QList<Damage*>& damages);
 

@@ -34,6 +34,7 @@ namespace KSpread
 class Function;
 
 /**
+ * \ingroup Value
  * A function module provides several Function objects.
  */
 class KSPREAD_EXPORT FunctionModule : public QObject

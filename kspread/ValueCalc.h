@@ -59,6 +59,7 @@ typedef void (*arrayWalkFunc)(ValueCalc *, Value &result,
                               Value val, Value param);
 
 /**
+ * \ingroup Value
 The ValueCalc class is used to perform all sorts of calculations.
 
 Usage of this class for simpler calculations is deprecated, as we now use

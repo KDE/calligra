@@ -24,7 +24,10 @@ namespace KSpread
 {
 
 /**
- * ValueStorage
+ * \class ValueStorage
+ * \ingroup Storage
+ * \ingroup Value
+ * Stores cell values.
  */
 class ValueStorage : public PointStorage<Value>
 {

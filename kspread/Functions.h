@@ -62,6 +62,7 @@ struct FuncExtra {
 typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 
 /**
+ * \ingroup Value
  * A function pointer and context.
  */
 class KSPREAD_EXPORT Function
@@ -101,6 +102,7 @@ private:
 enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
 
 /**
+ * \ingroup Value
  * A function parameter.
  */
 class KSPREAD_EXPORT FunctionParameter
@@ -127,6 +129,7 @@ private:
 };
 
 /**
+ * \ingroup Value
  * A function description.
  */
 class KSPREAD_EXPORT FunctionDescription
@@ -183,6 +186,7 @@ private:
 };
 
 /**
+ * \ingroup Value
  * The function repository.
  */
 class KSPREAD_EXPORT FunctionRepository

@@ -35,6 +35,7 @@ namespace KSpread
 /**
  * \class RTree
  * \brief An R-Tree template
+ * \ingroup Storage
  *
  * An R-Tree template extended by special needs of KSpread:
  * \li adjusts the rectangles on insertion to avoid unwanted overlapping

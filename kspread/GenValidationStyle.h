@@ -34,6 +34,10 @@ namespace KSpread
 class Validity;
 class GenValidationStyles;
 
+/**
+ * \class GenValidationStyle
+ * \ingroup OpenDocument
+ */
 class GenValidationStyle
 {
 public:
@@ -77,6 +81,10 @@ private:
     friend class GenValidationStyles;
 };
 
+/**
+ * \class GenValidationStyles
+ * \ingroup OpenDocument
+ */
 class KSPREAD_EXPORT GenValidationStyles
 {
 public:

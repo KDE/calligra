@@ -34,6 +34,7 @@ namespace KSpread
 {
 
 /**
+ * \ingroup Style
  * Collection of string formatting enumeration and functions.
  */
 namespace Format {

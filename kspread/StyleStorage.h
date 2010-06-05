@@ -38,6 +38,8 @@ class StyleManager;
 class SubStyle;
 
 /**
+ * \ingroup Storage
+ * \ingroup Style
  * The style storage.
  * Acts mainly as a wrapper around the R-Tree data structure to allow a future
  * replacement of this backend. Decorated with some additional features like

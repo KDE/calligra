@@ -1,0 +1,222 @@
+/**
+\page formulaengine Formula Engine
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    FINISHED; NEEDS UPDATE (inline arrays)
+
+<p>This formula engine is just an expression evaluator. To offer better
+performance, the expression is first compiled into byte codes which will
+be executed later by a virtual machine.</p>
+
+<p>Before compilation, the expression is separated into pieces, called tokens.
+This step, which is also known as lexical analysis, takes places at once
+and will produce sequence of tokens. They are however not stored and used only
+for the purpose of the subsequent step.
+Tokens are supplied to the parser, also known as syntax analyzer. In this
+design, the parser is also a code generator. It involve the generation
+of byte codes which represents the expression.
+Evaluating the formula expression is now basically running the virtual
+machine to execute compiled byte codes. No more scanning or parsing
+are performed during evaluation, this saves time a lot.</p>
+
+<p>The virtual machine itself (and of course the byte codes) are designed to be
+as simple as possible. This is supposed to be stack-based, i.e. the virtual
+machine has an execution stack of values which would be manipulated
+as each byte code is processed. Beside the stack, there will be a list of
+constant (sometimes also called as "constants pool") to hold Boolean,
+integer, floating-point or string values. When a certain byte code needs
+a constant for the operand, an index is specified which should be used
+to look up the constant in the constants pool.</p>
+
+<p>There are only few byte code, sufficient enough to perform calculation.
+Yes, this is really minimalist but yet does the job fairly well.
+The following provides brief description for each type of bytecode.</p>
+
+<blockquote>
+
+<p><i>Nop</i> means no operation.</p>
+
+<p><i>Load</i> means loads a constant and push it to the stack. The constant can
+be found at constant pools, at position by 'index', it could be a Boolean,
+integer, floating-point or string value.</p>
+
+<p><i>Ref</i> means gets a value from a reference. Member variable 'index' will
+refers to a string value in the constant pools, i.e. the name of the reference.
+Typically the reference is either a cell (e.g. A1), range of cells (A1:B10)
+or possibly function name. Example: expression A2+B2 will be compiled as:<br>
+Constants:<br>
+#0: "A2"<br>
+#1: "B2"<br>
+Codes:<br>
+Ref #0<br>
+Ref #1<br>
+Add
+</p>
+
+<p><i>Function</i>.
+Example: expression "sin(x)" will be compiled as:<br>
+Constants:<br>
+#0: "sin"<br>
+#1: "x"<br>
+Codes:<br>
+Ref #0<br>
+Ref #1<br>
+Function 1
+</p>
+
+<p><i>Neg</i> is a unary operator, a value is popped from stack and negated and then
+pushed back to the stack. If it is not number (Boolean or string), it
+will be converted first.</p>
+
+<p><i>Add, Sub, Mul, Div and Pow</i> are binary operators, two values are popped from
+stack and processed (added, subtracted, multiplied, divided, or power) and
+the result is pushed to the stack.</p>
+
+<p><i>Concat</i> is string operation, two values are popped from stack (and converted
+to string if they are not string values), concatenated, and the result is
+pushed to the stack.</p>
+
+<p><i>Not</i> is a logical operation, a value is popped from stack and its Boolean
+not is pushed into the stack. When it is not Boolean value, there will be
+a cast.</p>
+
+<p><i>Equal, Less, and Greater</i> are comparison operators, two values are
+popped from stack and compared appropriately. The result, which is a Boolean
+value, is pushed into the stack. To simplify, there no &quot;not equal&quot;
+comparison because it can be regarded as &quot;equal&quot; followed by
+&quot;not&quot; byte codes. Same goes for &quot;less than or equal to&quot; and
+&quot;greater than or equal to&quot;.</p>
+
+</blockquote>
+
+<p>The expression scanner is based on finite state acceptor. The state denotes
+the position of cursor, e.g. inside a cell token, inside an identifier, etc.
+State transition is following by emitting the associated token to the
+result buffer. Rather than showing the state diagrams here, it is much more
+convenience and less complicated to browse the scanner source code and try
+to follow its algorithm from there.</p>
+
+<p>The parser is designed using one of bottom-up parsing technique, namely
+based on Polish notation. Instead of ordering the tokens in suffix Polish
+form, the parser (which is also the code generator) simply outputs
+byte codes. In its operation, the parser requires the knowledge of operator
+precedence to correctly translate unparenthesized infix expression and
+thus requires the use of a syntax stack.</p>
+
+<p>The parser algorithm is given as follows:</p>
+
+<blockquote>
+Repeat the following steps:<br>
+Step 1: Get next token<br>
+Step 2: If it is an identifier<br>
+- push it to syntax stack<br>
+- generated "Ref"<br>
+Step 3: If it is a Boolean, integer, float or string value<br>
+- push it to syntax stack<br>
+- generated "Load"<br>
+Step 4: If it is an operator<br>
+- check for reduce rules<br>
+<br>
+- when no more rules applies, push token to the syntax stack<br>
+</blockquote>
+
+<p>The reduce rules are:</p>
+
+<p>Rule A: <i>function argument</i>:
+if token is semicolon or right parenthesis,
+if syntax stack looks as:
+<ul type="square">
+<li>non-operator &lt;--- top</li>
+<li>operator ;</li>
+<li>non-operator</li>
+<li>operator (</li>
+<li>identifier</li>
+</ul>
+then reduce to
+<ul type="circle">
+<li>non operator</li>
+<li>operator (</li>
+<li>identifier</li>
+<li>increase number of function arguments</li>
+</ul>
+</p>
+
+<p>Rule B: last function argument<br>
+if syntax stack looks as:<br>
+<ul type="square">
+<li>operator )</li>
+<li>non-operator</li>
+<li>operator (</li>
+<li>identifier</li>
+</ul>
+then reduce to:<br>
+<ul type="circle">
+<li>non-operator</li>
+<li>generated "Function" + number of function arguments</li>
+</ul>
+</p>
+
+<p>Rule C: function without argument<br>
+if syntax stack looks as:<br>
+<ul type="square">
+<li>operator )</li>
+<li>operator (</li>
+<li>identifier</li>
+</ul>
+then reduce to:<br>
+<ul type="circle">
+<li>non-operator (dummy)</li>
+</ul>
+</p>
+
+<p>Rule D: parenthesis removal<br>
+if syntax stack looks as:<br>
+<ul type="square">
+<li>operator (</li>
+<li>non-operator</li>
+<li>operator )</li>
+</ul>
+then reduce to:<br>
+<ul type="circle">
+<li>non-operator</li>
+</ul>
+</p>
+
+<p>Rule E: binary operator<br>
+if syntax stack looks as:<br>
+<ul type="square">
+<li>non-operator</li>
+<li>binary operator</li>
+<li>non-operator</li>
+<li>and if the precedence of the binary operator in the syntax stack
+is greater or equals to the precedence of token</li>
+</ul>
+then reduce to:<br>
+<ul type="circle">
+<li>non-operator</li>
+<li>and generated appropriate byte code for the binary operator</li>
+</ul>
+</p>
+
+<p>Rule F: unary operator<br>
+if syntax stack looks as:<br>
+<ul type="square">
+<li>non-operator</li>
+<li>unary operator</li>
+<li>operator</li>
+</ul>
+then reduce to:<br>
+<ul type="circle">
+<li>operator</li>
+<li>and generated "Neg" if unary operator is '-'</li>
+</ul>
+</p>
+
+<p>Percent operator is a special case and not handled the above mentioned rule.
+When the parser finds the percent operator, it checks whether there's a non-operator
+token right before the percent. If yes, then the following code is generated:
+<tt>load 0.01</tt> followed by <tt>multiply</tt>.</p>
+
+*/

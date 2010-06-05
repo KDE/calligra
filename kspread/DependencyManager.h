@@ -30,6 +30,7 @@ namespace KSpread
 class Region;
 
 /**
+ * \ingroup Value
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */

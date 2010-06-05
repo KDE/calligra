@@ -36,6 +36,7 @@ namespace KSpread
 {
 
 /**
+ * \ingroup Storage
  * A custom rectangular storage.
  * Based on an R-Tree data structure.
  * Usable for any kind of data attached to rectangular regions.

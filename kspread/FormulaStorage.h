@@ -28,7 +28,9 @@ namespace KSpread
 {
 
 /**
- * FormulaStorage
+ * \ingroup Storage
+ * \ingroup Value
+ * Stores formulas.
  */
 class FormulaStorage : public PointStorage<Formula>
 {

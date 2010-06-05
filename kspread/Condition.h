@@ -43,6 +43,7 @@ class StyleManager;
 
 /**
  * \class Conditional
+ * \ingroup Style
  * Conditional formatting.
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
@@ -76,6 +77,7 @@ public:
 
 /**
  * \class Conditions
+ * \ingroup Style
  * Manages a set of conditions for a cell.
  */
 class KSPREAD_EXPORT Conditions

@@ -28,6 +28,11 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Style
+ * \class Currency
+ * Currency format information.
+ */
 class KSPREAD_EXPORT Currency
 {
 public:

@@ -53,6 +53,7 @@ class SheetView;
 class Style;
 
 /**
+ * \ingroup Painting
  * Responsible for the painting of Cell.
  * For each visible Cell exists a CellView, which is cached in the
  * corresponding SheetView. If the content of a Cell has changed, the CellView
@@ -82,7 +83,6 @@ public:
     Style style() const;
 
     /**
-     * \ingroup Painting
      * Paints the cell's background.
      * \param painter the used painter
      * \param coordinate the top left coordinate (scroll offset dependent)
@@ -90,7 +90,6 @@ public:
     void paintCellBackground(QPainter& painter, const QPointF& coordinate);
 
     /**
-     * \ingroup Painting
      * Paints the cell.
      * \param paintRegion the portion of the canvas that is actually in view
      * \param painter the used painter
@@ -103,7 +102,6 @@ public:
                            const Cell& cell, SheetView* sheetView);
 
     /**
-     * \ingroup Painting
      * Paints the cell custom borders, the page borders, diagonal lines.
      * \param paintRegion the portion of the canvas that is actually in view
      * \param painter the used painter
@@ -118,7 +116,6 @@ public:
                           const Cell& cell, SheetView* sheetView);
 
     /**
-     * \ingroup Painting
      * Paints the default cell borders.
      * \param painter the used painter
      * \param paintRegion the portion of the canvas that is actually in view
@@ -231,7 +228,6 @@ private:
     void obscureVerticalCells(SheetView* sheetView, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * Adjust the output text, so that it only holds the part that can be
      * displayed. The altered text is only temporary stored. It is restored
      * after the paint event has been processed.
@@ -247,7 +243,6 @@ private:
     QString textDisplaying(const QFontMetricsF& fontMetrics, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -256,7 +251,6 @@ private:
                             const QPointF& coordinate, Borders paintBorder);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -265,7 +259,6 @@ private:
                           Borders paintBorder, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -274,7 +267,6 @@ private:
                    QPaintDevice* paintDevice, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -282,7 +274,6 @@ private:
     void paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -291,7 +282,6 @@ private:
                                const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -299,7 +289,6 @@ private:
     void paintFormulaIndicator(QPainter& painter, const QPointF& coordinate, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -307,7 +296,6 @@ private:
     void paintMatrixElementIndicator(QPainter& painter, const QPointF& coordinate, const Cell& cell);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -315,7 +303,6 @@ private:
     void paintCellDiagonalLines(QPainter& painter, const QPointF& coordinate);
 
     /**
-     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal

@@ -1,0 +1,82 @@
+/**
+\page coding Coding Style
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\author Stefan Nikolaus (<a href="mailto:stefan.nikolaus@kdemail.new">stefan.nikolaus@kdemail.net</a>)
+\date 2008-08-24
+
+\par Status:
+    FINISHED
+
+KSpread follows the
+<a href="http://techbase.kde.org/Policies/Kdelibs_Coding_Style">KDElibs Coding Style</a>.
+\par Example (for details see the link above):
+\code
+class Foo
+{
+public:
+    void doSomething();
+
+private:
+    QString *m_name;
+};
+
+void Foo::doSomething()
+{
+    if (!m_name) {
+        return;
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        qDebug("%i", i);
+    }
+
+    switch (myEnum) {
+    case Value1:
+        doSomething();
+        break;
+    case Value2:
+        doSomethingElse();
+        // fall through
+    default:
+        defaultHandling();
+        break;
+    }
+}
+\endcode
+
+<p>Write <b>clean code</b>. To be correct is better than to be fast.
+KSpread source code is known to grow very fast in its early days and but later
+on also more difficult to understand.</p>
+
+<p>Put comment as documentation for classes and member functions. There is still
+lack of documentation as for now, whoever understands something about the
+classes and functions should write the documentation.</p>
+
+<p>In complex source files, list of header includes can be very long. Unless
+there is special reason not do it, try to group them together, i.e. standard
+C/C++ headers come first, followed by Qt headers, and then KDE headers,
+KOffice core/UI headers and application specific headers. For each group,
+sort the header files alphabetically. </p>
+
+<p>Write test cases. This will ease further maintenance. See also the section on Test
+Framework above.</p>
+
+<p>Do not use the term <i>table</i>. It was incorrectly invented quite likely
+because of the term <i>Tabelle</i> (German, literally means table). The correct
+term is <i>sheet</i> or <i>worksheet</i>. The English version of Microsoft
+uses <i>sheet</i> while the German version uses <i>Tabelle</i>.</p>
+
+<p>Use <a href="http://techbase.kde.org/Policies/Library_Code_Policy#D-Pointers">d-pointer</a> trick (also known pimpl) whenever possible. Such practice will help when later on
+we want to expose the API and need to maintain binary compatibility. But the
+most important thing is to separate the interface and the implementation.
+Furthermore, build time is reduced since modifications on the implementation
+would not cause tons of recompile.</p>
+
+<p>When creating a new class, use the namespace KSpread instead of the KSpread prefix.
+Example: use <tt>KSpread::FooBar</tt> instead of <tt>KSpreadFooBar</tt>.
+Also, source file names should not contain the kspread prefix anymore,
+but CamelCase form and .cpp extension, i.e.
+<tt>FooBar.h</tt> and <tt>FooBar.cpp</tt> (but not <tt>kspread_foo_bar.h</tt> or
+<tt>kspread_foo_bar.cc</tt>) for the above example.</p>
+
+*/

@@ -1,0 +1,98 @@
+/**
+\page styleStorage Style Storage
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    FINISHED; NEEDS UPDATE (R-Tree, RectStorage)
+
+<p>Formatting specifies how a cell should look like. It involves font
+attributes like bold or italics, vertical and horizontal alignment,
+rotation angle, shading, background color and so on. Each cell can have
+its own format, but bear also in mind that a whole row or column format
+should also apply.</p>
+
+<p>Current way of storing formatting information is rather inefficient:
+pack it together inside the cell. The reason is because most of cells
+are either very plain (no formatting) and/or only have partial attribute
+(e.g. only marked as bold, no font family or color is specified).
+Therefore the approximately 20 bytes used to hold formatting information
+are quite a waste of memory. Even worse, this requires that the cell
+must exist even if it is not in use. As illustration, imagine a worksheet
+where within range A1:B20 only 5 cells are not empty. When the user
+selects this range and changes the background color to yellow, then
+those 5 cells must store this information in their data structure but
+how about the other 35 cells? Since the formatting is attached to the cell,
+there is no choice but to create them. Doing this, just for the sake of
+storing format, is actually not really good.</p>
+
+<p>A new way to store formatting information is proposed below.</p>
+
+<p>For each type of format a user can use, we have the corresponding
+<i>formatting piece</i>, for example &quot;bold on&quot;, &quot;bold off&quot;,
+&quot;font Arial&quot, &quot;left-border 1 px&quot;, etc. Whenever the user
+applies formatting to a range (could also be a whole column, row, or worksheet),
+we save appropriate respective formatting piece in a stack. Say the user has
+marked column B as bold, row 2 as italics, and set range A1:C5 with
+yellow background color. Our formatting stack would look like:
+</p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <td><b>Range</b></td>
+  <td><b>Formatting Piece</b></td>
+</tr>
+<tr>
+  <td>Column B</td>
+  <td>Bold on</td>
+</tr>
+<tr>
+  <td>Row 2</td>
+  <td>Italics on</td>
+</tr>
+<tr>
+  <td>A1:C5</td>
+  <td>Yellow background</td>
+</tr>
+</table>
+
+<p>Now let try to figure out the overall format of cell B2. From the first
+we know it should be bold, from the second it should be italics, and last
+it should have yellow background. This complete format is the one which
+we used to render cell B2 on screen. In similar fashion, we can know that
+cell A1 on the other only specifies the yellow background, because the first
+and second pieces do not apply there.</p>
+
+<p>Another possible way to see the format storage is by using 3-D perspective.
+For each formatting piece, imagine there is a surface which covers the
+formatted range (the xy-plane). The formatting information is simply attached
+to the surface (say, as surface attribute). Every surface is stacked together,
+its depth (the z-axis) denotes the sequence, i.e. the first surface is the
+deepest. For the example above, we can view the pieces as one surface specifies
+&quot;bold on&quot; which is a vertical of column B, one surface specifies
+&quot;italics on&quot; which is a horizontal band of row 2 and one last surface
+which specifies &quot;yellow background&quot; stretched in the range A1:C5.
+How to find complete format for A2? This is now a matter of surface
+determination. Traversing in the direction of z-axis from B2 reveals
+that we hit the last and second surfaces only; thereby we can know the complete
+format is &quot;italics, yellow background&quot;.</p>
+
+<p>It is clear that a format storage corresponds to one sheet only. For each
+sheet, there should be one format storage. Cells can still have accessors to
+its formatting information, these simply become wrapper for proper calls to the
+format storage. Since each formatting piece holds information about the applied
+range, we must take care that the formatting storage is correctly updated
+whenever cells, rows or columns are inserted and deleted.</p>
+
+<p>In order to avoid low performance, we must use a smart way to iterate over
+all formatting pieces whenever we want to find out complete format for given
+cell(s). When the sheet gets very complex, it is likely that we will have
+many many formatting pieces that are not even overlap. This means, when we
+need formatting of cell A1, it is no use to check formatting pieces of range
+Z1:Z10 or A100:B100 which do not include cell A1 and are even very far from A1.
+One possible solution is to arrange the formatting pieces in a quad-tree.
+Because one piece can cover a very large area, it is possible that it will
+be in more than one leaf in the quad-tree. <i>Details on the possible use of
+quad-tree or other methods should be explored further more</i>.</p>
+
+*/

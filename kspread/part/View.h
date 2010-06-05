@@ -310,6 +310,10 @@ public Q_SLOTS:
      */
     void popupTabBarMenu(const QPoint&);
 
+    /**
+     * \ingroup Damages
+     * Handles damages that need visual updates.
+     */
     void handleDamages(const QList<Damage*>& damages);
 
     void initialiseMarkerFromSheet(Sheet *_sheet, const QPoint &point);

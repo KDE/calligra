@@ -33,6 +33,7 @@ class Sheet;
 /**
  * \class RecalcManager
  * \brief Manages the recalculations of cells containing a formula.
+ * \ingroup Value
  *
  * The recalculations of a cell region, a sheet or the map are based
  * on the following principle:

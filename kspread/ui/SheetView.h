@@ -42,6 +42,7 @@ class Region;
 class Sheet;
 
 /**
+ * \ingroup Painting
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */

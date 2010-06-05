@@ -27,7 +27,10 @@ namespace KSpread
 {
 
 /**
- * ValidityStorage
+ * \class ValidityStorage
+ * \ingroup Storage
+ * \ingroup Value
+ * Stores cell validations.
  */
 class ValidityStorage : public QObject, public RectStorage<Validity>
 {

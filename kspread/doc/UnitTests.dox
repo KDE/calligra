@@ -1,0 +1,54 @@
+/**
+\page tests Unit tests
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    NEEDS UPDATE (QTestLib)
+
+<p>Relevant mailing-list threads:</p>
+<ul>
+<li><a href="http://lists.kde.org/?l=kde-cvs&m=109511244721480&w=2">
+http://lists.kde.org/?l=kde-cvs&amp;m=109511244721480&amp;w=2</a></li>
+<li><a href="http://lists.kde.org/?l=koffice-devel&m=109518196922944&w=2">
+http://lists.kde.org/?l=koffice-devel&amp;m=109518196922944&amp;w=2</a></li>
+</ul>
+
+<p>It is well known that writing clean and easily understandable module will lead
+to better maintenance. However testing that particular module everytime there is
+a significant change requires considerable amount of time and effort. Since KSpread
+and other applications of its scale consist of hundreds of modules, in this case
+automatic testing of each module will help a lot, not to mention that it might
+catch bug as early as possible.</p>
+
+<p>KSpread has a simple test framework to facilitate such kind of test. This can
+be activated using the shortcut <tt>Ctrl+Shift+T</tt>. This test is however
+not accessible via menu, because it is intended to be used only by the developers.
+Ideally, there should be tests for all modules contained in KSpread. It is
+the responsibility of the developer to create the corresponding <tt>tester</tt>
+for the code that he or she is working on. All tests should be kept in
+<tt>koffice/kspread/tests/</tt>.</p>
+
+<p>Making a new tester is not difficult. The easiest way is to copy an already
+existing tester and modify it. Basically, it must be a subclass of class Tester
+(see <tt>koffice/kspread/tests/tester.h</tt>). Just reimplement the virtual
+function <tt>run()</tt> and it is ready. In order to make it possible to run
+the new tester, add an instance of the class in TestRunner
+(for details, see <tt>koffice/kspread/tests/testrunner.cc</tt>).</p>
+
+<p>A tester must be self-contained, it should not use any test data from
+current document. If necessary, it must create (or hard code) the data by
+itself.</p>
+
+<p>Whenever parts of KSpread features are improved or rewritten, it is always
+a good idea to run the related tests to ensure that all the changes do not do
+any harm. However, bear in mind that there is no 100% guarantee that the new
+code is bug-free.</p>
+
+<p>Also, if there is a bug which is not caught by the tester (i.e. it does not
+fail the tester, but the bug is confirmed), then the relevant tester must be
+modified to include one or more test cases similar to the offending bug.
+When the bug is finally fixed, from that point the test should always pass all
+test cases.</p>
+
+*/

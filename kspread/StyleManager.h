@@ -41,6 +41,7 @@ class StyleDialog;
 /**
  * \class StyleManager
  * \brief Manages cell styles
+ * \ingroup Style
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */

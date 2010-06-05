@@ -45,6 +45,7 @@ namespace KSpread
 
 /**
  * Calculation settings
+ * \ingroup Value
  */
 class KSPREAD_EXPORT CalculationSettings
 {

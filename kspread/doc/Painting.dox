@@ -1,19 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>KSpread Painting</title>
-</head>
+/**
+\page painting Painting
+\author Inge Wallin (<a href="mailto:inge@lysator.liu.se">inge@lysator.liu.se</a>)
+\date 2005-08-14
 
-<body>
+\par Status:
+    NEEDS UPDATE (CellView, SheetView)
 
-<h1>KSpread Painting</h1>
-
-<p>This file describes how the painting of a spreadsheet works and is
-supposed to work. At present, it is not a complete description.</p>
-
-
-<h2>General</h2>
+\section general General
 
 <p>Painting is started by Canvas::paintEvent().  This method
 calls paintCell() on all visible cells, i.e. it always repaints the
@@ -42,7 +35,7 @@ unmerged.  Cells that are merged never expand, but instead show a
 </p>
 
 
-<h2>Layout</h2>
+\section layout Layout
 
 <p>Painting is a two-step process.  First, makeLayout() is called, which
 analyzes the content of the cell and checks if it fits into the cell.
@@ -111,7 +104,7 @@ checking if d->extra()->merged[XY]Cells are zero (case 2) or non-zero
 (case 1).</p>
 
 
-<h2>Overflow</h2>
+\section overflow Overflow
 
 <p>In this context, the word <i>overflow</i> means that the content of
 a cell is wider than the cell itself.  In that case, the extra space
@@ -131,7 +124,7 @@ because it would be possible, that the content of the cell overflows.
 The current version (2.0 alpha) does that, but it has to be changed.</p>
 
 
-<h3>Other spreadsheets</h3>
+\section other Other Spreadsheets
 
 <p>Here follows a survey of how a number of spreadsheet programs
 handle overflow into other cells.</p>
@@ -255,5 +248,4 @@ handle overflow into other cells.</p>
   <td>TtL</td><td>To the Left</td>
 </tr>
 
-</body>
-</html>
+*/

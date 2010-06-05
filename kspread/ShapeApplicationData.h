@@ -26,6 +26,7 @@ namespace KSpread
 {
 
 /**
+ * \ingroup Embedding
  * KSpread specific data attached to each shape.
  */
 class ShapeApplicationData : public KoShapeApplicationData

@@ -42,7 +42,8 @@ class Value;
 typedef QHash<Cell, Cell> CellIndirection;
 
 /**
- * Token
+ * \ingroup Value
+ * A formula token.
  */
 class KSPREAD_EXPORT Token
 {
@@ -264,7 +265,8 @@ protected:
 };
 
 /**
- * Class Tokens represents array of tokens.
+ * \ingroup Value
+ * An array of formula tokens.
  *
  */
 class Tokens: public QVector<Token>
@@ -283,7 +285,8 @@ protected:
 
 
 /**
- * Class Formula encapsulates a formula for a cell.
+ * \ingroup Value
+ * A formula for a cell.
  *
  * A Formula is a equations which perform calculations on values in the cells
  * and sheets. Every formula must start with an equal sign (=).

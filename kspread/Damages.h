@@ -33,6 +33,10 @@ class Map;
 class Sheet;
 class Region;
 
+/**
+ * \ingroup Damages
+ * An abstract damage.
+ */
 class KSPREAD_EXPORT Damage
 {
 public:
@@ -53,6 +57,10 @@ public:
     }
 };
 
+/**
+ * \ingroup Damages
+ * A cell range damage.
+ */
 class KSPREAD_EXPORT CellDamage : public Damage
 {
 public:
@@ -91,6 +99,10 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
 
 
+/**
+ * \ingroup Damages
+ * A sheet damage.
+ */
 class KSPREAD_EXPORT SheetDamage : public Damage
 {
 public:
@@ -127,6 +139,10 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
 
 
+/**
+ * \ingroup Damages
+ * A workbook damage.
+ */
 class WorkbookDamage : public Damage
 {
 public:
@@ -155,6 +171,10 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
 
 
+/**
+ * \ingroup Damages
+ * A selection damage.
+ */
 class KSPREAD_EXPORT SelectionDamage : public Damage
 {
 public:

@@ -27,7 +27,9 @@ namespace KSpread
 {
 
 /**
- * BindingStorage
+ * \class BindingStorage
+ * \ingroup Storage
+ * Stores cell ranges acting as data sources.
  */
 class BindingStorage : public QObject, public RectStorage<Binding>
 {

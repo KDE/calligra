@@ -1,0 +1,69 @@
+/**
+\page toolbars Toolbars
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    IN PROGRESS
+
+<p>Relevant mailing-list threads:</p>
+
+<ul>
+<li><a href="http://lists.kde.org/?l=kde-usability&m=110751297906231&w=2">
+http://lists.kde.org/?l=kde-usability&amp;m=110751297906231&amp;w=2</a></li>
+<li><a href="http://lists.kde.org/?l=koffice-devel&m=110723903332496&w=2">
+http://lists.kde.org/?l=koffice-devel&amp;m=110723903332496&amp;w=2</a></li>
+</ul>
+
+<p>Toolbars are utilized to place most frequently used actions. It is
+important to present the user with default toolbars which make
+sense, i.e. they do not contain unnecessary buttons. In-depth usability
+analysis and/or further discussions are needed to make decision which
+buttons need to be in the toolbar and which don't.</p>
+
+<p>For reference, here is a list of default shown toolbars in
+some spreadsheet applications:</p>
+
+<p><b>Microsoft Excel 2002</b>:</p>
+
+<ul>
+<li><em>Standard toolbar</em>: New, Open, Save, Search, Print, Print Preview,
+Spelling, Cut, Copy, Paste, Format Painter, Undo, Redo, Insert Hyperlink,
+Autosum, Sort Ascending, Sort Descending, Chart Wizard, Drawing, Zoom, Help</li>
+<li><em>Formating toolbar:</em>: Font, Font Size, Bold, Italic, Align Left,
+Align Center, Align Right, Merge and Center, Format Currency, Format Percent,
+Comma Style, Increase Precision, Decrease Precision, Increase Indent,
+Decrease Indent, Merge Cells, Unmerge Cells, Merge Across, Borders,
+Fill Color, Font Color</li>
+</ul>
+
+
+<p><b>OpenOffice 2.0</b>:</p>
+
+<ul>
+<li><em>Standard toolbar</em>: New, Open, Save, E-mail, Edit, PDF, Print,
+Page Preview, Spellcheck, Cut, Copy, Paste, Format Paintbrush, Undo, Redo,
+Hyperlink, Sort Ascending, Sort Descending, Insert Chart, Navigator, Styles,
+Gallery, Zoom</li>
+<li><em>Format Object toolbar:</em> Font Name, Font Size, Bold, Italic,
+Underline, Font Color, Align Left, Align Center, Align Right, Justified,
+Merge Cells, Format as Currency, Format as Percent, Format Standard,
+Increase Precision, Decrease Precision, Increase Indent, Decrease Indent,
+Borders, Line Style, Line Color, Background Color, Align Top, Align Center
+Vertically, Align Bottom </li>
+</ul>
+
+<p><b>Gnumeric 1.4</b>:</p>
+
+<ul>
+<li><em>Standard toolbar</em>: New, Open, Save, Print, Print Preview,
+Cut, Copy, Paste, Undo, Redo, Hyperlink, Autosum, Function/Formula,
+Insert Chart, Zoom</li>
+<li><em>Format toolbar:</em> Font Family, Font Size, Bold, Italic,
+Underline, Align Left, Align Center, Align Right, Merge and Center,
+Merge Cells, Split Cell, Format Currency, Format Percent, Thousand Separator,
+Increase Precision, Decrease Precision, Decrease Indent, Increase Indent,
+Borders, Background, Foreground</li>
+</ul>
+
+*/

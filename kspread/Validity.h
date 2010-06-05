@@ -56,8 +56,9 @@ class OdfLoadingContext;
 
 /**
  * \class Validity
+ * \ingroup Value
  *
- * Validity checks for cell contents
+ * Validates cell contents.
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */

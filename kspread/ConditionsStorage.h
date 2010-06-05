@@ -27,7 +27,9 @@ namespace KSpread
 {
 
 /**
- * ConditionsStorage
+ * \class ConditionsStorage
+ * \ingroup Storage
+ * Stores conditional cell styles.
  */
 class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {

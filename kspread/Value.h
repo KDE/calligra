@@ -43,6 +43,7 @@ class CalculationSettings;
 class ValueStorage;
 
 /**
+ * \ingroup Value
  * Provides a wrapper for cell value.
  *
  * Each cell in a worksheet must hold a value, either as enterred by user

@@ -1,0 +1,33 @@
+/**
+\page architecture Document/View Architecture
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    FINISHED
+
+<p>MVC (Model/View/Controller) means that the application consists of three
+big parts, the <i>Model</i> which holds the data structure and objects,
+the <i>View</i> which shows the model to the user and the <i>Controller</i>
+which handles user inputs and changes the model accordingly. Like other
+office applications, KSpread uses the Document/View architecture, a slightly
+different variant of MVC where the View and Controller are put together
+as one part.</p>
+
+<p>In order of its complexity scale, KSpread code has to be well separated,
+i.e. the <i>Document</i> and the <i>View</i>. We may also call them as
+<i>back-end</i> and <i>front-end</i> respectively. Right now part of which
+should belong to the Document sometimes has access to the View. For example,
+a cell stores information about its metrics in pixels (which is zoom dependent),
+knows whether it is visible to the user or not (which is view dependent), etc.
+This needs to be changed.</p>
+
+<p>One easy way to decide whether some stuff or relationship must really really
+alienated in the Document is to imagine that somebody wants to create another
+View (front-end) to the Document object model (back-end) that is being worked
+on. Say, one decent guy would like to copy the look-and-feel of classic Lotus
+1-2-3 (for whatever reason we are not really interested in here); so basically
+to some extent he can take most part of the KSpread back-end and glue a new
+user interface around the code.</p>
+
+*/

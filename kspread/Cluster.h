@@ -35,6 +35,7 @@ class ColumnFormat;
 class RowFormat;
 
 /**
+\ingroup Storage
 This class defines a pointer map to all cells, which makes access to them more performant
 and additionally limits memory consumption.
 
@@ -261,6 +262,7 @@ private:
 };
 
 /**
+ * \ingroup Storage
  * A pointer map to all column formats.
  * \see Cluster
  */
@@ -301,6 +303,7 @@ private:
 };
 
 /**
+ * \ingroup Storage
  * A pointer map to all row formats.
  * \see Cluster
  */

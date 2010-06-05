@@ -31,7 +31,10 @@ class PrintSettings;
 class Sheet;
 
 /**
- * Manages printing on the sheet level.
+ * Manages the layouting of pages.
+ * Contains shared functionality between PrintManager, which layouts pages for
+ * printing, and TablePageManager, which does the same for the table shape in
+ * page based hosting apps.
  */
 class KSPREAD_EXPORT PageManager
 {

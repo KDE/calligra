@@ -53,6 +53,7 @@ typedef QMap<QString, CustomStyle*> CustomStyles;
 
 
 /**
+ * \ingroup Style
  * A cell style.
  */
 class KSPREAD_EXPORT Style
@@ -366,6 +367,7 @@ private:
 
 
 /**
+ * \ingroup Style
  * A named cell style.
  */
 class CustomStyle : public Style
@@ -434,6 +436,7 @@ private:
 
 
 /**
+ * \ingroup Style
  * A single style attribute.
  */
 class SubStyle : public QSharedData

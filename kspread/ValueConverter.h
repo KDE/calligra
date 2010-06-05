@@ -28,6 +28,7 @@ class CalculationSettings;
 class ValueParser;
 
 /**
+ * \ingroup Value
  * Converts between the different Value types.
  */
 class KSPREAD_EXPORT ValueConverter

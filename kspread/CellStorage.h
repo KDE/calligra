@@ -56,6 +56,7 @@ class Value;
 class ValueStorage;
 
 /**
+ * \ingroup Storage
  * The cell storage.
  * A wrapper around a couple of storages, which hold the cell data.
  * Provides methods to iterate over the non-empty cells.

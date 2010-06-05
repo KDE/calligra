@@ -34,6 +34,7 @@ class CalculationSettings;
 class Value;
 
 /**
+ * \ingroup Value
  * Generates a Value by parsing an user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */

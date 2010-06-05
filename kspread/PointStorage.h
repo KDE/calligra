@@ -32,6 +32,7 @@ namespace KSpread
 {
 
 /**
+ * \ingroup Storage
  * A custom pointwise storage.
  * Based on a compressed sparse matrix data structure.
  * Usable for any kind of data attached to 2D coordinates.

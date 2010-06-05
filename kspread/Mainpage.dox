@@ -1,77 +1,21 @@
 /**
- * \mainpage
+ * \mainpage KSpread
  * KSpread is a scriptable spreadsheet program which provides both
  * table-oriented sheets and support for complex mathematical formulas
  * and statistics.
  *
  * \section majorclasses Major classes
  * \li KSpread::Canvas The scrollable area showing the cells.
- * \li KSpread::Cell Represents a cell in spreadsheet and holds all its data.
- * \li KSpread::Doc This class holds the data that makes up a spreadsheet.
- * \li KSpread::Map A map is a simple container for all sheets.
- * \li KSpread::Sheet A sheet contains several cells.
- * \li KSpread::View The View class displays a document.
+ * \li KSpread::Cell Represents a cell in the spreadsheet.
+ * \li KSpread::Doc The KPart used in KSpread itself and when embedded in non-KOffice applications.
+ * \li KSpread::Map The actual spreadsheet document consisting of at least one sheet.
+ * \li KSpread::Sheet A sheet consists of several cells.
+ * \li KSpread::View This class displays the KPart document.
  *
  * \section plugins Plugins
  * \li \ref KSpreadScripting KSpread Scripting Plugin that offers flexible access
  *      to the Kross scripting framework.
- * \li \ref CalendarPlugin Plugin for inserting a calendar into a spreadsheet.
- *
- * \todo code examples
- */
-
-/**
-\page commands Commands
-
-To implement undo and redo functionality, every possible action
-by the user for editing and manipulating the document is encapsulated
-in a command (based on QUndoCommand).
-There is one command class (which will be instantiated) for every unique
-action. You need to reimplement the redo() and undo() methods
-of QUndoCommand.
-
-Each command is created from the user interface.
-The commands working on cell ranges, i.e. derivatives of AbstractRegionCommand,
-have to check wether the operation is allowed before execution. Cells may be
-protected or locked as elements of matrices. AbstractRegionCommand::execute
-takes care of that. If the operation is not allowed, the command will neither
-get executed nor added to the undo stack.
-All other commands can be added directly to the undo stack by using
-Doc::addCommand, which executes the operation immediately.
-
-This is an example of typical use of a command NOT processing cell ranges:
-\code
-    QUndoCommand* command = new RenameSheetCommand( sheet, name );
-    doc->addCommand( command );
-\endcode
-This is an example of typical use of a command, which works on a cell range:
-\code
-    CommentCommand* command = new CommentCommand();
-    command->setSheet( sheet );
-    command->setName( i18n( "Add Comment" ) );
-    command->setComment( comment );
-    command->add( cellRegion );
-    command->execute();
-\endcode
-
-Then whenever the user triggers an "undo", the corresponding
-undo() method of the command is called by the undo action,
-thereby reverting the previously executed command. Similar thing
-happens for the "redo".
-
-All command classes reside in the subdirectory commands/.
-
-\sa Doc::addCommand
-*/
-
-/**
- * \page design Design Notes
- * \htmlinclude doc/DESIGN.html
- */
-
-/**
- * \page painting Painting
- * \htmlinclude doc/PAINTING.html
+ * \li \ref CalendarTool Plugin for inserting a calendar into a spreadsheet.
  */
 
 /* NOTE Stefan:
@@ -82,14 +26,13 @@ All command classes reside in the subdirectory commands/.
 */
 
 /**
- * \defgroup OpenDocument OpenDocument file format
- * Classes and methods related to the OpenDocument loading/saving.
+ * \defgroup Damages Damage System
+ * Classes and methods related to the damage system.
  */
 
 /**
- * \defgroup Operations Operations
- * Classes and methods related to KSpread Operations.
- * These are all actions that can be un- and redone.
+ * \defgroup OpenDocument OpenDocument file format
+ * Classes and methods related to the OpenDocument loading/saving.
  */
 
 /**
@@ -103,20 +46,35 @@ All command classes reside in the subdirectory commands/.
  */
 
 /**
- * \defgroup Painting Painting
+ * \defgroup Painting Painting System
  * Classes and methods related to the painting of cells and objects.
  * \ref painting
  */
 
 /**
- * \defgroup Plugins Plugins
- * Classes and methods related to the plugins.
+ * \defgroup Plugin Plugin System
+ * Classes and methods related to plugins.
  */
 
 /**
- * \defgroup Embedding Object embedding
+ * \defgroup Embedding Object Embedding
  * Classes and methods related to the embedding of objects (charts, pictures, ...).
  */
 
-EXAMPLE_PATH=. doc
-EXAMPLE_RECURSIVE=NO
+/**
+ * \defgroup Storage Storage System
+ * Classes and methods related to data storage.
+ */
+
+/**
+ * \defgroup Style Style System
+ * Classes and methods related to cell styles.
+ */
+
+/**
+ * \defgroup Value Value System
+ * Classes and methods related to cell values.
+ */
+
+#EXAMPLE_PATH=. doc
+#EXAMPLE_RECURSIVE=NO

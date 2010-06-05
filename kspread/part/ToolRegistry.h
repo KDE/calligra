@@ -29,6 +29,7 @@ namespace KSpread
 
 /**
  * Registry for tools.
+ * \ingroup Plugin
  */
 class KSPREAD_EXPORT ToolRegistry : public QObject
 {
