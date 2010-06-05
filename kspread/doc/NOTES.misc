@@ -1,0 +1,43 @@
+Please everyone working on KSpread:
+
+Get yourself a copy of Excel 97 or 2000 and create
+a really big sheet, and I mean really big and insert Graphs and
+lots of dependencies and regressions etc. use external add-ins if you have any
+and real time links. Make links between sheets and then see how
+well Excel behaves.
+
+1. UNDERSTAND that putting a spread->recalc() or spread->recalc(true) in
+your code is an abosolute NO-NO! Complex spreadsheets with possible
+heavy mathematical calculations via dll/so add-ins as well as real
+time feeds will not be managable if you do not painstakingly check
+wether spread->getAutoCalc() is true.
+
+
+2. Learn to understand that without the
+following short cut actions you are lost ( try to scroll
+down a list of 10,000 obersvations ...not using CTRL Down
+for example)
+
+CTRL Up/Down/Left/Right
+CTRL Shift Up/Down/Left/Right
+CTRL Home/End
+CTRL Shift Home/End
+Shift F9 versus F9
+
+Let's try to get them working well in Kspread as well. I tried my
+hand at it but wasn't able to get them to be efficient.
+
+3. Familiarize yourself with the concept of array formulas and why they
+are necessary (area protection, partial argument evaluation) Who would
+be willing to implement them? This will be an absolute must if we
+want to make progress on the mathematical/financial/statistical
+function side of things. I would be willing to implement a miriad
+of these functions but I believe doing that without having array
+formulae first will be a big mistake.
+
+(In case you wonder why I feel so strongly about these things:
+I am a professional user of Excel. I eat, sleap and work with Excel
+on my trading desk on Wall-Street.)
+
+
+Bernd <wuebben@kde.org>
