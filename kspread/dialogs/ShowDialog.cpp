@@ -26,8 +26,8 @@
 #include "ShowDialog.h"
 
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QListWidget>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 
@@ -58,58 +58,42 @@ ShowDialog::ShowDialog(View* parent, const char* name)
     QLabel *label = new QLabel(i18n("Select hidden sheets to show:"), page);
     lay1->addWidget(label);
 
-    list = new QListWidget(page);
-    lay1->addWidget(list);
+    m_listWidget = new QListWidget(page);
+    lay1->addWidget(m_listWidget);
 
-    list->setSelectionMode(QAbstractItemView::MultiSelection);
+    m_listWidget->setSelectionMode(QListWidget::MultiSelection);
     QString text;
     QStringList::Iterator it;
     QStringList tabsList = m_pView->doc()->map()->hiddenSheets();
-    for (it = tabsList.begin(); it != tabsList.end(); ++it) {
-        text = *it;
-        list->addItem(text);
-    }
-    if (!list->count())
+    m_listWidget->addItems(tabsList);
+    if (!m_listWidget->count())
         enableButtonOk(false);
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotDoubleClicked(QListWidgetItem *)));
+  connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+          this, SLOT(accept()));
     resize(200, 150);
     setFocus();
 }
 
-void ShowDialog::slotDoubleClicked(QListWidgetItem *)
+void ShowDialog::accept()
 {
-    slotOk();
-}
+    const QList<QListWidgetItem *> items = m_listWidget->selectedItems();
 
-
-
-void ShowDialog::slotOk()
-{
-    QStringList listSheet;
-
-    for (int i = 0; i < list->count(); i++) {
-        if (list->item(i)->isSelected()) {
-            listSheet.append(list->item(i)->text());
-        }
+    if (items.count() == 0) {
+        return;
     }
 
-    //m_pView->tabBar()->showSheet(listSheet);
-
-    if (listSheet.count() == 0)
-        return;
-
+    const Map *const map = m_pView->doc()->map();
     Sheet *sheet;
     QUndoCommand* macroCommand = new QUndoCommand(i18n("Show Sheet"));
-    for (QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it) {
-        sheet = m_pView->doc()->map()->findSheet(*it);
+    for (int i = 0; i < items.count(); ++i) {
+        sheet = map->findSheet(items[i]->text());
         if (!sheet)
             continue;
         new ShowSheetCommand(sheet, macroCommand);
     }
     m_pView->doc()->addCommand(macroCommand);
     m_pView->slotUpdateView(m_pView->activeSheet());
-    accept();
+    KDialog::accept();
 }
 
 #include "ShowDialog.moc"

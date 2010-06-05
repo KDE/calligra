@@ -25,10 +25,9 @@
 #ifndef KSPREAD_SHOW_DIALOG
 #define KSPREAD_SHOW_DIALOG
 
-#include <kdialog.h>
+#include <KDialog>
 
 class QListWidget;
-class QListWidgetItem;
 
 namespace KSpread
 {
@@ -40,14 +39,12 @@ class ShowDialog: public KDialog
 public:
     ShowDialog(View* parent, const char* name);
 
-
-public slots:
-    void slotOk();
-    void slotDoubleClicked(QListWidgetItem *);
+public Q_SLOTS:
+    virtual void accept();
 protected:
     View* m_pView;
 
-    QListWidget * list;
+    QListWidget *m_listWidget;
 };
 
 } // namespace KSpread
