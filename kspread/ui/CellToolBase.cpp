@@ -40,7 +40,7 @@
 #include "part/Doc.h" // FIXME detach from part
 #include "DragAndDropStrategy.h"
 #include "HyperlinkStrategy.h"
-#include "inspector.h"
+#include "tests/inspector.h"
 #include "Map.h"
 #include "MergeStrategy.h"
 #include "NamedAreaManager.h"
