@@ -635,6 +635,10 @@ View::View(QWidget *_parent, Doc *_doc)
             this, SLOT(reviveSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
+    if (statusBar()) {
+        connect(doc()->map(), SIGNAL(statusMessage(const QString&, int)),
+                statusBar(), SLOT(showMessage(const QString&, int)));
+    }
 
     if (!doc()->isReadWrite()) {
         setZoom(100, true);

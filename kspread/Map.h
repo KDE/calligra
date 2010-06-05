@@ -360,6 +360,12 @@ Q_SIGNALS:
      */
     void sheetRevived(Sheet* sheet);
 
+    /**
+     * Emitted, if a status \p message should be shown in the status bar
+     * for \p timeout msecs.
+     */
+    void statusMessage(const QString &message, int timeout);
+
 private:
     Q_DISABLE_COPY(Map)
 

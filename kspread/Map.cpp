@@ -319,6 +319,8 @@ Sheet* Map::createSheet()
 {
     QString name(i18n("Sheet%1", d->tableId++));
     Sheet* sheet = new Sheet(this, name);
+    connect(sheet, SIGNAL(statusMessage(const QString &, int)),
+            this, SIGNAL(statusMessage(const QString &, int)));
     return sheet;
 }
 

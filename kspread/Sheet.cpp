@@ -4057,6 +4057,11 @@ void Sheet::emit_updateColumn(ColumnFormat *_format, int _column)
     emit sig_updateView(this);
 }
 
+void Sheet::showStatusMessage(const QString &message, int timeout)
+{
+    emit statusMessage(message, timeout);
+}
+
 bool Sheet::saveChildren(KoStore* _store, const QString &_path)
 {
     Q_UNUSED(_store);

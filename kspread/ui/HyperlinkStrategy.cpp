@@ -30,7 +30,6 @@
 
 #include <KMessageBox>
 #include <KMimeType>
-#include <KNotification>
 #include <KRun>
 
 #include <QTimer>
@@ -76,9 +75,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
     Q_UNUSED(modifiers)
-    KNotification* const notify = new KNotification("LinkActivated");
-    notify->setText(i18n("Link <i>%1</i> activated", d->url));
-    notify->addContext("d->url", d->url);
+    selection()->activeSheet()->showStatusMessage(i18n("Link %1 activated", d->url));
 
     const KUrl url(d->url);
     if (!url.isValid() || url.isRelative()) {
@@ -91,15 +88,12 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
             if (!region.firstRange().isNull()) {
                 const Cell cell = Cell(region.firstSheet(), region.firstRange().topLeft());
-                notify->addContext("region", cell.fullName());
             }
         }
     } else {
         const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
-        notify->addContext("type", type);
         if (!Util::localReferenceAnchor(d->url)) {
             const bool executable = KRun::isExecutableFile(url, type);
-            notify->addContext("executable", QVariant(executable).toString());
             if (executable) {
                 const QString question = i18n("This link points to the program or script '%1'.\n"
                                               "Malicious programs can harm your computer. "
@@ -116,6 +110,5 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         }
     }
 
-    QTimer::singleShot(0, notify, SLOT(sendEvent()));
     tool()->repaintDecorations();
 }

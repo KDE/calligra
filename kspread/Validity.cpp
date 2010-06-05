@@ -27,7 +27,6 @@
 
 // KDE
 #include <kmessagebox.h>
-#include <knotification.h>
 
 // KOffice
 #include <KoXmlReader.h>
@@ -814,13 +813,7 @@ bool Validity::testValidity(const Cell* cell) const
             }
         }
 
-        KNotification *notify = new KNotification("ValidityError");
-        notify->setText(i18n("Validation for cell <i>%1</i> failed", cell->fullName()));
-        notify->addContext("cell", cell->fullName());
-        notify->addContext("value", cell->userInput());
-        notify->addContext("title", d->title);
-        notify->addContext("message", d->message);
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        cell->sheet()->showStatusMessage(i18n("Validation for cell %1 failed", cell->fullName()));
     }
     return (valid || d->action != Stop);
 }

@@ -51,7 +51,6 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
-#include <knotification.h>
 #include <KSelectAction>
 
 #include <KoCanvasBase.h>

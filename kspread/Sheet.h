@@ -866,6 +866,12 @@ public:
     void emit_updateRow(RowFormat* rowFormat, int _row, bool repaint = true);
     void emit_updateColumn(ColumnFormat* columnFormat, int _column);
 
+
+    /**
+     * Shows a status \p message in the status bar for \p timeout msecs.
+     */
+    void showStatusMessage(const QString &message, int timeout = 3000);
+
     void updateLocale();
 
 
@@ -900,6 +906,12 @@ signals:
     void sig_RefreshView(Sheet*);
     void documentSizeChanged(const QSizeF&);
     void visibleSizeChanged();
+
+    /**
+     * Emitted, if a status \p message should be shown in the status bar
+     * for \p timeout msecs.
+     */
+    void statusMessage(const QString& message, int timeout);
 
 protected:
     /**

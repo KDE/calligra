@@ -90,7 +90,6 @@
 #include <KoParagraphStyle.h>
 
 #include <kdebug.h>
-#include <KNotification>
 
 #include <QTimer>
 #include <QTextDocument>
@@ -704,11 +703,7 @@ bool Cell::makeFormula()
 
     // parse the formula and check for errors
     if (!formula().isValid()) {
-        KNotification *notify = new KNotification("ParsingError");
-        notify->setText(i18n("Parsing of formula in cell <i>%1</i> failed.", fullName()));
-        notify->addContext("cell", fullName());
-        notify->addContext("expression", userInput());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
         setValue(Value::errorPARSE());
         return false;
     }
@@ -774,11 +769,7 @@ void Cell::parseUserInput(const QString& text)
 
         // parse the formula and check for errors
         if (!formula.isValid()) {
-            KNotification *notify = new KNotification("ParsingError");
-            notify->setText(i18n("Parsing of formula in cell <i>%1</i> failed.", fullName()));
-            notify->addContext("cell", fullName());
-            notify->addContext("expression", userInput());
-            QTimer::singleShot(0, notify, SLOT(sendEvent()));
+            sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
             setValue(Value::errorPARSE());
             return;
         }
