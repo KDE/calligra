@@ -30,15 +30,6 @@
 
 using namespace KSpread;
 
-class FunctionModuleRegistrySingleton
-{
-public:
-    FunctionModuleRegistry instance;
-};
-
-K_GLOBAL_STATIC(FunctionModuleRegistrySingleton, s_singleton)
-
-
 class FunctionModuleRegistry::Private
 {
 public:
@@ -87,7 +78,8 @@ FunctionModuleRegistry::~FunctionModuleRegistry()
 
 FunctionModuleRegistry* FunctionModuleRegistry::instance()
 {
-    return &s_singleton->instance;
+    K_GLOBAL_STATIC(FunctionModuleRegistry, s_instance)
+    return s_instance;
 }
 
 void FunctionModuleRegistry::loadFunctionModules()

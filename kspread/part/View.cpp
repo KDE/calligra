@@ -754,7 +754,7 @@ void View::initView()
     variant.setValue<QObject*>(doc()->map()->bindingManager());
 
     // Load the KSpread Tools
-    ToolRegistry::instance();
+    ToolRegistry::instance()->loadTools();
 
     if (shell())
     {

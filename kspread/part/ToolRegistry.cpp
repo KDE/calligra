@@ -30,13 +30,6 @@
 
 using namespace KSpread;
 
-class ToolRegistrySingleton
-{
-public:
-    ToolRegistry instance;
-};
-K_GLOBAL_STATIC(ToolRegistrySingleton, s_singleton)
-
 
 class ToolRegistry::Private
 {
@@ -60,7 +53,8 @@ ToolRegistry::~ToolRegistry()
 
 ToolRegistry* ToolRegistry::instance()
 {
-    return &s_singleton->instance;
+    K_GLOBAL_STATIC(ToolRegistry, s_instance)
+    return s_instance;
 }
 
 void ToolRegistry::loadTools()

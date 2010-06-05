@@ -189,32 +189,25 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
 }
 
 
-class FunctionRepositorySingleton
-{
-public:
-    FunctionRepository instance;
-};
-K_GLOBAL_STATIC(FunctionRepositorySingleton, s_singleton)
-
-
 FunctionRepository* FunctionRepository::self()
 {
-    if (!s_singleton->instance.d->initialized) {
-        s_singleton->instance.d->initialized = true;
+    K_GLOBAL_STATIC(FunctionRepository, s_instance)
+    if (!s_instance.exists()) {
+        *s_instance; // creates the global instance
 
         // register all existing functions
         FunctionModuleRegistry::instance()->registerFunctions();
 
 #ifndef NDEBUG
-        kDebug(36005) << "functions registered:" << s_singleton->instance.d->functions.count()
-                      << "descriptions loaded:" << s_singleton->instance.d->descriptions.count();
+        kDebug(36005) << "functions registered:" << s_instance->d->functions.count()
+                      << "descriptions loaded:" << s_instance->d->descriptions.count();
 
         // Verify, that every function has a description.
         QStringList missingDescriptions;
         typedef QHash<QString, QSharedPointer<Function> > Functions;
-        Functions::ConstIterator end = s_singleton->instance.d->functions.constEnd();
-        for (Functions::ConstIterator it = s_singleton->instance.d->functions.constBegin(); it != end; ++it) {
-            if (!s_singleton->instance.d->descriptions.contains(it.key()))
+        Functions::ConstIterator end = s_instance->d->functions.constEnd();
+        for (Functions::ConstIterator it = s_instance->d->functions.constBegin(); it != end; ++it) {
+            if (!s_instance->d->descriptions.contains(it.key()))
                 missingDescriptions << it.key();
         }
         if (missingDescriptions.count() > 0) {
@@ -225,7 +218,7 @@ FunctionRepository* FunctionRepository::self()
         }
 #endif
     }
-    return &s_singleton->instance;
+    return s_instance;
 }
 
 FunctionRepository::FunctionRepository()
