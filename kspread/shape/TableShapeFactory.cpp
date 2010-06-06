@@ -81,7 +81,7 @@ void TableShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     // One spreadsheet map for all inserted tables to allow referencing cells among them.
     QVariant variant;
-    variant.setValue<void*>(new Map(0, "TableMap"));
+    variant.setValue<void*>(new Map());
     manager->setResource(MapResourceId, variant);
 }
 
