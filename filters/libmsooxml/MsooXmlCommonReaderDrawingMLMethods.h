@@ -30,6 +30,7 @@ protected:
 
 void initDrawingML();
 
+// All the readers
 KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
 enum cNvPrCaller {
@@ -85,6 +86,7 @@ KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
+bool    m_isPlaceHolder; //! set by read_ph()
 QString m_phType; //! set by read_ph()
 
 KoFilter::ConversionStatus read_fld();
@@ -141,6 +143,7 @@ bool m_drawing_inline; //! set by read_drawing() to indicate if we have encounte
 
 int m_currentListLevel; //! set by drawingML_ppr
 
+// Shape properties
 int m_svgX; //!< set by read_off()
 int m_svgY; //!< set by read_off()
 int m_svgWidth; //! set by read_ext()
@@ -172,11 +175,11 @@ enum ColorType {
 ColorType m_colorType;
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
 QColor m_currentColor;
-QPen m_currentPen;
+QPen   m_currentPen;
 
 qreal* m_currentDoubleValue;
 
-bool m_hyperLink;
+bool    m_hyperLink;
 QString m_hyperLinkTarget;
 
 #ifdef PPTXXMLSLIDEREADER_H

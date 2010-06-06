@@ -54,6 +54,8 @@ public:
     int height;
     //! p:spPr/a:xfrm@rot value in 1/60,000th of a degree.
     int rot;
+    //! p:nvPr/p:ph
+    bool isPlaceHolder;
 };
 
 //! Data structure collecting information about single slide/master slide

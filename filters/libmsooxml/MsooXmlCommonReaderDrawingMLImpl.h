@@ -130,6 +130,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_flipH = false;
     m_flipV = false;
     m_rot = 0;
+    m_isPlaceHolder = false;
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
@@ -152,7 +153,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     body = drawFrameBuf.originalWriter();
 //    delete body;
 //    body = origBody;
-    {
+    if (!m_isPlaceHolder) {
         body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
         body->addAttribute("draw:layer", "layout");
@@ -510,6 +511,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     else if (m_context->type == SlideLayout) {
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
     }
+    m_isPlaceHolder = false;
     m_phType.clear();
 #endif
     m_cNvPrId.clear();
@@ -1285,6 +1287,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             m_currentShapeProperties->width = m_svgWidth;
             m_currentShapeProperties->height = m_svgHeight;
             m_currentShapeProperties->rot = m_rot;
+            m_currentShapeProperties->isPlaceHolder = m_isPlaceHolder;
             kDebug() << "Saved to m_currentShapeProperties";
         }
     }
@@ -1424,23 +1427,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 
     m_xlinkHref.clear();
 
+    // Read attributes.
     const QXmlStreamAttributes attrs(attributes());
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
     kDebug() << "embed:" << r_embed;
     if (!r_embed.isEmpty()) {
-        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_embed));
+        const QString sourceName(m_context->relationships->target(m_context->path,
+                                                                  m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
+
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
     }
 
+    // Read child elements
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

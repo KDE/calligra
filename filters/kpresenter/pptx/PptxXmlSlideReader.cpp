@@ -623,8 +623,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 #define CURRENT_EL bg
 // bg handler (Slide Background)
 /*! ECMA-376, 19.3.1.1
- This element specifies the background appearance information for a slide. The slide background covers the
- entire slide and is visible where no objects exist and as the background for transparent objects.
+ This element specifies the background appearance information for a
+ slide. The slide background covers the entire slide and is visible
+ where no objects exist and as the background for transparent objects.
 
  Parent elements:
     - cSld (§19.3.1.16)
@@ -652,8 +653,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 #undef CURRENT_EL
 #define CURRENT_EL bgPr
 //! 19.3.1.2 bgPr (Background Properties)
-//! This element specifies visual effects used to render the slide background. This includes any fill, image, or effects
-//! that are to make up the background of the slide.
+// This element specifies visual effects used to render the slide
+// background. This includes any fill, image, or effects that are to
+// make up the background of the slide.
 
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
@@ -801,6 +803,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_phType)
     kDebug() << "type:" << m_phType;
 
+    // Mark this shape as a place holder.
+    m_isPlaceHolder = true;
+
     readNext();
     READ_EPILOGUE
 }
@@ -847,7 +852,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
-                // buffer each text:p, because we have to write after the child elements aregenerated
+                // Buffer each text:p, because we have to write after
+                // the child elements are generated
                 MSOOXML::Utils::XmlWriteBuffer paragraphBuf;
                 if (isOutline) {
                     body = paragraphBuf.setWriter(body);
