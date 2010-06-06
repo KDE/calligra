@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005 David Faure <faure@kde.org>
- * Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
@@ -100,8 +100,15 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
                 m_nextFrames.insert(nextFrame, frame);
             }
 
-            if (textBox.hasAttributeNS(KoXmlNS::fo, "min-height"))
+            if (textBox.hasAttributeNS(KoXmlNS::fo, "min-height")) {
                 frame->setMinimumFrameHeight(KoUnit::parseValue(textBox.attributeNS(KoXmlNS::fo, "min-height")));
+                KoShape *shape = frame->shape();
+                QSizeF newSize = shape->size();
+                if (newSize.height() < frame->minimumFrameHeight()) {
+                    newSize.setHeight(frame->minimumFrameHeight());
+                    shape->setSize(newSize);
+                }
+            }
         }
     } else {
         KWFrameSet *fs = new KWFrameSet();
