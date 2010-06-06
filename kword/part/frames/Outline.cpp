@@ -46,6 +46,8 @@ Outline::Outline(KWFrame *frame, const QMatrix &matrix)
         m_side = Right;
     else if (frame->runAroundSide() == KWord::RightRunAroundSide)
         m_side = Left;
+    else if (frame->runAroundSide() == KWord::BothRunAroundSide)
+        m_side = None;
 }
 
 Outline::Outline(KoShape *shape, const QMatrix &matrix)
