@@ -160,6 +160,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
         m_currentListStyleProperties->setLevel(ilvl.toInt());
     }
 
+    m_bulletCharacter = QString();
+    m_bulletFont = QString();
+    m_bulletStyle = false;
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -170,14 +174,28 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             else if ( qualifiedName() == QLatin1String("w:pPr") ) {
                 TRY_READ(pPr_numbering)
             }
+            else if ( qualifiedName() == QLatin1String("w:rPr") ) {
+                TRY_READ(rPr_numbering)
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL)
+    }
+
+    // For some symbol bullets MS2007 sets the bullet char to wingdings/symbol  but since
+    // ODF does not support this, we replace those cases with default value '-'
+    if (m_bulletStyle && !m_bulletCharacter.isEmpty()) {
+        if (m_bulletFont == "Wingdings" || m_bulletFont == "Symbol") {
+            m_currentListStyleProperties->setBulletCharacter('-');
+        }
+        else {
+            m_currentListStyleProperties->setBulletCharacter(m_bulletCharacter.at(0));
+        }
     }
 
     QBuffer listBuf;
     KoXmlWriter listStyleWriter(&listBuf);
 
-    m_currentListStyleProperties->saveOdf(&listStyleWriter);  
+    m_currentListStyleProperties->saveOdf(&listStyleWriter);
     const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
     m_currentListStyle.addChildElement("list-style-properties", elementContents);
 
@@ -246,6 +264,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numFmt()
         else if (val == "upperLetter") {
             m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
         }
+        else if (val == "bullet") {
+            m_bulletStyle = true;
+        }
     }
 
     readNext();
@@ -295,7 +316,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentListStyleProperties->setListItemSuffix(val.right(1));
+        if (!m_bulletStyle) {
+            m_currentListStyleProperties->setListItemSuffix(val.right(1));
+        }
+        else {
+            m_bulletCharacter = val;
+        }
     }
 
     readNext();
@@ -334,6 +360,33 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         mainStyles->insert(m_currentListStyle, name, insertionFlags);
         // Maybe this should go to styles.xml?
         //mainStyles->markStyleForStylesXml(name);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rPr
+//! w:rpr handler (Run Properties)
+/*!
+
+ Parent elements:
+
+ Child elements:
+//! @todo: Handle all children
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("w:rFonts")) {
+                TRY_READ(rFonts_numbering)
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -426,7 +479,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlJc()
 
 #undef CURRENT_EL
 #define CURRENT_EL ind
-//! w:lvlJc handler (Level justification)
+//! w:ind handler (Indentation)
 /*!
 
  Parent elements:
@@ -446,6 +499,33 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
         m_currentListStyleProperties->setIndent(leftInd);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rFonts
+//! w:rFonts handler (Run Fonts)
+/*!
+
+ Parent elements:
+
+ Child elements:
+//! @todo: Handle all children
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_rFonts_numbering()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(ascii)
+
+    if (!ascii.isEmpty()) {
+        m_bulletFont = ascii;
+qDebug() << "Font is " << m_bulletFont;
     }
 
     readNext();
