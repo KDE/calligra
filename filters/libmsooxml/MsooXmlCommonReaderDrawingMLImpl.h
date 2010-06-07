@@ -499,7 +499,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 {
     READ_PROLOGUE
 
+    m_svgX = 0;
+    m_svgY = 0;
+    m_svgWidth = -1;
+    m_svgHeight = -1;
 #ifdef PPTXXMLSLIDEREADER_H
+    kDebug() << "type:" << m_context->type;
     if (m_context->type == Slide) {
     }
     else if (m_context->type == SlideMaster) {
@@ -509,6 +514,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
     }
     else if (m_context->type == SlideLayout) {
+        //m_currentShapeProperties = new PptxShapeProperties();
+        //m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
+        m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicStyle);
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
     }
     m_isPlaceHolder = false;
@@ -524,9 +532,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //    QBuffer drawFrameBuf;
 //    KoXmlWriter *origBody = body;
 #ifdef PPTXXMLSLIDEREADER_H
-    const bool outputDrawFrame = m_context->type == Slide;
+    bool outputDrawFrame = m_context->type == Slide || m_context->type == SlideLayout;
 #else
-    const bool outputDrawFrame = true;
+    bool outputDrawFrame = true;
 #endif
     if (outputDrawFrame) {
         body = drawFrameBuf.setWriter(body);
@@ -549,38 +557,65 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type != Slide && !d->phType.isEmpty() && outputDrawFrame) {
+        outputDrawFrame = false;
+        body = drawFrameBuf.originalWriter();
+        drawFrameBuf.clear();
+        kDebug() << "giving up outputDrawFrame for because ph@ is not empty: ph@type=" << d->phType << "m_context->type=" << m_context->type;
+    }
+#endif
+
     if (outputDrawFrame) {
+#ifdef PPTXXMLSLIDEREADER_H
+        kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
+//        KoXmlWriter *writer = m_context->type == SlideLayout ? mainStyles : body;
+#else
+#endif
+//        KoXmlWriter *writer = body;
 //        delete body;
 //        body = origBody;
         body = drawFrameBuf.originalWriter();
-
         body->startElement("draw:frame"); // CASE #P475
 
 #ifdef PPTXXMLSLIDEREADER_H
         body->addAttribute("draw:layer", "layout");
 
-        body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 //todo        body->addAttribute("presentation:style-name", styleName);
 # ifdef HARDCODED_PRESENTATIONSTYLENAME
         d->presentationStyleNameCount++;
         body->addAttribute("presentation:style-name",
                            d->presentationStyleNameCount == 1 ? "pr1" : "pr2");
+# else
+        //body->addAttribute("draw:style-name", );
 # endif // HARDCODED_PRESENTATIONSTYLENAME
 
+        if (m_context->type == Slide) {
 // CASE #P476
-        body->addAttribute("draw:id", m_cNvPrId);
-        body->addAttribute("presentation:class",
-                           MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType));
-//! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-        if (m_rot != 0) {
-            // m_rot is in 1/60,000th of a degree
-            body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
+            body->addAttribute("draw:id", m_cNvPrId);
+            const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
+            body->addAttribute("presentation:class", presentationClass);
+            kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
+            PptxPlaceholder *placeholder;
+            if (m_svgWidth > -1 && m_svgHeight > -1) {
+                body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+    //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
+                body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+                body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+            }
+            else if (   m_context->slideLayoutProperties
+                && ((placeholder = m_context->slideLayoutProperties->placeholders.value(presentationClass))))
+            {
+                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->styleName;
+                placeholder->writeAttributes(body);
+            }
+            if (m_rot != 0) {
+                // m_rot is in 1/60,000th of a degree
+                body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
+            }
         }
-
         // FIXME: Adapt this to apply to the current graphics style and use that.
         //if (m_currentColor.isValid()) {
         //  m_currentDrawStyle.addProperty("fo:background-color", m_currentColor.name());
@@ -601,13 +636,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     else if (m_context->type == SlideLayout) {
         // presentation:placeholder
         Q_ASSERT(m_placeholderElWriter);
+        const QString presentationObject(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
+
+        // Keep this placeholder information for reuse in slides because ODF requires
+        // not only reference but redundant copy of the properties to be present in slides.
+        PptxPlaceholder *placeholder = new PptxPlaceholder;
+        placeholder->x = EMU_TO_CM_STRING(m_svgX);
+        placeholder->y = EMU_TO_CM_STRING(m_svgY);
+        placeholder->width = EMU_TO_CM_STRING(m_svgWidth);
+        placeholder->height = EMU_TO_CM_STRING(m_svgHeight);
+        m_context->slideLayoutProperties->placeholders.insert(presentationObject, placeholder);
+
         m_placeholderElWriter->startElement("presentation:placeholder");
-        m_placeholderElWriter->addAttribute("presentation:object",
-            MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType));
-        m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-        m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
+        placeholder->writeAttributes(m_placeholderElWriter);
         m_placeholderElWriter->endElement();
     }
     d->shapeNumber++;
@@ -688,6 +730,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_H
 //! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
+        /*if (m_context->slideLayoutProperties) {
+            kDebug() << "m_context->slideLayoutProperties->shapes.count()" << m_context->slideLayoutProperties->shapes.count()
+                     << "d->shapeNumber" << d->shapeNumber;
+            if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
+                // for inheritance
+                m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
+                kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
+
+                m_svgX = m_currentShapeProperties->x;
+                m_svgY = m_currentShapeProperties->y;
+                kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
+                m_svgWidth = m_currentShapeProperties->width;
+                m_svgHeight = m_currentShapeProperties->height;
+                kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
+            }
+        }
+        else*/
         if (m_context->slideProperties) {
             kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
                      << "d->shapeNumber" << d->shapeNumber;
@@ -805,11 +864,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      if (m_currentListStyle.isEmpty()) {
+#ifdef PPTXXMLSLIDEREADER_H
                          // for now the name is hardcoded...should be maybe fixed
-                         if (m_phType == "title" || m_phType == "ctrTitle") {
+                         if (d->phType == "title" || d->phType == "ctrTitle") {
                              body->addAttribute("text:style-name", "titleList"); 
                          }
-                         else if (m_phType == "body" ) {
+                         else if (d->phType == "body" ) {
                              // Fixme? : for now the master slide list style is called bodyList
                              body->addAttribute("text:style-name", "bodyList");
                          }
@@ -817,6 +877,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                              // This hardcoded name should maybe changed to something else
                              body->addAttribute("text:style-name", "otherList");
                          }
+#else
+                         //! @todo ok?
+                         body->addAttribute("text:style-name", "otherList");
+#endif
                      }
                      else {
                          QString listStyleName = mainStyles->insert(m_currentListStyle);

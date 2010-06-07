@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *

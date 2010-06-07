@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -68,11 +68,31 @@ public:
     QList<PptxShapeProperties*> shapes;
 
     void clear();
-
-    QString layoutStyleName; //!< Used for page layouts
 };
 
-typedef QMap<QString, PptxSlideProperties*> PptxSlidePropertiesMap;
+//! Properties of a single placeholder for shapes defined by layouts
+class PptxPlaceholder
+{
+public:
+    PptxPlaceholder();
+    ~PptxPlaceholder();
+    //! Writers placeholder's attributes (svg:x, etc.) to @a writer
+    void writeAttributes(KoXmlWriter* writer);
+    QString x;
+    QString y;
+    QString width;
+    QString height;
+};
+
+//! Data structure collecting information about single layout
+class PptxSlideLayoutProperties
+{
+public:
+    PptxSlideLayoutProperties();
+    ~PptxSlideLayoutProperties();
+    QMap<QString, PptxPlaceholder*> placeholders; //! placeholders objects are owned by this object
+    QString styleName;
+};
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
 class PptxXmlSlideReader : public MSOOXML::MsooXmlCommonReader
@@ -115,6 +135,9 @@ protected:
     PptxXmlSlideReaderContext* m_context;
     PptxShapeProperties* m_currentShapeProperties;
 
+    KoGenStyle m_currentMasterPageStyle; //!< set by read_sp()
+    KoGenStyle m_currentPresentationPageLayoutStyle; //!< set by read_sp() for placeholders (KoGenStyle::PresentationPageLayoutStyle)
+
     KoXmlWriter* m_placeholderElWriter;
 
 private:
@@ -137,6 +160,7 @@ public:
         uint _slideNumber,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
+        PptxSlideLayoutProperties* _slideLayoutProperties,
         MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport* import;
     const QString path;
@@ -145,6 +169,7 @@ public:
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
     PptxXmlSlideReader::Type type;
     PptxSlideProperties* slideProperties;
+    PptxSlideLayoutProperties* slideLayoutProperties;
 };
 
 #endif

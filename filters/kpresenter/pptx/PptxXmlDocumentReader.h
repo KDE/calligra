@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -28,6 +28,8 @@
 
 class PptxImport;
 class PptxSlideProperties;
+class PptxSlideLayoutProperties;
+
 namespace MSOOXML
 {
 class MsooXmlRelationships;
@@ -65,9 +67,10 @@ protected:
     KoFilter::ConversionStatus read_sldMasterId();
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
-
+    KoFilter::ConversionStatus read_sldSz();
+    
     // Locates slide layout informaitons for given slide. Caches the result.
-    PptxSlideProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
+    PptxSlideLayoutProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
 
     PptxXmlDocumentReaderContext* m_context;
 private:

@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -47,7 +47,7 @@
 #else
 #pragma WARNING( Using hardcoded presentation:style-name attributes: pr1; pr2 )
 #endif
-#define HARDCODED_PRESENTATIONSTYLENAME
+//#define HARDCODED_PRESENTATIONSTYLENAME
 
 #include <MsooXmlReader_p.h>
 
@@ -68,9 +68,32 @@ void PptxSlideProperties::clear()
 {
     qDeleteAll(shapes);
     shapes.clear();
-    layoutStyleName.clear();
 }
 
+PptxPlaceholder::PptxPlaceholder()
+{
+}
+
+PptxPlaceholder::~PptxPlaceholder()
+{
+}
+
+void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
+{
+    writer->addAttribute("svg:x", x);
+    writer->addAttribute("svg:y", y);
+    writer->addAttribute("svg:width", width);
+    writer->addAttribute("svg:height", height);
+}
+
+PptxSlideLayoutProperties::PptxSlideLayoutProperties()
+{
+}
+
+PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
+{
+    qDeleteAll(placeholders);
+}
 
 // -------------------
 
@@ -78,11 +101,12 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
     uint _slideNumber, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
+    PptxSlideLayoutProperties* _slideLayoutProperties,
     MSOOXML::MsooXmlRelationships& _relationships)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
-        slideProperties(_slideProperties)
+        slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties)
 {
 }
 
@@ -100,6 +124,7 @@ public:
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
+    QString phType; //! set by read_ph()
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -332,7 +357,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         m_currentDrawStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
     }
     else if (m_context->type == SlideLayout) {
-        m_currentPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
+        m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
     }
 
     {
@@ -371,17 +396,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
                 body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
                 //! @todo presentation:use-date-time-name //optional; CASE #P304
-                //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
-
-                const QString currentPageStyleName(mainStyles->insert(m_currentDrawStyle));
+                const QString currentPageStyleName(mainStyles->insert(m_currentDrawStyle, "dp"));
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
 
-                if (!m_context->slideProperties->layoutStyleName.isEmpty()) {
+                if (!m_context->slideLayoutProperties->styleName.isEmpty()) {
+                    // CASE #P308
                     kDebug() << "presentation:presentation-page-layout-name=" <<
-                                       m_context->slideProperties->layoutStyleName;
+                                       m_context->slideLayoutProperties->styleName;
                     body->addAttribute("presentation:presentation-page-layout-name",
-                                       m_context->slideProperties->layoutStyleName);
+                                       m_context->slideLayoutProperties->styleName);
                 }
 
 //                body->addCompleteElement(&drawPageBuf);
@@ -392,8 +416,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
 
     if (m_context->type == SlideLayout) {
-        m_context->slideProperties->layoutStyleName = mainStyles->insert(m_currentPageLayoutStyle);
-        kDebug() << "layoutStyleName:" << m_context->slideProperties->layoutStyleName;
+        m_context->slideLayoutProperties->styleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
+        kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->styleName;
     }
     return KoFilter::OK;
 }
@@ -755,7 +779,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     placeholderElBuffer.close();
-    m_currentPageLayoutStyle.addProperty(
+    m_currentPresentationPageLayoutStyle.addProperty(
         QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
     placeholderElWriterSetter.release();
     delete m_placeholderElWriter;
@@ -800,8 +824,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 
     // Specifies what content type a placeholder is intended to contain.
     // The possible values for this attribute are defined by the ST_PlaceholderType simple type (§19.7.10), p.2988.
-    TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_phType)
-    kDebug() << "type:" << m_phType;
+    TRY_READ_ATTR_WITHOUT_NS_INTO(type, d->phType)
+    kDebug() << "type:" << d->phType;
 
     // Mark this shape as a place holder.
     m_isPlaceHolder = true;
@@ -830,18 +854,18 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     READ_PROLOGUE
     kDebug() << "m_context->type:" << m_context->type;
 
-#ifdef __GNUC__
+/*#ifdef __GNUC__
 #warning remove m_context->type != Slide
 #endif
     if (m_context->type != Slide) {
         SKIP_EVERYTHING_AND_RETURN
-    }
+    }*/
 
     body->startElement("draw:text-box"); // CASE #P436
 
     m_lstStyleFound = false;
     m_pPr_lvl = 0;
-    const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType) == QLatin1String("outline");
+    const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType) == QLatin1String("outline");
 
     MSOOXML::Utils::XmlWriteBuffer listBuf;
     body = listBuf.setWriter(body);
@@ -913,6 +937,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
 {
     READ_PROLOGUE
+    d->phType.clear();
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

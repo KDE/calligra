@@ -55,6 +55,9 @@
 //! Converts emu value (integer or double) to inches
 #define EMU_TO_INCH(emu) ((emu)/914400.0)
 
+//! Converts emu value (integer or double) to points
+#define EMU_TO_POINT(emu) ((emu)/12700.0)
+
 namespace MSOOXML
 {
 

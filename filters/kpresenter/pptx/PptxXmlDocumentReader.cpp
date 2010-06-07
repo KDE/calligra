@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
- * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -27,8 +27,10 @@
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+#include <MsooXmlUnits.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoPageLayout.h>
 
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxXmlDocumentReader
@@ -53,10 +55,10 @@ public:
     }
     ~Private() {
         qDeleteAll(masterSlidePropertiesMap);
-        qDeleteAll(slideLayoutsPropertiesMap);
+        qDeleteAll(slideLayoutPropertiesMap);
     }
-    PptxSlidePropertiesMap masterSlidePropertiesMap;
-    PptxSlidePropertiesMap slideLayoutsPropertiesMap;
+    QMap<QString, PptxSlideProperties*> masterSlidePropertiesMap;
+    QMap<QString, PptxSlideLayoutProperties*> slideLayoutPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
 private:
 };
@@ -129,7 +131,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     return KoFilter::OK;
 }
 
-PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
+PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     const QString& slidePath, const QString& slideFile)
 {
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
@@ -144,17 +146,18 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
     MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideLayoutPath, &slideLayoutFile);
 
     // load layout or find in cache
-    PptxSlideProperties *result = d->slideLayoutsPropertiesMap.value(slideLayoutPathAndFile);
+    PptxSlideLayoutProperties *result = d->slideLayoutPropertiesMap.value(slideLayoutPathAndFile);
     if (result)
         return result;
 
-    result = new PptxSlideProperties();
-    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(result);
+    result = new PptxSlideLayoutProperties();
+    MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,
         0/*unused*/, *m_context->themes,
         PptxXmlSlideReader::SlideLayout,
+        0,
         result,
         *m_context->relationships
     );
@@ -166,7 +169,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
         return 0;
     }
     slideLayoutPropertiesSetter.release();
-    d->slideLayoutsPropertiesMap.insert(slideLayoutPathAndFile, result);
+    d->slideLayoutPropertiesMap.insert(slideLayoutPathAndFile, result);
     return result;
 }
 
@@ -195,18 +198,23 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     QString slidePath, slideFile;
     MSOOXML::Utils::splitPathAndFile(slidePathAndFile, &slidePath, &slideFile);
 
-    PptxSlideProperties *slideLayoutProperties = this->slideLayoutProperties(slidePath, slideFile);
+    PptxSlideLayoutProperties *slideLayoutProperties = this->slideLayoutProperties(slidePath, slideFile);
+    if (!slideLayoutProperties) {
+        raiseError(i18n("Slide layout \"%1\" not found", slidePath + '/' + slideFile));
+        return KoFilter::WrongFormat;
+    }
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
         0/*unused*/, *m_context->themes,
         PptxXmlSlideReader::Slide,
+        0,
         slideLayoutProperties,
         *m_context->relationships
     );
     PptxXmlSlideReader slideReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
-        &slideReader, slidePath + "/" + slideFile, &context);
+        &slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideReader.errorString();
         return status;
@@ -249,6 +257,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         0/*unused*/, *m_context->themes,
         PptxXmlSlideReader::SlideMaster,
         masterSlideProperties,
+        0,
         *m_context->relationships
     );
     PptxXmlSlideReader slideMasterReader(this);
@@ -297,9 +306,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
  are available within the corresponding presentation. A slide master is a slide that
  is specifically designed to be a template for all related child layout slides.
 
- Parent Elements:
+ Parent elements:
  - [done] presentation (§19.2.1.26)
- Child Elements:
+ Child elements:
  - [done] sldMasterId (Slide Master ID) §19.2.1.36
 */
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
@@ -314,6 +323,59 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sldSz
+//! p:sldSz handler (Presentation)
+/*! ECMA-376, 19.2.1.39, p. 2801.
+ This element specifies the size of the presentation slide surface.
+ 
+ Parent elements:
+ - [done] presentation (§19.2.1.26)
+
+ No child elements.
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITHOUT_NS(cx)
+    READ_ATTR_WITHOUT_NS(cy)
+    int intCx, intCy;
+    STRING_TO_INT(cx, intCx, "sldSz@cx")
+    STRING_TO_INT(cy, intCy, "sldSz@cy")
+    //! @todo check "type" attr, e.g. 4x3
+
+    KoPageLayout pageLayout;
+    pageLayout.width = EMU_TO_POINT(qreal(intCx));
+    pageLayout.height = EMU_TO_POINT(qreal(intCy));
+    pageLayout.leftMargin = 0.0;
+    pageLayout.rightMargin = 0.0;
+    pageLayout.topMargin = 0.0;
+    pageLayout.bottomMargin = 0.0;
+    //! @todo orientation heristics - OK?
+    pageLayout.orientation = pageLayout.width > pageLayout.height ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+
+    KoGenStyle pageLayoutStyle(pageLayout.saveOdf()); // (KoGenStyle::PageLayoutStyle)
+    const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
+    mainStyles->markStyleForStylesXml(pageLayoutStyleName);
+    kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
+
+    //! @todo insert draw:frame child elements read from master slide
+    //<style:master-page style:name="Default" style:page-layout-name="PMpredef1" draw:style-name="dppredef1">
+    // <draw:frame presentation:style-name=...
+    KoGenStyle masterPageStyle(KoGenStyle::MasterPageStyle);
+    masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
+    const QString masterPageStyleName(mainStyles->insert(masterPageStyle, "Default", KoGenStyles::DontAddNumberToName));
+    kDebug() << "masterPageStyleName:" << masterPageStyleName;
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
     READ_EPILOGUE
 }
 
@@ -336,7 +398,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
     - photoAlbum (Photo Album Information) §19.2.1.24
     - [done] sldIdLst (List of Slide IDs) §19.2.1.34
     - [done] sldMasterIdLst (List of Slide Master IDs) §19.2.1.37
-    - sldSz (Presentation Slide Size) §19.2.1.39
+    - [done] sldSz (Presentation Slide Size) §19.2.1.39
     - smartTags (Smart Tags) §19.2.1.40
 */
 //! @todo support all child elements
@@ -356,7 +418,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         if (isStartElement()) {
             TRY_READ_IF(sldMasterIdLst)
             ELSE_TRY_READ_IF(sldIdLst)
-            //! @todo ELSE_TRY_READ_IF(sldSz)
+            ELSE_TRY_READ_IF(sldSz)
             //! @todo ELSE_TRY_READ_IF(notesSz)
             //! @todo ELSE_TRY_READ_IF(defaultTextStyle)
 //! @todo add ELSE_WRONG_FORMAT
