@@ -52,6 +52,9 @@
 #include <QTextCursor>
 #include <QAbstractTextDocumentLayout>
 
+// KDE
+#include <KColorUtils>
+
 // KOffice
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
@@ -1090,6 +1093,14 @@ void CellView::paintText(QPainter& painter,
             textColorPrint = Qt::black;
         else
             textColorPrint = QApplication::palette().text().color();
+
+        QColor bgColor = d->style.backgroundColor();
+        if (bgColor.isValid()) {
+            qreal contrast = KColorUtils::contrastRatio(bgColor, textColorPrint);
+            kDebug() << bgColor << textColorPrint << contrast;
+            if (contrast < 3)
+                textColorPrint = QColor(255 - textColorPrint.red(), 255 - textColorPrint.green(), 255 - textColorPrint.blue());
+        }
     }
 
     QPen tmpPen(textColorPrint);
