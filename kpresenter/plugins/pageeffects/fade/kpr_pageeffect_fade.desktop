@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Fade
+Comment=Fade Effect
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_fade
+X-KPresenter-Version=0
