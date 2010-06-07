@@ -479,7 +479,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "bodyList";
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
 
     while (!atEnd()) {
         readNext();
@@ -530,7 +530,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "titleList";
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
 
     while (!atEnd()) {
         readNext();
@@ -581,7 +581,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "otherList";
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
 
     while (!atEnd()) {
         readNext();
