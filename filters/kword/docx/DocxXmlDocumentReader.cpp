@@ -1686,6 +1686,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    if (m_listFound) {
+        m_currentParagraphStyle.addProperty("style:list-style-name", m_currentListStyleName);
+    }
+
     READ_EPILOGUE
 }
 

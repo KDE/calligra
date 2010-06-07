@@ -121,7 +121,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(abstractNumId)
 
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
 
     while (!atEnd()) {
         readNext();
