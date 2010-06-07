@@ -241,7 +241,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     READ_ATTR_WITH_NS(r, id)
     READ_ATTR_WITHOUT_NS(sheetId)
     READ_ATTR_WITHOUT_NS(name)
-    kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name;
+    TRY_READ_ATTR_WITHOUT_NS(state)
+    kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
 //! @todo    TRY_READ_ATTR_WITHOUT_NS(state)
 
 //! @todo implement MsooXmlRelationships with internal MsooXmlRelationshipsReader
@@ -253,7 +254,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     kDebug() << "path:" << path << "file:" << file;
 
     XlsxXmlWorksheetReader worksheetReader(this);
-    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, path, file,
+    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, state, path, file,
                                           *m_context->themes, *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,

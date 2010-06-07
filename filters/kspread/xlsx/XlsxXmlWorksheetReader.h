@@ -113,6 +113,7 @@ public:
     XlsxXmlWorksheetReaderContext(
         uint _worksheetNumber,
         const QString& _worksheetName,
+        const QString& _state,
         const QString _path, const QString _file,
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         const XlsxSharedStringVector& _sharedStrings,
@@ -123,6 +124,7 @@ public:
 
     const uint worksheetNumber;
     QString worksheetName;
+    QString state;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
     const XlsxSharedStringVector *sharedStrings;
     const XlsxComments* comments;

@@ -74,6 +74,7 @@
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
     const QString& _worksheetName,
+    const QString& _state,
     const QString _path, const QString _file,
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const XlsxSharedStringVector& _sharedStrings,
@@ -85,6 +86,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , worksheetNumber(_worksheetNumber)
         , worksheetName(_worksheetName)
+        , state(_state)
         , themes(&_themes)
         , sharedStrings(&_sharedStrings)
         , comments(&_comments)
@@ -151,7 +153,7 @@ public:
 class Sheet
 {
 public:
-    explicit Sheet() : m_maxRow(0), m_maxColumn(0) {}
+    explicit Sheet() : m_maxRow(0), m_maxColumn(0), m_visible(true) {}
     ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
 
     Row* row(int rowIndex, bool autoCreate)
@@ -197,6 +199,9 @@ public:
     int maxColumn() const { return m_maxColumn; }
     int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
 
+    bool visible() { return m_visible; }
+    void setVisible(bool visible) { m_visible = visible; }
+
     QString pictureBackgroundPath() { return m_pictureBackgroundPath; }
     void setPictureBackgroundPath(const QString& path) { m_pictureBackgroundPath = path; }
 
@@ -207,6 +212,7 @@ private:
     int m_maxRow;
     int m_maxColumn;
     QHash<int, int> m_maxCellsInRow;
+    bool m_visible;
     QString m_pictureBackgroundPath;
 };
 
@@ -270,6 +276,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderCo
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 {
     kDebug() << "=============================";
+    Q_ASSERT(m_context);
 
     readNext();
     if (!isStartDocument()) {
@@ -286,6 +293,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
         return KoFilter::WrongFormat;
     }
+    
+    d->sheet->setVisible( m_context->state.toLower() == "hidden" );
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
@@ -398,8 +407,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 //! @todo hardcoded master page name
     m_tableStyle.addAttribute("style:master-page-name",
                               QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
-//! @todo table:display="true" hardcoded
-    m_tableStyle.addProperty("table:display", XlsxXmlWorksheetReader::constTrue);
+
+    m_tableStyle.addProperty("table:display", !d->sheet->visible());
 
     //The style might be changed depending on what elements we find, 
     //hold the body writer so that we can set the proper style
