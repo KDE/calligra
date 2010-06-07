@@ -19,5 +19,6 @@
 
 #include "kptfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkplatopart, KPlato::Factory )
+#include <kexportplugin.h>
 
+K_EXPORT_PLUGIN( KPlato::Factory )
