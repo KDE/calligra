@@ -1042,6 +1042,18 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             //kDebug()<<"Node schedules<---";
         } else if ( e.tagName() == "wbs-definition" ) {
             m_wbsDefinition.loadXML( e, status );
+        } else if ( e.tagName() == "locale" ) {
+            // handled earlier
+        } else if ( e.tagName() == "resource-group" ) {
+            // handled earlier
+        } else if ( e.tagName() == "calendar" ) {
+            // handled earlier
+        } else if ( e.tagName() == "standard-worktime" ) {
+            // handled earlier
+        } else if ( e.tagName() == "project" ) {
+            // handled earlier
+        } else if ( e.tagName() == "task" ) {
+            // handled earlier
         } else {
             kWarning()<<"Unhandled tag:"<<e.tagName();
         }
