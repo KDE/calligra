@@ -196,8 +196,10 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     textStyleName = "P";
     textStyleName = m_mainStyles->insert(*m_odfParagraphStyle, textStyleName);
 
-    // check if the paragraph is inside frame
-    if (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs ) {
+    //check if the paragraph is inside of an absolutely positioned frame
+    if ( !m_paragraphProperties->pap().fInTable &&
+         (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
+    {
         KoGenStyle userStyle(KoGenStyle::GraphicAutoStyle, "graphic");
         QString drawStyleName;
 
@@ -339,7 +341,10 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
 
-    if (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs ) {
+    //check if the paragraph is inside of an absolutely positioned frame
+    if ( !m_paragraphProperties->pap().fInTable &&
+         (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
+    {
         writer->endElement(); //draw:text-box
         writer->endElement(); // draw:frame
         writer->endElement(); // close the <text:p>

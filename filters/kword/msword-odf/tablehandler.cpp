@@ -96,9 +96,8 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     tableStyle.addProperty("table:align", align);
     tableStyle.addProperty("style:border-model", "collapsing");
 
-    //process margin information, check sprmTDxaLeft description in MS-DOC
-    int margin = tap->dxaLeft - tap->dxaGapHalf;
-    margin += tap->widthIndent;
+    //process the margin information 
+    int margin = tap->rgdxaCenter[0];
     tableStyle.addPropertyPt("fo:margin-left", twipsToPt(margin));
 
     //check if we need a master page name attribute.

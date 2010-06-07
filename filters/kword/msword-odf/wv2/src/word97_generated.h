@@ -6768,21 +6768,22 @@ struct PAP : public Shared {
     U8 fUnused:2;
 
     /**
-     * vertical position code. Specifies coordinate frame to use when paragraphs
-     * are absolutely positioned.
-     * 0 vertical position coordinates are relative to margin
-     * 1 coordinates are relative to page
-     * 2 coordinates are relative to text. This means: relative to where the
-     * next non-APO text would have been placed if this APO did not exist.
+     * Vertical position code.  Specifies the location of an anchor point for
+     * an absolutely positioned table or frame.
+     * 0 - relative to the top page margin
+     * 1 - relative to the top edge of the page
+     * 2 - relative to the paragraph bottom of the pragraph that precedes it.
+     * 3 - None. The table or frame is not absolutely positioned.
      */
     U8 pcVert:2;
 
     /**
-     * horizontal position code. Specifies coordinate frame to use when paragraphs
-     * are absolutely positioned.
-     * 0 horiz. position coordinates are relative to column.
-     * 1 coordinates are relative to margin
-     * 2 coordinates are relative to page
+     * Horizontal position code.  Specifies the location of an anchor point for
+     * an absolutely positioned table or frame.
+     * 0 - relative to the left edge of the current column
+     * 1 - relative to the left page margin
+     * 2 - relative to the left edge of the page
+     * 3 - None. The table or frame is not absolutely positioned.
      */
     U8 pcHorz:2;
 

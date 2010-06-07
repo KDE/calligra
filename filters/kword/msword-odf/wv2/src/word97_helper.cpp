@@ -882,12 +882,8 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             break;
         case SPRM::sprmPPc:
         {
-            U8 pcTmp = ( *ptr & 0x30 ) >> 4;
-            if ( pcTmp != 3 )
-                pcVert = pcTmp;
-            pcTmp = ( *ptr & 0xC0 ) >> 6;
-            if ( pcTmp != 3 )
-                pcHorz = pcTmp;
+            pcVert = ( *ptr & 0x30 ) >> 4;
+            pcHorz = ( *ptr & 0xC0 ) >> 6;
             break;
         }
         case SPRM::sprmPBrcTop10:
@@ -2404,7 +2400,9 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         //absolute width measured in twips
         else if (ftsWidth == 3) {
             widthIndent = wWidth;
-            wvlog << "widthIndent" << widthIndent;
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "widthIndent: " << widthIndent;
+#endif
         }
         break; 
     }
