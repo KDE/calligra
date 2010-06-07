@@ -35,9 +35,22 @@ class TestEngineeringFunctions: public QObject
 
 private slots:
     void initTestCase();
+    
+    void testBIN2DEC();
+    void testBIN2OCT();
+    void testBIN2HEX();
     void testCOMPLEX();
+    void testCONVERT();
+    void testDEC2HEX();
+    void testDEC2BIN();
+    void testDEC2OCT();
+    void testDELTA();
     void testERF();
     void testERFC();
+    void testGESTEP();
+    void testHEX2BIN();
+    void testHEX2DEC();
+    void testHEX2OCT();
     void testIMABS();
     void testIMAGINARY();
     void testIMARGUMENT();
@@ -59,7 +72,10 @@ private slots:
     void testIMSUM();
     void testIMTAN();
     void testIMTANH();
-
+    void testOCT2BIN();
+    void testOCT2DEC();
+    void testOCT2HEX();
+    
 private:
     Value evaluate(const QString&);
 };

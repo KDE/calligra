@@ -223,24 +223,35 @@ void TestMathFunctions::testBESSELI()
 {
     // ODF-tests
     CHECK_EVAL_SHORT("BESSELI(2;2)",  Value(0.688948));     // TODO expand
+    CHECK_EVAL_SHORT("BESSELI(0.7;3)", Value(0.007367));
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELI(2;2)", Value(0.688948));
 }
 
 void TestMathFunctions::testBESSELJ()
 {
     // ODF-tests
     CHECK_EVAL_SHORT("BESSELJ(1;0)",  Value(0.765198));     // TODO expand
+    CHECK_EVAL_SHORT("BESSELJ(0.89;3)", Value(0.013974));
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELJ(1;0)", Value(0.765198));
 }
 
 void TestMathFunctions::testBESSELK()
 {
     // ODF-tests
     CHECK_EVAL_SHORT("BESSELK(3;0)",  Value(0.03474));      // TODO expand
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELK(3;0)", Value(0.03474));
 }
 
 void TestMathFunctions::testBESSELY()
 {
     // ODF-tests
     CHECK_EVAL_SHORT("BESSELY(1;1)", Value(-0.781213));     // TODO expand
+    CHECK_EVAL_SHORT("BESSELY(4;2)", Value(0.215903595));
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETBESSELY(1;1)", Value(-0.781213));
 }
 
 void TestMathFunctions::testCEIL()
