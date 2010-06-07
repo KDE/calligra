@@ -3148,13 +3148,6 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             record->setData(size, buffer, continuePositions);
             record->setPosition(pos);
 
-            if (record->rtti() == BOFRecord::id)
-                handleRecord(record);
-            if (!d->handlerStack.empty() && d->handlerStack.back())
-                d->handlerStack.back()->handleRecord(record);
-            if (record->rtti() == EOFRecord::id)
-                handleRecord(record);
-
 #ifdef SWINDER_XLS2RAW
             std::cout << "Record 0x";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
@@ -3164,6 +3157,13 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             record->dump(std::cout);
             std::cout << std::endl;
 #endif
+
+            if (record->rtti() == BOFRecord::id)
+                handleRecord(record);
+            if (!d->handlerStack.empty() && d->handlerStack.back())
+                d->handlerStack.back()->handleRecord(record);
+            if (record->rtti() == EOFRecord::id)
+                handleRecord(record);
 
             delete record;
         }
