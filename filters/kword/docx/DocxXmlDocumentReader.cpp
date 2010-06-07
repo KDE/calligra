@@ -971,13 +971,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
 //! lastRenderedPageBreak handler
 /*
  Parent elements:
- - r (§17.3.2.25)
- - r (§22.1.2.87)
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_lastRenderedPageBreak()
 {
     READ_PROLOGUE
-    m_currentParagraphStyle.addProperty("fo:break-before", "page");
+    body->startElement("text:soft-page-break");
+    body->endElement(); // text:soft-page-break
     readNext();
     READ_EPILOGUE
 }
