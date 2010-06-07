@@ -56,6 +56,7 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoOdfStylesReader;
 
+// FIXME: Remove all mentions of KDChart from the public API.
 namespace KDChart {
     class Chart;
     class Legend;

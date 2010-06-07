@@ -244,7 +244,7 @@ public:
     Private( ChartShape *shape );
     ~Private();
 
-    bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context );
+    bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement );
     void showLabel( KoShape *label, bool doShow );
 
     // The components of a chart
@@ -290,7 +290,7 @@ ChartShape::Private::~Private()
 {
 }
 
-bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
+bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelElement )
 {
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
@@ -1015,7 +1015,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
-        if ( !d->loadOdfLabel( d->title, titleElem, context) )
+        if ( !d->loadOdfLabel( d->title, titleElem ) )
             return false;
         d->showLabel(d->title, true);
     }
@@ -1024,7 +1024,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement,
                                                     KoXmlNS::chart, "subtitle" );
     if ( !subTitleElem.isNull() ) {
-        if ( !d->loadOdfLabel( d->subTitle, subTitleElem, context) )
+        if ( !d->loadOdfLabel( d->subTitle, subTitleElem ) )
             return false;
         d->showLabel(d->subTitle, true);
     }
@@ -1033,7 +1033,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement,
                                                   KoXmlNS::chart, "footer" );
     if ( !footerElem.isNull() ) {
-        if ( !d->loadOdfLabel( d->footer, footerElem, context ) )
+        if ( !d->loadOdfLabel( d->footer, footerElem ) )
             return false;
         d->showLabel(d->footer, true);
     }
@@ -1182,6 +1182,7 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.endElement(); // table:table-row
     bodyWriter.endElement(); // table:table-header-rows
 
+    // Here start the actual data rows.
     bodyWriter.startElement( "table:table-rows" );
     //QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
     for ( int row = 0; row < rows ; ++row ) {

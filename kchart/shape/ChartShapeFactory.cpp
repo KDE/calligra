@@ -34,9 +34,6 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-// KDChart
-#include <KDChartLegend>
-
 // Chart shape
 #include "ChartToolFactory.h"
 #include "ChartConfigWidget.h"
@@ -131,9 +128,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
     QPointF  plotAreaPos( 0.0, 0.0 );
     QSizeF   plotAreaSize( shapeSize );
     Legend *legend = shape->legend();
-    // FIXME: Remove *all* references to KDChart from this class!
-    legend->kdLegend()->forceRebuild();
-    legend->update();
+    legend->rebuild();          // Implies update()
 
     QPointF  legendPos( 0.0, 0.0 );
     QSizeF   legendSize = legend->size();

@@ -113,7 +113,7 @@ public:
     ThreeDScene  *threeDScene;
     
     // ----------------------------------------------------------------
-    // Data specific to each types
+    // Data specific to each chart type
 
     // table:cell-range-address, ODF v1.2, $18.595
     CellRegion cellRangeAddress;
@@ -485,23 +485,26 @@ void PlotArea::setChartType( ChartType type )
     // Set the dimensionality of the data points.
     int dimensions = 1;
     switch ( type ) {
-        case BarChartType:
-        case LineChartType:
-        case AreaChartType:
-        case CircleChartType:
-        case RingChartType:
-        case RadarChartType:
-        case StockChartType:
-        case GanttChartType:
-            dimensions = 1;
-            break;
-        case ScatterChartType:
-        case SurfaceChartType:
-            dimensions = 2;
-            break;
-        case BubbleChartType:
-            dimensions = 3;
-            break;
+    case BarChartType:
+    case LineChartType:
+    case AreaChartType:
+    case CircleChartType:
+    case RingChartType:
+    case RadarChartType:
+    case StockChartType:
+    case GanttChartType:
+        dimensions = 1;
+        break;
+    case ScatterChartType:
+    case SurfaceChartType:
+        dimensions = 2;
+        break;
+    case BubbleChartType:
+        dimensions = 3;
+        break;
+    case LastChartType:
+    default:
+        dimensions = 1;         // Shouldn't happen
     }
 
     d->shape->proxyModel()->setDataDimensions( dimensions );

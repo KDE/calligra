@@ -77,7 +77,6 @@ public:
     ChartShape            *shape;
 
     // Basic properties of the chart.
-    // FIXME: why are they needed here?
     ChartType              type;
     ChartSubtype           subtype;
     bool                   threeDMode;
@@ -179,8 +178,11 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     lastFixedPosition       = KDChart::Position::East;
     selectedDataSet = 0;
     shape = 0;
+
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
+    threeDMode = false;
+
     isExternalDataSource = false;
     cellRegionStringValidator = 0;
 

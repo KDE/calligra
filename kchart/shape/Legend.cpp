@@ -593,6 +593,12 @@ KDChart::Legend *Legend::kdLegend() const
     return d->kdLegend;
 }
 
+void Legend::rebuild()
+{
+    d->kdLegend->forceRebuild();
+    update();
+}
+
 void Legend::update() const
 {
     d->pixmapRepaintRequested = true;
