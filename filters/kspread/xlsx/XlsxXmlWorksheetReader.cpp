@@ -294,7 +294,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
         return KoFilter::WrongFormat;
     }
     
-    d->sheet->setVisible( m_context->state.toLower() == "hidden" );
+    d->sheet->setVisible( m_context->state.toLower() != "hidden" );
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
@@ -408,7 +408,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     m_tableStyle.addAttribute("style:master-page-name",
                               QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
 
-    m_tableStyle.addProperty("table:display", !d->sheet->visible());
+    m_tableStyle.addProperty("table:display", d->sheet->visible());
 
     //The style might be changed depending on what elements we find, 
     //hold the body writer so that we can set the proper style
