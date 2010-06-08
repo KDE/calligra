@@ -47,7 +47,7 @@
 using namespace KPlato;
 
 typedef KGenericFactory<ICalendarExport> ICalendarExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libicalendarexport, ICalendarExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ICalendarExportFactory("kofficefilters"))
 
 ICalendarExport::ICalendarExport(QObject* parent, const QStringList &)
         : KoFilter(parent)
