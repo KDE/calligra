@@ -283,6 +283,27 @@
      </Help>
    </Function>
 
+   <Function>
+     <Name>MATCH</Name>
+     <Type>Int</Type>
+     <Parameter>
+       <Comment>Search value</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Search region</Comment>
+       <Type>Reference/Array</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Match type (optional></Comment>
+       <Type>Int</Type>
+     </Parameter>
+     <Help>
+       <Text>Finds a search value in a search region, and returns its position (starting from 1). Match type can be either -1, 0 or 1 and determines how is searched for the value. If match type is 0, the index of the first value that equals search value is returned. If match type is 1 (or omitted), the index of the first value that is less than or equal to the search value is returned and the values in the search region must be sorted in ascending order. If match type is -1, the smallest value that is greater than or equal to the search value is found, and the search region needs to be sorted in descending order.</Text>
+       <Syntax>MATCH(Search value; Search region; Match type)</Syntax>
+     </Help>
+   </Function>
+
   </Group>
 
 </KSpreadFunctions>

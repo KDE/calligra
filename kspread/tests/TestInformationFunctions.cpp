@@ -62,29 +62,29 @@ void TestInformationFunctions::initTestCase()
     //
 
 
-//     // A19:A29
-//     storage->setValue(1,19, Value(    1 ) );
-//     storage->setValue(1,20, Value(    2 ) );
-//     storage->setValue(1,21, Value(    4 ) );
-//     storage->setValue(1,22, Value(    8 ) );
-//     storage->setValue(1,23, Value(   16 ) );
-//     storage->setValue(1,24, Value(   32 ) );
-//     storage->setValue(1,25, Value(   64 ) );
-//     storage->setValue(1,26, Value(  128 ) );
-//     storage->setValue(1,27, Value(  256 ) );
-//     storage->setValue(1,28, Value(  512 ) );
-//     storage->setValue(1,29, Value( 1024 ) );
-//     storage->setValue(1,30, Value( 2048 ) );
-//     storage->setValue(1,31, Value( 4096 ) );
-//
-//
-//     // B3:B17
+     // A19:A31
+     storage->setValue(1,19, Value(    1 ) );
+     storage->setValue(1,20, Value(    2 ) );
+     storage->setValue(1,21, Value(    4 ) );
+     storage->setValue(1,22, Value(    8 ) );
+     storage->setValue(1,23, Value(   16 ) );
+     storage->setValue(1,24, Value(   32 ) );
+     storage->setValue(1,25, Value(   64 ) );
+     storage->setValue(1,26, Value(  128 ) );
+     storage->setValue(1,27, Value(  256 ) );
+     storage->setValue(1,28, Value(  512 ) );
+     storage->setValue(1,29, Value( 1024 ) );
+     storage->setValue(1,30, Value( 2048 ) );
+     storage->setValue(1,31, Value( 4096 ) );
+
+
+     // B3:B17
     storage->setValue(2, 3, Value("7"));
     storage->setValue(2, 4, Value(2));
     storage->setValue(2, 5, Value(3));
     storage->setValue(2, 6, Value(true));
     storage->setValue(2, 7, Value("Hello"));
-//     // B8 leave empty
+     // B8 leave empty
     storage->setValue(2, 9, Value::errorDIV0());
     storage->setValue(2, 10, Value(0));
 //     storage->setValue(2,11, Value(      3    ) );
@@ -101,14 +101,16 @@ void TestInformationFunctions::initTestCase()
     storage->setValue(3, 5, Value(5));
 //     storage->setValue(3, 6, Value( 7 ) );
     storage->setValue(3, 7, Value("2005-01-31"));
-//     // C11:C17
-//     storage->setValue(3,11, Value( 5 ) );
-//     storage->setValue(3,12, Value( 6 ) );
-//     storage->setValue(3,13, Value( 8 ) );
-//     storage->setValue(3,14, Value( 4 ) );
-//     storage->setValue(3,15, Value( 3 ) );
-//     storage->setValue(3,16, Value( 2 ) );
-//     storage->setValue(3,17, Value( 1 ) );
+
+     // C11:C17
+     storage->setValue(3,11, Value( 5 ) );
+     storage->setValue(3,12, Value( 6 ) );
+     storage->setValue(3,13, Value( 8 ) );
+     storage->setValue(3,14, Value( 4 ) );
+     storage->setValue(3,15, Value( 3 ) );
+     storage->setValue(3,16, Value( 2 ) );
+     storage->setValue(3,17, Value( 1 ) );
+
 //     // C19:C31
 //     storage->setValue(3,19, Value( 0 ) );
 //     storage->setValue(3,20, Value( 5 ) );
@@ -166,6 +168,23 @@ void TestInformationFunctions::initTestCase()
 //     storage->setValue(7,58, Value( 26 ) );
 //     storage->setValue(7,59, Value( 24 ) );
 //     storage->setValue(7,60, Value( 27 ) );
+
+    // A1000:G1000
+    storage->setValue(1, 1000, Value("abc"));
+    storage->setValue(2, 1000, Value("def"));
+    storage->setValue(3, 1000, Value("efoob"));
+    storage->setValue(4, 1000, Value("flka"));
+    storage->setValue(5, 1000, Value("kde"));
+    storage->setValue(6, 1000, Value("kde"));
+    storage->setValue(7, 1000, Value("xxx"));
+
+     // Z19:Z23
+     storage->setValue(26,19, Value(   16 ) );
+     storage->setValue(26,20, Value(    8 ) );
+     storage->setValue(26,21, Value(    4 ) );
+     storage->setValue(26,22, Value(    2 ) );
+     storage->setValue(26,23, Value(    1 ) );
+
 }
 
 //
@@ -511,6 +530,49 @@ void TestInformationFunctions::testVALUE()
     // check dates - local dependent
     // CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
     // CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
+}
+
+void TestInformationFunctions::testMATCH()
+{
+    // invalid matchType
+    CHECK_EVAL("MATCH(1;A19:A31;\"foo\")", Value::errorVALUE());
+
+    // matchType == 0, exact match
+    CHECK_EVAL("MATCH(5;C11:C17;0)", Value(1));
+    CHECK_EVAL("MATCH(8;C11:C17;0)", Value(3));
+    CHECK_EVAL("MATCH(1;C11:C17;0)", Value(7));
+    CHECK_EVAL("MATCH(13;C11:C17;0)", Value::errorNA());
+    CHECK_EVAL("MATCH(5;C11:C11;0)", Value(1));
+    CHECK_EVAL("MATCH(5;C11;0)", Value(1));
+    CHECK_EVAL("MATCH(5;C11:D13;0)", Value::errorNA()); // not sure if this is the best error
+    CHECK_EVAL("MATCH(\"Hello\";B3:B10;0)", Value(5));
+    CHECK_EVAL("MATCH(\"hello\";B3:B10;0)", Value(5)); // match is always case insensitive
+    CHECK_EVAL("MATCH(\"kde\";A1000:G1000;0)", Value(5));
+
+    // matchType == 1 or omitted, largest value less than or equal to search value in sorted range
+    CHECK_EVAL("MATCH(0;A19:A31;1)", Value::errorNA());
+    CHECK_EVAL("MATCH(1;A19:A31;1)", Value(1));
+    CHECK_EVAL("MATCH(16;A19:A31;1)", Value(5));
+    CHECK_EVAL("MATCH(40;A19:A31;1)", Value(6));
+    CHECK_EVAL("MATCH(4096;A19:A31;1)", Value(13));
+    CHECK_EVAL("MATCH(5000;A19:A31;1)", Value(13));
+    CHECK_EVAL("MATCH(\"aaa\";A1000:G1000)", Value::errorNA());
+    CHECK_EVAL("MATCH(\"abc\";A1000:G1000)", Value(1));
+    CHECK_EVAL("MATCH(\"efoob\";A1000:G1000)", Value(3));
+    CHECK_EVAL("MATCH(\"epub\";A1000:G1000)", Value(3));
+    CHECK_EVAL("MATCH(\"kde\";A1000:G1000)", Value(6));
+    CHECK_EVAL("MATCH(\"xxx\";A1000:G1000)", Value(7));
+    CHECK_EVAL("MATCH(\"zzz\";A1000:G1000)", Value(7));
+    CHECK_EVAL("MATCH(13;C11:D13;1)", Value::errorNA()); // not sure if this is the best error
+
+    // matchType == -1, smallest value greater than or equal to search value, in descending range
+    CHECK_EVAL("MATCH(0;Z19:Z23;-1)", Value(5));
+    CHECK_EVAL("MATCH(1;Z19:Z23;-1)", Value(5));
+    CHECK_EVAL("MATCH(4;Z19:Z23;-1)", Value(3));
+    CHECK_EVAL("MATCH(5;Z19:Z23;-1)", Value(2));
+    CHECK_EVAL("MATCH(16;Z19:Z23;-1)", Value(1));
+    CHECK_EVAL("MATCH(33;Z19:Z23;-1)", Value::errorNA());
+    CHECK_EVAL("MATCH(13;C11:D13;-1)", Value::errorNA()); // not sure if this is the best error
 }
 
 //

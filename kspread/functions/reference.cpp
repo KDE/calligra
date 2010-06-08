@@ -49,6 +49,7 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_index(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_match(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_multiple_operations(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows(valVector args, ValueCalc *calc, FuncExtra *);
@@ -98,6 +99,11 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f = new Function("LOOKUP",   func_lookup);
     f->setParamCount(3);
     f->setAcceptArray();
+  add(f);
+    f = new Function("MATCH", func_match);
+    f->setParamCount(2, 3);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
   add(f);
     f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
     f->setParamCount(3, 5);
@@ -384,6 +390,69 @@ Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *)
                 return res;
         }
     return res;
+}
+
+//
+// Function: MATCH
+//
+Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
+{
+    int matchType = 1;
+    if (args.count() == 3) {
+        bool ok = true;
+        matchType = calc->conv()->asInteger(args[2], &ok).asInteger();
+        if (!ok)
+            return Value::errorVALUE(); // invalid matchtype
+    }
+
+    const Value& searchValue = args[0];
+    const Value& searchArray = args[1];
+
+    if (e->ranges[1].rows() != 1 && e->ranges[1].columns() != 1)
+        return Value::errorNA();
+    int dr = 1, dc = 0;
+    if (searchArray.columns() != 1) {
+        dr = 0; dc = 1;
+    }
+    int n = qMax(searchArray.rows(), searchArray.columns());
+
+    if (matchType == 0) {
+        // linear search
+        for (int r = 0, c = 0; r < n && c < n; r += dr, c += dc) {
+            if (calc->naturalEqual(searchValue, searchArray.element(c, r), false)) {
+                return Value(qMax(r, c) + 1);
+            }
+        }
+        return Value::errorNA();
+    } else if (matchType > 0) {
+        // binary search
+        int l = -1;
+        int h = n;
+        while (l+1 < h) {
+            int m = (l+h)/2;
+            if (calc->naturalLequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+                l = m;
+            } else {
+                h = m;
+            }
+        }
+        if (l == -1) return Value::errorNA();
+        return Value(l+1);
+    } else /* matchType < 0 */ {
+        // binary search
+        int l = -1;
+        int h = n;
+        while (l+1 < h) {
+            int m = (l+h)/2;
+            if (calc->naturalGequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+                l = m;
+            } else {
+                h = m;
+            }
+        }
+        if (l == -1) return Value::errorNA();
+        return Value(l+1);
+    }
 }
 
 //

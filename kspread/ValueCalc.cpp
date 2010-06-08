@@ -542,6 +542,11 @@ bool ValueCalc::naturalLower(const Value &a, const Value &b, bool CS)
     return naturalGreater(b, a, CS);
 }
 
+bool ValueCalc::naturalLequal(const Value &a, const Value &b, bool CS)
+{
+    return (naturalLower(a, b, CS) || naturalEqual(a, b, CS));
+}
+
 Value ValueCalc::roundDown(const Value &a,
                            const Value &digits)
 {

@@ -123,6 +123,8 @@ public:
     bool naturalGequal(const Value &a, const Value &b, bool CS = true);
     /** string or numerical comparison */
     bool naturalLower(const Value &a, const Value &b, bool CS = true);
+    /** string or numerical comparison - lower or equal */
+    bool naturalLequal(const Value &a, const Value &b, bool CS = true);
 
     int sign(const Value &a);
 

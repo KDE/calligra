@@ -61,6 +61,7 @@ private slots:
     void testISODD();
     void testISTEXT();
     void testISREF();
+    void testMATCH();
     void testN();
     void testNA();
     // void testNUMBERVALUE(); // to be implemented
