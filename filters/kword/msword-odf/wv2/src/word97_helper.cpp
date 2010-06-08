@@ -314,7 +314,7 @@ typedef enum
     sprmTSetBrc = 0xD62F,
     sprmTUndocumentedSpacing = 0xD632, // OOo: specific spacing
     sprmTUndocumented8 = 0xD634,
-    sprmTUndocumented9 = 0xD660, // "something to do with color" (OOo)
+    sprmTSetShdTable = 0xD660,
     sprmTCellBrcType = 0xD662,
     sprmCChs = 0xEA08,
     sprmCSizePos = 0xEA3F,
@@ -2379,7 +2379,9 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         }
         break;
     }
-    case SPRM::sprmTUndocumented9:
+    case SPRM::sprmTSetShdTable:
+        wvlog << "Warning: sprmTSetShdTable not implemented" << endl;
+        break;
     case SPRM::sprmTUndocumented10:
     case SPRM::sprmTUndocumented11:
     case SPRM::sprmTUndocumented12:

@@ -667,7 +667,11 @@ struct SHD {
      */
     bool isShdAutoOrNill();
 
-    bool shdAutoOrNill;     /// holds the last value of isShdAutoOrNill() call
+    /**
+     * true if ShdAuto, ShdNil or Shd80Nil is dected, no shading should be
+     * applied
+     */
+    bool shdAutoOrNill;
 }; // SHD
 
 bool operator==(const SHD &lhs, const SHD &rhs);

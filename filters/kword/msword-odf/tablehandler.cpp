@@ -440,13 +440,24 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("style:border-line-width-right", dba);
     }
 
-    //kDebug(30513) <<" shading " << shd.ipat;
-    if (shd.ipat == 0 && shd.cvBack != 0xff000000)
-        cellStyle.addProperty("fo:background-color", '#' + QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-
-    if (shd.ipat >= 0x02 && shd.ipat <=0x0d) {                          // if it's ipatPct5 to ipatPct90
-        uint grayColor = Conversion::shadingPatternToColor(shd.ipat);   // get the color from shading pattern
-        cellStyle.addProperty("fo:background-color", '#' + QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
+    //check if we have to ignore the shading information   
+    if (!shd.shdAutoOrNill) {
+	QString color = QString('#');
+	//ipatPct5 to ipatPct90
+        if (shd.ipat >= 0x02 && shd.ipat <= 0x0d) {
+            //get the color from the shading pattern
+            uint grayColor = Conversion::shadingPatternToColor(shd.ipat);
+            color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
+            cellStyle.addProperty("fo:background-color", color);
+        }
+	//ipatSolid
+        else if (shd.ipat == 0x01) {
+            color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+            cellStyle.addProperty("fo:background-color", color);
+        }
+        else {
+            kDebug(30513) << "Warning: Unsupported shading pattern";
+        }
     }
 
     //text direction

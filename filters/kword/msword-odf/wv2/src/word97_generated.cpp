@@ -568,20 +568,22 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
 void SHD::readPtr(const U8 *ptr) {
 
     U16 shifterU16;
-    U16 ico;
+    U16 icoFore, icoBack;
 
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
-    ico=shifterU16 & 0x1F;
-    cvFore=Word97::icoToRGB(ico);
+    icoFore=shifterU16 & 0x1F;
+    cvFore=Word97::icoToRGB(icoFore);
     shifterU16>>=5;
-    ico=shifterU16 & 0x1F;
-    cvBack=Word97::icoToRGB(ico);
+    icoBack=shifterU16 & 0x1F;
+    cvBack=Word97::icoToRGB(icoBack);
     shifterU16>>=5;
     ipat=shifterU16;
 
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
+    //check for Shd80Nil 
+    if (icoFore == 0x001F && icoBack == 0x001F && ipat == 0x003F) {
+        shdAutoOrNill = true;
+    }
 }
 
 void SHD::read90Ptr(const U8 *ptr) {
@@ -650,12 +652,17 @@ bool SHD::isShdAutoOrNill()
 {
     shdAutoOrNill = false;
 
+    //ShdAuto
     if (cvFore == 0xff000000 && cvBack == 0xff000000 && ipat == 0x0000) {
         shdAutoOrNill = true;
     }
-    if (cvFore == 0xffffffff && cvBack == 0xffffffff && (ipat == 0x0000 || ipat == 0xffff)) {
+    //ShdNil
+    if (cvFore == 0xffffffff && cvBack == 0xffffffff && 
+        (ipat == 0x0000 || ipat == 0xffff)) 
+    {
         shdAutoOrNill = true;
     }
+
 
     return shdAutoOrNill;
 }
