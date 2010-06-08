@@ -2347,6 +2347,8 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     // Some spreadsheet programs may support more rows than
     // KSpread so limit the number of repeated rows.
     // FIXME POSSIBLE DATA LOSS!
+
+    // First load all style information for rows, columns and cells
     while (!rowNode.isNull() && rowIndex <= KS_rowMax) {
         kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
         KoXmlElement rowElement = rowNode.toElement();
@@ -2375,7 +2377,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     while (!headerRowNode.isNull()) {
                         // NOTE Handle header rows as ordinary ones
                         //      as long as they're not supported.
-                        int columnMaximal = loadRowFormat(headerRowNode.toElement(), rowIndex,
+                        int columnMaximal = loadRowFormatStyles(headerRowNode.toElement(), rowIndex,
                                       tableContext, rowStyleRegions,
                                       cellStyleRegions);
                         // allow the row to define more columns then defined via table-column
@@ -2384,8 +2386,63 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     }
                 } else if (rowElement.localName() == "table-row") {
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
-                    int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
+                    int columnMaximal = loadRowFormatStyles(rowElement, rowIndex, tableContext,
                                   rowStyleRegions, cellStyleRegions);
+                    // allow the row to define more columns then defined via table-column
+                    maxColumn = qMax(maxColumn, columnMaximal);
+                    kDebug(36003) << " table-row found :index row after" << rowIndex;
+                }
+            }
+
+            // don't need it anymore
+            KoXml::unload(rowElement);
+        }
+
+        rowNode = rowNode.nextSibling();
+        map()->increaseLoadedRowsCounter();
+    }
+
+    // insert the styles into the storage (column defaults)
+    kDebug(36003) << "Inserting column default cell styles ...";
+    loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
+    // insert the styles into the storage (row defaults)
+    kDebug(36003) << "Inserting row default cell styles ...";
+    loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
+    // insert the styles into the storage
+    kDebug(36003) << "Inserting cell styles ...";
+    loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
+
+    rowIndex = 1;
+    indexCol = 1;
+    rowNode = sheetElement.firstChild();
+    // And secondly also load the actual cell content. Loading cell content requires syle
+    // information to be present, so we need this two phase approach
+    while (!rowNode.isNull() && rowIndex <= KS_rowMax) {
+        kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
+        KoXmlElement rowElement = rowNode.toElement();
+        if (!rowElement.isNull()) {
+            // slightly faster
+            KoXml::load(rowElement);
+
+            kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
+            if (rowElement.namespaceURI() == KoXmlNS::table) {
+                if (rowElement.localName() == "table-header-rows") {
+                    KoXmlNode headerRowNode = rowElement.firstChild();
+                    while (!headerRowNode.isNull()) {
+                        // NOTE Handle header rows as ordinary ones
+                        //      as long as they're not supported.
+                        int columnMaximal = loadRowFormatContent(headerRowNode.toElement(), rowIndex,
+                                      tableContext);
+                        // allow the row to define more columns then defined via table-column
+                        maxColumn = qMax(maxColumn, columnMaximal);
+                        headerRowNode = headerRowNode.nextSibling();
+                    }
+                } else if (rowElement.localName() == "table-row") {
+                    kDebug(36003) << " table-row found :index row before" << rowIndex;
+                    int columnMaximal = loadRowFormatContent(rowElement, rowIndex, tableContext);
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
@@ -2415,18 +2472,6 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
         map()->increaseLoadedRowsCounter();
     }
 
-    // insert the styles into the storage (column defaults)
-    kDebug(36003) << "Inserting column default cell styles ...";
-    loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
-    // insert the styles into the storage (row defaults)
-    kDebug(36003) << "Inserting row default cell styles ...";
-    loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
-    // insert the styles into the storage
-    kDebug(36003) << "Inserting cell styles ...";
-    loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -2673,7 +2718,7 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
     }
 }
 
-int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
+int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
                           OdfLoadingContext& tableContext,
                           QHash<QString, QRegion>& rowStyleRegions,
                           QHash<QString, QRegion>& cellStyleRegions)
@@ -2756,6 +2801,51 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
 
     int columnIndex = 1;
     int columnMaximal = 0;
+    //const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
+
+    KoXmlElement cellElement;
+    forEachElement(cellElement, row) {
+        if (cellElement.namespaceURI() != KoXmlNS::table)
+            continue;
+        if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
+            continue;
+
+        bool ok = false;
+        const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
+        // Some spreadsheet programs may support more columns than
+        // KSpread so limit the number of repeated columns.
+        // FIXME POSSIBLE DATA LOSS!
+        const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
+        columnMaximal = qMax(numberColumns, columnMaximal);
+
+        // Styles are inserted at the end of the loading process, so check the XML directly here.
+        const QString styleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
+        if (!styleName.isEmpty())
+            cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
+
+        columnIndex += numberColumns;
+    }
+    rowIndex += number;
+    return columnMaximal;
+}
+
+int Sheet::loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
+                          OdfLoadingContext& tableContext)
+{
+//    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
+    int number = 1;
+    if (row.hasAttributeNS(KoXmlNS::table, "number-rows-repeated")) {
+        bool ok = true;
+        int n = row.attributeNS(KoXmlNS::table, "number-rows-repeated", QString()).toInt(&ok);
+        if (ok)
+            // Some spreadsheet programs may support more rows than KSpread so
+            // limit the number of repeated rows.
+            // FIXME POSSIBLE DATA LOSS!
+            number = qMin(n, KS_rowMax - rowIndex + 1);
+    }
+
+    int columnIndex = 1;
+    int columnMaximal = 0;
     const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
 
     KoXmlElement cellElement;
@@ -2776,11 +2866,6 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
         columnMaximal = qMax(numberColumns, columnMaximal);
 
-        // Styles are inserted at the end of the loading process, so check the XML directly here.
-        const QString styleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
-        if (!styleName.isEmpty())
-            cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
-
         if (!cell.comment().isEmpty())
             cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());
         if (!cell.conditions().isEmpty())
@@ -2788,7 +2873,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         if (!cell.validity().isEmpty())
             cellStorage()->setValidity(Region(columnIndex, rowIndex, numberColumns, number, this), cell.validity());
 
-        if (!cell.isDefault()) {
+        if (!cell.hasDefaultContent()) {
             // Row-wise filling of PointStorages is faster than column-wise filling.
             QSharedPointer<QTextDocument> richText = cell.richText();
             for (int r = rowIndex; r <= endRow; ++r) {

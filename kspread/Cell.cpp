@@ -179,6 +179,27 @@ bool Cell::isDefault() const
     return true;
 }
 
+// Return true if this is the default cell (apart from maybe a custom style).
+bool Cell::hasDefaultContent() const
+{
+    // check each stored attribute
+    if (value() != Value())
+        return false;
+    if (formula() != Formula())
+        return false;
+    if (!link().isEmpty())
+        return false;
+    if (doesMergeCells() == true)
+        return false;
+    if (!comment().isEmpty())
+        return false;
+    if (!conditions().isEmpty())
+        return false;
+    if (!validity().isEmpty())
+        return false;
+    return true;
+}
+
 bool Cell::isEmpty() const
 {
     // empty = no value or formula

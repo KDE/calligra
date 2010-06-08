@@ -118,9 +118,16 @@ public:
 
     /**
      * Returns true, if this is a default cell, i.e. if the cell has no value, formula, link and
-     * does not merge any other cells.
+     * does not merge any other cells, and has no custom style.
      */
     bool isDefault() const;
+
+    /**
+     * Returns true, if this is a cell with default content, i.e. if the cell has no value, formula, link and
+     * does not merge any other cells. This is the same as isDefault, except that the style
+     * is not taken into account here.
+     */
+    bool hasDefaultContent() const;
 
     /**
      * Returns true, if this cell has no content, i.e no value and no formula.
