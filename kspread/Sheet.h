@@ -323,7 +323,7 @@ public:
     QImage backgroundImage() const;
 
     void setBackgroundImageProperties( const BackgroundImageProperties& properties );
-
+    
     BackgroundImageProperties backgroundImageProperties() const;
 
     //
@@ -931,16 +931,10 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    int loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
+    int loadRowFormat(const KoXmlElement& row, int &rowIndex,
                        OdfLoadingContext& odfContext,
                        QHash<QString, QRegion>& rowStyleRegions,
                        QHash<QString, QRegion>& cellStyleRegions);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    int loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
-                       OdfLoadingContext& odfContext);
 
     /**
      * \ingroup OpenDocument
