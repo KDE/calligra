@@ -278,7 +278,6 @@
        <Type>Reference</Type>
      </Parameter>
      <Help>
-     </Help>
        <Text>MULTIPLE.OPERATIONS executes the formula expression pointed to by FormulaCell and all formula expressions it depends on while replacing all references to RowCell with references to RowReplacement respectively all references to ColumnCell with references to ColumnReplacement. The function may be used to easily create tables of expressions that depend on two input parameters.</Text>
        <Syntax>MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; Column replacement)</Syntax>
      </Help>
