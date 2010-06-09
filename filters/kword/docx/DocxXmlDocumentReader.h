@@ -261,6 +261,9 @@ private:
     QString m_currentObjectXCm; //!< See m_currentObjectWidthCm for description
     QString m_currentObjectYCm; //!< See m_currentObjectWidthCm for description
 
+    QMap<QString, QString> m_headers;
+    QMap<QString, QString> m_footers;
+
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 

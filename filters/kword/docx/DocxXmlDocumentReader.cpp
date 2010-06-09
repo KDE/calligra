@@ -361,7 +361,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     }
 
     m_masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
-  
+
+    m_footers.clear();
+    m_headers.clear();
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -373,6 +376,35 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footerReference)
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    // Currently if there are 3 header/footer styles, the one with 'first' is ignored
+    if (!m_headers.isEmpty()) {
+        bool odd = false;
+        if (m_headers["even"] != "") {
+            m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
+        }
+        if (m_headers["default"] != "") {
+            odd = true;
+            m_masterPageStyle.addChildElement("style:header", m_headers["default"]);
+        }
+        if (!odd) {
+           m_masterPageStyle.addChildElement("style:header", m_headers["first"]);
+        }
+    }
+
+    if (!m_footers.isEmpty()) {
+        bool odd = false;
+        if (m_footers["even"] != "") {
+            m_masterPageStyle.addChildElement("style:footer-left", m_footers["even"]);
+        }
+        if (m_footers["default"] != "") {
+            odd = true;
+            m_masterPageStyle.addChildElement("style:footer", m_footers["default"]);
+        }
+        if (!odd) {
+           m_masterPageStyle.addChildElement("style:footer", m_footers["first"]);
+        }
     }
 
     QString pageLayoutStyleName("Mpm");
@@ -540,9 +572,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
         reader.raiseError(errorMessage);
     }
 
-//! @todo: support type attribute
+    QString footerContent = "";
 
-    m_masterPageStyle.addChildElement("style:footer", reader.content());
+    TRY_READ_ATTR(type)
+    if (!type.isEmpty()) {
+        if (type == "even") {
+             footerContent = "<style:footer-left>";
+             footerContent.append(reader.content());
+             footerContent.append("</style:footer-left>");
+        }
+        else {
+            footerContent = "<style:footer>";
+            footerContent.append(reader.content());
+            footerContent.append("</style:footer>");
+        }
+        m_footers[type] = footerContent;
+    }
+    else {
+        footerContent = "<style:footer>";
+        footerContent.append(reader.content());
+        footerContent.append("</style:footer>");
+        m_footers["default"] = footerContent;
+    }
 
     readNext();
     READ_EPILOGUE
@@ -591,9 +642,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         reader.raiseError(errorMessage);
     }
 
-//! @todo: support type attribute
+    QString headerContent = "";
 
-    m_masterPageStyle.addChildElement("style:header", reader.content());
+    TRY_READ_ATTR(type)
+    if (!type.isEmpty()) {
+        if (type == "even") {
+             headerContent = "<style:header-left>";
+             headerContent.append(reader.content());
+             headerContent.append("</style:header-left>");
+        }
+        else {
+            headerContent = "<style:header>";
+            headerContent.append(reader.content());
+            headerContent.append("</style:header>");
+        }
+        m_headers[type] = headerContent;
+    }
+    else {
+        headerContent = "<style:header>";
+        headerContent.append(reader.content());
+        headerContent.append("</style:header>");
+        m_headers["default"] = headerContent;
+    }
 
     readNext();
     READ_EPILOGUE

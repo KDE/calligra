@@ -145,7 +145,7 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read(MSOOXML::MsooXmlReaderConte
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
  - sdt (Block-Level Structured Document Tag)                                     §17.5.2.29
- - tbl (Table)                                                                   §17.4.38
+ - [done] tbl (Table)                                                                   §17.4.38
 //! @todo: Handle all children
 */
 KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
@@ -156,16 +156,15 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter *oldBody = body;
     body = new KoXmlWriter(&buffer);
-    body->startElement("style:header");
-   
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
         }
         BREAK_IF_END_OF(CURRENT_EL)
     }
-    body->endElement(); // "style:header"
 
     m_content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
 
