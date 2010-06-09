@@ -114,10 +114,12 @@ int Project::type() const { return Node::Type_Project; }
 void Project::generateUniqueNodeIds()
 {
     foreach ( Node *n, nodeIdDict ) {
+        kDebug()<<n->name()<<"old"<<n->id();
         QString uid = uniqueNodeId();
         nodeIdDict.remove( n->id() );
         n->setId( uid );
         nodeIdDict[ uid ] = n;
+        kDebug()<<n->name()<<"new"<<n->id();
     }
 }
 
@@ -834,7 +836,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     QString s;
     bool ok = false;
     setName( element.attribute( "name" ) );
+    removeId( m_id );
     m_id = element.attribute( "id" );
+    registerNodeId( this );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
@@ -1556,10 +1560,11 @@ bool Project::nodeIdentExists( const QString &id ) const
 QString Project::uniqueNodeId( int seed ) const
 {
     Q_UNUSED(seed);
-    QString ident = KRandom::randomString( 10 );
+    QString s = QDateTime::currentDateTime().toString( Qt::ISODate ) + ' ';
+    QString ident = s + KRandom::randomString( 10 );
 //    int i = seed;
     while ( nodeIdentExists( ident ) ) {
-        ident = KRandom::randomString( 10 );
+        ident = s + KRandom::randomString( 10 );
     }
     return ident;
 }
@@ -1644,9 +1649,10 @@ bool Project::setResourceGroupId( ResourceGroup *group )
 }
 
 QString Project::uniqueResourceGroupId() const {
-    QString id = KRandom::randomString( 10 );
+    QString s = QDateTime::currentDateTime().toString( Qt::ISODate ) + ' ';
+    QString id = s + KRandom::randomString( 10 );
     while ( resourceGroupIdDict.contains( id ) ) {
-        id = KRandom::randomString( 10 );
+        id = s + KRandom::randomString( 10 );
     }
     return id;
 }
@@ -1702,9 +1708,10 @@ bool Project::setResourceId( Resource *resource )
 }
 
 QString Project::uniqueResourceId() const {
-    QString id = KRandom::randomString( 10 );
+    QString s = QDateTime::currentDateTime().toString( Qt::ISODate ) + ' ';
+    QString id = s + KRandom::randomString( 10 );
     while ( resourceIdDict.contains( id ) ) {
-        id = KRandom::randomString( 10 );
+        id = s + KRandom::randomString( 10 );
     }
     return id;
 }
@@ -2125,9 +2132,10 @@ bool Project::setCalendarId( Calendar *calendar )
 }
 
 QString Project::uniqueCalendarId() const {
-    QString id = KRandom::randomString( 10 );
+    QString s = QDateTime::currentDateTime().toString( Qt::ISODate ) + ' ';
+    QString id = s + KRandom::randomString( 10 );
     while ( calendarIdDict.contains( id ) ) {
-        id = KRandom::randomString( 10 );
+        id = s + KRandom::randomString( 10 );
     }
     return id;
 }
