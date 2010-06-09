@@ -332,7 +332,7 @@ void View::slotPackageSettings()
     if ( dia->exec() == QDialog::Accepted ) {
         QUndoCommand *cmd = dia->buildCommand();
         if ( cmd ) {
-            qDebug()<<"slotPackageSettings:";
+            kDebug();
             part()->addCommand( cmd );
         }
     }
@@ -346,7 +346,7 @@ void View::slotSendPackage()
         KMessageBox::error(0, i18n("No work package is selected" ) );
         return;
     }
-    qDebug()<<"View::slotSendPackage:"<<node->name();
+    kDebug()<<node->name();
     WorkPackage *wp = part()->findWorkPackage( node );
     if ( wp == 0 ) {
         KMessageBox::error(0, i18n("Cannot find work package" ) );
@@ -424,7 +424,7 @@ Document *View::currentDocument() const
 
 void View::slotTaskProgress()
 {
-    qDebug()<<"View::slotTaskProgress:";
+    kDebug();
     Task *n = qobject_cast<Task*>( currentNode() );
     if ( n == 0 ) {
         return;
@@ -432,7 +432,7 @@ void View::slotTaskProgress()
     StandardWorktime *w = qobject_cast<Project*>( n->projectNode() )->standardWorktime();
     TaskProgressDialog dlg( *n, currentScheduleManager(), w, this );
     if ( dlg.exec() == QDialog::Accepted ) {
-        qDebug()<<"View::slotTaskProgress:";
+        kDebug();
         QUndoCommand *cmd = dlg.buildCommand();
         if ( cmd ) {
             cmd->redo(); //FIXME m_part->addCommand( cmd );
@@ -442,14 +442,14 @@ void View::slotTaskProgress()
 
 void View::slotTaskCompletion()
 {
-    qDebug()<<"View::slotTaskCompletion:";
+    kDebug();
     WorkPackage *wp = m_part->findWorkPackage( currentNode() );
     if ( wp == 0 ) {
         return;
     }
     TaskCompletionDialog *dlg = new TaskCompletionDialog( *wp, currentScheduleManager(), this );
     if ( dlg->exec() == QDialog::Accepted ) {
-        qDebug()<<"View::slotTaskCompletion:";
+        kDebug();
         QUndoCommand *cmd = dlg->buildCommand();
         if ( cmd ) {
             m_part->addCommand( cmd );
@@ -460,7 +460,7 @@ void View::slotTaskCompletion()
 
 void View::slotRemoveSelectedPackages()
 {
-    qDebug()<<"View::slotRemoveSelectedPackages:";
+    kDebug();
     QList<Node*> lst = currentView()->selectedNodes();
     if ( lst.isEmpty() ) {
         return;
@@ -470,7 +470,7 @@ void View::slotRemoveSelectedPackages()
 
 void View::slotRemoveCurrentPackage()
 {
-    qDebug()<<"View::slotRemoveCurrentPackage:";
+    kDebug();
     Node *n = currentNode();
     if ( n == 0 ) {
         return;

@@ -130,9 +130,9 @@ WorkPackage *DocumentChild::parentPackage() const
 void DocumentChild::setFileInfo( const KUrl &url )
 {
     m_fileinfo.setFile( url.path() );
-    //qDebug()<<"DocumentChild::setFileInfo:"<<url;
+    //kDebug()<<url;
     bool res = connect( KDirWatch::self(), SIGNAL( dirty( const QString & ) ), this, SLOT( slotDirty( const QString &) ) );
-    //qDebug()<<"DocumentChild::setFileInfo:"<<res<<filePath();
+    //kDebug()<<res<<filePath();
     Q_ASSERT( res );
     KDirWatch::self()->addFile( filePath() );
 }
@@ -148,7 +148,7 @@ void DocumentChild::setModified( bool mod )
 
 void DocumentChild::slotDirty( const QString &file )
 {
-    //qDebug()<<"DocumentChild::slotDirty:"<<filePath()<<file<<m_filemodified;
+    //kDebug()<<filePath()<<file<<m_filemodified;
     if ( file == filePath() && ! m_filemodified ) {
         kDebug()<<file<<"is modified";
         m_filemodified = true;
@@ -236,7 +236,7 @@ bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
     connect( m_process, SIGNAL( finished( int,  QProcess::ExitStatus ) ), SLOT( slotEditFinished( int,  QProcess::ExitStatus ) ) );
     connect( m_process, SIGNAL( error( QProcess::ProcessError ) ), SLOT( slotEditError( QProcess::ProcessError ) ) );
     m_process->start();
-    //qDebug()<<"DocumentChild::startProcess:"<<m_process->pid()<<m_process->program();
+    //kDebug()<<m_process->pid()<<m_process->program();
     return true;
 }
 
@@ -252,7 +252,7 @@ bool DocumentChild::isFileModified() const
 
 void DocumentChild::slotEditFinished( int /*par*/,  QProcess::ExitStatus )
 {
-    //qDebug()<<"DocumentChild::slotEditFinished:"<<par<<filePath();
+    //kDebug()<<par<<filePath();
     delete m_process;
     m_process = 0;
 }
@@ -346,7 +346,7 @@ void Part::addCommand( QUndoCommand *cmd )
 
 bool Part::setWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"Part::setWorkPackage:";
+    //kDebug();
     QString id = wp->id();
     if ( m_packageMap.contains( id ) ) {
         if ( KMessageBox::warningYesNo( 0, i18n("<p>The work package already exists in the projects store.</p>"
@@ -373,7 +373,7 @@ bool Part::setWorkPackage( WorkPackage *wp )
 
 void Part::removeWorkPackage( Node *node, MacroCommand *m )
 {
-    //qDebug()<<"Part::removeWorkPackage:"<<node->name();
+    //kDebug()<<node->name();
     WorkPackage *wp = findWorkPackage( node );
     if ( wp == 0 ) {
         KMessageBox::error( 0, i18n("Remove failed. Cannot find work package") );
@@ -389,7 +389,7 @@ void Part::removeWorkPackage( Node *node, MacroCommand *m )
 
 void Part::removeWorkPackages( const QList<Node*> &nodes )
 {
-    //qDebug()<<"Part::removeWorkPackage:"<<node->name();
+    //kDebug()<<node->name();
     MacroCommand *m = new MacroCommand( i18np( "Remove work package", "Remove work packages", nodes.count() ) );
     foreach ( Node *n, nodes ) {
         removeWorkPackage( n, m );
@@ -403,7 +403,7 @@ void Part::removeWorkPackages( const QList<Node*> &nodes )
 
 void Part::removeWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"Part::removeWorkPackage:";
+    //kDebug();
     int row = indexOf( wp );
     if ( row >= 0 ) {
         m_packageMap.remove( m_packageMap.keys().at( row ) );
@@ -413,7 +413,7 @@ void Part::removeWorkPackage( WorkPackage *wp )
 
 void Part::addWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"Part::addWorkPackage:";
+    //kDebug();
     QString id = wp->id();
     Q_ASSERT( ! m_packageMap.contains( id ) );
     m_packageMap[ id ] = wp;
@@ -425,7 +425,7 @@ bool Part::loadWorkPackages()
     m_loadingFromProjectStore = true;
     KStandardDirs *sd = componentData().dirs();
     QStringList lst = sd->findAllResources( "projects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
-    //qDebug()<<"Part::loadWorkPackages:"<<lst;
+    //kDebug()<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
             KMessageBox::information( 0, i18n( "Failed to load file:<br>%1" , file ) );
@@ -622,7 +622,7 @@ bool Part::editWorkpackageDocument( const Document *doc )
 bool Part::editOtherDocument( const Document *doc )
 {
     Q_ASSERT( doc != 0 );
-    //qDebug()<<doc->url();
+    //kDebug()<<doc->url();
     WorkPackage *wp = findWorkPackage( doc );
     if ( wp == 0 ) {
         KMessageBox::error( 0, i18n( "Edit failed. Cannot find a work package." ) );
@@ -692,7 +692,7 @@ bool Part::saveAs( const KUrl &/*url*/ )
 
 bool Part::saveWorkPackages( bool silent )
 {
-    qDebug()<<"saveWorkPackages:"<<silent;
+    kDebug()<<silent;
     foreach ( WorkPackage *wp, m_packageMap ) {
         wp->saveToProjects( this );
     }
@@ -707,13 +707,13 @@ bool Part::completeSaving( KoStore */*store*/ )
 
 QDomDocument Part::saveXML()
 {
-    qDebug()<<"Part::saveXML:";
+    kDebug();
     return QDomDocument();
 }
 
 bool Part::queryClose()
 {
-    qDebug()<<"queryClose:";
+    kDebug();
     QList<WorkPackage*> modifiedList;
     foreach ( WorkPackage *wp, m_packageMap ) {
         switch ( wp->queryClose( this ) ) {
@@ -721,7 +721,7 @@ bool Part::queryClose()
                 modifiedList << wp;
                 break;
             case KMessageBox::Cancel:
-                qDebug()<<"Part::queryClose: Cancel";
+                kDebug()<<"Cancel";
                 return false;
         }
     }
@@ -735,7 +735,7 @@ bool Part::queryClose()
 
 bool Part::openFile()
 {
-    qDebug()<<"Part::openFile:"<<localFilePath();
+    kDebug()<<localFilePath();
     return loadNativeFormatFromStore( localFilePath() );
 }
 

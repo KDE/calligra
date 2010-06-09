@@ -95,9 +95,9 @@ int KPlatoWork_Application::newInstance()
         return status;
     }
     QList<KMainWindow*> lst = KMainWindow::memberList();
-    qDebug()<<"newInstance() windows"<<lst.count();
+    kDebug()<<"windows"<<lst.count();
     if ( lst.count() > 1 ) {
-        qDebug()<<"newInstance() windows"<<lst.count();
+        kDebug()<<"windows"<<lst.count();
         return 1; // should never happen
     }
     if ( lst.isEmpty() ) {

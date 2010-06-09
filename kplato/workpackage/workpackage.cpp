@@ -97,7 +97,7 @@ void WorkPackage::setSettings( const WorkPackageSettings &settings )
 //TODO find a way to know when changes are undone
 void WorkPackage::projectChanged()
 {
-    qDebug()<<"WorkPackage::projectChanged:";
+    kDebug();
     setModified( true );
 }
 
@@ -130,7 +130,7 @@ bool WorkPackage::addChild( Part */*part*/, const Document *doc )
 
 void WorkPackage::slotChildModified( bool mod )
 {
-    qDebug()<<"WorkPackage::slotChildModified:"<<mod;
+    kDebug()<<mod;
     emit modified( isModified() );
 }
 
@@ -172,10 +172,10 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
             continue;
         }
         KoXmlElement e = n.toElement();
-        qDebug()<<"loadXML:"<<e.tagName();
+        kDebug()<<e.tagName();
         if ( e.tagName() == "project" ) {
             status.setProject( m_project );
-            qDebug()<<"loadXML:"<<"loading new project";
+            kDebug()<<"loading new project";
             if ( ! ( ok = m_project->load( e, status ) ) ) {
                 status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
@@ -189,7 +189,7 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
                 continue;
             }
             KoXmlElement e = n.toElement();
-            qDebug()<<"loadXML:"<<e.tagName();
+            kDebug()<<e.tagName();
             if ( e.tagName() == "workpackage" ) {
                 Task *t = static_cast<Task*>( m_project->childNode( 0 ) );
                 t->workPackage().setOwnerName( e.attribute( "owner" ) );
@@ -197,16 +197,16 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
 
                 Resource *r = m_project->findResource( t->workPackage().ownerId() );
                 if ( r == 0 ) {
-                    qDebug()<<"loadXML:"<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
+                    kDebug()<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
                 }
-                qDebug()<<"loadXML:"<<"is this me?"<<t->workPackage().ownerName();
+                kDebug()<<"is this me?"<<t->workPackage().ownerName();
                 KoXmlNode ch = e.firstChild();
                 for ( ; ! ch.isNull(); ch = ch.nextSibling() ) {
                     if ( ! ch.isElement() ) {
                         continue;
                     }
                     KoXmlElement el = ch.toElement();
-                    qDebug()<<"loadXML:"<<el.tagName();
+                    kDebug()<<el.tagName();
                     if ( el.tagName() == "settings" ) {
                         m_settings.loadXML( el );
                     }
@@ -239,7 +239,7 @@ bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
         KMessageBox::error( 0, i18n("Cannot save to empty filename") );
         return false;
     }
-    qDebug()<<"WorkPackage::saveNativeFormat:"<<node()->name()<<path;
+    kDebug()<<node()->name()<<path;
     KoStore* store = KoStore::createStore(path, KoStore::Write, "application/x-vnd.kde.kplato.work", KoStore::Auto );
     if (store->bad()) {
         KMessageBox::error( 0, i18n("Could not create the file for saving") );
@@ -338,7 +338,7 @@ void WorkPackage::saveToProjects( Part *part )
 {
     kDebug();
     QString path = fileName( part );
-    qDebug()<<"WorkPackage::saveToProjects:"<<node()->name();
+    kDebug()<<node()->name();
     if ( saveNativeFormat( part, path ) ) {
         m_fromProjectStore = true;
         m_filePath = path;
@@ -446,7 +446,7 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp )
             m->addCommand( new ModifyCompletionEntrymodeCmd( static_cast<Task*>( to )->completion(), static_cast<const Task*>( from )->completion().entrymode() ) );
         }
         if ( static_cast<Task*>( to )->workPackage().ownerId() != static_cast<const Task*>( from )->workPackage().ownerId() ) {
-            qDebug()<<"merge:"<<"different owners"<<static_cast<const Task*>( from )->workPackage().ownerName()<<static_cast<Task*>( to )->workPackage().ownerName();
+            kDebug()<<"merge:"<<"different owners"<<static_cast<const Task*>( from )->workPackage().ownerName()<<static_cast<Task*>( to )->workPackage().ownerName();
             if ( static_cast<Task*>( to )->workPackage().ownerId().isEmpty() ) {
                 //TODO cmd
                 static_cast<Task*>( to )->workPackage().setOwnerId( static_cast<const Task*>( from )->workPackage().ownerId() );
@@ -483,11 +483,11 @@ int WorkPackage::queryClose( Part *part )
 
         switch (result) {
             case KMessageBox::Continue: {
-                qDebug()<<"WorkPackage::queryClose: Continue";
+                kDebug()<<"Continue";
                 break;
             }
             default: // case KMessageBox::Cancel :
-                qDebug()<<"WorkPackage::queryClose: Cancel";
+                kDebug()<<"Cancel";
                 return KMessageBox::Cancel;
                 break;
         }
@@ -503,15 +503,15 @@ int WorkPackage::queryClose( Part *part )
 
     switch (res) {
         case KMessageBox::Yes: {
-            qDebug()<<"WorkPackage::queryClose: Yes";
+            kDebug()<<"Yes";
             saveToProjects( part );
             break;
         }
         case KMessageBox::No:
-            qDebug()<<"WorkPackage::queryClose: No";
+            kDebug()<<"No";
             break;
         default: // case KMessageBox::Cancel :
-            qDebug()<<"WorkPackage::queryClose: Cancel";
+            kDebug()<<"Cancel";
             break;
     }
     return res;

@@ -219,15 +219,15 @@ QVariant TaskWorkPackageModel::projectManager( const Node *node, int role ) cons
 int TaskWorkPackageModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //qDebug()<<"TaskWorkPackageModel::rowCount:"<<parent<<"nodes:"<<m_part->workPackageCount();
+        //kDebug()<<parent<<"nodes:"<<m_part->workPackageCount();
         return m_part->workPackageCount(); // == no of nodes (1 node pr wp)
     }
     Node *n = nodeForIndex( parent );
     if ( n ) {
-        //qDebug()<<"TaskWorkPackageModel::rowCount:"<<parent<<"docs:"<<n->documents().count();
+        //kDebug()<<parent<<"docs:"<<n->documents().count();
         return n->documents().count();
     }
-    //qDebug()<<"TaskWorkPackageModel::rowCount:"<<parent<<"rows:"<<0;
+    //kDebug()<<parent<<"rows:"<<0;
     return 0; // documents have no children
 }
 
@@ -288,7 +288,7 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 
 QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role ) const
 {
-    //qDebug()<<"TaskWorkPackageModel::documentData:"<<doc->url().fileName()<<column<<role;
+    //kDebug()<<doc->url().fileName()<<column<<role;
     if ( role != Qt::DisplayRole ) {
         return QVariant();
     }
@@ -527,7 +527,7 @@ Node *TaskWorkPackageModel::nodeForIndex( const QModelIndex &index ) const
 {
     WorkPackage *wp = ptrToWorkPackage( index );
     if ( wp ) {
-        //qDebug()<<"TaskWorkPackageModel::nodeForIndex:"<<index<<parent->node()->name();
+        //kDebug()<<index<<parent->node()->name();
         return wp->node();
     }
     return 0;
@@ -538,7 +538,7 @@ Document *TaskWorkPackageModel::documentForIndex( const QModelIndex &index ) con
     if ( index.isValid() ) {
         Node *parent = ptrToNode( index );
         if ( parent && index.row() < parent->documents().count() ) {
-            //qDebug()<<"TaskWorkPackageModel::documentForIndex:"<<index<<parent->name();
+            //kDebug()<<index<<parent->name();
             return parent->documents().value( index.row() );
         }
     }
