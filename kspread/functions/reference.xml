@@ -295,7 +295,7 @@
        <Type>Reference/Array</Type>
      </Parameter>
      <Parameter>
-       <Comment>Match type (optional></Comment>
+       <Comment>Match type (optional)</Comment>
        <Type>Int</Type>
      </Parameter>
      <Help>
