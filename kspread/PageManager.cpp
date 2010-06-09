@@ -65,7 +65,7 @@ void PageManager::layoutPages()
                 continue;
 
             // limit the print range to the used area
-            const QRect printRange = (*it)->rect() & sheet->usedArea();
+            const QRect printRange = (*it)->rect() & sheet->usedArea(true);
 //             kDebug() << "processing printRange" << printRange;
 
             int rows = 0;

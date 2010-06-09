@@ -487,7 +487,7 @@ public:
      * occupied column and row.
      * \return the used area
      */
-    QRect usedArea() const;
+    QRect usedArea(bool onlyContent = false) const;
 
     //
     //END Methods for Storage access

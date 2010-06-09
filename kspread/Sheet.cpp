@@ -2895,25 +2895,27 @@ int Sheet::loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
     return columnMaximal;
 }
 
-QRect Sheet::usedArea() const
+QRect Sheet::usedArea(bool onlyContent) const
 {
     int maxCols = d->cellStorage->columns();
     int maxRows = d->cellStorage->rows();
 
-    const RowFormat * row = firstRow();
-    while (row) {
-        if (row->row() > maxRows)
-            maxRows = row->row();
+    if (!onlyContent) {
+        const RowFormat * row = firstRow();
+        while (row) {
+            if (row->row() > maxRows)
+                maxRows = row->row();
 
-        row = row->next();
-    }
+            row = row->next();
+        }
 
-    const ColumnFormat* col = firstCol();
-    while (col) {
-        if (col->column() > maxCols)
-            maxCols = col->column();
+        const ColumnFormat* col = firstCol();
+        while (col) {
+            if (col->column() > maxCols)
+                maxCols = col->column();
 
-        col = col->next();
+            col = col->next();
+        }
     }
 
     // flake
