@@ -718,7 +718,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     QString s;
     bool ok = false;
     m_name = element.attribute( "name" );
+    removeId( m_id );
     m_id = element.attribute( "id" );
+    registerNodeId( this );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
