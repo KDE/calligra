@@ -21,6 +21,7 @@
 #include <kexidb/queryschema.h>
 #include <core/kexipart.h>
 #include <QDomDocument>
+#include <kexidb/parser/parser.h>
 
 KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
                                      KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0)
@@ -75,6 +76,7 @@ bool KexiDBReportData::open()
             m_cursor = m_connection->executeQuery ( *m_copySchema, 1 );
         }
 
+        
         if ( m_cursor )
         {
             kDebug() << "Moving to first row..";
@@ -114,7 +116,14 @@ bool KexiDBReportData::getSchema()
         }
 
         if (m_originalSchema) {
-            m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
+            kDebug() << "Original:" << m_connection->selectStatement(*m_originalSchema);
+            
+            //m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
+            KexiDB::Parser *parser = new KexiDB::Parser(m_connection);
+            parser->parse(m_connection->selectStatement(*m_originalSchema));
+            m_copySchema = parser->query();
+
+            kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
         }
         
         return true;
