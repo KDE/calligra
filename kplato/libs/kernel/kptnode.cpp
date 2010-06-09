@@ -159,7 +159,7 @@ Node *Node::projectNode() {
     if (m_parent)
         return m_parent->projectNode();
 
-    kError()<<"Ooops, no parent and no project found";
+    // This happends for default tasks
     return 0;
 }
 
@@ -170,7 +170,7 @@ const Node *Node::projectNode() const {
     if (m_parent)
         return m_parent->projectNode();
 
-    kError()<<"Ooops, no parent and no project found";
+    // This happends for default tasks
     return 0;
 }
 
