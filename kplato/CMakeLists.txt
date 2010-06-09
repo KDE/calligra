@@ -1,6 +1,9 @@
 
 project(kplato)
 
+# set kplato debug area
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
+
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KPLATO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
