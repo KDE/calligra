@@ -743,7 +743,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     - contentPart (Content Part) §19.3.1.14
     - cxnSp (Connection Shape) §19.3.1.19
     - extLst (Extension List with Modification Flag) §19.3.1.20
-    - graphicFrame (Graphic Frame) §19.3.1.21
+    - [done] graphicFrame (Graphic Frame) §19.3.1.21
     - grpSp (Group Shape) §19.3.1.22
     - grpSpPr (Group Shape Properties) §19.3.1.23
     - nvGrpSpPr (Non-Visual Properties for a Group Shape) §19.3.1.31
@@ -774,6 +774,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
         if (isStartElement()) {
             TRY_READ_IF(sp)
             ELSE_TRY_READ_IF(pic)
+            ELSE_TRY_READ_IF(graphicFrame)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -908,6 +909,45 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     }
 
     body->endElement(); // draw:text-box
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL graphicFrame
+//! graphicFrame 
+/*!
+  This element specifies the existence of a graphics frame. This frame contains a graphic that was generated
+  by an external source and needs a container in which to be displayed on the slide surface.
+
+  Parent Elements:
+    - grpSp (§4.4.1.19); spTree (§4.4.1.42)
+  Child Elements:
+    - extLst (Extension List with Modification Flag) (§4.2.4)
+    - graphic (Graphic Object) (§5.1.2.1.16)
+    - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
+    - xfrm (2D Transform for Graphic Frame)
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
+{
+    READ_PROLOGUE
+    bool inGraphicData = false;
+    while (!atEnd()) {
+        readNext();
+        if (qualifiedName() == QLatin1String("a:graphicData")) {
+            inGraphicData = isStartElement();
+        } else if (isStartElement() && inGraphicData) {
+            if (qualifiedName() == QLatin1String("c:chart")) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITH_NS(r, id)
+                if (!r_id.isEmpty()) {
+                    QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
+                    kDebug()<<"r:id="<<r_id<<"link="<<link;
+//! @todo use XlsxXmlChartReader
+                }
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
     READ_EPILOGUE
 }
 
