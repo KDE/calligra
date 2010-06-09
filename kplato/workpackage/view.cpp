@@ -343,7 +343,7 @@ void View::slotSendPackage()
 {
     Node *node = currentNode();
     if ( node == 0 ) {
-        KMessageBox::error(0, i18n("No node selected" ) );
+        KMessageBox::error(0, i18n("No work package is selected" ) );
         return;
     }
     qDebug()<<"View::slotSendPackage:"<<node->name();
