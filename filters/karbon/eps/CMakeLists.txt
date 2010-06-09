@@ -15,7 +15,7 @@
 ########### next target ###############
 
 macro_optional_find_package(Pstoedit)
-macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translates PostScript and PDF graphics to SVG" "http://www.pstoedit.net/" FALSE "" "Required by the Karbon EPS import filter")
+macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translates PostScript and PDF graphics to SVG" "http://www.pstoedit.net/" FALSE "" "Required at runtime by the Karbon EPS import filter")
 
 if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
