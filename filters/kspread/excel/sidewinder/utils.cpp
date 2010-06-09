@@ -20,6 +20,7 @@
  */
 #include "utils.h"
 #include <string.h>
+#include <iomanip>
 
 namespace Swinder
 {
@@ -160,6 +161,13 @@ std::ostream& operator<<(std::ostream& s, Swinder::UString ustring)
     return s;
 }
 
+std::ostream& operator<<(std::ostream& s, const QByteArray& d)
+{
+    s << std::hex << std::setfill('0');
+    for (int i = 0; i < d.size(); i++) s << " " << std::setw(2) << int((unsigned char)d[i]);
+    return s;
+}
+
 Value errorAsValue(int errorCode)
 {
     Value result(Value::Error);
@@ -254,12 +262,12 @@ Record* RecordRegistry::createRecord(unsigned id, Workbook *book)
     if (it != q->records.end()) {
         return it->second(book);
     }
-    
+
     std::map<unsigned, RecordFactoryWithArgs>::iterator it2 = q->recordsWithArgs.find(id);
     if (it2 != q->recordsWithArgs.end()) {
         return it2->second(book,  q->recordArgs[id]);
     }
-        
+
     return 0;
 }
 

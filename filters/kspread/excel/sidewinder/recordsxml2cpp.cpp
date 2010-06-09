@@ -65,6 +65,7 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType, c
     else if (xmlType == "float" || xmlType == "fixed") return "double";
     else if (xmlType == "bool") return "bool";
     else if (xmlType == "bytestring" || xmlType == "unicodestring") return "UString";
+    else if (xmlType == "blob") return "QByteArray";
     else if (extraTypes.contains(xmlType)) return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
     return "ERROR";
 }
@@ -266,6 +267,13 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 << indent << "}\n";
                 out << indent << "curOffset += stringSize;\n";
                 sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+            } else if (f.type == "QByteArray") {
+                out << indent << f.setterName() << "(" << setterArgs;
+                out << "QByteArray(reinterpret_cast<const char*>(";
+                out << "data";
+                if (dynamicOffset) out << " + curOffset";
+                if (offset) out << " + " << (offset / 8);
+                out << "), " << (bits / 8) << "));\n";
             } else if (bits % 8 == 0) {
                 if (f.isStringLength)
                     out << indent << "unsigned " << name << " = ";

@@ -652,30 +652,6 @@ void ExternNameRecord::dump(std::ostream& /*out*/) const
 {
 }
 
-// ========== FILEPASS ==========
-
-const unsigned int FilepassRecord::id = 0x002f;
-
-FilepassRecord::FilepassRecord(Workbook *book)
-    : Record(book)
-{
-}
-
-FilepassRecord::~FilepassRecord()
-{
-}
-
-void FilepassRecord::setData(unsigned,  const unsigned char*, const unsigned int*)
-{
-    // TODO
-    std::cout << "TODO FilepassRecord::setData" << std::endl;
-}
-
-void FilepassRecord::dump(std::ostream& out) const
-{
-    out << "FILEPASS" << std::endl;
-}
-
 // ========== FORMULA ==========
 
 const unsigned int FormulaRecord::id = 0x0006;
@@ -2759,10 +2735,6 @@ static Record* createExternNameRecord(Workbook *book)
 {
     return new ExternNameRecord(book);
 }
-static Record* createFilepassRecord(Workbook *book)
-{
-    return new FilepassRecord(book);
-}
 static Record* createFormulaRecord(Workbook *book)
 {
     return new FormulaRecord(book);
@@ -2821,7 +2793,6 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(BOFRecord::id, createBOFRecord);
     RecordRegistry::registerRecordClass(ExternBookRecord::id, createExternBookRecord);
     RecordRegistry::registerRecordClass(ExternNameRecord::id, createExternNameRecord);
-    RecordRegistry::registerRecordClass(FilepassRecord::id, createFilepassRecord);
     RecordRegistry::registerRecordClass(FormulaRecord::id, createFormulaRecord);
     RecordRegistry::registerRecordClass(SharedFormulaRecord::id, createSharedFormulaRecord);
     RecordRegistry::registerRecordClass(MulRKRecord::id, createMulRKRecord);
@@ -3051,7 +3022,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // this is set by FILEPASS record
         // subsequent records will need to be decrypted
         // since we do not support it yet, we have to bail out
-        if (d->globals->passwordProtected()) {
+        if (d->globals->passwordProtected() && !d->globals->encryptionTypeSupported()) {
             d->workbook->setPasswordProtected(true);
             break;
         }
@@ -3063,6 +3034,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
         unsigned long type = readU16(buffer);
         unsigned long size = readU16(buffer + 2);
+        d->globals->decryptionSkipBytes(4);
+
         unsigned int continuePositionsCount = 0;
 
         // verify buffer is large enough to hold the record data
@@ -3074,6 +3047,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // load actual record data
         bytes_read = stream->read(buffer, size);
         if (bytes_read != size) break;
+        d->globals->decryptRecord(type, size, buffer);
 
         // save current position in stream, to be able to restore the position later on
         unsigned long saved_pos;
@@ -3116,6 +3090,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                 std::cout << "ERROR!" << std::endl;
                 break;
             }
+            d->globals->decryptionSkipBytes(4);
+            d->globals->decryptRecord(next_type, next_size, buffer+size);
 
             // and finally update size
             size += next_size;
@@ -3149,6 +3125,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             record->setPosition(pos);
 
 #ifdef SWINDER_XLS2RAW
+            std::cout << std::setfill('0') << std::setw(8) << std::dec << record->position() << " ";
             std::cout << "Record 0x";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
             std::cout << " (";

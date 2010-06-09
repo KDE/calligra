@@ -1171,4 +1171,25 @@
   </array>
 </record>
 
+<record name="Filepass" id="0x002f">
+  <field name="encryptionType" type="unsigned" size="16">
+    <enum name="XORObfuscation" value="0" />
+    <enum name="RC4Encryption"  value="1" />
+  </field>
+  <if predicate="encryptionType() == RC4Encryption">
+    <field name="encryptionVersionMajor" type="unsigned" size="16" />
+    <field name="encryptionVersionMinor" type="unsigned" size="16" />
+    <if predicate="encryptionVersionMajor() == 0x0001">
+      <field name="salt"                    type="blob" size="128" />
+      <field name="encryptedVerifier"       type="blob" size="128" />
+      <field name="encryptedVerifierHash"   type="blob" size="128" />
+    </if>
+  </if>
+</record>
+
+<record name="UsrExcl" id="0x0194" />
+<record name="FileLock" id="0x0195" />
+<record name="RRDInfo" id="0x0196" />
+<record name="RRDHead" id="0x0138" />
+
 </records>

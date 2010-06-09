@@ -379,40 +379,6 @@ private:
     Private *d;
 };
 
-class FilepassRecord : public Record
-{
-public:
-
-    static const unsigned int id;
-
-    unsigned int rtti() const {
-        return this->id;
-    }
-
-    /**
-     * Creates a new FILEPASS record.
-     */
-    FilepassRecord(Workbook *book);
-
-    /**
-     * Destroy the record.
-     */
-    virtual ~FilepassRecord();
-
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
-
-    virtual const char* name() const {
-        return "FILEPASS";
-    }
-
-    virtual void dump(std::ostream& out) const;
-
-private:
-    // no copy or assign
-    FilepassRecord(const FilepassRecord&);
-    FilepassRecord& operator=(const FilepassRecord&);
-};
-
 /**
   \brief Formula.
 

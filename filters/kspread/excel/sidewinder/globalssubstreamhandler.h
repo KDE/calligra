@@ -64,7 +64,12 @@ public:
     virtual void handleRecord(Record* record);
 
     Workbook* workbook() const;
+
     bool passwordProtected() const;
+    bool encryptionTypeSupported() const;
+    void decryptionSkipBytes(int count);
+    void decryptRecord(unsigned type, unsigned size, unsigned char* buffer);
+
     unsigned version() const;
     Sheet* sheetFromPosition(unsigned position) const;
     UString stringFromSST(unsigned index) const;
@@ -89,7 +94,7 @@ public:
 
     virtual UString nameFromIndex(unsigned index) const;
     virtual UString externNameFromIndex(unsigned index) const;
-    
+
     MsoDrawingBlibItem* drawing(unsigned long pid) const;
     QList< Sheet* >& chartSheets();
 

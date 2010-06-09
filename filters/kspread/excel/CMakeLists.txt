@@ -1,4 +1,8 @@
 
+if(QCA2_FOUND)
+    add_definitions( -DHAVE_QCA2 )
+    include_directories(${QCA2_INCLUDE_DIR})
+endif(QCA2_FOUND)
 
 add_subdirectory( sidewinder )
 add_subdirectory( import )

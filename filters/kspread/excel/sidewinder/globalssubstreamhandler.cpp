@@ -26,6 +26,7 @@
 #include "excel.h"
 #include "sheet.h"
 #include "workbook.h"
+#include "decrypt.h"
 
 namespace Swinder
 {
@@ -53,6 +54,7 @@ public:
     // password protection flag
     // TODO: password hash for record decryption
     bool passwordProtected;
+    RC4Decryption* decryption;
 
     // table of font
     std::vector<FontRecord> fontTable;
@@ -86,6 +88,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
     d->workbook = workbook;
     d->version = version;
     d->passwordProtected = false;
+    d->decryption = 0;
 
     // initialize palette
     static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors
@@ -105,6 +108,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
 
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
 {
+    delete d->decryption;
     delete d;
 }
 
@@ -116,6 +120,36 @@ Workbook* GlobalsSubStreamHandler::workbook() const
 bool GlobalsSubStreamHandler::passwordProtected() const
 {
     return d->passwordProtected;
+}
+
+bool GlobalsSubStreamHandler::encryptionTypeSupported() const
+{
+    return d->decryption;
+}
+
+void GlobalsSubStreamHandler::decryptionSkipBytes(int count)
+{
+    if (d->decryption) d->decryption->skipBytes(count);
+}
+
+void GlobalsSubStreamHandler::decryptRecord(unsigned type, unsigned size, unsigned char* buffer)
+{
+    if (!d->decryption) return;
+
+    if (type == BOFRecord::id ||
+        type == FilepassRecord::id ||
+        type == UsrExclRecord::id ||
+        type == FileLockRecord::id ||
+        type == InterfaceHdrRecord::id ||
+        type == RRDInfoRecord::id ||
+        type == RRDHeadRecord::id) {
+        d->decryption->skipBytes(size);
+    } else if (type == BoundSheetRecord::id && size >= 4) { /* skip only first 4 bytes */
+        d->decryption->skipBytes(4);
+        d->decryption->decryptBytes(size-4, buffer+4);
+    } else {
+        d->decryption->decryptBytes(size, buffer);
+    }
 }
 
 unsigned GlobalsSubStreamHandler::version() const
@@ -665,6 +699,16 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
 void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
 {
     if (!record) return;
+
+    if (record->encryptionType() == FilepassRecord::RC4Encryption && record->encryptionVersionMajor() == 1) {
+        d->decryption = new RC4Decryption(record->salt(), record->encryptedVerifier(), record->encryptedVerifierHash());
+        if (!d->decryption->checkPassword("VelvetSweatshop")) {
+            delete d->decryption;
+            fprintf(stderr, "Invalid password\n");
+        } else {
+            d->decryption->setInitialPosition(record->position() + 54+4);
+        }
+    }
 
     d->passwordProtected = true;
 }

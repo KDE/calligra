@@ -150,6 +150,7 @@ UString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -
 UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
 
 std::ostream& operator<<(std::ostream& s, Swinder::UString ustring);
+std::ostream& operator<<(std::ostream& s, const QByteArray& data);
 
 inline QString string(const Swinder::UString& str)
 {

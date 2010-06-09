@@ -22,6 +22,7 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/formulas.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/utils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/objects.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/decrypt.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
@@ -38,6 +39,9 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 
 target_link_libraries(excelimport msooxml komain)
+if(QCA2_FOUND)
+   target_link_libraries(excelimport ${QCA2_LIBRARIES})
+endif(QCA2_FOUND)
 
 install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
