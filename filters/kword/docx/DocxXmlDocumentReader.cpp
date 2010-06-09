@@ -1256,7 +1256,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 if (!m_currentListStyleName.isEmpty()) {
                     body->addAttribute("text:style-name", m_currentListStyleName);
                 }
-                for (int i = 0; i <= m_currentListLevel; ++i) {
+                body->startElement("text:list-item");
+                for (int i = 0; i < m_currentListLevel; ++i) {
+                    body->startElement("text:list");
                     body->startElement("text:list-item");
                 }
             }
@@ -1277,10 +1279,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             (void)textPBuf.releaseWriter();
             body->endElement(); //text:p
             if (m_listFound) {
-                for (int i = 0; i <= m_currentListLevel; ++i) {
+                for (int i = 0; i < m_currentListLevel; ++i) {
                     body->endElement(); // text:list-item
+                    body->endElement(); // text:list
                 }
-                body->endElement(); // text:list
+                body->endElement(); //text:list-item
+                body->endElement(); //text:list
             }
             kDebug() << "/text:p";
         }
