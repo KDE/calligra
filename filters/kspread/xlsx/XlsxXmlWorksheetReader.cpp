@@ -1387,6 +1387,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             XlsxXmlDrawingReaderContext::Position pos = context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
             Cell* cell = d->sheet->cell(pos.m_col, pos.m_row, true);
             cell->drawings << context;
+        } else {
+            delete context;
         }
     }
     while (!atEnd()) {
