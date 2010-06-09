@@ -274,7 +274,7 @@ DataTableRecord* WorksheetSubStreamHandler::tableRecord(const std::pair<unsigned
     std::map<std::pair<unsigned, unsigned>, DataTableRecord*>::iterator datatable = d->dataTables.find(formulaCellPos);
     return datatable != d->dataTables.end() ? datatable->second : 0;
 }
-    
+
 void WorksheetSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
@@ -519,6 +519,8 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         if (len > 0) {
             left = footer.substr(pos, len);
             footer = footer.substr(pos + len, footer.length());
+        } else {
+            left = footer.substr(pos);
         }
     }
 
@@ -530,6 +532,8 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         if (len > 0) {
             center = footer.substr(pos, len);
             footer = footer.substr(pos + len, footer.length());
+        } else {
+            center = footer.substr(pos);
         }
     }
 
@@ -562,6 +566,8 @@ void WorksheetSubStreamHandler::handleHeader(HeaderRecord* record)
         if (len > 0) {
             left = header.substr(pos, len);
             header = header.substr(pos + len, header.length());
+        } else {
+            left = header.substr(pos);
         }
     }
 
@@ -573,6 +579,8 @@ void WorksheetSubStreamHandler::handleHeader(HeaderRecord* record)
         if (len > 0) {
             center = header.substr(pos, len);
             header = header.substr(pos + len, header.length());
+        } else {
+            center = header.substr(pos);
         }
     }
 
@@ -703,7 +711,7 @@ void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
             value.setValue(record->asFloat(i));
         cell->setValue(value);
         cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
-        
+
         if(prevCell) {
             if(*prevCell == *cell) {
                 ++repeat;
@@ -958,7 +966,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    
+
     // picture?
     std::map<unsigned long,unsigned long>::iterator pit = record->m_properties.find(DrawingObject::pid);
     if(pit != record->m_properties.end()) {
@@ -981,7 +989,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
         //TODO
         //Q_ASSERT(d->globals->drawing(id));
         //Q_ASSERT(false);
-        
+
         return;
     }
 
@@ -1055,11 +1063,11 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
         //QByteArray sDummy = sPasswd;
         //typedef sal_Char STRING16[ 16 ];
         //sPasswd = (sal_Char) nNewChar;
-        //sPasswd += sDummy;        
+        //sPasswd += sDummy;
 
         sPasswd.prepend(QChar(nNewChar));
     }
-        
+
     std::cout << ">>>> " << sPasswd.data() << std::endl; //0x218490a
 #endif
 
