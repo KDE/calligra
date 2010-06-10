@@ -717,7 +717,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
     columnWriter.endElement(); // style:columns;
 
     const QString elementContents = QString::fromUtf8(columnBuffer.buffer(), columnBuffer.buffer().size());
-    m_currentPageStyle.addChildElement("style:columns", elementContents);
+    if (!num.isEmpty()) {
+        m_currentPageStyle.addChildElement("style:columns", elementContents);
+    }
 
     READ_EPILOGUE
 }
