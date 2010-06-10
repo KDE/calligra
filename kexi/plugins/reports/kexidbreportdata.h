@@ -24,6 +24,7 @@
 
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
+#include <kexidb/parser/parser.h>
 
 #include <KoReportData.h>
 
@@ -39,6 +40,7 @@ private:
     KexiDB::Connection *m_connection;
     KexiDB::QuerySchema *m_originalSchema;
     KexiDB::QuerySchema *m_copySchema;
+    KexiDB::Parser *m_parser;
     
     bool getSchema();
 

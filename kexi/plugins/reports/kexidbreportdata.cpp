@@ -21,12 +21,13 @@
 #include <kexidb/queryschema.h>
 #include <core/kexipart.h>
 #include <QDomDocument>
-#include <kexidb/parser/parser.h>
+
 
 KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
-                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0)
+                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0), m_parser(0)
 {
     m_qstrQuery = qstrSQL;
+    m_parser = new KexiDB::Parser(m_connection);
     getSchema();
 }
 
@@ -60,6 +61,7 @@ void KexiDBReportData::addExpression(const QString& field, const QVariant& value
 KexiDBReportData::~KexiDBReportData()
 {
     close();
+    delete m_parser;
 }
 
 bool KexiDBReportData::open()
@@ -119,10 +121,10 @@ bool KexiDBReportData::getSchema()
             kDebug() << "Original:" << m_connection->selectStatement(*m_originalSchema);
             
             //m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
-            KexiDB::Parser *parser = new KexiDB::Parser(m_connection);
-            parser->parse(m_connection->selectStatement(*m_originalSchema));
-            m_copySchema = parser->query();
-
+            
+            m_parser->parse(m_connection->selectStatement(*m_originalSchema));
+            m_copySchema = m_parser->query();
+            
             kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
         }
         
