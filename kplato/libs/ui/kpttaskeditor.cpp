@@ -53,6 +53,171 @@ namespace KPlato
 {
 
 //--------------------
+TaskEditorItemModel::TaskEditorItemModel( QObject *parent )
+: NodeItemModel( parent )
+{
+}
+
+Qt::ItemFlags TaskEditorItemModel::flags( const QModelIndex &index ) const
+{
+    if ( index.column() == NodeModel::NodeType ) {
+        if ( ! m_readWrite || isColumnReadOnly( index.column() ) ) {
+            return QAbstractItemModel::flags( index );
+        }
+        Node *n = node( index );
+        if ( n && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+            return QAbstractItemModel::flags( index ) | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
+        }
+        return QAbstractItemModel::flags( index ) | Qt::ItemIsDropEnabled;
+    }
+    return NodeItemModel::flags( index );
+}
+
+QVariant TaskEditorItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( orientation == Qt::Horizontal && section == NodeModel::NodeType ) {
+        if ( role == Qt::ToolTipRole ) {
+            return i18nc( "@info:tooltip", "The type of task or the estimate type of the task" );
+        } else if ( role == Qt::WhatsThisRole ) {
+            return i18nc( "@info:whatsthis", 
+                          "<p>Indicates the type of task or the estimate type of the task.</p>"
+                          "The type can be set to <emphasis>Milestone</emphasis>, <emphasis>Effort</emphasis> or <emphasis>Duration</emphasis>.<nl/>"
+                          "<note>If the type is <emphasis>Summary</emphasis> or <emphasis>Project</emphasis> the type is not editable.</note>");
+        }
+    }
+    return NodeItemModel::headerData(section, orientation, role);
+}
+
+QVariant TaskEditorItemModel::data( const QModelIndex &index, int role ) const
+{
+    Node *n = node( index );
+    if ( n != 0 && index.column() == NodeModel::NodeType ) {
+        return type( n, role );
+    }
+    return NodeItemModel::data( index, role );
+}
+
+bool TaskEditorItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+{
+    Node *n = node( index );
+    if ( n != 0 && role == Qt::EditRole && index.column() == NodeModel::NodeType ) {
+        return setType( n, value, role );
+    }
+    return NodeItemModel::setData( index, value, role );
+}
+
+QVariant TaskEditorItemModel::type( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            if ( node->type() == Node::Type_Task ) {
+                return node->estimate()->typeToString( true );
+            }
+            return node->typeToString( true );
+        }
+        case Qt::EditRole:
+            return node->type();
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::ToolTipRole: {
+            if ( node->type() == Node::Type_Task ) {
+                return i18nc( "@info:tooltip", "Task with estimate type: %1", node->estimate()->typeToString( true ) );
+            }
+            return i18nc( "@info:tooltip", "Task type: %1", node->typeToString( true ) );
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+        case Role::EnumListValue: {
+            if ( node->type() == Node::Type_Milestone ) {
+                return 0;
+            }
+            if ( node->type() == Node::Type_Task ) {
+                return node->estimate()->type() + 1; 
+            }
+            return -1;
+        }
+        case Role::EnumList: {
+            QStringList lst;
+            lst << Node::typeToString( Node::Type_Milestone, true );
+            lst += Estimate::typeToStringList( true );
+            return lst;
+        }
+    }
+    return QVariant();
+}
+
+bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            if ( node->type() == Node::Type_Summarytask ) {
+                return false;
+            }
+            int v = value.toInt();
+            switch ( v ) {
+                case 0: { // Milestone
+                    ModifyEstimateCmd *cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    emit executeCommand( cmd );
+                    return true;
+                }
+                default: { // Estimate
+                    --v;
+                    MacroCommand *m = new MacroCommand( i18n( "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
+                    m->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v ) ); 
+                    if ( node->type() == Node::Type_Milestone ) {
+                        m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
+                        m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                    }
+                    emit executeCommand( m );
+                    return true;
+                }
+            }
+            break;
+        }
+        default: break;
+    }
+    return false;
+}
+
+//--------------------
+TaskEditorTreeView::TaskEditorTreeView( QWidget *parent )
+    : DoubleTreeViewBase( parent )
+{
+    TaskEditorItemModel *m = new TaskEditorItemModel( this );
+    setModel( m );
+    //setSelectionBehavior( QAbstractItemView::SelectItems );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+    createItemDelegates( m );
+    setItemDelegateForColumn( NodeModel::NodeType, new EnumDelegate( this ) );
+
+    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+}
+
+NodeItemModel *TaskEditorTreeView::baseModel() const
+{
+    NodeSortFilterProxyModel *pr = proxyModel();
+    if ( pr ) {
+        return static_cast<NodeItemModel*>( pr->sourceModel() );
+    }
+    return static_cast<NodeItemModel*>( model() );
+}
+    
+void TaskEditorTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
+{
+    QModelIndex idx = index;
+    NodeSortFilterProxyModel *pr = proxyModel();
+    if ( pr ) {
+        idx = pr->mapToSource( index );
+    }
+    if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
+        event->accept();
+    }
+}
+
+//--------------------
 NodeTreeView::NodeTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
@@ -88,6 +253,7 @@ void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorP
     }
 }
 
+
 //-----------------------------------
 TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
@@ -95,7 +261,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     kDebug()<<"----------------- Create TaskEditor ----------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new NodeTreeView( this );
+    m_view = new TaskEditorTreeView( this );
     l->addWidget( m_view );
     kDebug()<<m_view->actionSplitView();
     setupGui();
@@ -110,10 +276,9 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     QList<int> show;
-    show << NodeModel::NodeType
-            << NodeModel::NodeResponsible
+    show << NodeModel::NodeResponsible
             << NodeModel::NodeAllocation
-            << NodeModel::NodeEstimateType
+            << NodeModel::NodeType
             << NodeModel::NodeEstimateCalendar
             << NodeModel::NodeEstimate
             << NodeModel::NodeOptimisticRatio
@@ -135,8 +300,15 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
             lst2 << i;
         }
     }
+    for ( int i = 0; i < show.count(); ++i ) {
+        int sec = m_view->slaveView()->header()->visualIndex( show[ i ] );
+        //kDebug()<<"move section:"<<i<<show[i]<<sec;
+        if ( i != sec ) {
+            m_view->slaveView()->header()->moveSection( sec, i );
+        }
+    }
     m_view->hideColumns( lst1, lst2 );
-    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    m_view->masterView()->setDefaultColumns( QList<int>() << NodeModel::NodeName );
     m_view->slaveView()->setDefaultColumns( show );
     
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
@@ -482,6 +654,10 @@ void TaskEditor::slotAddSubtask()
 void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
+        if ( m_view->slaveView()->hasFocus() ) {
+            m_view->masterView()->setFocus();
+        }
+
         m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
         QModelIndex p = m_view->model()->parent( i );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );

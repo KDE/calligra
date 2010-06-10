@@ -118,17 +118,28 @@ void Node::init() {
     m_shutdownCost = 0.0;
 }
 
-QString Node::typeToString( bool trans ) const {
-    switch ( type() ) {
-        case Type_Node: return trans ? i18n("None") : "None";
-        case Type_Project: return trans ? i18n("Project") : "Project";
-        case Type_Subproject: return trans ? i18n("Sub-Project") : "Sub-Project";
-        case Type_Task: return trans ? i18n("Task") : "Task";
-        case Type_Milestone: return trans ? i18n("Milestone") : "Milestone";
-        case Type_Periodic: return trans ? i18n("Periodic") : "Periodic";
-        case Type_Summarytask: return trans ? i18n("Summary") : "Summary-Task";
-    }
-    return QString();
+QString Node::typeToString( bool trans ) const
+{
+    return typeToString( (Node::NodeTypes)type(), trans );
+}
+
+// static
+QString Node::typeToString( Node::NodeTypes typ, bool trans )
+{
+    return typeToStringList( trans ).at( typ );
+}
+
+// static
+QStringList Node::typeToStringList( bool trans )
+{
+    return QStringList() 
+            << ( trans ? i18n( "None" ) : QString( "None" ) )
+            << ( trans ? i18n( "Project" ) : QString( "Project" ) )
+            << ( trans ? i18n( "Sub-Project" ) : QString( "Sub-Project" ) )
+            << ( trans ? i18n( "Task" ) : QString( "Task" ) )
+            << ( trans ? i18n( "Milestone" ) : QString( "Milestone" ) )
+            << ( trans ? i18n( "Periodic" ) : QString( "Periodic" ) )
+            << ( trans ? i18n( "Summary" ) : QString( "Summary-Task" ) );
 }
 
 void Node::setName(const QString &n) 
@@ -1428,6 +1439,11 @@ void Estimate::save(QDomElement &element) const {
 
 QString Estimate::typeToString( bool trans ) const {
     return typeToStringList( trans ).at( m_type );
+}
+
+QString Estimate::typeToString( Estimate::Type typ, bool trans )
+{
+    return typeToStringList( trans ).value( typ );
 }
 
 QStringList Estimate::typeToStringList( bool trans ) {

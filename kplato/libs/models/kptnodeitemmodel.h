@@ -312,7 +312,7 @@ protected:
     QVariant allocation( const Node *node, int role ) const;
     bool setAllocation( Node *node, const QVariant &value, int role );
     bool setDescription( Node *node, const QVariant &value, int role );
-    bool setType( Node *node, const QVariant &value, int role );
+    virtual bool setType( Node *node, const QVariant &value, int role );
     bool setConstraint( Node *node, const QVariant &value, int role );
     bool setConstraintStartTime( Node *node, const QVariant &value, int role );
     bool setConstraintEndTime( Node *node, const QVariant &value, int role );

@@ -105,6 +105,8 @@ public:
     virtual int type() const = 0;
     
     QString typeToString( bool trans = false ) const;
+    static QString typeToString( NodeTypes typ, bool trans = false );
+    static QStringList typeToStringList( bool trans );
     /**
      * Returns a pointer to the project node (main- or sub-project)
      * Returns 0 if no project exists.
@@ -692,6 +694,8 @@ public:
     void setType(const QString& type);
     /// Return estimate type as a string. If @p trans is true, it's translated
     QString typeToString( bool trans=false ) const;
+    /// Return estimate type @p typ as a string. If @p trans is true, it's translated
+    static QString typeToString( Estimate::Type typ, bool trans=false );
     /// Return a stringlist of all estimate types. Translated if @p trans = true.
     static QStringList typeToStringList( bool trans=false );
     

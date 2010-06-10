@@ -46,6 +46,44 @@ class NodeItemModel;
 class GeneralNodeItemModel;
 class MacroCommand;
 
+class KPLATOUI_EXPORT TaskEditorItemModel : public NodeItemModel
+{
+    Q_OBJECT
+public:
+    explicit TaskEditorItemModel( QObject *parent = 0 );
+    
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    virtual bool setData( const QModelIndex & index, const QVariant &value, int role = Qt::EditRole );
+
+protected:
+    QVariant type( const Node *node, int role ) const;
+    virtual bool setType( Node *node, const QVariant &value, int role );
+
+};
+
+class KPLATOUI_EXPORT TaskEditorTreeView : public DoubleTreeViewBase
+{
+    Q_OBJECT
+public:
+    TaskEditorTreeView( QWidget *parent );
+    
+    //void setSelectionModel( QItemSelectionModel *selectionModel );
+
+    NodeItemModel *baseModel() const;
+    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+
+    Project *project() const { return baseModel()->project(); }
+    void setProject( Project *project ) { baseModel()->setProject( project ); }
+    
+signals:
+    void currentColumnChanged( QModelIndex, QModelIndex );
+    
+protected slots:
+    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+};
+
 class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
@@ -144,7 +182,7 @@ private:
     void edit( QModelIndex index );
 
 private:
-    NodeTreeView *m_view;
+    TaskEditorTreeView *m_view;
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
