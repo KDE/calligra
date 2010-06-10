@@ -20,6 +20,7 @@
 #define SWINDER_DECRYPT_H
 
 #include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 #ifdef HAVE_QCA2
     #include <QtCrypto>
