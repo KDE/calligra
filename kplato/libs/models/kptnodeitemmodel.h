@@ -424,6 +424,9 @@ public:
     explicit MilestoneItemModel( QObject *parent = 0 );
     ~MilestoneItemModel();
 
+    /// Returns a column number/- name map for this model
+    virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
+
     virtual void setProject( Project *project );
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
