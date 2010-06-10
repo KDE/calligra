@@ -31,6 +31,7 @@
 #include "XlsxImport.h"
 #include "Charting.h"
 #include "ChartExport.h"
+#include "FormulaParser.h"
 
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -293,7 +294,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
         return KoFilter::WrongFormat;
     }
-    
+
     d->sheet->setVisible( m_context->state.toLower() != "hidden" );
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
@@ -410,7 +411,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
     m_tableStyle.addProperty("table:display", d->sheet->visible());
 
-    //The style might be changed depending on what elements we find, 
+    //The style might be changed depending on what elements we find,
     //hold the body writer so that we can set the proper style
     KoXmlWriter* heldBody = body;
     QBuffer* bodyBuffer = new QBuffer();
@@ -500,7 +501,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         // Treat boolean values specially (ODF1.1 chapter 6.7.1)
                         if (cell->valueAttr == XlsxXmlWorksheetReader::officeBooleanValue)
                             //! @todo This breaks down if the value is a formula and not constant.
-                            body->addAttribute(cell->valueAttr, 
+                            body->addAttribute(cell->valueAttr,
                                                cell->valueAttrValue == "0" ? "false" : "true");
                         else
                             body->addAttribute(cell->valueAttr, cell->valueAttrValue);
@@ -856,49 +857,6 @@ static bool valueIsNumeric(const QString& v)
     return ok;
 }
 
-static QString convertFormula(const QString& formula)
-{
-    if (formula.isEmpty())
-        return QString();
-    enum { Start, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName } state;
-    state = Start;
-    QString result = '=' + formula;
-    for(int i = 1; i < result.length(); ++i) {
-        QChar ch = result[i];
-        switch (state) {
-        case Start:
-            if(ch == '(')
-                state = InArguments;
-            break;
-        case InArguments:
-            if (ch == '"')
-                state = InString;
-            else if (ch.unicode() == '\'')
-                state = InSheetOrAreaName;
-            else if (ch == ',')
-                result[i] = ';'; // replace argument delimiter
-            else if (ch == '(')
-                state = InParenthesizedArgument;
-            break;
-        case InParenthesizedArgument:
-            if (ch == ',')
-                result[i] = '~'; // union operator
-            else if (ch == ')')
-                state = InArguments;
-            break;
-        case InString:
-            if (ch == '"')
-                state = InArguments;
-            break;
-        case InSheetOrAreaName:
-            if (ch == '\'')
-                state = InArguments;
-            break;
-        };
-    };
-    return result;
-}
-
 static bool isCellnameCharacter(const QChar &c)
 {
     return c.isDigit() || c.isLetter() || c == '$';
@@ -1199,10 +1157,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
         if (isCharacters()) {
-            cell->formula = convertFormula(text().toString());
+            cell->formula = MSOOXML::convertFormula(text().toString());
         }
     }
-    
+
     if (!t.isEmpty()) {
         if (t == QLatin1String("shared")) {
             if (sharedGroupIndex >= 0) {

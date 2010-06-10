@@ -17,6 +17,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlCommentsReader.cpp
     NumberFormatParser.cpp
     ChartExport.cpp
+    FormulaParser.cpp
 )
 
 kde4_add_plugin(xlsximport WITH_PREFIX ${xlsximport_PART_SRCS})
@@ -33,8 +34,18 @@ install(TARGETS xlsximport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
   kspread_xlsx_import.desktop
 #  kspread_xlsx_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
+
+########## unit tests ###################
+
+set(TestFormulaParser_SRCS
+    FormulaParser.cpp
+    TestFormulaParser.cpp
+)
+
+kde4_add_unit_test(TestFormulaParser TESTNAME kspread-xlsx-FormulaParser ${TestFormulaParser_SRCS})
+target_link_libraries(TestFormulaParser ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
