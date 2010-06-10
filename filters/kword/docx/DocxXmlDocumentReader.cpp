@@ -320,7 +320,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
 
  Chils elements:
  - bidi (Right to Left Section Layout) §17.6.1
- - cols (Column Definitions) §17.6.4
+ - [done] cols (Column Definitions) §17.6.4
  - docGrid (Document Grid) §17.6.5
  - endnotePr (Section-Wide Endnote Properties) §17.11.5
  - [done] footerReference (Footer Reference) §17.10.2
@@ -374,6 +374,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(textDirection)
             ELSE_TRY_READ_IF(headerReference)
             ELSE_TRY_READ_IF(footerReference)
+            ELSE_TRY_READ_IF(cols)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -666,6 +667,58 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
     }
 
     readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cols
+//! w:cols handler (Column definitions)
+/*
+ Parents elements:
+ - [done] sectPr (§17.6.17)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
+
+ Child Elements:
+ - col (Single Column Definition) §17.6.3
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(num)
+    TRY_READ_ATTR(space)
+
+    QBuffer columnBuffer;
+    KoXmlWriter columnWriter(&columnBuffer);
+
+    columnWriter.startElement("style:columns");
+    if (!num.isEmpty()) {
+        columnWriter.addAttribute("fo:column-count", num);
+    }
+    if (!space.isEmpty()) {
+        bool ok;
+        const qreal distance = qreal(TWIP_TO_POINT(space.toDouble(&ok)));
+        if (ok) {
+            columnWriter.addAttributePt("fo:column-gap", distance);
+        }
+    }
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    columnWriter.endElement(); // style:columns;
+
+    const QString elementContents = QString::fromUtf8(columnBuffer.buffer(), columnBuffer.buffer().size());
+    m_currentPageStyle.addChildElement("style:columns", elementContents);
+
     READ_EPILOGUE
 }
 
