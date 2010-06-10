@@ -157,7 +157,7 @@ public:
     /**
      * Creates an array value using the data from \p array.
      */
-    explicit Value(const ValueStorage& array);
+    explicit Value(const ValueStorage& array, const QSize& size);
 
     /**
      * Creates a floating-point value from date/time.

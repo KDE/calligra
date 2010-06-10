@@ -499,7 +499,7 @@ Value CellStorage::value(int column, int row) const
 Value CellStorage::valueRegion(const Region& region) const
 {
     // create a subStorage with adjusted origin
-    return Value(d->valueStorage->subStorage(region, false));
+    return Value(d->valueStorage->subStorage(region, false), region.boundingRect().size());
 }
 
 void CellStorage::setValue(int column, int row, const Value& value)

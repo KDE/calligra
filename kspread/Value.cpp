@@ -35,7 +35,21 @@
 
 using namespace KSpread;
 
-typedef ValueStorage ValueArray;
+class ValueArray
+{
+public:
+    ValueArray() : m_size(0, 0) {}
+    ValueArray(const ValueStorage& storage, const QSize& size) : m_size(size), m_storage(storage) {}
+
+    ValueStorage& storage() { return m_storage; }
+    int rows() const { return qMax(m_size.height(), m_storage.rows()); }
+    int columns() const { return qMax(m_size.width(), m_storage.columns()); }
+
+    bool operator==(const ValueArray& a) const { return rows() == a.rows() && columns() == a.columns() && m_storage == a.m_storage; }
+private:
+    QSize m_size;
+    ValueStorage m_storage;
+};
 
 class Value::Private : public QSharedData
 {
@@ -338,11 +352,11 @@ Value::Value(const QDate& date, const CalculationSettings* settings)
 }
 
 // create an array value
-Value::Value(const ValueStorage& array)
+Value::Value(const ValueStorage& array, const QSize& size)
         : d(Private::null())
 {
     d->type = Array;
-    d->pa = new ValueArray(array);
+    d->pa = new ValueArray(array, size);
     d->format = fmt_None;
 }
 
@@ -521,21 +535,21 @@ Value Value::element(unsigned column, unsigned row) const
 {
     if (d->type != Array) return *this;
     if (!d->pa) return empty();
-    return d->pa->lookup(column + 1, row + 1);
+    return d->pa->storage().lookup(column + 1, row + 1);
 }
 
 Value Value::element(unsigned index) const
 {
     if (d->type != Array) return *this;
     if (!d->pa) return empty();
-    return d->pa->data(index);
+    return d->pa->storage().data(index);
 }
 
 void Value::setElement(unsigned column, unsigned row, const Value& v)
 {
     if (d->type != Array) return;
     if (!d->pa) d->pa = new ValueArray();
-    d->pa->insert(column + 1, row + 1, v);
+    d->pa->storage().insert(column + 1, row + 1, v);
 }
 
 unsigned Value::columns() const
@@ -556,7 +570,7 @@ unsigned Value::count() const
 {
     if (d->type != Array) return 1;
     if (!d->pa) return 1;
-    return d->pa->count();
+    return d->pa->storage().count();
 }
 
 // reference to empty value
