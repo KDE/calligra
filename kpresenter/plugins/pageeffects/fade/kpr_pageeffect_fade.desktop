@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Fade
+Name[nl]=Vervagen
 Name[pt]=Desvanecer
 Name[pt_BR]=Desvanecer
 Name[sv]=Tona
 Name[uk]=Згасання
 Name[x-test]=xxFadexx
 Comment=Fade Effect
+Comment[nl]=Vervagingseffect
 Comment[pt]=Efeito de Desvanecimento
 Comment[pt_BR]=Efeito de desvanecimento
 Comment[sv]=Toningseffekt
