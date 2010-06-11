@@ -192,7 +192,12 @@ void KWFrameGeometry::setUnit(KoUnit unit)
 
 void KWFrameGeometry::setGeometryAlignment(KoFlake::Position position)
 {
-    QPointF pos = m_frame->shape()->absolutePosition(position);
+    KWFrame *frame = m_frame;
+    if (frame == 0) {
+        frame = m_state->frame();
+        m_state->markFrameUsed();
+    }
+    QPointF pos = frame->shape()->absolutePosition(position);
     m_blockSignals = true;
     widget.xPos->changeValue(pos.x());
     widget.yPos->changeValue(pos.y());
