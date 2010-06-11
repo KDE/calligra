@@ -73,13 +73,14 @@ KexiFormEventAction::KexiFormEventAction(QObject* parent,
         : KAction(parent), m_actionName(actionName), m_objectName(objectName)
         , m_actionOption(actionOption)
 {
+    connect(this, SIGNAL(triggered()), this, SLOT(trigger()));
 }
 
 KexiFormEventAction::~KexiFormEventAction()
 {
 }
 
-void KexiFormEventAction::trigger()
+void KexiFormEventAction::slotTrigger()
 {
 kDebug() << m_actionName << m_objectName;
     KexiProject* project = KexiMainWindowIface::global()->project();
@@ -176,8 +177,8 @@ kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
         } else if (partInfo) { //'open or execute' action
             KexiFormEventAction* action = new KexiFormEventAction(widget, actionType, actionArg,
                     data.option);
-            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(trigger()));
-            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(trigger()));
+            QObject::disconnect(widget, SIGNAL(clicked()), action, SLOT(slotTrigger()));
+            QObject::connect(widget, SIGNAL(clicked()), action, SLOT(slotTrigger()));
         }
     }
 }
