@@ -47,8 +47,7 @@ KWAnchorStrategy::~KWAnchorStrategy()
 {
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText,
-                                  KWTextFrameSet *frameSet)
+bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText, KWTextFrameSet *frameSet)
 {
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
         KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
@@ -184,22 +183,19 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         break;
     case KoTextAnchor::VerticalOffset: {
         qreal y;
-        if (layout->lineCount()) {
-            Q_ASSERT(layout->lineCount());
+        if (block.length() == 2) { // the anchor is the only thing in the block
+            y = state->y();
+        } else if (layout->lineCount()) {
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
             y = tl.y() + tl.ascent();
             recalcFrom = block.position();
             m_finished = true;
-        }
-        else if (block.length() == 2) { // the anchor is the only thing in the block
-            y = state->y();
         } else {
             m_finished = false;
             return false; // lets go for a second round.
         }
         newPosition.setY(y - data->documentOffset());
-        // use frame runaround properties (runthrough/around and side) to give shape a nice position
         break;
     }
     case KoTextAnchor::TopOfPage: {
