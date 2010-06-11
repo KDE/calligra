@@ -44,6 +44,8 @@
 
 #include <KoXmlWriter.h>
 
+// ================================================================
+
 void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
@@ -53,8 +55,9 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
 }
 
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName, const QString& destinationDir,
-    QString& destinationName)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,
+                                                           const QString& destinationDir,
+                                                           QString& destinationName)
 {
     destinationName = destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
     if (m_copiedFiles.contains(sourceName)) {
@@ -83,6 +86,12 @@ QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
     return it.value();
 }
 
+
+// ================================================================
+// DrawingML tags
+// ================================================================
+
+
 #undef CURRENT_EL
 #define CURRENT_EL pic
 //! pic handler (Picture)
@@ -98,6 +107,7 @@ QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
  - lockedCanvas (§20.3.2.1) - DrawingML
  - oleObj (§19.3.2.4)
  - [done] spTree (§19.3.1.45)
+
  Child elements:
  - [done] blipFill (Picture Fill) §19.3.1.4
  - [done] blipFill (Picture Fill) §20.1.8.14 - DrawingML
@@ -118,6 +128,8 @@ QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 {
     READ_PROLOGUE
+
+    // Reset picture properties
     m_xlinkHref.clear();
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
@@ -203,11 +215,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         //! @todo: flipH, flipV
         //! @todo: Generalize the generation of draw:transform so it can be used in other places.
+        //         ingwa: I'm not so sure.  flipH, flipV are handled below, and generate the
+        //                style:mirror attribute.
+
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
             body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
         }
 
+        // Now it's time to link to the actual picture.  Only do it if
+        // there is an image to link to.  If so, this was created in
+        // read_blip().
         if (!m_xlinkHref.isEmpty()) {
             body->startElement("draw:image");
             body->addAttribute("xlink:href", m_xlinkHref);
@@ -246,8 +264,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
         //! @todo: horizontal-on-{odd,even}?
         m_currentDrawStyle.addProperty("style:mirror", mirror);
-
-        //! @todo: m_rot
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -499,11 +515,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 {
     READ_PROLOGUE
 
+    // Reset the position and size
     m_svgX = 0;
     m_svgY = 0;
     m_svgWidth = -1;
     m_svgHeight = -1;
+
 #ifdef PPTXXMLSLIDEREADER_H
+    // If called from the pptx converter, handle different contexts
+    // (Slide, SlideMaster, SlideLayout)
     kDebug() << "type:" << m_context->type;
     if (m_context->type == Slide) {
     }
@@ -522,6 +542,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_isPlaceHolder = false;
     m_phType.clear();
 #endif
+
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
@@ -1476,7 +1497,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
     - [done] grayscl (Gray Scale Effect) §20.1.8.34
     - hsl (Hue Saturation Luminance Effect) §20.1.8.39
-    - lum (Luminance Effect) §20.1.8.42
+    - [done] lum (Luminance Effect) §20.1.8.42
     - tint (Tint Effect) §20.1.8.60
 
  Attributes:
@@ -1519,6 +1540,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (isStartElement()) {
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
+            ELSE_TRY_READ_IF(lum)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1600,8 +1622,41 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_biLevel()
 
 #undef CURRENT_EL
 #define CURRENT_EL grayscl
-//! grayscl handler (gray scale)
-/*!
+//! grayscl handler (Grayscale effect)
+/*! ECMA-376, 20.1.8.34, p 3217
+
+  This element specifies a gray scale effect. Converts all effect
+  color values to a shade of gray, corresponding to their
+  luminance. Effect alpha (opacity) values are unaffected.
+
+ Parent elements:
+ - [done] blip (§20.1.8.13)
+ - cont (§20.1.8.20)
+ - effectDag (§20.1.8.25)
+
+ No child elements.
+
+ No attributes
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grayscl()
+{
+    READ_PROLOGUE
+
+    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("greyscale"));
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lum
+//! lum handler (luminance effect)
+/*! ECMA-376, 20.1.8.34, p 3222
+
+  This element specifies a luminance effect. Brightness linearly
+  shifts all colors closer to white or black.  Contrast scales all
+  colors to be either closer or further apart
 
  Parent elements:
  - [done] blip (§20.1.8.13)
@@ -1611,14 +1666,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_biLevel()
  No child elements.
 
  Attributes
- - thresh (Threshold)
+ - bright (Brightness)
+ - contrast (Contrast)
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grayscl()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
 {
     READ_PROLOGUE
-
-    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("greyscale"));
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo attributes -- even though there is no counterpart in ODF.
+    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("watermark"));
 
     readNext();
     READ_EPILOGUE

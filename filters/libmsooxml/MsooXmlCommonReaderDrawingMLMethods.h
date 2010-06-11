@@ -50,6 +50,7 @@ KoFilter::ConversionStatus read_blip();
 KoFilter::ConversionStatus read_stretch();
 KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
+KoFilter::ConversionStatus read_lum();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
