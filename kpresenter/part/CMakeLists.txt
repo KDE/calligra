@@ -59,6 +59,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrPageSelectStrategyBase.cpp
      KPrPageSelectStrategyFixed.cpp
      KPrPageSelectStrategyActive.cpp
+     KPrDurationParser.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
