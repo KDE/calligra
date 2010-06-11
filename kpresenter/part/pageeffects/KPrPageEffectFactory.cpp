@@ -28,6 +28,7 @@
 #include <KoXmlNS.h>
 
 #include "KPrPageEffectStrategy.h"
+#include "KPrDurationParser.h"
 
 #include <kdebug.h>
 
@@ -113,11 +114,28 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & ele
             reverse = true;
         }
 
+        int duration = 5000;
+        if (element.hasAttributeNS(KoXmlNS::smil, "dur")) {
+            duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
+            // TODO what if duration is -1
+        }
+        else if (element.hasAttributeNS(KoXmlNS::presentation, "transition-speed")) {
+            QString transitionSpeed(element.attributeNS(KoXmlNS::presentation, "transition-speed"));
+            if (transitionSpeed == "fast") {
+                duration = 2000;
+            }
+            else if (transitionSpeed == "slow") {
+                duration = 10000;
+            }
+            // wrong values and medium ar treated as default which is 5s
+        }
+
         EffectStrategies::nth_index<1>::type::iterator it( d->strategies.get<1>().find( boost::make_tuple( smilSubType, reverse ) ) );
 
         if ( it != d->strategies.get<1>().end() ) {
             strategy = *it;
-            pageEffect = new KPrPageEffect( 5000, d->id, strategy );
+            //strategy->loadOdf( element element )
+            pageEffect = new KPrPageEffect( duration, d->id, strategy );
         }
         else {
             kWarning(33002) << "effect for " << d->id << smilSubType << reverse << "not supported";

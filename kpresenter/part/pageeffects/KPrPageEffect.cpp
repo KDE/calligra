@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <QPainter>
 
+#include <KoXmlWriter.h>
+#include <KoGenStyle.h>
 #include "KPrPageEffectStrategy.h"
 
 KPrPageEffect::KPrPageEffect( int duration, const QString & id, KPrPageEffectStrategy * strategy )
@@ -96,12 +98,22 @@ int KPrPageEffect::subType() const
 
 void KPrPageEffect::saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const
 {
+    qreal seconds = m_duration / qreal(1000.0);
+    xmlWriter.addAttribute( "smil:dur", seconds );
     return m_strategy->saveOdfSmilAttributes( xmlWriter );
 }
 
 void KPrPageEffect::saveOdfSmilAttributes( KoGenStyle & style ) const
 {
-    return m_strategy->saveOdfSmilAttributes( style );
+    QString speed("slow");
+    if (m_duration < 2500) {
+        speed = "fast";
+    }
+    else if (m_duration < 7500) {
+        speed = "medium";
+    }
+    style.addProperty("presentation:transition-speed", speed);
+    return m_strategy->saveOdfSmilAttributes(style);
 }
 
 void KPrPageEffect::loadOdf( const KoXmlElement & /*element*/ )

@@ -106,6 +106,9 @@ protected:
     virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
 
     /// reimplemented
+    virtual bool saveOdfAnimations(KoPASavingContext & paContext) const;
+
+    /// reimplemented
     virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
 
     /// reimplemented

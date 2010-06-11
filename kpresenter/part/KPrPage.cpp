@@ -126,20 +126,52 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
         return false;
     }
 
+    KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
+    Q_ASSERT( data );
+
     KoXmlElement animation = KoXml::namedItemNS(element, KoXmlNS::anim, "par");
 
+    bool loadOldTransition = true;
     if (!animation.isNull()) {
         KoXmlElement animationElement;
         forEachElement(animationElement, animation) {
-            if (animationElement.tagName() == "seq" && animationElement.namespaceURI() == KoXmlNS::anim) {
-                QString nodeType(animationElement.attributeNS(KoXmlNS::presentation, "node-type"));
-                if (nodeType == "main-sequence") {
-                    KPrAnimationLoader al;
-                    al.loadOdf(animationElement, context);
+            if (animationElement.namespaceURI() == KoXmlNS::anim) {
+                if (animationElement.tagName() == "par") {
+                    QString begin(animationElement.attributeNS(KoXmlNS::smil, "begin"));
+                    if (begin.endsWith("begin")) {
+                        KoXmlElement transitionElement(KoXml::namedItemNS(animationElement, KoXmlNS::anim, "transitionFilter" ));
+                        data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( transitionElement ) );
+                        kDebug() << "XXXXXXX found page transition";
+                        loadOldTransition = false;
+                    }
+                    // check that the id is the correct one.
                 }
-                else {
-                    // not yet supported
+                if (animationElement.tagName() == "seq") {
+                    QString nodeType(animationElement.attributeNS(KoXmlNS::presentation, "node-type"));
+                    if (nodeType == "main-sequence") {
+                        KPrAnimationLoader al;
+                        al.loadOdf(animationElement, context);
+                    }
+                    else {
+                        // not yet supported
+                    }
                 }
+            }
+        }
+    }
+
+    if (loadOldTransition) {
+        KoOdfStylesReader& stylesReader = context.odfLoadingContext().stylesReader();
+        const KoXmlElement * styleElement = stylesReader.findContentAutoStyle( element.attributeNS( KoXmlNS::draw, "style-name" ), "drawing-page" );
+        if ( styleElement ) {
+#ifndef KOXML_USE_QDOM
+            KoXmlNode node = styleElement->namedItemNS( KoXmlNS::style, "drawing-page-properties" );
+#else
+        KoXmlNode node; // XXX!!!
+#endif
+            if ( node.isElement() ) {
+
+                data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( node.toElement() ) );
             }
         }
     }
@@ -222,21 +254,6 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
     }
     m_pageProperties = pageProperties;
 
-    KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
-    Q_ASSERT( data );
-
-    KoOdfStylesReader& stylesReader = loadingContext.odfLoadingContext().stylesReader();
-    const KoXmlElement * styleElement = stylesReader.findContentAutoStyle( element.attributeNS( KoXmlNS::draw, "style-name" ), "drawing-page" );
-    if ( styleElement ) {
-#ifndef KOXML_USE_QDOM
-        KoXmlNode node = styleElement->namedItemNS( KoXmlNS::style, "drawing-page-properties" );
-#else
-	KoXmlNode node; // XXX!!!
-#endif
-        if ( node.isElement() ) {
-            data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( node.toElement() ) );
-        }
-    }
 #ifndef KOXML_USE_QDOM
     KoXmlNode node = element.namedItemNS(KoXmlNS::presentation, "notes");
 #else
@@ -276,6 +293,30 @@ void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext 
         QString name = element.attributeNS (KoXmlNS::presentation, "use-date-time-name");
         d->usedDeclaration.insert(KPrDeclarations::DateTime, name);
     }
+}
+
+bool KPrPage::saveOdfAnimations(KoPASavingContext & paContext) const
+{
+    KPrPageApplicationData *data = dynamic_cast<KPrPageApplicationData *>(applicationData());
+    Q_ASSERT(data);
+    KPrPageEffect *pageEffect = data->pageEffect();
+    if (pageEffect /* || shape animations */) {
+        KoXmlWriter &writer = paContext.xmlWriter();
+        writer.startElement("anim:par");
+        writer.addAttribute("presentation:node-type", "timing-root");
+
+        if (pageEffect) {
+            writer.startElement("anim:par");
+            writer.addAttribute("smil:begin", "page" + QString::number(paContext.page()) + ".begin");
+            writer.startElement("anim:transitionFilter");
+            pageEffect->saveOdfSmilAttributes(writer);
+            writer.endElement(); // anim:transitionFilter
+            writer.endElement(); // anim:par
+        }
+        // TODO save shape animations
+        writer.endElement(); // anim:par
+    }
+    return true;
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const
