@@ -99,15 +99,34 @@ Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 ~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
 
+TODO: fix https://bugs.kde.org/show_bug.cgi?id=241144
+TODO: this causes crash:
+--- kexidb/queryschema.cpp      (revision 1135206)
++++ kexidb/queryschema.cpp      (working copy)
+@@ -76,6 +76,7 @@
+             , internalFields(0)
+             , fieldsExpandedWithInternalAndRowID(0)
+             , fieldsExpandedWithInternal(0)
++            //, orderByColumnList(copy->orderByColumnList)
+
+2010-06-11
+Main Window
+*fix autoopening (--open) for User Mode
+*fix possible crash on exit
+Forms
+*fix "open object by name" action assignment for buttons
+
+2010-06-03
 Migration
 *When source filename is preselected (e.g. when opening mdb file with Kexi), do not display the source name selection page
-*Append proper extension is not present, e.g. .kexi (regression in 2.x)
+*Append proper extension if not present, e.g. .kexi (regression in 2.x)
 
-**** TODO: setting "enabled" property to false does not work
+2010-05-24
 Forms
 *Image Box widget:
 **added new property "Smoothing". When "Scaled Contents" is on, image is scaled smoothly. On by default.
 **cache scaled pixmap between paint events
+**** TODO: setting "enabled" property to false does not work
 
 ===================== Kexi 2.2  =====================
 ~~~~~~~~~~~~~~~~ 2.2 rc 1 ~~~~~~~~~~~~~~~~
