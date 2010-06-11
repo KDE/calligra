@@ -28,7 +28,7 @@
 #include <KoXmlNS.h>
 
 #include "KPrPageEffectStrategy.h"
-#include "KPrDurationParser.h"
+//#include "KPrDurationParser.h"
 
 #include <kdebug.h>
 
@@ -116,7 +116,7 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & ele
 
         int duration = 5000;
         if (element.hasAttributeNS(KoXmlNS::smil, "dur")) {
-            duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
+            //duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
             // TODO what if duration is -1
         }
         else if (element.hasAttributeNS(KoXmlNS::presentation, "transition-speed")) {
