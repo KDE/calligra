@@ -637,7 +637,7 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
         result.replace(old_text, new_text);   // case-sensitive
     } else {
         // We are only looking to modify a single value, by position.
-        int position = 0;
+        int position = -1;
         for (int i = 0; i < occurrence; ++i) {
             position = result.indexOf(old_text, position + 1);
         }
