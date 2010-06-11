@@ -43,7 +43,7 @@ DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *pare
 void DeleteCommand::undo()
 {
     foreach (QUndoCommand *command, m_shapeDeleteCommands)
-        command->undo(); 
+        command->undo();
 
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
@@ -156,7 +156,7 @@ void DeleteCommand::deleteInlineObjects(QTextCursor &selection)
                 cursor.setPosition(position);
                 object = manager->inlineTextObject(cursor);
                 deleteTextAnchor(object);
-                m_invalidInlineObjects.append(object);
+                m_invalidInlineObjects.insert(object);
             } else {
                 position++;
             }
@@ -168,7 +168,7 @@ void DeleteCommand::deleteInlineObjects(QTextCursor &selection)
 
         object = manager->inlineTextObject(cursor);
         deleteTextAnchor(object);
-        m_invalidInlineObjects.append(object);
+        m_invalidInlineObjects.insert(object);
     }
 }
 
@@ -191,7 +191,7 @@ int DeleteCommand::id() const
     return 56789;
 }
 
-bool DeleteCommand::mergeWith( const QUndoCommand *command)
+bool DeleteCommand::mergeWith(const QUndoCommand *command)
 {
     class UndoTextCommand : public QUndoCommand
     {
