@@ -26,7 +26,6 @@
 #include "XlsxXmlChartReader.h"
 #include "XlsxXmlDrawingReader.h"
 #include "XlsxXmlWorksheetReader.h"
-#include "XlsxImport.h"
 
 #include "Charting.h"
 #include "ChartExport.h"
@@ -69,9 +68,10 @@ QString columnName(uint column)
     return s;
 }
 
-XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext)
+XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext, KoStore* _storeout)
     : MSOOXML::MsooXmlReaderContext()
     , drawingReaderContext(_drawingReaderContext)
+    , m_storeout(_storeout)
     , m_chart(0)
     , m_chartExport(0)
 {
@@ -169,8 +169,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     //m_context->m_chartExport->saveIndex(body);
 
     // write the embedded object file
-    KoStore* storeout = m_context->drawingReaderContext->worksheetReaderContext->import->outputStore();
-    m_context->m_chartExport->saveContent(storeout, manifest);
+    m_context->m_chartExport->saveContent(m_context->m_storeout, manifest);
 
     m_context = 0;
     return KoFilter::OK;

@@ -55,9 +55,10 @@ class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     XlsxXmlDrawingReaderContext* drawingReaderContext;
+    KoStore* m_storeout;
     Charting::Chart* m_chart;
     ChartExport* m_chartExport;
-    explicit XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext);
+    explicit XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext, KoStore* _storeout);
     virtual ~XlsxXmlChartReaderContext();
 };
 

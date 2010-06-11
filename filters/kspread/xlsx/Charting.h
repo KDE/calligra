@@ -273,6 +273,8 @@ namespace Charting
     class Chart : public Obj
     {
     public:
+        int m_fromRow, m_fromColumn, m_toRow, m_toColumn;
+        
         /// If true then the chart is a 3d chart else teh chart is 2d.
         bool m_is3d;
         /// Specifies a counter clockwise rotation of a polar coordinate in a circle, ring or polar chart.
