@@ -1218,8 +1218,6 @@ void View::addSheet(Sheet * _t)
             this, SLOT(slotSheetHidden(Sheet*)));
     connect(_t, SIGNAL(sig_SheetShown(Sheet*)),
             this, SLOT(slotSheetShown(Sheet*)));
-    connect(_t, SIGNAL(sig_SheetRemoved(Sheet*)),
-            this, SLOT(slotSheetRemoved(Sheet*)));
     connect(_t, SIGNAL(shapeAdded(Sheet *, KoShape *)),
             d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
     connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
@@ -1227,15 +1225,6 @@ void View::addSheet(Sheet * _t)
 
     if (!d->loading)
         updateBorderButton();
-}
-
-void View::slotSheetRemoved(Sheet* sheet)
-{
-    d->tabBar->removeTab(sheet->sheetName());
-    if (doc()->map()->findSheet(doc()->map()->visibleSheets().first()))
-        setActiveSheet(doc()->map()->findSheet(doc()->map()->visibleSheets().first()));
-    else
-        d->activeSheet = 0;
 }
 
 void View::removeAllSheets()
@@ -1833,39 +1822,6 @@ void View::resetPrintRange()
     doc()->addCommand(command);
 }
 
-/*
-  // TODO Use KoView setScaling/xScaling/yScaling instead
-void View::zoomMinus()
-{
-  if ( m_fZoom <= 0.25 )
-    return;
-
-  m_fZoom -= 0.25;
-
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setLayoutDirtyFlag();
-
-  d->canvas->repaint();
-  d->rowHeader->repaint();
-  d->columnHeader->repaint();
-}
-
-void View::zoomPlus()
-{
-  if ( m_fZoom >= 3 )
-    return;
-
-  m_fZoom += 0.25;
-
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setLayoutDirtyFlag();
-
-  d->canvas->repaint();
-  d->rowHeader->repaint();
-  d->columnHeader->repaint();
-}
-*/
-
 void View::deleteSheet()
 {
     if (doc()->map()->count() <= 1 || (doc()->map()->visibleSheets().count() <= 1)) {
@@ -1881,13 +1837,6 @@ void View::deleteSheet()
         Sheet * tbl = activeSheet();
         QUndoCommand* command = new RemoveSheetCommand(tbl);
         doc()->addCommand(command);
-
-
-#if 0
-        UndoRemoveSheet * undo = new UndoRemoveSheet(doc(), tbl);
-        doc()->addCommand(undo);
-        tbl->map()->removeSheet(tbl);
-#endif
     }
 }
 

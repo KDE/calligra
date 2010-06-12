@@ -339,7 +339,6 @@ public slots:
     void slotSheetRenamed(Sheet* sheet, const QString& old_name);
     void slotSheetHidden(Sheet*_sheet);
     void slotSheetShown(Sheet*_sheet);
-    void slotSheetRemoved(Sheet*_sheet);
     void shapeSelectionChanged();
     void editDeleteSelection();
 
