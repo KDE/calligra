@@ -25,6 +25,10 @@
 class KoCanvasBase;
 class KoShape;
 
+class KXMLGUIClient;
+
+class QAction;
+
 namespace KSpread
 {
 
@@ -35,7 +39,7 @@ class MapViewModel : public MapModel
 {
     Q_OBJECT
 public:
-    MapViewModel(Map *map, KoCanvasBase *canvas);
+    MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient);
     virtual ~MapViewModel();
 
     // QAbstractItemModel interface
@@ -51,6 +55,24 @@ public Q_SLOTS:
      */
     void setActiveSheet(Sheet* sheet);
 
+protected:
+    /**
+     * Plugs the action lists in, if a KParts::GUIActivateEvent is received.
+     * \return always \c false
+     */
+    bool eventFilter(QObject *object, QEvent *event);
+
+private Q_SLOTS:
+    /**
+     * Adds \p sheet to the goto sheet actions.
+     */
+    virtual void addSheet(Sheet *sheet);
+
+    /**
+     * Removes \p sheet from the goto sheet actions.
+     */
+    virtual void removeSheet(Sheet *sheet);
+
     /**
      * Adds the \p shape, if \p sheet is active.
      */
@@ -60,6 +82,11 @@ public Q_SLOTS:
      * Removes the \p shape, if \p sheet is active.
      */
     void removeShape(Sheet *sheet, KoShape *shape);
+
+    /**
+     * Activates the associated sheet of the \p action.
+     */
+    void gotoSheetActionTriggered(QAction *action);
 
 Q_SIGNALS:
     void activeSheetChanged(Sheet* sheet);

@@ -794,7 +794,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     action = KStandardAction::spelling(this, SLOT(spellCheck()), this);
     action->setToolTip(i18n("Check the spelling"));
-    addAction("spelling", action);
+    addAction("tools_spelling", action);
 
     action = new KAction(KIcon("inspector"), i18n("Run Inspector..."), this);
     addAction("inspector", action);

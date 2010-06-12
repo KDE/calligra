@@ -1,9 +1,12 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="40">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui name="KSpread" version="39">
 <MenuBar>
+<!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
   <Action name="createTemplate"/>
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<><   Edit Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
@@ -43,9 +46,8 @@
   </Menu>
   <Separator/>
   <Action name="editCell"/>
-<!--  <Separator/>
-  <Action name="transform"/>-->
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   View Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
@@ -57,12 +59,19 @@
   <Separator/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
-<!--  <Separator/>
-  <Action name="inspector"/>-->
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   Go Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+ <Menu name="go"><text>&amp;Go</text>
+   <Action name="go_next"/>
+   <Action name="go_previous"/>
+   <Separator/>
+   <Action name="go_first"/>
+   <Action name="go_last"/>
+   <Separator/>
+   <ActionList name="go_goto_sheet_actionlist"/>
+ </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   Insert Menu   >>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="Insert"><text>&amp;Insert</text>
-  <Action name="menuInserteheet"/>
-  <Separator/>
   <Action name="comment"/>
   <Action name="insertMathExpr"/>
   <Action name="insertFormula"/>
@@ -74,12 +83,6 @@
   <Action name="insertColumn"/>
   <Action name="insertRow"/>
   <Action name="insertSheet"/>
-<!--
-  <Separator/>
-  <Action name="insertPart"/>
-  <Action name="insertChart"/>
-  <Action name="insertPicture"/>
--->
   <Separator/>
   <Menu name="ExternalData"><text>&amp;External Data</text>
     <Action name="insertFromClipboard"/>
@@ -87,6 +90,7 @@
     <Action name="insertFromDatabase"/>
   </Menu>
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<   Format Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellStyle"/>
   <Action name="styleDialog"/>
@@ -132,6 +136,7 @@
   <Separator/>
   <Action name="documentSettingsDialog"/>
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<   Data Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
   <Menu name="Filter" icon="view-filter"><text>Filter</text>
@@ -148,8 +153,9 @@
   <Separator/>
   <Action name="goalSeek"/>
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<   Tools Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="tools"><text>&amp;Tools</text>
-  <Action name="spelling"/>
+  <Action name="tools_spelling"/>
   <Separator/>
   <Action name="sortList"/>
   <Separator/>
@@ -160,6 +166,7 @@
   <Action name="RecalcWorkBook"/>
   <Separator/>
  </Menu>
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<   Settings Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="showColumnHeader" group="settings_show"/>
   <Action name="showRowHeader" group="settings_show"/>
@@ -171,9 +178,13 @@
   <Action name="preference" group="settings_configure"/>
  </Menu>
 </MenuBar>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<   Flake Canvas Popup   >>>>>>>>>>>>>>>>>>>>>>>> -->
 <Menu name="default_canvas_popup">
     <ActionList name="toolproxy_action_list"/>
 </Menu>
+
+<!-- <<<<<<<<<<<<<   Function for Selected Cells Popup   >>>>>>>>>>>>>>>>>> -->
 <Menu name="calc_popup">
  <Action name="menu_none"/>
  <Separator/>
@@ -184,6 +195,8 @@
  <Action name="menu_min"/>
  <Action name="menu_sum"/>
 </Menu>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<   Edit ToolBar   >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <ToolBar fullWidth="true" iconText="icontextbottom" name="editToolBar"><text>Edit</text>
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
@@ -192,13 +205,21 @@
  <Action name="copy"/>
  <Action name="paste"/>
 </ToolBar>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<   Navigation ToolBar   >>>>>>>>>>>>>>>>>>>>>>>> -->
 <ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="navigationToolBar"><text>Navigation</text>
- <Action name="firstSheet"/>
- <Action name="previousSheet"/>
- <Action name="nextSheet"/>
- <Action name="lastSheet"/>
+ <Action name="go_first"/>
+ <Action name="go_previous"/>
+ <Action name="go_next"/>
+ <Action name="go_last"/>
+ <Menu icon="x-office-spreadsheet">
+   <text>Activate</text>
+   <ActionList name="go_goto_sheet_actionlist"/>
+ </Menu>
 </ToolBar>
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="fontToolBar"><text>Font</text>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<   Format ToolBar   >>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="fontPropertyToolBar"><text>Format</text>
  <Action name="font"/>
  <Action name="fontSize"/>
 </ToolBar>
@@ -224,6 +245,8 @@
  <Action name="currency"/>
  //-->
 </ToolBar>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<   Color/Border ToolBar   >>>>>>>>>>>>>>>>>>>>>>> -->
 <ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
  <Action name="borderTop"/>
@@ -240,6 +263,8 @@
  <Action name="textColor"/>
  <Action name="backgroundColor"/>
 </ToolBar>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<   TabBar Popup   >>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <Menu name="menupage_popup">
   <Action name="renameSheet"/>
   <!--<Action name="insertSheet"/>-->
@@ -250,4 +275,132 @@
   <Separator/>
   <Action name="sheetProperties" />
 </Menu>
-</kpartgui>
+
+<!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<   States   >>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<State name="map_is_protected">
+  <disable>
+    <Action name="hideSheet"/>
+    <Action name="showSheet"/>
+    <Action name="insertSheet"/>
+    <Action name="duplicateSheet"/>
+    <Action name="deleteSheet"/>
+  </disable>
+</State>
+
+<State name="map_contains_one_sheet">
+  <disable>
+    <Action name="hideSheet"/>
+    <Action name="deleteSheet"/>
+  </disable>
+</State>
+
+<State name="sheet_is_protected">
+  <disable>
+    <Action name="sheetProperties"/>
+    <Action name="renameSheet"/>
+  </disable>
+</State>
+
+<State name="cell_is_protected">
+  <disable>
+    <!-- Edit Menu Actions -->
+    <Action name="cut"/>
+    <Action name="paste"/>
+    <Action name="specialPaste"/>
+    <Action name="pasteWithInsertion"/>
+    <Action name="fillDown"/>
+    <Action name="fillLeft"/>
+    <Action name="fillRight"/>
+    <Action name="fillUp"/>
+    <Action name="edit_replace"/>
+    <Action name="clearAll"/>
+    <Action name="clearComment"/>
+    <Action name="clearConditional"/>
+    <Action name="clearContents"/>
+    <Action name="clearHyperlink"/>
+    <Action name="clearValidity"/>
+    <Action name="deleteCell"/>
+    <Action name="deleteColumn"/>
+    <Action name="deleteRow"/>
+    <Action name="editCell"/>
+    <!-- Insert Menu Actions -->
+    <Action name="comment"/>
+    <Action name="insertMathExpr"/>
+    <Action name="insertFormula"/>
+    <Action name="series"/>
+    <Action name="insertHyperlink"/>
+    <Action name="insertSpecialChar"/>
+    <Action name="insertCell"/>
+    <Action name="insertColumn"/>
+    <Action name="insertRow"/>
+    <Action name="insertFromClipboard"/>
+    <Action name="insertFromTextfile"/>
+    <Action name="insertFromDatabase"/>
+    <!-- Format Menu Actions -->
+    <Action name="cellStyle"/>
+    <Action name="styleDialog"/>
+    <Action name="setStyle"/>
+    <Action name="createStyleFromCell"/>
+    <Action name="conditional"/>
+    <Action name="sheetFormat"/><!--Auto-Format..-->
+    <Action name="mergeCells"/>
+    <Action name="mergeCellsHorizontal"/>
+    <Action name="mergeCellsVertical"/>
+    <Action name="dissociateCells"/>
+    <Action name="adjust"/>
+    <Action name="resizeRow"/>
+    <Action name="equalizeRow"/>
+    <Action name="hideRow"/>
+    <Action name="showRow"/>
+    <Action name="resizeCol"/>
+    <Action name="equalizeCol"/>
+    <Action name="hideColumn"/>
+    <Action name="showColumn"/>
+    <Action name="sheetProperties" />
+    <Action name="paperLayout"/>
+    <Action name="definePrintRange"/>
+    <Action name="resetPrintRange"/>
+    <Action name="shapeAnchor"/>
+    <!-- Data Menu Actions -->
+    <Action name="sort"/>
+    <Action name="autoFilter"/>
+    <Action name="customFilter"/>
+    <Action name="textToColumns"/>
+    <Action name="namedAreaDialog"/><!--FIXME also jumps to named area-->
+    <Action name="consolidate"/>
+    <Action name="subtotals"/>
+    <Action name="validity"/>
+    <Action name="goalSeek"/>
+    <!-- Tools Menu Actions -->
+    <Action name="tools_spelling"/><!--FIXME just spell check without correction?-->
+    <Action name="sortList"/>
+    <!-- Format ToolBar Actions -->
+    <Action name="font"/>
+    <Action name="fontSize"/>
+    <Action name="bold"/>
+    <Action name="italic"/>
+    <Action name="underline"/>
+    <Action name="alignLeft"/>
+    <Action name="alignCenter"/>
+    <Action name="alignRight"/>
+    <Action name="alignTop"/>
+    <Action name="alignMiddle"/>
+    <Action name="alignBottom"/>
+    <Action name="wrapText"/>
+    <Action name="cellStyle"/>
+    <!-- Color/Border ToolBar Actions -->
+    <Action name="borderLeft"/>
+    <Action name="borderTop"/>
+    <Action name="borderRight"/>
+    <Action name="borderBottom"/>
+    <Action name="borderOutline"/>
+    <Action name="borderAll"/>
+    <Action name="borderRemove"/>
+    <Action name="borderColor"/>
+    <Action name="dissociateCells"/>
+    <Action name="mergeCells"/>
+    <Action name="textColor"/>
+    <Action name="backgroundColor"/>
+  </disable>
+</State>
+</gui>

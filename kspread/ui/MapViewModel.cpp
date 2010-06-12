@@ -30,9 +30,10 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 
+#include <KAction>
 #include <KIcon>
-
-#define KSPREAD_SHEET_IN_MAP_MODEL_EXTENSION
+#include <kparts/event.h>
+#include <KXMLGUIClient>
 
 using namespace KSpread;
 
@@ -41,15 +42,28 @@ class MapViewModel::Private
 public:
     Sheet* activeSheet;
     KoCanvasBase *canvas;
+    KXMLGUIClient *xmlGuiClient;
+    QActionGroup *gotoSheetActionGroup;
 };
 
 
-MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas)
+MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient)
     : MapModel(map)
     , d(new Private)
 {
     d->activeSheet = 0;
     d->canvas = canvas;
+    d->xmlGuiClient = xmlGuiClient;
+    d->gotoSheetActionGroup = new QActionGroup(this);
+
+    connect(d->gotoSheetActionGroup, SIGNAL(triggered(QAction *)),
+            this, SLOT(gotoSheetActionTriggered(QAction *)));
+
+    // Add the initial controlled sheets.
+    const QList<Sheet *> sheets = map->sheetList();
+    for (int i = 0; i < sheets.count(); ++i) {
+        addSheet(sheets[i]);
+    }
 }
 
 MapViewModel::~MapViewModel()
@@ -128,10 +142,23 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     // The sheet may be set to 0 for one exceptional case.
     d->activeSheet = sheet;
 
+    if (!sheet) {
+        return;
+    }
+
     // Unhide, if necessary.
-    if (sheet && sheet->isHidden()) {
+    if (sheet->isHidden()) {
         QUndoCommand* command = new ShowSheetCommand(sheet);
         d->canvas->addCommand(command);
+    }
+
+    // Check the appropriate action of the goto sheet action group.
+    const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+    for (int i = 0; i < actions.count(); ++i) {
+        if (actions[i]->iconText() == sheet->sheetName()) {
+            actions[i]->setChecked(true);
+            break;
+        }
     }
 
     // Both sheets have to be in the list. If not, there won't be any signals.
@@ -145,6 +172,74 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     emit activeSheetChanged(sheet);
 }
 
+bool MapViewModel::eventFilter(QObject *object, QEvent *event)
+{
+    Q_UNUSED(object)
+    if (KParts::GUIActivateEvent::test(event)) {
+        if (static_cast<KParts::GUIActivateEvent*>(event)->activated()) {
+            const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+            d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
+        }
+    }
+    return false;
+}
+
+void MapViewModel::addSheet(Sheet *sheet)
+{
+    MapModel::addSheet(sheet);
+
+    connect(sheet, SIGNAL(shapeAdded(Sheet *, KoShape *)),
+            this, SLOT(addShape(Sheet *, KoShape *)));
+    connect(sheet, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
+            this, SLOT(removeShape(Sheet *, KoShape *)));
+
+    if (!d->xmlGuiClient) {
+        return;
+    }
+
+    // Update the goto sheet action group
+    const QString name = sheet->sheetName();
+    QAction *action = new KAction(KIcon("x-office-spreadsheet"), name, this);
+    action->setCheckable(true);
+    action->setToolTip(i18nc("Activate sheet named foo", "Activate %1", name));
+
+    d->gotoSheetActionGroup->addAction(action);
+
+    const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+    d->xmlGuiClient->unplugActionList("go_goto_sheet_actionlist");
+    d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
+}
+
+void MapViewModel::removeSheet(Sheet *sheet)
+{
+    MapModel::removeSheet(sheet);
+
+    disconnect(sheet, SIGNAL(shapeAdded(Sheet *, KoShape *)),
+               this, SLOT(addShape(Sheet *, KoShape *)));
+    disconnect(sheet, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
+               this, SLOT(removeShape(Sheet *, KoShape *)));
+
+    if (!d->xmlGuiClient) {
+        return;
+    }
+
+    // Update the goto sheet action group
+    QAction *action = 0;
+    const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+    for (int i = 0; i < actions.count(); ++i) {
+        if (actions[i]->text() == sheet->sheetName()) {
+            action = actions[i];
+            break;
+        }
+    }
+    if (action) {
+        d->gotoSheetActionGroup->removeAction(action);
+        const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+        d->xmlGuiClient->unplugActionList("go_goto_sheet_actionlist");
+        d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
+    }
+}
+
 void MapViewModel::addShape(Sheet *sheet, KoShape *shape)
 {
     if (sheet == d->activeSheet) {
@@ -156,6 +251,22 @@ void MapViewModel::removeShape(Sheet *sheet, KoShape *shape)
 {
     if (sheet == d->activeSheet) {
         d->canvas->shapeManager()->remove(shape);
+    }
+}
+
+void MapViewModel::gotoSheetActionTriggered(QAction *action)
+{
+    const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
+    for (int i = 0; i < actions.count(); ++i) {
+        if (actions[i]->text() == action->text()) {
+            Sheet *const sheet = map()->findSheet(action->iconText());
+            if (sheet) {
+                setActiveSheet(sheet);
+            } else { // should not happen
+                d->gotoSheetActionGroup->removeAction(action);
+            }
+            break;
+        }
     }
 }
 

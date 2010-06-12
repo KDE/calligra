@@ -1294,7 +1294,7 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertCells()));
     popupMenuActions.insert("insertCell", action);
 
-    action = new KAction(KIcon("removecell"), i18n("Cells..."), q);
+    action = new KAction(KIcon("removecell"), i18n("Delete Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteCells()));
     popupMenuActions.insert("deleteCell", action);
 

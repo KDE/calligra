@@ -214,7 +214,6 @@ public:
 
     void initActions();
     void adjustActions(bool mode);
-    void adjustWorkbookActions(bool mode);
     QAbstractButton* newIconButton(const char *_file, bool _kbutton = false, QWidget *_parent = 0);
 
     // On timeout this will execute the status bar operation (e.g. SUM).
@@ -388,27 +387,27 @@ void View::Private::initActions()
     actions->nextSheet  = new KAction(KIcon("go-next"), i18n("Next Sheet"), view);
     actions->nextSheet->setIconText(i18n("Next"));
     actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
-    ac->addAction("nextSheet", actions->nextSheet);
+    ac->addAction("go_next", actions->nextSheet);
     actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
     connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT(nextSheet()));
 
     actions->prevSheet  = new KAction(KIcon("go-previous"), i18n("Previous Sheet"), view);
     actions->prevSheet->setIconText(i18n("Previous"));
     actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
-    ac->addAction("previousSheet", actions->prevSheet);
+    ac->addAction("go_previous", actions->prevSheet);
     actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
     connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT(previousSheet()));
 
     actions->firstSheet  = new KAction(KIcon("go-first"), i18n("First Sheet"), view);
     actions->firstSheet->setIconText(i18n("First"));
     actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
-    ac->addAction("firstSheet", actions->firstSheet);
+    ac->addAction("go_first", actions->firstSheet);
     connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT(firstSheet()));
 
     actions->lastSheet  = new KAction(KIcon("go-last"), i18n("Last Sheet"), view);
     actions->lastSheet->setIconText(i18n("Last"));
     actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
-    ac->addAction("lastSheet", actions->lastSheet);
+    ac->addAction("go_last", actions->lastSheet);
     connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT(lastSheet()));
 
     // -- settings actions --
@@ -553,27 +552,6 @@ void View::Private::adjustActions(bool mode)
 
     if (activeSheet)
         selection->update();
-}
-
-void View::Private::adjustWorkbookActions(bool mode)
-{
-    tabBar->setReadOnly(!view->doc()->isReadWrite() || view->doc()->map()->isProtected());
-
-    actions->hideSheet->setEnabled(mode);
-    actions->showSheet->setEnabled(mode);
-    actions->insertSheet->setEnabled(mode);
-    actions->duplicateSheet->setEnabled(mode);
-    actions->deleteSheet->setEnabled(mode);
-
-    if (mode) {
-        if (activeSheet && !activeSheet->isProtected()) {
-            bool state = (view->doc()->map()->visibleSheets().count() > 1);
-            actions->deleteSheet->setEnabled(state);
-            actions->hideSheet->setEnabled(state);
-        }
-        actions->showSheet->setEnabled(view->doc()->map()->hiddenSheets().count() > 0);
-        actions->renameSheet->setEnabled(activeSheet && !activeSheet->isProtected());
-    }
 }
 
 QAbstractButton* View::Private::newIconButton(const char *_file, bool _kbutton, QWidget *_parent)
@@ -732,7 +710,8 @@ void View::initView()
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Setup the map model.
-    d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas);
+    d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
+    installEventFilter(d->mapViewModel); // listen to KParts::GUIActivateEvent
     connect(d->mapViewModel, SIGNAL(addCommandRequested(QUndoCommand*)),
             doc(), SLOT(addCommand(QUndoCommand*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
@@ -1127,6 +1106,7 @@ void View::initialPosition()
         }
     }
     setActiveSheet(sheet);
+    d->mapViewModel->setActiveSheet(sheet);
 
     // Set the initial X and Y offsets for the view (Native format loading)
     if (loadingInfo->fileFormat() == LoadingInfo::NativeFormat) {
@@ -1338,7 +1318,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->actions->protectDoc->blockSignals(false);
 
     d->adjustActions(!d->activeSheet->isProtected());
-    d->adjustWorkbookActions(!doc()->map()->isProtected());
+    const bool protect = d->activeSheet->isProtected();
+    stateChanged("sheet_is_protected", protect ? StateNoReverse : StateReverse);
 
     // Auto calculation state for the INFO function.
     const bool autoCalc = d->activeSheet->isAutoCalculationEnabled();
@@ -1558,7 +1539,7 @@ void View::toggleProtectDoc(bool mode)
     }
 
     doc()->setModified(true);
-    d->adjustWorkbookActions(!mode);
+    stateChanged("map_is_protected", mode ? StateNoReverse : StateReverse);
 }
 
 void View::toggleProtectSheet(bool mode)
@@ -2210,6 +2191,8 @@ void View::popupTabBarMenu(const QPoint & _point)
         menu->exec(_point);
         menu->removeAction(insertSheet);
         menu->removeAction(deleteSheet);
+        delete insertSheet;
+        delete deleteSheet;
     }
 }
 

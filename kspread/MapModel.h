@@ -63,8 +63,9 @@ Q_SIGNALS:
 protected:
     Map* map() const;
 
-private Q_SLOTS:
-    void addSheet(Sheet* sheet);
+protected Q_SLOTS:
+    virtual void addSheet(Sheet *sheet);
+    virtual void removeSheet(Sheet *sheet);
 
 private:
     class Private;
