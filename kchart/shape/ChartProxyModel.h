@@ -39,6 +39,9 @@ namespace KoChart
 
 namespace KChart {
 
+/**
+ * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
+ */
 class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT

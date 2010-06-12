@@ -183,6 +183,7 @@ bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles 
 {
     Q_UNUSED(bodyWriter);
     Q_UNUSED(mainStyles);
+    // The save logic is in ChartShape::saveOdf
     return true;
 }
 
