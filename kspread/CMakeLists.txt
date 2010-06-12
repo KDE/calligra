@@ -31,6 +31,7 @@ SET (commands_DIR_SRCS
 	commands/AutoFilterCommand.cpp
 	commands/AutoFormatCommand.cpp
 	commands/BorderColorCommand.cpp
+        commands/ColumnStyleCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
 	commands/CSVDataCommand.cpp
@@ -43,6 +44,7 @@ SET (commands_DIR_SRCS
         commands/PageBreakCommand.cpp
 	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
+        commands/RowStyleCommand.cpp
 	commands/SheetCommands.cpp
 	commands/SortManipulator.cpp
 	commands/SpellCheckCommand.cpp
