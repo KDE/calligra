@@ -3306,38 +3306,36 @@ void CellToolBase::listChoosePopupMenu()
     delete d->popupListChoose;
     d->popupListChoose = new QMenu();
 
-    QRect lastRange(selection()->lastRange());
-    Cell cell(selection()->activeSheet(), selection()->marker());
-    QString tmp = cell.userInput();
+    const Sheet *const sheet = selection()->activeSheet();
+    const Cell cursorCell(sheet, selection()->cursor());
+    const QString text = cursorCell.userInput();
+    const CellStorage *const storage = sheet->cellStorage();
+
     QStringList itemList;
-    for (int col = lastRange.left(); col <= lastRange.right(); ++col) {
-        Cell cell = selection()->activeSheet()->cellStorage()->firstInColumn(col);
-        while (!cell.isNull()) {
-            if (!cell.isPartOfMerged() &&
-                    !(col == selection()->marker().x() && cell.row() == selection()->marker().y())) {
-                if (cell.value().isString() && cell.userInput() != tmp && !cell.userInput().isEmpty()) {
-                    if (itemList.indexOf(cell.userInput()) == -1) {
-                        itemList.append(cell.userInput());
+    const Region::ConstIterator end(selection()->constEnd());
+    for (Region::ConstIterator it(selection()->constBegin()); it != end; ++it) {
+        const QRect range = (*it)->rect();
+        if (cursorCell.column() < range.left() || cursorCell.column() > range.right()) {
+            continue; // next range
+        }
+        Cell cell;
+        if (range.top() == 1) {
+            cell = storage->firstInColumn(cursorCell.column(), CellStorage::Values);
+        } else {
+            cell = storage->nextInColumn(cursorCell.column(), range.top() - 1, CellStorage::Values);
+        }
+        while (!cell.isNull() && cell.row() <= range.bottom()) {
+            if (!cell.isPartOfMerged() && !(cell == cursorCell)) {
+                const QString userInput = cell.userInput();
+                if (cell.value().isString() && userInput != text && !userInput.isEmpty()) {
+                    if (itemList.indexOf(userInput) == -1) {
+                        itemList.append(userInput);
                     }
                 }
             }
-            cell = selection()->activeSheet()->cellStorage()->nextInColumn(col, cell.row());
+            cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
         }
     }
-
-#if 0 // TODO remove this later
-    for (;cell; cell = cell.nextCell()) {
-        int col = cell.column();
-        if (selection.left() <= col && selection.right() >= col && !cell.isPartOfMerged() &&
-                !(col == selection()->marker().x() && cell.row() == selection()->marker().y())) {
-            if (cell.isString() && cell.text() != tmp && !cell.text().isEmpty()) {
-                if (itemList.indexOf(cell.text()) == -1) {
-                    itemList.append(cell.text());
-                }
-            }
-        }
-    }
-#endif
 
     for (QStringList::Iterator it = itemList.begin(); it != itemList.end();++it) {
         d->popupListChoose->addAction((*it));
@@ -3348,7 +3346,7 @@ void CellToolBase::listChoosePopupMenu()
     }
     double tx = selection()->activeSheet()->columnPosition(selection()->marker().x());
     double ty = selection()->activeSheet()->rowPosition(selection()->marker().y());
-    double h = cell.height();
+    double h = cursorCell.height();
     const CellView cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
     if (cellView.obscuresCells()) {
         h = cellView.cellHeight();

@@ -643,14 +643,6 @@ public:
     void cutSelection(Selection* selection);
 
     /**
-     * \ingroup UI
-     * @return @c true if there are text value in cell
-     * so you can create list selection
-     * @param selection the selection of cells to work on
-     */
-    bool testListChoose(Selection* selection);
-
-    /**
      * \ingroup Commands
      * returns the text to be copied to the clipboard
      * @param selection the selection of cells to work on

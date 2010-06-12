@@ -1326,39 +1326,6 @@ void Sheet::updateView(const Region& region)
     emit sig_updateView(this, region);
 }
 
-bool Sheet::testListChoose(Selection* selection)
-{
-    const QPoint marker(selection->marker());
-    const QString text = Cell(this, marker).userInput();
-
-    Region::ConstIterator end(selection->constEnd());
-    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
-        const QRect range = (*it)->rect();
-
-        int bottom = range.bottom();
-        if (bottom > d->cellStorage->rows()) bottom = d->cellStorage->rows();
-        for (int row = range.top(); row <= bottom; ++row) {
-            int col = range.left();
-            while (1) {
-                const Cell cell = d->cellStorage->nextInRow(col, row);
-                if (cell.isNull()) break;
-                col = cell.column();
-                if (cell.isDefault() || (col == 0) || (col > range.right())) break;
-
-                if (!cell.isPartOfMerged() && !(col == marker.x() && row == marker.y())) {
-                    if (!cell.isFormula() && !cell.value().isNumber() &&
-                            !cell.value().asString().isEmpty() &&
-                            !cell.isTime() && !cell.isDate()) {
-                        if (cell.userInput() != text)
-                            return true;
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
-
 
 // era: absolute references
 QDomDocument Sheet::saveCellRegion(const Region& region, bool era)

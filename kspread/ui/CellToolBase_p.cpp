@@ -1272,7 +1272,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             actions.append(q->action("clearComment"));
         }
 
-        if (q->selection()->activeSheet()->testListChoose(q->selection())) {
+        if (testListChoose(q->selection())) {
             actions.append(popupMenuActions["separator7"]);
             actions.append(popupMenuActions["listChoose"]);
         }
@@ -1325,6 +1325,41 @@ void CellToolBase::Private::createPopupMenuActions()
     action = new KAction(i18n("Selection List..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
+}
+
+bool CellToolBase::Private::testListChoose(Selection *selection) const
+{
+    const Sheet *const sheet = selection->activeSheet();
+    const Cell cursorCell(sheet, selection->cursor());
+    const CellStorage *const storage = sheet->cellStorage();
+
+    const Region::ConstIterator end(selection->constEnd());
+    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
+        const QRect range = (*it)->rect();
+        if (cursorCell.column() < range.left() || cursorCell.column() > range.right()) {
+            continue; // next range
+        }
+        Cell cell;
+        if (range.top() == 1) {
+            cell = storage->firstInColumn(cursorCell.column(), CellStorage::Values);
+        } else {
+            cell = storage->nextInColumn(cursorCell.column(), range.top() - 1, CellStorage::Values);
+        }
+        while (!cell.isNull() && cell.row() <= range.bottom()) {
+            if (cell.isDefault() || cell.isPartOfMerged()
+                    || cell.isFormula() || cell.isTime() || cell.isDate()
+                    || cell.value().isNumber() || cell.value().asString().isEmpty()
+                    || (cell == cursorCell)) {
+                cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
+                continue;
+            }
+            if (cell.userInput() != cursorCell.userInput()) {
+                return true;
+            }
+            cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
+        }
+    }
+    return false;
 }
 
 void CellToolBase::Private::relayoutDocker(bool wide)
