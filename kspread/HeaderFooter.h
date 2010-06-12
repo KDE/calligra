@@ -89,12 +89,6 @@ public:
     void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                           const QString &_footl, const QString &_footm, const QString &_footr );
 
-protected:
-    /**
-     * Number of total pages, only calculated during printing
-     */
-    uint m_uprintPages;
-
 private:
     /**
      * Replaces macros like <name>, <file>, <date> etc. in the string and

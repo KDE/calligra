@@ -24,6 +24,7 @@
 
 #include "part/Doc.h" // FIXME detach from part
 #include "Sheet.h"
+#include "SheetPrint.h"
 
 #include <KDebug>
 #include <KLocale>
@@ -139,7 +140,7 @@ void HeaderFooter::setHeadFootLine( const QString &_headl, const QString &_headm
 QString HeaderFooter::completeHeading( const QString &_data, int _page, const QString &_sheet ) const
 {
     QString page( QString::number( _page) );
-    QString pages( QString::number( m_uprintPages ) );
+    QString pages(QString::number(m_pSheet->print()->pageCount()));
 
     QString pathFileName(m_pSheet->doc()->url().path());
     if ( pathFileName.isNull() )
