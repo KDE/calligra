@@ -1,7 +1,8 @@
-Klarälvdalens Datakonsult AB <info@klaralvdalens-datakonsult.se> (charting engine)
+KDAB <info@kdab.com>                      (charting engine)
 Laurent Montel <montell@club-internet.fr> (wizards)
 Kalle Dalheimer <kalle@kde.org>           (charting engine, wizards)
 Reginald Stadlbauer <reggie@kde.org>      (built-in data table)
 Inge Wallin <inge@lysator.liu.se>         (numerous bug fixes, new data editor,
-					   tidied up config dialog, 
-					   data in rows/cols, ...)
+                                           tidied up config dialog, 
+                                           data in rows/cols, ...)
+Johannes Simon <johannes.simon@gmail.com> (Architectural redesign of chart flake shape)
