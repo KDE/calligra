@@ -1120,7 +1120,6 @@ void View::initialPosition()
         d->selection->initialize((marker.x() <= 0 || marker.y() <= 0) ? QPoint(1, 1) : marker);
     }
 
-    updateBorderButton();
     updateShowSheetMenu();
 
     if (koDocument()->isReadWrite())
@@ -1222,9 +1221,6 @@ void View::addSheet(Sheet * _t)
             d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
     connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
             d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
-
-    if (!d->loading)
-        updateBorderButton();
 }
 
 void View::removeAllSheets()
@@ -1238,7 +1234,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     if (sheet == d->activeSheet)
         return;
 
-    if (!d->selection->referenceSelectionMode()) {
+    if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
+        selection()->emitCloseEditor(true); // save changes
         saveCurrentSheetSelection();
     }
 
@@ -1259,11 +1256,24 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     if (oldSheet && oldSheet->layoutDirection() != d->activeSheet->layoutDirection())
         refreshView();
 
+    // Restore the old scrolling offset.
+    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
+    if (it3 != d->savedOffsets.end()) {
+        const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
+        d->canvas->setDocumentOffset(offset);
+        d->horzScrollBar->setValue(offset.x());
+        d->vertScrollBar->setValue(offset.y());
+    }
+
+    // Always repaint the visible cells.
+    d->canvas->update();
+    d->rowHeader->update();
+    d->columnHeader->update();
+    d->selectAllButton->update();
+
+    // Prevents an endless loop, if called by the TabBar.
     if (updateSheet) {
         d->tabBar->setActiveTab(d->activeSheet->sheetName());
-        d->rowHeader->repaint();
-        d->columnHeader->repaint();
-        d->selectAllButton->repaint();
     }
 
     if (d->selection->referenceSelectionMode()) {
@@ -1274,7 +1284,6 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     /* see if there was a previous selection on this other sheet */
     QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
     QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
-    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
 
     // restore the old anchor and marker
     const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1, 1) : *it;
@@ -1284,15 +1293,6 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->selection->setActiveSheet(d->activeSheet);
     d->selection->setOriginSheet(d->activeSheet);
     d->selection->initialize(QRect(newMarker, newAnchor));
-    d->canvas->scrollToCell(newMarker);
-    if (it3 != d->savedOffsets.end()) {
-        const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
-        d->canvas->setDocumentOffset(offset);
-        d->horzScrollBar->setValue(offset.x());
-        d->vertScrollBar->setValue(offset.y());
-    }
-
-    d->canvas->update();
 
     d->actions->showPageBorders->blockSignals(true);
     d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
@@ -1343,18 +1343,8 @@ void View::changeSheet(const QString& _name)
         kDebug() << "Unknown sheet" << _name;
         return;
     }
-    if (!selection()->referenceSelectionMode())
-        selection()->emitCloseEditor(true); // save changes
     setActiveSheet(t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
     d->mapViewModel->setActiveSheet(t);
-
-    //refresh toggle button
-    updateBorderButton();
-
-    //update visible area
-    d->rowHeader->repaint();
-    d->columnHeader->repaint();
-    d->selectAllButton->repaint();
 }
 
 void View::moveSheet(unsigned sheet, unsigned target)
